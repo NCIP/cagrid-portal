@@ -23,7 +23,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-discovery-1.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/lib/spring.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -32,16 +32,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/mobius_mako_client-1.1.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/mobius_gme_client-1.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/lib/mobius_tools-1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -59,7 +50,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/spring.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/lib/client.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -68,7 +59,25 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-metadata-common-1.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/lib/castor-0.9.9.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/mobius_factories-1.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/mobius_mako_client-1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -95,16 +104,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/mobius_tools-1.1.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/client.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/lib/mobius_gme_client-1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -122,7 +122,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/mobius_factories-1.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-discovery-1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -140,7 +140,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/castor-0.9.9.jar!/" />
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-metadata-common-1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -227,6 +227,11 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/spring.jar" />
       <url>jar://$MODULE_DIR$/ext/lib/spring.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/mysql-connector-java-3.1.13-bin.jar" />
+      <url>jar://$MODULE_DIR$/lib/mysql-connector-java-3.1.13-bin.jar!/</url>
     </containerElement>
     <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/webcontent/WEB-INF/web.xml" optional="false" version="2.3" />
     <deploymentDescriptor name="context.xml" url="file://$MODULE_DIR$/webcontent/META-INF/context.xml" optional="false" version="5.x" />

@@ -19,8 +19,12 @@
 
 
     <path id="portal.classpath">
-        <pathelement path="${lib.dir}"/>
-        <pathelement path="${ext.lib.dir}"/>
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${ext.lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
     </path>
 
     <!-- ============================================================== -->
