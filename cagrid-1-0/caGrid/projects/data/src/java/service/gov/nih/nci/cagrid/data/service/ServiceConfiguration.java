@@ -8,16 +8,16 @@ package gov.nih.nci.cagrid.data.service;
  */
 public class ServiceConfiguration {
 	
-	private String QueryProcessorClass;
+	private String queryProcessorClass;
 	
 
 	
 	public String getQueryProcessorClass() {
-		return QueryProcessorClass;
+		return queryProcessorClass;
 	}
 	
-	public void setQueryProcessorClass(String QueryProcessorClass) {
-		this.QueryProcessorClass = QueryProcessorClass;
+	public void setQueryProcessorClass(String queryProcessorClass) {
+		this.queryProcessorClass = queryProcessorClass;
 	}
 
 	
