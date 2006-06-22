@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -46,8 +45,6 @@ public class GMESchemaLocatorPanel extends JPanel {
 
 	private JComboBox schemaComboBox = null;
 
-	protected JComponent me;
-
 	private JPanel schemaPanel = null;
 
 	private JLabel namespaceLabel = null;
@@ -62,13 +59,16 @@ public class GMESchemaLocatorPanel extends JPanel {
 
 	public String url;
 
+	private boolean showGMESelection;
+
 
 	/**
 	 * This method initializes
 	 */
-	public GMESchemaLocatorPanel(String url) {
+	public GMESchemaLocatorPanel(String url, boolean showGMESelection) {
 		super();
 		this.url = url;
+		this.showGMESelection = showGMESelection;
 		initialize();
 
 	}
@@ -89,6 +89,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 	 * @return javax.swing.JPanel
 	 */
 	public JPanel getMainPanel() {
+		;
 		if (mainPanel == null) {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
@@ -105,7 +106,10 @@ public class GMESchemaLocatorPanel extends JPanel {
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.weightx = 0.0D;
 			gridBagConstraints1.weighty = 0.0D;
-			mainPanel.add(getQueryPanel(), gridBagConstraints1);
+			JPanel queryPanel = getQueryPanel();
+			if (this.showGMESelection) {
+				mainPanel.add(queryPanel, gridBagConstraints1);
+			}
 			mainPanel.add(getSchemaPanel(), gridBagConstraints);
 		}
 		return mainPanel;
@@ -168,7 +172,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 					makeCombosEnabled(true);
 				} catch (MobiusException e1) {
 					e1.printStackTrace();
-					JOptionPane.showMessageDialog(me,
+					JOptionPane.showMessageDialog(GMESchemaLocatorPanel.this,
 						"Please check the GME URL and make sure that you have the appropriate credentials!");
 				}
 
@@ -230,7 +234,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 									} catch (MobiusException e1) {
 										e1.printStackTrace();
 										JOptionPane
-											.showMessageDialog(me,
+											.showMessageDialog(GMESchemaLocatorPanel.this,
 												"Please check the GME URL and make sure that you have the appropriate credentials!");
 									}
 								}
@@ -266,9 +270,8 @@ public class GMESchemaLocatorPanel extends JPanel {
 									.getNamespace(), false);
 							}
 						} catch (MobiusException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
-							JOptionPane.showMessageDialog(me,
+							JOptionPane.showMessageDialog(GMESchemaLocatorPanel.this,
 								"Please check the GME URL and make sure that you have the appropriate credentials!");
 						}
 					}
@@ -374,12 +377,22 @@ public class GMESchemaLocatorPanel extends JPanel {
 
 
 	public static void main(String[] args) {
-		GMESchemaLocatorPanel panel = new GMESchemaLocatorPanel("http://localhost:8080/wsrf/services/cagrid/GlobalModelExchange");
+		GMESchemaLocatorPanel panel = new GMESchemaLocatorPanel(
+			"http://localhost:8080/wsrf/services/cagrid/GlobalModelExchange", true);
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(panel);
 		frame.pack();
 		frame.setVisible(true);
+	}
+
+
+	public Namespace getSelectedSchemaNamespace() {
+		SchemaWrapper schema = (SchemaWrapper) getSchemaComboBox().getSelectedItem();
+		if (schema != null) {
+			return schema.getNamespace();
+		}
+		return null;
 	}
 
 }

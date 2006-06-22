@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.portal.discoverytools.gme.GMESchemaLocatorPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.BorderLayout;
@@ -41,7 +42,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 	public static String GME_URL = "GME_URL";
 	public static String TYPE = "GME";
 
-	private GMEConfigurationPanel gmePanel = null;
+	private GMESchemaLocatorPanel gmePanel = null;
 
 
 	public GMETypeSelectionComponent(DiscoveryExtensionDescriptionType descriptor) {
@@ -73,10 +74,10 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private GMEConfigurationPanel getGmePanel() {
+	private GMESchemaLocatorPanel getGmePanel() {
 		if (gmePanel == null) {
-			gmePanel = new GMEConfigurationPanel(ExtensionTools.getProperty(getDescriptor().getProperties(),
-				GMETypeSelectionComponent.GME_URL));
+			gmePanel = new GMESchemaLocatorPanel(ExtensionTools.getProperty(getDescriptor().getProperties(),
+				GMETypeSelectionComponent.GME_URL),false);
 		}
 		return gmePanel;
 	}
@@ -85,21 +86,21 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 	public NamespaceType createNamespaceType(File schemaDestinationDir) {
 		NamespaceType input = new NamespaceType();
 		try {
-			// set the package name
-			String packageName = CommonTools.getPackageName(gmePanel.currentNamespace);
-			input.setPackageName(packageName);
-
-			if (this.gmePanel.currentNamespace != null) {
-				input.setNamespace(this.gmePanel.currentNamespace.getRaw());
-				ImportInfo ii = new ImportInfo(this.gmePanel.currentNamespace);
+			Namespace selectedNS = gmePanel.getSelectedSchemaNamespace();
+			if (selectedNS != null) {
+				// set the package name
+				String packageName = CommonTools.getPackageName(selectedNS);
+				input.setPackageName(packageName);
+				input.setNamespace(selectedNS.getRaw());
+				ImportInfo ii = new ImportInfo(selectedNS);
 				input.setLocation("./" + ii.getFileName());
+
+				gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(input, XMLUtilities
+					.stringToDocument(gmePanel.currentNode.getSchemaContents()));
+				cacheSchema(schemaDestinationDir, input.getNamespace());
 			} else {
 				return null;
 			}
-
-			gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(input, XMLUtilities
-				.stringToDocument(gmePanel.currentNode.getSchemaContents()));
-			cacheSchema(schemaDestinationDir, input.getNamespace());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

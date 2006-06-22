@@ -257,7 +257,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 	private GMESchemaLocatorPanel getGmeSchemaLocatorPanel() {
 		if (gmeSchemaLocatorPanel == null) {
 			gmeSchemaLocatorPanel = new GMESchemaLocatorPanel(ExtensionTools.getProperty(getDescriptor()
-				.getProperties(), GMESchemaLocatorPanel.GME_URL));
+				.getProperties(), GMESchemaLocatorPanel.GME_URL), false);
 			gmeSchemaLocatorPanel.getSchemaComboBox().addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
