@@ -50,7 +50,7 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
 					ModifyResourcePropertiesComponent comp = new ModifyResourcePropertiesComponent(node.getResourceProperties(),node.getInfo().getNamespaces(),true);
-					IntroduceLookAndFeel.centerWindow(comp);
+					//IntroduceLookAndFeel.centerWindow(comp);
 					comp.setVisible(true);
 					node.reInitialize(node.getResourceProperties());
 					
