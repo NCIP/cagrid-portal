@@ -77,7 +77,7 @@ public class Operation {
 	 * @param output
 	 */
 	public void setOutput(OperationOutput output){
-		output = output;
+		this.output = output;
 	}
 
 }
