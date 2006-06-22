@@ -101,5 +101,6 @@
 	<classpathentry kind="lib" path="lib/ServiceSecurity-common.jar"/>
 	<classpathentry kind="lib" path="lib/ServiceSecurity-service.jar"/>
 	<classpathentry kind="lib" path="lib/ServiceSecurity-tests.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
