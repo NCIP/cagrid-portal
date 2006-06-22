@@ -156,7 +156,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	public void discoverFromCaDSR() {
 		final CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
 		getProjectComboBox().removeAllItems();
-		makeCombosEnable(false);
+		makeCombosEnabled(false);
 		Thread t = new Thread() {
 			public void run() {
 				try {
@@ -166,7 +166,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 							getProjectComboBox().addItem(new ProjectDisplay(projects[i]));
 						}
 					}
-					makeCombosEnable(true);
+					makeCombosEnabled(true);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 					JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
@@ -483,9 +483,9 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 
 	public void handleProjectSelection(final Project project) {
-		//System.out.println("Handle Project:" + project.getShortName());
+		// System.out.println("Handle Project:" + project.getShortName());
 		getPackageComboBox().removeAllItems();
-		makeCombosEnable(false);
+		makeCombosEnabled(false);
 		Thread t = new Thread() {
 			public void run() {
 				try {
@@ -496,7 +496,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 							getPackageComboBox().addItem(new PackageDisplay(metadatas[i]));
 						}
 					}
-					makeCombosEnable(true);
+					makeCombosEnabled(true);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 					JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
@@ -508,7 +508,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	}
 
 
-	private synchronized void makeCombosEnable(boolean enabled) {
+	private synchronized void makeCombosEnabled(boolean enabled) {
 		getProjectComboBox().setEnabled(enabled);
 		getPackageComboBox().setEnabled(enabled);
 		getClassComboBox().setEnabled(enabled);
@@ -516,10 +516,10 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 
 	public void handlePackageSelection(final UMLPackageMetadata pkg) {
-		//System.out.println("Handle package:" + pkg.getName());
+		// System.out.println("Handle package:" + pkg.getName());
 		if (isShowClassSelection()) {
 			getClassComboBox().removeAllItems();
-			makeCombosEnable(false);
+			makeCombosEnabled(false);
 			Thread t = new Thread() {
 				public void run() {
 					try {
@@ -531,7 +531,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 								getClassComboBox().addItem(new ClassDisplay(metadatas[i]));
 							}
 						}
-						makeCombosEnable(true);
+						makeCombosEnabled(true);
 					} catch (Exception e1) {
 						e1.printStackTrace();
 						JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
