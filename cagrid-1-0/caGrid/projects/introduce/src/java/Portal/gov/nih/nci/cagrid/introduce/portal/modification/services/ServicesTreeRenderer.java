@@ -54,7 +54,7 @@ import java.awt.Font;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
+
 
 /**
  * Renders the grid service tree
@@ -68,20 +68,18 @@ import javax.swing.tree.DefaultTreeModel;
  * @version $Id$
  */
 public class ServicesTreeRenderer extends DefaultTreeCellRenderer {
-	private DefaultTreeModel model = null;
 
 	private Font normal = null;
 
-	public ServicesTreeRenderer(DefaultTreeModel model) {
+
+	public ServicesTreeRenderer() {
 		super();
-		this.model = model;
 	}
 
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-			boolean sel, boolean expanded, boolean leaf, int row,
-			boolean localHasFocus) {
-		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
-				row, localHasFocus);
+
+	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
+		boolean leaf, int row, boolean localHasFocus) {
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, localHasFocus);
 		if (normal == null) {
 			normal = this.getFont();
 		}

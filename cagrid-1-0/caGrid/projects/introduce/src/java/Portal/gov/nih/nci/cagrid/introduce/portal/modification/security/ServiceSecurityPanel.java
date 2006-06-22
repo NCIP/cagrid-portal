@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
@@ -201,7 +202,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		this.add(getSecureCommunicationPanel(), gridBagConstraints71);
 		setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Security Configuration",
 			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
-			null, IntroduceLookAndFeel.getPanelLabelColor()));
+			null, PortalLookAndFeel.getPanelLabelColor()));
 		this.add(getTransportPanel(), gridBagConstraints17);
 		synchronize();
 		isInited = true;
@@ -861,7 +862,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			jLabel6 = new JLabel();
 			jLabel6.setText("Import Credentials");
 			jLabel6.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
-			jLabel6.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
+			jLabel6.setForeground(PortalLookAndFeel.getPanelLabelColor());
 			selectPanel = new JPanel();
 
 			selectPanel.setLayout(new GridBagLayout());
@@ -1154,11 +1155,11 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		if (jPanel1 == null) {
 			credentialsRequired = new JLabel();
 			credentialsRequired.setText("Anonymous Clients");
-			credentialsRequired.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
+			credentialsRequired.setForeground(PortalLookAndFeel.getPanelLabelColor());
 			credentialsRequired.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
 			authLabel = new JLabel();
 			authLabel.setText("Authorization Mechanism");
-			authLabel.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
+			authLabel.setForeground(PortalLookAndFeel.getPanelLabelColor());
 			authLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
 
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();

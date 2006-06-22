@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.security.CommunicationMethod;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
-import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -25,19 +25,23 @@ public class SecureMessagePanel extends JPanel {
 	private boolean enabled = false;
 	private JLabel authMethodLabel = null;
 	private JComboBox communicationMethod = null;
+
+
 	public SecureMessagePanel() {
 		super();
 		initialize();
 	}
 
-	public void setSecureMessage(SecureMessage sm){
+
+	public void setSecureMessage(SecureMessage sm) {
 		communicationMethod.setSelectedItem(sm.getCommunicationMethod());
 	}
 
-	public SecureMessage getSecureMessage() throws Exception{
+
+	public SecureMessage getSecureMessage() throws Exception {
 		if (enabled) {
 			SecureMessage sm = new SecureMessage();
-			sm.setCommunicationMethod((CommunicationMethod)communicationMethod.getSelectedItem());
+			sm.setCommunicationMethod((CommunicationMethod) communicationMethod.getSelectedItem());
 			return sm;
 		} else {
 			return null;
@@ -58,20 +62,18 @@ public class SecureMessagePanel extends JPanel {
 
 
 	private void initialize() {
-		setBorder(javax.swing.BorderFactory.createTitledBorder(
-			null, "Secure Message",
-			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-			javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-			IntroduceLookAndFeel.getPanelLabelColor()));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Secure Message",
+			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
+			null, PortalLookAndFeel.getPanelLabelColor()));
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
 		gridBagConstraints1.gridx = 1;
 		gridBagConstraints1.gridy = 0;
-		gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints1.weightx = 1.0;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		gridBagConstraints.gridx = 0;
@@ -84,10 +86,10 @@ public class SecureMessagePanel extends JPanel {
 
 
 	/**
-	 * This method initializes communicationMethod	
-	 * 	
-	 * @return javax.swing.JComboBox	
-	 */    
+	 * This method initializes communicationMethod
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
 	private JComboBox getCommunicationMethod() {
 		if (communicationMethod == null) {
 			communicationMethod = new JComboBox();

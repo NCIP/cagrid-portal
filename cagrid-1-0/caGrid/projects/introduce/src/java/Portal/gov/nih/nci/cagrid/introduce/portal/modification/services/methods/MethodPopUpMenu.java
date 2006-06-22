@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.event.MouseAdapter;
@@ -46,7 +47,7 @@ public class MethodPopUpMenu extends JPopupMenu {
 		if (removeMethodMenuItem == null) {
 			removeMethodMenuItem = new JMenuItem();
 			removeMethodMenuItem.setText("Remove Method");
-			removeMethodMenuItem.setIcon(IntroduceLookAndFeel.getAddIcon());
+			removeMethodMenuItem.setIcon(PortalLookAndFeel.getAddIcon());
 			removeMethodMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
@@ -72,8 +73,8 @@ public class MethodPopUpMenu extends JPopupMenu {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
 					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-						new MethodViewer(node.getMethod(),node.getInfo()));
-					
+						new MethodViewer(node.getMethod(), node.getInfo()));
+
 				}
 			});
 		}

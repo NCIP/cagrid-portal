@@ -4,8 +4,6 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.common.GlobusTools;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
@@ -86,19 +84,25 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 			} else {
 				return null;
 			}
-			
+
 			if (this.globusPanel.currentSchemaFile != null) {
-				IntroducePortalConf conf = (IntroducePortalConf)PortalResourceManager.getInstance().getResource(IntroducePortalConf.RESOURCE);
-				int index = globusPanel.currentSchemaFile.getAbsolutePath().indexOf(conf.getGlobusLocation() + File.separator + "share" + File.separator + "schema" + File.separator) + new String(conf.getGlobusLocation()+ "share" + File.separator + "schema" + File.separator).length();
-				String location = ".." + File.separator + globusPanel.currentSchemaFile.getAbsolutePath().substring(index + 1,globusPanel.currentSchemaFile.getAbsolutePath().length());
+				IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
+					IntroducePortalConf.RESOURCE);
+				int index = globusPanel.currentSchemaFile.getAbsolutePath().indexOf(
+					conf.getGlobusLocation() + File.separator + "share" + File.separator + "schema" + File.separator)
+					+ new String(conf.getGlobusLocation() + "share" + File.separator + "schema" + File.separator)
+						.length();
+				String location = ".."
+					+ File.separator
+					+ globusPanel.currentSchemaFile.getAbsolutePath().substring(index + 1,
+						globusPanel.currentSchemaFile.getAbsolutePath().length());
 				input.setLocation(location);
 				gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(input, XMLUtilities
-						.fileNameToDocument(globusPanel.currentSchemaFile.getAbsolutePath()));
+					.fileNameToDocument(globusPanel.currentSchemaFile.getAbsolutePath()));
 			} else {
 				return null;
 			}
 
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -106,6 +110,7 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 
 		return input;
 	}
+
 
 	public static void main(String[] args) {
 		try {

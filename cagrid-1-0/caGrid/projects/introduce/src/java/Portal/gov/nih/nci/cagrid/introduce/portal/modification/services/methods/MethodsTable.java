@@ -2,10 +2,6 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
@@ -45,7 +41,7 @@ public class MethodsTable extends PortalBaseTable {
 			this.removeRow(i);
 		}
 
-		if (serviceType!=null && serviceType.getMethods() != null && serviceType.getMethods().getMethod() != null) {
+		if (serviceType != null && serviceType.getMethods() != null && serviceType.getMethods().getMethod() != null) {
 			for (int i = 0; i < serviceType.getMethods().getMethod().length; i++) {
 				final Vector v = new Vector();
 				v.add(new MethodTypeContainer(serviceType.getMethods().getMethod(i)));
@@ -55,8 +51,9 @@ public class MethodsTable extends PortalBaseTable {
 			}
 		}
 	}
-	
-	public void setMethods(ServiceType service){
+
+
+	public void setMethods(ServiceType service) {
 		this.serviceType = service;
 		initialize();
 	}
@@ -68,7 +65,7 @@ public class MethodsTable extends PortalBaseTable {
 			throw new Exception("invalid row");
 		}
 		MethodType method = getMethodType(getSelectedRow());
-		CommonTools.removeMethod(serviceType.getMethods(),method);
+		CommonTools.removeMethod(serviceType.getMethods(), method);
 		int oldSelectedRow = getSelectedRow();
 		((DefaultTableModel) getModel()).removeRow(oldSelectedRow);
 		if (oldSelectedRow == 0) {
@@ -106,7 +103,7 @@ public class MethodsTable extends PortalBaseTable {
 
 		((DefaultTableModel) this.getModel()).addRow(v);
 		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
-		CommonTools.addMethod(serviceType,method);
+		CommonTools.addMethod(serviceType, method);
 	}
 
 

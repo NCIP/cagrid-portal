@@ -69,8 +69,10 @@ public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode {
 	private DefaultTreeModel model;
 	private ResourcePropertiesPopUpMenu menu;
 	private ServiceInformation info;
-	
-	public ResourcePropertiesTypeTreeNode(ResourcePropertiesListType methods,DefaultTreeModel model,ServiceInformation info) {
+
+
+	public ResourcePropertiesTypeTreeNode(ResourcePropertiesListType methods, DefaultTreeModel model,
+		ServiceInformation info) {
 		super();
 		this.resourceProperties = methods;
 		this.setUserObject("Resource Properties");
@@ -79,90 +81,104 @@ public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode {
 		this.info = info;
 		initialize();
 	}
-	
-	private void initialize(){
-		if(resourceProperties!=null && resourceProperties.getResourceProperty()!=null){
-			for(int i = 0; i < resourceProperties.getResourceProperty().length; i++){
+
+
+	private void initialize() {
+		if (resourceProperties != null && resourceProperties.getResourceProperty() != null) {
+			for (int i = 0; i < resourceProperties.getResourceProperty().length; i++) {
 				ResourcePropertyType resource = resourceProperties.getResourceProperty(i);
-				ResourcePropertyTypeTreeNode newNode = new ResourcePropertyTypeTreeNode(resource,model);
-				model.insertNodeInto(newNode,this,this.getChildCount());
+				ResourcePropertyTypeTreeNode newNode = new ResourcePropertyTypeTreeNode(resource);
+				model.insertNodeInto(newNode, this, this.getChildCount());
 			}
 		}
 	}
-	
-	public void reInitialize(ResourcePropertiesListType resourceProperties){
-		this.resourceProperties = resourceProperties;
-		for(int i = this.getChildCount()-1; i == 0; i --){
-			model.removeNodeFromParent((DefaultMutableTreeNode)this.getChildAt(i));
+
+
+	public void reInitialize(ResourcePropertiesListType properties) {
+		this.resourceProperties = properties;
+		for (int i = this.getChildCount() - 1; i == 0; i--) {
+			model.removeNodeFromParent((DefaultMutableTreeNode) this.getChildAt(i));
 		}
 		initialize();
 	}
-	
-	public void add(ResourcePropertyType resourceProperty){
-		if(resourceProperties==null){
+
+
+	public void add(ResourcePropertyType resourceProperty) {
+		if (resourceProperties == null) {
 			System.err.println("ERROR: cannot add new resource when the resourcePropertys container is null.");
 		}
-		//add new resourceProperty to array in bean
-		//this seems to be a wierd way be adding things....
+		// add new resourceProperty to array in bean
+		// this seems to be a wierd way be adding things....
 		ResourcePropertyType[] newResourceProperty;
 		int newLength = 0;
-		if (resourceProperties!=null && resourceProperties.getResourceProperty()!=null) {
+		if (resourceProperties != null && resourceProperties.getResourceProperty() != null) {
 			newLength = resourceProperties.getResourceProperty().length + 1;
 			newResourceProperty = new ResourcePropertyType[newLength];
-			System.arraycopy(resourceProperties.getResourceProperty(), 0, newResourceProperty, 0,resourceProperties.getResourceProperty().length);
+			System.arraycopy(resourceProperties.getResourceProperty(), 0, newResourceProperty, 0, resourceProperties
+				.getResourceProperty().length);
 		} else {
 			newLength = 1;
 			newResourceProperty = new ResourcePropertyType[newLength];
 		}
 		newResourceProperty[newLength - 1] = resourceProperty;
 		resourceProperties.setResourceProperty(newResourceProperty);
-		
-		ResourcePropertyTypeTreeNode newNode = new ResourcePropertyTypeTreeNode(resourceProperty,model);
-		model.insertNodeInto(newNode,this,this.getChildCount());
+
+		ResourcePropertyTypeTreeNode newNode = new ResourcePropertyTypeTreeNode(resourceProperty);
+		model.insertNodeInto(newNode, this, this.getChildCount());
 	}
-	
-	public void removeResourceProperty(ResourcePropertyTypeTreeNode node){
-		
-		ResourcePropertyType[] newResourceProperties = new ResourcePropertyType[resourceProperties.getResourceProperty().length-1];
+
+
+	public void removeResourceProperty(ResourcePropertyTypeTreeNode node) {
+
+		ResourcePropertyType[] newResourceProperties = new ResourcePropertyType[resourceProperties
+			.getResourceProperty().length - 1];
 		int resourcePropertyCount = 0;
-		for(int i = 0; i < resourceProperties.getResourceProperty().length; i++){
-			if(!resourceProperties.getResourceProperty(i).equals(node.getUserObject())){
-				newResourceProperties[resourcePropertyCount++] = (ResourcePropertyType)node.getUserObject();
+		for (int i = 0; i < resourceProperties.getResourceProperty().length; i++) {
+			if (!resourceProperties.getResourceProperty(i).equals(node.getUserObject())) {
+				newResourceProperties[resourcePropertyCount++] = (ResourcePropertyType) node.getUserObject();
 			}
 		}
 		resourceProperties.setResourceProperty(newResourceProperties);
-		
+
 		model.removeNodeFromParent(node);
 	}
-	
-	public JPopupMenu getPopUpMenu(){
+
+
+	public JPopupMenu getPopUpMenu() {
 		return menu;
 	}
-	
-	public String toString(){
+
+
+	public String toString() {
 		return this.getUserObject().toString();
 	}
+
 
 	public ServiceInformation getInfo() {
 		return info;
 	}
-	
-	public DefaultTreeModel getModel(){
+
+
+	public DefaultTreeModel getModel() {
 		return this.model;
 	}
+
 
 	public void setInfo(ServiceInformation info) {
 		this.info = info;
 	}
 
+
 	public ResourcePropertiesListType getResourceProperties() {
 		return resourceProperties;
 	}
 
+
 	public void setResourceProperties(ResourcePropertiesListType resourceProperties) {
 		this.resourceProperties = resourceProperties;
 	}
-	
+
+
 	public ImageIcon getOpenIcon() {
 		return IntroduceLookAndFeel.getResourcePropertiesIcon();
 	}

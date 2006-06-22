@@ -1,9 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
-import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
-import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ModifyResourcePropertiesComponent;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -49,7 +47,7 @@ public class ServicePopUpMenu extends JPopupMenu {
 		if (removeMethodMenuItem == null) {
 			removeMethodMenuItem = new JMenuItem();
 			removeMethodMenuItem.setText("Remove Service Context");
-			removeMethodMenuItem.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+			removeMethodMenuItem.setIcon(PortalLookAndFeel.getRemoveIcon());
 			removeMethodMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
@@ -66,18 +64,18 @@ public class ServicePopUpMenu extends JPopupMenu {
 	 * 
 	 * @return javax.swing.JMenuItem
 	 */
-private JMenuItem getModificationMenuItem() {
+	private JMenuItem getModificationMenuItem() {
 		if (modificationMenuItem == null) {
 			modificationMenuItem = new JMenuItem();
 			modificationMenuItem.setText("Modify Service");
 			modificationMenuItem.addMouseListener(new MouseAdapter() {
-			
+
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
 					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-						new ModifyService(new SpecificServiceInformation(node.getInfo(),node.getServiceType())));
+						new ModifyService(new SpecificServiceInformation(node.getInfo(), node.getServiceType())));
 				}
-			
+
 			});
 		}
 		return modificationMenuItem;

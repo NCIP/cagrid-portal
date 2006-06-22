@@ -1,9 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 
@@ -24,7 +21,7 @@ public class ServicesTable extends PortalBaseTable {
 	public static String NAME = "Service Client Handles";
 
 	public static String DATA1 = "DATA1";
-	
+
 	public static String DATA2 = "DATA2";
 
 	private ServicesType services;
@@ -62,7 +59,7 @@ public class ServicesTable extends PortalBaseTable {
 			throw new Exception("invalid row");
 		}
 		Vector v = (Vector) getValueAt(getSelectedRow(), 1);
-		v.set(0,exception.getName());
+		v.set(0, exception.getName());
 		v.set(1, exception);
 	}
 
@@ -70,9 +67,10 @@ public class ServicesTable extends PortalBaseTable {
 	public ServiceType getSelectedRowData() throws Exception {
 		return getRowData(getSelectedRow());
 	}
-	
+
+
 	public ServiceType getRowData(int row) throws Exception {
-		ServiceType type =((ServiceType)getValueAt(row, 1));
+		ServiceType type = ((ServiceType) getValueAt(row, 1));
 		return type;
 	}
 

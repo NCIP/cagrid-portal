@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.introduce.beans.security.ProxyCredential;
@@ -235,7 +236,7 @@ public class LoadProxyFromFileSystemWindow extends GridPortalComponent {
 		if (cancelButton == null) {
 			cancelButton = new JButton();
 			cancelButton.setText("Cancel");
-			cancelButton.setIcon(IntroduceLookAndFeel.getCloseIcon());
+			cancelButton.setIcon(PortalLookAndFeel.getCloseIcon());
 			cancelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();

@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.introduce.info;
 
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
 
 /**
@@ -20,24 +18,27 @@ public class ImportInformation {
 	private MethodTypeImportInformation information;
 	private String prefix;
 
-	
-	public ImportInformation(MethodTypeImportInformation information, String prefix){
+
+	public ImportInformation(MethodTypeImportInformation information, String prefix) {
 		this.information = information;
 		this.prefix = prefix;
-	}	
-	
+	}
+
 
 	public MethodTypeImportInformation getInformation() {
 		return information;
 	}
 
+
 	public void setNamespace(MethodTypeImportInformation information) {
 		this.information = information;
 	}
 
+
 	public String getPrefix() {
 		return prefix;
 	}
+
 
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;

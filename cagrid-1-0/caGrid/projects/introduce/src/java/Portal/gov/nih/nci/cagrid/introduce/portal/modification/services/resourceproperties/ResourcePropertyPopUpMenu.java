@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
-import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -8,12 +8,15 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+
 public class ResourcePropertyPopUpMenu extends JPopupMenu {
 
 	private JMenuItem removeResourcePropertyMenuItem = null;
 	private ResourcePropertyTypeTreeNode node;
+
+
 	/**
-	 * This method initializes 
+	 * This method initializes
 	 * 
 	 */
 	public ResourcePropertyPopUpMenu(ResourcePropertyTypeTreeNode node) {
@@ -22,29 +25,31 @@ public class ResourcePropertyPopUpMenu extends JPopupMenu {
 		initialize();
 	}
 
+
 	/**
 	 * This method initializes this
 	 * 
 	 */
 	private void initialize() {
-        this.add(getRemoveResourcePropertyMenuItem());
-			
+		this.add(getRemoveResourcePropertyMenuItem());
+
 	}
 
+
 	/**
-	 * This method initializes removeResourcePropertyMenuItem	
-	 * 	
-	 * @return javax.swing.JMenuItem	
+	 * This method initializes removeResourcePropertyMenuItem
+	 * 
+	 * @return javax.swing.JMenuItem
 	 */
 	private JMenuItem getRemoveResourcePropertyMenuItem() {
 		if (removeResourcePropertyMenuItem == null) {
 			removeResourcePropertyMenuItem = new JMenuItem();
-			removeResourcePropertyMenuItem.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+			removeResourcePropertyMenuItem.setIcon(PortalLookAndFeel.getRemoveIcon());
 			removeResourcePropertyMenuItem.setText("Remove Resource Property");
-			removeResourcePropertyMenuItem.addMouseListener(new MouseAdapter() {		
+			removeResourcePropertyMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
-					((ResourcePropertiesTypeTreeNode)node.getParent()).removeResourceProperty(node);
+					((ResourcePropertiesTypeTreeNode) node.getParent()).removeResourceProperty(node);
 				}
 			});
 		}

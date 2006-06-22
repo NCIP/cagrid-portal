@@ -2,13 +2,11 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
-import javax.xml.namespace.QName;
 
 
 /**
@@ -25,7 +23,7 @@ public class OutputTypeTable extends PortalBaseTable {
 	public static String TYPE = "Type";
 
 	public static String DATA1 = "DATA1";
-	
+
 	public static String DATA2 = "DATA2";
 
 	private MethodType method;
@@ -136,7 +134,8 @@ public class OutputTypeTable extends PortalBaseTable {
 		// TODO Auto-generated method stub
 
 	}
-	
+
+
 	public static class MyDefaultTableModel extends DefaultTableModel {
 
 		public MyDefaultTableModel() {

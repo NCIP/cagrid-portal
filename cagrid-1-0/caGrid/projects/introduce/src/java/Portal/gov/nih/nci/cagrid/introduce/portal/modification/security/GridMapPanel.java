@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
@@ -112,7 +113,7 @@ public class GridMapPanel extends JPanel {
 		this.setLayout(new GridBagLayout());
 		setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Manage Grid Map File",
 			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
-			null, IntroduceLookAndFeel.getPanelLabelColor()));
+			null, PortalLookAndFeel.getPanelLabelColor()));
 		this.add(getGridMapFilePanel(), gridBagConstraints);
 		this.add(getTablePanel(), gridBagConstraints11);
 		this.add(getControlPanel(), gridBagConstraints21);
@@ -133,7 +134,7 @@ public class GridMapPanel extends JPanel {
 			gridBagConstraints3.gridy = 1;
 			jLabel1 = new JLabel();
 			jLabel1.setText("(File will be created if it does not exist)");
-			jLabel1.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
+			jLabel1.setForeground(PortalLookAndFeel.getPanelLabelColor());
 
 			jLabel1.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
@@ -281,7 +282,7 @@ public class GridMapPanel extends JPanel {
 			controlPanel = new JPanel();
 			controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Add/Remove User(s)",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			controlPanel.setLayout(new GridBagLayout());
 			controlPanel.add(getUserAddEditPanel(), gridBagConstraints7);
 			controlPanel.add(getUserManagerButtonPanel(), gridBagConstraints8);
@@ -373,7 +374,7 @@ public class GridMapPanel extends JPanel {
 		if (addButton == null) {
 			addButton = new JButton();
 			addButton.setText("Add User");
-			addButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addButton.setIcon(PortalLookAndFeel.getAddIcon());
 			addButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					addUser();
@@ -420,7 +421,7 @@ public class GridMapPanel extends JPanel {
 		if (removeButton == null) {
 			removeButton = new JButton();
 			removeButton.setText("Remove User");
-			removeButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+			removeButton.setIcon(PortalLookAndFeel.getRemoveIcon());
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					removeUser();

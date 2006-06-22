@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.security.CommunicationMethod;
 import gov.nih.nci.cagrid.introduce.beans.security.SecureConversation;
-import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -63,7 +63,7 @@ public class SecureConversationPanel extends JPanel {
 			null, "Secure Conversation",
 			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 			javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-			IntroduceLookAndFeel.getPanelLabelColor()));
+			PortalLookAndFeel.getPanelLabelColor()));
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;

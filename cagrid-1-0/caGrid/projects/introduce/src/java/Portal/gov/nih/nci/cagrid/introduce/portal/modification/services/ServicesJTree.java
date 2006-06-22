@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -11,16 +10,11 @@ import gov.nih.nci.cagrid.introduce.portal.modification.services.resourcepropert
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
@@ -38,7 +32,7 @@ public class ServicesJTree extends JTree {
 
 
 	public ServicesJTree(ServicesType services, ServiceInformation info) {
-		setCellRenderer(new ServicesTreeRenderer(model));
+		setCellRenderer(new ServicesTreeRenderer());
 		setServices(services);
 		this.info = info;
 		this.addMouseListener(new MouseAdapter() {
@@ -145,10 +139,10 @@ public class ServicesJTree extends JTree {
 	// Otherwise, collapses all nodes in the tree.
 	public void expandAll(boolean expand) {
 		JTree tree = this;
-		TreeNode root = (TreeNode) tree.getModel().getRoot();
+		TreeNode currRoot = (TreeNode) tree.getModel().getRoot();
 
 		// Traverse tree from root
-		expandAll(new TreePath(root), expand);
+		expandAll(new TreePath(currRoot), expand);
 	}
 
 
@@ -180,30 +174,6 @@ public class ServicesJTree extends JTree {
 		} else if (state && path.getLastPathComponent() == root) {
 			super.setExpandedState(path, state);
 		}
-	}
-
-
-	private boolean checkTypeExists(ServiceType type) {
-		TreeNode root = (TreeNode) this.getModel().getRoot();
-		// Traverse tree from root
-		return checkTypeExists(type, new TreePath(root));
-	}
-
-
-	private boolean checkTypeExists(ServiceType type, TreePath parent) {
-		// Traverse children
-		TreeNode node = (TreeNode) parent.getLastPathComponent();
-		if (node.getChildCount() >= 0) {
-			for (java.util.Enumeration e = node.children(); e.hasMoreElements();) {
-				TreeNode n = (TreeNode) e.nextElement();
-				ServiceTypeTreeNode nsNode = (ServiceTypeTreeNode) n;
-				ServiceType nsType = (ServiceType) nsNode.getUserObject();
-				if (nsType.getName().equals(type.getName())) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 

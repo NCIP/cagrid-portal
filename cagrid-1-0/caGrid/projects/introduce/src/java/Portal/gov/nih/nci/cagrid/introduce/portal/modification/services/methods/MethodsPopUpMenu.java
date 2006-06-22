@@ -1,13 +1,11 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
-import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -15,12 +13,15 @@ import javax.xml.namespace.QName;
 
 import org.projectmobius.portal.PortalResourceManager;
 
+
 public class MethodsPopUpMenu extends JPopupMenu {
 
 	private JMenuItem addMethodMenuItem = null;
 	MethodsTypeTreeNode node;
+
+
 	/**
-	 * This method initializes 
+	 * This method initializes
 	 * 
 	 */
 	public MethodsPopUpMenu(MethodsTypeTreeNode node) {
@@ -29,25 +30,27 @@ public class MethodsPopUpMenu extends JPopupMenu {
 		initialize();
 	}
 
+
 	/**
 	 * This method initializes this
 	 * 
 	 */
 	private void initialize() {
-        this.add(getAddMethodMenuItem());
-			
+		this.add(getAddMethodMenuItem());
+
 	}
 
+
 	/**
-	 * This method initializes addMethodMenuItem	
-	 * 	
-	 * @return javax.swing.JMenuItem	
+	 * This method initializes addMethodMenuItem
+	 * 
+	 * @return javax.swing.JMenuItem
 	 */
 	private JMenuItem getAddMethodMenuItem() {
 		if (addMethodMenuItem == null) {
 			addMethodMenuItem = new JMenuItem();
 			addMethodMenuItem.setText("Add Method");
-			addMethodMenuItem.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addMethodMenuItem.setIcon(PortalLookAndFeel.getAddIcon());
 			addMethodMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
@@ -57,20 +60,21 @@ public class MethodsPopUpMenu extends JPopupMenu {
 		}
 		return addMethodMenuItem;
 	}
-	
-	private void addMethod(){
+
+
+	private void addMethod() {
 		System.out.println("adding a new method");
-		
+
 		MethodType method = new MethodType();
 		method.setName("newMethod");
 		MethodTypeOutput output = new MethodTypeOutput();
 		output.setQName(new QName("", "void"));
 		method.setOutput(output);
-		
+
 		node.addMethod(method);
-		
+
 		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-			new MethodViewer(method, node.getInfo()));		
+			new MethodViewer(method, node.getInfo()));
 	}
 
 }

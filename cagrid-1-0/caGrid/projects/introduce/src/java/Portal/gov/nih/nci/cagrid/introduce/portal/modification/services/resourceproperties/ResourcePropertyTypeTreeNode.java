@@ -48,7 +48,6 @@ import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
 
 /**
@@ -65,7 +64,7 @@ public class ResourcePropertyTypeTreeNode extends DefaultMutableTreeNode {
 	private ResourcePropertyPopUpMenu menu;
 
 
-	public ResourcePropertyTypeTreeNode(ResourcePropertyType resourcePropertyType, DefaultTreeModel model) {
+	public ResourcePropertyTypeTreeNode(ResourcePropertyType resourcePropertyType) {
 		super();
 		this.menu = new ResourcePropertyPopUpMenu(this);
 		this.setUserObject(resourcePropertyType);

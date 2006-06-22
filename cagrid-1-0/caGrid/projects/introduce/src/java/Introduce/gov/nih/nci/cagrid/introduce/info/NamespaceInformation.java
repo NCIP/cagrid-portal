@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.info;
 
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
 
 /**
@@ -19,24 +18,27 @@ public class NamespaceInformation {
 	private NamespaceType namespace;
 	private String prefix;
 
-	
-	public NamespaceInformation(NamespaceType namespace, String prefix){
+
+	public NamespaceInformation(NamespaceType namespace, String prefix) {
 		this.namespace = namespace;
 		this.prefix = prefix;
-	}	
-	
+	}
+
 
 	public NamespaceType getNamespace() {
 		return namespace;
 	}
 
+
 	public void setNamespace(NamespaceType namespace) {
 		this.namespace = namespace;
 	}
 
+
 	public String getPrefix() {
 		return prefix;
 	}
+
 
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;

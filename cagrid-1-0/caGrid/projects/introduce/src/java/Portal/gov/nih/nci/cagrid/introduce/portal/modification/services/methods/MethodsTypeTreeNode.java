@@ -66,12 +66,13 @@ import javax.swing.tree.DefaultTreeModel;
  */
 public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
 	private MethodsType methods;
-	//private ServicesJTree tree;
+	// private ServicesJTree tree;
 	private MethodsPopUpMenu menu;
 	private DefaultTreeModel model;
 	private ServiceInformation info;
-	
-	public MethodsTypeTreeNode(MethodsType methods,DefaultTreeModel model,ServiceInformation info) {
+
+
+	public MethodsTypeTreeNode(MethodsType methods, DefaultTreeModel model, ServiceInformation info) {
 		super();
 		this.methods = methods;
 		this.setUserObject("Methods");
@@ -80,26 +81,28 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
 		this.model = model;
 		initialize();
 	}
-	
-	private void initialize(){
-		if(methods!=null && methods.getMethod()!=null){
-			for(int i = 0; i < methods.getMethod().length; i++){
+
+
+	private void initialize() {
+		if (methods != null && methods.getMethod() != null) {
+			for (int i = 0; i < methods.getMethod().length; i++) {
 				MethodType method = methods.getMethod(i);
-				MethodTypeTreeNode newNode = new MethodTypeTreeNode(method,model, info);
-				model.insertNodeInto(newNode,this,this.getChildCount());
+				MethodTypeTreeNode newNode = new MethodTypeTreeNode(method, info);
+				model.insertNodeInto(newNode, this, this.getChildCount());
 			}
 		}
 	}
-	
-	public void addMethod(MethodType method){
-		if(getMethods()==null){
+
+
+	public void addMethod(MethodType method) {
+		if (getMethods() == null) {
 			System.err.println("ERROR: cannot add new method when the methods container is null.");
 		}
-		//add new method to array in bean
-		//this seems to be a wierd way be adding things....
+		// add new method to array in bean
+		// this seems to be a wierd way be adding things....
 		MethodType[] newMethods;
 		int newLength = 0;
-		if (getMethods()!=null && getMethods().getMethod()!=null) {
+		if (getMethods() != null && getMethods().getMethod() != null) {
 			newLength = getMethods().getMethod().length + 1;
 			newMethods = new MethodType[newLength];
 			System.arraycopy(getMethods().getMethod(), 0, newMethods, 0, getMethods().getMethod().length);
@@ -109,61 +112,71 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
 		}
 		newMethods[newLength - 1] = method;
 		getMethods().setMethod(newMethods);
-		
-		MethodTypeTreeNode newNode = new MethodTypeTreeNode(method,model,info);
-		model.insertNodeInto(newNode,this,this.getChildCount());
-		
+
+		MethodTypeTreeNode newNode = new MethodTypeTreeNode(method, info);
+		model.insertNodeInto(newNode, this, this.getChildCount());
+
 	}
-	
-	public void removeMethod(MethodTypeTreeNode node){
-		
-		MethodType[] newMethods = new MethodType[getMethods().getMethod().length-1];
-		int newMethodsCount =0;
-		for(int i = 0; i < this.getChildCount(); i++){
-			MethodTypeTreeNode treenode = (MethodTypeTreeNode)this.getChildAt(i);
-			if(!treenode.equals(node)){
-				newMethods[newMethodsCount++] = (MethodType)treenode.getUserObject();
-			} 
+
+
+	public void removeMethod(MethodTypeTreeNode node) {
+
+		MethodType[] newMethods = new MethodType[getMethods().getMethod().length - 1];
+		int newMethodsCount = 0;
+		for (int i = 0; i < this.getChildCount(); i++) {
+			MethodTypeTreeNode treenode = (MethodTypeTreeNode) this.getChildAt(i);
+			if (!treenode.equals(node)) {
+				newMethods[newMethodsCount++] = (MethodType) treenode.getUserObject();
+			}
 		}
-		
+
 		getMethods().setMethod(newMethods);
-		
+
 		model.removeNodeFromParent(node);
 	}
-	
-	public JPopupMenu getPopUpMenu(){
+
+
+	public JPopupMenu getPopUpMenu() {
 		return menu;
 	}
-	
-	public String toString(){
+
+
+	public String toString() {
 		return this.getUserObject().toString();
 	}
+
 
 	public MethodsType getMethods() {
 		return methods;
 	}
 
+
 	public void setMethods(MethodsType methods) {
 		this.methods = methods;
 	}
+
 
 	public DefaultTreeModel getModel() {
 		return model;
 	}
 
+
 	public ServiceInformation getInfo() {
 		return info;
 	}
 
+
 	public void setInfo(ServiceInformation info) {
 		this.info = info;
 	}
-	
-	public ImageIcon getOpenIcon(){
+
+
+	public ImageIcon getOpenIcon() {
 		return IntroduceLookAndFeel.getMethodsIcon();
 	}
-	
-	public ImageIcon getClosedIcon(){
+
+
+	public ImageIcon getClosedIcon() {
 		return IntroduceLookAndFeel.getMethodsIcon();
 	}
 

@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 
@@ -64,10 +63,11 @@ public class ExceptionsTable extends PortalBaseTable {
 	public MethodTypeExceptionsException getSelectedRowData() throws Exception {
 		return getRowData(getSelectedRow());
 	}
-	
+
+
 	public MethodTypeExceptionsException getRowData(int row) throws Exception {
 		MethodTypeExceptionsException exception = new MethodTypeExceptionsException();
-		exception.setName((String)getValueAt(row, 0));
+		exception.setName((String) getValueAt(row, 0));
 		return exception;
 	}
 

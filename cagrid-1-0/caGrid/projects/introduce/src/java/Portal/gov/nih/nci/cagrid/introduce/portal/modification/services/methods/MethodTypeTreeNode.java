@@ -51,7 +51,6 @@ import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
 
 /**
@@ -67,37 +66,42 @@ import javax.swing.tree.DefaultTreeModel;
 public class MethodTypeTreeNode extends DefaultMutableTreeNode {
 	private MethodPopUpMenu popUpMenu;
 	private ServiceInformation info;
-	private DefaultTreeModel model;
 	MethodType method;
-	
-	public MethodTypeTreeNode(MethodType methodType,DefaultTreeModel model,ServiceInformation info) {
+
+
+	public MethodTypeTreeNode(MethodType methodType, ServiceInformation info) {
 		super();
 		this.info = info;
-		this.model = model;
 		popUpMenu = new MethodPopUpMenu(this);
 		this.method = methodType;
 		this.setUserObject(methodType);
 	}
-	
-	public ImageIcon getOpenIcon(){
+
+
+	public ImageIcon getOpenIcon() {
 		return IntroduceLookAndFeel.getMethodIcon();
 	}
-	
-	public ImageIcon getClosedIcon(){
+
+
+	public ImageIcon getClosedIcon() {
 		return IntroduceLookAndFeel.getMethodIcon();
 	}
-	
-	public String toString(){
-		return CommonTools.methodTypeToString(((MethodType)this.getUserObject()));
+
+
+	public String toString() {
+		return CommonTools.methodTypeToString(((MethodType) this.getUserObject()));
 	}
-	
-	public JPopupMenu getPopUpMenu(){
+
+
+	public JPopupMenu getPopUpMenu() {
 		return popUpMenu;
 	}
+
 
 	public MethodType getMethod() {
 		return method;
 	}
+
 
 	public ServiceInformation getInfo() {
 		return info;
