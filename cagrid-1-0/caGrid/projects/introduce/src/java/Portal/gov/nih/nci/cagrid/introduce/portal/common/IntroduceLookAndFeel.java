@@ -1,15 +1,9 @@
 package gov.nih.nci.cagrid.introduce.portal.common;
 
-import java.awt.Dimension;
-import java.awt.Window;
-
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-
-import org.projectmobius.portal.PortalResourceManager;
 
 
 /**

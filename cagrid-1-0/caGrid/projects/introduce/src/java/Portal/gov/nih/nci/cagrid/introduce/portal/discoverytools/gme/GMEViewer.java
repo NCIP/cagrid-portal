@@ -1,12 +1,12 @@
 package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
-import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.JEditTextArea;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.XMLTokenMarker;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
@@ -218,7 +218,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 			schemaViewer.setLayout(new GridBagLayout());
 			schemaViewer.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Schema Text",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			schemaViewer.add(getSchemaTextPane(), gridBagConstraints3);
 		}
 		return schemaViewer;
@@ -242,7 +242,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 			gmeViewerPanel.setLayout(new GridBagLayout());
 			gmeViewerPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Schema Locator",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			gmeViewerPanel.add(getGmeSchemaLocatorPanel(), gridBagConstraints4);
 		}
 		return gmeViewerPanel;
@@ -409,7 +409,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 			uploadSchemaViewPanel.setLayout(new GridBagLayout());
 			uploadSchemaViewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Schema Preview",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			uploadSchemaViewPanel.add(getUploadSchemaTextPane(), gridBagConstraints9);
 		}
 		return uploadSchemaViewPanel;
