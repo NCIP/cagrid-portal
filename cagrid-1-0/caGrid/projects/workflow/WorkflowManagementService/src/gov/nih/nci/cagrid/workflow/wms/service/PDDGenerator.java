@@ -36,17 +36,13 @@ import org.xml.sax.SAXException;
 public class PDDGenerator
 {
 	public static final String XMLNS_PDD =
-        "http://www.active-endpoints.com/schemas/deploy/pdd.xsd";
+		"http://schemas.active-endpoints.com/pdd/2005/09/pdd.xsd";
     public static final String XMLNS_BPEL =
         "http://schemas.xmlsoap.org/ws/2003/03/business-process/";
     public static final String XMLNS_WSDL =
         "http://schemas.xmlsoap.org/wsdl/";
-    public static final String XMLNS_PLINK =
-        "http://schemas.xmlsoap.org/ws/2003/05/partner-link/";
     public static final String XMLNS_WSA =
         "http://schemas.xmlsoap.org/ws/2003/03/addressing";
-    public static final String WSA_ANONYMOUS =
-        "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous";
     
 	public static Document 
 		generatePDD(String workflowName, Document bpelDoc) throws Exception {
@@ -65,7 +61,7 @@ public class PDDGenerator
         // Add partnerLinks
         Collection partnerLinks = parsePartnerLinks(root,bpelDoc, doc);
         Collection wsdlNamespaces = null;
-        appendPartnerLinks(doc, root, partnerLinks);
+        //appendPartnerLinks(doc, root, partnerLinks);
 		return doc;
 	}
 
@@ -85,19 +81,14 @@ public class PDDGenerator
 	            Element pNode = doc.createElementNS(XMLNS_PDD, "partnerLink");
 	            plinksNode.appendChild(pNode);
 	            pNode.setAttribute("name", plink.name);
-	            if (!"".equals(plink.myRole)) {
-	                Element myRoleNode = doc.createElementNS(XMLNS_PDD, "myRole");
-	                myRoleNode.setAttribute("service",plink.getName() + "Service");
-	                myRoleNode.setAttribute("allowedRoles","");
-	                myRoleNode.setAttribute("binding","MSG");
-	                pNode.appendChild(myRoleNode);
-	            } 
 	            if (!"".equals(plink.partnerRole)) {
 	                Element pRoleNode = doc.createElementNS(XMLNS_PDD, "partnerRole");
 	                pRoleNode.setAttribute("endpointReference","static");
+	                pRoleNode.setAttribute("invokeHandler", "default:Address");
 	                Element epRefNode = doc.createElement("wsa:EndpointReference");
+	                epRefNode.setAttribute("xmlns:wsa", XMLNS_WSA);
 	                Element epAddrNode = doc.createElement("wsa:Address");
-	               // Element epServNode = doc.createElementNS(XMLNS_WSA,"ServiceName");
+//	                Element epServNode = doc.createElementNS(XMLNS_WSA,"ServiceName");
 
 	                pNode.appendChild(pRoleNode);
 	                pRoleNode.appendChild(epRefNode);
@@ -115,7 +106,15 @@ public class PDDGenerator
 //	                epServNode.setAttribute("xmlns:ns0", 
 //	                        plink.linkType.getNamespaceURI());
 //	                epServNode.appendChild(doc.createTextNode("ns0:SoapPortHere"));
-	            } else {
+	            }
+	            if (!"".equals(plink.myRole)) {
+	                Element myRoleNode = doc.createElementNS(XMLNS_PDD, "myRole");
+	                myRoleNode.setAttribute("service",plink.getName() + "Service");
+	                myRoleNode.setAttribute("allowedRoles","");
+	                myRoleNode.setAttribute("binding","MSG");
+	                pNode.appendChild(myRoleNode);
+	            } 
+	             else {
 	                System.err.println("PartnerLink "+plink.name
 	                        +" should have either myRole or partnerRole attribute!");
 	                continue;
@@ -161,6 +160,7 @@ public class PDDGenerator
 	            wsdlNamespaces.add(nsuri);
 	            partnerLinks.add(pl);
 	        }
+	        appendPartnerLinks(pdd, root,partnerLinks);
 	        appendWsdlReferences(pdd, root, wsdlNamespaces, null);
 	        return partnerLinks;
 	    }
