@@ -23,26 +23,6 @@ import org.projectmobius.portal.PortalResourceManager;
  */
 public class IntroduceLookAndFeel extends PortalLookAndFeel {
 
-	public final static void centerComponent(JComponent comp) {
-		// Determine the new location of the window
-		int w = PortalResourceManager.getInstance().getGridPortal().getSize().width;
-		int h = PortalResourceManager.getInstance().getGridPortal().getSize().height;
-		int x = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().x;
-		int y = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().y;
-		Dimension dim = comp.getSize();
-		comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
-	}
-	
-	public final static void centerWindow(Window comp) {
-		// Determine the new location of the window
-		int w = PortalResourceManager.getInstance().getGridPortal().getSize().width;
-		int h = PortalResourceManager.getInstance().getGridPortal().getSize().height;
-		int x = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().x;
-		int y = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().y;
-		Dimension dim = comp.getSize();
-		comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
-	}
-
 
 	public final static ImageIcon getResyncIcon() {
 		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/view-refresh.png"));

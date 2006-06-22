@@ -67,7 +67,6 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		gridBagConstraints11.weighty = 1.0D;
 		gridBagConstraints11.gridx = 0;
 		this.setLayout(new GridBagLayout());
-		this.setSize(new java.awt.Dimension(337, 218));
 		this.add(getMainPanel(), gridBagConstraints11);
 	}
 

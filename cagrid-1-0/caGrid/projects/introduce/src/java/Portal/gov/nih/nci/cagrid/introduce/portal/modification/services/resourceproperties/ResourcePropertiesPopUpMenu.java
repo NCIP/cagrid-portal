@@ -2,9 +2,11 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
@@ -47,8 +49,12 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
 			modifyResourcePropetiesMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
-					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-						new ModifyResourcePropertiesComponent(node.getResourceProperties(),node.getInfo().getNamespaces(),true));
+					ModifyResourcePropertiesComponent comp = new ModifyResourcePropertiesComponent(node.getResourceProperties(),node.getInfo().getNamespaces(),true);
+					IntroduceLookAndFeel.centerWindow(comp);
+					comp.setVisible(true);
+					node.reInitialize(node.getResourceProperties());
+					
+				
 				}
 			
 			});

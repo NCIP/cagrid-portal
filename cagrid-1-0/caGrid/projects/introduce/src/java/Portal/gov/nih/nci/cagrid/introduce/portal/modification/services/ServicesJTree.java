@@ -26,6 +26,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+
 public class ServicesJTree extends JTree {
 	private ServicesTypeTreeNode root;
 
@@ -35,6 +36,7 @@ public class ServicesJTree extends JTree {
 
 	private ServiceInformation info;
 
+
 	public ServicesJTree(ServicesType services, ServiceInformation info) {
 		setCellRenderer(new ServicesTreeRenderer(model));
 		setServices(services);
@@ -42,32 +44,28 @@ public class ServicesJTree extends JTree {
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
-				ServicesJTree.this.setSelectionRow(ServicesJTree.this
-						.getRowForLocation(e.getX(), e.getY()));
+				ServicesJTree.this.setSelectionRow(ServicesJTree.this.getRowForLocation(e.getX(), e.getY()));
 				if (SwingUtilities.isRightMouseButton(e)) {
 					List nodes = ServicesJTree.this.getSelectedNodes();
 					if (nodes.size() >= 1) {
 						if (nodes.get(0) instanceof MethodsTypeTreeNode) {
-							((MethodsTypeTreeNode) nodes.get(0)).getPopUpMenu()
-									.show(e.getComponent(), e.getX(), e.getY());
+							((MethodsTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(), e.getX(),
+								e.getY());
 						} else if (nodes.get(0) instanceof MethodTypeTreeNode) {
-							((MethodTypeTreeNode) nodes.get(0)).getPopUpMenu()
-									.show(e.getComponent(), e.getX(), e.getY());
+							((MethodTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(), e.getX(),
+								e.getY());
 						} else if (nodes.get(0) instanceof ResourcePropertiesTypeTreeNode) {
-							((ResourcePropertiesTypeTreeNode) nodes.get(0))
-									.getPopUpMenu().show(e.getComponent(),
-											e.getX(), e.getY());
+							((ResourcePropertiesTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(),
+								e.getX(), e.getY());
 						} else if (nodes.get(0) instanceof ServicesTypeTreeNode) {
-							((ServicesTypeTreeNode) nodes.get(0))
-									.getPopUpMenu().show(e.getComponent(),
-											e.getX(), e.getY());
+							((ServicesTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(), e.getX(),
+								e.getY());
 						} else if (nodes.get(0) instanceof ResourcePropertyTypeTreeNode) {
-							((ResourcePropertyTypeTreeNode) nodes.get(0))
-									.getPopUpMenu().show(e.getComponent(),
-											e.getX(), e.getY());
+							((ResourcePropertyTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(),
+								e.getX(), e.getY());
 						} else if (nodes.get(0) instanceof ServiceTypeTreeNode) {
-							((ServiceTypeTreeNode) nodes.get(0)).getPopUpMenu()
-									.show(e.getComponent(), e.getX(), e.getY());
+							((ServiceTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(), e.getX(),
+								e.getY());
 						}
 					}
 				}
@@ -76,37 +74,21 @@ public class ServicesJTree extends JTree {
 
 	}
 
+
 	public void setServices(ServicesType ns) {
 		this.root = new ServicesTypeTreeNode(info);
 		this.model = new DefaultTreeModel(root, false);
 		this.services = ns;
 		this.root.setServices(this.services, this.model);
 		setModel(model);
-		model.addTreeModelListener(new TreeModelListener() {
-
-			public void treeStructureChanged(TreeModelEvent e) {
-			}
-
-			public void treeNodesRemoved(TreeModelEvent e) {
-			}
-
-			public void treeNodesInserted(TreeModelEvent e) {
-				System.out.println("treeNodesInserted");
-				
-			}
-
-			public void treeNodesChanged(TreeModelEvent e) {
-			}
-
-		});
 		expandAll(true);
 	}
+
 
 	public DefaultMutableTreeNode getCurrentNode() {
 		TreePath currentSelection = this.getSelectionPath();
 		if (currentSelection != null) {
-			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection
-					.getLastPathComponent();
+			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection.getLastPathComponent();
 			// if (currentNode != this.root) {
 			return currentNode;
 			// }
@@ -114,14 +96,14 @@ public class ServicesJTree extends JTree {
 		return null;
 	}
 
+
 	public List getSelectedNodes() {
 		List selected = new LinkedList();
 		TreePath[] currentSelection = this.getSelectionPaths();
 		if (currentSelection != null) {
 			for (int i = 0; i < currentSelection.length; i++) {
 				TreePath path = currentSelection[i];
-				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) path
-						.getLastPathComponent();
+				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) path.getLastPathComponent();
 				// if (currentNode != this.root) {
 				selected.add(currentNode);
 				// }
@@ -129,6 +111,7 @@ public class ServicesJTree extends JTree {
 		}
 		return selected;
 	}
+
 
 	public void removeSelectedNode() {
 		DefaultMutableTreeNode currentNode = getCurrentNode();
@@ -157,6 +140,7 @@ public class ServicesJTree extends JTree {
 		}
 	}
 
+
 	// If expand is true, expands all nodes in the tree.
 	// Otherwise, collapses all nodes in the tree.
 	public void expandAll(boolean expand) {
@@ -166,6 +150,7 @@ public class ServicesJTree extends JTree {
 		// Traverse tree from root
 		expandAll(new TreePath(root), expand);
 	}
+
 
 	private void expandAll(TreePath parent, boolean expand) {
 		JTree tree = this;
@@ -187,6 +172,7 @@ public class ServicesJTree extends JTree {
 		}
 	}
 
+
 	protected void setExpandedState(TreePath path, boolean state) {
 		// Ignore all collapse requests; collapse events will not be fired
 		if (path.getLastPathComponent() != root) {
@@ -196,11 +182,13 @@ public class ServicesJTree extends JTree {
 		}
 	}
 
+
 	private boolean checkTypeExists(ServiceType type) {
 		TreeNode root = (TreeNode) this.getModel().getRoot();
 		// Traverse tree from root
 		return checkTypeExists(type, new TreePath(root));
 	}
+
 
 	private boolean checkTypeExists(ServiceType type, TreePath parent) {
 		// Traverse children
@@ -217,6 +205,7 @@ public class ServicesJTree extends JTree {
 		}
 		return false;
 	}
+
 
 	/**
 	 * @param args

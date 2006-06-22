@@ -10,11 +10,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import org.projectmobius.portal.GridPortalComponent;
-
-public class ModifyResourcePropertiesComponent extends GridPortalComponent {
+public class ModifyResourcePropertiesComponent extends JDialog {
 
 	private JPanel mainPanel = null;
 	private JPanel resourcesPanel = null;

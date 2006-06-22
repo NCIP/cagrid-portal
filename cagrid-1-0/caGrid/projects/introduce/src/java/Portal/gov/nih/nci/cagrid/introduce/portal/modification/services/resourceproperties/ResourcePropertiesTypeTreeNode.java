@@ -90,6 +90,14 @@ public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode {
 		}
 	}
 	
+	public void reInitialize(ResourcePropertiesListType resourceProperties){
+		this.resourceProperties = resourceProperties;
+		for(int i = this.getChildCount()-1; i == 0; i --){
+			model.removeNodeFromParent((DefaultMutableTreeNode)this.getChildAt(i));
+		}
+		initialize();
+	}
+	
 	public void add(ResourcePropertyType resourceProperty){
 		if(resourceProperties==null){
 			System.err.println("ERROR: cannot add new resource when the resourcePropertys container is null.");
@@ -137,6 +145,10 @@ public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode {
 
 	public ServiceInformation getInfo() {
 		return info;
+	}
+	
+	public DefaultTreeModel getModel(){
+		return this.model;
 	}
 
 	public void setInfo(ServiceInformation info) {
