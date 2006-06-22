@@ -7,8 +7,6 @@ security operationprovider needs to be hooked into build properly...
 
 on deployment i have seen unable to delete namespace2package.mappings.
 
-eclipse launch files dont need to be in the top directory to work... move them somewhere else so they don't clutter the services root dir
-
 From BMI Tutorial:
 0) needs handouts for people to follow along
 6) Adding a resource property to a service context, doesn't refresh the JTree
@@ -68,6 +66,9 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+
+(DONE i am leaving this for now) eclipse launch files dont need to be in the top directory to work... move them somewhere else so they don't clutter the services root dir
+
 Modification Viewer's Methods table needs to manage the backend model, not create new Method objects 
 
 introduce created clients should not call getPortType() for each method invocation (its very inefficient), getPortType should be called once in the contructor, and each method should just use it
