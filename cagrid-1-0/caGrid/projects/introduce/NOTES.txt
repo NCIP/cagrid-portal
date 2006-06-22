@@ -5,7 +5,7 @@ I was adding faults to a method, and when I hit done, an error dialog poped up w
 security operationprovider needs to be hooked into build properly...
  - have copies of schema and jars... needs to get from artifacts
 
-on deployment i have seen unable to delete namespace2package.mappings.
+on save etc i have seen unable to delete namespace2package.mappings.
 
 From BMI Tutorial:
 0) needs handouts for people to follow along
