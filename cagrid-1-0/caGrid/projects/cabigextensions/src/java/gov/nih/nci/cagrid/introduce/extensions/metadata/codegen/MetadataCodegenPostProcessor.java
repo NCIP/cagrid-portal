@@ -81,7 +81,7 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 
 		// serialize the model
 		try {
-			Utils.serializeDocument(filename, metadata, MetadataConstants.SERVICE_QNAME);
+			Utils.serializeDocument(filename, metadata, MetadataConstants.SERVICE_METADATA_QNAME);
 		} catch (Exception e) {
 			throw new CodegenExtensionException("Error serializing metadata document.", e);
 		}
