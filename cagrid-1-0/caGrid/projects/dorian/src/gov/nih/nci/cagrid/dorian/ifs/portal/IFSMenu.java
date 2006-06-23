@@ -19,7 +19,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IFSMenu.java,v 1.15 2006-04-07 03:52:58 oster Exp $
+ * @version $Id: IFSMenu.java,v 1.16 2006-06-23 13:10:06 langella Exp $
  */
 public class IFSMenu extends GridPortalComponent {
 
@@ -251,7 +251,7 @@ public class IFSMenu extends GridPortalComponent {
 							400);
 		} else if (manageUsers.isSelected()) {
 			PortalResourceManager.getInstance().getGridPortal()
-					.addGridPortalComponent(new UserManagerWindow(),700,500);
+					.addGridPortalComponent(new UserManagerWindow(),700,550);
 		}else if (trustedIdP.isSelected()) {
 			PortalResourceManager.getInstance().getGridPortal()
 			.addGridPortalComponent(new TrustedIdPsWindow());

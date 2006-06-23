@@ -12,7 +12,7 @@ import javax.swing.table.TableColumn;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.7 2006-03-02 17:56:52 langella Exp $
+ * @version $Id: UsersTable.java,v 1.8 2006-06-23 13:10:06 langella Exp $
  */
 public class UsersTable extends PortalBaseTable {
 	public final static String USER = "user";
@@ -25,9 +25,9 @@ public class UsersTable extends PortalBaseTable {
 
 	public final static String EMAIL = "Email";
 
-	public final static String STATUS = "Status";
+	public final static String FIRST_NAME = "First Name";
 
-	public final static String ROLE = "Role";
+	public final static String LAST_NAME = "Last Name";
 	
 	UserManagerWindow window;
 
@@ -59,9 +59,9 @@ public class UsersTable extends PortalBaseTable {
 		model.addColumn(IDP);
 		model.addColumn(UID);
 		model.addColumn(GRID_IDENTITY);
+		model.addColumn(FIRST_NAME);
+		model.addColumn(LAST_NAME);
 		model.addColumn(EMAIL);
-		model.addColumn(STATUS);
-		model.addColumn(ROLE);
 		return model;
 
 	}
@@ -72,9 +72,9 @@ public class UsersTable extends PortalBaseTable {
 		v.add(String.valueOf(u.getIdPId()));
 		v.add(String.valueOf(u.getUID()));
 		v.add(u.getGridId());
-		v.add(u.getEmail());
-		v.add(u.getUserStatus().getValue());
-		v.add(u.getUserRole().getValue());
+		v.add(u.getFirstName());
+		v.add(u.getLastName());
+		v.add(u.getEmail());	
 		addRow(v);
 	}
 
