@@ -8,16 +8,27 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.AxisEngine;
 import org.apache.axis.AxisFault;
+import org.apache.axis.EngineConfiguration;
 import org.apache.axis.MessageContext;
+import org.apache.axis.client.AxisClient;
+import org.apache.axis.configuration.FileProvider;
+import org.apache.axis.encoding.SerializationContext;
+import org.apache.axis.message.MessageElement;
 import org.apache.axis.utils.XMLUtils;
+import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.encoding.ObjectSerializer;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 
 public class Utils {
@@ -136,6 +147,63 @@ public class Utils {
 		br.close();
 
 		return sb;
+	}
+	
+	
+	/**
+	 * Serialize an Object to XML
+	 * @param obj
+	 * 		The object to be serialized
+	 * @param qname
+	 * 		The QName of the object
+	 * @param writer
+	 * 		A writer to place XML into (eg: FileWriter, StringWriter)
+	 * @param wsddName
+	 * 		The name of the wsdd file
+	 * @throws Exception
+	 */
+	public static void serializeObject(Object obj, QName qname, Writer writer, String wsddName) 
+		throws Exception {
+		// configure the axis engine to use the supplied wsdd file
+		EngineConfiguration engineConfig = new FileProvider(wsddName);
+		AxisClient axisClient = new AxisClient(engineConfig);
+		MessageContext messageContext = new MessageContext(axisClient);
+		messageContext.setEncodingStyle("");
+		messageContext.setProperty(AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+		
+		// create a serialization context to use the new message context
+		SerializationContext serializationContext = 
+			new SerializationContext(writer, messageContext);
+		serializationContext.setPretty(true);
+		
+		// derive a message element for the object
+		MessageElement element = (MessageElement) ObjectSerializer.toSOAPElement(obj, qname);
+		
+		// output the message element through the serialization context
+		element.output(serializationContext);
+		writer.write("\n");
+		writer.flush();
+	}
+	
+	
+	/**
+	 * Deserializes XML into an object
+	 * @param xmlReader
+	 * 		The reader for the XML (eg: FileReader, StringReader, etc)
+	 * @param clazz
+	 * 		The class to serialize to
+	 * @param wsddName
+	 * 		The name of the wsdd file to use for configuration
+	 * @return
+	 * @throws SAXException
+	 * @throws DeserializationException
+	 */
+	public static Object deserializeObject(Reader xmlReader, Class clazz, String wsddName) 
+	throws SAXException, DeserializationException {
+		// input source for the xml
+		InputSource xmlSource = new InputSource(xmlReader);
+		
+		return ConfigurableObjectDeserializer.toObject(xmlSource, clazz, wsddName);		
 	}
 
 
