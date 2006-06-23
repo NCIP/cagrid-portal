@@ -153,6 +153,11 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 	private void editServiceContext(ServiceType service, ServiceContext serviceContext) {
 		serviceContext.setName(service.getName());
 
+		// set a description (for xsd validation reasons)
+		if (serviceContext.getDescription() == null || serviceContext.getDescription().trim().equals("")) {
+			serviceContext.setDescription("");
+		}
+
 		// make context properties for RPs
 		editServiceContextProperties(service.getResourcePropertiesList().getResourceProperty(), serviceContext);
 
@@ -205,6 +210,10 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 
 	private void editOperation(MethodType method, Operation operation) {
 		operation.setName(method.getName());
+		// set a description (for xsd validation reasons)
+		if (operation.getDescription() == null || operation.getDescription().trim().equals("")) {
+			operation.setDescription("");
+		}
 
 		// OUTPUT
 		MethodTypeOutput methOut = method.getOutput();
@@ -322,6 +331,10 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 				currFault = new Fault();
 			}
 			currFault.setName(name);
+			// set a description (for xsd validation reasons)
+			if (currFault.getDescription() == null || currFault.getDescription().trim().equals("")) {
+				currFault.setDescription("");
+			}
 			newFaults[i] = currFault;
 		}
 
@@ -364,6 +377,11 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 				currProp = new ContextProperty();
 			}
 			currProp.setName(name.toString());
+			// set a description (for xsd validation reasons)
+			if (currProp.getDescription() == null || currProp.getDescription().trim().equals("")) {
+				currProp.setDescription("");
+			}
+
 			newProps[i] = currProp;
 
 		}
