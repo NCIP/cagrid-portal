@@ -48,10 +48,20 @@ public class EncodingUtils {
 			String prop = (String) context.getProperty(CASTOR_MAPPING_PROPERTY);
 			if (prop != null && !prop.trim().equals("")) {
 				mappingLocation = prop;
-				LOG.debug("Loading castor mapping from property[" + CASTOR_MAPPING_PROPERTY + "]");
+				LOG.debug("Loading castor mapping from message context property[" + CASTOR_MAPPING_PROPERTY + "]");
 			} else {
-				LOG.debug("Unable to locate castor mapping property[" + CASTOR_MAPPING_PROPERTY
-					+ "], using default mapping location:" + DEFAULT_XML_MAPPING);
+				try {
+					prop = (String) context.getAxisEngine().getConfig().getGlobalOptions().get(CASTOR_MAPPING_PROPERTY);
+				} catch (Exception e) {
+					LOG.debug("Error reading global configuration:" + e.getMessage(), e);
+				}
+				if (prop != null && !prop.trim().equals("")) {
+					mappingLocation = prop;
+					LOG.debug("Loading castor mapping from globalConfiguration property[" + CASTOR_MAPPING_PROPERTY + "]");
+				} else {
+					LOG.debug("Unable to locate castor mapping property[" + CASTOR_MAPPING_PROPERTY
+						+ "], using default mapping location:" + DEFAULT_XML_MAPPING);
+				}
 			}
 		} else {
 			LOG.debug("Unable to determine message context, using default mapping location:" + DEFAULT_XML_MAPPING);

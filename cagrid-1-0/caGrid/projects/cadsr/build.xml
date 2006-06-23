@@ -383,6 +383,10 @@
 			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
 			<sysproperty key="axis.ClientConfigFile" value="${service.src.dir}/gov/nih/nci/cagrid/cadsr/client/client-config.wsdd" />
 			<jvmarg value="-Daxis.ClientConfigFile=${service.src.dir}/gov/nih/nci/cagrid/cadsr/client/client-config.wsdd" />
+			<!--
+			<sysproperty key="log4j.debug" value="true" />
+			<sysproperty key="log4j.configuration" value="file:\${ext.globus.dir}\log4j.properties" />
+			-->
 			<arg value="-url" />
 			<arg value="${cadsr.service.url}" />
 		</java>
