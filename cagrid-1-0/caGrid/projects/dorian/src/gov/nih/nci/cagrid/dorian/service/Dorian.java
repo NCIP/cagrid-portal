@@ -98,8 +98,13 @@ public class Dorian extends MobiusResourceManager {
 			idp.setIdPCertificate(CertUtil.writeCertificate(this.identityProvider.getIdPCertificate()));
 			idp.setStatus(TrustedIdPStatus.Active);
 			IFSUser usr = new IFSUser();
-			usr.setUID(IDP_ADMIN_USER_ID);
-			// usr.setEmail(idpUser.getEmail());
+			IdPUser idpUsr =identityProvider.getUser(IDP_ADMIN_USER_ID,IDP_ADMIN_USER_ID);
+			usr.setUID(idpUsr.getUserId());
+			usr.setFirstName(idpUsr.getFirstName());
+			usr.setLastName(idpUsr.getLastName());
+			usr.setEmail(idpUsr.getEmail());
+			//usr.setUID(IDP_ADMIN_USER_ID);
+			//usr.setEmail(idpUser.getEmail());
 			usr.setUserStatus(IFSUserStatus.Active);
 			usr.setUserRole(IFSUserRole.Administrator);
 

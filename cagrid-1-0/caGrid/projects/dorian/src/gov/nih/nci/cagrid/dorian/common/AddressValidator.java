@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.common;
 
+import gov.nih.nci.cagrid.common.Utils;
 
 
 /**
@@ -12,8 +13,21 @@ package gov.nih.nci.cagrid.dorian.common;
 public class AddressValidator {
 
 	public static void validateEmail(String email) throws IllegalArgumentException {
+		validateField("email", email);
 		if (email.indexOf("@") == -1) {
 			throw new IllegalArgumentException("Invalid email address specified.");
+		}
+	}
+
+
+	public static void validateField(String type, String name) throws IllegalArgumentException {
+		name = Utils.clean(name);
+		if (name == null) {
+			throw new IllegalArgumentException("No " + type + " specified.");
+		}
+		if (name.length() > 255) {
+			throw new IllegalArgumentException("The " + type
+				+ " specified is too long, it must be less than 255 characters.");
 		}
 	}
 

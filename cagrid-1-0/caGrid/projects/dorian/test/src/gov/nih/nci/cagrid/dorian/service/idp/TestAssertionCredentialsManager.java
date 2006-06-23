@@ -3,9 +3,8 @@ package gov.nih.nci.cagrid.dorian.service.idp;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.common.SAMLUtils;
-import gov.nih.nci.cagrid.dorian.service.idp.AssertionCredentialsManager;
-import gov.nih.nci.cagrid.dorian.service.idp.IdPConfiguration;
 import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.dorian.test.Utils;
@@ -13,7 +12,6 @@ import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.InvalidCryptoException;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
-import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
 import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLStatement;
@@ -47,6 +45,8 @@ public class TestAssertionCredentialsManager extends TestCase {
 
 	private static String TEST_EMAIL = "test@test.com";
 	private static String TEST_UID = "test";
+	private static String TEST_FIRST_NAME = "John";
+	private static String TEST_LAST_NAME = "Doe";
 
 
 	public void verifySAMLAssertion(SAMLAssertion saml, AssertionCredentialsManager cm) throws Exception {
@@ -64,7 +64,6 @@ public class TestAssertionCredentialsManager extends TestCase {
 		assertEquals(cm.getIdPCertificate().getSubjectDN().toString(), saml.getIssuer());
 		Iterator itr = saml.getStatements();
 		int count = 0;
-		boolean emailFound = false;
 		boolean authFound = false;
 		while (itr.hasNext()) {
 			count = count + 1;
@@ -81,31 +80,30 @@ public class TestAssertionCredentialsManager extends TestCase {
 			}
 
 			if (stmt instanceof SAMLAttributeStatement) {
-				if (emailFound) {
-					assertTrue(false);
-				} else {
-					emailFound = true;
-				}
-				SAMLAttributeStatement att = (SAMLAttributeStatement) stmt;
-				assertEquals(TEST_UID, att.getSubject().getNameIdentifier().getName());
-				Iterator i = att.getAttributes();
-				assertTrue(i.hasNext());
-				SAMLAttribute a = (SAMLAttribute) i.next();
-				assertEquals(AssertionCredentialsManager.EMAIL_NAMESPACE, a.getNamespace());
-				assertEquals(AssertionCredentialsManager.EMAIL_NAME, a.getName());
-				Iterator vals = a.getValues();
-				assertTrue(vals.hasNext());
-				String val = (String) vals.next();
-				assertEquals(TEST_EMAIL, val);
-				assertTrue(!vals.hasNext());
-				assertTrue(!i.hasNext());
+
+				String uid = Utils.getAttribute(saml, SAMLConstants.UID_ATTRIBUTE_NAMESPACE,
+					SAMLConstants.UID_ATTRIBUTE);
+				assertNotNull(uid);
+				String email = Utils.getAttribute(saml, SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE,
+					SAMLConstants.EMAIL_ATTRIBUTE);
+				assertNotNull(email);
+				String firstName = Utils.getAttribute(saml, SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE,
+					SAMLConstants.FIRST_NAME_ATTRIBUTE);
+				assertNotNull(firstName);
+				String lastName = Utils.getAttribute(saml, SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE,
+					SAMLConstants.LAST_NAME_ATTRIBUTE);
+				assertNotNull(lastName);
+
+				assertEquals(TEST_UID, uid);
+				assertEquals(TEST_FIRST_NAME, firstName);
+				assertEquals(TEST_LAST_NAME, lastName);
+				assertEquals(TEST_EMAIL, email);
 			}
 
 		}
 
 		assertEquals(2, count);
 		assertTrue(authFound);
-		assertTrue(emailFound);
 	}
 
 
@@ -123,7 +121,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 			assertNotNull(cm.getIdPKey());
 			String expectedSub = Utils.CA_SUBJECT_PREFIX + ",CN=" + AssertionCredentialsManager.CA_SUBJECT;
 			assertEquals(expectedSub, cert.getSubjectDN().toString());
-			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID, TEST_EMAIL);
+			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID, TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL);
 			verifySAMLAssertion(saml, cm);
 			String xml = SAMLUtils.samlAssertionToString(saml);
 			SAMLAssertion saml2 = SAMLUtils.stringToSAMLAssertion(xml);
@@ -184,7 +182,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 				assertTrue(false);
 			}
 
-			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID, TEST_EMAIL);
+			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID, TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL);
 			verifySAMLAssertion(saml, cm);
 			String xml = SAMLUtils.samlAssertionToString(saml);
 			SAMLAssertion saml2 = SAMLUtils.stringToSAMLAssertion(xml);
@@ -263,7 +261,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 			PrivateKey key = cm.getIdPKey();
 			assertNotNull(key);
 			assertEquals(conf.getAssertingKey(), key);
-			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID, TEST_EMAIL);
+			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID, TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL);
 			verifySAMLAssertion(saml, cm);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

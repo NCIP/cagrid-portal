@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.MetadataManager;
+import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
@@ -26,6 +27,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import javax.xml.namespace.QName;
 
 import org.apache.xml.security.signature.XMLSignature;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
@@ -49,10 +52,6 @@ public class AssertionCredentialsManager extends LoggingObject {
 	private final static String IDP_CERTIFICATE_DESCRIPTION = "Certificate corresponding to the private key used by IdP to sign authentication assersions.";
 
 	public final static String CA_SUBJECT = "Dorian IdP Authentication Asserter";
-
-	public final static String EMAIL_NAMESPACE = "http://cagrid.nci.nih.gov/email";
-
-	public final static String EMAIL_NAME = "email";
 
 	private MetadataManager mm;
 
@@ -147,7 +146,7 @@ public class AssertionCredentialsManager extends LoggingObject {
 	}
 
 
-	public SAMLAssertion getAuthenticationAssertion(String id, String email) throws DorianInternalFault {
+	public SAMLAssertion getAuthenticationAssertion(String uid, String firstName, String lastName, String email) throws DorianInternalFault {
 		try {
 			org.apache.xml.security.Init.init();
 			X509Certificate cert = getIdPCertificate();
@@ -161,20 +160,44 @@ public class AssertionCredentialsManager extends LoggingObject {
 			String ipAddress = null;
 			String subjectDNS = null;
 
-			SAMLNameIdentifier ni1 = new SAMLNameIdentifier(id, federation,
+			SAMLNameIdentifier ni1 = new SAMLNameIdentifier(uid, federation,
 				"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 			SAMLSubject sub = new SAMLSubject(ni1, null, null, null);
-			SAMLNameIdentifier ni2 = new SAMLNameIdentifier(id, federation,
+			SAMLNameIdentifier ni2 = new SAMLNameIdentifier(uid, federation,
 				"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 			SAMLSubject sub2 = new SAMLSubject(ni2, null, null, null);
 			SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub,
 				"urn:oasis:names:tc:SAML:1.0:am:password", new Date(), ipAddress, subjectDNS, null);
-			List vals = new ArrayList();
-			vals.add(email);
-			SAMLAttribute att = new SAMLAttribute(EMAIL_NAME, EMAIL_NAMESPACE, null, 0, vals);
+			
+			QName quid = new QName(SAMLConstants.UID_ATTRIBUTE_NAMESPACE, SAMLConstants.UID_ATTRIBUTE);
+			List vals1 = new ArrayList();
+			vals1.add(uid);
+			SAMLAttribute uidAtt = new SAMLAttribute(quid.getLocalPart(), quid.getNamespaceURI(), null, 0, vals1);
+		
+			QName qfirst = new QName(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE, SAMLConstants.FIRST_NAME_ATTRIBUTE);
+			List vals2 = new ArrayList();
+			vals2.add(firstName);
+			SAMLAttribute firstNameAtt = new SAMLAttribute(qfirst.getLocalPart(), qfirst.getNamespaceURI(), null, 0,
+				vals2);
+
+			QName qLast = new QName(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE, SAMLConstants.LAST_NAME_ATTRIBUTE);
+			List vals3 = new ArrayList();
+			vals3.add(lastName);
+			SAMLAttribute lastNameAtt = new SAMLAttribute(qLast.getLocalPart(), qLast.getNamespaceURI(), null, 0,
+				vals3);
+
+			QName qemail = new QName(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE, SAMLConstants.EMAIL_ATTRIBUTE);
+			List vals4 = new ArrayList();
+			vals4.add(email);
+			SAMLAttribute emailAtt = new SAMLAttribute(qemail.getLocalPart(), qemail.getNamespaceURI(), null, 0,
+				vals4);
 
 			List atts = new ArrayList();
-			atts.add(att);
+			atts.add(uidAtt);
+			atts.add(firstNameAtt);
+			atts.add(lastNameAtt);
+			atts.add(emailAtt);
+	
 			SAMLAttributeStatement attState = new SAMLAttributeStatement(sub2, atts);
 
 			List l = new ArrayList();

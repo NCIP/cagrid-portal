@@ -227,6 +227,15 @@ public class UserManager extends LoggingObject {
 				user.setIdPId(rs.getLong("IDP_ID"));
 				user.setUID(rs.getString("UID"));
 				user.setGridId(rs.getString("GID"));
+				String firstName = rs.getString("FIRST_NAME");
+				if ((firstName != null) && (!firstName.equalsIgnoreCase("null"))) {
+					user.setFirstName(firstName);
+				}
+
+				String lastName = rs.getString("LAST_NAME");
+				if ((lastName != null) && (!lastName.equalsIgnoreCase("null"))) {
+					user.setLastName(lastName);
+				}
 				String email = rs.getString("EMAIL");
 				if ((email != null) && (!email.equals("null"))) {
 					user.setEmail(email);
@@ -279,8 +288,17 @@ public class UserManager extends LoggingObject {
 				user.setIdPId(rs.getLong("IDP_ID"));
 				user.setUID(rs.getString("UID"));
 				user.setGridId(rs.getString("GID"));
+				String firstName = rs.getString("FIRST_NAME");
+				if ((firstName != null) && (!firstName.equalsIgnoreCase("null"))) {
+					user.setFirstName(firstName);
+				}
+
+				String lastName = rs.getString("LAST_NAME");
+				if ((lastName != null) && (!lastName.equalsIgnoreCase("null"))) {
+					user.setLastName(lastName);
+				}
 				String email = rs.getString("EMAIL");
-				if ((email != null) && (!email.equals("null"))) {
+				if ((email != null) && (!email.equalsIgnoreCase("null"))) {
 					user.setEmail(email);
 				}
 				user.setUserStatus(IFSUserStatus.fromValue(rs.getString("STATUS")));
@@ -347,6 +365,18 @@ public class UserManager extends LoggingObject {
 					sql.append(" GID LIKE '%" + filter.getGridId() + "%'");
 				}
 
+				if (filter.getFirstName() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" FIRST_NAME LIKE '%" + filter.getFirstName() + "%'");
+				}
+
+				if (filter.getLastName() != null) {
+					sql = appendWhereOrAnd(firstAppended, sql);
+					firstAppended = true;
+					sql.append(" LAST_NAME LIKE '%" + filter.getLastName() + "%'");
+				}
+
 				if (filter.getEmail() != null) {
 					sql = appendWhereOrAnd(firstAppended, sql);
 					firstAppended = true;
@@ -372,6 +402,15 @@ public class UserManager extends LoggingObject {
 				user.setIdPId(rs.getLong("IDP_ID"));
 				user.setUID(rs.getString("UID"));
 				user.setGridId(rs.getString("GID"));
+				String firstName = rs.getString("FIRST_NAME");
+				if ((firstName != null) && (!firstName.equalsIgnoreCase("null"))) {
+					user.setFirstName(firstName);
+				}
+
+				String lastName = rs.getString("LAST_NAME");
+				if ((lastName != null) && (!lastName.equalsIgnoreCase("null"))) {
+					user.setLastName(lastName);
+				}
 				String email = rs.getString("EMAIL");
 				if ((email != null) && (!email.equals("null"))) {
 					user.setEmail(email);
@@ -419,21 +458,22 @@ public class UserManager extends LoggingObject {
 				user.setGridId(subjectToIdentity(cert.getSubjectDN().toString()));
 				user.setUserRole(IFSUserRole.Non_Administrator);
 				user.setUserStatus(IFSUserStatus.Pending);
-				if (user.getEmail() != null) {
-					try {
-						AddressValidator.validateEmail(user.getEmail());
-					} catch (IllegalArgumentException e) {
-						InvalidUserFault fault = new InvalidUserFault();
-						fault.setFaultString(e.getMessage());
-						throw fault;
-					}
+				try {
+					AddressValidator.validateEmail(user.getEmail());
+				} catch (IllegalArgumentException e) {
+					InvalidUserFault fault = new InvalidUserFault();
+					fault.setFaultString(e.getMessage());
+					throw fault;
 				}
 				validateSpecifiedField("UID", user.getUID());
 				validateSpecifiedField("Grid Id", user.getGridId());
+				validateSpecifiedField("First Name", user.getFirstName());
+				validateSpecifiedField("Last Name", user.getLastName());
 
 				db.update("INSERT INTO " + USERS_TABLE + " SET IDP_ID='" + user.getIdPId() + "',UID='" + user.getUID()
 					+ "', GID='" + user.getGridId() + "',STATUS='" + user.getUserStatus().toString() + "',ROLE='"
-					+ user.getUserRole().toString() + "',EMAIL='" + user.getEmail() + "'");
+					+ user.getUserRole().toString() + "', FIRST_NAME='" + user.getFirstName() + "', LAST_NAME='"
+					+ user.getLastName() + "',EMAIL='" + user.getEmail() + "'");
 
 				if (!user.getUserStatus().equals(IFSUserStatus.Active)) {
 					publishCRL();
@@ -484,6 +524,25 @@ public class UserManager extends LoggingObject {
 			sb.append("update " + USERS_TABLE + " SET ");
 			int changes = 0;
 			IFSUser curr = this.getUser(u.getIdPId(), u.getUID());
+
+			if ((u.getFirstName() != null) && (!u.getFirstName().equals(curr.getFirstName()))) {
+				validateSpecifiedField("First Name", u.getFirstName());
+				
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("FIRST_NAME='" + u.getFirstName() + "'");
+				changes = changes + 1;
+			}
+
+			if ((u.getLastName() != null) && (!u.getLastName().equals(curr.getLastName()))) {
+				validateSpecifiedField("Last Name", u.getLastName());
+				if (changes > 0) {
+					sb.append(",");
+				}
+				sb.append("LAST_NAME='" + u.getLastName() + "'");
+				changes = changes + 1;
+			}
 
 			if ((u.getEmail() != null) && (!u.getEmail().equals(curr.getEmail()))) {
 				try {
@@ -581,11 +640,14 @@ public class UserManager extends LoggingObject {
 	}
 
 
-	private void validateSpecifiedField(String fieldName, String name) throws InvalidUserFault {
-		if ((name == null) || (name.length() == 0)) {
-			InvalidUserFault fault = new InvalidUserFault();
-			fault.setFaultString("No " + fieldName + " specified.");
-			throw fault;
+	private void validateSpecifiedField(String type, String name) throws InvalidUserFault {
+		name = Utils.clean(name);
+		if (name == null) {
+			throw new IllegalArgumentException("No " + type + " specified.");
+		}
+		if (name.length() > 255) {
+			throw new IllegalArgumentException("The " + type
+				+ " specified is too long, it must be less than 255 characters.");
 		}
 	}
 
@@ -648,8 +710,10 @@ public class UserManager extends LoggingObject {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(USERS_TABLE)) {
 				String users = "CREATE TABLE " + USERS_TABLE + " (" + "IDP_ID INT NOT NULL,"
-					+ "UID VARCHAR(255) NOT NULL," + "GID VARCHAR(255) NOT NULL," + "STATUS VARCHAR(50) NOT NULL,"
-					+ "ROLE VARCHAR(50) NOT NULL, " + "EMAIL VARCHAR(255) NOT NULL, " + "INDEX document_index (UID));";
+					+ "UID VARCHAR(255) NOT NULL," + "FIRST_NAME VARCHAR(255) NOT NULL,"
+					+ "LAST_NAME VARCHAR(255) NOT NULL," + "GID VARCHAR(255) NOT NULL,"
+					+ "STATUS VARCHAR(50) NOT NULL," + "ROLE VARCHAR(50) NOT NULL, " + "EMAIL VARCHAR(255) NOT NULL, "
+					+ "INDEX document_index (UID));";
 				db.update(users);
 
 				try {

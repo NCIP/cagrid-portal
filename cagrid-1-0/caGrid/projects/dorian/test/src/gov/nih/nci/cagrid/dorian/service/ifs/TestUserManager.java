@@ -61,6 +61,8 @@ public class TestUserManager extends TestCase {
 			IFSUser user = new IFSUser();
 			user.setIdPId(INIT_USER + 1);
 			user.setUID("user");
+			user.setFirstName("John");
+			user.setLastName("Doe");
 			user.setEmail("user@user.com");
 			user = um.addUser(user);
 			assertNotNull(user.getCertificate());
@@ -142,20 +144,44 @@ public class TestUserManager extends TestCase {
 			l7 = um.getUsers(f7);
 			assertEquals(1, l7.length);
 			assertEquals(user, l7[0]);
+			
+//			 Test querying by First Name 
+			IFSUserFilter f8 = new IFSUserFilter();
+			f8.setFirstName("nobody");
+			IFSUser[] l8 = um.getUsers(f8);
+			assertEquals(0, l8.length);
+			f8.setFirstName(user.getFirstName());
+			l8 = um.getUsers(f8);
+			assertEquals(1, l8.length);
+			assertEquals(user, l8[0]);
+			
+//			 Test querying by Last Name 
+			IFSUserFilter f9 = new IFSUserFilter();
+			f9.setLastName("nobody");
+			IFSUser[] l9 = um.getUsers(f9);
+			assertEquals(0, l9.length);
+			f9.setLastName(user.getLastName());
+			l9 = um.getUsers(f9);
+			assertEquals(1, l9.length);
+			assertEquals(user, l9[0]);
 
 			// Test All
-			IFSUserFilter f8 = new IFSUserFilter();
-			f8.setIdPId(user.getIdPId());
-			f8.setUID(user.getUID());
-			f8.setGridId(user.getGridId());
-			f8.setEmail(user.getEmail());
-			f8.setUserRole(user.getUserRole());
-			f8.setUserStatus(user.getUserStatus());
-			IFSUser[] l8 = um.getUsers(f8);
-			assertEquals(1, l8.length);
+			IFSUserFilter all = new IFSUserFilter();
+			all.setIdPId(user.getIdPId());
+			all.setUID(user.getUID());
+			all.setGridId(user.getGridId());
+			all.setFirstName(user.getFirstName());
+			all.setLastName(user.getLastName());
+			all.setEmail(user.getEmail());
+			all.setUserRole(user.getUserRole());
+			all.setUserStatus(user.getUserStatus());
+			IFSUser[] allList = um.getUsers(all);
+			assertEquals(1, allList.length);
 
 			// Test Update
 			IFSUser u1 = um.getUser(user.getGridId());
+			u1.setFirstName("newfirst");
+			u1.setLastName("newlast");
 			u1.setEmail("newemail@example.com");
 			um.updateUser(u1);
 			assertEquals(u1, um.getUser(u1.getGridId()));
@@ -179,6 +205,7 @@ public class TestUserManager extends TestCase {
 			u4.setEmail("newemail2@example.com");
 			um.updateUser(u4);
 			assertEquals(u4, um.getUser(u4.getGridId()));
+			
 
 			IFSUser u5 = um.getUser(user.getGridId());
 			u5.setGridId("changed grid id");
@@ -220,6 +247,8 @@ public class TestUserManager extends TestCase {
 		try {
 
 			String prefix = "user";
+			String firstNamePrefix = "John";
+			String lastNamePrefix = "Doe";
 
 			int userCount = 9;
 
@@ -229,11 +258,15 @@ public class TestUserManager extends TestCase {
 				long idpCount = (i / 3) + 1;
 
 				String uname = prefix + i;
+				String firstName = firstNamePrefix +i;
+				String lastName = lastNamePrefix+i;
 
 				IFSUser user = new IFSUser();
 
 				user.setIdPId(idpId);
 				user.setUID(uname);
+				user.setFirstName(firstName);
+				user.setLastName(lastName);
 				user.setEmail(uname + "@user.com");
 				user = um.addUser(user);
 				assertNotNull(user.getCertificate());
@@ -324,17 +357,45 @@ public class TestUserManager extends TestCase {
 				l7 = um.getUsers(f7);
 				assertEquals(1, l7.length);
 				assertEquals(user, l7[0]);
+				
+//				 Test querying by First Name 
+				IFSUserFilter f8 = new IFSUserFilter();
+				f8.setFirstName("nobody");
+				IFSUser[] l8 = um.getUsers(f8);
+				assertEquals(0, l8.length);
+				f8.setFirstName(firstNamePrefix);
+				l8 = um.getUsers(f8);
+				assertEquals((i+1), l8.length);
+				f8.setFirstName(user.getFirstName());
+				l8 = um.getUsers(f8);
+				assertEquals(1, l8.length);
+				assertEquals(user, l8[0]);
+				
+//				 Test querying by Last Name 
+				IFSUserFilter f9 = new IFSUserFilter();
+				f9.setLastName("nobody");
+				IFSUser[] l9 = um.getUsers(f9);
+				assertEquals(0, l9.length);
+				f9.setLastName(lastNamePrefix);
+				l9 = um.getUsers(f9);
+				assertEquals((i+1), l9.length);
+				f9.setLastName(user.getLastName());
+				l9 = um.getUsers(f9);
+				assertEquals(1, l9.length);
+				assertEquals(user, l9[0]);
 
 				// Test All
-				IFSUserFilter f8 = new IFSUserFilter();
-				f8.setIdPId(user.getIdPId());
-				f8.setUID(user.getUID());
-				f8.setGridId(user.getGridId());
-				f8.setEmail(user.getEmail());
-				f8.setUserRole(user.getUserRole());
-				f8.setUserStatus(user.getUserStatus());
-				IFSUser[] l8 = um.getUsers(f8);
-				assertEquals(1, l8.length);
+				IFSUserFilter all = new IFSUserFilter();
+				all.setIdPId(user.getIdPId());
+				all.setUID(user.getUID());
+				all.setGridId(user.getGridId());
+				all.setFirstName(user.getFirstName());
+				all.setLastName(user.getLastName());
+				all.setEmail(user.getEmail());
+				all.setUserRole(user.getUserRole());
+				all.setUserStatus(user.getUserStatus());
+				IFSUser[] lall = um.getUsers(all);
+				assertEquals(1, lall.length);
 
 				// Test Update
 				IFSUser u1 = um.getUser(user.getGridId());
@@ -404,7 +465,7 @@ public class TestUserManager extends TestCase {
 
 
 	private IFSConfiguration getOneYearConf() throws Exception {
-		IFSConfiguration conf = new IFSConfiguration();
+        IFSConfiguration conf = new IFSConfiguration();
 		conf.setCredentialsValidYears(1);
 		conf.setCredentialsValidMonths(0);
 		conf.setCredentialsValidDays(0);
@@ -436,6 +497,8 @@ public class TestUserManager extends TestCase {
 		idp.setStatus(TrustedIdPStatus.Active);
 		IFSUser usr = new IFSUser();
 		usr.setUID("inital_admin");
+		usr.setFirstName("Mr");
+		usr.setLastName("Admin");
 		usr.setEmail("inital_admin@test.com");
 		usr.setUserStatus(IFSUserStatus.Active);
 		usr.setUserRole(IFSUserRole.Administrator);

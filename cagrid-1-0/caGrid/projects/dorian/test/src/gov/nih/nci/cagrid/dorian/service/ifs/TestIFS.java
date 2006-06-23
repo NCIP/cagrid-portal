@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
@@ -12,14 +13,6 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
-import gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy;
-import gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalPolicy;
-import gov.nih.nci.cagrid.dorian.service.ifs.IFS;
-import gov.nih.nci.cagrid.dorian.service.ifs.IFSConfiguration;
-import gov.nih.nci.cagrid.dorian.service.ifs.IFSUtils;
-import gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalAutoRenewalPolicy;
-import gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalPolicy;
-import gov.nih.nci.cagrid.dorian.service.ifs.UserManager;
 import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.InvalidAssertionFault;
 import gov.nih.nci.cagrid.dorian.stubs.InvalidProxyFault;
@@ -69,10 +62,6 @@ public class TestIFS extends TestCase {
 	private static final int SHORT_PROXY_VALID = 2;
 
 	private static final int SHORT_CREDENTIALS_VALID = 7;
-
-	public final static String EMAIL_NAMESPACE = "http://cagrid.nci.nih.gov/email";
-
-	public final static String EMAIL_NAME = "email";
 
 	public final static String INITIAL_ADMIN = "admin";
 
@@ -531,6 +520,8 @@ public class TestIFS extends TestCase {
 		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP").getIdp();
 		IFSUser usr = new IFSUser();
 		usr.setUID(INITIAL_ADMIN);
+		usr.setFirstName("Mr");
+		usr.setLastName("Admin");
 		usr.setEmail(INITIAL_ADMIN + "@test.com");
 		usr.setUserStatus(IFSUserStatus.Active);
 		usr.setUserRole(IFSUserRole.Administrator);
@@ -557,6 +548,8 @@ public class TestIFS extends TestCase {
 		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP").getIdp();
 		IFSUser usr = new IFSUser();
 		usr.setUID("inital_admin");
+		usr.setFirstName("Mr");
+		usr.setLastName("Admin");
 		usr.setEmail("inital_admin@test.com");
 		usr.setUserStatus(IFSUserStatus.Active);
 		usr.setUserRole(IFSUserRole.Administrator);
@@ -598,6 +591,8 @@ public class TestIFS extends TestCase {
 			org.apache.xml.security.Init.init();
 			X509Certificate cert = idp.getCert();
 			PrivateKey key = idp.getKey();
+			String firstName="first"+id;
+			String lastName="first"+id;
 			String email = id + "@test.com";
 
 			String issuer = cert.getSubjectDN().toString();
@@ -612,13 +607,33 @@ public class TestIFS extends TestCase {
 			SAMLSubject sub2 = new SAMLSubject(ni2, null, null, null);
 			SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub, method, new Date(), ipAddress,
 				subjectDNS, null);
-			QName name = new QName(EMAIL_NAMESPACE, EMAIL_NAME);
-			List vals = new ArrayList();
-			vals.add(email);
-			SAMLAttribute att = new SAMLAttribute(name.getLocalPart(), name.getNamespaceURI(), name, 0, vals);
+			
+			
+			QName quid = new QName(SAMLConstants.UID_ATTRIBUTE_NAMESPACE, SAMLConstants.UID_ATTRIBUTE);
+			List vals1 = new ArrayList();
+			vals1.add(id);
+			SAMLAttribute uidAtt = new SAMLAttribute(quid.getLocalPart(), quid.getNamespaceURI(), quid, 0, vals1);
+			
+			QName qfirst = new QName(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE, SAMLConstants.FIRST_NAME_ATTRIBUTE);
+			List vals2 = new ArrayList();
+			vals2.add(firstName);
+			SAMLAttribute firstNameAtt = new SAMLAttribute(qfirst.getLocalPart(), qfirst.getNamespaceURI(), qfirst, 0, vals2);
+			
+			QName qLast = new QName(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE, SAMLConstants.LAST_NAME_ATTRIBUTE);
+			List vals3 = new ArrayList();
+			vals3.add(lastName);
+			SAMLAttribute lastNameAtt = new SAMLAttribute(qLast.getLocalPart(), qLast.getNamespaceURI(), qLast, 0, vals3);
+			
+			QName qemail = new QName(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE, SAMLConstants.EMAIL_ATTRIBUTE);
+			List vals4 = new ArrayList();
+			vals4.add(email);
+			SAMLAttribute emailAtt = new SAMLAttribute(qemail.getLocalPart(), qemail.getNamespaceURI(), qemail, 0, vals4);
 
 			List atts = new ArrayList();
-			atts.add(att);
+			atts.add(uidAtt);
+			atts.add(firstNameAtt);
+			atts.add(lastNameAtt);
+			atts.add(emailAtt);
 			SAMLAttributeStatement attState = new SAMLAttributeStatement(sub2, atts);
 
 			List l = new ArrayList();

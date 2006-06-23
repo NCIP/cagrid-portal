@@ -9,6 +9,14 @@
         </parameter>
       </resourceParams>
     </resource>
+    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.dorian.service.ServiceConfiguration">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+      </resourceParams>
+    </resource>
     <resource name="configuration" type="gov.nih.nci.cagrid.dorian.service.globus.resource.ResourceConfiguration">
       <resourceParams>
         <parameter>
@@ -29,14 +37,6 @@
           <name>serviceMetadataFile</name>
           <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the serviceMetadata extract -->
           <value>ETC-PATH/serviceMetadata.xml</value>
-        </parameter>
-      </resourceParams>
-    </resource>
-    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.dorian.service.ServiceConfiguration">
-      <resourceParams>
-        <parameter>
-          <name>factory</name>
-          <value>org.globus.wsrf.jndi.BeanFactory</value>
         </parameter>
       </resourceParams>
     </resource>

@@ -9,7 +9,7 @@
                       
   ============================================================-->
   <types>
-    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns2="http://cagrid.nci.nih.gov/1/dorian-ifs" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns1="http://cagrid.nci.nih.gov/1/dorian-common" xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-idp" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/Dorian" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns4="http://cagrid.nci.nih.gov/1/dorian-ifs" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns1="http://cagrid.nci.nih.gov/1/dorian-common" xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-idp" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/Dorian" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./xsd/cagrid/types/caGridMetadata.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/1/dorian-ifs" schemaLocation="./dorian-ifs.xsd" />
@@ -119,14 +119,14 @@
             <element name="publicKey">
               <complexType>
                 <sequence>
-                  <element ref="ns2:PublicKey" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns4:PublicKey" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
             <element name="lifetime">
               <complexType>
                 <sequence>
-                  <element ref="ns2:ProxyLifetime" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns4:ProxyLifetime" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -160,7 +160,7 @@
       <element name="GetTrustedIdPsResponse">
         <complexType>
           <sequence>
-            <element ref="ns2:TrustedIdP" minOccurs="1" maxOccurs="unbounded" />
+            <element ref="ns4:TrustedIdP" minOccurs="1" maxOccurs="unbounded" />
           </sequence>
         </complexType>
       </element>
@@ -170,7 +170,7 @@
             <element name="idp">
               <complexType>
                 <sequence>
-                  <element ref="ns2:TrustedIdP" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns4:TrustedIdP" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -180,7 +180,7 @@
       <element name="AddTrustedIdPResponse">
         <complexType>
           <sequence>
-            <element ref="ns2:TrustedIdP" minOccurs="1" maxOccurs="1" />
+            <element ref="ns4:TrustedIdP" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -190,7 +190,7 @@
             <element name="trustedIdP">
               <complexType>
                 <sequence>
-                  <element ref="ns2:TrustedIdP" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns4:TrustedIdP" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -208,7 +208,7 @@
             <element name="trustedIdP">
               <complexType>
                 <sequence>
-                  <element ref="ns2:TrustedIdP" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns4:TrustedIdP" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -226,7 +226,7 @@
             <element name="filter">
               <complexType>
                 <sequence>
-                  <element ref="ns2:IFSUserFilter" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns4:IFSUserFilter" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -236,7 +236,7 @@
       <element name="FindIFSUsersResponse">
         <complexType>
           <sequence>
-            <element ref="ns2:IFSUser" minOccurs="1" maxOccurs="unbounded" />
+            <element ref="ns4:IFSUser" minOccurs="1" maxOccurs="unbounded" />
           </sequence>
         </complexType>
       </element>
@@ -246,7 +246,7 @@
             <element name="user">
               <complexType>
                 <sequence>
-                  <element ref="ns2:IFSUser" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns4:IFSUser" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -264,7 +264,7 @@
             <element name="user">
               <complexType>
                 <sequence>
-                  <element ref="ns2:IFSUser" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns4:IFSUser" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -282,7 +282,7 @@
             <element name="user">
               <complexType>
                 <sequence>
-                  <element ref="ns2:IFSUser" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns4:IFSUser" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -292,7 +292,7 @@
       <element name="RenewIFSUserCredentialsResponse">
         <complexType>
           <sequence>
-            <element ref="ns2:IFSUser" minOccurs="1" maxOccurs="1" />
+            <element ref="ns4:IFSUser" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -304,7 +304,7 @@
       <element name="GetIFSUserPoliciesResponse">
         <complexType>
           <sequence>
-            <element ref="ns2:IFSUserPolicy" minOccurs="1" maxOccurs="unbounded" />
+            <element ref="ns4:IFSUserPolicy" minOccurs="1" maxOccurs="unbounded" />
           </sequence>
         </complexType>
       </element>
@@ -374,7 +374,7 @@
       <element name="DorianResourceProperties">
         <complexType>
           <sequence>
-            <element ref="ns3:ServiceMetadata" />
+            <element ref="ns2:ServiceMetadata" />
           </sequence>
         </complexType>
       </element>

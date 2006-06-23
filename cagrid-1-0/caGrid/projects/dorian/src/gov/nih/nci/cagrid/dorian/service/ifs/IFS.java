@@ -1,10 +1,12 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
+import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
@@ -43,10 +45,6 @@ import java.util.Iterator;
  *          Exp $
  */
 public class IFS extends LoggingObject {
-
-	public final static String EMAIL_NAMESPACE = "http://cagrid.nci.nih.gov/email";
-
-	public final static String EMAIL_NAME = "email";
 
 	private UserManager um;
 
@@ -228,27 +226,24 @@ public class IFS extends LoggingObject {
 		}
 
 		// If the user does not exist, add them
-		String email = this.getEmail(saml);
+		String uid = this.getAttribute(saml, SAMLConstants.UID_ATTRIBUTE_NAMESPACE, SAMLConstants.UID_ATTRIBUTE);
+		String email = this.getAttribute(saml, SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE, SAMLConstants.EMAIL_ATTRIBUTE);
+		String firstName = this.getAttribute(saml, SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE,
+			SAMLConstants.FIRST_NAME_ATTRIBUTE);
+		String lastName = this.getAttribute(saml, SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE,
+			SAMLConstants.LAST_NAME_ATTRIBUTE);
 
-		boolean emailIsValid = true;
-
-		try {
-			AddressValidator.validateEmail(email);
-		} catch (Exception e) {
-			emailIsValid = false;
-			logWarning("The email address, " + email + " supplied by the IdP " + idp.getName() + " (" + idp.getId()
-				+ ") is invalid.");
-		}
+		AddressValidator.validateEmail(email);
 
 		IFSUser usr = null;
-		if (!um.determineIfUserExists(idp.getId(), auth.getSubject().getNameIdentifier().getName())) {
+		if (!um.determineIfUserExists(idp.getId(), uid)) {
 			try {
 				usr = new IFSUser();
 				usr.setIdPId(idp.getId());
-				usr.setUID(auth.getSubject().getNameIdentifier().getName());
-				if (emailIsValid) {
-					usr.setEmail(email);
-				}
+				usr.setUID(uid);
+				usr.setFirstName(firstName);
+				usr.setLastName(lastName);
+				usr.setEmail(email);
 				usr.setUserRole(IFSUserRole.Non_Administrator);
 				usr.setUserStatus(IFSUserStatus.Pending);
 				usr = um.addUser(usr);
@@ -264,13 +259,25 @@ public class IFS extends LoggingObject {
 			}
 		} else {
 			try {
-				usr = um.getUser(idp.getId(), auth.getSubject().getNameIdentifier().getName());
-				if (emailIsValid) {
-					if ((usr.getEmail() == null) || (!usr.getEmail().equals(email))) {
-						usr.setEmail(email);
-						um.updateUser(usr);
-					}
+				usr = um.getUser(idp.getId(), uid);
+				boolean performUpdate = false;
+
+				if ((usr.getFirstName() == null) || (!usr.getFirstName().equals(firstName))) {
+					usr.setFirstName(firstName);
+					performUpdate = true;
 				}
+				if ((usr.getLastName() == null) || (!usr.getLastName().equals(lastName))) {
+					usr.setLastName(lastName);
+					performUpdate = true;
+				}
+				if ((usr.getEmail() == null) || (!usr.getEmail().equals(email))) {
+					usr.setEmail(email);
+					performUpdate = true;
+				}
+				if (performUpdate) {
+					um.updateUser(usr);
+				}
+
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
 				DorianInternalFault fault = new DorianInternalFault();
@@ -443,7 +450,7 @@ public class IFS extends LoggingObject {
 	}
 
 
-	private String getEmail(SAMLAssertion saml) {
+	private String getAttribute(SAMLAssertion saml, String namespace, String name) throws InvalidAssertionFault {
 		Iterator itr = saml.getStatements();
 		while (itr.hasNext()) {
 			Object o = itr.next();
@@ -452,17 +459,22 @@ public class IFS extends LoggingObject {
 				Iterator attItr = att.getAttributes();
 				while (attItr.hasNext()) {
 					SAMLAttribute a = (SAMLAttribute) attItr.next();
-					if ((a.getNamespace().equals(EMAIL_NAMESPACE)) && (a.getName().equals(EMAIL_NAME))) {
+					if ((a.getNamespace().equals(namespace)) && (a.getName().equals(name))) {
 						Iterator vals = a.getValues();
 						while (vals.hasNext()) {
-							return (String) vals.next();
+
+							String val = Utils.clean((String) vals.next());
+							if (val != null) {
+								return val;
+							}
 						}
 					}
 				}
 			}
 		}
-
-		return null;
+		InvalidAssertionFault fault = new InvalidAssertionFault();
+		fault.setFaultString("The assertion does not contain the required attribute, " + namespace + ":" + name);
+		throw fault;
 	}
 
 
