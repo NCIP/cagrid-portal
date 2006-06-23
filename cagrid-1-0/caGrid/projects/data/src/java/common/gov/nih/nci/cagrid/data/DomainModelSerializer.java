@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -28,7 +29,8 @@ public class DomainModelSerializer {
 	public static void serializeDomainModel(DomainModel model, 
 		Writer outputWriter, String wsddLocation) throws Exception {
 		StringWriter writer = new StringWriter();
-		Utils.serializeObject(model, DataServiceConstants.DOMAIN_MODEL_QNAME, writer, wsddLocation);
+		Utils.serializeObject(model, DataServiceConstants.DOMAIN_MODEL_QNAME, writer,
+			new FileInputStream(wsddLocation));
 		StringBuffer xml = writer.getBuffer();
 		fixWrongNs(xml);
 		outputWriter.write(xml.toString());
@@ -44,7 +46,7 @@ public class DomainModelSerializer {
 		}
 		fixWrongNs(buffer);
 		DomainModel model = (DomainModel) Utils.deserializeObject(
-			new StringReader(buffer.toString()), DomainModel.class, wsddLocation);
+			new StringReader(buffer.toString()), DomainModel.class, new FileInputStream(wsddLocation));
 		return model;
 	}
 	
