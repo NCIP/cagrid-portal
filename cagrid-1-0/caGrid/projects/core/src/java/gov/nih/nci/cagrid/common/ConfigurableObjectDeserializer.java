@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.common;
 
+import java.io.InputStream;
+
 import org.apache.axis.AxisEngine;
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.MessageContext;
@@ -21,10 +23,10 @@ import org.xml.sax.SAXException;
  */
 public class ConfigurableObjectDeserializer extends ObjectDeserializer {
 	
-	public static Object toObject(InputSource source, Class javaClass, String wsddName)
+	public static Object toObject(InputSource source, Class javaClass, InputStream wsdd)
 	throws DeserializationException, SAXException {
 		// create a message context for the wsdd
-		EngineConfiguration engineConfig = new FileProvider(wsddName);
+		EngineConfiguration engineConfig = new FileProvider(wsdd);
 		AxisClient axisClient = new AxisClient(engineConfig);
 		MessageContext messageContext = new MessageContext(axisClient);
 		messageContext.setEncodingStyle("");

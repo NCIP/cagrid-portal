@@ -158,16 +158,16 @@ public class Utils {
 	 * 		The QName of the object
 	 * @param writer
 	 * 		A writer to place XML into (eg: FileWriter, StringWriter)
-	 * @param wsddName
-	 * 		The name of the wsdd file
+	 * @param wsdd
+	 * 		A stream containing the WSDD configuration
 	 * @throws Exception
 	 */
-	public static void serializeObject(Object obj, QName qname, Writer writer, String wsddName) 
+	public static void serializeObject(Object obj, QName qname, Writer writer, InputStream wsdd) 
 		throws Exception {
 		// derive a message element for the object
 		MessageElement element = (MessageElement) ObjectSerializer.toSOAPElement(obj, qname);
 		// configure the axis engine to use the supplied wsdd file
-		EngineConfiguration engineConfig = new FileProvider(wsddName);
+		EngineConfiguration engineConfig = new FileProvider(wsdd);
 		AxisEngine axisClient = new AxisServer(engineConfig);
 		MessageContext messageContext = new MessageContext(axisClient);
 		messageContext.setEncodingStyle("");
@@ -194,18 +194,18 @@ public class Utils {
 	 * 		The reader for the XML (eg: FileReader, StringReader, etc)
 	 * @param clazz
 	 * 		The class to serialize to
-	 * @param wsddName
-	 * 		The name of the wsdd file to use for configuration
+	 * @param wsdd
+	 * 		A stream containing the WSDD configuration
 	 * @return
 	 * @throws SAXException
 	 * @throws DeserializationException
 	 */
-	public static Object deserializeObject(Reader xmlReader, Class clazz, String wsddName) 
+	public static Object deserializeObject(Reader xmlReader, Class clazz, InputStream wsdd) 
 	throws SAXException, DeserializationException {
 		// input source for the xml
 		InputSource xmlSource = new InputSource(xmlReader);
 		
-		return ConfigurableObjectDeserializer.toObject(xmlSource, clazz, wsddName);		
+		return ConfigurableObjectDeserializer.toObject(xmlSource, clazz, wsdd);		
 	}
 
 
