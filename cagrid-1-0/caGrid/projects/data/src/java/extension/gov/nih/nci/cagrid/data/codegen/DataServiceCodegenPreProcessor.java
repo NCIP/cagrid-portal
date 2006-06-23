@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.axis.message.MessageElement;
+import org.apache.log4j.Logger;
 import org.jdom.Element;
 
 
@@ -53,6 +54,8 @@ import org.jdom.Element;
  * @version $Id$
  */
 public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProcessor {
+	
+	private static Logger LOG = Logger.getLogger(DataServiceCodegenPreProcessor.class);
 
 	public void preCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
@@ -67,11 +70,13 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 
 	private void modifyMetadata(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
+		LOG.debug("Looking for caDSR element in extension data");
 		// verify there's a caDSR element in the extension data bucket
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
 		MessageElement cadsrElement = ExtensionTools.getExtensionDataElement(data,
 			DataServiceConstants.CADSR_ELEMENT_NAME);
 		if (cadsrElement != null) {
+			LOG.debug("Extracting caDSR information from element");
 			String cadsrUrl = cadsrElement.getAttribute(DataServiceConstants.CADSR_URL_ATTRIB);
 			String cadsrProject = cadsrElement.getAttribute(DataServiceConstants.CADSR_PROJECT_ATTRIB);
 			String cadsrPackage = cadsrElement.getAttribute(DataServiceConstants.CADSR_PACKAGE_ATTRIB);
@@ -116,6 +121,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				}
 
 				// build the domain model
+				LOG.info("Contacting caDSR to build domain model.  This might take a while...");
+				LOG.info("caDSR URL=" + cadsrUrl);
 				DomainModel model = null;
 				try {
 					// cadsr can now generate the data service DomainModel
@@ -134,7 +141,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 							+ cadsrProject);
 					}
 					model = cadsrClient.generateDomainModelForPackages(proj, new String[]{cadsrPackage});
-					System.out.println("Created data service metadata!");
+					System.out.println("Created data service Domain Model!");
+					LOG.info("Created data service Domain Model!");
 				} catch (RemoteException ex) {
 					throw new CodegenExtensionException("Error connecting to caDSR for metadata: " 
 						+ ex.getMessage(), ex);
@@ -148,6 +156,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				// find the client-configuration.wsdd needed to serialize the domain model
 				String configFilename = ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator 
 					+ "data" + File.separator + "DomainModel-client-config.wsdd"; 
+				LOG.debug("Serializing domain model to file " + domainModelFile);
+				LOG.debug("Using config filename " + configFilename);
 				try {
 					FileWriter domainModelFileWriter = new FileWriter(domainModelFile);
 					InputStream configInput = new FileInputStream(configFilename);
@@ -156,6 +166,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 					domainModelFileWriter.flush();
 					domainModelFileWriter.close();
 					configInput.close();
+					LOG.debug("Serialized domain model");
 				} catch (Exception ex) {
 					throw new CodegenExtensionException("Error serializing the domain model to disk: "
 						+ ex.getMessage(), ex);
