@@ -380,7 +380,14 @@
 	<!-- jars the common classes -->
 	<target name="jarCommon" depends="compileCommon" description="Builds and jars the common classes">
 		<jar destfile="${common.jar.file}">
-			<fileset dir="${build.common.dest}"/>
+			<fileset dir="${build.common.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${common.src.dir}">
+				<include name="**/*.java"/>
+				<include name="**/*.xml"/>
+			</fileset>
+			<filename name="${basedir}/DomainModel-client-config.wsdd"/>
 		</jar>
 	</target>
 
@@ -431,7 +438,7 @@
 				<include name="**/*.class"/>
 			</fileset>
 			<fileset dir="${validation.src.dir}">
-				<include name="**/*.class"/>
+				<include name="**/*.java"/>
 			</fileset>
 		</jar>
 	</target>
@@ -457,7 +464,7 @@
 				<include name="**/*.class"/>
 			</fileset>
 			<fileset dir="${cql.src.dir}">
-				<include name="**/*.class"/>
+				<include name="**/*.java"/>
 			</fileset>
 		</jar>
 	</target>
@@ -546,6 +553,12 @@
 		<copy todir="${introduce.extensions.dir}/data/schema/metadata">
 			<fileset dir="${ext.schema.dir}">
 				<include name="**/*.xsd"/>
+			</fileset>
+		</copy>
+		<!-- DomainModel client-config.wsdd -->
+		<copy todir="${introduce.extensions.dir}/data">
+			<fileset dir="${basedir}">
+				<include name="DomainModel-client-config.wsdd"/>
 			</fileset>
 		</copy>
 	</target>

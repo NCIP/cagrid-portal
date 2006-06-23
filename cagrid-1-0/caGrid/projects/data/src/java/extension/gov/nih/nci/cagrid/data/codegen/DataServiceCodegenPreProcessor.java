@@ -19,11 +19,15 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPreProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.rmi.RemoteException;
@@ -136,12 +140,22 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 						+ ex.getMessage(), ex);
 				}
 
-				// find the service's etc directory and serialize the domain model to it
+				// find the service's etc directory, where the domain model goes
 				String domainModelFile = info.getIntroduceServiceProperties().getProperty(
 					IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 					+ File.separator + "etc" + File.separator + "domainModel.xml";
+				
+				// find the client-configuration.wsdd needed to serialize the domain model
+				String configFilename = ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator 
+					+ "data" + File.separator + "DomainModel-client-config.wsdd"; 
 				try {
-					Utils.serializeDocument(domainModelFile, model, DataServiceConstants.DOMAIN_MODEL_QNAME);
+					FileWriter domainModelFileWriter = new FileWriter(domainModelFile);
+					InputStream configInput = new FileInputStream(configFilename);
+					Utils.serializeObject(model, DataServiceConstants.DOMAIN_MODEL_QNAME, 
+						domainModelFileWriter, configInput);
+					domainModelFileWriter.flush();
+					domainModelFileWriter.close();
+					configInput.close();
 				} catch (Exception ex) {
 					throw new CodegenExtensionException("Error serializing the domain model to disk: "
 						+ ex.getMessage(), ex);
