@@ -2,7 +2,7 @@
  xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension" extensionType="SERVICE" extensionPreferencesPanel="gov.nih.nci.cagrid.introduce.portal.extension.example.ExampleExtensionPreferencesConfigurationPanel">
  <ns1:ServiceExtensionDescription displayName="Example Extension" name="service_example">
   <ns1:CreationPostProcessor>gov.nih.nci.cagrid.introduce.extension.example.ExampleCreationPostProcessor</ns1:CreationPostProcessor>
-  <ns1:CreationUIDialog>gov.nih.nci.cagrid.introduce.extension.example.ExampleCreationDialog</ns1:CreationUIDialog>
+  <ns1:CreationUIDialog>gov.nih.nci.cagrid.introduce.portal.extension.example.ExampleCreationDialog</ns1:CreationUIDialog>
   <ns1:CodegenPreProcessor>gov.nih.nci.cagrid.introduce.extension.example.ExampleCodegenPreProcessor</ns1:CodegenPreProcessor>
   <ns1:CodegenPostProcessor>gov.nih.nci.cagrid.introduce.extension.example.ExampleCodegenPostProcessor</ns1:CodegenPostProcessor>
   <ns1:ServiceModificationUIPanel>gov.nih.nci.cagrid.introduce.extension.example.ExampleServiceModificationPanel</ns1:ServiceModificationUIPanel>
