@@ -19,10 +19,10 @@ import org.apache.axis.AxisEngine;
 import org.apache.axis.AxisFault;
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.MessageContext;
-import org.apache.axis.client.AxisClient;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.message.MessageElement;
+import org.apache.axis.server.AxisServer;
 import org.apache.axis.utils.XMLUtils;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
@@ -164,25 +164,27 @@ public class Utils {
 	 */
 	public static void serializeObject(Object obj, QName qname, Writer writer, String wsddName) 
 		throws Exception {
+		// derive a message element for the object
+		MessageElement element = (MessageElement) ObjectSerializer.toSOAPElement(obj, qname);
 		// configure the axis engine to use the supplied wsdd file
 		EngineConfiguration engineConfig = new FileProvider(wsddName);
-		AxisClient axisClient = new AxisClient(engineConfig);
+		AxisEngine axisClient = new AxisServer(engineConfig);
 		MessageContext messageContext = new MessageContext(axisClient);
 		messageContext.setEncodingStyle("");
 		messageContext.setProperty(AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+		// the following two properties prevent xsd types from appearing in
+		// every single element in the serialized XML
+		messageContext.setProperty(AxisEngine.PROP_EMIT_ALL_TYPES, Boolean.FALSE);
+		messageContext.setProperty(AxisEngine.PROP_SEND_XSI, Boolean.FALSE);
 		
 		// create a serialization context to use the new message context
 		SerializationContext serializationContext = 
 			new SerializationContext(writer, messageContext);
 		serializationContext.setPretty(true);
 		
-		// derive a message element for the object
-		MessageElement element = (MessageElement) ObjectSerializer.toSOAPElement(obj, qname);
-		
 		// output the message element through the serialization context
 		element.output(serializationContext);
 		writer.write("\n");
-		writer.flush();
 	}
 	
 	
