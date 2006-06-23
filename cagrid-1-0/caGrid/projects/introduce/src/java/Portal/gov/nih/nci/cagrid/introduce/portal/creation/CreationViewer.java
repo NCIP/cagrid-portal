@@ -445,7 +445,7 @@ public class CreationViewer extends GridPortalComponent {
 				"Creating") {
 				public void process() {
 					try {
-						
+
 						setProgressText("Validating service name...");
 						String serviceName = getService().getText();
 						String dirName = getDir().getText();
@@ -462,8 +462,7 @@ public class CreationViewer extends GridPortalComponent {
 							setErrorMessage("Package Name is not valid.  Service name must have a valid java Package Name");
 							return;
 						}
-						
-						
+
 						if (dirFile.exists()) {
 							setProgressText("Deleting existing directory...");
 							boolean deleted = Utils.deleteDir(dirFile);
@@ -485,7 +484,9 @@ public class CreationViewer extends GridPortalComponent {
 								serviceExtensions += ",";
 							}
 						}
+
 						setProgressText("Creating service...");
+
 						String cmd = CommonTools.getAntSkeletonCreationCommand(".", serviceName, dirName, packageName,
 							serviceNsDomain, serviceExtensions);
 						Process p = CommonTools.createAndOutputProcess(cmd);
@@ -508,10 +509,10 @@ public class CreationViewer extends GridPortalComponent {
 						for (int i = 0; i < getExtensionsTable().getRowCount(); i++) {
 							ServiceExtensionDescriptionType edt = ExtensionsLoader.getInstance()
 								.getServiceExtensionByDisplayName(getExtensionsTable().getRowData(i));
-							JDialog extDialog = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.getCreationUIDialog(edt.getName(), info);
+							JDialog extDialog = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
+								.getCreationUIDialog(edt.getName(), info);
 							if (extDialog != null) {
 								extDialog.setVisible(true);
-								return;
 							}
 						}
 
@@ -607,15 +608,12 @@ public class CreationViewer extends GridPortalComponent {
 		if (addExtensionButton == null) {
 			addExtensionButton = new JButton();
 			addExtensionButton.setText("Add");
-			addExtensionButton.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent e) {
-					super.mouseClicked(e);
+			addExtensionButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (!((String) serviceStyleSeletor.getSelectedItem()).equals("NONE")) {
 						getExtensionsTable().addRow((String) serviceStyleSeletor.getSelectedItem());
 					}
 				}
-
 			});
 		}
 		return addExtensionButton;
@@ -631,14 +629,11 @@ public class CreationViewer extends GridPortalComponent {
 		if (removeExtensionButton == null) {
 			removeExtensionButton = new JButton();
 			removeExtensionButton.setText("Remove");
-			removeExtensionButton.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent e) {
-					super.mouseClicked(e);
+			removeExtensionButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
 						getExtensionsTable().removeSelectedRow();
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -671,7 +666,7 @@ public class CreationViewer extends GridPortalComponent {
 	private ExtensionsTable getExtensionsTable() {
 		if (extensionsTable == null) {
 			extensionsTable = new ExtensionsTable();
-			extensionsTable.setPreferredSize(new java.awt.Dimension(100, 150));
+			extensionsTable.setMinimumSize(new java.awt.Dimension(100, 150));
 		}
 		return extensionsTable;
 	}
@@ -700,7 +695,6 @@ public class CreationViewer extends GridPortalComponent {
 					try {
 						getExtensionsTable().moveSelectedRowDown();
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -713,7 +707,6 @@ public class CreationViewer extends GridPortalComponent {
 					try {
 						getExtensionsTable().moveSelectedRowUp();
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
