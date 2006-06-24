@@ -8,6 +8,7 @@ import java.util.Properties;
 import javax.swing.SwingUtilities;
 
 
+import gov.nih.nci.cagrid.installer.ui.panels.GridPanel;
 import gov.nih.nci.cagrid.installer.ui.panels.info.InfoPanel;
 import gov.nih.nci.cagrid.installer.ui.panels.input.InputFormPanel;
 import gov.nih.nci.cagrid.installer.ui.panels.progress.ProgressPanel;
@@ -18,7 +19,7 @@ public class Installer {
 
 	private static Installer instance;
 	private InstallerWindow iw;
-	private ArrayList<gov.nih.nci.cagrid.installer.ui.panels.GridPanel> panels = new ArrayList<gov.nih.nci.cagrid.installer.ui.panels.GridPanel>();
+	private ArrayList<GridPanel> panels = new ArrayList<GridPanel>();
 	private int counter =0;
 	private Hashtable session;
 	private Properties vars;
@@ -35,7 +36,7 @@ public class Installer {
 		iw = new InstallerWindow();
 		
 		initPanels();
-		gov.nih.nci.cagrid.installer.ui.panels.GridPanel welcome = (gov.nih.nci.cagrid.installer.ui.panels.GridPanel)panels.get(0);
+		GridPanel welcome = (GridPanel)panels.get(0);
 		welcome.setVisible(true);
 		iw.getContentPane().add(welcome);
 		
@@ -52,10 +53,10 @@ public class Installer {
 	
 	public void next(){
 		counter++;
-		gov.nih.nci.cagrid.installer.ui.panels.GridPanel gp = (gov.nih.nci.cagrid.installer.ui.panels.GridPanel)panels.get(counter-1);
+		GridPanel gp = (GridPanel)panels.get(counter-1);
 		gp.setVisible(false);
 		iw.getContentPane().remove(gp);
-		gov.nih.nci.cagrid.installer.ui.panels.GridPanel gp1 = (gov.nih.nci.cagrid.installer.ui.panels.GridPanel)panels.get(counter);
+		GridPanel gp1 = (GridPanel)panels.get(counter);
 		gp1.synch();
 		gp1.setVisible(true);
 		iw.getContentPane().add(gp1);
@@ -64,10 +65,10 @@ public class Installer {
 	
 	public void prev(){
 		counter--;
-		gov.nih.nci.cagrid.installer.ui.panels.GridPanel gp = (gov.nih.nci.cagrid.installer.ui.panels.GridPanel)panels.get(counter+1);
+		GridPanel gp = (GridPanel)panels.get(counter+1);
 		gp.setVisible(false);
 		iw.getContentPane().remove(gp);
-		gov.nih.nci.cagrid.installer.ui.panels.GridPanel gp1 = (gov.nih.nci.cagrid.installer.ui.panels.GridPanel)panels.get(counter);
+		GridPanel gp1 = (GridPanel)panels.get(counter);
 		gp1.synch();
 		gp1.setVisible(true);
 		iw.getContentPane().add(gp1);
@@ -79,15 +80,15 @@ public class Installer {
 	
 	private void initPanels(){
 		
-		gov.nih.nci.cagrid.installer.ui.panels.GridPanel welcome = new WelcomePanel();
-		gov.nih.nci.cagrid.installer.ui.panels.GridPanel info = new InfoPanel();
-		gov.nih.nci.cagrid.installer.ui.panels.GridPanel input = new InputFormPanel();
+		GridPanel welcome = new WelcomePanel();
+		GridPanel info = new InfoPanel();
+		GridPanel input = new InputFormPanel();
 		progress = new ProgressPanel();
 		
 		panels.add(0,welcome);
 		panels.add(1,info);
 		panels.add(2,input);
-		panels.add(3,(gov.nih.nci.cagrid.installer.ui.panels.GridPanel)progress);
+		panels.add(3,(GridPanel)progress);
 	
 		
 		
