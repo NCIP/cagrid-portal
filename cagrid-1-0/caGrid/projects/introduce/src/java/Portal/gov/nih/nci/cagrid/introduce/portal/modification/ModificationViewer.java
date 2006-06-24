@@ -567,7 +567,7 @@ public class ModificationViewer extends GridPortalComponent {
 					MethodTypeOutput output = new MethodTypeOutput();
 					output.setQName(new QName("", "void"));
 					method.setOutput(output);
-					
+
 					getMethodsTable().addRow(method);
 
 					performMethodModify();
@@ -1497,8 +1497,9 @@ public class ModificationViewer extends GridPortalComponent {
 						String value = getServicePropertyValueTextField().getText();
 						getServicePropertiesTable().addRow(key, value);
 					} else {
-						JOptionPane.showMessageDialog(ModificationViewer.this,
-							"Service Property key must be a valid java identifier");
+						JOptionPane
+							.showMessageDialog(ModificationViewer.this,
+								"Service Property key must be a valid java identifier, beginning with a lowercase character.");
 					}
 				}
 			});

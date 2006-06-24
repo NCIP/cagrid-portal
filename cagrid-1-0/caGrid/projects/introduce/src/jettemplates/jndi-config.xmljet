@@ -11,7 +11,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
    	}
 %><?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
-	<service name="SERVICE-INSTANCE-PREFIX/<%=modifiedServiceName%>">
+	<service name="SERVICE-INSTANCE-PREFIX/<%=serviceName%>">
 		<resource name="home" type="<%=service.getPackageName()%>.service.globus.resource.BaseResourceHome">
 			<resourceParams>
 				<parameter>
