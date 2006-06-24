@@ -1,5 +1,9 @@
 To Do:
 
+should generated two different interfaces in common..
+  - one, for all the non-imported operations that the service implements
+  - one, that extends that interface, that adds the imported methods, that only the client implements 
+
 I was adding faults to a method, and when I hit done, an error dialog poped up with method "java.util.Vector" and removed my faults
 
 security operationprovider needs to be hooked into build properly...
