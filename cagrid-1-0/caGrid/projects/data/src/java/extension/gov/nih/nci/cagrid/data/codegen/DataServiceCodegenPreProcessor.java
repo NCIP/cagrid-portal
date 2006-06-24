@@ -30,7 +30,6 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -45,8 +44,8 @@ import org.jdom.Element;
 
 
 /**
- * DataServiceCodegenPreProcessor 
- * Preprocessor for data service codegen operations.
+ * DataServiceCodegenPreProcessor Preprocessor for data service codegen
+ * operations.
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
@@ -54,8 +53,9 @@ import org.jdom.Element;
  * @version $Id$
  */
 public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProcessor {
-	
+
 	private static Logger LOG = Logger.getLogger(DataServiceCodegenPreProcessor.class);
+
 
 	public void preCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
@@ -143,26 +143,27 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 					model = cadsrClient.generateDomainModelForPackages(proj, new String[]{cadsrPackage});
 					System.out.println("Created data service Domain Model!");
 					LOG.info("Created data service Domain Model!");
-				} catch (RemoteException ex) {
-					throw new CodegenExtensionException("Error connecting to caDSR for metadata: " 
-						+ ex.getMessage(), ex);
+				} catch (Exception ex) {
+					throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(),
+						ex);
 				}
 
 				// find the service's etc directory, where the domain model goes
 				String domainModelFile = info.getIntroduceServiceProperties().getProperty(
 					IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 					+ File.separator + "etc" + File.separator + "domainModel.xml";
-				
-				// find the client-configuration.wsdd needed to serialize the domain model
-				String configFilename = ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator 
-					+ "data" + File.separator + "DomainModel-client-config.wsdd"; 
+
+				// find the client-configuration.wsdd needed to serialize the
+				// domain model
+				String configFilename = ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
+					+ File.separator + "DomainModel-client-config.wsdd";
 				LOG.debug("Serializing domain model to file " + domainModelFile);
 				LOG.debug("Using config filename " + configFilename);
 				try {
 					FileWriter domainModelFileWriter = new FileWriter(domainModelFile);
 					InputStream configInput = new FileInputStream(configFilename);
-					Utils.serializeObject(model, DataServiceConstants.DOMAIN_MODEL_QNAME, 
-						domainModelFileWriter, configInput);
+					Utils.serializeObject(model, DataServiceConstants.DOMAIN_MODEL_QNAME, domainModelFileWriter,
+						configInput);
 					domainModelFileWriter.flush();
 					domainModelFileWriter.close();
 					configInput.close();
@@ -198,13 +199,14 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 	}
 
 
-	private void modifyServiceProperties(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
+	private void modifyServiceProperties(ServiceExtensionDescriptionType desc, ServiceInformation info)
+		throws Exception {
 		ServiceProperties props = info.getServiceProperties();
 		if (props == null) {
 			props = new ServiceProperties();
 		}
 		if (props.getProperty() == null) {
-			props.setProperty(new ServicePropertiesProperty[] {});
+			props.setProperty(new ServicePropertiesProperty[]{});
 		}
 		String qpClassname = getQueryProcesorClass(desc, info);
 		if (qpClassname != null) {
@@ -225,7 +227,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 					libs.add(new File(serviceDir + File.separator + "lib" + File.separator + jarFilename));
 				}
 			}
-			// load the class from the additional libraries and current classpath
+			// load the class from the additional libraries and current
+			// classpath
 			URL[] libUrls = new URL[libs.size()];
 			Iterator libIter = libs.iterator();
 			int i = 0;
@@ -243,13 +246,14 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				Iterator paramKeyIter = params.keySet().iterator();
 				while (paramKeyIter.hasNext()) {
 					String key = (String) paramKeyIter.next();
-					// verify the keys of the required params list are valid Java identifiers
+					// verify the keys of the required params list are valid
+					// Java identifiers
 					if (!CommonTools.isValidJavaField(key)) {
-						throw new CodegenExtensionException(
-							"The query processor's required parameter " + key + " is not a valid Java field name.");
+						throw new CodegenExtensionException("The query processor's required parameter " + key
+							+ " is not a valid Java field name.");
 					}
 					if (!hasProperty(props, key)) {
-						ServicePropertiesProperty prop = new ServicePropertiesProperty();					
+						ServicePropertiesProperty prop = new ServicePropertiesProperty();
 						String value = (String) params.get(key);
 						if (value == null) {
 							value = "";
@@ -257,7 +261,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 						prop.setKey(key);
 						prop.setValue(value);
 						qpProperties.add(prop);
-					}	
+					}
 				}
 				// add the query processor class name to the properties
 				for (int p = 0; p < props.getProperty().length; p++) {
@@ -265,7 +269,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 						props.getProperty(p).setValue(qpClassname);
 					}
 				}
-				// write all the properties back into the service properties bean
+				// write all the properties back into the service properties
+				// bean
 				qpProperties.addAll(Arrays.asList(props.getProperty()));
 				ServicePropertiesProperty[] allProperties = new ServicePropertiesProperty[qpProperties.size()];
 				qpProperties.toArray(allProperties);
@@ -274,8 +279,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			}
 		}
 	}
-	
-	
+
+
 	private boolean hasProperty(ServiceProperties props, String key) {
 		if (props != null && props.getProperty() != null) {
 			for (int i = 0; i < props.getProperty().length; i++) {

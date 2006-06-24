@@ -22,7 +22,7 @@
 	<property name="schema.dir" value="schema" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 	
-	<property name="jar.name" value="caGrid-caDSRService-1.0"/>
+	<property name="jar.name" value="caGrid-caDSR-1.0"/>
 	<property name="common.jar.name" value="${jar.name}-common.jar" />
 	<property name="client.jar.name" value="${jar.name}-client.jar" />
 	<property name="service.jar.name" value="${jar.name}-service.jar" />

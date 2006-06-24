@@ -11,22 +11,23 @@ import javax.swing.JOptionPane;
 
 import org.projectmobius.portal.PortalResourceManager;
 
-/** 
- *  DomainBrowserPanel
- *  CaDSRBrowserPanel that allows users to set the selected project and package
+
+/**
+ * DomainBrowserPanel CaDSRBrowserPanel that allows users to set the selected
+ * project and package
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
- * @created May 10, 2006 
- * @version $Id$ 
+ * @created May 10, 2006
+ * @version $Id$
  */
 public class DomainBrowserPanel extends CaDSRBrowserPanel {
-	
+
 	public DomainBrowserPanel() {
 		super();
 	}
-	
-	
+
+
 	/**
 	 * @param showQueryPanel
 	 * @param showClassSelection
@@ -34,8 +35,8 @@ public class DomainBrowserPanel extends CaDSRBrowserPanel {
 	public DomainBrowserPanel(boolean showQueryPanel, boolean showClassSelection) {
 		super(showQueryPanel, showClassSelection);
 	}
-	
-	
+
+
 	public synchronized void setSelectedProject(String proj) {
 		System.out.println("Trying to select project " + proj);
 		for (int i = 0; i < getProjectComboBox().getItemCount(); i++) {
@@ -48,8 +49,8 @@ public class DomainBrowserPanel extends CaDSRBrowserPanel {
 		}
 		System.out.println("Project " + proj + " not found");
 	}
-	
-	
+
+
 	public synchronized void setSelectedPackage(String pack) {
 		System.out.println("Trying to select package " + pack);
 		for (int i = 0; i < getPackageComboBox().getItemCount(); i++) {
@@ -62,16 +63,17 @@ public class DomainBrowserPanel extends CaDSRBrowserPanel {
 		}
 		System.out.println("Package " + pack + " not found");
 	}
-	
-	
+
+
 	public synchronized void blockingCadsrRefresh() {
 		System.out.println("Refreshing from caDSR, please wait...");
-		BusyDialogRunnable refresher = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(), "Loading caDSR information") {
+		BusyDialogRunnable refresher = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
+			"Loading caDSR information") {
 			public void process() {
 				setProgressText("Refreshing information from caDSR . . .");
-				final CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());				
 				getProjectComboBox().removeAllItems();
 				try {
+					CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
 					Project[] projects = cadsrService.findAllProjects();
 					if (projects != null) {
 						for (int i = 0; i < projects.length; i++) {
@@ -81,18 +83,18 @@ public class DomainBrowserPanel extends CaDSRBrowserPanel {
 				} catch (Exception e1) {
 					e1.printStackTrace();
 					JOptionPane.showMessageDialog(DomainBrowserPanel.this,
-					"Error communicating with caDSR; please check the caDSR URL!");
+						"Error communicating with caDSR; please check the caDSR URL!");
 				}
 			}
 		};
 		refresher.run();
 		System.out.println("Done refreshing from caDSR");
 	}
-	
-	
+
+
 	/**
-	 * Have to override this to ensure the package combo box gets updated
-	 * before somebody calls setSelectedPackage
+	 * Have to override this to ensure the package combo box gets updated before
+	 * somebody calls setSelectedPackage
 	 */
 	public void handleProjectSelection(final Project project) {
 		getPackageComboBox().removeAllItems();
@@ -107,8 +109,7 @@ public class DomainBrowserPanel extends CaDSRBrowserPanel {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			JOptionPane.showMessageDialog(DomainBrowserPanel.this,
-			"Error communicating with caDSR; please check the caDSR URL!");
+				"Error communicating with caDSR; please check the caDSR URL!");
 		}
 	}
 }
-
