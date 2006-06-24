@@ -40,7 +40,7 @@ public class BaseResource implements Resource, ResourceProperties {
 	//this can be used to cancel the registration renewal
 	private Timer registrationTimer;
 
-	private MetadataConfiguration configuration;
+	private ResourceConfiguration configuration;
 	
 	private URL baseURL;
 
@@ -57,7 +57,7 @@ public class BaseResource implements Resource, ResourceProperties {
 		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);
 
 		// this loads the metadata from XML files
-		populateMetadata();
+		populateResourceProperty();
 		
 		// now add the metadata as resource properties		//init the rp
 		this.serviceMetadataRP = new SimpleResourceProperty(ResourceConstants.SERVICEMETADATA_MD_RP);
@@ -159,7 +159,7 @@ public class BaseResource implements Resource, ResourceProperties {
 					+ getConfiguration().getRegistrationTemplateFile());
 
 				if (registrationFile.exists() && registrationFile.canRead()) {
-					logger.debug("Loading registration information from:" + registrationFile);
+					logger.debug("Loading registration argumentsrmation from:" + registrationFile);
 
 					ServiceGroupRegistrationParameters params = ServiceGroupRegistrationClient
 						.readParams(registrationFile.getAbsolutePath());
@@ -182,7 +182,7 @@ public class BaseResource implements Resource, ResourceProperties {
 
 
 
-	private void populateMetadata() {
+	private void populateResourceProperty() {
 	
 		loadServiceMetadataFromFile();
 	
@@ -203,7 +203,7 @@ public class BaseResource implements Resource, ResourceProperties {
 	
 		
 
-	public MetadataConfiguration getConfiguration() {
+	public ResourceConfiguration getConfiguration() {
 		if (this.configuration != null) {
 			return this.configuration;
 		}
@@ -215,7 +215,7 @@ public class BaseResource implements Resource, ResourceProperties {
 		logger.debug("Will read configuration from jndi name: " + jndiName);
 		try {
 			Context initialContext = new InitialContext();
-			this.configuration = (MetadataConfiguration) initialContext.lookup(jndiName);
+			this.configuration = (ResourceConfiguration) initialContext.lookup(jndiName);
 		} catch (Exception e) {
 			logger.error("when performing JNDI lookup for " + jndiName + ": " + e);
 		}

@@ -154,12 +154,12 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 
 	public void discoverFromCaDSR() {
-		final CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
 		getProjectComboBox().removeAllItems();
 		makeCombosEnabled(false);
 		Thread t = new Thread() {
 			public void run() {
 				try {
+					CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
 					Project[] projects = cadsrService.findAllProjects();
 					if (projects != null) {
 						for (int i = 0; i < projects.length; i++) {

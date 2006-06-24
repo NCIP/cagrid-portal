@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.cadsr.service.globus.resource;
 
-public class MetadataConfiguration {
+public class ResourceConfiguration {
 	private String registrationTemplateFile;
 	private boolean performRegistration;
 	private String serviceMetadataFile;

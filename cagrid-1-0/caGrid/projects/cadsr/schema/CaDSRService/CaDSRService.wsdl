@@ -1,559 +1,514 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions name="CaDSRService" targetNamespace="http://cadsr.cagrid.nci.nih.gov/CaDSRService"
-	xmlns:tns="http://cadsr.cagrid.nci.nih.gov/CaDSRService"
-	xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"
-	xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"
-	xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor"
-	xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl"
-	xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing"
-	xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl"
-	xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
-	xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
-	xmlns="http://schemas.xmlsoap.org/wsdl/">
-	<import
-		namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
-		location="../wsrf/properties/WS-ResourceProperties.wsdl"/>
-	<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl"
-		location="../wsrf/faults/WS-BaseFaults.wsdl"/>
-	<!--============================================================
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cadsr.cagrid.nci.nih.gov" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" name="CaDSRService" targetNamespace="http://cadsr.cagrid.nci.nih.gov">
+  <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
+  <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
+  <import namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" location="./ServiceSecurity.wsdl" />
+  <!--============================================================
 
                       T Y P E S
                       
   ============================================================-->
-	<types>
-		<schema targetNamespace="http://cadsr.cagrid.nci.nih.gov/CaDSRService"
-			xmlns:tns="http://cadsr.cagrid.nci.nih.gov/CaDSRService"
-			xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
-			xmlns:ns0="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
-			xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"
-			xmlns:ns1="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"
-			xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"
-			xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema"
-			xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd"
-			elementFormDefault="qualified" attributeFormDefault="unqualified">
-			<import
-				namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd"
-				schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
-			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
-				schemaLocation="./xsd/cagrid/types/caGridMetadata.xsd"/>
-			<import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
-				schemaLocation="./xsd/cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
-			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"
-				schemaLocation="./xsd/cagrid/types/data/data.xsd"/>
-			<import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"
-				schemaLocation="./xsd/cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.domain.xsd"/>
-			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"
-				schemaLocation="./1.0_gov.nih.nci.cagrid.cadsrservice.xsd"/>
-			<element name="findAllProjects">
-				<complexType>
-					<sequence> </sequence>
-				</complexType>
-			</element>
-			<element name="findAllProjectsResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns0:Project" minOccurs="1" maxOccurs="unbounded"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findProjects">
-				<complexType>
-					<sequence>
-						<element name="context" type="xs:string" minOccurs="1" maxOccurs="1"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findProjectsResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns0:Project" minOccurs="1" maxOccurs="unbounded"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findPackagesInProject">
-				<complexType>
-					<sequence>
-						<element name="project">
-							<complexType>
-								<sequence>
-									<element ref="ns0:Project" minOccurs="1" maxOccurs="1"/>
-								</sequence>
-							</complexType>
-						</element>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findPackagesInProjectResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns0:UMLPackageMetadata" minOccurs="1" maxOccurs="unbounded"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findClassesInProject">
-				<complexType>
-					<sequence>
-						<element name="project">
-							<complexType>
-								<sequence>
-									<element ref="ns0:Project" minOccurs="1" maxOccurs="1"/>
-								</sequence>
-							</complexType>
-						</element>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findClassesInProjectResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns0:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findClassesInPackage">
-				<complexType>
-					<sequence>
-						<element name="project">
-							<complexType>
-								<sequence>
-									<element ref="ns0:Project" minOccurs="1" maxOccurs="1"/>
-								</sequence>
-							</complexType>
-						</element>
-						<element name="packageName" type="xs:string" minOccurs="1" maxOccurs="1"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findClassesInPackageResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns0:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="generateDomainModelForProject">
-				<complexType>
-					<sequence>
-						<element name="project">
-							<complexType>
-								<sequence>
-									<element ref="ns0:Project" minOccurs="1" maxOccurs="1"/>
-								</sequence>
-							</complexType>
-						</element>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="generateDomainModelForProjectResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns3:DomainModel" minOccurs="1" maxOccurs="1"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="generateDomainModelForPackages">
-				<complexType>
-					<sequence>
-						<element name="project">
-							<complexType>
-								<sequence>
-									<element ref="ns0:Project" minOccurs="1" maxOccurs="1"/>
-								</sequence>
-							</complexType>
-						</element>
-						<element name="packageNames" type="xs:string" minOccurs="1"
-							maxOccurs="unbounded"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="generateDomainModelForPackagesResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns3:DomainModel" minOccurs="1" maxOccurs="1"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="generateDomainModelForClasses">
-				<complexType>
-					<sequence>
-						<element name="project">
-							<complexType>
-								<sequence>
-									<element ref="ns0:Project" minOccurs="1" maxOccurs="1"/>
-								</sequence>
-							</complexType>
-						</element>
-						<element name="classes">
-							<complexType>
-								<sequence>
-									<element ref="ns0:UMLClassMetadata" minOccurs="1"
-										maxOccurs="unbounded"/>
-								</sequence>
-							</complexType>
-						</element>
-						<element name="associations">
-							<complexType>
-								<sequence>
-									<element ref="ns4:UMLAssociation" minOccurs="1"
-										maxOccurs="unbounded"/>
-								</sequence>
-							</complexType>
-						</element>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="generateDomainModelForClassesResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns3:DomainModel" minOccurs="1" maxOccurs="1"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findAttributesInClass">
-				<complexType>
-					<sequence>
-						<element name="project">
-							<complexType>
-								<sequence>
-									<element ref="ns0:Project" minOccurs="1" maxOccurs="1"/>
-								</sequence>
-							</complexType>
-						</element>
-						<element name="clazz">
-							<complexType>
-								<sequence>
-									<element ref="ns0:UMLClassMetadata" minOccurs="1" maxOccurs="1"
-									/>
-								</sequence>
-							</complexType>
-						</element>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findAttributesInClassResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns0:UMLAttributeMetadata" minOccurs="1" maxOccurs="unbounded"
-						/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findSemanticMetadataForClass">
-				<complexType>
-					<sequence>
-						<element name="project">
-							<complexType>
-								<sequence>
-									<element ref="ns0:Project" minOccurs="1" maxOccurs="1"/>
-								</sequence>
-							</complexType>
-						</element>
-						<element name="clazz">
-							<complexType>
-								<sequence>
-									<element ref="ns0:UMLClassMetadata" minOccurs="1" maxOccurs="1"
-									/>
-								</sequence>
-							</complexType>
-						</element>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findSemanticMetadataForClassResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns0:SemanticMetadata" minOccurs="1" maxOccurs="unbounded"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findValueDomainForAttribute">
-				<complexType>
-					<sequence>
-						<element name="project">
-							<complexType>
-								<sequence>
-									<element ref="ns0:Project" minOccurs="1" maxOccurs="1"/>
-								</sequence>
-							</complexType>
-						</element>
-						<element name="attribute">
-							<complexType>
-								<sequence>
-									<element ref="ns0:UMLAttributeMetadata" minOccurs="1"
-										maxOccurs="1"/>
-								</sequence>
-							</complexType>
-						</element>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findValueDomainForAttributeResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns1:ValueDomain" minOccurs="1" maxOccurs="1"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findAssociationsForClass">
-				<complexType>
-					<sequence>
-						<element name="project">
-							<complexType>
-								<sequence>
-									<element ref="ns0:Project" minOccurs="1" maxOccurs="1"/>
-								</sequence>
-							</complexType>
-						</element>
-						<element name="clazz">
-							<complexType>
-								<sequence>
-									<element ref="ns0:UMLClassMetadata" minOccurs="1" maxOccurs="1"
-									/>
-								</sequence>
-							</complexType>
-						</element>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findAssociationsForClassResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns4:UMLAssociation" minOccurs="1" maxOccurs="unbounded"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findAssociationsInPackage">
-				<complexType>
-					<sequence>
-						<element name="project">
-							<complexType>
-								<sequence>
-									<element ref="ns0:Project" minOccurs="1" maxOccurs="1"/>
-								</sequence>
-							</complexType>
-						</element>
-						<element name="packageName" type="xs:string" minOccurs="1" maxOccurs="1"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findAssociationsInPackageResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns4:UMLAssociation" minOccurs="1" maxOccurs="unbounded"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findAssociationsInProject">
-				<complexType>
-					<sequence>
-						<element name="project">
-							<complexType>
-								<sequence>
-									<element ref="ns0:Project" minOccurs="1" maxOccurs="1"/>
-								</sequence>
-							</complexType>
-						</element>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="findAssociationsInProjectResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns4:UMLAssociation" minOccurs="1" maxOccurs="unbounded"/>
-					</sequence>
-				</complexType>
-			</element>
-			<element name="CaDSRServiceResourceProperties">
-				<complexType>
-					<sequence>
-						<element ref="ns2:ServiceMetadata"/>
-					</sequence>
-				</complexType>
-			</element>
-		</schema>
-	</types>
-	<!--  place service messages here -->
-	<message name="findAllProjectsInputMessage">
-		<part name="parameters" element="tns:findAllProjects"/>
-	</message>
-	<message name="findAllProjectsOutputMessage">
-		<part name="parameters" element="tns:findAllProjectsResponse"/>
-	</message>
-	<message name="findProjectsInputMessage">
-		<part name="parameters" element="tns:findProjects"/>
-	</message>
-	<message name="findProjectsOutputMessage">
-		<part name="parameters" element="tns:findProjectsResponse"/>
-	</message>
-	<message name="findPackagesInProjectInputMessage">
-		<part name="parameters" element="tns:findPackagesInProject"/>
-	</message>
-	<message name="findPackagesInProjectOutputMessage">
-		<part name="parameters" element="tns:findPackagesInProjectResponse"/>
-	</message>
-	<message name="findClassesInProjectInputMessage">
-		<part name="parameters" element="tns:findClassesInProject"/>
-	</message>
-	<message name="findClassesInProjectOutputMessage">
-		<part name="parameters" element="tns:findClassesInProjectResponse"/>
-	</message>
-	<message name="findClassesInPackageInputMessage">
-		<part name="parameters" element="tns:findClassesInPackage"/>
-	</message>
-	<message name="findClassesInPackageOutputMessage">
-		<part name="parameters" element="tns:findClassesInPackageResponse"/>
-	</message>
-	<message name="generateDomainModelForProjectInputMessage">
-		<part name="parameters" element="tns:generateDomainModelForProject"/>
-	</message>
-	<message name="generateDomainModelForProjectOutputMessage">
-		<part name="parameters" element="tns:generateDomainModelForProjectResponse"/>
-	</message>
-	<message name="generateDomainModelForPackagesInputMessage">
-		<part name="parameters" element="tns:generateDomainModelForPackages"/>
-	</message>
-	<message name="generateDomainModelForPackagesOutputMessage">
-		<part name="parameters" element="tns:generateDomainModelForPackagesResponse"/>
-	</message>
-	<message name="generateDomainModelForClassesInputMessage">
-		<part name="parameters" element="tns:generateDomainModelForClasses"/>
-	</message>
-	<message name="generateDomainModelForClassesOutputMessage">
-		<part name="parameters" element="tns:generateDomainModelForClassesResponse"/>
-	</message>
-	<message name="findAttributesInClassInputMessage">
-		<part name="parameters" element="tns:findAttributesInClass"/>
-	</message>
-	<message name="findAttributesInClassOutputMessage">
-		<part name="parameters" element="tns:findAttributesInClassResponse"/>
-	</message>
-	<message name="findSemanticMetadataForClassInputMessage">
-		<part name="parameters" element="tns:findSemanticMetadataForClass"/>
-	</message>
-	<message name="findSemanticMetadataForClassOutputMessage">
-		<part name="parameters" element="tns:findSemanticMetadataForClassResponse"/>
-	</message>
-	<message name="findValueDomainForAttributeInputMessage">
-		<part name="parameters" element="tns:findValueDomainForAttribute"/>
-	</message>
-	<message name="findValueDomainForAttributeOutputMessage">
-		<part name="parameters" element="tns:findValueDomainForAttributeResponse"/>
-	</message>
-	<message name="findAssociationsForClassInputMessage">
-		<part name="parameters" element="tns:findAssociationsForClass"/>
-	</message>
-	<message name="findAssociationsForClassOutputMessage">
-		<part name="parameters" element="tns:findAssociationsForClassResponse"/>
-	</message>
-	<message name="findAssociationsInPackageInputMessage">
-		<part name="parameters" element="tns:findAssociationsInPackage"/>
-	</message>
-	<message name="findAssociationsInPackageOutputMessage">
-		<part name="parameters" element="tns:findAssociationsInPackageResponse"/>
-	</message>
-	<message name="findAssociationsInProjectInputMessage">
-		<part name="parameters" element="tns:findAssociationsInProject"/>
-	</message>
-	<message name="findAssociationsInProjectOutputMessage">
-		<part name="parameters" element="tns:findAssociationsInProjectResponse"/>
-	</message>
-	<!--============================================================
+  <types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns1="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" xmlns:ns0="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cadsr.cagrid.nci.nih.gov" elementFormDefault="qualified" attributeFormDefault="unqualified">
+      <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
+      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./xsd/cagrid/types/caGridMetadata.xsd" />
+      <import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="./xsd/cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" />
+      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" schemaLocation="./xsd/cagrid/types/data/data.xsd" />
+      <import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" schemaLocation="./xsd/cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.domain.xsd" />
+      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./ServiceSecurity.xsd" />
+      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice" schemaLocation="./1.0_gov.nih.nci.cagrid.cadsrservice.xsd" />
+      <element name="FindAllProjectsRequest">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
+      <element name="FindAllProjectsResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns1:Project" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindProjectsRequest">
+        <complexType>
+          <sequence>
+            <element name="context" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindProjectsResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns1:Project" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindPackagesInProjectRequest">
+        <complexType>
+          <sequence>
+            <element name="project">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:Project" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindPackagesInProjectResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns1:UMLPackageMetadata" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindClassesInProjectRequest">
+        <complexType>
+          <sequence>
+            <element name="project">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:Project" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindClassesInProjectResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns1:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindClassesInPackageRequest">
+        <complexType>
+          <sequence>
+            <element name="project">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:Project" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="packageName" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindClassesInPackageResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns1:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GenerateDomainModelForProjectRequest">
+        <complexType>
+          <sequence>
+            <element name="project">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:Project" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GenerateDomainModelForProjectResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns4:DomainModel" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GenerateDomainModelForPackagesRequest">
+        <complexType>
+          <sequence>
+            <element name="project">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:Project" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="packageNames" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GenerateDomainModelForPackagesResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns4:DomainModel" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GenerateDomainModelForClassesRequest">
+        <complexType>
+          <sequence>
+            <element name="project">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:Project" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="classes">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="associations">
+              <complexType>
+                <sequence>
+                  <element ref="ns5:UMLAssociation" minOccurs="1" maxOccurs="unbounded" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GenerateDomainModelForClassesResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns4:DomainModel" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindAttributesInClassRequest">
+        <complexType>
+          <sequence>
+            <element name="project">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:Project" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="clazz">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:UMLClassMetadata" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindAttributesInClassResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns1:UMLAttributeMetadata" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindSemanticMetadataForClassRequest">
+        <complexType>
+          <sequence>
+            <element name="project">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:Project" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="clazz">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:UMLClassMetadata" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindSemanticMetadataForClassResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns1:SemanticMetadata" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindValueDomainForAttributeRequest">
+        <complexType>
+          <sequence>
+            <element name="project">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:Project" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="attribute">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:UMLAttributeMetadata" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindValueDomainForAttributeResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns2:ValueDomain" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindAssociationsForClassRequest">
+        <complexType>
+          <sequence>
+            <element name="project">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:Project" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="clazz">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:UMLClassMetadata" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindAssociationsForClassResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns5:UMLAssociation" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindAssociationsInPackageRequest">
+        <complexType>
+          <sequence>
+            <element name="project">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:Project" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="packageName" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindAssociationsInPackageResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns5:UMLAssociation" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindAssociationsInProjectRequest">
+        <complexType>
+          <sequence>
+            <element name="project">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:Project" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindAssociationsInProjectResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns5:UMLAssociation" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="CaDSRServiceResourceProperties">
+        <complexType>
+          <sequence>
+            <element ref="ns3:ServiceMetadata" />
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </types>
+  <!--  place service messages here -->
+  <message name="FindAllProjectsRequest">
+    <part name="parameters" element="tns:FindAllProjectsRequest" />
+  </message>
+  <message name="FindAllProjectsResponse">
+    <part name="parameters" element="tns:FindAllProjectsResponse" />
+  </message>
+  <message name="FindProjectsRequest">
+    <part name="parameters" element="tns:FindProjectsRequest" />
+  </message>
+  <message name="FindProjectsResponse">
+    <part name="parameters" element="tns:FindProjectsResponse" />
+  </message>
+  <message name="FindPackagesInProjectRequest">
+    <part name="parameters" element="tns:FindPackagesInProjectRequest" />
+  </message>
+  <message name="FindPackagesInProjectResponse">
+    <part name="parameters" element="tns:FindPackagesInProjectResponse" />
+  </message>
+  <message name="FindClassesInProjectRequest">
+    <part name="parameters" element="tns:FindClassesInProjectRequest" />
+  </message>
+  <message name="FindClassesInProjectResponse">
+    <part name="parameters" element="tns:FindClassesInProjectResponse" />
+  </message>
+  <message name="FindClassesInPackageRequest">
+    <part name="parameters" element="tns:FindClassesInPackageRequest" />
+  </message>
+  <message name="FindClassesInPackageResponse">
+    <part name="parameters" element="tns:FindClassesInPackageResponse" />
+  </message>
+  <message name="GenerateDomainModelForProjectRequest">
+    <part name="parameters" element="tns:GenerateDomainModelForProjectRequest" />
+  </message>
+  <message name="GenerateDomainModelForProjectResponse">
+    <part name="parameters" element="tns:GenerateDomainModelForProjectResponse" />
+  </message>
+  <message name="GenerateDomainModelForPackagesRequest">
+    <part name="parameters" element="tns:GenerateDomainModelForPackagesRequest" />
+  </message>
+  <message name="GenerateDomainModelForPackagesResponse">
+    <part name="parameters" element="tns:GenerateDomainModelForPackagesResponse" />
+  </message>
+  <message name="GenerateDomainModelForClassesRequest">
+    <part name="parameters" element="tns:GenerateDomainModelForClassesRequest" />
+  </message>
+  <message name="GenerateDomainModelForClassesResponse">
+    <part name="parameters" element="tns:GenerateDomainModelForClassesResponse" />
+  </message>
+  <message name="FindAttributesInClassRequest">
+    <part name="parameters" element="tns:FindAttributesInClassRequest" />
+  </message>
+  <message name="FindAttributesInClassResponse">
+    <part name="parameters" element="tns:FindAttributesInClassResponse" />
+  </message>
+  <message name="FindSemanticMetadataForClassRequest">
+    <part name="parameters" element="tns:FindSemanticMetadataForClassRequest" />
+  </message>
+  <message name="FindSemanticMetadataForClassResponse">
+    <part name="parameters" element="tns:FindSemanticMetadataForClassResponse" />
+  </message>
+  <message name="FindValueDomainForAttributeRequest">
+    <part name="parameters" element="tns:FindValueDomainForAttributeRequest" />
+  </message>
+  <message name="FindValueDomainForAttributeResponse">
+    <part name="parameters" element="tns:FindValueDomainForAttributeResponse" />
+  </message>
+  <message name="FindAssociationsForClassRequest">
+    <part name="parameters" element="tns:FindAssociationsForClassRequest" />
+  </message>
+  <message name="FindAssociationsForClassResponse">
+    <part name="parameters" element="tns:FindAssociationsForClassResponse" />
+  </message>
+  <message name="FindAssociationsInPackageRequest">
+    <part name="parameters" element="tns:FindAssociationsInPackageRequest" />
+  </message>
+  <message name="FindAssociationsInPackageResponse">
+    <part name="parameters" element="tns:FindAssociationsInPackageResponse" />
+  </message>
+  <message name="FindAssociationsInProjectRequest">
+    <part name="parameters" element="tns:FindAssociationsInProjectRequest" />
+  </message>
+  <message name="FindAssociationsInProjectResponse">
+    <part name="parameters" element="tns:FindAssociationsInProjectResponse" />
+  </message>
+  <!--============================================================
 
                        P O R T T Y P E
                       
   ============================================================-->
-	<portType name="CaDSRServicePortType"
-		wsrp:ResourceProperties="tns:CaDSRServiceResourceProperties">
-		<operation name="findAllProjects">
-			<input message="tns:findAllProjectsInputMessage"/>
-			<output message="tns:findAllProjectsOutputMessage"/>
-		</operation>
-		<operation name="findProjects">
-			<input message="tns:findProjectsInputMessage"/>
-			<output message="tns:findProjectsOutputMessage"/>
-		</operation>
-		<operation name="findPackagesInProject">
-			<input message="tns:findPackagesInProjectInputMessage"/>
-			<output message="tns:findPackagesInProjectOutputMessage"/>
-		</operation>
-		<operation name="findClassesInProject">
-			<input message="tns:findClassesInProjectInputMessage"/>
-			<output message="tns:findClassesInProjectOutputMessage"/>
-		</operation>
-		<operation name="findClassesInPackage">
-			<input message="tns:findClassesInPackageInputMessage"/>
-			<output message="tns:findClassesInPackageOutputMessage"/>
-		</operation>
-		<operation name="generateDomainModelForProject">
-			<input message="tns:generateDomainModelForProjectInputMessage"/>
-			<output message="tns:generateDomainModelForProjectOutputMessage"/>
-		</operation>
-		<operation name="generateDomainModelForPackages">
-			<input message="tns:generateDomainModelForPackagesInputMessage"/>
-			<output message="tns:generateDomainModelForPackagesOutputMessage"/>
-		</operation>
-		<operation name="generateDomainModelForClasses">
-			<input message="tns:generateDomainModelForClassesInputMessage"/>
-			<output message="tns:generateDomainModelForClassesOutputMessage"/>
-		</operation>
-		<operation name="findAttributesInClass">
-			<input message="tns:findAttributesInClassInputMessage"/>
-			<output message="tns:findAttributesInClassOutputMessage"/>
-		</operation>
-		<operation name="findSemanticMetadataForClass">
-			<input message="tns:findSemanticMetadataForClassInputMessage"/>
-			<output message="tns:findSemanticMetadataForClassOutputMessage"/>
-		</operation>
-		<operation name="findValueDomainForAttribute">
-			<input message="tns:findValueDomainForAttributeInputMessage"/>
-			<output message="tns:findValueDomainForAttributeOutputMessage"/>
-		</operation>
-		<operation name="findAssociationsForClass">
-			<input message="tns:findAssociationsForClassInputMessage"/>
-			<output message="tns:findAssociationsForClassOutputMessage"/>
-		</operation>
-		<operation name="findAssociationsInPackage">
-			<input message="tns:findAssociationsInPackageInputMessage"/>
-			<output message="tns:findAssociationsInPackageOutputMessage"/>
-		</operation>
-		<operation name="findAssociationsInProject">
-			<input message="tns:findAssociationsInProjectInputMessage"/>
-			<output message="tns:findAssociationsInProjectOutputMessage"/>
-		</operation>
-		<operation name="GetResourceProperty">
-			<input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest"
-				wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty"/>
-			<output name="GetResourcePropertyResponse" message="wsrpw:GetResourcePropertyResponse"
-				wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourcePropertyResponse"/>
-			<fault name="InvalidResourcePropertyQNameFault"
-				message="wsrpw:InvalidResourcePropertyQNameFault"/>
-			<fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
-		</operation>
-		<operation name="GetMultipleResourceProperties">
-			<input name="GetMultipleResourcePropertiesRequest"
-				message="wsrpw:GetMultipleResourcePropertiesRequest"
-				wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
-			<output name="GetMultipleResourcePropertiesResponse"
-				message="wsrpw:GetMultipleResourcePropertiesResponse"
-				wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
-			<fault name="InvalidResourcePropertyQNameFault"
-				message="wsrpw:InvalidResourcePropertyQNameFault"/>
-			<fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
-		</operation>
-		<operation name="QueryResourceProperties">
-			<input name="QueryResourcePropertiesRequest"
-				message="wsrpw:QueryResourcePropertiesRequest"
-				wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourceProperties"/>
-			<output name="QueryResourcePropertiesResponse"
-				message="wsrpw:QueryResourcePropertiesResponse"
-				wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourcePropertiesResponse"/>
-			<fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault"/>
-			<fault name="InvalidResourcePropertyQNameFault"
-				message="wsrpw:InvalidResourcePropertyQNameFault"/>
-			<fault name="UnknownQueryExpressionDialectFault"
-				message="wsrpw:UnknownQueryExpressionDialectFault"/>
-			<fault name="InvalidQueryExpressionFault" message="wsrpw:InvalidQueryExpressionFault"/>
-			<fault name="QueryEvaluationErrorFault" message="wsrpw:QueryEvaluationErrorFault"/>
-		</operation>
-	</portType>
+  <portType name="CaDSRServicePortType" wsrp:ResourceProperties="tns:CaDSRServiceResourceProperties">
+    <operation name="findAllProjects">
+      <input message="tns:FindAllProjectsRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindAllProjectsRequest" />
+      <output message="tns:FindAllProjectsResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindAllProjectsResponse" />
+    </operation>
+    <operation name="findProjects">
+      <input message="tns:FindProjectsRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindProjectsRequest" />
+      <output message="tns:FindProjectsResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindProjectsResponse" />
+    </operation>
+    <operation name="findPackagesInProject">
+      <input message="tns:FindPackagesInProjectRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindPackagesInProjectRequest" />
+      <output message="tns:FindPackagesInProjectResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindPackagesInProjectResponse" />
+    </operation>
+    <operation name="findClassesInProject">
+      <input message="tns:FindClassesInProjectRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindClassesInProjectRequest" />
+      <output message="tns:FindClassesInProjectResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindClassesInProjectResponse" />
+    </operation>
+    <operation name="findClassesInPackage">
+      <input message="tns:FindClassesInPackageRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindClassesInPackageRequest" />
+      <output message="tns:FindClassesInPackageResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindClassesInPackageResponse" />
+    </operation>
+    <operation name="generateDomainModelForProject">
+      <input message="tns:GenerateDomainModelForProjectRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/GenerateDomainModelForProjectRequest" />
+      <output message="tns:GenerateDomainModelForProjectResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/GenerateDomainModelForProjectResponse" />
+    </operation>
+    <operation name="generateDomainModelForPackages">
+      <input message="tns:GenerateDomainModelForPackagesRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/GenerateDomainModelForPackagesRequest" />
+      <output message="tns:GenerateDomainModelForPackagesResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/GenerateDomainModelForPackagesResponse" />
+    </operation>
+    <operation name="generateDomainModelForClasses">
+      <input message="tns:GenerateDomainModelForClassesRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/GenerateDomainModelForClassesRequest" />
+      <output message="tns:GenerateDomainModelForClassesResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/GenerateDomainModelForClassesResponse" />
+    </operation>
+    <operation name="findAttributesInClass">
+      <input message="tns:FindAttributesInClassRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindAttributesInClassRequest" />
+      <output message="tns:FindAttributesInClassResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindAttributesInClassResponse" />
+    </operation>
+    <operation name="findSemanticMetadataForClass">
+      <input message="tns:FindSemanticMetadataForClassRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindSemanticMetadataForClassRequest" />
+      <output message="tns:FindSemanticMetadataForClassResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindSemanticMetadataForClassResponse" />
+    </operation>
+    <operation name="findValueDomainForAttribute">
+      <input message="tns:FindValueDomainForAttributeRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindValueDomainForAttributeRequest" />
+      <output message="tns:FindValueDomainForAttributeResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindValueDomainForAttributeResponse" />
+    </operation>
+    <operation name="findAssociationsForClass">
+      <input message="tns:FindAssociationsForClassRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindAssociationsForClassRequest" />
+      <output message="tns:FindAssociationsForClassResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindAssociationsForClassResponse" />
+    </operation>
+    <operation name="findAssociationsInPackage">
+      <input message="tns:FindAssociationsInPackageRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindAssociationsInPackageRequest" />
+      <output message="tns:FindAssociationsInPackageResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindAssociationsInPackageResponse" />
+    </operation>
+    <operation name="findAssociationsInProject">
+      <input message="tns:FindAssociationsInProjectRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindAssociationsInProjectRequest" />
+      <output message="tns:FindAssociationsInProjectResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindAssociationsInProjectResponse" />
+    </operation>
+    <operation name="GetResourceProperty">
+      <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />
+      <output name="GetResourcePropertyResponse" message="wsrpw:GetResourcePropertyResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourcePropertyResponse" />
+      <fault name="InvalidResourcePropertyQNameFault" message="wsrpw:InvalidResourcePropertyQNameFault" />
+      <fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault" />
+    </operation>
+    <operation name="GetMultipleResourceProperties">
+      <input name="GetMultipleResourcePropertiesRequest" message="wsrpw:GetMultipleResourcePropertiesRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties" />
+      <output name="GetMultipleResourcePropertiesResponse" message="wsrpw:GetMultipleResourcePropertiesResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties" />
+      <fault name="InvalidResourcePropertyQNameFault" message="wsrpw:InvalidResourcePropertyQNameFault" />
+      <fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault" />
+    </operation>
+    <operation name="QueryResourceProperties">
+      <input name="QueryResourcePropertiesRequest" message="wsrpw:QueryResourcePropertiesRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourceProperties" />
+      <output name="QueryResourcePropertiesResponse" message="wsrpw:QueryResourcePropertiesResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourcePropertiesResponse" />
+      <fault name="ResourceUnknownFault" message="wsrpw:ResourceUnknownFault" />
+      <fault name="InvalidResourcePropertyQNameFault" message="wsrpw:InvalidResourcePropertyQNameFault" />
+      <fault name="UnknownQueryExpressionDialectFault" message="wsrpw:UnknownQueryExpressionDialectFault" />
+      <fault name="InvalidQueryExpressionFault" message="wsrpw:InvalidQueryExpressionFault" />
+      <fault name="QueryEvaluationErrorFault" message="wsrpw:QueryEvaluationErrorFault" />
+    </operation>
+    <operation name="getServiceSecurityMetadata">
+      <input message="wns0:GetServiceSecurityMetadataRequest" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest" />
+      <output message="wns0:GetServiceSecurityMetadataResponse" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataResponse" />
+    </operation>
+  </portType>
 </definitions>
+

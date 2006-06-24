@@ -19,7 +19,6 @@ import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComp
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.rmi.RemoteException;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -89,10 +88,11 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 		// update the graph for the given package
 		Thread t = new Thread() {
 			public void run() {
-				CaDSRServiceI cadsrService = new CaDSRServiceClient(getCaDSRPanel().getCadsr().getText());
+
 				try {
-			
-					getUMLDiagram().clear(); 
+					CaDSRServiceI cadsrService = new CaDSRServiceClient(getCaDSRPanel().getCadsr().getText());
+
+					getUMLDiagram().clear();
 					UMLClassMetadata[] classes = cadsrService.findClassesInPackage(
 						getCaDSRPanel().getSelectedProject(), pkg.getName());
 
@@ -116,7 +116,6 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 
 							getUMLDiagram().addClass(c);
 
-
 						}
 					}
 
@@ -133,10 +132,9 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 						// }
 					}
 
-					
 					getUMLDiagram().refresh();
 
-				} catch (RemoteException e) {
+				} catch (Exception e) {
 					JOptionPane.showMessageDialog(CaDSRTypeDiscoveryComponent.this,
 						"Error communicating with caDSR; please check the caDSR URL!");
 				}

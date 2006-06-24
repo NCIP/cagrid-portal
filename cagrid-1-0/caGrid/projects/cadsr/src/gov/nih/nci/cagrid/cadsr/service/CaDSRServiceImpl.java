@@ -9,7 +9,6 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
-import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRUtils;
 import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
 import gov.nih.nci.system.applicationservice.ApplicationService;
@@ -33,7 +32,7 @@ import org.globus.wsrf.Constants;
  * 
  * @created by caGrid toolkit version 1.0
  */
-public class CaDSRServiceImpl implements CaDSRServiceI {
+public class CaDSRServiceImpl {
 
 	protected static Log LOG = LogFactory.getLog(CaDSRServiceImpl.class.getName());
 	private ServiceConfiguration configuration;

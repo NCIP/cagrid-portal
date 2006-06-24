@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<project default="all" name="caDSR Build File" basedir=".">
+<!-- adopted from GTBS and modified -->
+<project default="help" name="Introduce Build File" basedir=".">
+
 	<!-- Define the environment variable -->
 	<property environment="env" />
 
@@ -8,36 +10,31 @@
     -->
 	<property file="introduce.properties" />
 	<property name="introduce.ns.excludes" value="" />
-	<property name="package.name" value="${introduce.skeleton.package}" />
-	<property name="package.dir" value="${introduce.skeleton.package.dir}" />
-	<property name="gar.filename" value="caGrid-caDSR-1.0" />
+	<property name="service.name" value="${introduce.skeleton.service.name}" />
 	<property name="schema.path" value="${introduce.skeleton.service.name}" />
-	<property name="interface.name" value="${introduce.skeleton.service.name}" />
 
 	<!-- Important directories and files -->
-	<property name="service.src.dir" value="src" />
+	<property name="src.dir" value="src" />
 	<property name="portal.src.dir" value="Portal/src" />
 	<property name="lib.dir" value="lib" />
 	<property name="ext.lib.dir" value="ext/lib" />
 	<property name="etc.dir" value="etc" />
 	<property name="schema.dir" value="schema" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
-	<property name="common.jar.name" value="${gar.filename}-common.jar" />
-	<property name="client.jar.name" value="${gar.filename}-client.jar" />
-	<property name="service.jar.name" value="${gar.filename}-service.jar" />
-	<property name="portal.jar.name" value="${gar.filename}-portal.jar" />
-	<property name="stubs.jar.name" value="${gar.filename}-stubs.jar" />
+	<property name="common.jar.name" value="${service.name}-common.jar" />
+	<property name="client.jar.name" value="${service.name}-client.jar" />
+	<property name="service.jar.name" value="${service.name}-service.jar" />
+	<property name="portal.jar.name" value="${service.name}-portal.jar" />
+	<property name="stubs.jar.name" value="${service.name}_stubs.jar" />
 
 	<!-- Important test directories and files -->
 	<property name="test.dir" value="test" />
 	<property name="test.src.dir" value="${test.dir}/src" />
 	<property name="test.lib.dir" value="${test.dir}/lib" />
 	<property name="test.log.dir" value="test/logs" />
-	<property name="junit.results.dir" value="${test.log.dir}/junit" />
-	<property name="test.jar.name" value="${gar.filename}-tests.jar" />
+	<property name="test.jar.name" value="${service.name}-tests.jar" />
 	<property name="ext.test.lib.dir" value="ext/test/lib" />
-
-	<property name="force.config.replace" value="false" />
+	<property name="junit.results.dir" value="${test.log.dir}/junit" />
 
 	<!-- override with introduce.properties or -D on commandline when using outside project structure -->
 	<property name="introduce.extensions.dir" value="../introduce/extensions" />
@@ -48,14 +45,14 @@
 	<!-- Auxiliary directory where all the intermediate files will be placed -->
 	<property name="build.dir" location="build" />
 	<!-- Directory for compiled service classes -->
-	<property name="service.build.dest" location="${build.dir}/Service/classes" />
-	<property name="portal.build.dest" location="${build.dir}/Portal/classes" />
+	<property name="build.dest" location="${build.dir}/classes" />
 	<property name="test.build.dest" value="${build.dir}/test/classes" />
+	<property name="portal.build.dest" location="${build.dir}/Portal/classes" />
 	<!-- Directory for compiled JAR files (additional library files required by
 	     the service will also be placed here) -->
 	<property name="build.lib.dir" location="${build.dir}/lib" />
 	<!-- Directory where stub source and class files are placed -->
-	<property name="stubs.dir" location="${build.dir}/stubs-${gar.filename}" />
+	<property name="stubs.dir" location="${build.dir}/stubs-${service.name}" />
 	<!-- Stub source files -->
 	<property name="stubs.src" location="${stubs.dir}/src" />
 	<!-- Compiled stub classes -->
@@ -64,21 +61,6 @@
 	<!-- Where we have to copy schema files inside the build directory -->
 	<property name="schema.dest" location="${build.dir}/schema" />
 
-	<!-- Filesets -->
-	<!-- JARs to be included in the GAR file -->
-	<fileset dir="${build.lib.dir}" id="garjars" />
-	<property name="garjars.id" value="garjars" />
-
-	<!-- Schema files (WSDL, XSD, etc.) to be included in the GAR file -->
-	<fileset dir="${schema.dest}" id="garschema">
-		<include name="${schema.path}/**/*" />
-	</fileset>
-	<property name="garschema.id" value="garschema" />
-
-	<!-- Configuration files (security, etc.) to be included in the GAR file -->
-	<property name="garetc.id" value="garetc" />
-	<fileset dir="${etc.dir}" id="garetc" />
-
 
 	<!-- We want detailed error messages -->
 	<property name="java.debug" value="on" />
@@ -86,31 +68,17 @@
 	<!--import deployment ant files -->
 	<import file="build-deploy.xml" />
 
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="${lib.dir}/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+
 	<condition property="isJDK1.5">
 		<and>
 			<equals arg1="${ant.java.version}" arg2="1.5" />
 		</and>
 	</condition>
-
-
-	<!-- ============================================================== -->
-	<!-- Tomcat properties                                              -->
-	<!-- ============================================================== -->
-	<target name="checkTomcat" depends="setTomcat">
-		<condition property="tomcat.not.found">
-			<or>
-				<not>
-					<isset property="ext.tomcat.dir" />
-				</not>
-				<equals arg1="${ext.tomcat.dir}" arg2="" />
-			</or>
-		</condition>
-		<fail message="Tomcat directory is not set in either CATALINA_HOME or ext.tomcat.dir" if="tomcat.not.found" />
-		<echo message="Tomcat: ${ext.tomcat.dir}" />
-	</target>
-	<target name="setTomcat" if="env.CATALINA_HOME">
-		<property name="ext.tomcat.dir" value="${env.CATALINA_HOME}" />
-	</target>
 
 
 	<!-- ============================================================== -->
@@ -138,50 +106,6 @@
 		<property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" />
 	</target>
 
-	<target name="defineClasspaths" depends="checkGlobus">
-		<path id="base.classpath">
-			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ext.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ext.globus.dir}/lib">
-				<include name="*.jar" />
-				<exclude name="${stubs.jar.name}" />
-				<exclude name="${common.jar.name}" />
-				<exclude name="${client.jar.name}" />
-				<exclude name="${service.jar.name}" />
-			</fileset>
-		</path>
-		<path id="service.build.classpath">
-			<pathelement location="${stubs.dest}" />
-			<path refid="base.classpath" />
-		</path>
-		<path id="test.build.classpath">
-			<fileset dir="${test.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ext.test.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<pathelement location="${service.build.dest}" />
-			<path refid="service.build.classpath" />
-		</path>
-		<path id="test.run.classpath">
-			<pathelement location="${test.build.dest}" />
-			<path refid="test.build.classpath" />
-		</path>
-		<path id="portal.build.classpath">
-			<pathelement location="${service.build.dest}" />
-			<path refid="service.build.classpath" />
-		</path>
-		<path id="run.classpath">
-			<pathelement location="${service.build.dest}" />
-			<path refid="service.build.classpath" />
-		</path>
-	</target>
-
 	<target name="checkJDK" unless="isJDK1.5">
 		<fail message="JDK with version &lt; 1.5 is required to build this project!" />
 	</target>
@@ -189,7 +113,7 @@
 	<!-- Sets up the build directory structure -->
 	<target name="init" depends="checkGlobus, checkJDK, defineClasspaths">
 		<mkdir dir="${build.dir}" />
-		<mkdir dir="${service.build.dest}" />
+		<mkdir dir="${build.dest}" />
 		<mkdir dir="${test.build.dest}" />
 		<mkdir dir="${portal.build.dest}" />
 		<mkdir dir="${test.log.dir}" />
@@ -214,12 +138,59 @@
 		<mkdir dir="${etc.dir}" />
 	</target>
 
+	<target name="defineClasspaths">
+		<path id="base.classpath">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.globus.dir}/lib">
+				<include name="*.jar" />
+				<exclude name="${stubs.jar.name}" />
+				<exclude name="${common.jar.name}" />
+				<exclude name="${client.jar.name}" />
+				<exclude name="${service.jar.name}" />
+			</fileset>
+		</path>
+		<path id="service.build.classpath">
+			<pathelement location="${stubs.dest}" />
+			<path refid="base.classpath" />
+		</path>
+		<path id="service.run.classpath">
+			<pathelement location="${build.dest}" />
+			<path refid="service.build.classpath" />
+		</path>
+		<path id="test.build.classpath">
+			<fileset dir="${test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<pathelement location="${build.dest}" />
+			<path refid="service.build.classpath" />
+		</path>
+		<path id="test.run.classpath">
+			<pathelement location="${test.build.dest}" />
+			<path refid="test.build.classpath" />
+		</path>
+		<path id="portal.build.classpath">
+			<pathelement location="${build.dest}" />
+			<path refid="service.build.classpath" />
+		</path>
+		<path id="run.classpath">
+			<pathelement location="${build.dest}" />
+			<path refid="service.build.classpath" />
+		</path>
+	</target>
 
 	<!-- "Flattens" the WSDL file. i.e. runs the WSDL Preprocessor and creates a single
 	     WSDL file with all the operations and RPs in the portTypes specified in
 	     the wsdlpp:extends attribute (plus, of course, those defined in our own WSDL file) -->
 	<!-- Note that this is done with a GT4 tool -->
-	<target name="flatten" depends="init">
+	<target name="serviceFlatten" depends="init">
 		<ant antfile="${build.stubs}" target="flatten">
 			<property name="source.flatten.dir" location="${schema.dest}/${schema.path}" />
 			<property name="target.flatten.dir" location="${schema.dest}/${schema.path}" />
@@ -229,10 +200,9 @@
 		</ant>
 	</target>
 
-
 	<!-- Generate bindings for our WSDL file -->
 	<!-- This is done with a GT4 tool -->
-	<target name="generateBindings" depends="flatten">
+	<target name="serviceGenerateBindings" depends="serviceFlatten">
 		<ant antfile="${build.stubs}" target="generateBinding">
 			<property name="source.binding.dir" value="${schema.dest}/${schema.path}" />
 			<property name="target.binding.dir" value="${schema.dest}/${schema.path}" />
@@ -241,15 +211,17 @@
 		</ant>
 	</target>
 
-
-	<!-- Generate the stub source files -->
-	<!-- This is done with a GT4 tool -->
-	<target name="stubs" depends="generateBindings">
+	<target name="merge" depends="init">
 		<!-- Merge our namespace mappings file with the GT4 mappins file -->
 		<ant antfile="${build.stubs}" target="mergePackageMapping">
 			<property name="mapping.src" location="${mappings.file}" />
 			<property name="mapping.dst" location="${build.dir}/namespace2package.mappings" />
 		</ant>
+	</target>
+
+	<!-- Generate the stub source files -->
+	<!-- This is done with a GT4 tool -->
+	<target name="serviceStubs" depends="serviceGenerateBindings,merge">
 		<!-- Invoke the stub generator -->
 		<ant antfile="${build.stubs}" target="generateStubs">
 			<property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
@@ -260,35 +232,64 @@
 		</ant>
 	</target>
 
+	<!-- "Flattens" the WSDL file. i.e. runs the WSDL Preprocessor and creates a single
+		WSDL file with all the operations and RPs in the portTypes specified in
+		the wsdlpp:extends attribute (plus, of course, those defined in our own WSDL file) -->
+	<!-- Note that this is done with a GT4 tool -->
+	<target name="flatten" depends="init">
+		<for list="${introduce.skeleton.services.list}" parallel="false" param="service.name" trim="true">
+			<sequential>
+				<echo message="Flattening service: @{service.name}." />
+				<antcall target="serviceFlatten">
+					<param name="interface.name" value="@{service.name}" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+
+
+	<!-- Generate the stub source files -->
+	<!-- This is done with a GT4 tool -->
+	<target name="stubs" depends="init">
+		<for list="${introduce.skeleton.services.list}" parallel="false" param="service.name" trim="true">
+			<sequential>
+				<echo message="Generating stubs for @{service.name}." />
+				<antcall target="serviceStubs">
+					<param name="interface.name" value="@{service.name}" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+
 
 	<!-- Compile the stubs generated in the previous step -->
 	<target name="compileStubs" depends="stubs">
-		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}" classpathref="base.classpath" />
+		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}" classpathref="base.classpath">
+			<include name="**/*.java" />
+		</javac>
 	</target>
 
 
 	<!-- Compile the implementation classes (service, resource, etc.) -->
-	<target name="compileService" depends="compileStubs">
-		<javac srcdir="${service.src.dir}" includes="${package.dir}/**" classpathref="service.build.classpath" destdir="${service.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
-		<copy toDir="${service.build.dest}">
-			<fileset dir="${service.src.dir}">
+	<target name="compile" depends="compileStubs" description="Compiles the service.">
+		<javac srcdir="${src.dir}" classpathref="service.build.classpath" includes="**" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
+
+		<!-- Copy the source code, wsdd, properties, etc to the build dir for include in the jar -->
+		<copy toDir="${build.dest}">
+			<fileset dir="${src.dir}">
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		<copy toDir="${service.build.dest}">
-			<fileset dir="${basedir}">
-				<include name="client-config.wsdd" />
-			</fileset>
-		</copy>
 	</target>
 
-	<!-- Compile the test implementation classes -->
-	<target name="compileTests" depends="compileService">
-		<javac srcdir="${test.src.dir}" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" classpathref="test.build.classpath" />
+
+	<!-- Compile the test implementation classes (service, resource, etc.) -->
+	<target name="compileTests" depends="compile">
+		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
 	</target>
 
 	<!-- Compile the portal implementation classes  -->
-	<target name="compilePortal" depends="compileService">
+	<target name="compilePortal" depends="compile">
 		<javac srcdir="${portal.src.dir}" destdir="${portal.build.dest}" debug="${java.debug}" deprecation="${deprecation}" classpathref="portal.build.classpath" />
 	</target>
 
@@ -311,28 +312,23 @@
 
 
 	<!-- Create a JAR file with the implementation classes -->
-	<target name="jarService" depends="compileService">
-		<jar jarfile="${build.lib.dir}/${client.jar.name}" basedir="${service.build.dest}">
-			<include name="${package.dir}/client/**" />
+	<target name="jar" depends="compile">
+		<jar jarfile="${build.lib.dir}/${client.jar.name}" basedir="${build.dest}">
+			<include name="**/client/**" />
 		</jar>
-		<jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${service.build.dest}">
-			<include name="${package.dir}/service/**" />
+		<jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
+			<include name="**/service/**" />
 		</jar>
-		<jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${service.build.dest}">
-			<include name="**/*.xml" />
-			<include name="**/*.dtd" />
-			<include name="**/*.properties" />
-			<include name="**/*.xsd" />
-			<include name="**/*.wsdd" />
-			<include name="${package.dir}/**" />
-			<exclude name="${package.dir}/client/**" />
-			<exclude name="${package.dir}/service/**" />
+		<jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
+			<include name="**/*" />
+			<exclude name="**/client/**" />
+			<exclude name="**/service/**" />
 		</jar>
 	</target>
 
 
 	<!-- Create a JAR file with the test implementation classes -->
-	<target name="jarTests" depends="compileTests">
+	<target name="jarTests" depends="jar,compileTests">
 		<jar jarfile="${build.lib.dir}/${test.jar.name}" basedir="${test.build.dest}" />
 	</target>
 
@@ -341,62 +337,71 @@
 		<jar jarfile="${build.lib.dir}/${portal.jar.name}" basedir="${portal.build.dest}" />
 	</target>
 
-
 	<!-- Create a JAR file with the stub classes -->
 	<target name="jarStubs" depends="compileStubs">
 		<jar destfile="${build.lib.dir}/${stubs.jar.name}" basedir="${stubs.dest}" />
 	</target>
 
 
+	<!-- Empty target, in case we simply want to generate the JAR files -->
+	<target name="jars" depends="jarStubs, jar, jarTests, jarPortal" />
+
 
 	<!-- call the test target for each project and aggregates the log resutls  -->
-	<target name="test" depends="checkGlobus">
+	<target name="test" depends="checkGlobus" description="Runs the service's tests.">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
-			<sysproperty key="basedir" value="${basedir}" />
-			<jvmarg value="-Xmx512M" />
-			<jvmarg value="-Dbuild.dir=${build.dir}" />
-			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
 			<classpath refid="test.run.classpath" />
+			<sysproperty key="build.dir" value="${build.dest}" />
+			<jvmarg value="-Xmx512M" />
+			<jvmarg value="-Dbuild.dir=${build.dest}" />
 			<formatter type="xml" />
 			<batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
+					<include name="**/Test*.java" />
 					<include name="**/*TestCase.java" />
 				</fileset>
 			</batchtest>
 		</junit>
 	</target>
 
-
 	<!-- Clean up all the intermediate files -->
-	<target name="clean">
+	<target name="clean" description="Removes all generated build artifacts.">
 		<delete dir="tmp" />
 		<delete dir="${build.dir}" />
 		<delete file="${gar.name}" />
 	</target>
 
-	<target name="runClient" depends="defineClasspaths" description="Run the sample Discovery Client">
+	<target name="runClient" depends="checkGlobus, defineClasspaths" description="Run the sample Discovery Client">
 		<property name="cadsr.service.url" value="http://localhost:8080/wsrf/services/cagrid/CaDSRService" />
 		<echo message="Connecting to service: ${cadsr.service.url}" />
 		<java classname="gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient" classpathref="run.classpath" fork="no">
 			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
-			<sysproperty key="axis.ClientConfigFile" value="${service.src.dir}/gov/nih/nci/cagrid/cadsr/client/client-config.wsdd" />
-			<jvmarg value="-Daxis.ClientConfigFile=${service.src.dir}/gov/nih/nci/cagrid/cadsr/client/client-config.wsdd" />
+			<sysproperty key="axis.ClientConfigFile" value="${src.dir}/gov/nih/nci/cagrid/cadsr/client/client-config.wsdd" />
+			<jvmarg value="-Daxis.ClientConfigFile=${src.dir}/gov/nih/nci/cagrid/cadsr/client/client-config.wsdd" />
 			<!--
-			<sysproperty key="log4j.debug" value="true" />
-			<sysproperty key="log4j.configuration" value="file:\${ext.globus.dir}\log4j.properties" />
-			-->
+				<sysproperty key="log4j.debug" value="true" />
+				<sysproperty key="log4j.configuration" value="file:\${ext.globus.dir}\log4j.properties" />
+				-->
 			<arg value="-url" />
 			<arg value="${cadsr.service.url}" />
 		</java>
 	</target>
 
 
-	<!-- Empty target, in case we simply want to generate the JAR files -->
-	<target name="jars" depends="jarStubs, jarService, jarTests, jarPortal" />
-
 	<!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
-	<target name="all" depends="jars" />
+	<target name="all" depends="jars" description="Builds the entire service." />
+
+	<target name="help" description="Prints usage information.">
+		<echo message="================================================================================" />
+		<echo message="|    Introduce Created Grid Service                                            |" />
+		<echo message="          Service: ${service.name}" />
+		<echo message="--------------------------------------------------------------------------------" />
+		<echo message="|  USAGE:                                                                      |" />
+		<echo message="|    Type 'ant -h' for general help with Ant                                   |" />
+		<echo message="|    Type 'ant -p' for a description of this service's build targets.          |" />
+		<echo message="================================================================================" />
+	</target>
 
 </project>
