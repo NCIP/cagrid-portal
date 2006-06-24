@@ -4,414 +4,422 @@
 <!-- ================================================================= -->
 
 <project name="Master" default="all" basedir=".">
-    <!-- Give user the chance to override properties -->
-    <property environment="env" />
-    <property file="build.properties" />
+	<!-- Give user the chance to override properties -->
+	<property environment="env" />
+	<property file="build.properties" />
 
-    <!-- Layout info -->
-    <property name="projects.dir" location="${basedir}/projects" />
-    <property name="test.dir" location="${basedir}/test" />
-    <property name="share.dir" location="${basedir}/share" />
-    <property name="share.lib.dir" location="${share.dir}/lib" />
-    <property name="test.lib.dir" location="${test.dir}/lib" />
-    <property name="antfiles.dir" location="${basedir}/antfiles" />
+	<!-- Layout info -->
+	<property name="projects.dir" location="${basedir}/projects" />
+	<property name="test.dir" location="${basedir}/test" />
+	<property name="share.dir" location="${basedir}/share" />
+	<property name="share.lib.dir" location="${share.dir}/lib" />
+	<property name="test.lib.dir" location="${test.dir}/lib" />
+	<property name="antfiles.dir" location="${basedir}/antfiles" />
 
-    <condition property="isJDK1.5" value="true">
-        <equals arg1="${ant.java.version}" arg2="1.5" />
-    </condition>
+	<condition property="isJDK1.5" value="true">
+		<equals arg1="${ant.java.version}" arg2="1.5" />
+	</condition>
+	<!-- Require Java 1.5 for now -->
+	<fail message="JDK 1.5 is currently required to build this project!" unless="isJDK1.5" />
 
-    <!-- IMPORT THE UTILITIES TARGETS -->
-    <import file="${antfiles.dir}/artifacts.xml" />
-    <import file="${antfiles.dir}/ant-utilities.xml" />
-    <import file="${antfiles.dir}/test-utilities.xml" />
-    <import file="${antfiles.dir}/run-utilities.xml" />
-    <import file="${antfiles.dir}/report-utilities.xml" />
+	<!-- IMPORT THE UTILITIES TARGETS -->
+	<import file="${antfiles.dir}/artifacts.xml" />
+	<import file="${antfiles.dir}/ant-utilities.xml" />
+	<import file="${antfiles.dir}/test-utilities.xml" />
+	<import file="${antfiles.dir}/run-utilities.xml" />
+	<import file="${antfiles.dir}/report-utilities.xml" />
 
-    <!-- IMPORT THE TEST TARGET -->
-    <import file="${test.dir}/test.xml" />
-
-
-
-    <!-- ================================================================================ -->
-    <!--                          DEFINE THE SUB PROJECTS                                 -->
-    <!-- ================================================================================ -->
-    <!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-    <property name="projects.list" value="cabigextensions, cadsr, core, cql2xpath, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, introduce, metadata, opensaml, sdkQuery, syncgts" />
-    <!-- ================================================================================ -->
-    <!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
-    <!-- ================================================================================ -->
-    <!-- This should be a subset of the projects above -->
-    <property name="testable.projects.list" value="dorian, introduce, cabigextensions, core, discovery, cadsr, gridca, gts, syncgts, cql2xpath, data, sdkQuery" />
-
-
-    <!-- =============================================================== -->
-    <!-- Bootstrap the build by setting up the structure and building    -->
-    <!-- our custom ant tasks.                                           -->
-    <!-- =============================================================== -->
-    <target name="prepare">
-        <tstamp />
-        <delete dir="${antfiles.dir}/build" />
-        <mkdir dir="${antfiles.dir}/build" />
-        <javac srcdir="${antfiles.dir}/src" destdir="${antfiles.dir}/build" debug="on" deprecation="off" optimize="off">
-            <classpath>
-                <fileset dir="${ant.library.dir}">
-                    <include name="ant.jar" />
-                </fileset>
-            </classpath>
-        </javac>
-
-        <typedef name="artifact" classname="gov.nih.nci.cagrid.ant.Artifact" loaderref="artifact">
-            <classpath>
-                <pathelement location="${antfiles.dir}/build" />
-            </classpath>
-        </typedef>
-        <taskdef name="resolveDependencies" classname="gov.nih.nci.cagrid.ant.ResolveDependencies" loaderref="artifact">
-            <classpath>
-                <pathelement location="${antfiles.dir}/build" />
-            </classpath>
-        </taskdef>
-
-        <taskdef resource="net/sf/antcontrib/antlib.xml">
-            <classpath>
-                <pathelement location="${share.lib.dir}/ant-contrib.jar" />
-            </classpath>
-        </taskdef>
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- CORE: This cannot have any dependencies on other projects       -->
-    <!-- =============================================================== -->
-    <target name="build-core" depends="prepare" description="Builds the core">
-        <resolveDependencies extdir="${projects.dir}/core/ext">
-            <artifact refid="mobius.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-
-    <!-- =============================================================== -->
-    <!-- OPENSAML: This cannot have any dependencies on other projects   -->
-    <!-- =============================================================== -->
-    <target name="build-opensaml" depends="prepare" description="Builds opensaml">
-        <ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-
-    <!-- =============================================================== -->
-    <!-- METADATA: This may only depend on core                          -->
-    <!-- =============================================================== -->
-    <target name="build-metadata" if="isJDK1.5" depends="prepare" description="Builds the common metadata">
-        <resolveDependencies extdir="${projects.dir}/metadata/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="caCORE.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="jar" />
-    </target>
-
-
-    <!-- =============================================================== -->
-    <!-- DISCOVERY:                                                      -->
-    <!-- =============================================================== -->
-    <target name="build-discovery" if="isJDK1.5" depends="prepare" description="Builds the common metadata">
-        <resolveDependencies extdir="${projects.dir}/discovery/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="data.metadata.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-
-    <!-- =============================================================== -->
-    <!-- PORTAL:                                                      -->
-    <!-- =============================================================== -->
-    <target name="build-portal" if="isJDK1.5" depends="prepare" description="Builds the portal project">
-        <resolveDependencies extdir="${projects.dir}/portal/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="data.metadata.jars" />
-            <artifact refid="discovery.jars"/>
-        </resolveDependencies>
-        <ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-
-    <!-- =============================================================== -->
-    <!-- caBIG Introduce Extensions:                                     -->
-    <!-- =============================================================== -->
-    <target name="build-cabigextensions" if="isJDK1.5" depends="prepare" description="Builds the caBIG Introduce extensions">
-        <resolveDependencies extdir="${projects.dir}/cabigextensions/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="metadata.schemas" />
-            <artifact refid="introduce.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/cabigextensions" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- GRAPH: Graphing/UML diagrams                                    -->
-    <!-- =============================================================== -->
-    <target name="build-graph" depends="prepare" description="Builds graph">
-        <resolveDependencies extdir="${projects.dir}/graph/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="caCORE.jars" />
-            <artifact refid="data.metadata.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/graph" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-
-    <!-- =============================================================== -->
-    <!-- caDSR:                                                          -->
-    <!-- =============================================================== -->
-    <target name="build-cadsr" if="isJDK1.5" depends="prepare" description="Builds the cadsr project">
-        <resolveDependencies extdir="${projects.dir}/cadsr/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="data.metadata.jars" />
-            <artifact refid="caCORE.jars" />
-            <artifact refid="introduce.jars" />
-            <artifact refid="graph.jars" />
-            <artifact refid="gme.globus.client.jars" />
-        </resolveDependencies>
-        <resolveDependencies extdir="${projects.dir}/cadsr/schema/CaDSRService">
-            <artifact refid="metadata.schemas" />
-        </resolveDependencies>
-
-        <ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-
-    <!-- =============================================================== -->
-    <!-- Grid CA:                                                        -->
-    <!-- =============================================================== -->
-    <target name="build-gridca" depends="prepare" description="Builds the gridca project">
-        <resolveDependencies extdir="${projects.dir}/gridca/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="core.resources" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-
-    <!-- =============================================================== -->
-    <!-- DORIAN:                                                         -->
-    <!-- =============================================================== -->
-    <target name="build-dorian" depends="prepare" description="Builds the dorian project">
-        <resolveDependencies extdir="${projects.dir}/dorian/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-        	<artifact refid="core.test.jars" />
-            <artifact refid="core.resources" />
-            <artifact refid="gridca.jars" />
-            <artifact refid="gridca.resources" />
-            <artifact refid="mobius.jars" />
-            <artifact refid="opensaml.jars" />
-            <artifact refid="opensaml.endorsed" />
-            <artifact refid="gts.client.jars" />
-        </resolveDependencies>
-        <resolveDependencies extdir="${projects.dir}/dorian/schema/Dorian">
-            <artifact refid="metadata.schemas" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-
-    <!-- =============================================================== -->
-    <!-- Grid Trust Service:                                             -->
-    <!-- =============================================================== -->
-    <target name="build-gts" depends="prepare" description="Builds the GTS project">
-        <resolveDependencies extdir="${projects.dir}/gts/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="core.resources" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="gridca.jars" />
-            <artifact refid="gridca.resources" />
-            <artifact refid="mobius.jars" />
-        </resolveDependencies>
-        <resolveDependencies extdir="${projects.dir}/gts/schema/GTS">
-            <artifact refid="metadata.schemas" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-
-    <!-- =============================================================== -->
-    <!-- Sync GTS                                                        -->
-    <!-- =============================================================== -->
-    <target name="build-syncgts" depends="prepare" description="Builds the syncgts project">
-        <resolveDependencies extdir="${projects.dir}/syncgts/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="gridca.jars" />
-            <artifact refid="mobius.jars" />
-            <artifact refid="gts.client.jars" />
-        </resolveDependencies>
-        <resolveDependencies extdir="${projects.dir}/syncgts/schema/SyncGTS">
-            <artifact refid="metadata.schemas" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/syncgts" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- IMPORT THE TEST TARGET -->
+	<import file="${test.dir}/test.xml" />
 
 
 
-    <!-- =============================================================== -->
-    <!-- INTRODUCE:                                                      -->
-    <!-- =============================================================== -->
-    <target name="build-introduce" depends="prepare" description="Builds Introduce">
-        <resolveDependencies extdir="${projects.dir}/introduce/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="core.resources" />
-            <artifact refid="mobius.jars" />
-            <artifact refid="gme.globus.client.jars" />
-            <artifact refid="metadata.schemas" />
-            <artifact refid="gridca.jars" />
-            <artifact refid="gridca.resources" />
-        	<artifact refid="security.metadata.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- CAGRID GME:                                                     -->
-    <!-- =============================================================== -->
-    <target name="build-gme" depends="prepare" description="Builds caGrid GME">
-        <resolveDependencies extdir="${projects.dir}/gme/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="core.resources" />
-            <artifact refid="mobius.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- ================================================================================ -->
+	<!--                          DEFINE THE SUB PROJECTS                                 -->
+	<!-- ================================================================================ -->
+	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
+	<property name="projects.list" value="cabigextensions, cadsr, core, cql2xpath, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, introduce, metadata, opensaml, sdkQuery, syncgts" />
+	<!-- ================================================================================ -->
+	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
+	<!-- ================================================================================ -->
+	<!-- This should be a subset of the projects above -->
+	<property name="testable.projects.list" value="dorian, introduce, cabigextensions, core, discovery, cadsr, gridca, gts, syncgts, cql2xpath, data, sdkQuery" />
 
 
-    <!-- =============================================================== -->
-    <!-- CAGRID DataService:                                             -->
-    <!-- =============================================================== -->
-    <target name="build-data" if="isJDK1.5" depends="prepare" description="Builds caGrid Data Services components">
-        <resolveDependencies extdir="${projects.dir}/data/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="introduce.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="gme.globus.client.jars" />
-            <artifact refid="core.resources" />
-            <artifact refid="introduce.resources" />
-            <artifact refid="cadsr.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="data.metadata.jars" />
-            <artifact refid="metadata.schemas" />
-            <artifact refid="graph.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- Bootstrap the build by setting up the structure and building    -->
+	<!-- our custom ant tasks.                                           -->
+	<!-- =============================================================== -->
+	<target name="prepare">
+		<tstamp />
+		<delete dir="${antfiles.dir}/build" />
+		<mkdir dir="${antfiles.dir}/build" />
+		<javac srcdir="${antfiles.dir}/src" destdir="${antfiles.dir}/build" debug="on" deprecation="off" optimize="off">
+			<classpath>
+				<fileset dir="${ant.library.dir}">
+					<include name="ant.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+
+		<typedef name="artifact" classname="gov.nih.nci.cagrid.ant.Artifact" loaderref="artifact">
+			<classpath>
+				<pathelement location="${antfiles.dir}/build" />
+			</classpath>
+		</typedef>
+		<taskdef name="resolveDependencies" classname="gov.nih.nci.cagrid.ant.ResolveDependencies" loaderref="artifact">
+			<classpath>
+				<pathelement location="${antfiles.dir}/build" />
+			</classpath>
+		</taskdef>
+
+		<taskdef resource="net/sf/antcontrib/antlib.xml">
+			<classpath>
+				<pathelement location="${share.lib.dir}/ant-contrib.jar" />
+			</classpath>
+		</taskdef>
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- CORE: This cannot have any dependencies on other projects       -->
+	<!-- =============================================================== -->
+	<target name="build-core" depends="prepare" description="Builds the core">
+		<resolveDependencies extdir="${projects.dir}/core/ext">
+			<artifact refid="mobius.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
-    <!-- =============================================================== -->
-    <!-- CAGRID SDK Data Service Query Processor:                        -->
-    <!-- =============================================================== -->
-    <target name="build-sdkQuery" if="isJDK1.5" depends="prepare" description="Builds caGrid SDK Query processor">
-        <resolveDependencies extdir="${projects.dir}/sdkQuery/ext">
-            <artifact refid="core.jars" />
-            <artifact refid="caCORE.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="data.jars" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-        </resolveDependencies>
-
-        <ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <!-- =============================================================== -->
-    <!-- Federated Query Processor:                                      -->
-    <!-- =============================================================== -->
-    <target name="build-fqp" if="isJDK1.5" depends="prepare" description="Federated Query Processor">
-        <resolveDependencies extdir="${projects.dir}/fqp/ext">
-            <artifact refid="data.jars" />
-            <artifact refid="common.test.jars" />
-        </resolveDependencies>
-        <resolveDependencies extdir="${projects.dir}/fqp/schema">
-            <artifact refid="data.cql.schemas" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- OPENSAML: This cannot have any dependencies on other projects   -->
+	<!-- =============================================================== -->
+	<target name="build-opensaml" depends="prepare" description="Builds opensaml">
+		<ant dir="${projects.dir}/opensaml" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
-    <!-- =============================================================== -->
-    <!-- CAGRID Cql2Xpath:                                               -->
-    <!-- =============================================================== -->
-    <target name="build-cql2xpath" depends="prepare" description="Builds caGrid Cql2Xpath utility">
-        <resolveDependencies extdir="${projects.dir}/cql2xpath/ext">
-            <artifact refid="core.jars" />
-        </resolveDependencies>
-        <ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- METADATA: This may only depend on core                          -->
+	<!-- =============================================================== -->
+	<target name="build-metadata" if="isJDK1.5" depends="prepare" description="Builds the common metadata">
+		<resolveDependencies extdir="${projects.dir}/metadata/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="caCORE.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="jar" />
+	</target>
 
 
-    <!-- ============================================================== -->
-    <!-- Cleans up generated stuff                                      -->
-    <!-- ============================================================== -->
-    <target name="clean" depends="prepare" description="Cleans all projects.">
-        <for list="${projects.list}" parallel="true" param="project.name" trim="true">
-            <sequential>
-                <echo message="Cleaning project @{project.name}." />
-                <delete dir="${projects.dir}/@{project.name}/ext" />
-                <ant dir="${projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean" />
-            </sequential>
-        </for>
-
-        <delete failonerror="false">
-            <fileset dir="${junit.results.dir}">
-                <include name="*" />
-            </fileset>
-        </delete>
-    </target>
+	<!-- =============================================================== -->
+	<!-- DISCOVERY:                                                      -->
+	<!-- =============================================================== -->
+	<target name="build-discovery" if="isJDK1.5" depends="prepare" description="Builds the common metadata">
+		<resolveDependencies extdir="${projects.dir}/discovery/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="data.metadata.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 
-    <!-- ============================================================== -->
-    <!-- Builds from scratch                                            -->
-    <!-- ============================================================== -->
-    <target name="all" depends="prepare, clean" description="Builds the entire application">
-        <for list="${projects.list}" parallel="false" param="project.name" trim="true">
-            <sequential>
-                <echo message="Building project @{project.name}." />
-                <runtarget target="build-@{project.name}" />
-                <echo message="Built project @{project.name}." />
-            </sequential>
-        </for>
-        <runtarget target="displayBuildWarning" />
-    </target>
-    <target name="displayBuildWarning" unless="isJDK1.5">
-        <echo message="=====================================================================================" />
-        <echo message="WARNING: When building with a JDK of version &lt; 1.5, not all projects can be built!" />
-        <echo message="         You are using Java Version: ${ant.java.version}" />
-        <echo message="=====================================================================================" />
-    </target>
+	<!-- =============================================================== -->
+	<!-- PORTAL:                                                      -->
+	<!-- =============================================================== -->
+	<target name="build-portal" if="isJDK1.5" depends="prepare" description="Builds the portal project">
+		<resolveDependencies extdir="${projects.dir}/portal/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="data.metadata.jars" />
+			<artifact refid="discovery.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- caBIG Introduce Extensions:                                     -->
+	<!-- =============================================================== -->
+	<target name="build-cabigextensions" if="isJDK1.5" depends="prepare" description="Builds the caBIG Introduce extensions">
+		<resolveDependencies extdir="${projects.dir}/cabigextensions/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="metadata.schemas" />
+			<artifact refid="introduce.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/cabigextensions" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- GRAPH: Graphing/UML diagrams                                    -->
+	<!-- =============================================================== -->
+	<target name="build-graph" depends="prepare" description="Builds graph">
+		<resolveDependencies extdir="${projects.dir}/graph/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="caCORE.jars" />
+			<artifact refid="data.metadata.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/graph" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- caDSR:                                                          -->
+	<!-- =============================================================== -->
+	<target name="build-cadsr" if="isJDK1.5" depends="prepare" description="Builds the cadsr project">
+		<resolveDependencies extdir="${projects.dir}/cadsr/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="data.metadata.jars" />
+			<artifact refid="caCORE.jars" />
+			<artifact refid="introduce.jars" />
+			<artifact refid="graph.jars" />
+			<artifact refid="gme.globus.client.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/cadsr/schema/CaDSRService">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+
+		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- Grid CA:                                                        -->
+	<!-- =============================================================== -->
+	<target name="build-gridca" depends="prepare" description="Builds the gridca project">
+		<resolveDependencies extdir="${projects.dir}/gridca/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="core.resources" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- DORIAN:                                                         -->
+	<!-- =============================================================== -->
+	<target name="build-dorian" depends="prepare" description="Builds the dorian project">
+		<resolveDependencies extdir="${projects.dir}/dorian/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="core.resources" />
+			<artifact refid="gridca.jars" />
+			<artifact refid="gridca.resources" />
+			<artifact refid="mobius.jars" />
+			<artifact refid="opensaml.jars" />
+			<artifact refid="opensaml.endorsed" />
+			<artifact refid="gts.client.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/dorian/schema/Dorian">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- Grid Trust Service:                                             -->
+	<!-- =============================================================== -->
+	<target name="build-gts" depends="prepare" description="Builds the GTS project">
+		<resolveDependencies extdir="${projects.dir}/gts/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="core.resources" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="gridca.jars" />
+			<artifact refid="gridca.resources" />
+			<artifact refid="mobius.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/gts/schema/GTS">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gts" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- Sync GTS                                                        -->
+	<!-- =============================================================== -->
+	<target name="build-syncgts" depends="prepare" description="Builds the syncgts project">
+		<resolveDependencies extdir="${projects.dir}/syncgts/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="gridca.jars" />
+			<artifact refid="mobius.jars" />
+			<artifact refid="gts.client.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/syncgts/schema/SyncGTS">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/syncgts" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+
+	<!-- =============================================================== -->
+	<!-- INTRODUCE:                                                      -->
+	<!-- =============================================================== -->
+	<target name="build-introduce" depends="prepare" description="Builds Introduce">
+		<resolveDependencies extdir="${projects.dir}/introduce/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="core.resources" />
+			<artifact refid="mobius.jars" />
+			<artifact refid="gme.globus.client.jars" />
+			<artifact refid="metadata.schemas" />
+			<artifact refid="gridca.jars" />
+			<artifact refid="gridca.resources" />
+			<artifact refid="security.metadata.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- CAGRID GME:                                                     -->
+	<!-- =============================================================== -->
+	<target name="build-gme" depends="prepare" description="Builds caGrid GME">
+		<resolveDependencies extdir="${projects.dir}/gme/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.resources" />
+			<artifact refid="mobius.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- CAGRID DataService:                                             -->
+	<!-- =============================================================== -->
+	<target name="build-data" if="isJDK1.5" depends="prepare" description="Builds caGrid Data Services components">
+		<resolveDependencies extdir="${projects.dir}/data/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="introduce.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="gme.globus.client.jars" />
+			<artifact refid="core.resources" />
+			<artifact refid="introduce.resources" />
+			<artifact refid="cadsr.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="data.metadata.jars" />
+			<artifact refid="metadata.schemas" />
+			<artifact refid="graph.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- CAGRID SDK Data Service Query Processor:                        -->
+	<!-- =============================================================== -->
+	<target name="build-sdkQuery" if="isJDK1.5" depends="prepare" description="Builds caGrid SDK Query processor">
+		<resolveDependencies extdir="${projects.dir}/sdkQuery/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="caCORE.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="data.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+		</resolveDependencies>
+
+		<ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- Federated Query Processor:                                      -->
+	<!-- =============================================================== -->
+	<target name="build-fqp" if="isJDK1.5" depends="prepare" description="Federated Query Processor">
+		<resolveDependencies extdir="${projects.dir}/fqp/ext">
+			<artifact refid="data.jars" />
+			<artifact refid="common.test.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/fqp/schema">
+			<artifact refid="data.cql.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
+	<!-- CAGRID Cql2Xpath:                                               -->
+	<!-- =============================================================== -->
+	<target name="build-cql2xpath" depends="prepare" description="Builds caGrid Cql2Xpath utility">
+		<resolveDependencies extdir="${projects.dir}/cql2xpath/ext">
+			<artifact refid="core.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- ============================================================== -->
+	<!-- Cleans up generated stuff                                      -->
+	<!-- ============================================================== -->
+	<target name="clean" depends="prepare" description="Cleans all projects.">
+		<for list="${projects.list}" parallel="true" param="project.name" trim="true">
+			<sequential>
+				<echo message="Cleaning project @{project.name}." />
+				<delete dir="${projects.dir}/@{project.name}/ext" />
+				<ant dir="${projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean" />
+			</sequential>
+		</for>
+
+		<delete failonerror="false">
+			<fileset dir="${junit.results.dir}">
+				<include name="*" />
+			</fileset>
+		</delete>
+	</target>
+
+
+	<target name="noDeps">
+		<property name="skip.artifact.antcalls" value="true"/>
+	</target>
+
+
+
+	<!-- ============================================================== -->
+	<!-- Builds from scratch                                            -->
+	<!-- ============================================================== -->
+	<target name="all" depends="prepare, clean" description="Builds the entire application">
+		<for list="${projects.list}" parallel="false" param="project.name" trim="true">
+			<sequential>
+				<echo message="Building project @{project.name}." />
+				<runtarget target="build-@{project.name}" />
+				<echo message="Built project @{project.name}." />
+			</sequential>
+		</for>
+		<runtarget target="displayBuildWarning" />
+	</target>
+	<target name="displayBuildWarning" unless="isJDK1.5">
+		<echo message="=====================================================================================" />
+		<echo message="WARNING: When building with a JDK of version &lt; 1.5, not all projects can be built!" />
+		<echo message="         You are using Java Version: ${ant.java.version}" />
+		<echo message="=====================================================================================" />
+	</target>
 </project>
