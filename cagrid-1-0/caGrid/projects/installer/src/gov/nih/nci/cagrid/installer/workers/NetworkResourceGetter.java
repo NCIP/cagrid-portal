@@ -105,18 +105,15 @@ public class NetworkResourceGetter extends Get{
 			}
 	}
 	
-	public void downLoadFile(String destDir,String url, String fileName ){
+	public void downLoadFile(String destDir,String url, String fileName ) throws Exception{
 		
 		File destFile = new File(destDir+File.separator+fileName);
-		try {
+		
 			URL uri = new URL(url);
 			this.setDest(destFile);
 			this.setSrc(uri);
 			this.execute();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		
 		
 	}
