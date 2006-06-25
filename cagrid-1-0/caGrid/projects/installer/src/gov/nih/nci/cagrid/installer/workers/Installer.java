@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.installer.ui.panels.input.InputFormPanel;
 import gov.nih.nci.cagrid.installer.ui.panels.progress.ProgressPanel;
 import gov.nih.nci.cagrid.installer.ui.panels.welcome.WelcomePanel;
 import gov.nih.nci.cagrid.installer.ui.windows.InstallerWindow;
+import gov.nih.nci.cagrid.installer.utils.Logutil;
 
 public class Installer {
 
@@ -35,7 +36,7 @@ public class Installer {
 		Properties sysProperties = System.getProperties();
 		userHome = sysProperties.getProperty("user.home");
 		
-		
+		logger = Logutil.getLogger();
 		logger.log(Level.INFO,"user home:"+userHome);
 		iw = new InstallerWindow();
 		

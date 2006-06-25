@@ -1,10 +1,19 @@
 package gov.nih.nci.cagrid.installer.workers;
 
+import gov.nih.nci.cagrid.installer.utils.Logutil;
+
 import java.util.Properties;
 import java.io.*;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public class SystemSniffer {
 
+	private Logger logger;
+	
+	public SystemSniffer(){
+		logger = Logutil.getLogger();
+	}
 	
 	public String getSystemPropertyValue(String property){
 		Properties p = System.getProperties();
@@ -28,7 +37,7 @@ public class SystemSniffer {
 				 System.out.println(fileName);
 			 }
 		 }catch(Exception ex){
-			 ex.printStackTrace();
+			 logger.log(Level.SEVERE,ex.getMessage());
 		 }
 		return isFirstInstallation;
 	}
@@ -42,7 +51,7 @@ public class SystemSniffer {
 			 File f = new File(fileName);
 			 date = f.lastModified();
 		 }catch(Exception ex){
-			 ex.printStackTrace();
+			 logger.log(Level.SEVERE,ex.getMessage());
 		 }
 		return date;
 	}
@@ -95,15 +104,6 @@ public class SystemSniffer {
 		return stbr.toString();
 		
 	}
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Properties p = System.getProperties();
-		System.out.println(p.getProperty("user.home"));
-       // p.list(System.out);
-
-	}
+	
     
 }
