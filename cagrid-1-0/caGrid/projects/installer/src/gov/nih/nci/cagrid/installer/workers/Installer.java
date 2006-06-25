@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Properties;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.swing.SwingUtilities;
 
@@ -25,6 +27,7 @@ public class Installer {
 	private Properties vars;
 	private String userHome;
 	private ProgressPanel progress;
+	private Logger logger;
 	
 	private Installer(){
 		session = new Hashtable();
@@ -32,7 +35,8 @@ public class Installer {
 		Properties sysProperties = System.getProperties();
 		userHome = sysProperties.getProperty("user.home");
 		
-		System.out.println(userHome);
+		
+		logger.log(Level.INFO,"user home:"+userHome);
 		iw = new InstallerWindow();
 		
 		initPanels();
