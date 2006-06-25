@@ -104,8 +104,12 @@ public class ProgressBarPanel extends JPanel{
     }
     
     private ThreadManager prepareTasks(){
-    	
+    	boolean ant_exist = true;
     	Installer is = Installer.getInstance();
+    	String antExist = is.getProperty("antExist");
+    	if(antExist.equalsIgnoreCase("no")){
+    		ant_exist= false;
+    	}
     	String GRID_HOME = is.getProperty("GRID_HOME");
     	String downloadDirName = GRID_HOME+File.separator+"downloads";
     	File downloadDir = new File(downloadDirName);
@@ -123,11 +127,25 @@ public class ProgressBarPanel extends JPanel{
     										   "ftp://ftp.globus.org/pub/gt4/4.0/4.0.0/ws-core/bin//ws-core-4.0.0-bin.zip",
     										   "ws-core-4.0.0-bin.zip",
     										   tm);
-    	SwingWorker sw3 = new StringDisplayerTask(result," Downloading caGrid packs completed !\n",progressBar,false,tm);
+    	SwingWorker sw3 = new StringDisplayerTask(result,"caGrid download completed !\n",progressBar,false,tm);
     	
     	tasks.add(0,sw1);
     	tasks.add(1,sw2);
     	tasks.add(2,sw3);
+    	
+    	if(!ant_exist){
+    		String ant_home = is.getProperty("ANT_install_dir");
+    		SwingWorker sw4 = new StringDisplayerTask(result," Downloading Apache Ant .....\n",progressBar,true,tm);
+    		SwingWorker sw5 = new DownloadFileTask(downloadDirName,
+					   "http://apache.secsup.org/dist/ant/binaries/apache-ant-1.6.5-bin.zip",
+					   "apache-ant-1.6.5-bin.zip",
+					   tm);
+    		SwingWorker sw6 = new StringDisplayerTask(result," Apache Ant download completed !\n",progressBar,true,tm);
+    		
+    		
+    		
+    	}
+    	
     	
     	return tm;
     }
