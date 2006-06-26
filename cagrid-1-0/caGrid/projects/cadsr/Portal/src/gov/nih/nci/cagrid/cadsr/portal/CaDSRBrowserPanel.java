@@ -22,6 +22,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
 
 
 public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener, PackageSelectedListener {
@@ -45,6 +47,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	private List packageSelectionListeners = null;
 	private List projectSelectionListeners = null;
 	private List classSelectionListeners = null;
+	private JPanel progressPanel = null;
+	private JProgressBar jProgressBar = null;
 
 
 	public CaDSRBrowserPanel() {
@@ -86,6 +90,12 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	 * This method initializes this
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+		gridBagConstraints21.gridx = 0;
+		gridBagConstraints21.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints21.weightx = 0.0D;
+		gridBagConstraints21.weighty = 0.0D;
+		gridBagConstraints21.gridy = 2;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -104,6 +114,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			add(getQueryPanel(), gridBagConstraints1);
 		}
 		add(getProjectsPanel(), gridBagConstraints);
+		this.add(getProgressPanel(), gridBagConstraints21);
 	}
 
 
@@ -154,8 +165,13 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 
 	public void discoverFromCaDSR() {
-		getProjectComboBox().removeAllItems();
+		startProgress("Discovering from caDSR...");
 		makeCombosEnabled(false);
+
+		getProjectComboBox().removeAllItems();
+		getPackageComboBox().removeAllItems();
+		getClassComboBox().removeAllItems();
+
 		Thread t = new Thread() {
 			public void run() {
 				try {
@@ -167,14 +183,60 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 						}
 					}
 					makeCombosEnabled(true);
+
 				} catch (Exception e1) {
 					e1.printStackTrace();
 					JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
 						"Error communicating with caDSR; please check the caDSR URL!");
+				} finally {
+					if (getProjectComboBox().getItemCount() == 0) {
+						finishProgress();
+					}
 				}
 			}
+
 		};
 		t.start();
+	}
+
+
+	public void startProgress(final String message) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				getJProgressBar().setVisible(true);
+				getJProgressBar().setIndeterminate(true);
+				if (message != null && !message.trim().equals("")) {
+					getJProgressBar().setString(message);
+					getJProgressBar().setStringPainted(true);
+				}
+			}
+		});
+
+	}
+
+
+	public void updateProgress(final String message, final int min, final int max, final int current) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				getJProgressBar().setIndeterminate(false);
+				getJProgressBar().setString(message);
+				getJProgressBar().setStringPainted(true);
+				getJProgressBar().setMinimum(min);
+				getJProgressBar().setMaximum(max);
+				getJProgressBar().setValue(current);
+			}
+		});
+
+	}
+
+
+	public void finishProgress() {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				getJProgressBar().setVisible(false);
+				getJProgressBar().setIndeterminate(false);
+			}
+		});
 	}
 
 
@@ -185,7 +247,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	 */
 	protected JButton getQueryButton() {
 		if (queryButton == null) {
-			queryButton = new JButton("Refresh from caDSR Service");
+			queryButton = new JButton("Refresh from caDSR Service...");
 			queryButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					discoverFromCaDSR();
@@ -472,6 +534,43 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	}
 
 
+	/**
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getProgressPanel() {
+		if (progressPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridy = 0;
+			gridBagConstraints11.weightx = 1.0D;
+			gridBagConstraints11.weighty = 1.0D;
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints11.gridx = 0;
+			progressPanel = new JPanel();
+			progressPanel.setLayout(new GridBagLayout());
+			progressPanel.add(getJProgressBar(), gridBagConstraints11);
+		}
+		return progressPanel;
+	}
+
+
+	/**
+	 * This method initializes jProgressBar
+	 * 
+	 * @return javax.swing.JProgressBar
+	 */
+	private JProgressBar getJProgressBar() {
+		if (jProgressBar == null) {
+			jProgressBar = new JProgressBar();
+			// jProgressBar.setIndeterminate(true);
+			jProgressBar.setVisible(false);
+			// jProgressBar.setStringPainted(true);
+		}
+		return jProgressBar;
+	}
+
+
 	public static void main(String[] args) {
 		CaDSRBrowserPanel panel = new CaDSRBrowserPanel();
 		JFrame frame = new JFrame();
@@ -484,8 +583,10 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 	public void handleProjectSelection(final Project project) {
 		// System.out.println("Handle Project:" + project.getShortName());
-		getPackageComboBox().removeAllItems();
 		makeCombosEnabled(false);
+		startProgress("Updating Packages for " + project.getShortName());
+		getPackageComboBox().removeAllItems();
+
 		Thread t = new Thread() {
 			public void run() {
 				try {
@@ -501,6 +602,10 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 					e1.printStackTrace();
 					JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
 						"Error communicating with caDSR; please check the caDSR URL!");
+				} finally {
+					if (getPackageComboBox().getItemCount() == 0 || !isShowClassSelection()) {
+						finishProgress();
+					}
 				}
 			}
 		};
@@ -518,8 +623,11 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	public void handlePackageSelection(final UMLPackageMetadata pkg) {
 		// System.out.println("Handle package:" + pkg.getName());
 		if (isShowClassSelection()) {
-			getClassComboBox().removeAllItems();
 			makeCombosEnabled(false);
+
+			startProgress("Updating Classes for Package " + pkg.getName());
+			getClassComboBox().removeAllItems();
+
 			Thread t = new Thread() {
 				public void run() {
 					try {
@@ -536,6 +644,8 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 						e1.printStackTrace();
 						JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
 							"Error communicating with caDSR; please check the caDSR URL!");
+					} finally {
+						finishProgress();
 					}
 				}
 			};

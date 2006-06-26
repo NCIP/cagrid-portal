@@ -62,8 +62,8 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints.gridy = 0;
-		gridBagConstraints.weightx = 1D;
-		gridBagConstraints.weighty = 1D;
+		gridBagConstraints.weightx = 0.0D;
+		gridBagConstraints.weighty = 0.0D;
 		this.setLayout(new GridBagLayout());
 		this.add(getCaDSRPanel(), gridBagConstraints);
 		this.add(getGraphPanel(), gridBagConstraints1);
@@ -88,8 +88,8 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 		// update the graph for the given package
 		Thread t = new Thread() {
 			public void run() {
-
 				try {
+					getCaDSRPanel().startProgress("Processing Package " + pkg.getName());
 					CaDSRServiceI cadsrService = new CaDSRServiceClient(getCaDSRPanel().getCadsr().getText());
 
 					getUMLDiagram().clear();
@@ -100,6 +100,9 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 						for (int i = 0; i < classes.length; i++) {
 							UMLClassMetadata clazz = classes[i];
 							UMLClass c = new UMLClass(clazz.getName());
+							getCaDSRPanel().updateProgress(
+								"Processing Class " + clazz.getName() + " ( " + i + " of " + classes.length + ")", 0,
+								classes.length, i);
 
 							UMLAttributeMetadata[] atts = cadsrService.findAttributesInClass(getCaDSRPanel()
 								.getSelectedProject(), clazz);
@@ -119,9 +122,10 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 						}
 					}
 
-					UMLAssociation[] assocs = cadsrService.findAssociationsInPackage(getCaDSRPanel()
-						.getSelectedProject(), pkg.getName());
-					if (assocs != null) {
+					getCaDSRPanel().startProgress("Processing Associations...");
+					//UMLAssociation[] assocs = cadsrService.findAssociationsInPackage(getCaDSRPanel()
+					//	.getSelectedProject(), pkg.getName());
+					//if (assocs != null) {
 						// for (int i = 0; i < assocs.length; i++) {
 						// UMLAssociation assoc = assocs[i];
 						// TODO: create and add Assocation to the graph
@@ -130,9 +134,11 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 						// also need to handle the association linking to
 						// classes in external packages
 						// }
-					}
+					//}
 
+					getCaDSRPanel().startProgress("Rendering...");
 					getUMLDiagram().refresh();
+					getCaDSRPanel().finishProgress();
 
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(CaDSRTypeDiscoveryComponent.this,
