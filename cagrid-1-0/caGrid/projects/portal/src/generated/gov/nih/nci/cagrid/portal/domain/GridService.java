@@ -6,28 +6,28 @@ package gov.nih.nci.cagrid.portal.domain;
  */
 public interface GridService {
 
-	public abstract java.lang.String getDescription();
+    public abstract java.lang.String getDescription();
 
-	public abstract EPR getHandle();
+    public abstract EPR getHandle();
 
-	public abstract java.lang.String getName();
+    public abstract java.lang.String getName();
 
-	/**
-	 * 
-	 * @param desc
-	 */
-	public abstract void setDescription(java.lang.String desc);
+    /**
+     *
+     * @param desc
+     */
+    public abstract void setDescription(java.lang.String desc);
 
-	/**
-	 * 
-	 * @param handle
-	 */
-	public void setHandle(java.lang.String handle);
+    /**
+     *
+     * @param handle
+     */
+    public void setHandle(java.lang.String handle);
 
-	/**
-	 * 
-	 * @param name
-	 */
-	public abstract void setName(java.lang.String name);
+    /**
+     *
+     * @param name
+     */
+    public abstract void setName(java.lang.String name);
 
 }

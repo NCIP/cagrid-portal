@@ -7,15 +7,21 @@
     <property file="${user.name}-portal-build.properties" />
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 
+    <property name='javac.debug' value='true'/>
+    <property name='javac.deprecation' value='true'/>
 
-    <property name="lib.dir" value="lib"/>
-    <property name="ext.lib.dir" value="ext/lib"/>
     <property name='src.dir' value='src/java'/>
     <property name='generated.src.dir' value='src/generated'/>
+
     <property name="webcontent.dir" value="webcontent"/>
     <property name='webinf.dir' value='${webcontent.dir}/WEB-INF'/>
-    <property name='build.dest' value='${webinf.dir}/classes'/>
+    <property name="resources.dir" value="resources"/>
+
+    <property name="lib.dir" value="lib"/>
     <property name="lib.dest" value="${webinf.dir}/lib"/>
+    <property name="ext.lib.dir" value="ext/lib"/>
+
+    <property name='build.dest' value='${webinf.dir}/classes'/>
 
 
     <path id="portal.classpath">
@@ -26,6 +32,12 @@
             <include name="*.jar"/>
         </fileset>
     </path>
+
+    <!-- ============================================================== -->
+    <!-- Builds from scratch                                                -->
+    <!-- ============================================================== -->
+    <target name="all" depends="war" description="Builds the entire application" />
+
 
     <!-- ============================================================== -->
     <!-- Initialize build environment                                   -->
@@ -50,7 +62,7 @@
     <target name="compile" depends="init">
         <javac destdir="${build.dest}" classpathref="portal.classpath">
             <src>
-                
+
                 <pathelement path="${generated.src.dir}"/>
             </src>
         </javac>
@@ -74,15 +86,55 @@
     <!-- ============================================================== -->
     <!-- Create war for deployment                                      -->
     <!-- ============================================================== -->
-    <target name="war" depends="compile,copyResources">
+    <target name="war" depends="clean,compile,hibernate,copyResources">
         <!--Create war
 
         -->
     </target>
 
-    <!-- ============================================================== -->
-    <!-- Builds from scratch                                                -->
-    <!-- ============================================================== -->
-    <target name="all" depends="war" description="Builds the entire application" />
+
+    <target name="hibernate" description="Does all the hibernate generation stuff"
+            depends="hibernate.xdoclet,file-list">
+    </target>
+
+
+    <target name="hibernate.xdoclet" depends="compile" description="Creates the hbm.xml files">
+
+        <path id="xdoclet.classpath">
+            <fileset dir="${lib.dir}/xdoclet">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+
+        <taskdef name="hibernatedoclet"
+                 classname="xdoclet.modules.hibernate.HibernateDocletTask">
+            <classpath refid="xdoclet.classpath"/>
+        </taskdef>
+
+        <hibernatedoclet
+                destdir="${build.dest}"
+                excludedtags="@version,@author,@todo"
+                force="false"
+                mergedir="merge"
+                verbose="false">
+
+            <fileset dir="${generated.src.dir}">
+                <include name="**/domain/**/*.java"/>
+            </fileset>
+
+            <hibernate version='3.0'/>
+        </hibernatedoclet>
+
+    </target>
+
+    <target name="file-list"
+            description="Create hibernate mapping file list">
+
+        <property name="generated.dir" location="${build.dest}"/>
+        <property name="hibernate.list.file" location="${build.dest}/hibernate.cfg.xml"/>
+        <script language="beanshell" src="${basedir}/create_hbnfile.sh"/>
+
+    </target>
+
 
 </project>

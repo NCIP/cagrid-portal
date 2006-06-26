@@ -16,7 +16,7 @@ public class DomainModel {
     private RegisteredService registeredService;
     private java.util.Collection umlClassCollection;
 
-    public DomainModel(){
+    public DomainModel() {
 
     }
 
@@ -24,23 +24,23 @@ public class DomainModel {
 
     }
 
-    public java.lang.String getLongName(){
+    public java.lang.String getLongName() {
         return longName;
     }
 
-    public java.lang.String getProjectDescription(){
+    public java.lang.String getProjectDescription() {
         return projectDescription;
     }
 
-    public java.lang.String getProjectVersion(){
+    public java.lang.String getProjectVersion() {
         return projectVersion;
     }
 
-    public java.lang.String getServiceEPR(){
+    public java.lang.String getServiceEPR() {
         return serviceEPR;
     }
 
-    public java.lang.String getShortName(){
+    public java.lang.String getShortName() {
         return shortName;
     }
 
@@ -48,7 +48,7 @@ public class DomainModel {
      *
      * @param newVal
      */
-    public void setLongName(java.lang.String newVal){
+    public void setLongName(java.lang.String newVal) {
         longName = newVal;
     }
 
@@ -56,7 +56,7 @@ public class DomainModel {
      *
      * @param newVal
      */
-    public void setProjectDescription(java.lang.String newVal){
+    public void setProjectDescription(java.lang.String newVal) {
         projectDescription = newVal;
     }
 
@@ -64,7 +64,7 @@ public class DomainModel {
      *
      * @param newVal
      */
-    public void setProjectVersion(java.lang.String newVal){
+    public void setProjectVersion(java.lang.String newVal) {
         projectVersion = newVal;
     }
 
@@ -72,7 +72,7 @@ public class DomainModel {
      *
      * @param newVal
      */
-    public void setServiceEPR(java.lang.String newVal){
+    public void setServiceEPR(java.lang.String newVal) {
         serviceEPR = newVal;
     }
 
@@ -80,7 +80,7 @@ public class DomainModel {
      *
      * @param newVal
      */
-    public void setShortName(java.lang.String newVal){
+    public void setShortName(java.lang.String newVal) {
         shortName = newVal;
     }
 
