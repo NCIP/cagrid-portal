@@ -23,15 +23,26 @@ import java.util.Iterator;
 public class DataServiceHandle {
 
 	private DataServiceI service;
+	private String wsddFilename;
 	
 	public DataServiceHandle(DataServiceI dataService) {
+		this(dataService, null);
+	}
+	
+	
+	public DataServiceHandle(DataServiceI dataService, String wsddFilename) {
 		this.service = dataService;
+		this.wsddFilename = wsddFilename;
 	}
 	
 	
 	public Iterator query(CQLQuery cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException, RemoteException {
 		CQLQueryResults results = service.query(cqlQuery);
-		return new CQLQueryResultsIterator(results);
+		if (wsddFilename == null) {
+			return new CQLQueryResultsIterator(results);
+		} else {
+			return new CQLQueryResultsIterator(results, wsddFilename);
+		}
 	}
 }
