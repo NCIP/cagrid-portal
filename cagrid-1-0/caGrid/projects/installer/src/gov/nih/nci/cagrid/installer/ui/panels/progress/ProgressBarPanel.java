@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.installer.workers.SwingWorker;
 import gov.nih.nci.cagrid.installer.workers.ThreadManager;
 import gov.nih.nci.cagrid.installer.workers.swing.DownloadFileTask;
 import gov.nih.nci.cagrid.installer.workers.swing.StringDisplayerTask;
+import gov.nih.nci.cagrid.installer.workers.swing.LocalInstallerLauncher;
 
 
 import java.awt.BorderLayout;
@@ -47,12 +48,13 @@ public class ProgressBarPanel extends JPanel{
     private void buildGUI(){
     	this.setLayout(new BorderLayout());
     	//this.setOpaque(false);
-    	result = new JTextArea("Installing \n",8,10);
+    	result = new JTextArea("Installing \n",9,10);
     	
     	result.setCursor(null);
     	result.setBackground(Color.BLACK);
     	result.setForeground(Color.GREEN);
     	Font f = new Font("Courier",Font.BOLD,16);
+    	result.setLineWrap(true);
     	
     	result.setFont(f);
     	progressBar = new JProgressBar();
@@ -101,11 +103,13 @@ public class ProgressBarPanel extends JPanel{
     	
     	ThreadManager tm = prepareTasks();
     	tm.executeTasks();
+    	
     }
     
     private ThreadManager prepareTasks(){
     	boolean ant_exist = true;
     	Installer is = Installer.getInstance();
+    	is.addOrUpdateProperty("antExist","yes");
     	String antExist = is.getProperty("antExist");
     	if(antExist.equalsIgnoreCase("no")){
     		ant_exist= false;
@@ -126,12 +130,15 @@ public class ProgressBarPanel extends JPanel{
     	SwingWorker sw2 = new DownloadFileTask(downloadDirName,
     										   "ftp://ftp.globus.org/pub/gt4/4.0/4.0.0/ws-core/bin//ws-core-4.0.0-bin.zip",
     										   "ws-core-4.0.0-bin.zip",
+    										   result,
+    										   progressBar,
     										   tm);
-    	SwingWorker sw3 = new StringDisplayerTask(result,"caGrid download completed !\n",progressBar,false,tm);
     	
+    	SwingWorker sw3 = new LocalInstallerLauncher(tm);
     	tasks.add(0,sw1);
     	tasks.add(1,sw2);
     	tasks.add(2,sw3);
+    	
     	
     	if(!ant_exist){
     		String ant_home = is.getProperty("ANT_install_dir");
@@ -139,6 +146,8 @@ public class ProgressBarPanel extends JPanel{
     		SwingWorker sw5 = new DownloadFileTask(downloadDirName,
 					   "http://apache.secsup.org/dist/ant/binaries/apache-ant-1.6.5-bin.zip",
 					   "apache-ant-1.6.5-bin.zip",
+					   result,
+					   progressBar,
 					   tm);
     		SwingWorker sw6 = new StringDisplayerTask(result," Apache Ant download completed !\n",progressBar,true,tm);
     		

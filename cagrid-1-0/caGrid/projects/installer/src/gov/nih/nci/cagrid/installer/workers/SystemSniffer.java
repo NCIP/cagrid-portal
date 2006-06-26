@@ -61,6 +61,7 @@ public class SystemSniffer {
 	}
 	
 	public String checkSystem(){
+		
 		StringBuffer stbr = new StringBuffer();
 		
 		if(this.isFirstInstallation()){

@@ -108,7 +108,7 @@ public class Installer {
 	}
 	
 	public void install(){
-		System.out.println(SwingUtilities.isEventDispatchThread());
+		
 		progress.install();
 	}
 	
