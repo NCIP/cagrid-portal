@@ -13,7 +13,9 @@ import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeD
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -126,7 +128,7 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 			input.setLocation("./" + new File(currentFile).getName());
 
 			ExtensionTools.setSchemaElements(input, XMLUtilities.fileNameToDocument(currentFile));
-			copySchemas(currentFile, schemaDestinationDir);
+			copySchemas(currentFile, schemaDestinationDir, new HashSet());
 		} catch (Exception e) {
 			e.printStackTrace();
 
@@ -136,10 +138,13 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 	}
 
 
-	public static void copySchemas(String fileName, File copyToDirectory) throws Exception {
+	public static void copySchemas(String fileName, File copyToDirectory, Set visitedSchemas) throws Exception {
 		File schemaFile = new File(fileName);
-		System.out.println("Looking at schema " + fileName);
-		Utils.copyFile(schemaFile, new File(copyToDirectory.getAbsolutePath() + File.separator + schemaFile.getName()));
+		System.out.println("Copying schema " + fileName + " to " + copyToDirectory.getCanonicalPath());
+		Utils.copyFile(schemaFile, new File(copyToDirectory.getCanonicalPath() + File.separator + schemaFile.getName()));
+		// mark the schema as visited
+		visitedSchemas.add(schemaFile.getCanonicalPath());
+		// look for imports
 		Document schema = XMLUtilities.fileNameToDocument(schemaFile.getCanonicalPath());
 		List importEls = schema.getRootElement().getChildren("import",
 			schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
@@ -150,8 +155,11 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 				File currentPath = schemaFile.getCanonicalFile().getParentFile();
 				if (!schemaFile.equals(new File(currentPath.getCanonicalPath() + File.separator + location))) {
 					File importedSchema = new File(currentPath + File.separator + location);
-					copySchemas(importedSchema.getCanonicalPath(), new File(copyToDirectory.getCanonicalFile()
-						+ File.separator + location).getParentFile());
+					if (!visitedSchemas.contains(importedSchema.getCanonicalPath())) {
+						// only copy schemas not yet visited
+						copySchemas(importedSchema.getCanonicalPath(), new File(copyToDirectory.getCanonicalFile()
+							+ File.separator + location).getParentFile(), visitedSchemas);
+					}
 				} else {
 					System.err.println("WARNING: Schema is importing itself. " + schemaFile);
 				}
