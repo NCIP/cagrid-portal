@@ -116,7 +116,7 @@ public class ProgressBarPanel extends JPanel{
     	if(!downloadDir.exists()){
     		downloadDir.mkdir();
     	}
-    	ArrayList<SwingWorker> tasks = new ArrayList<SwingWorker>();
+    	ArrayList tasks = new ArrayList();
     	ThreadManager tm = new ThreadManager(tasks);
     	
     	SwingWorker sw1 = new StringDisplayerTask(result," Downloading caGrid packs .....\n",progressBar,true,tm);

@@ -51,7 +51,7 @@ public class WelcomePanel extends gov.nih.nci.cagrid.installer.ui.panels.GridPan
 		
 	}
 
-	@Override
+	
 	public void synch() {
 		// TODO Auto-generated method stub
 		

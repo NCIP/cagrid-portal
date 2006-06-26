@@ -52,7 +52,7 @@ public class ProgressPanel extends GridPanel{
 		
 	}
 
-	@Override
+	
 	public void synch() {
 		// TODO Auto-generated method stub
 		

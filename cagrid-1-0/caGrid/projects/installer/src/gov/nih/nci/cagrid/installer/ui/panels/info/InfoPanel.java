@@ -50,7 +50,7 @@ public class InfoPanel extends gov.nih.nci.cagrid.installer.ui.panels.GridPanel{
 		
 	}
 
-	@Override
+	
 	public void synch() {
 		// TODO Auto-generated method stub
 		//System.out.println("shit");

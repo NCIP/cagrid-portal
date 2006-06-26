@@ -15,7 +15,7 @@ public class DummyWorker1 extends SwingWorker{
 		this.str=str;
 	}
 
-	@Override
+	
 	public Object construct() {
 		// TODO Auto-generated method stub
 		try{

@@ -50,7 +50,7 @@ public class InputFormPanel extends gov.nih.nci.cagrid.installer.ui.panels.GridP
 		
 	}
 
-	@Override
+	
 	public void synch() {
 		inputextPanel.synch();
 		

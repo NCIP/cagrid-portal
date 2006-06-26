@@ -87,7 +87,7 @@ public class InputButtonPanel extends GridPanel implements ActionListener{
 		private JButton quit;
 		private JButton back;
 
-		@Override
+		
 		public void synch() {
 			// TODO Auto-generated method stub
 			

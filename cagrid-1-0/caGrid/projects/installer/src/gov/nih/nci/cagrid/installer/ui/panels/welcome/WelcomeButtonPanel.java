@@ -70,7 +70,7 @@ public WelcomeButtonPanel() {
 	private JButton next;
 	private JButton quit;
 
-	@Override
+	
 	public void synch() {
 		// TODO Auto-generated method stub
 		

@@ -21,7 +21,7 @@ public class StringDisplayerTask extends SwingWorker{
 		this.working=working;
 		this.tm=tm;
 	}
-	@Override
+	
 	public Object construct() {
 		// TODO Auto-generated method stub
 		return null;

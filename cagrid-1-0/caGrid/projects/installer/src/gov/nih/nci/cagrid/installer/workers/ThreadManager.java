@@ -4,10 +4,10 @@ package gov.nih.nci.cagrid.installer.workers;
 import java.util.ArrayList;
 
 public class ThreadManager {
-	private ArrayList<SwingWorker>	tasks = new ArrayList<SwingWorker>();
+	private ArrayList	tasks = new ArrayList();
 	
 	private int swcounter=0;
-	public ThreadManager(ArrayList<SwingWorker> tasks){
+	public ThreadManager(ArrayList tasks){
 		this.tasks= tasks;
 	}
     
@@ -21,13 +21,13 @@ public class ThreadManager {
 	
 	private void firstFirstTask(){
 		
-		SwingWorker sw = tasks.get(swcounter);
+		SwingWorker sw = (SwingWorker)tasks.get(swcounter);
 		fireTask(sw);
 	}
 	
 	private void fireNextTask(){
 		if(swcounter<tasks.size()){
-		SwingWorker sw = tasks.get(swcounter);
+		SwingWorker sw = (SwingWorker)tasks.get(swcounter);
 		fireTask(sw);
 		}
 	}

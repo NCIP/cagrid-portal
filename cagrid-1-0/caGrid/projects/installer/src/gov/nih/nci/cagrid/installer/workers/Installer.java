@@ -22,7 +22,7 @@ public class Installer {
 
 	private static Installer instance;
 	private InstallerWindow iw;
-	private ArrayList<GridPanel> panels = new ArrayList<GridPanel>();
+	private ArrayList panels = new ArrayList();
 	private int counter =0;
 	private Hashtable session;
 	private Properties vars;
