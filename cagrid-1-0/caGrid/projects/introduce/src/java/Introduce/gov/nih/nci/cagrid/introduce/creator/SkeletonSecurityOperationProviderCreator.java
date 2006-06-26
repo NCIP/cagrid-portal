@@ -84,6 +84,7 @@ public class SkeletonSecurityOperationProviderCreator {
 			CommonTools.addNamespace(info.getServiceDescriptor(), nsType);
 
 			// copy over the wsdl file and the required schema
+			new File(pathToServSchema + "xsd").mkdirs();
 			Utils.copyFile(new File(PATH_TO_SCHEMA + SERVICE_SECURITY_WSDL), new File(pathToServSchema
 				+ SERVICE_SECURITY_WSDL));
 			Utils.copyFile(new File(PATH_TO_SCHEMA + "xsd" + File.separator + SERVICE_SECURITY_XSD), new File(
