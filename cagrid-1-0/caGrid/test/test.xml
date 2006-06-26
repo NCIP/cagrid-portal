@@ -69,7 +69,7 @@
 		<echo>Set proxy2: proxyhost=${proxyhost} proxyport=${proxyport}</echo>
 		<setproxy proxyhost="${proxyhost}" proxyport="${proxyport}" />
 	</target>
-	<target name="publish" depends="setproxy1, setproxy2" description="Call to publish test results to dart, doesn't do any building or testing.">
+	<target name="publish" depends="setproxy1, setproxy2">
 		<fail unless="dart.logfile" message="Before you attempt to publish to dart, you must set the
 			property [dart.logfile] to the location of the log to be sent to dart." />
 		<java jar="${dart.client.jar}" failonerror="true" fork="true">
@@ -86,7 +86,7 @@
 	<!-- =============================================================== -->
 	<!-- Run a dart experimental (currently only submits test results)   -->
 	<!-- =============================================================== -->
-	<target name="experimental" depends="all,test" description="Test the projects and publish results to dart board.">
+	<target name="experimental" depends="all,test">
 		<tstamp>
 			<format property="BUILDSTAMP" pattern="yyyy-MM-dd'T'HH:mm:ss.SZ" locale="en" />
 			<format property="BUILDFILE" pattern="yyyy-MM-dd'T'HH.mm.ss.SZ" locale="en" />
