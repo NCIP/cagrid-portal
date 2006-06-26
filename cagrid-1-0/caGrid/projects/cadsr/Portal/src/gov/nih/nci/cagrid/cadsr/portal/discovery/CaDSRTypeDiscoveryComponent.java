@@ -5,7 +5,6 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
-import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.cadsr.portal.PackageSelectedListener;
 import gov.nih.nci.cagrid.common.Utils;

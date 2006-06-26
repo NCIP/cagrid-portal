@@ -1,5 +1,17 @@
 package gov.nih.nci.cagrid.cadsr.client;
 
+import gov.nih.nci.cadsr.umlproject.domain.Project;
+import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
+import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
+import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
+import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
+import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
+import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
+import gov.nih.nci.cagrid.cadsr.stubs.CaDSRServicePortType;
+import gov.nih.nci.cagrid.cadsr.stubs.service.CaDSRServiceAddressingLocator;
+import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.rmi.RemoteException;
@@ -13,22 +25,8 @@ import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.axis.utils.ClassUtils;
-
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.encoding.ObjectSerializer;
-
-import gov.nih.nci.cadsr.umlproject.domain.Project;
-import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
-import gov.nih.nci.cagrid.cadsr.stubs.CaDSRServicePortType;
-import gov.nih.nci.cagrid.cadsr.stubs.service.CaDSRServiceAddressingLocator;
-import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
-import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
-import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 
 /**
