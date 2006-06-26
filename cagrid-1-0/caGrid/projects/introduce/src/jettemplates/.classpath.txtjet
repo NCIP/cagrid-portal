@@ -89,9 +89,5 @@
 	<classpathentry kind="lib" path="<%=globusLocation%>/lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="<%=globusLocation%>/lib/xmlsec.jar"/>
 <%=serviceLibsString%>
-	<classpathentry kind="lib" path="lib/ServiceSecurity_stubs.jar"/>
-	<classpathentry kind="lib" path="lib/ServiceSecurity-client.jar"/>
-	<classpathentry kind="lib" path="lib/ServiceSecurity-common.jar"/>
-	<classpathentry kind="lib" path="lib/ServiceSecurity-service.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

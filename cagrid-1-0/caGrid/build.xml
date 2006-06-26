@@ -189,6 +189,7 @@
 			<artifact refid="introduce.jars" />
 			<artifact refid="graph.jars" />
 			<artifact refid="gme.globus.client.jars" />
+			<artifact refid="introduce.servicesecurity.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/cadsr/schema/CaDSRService">
 			<artifact refid="metadata.schemas" />
@@ -228,6 +229,7 @@
 			<artifact refid="opensaml.jars" />
 			<artifact refid="opensaml.endorsed" />
 			<artifact refid="gts.client.jars" />
+			<artifact refid="introduce.servicesecurity.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/dorian/schema/Dorian">
 			<artifact refid="metadata.schemas" />
@@ -250,6 +252,7 @@
 			<artifact refid="gridca.jars" />
 			<artifact refid="gridca.resources" />
 			<artifact refid="mobius.jars" />
+			<!--<artifact refid="introduce.servicesecurity.jars" />-->
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/gts/schema/GTS">
 			<artifact refid="metadata.schemas" />
@@ -270,6 +273,7 @@
 			<artifact refid="gridca.jars" />
 			<artifact refid="mobius.jars" />
 			<artifact refid="gts.client.jars" />
+			<!--<artifact refid="introduce.servicesecurity.jars" />-->
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/syncgts/schema/SyncGTS">
 			<artifact refid="metadata.schemas" />
@@ -297,6 +301,9 @@
 			<artifact refid="security.metadata.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+	<target name="build-introduceServiceSecurity" depends="prepare" description="Builds Introduce's ServiceSecurity Operation Provider">
+		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="buildServiceSecurity" />
 	</target>
 
 	<!-- =============================================================== -->
@@ -398,7 +405,7 @@
 
 
 	<target name="noDeps">
-		<property name="skip.artifact.antcalls" value="true"/>
+		<property name="skip.artifact.antcalls" value="true" />
 	</target>
 
 

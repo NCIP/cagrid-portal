@@ -68,7 +68,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="lib/ant-contrib.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-core-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
@@ -96,11 +95,11 @@
 	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-common-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-data-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/ServiceSecurity_stubs.jar"/>
-	<classpathentry kind="lib" path="lib/ServiceSecurity-client.jar"/>
-	<classpathentry kind="lib" path="lib/ServiceSecurity-common.jar"/>
-	<classpathentry kind="lib" path="lib/ServiceSecurity-service.jar"/>
-	<classpathentry kind="lib" path="lib/ServiceSecurity-tests.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-client-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-common-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-service-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-stubs-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-security-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

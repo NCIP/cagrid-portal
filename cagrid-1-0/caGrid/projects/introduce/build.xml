@@ -53,6 +53,8 @@
 	<import file="${antfiles.dir}/introduce-utils.xml" />
 	<!-- Load test files -->
 	<import file="test/test.xml" />
+
+
 	<!-- =================================================================== -->
 	<!-- Cleans up generated stuff                                           -->
 	<!-- =================================================================== -->
@@ -61,26 +63,29 @@
 		<delete dir="${templates.created.src.dir}" />
 		<delete dir="${beans.created.src.dir}" />
 	</target>
-	
+
+
 	<!-- ============================================================== -->
 	<!-- Globus properties                                              -->
 	<!-- ============================================================== -->
 	<target name="checkGlobus" depends="setGlobus">
 		<condition property="globus.not.found">
 			<or>
-				<not><isset property="ext.globus.dir"/></not>
-				<equals arg1="${ext.globus.dir}" arg2=""/>
+				<not>
+					<isset property="ext.globus.dir" />
+				</not>
+				<equals arg1="${ext.globus.dir}" arg2="" />
 			</or>
 		</condition>
-		<fail message="Globus installation is not set in either GLOBUS_LOCATION or ext.globus.dir" if="globus.not.found"/>
-		<echo message="Globus: ${ext.globus.dir}"/>
+		<fail message="Globus installation is not set in either GLOBUS_LOCATION or ext.globus.dir" if="globus.not.found" />
+		<echo message="Globus: ${ext.globus.dir}" />
 	</target>
 	<target name="setGlobus" if="env.GLOBUS_LOCATION">
-		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}"/>
+		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
 		<property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
 		<property name="schema.src" location="${ext.globus.dir}/share/schema" />
 	</target>
-	
+
 	<!-- Allows you define a new property with a value of ${${a}.${b}} which can't be done by the Property task alone.  -->
 	<macrodef name="compose-property">
 		<attribute name="name" />
@@ -90,7 +95,7 @@
 			<property name="@{name}" value="${@{stem}.@{selector}}" />
 		</sequential>
 	</macrodef>
-	
+
 	<!-- =================================================================== -->
 	<!-- Prepares the build directory and classpaths                         -->
 	<!-- =================================================================== -->
@@ -98,7 +103,7 @@
 		<tstamp />
 	</target>
 	<target name="checkConf" depends="">
-		<copy file="${basedir}/conf/introduce/introduce-portal-conf.xml.example" overwrite="false" tofile="${basedir}/conf/introduce/introduce-portal-conf.xml"/>
+		<copy file="${basedir}/conf/introduce/introduce-portal-conf.xml.example" overwrite="false" tofile="${basedir}/conf/introduce/introduce-portal-conf.xml" />
 	</target>
 	<target name="init" depends="checkGlobus,checkConf">
 		<mkdir dir="${build.dir}" />
@@ -111,8 +116,10 @@
 		<mkdir dir="${jars.dir}" />
 		<mkdir dir="${junit.results.dir}" />
 		<mkdir dir="${javadoc.dir}" />
-		<mkdir dir="${test.log.dir}"/>
+		<mkdir dir="${test.log.dir}" />
 	</target>
+
+
 	<!-- =================================================================== -->
 	<!-- Prints information about the build                                  -->
 	<!-- =================================================================== -->
@@ -120,6 +127,8 @@
 		<echo message="To see the list of targets avaiable type 'ant -p'" />
 		<echo message="For an overview of the process, see docs/buildProcess.txt" />
 	</target>
+
+
 	<!-- =================================================================== -->
 	<!-- Builds Code Docuementation                                          -->
 	<!-- =================================================================== -->
@@ -137,6 +146,8 @@
 			<tag name="created" scope="all" description="Creation Date:" />
 		</javadoc>
 	</target>
+
+
 	<!-- =================================================================== -->
 	<!--  Generate Java Beans from XSD                                       -->
 	<!-- =================================================================== -->
@@ -149,6 +160,8 @@
 			<property name="wsdl.file" value="beans.wsdl" />
 		</ant>
 	</target>
+
+
 	<!-- =================================================================== -->
 	<!--  Generate JET template classes                                      -->
 	<!-- =================================================================== -->
@@ -167,39 +180,40 @@
 		</classpath>
 	</taskdef>
 	<target name="generateJETClasses">
-		
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/server-config.wsdd.xmljet" />			
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/server-config-new-service.wsdd.xmljet" />	
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/jndi-config.xmljet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/jndi-config-new-service.xmljet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/jndi-config-service-properties.xmljet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/jndi-config-service-resource-properties.xmljet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/deploy.properties.txtjet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/namespace2package.mappings.txtjet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/.classpath.txtjet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/.project.xmljet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/client.launch.xmljet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/etc/registration.xmljet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/etc/security-desc.xmljet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/schema/Service/service.wsdl.xmljet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/docs/api/doxyfile.txtjet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/client/ServiceClient.javajet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/client/client-config.wsdd.xmljet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/common/ServiceI.javajet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/ServiceImpl.javajet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/ServiceConfiguration.javajet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/ServiceProviderImpl.javajet" />
-		    <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/main/BaseResource.javajet" />
-		    <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/main/BaseResourceHome.javajet" />
-		    <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/main/ResourceConfiguration.javajet" />
-		    <jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/base/BaseResource.javajet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/base/BaseResourceHome.javajet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/singleton/BaseResource.javajet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/singleton/BaseResourceHome.javajet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/singleton/ResourceConfiguration.javajet" />
-			<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/ResourceConstants.javajet" />
-	
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/server-config.wsdd.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/server-config-new-service.wsdd.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/jndi-config.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/jndi-config-new-service.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/jndi-config-service-properties.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/jndi-config-service-resource-properties.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/deploy.properties.txtjet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/namespace2package.mappings.txtjet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/.classpath.txtjet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/.project.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/client.launch.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/etc/registration.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/etc/security-desc.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/schema/Service/service.wsdl.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/docs/api/doxyfile.txtjet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/client/ServiceClient.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/client/client-config.wsdd.xmljet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/common/ServiceI.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/ServiceImpl.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/ServiceConfiguration.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/ServiceProviderImpl.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/main/BaseResource.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/main/BaseResourceHome.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/main/ResourceConfiguration.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/base/BaseResource.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/base/BaseResourceHome.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/singleton/BaseResource.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/singleton/BaseResourceHome.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/singleton/ResourceConfiguration.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/globus/resource/ResourceConstants.javajet" />
+
 	</target>
+
+
 	<!-- =================================================================== -->
 	<!-- Compiles the source code                                            -->
 	<!-- =================================================================== -->
@@ -237,6 +251,8 @@
 			</javac>
 		</sequential>
 	</macrodef>
+
+
 	<!-- =================================================================== -->
 	<!-- Create Jars                                                         -->
 	<!-- =================================================================== -->
@@ -252,8 +268,10 @@
 			</manifest>
 		</jar>
 	</target>
+
+
 	<!-- =================================================================== -->
-	<!-- Create Test Jars                                                         -->
+	<!-- Create Test Jars                                                    -->
 	<!-- =================================================================== -->
 	<target name="jar-tests" depends="compile-tests" description="Builds the Test Jar Files">
 		<jar jarfile="${jars.prefix}core-tests${jars.sufix}" basedir="${test.classes.dir}/Introduce" defaultExcludes="false" update="no">
@@ -267,13 +285,16 @@
 			</manifest>
 		</jar>
 	</target>
+
+
+
 	<!-- =================================================================== -->
 	<!-- Create new service                                                  -->
 	<!-- =================================================================== -->
 	<target name="createService" description="Create new service">
 		<ant dir="${basedir}" antfile="antfiles/introduce-creator.xml" target="createService" inheritall="true" />
 	</target>
-	
+
 	<!-- =================================================================== -->
 	<!-- Create new service                                                  -->
 	<!-- =================================================================== -->
@@ -281,6 +302,8 @@
 		<ant dir="${basedir}" antfile="antfiles/introduce-creator.xml" target="postCreateService" inheritall="true" />
 		<ant dir="${basedir}" antfile="antfiles/introduce-resync.xml" target="resyncService" inheritall="true" />
 	</target>
+
+
 	<!-- =================================================================== -->
 	<!-- Sync service                                                  -->
 	<!-- =================================================================== -->
@@ -288,15 +311,24 @@
 		methods to this service skeleton">
 		<ant dir="${basedir}" antfile="antfiles/introduce-resync.xml" target="resyncService" inheritall="true" />
 	</target>
+
+
 	<!-- =================================================================== -->
 	<!-- Builds the project                                                  -->
 	<!-- =================================================================== -->
 	<target name="build" description="Builds the entire application" depends="jar, jar-tests" />
+
+
+	<!-- =================================================================== -->
+	<!-- Builds the Security OperationProvider                               -->
+	<!-- =================================================================== -->
+	<target name="buildServiceSecurity" description="Builds the ServiceSecurity service">
+		<ant dir="${basedir}/operationProviders/ServiceSecurity" antfile="build.xml" target="all" inheritall="false" />
+	</target>
+
 	<!-- =================================================================== -->
 	<!-- Builds the project from a clean start                               -->
 	<!-- =================================================================== -->
 	<target name="all" description="Cleans and build the entire application" depends="generateStubs,
-		build">
-		<ant dir="${basedir}/operationProviders/ServiceSecurity" antfile="build.xml" target="all" inheritall="false" />
-	</target>
+		build, buildServiceSecurity" />
 </project>

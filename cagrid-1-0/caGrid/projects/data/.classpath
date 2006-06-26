@@ -115,7 +115,6 @@
 	<classpathentry kind="lib" path="ext/lib/swidgets-0.1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/toolbar-1.1.1.jar"/>
 	<classpathentry kind="src" path="src/java/cql"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-caDSR-1.0_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/ServiceSecurity_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/ServiceSecurity-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/ServiceSecurity-common.jar"/>
