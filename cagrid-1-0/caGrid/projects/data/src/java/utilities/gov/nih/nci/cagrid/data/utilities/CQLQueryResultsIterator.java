@@ -2,8 +2,12 @@ package gov.nih.nci.cagrid.data.utilities;
 
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import org.apache.axis.utils.ClassUtils;
 
 /** 
  *  CQLQueryResultsIterator
@@ -18,21 +22,59 @@ public class CQLQueryResultsIterator implements Iterator {
 	private CQLQueryResults results;
 	private Iterator resultIterator;
 	private boolean xmlOnly;
+	private String wsddFilename;
 	
+	/**
+	 * Create a new CQLQueryResultsIterator which will return Object 
+	 * results deserialized with the default configured AXIS deserializers
+	 * 
+	 * @param results
+	 * 		The results to iterate over
+	 */
 	public CQLQueryResultsIterator(CQLQueryResults results) {
-		this(results, false);
+		this(results, false, null);
 	}
 	
 	
 	/**
 	 * When returning objects, setting xmlOnly to true will bypass the
-	 * AXIS deserializer and return straight XML strings
+	 * AXIS deserializer and return straight XML strings.  When set to
+	 * false, the results are deseriailzed with the default AXIS config
+	 * 
 	 * @param results
+	 * 		The resuls to iterate over
 	 * @param xmlOnly
+	 * 		A flag to indicate if xml strings or objects should be returned
 	 */
 	public CQLQueryResultsIterator(CQLQueryResults results, boolean xmlOnly) {
+		this(results, xmlOnly, null);
+	}
+	
+	
+	/**
+	 * When returning objects, the supplied WSDD configuration file is used
+	 * to configure the AXIS deserializers
+	 * 
+	 * @param results
+	 * 		The results to iterate over
+	 * @param wsddFilename
+	 * 		The filename of a wsdd file to use for configuration
+	 */
+	public CQLQueryResultsIterator(CQLQueryResults results, String wsddFilename) {
+		this(results, false, wsddFilename);
+	}
+	
+	
+	/**
+	 * Internal constructor
+	 * @param results
+	 * @param xmlOnly
+	 * @param wsddFilename
+	 */
+	private CQLQueryResultsIterator(CQLQueryResults results, boolean xmlOnly, String wsddFilename) {
 		this.results = results;
 		this.xmlOnly = xmlOnly;
+		this.wsddFilename = wsddFilename;
 	}
 	
 
@@ -54,7 +96,8 @@ public class CQLQueryResultsIterator implements Iterator {
 	private Iterator getIterator() {
 		if (resultIterator == null) {
 			if (results.getObjectResult() != null && results.getObjectResult().length != 0) {
-				resultIterator = new CQLObjectResultIterator(results.getObjectResult(), xmlOnly);
+				resultIterator = new CQLObjectResultIterator(
+					results.getObjectResult(), xmlOnly, findConfigWsdd());
 			} else if (results.getAttributeResult() != null && results.getAttributeResult().length != 0) {
 				resultIterator = new CQLAttributeResultIterator(results.getAttributeResult());
 			} else if (results.getIdentifierResult() != null && results.getIdentifierResult().length != 0) {
@@ -64,6 +107,21 @@ public class CQLQueryResultsIterator implements Iterator {
 			}
 		}
 		return resultIterator;
+	}
+	
+	
+	private InputStream findConfigWsdd() {
+		if (wsddFilename == null) {
+			// use the axis default client configuration
+			return ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
+		} else {
+			try {
+				return new FileInputStream(wsddFilename);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				return null;
+			}
+		}
 	}
 	
 	

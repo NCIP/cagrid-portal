@@ -1,15 +1,17 @@
 package gov.nih.nci.cagrid.data.utilities;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.apache.axis.message.MessageElement;
-import org.apache.axis.utils.XMLUtils;
-import org.globus.wsrf.encoding.ObjectDeserializer;
 
 /** 
  *  CQLObjectResultIterator
@@ -25,14 +27,17 @@ public class CQLObjectResultIterator implements Iterator {
 	private int currentIndex;
 	private Class objectClass;
 	private boolean xmlOnly;
+	private InputStream wsddInputStream;
+	private byte[] wsddContent;
 	
-	CQLObjectResultIterator(CQLObjectResult[] results, boolean xmlOnly) {
+	CQLObjectResultIterator(CQLObjectResult[] results, boolean xmlOnly, InputStream wsdd) {
 		if (results.length != 0) {
 			objectClass = getObjectClass(results[0]);
 		}
 		this.results = results;
 		this.currentIndex = -1;
 		this.xmlOnly = xmlOnly;
+		this.wsddInputStream = wsdd;
 	}
 	
 
@@ -58,9 +63,13 @@ public class CQLObjectResultIterator implements Iterator {
 			if (xmlOnly) {
 				return documentString;
 			}
+			return Utils.deserializeObject(new StringReader(documentString), objectClass, 
+				getConsumableInputStream());
+			/*
 			InputStream documentStream = new ByteArrayInputStream(documentString.getBytes());
 			org.w3c.dom.Document doc = XMLUtils.newDocument(documentStream);
 			obj = ObjectDeserializer.toObject(doc.getDocumentElement(), objectClass);
+			*/
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -76,5 +85,23 @@ public class CQLObjectResultIterator implements Iterator {
 			ex.printStackTrace();
 		}
 		return c;
+	}
+	
+	
+	private InputStream getConsumableInputStream() throws IOException {
+		if (wsddContent == null) {
+			wsddContent = new byte[0];
+			byte[] readBytes = new byte[1024];
+			int len = -1;
+			BufferedInputStream buffStream = new BufferedInputStream(wsddInputStream);
+			while ((len = buffStream.read(readBytes)) != -1) {
+				byte[] tmpContent = new byte[wsddContent.length + len];
+				System.arraycopy(wsddContent, 0, tmpContent, 0, wsddContent.length);
+				System.arraycopy(readBytes, 0, tmpContent, wsddContent.length, len);
+				wsddContent = tmpContent;
+			}
+			buffStream.close();
+		}
+		return new ByteArrayInputStream(wsddContent);
 	}
 }
