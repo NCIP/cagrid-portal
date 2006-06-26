@@ -23,6 +23,11 @@
 				<include name="*.jar" />
 			</fileset>
 		</artifact>
+		<artifact track="main" type="jars" id="mds.jars">
+			<fileset dir="${share.dir}/lib/mds">
+				<include name="*.jar" />
+			</fileset>
+		</artifact>
 		<artifact track="test" type="jars" id="common.test.jars">
 			<fileset dir="${test.lib.dir}">
 				<include name="jdepend*.jar" />

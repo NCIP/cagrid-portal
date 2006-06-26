@@ -2,10 +2,6 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src/java"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator_stubs.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup_stubs.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0_Stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-extension.jar"/>
@@ -93,5 +89,9 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-validation.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-cql.jar"/>
+	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
+	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

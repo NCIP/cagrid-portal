@@ -16,6 +16,7 @@
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
 	<property name="lib.dir" value="lib" />
+	<property name="ext.lib.dir" value="ext/lib" />
 	<property name="etc.dir" value="etc" />
 	<property name="schema.dir" value="schema" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
@@ -130,6 +131,9 @@
 	<target name="defineClasspaths">
 		<path id="base.classpath">
 			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${ext.globus.dir}/lib">

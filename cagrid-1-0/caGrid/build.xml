@@ -181,6 +181,7 @@
 	<target name="build-cadsr" if="isJDK1.5" depends="prepare" description="Builds the cadsr project">
 		<resolveDependencies extdir="${projects.dir}/cadsr/ext">
 			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="common.metadata.jars" />
@@ -219,6 +220,7 @@
 	<target name="build-dorian" depends="prepare" description="Builds the dorian project">
 		<resolveDependencies extdir="${projects.dir}/dorian/ext">
 			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="core.test.jars" />
@@ -244,6 +246,7 @@
 	<target name="build-gts" depends="prepare" description="Builds the GTS project">
 		<resolveDependencies extdir="${projects.dir}/gts/ext">
 			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="core.test.jars" />
@@ -267,6 +270,7 @@
 	<target name="build-syncgts" depends="prepare" description="Builds the syncgts project">
 		<resolveDependencies extdir="${projects.dir}/syncgts/ext">
 			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="common.metadata.jars" />
@@ -300,9 +304,19 @@
 			<artifact refid="gridca.resources" />
 			<artifact refid="security.metadata.jars" />
 		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/introduce/skeleton">
+			<artifact refid="mds.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/introduce/operationProviders/ServiceSecurity/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
+		</resolveDependencies>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 	<target name="build-introduceServiceSecurity" depends="prepare" description="Builds Introduce's ServiceSecurity Operation Provider">
+		<resolveDependencies extdir="${projects.dir}/introduce/operationProviders/ServiceSecurity/ext">
+			<artifact refid="mds.jars" />
+		</resolveDependencies>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="buildServiceSecurity" />
 	</target>
 
@@ -312,6 +326,7 @@
 	<target name="build-gme" depends="prepare" description="Builds caGrid GME">
 		<resolveDependencies extdir="${projects.dir}/gme/ext">
 			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="mobius.jars" />
@@ -348,13 +363,13 @@
 	<target name="build-sdkQuery" if="isJDK1.5" depends="prepare" description="Builds caGrid SDK Query processor">
 		<resolveDependencies extdir="${projects.dir}/sdkQuery/ext">
 			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
 			<artifact refid="caCORE.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="data.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 		</resolveDependencies>
-
 		<ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
@@ -365,6 +380,10 @@
 		<resolveDependencies extdir="${projects.dir}/fqp/ext">
 			<artifact refid="data.jars" />
 			<artifact refid="common.test.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/fqp/service/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/fqp/schema">
 			<artifact refid="data.cql.schemas" />
