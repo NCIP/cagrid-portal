@@ -25,7 +25,8 @@
     <!-- Compile the java code from ${src} into ${build} -->
     <javac destdir="${build}" source="1.4">
     <src path ="${src}"/>
-    <classpath refid = "build.classpath"/>
+    	<classpath refid = "build.classpath"/>
+		<compilerarg value="-Xlint"/>
     </javac>
     <copy todir= "${build}">
     	<fileset dir ="${src}">
