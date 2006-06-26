@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.workflow.wms.tests;
+package gov.nih.nci.wms.tests;
 
 import junit.framework.Test;
 import junit.framework.TestResult;

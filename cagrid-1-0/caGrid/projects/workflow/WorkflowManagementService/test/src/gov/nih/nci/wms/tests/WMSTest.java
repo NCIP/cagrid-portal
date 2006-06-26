@@ -1,16 +1,21 @@
-package gov.nih.nci.cagrid.workflow.wms.tests;
+package gov.nih.nci.wms.tests;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.workflow.stubs.Invoke;
+import gov.nih.nci.cagrid.workflow.samples.secure.stubs.InvokeRequest;
+import gov.nih.nci.cagrid.workflow.samples.secure.stubs.InvokeResponse;
 import gov.nih.nci.cagrid.workflow.wms.stubs.WorkflowManagementServicePortType;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WMSInputType;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WMSOutputType;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WorkflowInputType;
+import gov.nih.nci.cagrid.workflow.wms.stubs.service.WSDLReferences;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WorkflowManagementServiceAddressingLocator;
 
 import java.io.File;
 import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.net.URL;
+import org.apache.axis.types.URI;
 
 import javax.xml.namespace.QName;
 
@@ -29,28 +34,57 @@ public class WMSTest extends GridTestCase {
 	
 	private GlobusCredential proxy;
 	private EndpointReferenceType epr;
+	String serviceUrl = "https://localhost:8443/wsrf/services/cagrid/WorkflowManagementService";
 	
 	public WMSTest(String name) {
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
 
-	public void testBasic() throws Exception {
+	/*public void testBasic() throws Exception {
 		assertTrue(TEST_CONTAINER != null);
-		String serviceUrl = "https://localhost:8443/wsrf/services/cagrid/WorkflowManagementService";
-		System.out.println("ServiceURL: " + serviceUrl);
 		this.epr = new EndpointReferenceType();
 		this.epr.setAddress(new Address(serviceUrl));
 		Invoke invoke = new Invoke("Test");
 		QName qname = new QName("http://workflow.cagrid.nci.nih.gov/SampleService1", "invoke");
-		WMSInputType input =createInput("Simple.bpel", qname, (Object)invoke);
+		WSDLReferences[] wsdlRefArray = new WSDLReferences[1];
+		wsdlRefArray[0] = new WSDLReferences();
+		wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/SampleService1"));
+		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/SampleService1/SampleService1_flattened.wsdl");
+		wsdlRefArray[0].setWsdlNamespace(new URI("http://workflow.cagrid.nci.nih.gov/SampleService1"));
+		WMSInputType input =createInput("test/Simple.bpel", qname, (Object)invoke);
+		input.setWsdlReferences(wsdlRefArray);
 		WMSOutputType output = runWorkflow(input);
 		String outputString = output.getOutputType().getOutputAsXMLString();
 		System.out.println("Output " +  outputString);
 		assertTrue(outputString != null);
 		assertTrue(output!=null);
-	}
+	}*/
 
+	public void testSecure() throws Exception {
+		assertTrue(TEST_CONTAINER != null);
+		this.epr = new EndpointReferenceType();
+		this.epr.setAddress(new Address(serviceUrl));
+		Invoke invoke = new Invoke("Test");
+		QName qname = new QName("http://workflow.cagrid.nci.nih.gov/SampleService1", "invoke");
+		WMSInputType input = createInput("SimpleSecure","SimpleSecure.bpel", qname, (Object)invoke);
+		WSDLReferences[] wsdlRefArray = new WSDLReferences[2];
+		wsdlRefArray[0] = new WSDLReferences();
+		wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/SampleService1"));
+		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/SampleService1/SampleService1_flattened.wsdl");
+		wsdlRefArray[0].setWsdlNamespace(new URI("http://workflow.cagrid.nci.nih.gov/SampleService1"));
+		wsdlRefArray[1] = new WSDLReferences();
+		wsdlRefArray[1].setServiceUrl(new URI("https://localhost:8443/wsrf/services/cagrid/SecureSample"));
+		wsdlRefArray[1].setWsdlLocation("http://localhost:8080/wsrf/share/schema/SecureSample/SecureSample_flattened.wsdl");
+		wsdlRefArray[1].setWsdlNamespace(new URI("http://cagrid.nci.nih.gov/SecureSample"));
+		input.setWsdlReferences(wsdlRefArray);
+		WMSOutputType output = runWorkflow(input);
+		String outputString = output.getOutputType().getOutputAsXMLString();
+		System.out.println("Output " +  outputString);
+		assertTrue(outputString != null);
+		assertTrue(output!=null);
+		
+	}
 	private WorkflowManagementServicePortType getPortType()
 			throws RemoteException {
 
@@ -106,7 +140,7 @@ public class WMSTest extends GridTestCase {
 
 	}
 	
-	public static WMSInputType createInput(String bpelFile, QName inputQName, Object inputObject) throws Exception {
+	public static WMSInputType createInput(String workflowName, String bpelFile, QName inputQName, Object inputObject) throws Exception {
 		WMSInputType input = new WMSInputType();
 		String bpelProcess = Utils.fileToStringBuffer(new File(bpelFile)).toString();
 		
@@ -115,7 +149,7 @@ public class WMSTest extends GridTestCase {
 		inputArgs.setInputAsXMLString(ObjectSerializer.toString(inputObject, inputQName));
 		input.setBpelDoc(bpelProcess);
 		input.setInputArgs(inputArgs);
-		input.setWorkflowName("Simple");
+		input.setWorkflowName(workflowName);
 		return input;
 	}
 

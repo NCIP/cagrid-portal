@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.workflow.wms.service;
 
+import gov.nih.nci.cagrid.workflow.wms.stubs.service.WSDLReferences;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,20 +14,21 @@ import java.util.jar.Manifest;
 
 public class BPRCreator {
 
-	public static String makeBpr(String bpelFileName, String workflowName) throws Exception {
+	public static String makeBpr(String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws Exception {
 		String bprName = System.getProperty("java.io.tmpdir")+ workflowName + ".bpr";
 		File bprFile = new File(bprName);
 		bprFile.deleteOnExit();
 		String bprFileName = bprFile.getAbsolutePath();
 		String serviceName = workflowName + "Service";
-		String pddFileName = createPDD(bpelFileName, workflowName, serviceName);
+		String pddFileName = createPDD(bpelFileName, workflowName, serviceName, wsdlRefArray);
 		String[] fileList = {bpelFileName, pddFileName};
 		createBPR(fileList, bprFileName);
 		return bprFileName;
 	}
 	
-	public static String createPDD(String bpelFileName, String workflowName, String serviceName) throws Exception {
-		return PDDGenerator.createPDD(workflowName, bpelFileName, serviceName);
+	public static String 
+		createPDD(String bpelFileName, String workflowName, String serviceName, WSDLReferences[] wsdlRefArray) throws Exception {
+		return PDDGenerator.createPDD(workflowName, bpelFileName, serviceName, wsdlRefArray);
 	}
 	public static void createBPR(String[] fileList, String bprPath)
 			throws IOException {

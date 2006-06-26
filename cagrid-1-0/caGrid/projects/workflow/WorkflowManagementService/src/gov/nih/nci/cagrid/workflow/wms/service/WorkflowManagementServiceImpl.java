@@ -1,22 +1,18 @@
 package gov.nih.nci.cagrid.workflow.wms.service;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.workflow.stubs.Invoke;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WMSInputType;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WMSOutputType;
+import gov.nih.nci.cagrid.workflow.wms.stubs.service.WSDLReferences;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WorkflowOuputType;
 
 import java.io.File;
 import java.rmi.RemoteException;
 
 import javax.naming.InitialContext;
-import javax.xml.namespace.QName;
 
 import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
-import org.globus.wsrf.encoding.ObjectDeserializer;
-import org.globus.wsrf.encoding.ObjectSerializer;
-import org.globus.wsrf.utils.AnyHelper;
 
 /**
  * gov.nih.nci.cagrid.workflow.wmsI TODO:DOCUMENT ME
@@ -57,8 +53,8 @@ public class WorkflowManagementServiceImpl {
 		return this.configuration;
 	}
 
-	private String deploy(String bpelFileName, String workflowName) throws Exception {
-		return ActiveBPELAdapter.deployBpr(bpelFileName ,workflowName);
+	private String deploy(String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws Exception {
+		return ActiveBPELAdapter.deployBpr(bpelFileName ,workflowName, wsdlRefArray);
 	}
 	
 	private String invokeProcess(String partnerLinkName, String message) throws Exception {
@@ -77,7 +73,8 @@ public class WorkflowManagementServiceImpl {
 			bpelFile.deleteOnExit();
 			Utils.stringBufferToFile(new StringBuffer(bpelProcess),
 					bpelFileName);
-			deploy(bpelFileName, workflowName);
+			WSDLReferences[] wsdlRefArray = wmsInput.getWsdlReferences();
+			deploy(bpelFileName, workflowName, wsdlRefArray);
 		} catch (Exception e){
 			throw new RemoteException ("Exception deploying workflow:"+ workflowName ,e );
 		}

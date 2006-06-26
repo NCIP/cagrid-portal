@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.workflow.wms.service;
 
+import gov.nih.nci.cagrid.workflow.wms.stubs.service.WSDLReferences;
+
 import java.net.URL;
 
 import org.activebpel.rt.base64.Base64;
@@ -12,9 +14,9 @@ public class ActiveBPELAdapter {
 	protected static final String abAdminUrl = "http://localhost:8080/active-bpel/services/BpelEngineAdmin";
 	
 	
-	public static String deployBpr(String bpelFileName, String workflowName) throws Exception {
+	public static String deployBpr(String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws Exception {
 		String returnString = "success";
-		String bprFileName = BPRCreator.makeBpr(bpelFileName,workflowName);
+		String bprFileName = BPRCreator.makeBpr(bpelFileName,workflowName, wsdlRefArray);
 		BpelEngineAdminLocator locator = new BpelEngineAdminLocator();
 		URL url = new URL(abAdminUrl);
 		RemoteDebugSoapBindingStub mRemote = (RemoteDebugSoapBindingStub) locator

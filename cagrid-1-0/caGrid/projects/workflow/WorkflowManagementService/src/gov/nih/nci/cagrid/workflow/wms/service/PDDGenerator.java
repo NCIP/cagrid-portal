@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.workflow.wms.service;
 
+import gov.nih.nci.cagrid.workflow.wms.stubs.service.WSDLReferences;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -9,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
@@ -17,6 +21,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.axis.types.URI;
 import org.apache.axis.utils.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -32,8 +37,8 @@ public class PDDGenerator {
 
 	public static final String XMLNS_WSA = "http://schemas.xmlsoap.org/ws/2003/03/addressing";
 
-	public static Document generatePDD(String workflowName, Document bpelDoc, String serviceName)
-			throws Exception {
+	public static Document generatePDD(String workflowName, Document bpelDoc, 
+			String serviceName, WSDLReferences[] wsdlRefArray) throws Exception {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
 		DocumentBuilder db = dbf.newDocumentBuilder();
@@ -47,7 +52,7 @@ public class PDDGenerator {
 		root.setAttribute("xmlns:wsa", XMLNS_WSA);
 		pdd.appendChild(root);
 		// Add partnerLinks
-		parsePartnerLinks(root, bpelDoc, pdd, serviceName);
+		parsePartnerLinks(root, bpelDoc, pdd, serviceName, wsdlRefArray);
 		return pdd;
 	}
 
@@ -59,7 +64,7 @@ public class PDDGenerator {
 	}
 
 	public static void appendPartnerLinks(Document doc, Node root,
-			Collection partnerLinks, String serviceName) {
+			Collection partnerLinks, String serviceName, Map wsdlRefs) {
 		Element plinksNode = doc.createElementNS(XMLNS_PDD, "partnerLinks");
 		root.appendChild(plinksNode);
 		for (Iterator it = partnerLinks.iterator(); it.hasNext();) {
@@ -75,12 +80,14 @@ public class PDDGenerator {
 				Element epRefNode = doc.createElement("wsa:EndpointReference");
 				epRefNode.setAttribute("xmlns:wsa", XMLNS_WSA);
 				Element epAddrNode = doc.createElement("wsa:Address");
-
+				QName plinkType = plink.getLinkType();
+				String nsuri = plinkType.getNamespaceURI();
+				System.out.println("nsuri: " + nsuri);
+				WSDLReferences ref = (WSDLReferences)wsdlRefs.get(nsuri);
 				pNode.appendChild(pRoleNode);
 				pRoleNode.appendChild(epRefNode);
 				epRefNode.appendChild(epAddrNode);
-
-				epAddrNode.appendChild(doc.createTextNode("http://localhost:8080/wsrf/services/cagrid/SampleService1"));
+				epAddrNode.appendChild(doc.createTextNode(ref.getServiceUrl().toString()));
 			}
 			if (!"".equals(plink.myRole)) {
 				Element myRoleNode = doc.createElementNS(XMLNS_PDD, "myRole");
@@ -99,28 +106,39 @@ public class PDDGenerator {
 	}
 
 	private static void appendWsdlReferences(Document doc, Node root,
-			Collection wsdlNamespaces, Collection locations) {
+			Map wsdlRefs) {
 		Element wsdlRefsNode = doc.createElementNS(XMLNS_PDD, "wsdlReferences");
 		root.appendChild(wsdlRefsNode);
-		for (Iterator it = wsdlNamespaces.iterator(); it.hasNext();) {
+		for (Iterator it = wsdlRefs.keySet().iterator(); it.hasNext();) {
 			String ns = (String) it.next();
 			Element wsdlRefNode = doc.createElementNS(XMLNS_PDD, "wsdl");
 			wsdlRefNode.setAttribute("namespace", ns);
+			WSDLReferences ref = (WSDLReferences)wsdlRefs.get(ns);
+			String location = ref.getWsdlLocation();
 			wsdlRefNode
 					.setAttribute(
-							"location",
-							"http://localhost:8080/wsrf/share/schema/SampleService1/SampleService1_flattened.wsdl");
+							"location",location);
 			wsdlRefsNode.appendChild(wsdlRefNode);
 		}
 	}
 
+	private static HashMap mapWsdlRefs(WSDLReferences[] wsdlRefs) {
+		HashMap map = new HashMap();
+		System.out.println("lenght: " + wsdlRefs.length);
+		for(int i=0;i<wsdlRefs.length;i++){
+			String qName = wsdlRefs[i].getWsdlNamespace().toString();
+			System.out.println(qName + wsdlRefs[i].getWsdlLocation() + wsdlRefs[i].getServiceUrl() + wsdlRefs[i].getWsdlNamespace().toString());
+			map.put(qName, wsdlRefs[i]);
+		}
+		return map;
+	}
 	private static void  parsePartnerLinks(Node root, Document bpelDoc,
-			Document pdd, String serviceName) {
+			Document pdd, String serviceName, WSDLReferences wsdlRefs[]) {
 		NodeList partnerLinksNL = bpelDoc.getElementsByTagNameNS(XMLNS_BPEL,
 				"partnerLink");
 		ArrayList partnerLinks = new ArrayList();
 		Collection wsdlNamespaces = new HashSet();
-
+		HashMap map = mapWsdlRefs(wsdlRefs);
 		int len = partnerLinksNL.getLength();
 		for (int i = 0; i < len; i++) {
 			PartnerLink pl = new PartnerLink();
@@ -143,8 +161,8 @@ public class PDDGenerator {
 			wsdlNamespaces.add(nsuri);
 			partnerLinks.add(pl);
 		}
-		appendPartnerLinks(pdd, root, partnerLinks, serviceName);
-		appendWsdlReferences(pdd, root, wsdlNamespaces, null);
+		appendPartnerLinks(pdd, root, partnerLinks, serviceName, map);
+		appendWsdlReferences(pdd, root, map);
 	}
 
 	private static String resolveNS(final Node start, final String prefix) {
@@ -172,8 +190,8 @@ public class PDDGenerator {
 		return nsuri;
 	}
 
-	public static String createPDD(String workflowName, String bpelFile, String serviceName)
-			throws Exception {
+	public static String createPDD(String workflowName, String bpelFile, 
+			String serviceName, WSDLReferences[] wsdlRefArray) throws Exception {
 		File f = new File(bpelFile);
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
@@ -185,7 +203,8 @@ public class PDDGenerator {
 		}
 		Document bpelDoc = db.parse(f);
 
-		Document pdd = PDDGenerator.generatePDD(workflowName, bpelDoc, serviceName);
+		Document pdd = PDDGenerator.generatePDD(workflowName, 
+				bpelDoc, serviceName, wsdlRefArray );
 		File pddFile = new File(System.getProperty("java.io.tmpdir")
 				+ workflowName + ".pdd");
 		Writer writer = new BufferedWriter(new FileWriter(pddFile));
@@ -209,8 +228,18 @@ public class PDDGenerator {
 			throw e;
 		}
 		Document bpelDoc = db.parse(f);
-
-		Document pdd = PDDGenerator.generatePDD(workflowName, bpelDoc, "TestService");
+		WSDLReferences[] wsdlRefArray = new WSDLReferences[2];
+		wsdlRefArray[0] = new WSDLReferences();
+		wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/SampleService1"));
+		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/SampleService1/SampleService1_flattened.wsdl");
+		wsdlRefArray[0].setWsdlNamespace(new URI("http://workflow.cagrid.nci.nih.gov/SampleService1"));
+		wsdlRefArray[1] = new WSDLReferences();
+		wsdlRefArray[1].setServiceUrl(new URI("https://localhost:8443/wsrf/services/cagrid/SecureSample"));
+		wsdlRefArray[1].setWsdlLocation("http://localhost:8080/wsrf/share/schema/SecureSample/SecureSample_flattened.wsdl");
+		wsdlRefArray[1].setWsdlNamespace(new URI("http://cagrid.nci.nih.gov/SecureSample"));
+		
+		Document pdd = PDDGenerator.generatePDD(workflowName, 
+				bpelDoc, "TestService", wsdlRefArray);
 		System.out.println(XMLUtils.PrettyDocumentToString(pdd));
 
 	}
