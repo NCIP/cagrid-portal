@@ -44,6 +44,12 @@
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects above -->
 	<property name="testable.projects.list" value="dorian, introduce, cabigextensions, core, discovery, cadsr, gridca, gts, syncgts, cql2xpath, data, sdkQuery" />
+	<!-- ================================================================================ -->
+	<!--                  DEFINE THE SUB PROJECTS THAT PROVIDE INTRODUCE EXTENSIONS       -->
+	<!-- ================================================================================ -->
+	<!-- This should be a subset of the projects above -->
+	<property name="introduce.extension.projects.list" value="cabigextensions, cadsr, data" />
+	<property name="introduce.extensions.dir" value="${projects.dir}/introduce/extensions" />
 
 
 	<!-- =============================================================== -->
@@ -333,8 +339,8 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
-	
-	
+
+
 	<!-- =============================================================== -->
 	<!-- CAGRID Installer:                                                     -->
 	<!-- =============================================================== -->
@@ -414,6 +420,25 @@
 	</target>
 
 
+
+	<!-- ============================================================== -->
+	<!-- Installs the Introduce Extensions                              -->
+	<!-- ============================================================== -->
+	<target name="installIntroduceExtensions" depends="prepare">
+		<delete>
+			<fileset dir="${introduce.extensions.dir}/lib" includes="**" />
+		</delete>
+		<for list="${introduce.extension.projects.list}" parallel="true" param="project.name" trim="true">
+			<sequential>
+				<echo message="Installing Introduce Extensions from @{project.name}." />
+				<ant dir="${projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="installIntroduceExtensions">
+					<property name="introduce.extensions.dir" value="${introduce.extensions.dir}" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+
+
 	<!-- ============================================================== -->
 	<!-- Cleans up generated stuff                                      -->
 	<!-- ============================================================== -->
@@ -434,10 +459,10 @@
 	</target>
 
 
+	<!-- Calling this target will configure the build process to not build dependent projects. -->
 	<target name="noDeps">
 		<property name="skip.artifact.antcalls" value="true" />
 	</target>
-
 
 
 	<!-- ============================================================== -->
@@ -446,11 +471,14 @@
 	<target name="all" depends="prepare, clean" description="Builds the entire application">
 		<for list="${projects.list}" parallel="false" param="project.name" trim="true">
 			<sequential>
+				<echo message="=====================================================================================" />
 				<echo message="Building project @{project.name}." />
+				<echo message="=====================================================================================" />
 				<runtarget target="build-@{project.name}" />
 				<echo message="Built project @{project.name}." />
 			</sequential>
 		</for>
+		<runtarget target="installIntroduceExtensions" />
 		<runtarget target="displayBuildWarning" />
 	</target>
 	<target name="displayBuildWarning" unless="isJDK1.5">
