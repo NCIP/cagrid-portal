@@ -41,7 +41,7 @@ public class WMSTest extends GridTestCase {
 		// TODO Auto-generated constructor stub
 	}
 
-	/*public void testBasic() throws Exception {
+	public void testBasic() throws Exception {
 		assertTrue(TEST_CONTAINER != null);
 		this.epr = new EndpointReferenceType();
 		this.epr.setAddress(new Address(serviceUrl));
@@ -52,14 +52,14 @@ public class WMSTest extends GridTestCase {
 		wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/SampleService1"));
 		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/SampleService1/SampleService1_flattened.wsdl");
 		wsdlRefArray[0].setWsdlNamespace(new URI("http://workflow.cagrid.nci.nih.gov/SampleService1"));
-		WMSInputType input =createInput("test/Simple.bpel", qname, (Object)invoke);
+		WMSInputType input =createInput("Simple","test/Simple.bpel", qname, (Object)invoke);
 		input.setWsdlReferences(wsdlRefArray);
 		WMSOutputType output = runWorkflow(input);
 		String outputString = output.getOutputType().getOutputAsXMLString();
 		System.out.println("Output " +  outputString);
 		assertTrue(outputString != null);
 		assertTrue(output!=null);
-	}*/
+	}
 
 	public void testSecure() throws Exception {
 		assertTrue(TEST_CONTAINER != null);

@@ -1,0 +1,2 @@
+1. Cleanup tmp file creation
+2. Look at cleaning up WorkflowInputType, WMSInputType

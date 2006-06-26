@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.workflow.wms.stubs.service.WSDLReferences;
 
 import java.net.URL;
 
-import org.activebpel.rt.base64.Base64;
+import gov.nih.nci.cagrid.workflow.wms.utils.Base64;
 
 import AeAdminServices.BpelEngineAdminLocator;
 import AeAdminServices.RemoteDebugSoapBindingStub;
