@@ -12,10 +12,12 @@ import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionEvent;
 import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionListener;
 import gov.nih.nci.cagrid.data.ui.browser.QueryProcessorClassConfigDialog;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -30,6 +32,9 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.apache.axis.message.MessageElement;
 import org.jdom.Element;
@@ -67,6 +72,9 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private JButton configureButton = null;
 	
 	private transient XMLDataModelService gmeHandle = null;
+	private JButton selectDomainModelButton = null;
+	private JTextField domainModelNameTextField = null;
+	private JPanel domainModelSelectionPanel = null;  //  @jve:decl-index=0:visual-constraint="446,639"
 	
 	public TargetTypeSelectionPanel(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo) {
 		super(desc, serviceInfo);
@@ -205,6 +213,10 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	 */
 	private JPanel getTypeSelectionPanel() {
 		if (typeSelectionPanel == null) {
+			GridBagConstraints gridBagCosntraints32 = new GridBagConstraints();
+			gridBagCosntraints32.gridx = 0;
+			gridBagCosntraints32.gridy = 3;
+			gridBagCosntraints32.fill = GridBagConstraints.HORIZONTAL;
 			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 			gridBagConstraints31.gridx = 0;
 			gridBagConstraints31.insets = new java.awt.Insets(2,2,2,2);
@@ -225,6 +237,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			typeSelectionPanel.add(getDomainBrowserPanel(), gridBagConstraints);
 			typeSelectionPanel.add(getTypesTreeScrollPane(), gridBagConstraints1);
 			typeSelectionPanel.add(getSetModelButton(), gridBagConstraints31);
+			typeSelectionPanel.add(getDomainModelSelectionPanel(), gridBagCosntraints32);
 		}
 		return typeSelectionPanel;
 	}
@@ -526,5 +539,109 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			});
 		}
 		return configureButton;
+	}
+
+
+	/**
+	 * This method initializes jButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getSelectDomainModelButton() {
+		if (selectDomainModelButton == null) {
+			selectDomainModelButton = new JButton();
+			selectDomainModelButton.setText("Select Domain Model");
+			selectDomainModelButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						String filename = ResourceManager.promptFile(
+							TargetTypeSelectionPanel.this, null, new FileFilters.XMLFileFilter());
+						getDomainModelNameTextField().setText(filename);
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						PortalUtils.showErrorMessage("Error selecting file", ex);
+					}
+				}
+			});
+		}
+		return selectDomainModelButton;
+	}
+
+
+	/**
+	 * This method initializes jTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getDomainModelNameTextField() {
+		if (domainModelNameTextField == null) {
+			domainModelNameTextField = new JTextField();
+			domainModelNameTextField.setToolTipText("Optional xml file name of an existing domain model");
+			domainModelNameTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void insertUpdate(DocumentEvent e) {
+					setDomainModelFile();
+				}
+
+				
+			    public void removeUpdate(DocumentEvent e) {
+			    	setDomainModelFile();
+			    }
+
+			    
+			    public void changedUpdate(DocumentEvent e) {
+			    	setDomainModelFile();
+			    }
+			    
+			    
+			    private void setDomainModelFile() {
+			    	ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
+			    	String filename = getDomainModelNameTextField().getText();
+			    	if (filename == null || filename.length() == 0) {
+			    		ExtensionTools.removeExtensionDataElement(data, DataServiceConstants.SUPPLIED_DOMAIN_MODEL);
+			    	} else {
+			    		Element elem = new Element(DataServiceConstants.SUPPLIED_DOMAIN_MODEL);
+			    		elem.setText(filename);
+			    		try {
+			    			MessageElement messageElem = AxisJdomUtils.fromElement(elem);
+			    			ExtensionTools.updateExtensionDataElement(data, messageElem);
+			    		} catch (Exception ex) {
+			    			ex.printStackTrace();
+			    			PortalUtils.showErrorMessage("Error storing domain model filename", ex);
+			    		}
+			    	}
+			    }
+			});
+		}
+		return domainModelNameTextField;
+	}
+
+
+	/**
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getDomainModelSelectionPanel() {
+		if (domainModelSelectionPanel == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.gridx = 1;
+			gridBagConstraints7.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints7.gridy = 0;
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints6.gridy = 0;
+			gridBagConstraints6.weightx = 1.0;
+			gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints6.gridx = 0;
+			domainModelSelectionPanel = new JPanel();
+			domainModelSelectionPanel.setLayout(new GridBagLayout());
+			domainModelSelectionPanel.setSize(new java.awt.Dimension(295,69));
+			domainModelSelectionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Optional Supplied Domain Model", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			domainModelSelectionPanel.add(getDomainModelNameTextField(), gridBagConstraints6);
+			domainModelSelectionPanel.add(getSelectDomainModelButton(), gridBagConstraints7);
+		}
+		return domainModelSelectionPanel;
 	}
 }
