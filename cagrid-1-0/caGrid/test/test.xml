@@ -40,8 +40,8 @@
 	<!-- =============================================================== -->
 	<target name="test" depends="prepare,createDartTestFiles" description="Test all the projects.">
 		<!-- Clean out old logs first -->
-		<delete>
-			<fileset dir="${junit.results.dir}" failonerror="false">
+		<delete failonerror="false">
+			<fileset dir="${junit.results.dir}">
 				<include name="*" />
 			</fileset>
 		</delete>
