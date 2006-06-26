@@ -23,44 +23,24 @@ import org.globus.wsrf.utils.AddressingUtils;
  * @created by Introduce Toolkit version 1.0
  */
 public class ServiceSecurityImpl {
-	private ServiceConfiguration configuration;
 	private ServiceSecurityMetadata metadata;
 
 
 	public ServiceSecurityImpl() throws RemoteException {
 		try {
 			EndpointReferenceType type = AddressingUtils.createEndpointReference(null);
-			String configFileEnd = (String)MessageContext.getCurrentContext().getProperty("securityMetadata");
-			String configFile = ContainerConfig.getBaseDirectory() + File.separator+configFileEnd;
+			String configFileEnd = (String) MessageContext.getCurrentContext().getProperty("securityMetadata");
+			String configFile = ContainerConfig.getBaseDirectory() + File.separator + configFileEnd;
 			File f = new File(configFile);
-			if(!f.exists()){
-				throw new RemoteException("The security metadata file ("+configFile+") could not be found!!!");
+			if (!f.exists()) {
+				throw new RemoteException("The security metadata file (" + configFile + ") could not be found!!!");
 			}
 			metadata = (ServiceSecurityMetadata) Utils.deserializeDocument(configFile, ServiceSecurityMetadata.class);
-			
+
 		} catch (Exception e) {
 			FaultHelper.printStackTrace(e);
 			throw new RemoteException(Utils.getExceptionMessage(e));
 		}
-	}
-
-
-	public ServiceConfiguration getConfiguration() throws Exception {
-		if (this.configuration != null) {
-			return this.configuration;
-		}
-		MessageContext ctx = MessageContext.getCurrentContext();
-
-		String servicePath = ctx.getTargetService();
-
-		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
-		try {
-			javax.naming.Context initialContext = new InitialContext();
-			this.configuration = (ServiceConfiguration) initialContext.lookup(jndiName);
-		} catch (Exception e) {
-			throw new Exception("Unable to instantiate service configuration.", e);
-		}
-		return this.configuration;
 	}
 
 

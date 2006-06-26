@@ -102,6 +102,11 @@
 				<include name="**/*.xsd" />
 			</fileset>
 		</artifact>
+		<artifact track="main" type="schemas" id="security.metadata.schemas">
+			<fileset dir="${projects.dir}/metadata/schema/cagrid/types/security">
+				<include name="*.xsd" />
+			</fileset>
+		</artifact>
 		<artifact track="main" type="mappings" id="metadata.mappings">
 			<fileset dir="${projects.dir}/metadata">
 				<include name="NStoPkg.properties" />

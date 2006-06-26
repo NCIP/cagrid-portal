@@ -62,6 +62,7 @@
 		<delete dir="${build.dir}" />
 		<delete dir="${templates.created.src.dir}" />
 		<delete dir="${beans.created.src.dir}" />
+		<ant dir="${basedir}/operationProviders/ServiceSecurity" antfile="build.xml" target="clean" inheritall="false" />
 	</target>
 
 

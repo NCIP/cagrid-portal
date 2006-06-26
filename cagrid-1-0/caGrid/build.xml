@@ -296,7 +296,7 @@
 	<!-- =============================================================== -->
 	<!-- INTRODUCE:                                                      -->
 	<!-- =============================================================== -->
-	<target name="build-introduce" depends="prepare" description="Builds Introduce">
+	<target name="build-introduce" depends="prepare, build-introduceServiceSecurity" description="Builds Introduce">
 		<resolveDependencies extdir="${projects.dir}/introduce/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="common.test.jars" />
@@ -313,15 +313,14 @@
 		<resolveDependencies extdir="${projects.dir}/introduce/skeleton">
 			<artifact refid="mds.jars" />
 		</resolveDependencies>
-		<resolveDependencies extdir="${projects.dir}/introduce/operationProviders/ServiceSecurity/ext">
-			<artifact refid="core.jars" />
-			<artifact refid="mds.jars" />
-		</resolveDependencies>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 	<target name="build-introduceServiceSecurity" depends="prepare" description="Builds Introduce's ServiceSecurity Operation Provider">
 		<resolveDependencies extdir="${projects.dir}/introduce/operationProviders/ServiceSecurity/ext">
-			<artifact refid="mds.jars" />
+			<artifact refid="core.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/introduce/operationProviders/ServiceSecurity/schema/ServiceSecurity">
+			<artifact refid="security.metadata.schemas" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="buildServiceSecurity" />
 	</target>

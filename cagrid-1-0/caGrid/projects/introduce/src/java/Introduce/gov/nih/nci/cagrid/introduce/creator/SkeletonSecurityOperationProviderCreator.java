@@ -28,7 +28,7 @@ public class SkeletonSecurityOperationProviderCreator {
 
 	private static final String JAR_PREFIX = "caGrid-introduce-security";
 	private static final String SERVICE_SECURITY_WSDL = "ServiceSecurity.wsdl";
-	private static final String SERVICE_SECURITY_XSD = "ServiceSecurity.xsd";
+	private static final String SERVICE_SECURITY_XSD = "security.xsd";
 	private static final String SECURITY_SERVICE_NS = "http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity";
 	private static final String SECURITY_NS = "gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security";
 	private static final String PATH_TO_BUILD_LIB = "operationProviders" + File.separator + "ServiceSecurity"
@@ -77,16 +77,17 @@ public class SkeletonSecurityOperationProviderCreator {
 			String pathToSerLib = info.getBaseDirectory().getAbsolutePath() + File.separator + "lib" + File.separator;
 
 			// add in the namespace type
-			NamespaceType nsType = CommonTools.createNamespaceType(PATH_TO_SCHEMA + SERVICE_SECURITY_XSD);
+			NamespaceType nsType = CommonTools.createNamespaceType(PATH_TO_SCHEMA + "xsd" + File.separator
+				+ SERVICE_SECURITY_XSD);
 			nsType.setGenerateStubs(new Boolean(false));
-			nsType.setLocation("./" + SERVICE_SECURITY_XSD);
+			nsType.setLocation("./" + "xsd" + File.separator + SERVICE_SECURITY_XSD);
 			CommonTools.addNamespace(info.getServiceDescriptor(), nsType);
 
 			// copy over the wsdl file and the required schema
 			Utils.copyFile(new File(PATH_TO_SCHEMA + SERVICE_SECURITY_WSDL), new File(pathToServSchema
 				+ SERVICE_SECURITY_WSDL));
-			Utils.copyFile(new File(PATH_TO_SCHEMA + SERVICE_SECURITY_XSD), new File(pathToServSchema
-				+ SERVICE_SECURITY_XSD));
+			Utils.copyFile(new File(PATH_TO_SCHEMA + "xsd" + File.separator + SERVICE_SECURITY_XSD), new File(
+				pathToServSchema + "xsd" + File.separator + SERVICE_SECURITY_XSD));
 
 			// copy over the jars which contain the stubs and the service impl
 			File libDir = new File(PATH_TO_BUILD_LIB);
