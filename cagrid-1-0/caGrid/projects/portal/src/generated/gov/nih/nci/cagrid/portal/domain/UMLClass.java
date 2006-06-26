@@ -19,7 +19,7 @@ public class UMLClass {
     private java.util.Collection umlAttributeCollection;
     private java.util.Collection semanticMetadataCollection;
 
-    public UMLClass(){
+    public UMLClass() {
 
     }
 
@@ -27,31 +27,31 @@ public class UMLClass {
 
     }
 
-    public java.lang.String getClassName(){
+    public java.lang.String getClassName() {
         return className;
     }
 
-    public java.lang.String getDescription(){
+    public java.lang.String getDescription() {
         return description;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 
-    public java.lang.String getPackageName(){
+    public java.lang.String getPackageName() {
         return packageName;
     }
 
-    public java.lang.String getProjectName(){
+    public java.lang.String getProjectName() {
         return projectName;
     }
 
-    public java.lang.String getProjectVersion(){
+    public java.lang.String getProjectVersion() {
         return projectVersion;
     }
 
-    public java.lang.String getServiceEPR(){
+    public java.lang.String getServiceEPR() {
         return serviceEPR;
     }
 
@@ -59,7 +59,7 @@ public class UMLClass {
      *
      * @param newVal
      */
-    public void setClassName(java.lang.String newVal){
+    public void setClassName(java.lang.String newVal) {
         className = newVal;
     }
 
@@ -67,7 +67,7 @@ public class UMLClass {
      *
      * @param newVal
      */
-    public void setDescription(java.lang.String newVal){
+    public void setDescription(java.lang.String newVal) {
         description = newVal;
     }
 
@@ -75,7 +75,7 @@ public class UMLClass {
      *
      * @param newVal
      */
-    public void setId(int newVal){
+    public void setId(int newVal) {
         id = newVal;
     }
 
@@ -83,7 +83,7 @@ public class UMLClass {
      *
      * @param newVal
      */
-    public void setPackageName(java.lang.String newVal){
+    public void setPackageName(java.lang.String newVal) {
         packageName = newVal;
     }
 
@@ -91,7 +91,7 @@ public class UMLClass {
      *
      * @param newVal
      */
-    public void setProjectName(java.lang.String newVal){
+    public void setProjectName(java.lang.String newVal) {
         projectName = newVal;
     }
 
@@ -99,7 +99,7 @@ public class UMLClass {
      *
      * @param newVal
      */
-    public void setProjectVersion(java.lang.String newVal){
+    public void setProjectVersion(java.lang.String newVal) {
         projectVersion = newVal;
     }
 
@@ -107,7 +107,7 @@ public class UMLClass {
      *
      * @param newVal
      */
-    public void setServiceEPR(java.lang.String newVal){
+    public void setServiceEPR(java.lang.String newVal) {
         serviceEPR = newVal;
     }
 

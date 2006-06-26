@@ -132,7 +132,7 @@
 
         <property name="generated.dir" location="${build.dest}"/>
         <property name="hibernate.list.file" location="${build.dest}/hibernate.cfg.xml"/>
-        <script language="beanshell" src="${basedir}/create_hbnfile.sh"/>
+         
 
     </target>
 

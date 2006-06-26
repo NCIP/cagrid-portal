@@ -6,52 +6,52 @@ package gov.nih.nci.cagrid.portal.domain;
  */
 public class Statistics {
 
-	private boolean active;
-	private double responseTime;
-	private double timestamp;
+    private boolean active;
+    private double responseTime;
+    private double timestamp;
 
-	public Statistics(){
+    public Statistics() {
 
-	}
+    }
 
-	public void finalize() throws Throwable {
+    public void finalize() throws Throwable {
 
-	}
+    }
 
-	public double getResponseTime(){
-		return responseTime;
-	}
+    public double getResponseTime() {
+        return responseTime;
+    }
 
-	public double getTimestamp(){
-		return timestamp;
-	}
+    public double getTimestamp() {
+        return timestamp;
+    }
 
-	public boolean isActive(){
-		return active;
-	}
+    public boolean isActive() {
+        return active;
+    }
 
-	/**
-	 * 
-	 * @param newVal
-	 */
-	public void setActive(boolean newVal){
-		active = newVal;
-	}
+    /**
+     *
+     * @param newVal
+     */
+    public void setActive(boolean newVal) {
+        active = newVal;
+    }
 
-	/**
-	 * 
-	 * @param newVal
-	 */
-	public void setResponseTime(double newVal){
-		responseTime = newVal;
-	}
+    /**
+     *
+     * @param newVal
+     */
+    public void setResponseTime(double newVal) {
+        responseTime = newVal;
+    }
 
-	/**
-	 * 
-	 * @param newVal
-	 */
-	public void setTimestamp(double newVal){
-		timestamp = newVal;
-	}
+    /**
+     *
+     * @param newVal
+     */
+    public void setTimestamp(double newVal) {
+        timestamp = newVal;
+    }
 
 }

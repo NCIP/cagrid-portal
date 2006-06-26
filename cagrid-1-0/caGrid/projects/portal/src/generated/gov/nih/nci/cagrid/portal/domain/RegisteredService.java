@@ -5,6 +5,7 @@ import java.util.Collection;
 /**
  * @version 1.0
  * @created 19-Jun-2006 4:08:50 PM
+ * @hibernate.class table="REGISTERED_SERVICES"
  */
 public class RegisteredService implements GridService {
 
@@ -14,16 +15,31 @@ public class RegisteredService implements GridService {
     public java.util.Collection statisticsCollection;
     public Operation operations;
     private DomainModel domainModel;
+    private String epr;
+    private EPR handle;
 
-    public RegisteredService(){
-
-    }
-
-    public void finalize() throws Throwable {
+    public RegisteredService() {
 
     }
 
-    public java.lang.String getAlias(){
+    /**
+     * @hibernate.id column EPR
+     * type string
+     */
+    public String getEpr() {
+        return epr;
+    }
+
+    public void setEpr(String epr) {
+        this.epr = epr;
+        this.handle = new EPR(epr);
+    }
+
+
+    /**
+     * @hibernate.property column ALIAS
+     */
+    public java.lang.String getAlias() {
         return alias;
     }
 
@@ -31,19 +47,27 @@ public class RegisteredService implements GridService {
      *
      * @param newVal
      */
-    public void setAlias(java.lang.String newVal){
+    public void setAlias(java.lang.String newVal) {
         alias = newVal;
     }
 
-    public EPR getHandle(){
+    public EPR getHandle() {
+        return this.handle;
+    }
+
+    /**
+     * @hibernate.property column NAME
+     * type string
+     */
+    public java.lang.String getName() {
         return null;
     }
 
-    public java.lang.String getName(){
-        return null;
-    }
-
-    public java.lang.String getDescription(){
+    /**
+     * @hibernate.property column DESCRIPTION
+     * type string
+     */
+    public java.lang.String getDescription() {
         return null;
     }
 
@@ -51,7 +75,7 @@ public class RegisteredService implements GridService {
      *
      * @param desc
      */
-    public void setDescription(java.lang.String desc){
+    public void setDescription(java.lang.String desc) {
 
     }
 
@@ -59,7 +83,7 @@ public class RegisteredService implements GridService {
      *
      * @param name
      */
-    public void setName(java.lang.String name){
+    public void setName(java.lang.String name) {
 
     }
 
@@ -67,10 +91,13 @@ public class RegisteredService implements GridService {
      *
      * @param handle
      */
-    public void setHandle(java.lang.String handle){
+    public void setHandle(java.lang.String handle) {
 
     }
 
+    /**
+     * @hibernate.collection-many-to-many class Index
+     */
     public Collection getIndexServiceCollection() {
         return indexServiceCollection;
     }

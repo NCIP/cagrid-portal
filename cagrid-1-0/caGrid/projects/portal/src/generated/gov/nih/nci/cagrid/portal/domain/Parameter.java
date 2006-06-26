@@ -6,22 +6,22 @@ package gov.nih.nci.cagrid.portal.domain;
  */
 public interface Parameter {
 
-	public abstract int getDimensionality();
+    public abstract int getDimensionality();
 
-	public abstract UMLClass getUMLClass();
+    public abstract UMLClass getUMLClass();
 
-	public abstract boolean isArray();
+    public abstract boolean isArray();
 
-	/**
-	 * 
-	 * @param dimesionality
-	 */
-	public void setDimensionality(int dimesionality);
+    /**
+     *
+     * @param dimesionality
+     */
+    public void setDimensionality(int dimesionality);
 
-	/**
-	 * 
-	 * @param umlClass
-	 */
-	public abstract void setUMLClass(UMLClass umlClass);
+    /**
+     *
+     * @param umlClass
+     */
+    public abstract void setUMLClass(UMLClass umlClass);
 
 }

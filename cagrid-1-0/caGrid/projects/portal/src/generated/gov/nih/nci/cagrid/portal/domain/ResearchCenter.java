@@ -17,7 +17,7 @@ public class ResearchCenter {
     private java.lang.String shortName;
     private java.util.Collection registeredServicesCollection;
 
-    public ResearchCenter(){
+    public ResearchCenter() {
 
     }
 
@@ -25,31 +25,31 @@ public class ResearchCenter {
 
     }
 
-    public java.lang.String getDescription(){
+    public java.lang.String getDescription() {
         return description;
     }
 
-    public java.lang.String getDisplayName(){
+    public java.lang.String getDisplayName() {
         return displayName;
     }
 
-    public java.lang.String getHomepageURL(){
+    public java.lang.String getHomepageURL() {
         return homepageURL;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 
-    public java.lang.String getImageURL(){
+    public java.lang.String getImageURL() {
         return imageURL;
     }
 
-    public java.lang.String getrssNewsURL(){
+    public java.lang.String getrssNewsURL() {
         return rssNewsURL;
     }
 
-    public java.lang.String getShortName(){
+    public java.lang.String getShortName() {
         return shortName;
     }
 
@@ -57,7 +57,7 @@ public class ResearchCenter {
      *
      * @param newVal
      */
-    public void setDescription(java.lang.String newVal){
+    public void setDescription(java.lang.String newVal) {
         description = newVal;
     }
 
@@ -65,7 +65,7 @@ public class ResearchCenter {
      *
      * @param newVal
      */
-    public void setDisplayName(java.lang.String newVal){
+    public void setDisplayName(java.lang.String newVal) {
         displayName = newVal;
     }
 
@@ -73,7 +73,7 @@ public class ResearchCenter {
      *
      * @param newVal
      */
-    public void setHomepageURL(java.lang.String newVal){
+    public void setHomepageURL(java.lang.String newVal) {
         homepageURL = newVal;
     }
 
@@ -81,7 +81,7 @@ public class ResearchCenter {
      *
      * @param newVal
      */
-    public void setId(int newVal){
+    public void setId(int newVal) {
         id = newVal;
     }
 
@@ -89,7 +89,7 @@ public class ResearchCenter {
      *
      * @param newVal
      */
-    public void setImageURL(java.lang.String newVal){
+    public void setImageURL(java.lang.String newVal) {
         imageURL = newVal;
     }
 
@@ -97,7 +97,7 @@ public class ResearchCenter {
      *
      * @param newVal
      */
-    public void setrssNewsURL(java.lang.String newVal){
+    public void setrssNewsURL(java.lang.String newVal) {
         rssNewsURL = newVal;
     }
 
@@ -105,7 +105,7 @@ public class ResearchCenter {
      *
      * @param newVal
      */
-    public void setShortName(java.lang.String newVal){
+    public void setShortName(java.lang.String newVal) {
         shortName = newVal;
     }
 

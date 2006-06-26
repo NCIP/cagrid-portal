@@ -6,40 +6,40 @@ package gov.nih.nci.cagrid.portal.domain;
  */
 public class OperationOutput implements Parameter {
 
-	public OperationOutput(){
+    public OperationOutput() {
 
-	}
+    }
 
-	public void finalize() throws Throwable {
+    public void finalize() throws Throwable {
 
-	}
+    }
 
-	/**
-	 * 
-	 * @param umlClass
-	 */
-	public void setUMLClass(UMLClass umlClass){
+    /**
+     *
+     * @param umlClass
+     */
+    public void setUMLClass(UMLClass umlClass) {
 
-	}
+    }
 
-	/**
-	 * 
-	 * @param dimesionality
-	 */
-	public void setDimensionality(int dimesionality){
+    /**
+     *
+     * @param dimesionality
+     */
+    public void setDimensionality(int dimesionality) {
 
-	}
+    }
 
-	public int getDimensionality(){
-		return 0;
-	}
+    public int getDimensionality() {
+        return 0;
+    }
 
-	public UMLClass getUMLClass(){
-		return null;
-	}
+    public UMLClass getUMLClass() {
+        return null;
+    }
 
-	public boolean isArray(){
-		return false;
-	}
+    public boolean isArray() {
+        return false;
+    }
 
 }
