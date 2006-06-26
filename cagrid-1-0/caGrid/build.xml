@@ -38,7 +38,7 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="cabigextensions, cadsr, core, cql2xpath, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, introduce, metadata, opensaml, sdkQuery, syncgts" />
+	<property name="projects.list" value="cabigextensions, cadsr, core, cql2xpath, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, opensaml, sdkQuery, syncgts" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
@@ -332,6 +332,17 @@
 			<artifact refid="mobius.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+	
+	
+	<!-- =============================================================== -->
+	<!-- CAGRID Installer:                                                     -->
+	<!-- =============================================================== -->
+	<target name="build-installer" depends="prepare" description="Builds caGrid Installer">
+		<resolveDependencies extdir="${projects.dir}/installer/ext">
+			<artifact refid="core.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/installer" inheritAll="false" antfile="build.xml" target="dist" />
 	</target>
 
 
