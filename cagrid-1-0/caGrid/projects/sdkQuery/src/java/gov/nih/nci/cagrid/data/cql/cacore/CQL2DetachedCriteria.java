@@ -38,6 +38,7 @@ public class CQL2DetachedCriteria {
 	
 	/**
 	 * Translates a CQLQuery into a Hibernate DetachedCriteria.
+	 * 
 	 * @param query
 	 * 		A fully valid CQL query.
 	 * @return
@@ -54,14 +55,14 @@ public class CQL2DetachedCriteria {
 			throw new QueryProcessingException("Error obtaining nested object class: " + ex.getMessage(), ex);
 		}
 		DetachedCriteria targetCriteria = DetachedCriteria.forClass(objectClass);
-		
+		populateObjectCritaria(targetCriteria, objectClass, query.getTarget());
 		return targetCriteria;
 	}
 	
 
-	private static DetachedCriteria populateObjectCritaria(DetachedCriteria objectCriteria, Object objectType) throws MalformedQueryException, QueryProcessingException {
-		Class objectClass = objectType.getClass();
-		
+	private static DetachedCriteria populateObjectCritaria(DetachedCriteria objectCriteria, 
+		Class objectClass, Object objectType) throws MalformedQueryException, QueryProcessingException {
+				
 		// handle association
 		if (objectType.getAssociation() != null) {
 			handleAssociation(objectCriteria, objectClass, objectType.getAssociation());
@@ -104,7 +105,7 @@ public class CQL2DetachedCriteria {
 			throw new MalformedQueryException("Association from " + objectClass.getName() + " to " + associationType + " does not exist.  Use only direct associations");
 		}
 		DetachedCriteria associationCriteria = parentObjectCriteria.createCriteria(role);
-		populateObjectCritaria(associationCriteria, association);
+		populateObjectCritaria(associationCriteria, objectClass, association);
 	}
 	
 	
