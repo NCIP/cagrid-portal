@@ -44,8 +44,8 @@ import org.jdom.Element;
 
 
 /**
- * DataServiceCodegenPreProcessor Preprocessor for data service codegen
- * operations.
+ * DataServiceCodegenPreProcessor 
+ * Preprocessor for data service codegen operations.
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
@@ -62,7 +62,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		try {
 			modifyServiceProperties(desc, info);
 		} catch (Exception ex) {
-			throw new CodegenExtensionException("Error modifying deployment properties: " + ex.getMessage(), ex);
+			throw new CodegenExtensionException("Error modifying deployment properties: " 
+				+ ex.getMessage(), ex);
 		}
 		modifyMetadata(desc, info);
 	}
@@ -70,6 +71,30 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 
 	private void modifyMetadata(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
+		// find the service's etc directory, where the domain model goes
+		String domainModelFile = info.getIntroduceServiceProperties().getProperty(
+			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+			+ File.separator + "etc" + File.separator + "domainModel.xml";
+		
+		LOG.debug("Looking for user-supplied domain model xml file");
+		String suppliedDomainModel = getSuppliedDomainModelFilename(desc, info);
+		if (suppliedDomainModel != null) {
+			LOG.debug("User-supplied domain model is " + suppliedDomainModel);
+			LOG.info("Copying domain model from " + suppliedDomainModel + " to " + domainModelFile);
+			try {
+				Utils.copyFile(new File(suppliedDomainModel), new File(domainModelFile));
+			} catch (Exception ex) {
+				throw new CodegenExtensionException("Error copying domain model file: " + ex.getMessage(), ex);
+			}
+		} else {
+			LOG.info("No domain model supplied, generating from caDSR");
+			generateDomainModel(desc, info, domainModelFile);
+		}
+	}
+	
+	
+	private void generateDomainModel(ServiceExtensionDescriptionType desc, ServiceInformation info, 
+		String domainModelFile) throws CodegenExtensionException {
 		LOG.debug("Looking for caDSR element in extension data");
 		// verify there's a caDSR element in the extension data bucket
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
@@ -137,21 +162,16 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 						}
 					}
 					if (proj == null) {
-						throw new CodegenExtensionException("caDSR service " + cadsrUrl + " did not find project "
-							+ cadsrProject);
+						throw new CodegenExtensionException("caDSR service " + cadsrUrl 
+							+ " did not find project " + cadsrProject);
 					}
 					model = cadsrClient.generateDomainModelForPackages(proj, new String[]{cadsrPackage});
 					System.out.println("Created data service Domain Model!");
 					LOG.info("Created data service Domain Model!");
 				} catch (Exception ex) {
-					throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(),
-						ex);
+					throw new CodegenExtensionException("Error connecting to caDSR for metadata: " 
+						+ ex.getMessage(), ex);
 				}
-
-				// find the service's etc directory, where the domain model goes
-				String domainModelFile = info.getIntroduceServiceProperties().getProperty(
-					IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
-					+ File.separator + "etc" + File.separator + "domainModel.xml";
 
 				// find the client-configuration.wsdd needed to serialize the
 				// domain model
@@ -173,8 +193,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 						+ ex.getMessage(), ex);
 				}
 
-				// add the metadata to the service information as a resource
-				// property
+				// add the metadata to the service information as a resource property
 				ResourcePropertyType domainModelResourceProperty = new ResourcePropertyType();
 				domainModelResourceProperty.setPopulateFromFile(true);
 				domainModelResourceProperty.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
@@ -300,6 +319,17 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		if (qpEntry != null) {
 			String queryProcessorClass = qpEntry.getValue();
 			return queryProcessorClass;
+		}
+		return null;
+	}
+	
+	
+	private String getSuppliedDomainModelFilename(ServiceExtensionDescriptionType desc, ServiceInformation info) {
+		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
+		MessageElement element = ExtensionTools.getExtensionDataElement(
+			data, DataServiceConstants.SUPPLIED_DOMAIN_MODEL);
+		if (element != null) {
+			return element.getValue();
 		}
 		return null;
 	}
