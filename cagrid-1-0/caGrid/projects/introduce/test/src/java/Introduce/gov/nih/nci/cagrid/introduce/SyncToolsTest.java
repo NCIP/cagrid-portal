@@ -51,7 +51,7 @@ public class SyncToolsTest extends Story {
 	protected Vector steps() {
 		this.tci1 = new TestCaseInfo1();
 		this.tci2 = new TestCaseInfo2();
-		this.helper = new GlobusHelper(false,new File("tmp"), IntroduceTestConstants.TEST_PORT);
+		this.helper = new GlobusHelper(false,new File(IntroduceTestConstants.TEST_TEMP), IntroduceTestConstants.TEST_PORT);
 		Vector steps = new Vector();
 
 		try {
