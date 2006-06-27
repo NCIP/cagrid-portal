@@ -9,7 +9,7 @@
   <parameter name="sendXsiTypes" value="true"/>
   <parameter name="sendMultiRefs" value="true"/>
   <parameter name="sendXMLDeclaration" value="true"/>
-  <parameter name="castorMapping" value="/gov/nih/nci/cagrid/data/ds-xml-mapping.xml"/>
+  <parameter name="castorMapping" value="gov/nih/nci/cagrid/data/ds-xml-mapping.xml"/>
   
   <requestFlow>
    <handler type="java:org.globus.wsrf.handlers.AddressingHandler"/>
