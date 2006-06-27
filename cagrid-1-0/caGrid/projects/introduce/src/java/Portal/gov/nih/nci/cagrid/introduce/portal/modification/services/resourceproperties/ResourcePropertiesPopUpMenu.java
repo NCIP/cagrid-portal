@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.event.MouseAdapter;
@@ -51,7 +52,7 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
 					super.mousePressed(e);
 					ModifyResourcePropertiesComponent comp = new ModifyResourcePropertiesComponent(node
 						.getResourceProperties(), node.getInfo().getNamespaces(), true);
-					IntroduceLookAndFeel.centerWindow(comp);
+					PortalUtils.centerWindow(comp);
 					comp.setVisible(true);
 					node.reInitialize(node.getResourceProperties());
 

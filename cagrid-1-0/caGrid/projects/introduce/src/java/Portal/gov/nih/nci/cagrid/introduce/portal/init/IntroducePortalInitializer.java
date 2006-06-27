@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.init;
 
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.help.IntroduceHelp;
@@ -35,9 +37,11 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
 		JMenu configMenu = PortalResourceManager.getInstance().getGridPortal().getJMenuBar().getMenu(CONFIG_MENU);
 		JMenuItem configMenuItem = new JMenuItem("Preferences");
 		final PreferencesDialog preferences = new PreferencesDialog(PortalResourceManager.getInstance().getGridPortal());
+		
 		configMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// user want to configure preferences....
+				PortalUtils.centerWindow(preferences);
 				preferences.setVisible(true);
 			}
 
