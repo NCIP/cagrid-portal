@@ -192,20 +192,8 @@ public class SyncSource {
 	}
 
 
-	private String removeMultiNewLines(String string) {
-		String newString = "";
-		for (int i = 0; i < string.length(); i++) {
-			if (i + 2 < string.length()) {
-				if (string.charAt(i) == '\n' && string.charAt(i + 1) == '\n' && string.charAt(i + 2) == '\n') {
-					// do nothing here becuase want to skip this \n
-				} else {
-					newString += string.charAt(i);
-				}
-			} else {
-				newString += string.charAt(i);
-			}
-		}
-		return newString;
+	protected static String removeMultiNewLines(String string) {
+		return string.replaceAll("\n\n(\n)+", "\n\n");
 	}
 
 
