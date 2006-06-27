@@ -14,14 +14,17 @@ import junit.textui.TestRunner;
 
 import com.atomicobject.haste.framework.Story;
 
+
 public class SyncToolsComplexImportTest extends Story {
 	private TestCaseInfo tci1;
 
 	private TestCaseInfo tci3;
-	
-	public SyncToolsComplexImportTest(){
+
+
+	public SyncToolsComplexImportTest() {
 		this.setName("IntroduceCodegenComplexImportSystemTest");
 	}
+
 
 	protected Vector steps() {
 		this.tci1 = new TestCaseInfo1();
@@ -34,8 +37,7 @@ public class SyncToolsComplexImportTest extends Story {
 
 			steps.add(new AddSimpleMethodStep(tci3, "newSimpleMethod", true));
 			steps.add(new AddComplexMethodWithFaultStep(tci3, "newMethod", true));
-			steps.add(new AddImportedMethodStep(tci1, tci3, "newMethod",
-					true,true));
+			steps.add(new AddImportedMethodStep(tci1, tci3, "newMethod", true, true));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -43,9 +45,11 @@ public class SyncToolsComplexImportTest extends Story {
 		return steps;
 	}
 
+
 	public String getDescription() {
 		return "Testing the Introduce code generation tools";
 	}
+
 
 	protected void storyTearDown() throws Throwable {
 		RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
@@ -54,11 +58,13 @@ public class SyncToolsComplexImportTest extends Story {
 		step2.runStep();
 	}
 
+
 	// used to make sure that if we are going to use a junit testsuite to test
 	// this
 	// that the test suite will not error out looking for a single test......
 	public void testDummy() throws Throwable {
 	}
+
 
 	/**
 	 * Convenience method for running all the Steps in this Story.

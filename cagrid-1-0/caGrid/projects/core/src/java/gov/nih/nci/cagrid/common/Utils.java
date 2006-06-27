@@ -116,6 +116,24 @@ public class Utils {
 	}
 
 
+	// Copies all files under srcDir to dstDir.
+	// If dstDir does not exist, it will be created.
+	public static void copyDirectory(File srcDir, File dstDir) throws Exception {
+		if (srcDir.isDirectory()) {
+			if (!dstDir.exists()) {
+				dstDir.mkdir();
+			}
+
+			String[] children = srcDir.list();
+			for (int i = 0; i < children.length; i++) {
+				copyDirectory(new File(srcDir, children[i]), new File(dstDir, children[i]));
+			}
+		} else {
+			copyFile(srcDir, dstDir);
+		}
+	}
+
+
 	public static boolean deleteDir(File dir) {
 		if (dir.isDirectory()) {
 			String[] children = dir.list();
@@ -148,22 +166,22 @@ public class Utils {
 
 		return sb;
 	}
-	
-	
+
+
 	/**
 	 * Serialize an Object to XML
+	 * 
 	 * @param obj
-	 * 		The object to be serialized
+	 *            The object to be serialized
 	 * @param qname
-	 * 		The QName of the object
+	 *            The QName of the object
 	 * @param writer
-	 * 		A writer to place XML into (eg: FileWriter, StringWriter)
+	 *            A writer to place XML into (eg: FileWriter, StringWriter)
 	 * @param wsdd
-	 * 		A stream containing the WSDD configuration
+	 *            A stream containing the WSDD configuration
 	 * @throws Exception
 	 */
-	public static void serializeObject(Object obj, QName qname, Writer writer, InputStream wsdd) 
-		throws Exception {
+	public static void serializeObject(Object obj, QName qname, Writer writer, InputStream wsdd) throws Exception {
 		// derive a message element for the object
 		MessageElement element = (MessageElement) ObjectSerializer.toSOAPElement(obj, qname);
 		// configure the axis engine to use the supplied wsdd file
@@ -176,36 +194,36 @@ public class Utils {
 		// every single element in the serialized XML
 		messageContext.setProperty(AxisEngine.PROP_EMIT_ALL_TYPES, Boolean.FALSE);
 		messageContext.setProperty(AxisEngine.PROP_SEND_XSI, Boolean.FALSE);
-		
+
 		// create a serialization context to use the new message context
-		SerializationContext serializationContext = 
-			new SerializationContext(writer, messageContext);
+		SerializationContext serializationContext = new SerializationContext(writer, messageContext);
 		serializationContext.setPretty(true);
-		
+
 		// output the message element through the serialization context
 		element.output(serializationContext);
 		writer.write("\n");
 	}
-	
-	
+
+
 	/**
 	 * Deserializes XML into an object
+	 * 
 	 * @param xmlReader
-	 * 		The reader for the XML (eg: FileReader, StringReader, etc)
+	 *            The reader for the XML (eg: FileReader, StringReader, etc)
 	 * @param clazz
-	 * 		The class to serialize to
+	 *            The class to serialize to
 	 * @param wsdd
-	 * 		A stream containing the WSDD configuration
+	 *            A stream containing the WSDD configuration
 	 * @return
 	 * @throws SAXException
 	 * @throws DeserializationException
 	 */
-	public static Object deserializeObject(Reader xmlReader, Class clazz, InputStream wsdd) 
-	throws SAXException, DeserializationException {
+	public static Object deserializeObject(Reader xmlReader, Class clazz, InputStream wsdd) throws SAXException,
+		DeserializationException {
 		// input source for the xml
 		InputSource xmlSource = new InputSource(xmlReader);
-		
-		return ConfigurableObjectDeserializer.toObject(xmlSource, clazz, wsdd);		
+
+		return ConfigurableObjectDeserializer.toObject(xmlSource, clazz, wsdd);
 	}
 
 
@@ -266,8 +284,8 @@ public class Utils {
 	public static Class getRegisteredClass(QName qname) {
 		return MessageContext.getCurrentContext().getTypeMapping().getClassForQName(qname);
 	}
-	
-	
+
+
 	public static List recursiveListFiles(File baseDir, final FileFilter filter) {
 		FileFilter dirFilter = new FileFilter() {
 			public boolean accept(File pathname) {

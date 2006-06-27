@@ -432,22 +432,15 @@ public class CommonTools {
 			+ File.separator + "introduce.xml", ServiceDescription.class);
 
 		if (copyFiles) {
+			File fromwsdl = new File(fromDir.getAbsolutePath() + File.separator + "schema" + File.separator
+				+ fromService);
+			File towsdl = new File(toDir.getAbsolutePath() + File.separator + "schema" + File.separator + toService);
+			Utils.copyDirectory(fromwsdl, towsdl);
 
-			String fromwsdl = fromDir.getAbsolutePath() + File.separator + "schema" + File.separator + fromService;
-			String towsdl = toDir.getAbsolutePath() + File.separator + "schema" + File.separator + toService;
+			File fromLibDir = new File(fromDir.getAbsolutePath() + File.separator + "lib");
+			File toLibDir = new File(toDir.getAbsolutePath() + File.separator + "lib");
 
-			File[] wsdls = new File(fromwsdl).listFiles();
-			for (int i = 0; i < wsdls.length; i++) {
-				Utils.copyFile(wsdls[i].getAbsoluteFile(), new File(towsdl + File.separator + wsdls[i].getName()));
-			}
-
-			String fromLibDir = fromDir.getAbsolutePath() + File.separator + "lib";
-			String toLibDir = toDir.getAbsolutePath() + File.separator + "lib";
-
-			File[] libs = new File(fromLibDir).listFiles();
-			for (int i = 0; i < libs.length; i++) {
-				Utils.copyFile(libs[i].getAbsoluteFile(), new File(toLibDir + File.separator + libs[i].getName()));
-			}
+			Utils.copyDirectory(fromLibDir,toLibDir);
 		}
 
 		// copy over the namespaces from the imported service

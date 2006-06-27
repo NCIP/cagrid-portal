@@ -27,14 +27,17 @@ import junit.textui.TestRunner;
 
 import com.atomicobject.haste.framework.Story;
 
+
 public class SyncToolsTest extends Story {
 	private TestCaseInfo tci1;
 
 	private TestCaseInfo tci2;
-	
-	public SyncToolsTest(){
+
+
+	public SyncToolsTest() {
 		this.setName("Introduce Codegen System Test");
 	}
+
 
 	protected Vector steps() {
 		this.tci1 = new TestCaseInfo1();
@@ -51,19 +54,14 @@ public class SyncToolsTest extends Story {
 			steps.add(new RemoveMethodStep(tci1, "newMethod", false));
 			steps.add(new RemoveMethodStep(tci2, "newMethod2", true));
 			steps.add(new AddSimpleMethodStep(tci2, "newMethod1", true));
-			steps.add(new AddImportedMethodStep(tci1, tci2, "newMethod1",
-					true,false));
-			steps.add(new AddSimpleMethodWithFaultStep(tci1,
-					"newMethodWithFault", false));
-			steps.add(new AddSimpleMethodWithReturnStep(tci1,
-					"newMethodWithReturn", false));
-			steps.add(new AddSimpleMethodWithArraysStep(tci1,
-					"newMethodWithArrays", true));
+			steps.add(new AddImportedMethodStep(tci1, tci2, "newMethod1", true, false));
+			steps.add(new AddSimpleMethodWithFaultStep(tci1, "newMethodWithFault", false));
+			steps.add(new AddSimpleMethodWithReturnStep(tci1, "newMethodWithReturn", false));
+			steps.add(new AddSimpleMethodWithArraysStep(tci1, "newMethodWithArrays", true));
 			steps.add(new RollBackStep(tci1));
-			steps.add(new AddComplexMethodWithFaultStep(tci1,
-					"newComplexMethodWithFault", false));
-			steps.add(new AddComplexMethodWithFaulsAndArraysStep(tci1,
-					"newComplexMethodWithFaultStepsAndArrays", true));
+			steps.add(new AddComplexMethodWithFaultStep(tci1, "newComplexMethodWithFault", false));
+			steps
+				.add(new AddComplexMethodWithFaulsAndArraysStep(tci1, "newComplexMethodWithFaultStepsAndArrays", true));
 			steps.add(new AddMetadataStep(tci1, true));
 			steps.add(new AddMetadatatWithLoadFromFileStep(tci1, true));
 			steps.add(new RemoveAllMetadataStep(tci1, true));
@@ -76,20 +74,24 @@ public class SyncToolsTest extends Story {
 		return steps;
 	}
 
+
 	public String getDescription() {
 		return "Testing the Introduce code generation tools";
 	}
+
 
 	protected void storyTearDown() throws Throwable {
 		RemoveSkeletonStep step = new RemoveSkeletonStep(tci1);
 		step.runStep();
 	}
 
+
 	// used to make sure that if we are going to use a junit testsuite to test
 	// this
 	// that the test suite will not error out looking for a single test......
 	public void testDummy() throws Throwable {
 	}
+
 
 	/**
 	 * Convenience method for running all the Steps in this Story.

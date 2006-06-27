@@ -31,8 +31,9 @@ public class AddImportedMethodStep extends BaseStep {
 	private boolean copyFiles;
 
 
-	public AddImportedMethodStep(TestCaseInfo tci, TestCaseInfo importedTCI, String methodName, boolean build, boolean copyFiles) throws Exception {
-		super(tci.getDir(),build);
+	public AddImportedMethodStep(TestCaseInfo tci, TestCaseInfo importedTCI, String methodName, boolean build,
+		boolean copyFiles) throws Exception {
+		super(tci.getDir(), build);
 		this.tci = tci;
 		this.importedTCI = importedTCI;
 		this.methodName = methodName;
@@ -48,8 +49,9 @@ public class AddImportedMethodStep extends BaseStep {
 		ii.setPortTypeName(importedTCI.getName() + "PortType");
 		ii.setPackageName(importedTCI.getPackageName() + ".stubs");
 		ii.setWsdlFile(importedTCI.getName() + ".wsdl");
-		
-		CommonTools.importMethod(ii,new File(getBaseDir() + File.separator + importedTCI.getDir()),new File(getBaseDir() + File.separator + tci.getDir()),importedTCI.getName(), tci.getName(), methodName, copyFiles);
+
+		CommonTools.importMethod(ii, new File(getBaseDir() + File.separator + importedTCI.getDir()), new File(
+			getBaseDir() + File.separator + tci.getDir()), importedTCI.getName(), tci.getName(), methodName, copyFiles);
 
 		try {
 			SyncTools sync = new SyncTools(new File(getBaseDir() + File.separator + tci.getDir()));
@@ -58,10 +60,11 @@ public class AddImportedMethodStep extends BaseStep {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
-		
+
 		// look at the interface to make sure method exists.......
-		String serviceInterface = getBaseDir() + File.separator + tci.getDir() + File.separator + "src" + File.separator
-			+ tci.getPackageDir() + File.separator + "common" + File.separator + tci.getName() + "I.java";
+		String serviceInterface = getBaseDir() + File.separator + tci.getDir() + File.separator + "src"
+			+ File.separator + tci.getPackageDir() + File.separator + "common" + File.separator + tci.getName()
+			+ "I.java";
 		assertTrue(StepTools.methodExists(serviceInterface, methodName));
 
 		buildStep();
