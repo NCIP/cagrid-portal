@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.data.utilities;
 
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -22,7 +21,7 @@ public class CQLQueryResultsIterator implements Iterator {
 	private CQLQueryResults results;
 	private Iterator resultIterator;
 	private boolean xmlOnly;
-	private String wsddFilename;
+	private InputStream wsddConfigStream;
 	
 	/**
 	 * Create a new CQLQueryResultsIterator which will return Object 
@@ -60,8 +59,8 @@ public class CQLQueryResultsIterator implements Iterator {
 	 * @param wsddFilename
 	 * 		The filename of a wsdd file to use for configuration
 	 */
-	public CQLQueryResultsIterator(CQLQueryResults results, String wsddFilename) {
-		this(results, false, wsddFilename);
+	public CQLQueryResultsIterator(CQLQueryResults results, InputStream wsdd) {
+		this(results, false, wsdd);
 	}
 	
 	
@@ -71,10 +70,10 @@ public class CQLQueryResultsIterator implements Iterator {
 	 * @param xmlOnly
 	 * @param wsddFilename
 	 */
-	private CQLQueryResultsIterator(CQLQueryResults results, boolean xmlOnly, String wsddFilename) {
+	private CQLQueryResultsIterator(CQLQueryResults results, boolean xmlOnly, InputStream wsdd) {
 		this.results = results;
 		this.xmlOnly = xmlOnly;
-		this.wsddFilename = wsddFilename;
+		this.wsddConfigStream = wsdd;
 	}
 	
 
@@ -111,17 +110,11 @@ public class CQLQueryResultsIterator implements Iterator {
 	
 	
 	private InputStream findConfigWsdd() {
-		if (wsddFilename == null) {
+		if (wsddConfigStream == null) {
 			// use the axis default client configuration
-			return ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
-		} else {
-			try {
-				return new FileInputStream(wsddFilename);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				return null;
-			}
+			wsddConfigStream = ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
 		}
+		return wsddConfigStream;
 	}
 	
 	

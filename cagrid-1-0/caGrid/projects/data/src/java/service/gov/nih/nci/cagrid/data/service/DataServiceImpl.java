@@ -2,10 +2,14 @@ package gov.nih.nci.cagrid.data.service;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.stubs.QueryProcessingException;
 
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.Map;
+
+import org.apache.axis.utils.ClassUtils;
 
 /** 
  *  gov.nih.nci.cagrid.dataI
@@ -21,7 +25,13 @@ public class DataServiceImpl {
 	}
 	
 	public Map getConfiguration() throws Exception {
-		return ServiceConfigUtil.getConfigurationMap();
+		// get the configuration pertaining to the service properties
+		Map config = ServiceConfigUtil.getConfigurationMap();
+		// add the property for the server-config.wsdd input source
+		InputStream configStream = ClassUtils.getResourceAsStream(
+			getClass(), "server-config.wsdd");
+		config.put(CQLQueryProcessor.AXIS_WSDD_CONFIG_STREAM, configStream);
+		return config;
 	}
 	
 	

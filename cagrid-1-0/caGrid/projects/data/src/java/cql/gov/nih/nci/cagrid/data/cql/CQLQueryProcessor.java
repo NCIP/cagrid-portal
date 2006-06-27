@@ -19,6 +19,7 @@ import java.util.Map;
  * @version $Id$ 
  */
 public abstract class CQLQueryProcessor {
+	public static final String AXIS_WSDD_CONFIG_STREAM = "axis.configuration.stream";
 	
 	public CQLQueryProcessor() {
 	
@@ -27,7 +28,10 @@ public abstract class CQLQueryProcessor {
 	
 	/**
 	 * Initialize the query processor with the properties it requires as specified
-	 * in the map provided by getRequiredParameters()
+	 * in the map provided by getRequiredParameters().  Additionally, the parameter
+	 * <code>AXIS_WSDD_CONFIG_STREAM</code> will be defined and mapped to
+	 * an <code>InputStream</code> object containing the configuration of the
+	 * current axis engine.
 	 * @param configuration
 	 * @throws InitializationException
 	 */

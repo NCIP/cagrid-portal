@@ -65,11 +65,6 @@ public class CQLObjectResultIterator implements Iterator {
 			}
 			return Utils.deserializeObject(new StringReader(documentString), objectClass, 
 				getConsumableInputStream());
-			/*
-			InputStream documentStream = new ByteArrayInputStream(documentString.getBytes());
-			org.w3c.dom.Document doc = XMLUtils.newDocument(documentStream);
-			obj = ObjectDeserializer.toObject(doc.getDocumentElement(), objectClass);
-			*/
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

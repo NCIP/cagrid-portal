@@ -7,6 +7,9 @@ import gov.nih.nci.cagrid.data.common.DataServiceI;
 import gov.nih.nci.cagrid.data.stubs.MalformedQueryException;
 import gov.nih.nci.cagrid.data.stubs.QueryProcessingException;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 
@@ -23,26 +26,32 @@ import java.util.Iterator;
 public class DataServiceHandle {
 
 	private DataServiceI service;
-	private String wsddFilename;
+	private InputStream wsddStream;
 	
 	public DataServiceHandle(DataServiceI dataService) {
-		this(dataService, null);
+		this(dataService, (InputStream) null);
 	}
 	
 	
-	public DataServiceHandle(DataServiceI dataService, String wsddFilename) {
+	public DataServiceHandle(DataServiceI dataService, String wsddFilename) 
+		throws FileNotFoundException {
+		this(dataService, new FileInputStream(wsddFilename));
+	}
+	
+	
+	public DataServiceHandle(DataServiceI dataService, InputStream wsddStream) {
 		this.service = dataService;
-		this.wsddFilename = wsddFilename;
+		this.wsddStream = wsddStream;
 	}
 	
 	
 	public Iterator query(CQLQuery cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException, RemoteException {
 		CQLQueryResults results = service.query(cqlQuery);
-		if (wsddFilename == null) {
+		if (wsddStream == null) {
 			return new CQLQueryResultsIterator(results);
 		} else {
-			return new CQLQueryResultsIterator(results, wsddFilename);
+			return new CQLQueryResultsIterator(results, wsddStream);
 		}
 	}
 }
