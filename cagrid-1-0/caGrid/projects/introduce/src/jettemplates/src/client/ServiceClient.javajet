@@ -112,6 +112,7 @@ public class <%=info.getService().getName()%>Client extends ServiceSecurityClien
 		}
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 

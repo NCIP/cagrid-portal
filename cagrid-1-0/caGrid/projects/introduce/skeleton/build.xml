@@ -30,6 +30,7 @@
     <property name="test.src.dir" value="${test.dir}/src" />
     <property name="test.lib.dir" value="${test.dir}/lib" />
     <property name="test.log.dir" value="test/logs" />
+    <property name="test.jar.name" value="${service.name}-tests.jar" />
     <property name="ext.test.lib.dir" value="ext/test/lib" />
     <property name="junit.results.dir" value="${test.log.dir}/junit" />
 
@@ -60,6 +61,9 @@
 
     <!--import deployment ant files -->
     <import file="build-deploy.xml" />
+    
+    <!--import run ant files -->
+    <import file="run-tools.xml" />
 
     <taskdef resource="net/sf/antcontrib/antlib.xml">
         <classpath>
@@ -152,6 +156,10 @@
         <path id="test.run.classpath">
             <pathelement location="${test.build.dest}" />
             <path refid="test.build.classpath" />
+        </path>
+        <path id="run.classpath">
+            <pathelement location="${build.dest}" />
+            <path refid="service.build.classpath" />
         </path>
     </target>
 
@@ -314,8 +322,8 @@
     </target>
 
     <!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
-    <target name="all" depends="jars" description="Builds the entire service." />
-
+    <target name="all" depends="clean,jars" description="Builds the entire service." />
+    
     <target name="help" description="Prints usage information.">
         <echo message="================================================================================"/>
         <echo message="|    Introduce Created Grid Service                                            |"/>

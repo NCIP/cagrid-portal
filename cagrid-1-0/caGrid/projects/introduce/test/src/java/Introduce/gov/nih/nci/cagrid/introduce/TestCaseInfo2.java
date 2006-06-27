@@ -13,7 +13,7 @@ public class TestCaseInfo2 extends TestCaseInfo {
 	
 	public String packageDir = "org" + File.separator + "test2";
 
-	public String namespaceDomain = "test2.org/IntroduceTestInnerService";
+	public String namespaceDomain = "http://test2.org/IntroduceTestInnerService";
 
 	public TestCaseInfo2() {
 

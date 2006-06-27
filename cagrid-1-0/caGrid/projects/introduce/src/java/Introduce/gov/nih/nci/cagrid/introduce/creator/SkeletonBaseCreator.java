@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.introduce.templates.DeployPropertiesTemplate;
 import gov.nih.nci.cagrid.introduce.templates.JNDIConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.ProjectTemplate;
+import gov.nih.nci.cagrid.introduce.templates.RunToolsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.ServerConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.ServiceClientLaunchTemplate;
 
@@ -34,6 +35,13 @@ public class SkeletonBaseCreator {
 		String serviceName =info.getIntroduceServiceProperties().getProperty(
 				IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 
+		RunToolsTemplate runToolsT = new RunToolsTemplate();
+		String runToolsS = runToolsT.generate(new SpecificServiceInformation(info,info.getServices().getService(0)));
+		File runToolsF = new File(baseDirectory.getAbsolutePath() + File.separator + "run-tools.xml");
+		FileWriter runToolsFW = new FileWriter(runToolsF);
+		runToolsFW.write(runToolsS);
+		runToolsFW.close();
+		
 		ServerConfigTemplate serverConfigT = new ServerConfigTemplate();
 		String serverConfigS = serverConfigT.generate(new SpecificServiceInformation(info,info.getServices().getService(0)));
 		File serverConfigF = new File(baseDirectory.getAbsolutePath() + File.separator + "server-config.wsdd");

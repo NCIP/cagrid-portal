@@ -40,7 +40,7 @@ public class AddSimpleMethodStep extends BaseStep {
 		MethodType method = new MethodType();
 		method.setName(this.methodName);
 		MethodTypeOutput output = new MethodTypeOutput();
-		output.setQName(new QName("","void"));
+		output.setQName(new QName("http://www.w3.org/2001/XMLSchema","string"));
 		method.setOutput(output);
 
 		// create a new input param
