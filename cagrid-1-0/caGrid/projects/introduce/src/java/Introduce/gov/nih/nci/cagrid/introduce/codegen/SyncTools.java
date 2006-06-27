@@ -618,7 +618,8 @@ public class SyncTools {
 					// the model explictly says not to generate stubs
 					excludeSet.add(ntype.getNamespace());
 					TemplateUtils.walkSchemasGetNamespaces(schemaDir
-							+ File.separator + ntype.getLocation(), excludeSet, new HashSet());
+						+ File.separator + ntype.getLocation(), excludeSet, 
+						new HashSet(), new HashSet());
 				} else if (ntype.getSchemaElement() != null) {
 					for (int j = 0; j < ntype.getSchemaElement().length; j++) {
 						SchemaElementType type = ntype.getSchemaElement(j);
@@ -629,9 +630,8 @@ public class SyncTools {
 								
 								excludeSet.add(ntype.getNamespace());
 								TemplateUtils.walkSchemasGetNamespaces(
-										schemaDir + File.separator
-												+ ntype.getLocation(),
-										excludeSet, new HashSet());
+									schemaDir + File.separator + ntype.getLocation(),
+									excludeSet, new HashSet(), new HashSet());
 								// this schema is excluded.. no need to check
 								// the rest of the schemaelements
 								break;

@@ -220,35 +220,45 @@ public class TemplateUtils {
 	 * namespaces set
 	 * 
 	 * @param schemaFile
-	 *            The <i><b>FULLY QUALIFIED</i></b> file name of an XML
-	 *            schema
+	 *		The <i><b>FULLY QUALIFIED</i></b> file name of an XML schema
 	 * @param namespaces
-	 *            The set of namespaces to populate
+	 * 		The set of namespaces to populate
+	 * @param visitedSchemas
+	 * 		The set of schemas already visited by this method
 	 * @throws Exception
 	 */
 	public static void walkSchemasGetNamespaces(String schemaFile,
-		Set namespaces, Set excludedNamespaces) throws Exception {
-		System.out.println("Looking at schema " + schemaFile);
+		Set namespaces, Set excludedNamespaces, Set visitedSchemas) throws Exception {
+		System.out.println("Getting namespaces from schema " + schemaFile);
+		visitedSchemas.add(schemaFile);
+		File currentPath = new File(schemaFile).getCanonicalFile().getParentFile();
 		Document schema = XMLUtilities.fileNameToDocument(schemaFile);
 		List importEls = schema.getRootElement().getChildren(
-			"import",schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
+			"import", schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
 		for (int i = 0; i < importEls.size(); i++) {
-			org.jdom.Element importEl = (org.jdom.Element) importEls.get(i);
-			String namespace = importEl.getAttributeValue("namespace");
-			if (!excludedNamespaces.contains(namespace)) {
-				if (namespaces.add(namespace)) {
-					System.out.println("adding namepace " + namespace);
+			// get the import element
+			Element importEl = (Element) importEls.get(i);
+			
+			// get the location of the imported schema
+			String location = importEl.getAttributeValue("schemaLocation");
+			File importedSchema = new File(currentPath + File.separator + location);
+			
+			// has the schema been visited yet?
+			if (!visitedSchemas.contains(importedSchema.getCanonicalPath())) {				
+				String namespace = importEl.getAttributeValue("namespace");
+				if (!excludedNamespaces.contains(namespace)) {
+					if (namespaces.add(namespace)) {
+						System.out.println("adding namepace " + namespace);
+					}
+					if (!schemaFile.equals(importedSchema.getCanonicalPath())) {
+						walkSchemasGetNamespaces(importedSchema.getCanonicalPath(),
+							namespaces, excludedNamespaces, visitedSchemas);
+					} else {
+						System.err.println("WARNING: Schema is importing itself. " + schemaFile);
+					}
 				}
-				String location = importEl.getAttributeValue("schemaLocation");
-				File currentPath = new File(schemaFile).getCanonicalFile().getParentFile();
-				if (!schemaFile.equals(currentPath.getCanonicalPath()
-					+ File.separator + location)) {
-					File importedSchema = new File(currentPath + File.separator + location);
-					walkSchemasGetNamespaces(importedSchema.getCanonicalPath(),
-						namespaces, excludedNamespaces);
-				} else {
-					System.err.println("WARNING: Schema is importing itself. " + schemaFile);
-				}
+			} else {
+				System.err.println("WARNING: Schema imports contain circular references. " + schemaFile);
 			}
 		}
 	}
