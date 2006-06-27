@@ -55,7 +55,6 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
 					PortalUtils.centerWindow(comp);
 					comp.setVisible(true);
 					node.reInitialize(node.getResourceProperties());
-
 				}
 
 			});
