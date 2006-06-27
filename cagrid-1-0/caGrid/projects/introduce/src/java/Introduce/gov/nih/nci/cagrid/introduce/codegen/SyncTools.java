@@ -167,7 +167,7 @@ public class SyncTools {
 																IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
 												+ File.separator
 												+ service.getName()
-												+ "_flattened.wsdl")
+												+ ".wsdl")
 										.getAbsolutePath());
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -714,13 +714,6 @@ public class SyncTools {
 
 		writeNamespaceMappings(info);
 
-		String cmd = CommonTools.getAntFlattenCommand(baseDirectory
-				.getAbsolutePath());
-		Process p = CommonTools.createAndOutputProcess(cmd);
-		p.waitFor();
-		if (p.exitValue() != 0) {
-			throw new Exception("Service flatten wsdl exited abnormally");
-		}
 	}
 
 	private void createArchive(ServiceInformation info) throws Exception {
