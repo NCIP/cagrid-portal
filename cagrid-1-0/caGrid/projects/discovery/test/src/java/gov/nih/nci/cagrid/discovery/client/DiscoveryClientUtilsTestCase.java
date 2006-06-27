@@ -38,20 +38,20 @@ public class DiscoveryClientUtilsTestCase extends TestCase {
 
 
 	public void testBuildPOCPredicateNulls() {
-		assertEquals("*", DiscoveryClient.buildPOCPredicate(nullPOC));
-		assertEquals("*", DiscoveryClient.buildPOCPredicate(emptyPOC));
-		assertEquals("*", DiscoveryClient.buildPOCPredicate(voidPOC));
+		assertEquals("true()", DiscoveryClient.buildPOCPredicate(nullPOC));
+		assertEquals("true()", DiscoveryClient.buildPOCPredicate(emptyPOC));
+		assertEquals("true()", DiscoveryClient.buildPOCPredicate(voidPOC));
 	}
 
 
 	public void testBuildPOCPredicate() {
-		assertTrue(DiscoveryClient.buildPOCPredicate(emailPOC).contains("email/text()='emailV'"));
-		assertTrue(DiscoveryClient.buildPOCPredicate(fullPOC).contains("affiliation/text()='affiliationV'"));
-		assertTrue(DiscoveryClient.buildPOCPredicate(fullPOC).contains("email/text()='emailV'"));
-		assertTrue(DiscoveryClient.buildPOCPredicate(fullPOC).contains("firstName/text()='firstNameV'"));
-		assertTrue(DiscoveryClient.buildPOCPredicate(fullPOC).contains("lastName/text()='lastNameV'"));
-		assertTrue(DiscoveryClient.buildPOCPredicate(fullPOC).contains("phoneNumber/text()='phoneNumberV'"));
-		assertTrue(DiscoveryClient.buildPOCPredicate(fullPOC).contains("role/text()='roleV'"));
+		assertTrue(DiscoveryClient.buildPOCPredicate(emailPOC).contains("@email='emailV'"));
+		assertTrue(DiscoveryClient.buildPOCPredicate(fullPOC).contains("@affiliation='affiliationV'"));
+		assertTrue(DiscoveryClient.buildPOCPredicate(fullPOC).contains("@email='emailV'"));
+		assertTrue(DiscoveryClient.buildPOCPredicate(fullPOC).contains("@firstName='firstNameV'"));
+		assertTrue(DiscoveryClient.buildPOCPredicate(fullPOC).contains("@lastName='lastNameV'"));
+		assertTrue(DiscoveryClient.buildPOCPredicate(fullPOC).contains("@phoneNumber='phoneNumberV'"));
+		assertTrue(DiscoveryClient.buildPOCPredicate(fullPOC).contains("@role='roleV'"));
 	}
 
 
