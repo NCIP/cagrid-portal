@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns14:IndexRP xmlns:ns0="http://mds.globus.org/index"
+    xmlns:ns1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd"
+    xmlns:ns10="http://mds.globus.org/metrics/2004/09" xmlns:ns11="http://mds.globus.org/metadata/2005/02"
+    xmlns:ns12="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd"
+    xmlns:ns13="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"
+    xmlns:ns2="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+    xmlns:ns3="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
+    xmlns:ns4="http://mds.globus.org/inmemoryservicegroup" xmlns:ns5="http://mds.globus.org/aggregator/types"
+    xmlns:ns6="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"
+    xmlns:ns7="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
+    xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns:ns9="http://mds.globus.org/aggregator"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns:ns14="http://mds.globus.org/index">
+    <ns1:Entry>
+        <ns1:ServiceGroupEntryEPR>
+            <ns2:Address>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexServiceEntry</ns2:Address>
+            <ns3:ReferenceProperties xmlns:ns3="http://schemas.xmlsoap.org/ws/2004/03/addressing">
+                <ns4:ServiceGroupEntryKey>
+                    <ns5:GroupKey>16781548</ns5:GroupKey>
+                    <ns6:EntryKey xmlns:ns6="http://mds.globus.org/aggregator/types">8441896</ns6:EntryKey>
+                </ns4:ServiceGroupEntryKey>
+            </ns3:ReferenceProperties>
+            <ns7:ReferenceParameters xmlns:ns7="http://schemas.xmlsoap.org/ws/2004/03/addressing"/>
+        </ns1:ServiceGroupEntryEPR>
+        <ns1:MemberServiceEPR>
+            <ns8:Address xmlns:ns8="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+                >http://service1.com/wsrf/services/Service1</ns8:Address>
+            <ns9:ReferenceProperties xmlns:ns9="http://schemas.xmlsoap.org/ws/2004/03/addressing"/>
+            <ns10:ReferenceParameters xmlns:ns10="http://schemas.xmlsoap.org/ws/2004/03/addressing"/>
+        </ns1:MemberServiceEPR>
+        <ns1:Content xsi:type="ns11:AggregatorContent" xmlns:ns11="http://mds.globus.org/aggregator/types">
+            <ns11:AggregatorConfig>
+                <ns3:GetMultipleResourcePropertiesPollType
+                    xmlns:ns0="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
+                    xmlns:ns1="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"
+                    xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
+                    xmlns:ns3="http://mds.globus.org/aggregator/types">
+                    <!-- Specifies that the index should refresh information
+                        every 300000 milliseconds (once every 5 minutes) -->
+                    <ns3:PollIntervalMillis>300000</ns3:PollIntervalMillis>
+                    <!-- specifies all Resource Properties that should be retrieved from the service -->
+                    <ns3:ResourcePropertyNames>ns2:ServiceMetadata</ns3:ResourcePropertyNames>
+                </ns3:GetMultipleResourcePropertiesPollType>
+            </ns11:AggregatorConfig>
+            <ns11:AggregatorData>
+                <ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
+                    <ns1:serviceDescription>
+                        <ns2:Service
+                            description="This service provides access to information in caDSR as well as capabilities to generate metadata extracts."
+                            name="CaDSRService" version="1.0" xsi:type="ns2:Service"
+                            xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+                            <ns2:pointOfContactCollection>
+                                <com:PointOfContact affiliation="OSU" email="oster@bmi.osu.edu" firstName="Scott"
+                                    lastName="Oster" role="Maintainer"
+                                    xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+                            </ns2:pointOfContactCollection>
+                            <ns2:serviceContextCollection>
+                                <ns2:ServiceContext description="" name="CaDSRService" xsi:type="ns2:ServiceContext">
+                                    <ns2:operationCollection>
+                                        <ns2:Operation description="" name="getServiceSecurityMetadata"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection/>
+                                            <ns2:Output qName="ns3:ServiceSecurityMetadata" dimentionality="1"
+                                                isArray="false" xsi:type="ns2:Output"
+                                                xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="findAllProjects" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection/>
+                                            <ns2:Output qName="ns4:Project" dimentionality="1" isArray="true"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns4="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="findProjects" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="xsd:string" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="context"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns5:Project" dimentionality="1" isArray="true"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns5="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="findPackagesInProject"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns6:Project" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="project"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns6="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
+                                                />
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns7:UMLPackageMetadata" dimentionality="1" isArray="true"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns7="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="findClassesInProject"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns8:Project" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="project"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns8="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
+                                                />
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns9:UMLClassMetadata" dimentionality="1" isArray="true"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns9="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="findClassesInPackage"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns10:Project" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="project"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns10="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                                <ns2:InputParameter qName="xsd:string" dimentionality="1" index="1"
+                                                    isArray="false" isRequired="false" name="packageName"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns11:UMLClassMetadata" dimentionality="1" isArray="true"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns11="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="generateDomainModelForProject"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns12:Project" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="project"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns12="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
+                                                />
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns13:DomainModel" dimentionality="1" isArray="false"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="generateDomainModelForPackages"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns14:Project" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="project"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns14="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                                <ns2:InputParameter qName="xsd:string" dimentionality="1" index="1"
+                                                    isArray="true" isRequired="false" name="packageNames"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns15:DomainModel" dimentionality="1" isArray="false"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns15="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="generateDomainModelForClasses"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns16:Project" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="project"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns16="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                                <ns2:InputParameter qName="ns17:UMLClassMetadata" dimentionality="1"
+                                                    index="1" isArray="true" isRequired="false" name="classes"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns17="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                                <ns2:InputParameter qName="ns18:UMLAssociation" dimentionality="1"
+                                                    index="2" isArray="true" isRequired="false" name="associations"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns18="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"
+                                                />
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns19:DomainModel" dimentionality="1" isArray="false"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns19="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="findAttributesInClass"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns20:Project" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="project"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns20="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                                <ns2:InputParameter qName="ns21:UMLClassMetadata" dimentionality="1"
+                                                    index="1" isArray="false" isRequired="false" name="clazz"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns21="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
+                                                />
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns22:UMLAttributeMetadata" dimentionality="1"
+                                                isArray="true" xsi:type="ns2:Output"
+                                                xmlns:ns22="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="findSemanticMetadataForClass"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns23:Project" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="project"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns23="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                                <ns2:InputParameter qName="ns24:UMLClassMetadata" dimentionality="1"
+                                                    index="1" isArray="false" isRequired="false" name="clazz"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns24="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
+                                                />
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns25:SemanticMetadata" dimentionality="1" isArray="true"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns25="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="findValueDomainForAttribute"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns26:Project" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="project"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns26="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                                <ns2:InputParameter qName="ns27:UMLAttributeMetadata" dimentionality="1"
+                                                    index="1" isArray="false" isRequired="false" name="attribute"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns27="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
+                                                />
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns28:ValueDomain" dimentionality="1" isArray="false"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns28="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="findAssociationsForClass"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns29:Project" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="project"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns29="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                                <ns2:InputParameter qName="ns30:UMLClassMetadata" dimentionality="1"
+                                                    index="1" isArray="false" isRequired="false" name="clazz"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns30="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
+                                                />
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns31:UMLAssociation" dimentionality="1" isArray="true"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns31="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="findAssociationsInPackage"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns32:Project" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="project"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns32="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+                                                <ns2:InputParameter qName="xsd:string" dimentionality="1" index="1"
+                                                    isArray="false" isRequired="false" name="packageName"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns33:UMLAssociation" dimentionality="1" isArray="true"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns33="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="findAssociationsInProject"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns34:Project" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="project"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns34="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
+                                                />
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns35:UMLAssociation" dimentionality="1" isArray="true"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns35="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                    </ns2:operationCollection>
+                                    <ns2:contextPropertyCollection>
+                                        <ns2:ContextProperty description=""
+                                            name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"
+                                            xsi:type="ns2:ContextProperty"/>
+                                    </ns2:contextPropertyCollection>
+                                </ns2:ServiceContext>
+                            </ns2:serviceContextCollection>
+                        </ns2:Service>
+                    </ns1:serviceDescription>
+                    <ns1:hostingResearchCenter>
+                        <ns36:ResearchCenter displayName="Ohio State University" shortName="OSU"
+                            xsi:type="ns36:ResearchCenter"
+                            xmlns:ns36="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+                            <ns36:Address country="US" postalCode="43210" stateProvence="OH" street1="333 W. 10th Ave."
+                                xsi:type="ns36:Address"/>
+                            <ns36:pointOfContactCollection>
+                                <ns36:PointOfContact affiliation="OSU" email="oster@bmi.osu.edu" firstName="Scott"
+                                    lastName="Oster" role="Maintainer" xsi:type="ns36:PointOfContact"/>
+                            </ns36:pointOfContactCollection>
+                        </ns36:ResearchCenter>
+                    </ns1:hostingResearchCenter>
+                </ns1:ServiceMetadata>
+            </ns11:AggregatorData>
+        </ns1:Content>
+    </ns1:Entry>
+    <ns1:Entry>
+        <ns1:ServiceGroupEntryEPR>
+            <ns2:Address>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexServiceEntry</ns2:Address>
+            <ns3:ReferenceProperties xmlns:ns3="http://schemas.xmlsoap.org/ws/2004/03/addressing">
+                <ns4:ServiceGroupEntryKey>
+                    <ns5:GroupKey>16781548</ns5:GroupKey>
+                    <ns6:EntryKey xmlns:ns6="http://mds.globus.org/aggregator/types">17126955</ns6:EntryKey>
+                </ns4:ServiceGroupEntryKey>
+            </ns3:ReferenceProperties>
+            <ns7:ReferenceParameters xmlns:ns7="http://schemas.xmlsoap.org/ws/2004/03/addressing"/>
+        </ns1:ServiceGroupEntryEPR>
+        <ns1:MemberServiceEPR>
+            <ns8:Address xmlns:ns8="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+                >http://service2.com/wsrf/services/Service2</ns8:Address>
+            <ns9:ReferenceProperties xmlns:ns9="http://schemas.xmlsoap.org/ws/2004/03/addressing"/>
+            <ns10:ReferenceParameters xmlns:ns10="http://schemas.xmlsoap.org/ws/2004/03/addressing"/>
+        </ns1:MemberServiceEPR>
+        <ns1:Content xsi:type="ns11:AggregatorContent" xmlns:ns11="http://mds.globus.org/aggregator/types">
+            <ns11:AggregatorConfig>
+                <ns11:GetMultipleResourcePropertiesPollType>
+                    <!-- Specifies that the index should refresh information 
+                        every 300000 milliseconds (once every 5 minutes) -->
+                    <ns11:PollIntervalMillis>300000</ns11:PollIntervalMillis>
+                    <!-- specifies all Resource Properties that should be retrieved from the service -->
+                    <ns11:ResourcePropertyNames/>
+                </ns11:GetMultipleResourcePropertiesPollType>
+            </ns11:AggregatorConfig>
+        </ns1:Content>
+    </ns1:Entry>
+    <ns1:Entry>
+        <ns1:ServiceGroupEntryEPR>
+            <ns2:Address>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexServiceEntry</ns2:Address>
+            <ns3:ReferenceProperties xmlns:ns3="http://schemas.xmlsoap.org/ws/2004/03/addressing">
+                <ns4:ServiceGroupEntryKey>
+                    <ns5:GroupKey>16781548</ns5:GroupKey>
+                    <ns6:EntryKey xmlns:ns6="http://mds.globus.org/aggregator/types">8441896</ns6:EntryKey>
+                </ns4:ServiceGroupEntryKey>
+            </ns3:ReferenceProperties>
+            <ns7:ReferenceParameters xmlns:ns7="http://schemas.xmlsoap.org/ws/2004/03/addressing"/>
+        </ns1:ServiceGroupEntryEPR>
+        <ns1:MemberServiceEPR>
+            <ns8:Address xmlns:ns8="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+                >http://service3.com/wsrf/services/Service3</ns8:Address>
+            <ns9:ReferenceProperties xmlns:ns9="http://schemas.xmlsoap.org/ws/2004/03/addressing"/>
+            <ns10:ReferenceParameters xmlns:ns10="http://schemas.xmlsoap.org/ws/2004/03/addressing"/>
+        </ns1:MemberServiceEPR>
+        <ns1:Content xsi:type="ns11:AggregatorContent" xmlns:ns11="http://mds.globus.org/aggregator/types">
+            <ns11:AggregatorConfig>
+                <ns3:GetMultipleResourcePropertiesPollType
+                    xmlns:ns0="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
+                    xmlns:ns1="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"
+                    xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
+                    xmlns:ns3="http://mds.globus.org/aggregator/types">
+                    <!-- Specifies that the index should refresh information
+                        every 300000 milliseconds (once every 5 minutes) -->
+                    <ns3:PollIntervalMillis>300000</ns3:PollIntervalMillis>
+                    <!-- specifies all Resource Properties that should be retrieved from the service -->
+                    <ns3:ResourcePropertyNames>ns2:ServiceMetadata</ns3:ResourcePropertyNames>
+                </ns3:GetMultipleResourcePropertiesPollType>
+            </ns11:AggregatorConfig>
+            <ns11:AggregatorData>
+                <ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
+                    <ns1:serviceDescription>
+                        <ns2:Service
+                            description="Dorian is a grid service for facilitating Identity Management and Federation."
+                            name="Dorian" version="1.0" xsi:type="ns2:Service"
+                            xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+                            <ns2:pointOfContactCollection>
+                                <ns3:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu" firstName="Stephen"
+                                    lastName="Langella" role="Maintainer" xsi:type="ns3:PointOfContact"
+                                    xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+                            </ns2:pointOfContactCollection>
+                            <ns2:serviceContextCollection>
+                                <ns2:ServiceContext description="" name="Dorian" xsi:type="ns2:ServiceContext">
+                                    <ns2:operationCollection>
+                                        <ns2:Operation description="" name="getServiceSecurityMetadata"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection/>
+                                            <ns2:Output qName="ns4:ServiceSecurityMetadata" dimentionality="1"
+                                                isArray="false" xsi:type="ns2:Output"
+                                                xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+                                            <ns2:faultCollection/>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="registerWithIdP" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns5:Application" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="application"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns5="http://cagrid.nci.nih.gov/1/dorian-idp"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="xsd:string" dimentionality="1" isArray="false"
+                                                xsi:type="ns2:Output" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="InvalidUserPropertyFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="findIdPUsers" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns6:IdPUserFilter" dimentionality="1"
+                                                    index="0" isArray="false" isRequired="false" name="filter"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns6="http://cagrid.nci.nih.gov/1/dorian-idp"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns7:IdPUser" dimentionality="1" isArray="true"
+                                                xsi:type="ns2:Output" xmlns:ns7="http://cagrid.nci.nih.gov/1/dorian-idp"/>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="PermissionDeniedFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="updateIdPUser" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns8:IdPUser" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="user"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns8="http://cagrid.nci.nih.gov/1/dorian-idp"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="NoSuchUserFault" xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="PermissionDeniedFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="removeIdPUser" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="xsd:string" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="userId"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="PermissionDeniedFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="authenticateWithIdP"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns9:BasicAuthCredential" dimentionality="1"
+                                                    index="0" isArray="false" isRequired="false" name="cred"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns9="http://cagrid.nci.nih.gov/1/dorian-idp"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns10:SAMLAssertion" dimentionality="1" isArray="false"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns10="http://cagrid.nci.nih.gov/1/dorian-common"/>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="PermissionDeniedFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="createProxy" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns11:SAMLAssertion" dimentionality="1"
+                                                    index="0" isArray="false" isRequired="false" name="saml"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns11="http://cagrid.nci.nih.gov/1/dorian-common"/>
+                                                <ns2:InputParameter qName="ns12:PublicKey" dimentionality="1" index="1"
+                                                    isArray="false" isRequired="false" name="publicKey"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns12="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+                                                <ns2:InputParameter qName="ns13:ProxyLifetime" dimentionality="1"
+                                                    index="2" isArray="false" isRequired="false" name="lifetime"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns13="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns14:X509Certificate" dimentionality="1" isArray="true"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns14="http://cagrid.nci.nih.gov/1/dorian-common"/>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="InvalidAssertionFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="InvalidProxyFault" xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="UserPolicyFault" xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="PermissionDeniedFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="getCACertificate" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection/>
+                                            <ns2:Output qName="ns15:X509Certificate" dimentionality="1" isArray="false"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns15="http://cagrid.nci.nih.gov/1/dorian-common"/>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="getTrustedIdPs" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection/>
+                                            <ns2:Output qName="ns16:TrustedIdP" dimentionality="1" isArray="true"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns16="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="PermissionDeniedFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="addTrustedIdP" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns17:TrustedIdP" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="idp"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns17="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns18:TrustedIdP" dimentionality="1" isArray="false"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns18="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="InvalidTrustedIdPFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="PermissionDeniedFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="updateTrustedIdP" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns19:TrustedIdP" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="trustedIdP"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns19="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="InvalidTrustedIdPFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="PermissionDeniedFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="removeTrustedIdP" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns20:TrustedIdP" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="trustedIdP"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns20="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="InvalidTrustedIdPFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="PermissionDeniedFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="findIFSUsers" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns21:IFSUserFilter" dimentionality="1"
+                                                    index="0" isArray="false" isRequired="false" name="filter"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns21="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns22:IFSUser" dimentionality="1" isArray="true"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns22="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="PermissionDeniedFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="updateIFSUser" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns23:IFSUser" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="user"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns23="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="InvalidUserFault" xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="PermissionDeniedFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="removeIFSUser" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns24:IFSUser" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="user"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns24="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="InvalidUserFault" xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="PermissionDeniedFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="renewIFSUserCredentials"
+                                            xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection>
+                                                <ns2:InputParameter qName="ns25:IFSUser" dimentionality="1" index="0"
+                                                    isArray="false" isRequired="false" name="user"
+                                                    xsi:type="ns2:InputParameter"
+                                                    xmlns:ns25="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+                                            </ns2:inputParameterCollection>
+                                            <ns2:Output qName="ns26:IFSUser" dimentionality="1" isArray="false"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns26="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="InvalidUserFault" xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="PermissionDeniedFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                        <ns2:Operation description="" name="getIFSUserPolicies" xsi:type="ns2:Operation">
+                                            <ns2:inputParameterCollection/>
+                                            <ns2:Output qName="ns27:IFSUserPolicy" dimentionality="1" isArray="true"
+                                                xsi:type="ns2:Output"
+                                                xmlns:ns27="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+                                            <ns2:faultCollection>
+                                                <ns2:Fault description="" name="DorianInternalFault"
+                                                    xsi:type="ns2:Fault"/>
+                                                <ns2:Fault description="" name="PermissionDeniedFault"
+                                                    xsi:type="ns2:Fault"/>
+                                            </ns2:faultCollection>
+                                        </ns2:Operation>
+                                    </ns2:operationCollection>
+                                    <ns2:contextPropertyCollection>
+                                        <ns2:ContextProperty description=""
+                                            name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"
+                                            xsi:type="ns2:ContextProperty"/>
+                                    </ns2:contextPropertyCollection>
+                                </ns2:ServiceContext>
+                            </ns2:serviceContextCollection>
+                        </ns2:Service>
+                    </ns1:serviceDescription>
+                    <ns1:hostingResearchCenter>
+                        <ns28:ResearchCenter displayName="Ohio State University" shortName="OSU"
+                            xsi:type="ns28:ResearchCenter"
+                            xmlns:ns28="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+                            <ns28:Address country="US" postalCode="43210" stateProvence="OH" street1="333 W. 10th Ave."
+                                xsi:type="ns28:Address"/>
+                            <ns28:pointOfContactCollection>
+                                <ns28:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu" firstName="Stephen"
+                                    lastName="Langella" role="Maintainer" xsi:type="ns28:PointOfContact"/>
+                            </ns28:pointOfContactCollection>
+                        </ns28:ResearchCenter>
+                    </ns1:hostingResearchCenter>
+                </ns1:ServiceMetadata>
+            </ns11:AggregatorData>
+        </ns1:Content>
+    </ns1:Entry>
+    <ns1:RegistrationCount xmlns:ns1="http://mds.globus.org/aggregator">
+        <ns2:startTime xmlns:ns2="http://mds.globus.org/metrics/2004/09">2006-05-18T18:38:04.896Z</ns2:startTime>
+        <ns3:lastChange xmlns:ns3="http://mds.globus.org/metrics/2004/09">2006-05-25T17:06:31.472Z</ns3:lastChange>
+        <ns4:total xmlns:ns4="http://mds.globus.org/metrics/2004/09">199</ns4:total>
+        <ns5:expRate xmlns:ns5="http://mds.globus.org/metrics/2004/09">
+            <ns5:rate>0.0</ns5:rate>
+            <ns5:decay>0</ns5:decay>
+        </ns5:expRate>
+        <ns6:expRate xmlns:ns6="http://mds.globus.org/metrics/2004/09">
+            <ns6:rate>0.0</ns6:rate>
+            <ns6:decay>0</ns6:decay>
+        </ns6:expRate>
+        <ns7:expRate xmlns:ns7="http://mds.globus.org/metrics/2004/09">
+            <ns7:rate>0.0</ns7:rate>
+            <ns7:decay>0</ns7:decay>
+        </ns7:expRate>
+    </ns1:RegistrationCount>
+    <ns1:ServiceMetaDataInfo xmlns:ns1="http://mds.globus.org/metadata/2005/02">
+        <ns1:startTime>2006-05-18T18:38:04.904Z</ns1:startTime>
+        <ns1:version>4.0.2</ns1:version>
+        <ns1:serviceTypeName>DefaultIndexService</ns1:serviceTypeName>
+    </ns1:ServiceMetaDataInfo>
+    <ns1:FixedTopicSet xmlns:ns1="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd">false</ns1:FixedTopicSet>
+    <ns2:Topic ns2:Dialect="http://docs.oasis-open.org/wsn/2004/06/TopicExpression/Simple"
+        xmlns:ns2="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd">ns1:Entry</ns2:Topic>
+    <ns1:TopicExpressionDialects
+        xmlns:ns1="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd"
+        >http://docs.oasis-open.org/wsn/2004/06/TopicExpression/Simple</ns1:TopicExpressionDialects>
+    <ns1:TerminationTime xsi:nil="true"
+        xmlns:ns1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
+    <ns1:CurrentTime xmlns:ns1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"
+        >2006-05-25T19:06:21.449Z</ns1:CurrentTime>
+</ns14:IndexRP>

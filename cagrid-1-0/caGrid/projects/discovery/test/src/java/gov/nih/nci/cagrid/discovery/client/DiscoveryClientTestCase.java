@@ -1,25 +1,37 @@
 package gov.nih.nci.cagrid.discovery.client;
 
+import gov.nih.nci.cagrid.common.SchemaValidationException;
+import gov.nih.nci.cagrid.common.SchemaValidator;
 import gov.nih.nci.cagrid.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 
+import java.io.File;
 import java.io.InputStream;
 
 import junit.framework.TestCase;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.xpath.XPathAPI;
+import org.apache.xpath.objects.XNodeSet;
+import org.apache.xpath.objects.XObject;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.utils.XmlUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 public class DiscoveryClientTestCase extends TestCase {
 
 	private static final String NO_SERVICES_RESOURCE = "noServices.xml";
-	private static final String TWO_SERVICES_ONE_VALID_RESOURCE = "1valid1Invalid.xml";
+	private static final String THREE_SERVICES_TWO_VALID_RESOURCES = "2valid1Invalid.xml";
+	private static final String METADATA_XSD = "ext" + File.separator + "xsd" + File.separator + "cagrid"
+		+ File.separator + "types" + File.separator + "caGridMetadata.xsd";
 
 	private static final String SERVICE1_EPR_RESOURCE = "EPRs/service1_EPR.xml";
 	private static final String SERVICE2_EPR_RESOURCE = "EPRs/service2_EPR.xml";
+	private static final String SERVICE3_EPR_RESOURCE = "EPRs/service3_EPR.xml";
 
 	// DEFINE THE DISCOVERY METHODS
 	private static final int ALL_SERVICES = 0;
@@ -34,6 +46,7 @@ public class DiscoveryClientTestCase extends TestCase {
 
 	private EndpointReferenceType service1EPR = null;
 	private EndpointReferenceType service2EPR = null;
+	private EndpointReferenceType service3EPR = null;
 
 
 	protected void setUp() throws Exception {
@@ -54,6 +67,13 @@ public class DiscoveryClientTestCase extends TestCase {
 		service2EPR = (EndpointReferenceType) ObjectDeserializer.toObject(doc.getDocumentElement(),
 			EndpointReferenceType.class);
 		assertNotNull(service1EPR);
+
+		is = getClass().getResourceAsStream(SERVICE3_EPR_RESOURCE);
+		assertNotNull(is);
+		doc = XmlUtils.newDocument(is);
+		service3EPR = (EndpointReferenceType) ObjectDeserializer.toObject(doc.getDocumentElement(),
+			EndpointReferenceType.class);
+		assertNotNull(service1EPR);
 	}
 
 
@@ -64,8 +84,8 @@ public class DiscoveryClientTestCase extends TestCase {
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
 		assertEquals(0, services.length);
 
-		services = invokeDiscoveryMethod(TWO_SERVICES_ONE_VALID_RESOURCE, operation, null);
-		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service2EPR}, services);
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, null);
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service2EPR, service3EPR}, services);
 
 	}
 
@@ -82,6 +102,13 @@ public class DiscoveryClientTestCase extends TestCase {
 
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "foo");
 		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "CaDSRService");
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR}, services);
+
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "Dorian");
+		assertResultsEqual(new EndpointReferenceType[]{service3EPR}, services);
+
 	}
 
 
@@ -148,6 +175,12 @@ public class DiscoveryClientTestCase extends TestCase {
 
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "foo");
 		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "getServiceSecurityMetadata");
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR}, services);
+
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "findProjects");
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR}, services);
 	}
 
 
@@ -165,6 +198,19 @@ public class DiscoveryClientTestCase extends TestCase {
 		criteria.setFirstName("not valid");
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, criteria);
 		assertEquals(0, services.length);
+
+		criteria.setFirstName("Scott");
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, criteria);
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR}, services);
+
+		criteria.setFirstName("Stephen");
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, criteria);
+		assertResultsEqual(new EndpointReferenceType[]{service3EPR}, services);
+
+		criteria.setFirstName("");
+		criteria.setAffiliation("OSU");
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, criteria);
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR}, services);
 	}
 
 
@@ -180,6 +226,15 @@ public class DiscoveryClientTestCase extends TestCase {
 
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "foo");
 		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "foo");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "OSU");
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR}, services);
+
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "Ohio State University");
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR}, services);
 	}
 
 
@@ -193,8 +248,20 @@ public class DiscoveryClientTestCase extends TestCase {
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "");
 		assertEquals(0, services.length);
 
-		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "foo");
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "a");
 		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "generate metadata extracts");
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR}, services);
+
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "IFS");
+		assertResultsEqual(new EndpointReferenceType[]{service3EPR}, services);
+
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "get");
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR}, services);
+
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "tainer");
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR}, services);
 	}
 
 
@@ -289,11 +356,46 @@ public class DiscoveryClientTestCase extends TestCase {
 			Node xmlNode = XmlUtils.newDocument(resource);
 			assertNotNull(xmlNode);
 
+			XObject result = XPathAPI.eval(xmlNode, "//*[local-name()='ServiceMetadata']");
+			assertNotNull(result);
+			if (result instanceof XNodeSet) {
+				XNodeSet set = (XNodeSet) result;
+				NodeList list = set.nodelist();
+				for (int i = 0; i < list.getLength(); i++) {
+					Node node = list.item(i);
+					String xmlContent = null;
+					if (node instanceof Document) {
+						xmlContent = XmlUtils.toString((Document) node);
+					} else if (node instanceof Element) {
+						xmlContent = XmlUtils.toString((Element) node);
+					} else {
+						throw new Exception("Unexpected query result!");
+					}
+					try {
+						// validate the "registered" service's XML
+						SchemaValidator validator = new SchemaValidator(getSchemaFilename());
+						validator.validate(xmlContent);
+					} catch (SchemaValidationException e) {
+						fail("Schema validation error:" + e.getMessage() + "\n" + xmlContent);
+					}
+				}
+			} else {
+				throw new Exception("Unexpected query result!");
+			}
+
 			client = new MockDiscoveryClient(xmlNode);
 		} catch (Exception e) {
 			fail("Problem creating Mock DiscoveryClient:" + e.getMessage());
 		}
 		return client;
+	}
+
+
+	private String getSchemaFilename() {
+		File file = new File(METADATA_XSD);
+		assertNotNull(file);
+		assertTrue(file.exists() && file.canRead());
+		return file.getAbsolutePath();
 	}
 
 

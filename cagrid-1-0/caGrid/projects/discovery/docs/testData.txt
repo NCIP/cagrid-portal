@@ -2,11 +2,13 @@ noServices.xml
 --------------------
 Index Service with no registered services
 
-1valid1Invalid.xml
+2valid1Invalid.xml
 --------------------
-2 registered services
+3 registered services
  -http://service1.com/wsrf/services/Service1
-   - contains standard metadata (common only)
+   - contains standard metadata (cadsr)
  -http://service2.com/wsrf/services/Service2
    - contains no metadata
+ -http://service3.com/wsrf/services/Service3
+   - contains standard metadata (dorian)
 

@@ -12,6 +12,8 @@ import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -116,8 +118,8 @@ public class DiscoveryClient {
 	 * @return EndpointReferenceType[] matching the criteria
 	 */
 	public EndpointReferenceType[] discoverServicesBySearchString(String searchString) throws Exception {
-		return discoverByFilter(CONTENT_PATH + "//*[contains(text(),'" + searchString + "') or contains(@*,'"
-			+ searchString + "')]");
+		return discoverByFilter(CONTENT_PATH + "//*[contains(text(),'" + searchString + "') or @*[contains(string(),'"
+			+ searchString + "')]]");
 	}
 
 
@@ -130,8 +132,8 @@ public class DiscoveryClient {
 	 * @return EndpointReferenceType[] matching the criteria
 	 */
 	public EndpointReferenceType[] discoverServicesByResearchCenter(String centerName) throws Exception {
-		return discoverByFilter(MD_PATH + "/" + cagrid + ":hostingResearchCenter/" + com + ":ResearchCenter[" + com
-			+ ":displayName='" + centerName + "' or " + com + ":shortName='" + centerName + "']");
+		return discoverByFilter(MD_PATH + "/" + cagrid + ":hostingResearchCenter/" + com
+			+ ":ResearchCenter[@displayName='" + centerName + "' or @shortName='" + centerName + "']");
 	}
 
 
@@ -163,7 +165,7 @@ public class DiscoveryClient {
 	 * @return EndpointReferenceType[] matching the criteria
 	 */
 	public EndpointReferenceType[] discoverServicesByName(String serviceName) throws Exception {
-		return discoverByFilter(SERV_PATH + "[" + serv + ":name/text()='" + serviceName + "']");
+		return discoverByFilter(SERV_PATH + "[@name='" + serviceName + "']");
 	}
 
 
@@ -176,7 +178,7 @@ public class DiscoveryClient {
 	 * @return EndpointReferenceType[] matching the criteria
 	 */
 	public EndpointReferenceType[] discoverServicesByOperationName(String operationName) throws Exception {
-		return discoverByFilter(OPER_PATH + "[" + serv + ":name/text()='" + operationName + "']");
+		return discoverByFilter(OPER_PATH + "[@name='" + operationName + "']");
 	}
 
 
@@ -203,6 +205,19 @@ public class DiscoveryClient {
 
 
 	/**
+	 * Searches to find services that have an operation defined that takes the
+	 * given QName as input.
+	 * 
+	 * @param xml
+	 *            The QName of the input type
+	 * @return EndpointReferenceType[] matching the criteria
+	 */
+	public EndpointReferenceType[] discoverServicesByOperationInput(QName xml) throws Exception {
+		throw new Exception("Not yet implemented");
+	}
+
+
+	/**
 	 * Searches to find services that have an operation defined that produces
 	 * the given UMLClass. Any fields set on the UMLClass are checked for a
 	 * match. For example, you can set only the packageName, and only it will be
@@ -221,6 +236,19 @@ public class DiscoveryClient {
 
 		return discoverByFilter(OPER_PATH + "/" + serv + ":output/" + serv + ":Output/" + com + ":UMLClass["
 			+ umlClassPredicate + "]");
+	}
+
+
+	/**
+	 * Searches to find services that have an operation defined that produces
+	 * the given QName.
+	 * 
+	 * @param xml
+	 *            The QName of the produced XML
+	 * @return EndpointReferenceType[] matching the criteria
+	 */
+	public EndpointReferenceType[] discoverServicesByOperationOutput(QName xml) throws Exception {
+		throw new Exception("Not yet implemented");
 	}
 
 
@@ -249,6 +277,54 @@ public class DiscoveryClient {
 
 
 	/**
+	 * Searches to find services that have an operation defined that produces
+	 * the given QName or takes it as input.
+	 * 
+	 * @param xml
+	 *            The QName to look for
+	 * @return EndpointReferenceType[] matching the criteria
+	 */
+	public EndpointReferenceType[] discoverServicesByOperationClass(QName xml) throws Exception {
+		throw new Exception("Not yet implemented");
+	}
+
+
+	public EndpointReferenceType[] discoverServicesByConceptCode(String conceptCode) throws Exception {
+		throw new Exception("Not yet implemented");
+	}
+
+
+	
+	/**
+	 * Query the registry for all registered data services
+	 * 
+	 * @return EndpointReferenceType[] contain all registered services
+	 */
+	public EndpointReferenceType[] getAllDataServices() throws Exception {
+		throw new Exception("Not yet implemented");
+	}
+	
+	public EndpointReferenceType[] discoverDataServicesByDomainModel(String modelName) throws Exception {
+		throw new Exception("Not yet implemented");
+	}
+
+
+	public EndpointReferenceType[] discoverDataServicesByModelConceptCode(String conceptCode) throws Exception {
+		throw new Exception("Not yet implemented");
+	}
+
+
+	public EndpointReferenceType[] discoverDataServicesByExposedClass(UMLClass clazzPrototype) throws Exception {
+		throw new Exception("Not yet implemented");
+	}
+
+
+	public EndpointReferenceType[] discoverDataServicesWithAssociationsWithClass(UMLClass clazzPrototype) throws Exception {
+		throw new Exception("Not yet implemented");
+	}
+	
+
+	/**
 	 * Builds up a predicate for a PointOfContact, based on the prototype passed
 	 * in.
 	 * 
@@ -258,15 +334,15 @@ public class DiscoveryClient {
 	 *         the predicate necessary to match all values.
 	 */
 	protected static String buildPOCPredicate(PointOfContact contact) {
-		String pocPredicate = "*";
+		String pocPredicate = "true()";
 
 		if (contact != null) {
-			pocPredicate += addNonNullPredicate(com + ":affiliation", contact.getAffiliation(), false);
-			pocPredicate += addNonNullPredicate(com + ":email", contact.getEmail(), false);
-			pocPredicate += addNonNullPredicate(com + ":firstName", contact.getFirstName(), false);
-			pocPredicate += addNonNullPredicate(com + ":lastName", contact.getLastName(), false);
-			pocPredicate += addNonNullPredicate(com + ":phoneNumber", contact.getPhoneNumber(), false);
-			pocPredicate += addNonNullPredicate(com + ":role", contact.getRole(), false);
+			pocPredicate += addNonNullPredicate("affiliation", contact.getAffiliation(), true);
+			pocPredicate += addNonNullPredicate("email", contact.getEmail(), true);
+			pocPredicate += addNonNullPredicate("firstName", contact.getFirstName(), true);
+			pocPredicate += addNonNullPredicate("lastName", contact.getLastName(), true);
+			pocPredicate += addNonNullPredicate("phoneNumber", contact.getPhoneNumber(), true);
+			pocPredicate += addNonNullPredicate("role", contact.getRole(), true);
 		}
 
 		return pocPredicate;
@@ -286,14 +362,14 @@ public class DiscoveryClient {
 	 *         the predicate necessary to match all values.
 	 */
 	protected static String buildUMLClassPredicate(UMLClass clazz) {
-		String umlPredicate = "*";
+		String umlPredicate = "true()";
 
 		if (clazz != null) {
-			umlPredicate += addNonNullPredicate(com + ":projectName", clazz.getProjectName(), false);
-			umlPredicate += addNonNullPredicate(com + ":projectVersion", clazz.getProjectVersion(), false);
-			umlPredicate += addNonNullPredicate(com + ":className", clazz.getClassName(), false);
-			umlPredicate += addNonNullPredicate(com + ":packageName", clazz.getPackageName(), false);
-			umlPredicate += addNonNullPredicate(com + ":description", clazz.getDescription(), false);
+			umlPredicate += addNonNullPredicate("projectName", clazz.getProjectName(), true);
+			umlPredicate += addNonNullPredicate("projectVersion", clazz.getProjectVersion(), true);
+			umlPredicate += addNonNullPredicate("className", clazz.getClassName(), true);
+			umlPredicate += addNonNullPredicate("packageName", clazz.getPackageName(), true);
+			umlPredicate += addNonNullPredicate("description", clazz.getDescription(), true);
 		}
 
 		return umlPredicate;
@@ -362,15 +438,6 @@ public class DiscoveryClient {
 		return translatedxpath;
 	}
 
-
-	// ----service----
-	// discoverServicesByConceptCode
-	// ----data----
-	// discoverDataServicesByModelName
-	// discoverDataServicesByConceptCode
-	// discoverDataServicesByClass
-	// discoverDataServicesByObjectsAssociatedWithClass???
-	//
 
 	/**
 	 * Gets the EPR of the Index Service being used.

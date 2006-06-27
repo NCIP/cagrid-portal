@@ -3,19 +3,19 @@
 /*/wssg:Entry[   ]/wssg:MemberServiceEPR
 
 #searchString
-wssg:Content/agg:AggregatorData//*[contains(text(),'searchString') or contains(@*,'searchString')]
+wssg:Content/agg:AggregatorData//*[contains(text(),'searchString') or @*[contains(string(),'searchString')]]
 
 #centerName
-wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:hostingResearchCenter/com:ResearchCenter[com:displayName='centerName' or com:shortName='centerName']
+wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:hostingResearchCenter/com:ResearchCenter[@displayName='centerName' or @shortName='centerName']
 
 #POC
 wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata[cagrid:hostingResearchCenter/com:ResearchCenter/com:pointOfContactCollection/com:pointOfContact[POC_CRITERIA] or cagrid:serviceDescription/serv:Service/serv:pointOfContactCollection/com:pointOfContact[POC_CRITERIA]]
 
 #service name
-wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription/serv:Service[serv:name/text()='serviceName']
+wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription/serv:Service[@name='serviceName']
 
 #operation name
-wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription/serv:Service/serv:serviceContextCollection/serv:ServiceContext/serv:operationCollection/serv:Operation[serv:name/text()='operationName']
+wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription/serv:Service/serv:serviceContextCollection/serv:ServiceContext/serv:operationCollection/serv:Operation[@name='operationName']
 
 #input
 wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription/serv:Service/serv:serviceContextCollection/serv:ServiceContext/serv:operationCollection/serv:Operation/serv:inputParameterCollection/serv:InputParam/com:UMLClass[UML_CRITERIA]
