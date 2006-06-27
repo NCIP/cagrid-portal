@@ -1,7 +1,11 @@
 package gov.nih.nci.cagrid.common.portal;
 
+import java.awt.Dimension;
+import java.awt.Window;
+
 import gov.nih.nci.cagrid.common.Utils;
 
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import org.projectmobius.portal.PortalResourceManager;
@@ -46,5 +50,25 @@ public class PortalUtils {
 	public static void showErrorMessage(String title, String msg) {
 		JOptionPane.showMessageDialog(PortalResourceManager.getInstance()
 				.getGridPortal(), msg, title, JOptionPane.ERROR_MESSAGE);
+	}
+
+	public final static void centerComponent(JComponent comp) {
+		// Determine the new location of the window
+		int w = PortalResourceManager.getInstance().getGridPortal().getSize().width;
+		int h = PortalResourceManager.getInstance().getGridPortal().getSize().height;
+		int x = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().x;
+		int y = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().y;
+		Dimension dim = comp.getSize();
+		comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
+	}
+
+	public final static void centerWindow(Window comp) {
+		// Determine the new location of the window
+		int w = PortalResourceManager.getInstance().getGridPortal().getSize().width;
+		int h = PortalResourceManager.getInstance().getGridPortal().getSize().height;
+		int x = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().x;
+		int y = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().y;
+		Dimension dim = comp.getSize();
+		comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
 	}
 }

@@ -1,36 +1,12 @@
 package gov.nih.nci.cagrid.common.portal;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Window;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 
-import org.projectmobius.portal.PortalResourceManager;
 
 public class PortalLookAndFeel {
 	
-	public final static void centerComponent(JComponent comp) {
-		// Determine the new location of the window
-		int w = PortalResourceManager.getInstance().getGridPortal().getSize().width;
-		int h = PortalResourceManager.getInstance().getGridPortal().getSize().height;
-		int x = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().x;
-		int y = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().y;
-		Dimension dim = comp.getSize();
-		comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
-	}
-	
-	public final static void centerWindow(Window comp) {
-		// Determine the new location of the window
-		int w = PortalResourceManager.getInstance().getGridPortal().getSize().width;
-		int h = PortalResourceManager.getInstance().getGridPortal().getSize().height;
-		int x = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().x;
-		int y = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().y;
-		Dimension dim = comp.getSize();
-		comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
-	}
-
 	public final static Color getPanelLabelColor() {
 		float[] vals = new float[3];
 		Color.RGBtoHSB(62, 109, 181, vals);

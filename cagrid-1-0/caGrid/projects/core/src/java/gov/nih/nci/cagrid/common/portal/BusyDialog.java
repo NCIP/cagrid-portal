@@ -33,7 +33,7 @@ public class BusyDialog extends JDialog {
 		this.setSize(new java.awt.Dimension(362, 85));
 		this.setContentPane(getMainPanel());
 		this.getOwner();
-		PortalLookAndFeel.centerWindow(this);
+		PortalUtils.centerWindow(this);
 	}
 
 
