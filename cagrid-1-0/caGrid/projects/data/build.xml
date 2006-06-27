@@ -14,8 +14,8 @@
 	<property name="java.debug" value="on" />
 
     <!-- Information -->
-    <property name="project.name" value="caGrid-data" />
     <property name="project.version" value="1.0" />
+    <property name="project.name" value="caGrid-${project.version}-data" />
 
 	<!-- build output dirs -->
     <property name="build.dir" location="build" />
@@ -28,13 +28,12 @@
     <property name="build.jars.dir" location="build/lib" />
 	
 	<!-- jar names -->
-	<property name="utils.jar.name" value="${project.name}-${project.version}-utils.jar"/>
-	<property name="extension.jar.name" value="${project.name}-${project.version}-extension.jar"/>
-	<property name="project.jar.name" value="${project.name}-${project.version}.jar"/>
-	<property name="service.jar.name" value="${project.name}-${project.version}-service.jar"/>
-	<property name="validation.jar.name" value="${project.name}-${project.version}-validation.jar"/>
-	<property name="common.jar.name" value="${project.name}-${project.version}-common.jar"/>
-	<property name="cql.jar.name" value="${project.name}-${project.version}-cql.jar"/>
+	<property name="utils.jar.name" value="${project.name}-utils.jar"/>
+	<property name="extension.jar.name" value="${project.name}-extension.jar"/>
+	<property name="service.jar.name" value="${project.name}-service.jar"/>
+	<property name="validation.jar.name" value="${project.name}-validation.jar"/>
+	<property name="common.jar.name" value="${project.name}-common.jar"/>
+	<property name="cql.jar.name" value="${project.name}-cql.jar"/>
 	
 	<!-- jar files -->
 	<property name="extension.jar.file" value="${build.jars.dir}/${extension.jar.name}"/>
@@ -53,7 +52,7 @@
     <property name="stubs.dir" location="${build.dir}/stubs" />
     <property name="stubs.src" location="${stubs.dir}/src" />
     <property name="stubs.dest" location="${stubs.dir}/classes" />
-    <property name="stubs.jar.name" value="${project.name}-${project.version}_Stubs.jar" />
+    <property name="stubs.jar.name" value="${project.name}-stubs.jar" />
 	<property name="stubs.jar.file" value="${build.jars.dir}/${stubs.jar.name}"/>
     <property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />    
 	<property name="interface.name" value="DataService"/>
@@ -85,7 +84,7 @@
 	<property name="test.classes.dir" location="${build.dir}/test/classes" />
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="test.logs.dir" location="${test.dir}/logs" />
-	<property name="test.project.jar" location="${build.jars.dir}/${project.name}-tests-${project.version}.jar" />
+	<property name="test.project.jar" location="${build.jars.dir}/${project.name}-tests.jar" />
 	<import file="test/test.xml" />
 	
 	<!-- =============================================================== -->

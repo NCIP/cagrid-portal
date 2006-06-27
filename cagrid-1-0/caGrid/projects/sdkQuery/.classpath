@@ -3,10 +3,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0_Stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-extension.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-utils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
@@ -85,13 +81,17 @@
 	<classpathentry kind="lib" path="ext/lib/client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-validation.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-cql.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-cql.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-extension.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-utils.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-validation.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

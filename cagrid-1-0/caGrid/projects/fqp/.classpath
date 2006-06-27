@@ -3,15 +3,16 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="test/src"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0_Stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-extension.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-utils.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-data-1.0-validation.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-cql.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-extension.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-utils.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-validation.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
