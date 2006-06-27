@@ -15,7 +15,7 @@ import java.util.jar.Manifest;
 public class BPRCreator {
 
 	public static String makeBpr(String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws Exception {
-		String bprName = System.getProperty("java.io.tmpdir")+ workflowName + ".bpr";
+		String bprName = System.getProperty("java.io.tmpdir")+  File.separator + workflowName + ".bpr";
 		File bprFile = new File(bprName);
 		bprFile.deleteOnExit();
 		String bprFileName = bprFile.getAbsolutePath();
@@ -26,11 +26,11 @@ public class BPRCreator {
 		return bprFileName;
 	}
 	
-	public static String 
+	private static String 
 		createPDD(String bpelFileName, String workflowName, String serviceName, WSDLReferences[] wsdlRefArray) throws Exception {
 		return PDDGenerator.createPDD(workflowName, bpelFileName, serviceName, wsdlRefArray);
 	}
-	public static void createBPR(String[] fileList, String bprPath)
+	private static void createBPR(String[] fileList, String bprPath)
 			throws IOException {
 		FileOutputStream fos = new FileOutputStream(bprPath);
 		Manifest manifest = new Manifest();

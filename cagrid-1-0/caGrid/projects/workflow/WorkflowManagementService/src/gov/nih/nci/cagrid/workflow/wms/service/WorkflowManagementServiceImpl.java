@@ -68,7 +68,7 @@ public class WorkflowManagementServiceImpl {
 		String resultAsString = null;
 		File bpelFile = null;
 		try {
-			String bpelFileName = System.getProperty("java.io.tmpdir") + workflowName + ".bpel";
+			String bpelFileName = System.getProperty("java.io.tmpdir") + File.separator+ workflowName + ".bpel";
 			bpelFile = new File(bpelFileName);
 			bpelFile.deleteOnExit();
 			Utils.stringBufferToFile(new StringBuffer(bpelProcess),

@@ -96,6 +96,7 @@ public class PDDGenerator {
 				myRoleNode.setAttribute("binding", "MSG");
 				pNode.appendChild(myRoleNode);
 			} else {
+				//TODO: Throw appropriate exceptions
 				System.err
 						.println("PartnerLink "
 								+ plink.name
@@ -127,7 +128,6 @@ public class PDDGenerator {
 		System.out.println("lenght: " + wsdlRefs.length);
 		for(int i=0;i<wsdlRefs.length;i++){
 			String qName = wsdlRefs[i].getWsdlNamespace().toString();
-			System.out.println(qName + wsdlRefs[i].getWsdlLocation() + wsdlRefs[i].getServiceUrl() + wsdlRefs[i].getWsdlNamespace().toString());
 			map.put(qName, wsdlRefs[i]);
 		}
 		return map;
@@ -206,11 +206,10 @@ public class PDDGenerator {
 		Document pdd = PDDGenerator.generatePDD(workflowName, 
 				bpelDoc, serviceName, wsdlRefArray );
 		File pddFile = new File(System.getProperty("java.io.tmpdir")
-				+ workflowName + ".pdd");
+				+ File.separator + workflowName + ".pdd");
 		Writer writer = new BufferedWriter(new FileWriter(pddFile));
 		XMLUtils.PrettyDocumentToWriter(pdd, writer);
 		writer.close();
-		System.out.println(pddFile.getAbsolutePath());
 		return pddFile.getAbsolutePath();
 
 	}
