@@ -35,7 +35,7 @@ public class StdIOThread
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 		} finally {
 			try{
 				if(br!=null){
