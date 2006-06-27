@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.installer.workers;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -108,12 +110,26 @@ public class Installer {
 	}
 	
 	public void install(){
-		
+		storeGridHome();
 		progress.install();
 	}
 	
 	
+	private void storeGridHome(){
+		Properties pr = new Properties();
+		String grid_home=this.getProperty("GRID_HOME");
+		pr.put("GRID_HOME",grid_home);
 		
+		Properties p = System.getProperties();
+		String userHome = p.getProperty("user.home");
+		
+		try{
+			OutputStream ops = new FileOutputStream(userHome+File.separator+"gridhome.properties",false);
+			pr.store(ops,null);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
 	
 	
 	
