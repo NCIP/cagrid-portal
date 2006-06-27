@@ -12,8 +12,6 @@ import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.namespace.QName;
-
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -25,31 +23,37 @@ import org.globus.wsrf.encoding.ObjectDeserializer;
 
 
 /**
- * @author oster
+ * DiscoveryClient represents the base discovery API. The client should be
+ * constructed passing a URL of an Index Service. Services can then be
+ * discovered by calling the discover methods, passing in the necessary
+ * criteria. The methods all return a EndPointReferenceType[]. See the main
+ * method for examples. This should be extended to provide specialized
+ * service-type discovery (beyond data services).
  * 
+ * @author oster
  */
 public class DiscoveryClient {
 
-	private static final String DEFAULT_INDEX_SERVICE_URL = "http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService";
-	private EndpointReferenceType indexEPR = null;
+	protected static final String DEFAULT_INDEX_SERVICE_URL = "http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService";
+	protected EndpointReferenceType indexEPR = null;
 
 	// Define the prefixes
-	private static final String wssg = WSRFConstants.SERVICEGROUP_PREFIX;
-	private static final String agg = "agg";
-	private static final String cagrid = "cagrid";
-	private static final String com = "com";
-	private static final String serv = "serv";
-	private static final String data = "data";
+	protected static final String wssg = WSRFConstants.SERVICEGROUP_PREFIX;
+	protected static final String agg = "agg";
+	protected static final String cagrid = "cagrid";
+	protected static final String com = "com";
+	protected static final String serv = "serv";
+	protected static final String data = "data";
 
 	// some common paths for reuse
-	private static final String CONTENT_PATH = wssg + ":Content/" + agg + ":AggregatorData";
-	private static final String MD_PATH = CONTENT_PATH + "/" + cagrid + ":ServiceMetadata";
-	private static final String SERV_PATH = MD_PATH + "/" + cagrid + ":serviceDescription/" + serv + ":Service";
-	private static final String OPER_PATH = SERV_PATH + "/" + serv + ":serviceContextCollection/" + serv
+	protected static final String CONTENT_PATH = wssg + ":Content/" + agg + ":AggregatorData";
+	protected static final String MD_PATH = CONTENT_PATH + "/" + cagrid + ":ServiceMetadata";
+	protected static final String SERV_PATH = MD_PATH + "/" + cagrid + ":serviceDescription/" + serv + ":Service";
+	protected static final String OPER_PATH = SERV_PATH + "/" + serv + ":serviceContextCollection/" + serv
 		+ ":ServiceContext/" + serv + ":operationCollection/" + serv + ":Operation";
 
 	// Map the prefixes to there namepsaces
-	private static Map nsMap = new HashMap();
+	protected static Map nsMap = new HashMap();
 	static {
 		nsMap.put(wssg, WSRFConstants.SERVICEGROUP_NS);
 		nsMap.put(agg, MetadataConstants.AGGREGATOR_NAMESPACE);
@@ -205,19 +209,6 @@ public class DiscoveryClient {
 
 
 	/**
-	 * Searches to find services that have an operation defined that takes the
-	 * given QName as input.
-	 * 
-	 * @param xml
-	 *            The QName of the input type
-	 * @return EndpointReferenceType[] matching the criteria
-	 */
-	public EndpointReferenceType[] discoverServicesByOperationInput(QName xml) throws Exception {
-		throw new Exception("Not yet implemented");
-	}
-
-
-	/**
 	 * Searches to find services that have an operation defined that produces
 	 * the given UMLClass. Any fields set on the UMLClass are checked for a
 	 * match. For example, you can set only the packageName, and only it will be
@@ -236,19 +227,6 @@ public class DiscoveryClient {
 
 		return discoverByFilter(OPER_PATH + "/" + serv + ":output/" + serv + ":Output/" + com + ":UMLClass["
 			+ umlClassPredicate + "]");
-	}
-
-
-	/**
-	 * Searches to find services that have an operation defined that produces
-	 * the given QName.
-	 * 
-	 * @param xml
-	 *            The QName of the produced XML
-	 * @return EndpointReferenceType[] matching the criteria
-	 */
-	public EndpointReferenceType[] discoverServicesByOperationOutput(QName xml) throws Exception {
-		throw new Exception("Not yet implemented");
 	}
 
 
@@ -278,23 +256,18 @@ public class DiscoveryClient {
 
 	/**
 	 * Searches to find services that have an operation defined that produces
-	 * the given QName or takes it as input.
+	 * the or takes as input, a Class based on the given concept code or one
+	 * with attributes based on that concept code.
 	 * 
-	 * @param xml
-	 *            The QName to look for
+	 * @param conceptCode
+	 *            The concept to look for
 	 * @return EndpointReferenceType[] matching the criteria
 	 */
-	public EndpointReferenceType[] discoverServicesByOperationClass(QName xml) throws Exception {
-		throw new Exception("Not yet implemented");
-	}
-
-
 	public EndpointReferenceType[] discoverServicesByConceptCode(String conceptCode) throws Exception {
 		throw new Exception("Not yet implemented");
 	}
 
 
-	
 	/**
 	 * Query the registry for all registered data services
 	 * 
@@ -303,7 +276,16 @@ public class DiscoveryClient {
 	public EndpointReferenceType[] getAllDataServices() throws Exception {
 		throw new Exception("Not yet implemented");
 	}
-	
+
+
+	/**
+	 * Searches to find data services that are exposing a subset of given domain
+	 * (short name or long name).
+	 * 
+	 * @param modelName
+	 *            The model to look for
+	 * @return EndpointReferenceType[] matching the criteria
+	 */
 	public EndpointReferenceType[] discoverDataServicesByDomainModel(String modelName) throws Exception {
 		throw new Exception("Not yet implemented");
 	}
@@ -319,10 +301,11 @@ public class DiscoveryClient {
 	}
 
 
-	public EndpointReferenceType[] discoverDataServicesWithAssociationsWithClass(UMLClass clazzPrototype) throws Exception {
+	public EndpointReferenceType[] discoverDataServicesWithAssociationsWithClass(UMLClass clazzPrototype)
+		throws Exception {
 		throw new Exception("Not yet implemented");
 	}
-	
+
 
 	/**
 	 * Builds up a predicate for a PointOfContact, based on the prototype passed
@@ -428,6 +411,13 @@ public class DiscoveryClient {
 	}
 
 
+	/**
+	 * Adds the common Index RP Entry filter, and translates the xpath to
+	 * IndexService friendly XPath.
+	 * 
+	 * @param xpathPredicate
+	 * @return the modified xpath
+	 */
 	protected String translateXPath(String xpathPredicate) {
 		String xpath = "/*/" + wssg + ":Entry[" + xpathPredicate + "]/" + wssg + ":MemberServiceEPR";
 		LOG.debug("Querying for: " + xpath);
