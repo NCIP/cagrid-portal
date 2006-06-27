@@ -35,6 +35,7 @@
 			<sysproperty key="basedir" value="${basedir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
 			<jvmarg value="-Dbuild.dir=${classes.dir}" />
+			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
 			<classpath location="${instrumented.classes.dir}" />
 			<classpath refid="Introduce.test.classpath" />
 			<formatter type="xml" />
