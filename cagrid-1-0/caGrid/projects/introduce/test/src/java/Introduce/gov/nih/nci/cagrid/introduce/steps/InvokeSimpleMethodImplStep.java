@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.steps;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.IntroduceTestConstants;
 import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -35,6 +36,7 @@ public class InvokeSimpleMethodImplStep extends BaseStep {
 		System.out.println("Invoking a simple methods implementation.");
 
 		String cmd = CommonTools.getAntCommand("runClient",tci.getDir());
+		cmd += " -Dservice.url=\"" + IntroduceTestConstants.TEST_URL +  "\"";
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		
