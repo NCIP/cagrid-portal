@@ -159,23 +159,14 @@
         <available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
     </target>
 	
-	<!-- runs Globus' flatten WSDL -->
-	<target name="serviceFlatten" depends="init">
-		<!-- copy the globus schemas in to the build dir -->
+	
+	<target name="copyGlobusSchemas" depends="init">
 		<copy toDir="${schema.dest}">
 			<fileset dir="${schema.src}" casesensitive="yes">
-		    	<include name="wsrf/**/*" />
-		    	<include name="ws/**/*" />
-		    </fileset>
+				<include name="wsrf/**/*" />
+				<include name="ws/**/*" />
+			</fileset>
 		</copy>
-		<!-- build the service stubs -->
-	    <ant antfile="${build.stubs}" target="flatten">
-	    	<property name="source.flatten.dir" location="${schema.dest}/Data" />
-	        <property name="target.flatten.dir" location="${schema.dest}/Data" />
-	        <property name="wsdl.source" value="${interface.name}.wsdl" />
-	        <property name="wsdl.target" value="${interface.name}_flattened.wsdl" />
-	        <property name="wsdl.porttype" value="${interface.name}PortType" />
-	    </ant>
 	</target>
 	
 
@@ -189,7 +180,7 @@
 	
 
 	<!-- generates source stubs for the schema defined types -->
-    <target name="stubs" unless="stubs.present" depends="init, setGlobus, serviceFlatten, mergeNsMappings">
+    <target name="stubs" unless="stubs.present" depends="init, setGlobus, copyGlobusSchemas, mergeNsMappings">
         <property name="mapping.dst" value="${build.dir}/NStoPkg.properties" />
         <ant antfile="${ant.build.stubs}" target="mergePackageMapping" />
         <property name="mapping.file" value="${mapping.dst}" />
@@ -209,7 +200,7 @@
     	<ant antfile="${ant.build.stubs}" target="generateBinding">
 			<property name="source.binding.dir" value="${schema.dest}/Data" />
     	   	<property name="target.binding.dir" value="${schema.dest}/Data" />
-    		<property name="porttype.wsdl" value="${interface.name}_flattened.wsdl" />
+    		<property name="porttype.wsdl" value="${interface.name}.wsdl" />
     		<property name="binding.root" value="${interface.name}" />
     	</ant>
     	<!-- Invoke the stub generator -->
