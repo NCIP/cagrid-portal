@@ -20,7 +20,7 @@ metadata code doesn't compile if you select an element that is xsd:type an XML s
 Introduce Portal (or something it uses) is leaving file handles open
   - when i create a service, then close the mod viewer, and try to create it again, it can't delete the creation dir
 
-need to add deploy testing
+need to add deploy testing (have added some to the nightly)
 
 add support for having fault types in the types browser....
 
