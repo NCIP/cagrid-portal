@@ -21,7 +21,7 @@ public class InvokeSimpleMethodImplStep extends BaseStep {
 		System.out.println("Invoking a simple methods implementation.");
 
 		String cmd = CommonTools.getAntCommand("runClient",tci.getDir());
-		cmd += " -Dservice.url=\"" + IntroduceTestConstants.TEST_URL +  "\"";
+		cmd += " -Dservice.url=" + IntroduceTestConstants.TEST_URL ;
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		

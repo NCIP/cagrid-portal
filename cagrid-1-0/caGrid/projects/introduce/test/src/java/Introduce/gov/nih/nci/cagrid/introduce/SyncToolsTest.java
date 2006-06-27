@@ -69,8 +69,7 @@ public class SyncToolsTest extends Story {
 			steps.add(new AddSimpleMethodStep(tci2, "newMethod2", true));
 			steps.add(new DeployGlobusServiceStep(helper, tci1));
 			steps.add(new StartGlobusStep(helper));
-			//it puts the fixed code in the repository
-			//steps.add(new InvokeSimpleMethodImplStep(tci1, "newMethod", false));
+			steps.add(new InvokeSimpleMethodImplStep(tci1, "newMethod", false));
 			steps.add(new RemoveSimpleMethodImplStep(tci1, "newMethod", true));
 			steps.add(new ModifySimpleMethodStep(tci1, "newMethod", false));
 			steps.add(new ModifySimpleMethodStep(tci2, "newMethod2", true));

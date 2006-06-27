@@ -24,9 +24,26 @@ public class StdIOThread
 	{
 		try {
 			String line = null;
-			while ((line = br.readLine()) != null) System.out.println(line);
+			line = br.readLine();
+			while (line!= null) {
+				System.out.println(line);
+				if(br!=null){
+					line = br.readLine();
+				} else {
+					line = null;
+				}
+			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try{
+				if(br!=null){
+					br.close();
+				}
+			} catch(IOException ex){
+			
+			}
 		}
 	}
 
