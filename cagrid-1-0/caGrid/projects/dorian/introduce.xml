@@ -259,6 +259,8 @@
    </ns35:ServiceSecurity>
   </ns3:Service>
  </ns3:Services>
- <ns36:Extensions xsi:type="ns36:ExtensionsType" xmlns:ns36="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns36:Extensions xsi:type="ns36:ExtensionsType" xmlns:ns36="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns36:Extension name="cagrid_metadata" xsi:type="ns36:ExtensionType"/>
+ </ns36:Extensions>
  <ns37:ServiceProperties xmlns:ns37="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
 </ns1:ServiceSkeleton>
