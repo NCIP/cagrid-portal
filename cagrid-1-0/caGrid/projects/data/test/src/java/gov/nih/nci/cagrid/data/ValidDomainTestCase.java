@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data;
 
+import gov.nih.nci.cagrid.common.SchemaValidator;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.cql.validation.CQLValidator;
 import gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator;
@@ -27,6 +28,9 @@ import org.xml.sax.InputSource;
  * @version $Id$ 
  */
 public class ValidDomainTestCase extends TestCase {
+	public static final String DOMAIN_MODEL_FILE = "test/resources/domainModel.xml";
+	public static final String DOMAIN_MODEL_XSD = "ext/xsd/cagrid/types/data/data.xsd";
+	
 	private CQLValidator validator = null;
 	private DomainModel domainModel = null;
 	private String cqlDocsDir = null;
@@ -66,7 +70,7 @@ public class ValidDomainTestCase extends TestCase {
 	private DomainModel getDomainModel() {
 		if (domainModel == null) {
 			try {
-				InputSource domainModelInput = new InputSource(new FileReader("test/resources/domainModel.xml"));
+				InputSource domainModelInput = new InputSource(new FileReader(DOMAIN_MODEL_FILE));
 				domainModel = (DomainModel) ObjectDeserializer.deserialize(domainModelInput, DomainModel.class);
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -93,6 +97,17 @@ public class ValidDomainTestCase extends TestCase {
 	
 	public void testValidObjectWithAttribute() {
 		checkQuery("objectWithAttribute.xml");
+	}
+	
+	
+	public void testDomainModelConformsToSchema() {
+		try {
+			SchemaValidator.validate(DOMAIN_MODEL_XSD, new File(DOMAIN_MODEL_FILE));
+			assertTrue(DOMAIN_MODEL_FILE + " appears valid against schema " + DOMAIN_MODEL_XSD, true);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			fail(DOMAIN_MODEL_FILE + " not valid against schema " + DOMAIN_MODEL_XSD + "\n\t" + ex.getMessage());
+		}
 	}
 	
 	
