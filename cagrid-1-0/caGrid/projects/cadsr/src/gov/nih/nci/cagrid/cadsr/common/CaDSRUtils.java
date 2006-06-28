@@ -61,6 +61,9 @@ public class CaDSRUtils {
 			converted = new UMLClass();
 			converted.setClassName(classMetadata.getName());
 			converted.setDescription(classMetadata.getDescription());
+			if(converted.getDescription()==null){
+				converted.setDescription("");
+			}
 			converted.setId(classMetadata.getId());
 			converted.setPackageName(classMetadata.getUMLPackageMetadata().getName());
 			converted.setProjectName(classMetadata.getProject().getLongName());

@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.cadsr.service;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
+import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRUtils;
@@ -163,6 +164,9 @@ public class DomainModelBuilder {
 		sourceEdge.setMaxCardinality(cadsrAssociation.getSourceMaxCardinality());
 		sourceEdge.setMinCardinality(cadsrAssociation.getSourceMinCardinality());
 		sourceEdge.setRoleName(cadsrAssociation.getSourceRoleName());
+		if (sourceEdge.getRoleName() == null) {
+			sourceEdge.setRoleName("");
+		}
 		sourceEdge.setUMLClassReference(new UMLClassReference(cadsrAssociation.getSourceUMLClassMetadata()
 			.getUMLClassMetadata().getId()));
 		convertedSourceEdge.setUMLAssociationEdge(sourceEdge);
@@ -172,6 +176,9 @@ public class DomainModelBuilder {
 		targetEdge.setMaxCardinality(cadsrAssociation.getTargetMaxCardinality());
 		targetEdge.setMinCardinality(cadsrAssociation.getTargetMinCardinality());
 		targetEdge.setRoleName(cadsrAssociation.getTargetRoleName());
+		if (targetEdge.getRoleName() == null) {
+			targetEdge.setRoleName("");
+		}
 		targetEdge.setUMLClassReference(new UMLClassReference(cadsrAssociation.getTargetUMLClassMetadata()
 			.getUMLClassMetadata().getId()));
 		convertedTargetEdge.setUMLAssociationEdge(targetEdge);
@@ -237,7 +244,10 @@ public class DomainModelBuilder {
 					// back
 					Iterator attribIter = metadata.getUMLAttributeMetadataCollection().iterator();
 					while (attribIter.hasNext()) {
-						attribIter.next();
+						UMLAttributeMetadata att = (UMLAttributeMetadata) attribIter.next();
+						if (att.getDescription() == null) {
+							att.setDescription("");
+						}
 					}
 					Iterator smIter = metadata.getSemanticMetadataCollection().iterator();
 					while (smIter.hasNext()) {
