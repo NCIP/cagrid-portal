@@ -64,6 +64,7 @@ public class CaDSRUtils {
 			converted.setId(classMetadata.getId());
 			converted.setPackageName(classMetadata.getUMLPackageMetadata().getName());
 			converted.setProjectName(classMetadata.getProject().getLongName());
+			converted.setProjectVersion(classMetadata.getProject().getVersion());
 			converted.setUmlAttributeCollection(convertAttributeCollection(classMetadata));
 			SemanticMetadata[] smArray = convertSemanticMetadataCollection(classMetadata
 				.getSemanticMetadataCollection());
