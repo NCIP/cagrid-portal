@@ -124,9 +124,9 @@ public class ModificationViewer extends GridPortalComponent {
 
 	private JTextField serviceName = null;
 
-	private JLabel packageLabel = null;
+	private JLabel namespaceLable = null;
 
-	private JTextField packageName = null;
+	private JTextField namespace = null;
 
 	private JLabel lastSavedLabel = null;
 
@@ -479,9 +479,9 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints19.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints19.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints19.gridy = 0;
-			packageLabel = new JLabel();
-			packageLabel.setText("Package");
-			packageLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
+			namespaceLable = new JLabel();
+			namespaceLable.setText("Namespace");
+			namespaceLable.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
 			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
 			gridBagConstraints18.gridx = 0;
 			gridBagConstraints18.anchor = java.awt.GridBagConstraints.WEST;
@@ -504,8 +504,8 @@ public class ModificationViewer extends GridPortalComponent {
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			selectPanel.add(serviceNameLabel, gridBagConstraints18);
 			selectPanel.add(getServiceName(), gridBagConstraints17);
-			selectPanel.add(packageLabel, gridBagConstraints19);
-			selectPanel.add(getPackageName(), gridBagConstraints20);
+			selectPanel.add(namespaceLable, gridBagConstraints19);
+			selectPanel.add(getNamespace(), gridBagConstraints20);
 			selectPanel.add(lastSavedLabel, gridBagConstraints21);
 			selectPanel.add(getLastSaved(), gridBagConstraints22);
 			selectPanel.add(saveLocationLabel, gridBagConstraints23);
@@ -926,14 +926,14 @@ public class ModificationViewer extends GridPortalComponent {
 	 * 
 	 * @return javax.swing.JTextField
 	 */
-	private JTextField getPackageName() {
-		if (packageName == null) {
-			packageName = new JTextField();
-			packageName.setText(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_PACKAGE));
-			packageName.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
-			packageName.setEditable(false);
+	private JTextField getNamespace() {
+		if (namespace == null) {
+			namespace = new JTextField();
+			namespace.setText(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN));
+			namespace.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
+			namespace.setEditable(false);
 		}
-		return packageName;
+		return namespace;
 	}
 
 
