@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 
 import java.awt.Component;
 import java.io.BufferedInputStream;
