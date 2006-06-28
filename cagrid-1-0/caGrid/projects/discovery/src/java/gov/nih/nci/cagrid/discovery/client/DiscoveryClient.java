@@ -44,6 +44,7 @@ public class DiscoveryClient {
 	protected static final String com = "com";
 	protected static final String serv = "serv";
 	protected static final String data = "data";
+	protected static final String uml = "uml";
 
 	// some common paths for reuse
 	protected static final String CONTENT_PATH = wssg + ":Content/" + agg + ":AggregatorData";
@@ -61,6 +62,7 @@ public class DiscoveryClient {
 		nsMap.put(com, MetadataConstants.CAGRID_COMMON_MD_NAMESPACE);
 		nsMap.put(serv, MetadataConstants.CAGRID_SERVICE_MD_NAMESPACE);
 		nsMap.put(data, MetadataConstants.CAGRID_DATA_MD_NAMESPACE);
+		nsMap.put(uml, MetadataConstants.CADSR_UML_NAMESPACE);
 	}
 
 	protected static Log LOG = LogFactory.getLog(DiscoveryClient.class.getName());
@@ -225,8 +227,7 @@ public class DiscoveryClient {
 	public EndpointReferenceType[] discoverServicesByOperationOutput(UMLClass clazzPrototype) throws Exception {
 		String umlClassPredicate = buildUMLClassPredicate(clazzPrototype);
 
-		return discoverByFilter(OPER_PATH + "/" + serv + ":output/" + serv + ":Output/" + com + ":UMLClass["
-			+ umlClassPredicate + "]");
+		return discoverByFilter(OPER_PATH + "/" + serv + ":Output/" + com + ":UMLClass[" + umlClassPredicate + "]");
 	}
 
 
@@ -248,9 +249,9 @@ public class DiscoveryClient {
 	public EndpointReferenceType[] discoverServicesByOperationClass(UMLClass clazzPrototype) throws Exception {
 		String umlClassPredicate = buildUMLClassPredicate(clazzPrototype);
 
-		return discoverByFilter(OPER_PATH + "[" + serv + ":output/" + serv + ":Output/" + com + ":UMLClass["
-			+ umlClassPredicate + "] or " + serv + ":inputParameterCollection/" + serv + ":InputParam/" + com
-			+ ":UMLClass[" + umlClassPredicate + "]" + "]");
+		return discoverByFilter(OPER_PATH + "[" + serv + ":Output/" + com + ":UMLClass[" + umlClassPredicate + "] or "
+			+ serv + ":inputParameterCollection/" + serv + ":InputParam/" + com + ":UMLClass[" + umlClassPredicate
+			+ "]" + "]");
 	}
 
 
@@ -264,7 +265,13 @@ public class DiscoveryClient {
 	 * @return EndpointReferenceType[] matching the criteria
 	 */
 	public EndpointReferenceType[] discoverServicesByConceptCode(String conceptCode) throws Exception {
-		throw new Exception("Not yet implemented");
+		String umlClassPredicate = com + ":semanticMetadataCollection/" + uml + ":SemanticMetadata/@conceptCode='"
+			+ conceptCode + "' or " + com + ":umlAttributeCollection/" + com + ":semanticMetadataCollection/" + uml
+			+ ":SemanticMetadata/@conceptCode='" + conceptCode + "'";
+
+		return discoverByFilter(OPER_PATH + "[" + serv + ":Output/" + com + ":UMLClass[" + umlClassPredicate + "] or "
+			+ serv + ":inputParameterCollection/" + serv + ":InputParam/" + com + ":UMLClass[" + umlClassPredicate
+			+ "]" + "]");
 	}
 
 

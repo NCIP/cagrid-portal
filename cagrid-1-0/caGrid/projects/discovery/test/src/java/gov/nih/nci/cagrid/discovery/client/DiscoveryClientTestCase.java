@@ -43,6 +43,12 @@ public class DiscoveryClientTestCase extends TestCase {
 	private static final int BY_POC = 6;
 	private static final int BY_CENTER = 7;
 	private static final int BY_STRING = 8;
+	private static final int BY_CODE = 9;
+	private static final int BY_DS_MODEL = 10;
+	private static final int BY_DS_CODE = 11;
+	private static final int BY_DS_CLASS = 12;
+	private static final int BY_DS_ASSOC = 13;
+	private static final int ALL_DS = 14;
 
 	private EndpointReferenceType service1EPR = null;
 	private EndpointReferenceType service2EPR = null;
@@ -146,7 +152,7 @@ public class DiscoveryClientTestCase extends TestCase {
 	}
 
 
-	public void testDiscoverServicesByOperationOuput() {
+	public void testDiscoverServicesByOperationOutput() {
 		final int operation = BY_OP_OUTPUT;
 		EndpointReferenceType[] services = null;
 		UMLClass clazz = new UMLClass();
@@ -161,7 +167,6 @@ public class DiscoveryClientTestCase extends TestCase {
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, clazz);
 		assertEquals(0, services.length);
 	}
-
 
 	public void testDiscoverServicesByOperationName() {
 		final int operation = BY_OP_NAME;
@@ -265,6 +270,50 @@ public class DiscoveryClientTestCase extends TestCase {
 	}
 
 
+	public void testDiscoverServicesByConceptCode() {
+		final int operation = BY_CODE;
+		EndpointReferenceType[] services = null;
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "not present");
+		assertEquals(0, services.length);
+		
+		//TODO: add some positive tests when the test examples have UML info
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "not present");
+		assertEquals(0, services.length);
+	}
+
+
+	public void testGetAllDataServices() {
+		//fail("Not tested yet.");
+	}
+
+
+	public void testDiscoverDataServicesByDomainModel() {
+		//fail("Not tested yet.");
+	}
+
+
+	public void testDiscoverDataServicesByModelConceptCode() {
+		//fail("Not tested yet.");
+	}
+
+
+	public void testDiscoverDataServicesByExposedClass() {
+		//fail("Not tested yet.");
+	}
+
+
+	public void testDiscoverDataServicesWithAssociationsWithClass() {
+		//fail("Not tested yet.");
+	}
+
+
 	private void assertResultsEqual(EndpointReferenceType[] expected, EndpointReferenceType[] received) {
 		// id like to be able to do this:
 		// assertTrue(Arrays.equals(target, services));
@@ -323,6 +372,24 @@ public class DiscoveryClientTestCase extends TestCase {
 					break;
 				case BY_STRING :
 					eprs = client.discoverServicesBySearchString((String) criteria);
+					break;
+				case BY_CODE :
+					eprs = client.discoverServicesByConceptCode((String) criteria);
+					break;
+				case BY_DS_MODEL :
+					eprs = client.discoverDataServicesByDomainModel((String) criteria);
+					break;
+				case BY_DS_CLASS :
+					eprs = client.discoverDataServicesByExposedClass((UMLClass) criteria);
+					break;
+				case BY_DS_CODE :
+					eprs = client.discoverDataServicesByModelConceptCode((String) criteria);
+					break;
+				case BY_DS_ASSOC :
+					eprs = client.discoverDataServicesWithAssociationsWithClass((UMLClass) criteria);
+					break;
+				case ALL_DS :
+					eprs = client.getAllDataServices();
 					break;
 				default :
 					fail("Invalid discovery method");
@@ -402,4 +469,6 @@ public class DiscoveryClientTestCase extends TestCase {
 	public static void main(String[] args) {
 		junit.textui.TestRunner.run(DiscoveryClientTestCase.class);
 	}
+
+
 }
