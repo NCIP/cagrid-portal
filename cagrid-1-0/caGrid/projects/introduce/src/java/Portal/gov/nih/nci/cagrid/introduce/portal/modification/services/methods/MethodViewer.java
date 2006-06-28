@@ -189,7 +189,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JLabel providerClassnameLabel = null;
 
 
-
 	public MethodViewer(MethodType method, ServiceInformation info) {
 		this.info = info;
 		this.method = method;
@@ -1415,6 +1414,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 			isImportedCheckBox = new JCheckBox();
 			isImportedCheckBox.setText("imported");
 			isImportedCheckBox.setSelected(method.isIsImported());
+			if (isImportedCheckBox.isSelected()) {
+				getTabbedPanel().setEnabledAt(2, true);
+			} else {
+				getTabbedPanel().setEnabledAt(2, false);
+				if (getTabbedPanel().getSelectedIndex() == 2) {
+					getTabbedPanel().setSelectedIndex(0);
+				}
+			}
 			isImportedCheckBox.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
