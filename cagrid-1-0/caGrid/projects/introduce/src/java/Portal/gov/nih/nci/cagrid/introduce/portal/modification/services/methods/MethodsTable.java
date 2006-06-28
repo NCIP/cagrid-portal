@@ -1,16 +1,25 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.io.File;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Properties;
 import java.util.Vector;
 
 import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
 
 
 /**
@@ -25,6 +34,7 @@ public class MethodsTable extends PortalBaseTable {
 
 	public MethodsTable(ServiceType service, File methodsDirectory, Properties serviceProperties) {
 		super(createTableModel());
+		setAutoCreateColumnsFromModel(false);
 		this.serviceType = service;
 		this.setRowSelectionAllowed(true);
 		initialize();
@@ -43,13 +53,35 @@ public class MethodsTable extends PortalBaseTable {
 
 		if (serviceType != null && serviceType.getMethods() != null && serviceType.getMethods().getMethod() != null) {
 			for (int i = 0; i < serviceType.getMethods().getMethod().length; i++) {
-				final Vector v = new Vector();
-				v.add(new MethodTypeContainer(serviceType.getMethods().getMethod(i)));
+				if (!serviceType.getMethods().getMethod(i).getName().equals(
+					IntroduceConstants.SERVICE_SECURITY_METADATA_METHOD)) {
+					final Vector v = new Vector();
+					v.add(new MethodTypeContainer(serviceType.getMethods().getMethod(i)));
 
-				((DefaultTableModel) this.getModel()).addRow(v);
-				this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
+					((DefaultTableModel) this.getModel()).addRow(v);
+					this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
+				}
 			}
 		}
+	}
+
+
+	public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
+		Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
+		MethodType method = getMethodType(rowIndex);
+		if (method.isIsImported()) {
+			c.setBackground(Color.LIGHT_GRAY);
+			c.setFont(getFont().deriveFont(Font.ITALIC));
+		} else {
+			// If not shaded, match the table's background
+			c.setBackground(getBackground());
+			c.setFont(getFont().deriveFont(Font.BOLD));
+		}
+		if (isCellSelected(rowIndex, vColIndex)) {
+			c.setBackground(getSelectionBackground());
+		}
+		c.setForeground(Color.BLACK);
+		return c;
 	}
 
 
@@ -98,12 +130,21 @@ public class MethodsTable extends PortalBaseTable {
 
 
 	public void addRow(final MethodType method) {
+		CommonTools.addMethod(serviceType, method);
+
 		final Vector v = new Vector();
-		v.add(new MethodTypeContainer(method));
+		MethodTypeContainer mtc = new MethodTypeContainer(method);
+		v.add(mtc);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
-		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
-		CommonTools.addMethod(serviceType, method);
+
+		sort();
+		for (int i = 0; i < getRowCount(); i++) {
+			if (getMethodType(i).equals(mtc.getMethod())) {
+				setRowSelectionInterval(i, i);
+				return;
+			}
+		}
 	}
 
 
@@ -114,7 +155,7 @@ public class MethodsTable extends PortalBaseTable {
 	}
 
 
-	class MethodTypeContainer {
+	class MethodTypeContainer implements Comparable {
 		private MethodType method;
 
 
@@ -136,6 +177,21 @@ public class MethodsTable extends PortalBaseTable {
 		public String toString() {
 			return CommonTools.methodTypeToString(this.method);
 		}
+
+
+		public int compareTo(Object arg0) {
+			MethodTypeContainer mtc = (MethodTypeContainer) (arg0);
+			if (getMethod().isIsImported() && mtc.getMethod().isIsImported()) {
+				return 100 + getMethod().getName().compareTo(mtc.getMethod().getName());
+			} else if (!getMethod().isIsImported() && !mtc.getMethod().isIsImported()) {
+				return getMethod().getName().compareTo(mtc.getMethod().getName());
+			} else if (this.getMethod().isIsImported()) {
+				return 100;
+			} else if (!this.getMethod().isIsImported()) {
+				return 0;
+			}
+			return 0;
+		}
 	}
 
 
@@ -148,6 +204,54 @@ public class MethodsTable extends PortalBaseTable {
 	public void doubleClick() throws Exception {
 		// TODO Auto-generated method stub
 
+	}
+
+
+	public void sort() {
+		DefaultTableModel model = (DefaultTableModel) getModel();
+		Vector data = model.getDataVector();
+		Collections.sort(data, new ColumnSorter(0, true));
+		model.fireTableStructureChanged();
+	}
+
+
+	public class ColumnSorter implements Comparator {
+		int colIndex;
+		boolean ascending;
+
+
+		ColumnSorter(int colIndex, boolean ascending) {
+			this.colIndex = colIndex;
+			this.ascending = ascending;
+		}
+
+
+		public int compare(Object a, Object b) {
+			Vector v1 = (Vector) a;
+			Vector v2 = (Vector) b;
+			MethodTypeContainer o1 = (MethodTypeContainer) v1.get(colIndex);
+			MethodTypeContainer o2 = (MethodTypeContainer) v2.get(colIndex);
+
+			if (o1 == null && o2 == null) {
+				return 0;
+			} else if (o1 == null) {
+				return 1;
+			} else if (o2 == null) {
+				return -1;
+			} else if (o1 instanceof Comparable) {
+				if (ascending) {
+					return ((Comparable) o1).compareTo(o2);
+				} else {
+					return ((Comparable) o2).compareTo(o1);
+				}
+			} else {
+				if (ascending) {
+					return o1.toString().compareTo(o2.toString());
+				} else {
+					return o2.toString().compareTo(o1.toString());
+				}
+			}
+		}
 	}
 
 }

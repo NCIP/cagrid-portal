@@ -16,6 +16,8 @@ import javax.xml.namespace.QName;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin </A>
  */
 public class IntroduceConstants {
+	
+	public static final String SERVICE_SECURITY_METADATA_METHOD = "getServiceSecurityMetadata";
 
 	// service skeleton properties
 	public static final String INTRODUCE_PROPERTIES_FILE = "introduce.properties";

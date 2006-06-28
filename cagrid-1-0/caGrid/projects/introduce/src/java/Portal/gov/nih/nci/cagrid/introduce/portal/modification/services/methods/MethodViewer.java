@@ -189,11 +189,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JLabel providerClassnameLabel = null;
 
 
+
 	public MethodViewer(MethodType method, ServiceInformation info) {
 		this.info = info;
 		this.method = method;
-		// this.methodsTable = table;
-		// this.currentRow = selectedRow;
 		this.setTitle("Modify Method");
 		initialize();
 	}
@@ -385,7 +384,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getDoneButton() {
+	public JButton getDoneButton() {
 		if (doneButton == null) {
 			doneButton = new JButton(IntroduceLookAndFeel.getDoneIcon());
 			doneButton.setText("Done");
@@ -477,6 +476,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 				}
 
 			});
+
 		}
 		return doneButton;
 	}
@@ -507,6 +507,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 						JOptionPane.showMessageDialog(MethodViewer.this, "Please select a type to add");
 					}
 				}
+
 			});
 		}
 		return addInputParamButton;
@@ -1285,7 +1286,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints36.gridwidth = 2;
 			gridBagConstraints36.gridy = 5;
 			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
-			gridBagConstraints23.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints23.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints23.gridy = 0;
 			gridBagConstraints23.gridx = 1;
 			GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
@@ -1415,19 +1416,18 @@ public class MethodViewer extends GridPortalBaseFrame {
 			isImportedCheckBox.setText("imported");
 			isImportedCheckBox.setSelected(method.isIsImported());
 			isImportedCheckBox.addActionListener(new ActionListener() {
-			
+
 				public void actionPerformed(ActionEvent e) {
-					if(isImportedCheckBox.isSelected()){
-						getTabbedPanel().setEnabledAt(2,true);
-					}
-					else {
-						getTabbedPanel().setEnabledAt(2,false);
-						if(getTabbedPanel().getSelectedIndex()==2){
+					if (isImportedCheckBox.isSelected()) {
+						getTabbedPanel().setEnabledAt(2, true);
+					} else {
+						getTabbedPanel().setEnabledAt(2, false);
+						if (getTabbedPanel().getSelectedIndex() == 2) {
 							getTabbedPanel().setSelectedIndex(0);
 						}
 					}
 				}
-			
+
 			});
 		}
 		return isImportedCheckBox;
@@ -1461,17 +1461,17 @@ public class MethodViewer extends GridPortalBaseFrame {
 			isProvidedCheckBox.setText("Provided");
 			isProvidedCheckBox.setSelected(method.isIsProvided());
 			isProvidedCheckBox.addActionListener(new ActionListener() {
-			
+
 				public void actionPerformed(ActionEvent e) {
-					if(isProvidedCheckBox.isSelected()){
+					if (isProvidedCheckBox.isSelected()) {
 						getProviderClassnameTextField().setEnabled(true);
 						getProviderClassnameTextField().setEditable(true);
-					}else{
+					} else {
 						getProviderClassnameTextField().setEnabled(false);
 						getProviderClassnameTextField().setEditable(false);
 					}
 				}
-			
+
 			});
 		}
 		return isProvidedCheckBox;
@@ -1582,14 +1582,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes providerClassnameTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes providerClassnameTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getProviderClassnameTextField() {
 		if (providerClassnameTextField == null) {
 			providerClassnameTextField = new JTextField();
-			if(method.getProviderInformation()!=null && method.getProviderInformation().getProviderClass()!=null){
+			if (method.getProviderInformation() != null && method.getProviderInformation().getProviderClass() != null) {
 				providerClassnameTextField.setText(method.getProviderInformation().getProviderClass());
 			}
 		}
@@ -1598,28 +1598,28 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes providerInformationPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes providerInformationPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getProviderInformationPanel() {
 		if (providerInformationPanel == null) {
 			GridBagConstraints gridBagConstraints34 = new GridBagConstraints();
 			gridBagConstraints34.gridx = 0;
-			gridBagConstraints34.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints34.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints34.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints34.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints34.gridy = 1;
 			GridBagConstraints gridBagConstraints37 = new GridBagConstraints();
 			gridBagConstraints37.gridx = 1;
-			gridBagConstraints37.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints37.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints37.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints37.weightx = 1.0D;
 			gridBagConstraints37.gridy = 1;
 			GridBagConstraints gridBagConstraints38 = new GridBagConstraints();
 			gridBagConstraints38.gridx = 0;
 			gridBagConstraints38.gridwidth = 2;
-			gridBagConstraints38.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints38.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints38.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints38.anchor = java.awt.GridBagConstraints.CENTER;
 			gridBagConstraints38.weightx = 0.0D;
@@ -1628,7 +1628,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 			providerClassnameLabel.setText("Provider Classname");
 			providerInformationPanel = new JPanel();
 			providerInformationPanel.setLayout(new GridBagLayout());
-			providerInformationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Provider Information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			providerInformationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				"Provider Information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 			providerInformationPanel.add(getIsProvidedCheckBox(), gridBagConstraints38);
 			providerInformationPanel.add(providerClassnameLabel, gridBagConstraints34);
 			providerInformationPanel.add(getProviderClassnameTextField(), gridBagConstraints37);

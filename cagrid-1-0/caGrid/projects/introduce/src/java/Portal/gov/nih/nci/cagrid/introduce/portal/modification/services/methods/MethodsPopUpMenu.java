@@ -74,7 +74,7 @@ public class MethodsPopUpMenu extends JPopupMenu {
 		node.addMethod(method);
 
 		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-			new MethodViewer(method, node.getInfo()));
+			new MethodViewer( method, node.getInfo()));
 	}
 
 }

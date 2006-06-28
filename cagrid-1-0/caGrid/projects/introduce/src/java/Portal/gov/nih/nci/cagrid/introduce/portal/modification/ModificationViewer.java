@@ -42,6 +42,8 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeT
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
@@ -687,8 +689,34 @@ public class ModificationViewer extends GridPortalComponent {
 			return;
 		}
 		// TODO: check this.... setting this for now......
-
-		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new MethodViewer(method, info));
+		MethodViewer mv = new MethodViewer(method, info);
+		
+		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(mv);
+		//TODO: total hack for now to avoid tryin sort action listerners and
+		//      having to pass the table into the method modification viewer.
+		mv.getDoneButton().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Thread th = new Thread(new Runnable() {
+				
+					public void run() {
+						try {
+							Thread.sleep(100);
+							Thread.yield();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						getMethodsTable().sort();
+				
+					}
+				
+				});
+				
+				th.start();
+				
+			}
+		
+		});
 	}
 
 
