@@ -290,7 +290,15 @@ public class DiscoveryClientTestCase extends TestCase {
 
 
 	public void testGetAllDataServices() {
-		//fail("Not tested yet.");
+		final int operation = ALL_DS;
+		EndpointReferenceType[] services = null;
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
+		
+		//TODO: add some positive tests when the test examples have dataservices
+		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, null);
+		assertEquals(0, services.length);
 	}
 
 

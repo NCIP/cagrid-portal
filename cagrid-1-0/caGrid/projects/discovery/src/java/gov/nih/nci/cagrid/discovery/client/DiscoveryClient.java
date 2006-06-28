@@ -48,10 +48,13 @@ public class DiscoveryClient {
 
 	// some common paths for reuse
 	protected static final String CONTENT_PATH = wssg + ":Content/" + agg + ":AggregatorData";
+	
 	protected static final String MD_PATH = CONTENT_PATH + "/" + cagrid + ":ServiceMetadata";
 	protected static final String SERV_PATH = MD_PATH + "/" + cagrid + ":serviceDescription/" + serv + ":Service";
 	protected static final String OPER_PATH = SERV_PATH + "/" + serv + ":serviceContextCollection/" + serv
 		+ ":ServiceContext/" + serv + ":operationCollection/" + serv + ":Operation";
+	
+	protected static final String DATA_MD_PATH = CONTENT_PATH + "/" + data + ":DomainModel";
 
 	// Map the prefixes to there namepsaces
 	protected static Map nsMap = new HashMap();
@@ -281,7 +284,7 @@ public class DiscoveryClient {
 	 * @return EndpointReferenceType[] contain all registered services
 	 */
 	public EndpointReferenceType[] getAllDataServices() throws Exception {
-		throw new Exception("Not yet implemented");
+		return discoverByFilter(DATA_MD_PATH);
 	}
 
 

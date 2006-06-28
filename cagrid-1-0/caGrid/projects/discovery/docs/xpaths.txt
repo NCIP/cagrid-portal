@@ -46,6 +46,7 @@ wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription
 ]
 
 #all ds
+wssg:Content/agg:AggregatorData/data:DomainModel
 
 #ds concept
 
