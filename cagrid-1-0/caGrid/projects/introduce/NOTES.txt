@@ -6,9 +6,6 @@ should generated two different interfaces in common..  (what is the use.  The se
 
 I was adding faults to a method, and when I hit done, an error dialog poped up with method "java.util.Vector" and removed my faults
 
-security operationprovider needs to be hooked into build properly...
- - have copies of schema and jars... needs to get from artifacts
-
 on save etc i have seen unable to delete namespace2package.mappings.
 
 From BMI Tutorial:
@@ -70,7 +67,9 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
-
+security operationprovider needs to be hooked into build properly...
+ - have copies of schema and jars... needs to get from artifacts
+ 
 (DONE i am leaving this for now) eclipse launch files dont need to be in the top directory to work... move them somewhere else so they don't clutter the services root dir
 
 Modification Viewer's Methods table needs to manage the backend model, not create new Method objects 
