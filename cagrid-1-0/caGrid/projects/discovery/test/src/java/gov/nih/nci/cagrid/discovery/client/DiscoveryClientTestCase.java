@@ -200,6 +200,12 @@ public class DiscoveryClientTestCase extends TestCase {
 
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "findProjects");
 		assertResultsEqual(new EndpointReferenceType[]{service1EPR}, services);
+		
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "updateIdPUser");
+		assertResultsEqual(new EndpointReferenceType[]{service3EPR}, services);		
+		
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "query");
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
 	}
 
 
