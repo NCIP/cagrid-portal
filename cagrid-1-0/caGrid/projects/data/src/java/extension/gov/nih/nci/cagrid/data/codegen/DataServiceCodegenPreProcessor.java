@@ -90,6 +90,9 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			LOG.info("No domain model supplied, generating from caDSR");
 			generateDomainModel(desc, info, domainModelFile);
 		}
+		
+		// add the resource property for the domain model
+		addDomainModelResourceProperty(info);
 	}
 	
 	
@@ -332,5 +335,28 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			return element.getValue();
 		}
 		return null;
+	}
+	
+	
+	private void addDomainModelResourceProperty(ServiceInformation info) {
+		ResourcePropertyType domainMetadata = new ResourcePropertyType();
+		domainMetadata.setPopulateFromFile(true); // no metadata file yet...
+		domainMetadata.setRegister(true);
+		domainMetadata.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
+		ResourcePropertiesListType propsList = info.getServices().getService()[0].getResourcePropertiesList();
+		if (propsList == null) {
+			propsList = new ResourcePropertiesListType();
+			info.getServices().getService()[0].setResourcePropertiesList(propsList);
+		}
+		ResourcePropertyType[] metadataArray = propsList.getResourceProperty();
+		if (metadataArray == null || metadataArray.length == 0) {
+			metadataArray = new ResourcePropertyType[]{domainMetadata};
+		} else {
+			ResourcePropertyType[] tmpArray = new ResourcePropertyType[metadataArray.length + 1];
+			System.arraycopy(metadataArray, 0, tmpArray, 0, metadataArray.length);
+			tmpArray[metadataArray.length] = domainMetadata;
+			metadataArray = tmpArray;
+		}
+		propsList.setResourceProperty(metadataArray);
 	}
 }
