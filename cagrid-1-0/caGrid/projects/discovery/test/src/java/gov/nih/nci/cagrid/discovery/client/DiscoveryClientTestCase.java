@@ -55,9 +55,6 @@ public class DiscoveryClientTestCase extends TestCase {
 	private static final int BY_DS_ASSOC = 13;
 	private static final int ALL_DS = 14;
 
-	private static final int NUM_SERVICES = 3;
-	private static final int NUM_DATA_SERVICES = 1;
-
 	private EndpointReferenceType service1EPR = null;
 	private EndpointReferenceType service2EPR = null;
 	private EndpointReferenceType service3EPR = null;
@@ -387,8 +384,31 @@ public class DiscoveryClientTestCase extends TestCase {
 	}
 
 
-	public void testDiscoverDataServicesWithAssociationsWithClass() {
-		// fail("Not tested yet.");
+	public void testDiscoverDataServicesByAssociationsWithClass() {
+		final int operation = BY_DS_ASSOC;
+		EndpointReferenceType[] services = null;
+		UMLClass clazz = new UMLClass();
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, clazz);
+		assertEquals(0, services.length);
+
+		clazz.setClassName("non-present class");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, clazz);
+		assertEquals(0, services.length);
+
+		clazz.setClassName("Gene");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, clazz);
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
+
+		clazz.setClassName("Taxon");
+		clazz.setPackageName("gov.nih.nci.cabio.domain");
+		clazz.setProjectName("caCORE");
+		clazz.setProjectVersion("3");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, clazz);
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
 	}
 
 
@@ -464,7 +484,7 @@ public class DiscoveryClientTestCase extends TestCase {
 					eprs = client.discoverDataServicesByModelConceptCode((String) criteria);
 					break;
 				case BY_DS_ASSOC :
-					eprs = client.discoverDataServicesWithAssociationsWithClass((UMLClass) criteria);
+					eprs = client.discoverDataServicesByAssociationsWithClass((UMLClass) criteria);
 					break;
 				case ALL_DS :
 					eprs = client.getAllDataServices();

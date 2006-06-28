@@ -60,3 +60,9 @@ wssg:Content/agg:AggregatorData/data:DomainModel/data:exposedUMLClassCollection/
 wssg:Content/agg:AggregatorData/data:DomainModel/data:exposedUMLClassCollection/com:UMLClass[UML_CRITERIA]
 
 #ds assoc
+wssg:Content/agg:AggregatorData/data:DomainModel
+[
+	data:exposedUMLAssociationCollection/data:UMLAssociation/data:targetUMLAssociationEdge/data:UMLAssociationEdge/data:UMLClassReference/@refid=data:exposedUMLClassCollection/com:UMLClass[UML_CRITERIA]/@id
+    	or
+  	data:exposedUMLAssociationCollection/data:UMLAssociation/data:sourceUMLAssociationEdge/data:UMLAssociationEdge/data:UMLClassReference/@refid=data:exposedUMLClassCollection/com:UMLClass[UML_CRITERIA]/@id
+]

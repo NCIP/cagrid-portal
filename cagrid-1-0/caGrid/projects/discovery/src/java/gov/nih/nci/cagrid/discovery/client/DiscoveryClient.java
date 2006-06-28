@@ -328,9 +328,15 @@ public class DiscoveryClient {
 	}
 
 
-	public EndpointReferenceType[] discoverDataServicesWithAssociationsWithClass(UMLClass clazzPrototype)
+	public EndpointReferenceType[] discoverDataServicesByAssociationsWithClass(UMLClass clazzPrototype)
 		throws Exception {
-		throw new Exception("Not yet implemented");
+		String referenceFiler = data + ":UMLAssociationEdge/" + data + ":UMLClassReference/@refid=" + data
+			+ ":exposedUMLClassCollection/" + com + ":UMLClass[" + buildUMLClassPredicate(clazzPrototype) + "]/@id";
+
+		return discoverByFilter(DATA_MD_PATH + "[" + data + ":exposedUMLAssociationCollection/" + data
+			+ ":UMLAssociation/" + data + ":targetUMLAssociationEdge/" + referenceFiler + " or " + data
+			+ ":exposedUMLAssociationCollection/" + data + ":UMLAssociation/" + data + ":sourceUMLAssociationEdge/"
+			+ referenceFiler + "]");
 	}
 
 
