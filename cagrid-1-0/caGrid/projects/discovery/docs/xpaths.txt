@@ -33,7 +33,7 @@ wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription
 	[
 	  com:semanticMetadataCollection/uml:SemanticMetadata/@conceptCode="concept"
 	    or
-	  com:umlAttributeCollection/com:semanticMetadataCollection/uml:SemanticMetadata/@conceptCode="concept"
+	  com:umlAttributeCollection/com:UMLAttribute/com:semanticMetadataCollection/uml:SemanticMetadata/@conceptCode="concept"
 	]
   or
 
@@ -41,7 +41,7 @@ wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription
 	[
 	  com:semanticMetadataCollection/uml:SemanticMetadata/@conceptCode="concept"
 	    or
-	  com:umlAttributeCollection/com:semanticMetadataCollection/uml:SemanticMetadata/@conceptCode="concept"
+	  com:umlAttributeCollection/com:UMLAttribute/com:semanticMetadataCollection/uml:SemanticMetadata/@conceptCode="concept"
 	]
 ]
 
@@ -49,6 +49,12 @@ wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata/cagrid:serviceDescription
 wssg:Content/agg:AggregatorData/data:DomainModel
 
 #ds concept
+wssg:Content/agg:AggregatorData/data:DomainModel/data:exposedUMLClassCollection/com:UMLClass
+[
+  com:semanticMetadataCollection/uml:SemanticMetadata/@conceptCode="concept"
+    or
+  com:umlAttributeCollection/com:UMLAttribute/com:semanticMetadataCollection/uml:SemanticMetadata/@conceptCode="concept"
+]
 
 #ds class
 

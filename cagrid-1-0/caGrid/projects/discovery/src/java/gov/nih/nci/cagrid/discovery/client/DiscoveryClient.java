@@ -48,12 +48,12 @@ public class DiscoveryClient {
 
 	// some common paths for reuse
 	protected static final String CONTENT_PATH = wssg + ":Content/" + agg + ":AggregatorData";
-	
+
 	protected static final String MD_PATH = CONTENT_PATH + "/" + cagrid + ":ServiceMetadata";
 	protected static final String SERV_PATH = MD_PATH + "/" + cagrid + ":serviceDescription/" + serv + ":Service";
 	protected static final String OPER_PATH = SERV_PATH + "/" + serv + ":serviceContextCollection/" + serv
 		+ ":ServiceContext/" + serv + ":operationCollection/" + serv + ":Operation";
-	
+
 	protected static final String DATA_MD_PATH = CONTENT_PATH + "/" + data + ":DomainModel";
 
 	// Map the prefixes to there namepsaces
@@ -268,13 +268,25 @@ public class DiscoveryClient {
 	 * @return EndpointReferenceType[] matching the criteria
 	 */
 	public EndpointReferenceType[] discoverServicesByConceptCode(String conceptCode) throws Exception {
-		String umlClassPredicate = com + ":semanticMetadataCollection/" + uml + ":SemanticMetadata/@conceptCode='"
-			+ conceptCode + "' or " + com + ":umlAttributeCollection/" + com + ":semanticMetadataCollection/" + uml
-			+ ":SemanticMetadata/@conceptCode='" + conceptCode + "'";
+		String conceptPredicatedUMLClass = createConceptPredicatedUMLClass(conceptCode);
 
-		return discoverByFilter(OPER_PATH + "[" + serv + ":Output/" + com + ":UMLClass[" + umlClassPredicate + "] or "
-			+ serv + ":inputParameterCollection/" + serv + ":InputParam/" + com + ":UMLClass[" + umlClassPredicate
-			+ "]" + "]");
+		return discoverByFilter(OPER_PATH + "[" + serv + ":Output/" + conceptPredicatedUMLClass + " or " + serv
+			+ ":inputParameterCollection/" + serv + ":InputParam/" + conceptPredicatedUMLClass + "]");
+	}
+
+
+	/**
+	 * Creates a UMLClass step that is predicated to contain either an attribute
+	 * based on the given concept, or the class itself based on that concept.
+	 * 
+	 * @param conceptCode
+	 *            the code to look for
+	 * @return
+	 */
+	private String createConceptPredicatedUMLClass(String conceptCode) {
+		return com + ":UMLClass[" + com + ":semanticMetadataCollection/" + uml + ":SemanticMetadata/@conceptCode='"
+			+ conceptCode + "' or " + com + ":umlAttributeCollection/" + com + ":UMLAttribute/" + com
+			+ ":semanticMetadataCollection/" + uml + ":SemanticMetadata/@conceptCode='" + conceptCode + "'" + "]";
 	}
 
 
@@ -297,12 +309,14 @@ public class DiscoveryClient {
 	 * @return EndpointReferenceType[] matching the criteria
 	 */
 	public EndpointReferenceType[] discoverDataServicesByDomainModel(String modelName) throws Exception {
-		throw new Exception("Not yet implemented");
+		return discoverByFilter(DATA_MD_PATH + "[@projectShortName='" + modelName + "' or @projectLongName='"
+			+ modelName + "']");
 	}
 
 
 	public EndpointReferenceType[] discoverDataServicesByModelConceptCode(String conceptCode) throws Exception {
-		throw new Exception("Not yet implemented");
+		return discoverByFilter(DATA_MD_PATH + "/" + data + ":exposedUMLClassCollection/"
+			+ createConceptPredicatedUMLClass(conceptCode));
 	}
 
 

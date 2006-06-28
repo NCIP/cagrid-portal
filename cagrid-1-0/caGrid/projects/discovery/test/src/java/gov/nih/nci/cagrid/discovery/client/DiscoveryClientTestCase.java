@@ -8,6 +8,8 @@ import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import java.io.File;
 import java.io.InputStream;
 
+import javax.xml.transform.TransformerException;
+
 import junit.framework.TestCase;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -25,13 +27,16 @@ import org.w3c.dom.NodeList;
 public class DiscoveryClientTestCase extends TestCase {
 
 	private static final String NO_SERVICES_RESOURCE = "noServices.xml";
-	private static final String THREE_SERVICES_TWO_VALID_RESOURCES = "2valid1Invalid.xml";
-	private static final String METADATA_XSD = "ext" + File.separator + "xsd" + File.separator + "cagrid"
-		+ File.separator + "types" + File.separator + "caGridMetadata.xsd";
+	private static final String REGISTERED_SERVICES = "RegisteredServices.xml";
+	private static final String METADATA_XSD_PATH = "ext" + File.separator + "xsd" + File.separator + "cagrid"
+		+ File.separator + "types" + File.separator;
+	private static final String METADATA_XSD = METADATA_XSD_PATH + "caGridMetadata.xsd";
+	private static final String DATA_METADATA_XSD = METADATA_XSD_PATH + "data" + File.separator + "data.xsd";
 
 	private static final String SERVICE1_EPR_RESOURCE = "EPRs/service1_EPR.xml";
 	private static final String SERVICE2_EPR_RESOURCE = "EPRs/service2_EPR.xml";
 	private static final String SERVICE3_EPR_RESOURCE = "EPRs/service3_EPR.xml";
+	private static final String SERVICE4_EPR_RESOURCE = "EPRs/service4_EPR.xml";
 
 	// DEFINE THE DISCOVERY METHODS
 	private static final int ALL_SERVICES = 0;
@@ -50,9 +55,13 @@ public class DiscoveryClientTestCase extends TestCase {
 	private static final int BY_DS_ASSOC = 13;
 	private static final int ALL_DS = 14;
 
+	private static final int NUM_SERVICES = 3;
+	private static final int NUM_DATA_SERVICES = 1;
+
 	private EndpointReferenceType service1EPR = null;
 	private EndpointReferenceType service2EPR = null;
 	private EndpointReferenceType service3EPR = null;
+	private EndpointReferenceType service4EPR = null;
 
 
 	protected void setUp() throws Exception {
@@ -72,14 +81,21 @@ public class DiscoveryClientTestCase extends TestCase {
 		doc = XmlUtils.newDocument(is);
 		service2EPR = (EndpointReferenceType) ObjectDeserializer.toObject(doc.getDocumentElement(),
 			EndpointReferenceType.class);
-		assertNotNull(service1EPR);
+		assertNotNull(service2EPR);
 
 		is = getClass().getResourceAsStream(SERVICE3_EPR_RESOURCE);
 		assertNotNull(is);
 		doc = XmlUtils.newDocument(is);
 		service3EPR = (EndpointReferenceType) ObjectDeserializer.toObject(doc.getDocumentElement(),
 			EndpointReferenceType.class);
-		assertNotNull(service1EPR);
+		assertNotNull(service3EPR);
+
+		is = getClass().getResourceAsStream(SERVICE4_EPR_RESOURCE);
+		assertNotNull(is);
+		doc = XmlUtils.newDocument(is);
+		service4EPR = (EndpointReferenceType) ObjectDeserializer.toObject(doc.getDocumentElement(),
+			EndpointReferenceType.class);
+		assertNotNull(service4EPR);
 	}
 
 
@@ -90,8 +106,8 @@ public class DiscoveryClientTestCase extends TestCase {
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
 		assertEquals(0, services.length);
 
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, null);
-		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service2EPR, service3EPR}, services);
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, null);
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service2EPR, service3EPR, service4EPR}, services);
 
 	}
 
@@ -109,10 +125,10 @@ public class DiscoveryClientTestCase extends TestCase {
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "foo");
 		assertEquals(0, services.length);
 
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "CaDSRService");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "CaDSRService");
 		assertResultsEqual(new EndpointReferenceType[]{service1EPR}, services);
 
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "Dorian");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "Dorian");
 		assertResultsEqual(new EndpointReferenceType[]{service3EPR}, services);
 
 	}
@@ -168,6 +184,7 @@ public class DiscoveryClientTestCase extends TestCase {
 		assertEquals(0, services.length);
 	}
 
+
 	public void testDiscoverServicesByOperationName() {
 		final int operation = BY_OP_NAME;
 		EndpointReferenceType[] services = null;
@@ -181,10 +198,10 @@ public class DiscoveryClientTestCase extends TestCase {
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "foo");
 		assertEquals(0, services.length);
 
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "getServiceSecurityMetadata");
-		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR}, services);
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "getServiceSecurityMetadata");
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR, service4EPR}, services);
 
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "findProjects");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "findProjects");
 		assertResultsEqual(new EndpointReferenceType[]{service1EPR}, services);
 	}
 
@@ -205,16 +222,16 @@ public class DiscoveryClientTestCase extends TestCase {
 		assertEquals(0, services.length);
 
 		criteria.setFirstName("Scott");
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, criteria);
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, criteria);
 		assertResultsEqual(new EndpointReferenceType[]{service1EPR}, services);
 
 		criteria.setFirstName("Stephen");
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, criteria);
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, criteria);
 		assertResultsEqual(new EndpointReferenceType[]{service3EPR}, services);
 
 		criteria.setFirstName("");
 		criteria.setAffiliation("OSU");
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, criteria);
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, criteria);
 		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR}, services);
 	}
 
@@ -232,13 +249,13 @@ public class DiscoveryClientTestCase extends TestCase {
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "foo");
 		assertEquals(0, services.length);
 
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "foo");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "foo");
 		assertEquals(0, services.length);
 
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "OSU");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "OSU");
 		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR}, services);
 
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "Ohio State University");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "Ohio State University");
 		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR}, services);
 	}
 
@@ -256,16 +273,16 @@ public class DiscoveryClientTestCase extends TestCase {
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "a");
 		assertEquals(0, services.length);
 
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "generate metadata extracts");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "generate metadata extracts");
 		assertResultsEqual(new EndpointReferenceType[]{service1EPR}, services);
 
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "IFS");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "IFS");
 		assertResultsEqual(new EndpointReferenceType[]{service3EPR}, services);
 
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "get");
-		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR}, services);
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "get");
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR, service4EPR}, services);
 
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "tainer");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "tainer");
 		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR}, services);
 	}
 
@@ -280,11 +297,11 @@ public class DiscoveryClientTestCase extends TestCase {
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "");
 		assertEquals(0, services.length);
 
-		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "not present");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "not present");
 		assertEquals(0, services.length);
-		
-		//TODO: add some positive tests when the test examples have UML info
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, "not present");
+
+		// TODO: add some positive tests when the test examples have UML info
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C28421");
 		assertEquals(0, services.length);
 	}
 
@@ -295,30 +312,59 @@ public class DiscoveryClientTestCase extends TestCase {
 
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
 		assertEquals(0, services.length);
-		
-		//TODO: add some positive tests when the test examples have dataservices
-		services = invokeDiscoveryMethod(THREE_SERVICES_TWO_VALID_RESOURCES, operation, null);
-		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, null);
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
 	}
 
 
 	public void testDiscoverDataServicesByDomainModel() {
-		//fail("Not tested yet.");
+		final int operation = BY_DS_MODEL;
+		EndpointReferenceType[] services = null;
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "not present");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "caCORE");
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
 	}
 
 
 	public void testDiscoverDataServicesByModelConceptCode() {
-		//fail("Not tested yet.");
+		final int operation = BY_DS_CODE;
+		EndpointReferenceType[] services = null;
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "not present");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C28421");
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
+		
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C28709");
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
+		
 	}
 
 
 	public void testDiscoverDataServicesByExposedClass() {
-		//fail("Not tested yet.");
+		// fail("Not tested yet.");
 	}
 
 
 	public void testDiscoverDataServicesWithAssociationsWithClass() {
-		//fail("Not tested yet.");
+		// fail("Not tested yet.");
 	}
 
 
@@ -431,32 +477,13 @@ public class DiscoveryClientTestCase extends TestCase {
 			Node xmlNode = XmlUtils.newDocument(resource);
 			assertNotNull(xmlNode);
 
+			// validate Service Metadata
 			XObject result = XPathAPI.eval(xmlNode, "//*[local-name()='ServiceMetadata']");
-			assertNotNull(result);
-			if (result instanceof XNodeSet) {
-				XNodeSet set = (XNodeSet) result;
-				NodeList list = set.nodelist();
-				for (int i = 0; i < list.getLength(); i++) {
-					Node node = list.item(i);
-					String xmlContent = null;
-					if (node instanceof Document) {
-						xmlContent = XmlUtils.toString((Document) node);
-					} else if (node instanceof Element) {
-						xmlContent = XmlUtils.toString((Element) node);
-					} else {
-						throw new Exception("Unexpected query result!");
-					}
-					try {
-						// validate the "registered" service's XML
-						SchemaValidator validator = new SchemaValidator(getSchemaFilename());
-						validator.validate(xmlContent);
-					} catch (SchemaValidationException e) {
-						fail("Schema validation error:" + e.getMessage() + "\n" + xmlContent);
-					}
-				}
-			} else {
-				throw new Exception("Unexpected query result!");
-			}
+			assertValidXML(result, METADATA_XSD);
+
+			// validate Data Service Metadata
+			result = XPathAPI.eval(xmlNode, "//*[local-name()='DomainModel']");
+			assertValidXML(result, DATA_METADATA_XSD);
 
 			client = new MockDiscoveryClient(xmlNode);
 		} catch (Exception e) {
@@ -466,8 +493,37 @@ public class DiscoveryClientTestCase extends TestCase {
 	}
 
 
-	private String getSchemaFilename() {
-		File file = new File(METADATA_XSD);
+	private void assertValidXML(XObject result, String schemaFile) throws TransformerException, Exception {
+		assertNotNull(result);
+		if (result instanceof XNodeSet) {
+			XNodeSet set = (XNodeSet) result;
+			NodeList list = set.nodelist();
+			for (int i = 0; i < list.getLength(); i++) {
+				Node node = list.item(i);
+				String xmlContent = null;
+				if (node instanceof Document) {
+					xmlContent = XmlUtils.toString((Document) node);
+				} else if (node instanceof Element) {
+					xmlContent = XmlUtils.toString((Element) node);
+				} else {
+					throw new Exception("Unexpected query result!");
+				}
+				try {
+					// validate the "registered" service's XML
+					SchemaValidator validator = new SchemaValidator(getSchemaFilename(schemaFile));
+					validator.validate(xmlContent);
+				} catch (SchemaValidationException e) {
+					fail("Schema validation error:" + e.getMessage() + "\n" + xmlContent);
+				}
+			}
+		} else {
+			throw new Exception("Unexpected query result!");
+		}
+	}
+
+
+	private String getSchemaFilename(String filepath) {
+		File file = new File(filepath);
 		assertNotNull(file);
 		assertTrue(file.exists() && file.canRead());
 		return file.getAbsolutePath();
@@ -477,6 +533,5 @@ public class DiscoveryClientTestCase extends TestCase {
 	public static void main(String[] args) {
 		junit.textui.TestRunner.run(DiscoveryClientTestCase.class);
 	}
-
 
 }
