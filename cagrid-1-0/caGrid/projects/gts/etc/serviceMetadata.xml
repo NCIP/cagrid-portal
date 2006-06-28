@@ -1,30 +1,210 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ServiceMetadata xmlns="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
-    xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
-    xmlns:serv="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
-    <serviceDescription>
-        <serv:Service description="The Grid Trust Service (GTS) is a federated solution for managing
-            the trust fabric in the grid." name="GTS" version="1.0">
-            <serv:pointOfContactCollection>
-                <com:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu"
-                    firstName="Stephen" lastName="Langella" role="Maintainer"/>
-            </serv:pointOfContactCollection>
-            <serv:serviceContextCollection>
-                <serv:ServiceContext description="The main service context." name="Main">
-                    <serv:operationCollection/>
-                    <serv:contextPropertyCollection/>
-                </serv:ServiceContext>
-            </serv:serviceContextCollection>
-        </serv:Service>
-    </serviceDescription>
-    <hostingResearchCenter>
-        <com:ResearchCenter displayName="Ohio State University" shortName="OSU">
-            <com:Address country="US" postalCode="43210" stateProvence="OH" street1="333 W. 10th
-                Ave."/>
-            <com:pointOfContactCollection>
-                <com:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu"
-                    firstName="Stephen" lastName="Langella" role="Maintainer"/>
-            </com:pointOfContactCollection>
-        </com:ResearchCenter>
-    </hostingResearchCenter>
-</ServiceMetadata>
+<ns1:ServiceMetadata xsi:type="ns1:ServiceMetadata" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <ns1:serviceDescription>
+  <ns2:Service description="The Grid Trust Service (GTS) is a federated solution for managing             the trust fabric in the grid." name="GTS" version="1.0" xsi:type="ns2:Service" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+   <ns2:pointOfContactCollection>
+    <ns3:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Maintainer" xsi:type="ns3:PointOfContact" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   </ns2:pointOfContactCollection>
+   <ns2:serviceContextCollection>
+    <ns2:ServiceContext description="" name="GTS" xsi:type="ns2:ServiceContext">
+     <ns2:operationCollection>
+      <ns2:Operation description="" name="getServiceSecurityMetadata" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection/>
+       <ns2:Output qName="ns4:ServiceSecurityMetadata" dimentionality="1" isArray="false" xsi:type="ns2:Output" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="addTrustedAuthority" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns5:TrustedAuthority" dimentionality="1" index="0" isArray="false" isRequired="false" name="ta" xsi:type="ns2:InputParameter" xmlns:ns5="http://cagrid.nci.nih.gov/8/gts"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns6:TrustedAuthority" dimentionality="1" isArray="false" xsi:type="ns2:Output" xmlns:ns6="http://cagrid.nci.nih.gov/8/gts"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="IllegalTrustedAuthorityFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="findTrustedAuthorities" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns7:TrustedAuthorityFilter" dimentionality="1" index="0" isArray="false" isRequired="false" name="filter" xsi:type="ns2:InputParameter" xmlns:ns7="http://cagrid.nci.nih.gov/8/gts"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns8:TrustedAuthority" dimentionality="1" isArray="true" xsi:type="ns2:Output" xmlns:ns8="http://cagrid.nci.nih.gov/8/gts"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="removeTrustedAuthority" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="xsd:string" dimentionality="1" index="0" isArray="false" isRequired="false" name="trustedAuthorityName" xsi:type="ns2:InputParameter" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="InvalidTrustedAuthorityFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="addPermission" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns9:Permission" dimentionality="1" index="0" isArray="false" isRequired="false" name="permission" xsi:type="ns2:InputParameter" xmlns:ns9="http://cagrid.nci.nih.gov/8/gts"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="IllegalPermissionFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="findPermissions" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns10:PermissionFilter" dimentionality="1" index="0" isArray="false" isRequired="false" name="filter" xsi:type="ns2:InputParameter" xmlns:ns10="http://cagrid.nci.nih.gov/8/gts"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns11:Permission" dimentionality="1" isArray="true" xsi:type="ns2:Output" xmlns:ns11="http://cagrid.nci.nih.gov/8/gts"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="revokePermission" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns12:Permission" dimentionality="1" index="0" isArray="false" isRequired="false" name="permission" xsi:type="ns2:InputParameter" xmlns:ns12="http://cagrid.nci.nih.gov/8/gts"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="InvalidPermissionFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="updateTrustedAuthority" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns13:TrustedAuthority" dimentionality="1" index="0" isArray="false" isRequired="false" name="ta" xsi:type="ns2:InputParameter" xmlns:ns13="http://cagrid.nci.nih.gov/8/gts"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="IllegalTrustedAuthorityFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="InvalidTrustedAuthorityFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="addTrustLevel" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns14:TrustLevel" dimentionality="1" index="0" isArray="false" isRequired="false" name="trustLevel" xsi:type="ns2:InputParameter" xmlns:ns14="http://cagrid.nci.nih.gov/8/gts"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="IllegalTrustLevelFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="updateTrustLevel" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns15:TrustLevel" dimentionality="1" index="0" isArray="false" isRequired="false" name="trustLevel" xsi:type="ns2:InputParameter" xmlns:ns15="http://cagrid.nci.nih.gov/8/gts"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="InvalidTrustLevelFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="IllegalTrustLevelFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getTrustLevels" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection/>
+       <ns2:Output qName="ns16:TrustLevel" dimentionality="1" isArray="true" xsi:type="ns2:Output" xmlns:ns16="http://cagrid.nci.nih.gov/8/gts"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="removeTrustLevel" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="xsd:string" dimentionality="1" index="0" isArray="false" isRequired="false" name="trustLevelName" xsi:type="ns2:InputParameter" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="InvalidTrustLevelFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="IllegalTrustLevelFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="addAuthority" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns17:AuthorityGTS" dimentionality="1" index="0" isArray="false" isRequired="false" name="authorityGTS" xsi:type="ns2:InputParameter" xmlns:ns17="http://cagrid.nci.nih.gov/8/gts"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="IllegalAuthorityFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="updateAuthority" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns18:AuthorityGTS" dimentionality="1" index="0" isArray="false" isRequired="false" name="authorityGTS" xsi:type="ns2:InputParameter" xmlns:ns18="http://cagrid.nci.nih.gov/8/gts"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="IllegalAuthorityFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="InvalidAuthorityFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="updateAuthorityPriorities" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns19:AuthorityPriorityUpdate" dimentionality="1" index="0" isArray="false" isRequired="false" name="authorityPriorityUpdate" xsi:type="ns2:InputParameter" xmlns:ns19="http://cagrid.nci.nih.gov/8/gts"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="IllegalAuthorityFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getAuthorities" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection/>
+       <ns2:Output qName="ns20:AuthorityGTS" dimentionality="1" isArray="true" xsi:type="ns2:Output" xmlns:ns20="http://cagrid.nci.nih.gov/8/gts"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="removeAuthority" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="xsd:string" dimentionality="1" index="0" isArray="false" isRequired="false" name="serviceURI" xsi:type="ns2:InputParameter" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="InvalidAuthorityFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="updateCRL" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="xsd:string" dimentionality="1" index="0" isArray="false" isRequired="false" name="trustedAuthorityName" xsi:type="ns2:InputParameter" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+        <ns2:InputParameter qName="ns21:X509CRL" dimentionality="1" index="1" isArray="false" isRequired="false" name="crl" xsi:type="ns2:InputParameter" xmlns:ns21="http://cagrid.nci.nih.gov/8/gts"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="IllegalTrustedAuthorityFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="InvalidTrustedAuthorityFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="validate" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns22:X509Certificate" dimentionality="1" index="0" isArray="true" isRequired="false" name="chain" xsi:type="ns2:InputParameter" xmlns:ns22="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="ns23:TrustedAuthorityFilter" dimentionality="1" index="1" isArray="false" isRequired="false" name="filter" xsi:type="ns2:InputParameter" xmlns:ns23="http://cagrid.nci.nih.gov/8/gts"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="xsd:boolean" dimentionality="1" isArray="false" xsi:type="ns2:Output" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GTSInternalFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="CertificateValidationFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+     </ns2:operationCollection>
+     <ns2:contextPropertyCollection>
+      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata" xsi:type="ns2:ContextProperty"/>
+     </ns2:contextPropertyCollection>
+    </ns2:ServiceContext>
+   </ns2:serviceContextCollection>
+  </ns2:Service>
+ </ns1:serviceDescription>
+ <ns1:hostingResearchCenter>
+  <ns24:ResearchCenter displayName="Ohio State University" shortName="OSU" xsi:type="ns24:ResearchCenter" xmlns:ns24="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns24:Address country="US" postalCode="43210" stateProvence="OH" street1="333 W. 10th                 Ave." xsi:type="ns24:Address"/>
+   <ns24:pointOfContactCollection>
+    <ns24:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Maintainer" xsi:type="ns24:PointOfContact"/>
+   </ns24:pointOfContactCollection>
+  </ns24:ResearchCenter>
+ </ns1:hostingResearchCenter>
+</ns1:ServiceMetadata>
