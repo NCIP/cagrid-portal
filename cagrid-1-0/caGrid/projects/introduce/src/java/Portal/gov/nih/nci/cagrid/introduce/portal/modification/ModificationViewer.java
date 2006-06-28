@@ -988,10 +988,23 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JPanel getNamespacePanel() {
 		if (namespacePanel == null) {
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.gridx = 1;
+			gridBagConstraints14.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints14.weighty = 0.8D;
+			gridBagConstraints14.weightx = 0.8D;
+			gridBagConstraints14.gridy = 0;
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 0;
+			gridBagConstraints12.ipady = 0;
+			gridBagConstraints12.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints12.weighty = 0.5D;
+			gridBagConstraints12.weightx = 0.5D;
+			gridBagConstraints12.gridy = 0;
 			namespacePanel = new JPanel();
-			namespacePanel.setLayout(new GridLayout(1, 2));
-			namespacePanel.add(getNamespaceConfigurationPanel());
-			namespacePanel.add(getNamespaceConfPanel());
+			namespacePanel.setLayout(new GridBagLayout());
+			namespacePanel.add(getNamespaceConfigurationPanel(), gridBagConstraints12);
+			namespacePanel.add(getNamespaceConfPanel(), gridBagConstraints14);
 		}
 		return namespacePanel;
 	}
