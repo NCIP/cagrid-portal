@@ -91,9 +91,5 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-common-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-service-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-stubs-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/ServiceSecurity_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/ServiceSecurity-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/ServiceSecurity-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/ServiceSecurity-service.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
