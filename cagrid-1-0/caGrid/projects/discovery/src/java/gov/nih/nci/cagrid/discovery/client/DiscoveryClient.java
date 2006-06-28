@@ -321,7 +321,10 @@ public class DiscoveryClient {
 
 
 	public EndpointReferenceType[] discoverDataServicesByExposedClass(UMLClass clazzPrototype) throws Exception {
-		throw new Exception("Not yet implemented");
+		String umlClassPredicate = buildUMLClassPredicate(clazzPrototype);
+
+		return discoverByFilter(DATA_MD_PATH + "/" + data + ":exposedUMLClassCollection/" + com + ":UMLClass["
+			+ umlClassPredicate + "]");
 	}
 
 

@@ -146,7 +146,7 @@ public class DiscoveryClientTestCase extends TestCase {
 		assertEquals(0, services.length);
 
 		clazz.setClassName("non-present class");
-		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, clazz);
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, clazz);
 		assertEquals(0, services.length);
 	}
 
@@ -163,7 +163,7 @@ public class DiscoveryClientTestCase extends TestCase {
 		assertEquals(0, services.length);
 
 		clazz.setClassName("non-present class");
-		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, clazz);
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, clazz);
 		assertEquals(0, services.length);
 	}
 
@@ -180,7 +180,7 @@ public class DiscoveryClientTestCase extends TestCase {
 		assertEquals(0, services.length);
 
 		clazz.setClassName("non-present class");
-		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, clazz);
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, clazz);
 		assertEquals(0, services.length);
 	}
 
@@ -351,15 +351,39 @@ public class DiscoveryClientTestCase extends TestCase {
 
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C28421");
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
-		
+
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C28709");
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
-		
+
 	}
 
 
 	public void testDiscoverDataServicesByExposedClass() {
-		// fail("Not tested yet.");
+		final int operation = BY_DS_CLASS;
+		EndpointReferenceType[] services = null;
+		UMLClass clazz = new UMLClass();
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, clazz);
+		assertEquals(0, services.length);
+
+		clazz.setClassName("non-present class");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, clazz);
+		assertEquals(0, services.length);
+
+		clazz.setClassName("Gene");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, clazz);
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
+
+		clazz.setClassName("Taxon");
+		clazz.setPackageName("gov.nih.nci.cabio.domain");
+		clazz.setProjectName("caCORE");
+		clazz.setProjectVersion("3");
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, clazz);
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
+
 	}
 
 

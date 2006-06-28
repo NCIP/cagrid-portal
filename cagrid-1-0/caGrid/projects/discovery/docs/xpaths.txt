@@ -57,5 +57,6 @@ wssg:Content/agg:AggregatorData/data:DomainModel/data:exposedUMLClassCollection/
 ]
 
 #ds class
+wssg:Content/agg:AggregatorData/data:DomainModel/data:exposedUMLClassCollection/com:UMLClass[UML_CRITERIA]
 
 #ds assoc
