@@ -4,7 +4,10 @@ import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTable.ColumnSorter;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Vector;
 
 import javax.swing.event.TableModelEvent;
@@ -13,9 +16,8 @@ import javax.swing.table.DefaultTableModel;
 
 
 /**
- * ServicePropertiesTable
- * Table to render and allow modification of service properties
- * as contained in an introduce service model.
+ * ServicePropertiesTable Table to render and allow modification of service
+ * properties as contained in an introduce service model.
  * 
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -29,8 +31,10 @@ public class ServicePropertiesTable extends PortalBaseTable {
 
 	private ServiceInformation info;
 
+
 	public ServicePropertiesTable(ServiceInformation info) {
 		super(new MyDefaultTableModel());
+		setAutoCreateColumnsFromModel(false);
 		this.info = info;
 		initialize();
 	}
@@ -39,8 +43,8 @@ public class ServicePropertiesTable extends PortalBaseTable {
 	public boolean isCellEditable(int row, int column) {
 		return true;
 	}
-	
-	
+
+
 	public void refreshView() {
 		// clean out old data
 		while (getRowCount() != 0) {
@@ -59,10 +63,13 @@ public class ServicePropertiesTable extends PortalBaseTable {
 				}
 			}
 		}
+
+		sort();
+
 		repaint();
 	}
-	
-	
+
+
 	private void setSelectedRow(int row) {
 		setRowSelectionInterval(row, row);
 	}
@@ -71,33 +78,37 @@ public class ServicePropertiesTable extends PortalBaseTable {
 	public void addRow(String key, String value) {
 		// add the property to the service model
 		CommonTools.setServiceProperty(info, key, value);
-				
+
 		// add the row to the GUI
 		refreshView();
-		
-		// select the newly added row
-		setSelectedRow(info.getServiceProperties().getProperty().length - 1);
+
+		for (int i = 0; i < getRowCount(); i++) {
+			String tkey = (String) getModel().getValueAt(i, 0);
+			if (tkey.equals(key)) {
+				// select the newly added row
+				setSelectedRow(i);
+			}
+		}
+
 	}
 
 
-	public void modifyRow(final ServicePropertiesProperty property, int row) 
-		throws IndexOutOfBoundsException {
+	public void modifyRow(final ServicePropertiesProperty property, int row) throws IndexOutOfBoundsException {
 		if ((row < 0) || (row >= getRowCount())) {
 			throw new IndexOutOfBoundsException("invalid row: " + row);
 		}
 		// modify the property in the service model
 		info.getServiceProperties().setProperty(row, property);
-		
+
 		// update the gui
 		refreshView();
 	}
 
 
-	public void modifySelectedRow(final ServicePropertiesProperty property) 
-		throws IndexOutOfBoundsException {
+	public void modifySelectedRow(final ServicePropertiesProperty property) throws IndexOutOfBoundsException {
 		modifyRow(property, getSelectedRow());
 	}
-	
+
 
 	public void removeSelectedRow() throws IndexOutOfBoundsException {
 		int row = getSelectedRow();
@@ -108,10 +119,10 @@ public class ServicePropertiesTable extends PortalBaseTable {
 		// remove the row from the model
 		String removeKey = info.getServiceProperties().getProperty(oldSelectedRow).getKey();
 		CommonTools.removeServiceProperty(info, removeKey);
-		
+
 		// update GUI
 		refreshView();
-		
+
 		// change row selection
 		if (getRowCount() > 0) {
 			if (oldSelectedRow == 0) {
@@ -128,18 +139,6 @@ public class ServicePropertiesTable extends PortalBaseTable {
 		this.getColumn(DATA1).setMinWidth(0);
 		this.getColumn(DATA1).setPreferredWidth(0);
 		refreshView();
-		// handle modifications to the table model
-		((DefaultTableModel) getModel()).addTableModelListener(new TableModelListener() {
-			public void tableChanged(TableModelEvent e) {
-				if (e.getType() == TableModelEvent.UPDATE) {
-					int row = e.getFirstRow();
-					String key = (String) getValueAt(row, 0);
-					String val = (String) getValueAt(row, 1);
-					ServicePropertiesProperty modified = new ServicePropertiesProperty(key, val);
-					modifyRow(modified, row);
-				}
-			}
-		});
 	}
 
 
@@ -150,6 +149,54 @@ public class ServicePropertiesTable extends PortalBaseTable {
 
 	public void doubleClick() throws Exception {
 		// TODO Auto-generated method stub
+	}
+
+
+	public void sort() {
+		DefaultTableModel model = (DefaultTableModel) getModel();
+		Vector data = model.getDataVector();
+		Collections.sort(data, new ColumnSorter(0, true));
+		model.fireTableStructureChanged();
+	}
+
+
+	public class ColumnSorter implements Comparator {
+		int colIndex;
+		boolean ascending;
+
+
+		ColumnSorter(int colIndex, boolean ascending) {
+			this.colIndex = colIndex;
+			this.ascending = ascending;
+		}
+
+
+		public int compare(Object a, Object b) {
+			Vector v1 = (Vector) a;
+			Vector v2 = (Vector) b;
+			String o1 = (String) v1.get(colIndex);
+			String o2 = (String) v2.get(colIndex);
+
+			if (o1 == null && o2 == null) {
+				return 0;
+			} else if (o1 == null) {
+				return 1;
+			} else if (o2 == null) {
+				return -1;
+			} else if (o1 instanceof Comparable) {
+				if (ascending) {
+					return ((Comparable) o1).compareTo(o2);
+				} else {
+					return ((Comparable) o2).compareTo(o1);
+				}
+			} else {
+				if (ascending) {
+					return o1.toString().compareTo(o2.toString());
+				} else {
+					return o2.toString().compareTo(o1.toString());
+				}
+			}
+		}
 	}
 
 

@@ -16,10 +16,8 @@ import java.util.Properties;
 import java.util.Vector;
 
 import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
 
 
 /**
@@ -108,8 +106,9 @@ public class MethodsTable extends PortalBaseTable {
 	public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
 		Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
 		MethodType method = getMethodType(rowIndex);
+		c.setForeground(Color.BLACK);
 		if (method.isIsImported()) {
-			c.setBackground(new Color(235,235,235));
+			c.setBackground(new Color(235, 235, 235));
 			c.setFont(getFont().deriveFont(Font.ITALIC));
 		} else {
 			c.setBackground(getBackground());
@@ -117,9 +116,8 @@ public class MethodsTable extends PortalBaseTable {
 		}
 		if (isCellSelected(rowIndex, vColIndex)) {
 			c.setBackground(getSelectionBackground());
+			c.setForeground(Color.WHITE);
 		}
-		c.setForeground(Color.BLACK);
-		
 		return c;
 	}
 
