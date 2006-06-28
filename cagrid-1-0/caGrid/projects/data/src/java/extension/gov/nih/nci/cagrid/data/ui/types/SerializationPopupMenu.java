@@ -4,13 +4,12 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
 import java.awt.Component;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 /** 
  *  SerializationPopupMenu
@@ -83,7 +82,8 @@ public class SerializationPopupMenu extends JPopupMenu {
 			String ser = types[i].getSerializer();
 			String des = types[i].getDeserializer();
 			if (!(ser != null && des != null && 
-				ser.equals(DataServiceConstants.SDK_SERIALIZER) && des.equals(DataServiceConstants.SDK_DESERIALIZER))) {
+				ser.equals(DataServiceConstants.SDK_SERIALIZER) 
+				&& des.equals(DataServiceConstants.SDK_DESERIALIZER))) {
 				return false;
 			}
 		}
@@ -95,9 +95,9 @@ public class SerializationPopupMenu extends JPopupMenu {
 		if (defaultCheckItem == null) {
 			defaultCheckItem = new JCheckBoxMenuItem();
 			defaultCheckItem.setText("Default Serialization");
-			defaultCheckItem.addChangeListener(new ChangeListener() {
-				public void stateChanged(ChangeEvent e) {
-					if (defaultCheckItem.isSelected()) {
+			defaultCheckItem.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
 						for (int i = 0; i < schemaTypes.length; i++) {
 							schemaTypes[i].setSerializer("");
 							schemaTypes[i].setDeserializer("");
@@ -116,9 +116,9 @@ public class SerializationPopupMenu extends JPopupMenu {
 		if (sdkCheckItem == null) {
 			sdkCheckItem = new JCheckBoxMenuItem();
 			sdkCheckItem.setText("SDK Serialization");
-			sdkCheckItem.addChangeListener(new ChangeListener() {
-				public void stateChanged(ChangeEvent e) {
-					if (sdkCheckItem.isSelected()) {
+			sdkCheckItem.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
 						for (int i = 0; i < schemaTypes.length; i++) {
 							schemaTypes[i].setSerializer(DataServiceConstants.SDK_SERIALIZER);
 							schemaTypes[i].setDeserializer(DataServiceConstants.SDK_DESERIALIZER);
@@ -137,15 +137,11 @@ public class SerializationPopupMenu extends JPopupMenu {
 		if (customCheckItem == null) {
 			customCheckItem = new JCheckBoxMenuItem();
 			customCheckItem.setText("Custom Serialization");
-			customCheckItem.addChangeListener(new ChangeListener() {
-				public void stateChanged(ChangeEvent e) {
-					if (customCheckItem.isSelected()) {
-						String serializer = JOptionPane.showInputDialog(typesTable, "Enter Serializer Class", "Serializer", JOptionPane.QUESTION_MESSAGE);
-						String deserializer = JOptionPane.showInputDialog(typesTable, "Enter Deserializer Class", "Deserializer", JOptionPane.QUESTION_MESSAGE);
+			customCheckItem.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						new CustomSerializationDialog(schemaTypes);
 						for (int i = 0; i < schemaTypes.length; i++) {
-							schemaTypes[i].setSerializer(serializer);
-							schemaTypes[i].setDeserializer(deserializer);
-							schemaTypes[i].setClassName(schemaTypes[i].getType());
 							typesTable.refreshSerialization(schemaTypes[i]);
 						}
 					}
