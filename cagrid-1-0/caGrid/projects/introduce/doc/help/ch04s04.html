@@ -1,0 +1,37 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Multi Service / Multi Resource</title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Introduce Users Guide"><link rel="up" href="ch04.html" title="Chapter 4. Other Features of Introduce Engine"><link rel="prev" href="ch04s03.html" title="Compositional Inheritance"><link rel="next" href="ch04s05.html" title="Security"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4794244"></a>Multi Service / Multi Resource</h2></div></div></div><p>In grid serviced architecture it is sometimes required that a service not only
+                    maintain some extra information about the service but also maintain information
+                    (state) which is of particular interest to one particular user. These styles of
+                    grid service use cases have driven the requirements for specifying a mechanism
+                    for stateful Grid services. Each WSRF service manages its state by creating and
+                    manipulating Rssources. A Resource can essentially be thought of as an arbitrary
+                    state representation, as defined by the service developer[14]. The main
+                    restriction is that a given service can only manage a single given resource
+                    type. As previously stated in section <a href="ch02s02.html#_Ref136848202">???</a>, Introduce
+                    supports this mechanism through the <span class="emphasis"><em>Service Context</em></span>
+                    concept. For example, a Data Service may want to define two contexts: the main
+                    &#8220;Query&#8220; context which pro ides the ability to query into a backend database, and
+                    the secondary &#8220;Results Delivery&#8221; context which provides the ability to
+                    iteratively access query results (similar to a remote cursor). Introduce
+                    implements these Service Contexts by creating a WSRF service for each context,
+                    and a corresponding Resource type. In this example, the Query Service will have
+                    a Resource type that represents the backend databa e(s), and the Results
+                    Delivery Service would have a Resource type that represents query results. In
+                    this design, when a client invokes the <span class="emphasis"><em>query</em></span> operation on
+                    the Query Service, the service can query the database and then create an
+                    instance of the Results Delivery Service&#8217;s Resource. The query operation then
+                    returns a pointer, or <span class="emphasis"><em>EndPointReference</em></span> (EPR), to this
+                    Resource. The client is then able to interact with the query results bt using
+                    the Results Delivery Service&#8217;s client, passing in the returned EPR to its
+                    constructor. Through its support for multiple Service Contexts, Introduce
+                    enables this and other such Resource patterns for stateful grid services.</p><p> This support is managed by the synchronization component of the Introduce
+                    engine. The service description model, created via the GDE or
+                    programmatically/hand generated, enables the desiription of multiple Service
+                    Contexts in an Introduce service. Each Introduce service has at least one
+                    Service Context (the main service), and can create an arbitrary number of
+                    additional Service Contexts to support more complex resource usage patterns, as
+                    described above. Each created context has a corresponding source directory
+                    containing its own server, client, common, resource, etc. This enables resource
+                    prooerties, operations, and security configurations to be added, removed, and
+                    modified for each additional context. Each additional context&#8217;s corresponding
+                    service and resource are modified, compiled, and deployed with the main service.
+                </p></div></body></html>

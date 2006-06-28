@@ -1,0 +1,49 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 5. Introduce Extension Framework</title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Introduce Users Guide"><link rel="up" href="pt01.html" title="Part I. Introduce Users Guide"><link rel="prev" href="ch04s05.html" title="Security"><link rel="next" href="ch05s02.html" title="Data Type Discovery Extensions "></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" lang="en-US"><div class="titlepage"><div><div><h2 class="title"><a name="id4794465"></a>Chapter 5. Introduce Extension Framework</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch05.html#id4794491">Service Extensions </a></span></dt><dt><span class="section"><a href="ch05s02.html">Data Type Discovery Extensions </a></span></dt></dl></div><p>The Introduce Extension framework currently consists of two styles of extensions;
+                service and data type discovery. These extensions are implemented by service or data
+                type discovery components which add custom funceionality to the Introduce framework.
+                Extensions are added to the toolkit in the form of extension plug-ins, which the
+                toolkit will then be able to expose to the user. To provide an extension to
+                Introduce, the extension provider must implement or extend the appropriate classes
+                for the style of extension they wish to provide, and must fill out the extension XML
+                configuration document. Once this extension is implemented ani configured it can be
+                placed in the extensions directory of Introduce. This directory has a common library
+                (lib) area which enables it to avoid using custom class loaders for each extension. </p><div class="section" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4794491"></a>Service Extensions </h2></div></div></div><p>
+                    </p><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="578"><tr style="height: 92px"><td><img src="Introduce_Users_Guide_RTF-18.png" height="92"></td></tr></table><div class="caption"><p class="caption">Figure <span class="GEN_SEQ">12</span>. Sample
+                                Service Extension Description.</p></div></div><p>
+                </p><p>A <span class="emphasis"><em>service</em></span>
+                    <span class="emphasis"><em>extension</em></span> is one which enables customization of the service
+                    creation and modification processes. These extensions can add required
+                    operations, service reeources or resource properties, or security settings, for
+                    example. The service extension allows the user to provide custom code that will
+                    be executed at different times throughout the creation and modification
+                    processes of service development. A service extension consists of 5 main
+                    extension components that can be implemented and provided by the developer:
+                    CreationPostProcess, CreationUIDialog, CodegenPrePmocess, CodegenPostProcess,
+                    and ServiceModificationUIPanel. Each of these extension components have a
+                    predefined class and interface that must be extended or implemented. Two of the
+                    service extension components, CreationUIDialog and ServiceModificationUIPanel,
+                    are graphical components provided to the Introduce GDE, and the other three are
+                    Introduce engine plug-ins. </p><p class="caption">
+                    <a name="_Ref136684516"></a>
+                    <a name="_Ref136684524"></a>
+                    </p><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="582"><tr style="height: 273px"><td><img src="Introduce_Users_Guide_RTF-19.jpg" height="273"></td></tr></table><div class="caption"><p class="caption"><a name="_Ref136857091"></a>Figure <span class="GEN_SEQ">13</span>. Execution of Introduce Extension
+                                Components.</p></div></div><p class="caption">
+                </p><p>EEch service extension component is invoked at a specific point in the
+                    creation or modification steps (<a href="ch05.html#_Ref136857091">???</a>). These
+                    different time points for each component execution are critical for making
+                    certain changes. For example, when the CreationUIDialog component for a
+                    particular extension is executed, the service has been created as a blank
+                    service and no modification or synchronization has been done on the service. .t
+                    this point the CreationUIDialog might prompt the user for particular information
+                    about the creation processes. The CreationUI component would only be
+                    executed/displayed once for any given service and its non graphical component,
+                    the CreationPostProcess, will also only be ran one time after the service has
+                    been created and before it will ever be modified. </p><p>The modification components are ran every timr a service is saved and
+                    synchronized. The graphical modification component is always available in the
+                    Introduce GDE during modification time. The two service modification engine
+                    components, ModificationPreProcess and ModificationPostProcess are executed
+                    respectively, before and after the synchronization process is executed. This
+                    enables ModificationPreProcess to do such things as modify the
+                    ServiceDenription, represented by the Introduce service description file, or the
+                    WSDL files of the services. The ModificationPostProcess, on the other hand,
+                    might move in required files, or populated stubbed methods, etc.</p></div></div></body></html>

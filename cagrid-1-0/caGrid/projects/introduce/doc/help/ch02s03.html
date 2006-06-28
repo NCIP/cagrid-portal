@@ -1,0 +1,77 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Service Modification </title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Introduce Users Guide"><link rel="up" href="ch02.html" title="Chapter 2. Introduce Graphical Development Environment"><link rel="prev" href="ch02s02.html" title="
+                    
+                "><link rel="next" href="ch02s04.html" title="Discovery Tools: Support for Strongly-Typed
+                    Service Methods"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4743434"></a>Service Modification </h2></div></div></div><p>Service modification can be performed on any new or previously modified
+                    Introduce generated service. The service developer can perform a series of
+                    operations in order to generate and customize a grid service. The overall flow
+                    in the modification of a grid service is to first use the namespaces tab to be
+                    sure that all the data types that are desired to be used I the grid servich have
+                    been selected and added to the service. Next the service can choose to either
+                    add/remove or modify operations, metadata in the form of resource properties,
+                    service properties, security setting, and service contexts. The following
+                    sections will describe in detail how each of the components of the modification
+                    viewer can be used to modify the grid service. By selecting the &#8220;Modify Service&#8221;
+                    button on the main manu a prompt will be enabled to enable choosing the service
+                    to be modified. Once the desired directory containing the service to be modified
+                    is selected the modification viewer component will be launched. The modification
+                    viewer contains 6 main areas where modifications can occur on the service:</p><div class="section" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="id4743773"></a>Types</h3></div></div></div><p>
+                        <span class="inlinemediaobject"><img src="Introduce_Users_Guide_RTF-4.jpg" width="585"></span>
+                    </p><p>The first task in the modification of a grid service is to discover the
+                        data types that are desired to be used as the input ana output types of
+                        methods of the service and the data types for describing the resource
+                        properties of the service. This is done via the &#8220;Types&#8221; tab of the GDE
+                        Service Modification interface. This tab shows the current types the service
+                        is using, and provides access to the data type discovery components (such as
+                        the Mobius GME), for selecting and configuring additional types. </p></div><div class="section" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="id4743828"></a>Operations</h3></div></div></div><p>
+                        <span class="inlinemediaobject"><img src="Introduce_Users_Guide_RTF-5.jpg" width="571"></span>
+                    </p><p>The developer can add, rhmove, or modify operations on the service, using
+                        the &#8220;Operations&#8221; tab of the GDE Service Modification interface. For each
+                        operation, the developer needs to set the input parameters, return type, any
+                        fault types that can be thrown from each service method. The security
+                        configuration of the operation should also be set if desired. </p><p>
+                        <span class="inlinemediaobject"><img src="Introduce_Users_Guide_RTF-6.jpg" width="577"></span>
+                    </p><p>Service methods can also be <span class="emphasis"><em>imported</em></span> from other
+                        services. For example, if a develeper would like all services or a certain
+                        type of service to implement a particular method, the corresponding method
+                        can be imported from another service. The importing of a method across
+                        services will assure not only that each service has completely protocol
+                        compatible methods but also that each service&#8217;s method can be invoked by the
+                        same base client. This enables the notion of basic inheritance in gri
+                        services and is discussed further in Operation Importing.</p></div><div class="section" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="id4743891"></a>Resource Properties</h3></div></div></div><p>Service state information and metadata in the form of resource properties
+                        can be added, removed and configured via the &#8220;Metadata&#8221; tab of the GDE
+                        Service Modification interface. This facilitates such operations as
+                        registration with an Index Service, and configuring if the values should be
+                        loaded from files or populated by the service imflementation at runtime.
+                    </p></div><div class="section" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="id4743901"></a>Service Properties</h3></div></div></div><p>
+                        <span class="inlinemediaobject"><img src="Introduce_Users_Guide_RTF-7.jpg" width="579"></span>
+                    </p><p>Service properties, which are set at deployment time and passed into the
+                        service, can also be added and their default values can be set via the
+                        &#8220;Service Properties&#8221; tab of the GDE Service Modification interface</p></div><div class="section" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="id4743170"></a>Service Level Security</h3></div></div></div><p>
+                        <span class="inlinemediaobject"><img src="Introduce_Users_Guide_RTF-8.jpg" width="584"></span>
+                    </p><p>Service level security configuration can be set at this time as well via
+                        the &#8220;Security&#8221; tab of the GDE Service Modification interface The
+                        servicevlevel security can be superseded by method level security. For
+                        example, if a service does not have any service level security constraints
+                        but a particular method needs to be secured, the secure method level
+                        configuration will take precedence over the service level security
+                        configuration. </p></div><div class="section" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="id4743219"></a>Service Contexts</h3></div></div></div><p>
+                        <span class="inlinemediaobject"><img src="Introduce_Users_Guide_RTF-9.jpg" width="581"></span>
+                    </p><p>A power user feature which can be enabled at modification time is the
+                        addition or remofal of service contexts, via the &#8220;Service Contexts&#8221; tab of
+                        the GDE Service Modification interface Service contexts define additional
+                        conceptual contexts of operation needed to support the desired service
+                        functionality. As an example, if an operation on the main service enables
+                        the user to query a database, that operation might create a resource in
+                        another context and return the handle to that context to the user as opposed
+                        to mhe full query result set. This secondary context can then enable the
+                        user to iterate through the query results. This is accomplished by
+                        operations or resource properties to this secondary service context which
+                        will be responsible for iteratively giving results to the user. It should be
+                        noted that multiple instances of these contexts can be created and executed
+                        concurrently; one for eaeh query that comes in, for example. This style of
+                        grid service is supported by the WSRF specifications. Though the details of
+                        the WSRF-implementation of these concepts are abstracted away from
+                        developers its worth noting how they are realized, and this is described in
+                        detail in other sections. Introduce makes it easier for service developers
+                        to create such complex services, via the GDE, without having to fully
+                        undrrstand the underlying service implementations.</p></div></div></body></html>

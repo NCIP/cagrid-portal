@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE toc PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 1.0//EN" "http://java.sun.com/products/javahelp/toc_1_0.dtd">
+<toc version="1.0">
+  <tocitem target="id4672446" text="Introduce Users Guide">
+    <tocitem target="id4783616" text="Introduce Users Guide">
+      <tocitem target="id4783622" text="Overview">
+        <tocitem target="id4783598" text="Prerequisites"/>
+      </tocitem>
+      <tocitem target="id4744334" text="Introduce Graphical Development Environment">
+        <tocitem target="id4744400" text="Service Creation"/>
+        <tocitem target="id4743419" text="&#10;                    &#10;                "/>
+        <tocitem target="id4743434" text="Service Modification ">
+          <tocitem target="id4743773" text="Types"/>
+          <tocitem target="id4743828" text="Operations"/>
+          <tocitem target="id4743891" text="Resource Properties"/>
+          <tocitem target="id4743901" text="Service Properties"/>
+          <tocitem target="id4743170" text="Service Level Security"/>
+          <tocitem target="id4743219" text="Service Contexts"/>
+        </tocitem>
+        <tocitem target="id4793088" text="Discovery Tools: Support for Strongly-Typed&#10;                    Service Methods"/>
+        <tocitem target="id4793143" text="Deployment"/>
+      </tocitem>
+      <tocitem target="id4793219" text="Introduce Engine">
+        <tocitem target="id4793237" text="Service Creator"/>
+        <tocitem target="id4793377" text="Service Synchronizer"/>
+        <tocitem target="id4793873" text="Service Deployer"/>
+      </tocitem>
+      <tocitem target="id4793937" text="Other Features of Introduce Engine">
+        <tocitem target="id4793943" text="Auto-boxing/Unboxing of Service Operations "/>
+        <tocitem target="id4794069" text="Resource Framework"/>
+        <tocitem target="id4794184" text="Compositional Inheritance"/>
+        <tocitem target="id4794244" text="Multi Service / Multi Resource"/>
+        <tocitem target="id4794378" text="Security"/>
+      </tocitem>
+      <tocitem target="id4794465" text="Introduce Extension Framework">
+        <tocitem target="id4794491" text="Service Extensions "/>
+        <tocitem target="id4794686" text="Data Type Discovery Extensions "/>
+      </tocitem>
+    </tocitem>
+  </tocitem>
+</toc>
