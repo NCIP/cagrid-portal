@@ -28,6 +28,45 @@ import javax.swing.tree.DefaultTreeModel;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  */
 public class MethodsTable extends PortalBaseTable {
+	class MethodTypeContainer implements Comparable {
+		private MethodType method;
+
+
+		public MethodType getMethod() {
+			return method;
+		}
+
+
+		public void setMethod(MethodType method) {
+			this.method = method;
+		}
+
+
+		public MethodTypeContainer(MethodType method) {
+			this.method = method;
+		}
+
+
+		public String toString() {
+			return CommonTools.methodTypeToString(this.method);
+		}
+
+
+		public int compareTo(Object arg0) {
+			MethodTypeContainer mtc = (MethodTypeContainer) (arg0);
+			if (getMethod().isIsImported() && mtc.getMethod().isIsImported()) {
+				return 100 + getMethod().getName().compareTo(mtc.getMethod().getName());
+			} else if (!getMethod().isIsImported() && !mtc.getMethod().isIsImported()) {
+				return getMethod().getName().compareTo(mtc.getMethod().getName());
+			} else if (this.getMethod().isIsImported()) {
+				return 100;
+			} else if (!this.getMethod().isIsImported()) {
+				return 0;
+			}
+			return 0;
+		}
+	}
+
 	public static final String OPERATION = "Operation";
 	private ServiceType serviceType;
 
@@ -70,17 +109,17 @@ public class MethodsTable extends PortalBaseTable {
 		Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
 		MethodType method = getMethodType(rowIndex);
 		if (method.isIsImported()) {
-			c.setBackground(Color.LIGHT_GRAY);
+			c.setBackground(new Color(235,235,235));
 			c.setFont(getFont().deriveFont(Font.ITALIC));
 		} else {
-			// If not shaded, match the table's background
 			c.setBackground(getBackground());
-			c.setFont(getFont().deriveFont(Font.BOLD));
+			c.setFont(getFont().deriveFont(Font.BOLD + Font.ITALIC));
 		}
 		if (isCellSelected(rowIndex, vColIndex)) {
 			c.setBackground(getSelectionBackground());
 		}
 		c.setForeground(Color.BLACK);
+		
 		return c;
 	}
 
@@ -152,46 +191,6 @@ public class MethodsTable extends PortalBaseTable {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(OPERATION);
 		return model;
-	}
-
-
-	class MethodTypeContainer implements Comparable {
-		private MethodType method;
-
-
-		public MethodType getMethod() {
-			return method;
-		}
-
-
-		public void setMethod(MethodType method) {
-			this.method = method;
-		}
-
-
-		public MethodTypeContainer(MethodType method) {
-			this.method = method;
-		}
-
-
-		public String toString() {
-			return CommonTools.methodTypeToString(this.method);
-		}
-
-
-		public int compareTo(Object arg0) {
-			MethodTypeContainer mtc = (MethodTypeContainer) (arg0);
-			if (getMethod().isIsImported() && mtc.getMethod().isIsImported()) {
-				return 100 + getMethod().getName().compareTo(mtc.getMethod().getName());
-			} else if (!getMethod().isIsImported() && !mtc.getMethod().isIsImported()) {
-				return getMethod().getName().compareTo(mtc.getMethod().getName());
-			} else if (this.getMethod().isIsImported()) {
-				return 100;
-			} else if (!this.getMethod().isIsImported()) {
-				return 0;
-			}
-			return 0;
-		}
 	}
 
 
