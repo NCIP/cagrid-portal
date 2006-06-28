@@ -28,7 +28,7 @@ public class GTSPublicClient {
 	private GTSClient client;
 
 
-	public GTSPublicClient(String url) throws MalformedURIException {
+	public GTSPublicClient(String url) throws MalformedURIException, RemoteException {
 		this.client = new GTSClient(url);
 	}
 

@@ -165,27 +165,15 @@
 		</path>
 	</target>
 
-	<!-- "Flattens" the WSDL file. i.e. runs the WSDL Preprocessor and creates a single
-	     WSDL file with all the operations and RPs in the portTypes specified in
-	     the wsdlpp:extends attribute (plus, of course, those defined in our own WSDL file) -->
-	<!-- Note that this is done with a GT4 tool -->
-	<target name="serviceFlatten" depends="init">
-		<ant antfile="${build.stubs}" target="flatten">
-			<property name="source.flatten.dir" location="${schema.dest}/${schema.path}" />
-			<property name="target.flatten.dir" location="${schema.dest}/${schema.path}" />
-			<property name="wsdl.source" value="${interface.name}.wsdl" />
-			<property name="wsdl.target" value="${interface.name}_flattened.wsdl" />
-			<property name="wsdl.porttype" value="${interface.name}PortType" />
-		</ant>
-	</target>
+
 
 	<!-- Generate bindings for our WSDL file -->
 	<!-- This is done with a GT4 tool -->
-	<target name="serviceGenerateBindings" depends="serviceFlatten">
+	<target name="serviceGenerateBindings" depends="init">
 		<ant antfile="${build.stubs}" target="generateBinding">
 			<property name="source.binding.dir" value="${schema.dest}/${schema.path}" />
 			<property name="target.binding.dir" value="${schema.dest}/${schema.path}" />
-			<property name="porttype.wsdl" value="${interface.name}_flattened.wsdl" />
+			<property name="porttype.wsdl" value="${interface.name}.wsdl" />
 			<property name="binding.root" value="${interface.name}" />
 		</ant>
 	</target>
@@ -211,20 +199,6 @@
 				</ant>
 			</target>
 
-	<!-- "Flattens" the WSDL file. i.e. runs the WSDL Preprocessor and creates a single
-		WSDL file with all the operations and RPs in the portTypes specified in
-		the wsdlpp:extends attribute (plus, of course, those defined in our own WSDL file) -->
-	<!-- Note that this is done with a GT4 tool -->
-	<target name="flatten" depends="init">
-		<for list="${introduce.skeleton.services.list}" parallel="false" param="service.name" trim="true">
-			<sequential>
-				<echo message="Flattening service: @{service.name}." />
-				<antcall target="serviceFlatten">
-					<param name="interface.name" value="@{service.name}" />
-				</antcall>
-			</sequential>
-		</for>
-	</target>
 
 	<!-- Generate the stub source files -->
 	<!-- This is done with a GT4 tool -->

@@ -262,7 +262,7 @@
 			<artifact refid="gridca.jars" />
 			<artifact refid="gridca.resources" />
 			<artifact refid="mobius.jars" />
-			<!--<artifact refid="introduce.servicesecurity.jars" />-->
+			<artifact refid="introduce.servicesecurity.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/gts/schema/GTS">
 			<artifact refid="metadata.schemas" />
@@ -284,7 +284,7 @@
 			<artifact refid="gridca.jars" />
 			<artifact refid="mobius.jars" />
 			<artifact refid="gts.client.jars" />
-			<!--<artifact refid="introduce.servicesecurity.jars" />-->
+			<artifact refid="introduce.servicesecurity.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/syncgts/schema/SyncGTS">
 			<artifact refid="metadata.schemas" />

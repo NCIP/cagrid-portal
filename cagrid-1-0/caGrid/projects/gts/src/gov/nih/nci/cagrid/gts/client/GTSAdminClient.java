@@ -37,7 +37,7 @@ public class GTSAdminClient {
 	private GTSClient client;
 
 
-	public GTSAdminClient(String url, GlobusCredential proxy)throws MalformedURIException {
+	public GTSAdminClient(String url, GlobusCredential proxy)throws MalformedURIException, RemoteException  {
 		this.client = new GTSClient(url, proxy);
 	}
 

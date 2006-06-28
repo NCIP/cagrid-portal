@@ -82,5 +82,18 @@
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-data-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-security-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/cglib-full-2.0.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
+	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-client-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-common-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-service-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-stubs-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/ServiceSecurity_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/ServiceSecurity-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/ServiceSecurity-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/ServiceSecurity-service.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

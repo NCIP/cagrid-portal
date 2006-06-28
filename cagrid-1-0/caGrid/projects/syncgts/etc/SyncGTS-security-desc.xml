@@ -15,6 +15,15 @@
       <none />
     </auth-method>
   </method>
+  <method name="getServiceSecurityMetadata">
+    <auth-method>
+      <none />
+    </auth-method>
+  </method>
+  <auth-method>
+    <none />
+  </auth-method>
+  <authz value="none" />
 </securityConfig>
 
 

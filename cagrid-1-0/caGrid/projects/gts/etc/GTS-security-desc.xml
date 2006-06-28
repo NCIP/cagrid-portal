@@ -15,6 +15,11 @@
       <none />
     </auth-method>
   </method>
+  <method name="getServiceSecurityMetadata">
+    <auth-method>
+      <none />
+    </auth-method>
+  </method>
   <authz value="none" />
   <auth-method>
     <GSITransport>

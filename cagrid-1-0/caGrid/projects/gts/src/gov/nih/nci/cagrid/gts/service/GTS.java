@@ -12,13 +12,12 @@ import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.bean.X509CRL;
 import gov.nih.nci.cagrid.gts.bean.X509Certificate;
+import gov.nih.nci.cagrid.gts.client.GTSClient;
 import gov.nih.nci.cagrid.gts.common.MySQLDatabase;
 import gov.nih.nci.cagrid.gts.service.db.DBManager;
 import gov.nih.nci.cagrid.gts.service.db.mysql.MySQLManager;
 import gov.nih.nci.cagrid.gts.stubs.CertificateValidationFault;
 import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
-import gov.nih.nci.cagrid.gts.stubs.GTSPortType;
-import gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsRequest;
 import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
@@ -28,7 +27,6 @@ import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault;
 import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gts.stubs.service.GTSServiceAddressingLocator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,7 +41,6 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.globus.wsrf.impl.security.authorization.IdentityAuthorization;
-import org.globus.wsrf.impl.security.authorization.NoAuthorization;
 import org.projectmobius.common.MobiusPoolManager;
 import org.projectmobius.common.MobiusRunnable;
 
@@ -654,34 +651,16 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 					TrustLevel[] levels = null;
 					TrustedAuthority[] trusted = null;
 					try {
-						GTSServiceAddressingLocator locator = new GTSServiceAddressingLocator();
 						EndpointReferenceType endpoint = new EndpointReferenceType();
 						endpoint.setAddress(new Address(auths[i].getServiceURI()));
-						GTSPortType port = locator.getGTSPortTypePort(endpoint);
-						org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub) port;
-						stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-							org.globus.wsrf.security.Constants.ENCRYPTION);
-						stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
+						GTSClient client = new GTSClient(endpoint);
+
 						if (auths[i].isPerformAuthorization()) {
 							IdentityAuthorization ia = new IdentityAuthorization(auths[i].getServiceIdentity());
-							stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, ia);
-						} else {
-							stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization
-								.getInstance());
+							client.setAuthorization(ia);
 						}
 
-						GetTrustLevelsRequest params2 = new GetTrustLevelsRequest();
-						gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsResponse boxedResult2 = port.getTrustLevels(params2);
-						levels = boxedResult2.getTrustLevel();
-
-						// Find Trusted Authorities
-						gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesRequest params = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesRequest();
-						gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesRequestFilter filterContainer = new gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesRequestFilter();
-						filterContainer.setTrustedAuthorityFilter(filter);
-						params.setFilter(filterContainer);
-						gov.nih.nci.cagrid.gts.stubs.FindTrustedAuthoritiesResponse boxedResult = port
-							.findTrustedAuthorities(params);
-						trusted = boxedResult.getTrustedAuthority();
+						trusted = client.findTrustedAuthorities(filter);
 
 					} catch (Exception ex) {
 						this.log.error("Error synchronizing with the authority " + auths[i].getServiceURI() + ": "
