@@ -297,6 +297,11 @@ public class SyncTools {
 				}
 			}
 		}
+		
+		// serialize the possibly modified model back to disk
+		System.out.println("Serializing service model to disk");
+		Utils.serializeDocument(baseDirectory.getAbsolutePath() + File.separator + "introduce.xml", 
+			introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
 		// STEP 4: write out namespace mappings and flatten the wsdl file then
 		// merge namespace
@@ -348,9 +353,8 @@ public class SyncTools {
 		
 		table = null;
 		System.gc();
-		
-		
 	}
+	
 
 	private void populateClassnames(ServiceInformation info,
 			MultiServiceSymbolTable table) throws MalformedNamespaceException,
@@ -490,7 +494,8 @@ public class SyncTools {
 		}
 	}
 
-	public void createNewServices(ServiceInformation info) {
+	
+	private void createNewServices(ServiceInformation info) {
 		List newServices = new ArrayList();
 		if (info.getServices() != null
 				&& info.getServices().getService() != null) {
