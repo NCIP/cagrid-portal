@@ -264,6 +264,10 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 						}
 					}
 					storeCaDSRInfo();
+					// clear out the types table
+					while (getTypesTable().getRowCount() != 0) {
+						getTypesTable().removeSchemaElementType(0);
+					}
 				}
 			});
 		}
