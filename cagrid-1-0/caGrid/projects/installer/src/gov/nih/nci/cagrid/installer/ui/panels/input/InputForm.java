@@ -22,6 +22,11 @@ import javax.swing.JTextField;
 
 public class InputForm extends JPanel implements ActionListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -875959947733472402L;
+
 	private JButton openButton;
 
 	private JTextField gridHome;

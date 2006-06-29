@@ -99,13 +99,9 @@ public class ProgressBarPanel extends JPanel {
 	}
 
 	private ThreadManager prepareTasks() {
-		boolean ant_exist = true;
+		
 		Installer is = Installer.getInstance();
-		is.addOrUpdateProperty("antExist", "yes");
-		String antExist = is.getProperty("antExist");
-		if (antExist.equalsIgnoreCase("no")) {
-			ant_exist = false;
-		}
+		
 		String GRID_HOME = is.getProperty("GRID_HOME");
 		String downloadDirName = GRID_HOME + File.separator + "downloads";
 		File downloadDir = new File(downloadDirName);
@@ -150,19 +146,7 @@ public class ProgressBarPanel extends JPanel {
 		tasks.add(3, sw4);
 		tasks.add(4, sw5);
 
-		if (!ant_exist) {
-			String ant_home = is.getProperty("ANT_install_dir");
-			// SwingWorker sw5 = new StringDisplayerTask(result," Downloading
-			// Apache Ant .....\n",progressBar,true,tm);
-			SwingWorker sw6 = new DownloadFileTask(
-					downloadDirName,
-					"http://apache.secsup.org/dist/ant/binaries/apache-ant-1.6.5-bin.zip",
-					"apache-ant-1.6.5-bin.zip", result, progressBar, tm);
-			SwingWorker sw7 = new StringDisplayerTask(result,
-					" Apache Ant download completed !\n", progressBar, true, tm);
-
-		}
-
+		
 		return tm;
 	}
 

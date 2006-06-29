@@ -76,10 +76,7 @@ public class InputButtonPanel extends GridPanel implements ActionListener {
 
 	}
 
-	private void setProperty() {
-		Installer is = Installer.getInstance();
-		is.addOrUpdateProperty("caGRID_HOME", "xyz");
-	}
+	
 
 	private JButton next;
 

@@ -59,9 +59,7 @@ public class SystemSniffer {
 		return date;
 	}
 
-	private String getLastInstallationStatus() {
-		return null;
-	}
+	
 
 	public String checkSystem() {
 

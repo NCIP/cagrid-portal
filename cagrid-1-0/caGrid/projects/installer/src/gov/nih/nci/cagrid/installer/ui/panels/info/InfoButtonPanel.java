@@ -88,7 +88,7 @@ public class InfoButtonPanel extends GridPanel implements ActionListener {
 
 		// TODO Auto-generated method stub
 
-		Installer is = Installer.getInstance();
+		
 		SystemSniffer ss = new SystemSniffer();
 		boolean isVirgin = ss.isFirstInstallation();
 		boolean caGridExist = !isVirgin;

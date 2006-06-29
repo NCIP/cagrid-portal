@@ -78,12 +78,8 @@ public class ProgressButtonPanel extends JPanel implements ActionListener {
 
 	}
 
-	private void setProperty() {
-		Installer is = Installer.getInstance();
-		is.addOrUpdateProperty("GRID_HOME", "xyz");
-	}
+	
 
-	private JButton next;
 
 	private JButton quit;
 
