@@ -199,6 +199,8 @@ Caused by: java.util.NoSuchElementException
 	
 ==========
 
+(DONE) added all xsd types to skeleton
+
 (DONE) Shannon, did your refactor break the functionality of synchronizeMetadataFramework in the MetadataListType?
 
 (DONE) BaseResource bug that Mike and Steve found.  Make new service with secure conv. and keep the initial
