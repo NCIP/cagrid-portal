@@ -41,7 +41,6 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeT
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -702,9 +701,9 @@ public class ModificationViewer extends GridPortalComponent {
 						try {
 							Thread.sleep(100);
 							Thread.yield();
-						} catch (InterruptedException e) {
+						} catch (InterruptedException ex) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							ex.printStackTrace();
 						}
 						getMethodsTable().sort();
 				
@@ -1303,11 +1302,11 @@ public class ModificationViewer extends GridPortalComponent {
 						NamespacesType namespaces = introService.getNamespaces();
 						if (namespaces != null && namespaces.getNamespace() != null) {
 							for (int i = 0; i < namespaces.getNamespace().length; i++) {
-								NamespaceType namespace = namespaces.getNamespace(i);
-								if (namespace.getPackageName() != null) {
-									if (!CommonTools.isValidPackageName(namespace.getPackageName())) {
+								NamespaceType currentNs = namespaces.getNamespace(i);
+								if (currentNs.getPackageName() != null) {
+									if (!CommonTools.isValidPackageName(currentNs.getPackageName())) {
 										setErrorMessage("Error: Invalid package name for namespace "
-											+ namespace.getNamespace() + " : " + namespace.getPackageName());
+											+ currentNs.getNamespace() + " : " + currentNs.getPackageName());
 										return;
 									}
 								}
@@ -1364,6 +1363,9 @@ public class ModificationViewer extends GridPortalComponent {
 						loadServiceProps();
 						setLastSaved(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
 						this.setProgressText("");
+						
+						// reinitialize the GUI with changes from saved model
+						initialize();
 					} catch (Exception e1) {
 						e1.printStackTrace();
 						setErrorMessage("Error: " + e1.getMessage());
