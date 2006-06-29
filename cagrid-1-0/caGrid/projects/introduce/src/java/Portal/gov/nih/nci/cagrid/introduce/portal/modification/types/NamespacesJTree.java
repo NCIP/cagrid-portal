@@ -30,17 +30,19 @@ public class NamespacesJTree extends JTree {
 
 	private void initialize() {
 		if (namespaces.getNamespace() != null) {
+			NamespaceTypeTreeNode w3cNode = null;
 			for (int i = 0; i < namespaces.getNamespace().length; i++) {
 				if (!checkTypeExists(namespaces.getNamespace(i))) {
 					NamespaceTypeTreeNode newNode = new NamespaceTypeTreeNode(namespaces.getNamespace(i), model);
 					if (namespaces.getNamespace(i).getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-						if (showW3CSimpleTypes) {
-							model.insertNodeInto(newNode, root, root.getChildCount());
-						}
+						w3cNode = newNode;
 					} else {
 						model.insertNodeInto(newNode, root, root.getChildCount());
 					}
 				}
+			}
+			if (showW3CSimpleTypes) {
+				model.insertNodeInto(w3cNode, root, root.getChildCount());
 			}
 		}
 		expandAll(true);
@@ -59,7 +61,7 @@ public class NamespacesJTree extends JTree {
 	public void addNode(NamespaceType type) {
 		if (!checkTypeExists(type)) {
 			NamespaceTypeTreeNode newNode = new NamespaceTypeTreeNode(type, model);
-			model.insertNodeInto(newNode, root, root.getChildCount());
+			model.insertNodeInto(newNode, root, 0);
 			expandPath(new TreePath(model.getPathToRoot(newNode)));
 			// keep namespacestype consistant
 			int currentLength = 0;
@@ -68,9 +70,9 @@ public class NamespacesJTree extends JTree {
 			}
 			NamespaceType[] newNamespaceTypes = new NamespaceType[currentLength + 1];
 			if (currentLength > 0) {
-				System.arraycopy(namespaces.getNamespace(), 0, newNamespaceTypes, 0, currentLength);
+				System.arraycopy(namespaces.getNamespace(), 0, newNamespaceTypes, 1, currentLength);
 			}
-			newNamespaceTypes[currentLength] = type;
+			newNamespaceTypes[0] = type;
 			namespaces.setNamespace(newNamespaceTypes);
 		}
 	}
