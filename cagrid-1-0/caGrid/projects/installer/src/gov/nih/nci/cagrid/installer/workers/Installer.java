@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,8 +26,6 @@ public class Installer {
 
 	private int counter = 0;
 
-	private Hashtable session;
-
 	private Properties vars;
 
 	private String userHome;
@@ -38,7 +35,7 @@ public class Installer {
 	private Logger logger;
 
 	private Installer() {
-		session = new Hashtable();
+
 		vars = new Properties();
 		Properties sysProperties = System.getProperties();
 		userHome = sysProperties.getProperty("user.home");
