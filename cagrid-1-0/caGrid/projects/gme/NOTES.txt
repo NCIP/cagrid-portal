@@ -1,8 +1,5 @@
 Need to add the metadata required.
 
-IMPORTANT:  need to have utilities for backing up and restoring the GME backend.
-  -- should also have some simple logging to keep track of when/what schemas were uploaded 
-
 need to have deployer configuration 
 
 cache schema needs to use the entire namespace to determine filename, it currently is overwriting files it shouldn't.
