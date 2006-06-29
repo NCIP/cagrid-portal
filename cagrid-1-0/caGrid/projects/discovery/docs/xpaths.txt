@@ -2,6 +2,10 @@
 #MAIN PREDICATE
 /*/wssg:Entry[   ]/wssg:MemberServiceEPR
 
+
+#uncompliant services
+/*/wssg:Entry[not(wssg:Content/agg:AggregatorData/cagrid:ServiceMetadata)]/wssg:MemberServiceEPR/wsa:Address
+
 #searchString
 wssg:Content/agg:AggregatorData//*[contains(text(),'searchString') or @*[contains(string(),'searchString')]]
 

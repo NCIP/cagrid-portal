@@ -111,10 +111,19 @@ public class DiscoveryClient {
 	/**
 	 * Query the registry for all registered services
 	 * 
+	 * @param requireMetadataCompliance
+	 *            if true, only services providing the standard metadata will be
+	 *            returned. Otherwise, all services registered will be returned,
+	 *            regardless of whether or not any metadata has been aggregated.
 	 * @return EndpointReferenceType[] contain all registered services
 	 */
-	public EndpointReferenceType[] getAllServices() throws Exception {
-		return discoverByFilter("*");
+	public EndpointReferenceType[] getAllServices(boolean requireMetadataCompliance) throws Exception {
+		if (!requireMetadataCompliance) {
+			return discoverByFilter("*");
+		} else {
+			return discoverByFilter(MD_PATH);
+		}
+
 	}
 
 
@@ -502,7 +511,7 @@ public class DiscoveryClient {
 
 		EndpointReferenceType[] allServices = null;
 		try {
-			allServices = client.getAllServices();
+			allServices = client.getAllServices(true);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			System.exit(-1);

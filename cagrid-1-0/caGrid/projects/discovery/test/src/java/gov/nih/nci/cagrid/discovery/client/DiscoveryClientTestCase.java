@@ -100,11 +100,17 @@ public class DiscoveryClientTestCase extends TestCase {
 		final int operation = ALL_SERVICES;
 		EndpointReferenceType[] services = null;
 
-		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, Boolean.TRUE);
 		assertEquals(0, services.length);
 
-		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, null);
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, Boolean.FALSE);
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, Boolean.FALSE);
 		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service2EPR, service3EPR, service4EPR}, services);
+
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, Boolean.TRUE);
+		assertResultsEqual(new EndpointReferenceType[]{service1EPR, service3EPR, service4EPR}, services);
 
 	}
 
@@ -200,10 +206,10 @@ public class DiscoveryClientTestCase extends TestCase {
 
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "findProjects");
 		assertResultsEqual(new EndpointReferenceType[]{service1EPR}, services);
-		
+
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "updateIdPUser");
-		assertResultsEqual(new EndpointReferenceType[]{service3EPR}, services);		
-		
+		assertResultsEqual(new EndpointReferenceType[]{service3EPR}, services);
+
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "query");
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
 	}
@@ -451,7 +457,7 @@ public class DiscoveryClientTestCase extends TestCase {
 		try {
 			switch (method) {
 				case ALL_SERVICES :
-					eprs = client.getAllServices();
+					eprs = client.getAllServices(((Boolean) criteria).booleanValue());
 					break;
 				case BY_CENTER :
 					eprs = client.discoverServicesByResearchCenter((String) criteria);
