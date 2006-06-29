@@ -1,6 +1,6 @@
 <ns1:SyncDescription xmlns:ns1="http://cagrid.nci.nih.gov/12/SyncGTS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<ns1:SyncDescriptor>
-		<ns1:gtsServiceURI>https://cagrid01.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GTS</ns1:gtsServiceURI>
+		<ns1:gtsServiceURI>https://cagrid02.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GTS</ns1:gtsServiceURI>
 		<ns1:TrustedAuthorityFilter xsi:type="ns2:TrustedAuthorityFilter" xmlns:ns2="http://cagrid.nci.nih.gov/8/gts">
  		  <ns2:Lifetime xsi:type="ns2:Lifetime">Valid</ns2:Lifetime> 
   		  <ns2:Status xsi:type="ns2:Status">Trusted</ns2:Status> 
@@ -11,5 +11,5 @@
 	<ns1:FilePrefix>gts</ns1:FilePrefix>
 	<ns1:NextSync>120</ns1:NextSync>
 	<ns1:PerformAuthorization>true</ns1:PerformAuthorization>
-	<ns1:HostIdentity>/O=OSU/OU=BMI/OU=caGrid/OU=Trust Fabric/CN=host/cagrid01.bmi.ohio-state.edu</ns1:HostIdentity>
+	<ns1:HostIdentity>/O=OSU/OU=BMI/OU=caGrid/OU=Trust Fabric/CN=host/cagrid02.bmi.ohio-state.edu</ns1:HostIdentity>
 </ns1:SyncDescription>
