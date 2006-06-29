@@ -123,6 +123,12 @@ public class NetworkResourceGetter extends Get{
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		NetworkResourceGetter nrg = new NetworkResourceGetter();
+		try {
+			nrg.downLoadFile("C:\\cagrid_temp","http://156.40.129.72:8080/cagrid/cagrid-1-0.zip","cagrid-1-0.zip");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//nrg.getTomcat();
 	}
 

@@ -6,9 +6,11 @@ import gov.nih.nci.cagrid.installer.workers.SwingWorker;
 import gov.nih.nci.cagrid.installer.workers.ThreadManager;
 
 public class LocalInstallerLauncher extends SwingWorker{
+	private String fileName;
 	private ThreadManager tm;
 	
-	public LocalInstallerLauncher(ThreadManager tm){
+	public LocalInstallerLauncher(String fileName,ThreadManager tm){
+		this.fileName=fileName;
 		this.tm=tm;
 	}
 
@@ -16,8 +18,10 @@ public class LocalInstallerLauncher extends SwingWorker{
 		// TODO Auto-generated method stub
 		try {
 	        // Execute a command without arguments
-	        
-	        Process child = Runtime.getRuntime().exec("java -jar C:\\AntInstaller_development\\caGrid_Installer_v1\\selfextractpack.jar");
+	        String execPath = "java -jar "+fileName;
+	        System.out.println(execPath);
+	        //Process child = Runtime.getRuntime().exec("java -jar C:\\AntInstaller_development\\caGrid_Installer_v1\\selfextractpack.jar");
+	        Process child = Runtime.getRuntime().exec(execPath);
 	        
 	        
 	    } catch (IOException e) {

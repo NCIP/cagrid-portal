@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.installer.workers.ThreadManager;
 import gov.nih.nci.cagrid.installer.workers.swing.DownloadFileTask;
 import gov.nih.nci.cagrid.installer.workers.swing.StringDisplayerTask;
 import gov.nih.nci.cagrid.installer.workers.swing.LocalInstallerLauncher;
+import gov.nih.nci.cagrid.installer.workers.swing.UnPackFileTask;
 
 
 import java.awt.BorderLayout;
@@ -123,33 +124,56 @@ public class ProgressBarPanel extends JPanel{
     	ArrayList tasks = new ArrayList();
     	ThreadManager tm = new ThreadManager(tasks);
     	
-    	SwingWorker sw1 = new StringDisplayerTask(result," Downloading caGrid packs .....\n",progressBar,true,tm);
+    	SwingWorker sw1 = new StringDisplayerTask(result," Downloading caGrid .....\n",progressBar,true,tm);
     	/**
     	 *  Set the parameter for caGrid packs
     	 */
+    	/**
     	SwingWorker sw2 = new DownloadFileTask(downloadDirName,
     										   "ftp://ftp.globus.org/pub/gt4/4.0/4.0.0/ws-core/bin//ws-core-4.0.0-bin.zip",
     										   "ws-core-4.0.0-bin.zip",
     										   result,
     										   progressBar,
     										   tm);
+         */
+    	SwingWorker sw2 = new DownloadFileTask(downloadDirName,
+				   "http://156.40.129.72:8080/cagrid/cagrid-1-0.zip",
+				   "cagrid-1-0.zip",
+				   result,
+				   progressBar,
+				   tm);
+    	File src = new File(downloadDirName,"cagrid-1-0.zip");
     	
-    	SwingWorker sw3 = new LocalInstallerLauncher(tm);
+    	SwingWorker sw3 = new StringDisplayerTask(result," Unpacking caGrid .....\n",progressBar,true,tm);
+    	
+    	File dest = new File(GRID_HOME);
+    	SwingWorker sw4 = new UnPackFileTask(src,dest,result,progressBar,tm);
+    	
+    	
+    	File execFile = new File(GRID_HOME,"cagrid-1-0"+File.separator+"caGrid"+File.separator+"projects"+
+    										File.separator+"installer"+File.separator+"executables"
+    										+File.separator+"masterinstaller.jar");
+    	String execFileName = execFile.getAbsolutePath();
+    	
+    	System.out.println("Exec File Name:"+execFileName);
+    	SwingWorker sw5 = new LocalInstallerLauncher(execFileName,tm);
     	tasks.add(0,sw1);
     	tasks.add(1,sw2);
     	tasks.add(2,sw3);
+    	tasks.add(3,sw4);
+    	tasks.add(4,sw5);
     	
     	
     	if(!ant_exist){
     		String ant_home = is.getProperty("ANT_install_dir");
-    		SwingWorker sw4 = new StringDisplayerTask(result," Downloading Apache Ant .....\n",progressBar,true,tm);
-    		SwingWorker sw5 = new DownloadFileTask(downloadDirName,
+    		//SwingWorker sw5 = new StringDisplayerTask(result," Downloading Apache Ant .....\n",progressBar,true,tm);
+    		SwingWorker sw6 = new DownloadFileTask(downloadDirName,
 					   "http://apache.secsup.org/dist/ant/binaries/apache-ant-1.6.5-bin.zip",
 					   "apache-ant-1.6.5-bin.zip",
 					   result,
 					   progressBar,
 					   tm);
-    		SwingWorker sw6 = new StringDisplayerTask(result," Apache Ant download completed !\n",progressBar,true,tm);
+    		SwingWorker sw7 = new StringDisplayerTask(result," Apache Ant download completed !\n",progressBar,true,tm);
     		
     		
     		
