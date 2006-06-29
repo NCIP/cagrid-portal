@@ -168,7 +168,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 
 		// add the service metadata if need be
 		if (!serviceMetadataExists(description)) {
-			addServiceMetadata(description);
+			// addServiceMetadata(description);
 		}
 	}
 
