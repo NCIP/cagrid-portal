@@ -1,5 +1,9 @@
 package gov.nih.nci.cagrid.portal.domain;
 
+import gov.nih.nci.cagrid.portal.utils.GridUtils;
+import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.types.URI;
+
 import java.util.List;
 
 /**
@@ -9,24 +13,33 @@ import java.util.List;
  * @created 19-Jun-2006 4:08:50 PM
  * @hibernate.class table="INDEX_SERVICE"
  */
-public class IndexService implements GridService {
+public class IndexService implements DomainObject, GridService {
 
     private List registeredServicesCollection;
     private String epr;
     private String description;
     private String name;
-    private EPR handle;
+    private EndpointReferenceType handle;
+
+    // Primary key
+    private int key;
 
     /**
      * Needed for hibernate
      */
     public IndexService() {
-
     }
 
-
     /**
-     * @hibernate.collection-many-to-many class RegisteredService
+     * @hibernate.list inverse="true"
+     * table="INDEX_REGISTERED_SERVICES_JOIN"
+     * outer-join="false"
+     * cascade="none"
+     * lazy="true"
+     * @hibernate.collection-key column="INDEX_ID_KEY"
+     * @hibernate.collection-many-to-many column="REGISTERED_SERVICE_ID_KEY"
+     * class="gov.nih.nci.cagrid.portal.domain.RegisteredService"
+     * @TODO change class to interface type
      */
     public List getRegisteredServicesCollection() {
         return registeredServicesCollection;
@@ -37,69 +50,80 @@ public class IndexService implements GridService {
     }
 
     /**
-     * @hibernate.id type string
-     * column EPR
-     * generator assigned
+     * @hibernate.property column="SERVICE_EPR"
+     * not-null="true"
      */
     public String getEpr() {
         return epr;
     }
 
-    public void setEpr(String epr) {
+
+    /**
+     * @throws URI.MalformedURIException Will throw an exception if epr string is not a valid URI
+     */
+    public void setEpr(String epr) throws URI.MalformedURIException {
         this.epr = epr;
-        this.handle = new EPR(epr);
+
+        // Once epr is set also set the handle property
+        setHandle(GridUtils.getEPR(epr));
     }
 
     /**
-     * @hibernate.property column DESCRIPTION
-     * type string
+     * @hibernate.property column="DESCRIPTION"
      */
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
-
-    public EPR getHandle() {
-        return this.handle;
+    public void setDescription(String description) {
+        this.description = description;
     }
-
 
     /**
-     * @hibernate.property column NAME
-     * type string
+     * @hibernate.property column="NAME"
      */
     public String getName() {
-        return this.name;
-
+        return name;
     }
 
-    /**
-     * @param desc
-     */
-    public void setDescription(String desc) {
-        this.description = desc;
-    }
-
-    /**
-     * @param handle
-     */
-    public void setHandle(EPR handle) {
-        this.handle = handle;
-    }
-
-    /**
-     * @param name
-     */
     public void setName(String name) {
         this.name = name;
     }
 
+    public EndpointReferenceType getHandle() {
+        return handle;
+    }
+
+    public void setHandle(EndpointReferenceType handle) {
+        this.handle = handle;
+    }
+
     /**
-     *
-     * @param handle
+     * @hibernate.id generator-class="native"
+     * column="ID_KEY"
      */
-    public void setHandle(String handle) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public int getKey() {
+        return key;
+    }
+
+    public void setKey(int key) {
+        this.key = key;
+    }
+
+    /**
+     * @return boolean
+     *         ToDo Should be Implemented by concrerte classes
+     */
+    public boolean isEqual(DomainObject obj) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    /**
+     * @return Integer primary key
+     *         ToDo Should be Implemented by concrete classes
+     */
+    public Integer getPK() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
 }

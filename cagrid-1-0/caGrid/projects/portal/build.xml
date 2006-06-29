@@ -4,13 +4,15 @@
     <property name="webapp.name" value="cagrid-portal"/>
 
     <!-- Local Environment -->
+    <property environment="env" />
     <property file="${user.name}-portal-build.properties" />
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
+    <property name="globus.lib.dir" location="${globus.dir}/lib" />
 
     <property name='javac.debug' value='true'/>
     <property name='javac.deprecation' value='true'/>
 
-    <property name='src.dir' value='src/java'/>
+    <property name='java.src.dir' value='src/java'/>
     <property name='generated.src.dir' value='src/generated'/>
 
     <property name="webcontent.dir" value="webcontent"/>
@@ -31,14 +33,37 @@
         <fileset dir="${ext.lib.dir}">
             <include name="*.jar"/>
         </fileset>
+        <fileset dir="${globus.lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
     </path>
 
+    <path id="xdoclet.classpath">
+        <fileset dir="${lib.dir}/xdoclet">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <presetdef name="portal.javac">
+        <javac source="1.4"/>
+    </presetdef>
+
     <!-- ============================================================== -->
-    <!-- Builds from scratch                                                -->
+    <!-- Target for continous build. Use war target to build            -->
+    <!-- actual app                                                     -->
     <!-- ============================================================== -->
-    <target name="all" depends="war" description="Builds the entire application" />
+    <target name="all" depends="clean,compile,hibernate.xdoclet,copyResources" description="Builds the entire application" />
 
 
+
+    <!-- ============================================================== -->
+    <!-- Create war for deployment                                      -->
+    <!-- ============================================================== -->
+    <target name="war" depends="clean,compile,hibernate,copyResources">
+        <!--Create war
+
+        -->
+    </target>
     <!-- ============================================================== -->
     <!-- Initialize build environment                                   -->
     <!-- ============================================================== -->
@@ -60,12 +85,17 @@
     <!-- Compile up generated stuff                                      -->
     <!-- ============================================================== -->
     <target name="compile" depends="init">
-        <javac destdir="${build.dest}" classpathref="portal.classpath">
-            <src>
 
+        <javac source="1.4" destdir="${build.dest}" classpathref="portal.classpath">
+            <src>
                 <pathelement path="${generated.src.dir}"/>
+                <pathelement path="${java.src.dir}"/>
             </src>
         </javac>
+
+
+
+
     </target>
 
     <target name="copyResources">
@@ -79,32 +109,41 @@
             </fileset>
         </copy>
 
+        <copy
+                file='resources/hibernate.properties.template'
+                tofile='${build.dest}/hibernate.properties'
+                filtering='true'
+                overwrite='true'>
+            <filterset>
+                <filter token='hibernate.connection.driver_class' value='${hibernate.dialect}'/>
+                <filter token='hibernate.connection.url' value='${hibernate.connection.url}'/>
+                <filter token='hibernate.connection.username' value='${hibernate.connection.username}'/>
+                <filter token='hibernate.connection.password' value='${hibernate.connection.password}'/>
+                <filter token='hibernate.c3p0.min_size' value='${hibernate.c3p0.min_size}'/>
+                <filter token='hibernate.c3p0.max_size' value='${hibernate.c3p0.max_size}'/>
+                <filter token='hibernate.c3p0.timeout' value='${hibernate.c3p0.timeout}'/>
+                <filter token='hibernate.dialect' value='${hibernate.dialect}'/>
+                <filter token='hibernate.use.outer.join' value='${hibernate.outer.join}'/>
+                <filter token='hibernate.max_fetch_depth' value='${hibernate.max_fetch_depth}'/>
+                <filter token='hibernate.transaction.factory_class' value='${hibernate.transaction.factory_class}'/>
+            </filterset>
+        </copy>
+
         <!--ToDo copy GLOBUS libs -->
     </target>
 
 
-    <!-- ============================================================== -->
-    <!-- Create war for deployment                                      -->
-    <!-- ============================================================== -->
-    <target name="war" depends="clean,compile,hibernate,copyResources">
-        <!--Create war
-
-        -->
-    </target>
 
 
     <target name="hibernate" description="Does all the hibernate generation stuff"
             depends="hibernate.xdoclet,file-list">
+
     </target>
 
 
     <target name="hibernate.xdoclet" depends="compile" description="Creates the hbm.xml files">
 
-        <path id="xdoclet.classpath">
-            <fileset dir="${lib.dir}/xdoclet">
-                <include name="*.jar"/>
-            </fileset>
-        </path>
+
 
         <taskdef name="hibernatedoclet"
                  classname="xdoclet.modules.hibernate.HibernateDocletTask">
@@ -129,10 +168,19 @@
 
     <target name="file-list"
             description="Create hibernate mapping file list">
+        <taskdef name="scriptdef" classname="org.apache.tools.ant.taskdefs.optional.Script">
+            <classpath>
+                <fileset dir="${lib.dir}/xdoclet">
+                    <include name="**/*.jar"/>
+                </fileset>
+
+
+            </classpath>
+        </taskdef>
 
         <property name="generated.dir" location="${build.dest}"/>
         <property name="hibernate.list.file" location="${build.dest}/hibernate.cfg.xml"/>
-         
+        <scriptdef language="beanshell" src="${basedir}/create_hbnfile.sh"/>
 
     </target>
 

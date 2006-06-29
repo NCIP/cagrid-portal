@@ -1,5 +1,9 @@
 package gov.nih.nci.cagrid.portal.domain;
 
+import gov.nih.nci.cagrid.portal.utils.GridUtils;
+import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.types.URI;
+
 import java.util.Collection;
 
 /**
@@ -16,7 +20,7 @@ public class RegisteredService implements GridService {
     public Operation operations;
     private DomainModel domainModel;
     private String epr;
-    private EPR handle;
+    private EndpointReferenceType handle;
 
     public RegisteredService() {
 
@@ -30,9 +34,16 @@ public class RegisteredService implements GridService {
         return epr;
     }
 
-    public void setEpr(String epr) {
+    /**
+     *
+     * @param epr
+     * @throws URI.MalformedURIException
+     */
+    public void setEpr(String epr) throws URI.MalformedURIException {
         this.epr = epr;
-        this.handle = new EPR(epr);
+
+        // Once epr is set also set the handle property
+        setHandle(GridUtils.getEPR(epr));
     }
 
 
@@ -51,7 +62,7 @@ public class RegisteredService implements GridService {
         alias = newVal;
     }
 
-    public EPR getHandle() {
+    public EndpointReferenceType getHandle() {
         return this.handle;
     }
 
@@ -91,7 +102,7 @@ public class RegisteredService implements GridService {
      *
      * @param handle
      */
-    public void setHandle(java.lang.String handle) {
+    public void setHandle(EndpointReferenceType handle) {
 
     }
 

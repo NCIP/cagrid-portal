@@ -146,6 +146,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Globus-4.0" level="application" />
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
@@ -232,6 +233,10 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/mysql-connector-java-3.1.13-bin.jar" />
       <url>jar://$MODULE_DIR$/lib/mysql-connector-java-3.1.13-bin.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="application" name="Globus-4.0">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
     </containerElement>
     <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/webcontent/WEB-INF/web.xml" optional="false" version="2.3" />
     <deploymentDescriptor name="context.xml" url="file://$MODULE_DIR$/webcontent/META-INF/context.xml" optional="false" version="5.x" />
