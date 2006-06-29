@@ -21,8 +21,8 @@
 	<property name="etc.dir" value="etc" />
 	<property name="schema.dir" value="schema" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
-	
-	<property name="jar.name" value="caGrid-caDSR-1.0"/>
+
+	<property name="jar.name" value="caGrid-caDSR-1.0" />
 	<property name="common.jar.name" value="${jar.name}-common.jar" />
 	<property name="client.jar.name" value="${jar.name}-client.jar" />
 	<property name="service.jar.name" value="${jar.name}-service.jar" />
@@ -66,6 +66,7 @@
 
 	<!-- We want detailed error messages -->
 	<property name="java.debug" value="on" />
+	<property name="java.source" value="1.4" />
 
 	<!--import deployment ant files -->
 	<import file="build-deploy.xml" />
@@ -238,7 +239,7 @@
 
 	<!-- Compile the stubs generated in the previous step -->
 	<target name="compileStubs" depends="stubs">
-		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}" classpathref="base.classpath">
+		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}" source="${java.source}" classpathref="base.classpath">
 			<include name="**/*.java" />
 		</javac>
 	</target>
@@ -246,7 +247,7 @@
 
 	<!-- Compile the implementation classes (service, resource, etc.) -->
 	<target name="compile" depends="compileStubs" description="Compiles the service.">
-		<javac srcdir="${src.dir}" classpathref="service.build.classpath" includes="**" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
+		<javac srcdir="${src.dir}" classpathref="service.build.classpath" includes="**" destdir="${build.dest}" debug="${java.debug}" source="${java.source}" deprecation="${deprecation}" />
 
 		<!-- Copy the source code, wsdd, properties, etc to the build dir for include in the jar -->
 		<copy toDir="${build.dest}">
@@ -259,12 +260,12 @@
 
 	<!-- Compile the test implementation classes (service, resource, etc.) -->
 	<target name="compileTests" depends="compile">
-		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
+		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" source="${java.source}" deprecation="${deprecation}" />
 	</target>
 
 	<!-- Compile the portal implementation classes  -->
 	<target name="compilePortal" depends="compile">
-		<javac srcdir="${portal.src.dir}" destdir="${portal.build.dest}" debug="${java.debug}" deprecation="${deprecation}" classpathref="portal.build.classpath" />
+		<javac srcdir="${portal.src.dir}" destdir="${portal.build.dest}" debug="${java.debug}" source="${java.source}" deprecation="${deprecation}" classpathref="portal.build.classpath" />
 	</target>
 
 	<target name="installIntroduceExtensions" depends="jars" description="Builds and installs the caDSR Introduce extensions into Introduce.">
