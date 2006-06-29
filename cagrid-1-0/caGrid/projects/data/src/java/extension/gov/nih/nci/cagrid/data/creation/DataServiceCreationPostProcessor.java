@@ -166,8 +166,10 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		methods.setMethod(dsMethods);
 		dataService.setMethods(methods);
 
-		// add the service metadata
-		addServiceMetadata(description);
+		// add the service metadata if need be
+		if (!serviceMetadataExists(description)) {
+			addServiceMetadata(description);
+		}
 	}
 
 
@@ -196,6 +198,24 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 			metadataArray = tmpArray;
 		}
 		propsList.setResourceProperty(metadataArray);
+	}
+	
+	
+	private boolean serviceMetadataExists(ServiceDescription desc) {
+		ResourcePropertiesListType propsList = desc.getServices().getService()[0].getResourcePropertiesList();
+		if (propsList == null) {
+			return false;
+		}
+		ResourcePropertyType[] props = propsList.getResourceProperty();
+		if (props == null || props.length == 0) {
+			return false;
+		}
+		for (int i = 0; i < props.length; i++) {
+			if (props[i].getQName().equals(DataServiceConstants.SERVICE_METADATA_QNAME)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 
