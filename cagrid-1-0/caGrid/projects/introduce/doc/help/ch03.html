@@ -1,19 +1,92 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 3. Introduce Engine</title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Introduce Users Guide"><link rel="up" href="pt01.html" title="Part I. Introduce Users Guide"><link rel="prev" href="ch02s05.html" title="Deployment"><link rel="next" href="ch03s02.html" title="Service Synchronizer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" lang="en-US"><div class="titlepage"><div><div><h2 class="title"><a name="id4793219"></a>Chapter 3. <a name="_Ref136559788"></a>Introduce Engine</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch03.html#id4793237">Service Creator</a></span></dt><dt><span class="section"><a href="ch03s02.html">Service Synchronizer</a></span></dt><dt><span class="section"><a href="ch03s03.html">Service Deployer</a></span></dt></dl></div><p>The runtime support to enable service creation, modification, and deployment is
-                rrovided by the Introduce engine. In this section, we describe the main components
-                of this engine. </p><div class="section" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4793237"></a>Service Creator</h2></div></div></div><p>The service creator is composed by a series of templates using the Java
-                    Emitter Templates (JET) component, which is part of the Eclipse Modeling
-                    Framework (http://www.eclipse.org/emf/), for generating source code and
-                    configuration files, and a skeleton set of directories which is used to generate
-                    a Grid service that can be built, registered, and deployed in the Grid
-                    environment. </p><p class="caption"><a name="_Ref136683129"></a><span class="inlinemediaobject"><img src="Introduce_Users_Guide_RTF-11.jpg" height="210"></span>Figure <span class="GEN_SEQ">5</span>. Service creation
-                    tools and use of JET templates for service creation.</p><p>Templates for source code and configuration files are used to create all the
-                    custom Java source code for the service and the client APIs, and to generate the
-                    files required by the GT in order to build and deploy a Grid service (<a href="ch03.html#_Ref136683129">???</a>). Deployment configurotion files are used for
-                    resource and resource property configuration in the form of Java Naming and
-                    Directory Interface (JNDI), resource property registration configuration,
-                    service deployment descriptor in the form of Web Service Deployment Descriptor
-                    (WSDD), and security configuration. The basic service created by Introduce has
-                    the following components:</p><div class="itemizedlist"><ul type="disc"><li style="list-style-type: disc"><p>Ant processes for build, deploy, and test operationr, </p></li><li style="list-style-type: disc"><p>custom configuration files for IDE integration, e.g., Eclipse project
-                            files for editing of the service using the Eclipse platform
-                            (www.eclipse.org),</p></li><li style="list-style-type: disc"><p>standard interface for both client and service to implement,</p></li><li style="list-style-type: disc"><p>fully implemented client APIs,</p></li><li style="list-style-type: disc"><p>stub implemented service,</p></li><li style="list-style-type: disc"><p>configuration to support service metadata and resource properties and
-                            the registration of metadata and properties,</p></li><li style="list-style-type: disc"><p>configuration for secure seovice deployment and authorization.</p></li></ul></div></div></div></body></html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Chapter 3. Introduce Engine</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
+<link rel="start" href="index.html" title="Introduce Users Guide">
+<link rel="up" href="pt01.html" title="Part I. Introduce Users Guide">
+<link rel="prev" href="ch02s05.html" title="Deployment">
+<link rel="next" href="ch03s02.html" title="Service Synchronizer">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084"
+	alink="#0000FF">
+<div class="chapter" lang="en-US">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title"><a name="id4793219"></a>Chapter 3. <a
+	name="_Ref136559788"></a>Introduce Engine</h2>
+</div>
+</div>
+</div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+	<dt><span class="section"><a href="ch03.html#id4793237">Service Creator</a></span></dt>
+	<dt><span class="section"><a href="ch03s02.html">Service Synchronizer</a></span></dt>
+	<dt><span class="section"><a href="ch03s03.html">Service Deployer</a></span></dt>
+</dl>
+</div>
+<p>The runtime support to enable service creation, modification, and
+deployment is rrovided by the Introduce engine. In this section, we
+describe the main components of this engine.</p>
+<div class="section" lang="en-US">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" style="clear: both"><a name="id4793237"></a>Service
+Creator</h2>
+</div>
+</div>
+</div>
+<p>The service creator is composed by a series of templates using the
+Java Emitter Templates (JET) component, which is part of the Eclipse
+Modeling Framework (http://www.eclipse.org/emf/), for generating source
+code and configuration files, and a skeleton set of directories which is
+used to generate a Grid service that can be built, registered, and
+deployed in the Grid environment.</p>
+<p class="caption"><a name="_Ref136683129"></a><span
+	class="inlinemediaobject"><img src="Introduce_Users_Guide_RTF-11.jpg"></span>Figure <span class="GEN_SEQ">5</span>. Service
+creation tools and use of JET templates for service creation.</p>
+<p>Templates for source code and configuration files are used to create
+all the custom Java source code for the service and the client APIs, and
+to generate the files required by the GT in order to build and deploy a
+Grid service (<a href="ch03.html#_Ref136683129">???</a>). Deployment
+configurotion files are used for resource and resource property
+configuration in the form of Java Naming and Directory Interface (JNDI),
+resource property registration configuration, service deployment
+descriptor in the form of Web Service Deployment Descriptor (WSDD), and
+security configuration. The basic service created by Introduce has the
+following components:</p>
+<div class="itemizedlist">
+<ul type="disc">
+	<li style="list-style-type: disc">
+	<p>Ant processes for build, deploy, and test operationr,</p>
+	</li>
+	<li style="list-style-type: disc">
+	<p>custom configuration files for IDE integration, e.g., Eclipse
+	project files for editing of the service using the Eclipse platform
+	(www.eclipse.org),</p>
+	</li>
+	<li style="list-style-type: disc">
+	<p>standard interface for both client and service to implement,</p>
+	</li>
+	<li style="list-style-type: disc">
+	<p>fully implemented client APIs,</p>
+	</li>
+	<li style="list-style-type: disc">
+	<p>stub implemented service,</p>
+	</li>
+	<li style="list-style-type: disc">
+	<p>configuration to support service metadata and resource properties
+	and the registration of metadata and properties,</p>
+	</li>
+	<li style="list-style-type: disc">
+	<p>configuration for secure seovice deployment and authorization.</p>
+	</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

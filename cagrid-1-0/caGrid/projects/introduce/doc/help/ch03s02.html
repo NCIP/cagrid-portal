@@ -1,82 +1,195 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Service Synchronizer</title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Introduce Users Guide"><link rel="up" href="ch03.html" title="Chapter 3. Introduce Engine"><link rel="prev" href="ch03.html" title="Chapter 3. Introduce Engine"><link rel="next" href="ch03s03.html" title="Service Deployer"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4793377"></a><a name="_Ref136559857"></a>Service Synchronizer</h2></div><div><h2 class="title" style="clear: both"><a name="id4793377"></a><a name="_Ref136559857"></a>Service Synchronizer</h2></div></div></div><p>Service resynchronization is the process by which the source code and
-                    configuration generation tools of the Introduce toolkit will analyze the
-                    service&#8217;s current implementation with that of the desired service description.
-                    This process will add, remove, and modify any service methods, resource
-                    properties, and service settings which have been added, removed, or modified
-                    from the service description. The descriptions and configurations for methods,
-                    metadata, and security are those that are generated from the GDE,
-                    programmatically or by hand, and that can be validated by the Infroduce service
-                    schema (<a href="ch03s02.html#_Ref136856885">???</a> and <a href="ch03s02.html#_Ref136856895">???</a>).
-                    The service description is the basis by which the code generation tools add,
-                    remove and modify operations, metadata, and change the secuiity configuration of
-                    the service by editing the source code, configuration files, and metadata files.
-                    This is similar to the way that Axis will use the WSDL to generate the grid
-                    stubs of the service. The overall high level process of service
-                    resynchronization is illustrated in <a href="ch03s02.html#_Ref136922916">???</a>. </p><p class="caption">
-                    <a name="_Ref136683601"></a>
-                    </p><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="581"><tr style="height: 233px"><td><img src="Introduce_Users_Guide_RTF-12.jpg" height="233"></td></tr></table><div class="caption"><p class="caption"><a name="_Ref136922916"></a>Figure <span class="GEN_SEQ">6</span>. Service resynchronization
-                            process.</p></div></div><p class="caption">
-                </p><p>In this process, modified documents created by the GDE are processed using JET
-                    tem lates to create the modified service skeleton. The service synchronizer
-                    component manages the service WSDL description. If a service or method has been
-                    added or removed, the respective WSDL files must be updated to reflect the
-                    changes. Updating the files requires many auto generated code segments. External
-                    XML schemas, which describe published data types, must be imported into the
-                    respective WSDL files so that the drta types can be located and used to generate
-                    the required Java beans and SOAP bindings. The WSDL description is basically the
-                    Grid layer representation of the Java based service interface. Both the
-                        <span class="emphasis"><em>message</em></span> types, which represent the data types of the
-                    input parameters and the return type of a service method, and the complete
-                        <span class="emphasis"><em>operation</em></span>, which reflects the Java based signature of
-                    the method being exposed, have to be detcribed in the WSDL file. The
-                    synchronization operation automatically keeps this file in sync during the
-                    development of services so that the service implementation and the Grid service
-                    description represented by the WSDL match up. This ensures that the methods
-                    implemented in the Grid service can actually be invoked. </p><p>
-                    </p><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="584"><tr style="height: 321px"><td><img src="Introduce_Users_Guide_RTF-13.jpg" height="321"></td></tr></table><div class="caption"><p class="caption"><a name="_Ref139259763"></a>Figure <span class="GEN_SEQ">7</span>. Basic service layout of an example
-                                service created by Introduce .</p></div></div><p>
-                </p><p><a href="ch03s02.html#_Ref139259763">???</a> shows a basic service layout cs created by the
-                    Introduce Service Creator component. It shows which pieces of this example
-                    service are generated by the code generation tools, which pieces are built by
-                    the underlying Globus/Axis tools, and which pieces are to be implemented by the
-                    service developer.</p><p>
-                    </p><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="583"><tr style="height: 309px"><td><img src="Introduce_Users_Guide_RTF-14.jpg" height="309"></td></tr></table><div class="caption"><p class="caption"><a name="_Ref139259750"></a>Figure <span class="GEN_SEQ">8</span>. Source files used in an example
-                                service created by Introduce.</p></div></div><p>
-                </p><p><a href="ch03s02.html#_Ref139259750">???</a> describes what some particularly critical
-                    source files are generated for in an example seruice created by the Introduce
-                    engine. When a WSDL file is parsed by the Axis engine a PortType interface is
-                    created which is the Java representation of the API of the grid service. The
-                    Axis generated PortType interface must then be implemented on the service to
-                    provide the services implementation. In order to enable the service developer to
-                    implement a cleaner, non-documument literal interface, Introduce will
-                    automatically creade the implementation of this PortType interface
-                        (<span class="emphasis"><em>HelloWorldProviderImpl</em></span>). The Introduced generated
-                    implementation of this interface will <span class="emphasis"><em>unbox</em></span> the document
-                    literal calls ot the service and pass them on to the unboxed/clean interface
-                        (<span class="emphasis"><em>HelloWorldI</em></span>) which the user defined. Introduce will
-                    generate a stubbed implementation of this interface
-                    (<span class="emphasis"><em>HelloWorldImpl</em></span>) which the user will be responsible for
-                    implementing. This class will maintail the services implementation of the
-                    methods. This enables the service designer to be shielded from the details of
-                    the Axis document literal grid service interface and enable them to implement an
-                    interface which is as then originally described. The figure also illustrates the
-                    example service&#8217;s resource and resource home, which are generated to manage the
-                    service resource and the service resouece properties, respectively.</p><p>
-                    </p><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="583"><tr style="height: 319px"><td><img src="Introduce_Users_Guide_RTF-15.jpg" height="319"></td></tr></table><div class="caption"><p class="caption"><a name="_Ref139259788"></a>Figure <span class="GEN_SEQ">9</span>. Example common/configuration files on
-                                an example service created by Introduce.</p></div></div><p>
-                </p><p><a href="ch03s02.html#_Ref139259788">???</a> shows the use of the different common files of
-                    an example Introduce created service. It shows the files used for configuring
-                    registration and security for the grid service, as well as those used by
-                    Introduce for synchronization, and those used for build and deployment. This
-                    example service created by Introduce also contains Eclipse projoct files so that
-                    the service can easily be edited using the Eclipse platform
-                (www.eclipse.org)</p><p>The service can have an inheritance model by adding methods from another service,
-                    possibly along with the implementations of those methods (see Section <a href="ch04s02.html#_Ref136897300">???</a>). If a method were imported from another Grid service,
-                    the service synchronizer component would also pull in the WSDL description of the
-                    method and copy it into the pontType of the new service. This enables the service to
-                    have a completely protocol compatible implementation of the method. </p><p>
-                    </p><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="617"><tr style="height: 235px"><td><img src="Introduce_Users_Guide_RTF-16.jpg" height="235"></td></tr></table><div class="caption"><p class="caption"><a name="_Ref136856885"></a>Figure <span class="GEN_SEQ">10</span>. Base Introduce Service Description
-                                Schema</p></div></div><p>
-                </p><p>
-                    </p><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="614"><tr style="height: 264px"><td><img src="Introduce_Users_Guide_RTF-17.jpg" height="264"></td></tr></table><div class="caption"><p class="caption"><a name="_Ref136856895"></a>Figure <span class="GEN_SEQ">11</span>. Schema for Introduce Services.</p></div></div><p>
-                </p></div></body></html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Service Synchronizer</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
+<link rel="start" href="index.html" title="Introduce Users Guide">
+<link rel="up" href="ch03.html" title="Chapter 3. Introduce Engine">
+<link rel="prev" href="ch03.html" title="Chapter 3. Introduce Engine">
+<link rel="next" href="ch03s03.html" title="Service Deployer">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084"
+	alink="#0000FF">
+<div class="section" lang="en-US">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" style="clear: both"><a name="id4793377"></a><a
+	name="_Ref136559857"></a>Service Synchronizer</h2>
+</div>
+<div>
+<h2 class="title" style="clear: both"><a name="id4793377"></a><a
+	name="_Ref136559857"></a>Service Synchronizer</h2>
+</div>
+</div>
+</div>
+<p>Service resynchronization is the process by which the source code and
+configuration generation tools of the Introduce toolkit will analyze the
+service&#8217;s current implementation with that of the desired service
+description. This process will add, remove, and modify any service
+methods, resource properties, and service settings which have been
+added, removed, or modified from the service description. The
+descriptions and configurations for methods, metadata, and security are
+those that are generated from the GDE, programmatically or by hand, and
+that can be validated by the Infroduce service schema (<a
+	href="ch03s02.html#_Ref136856885">???</a> and <a
+	href="ch03s02.html#_Ref136856895">???</a>). The service description is
+the basis by which the code generation tools add, remove and modify
+operations, metadata, and change the secuiity configuration of the
+service by editing the source code, configuration files, and metadata
+files. This is similar to the way that Axis will use the WSDL to
+generate the grid stubs of the service. The overall high level process
+of service resynchronization is illustrated in <a
+	href="ch03s02.html#_Ref136922916">???</a>.</p>
+<p class="caption"><a name="_Ref136683601"></a></p>
+<div class="mediaobject">
+<table border="0" summary="manufactured viewport for HTML img"
+	cellspacing="0" cellpadding="0" width="581">
+	<tr style="height: 233px">
+		<td><img src="Introduce_Users_Guide_RTF-12.jpg"></td>
+	</tr>
+</table>
+<div class="caption">
+<p class="caption"><a name="_Ref136922916"></a>Figure <span
+	class="GEN_SEQ">6</span>. Service resynchronization process.</p>
+</div>
+</div>
+<p class="caption"></p>
+<p>In this process, modified documents created by the GDE are processed
+using JET tem lates to create the modified service skeleton. The service
+synchronizer component manages the service WSDL description. If a
+service or method has been added or removed, the respective WSDL files
+must be updated to reflect the changes. Updating the files requires many
+auto generated code segments. External XML schemas, which describe
+published data types, must be imported into the respective WSDL files so
+that the drta types can be located and used to generate the required
+Java beans and SOAP bindings. The WSDL description is basically the Grid
+layer representation of the Java based service interface. Both the <span
+	class="emphasis"><em>message</em></span> types, which represent the
+data types of the input parameters and the return type of a service
+method, and the complete <span class="emphasis"><em>operation</em></span>,
+which reflects the Java based signature of the method being exposed,
+have to be detcribed in the WSDL file. The synchronization operation
+automatically keeps this file in sync during the development of services
+so that the service implementation and the Grid service description
+represented by the WSDL match up. This ensures that the methods
+implemented in the Grid service can actually be invoked.</p>
+<p></p>
+<div class="mediaobject">
+<table border="0" summary="manufactured viewport for HTML img"
+	cellspacing="0" cellpadding="0" width="584">
+	<tr style="height: 321px">
+		<td><img src="Introduce_Users_Guide_RTF-13.jpg"></td>
+	</tr>
+</table>
+<div class="caption">
+<p class="caption"><a name="_Ref139259763"></a>Figure <span
+	class="GEN_SEQ">7</span>. Basic service layout of an example service
+created by Introduce .</p>
+</div>
+</div>
+<p></p>
+<p><a href="ch03s02.html#_Ref139259763">???</a> shows a basic service
+layout cs created by the Introduce Service Creator component. It shows
+which pieces of this example service are generated by the code
+generation tools, which pieces are built by the underlying Globus/Axis
+tools, and which pieces are to be implemented by the service developer.</p>
+<p></p>
+<div class="mediaobject">
+<table border="0" summary="manufactured viewport for HTML img"
+	cellspacing="0" cellpadding="0" width="583">
+	<tr style="height: 309px">
+		<td><img src="Introduce_Users_Guide_RTF-14.jpg"></td>
+	</tr>
+</table>
+<div class="caption">
+<p class="caption"><a name="_Ref139259750"></a>Figure <span
+	class="GEN_SEQ">8</span>. Source files used in an example service
+created by Introduce.</p>
+</div>
+</div>
+<p></p>
+<p><a href="ch03s02.html#_Ref139259750">???</a> describes what some
+particularly critical source files are generated for in an example
+seruice created by the Introduce engine. When a WSDL file is parsed by
+the Axis engine a PortType interface is created which is the Java
+representation of the API of the grid service. The Axis generated
+PortType interface must then be implemented on the service to provide
+the services implementation. In order to enable the service developer to
+implement a cleaner, non-documument literal interface, Introduce will
+automatically creade the implementation of this PortType interface (<span
+	class="emphasis"><em>HelloWorldProviderImpl</em></span>). The
+Introduced generated implementation of this interface will <span
+	class="emphasis"><em>unbox</em></span> the document literal calls ot
+the service and pass them on to the unboxed/clean interface (<span
+	class="emphasis"><em>HelloWorldI</em></span>) which the user defined.
+Introduce will generate a stubbed implementation of this interface (<span
+	class="emphasis"><em>HelloWorldImpl</em></span>) which the user will be
+responsible for implementing. This class will maintail the services
+implementation of the methods. This enables the service designer to be
+shielded from the details of the Axis document literal grid service
+interface and enable them to implement an interface which is as then
+originally described. The figure also illustrates the example
+service&#8217;s resource and resource home, which are generated to
+manage the service resource and the service resouece properties,
+respectively.</p>
+<p></p>
+<div class="mediaobject">
+<table border="0" summary="manufactured viewport for HTML img"
+	cellspacing="0" cellpadding="0" width="583">
+	<tr style="height: 319px">
+		<td><img src="Introduce_Users_Guide_RTF-15.jpg"></td>
+	</tr>
+</table>
+<div class="caption">
+<p class="caption"><a name="_Ref139259788"></a>Figure <span
+	class="GEN_SEQ">9</span>. Example common/configuration files on an
+example service created by Introduce.</p>
+</div>
+</div>
+<p></p>
+<p><a href="ch03s02.html#_Ref139259788">???</a> shows the use of the
+different common files of an example Introduce created service. It shows
+the files used for configuring registration and security for the grid
+service, as well as those used by Introduce for synchronization, and
+those used for build and deployment. This example service created by
+Introduce also contains Eclipse projoct files so that the service can
+easily be edited using the Eclipse platform (www.eclipse.org)</p>
+<p>The service can have an inheritance model by adding methods from
+another service, possibly along with the implementations of those
+methods (see Section <a href="ch04s02.html#_Ref136897300">???</a>). If a
+method were imported from another Grid service, the service synchronizer
+component would also pull in the WSDL description of the method and copy
+it into the pontType of the new service. This enables the service to
+have a completely protocol compatible implementation of the method.</p>
+<p></p>
+<div class="mediaobject">
+<table border="0" summary="manufactured viewport for HTML img"
+	cellspacing="0" cellpadding="0" width="617">
+	<tr style="height: 235px">
+		<td><img src="Introduce_Users_Guide_RTF-16.jpg"></td>
+	</tr>
+</table>
+<div class="caption">
+<p class="caption"><a name="_Ref136856885"></a>Figure <span
+	class="GEN_SEQ">10</span>. Base Introduce Service Description Schema</p>
+</div>
+</div>
+<p></p>
+<p></p>
+<div class="mediaobject">
+<table border="0" summary="manufactured viewport for HTML img"
+	cellspacing="0" cellpadding="0" width="614">
+	<tr style="height: 264px">
+		<td><img src="Introduce_Users_Guide_RTF-17.jpg"></td>
+	</tr>
+</table>
+<div class="caption">
+<p class="caption"><a name="_Ref136856895"></a>Figure <span
+	class="GEN_SEQ">11</span>. Schema for Introduce Services.</p>
+</div>
+</div>
+<p></p>
+</div>
+</body>
+</html>

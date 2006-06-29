@@ -1,19 +1,49 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Compositional Inheritance</title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Introduce Users Guide"><link rel="up" href="ch04.html" title="Chapter 4. Other Features of Introduce Engine"><link rel="prev" href="ch04s02.html" title="Resource Framework"><link rel="next" href="ch04s04.html" title="Multi Service / Multi Resource"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4794184"></a>Compositional Inheritance</h2></div></div></div><p>Introduce enables the service developer to import methods from other services
-                    (i.e., from other portTypes). This notion is called <span class="emphasis"><em>compositional
-                        inheritance</em></span>. Services under the new WSDL 2.0 specification cannot
-                    extend portType definit ons. In order to simulate portType extension Introduce
-                    implements the ability to copy <span class="emphasis"><em>operation</em></span> descriptions from
-                    other portTypes and put them in the service&#8217;s own description. When using this
-                    feature, there are various configuration option the engine must know such as the
-                    namespaces of the operations, and whether or not an implementation of the
-                    operations are already provided or should be genefated stubbed just as any other
-                    Introduce defined operation.</p><p>In order to be sure that the operation can be correctly imported and copied
-                    into the new portType, the WSDL of this operation and any referenced schemas
-                    must be brought into this new service and imported. If the operation
-                    implementation is not being provided, the synchronization engine must add this
-                    operation to the services base interface, and the ln-boxing Globus wrapper for
-                    this operation must be generated. If the implementation of this operation is
-                    being provided, the extra code in the interface, its implementation, and the
-                    wrapper do not need to be added. However, the implementation code, in the form
-                    of a JAR file, must be brought into the new service, and the operation class
-                    must be added to the WSDD of this service.<a name="_Ref136844302"></a></p></div></body></html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Compositional Inheritance</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
+<link rel="start" href="index.html" title="Introduce Users Guide">
+<link rel="up" href="ch04.html"
+	title="Chapter 4. Other Features of Introduce Engine">
+<link rel="prev" href="ch04s02.html" title="Resource Framework">
+<link rel="next" href="ch04s04.html"
+	title="Multi Service / Multi Resource">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084"
+	alink="#0000FF">
+<div class="section" lang="en-US">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" style="clear: both"><a name="id4794184"></a>Compositional
+Inheritance</h2>
+</div>
+</div>
+</div>
+<p>Introduce enables the service developer to import methods from other
+services (i.e., from other portTypes). This notion is called <span
+	class="emphasis"><em>compositional inheritance</em></span>. Services
+under the new WSDL 2.0 specification cannot extend portType definit ons.
+In order to simulate portType extension Introduce implements the ability
+to copy <span class="emphasis"><em>operation</em></span> descriptions
+from other portTypes and put them in the service&#8217;s own
+description. When using this feature, there are various configuration
+option the engine must know such as the namespaces of the operations,
+and whether or not an implementation of the operations are already
+provided or should be genefated stubbed just as any other Introduce
+defined operation.</p>
+<p>In order to be sure that the operation can be correctly imported and
+copied into the new portType, the WSDL of this operation and any
+referenced schemas must be brought into this new service and imported.
+If the operation implementation is not being provided, the
+synchronization engine must add this operation to the services base
+interface, and the ln-boxing Globus wrapper for this operation must be
+generated. If the implementation of this operation is being provided,
+the extra code in the interface, its implementation, and the wrapper do
+not need to be added. However, the implementation code, in the form of a
+JAR file, must be brought into the new service, and the operation class
+must be added to the WSDD of this service.<a name="_Ref136844302"></a></p>
+</div>
+</body>
+</html>

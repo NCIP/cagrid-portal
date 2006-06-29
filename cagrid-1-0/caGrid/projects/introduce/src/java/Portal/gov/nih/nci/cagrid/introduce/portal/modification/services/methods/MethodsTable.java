@@ -109,10 +109,8 @@ public class MethodsTable extends PortalBaseTable {
 		c.setForeground(Color.BLACK);
 		if (method.isIsImported()) {
 			c.setBackground(new Color(235, 235, 235));
-			c.setFont(getFont().deriveFont(Font.ITALIC));
 		} else {
 			c.setBackground(getBackground());
-			c.setFont(getFont().deriveFont(Font.BOLD + Font.ITALIC));
 		}
 		if (isCellSelected(rowIndex, vColIndex)) {
 			c.setBackground(getSelectionBackground());

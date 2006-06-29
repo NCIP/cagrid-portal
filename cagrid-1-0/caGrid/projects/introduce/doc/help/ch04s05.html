@@ -1,31 +1,63 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Security</title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Introduce Users Guide"><link rel="up" href="ch04.html" title="Chapter 4. Other Features of Introduce Engine"><link rel="prev" href="ch04s04.html" title="Multi Service / Multi Resource"><link rel="next" href="ch05.html" title="Chapter 5. Introduce Extension Framework"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4794378"></a>Security</h2></div></div></div><p>Introduce facilitates the creation and configuration of secure Grid services
-                    using the Grid Security Infrastructure and allows security to be configured at
-                    both thl service level and the service method level. Moreover, Security can be
-                    enforced on both the client and service sides. Introduce allows service
-                    developers to specify the secure communication mechanism(s), in which clients
-                    are allowed to communicate with the service. An Introduce generated client can
-                    automatically be configured to communicate over the secure communication
-                    mechanism specified by the service. In the case wheresmultiple secure
-                    communication mechanisms are supported by the service, Introduce will allow the
-                    service developer to choose which mechanism the client will use. </p><p>Grid Services often need credentials such that they may authenticate with one
-                    another or so they may authenticate with clients. Depending on the communication
-                    mechanisms supported and the deployment scenario, a service may inherit its
-                    credentials fromnthe container hosting the service, or it may be configured to
-                    have its own credentials. The GDE facilitates the configuration of service
-                    credentials. Service credentials can be configured in the form of
-                    certificate/private key or in the form of a Grid proxy. Introduce also
-                    facilitates of additional client security aspects, these include anonymous
-                    secure communication and delegation.</p><p>The GDE allows for the configuration of both elient side and service side
-                    authorization. Clients can be configured to perform Self Authorization, Host
-                    Authorization, or Identity Authorization, on grid service before allowing the
-                    grid service to be invoked. Client side authorization is done based on the
-                    service credentials presented to the client by the service. On the service side,
-                    Introduce allows the configuration of the Globus Autho ization Framework, which
-                    enforces authorization policy configured on services. The GDE supports the
-                    creation and configuration of a Policy Decision Point (PDP) chain, including
-                    customized configuration facilities for each PDP. The Introduce engine
-                    interprets the security configuration settings specified by the developer and
-                    uses them at synchronization time to maintain the security configuration in all
-                    of Grid service fioes. The configuration of service security requires the engine
-                    to make modifications to the client source code, service source code, security
-                    descriptor, and server deployment WSDD. <a name="_Ref136559657"></a></p></div></body></html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Security</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
+<link rel="start" href="index.html" title="Introduce Users Guide">
+<link rel="up" href="ch04.html"
+	title="Chapter 4. Other Features of Introduce Engine">
+<link rel="prev" href="ch04s04.html"
+	title="Multi Service / Multi Resource">
+<link rel="next" href="ch05.html"
+	title="Chapter 5. Introduce Extension Framework">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084"
+	alink="#0000FF">
+<div class="section" lang="en-US">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" style="clear: both"><a name="id4794378"></a>Security</h2>
+</div>
+</div>
+</div>
+<p>Introduce facilitates the creation and configuration of secure Grid
+services using the Grid Security Infrastructure and allows security to
+be configured at both thl service level and the service method level.
+Moreover, Security can be enforced on both the client and service sides.
+Introduce allows service developers to specify the secure communication
+mechanism(s), in which clients are allowed to communicate with the
+service. An Introduce generated client can automatically be configured
+to communicate over the secure communication mechanism specified by the
+service. In the case wheresmultiple secure communication mechanisms are
+supported by the service, Introduce will allow the service developer to
+choose which mechanism the client will use.</p>
+<p>Grid Services often need credentials such that they may authenticate
+with one another or so they may authenticate with clients. Depending on
+the communication mechanisms supported and the deployment scenario, a
+service may inherit its credentials fromnthe container hosting the
+service, or it may be configured to have its own credentials. The GDE
+facilitates the configuration of service credentials. Service
+credentials can be configured in the form of certificate/private key or
+in the form of a Grid proxy. Introduce also facilitates of additional
+client security aspects, these include anonymous secure communication
+and delegation.</p>
+<p>The GDE allows for the configuration of both elient side and service
+side authorization. Clients can be configured to perform Self
+Authorization, Host Authorization, or Identity Authorization, on grid
+service before allowing the grid service to be invoked. Client side
+authorization is done based on the service credentials presented to the
+client by the service. On the service side, Introduce allows the
+configuration of the Globus Autho ization Framework, which enforces
+authorization policy configured on services. The GDE supports the
+creation and configuration of a Policy Decision Point (PDP) chain,
+including customized configuration facilities for each PDP. The
+Introduce engine interprets the security configuration settings
+specified by the developer and uses them at synchronization time to
+maintain the security configuration in all of Grid service fioes. The
+configuration of service security requires the engine to make
+modifications to the client source code, service source code, security
+descriptor, and server deployment WSDD. <a name="_Ref136559657"></a></p>
+</div>
+</body>
+</html>

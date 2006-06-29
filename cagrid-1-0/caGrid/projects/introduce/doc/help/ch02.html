@@ -1,43 +1,174 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 2. Introduce Graphical Development Environment</title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Introduce Users Guide"><link rel="up" href="pt01.html" title="Part I. Introduce Users Guide"><link rel="prev" href="ch01.html" title="Chapter 1. Overview"><link rel="next" href="ch02s02.html" title="
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Chapter 2. Introduce Graphical Development Environment</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
+<link rel="start" href="index.html" title="Introduce Users Guide">
+<link rel="up" href="pt01.html" title="Part I. Introduce Users Guide">
+<link rel="prev" href="ch01.html" title="Chapter 1. Overview">
+<link rel="next" href="ch02s02.html"
+	title="
                     
-                "></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="chapter" lang="en-US"><div class="titlepage"><div><div><h2 class="title"><a name="id4744334"></a>Chapter 2. Introduce Graphical Development Environment</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch02.html#id4744400">Service Creation</a></span></dt><dt><span class="section"><a href="ch02s02.html">
-                    
-                </a></span></dt><dt><span class="section"><a href="ch02s03.html">Service Modification </a></span></dt><dd><dl><dt><span class="section"><a href="ch02s03.html#id4743773">Types</a></span></dt><dt><span class="section"><a href="ch02s03.html#id4743828">Operations</a></span></dt><dt><span class="section"><a href="ch02s03.html#id4743891">Resource Properties</a></span></dt><dt><span class="section"><a href="ch02s03.html#id4743901">Service Properties</a></span></dt><dt><span class="section"><a href="ch02s03.html#id4743170">Service Level Security</a></span></dt><dt><span class="section"><a href="ch02s03.html#id4743219">Service Contexts</a></span></dt></dl></dd><dt><span class="section"><a href="ch02s04.html">Discovery Tools: Support for Strongly-Typed
-                    Service Methods</a></span></dt><dt><span class="section"><a href="ch02s05.html">Deployment</a></span></dt></dl></div><p>The Introduce Graphical Development Environment (GDE) is the graphical user
-                interface that can be used to create, modify, and deploy a ser(ice (see Figure 2).
-                It is designed to be very simple to use, enable using community excepted data types,
-                and provide easy configuration of service metadata, operations, and security. It
-                also allows customized plug-ins to be added for such things as repositories of data
-                types and for creating custom or common service types. </p><p>
-                </p><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="581"><tr style="height: 523px"><td><img src="Introduce_Users_Guide_RTF-2.jpg" width="581"></td></tr></table><div class="caption"><p class="caption">Figure <span class="GEN_SEQ">2</span>. The Introduce
-                            Graphical Development Environment (GDE)</p></div></div><p>
-            </p><p>The interface contains se eral screens and options for the service developer to 1)
-                create a new service, 2) modify an existing service, 3) discover and use published
-                data types in order to create strongly-typed service methods, and 4) configure
-                service metadata and deploy the service. </p><div class="section" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4744400"></a>Service Creation</h2></div></div></div><p>The service creation component, shown in <a href="ch02.html#_Ref136854071">???</a>,
-                    enables the developer to create a new grid service. Using the creation
-                    interface, the service de eloper can provide basic information about the service
-                    such as:</p><div class="itemizedlist"><ul type="disc"><li style="list-style-type: disc"><p>Service Name</p><div class="itemizedlist"><ul type="disc"><li style="list-style-type: disc"><p><span class="emphasis"><em>Service name is the name that will be used to
-                                        generate the service. The service name must be a valid java
-                                        identifier</em></span>.</p></li></ul></div></li><li style="list-style-type: disc"><p>Creation Directory</p><div class="itemizedlist"><ul type="disc"><li style="list-style-type: disc"><p><span class="emphasis"><em>The creation directory is the location of which the
-                                        grid service will be generated</em></span>.</p></li></ul></div></li><li style="list-style-type: disc"><p>Package Name</p><div class="itemizedlist"><ul type="disc"><li style="list-style-type: disc"><p>The package name is the base package to be used when generated
-                                    the grid service code.</p></li></ul></div></li><li style="list-style-type: disc"><p>Namespace</p><div class="itemizedlist"><ul type="disc"><li style="list-style-type: disc"><p><span class="emphasis"><em>The namespace im the namespace to be used when
-                                        defining the messages which will be defined in the WSDL of
-                                        the service</em></span>.</p></li></ul></div></li></ul></div><p>The developer also has the ability to add service extensions. A service
-                    extension is an Introduce plug-in (see Service Extensions), which is designed to
-                    add customizations to the service. For example, service extensions might add
-                    pre-defined operations, resources/resource properties, or security settings.
-                    They enable tse development of custom service types with predefined methods,
-                    which must be implemented. They also enable Introduce to run the custom code
-                    implemented in the plug-in, which makes modifications to the underlying service
-                    being created. This capability allows the specialization of Introduce to support
-                    domain specific common scenarios, further abstracting the individual service
-                    developer from responsibilpties related to the deployment of grid technologies
-                    in a production environment. Once the information has been entered and
-                    extensions, if any, have been selected, the user will select the create button.
-                    Once the creation is selected the Introduce creation engine will begin
-                    generating the service. After the service is generated is will be compiled and
-                    the Modification component will be displayed.</p><p>
-                    </p><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="479"><tr style="height: 515px"><td><img src="Introduce_Users_Guide_RTF-3.jpg" width="479"></td></tr></table><div class="caption"><p class="caption"><a name="_Ref136854071"></a><a name="_Ref136854061"></a>Figure <span class="GEN_SEQ">3</span>.
-                                Introduce GDE Seroice Creation Component.</p></div></div><p>
-                </p></div></div></body></html>
+                ">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084"
+	alink="#0000FF">
+<div class="chapter" lang="en-US">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title"><a name="id4744334"></a>Chapter 2. Introduce Graphical
+Development Environment</h2>
+</div>
+</div>
+</div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+	<dt><span class="section"><a href="ch02.html#id4744400">Service
+	Creation</a></span></dt>
+	<dt><span class="section"><a href="ch02s02.html"> </a></span></dt>
+	<dt><span class="section"><a href="ch02s03.html">Service Modification </a></span></dt>
+	<dd>
+	<dl>
+		<dt><span class="section"><a href="ch02s03.html#id4743773">Types</a></span></dt>
+		<dt><span class="section"><a href="ch02s03.html#id4743828">Operations</a></span></dt>
+		<dt><span class="section"><a href="ch02s03.html#id4743891">Resource
+		Properties</a></span></dt>
+		<dt><span class="section"><a href="ch02s03.html#id4743901">Service
+		Properties</a></span></dt>
+		<dt><span class="section"><a href="ch02s03.html#id4743170">Service
+		Level Security</a></span></dt>
+		<dt><span class="section"><a href="ch02s03.html#id4743219">Service
+		Contexts</a></span></dt>
+	</dl>
+	</dd>
+	<dt><span class="section"><a href="ch02s04.html">Discovery Tools:
+	Support for Strongly-Typed Service Methods</a></span></dt>
+	<dt><span class="section"><a href="ch02s05.html">Deployment</a></span></dt>
+</dl>
+</div>
+<p>The Introduce Graphical Development Environment (GDE) is the
+graphical user interface that can be used to create, modify, and deploy
+a ser(ice (see Figure 2). It is designed to be very simple to use,
+enable using community excepted data types, and provide easy
+configuration of service metadata, operations, and security. It also
+allows customized plug-ins to be added for such things as repositories
+of data types and for creating custom or common service types.</p>
+<p></p>
+<div class="mediaobject">
+<table border="0" summary="manufactured viewport for HTML img"
+	cellspacing="0" cellpadding="0" width="581">
+	<tr style="height: 523px">
+		<td><img src="Introduce_Users_Guide_RTF-2.jpg"></td>
+	</tr>
+</table>
+<div class="caption">
+<p class="caption">Figure <span class="GEN_SEQ">2</span>. The Introduce
+Graphical Development Environment (GDE)</p>
+</div>
+</div>
+<p></p>
+<p>The interface contains se eral screens and options for the service
+developer to 1) create a new service, 2) modify an existing service, 3)
+discover and use published data types in order to create strongly-typed
+service methods, and 4) configure service metadata and deploy the
+service.</p>
+<div class="section" lang="en-US">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" style="clear: both"><a name="id4744400"></a>Service
+Creation</h2>
+</div>
+</div>
+</div>
+<p>The service creation component, shown in <a
+	href="ch02.html#_Ref136854071">???</a>, enables the developer to create
+a new grid service. Using the creation interface, the service de eloper
+can provide basic information about the service such as:</p>
+<div class="itemizedlist">
+<ul type="disc">
+	<li style="list-style-type: disc">
+	<p>Service Name</p>
+	<div class="itemizedlist">
+	<ul type="disc">
+		<li style="list-style-type: disc">
+		<p><span class="emphasis"><em>Service name is the name that will be
+		used to generate the service. The service name must be a valid java
+		identifier</em></span>.</p>
+		</li>
+	</ul>
+	</div>
+	</li>
+	<li style="list-style-type: disc">
+	<p>Creation Directory</p>
+	<div class="itemizedlist">
+	<ul type="disc">
+		<li style="list-style-type: disc">
+		<p><span class="emphasis"><em>The creation directory is the location
+		of which the grid service will be generated</em></span>.</p>
+		</li>
+	</ul>
+	</div>
+	</li>
+	<li style="list-style-type: disc">
+	<p>Package Name</p>
+	<div class="itemizedlist">
+	<ul type="disc">
+		<li style="list-style-type: disc">
+		<p>The package name is the base package to be used when generated the
+		grid service code.</p>
+		</li>
+	</ul>
+	</div>
+	</li>
+	<li style="list-style-type: disc">
+	<p>Namespace</p>
+	<div class="itemizedlist">
+	<ul type="disc">
+		<li style="list-style-type: disc">
+		<p><span class="emphasis"><em>The namespace im the namespace to be
+		used when defining the messages which will be defined in the WSDL of
+		the service</em></span>.</p>
+		</li>
+	</ul>
+	</div>
+	</li>
+</ul>
+</div>
+<p>The developer also has the ability to add service extensions. A
+service extension is an Introduce plug-in (see Service Extensions),
+which is designed to add customizations to the service. For example,
+service extensions might add pre-defined operations, resources/resource
+properties, or security settings. They enable tse development of custom
+service types with predefined methods, which must be implemented. They
+also enable Introduce to run the custom code implemented in the plug-in,
+which makes modifications to the underlying service being created. This
+capability allows the specialization of Introduce to support domain
+specific common scenarios, further abstracting the individual service
+developer from responsibilpties related to the deployment of grid
+technologies in a production environment. Once the information has been
+entered and extensions, if any, have been selected, the user will select
+the create button. Once the creation is selected the Introduce creation
+engine will begin generating the service. After the service is generated
+is will be compiled and the Modification component will be displayed.</p>
+<p></p>
+<div class="mediaobject">
+<table border="0" summary="manufactured viewport for HTML img"
+	cellspacing="0" cellpadding="0" width="479">
+	<tr style="height: 515px">
+		<td><img src="Introduce_Users_Guide_RTF-3.jpg"></td>
+	</tr>
+</table>
+<div class="caption">
+<p class="caption"><a name="_Ref136854071"></a><a name="_Ref136854061"></a>Figure
+<span class="GEN_SEQ">3</span>. Introduce GDE Seroice Creation
+Component.</p>
+</div>
+</div>
+<p></p>
+</div>
+</div>
+</body>
+</html>

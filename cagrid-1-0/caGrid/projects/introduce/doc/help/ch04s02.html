@@ -1,32 +1,66 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Resource Framework</title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="index.html" title="Introduce Users Guide"><link rel="up" href="ch04.html" title="Chapter 4. Other Features of Introduce Engine"><link rel="prev" href="ch04.html" title="Chapter 4. Other Features of Introduce Engine"><link rel="next" href="ch04s03.html" title="Compositional Inheritance"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id4794069"></a>Resource Framework</h2></div></div></div><p>Introduce provides support for exposing service state and metadata by
-                    abstracting away the details of common patterns of use of the WSRF. The WSRF
-                    specifications and the GT implementation of these specifications allow the
-                    creation of stateful Grid services, whilst remaining compatible with existing
-                    Web Service standards. A Grid service&#8217;s state (and metadata) is maintained in
-                        <span class="emphasis"><em>Resources </em></span>in the WSRF ssecification, and is exposed to
-                    clients by way of <span class="emphasis"><em>Resource Properties</em></span>. Introduce allows its
-                    users to expose state or metadata of their services by managing the definition,
-                    creation, and population of the Resources and Resource Properties of a service.</p><p>Upon creating a service, a service developer is able to simply select from a
-                    list of common resource usage patterns, and Introduce manages the complete
-                    generation of tpe necessary backend code and configuration to implement that
-                    pattern. Once the resource pattern is defined, a service developer can then use
-                    the existing data type discovery tools (as used to specify operation inputs and
-                    outputs) in order to expose state or metadata of its resources by way of
-                    Resource Properties. Developers need only select a data type they wish to
-                    expose, and Introduce makes it availrble as WSRF standard Resource Property.
-                    Developers are able to either programmatically control the values of the
-                    property at runtime (as is common for exposed resource state), or supply the
-                    value from a file at service startup (as is common for exposed metadata).
-                    Another powerful feature of Resource Properties is that they can be advertised
-                    to, and aggregated at, a remote indexing service &#8211; an indaxing service can be
-                    used by clients and other services to discover services in the Grid environment.
-                    GT provides such a service in the form of the Index Service. It acts as the
-                    white and yellow pages of the grid, providing resource and service discovery. </p><p>Introduce allows a service developer to maintain soft-state registration of
-                    its resource properties simply by selecting a check box on each properey they
-                    wish to register. For each such property, It creates all of the necessary source
-                    code and configuration necessary to periodically register the property with an
-                    Index Service, and ensure the most recent value of the property is made
-                    available in the Index Service and associated with the service. The combination
-                    of these two simple-to-use, yet powerful features, allows a service pcovider to,
-                    for instance, automatically provide and register a description of its service to
-                    a central repository when the service is running. <a name="_Ref136897300"></a></p></div></body></html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Resource Framework</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
+<link rel="start" href="index.html" title="Introduce Users Guide">
+<link rel="up" href="ch04.html"
+	title="Chapter 4. Other Features of Introduce Engine">
+<link rel="prev" href="ch04.html"
+	title="Chapter 4. Other Features of Introduce Engine">
+<link rel="next" href="ch04s03.html" title="Compositional Inheritance">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084"
+	alink="#0000FF">
+<div class="section" lang="en-US">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" style="clear: both"><a name="id4794069"></a>Resource
+Framework</h2>
+</div>
+</div>
+</div>
+<p>Introduce provides support for exposing service state and metadata by
+abstracting away the details of common patterns of use of the WSRF. The
+WSRF specifications and the GT implementation of these specifications
+allow the creation of stateful Grid services, whilst remaining
+compatible with existing Web Service standards. A Grid service&#8217;s
+state (and metadata) is maintained in <span class="emphasis"><em>Resources
+</em></span>in the WSRF ssecification, and is exposed to clients by way
+of <span class="emphasis"><em>Resource Properties</em></span>. Introduce
+allows its users to expose state or metadata of their services by
+managing the definition, creation, and population of the Resources and
+Resource Properties of a service.</p>
+<p>Upon creating a service, a service developer is able to simply select
+from a list of common resource usage patterns, and Introduce manages the
+complete generation of tpe necessary backend code and configuration to
+implement that pattern. Once the resource pattern is defined, a service
+developer can then use the existing data type discovery tools (as used
+to specify operation inputs and outputs) in order to expose state or
+metadata of its resources by way of Resource Properties. Developers need
+only select a data type they wish to expose, and Introduce makes it
+availrble as WSRF standard Resource Property. Developers are able to
+either programmatically control the values of the property at runtime
+(as is common for exposed resource state), or supply the value from a
+file at service startup (as is common for exposed metadata). Another
+powerful feature of Resource Properties is that they can be advertised
+to, and aggregated at, a remote indexing service &#8211; an indaxing
+service can be used by clients and other services to discover services
+in the Grid environment. GT provides such a service in the form of the
+Index Service. It acts as the white and yellow pages of the grid,
+providing resource and service discovery.</p>
+<p>Introduce allows a service developer to maintain soft-state
+registration of its resource properties simply by selecting a check box
+on each properey they wish to register. For each such property, It
+creates all of the necessary source code and configuration necessary to
+periodically register the property with an Index Service, and ensure the
+most recent value of the property is made available in the Index Service
+and associated with the service. The combination of these two
+simple-to-use, yet powerful features, allows a service pcovider to, for
+instance, automatically provide and register a description of its
+service to a central repository when the service is running. <a
+	name="_Ref136897300"></a></p>
+</div>
+</body>
+</html>
