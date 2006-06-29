@@ -71,28 +71,33 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 
 	private void modifyMetadata(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
-		// find the service's etc directory, where the domain model goes
-		String domainModelFile = info.getIntroduceServiceProperties().getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
-			+ File.separator + "etc" + File.separator + "domainModel.xml";
-		
-		LOG.debug("Looking for user-supplied domain model xml file");
-		String suppliedDomainModel = getSuppliedDomainModelFilename(desc, info);
-		if (suppliedDomainModel != null) {
-			LOG.debug("User-supplied domain model is " + suppliedDomainModel);
-			LOG.info("Copying domain model from " + suppliedDomainModel + " to " + domainModelFile);
-			try {
-				Utils.copyFile(new File(suppliedDomainModel), new File(domainModelFile));
-			} catch (Exception ex) {
-				throw new CodegenExtensionException("Error copying domain model file: " + ex.getMessage(), ex);
+		if (!domainModelResourcePropertyExists(info)) {
+			// find the service's etc directory, where the domain model goes
+			String domainModelFile = info.getIntroduceServiceProperties().getProperty(
+				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+				+ File.separator + "etc" + File.separator + "domainModel.xml";
+			
+			LOG.debug("Looking for user-supplied domain model xml file");
+			String suppliedDomainModel = getSuppliedDomainModelFilename(desc, info);
+			if (suppliedDomainModel != null) {
+				LOG.debug("User-supplied domain model is " + suppliedDomainModel);
+				LOG.info("Copying domain model from " + suppliedDomainModel + " to " + domainModelFile);
+				try {
+					Utils.copyFile(new File(suppliedDomainModel), new File(domainModelFile));
+				} catch (Exception ex) {
+					throw new CodegenExtensionException("Error copying domain model file: " + ex.getMessage(), ex);
+				}
+			} else {
+				LOG.info("No domain model supplied, generating from caDSR");
+				generateDomainModel(desc, info, domainModelFile);
 			}
-		} else {
-			LOG.info("No domain model supplied, generating from caDSR");
-			generateDomainModel(desc, info, domainModelFile);
+			
+			// if the domain model was actually placed in the service's etc
+			// directory, then add the resource property for the domain model
+			if (new File(domainModelFile).exists()) {
+				addDomainModelResourceProperty(info);
+			}
 		}
-		
-		// add the resource property for the domain model
-		addDomainModelResourceProperty(info);
 	}
 	
 	
@@ -358,5 +363,23 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			metadataArray = tmpArray;
 		}
 		propsList.setResourceProperty(metadataArray);
+	}
+	
+	
+	private boolean domainModelResourcePropertyExists(ServiceInformation info) {
+		ResourcePropertiesListType propsList = info.getServices().getService()[0].getResourcePropertiesList();
+		if (propsList == null) {
+			return false;
+		}
+		ResourcePropertyType[] props = propsList.getResourceProperty();
+		if (props == null || props.length == 0) {
+			return false;
+		}
+		for (int i = 0; i < props.length; i++) {
+			if (props[i].getQName().equals(DataServiceConstants.DOMAIN_MODEL_QNAME)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
