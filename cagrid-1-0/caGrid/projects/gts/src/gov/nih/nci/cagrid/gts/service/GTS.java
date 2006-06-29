@@ -659,7 +659,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 							IdentityAuthorization ia = new IdentityAuthorization(auths[i].getServiceIdentity());
 							client.setAuthorization(ia);
 						}
-
+						levels = client.getTrustLevels();
 						trusted = client.findTrustedAuthorities(filter);
 
 					} catch (Exception ex) {
