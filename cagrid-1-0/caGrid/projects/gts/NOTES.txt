@@ -8,11 +8,12 @@ Add Authority Time To Live Check as compared to sync time (DONE)
 Looked into expires representation (DONE)
 Test Remove   (DONE)
 Test with sync gts (DONE)
-Fix Metadata Access Problem
+Fix Metadata Access Problem (DONE)
 Support Multiple Trust Levels for a Given CA
 Support Querying of Multiple Trust Levels.
 Add Ant Utility for Admin Bootstrapping
 Add Ant Utility for Portal
+Add check for Transaction database.
 
 
 transactions are need in mysql.
