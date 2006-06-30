@@ -104,7 +104,6 @@
 	<!-- Schema files (WSDL, XSD, etc.) to be included in the GAR file -->
 	<fileset dir="${schema.dest}" id="garschema">
 		<include name="${schema.path}/**/*" />
-		<include name="${factory.schema.path}/**/*" />
 	</fileset>
 	<property name="garschema.id" value="garschema" />
 
@@ -142,7 +141,6 @@
 			<fileset dir="${schema.local}" casesensitive="yes">
 				<include name="**" />
 				<include name="${schema.path}/*" />
-				<include name="${factory.schema.path}/*" />
 			</fileset>
 		</copy>
 
@@ -151,55 +149,17 @@
 	</target>
 
 
-	<!-- "Flattens" the WSDL file. i.e. runs the WSDL Preprocessor and creates a single
-	     WSDL file with all the operations and RPs in the portTypes specified in
-	     the wsdlpp:extends attribute (plus, of course, those defined in our own WSDL file) -->
-	<!-- Note that this is done with a GT4 tool -->
-	<target name="flatten" depends="init">
-		<ant antfile="${build.stubs}" target="flatten">
-			<property name="source.flatten.dir" location="${schema.dest}/${schema.path}" />
-			<property name="target.flatten.dir" location="${schema.dest}/${schema.path}" />
-			<property name="wsdl.source" value="${interface.name}.wsdl" />
-			<property name="wsdl.target" value="${interface.name}_flattened.wsdl" />
-			<property name="wsdl.porttype" value="${interface.name}PortType" />
-		</ant>
-	</target>
-
-
-	<!-- Same as above, but for the factory WSDL file (if any) -->
-	<target name="factoryFlatten" depends="init" if="factory.schema.path">
-		<ant antfile="${build.stubs}" target="flatten">
-			<property name="source.flatten.dir" location="${schema.dest}/${factory.schema.path}" />
-			<property name="target.flatten.dir" location="${schema.dest}/${factory.schema.path}" />
-			<property name="wsdl.source" value="${factory.interface.name}.wsdl" />
-			<property name="wsdl.target" value="${factory.interface.name}_flattened.wsdl" />
-			<property name="wsdl.porttype" value="${factory.interface.name}PortType" />
-		</ant>
-	</target>
-
 
 	<!-- Generate bindings for our WSDL file -->
 	<!-- This is done with a GT4 tool -->
-	<target name="generateBindings" depends="flatten">
+	<target name="generateBindings" depends="init">
 		<ant antfile="${build.stubs}" target="generateBinding">
 			<property name="source.binding.dir" value="${schema.dest}/${schema.path}" />
 			<property name="target.binding.dir" value="${schema.dest}/${schema.path}" />
-			<property name="porttype.wsdl" value="${interface.name}_flattened.wsdl" />
+			<property name="porttype.wsdl" value="${interface.name}.wsdl" />
 			<property name="binding.root" value="${interface.name}" />
 		</ant>
 	</target>
-
-
-	<!-- Same as above, but for the factory WSDL file (if any) -->
-	<target name="generateFactoryBindings" depends="factoryFlatten" if="factory.schema.path">
-		<ant antfile="${build.stubs}" target="generateBinding">
-			<property name="source.binding.dir" value="${schema.dest}/${factory.schema.path}" />
-			<property name="target.binding.dir" value="${schema.dest}/${factory.schema.path}" />
-			<property name="porttype.wsdl" value="${factory.interface.name}_flattened.wsdl" />
-			<property name="binding.root" value="${factory.interface.name}" />
-		</ant>
-	</target>
-
 
 	<!-- Generate the stub source files -->
 	<!-- This is done with a GT4 tool -->
@@ -218,25 +178,8 @@
 		</ant>
 	</target>
 
-
-	<!-- Same as above, but for the factory service (if any) -->
-	<target name="factoryStubs" depends="generateFactoryBindings" if="factory.schema.path">
-		<ant antfile="${build.stubs}" target="mergePackageMapping">
-			<property name="mapping.src" location="${mappings.file}" />
-			<property name="mapping.dst" location="${build.dir}/namespace2package.mappings" />
-		</ant>
-		<ant antfile="${build.stubs}" target="generateStubs">
-			<property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
-			<property name="source.stubs.dir" location="${schema.dest}/${factory.schema.path}" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
-			<property name="wsdl.file" value="${factory.interface.name}_service.wsdl" />
-		</ant>
-
-	</target>
-
-
 	<!-- Compile the stubs generated in the previous step -->
-	<target name="compileStubs" depends="stubs, factoryStubs">
+	<target name="compileStubs" depends="stubs">
 		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}">
 			<include name="**/*.java" />
 			<classpath>
