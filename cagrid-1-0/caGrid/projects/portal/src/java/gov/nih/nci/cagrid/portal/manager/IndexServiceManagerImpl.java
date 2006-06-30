@@ -18,7 +18,9 @@ public class IndexServiceManagerImpl extends BaseManagerImpl implements IndexSer
 
     public IndexService findIndexServiceByEPR(EndpointReferenceType epr) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+
     }
+
 
 
 }

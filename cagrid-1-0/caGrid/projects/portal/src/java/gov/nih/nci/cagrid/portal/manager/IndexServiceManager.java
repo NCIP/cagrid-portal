@@ -14,4 +14,6 @@ public interface IndexServiceManager extends BaseManager {
     IndexService findIndexServiceByPK(Integer key);
 
     IndexService findIndexServiceByEPR(EndpointReferenceType epr);
+
+    
 }

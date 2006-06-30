@@ -24,6 +24,12 @@ public class IndexService implements DomainObject, GridService {
     // Primary key
     private int key;
 
+    public IndexService(String epr)throws URI.MalformedURIException {
+        //Use setter to throw appropriate exception
+        this.setEpr(epr);
+
+    }
+
     /**
      * Needed for hibernate
      */

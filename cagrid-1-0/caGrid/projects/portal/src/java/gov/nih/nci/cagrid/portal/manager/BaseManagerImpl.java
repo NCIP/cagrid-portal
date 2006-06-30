@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.portal.dao.BaseDAO;
 import gov.nih.nci.cagrid.portal.dao.IndexDAO;
 
 import java.util.List;
+import java.util.Collection;
 
 /**
  * Implementation of the BaseManager Interface
@@ -46,4 +47,13 @@ public class BaseManagerImpl implements BaseManager {
     public List loadAll(Class cls) {
         return baseDAO.loadAll(cls);
     }
+
+    public void saveAll(Collection objects) {
+        baseDAO.saveOrUpdate(objects);
+    }
+
+    public void save(Object obj) {
+        baseDAO.saveOrUpdate(obj);
+    }
 }
+

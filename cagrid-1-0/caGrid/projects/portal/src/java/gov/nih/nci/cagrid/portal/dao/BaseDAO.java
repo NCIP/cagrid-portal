@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.dao;
 
 import java.util.List;
+import java.util.Collection;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,4 +14,8 @@ public interface BaseDAO {
 
 
     public List loadAll(Class type);
+
+     public void saveOrUpdate(Collection objects);
+
+    public void saveOrUpdate(Object obj);
 }

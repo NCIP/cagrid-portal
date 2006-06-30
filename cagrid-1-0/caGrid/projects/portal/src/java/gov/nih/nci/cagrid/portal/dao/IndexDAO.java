@@ -15,7 +15,6 @@ public interface IndexDAO {
      */
     public void deleteByEPR(String epr);
 
-    public void saveOrUpdate(IndexService idx) throws DataAccessException;
 
     public IndexService getObjectByPK(Integer pk);
 

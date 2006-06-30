@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.manager;
 
 import java.util.List;
+import java.util.Collection;
 
 /**
  * BaseManager Interface that all Managers
@@ -21,4 +22,8 @@ public interface BaseManager {
      * @return List
      */
     public List loadAll(Class cls);
+
+    public void saveAll(Collection objects);
+
+    public void save(Object obj);
 }
