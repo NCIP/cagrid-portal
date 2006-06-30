@@ -112,7 +112,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			ExtensionTools.getExtensionDataElement(data, DataServiceConstants.CADSR_ELEMENT_NAME));
 			LOG.debug("Extracting caDSR information from element");
 			String cadsrUrl = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_URL_ATTRIB);
-			String cadsrProjectId = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_ID_ATTRIB);
+			String cadsrProjectName = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_NAME_ATTRIB);
+			String cadsrProjectVersion = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_VERSION_ATTRIB);
 			String cadsrPackage = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PACKAGE_ATTRIB);
 			// get selected classes
 			String[] selectedClasses = null;
@@ -160,12 +161,12 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 					// cadsr can now generate the data service DomainModel
 					CaDSRServiceClient cadsrClient = new CaDSRServiceClient(cadsrUrl);
 					// get the project
-					// Project proj = getProject(cadsrClient, cadsrProject);
 					Project proj = new Project();
-					proj.setId(cadsrProjectId);
+					proj.setShortName(cadsrProjectName);
+					proj.setVersion(cadsrProjectVersion);
 					if (proj == null) {
 						throw new CodegenExtensionException("caDSR service " + cadsrUrl 
-							+ " did not find project with ID " + cadsrProjectId);
+							+ " did not find project " + cadsrProjectName + ": " + cadsrProjectVersion);
 					}
 					if (selectedClasses != null) {
 						UMLClassMetadata[] classMetadata = getUmlClassMetadata(
