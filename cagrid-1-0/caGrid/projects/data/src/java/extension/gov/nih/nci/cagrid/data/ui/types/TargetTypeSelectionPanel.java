@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
@@ -70,11 +71,11 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private ClassBrowserPanel classBrowserPanel = null;
 	private JPanel configurationPanel = null;
 	private JButton configureButton = null;
-	
-	private transient XMLDataModelService gmeHandle = null;
 	private JButton selectDomainModelButton = null;
 	private JTextField domainModelNameTextField = null;
-	private JPanel domainModelSelectionPanel = null;  //  @jve:decl-index=0:visual-constraint="446,639"
+	private JPanel domainModelSelectionPanel = null;
+	
+	private transient XMLDataModelService gmeHandle = null;
 	
 	public TargetTypeSelectionPanel(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo) {
 		super(desc, serviceInfo);
@@ -139,12 +140,24 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				public void typeSelectionAdded(TypeSelectionEvent e) {
 					getTypesTable().addType(getTypesTree().getOriginalNamespace(), e.getSchemaElementType());
 					addTreeNamespaceToServiceDescription();
+					updateSelectedClasses();
 				}
 				
 				
 				public void typeSelectionRemoved(TypeSelectionEvent e) {
 					getTypesTable().removeSchemaElementType(e.getSchemaElementType());
 					addTreeNamespaceToServiceDescription();
+					updateSelectedClasses();
+				}
+				
+				
+				private void updateSelectedClasses() {
+					try {
+						storeCaDSRSelectedClasses();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						PortalUtils.showErrorMessage("Error storing selected classes", ex);
+					}
 				}
 			});
 			// see if there is already a targeted namespace to display
@@ -462,6 +475,28 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			ex.printStackTrace();
 			PortalUtils.showErrorMessage("Error storing caDSR information!", ex);
 		}
+	}
+	
+	
+	private void storeCaDSRSelectedClasses() throws Exception {
+		ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
+		Element cadsrElement = AxisJdomUtils.fromMessageElement(ExtensionTools.getExtensionDataElement(
+			data, DataServiceConstants.CADSR_ELEMENT_NAME));
+		// remove any old selected classes element
+		if (cadsrElement.getChild(DataServiceConstants.CADSR_SELECTED_CLASSES) != null) {
+			cadsrElement.removeChild(DataServiceConstants.CADSR_SELECTED_CLASSES);
+		}
+		// build up new selected classes element
+		Element selectedClassesElement = new Element(DataServiceConstants.CADSR_SELECTED_CLASSES);
+		SchemaElementType[] types = getTypesTree().getCheckedTypes();
+		for (int i = 0; i < types.length; i++) {
+			Element typeElement = new Element(DataServiceConstants.CADSR_CLASS);
+			typeElement.setText(types[i].getType());
+			selectedClassesElement.addContent(typeElement);
+		}
+		cadsrElement.addContent(selectedClassesElement);
+		MessageElement cadsrMessageElement = AxisJdomUtils.fromElement(cadsrElement);
+		ExtensionTools.updateExtensionDataElement(data, cadsrMessageElement);
 	}
 	
 	
