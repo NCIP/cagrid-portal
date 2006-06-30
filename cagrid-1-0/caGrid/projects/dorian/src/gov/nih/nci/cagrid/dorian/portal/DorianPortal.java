@@ -36,7 +36,7 @@ public final class DorianPortal {
 
 
 	private static void showDorianSplash() {
-		dorianSplash = new SplashScreen("/dorianSplash.jpg");
+		dorianSplash = new SplashScreen("/dorianSplash.png");
 	}
 
 
