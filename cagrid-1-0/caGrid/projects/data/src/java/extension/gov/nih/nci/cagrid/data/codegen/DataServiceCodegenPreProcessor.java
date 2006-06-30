@@ -348,10 +348,10 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		domainMetadata.setPopulateFromFile(true); // no metadata file yet...
 		domainMetadata.setRegister(true);
 		domainMetadata.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
-		ResourcePropertiesListType propsList = info.getServices().getService()[0].getResourcePropertiesList();
+		ResourcePropertiesListType propsList = info.getServices().getService(0).getResourcePropertiesList();
 		if (propsList == null) {
 			propsList = new ResourcePropertiesListType();
-			info.getServices().getService()[0].setResourcePropertiesList(propsList);
+			info.getServices().getService(0).setResourcePropertiesList(propsList);
 		}
 		ResourcePropertyType[] metadataArray = propsList.getResourceProperty();
 		if (metadataArray == null || metadataArray.length == 0) {
