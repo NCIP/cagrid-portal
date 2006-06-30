@@ -12,6 +12,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.apache.axis.message.MessageElement;
+import org.apache.axis.utils.XMLUtils;
+import org.globus.wsrf.encoding.ObjectDeserializer;
+import org.xml.sax.InputSource;
 
 /** 
  *  CQLObjectResultIterator
@@ -57,18 +60,25 @@ public class CQLObjectResultIterator implements Iterator {
 			throw new NoSuchElementException();
 		}
 		MessageElement element = results[currentIndex].get_any()[0];
-		Object obj = null;
 		try {
 			String documentString = element.getAsString();
 			if (xmlOnly) {
 				return documentString;
 			}
-			return Utils.deserializeObject(new StringReader(documentString), objectClass, 
-				getConsumableInputStream());
+			InputStream configStream = getConsumableInputStream();
+			if (configStream != null) {
+				return Utils.deserializeObject(new StringReader(documentString), objectClass, 
+					getConsumableInputStream());
+			} else {
+				
+				org.w3c.dom.Document doc = XMLUtils.newDocument(
+					new InputSource(new StringReader(documentString)));
+				return ObjectDeserializer.toObject(doc.getDocumentElement(), objectClass);
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return obj;
+		return null;
 	}
 	
 	
@@ -84,19 +94,22 @@ public class CQLObjectResultIterator implements Iterator {
 	
 	
 	private InputStream getConsumableInputStream() throws IOException {
-		if (wsddContent == null) {
-			wsddContent = new byte[0];
-			byte[] readBytes = new byte[1024];
-			int len = -1;
-			BufferedInputStream buffStream = new BufferedInputStream(wsddInputStream);
-			while ((len = buffStream.read(readBytes)) != -1) {
-				byte[] tmpContent = new byte[wsddContent.length + len];
-				System.arraycopy(wsddContent, 0, tmpContent, 0, wsddContent.length);
-				System.arraycopy(readBytes, 0, tmpContent, wsddContent.length, len);
-				wsddContent = tmpContent;
+		if (wsddInputStream != null) {
+			if (wsddContent == null) {
+				wsddContent = new byte[0];
+				byte[] readBytes = new byte[1024];
+				int len = -1;
+				BufferedInputStream buffStream = new BufferedInputStream(wsddInputStream);
+				while ((len = buffStream.read(readBytes)) != -1) {
+					byte[] tmpContent = new byte[wsddContent.length + len];
+					System.arraycopy(wsddContent, 0, tmpContent, 0, wsddContent.length);
+					System.arraycopy(readBytes, 0, tmpContent, wsddContent.length, len);
+					wsddContent = tmpContent;
+				}
+				buffStream.close();
 			}
-			buffStream.close();
+			return new ByteArrayInputStream(wsddContent);
 		}
-		return new ByteArrayInputStream(wsddContent);
+		return null;
 	}
 }
