@@ -3,18 +3,26 @@ package gov.nih.nci.cagrid.installer.workers;
 import java.io.File;
 import java.net.URL;
 
+
 import org.apache.tools.ant.Project;
+
 import org.apache.tools.ant.Target;
 import org.apache.tools.ant.taskdefs.Get;
 
 public class NetworkResourceGetter extends Get {
 
 	public NetworkResourceGetter() {
+		
+	  
+	  
 		project = new Project();
 		project.init();
 		taskType = "get";
 		taskName = "get";
 		target = new Target();
+		
+		
+		
 	}
 
 	public void getMySql(String destDir) {
