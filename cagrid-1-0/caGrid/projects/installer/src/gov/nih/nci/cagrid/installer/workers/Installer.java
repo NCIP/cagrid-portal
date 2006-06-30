@@ -136,9 +136,14 @@ public class Installer {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
-		Installer.getInstance();
-
+		 String GRID_RELEASE_URL=args[0];
+		
+		String GRID_FILE=args[1];
+		
+		Installer is = Installer.getInstance();
+		is.addOrUpdateProperty("GRID_RELEASE_URL",GRID_RELEASE_URL);
+		is.addOrUpdateProperty("GRID_FILE",GRID_FILE);
+		
 	}
 
 }
