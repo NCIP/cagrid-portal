@@ -73,32 +73,30 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 
 	private void modifyMetadata(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
-		if (!domainModelResourcePropertyExists(info)) {
-			// find the service's etc directory, where the domain model goes
-			String domainModelFile = info.getIntroduceServiceProperties().getProperty(
-				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
-				+ File.separator + "etc" + File.separator + "domainModel.xml";
-			
-			LOG.debug("Looking for user-supplied domain model xml file");
-			String suppliedDomainModel = getSuppliedDomainModelFilename(desc, info);
-			if (suppliedDomainModel != null) {
-				LOG.debug("User-supplied domain model is " + suppliedDomainModel);
-				LOG.info("Copying domain model from " + suppliedDomainModel + " to " + domainModelFile);
-				try {
-					Utils.copyFile(new File(suppliedDomainModel), new File(domainModelFile));
-				} catch (Exception ex) {
-					throw new CodegenExtensionException("Error copying domain model file: " + ex.getMessage(), ex);
-				}
-			} else {
-				LOG.info("No domain model supplied, generating from caDSR");
-				generateDomainModel(desc, info, domainModelFile);
+		// find the service's etc directory, where the domain model goes
+		String domainModelFile = info.getIntroduceServiceProperties().getProperty(
+			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+			+ File.separator + "etc" + File.separator + "domainModel.xml";
+		
+		LOG.debug("Looking for user-supplied domain model xml file");
+		String suppliedDomainModel = getSuppliedDomainModelFilename(desc, info);
+		if (suppliedDomainModel != null) {
+			LOG.debug("User-supplied domain model is " + suppliedDomainModel);
+			LOG.info("Copying domain model from " + suppliedDomainModel + " to " + domainModelFile);
+			try {
+				Utils.copyFile(new File(suppliedDomainModel), new File(domainModelFile));
+			} catch (Exception ex) {
+				throw new CodegenExtensionException("Error copying domain model file: " + ex.getMessage(), ex);
 			}
-			
-			// if the domain model was actually placed in the service's etc
-			// directory, then add the resource property for the domain model
-			if (new File(domainModelFile).exists()) {
-				addDomainModelResourceProperty(info);
-			}
+		} else {
+			LOG.info("No domain model supplied, generating from caDSR");
+			generateDomainModel(desc, info, domainModelFile);
+		}
+		
+		// if the domain model was actually placed in the service's etc
+		// directory, then add the resource property for the domain model
+		if (new File(domainModelFile).exists()) {
+			addDomainModelResourceProperty(info);
 		}
 	}
 	
