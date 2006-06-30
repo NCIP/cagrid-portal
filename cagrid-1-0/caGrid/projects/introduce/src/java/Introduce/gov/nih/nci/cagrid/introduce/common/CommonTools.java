@@ -174,12 +174,26 @@ public class CommonTools {
 		return getAntCommand("all", buildFileDir);
 	}
 
+
 	public static String getAntMergeCommand(String buildFileDir) throws Exception {
 		return getAntCommand("merge", buildFileDir);
 	}
 
+
 	public static String getAntDeployTomcatCommand(String buildFileDir) throws Exception {
-		String cmd = " -Dservice.properties.file=" + buildFileDir + File.separator
+		String dir = buildFileDir;
+		File dirF = new File(dir);
+		if (!dirF.isAbsolute()) {
+			dir = buildFileDir + File.separator + dir;
+		}
+		String os = System.getProperty("os.name");
+		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
+			dir = "\"" + dir + "\"";
+		} else {
+			dir = dir.replaceAll(" ", "\\ ");
+		}
+
+		String cmd = " -Dservice.properties.file=" + dir + File.separator
 			+ IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES;
 		cmd = getAntCommand("deployTomcat", buildFileDir) + " " + cmd;
 		return cmd;
@@ -187,6 +201,18 @@ public class CommonTools {
 
 
 	public static String getAntDeployGlobusCommand(String buildFileDir) throws Exception {
+		String dir = buildFileDir;
+		File dirF = new File(dir);
+		if (!dirF.isAbsolute()) {
+			dir = buildFileDir + File.separator + dir;
+		}
+		String os = System.getProperty("os.name");
+		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
+			dir = "\"" + dir + "\"";
+		} else {
+			dir = dir.replaceAll(" ", "\\ ");
+		}
+
 		String cmd = " -Dservice.properties.file=" + buildFileDir + File.separator
 			+ IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES;
 		cmd = getAntCommand("deployGlobus", buildFileDir) + " " + cmd;
@@ -433,7 +459,7 @@ public class CommonTools {
 			File fromLibDir = new File(fromDir.getAbsolutePath() + File.separator + "lib");
 			File toLibDir = new File(toDir.getAbsolutePath() + File.separator + "lib");
 
-			Utils.copyDirectory(fromLibDir,toLibDir);
+			Utils.copyDirectory(fromLibDir, toLibDir);
 		}
 
 		// copy over the namespaces from the imported service

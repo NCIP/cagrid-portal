@@ -1,5 +1,7 @@
 To Do:
 
+fix the CommonTools ant calls to uniformly handle things like path issues
+
 if add a new service with same namespace i get funny gui error.
 
 should generated two different interfaces in common..  (what is the use.  The server only implements non "provided" methods.  Has nothing to do with "importing")
