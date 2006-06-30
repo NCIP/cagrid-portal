@@ -104,16 +104,6 @@ public class SkeletonSecurityOperationProviderCreator {
 				}
 			}
 		}
-		// write the modified document back out
-		try {
-			Utils.serializeDocument(info.getBaseDirectory() + File.separator + "introduce.xml", info
-				.getServiceDescriptor(), new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceDescription"));
-		} catch (Exception e1) {
-			BuildException be = new BuildException(e1.getMessage());
-			be.setStackTrace(e1.getStackTrace());
-			be.printStackTrace();
-			throw be;
-		}
 	}
 
 }
