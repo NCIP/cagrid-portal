@@ -1,4 +1,5 @@
-<project name="MyProject" default="dist" basedir=".">
+
+<project name="MyProject" default="signjar" basedir=".">
     <description>
         caGrid Installer build file
     </description>
@@ -51,11 +52,21 @@
   	</copy>
   </target>
 
-  <target name="clean"
-        description="clean up" >
-   
-    <delete dir="${build}"/>
-    <delete dir="${dist}"/>
-  </target>
+  
+	
+	<target name="signjar" depends="dist" description="signs the jars">
+	   	<signjar jar="${dist}/lib/ant.jar"
+	   	alias="installer" storepass="installerpassword" keystore="${dist}/lib/installerKeys" />
+		<signjar jar="${dist}/lib/systemCheck.jar"
+			   	alias="installer" storepass="installerpassword" keystore="${dist}/lib/installerKeys" />
+
+	</target>
+	
+	<target name="clean"
+	        description="clean up" >
+	   
+	    <delete dir="${build}"/>
+	    <delete dir="${dist}"/>
+	  </target>
 </project>
 
