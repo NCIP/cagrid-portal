@@ -33,6 +33,7 @@ import javax.swing.JTextField;
 
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
+import java.awt.Insets;
 
 
 /**
@@ -101,6 +102,8 @@ public class CreationViewer extends GridPortalComponent {
 
 	private JLabel downExtensionLabel = null;
 
+	private JPanel extSelectionPanel = null;
+
 
 	public CreationViewer() {
 		super();
@@ -126,15 +129,6 @@ public class CreationViewer extends GridPortalComponent {
 	 */
 	private JPanel getInputPanel() {
 		if (inputPanel == null) {
-			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			gridBagConstraints17.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints17.gridy = 5;
-			gridBagConstraints17.weightx = 0.0;
-			gridBagConstraints17.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints17.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints17.gridwidth = 3;
-			gridBagConstraints17.weighty = 1.0D;
-			gridBagConstraints17.gridx = 0;
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints12.gridy = 3;
@@ -233,7 +227,6 @@ public class CreationViewer extends GridPortalComponent {
 			inputPanel.add(getNamespaceDomain(), gridBagConstraints12);
 			inputPanel.add(serviceLabel, gridBagConstraints4);
 			inputPanel.add(namespaceLabel, gridBagConstraints11);
-			inputPanel.add(getExtensionsPanel(), gridBagConstraints17);
 		}
 		return inputPanel;
 	}
@@ -246,6 +239,15 @@ public class CreationViewer extends GridPortalComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.anchor = GridBagConstraints.WEST;
+			gridBagConstraints17.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints17.gridwidth = 3;
+			gridBagConstraints17.gridx = 0;
+			gridBagConstraints17.gridy = 1;
+			gridBagConstraints17.weightx = 1.0D;
+			gridBagConstraints17.weighty = 1.0D;
+			gridBagConstraints17.fill = java.awt.GridBagConstraints.BOTH;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints1.gridx = 0;
@@ -256,14 +258,15 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints.gridheight = 1;
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 0;
-			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
 			gridBagConstraints.weightx = 1.0D;
-			gridBagConstraints.weighty = 1.0D;
+			gridBagConstraints.weighty = 0.0D;
 			gridBagConstraints.gridwidth = 1;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(getInputPanel(), gridBagConstraints);
+			mainPanel.add(getExtensionsPanel(), gridBagConstraints17);
 			mainPanel.add(getButtonPanel(), gridBagConstraints1);
 		}
 		return mainPanel;
@@ -348,7 +351,8 @@ public class CreationViewer extends GridPortalComponent {
 	private JTextField getDir() {
 		if (dir == null) {
 			dir = new JTextField();
-			dir.setText(DEFAULT_NAME);
+			String home = System.getProperty("user.home");
+			dir.setText(home + File.separator + DEFAULT_NAME);
 		}
 		return dir;
 	}
@@ -570,37 +574,33 @@ public class CreationViewer extends GridPortalComponent {
 	private JPanel getExtensionsPanel() {
 		if (extensionsPanel == null) {
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.gridx = 1;
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints13.weightx = 1.0D;
+			gridBagConstraints13.weighty = 0.0D;
 			gridBagConstraints13.gridy = 0;
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
 			gridBagConstraints20.gridx = 0;
 			gridBagConstraints20.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints20.gridwidth = 3;
+			gridBagConstraints20.weightx = 1.0D;
+			gridBagConstraints20.weighty = 1.0D;
+			gridBagConstraints20.insets = new java.awt.Insets(5,2,5,2);
 			gridBagConstraints20.gridy = 1;
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
 			gridBagConstraints19.gridx = 0;
 			gridBagConstraints19.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints19.gridheight = 2;
+			gridBagConstraints19.weightx = 1.0D;
+			gridBagConstraints19.weighty = 1.0D;
 			gridBagConstraints19.gridy = 2;
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.gridx = 2;
-			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints16.gridy = 0;
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints15.gridx = 0;
-			gridBagConstraints15.gridy = 0;
-			gridBagConstraints15.weightx = 1.0;
-			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
 			extensionsPanel = new JPanel();
 			extensionsPanel.setLayout(new GridBagLayout());
 			extensionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Extensions",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-			extensionsPanel.add(getServiceStyleSeletor(), gridBagConstraints15);
-			extensionsPanel.add(getRemoveExtensionButton(), gridBagConstraints16);
+			extensionsPanel.add(getExtSelectionPanel(), gridBagConstraints13);
 			extensionsPanel.add(getExtensionsTable(), gridBagConstraints19);
-			extensionsPanel.add(getAddExtensionButton(), gridBagConstraints13);
 			extensionsPanel.add(getExtensionsTableionsTablePanel(), gridBagConstraints20);
 		}
 		return extensionsPanel;
@@ -734,5 +734,33 @@ public class CreationViewer extends GridPortalComponent {
 			extensionsTablePanel.add(downExtensionLabel, gridBagConstraints14);
 		}
 		return extensionsTablePanel;
+	}
+
+
+	/**
+	 * This method initializes extSelectionPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getExtSelectionPanel() {
+		if (extSelectionPanel == null) {
+			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+			gridBagConstraints22.gridy = 0;
+			gridBagConstraints22.gridx = 2;
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.gridy = 0;
+			gridBagConstraints16.gridx = 1;
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints15.gridx = 0;
+			gridBagConstraints15.gridy = 0;
+			gridBagConstraints15.weightx = 1.0;
+			extSelectionPanel = new JPanel();
+			extSelectionPanel.setLayout(new GridBagLayout());
+			extSelectionPanel.add(getServiceStyleSeletor(), gridBagConstraints15);
+			extSelectionPanel.add(getRemoveExtensionButton(), gridBagConstraints16);
+			extSelectionPanel.add(getAddExtensionButton(), gridBagConstraints22);
+		}
+		return extSelectionPanel;
 	}
 }

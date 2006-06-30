@@ -20,8 +20,8 @@
           <class>gov.nih.nci.cagrid.introduce.portal.creation.CreationViewer</class>
           <icon>/cog_add.png</icon>
           <dimensions>
-            <width>500</width>
-            <height>300</height>
+            <width>600</width>
+            <height>350</height>
           </dimensions>
         </component>
         <component>
