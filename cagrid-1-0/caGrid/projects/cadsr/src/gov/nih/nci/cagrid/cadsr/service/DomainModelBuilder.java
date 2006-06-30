@@ -87,10 +87,12 @@ public class DomainModelBuilder {
 	public DomainModel getDomainModel(Project proj, String[] packageNames) throws RemoteException {
 		// grab the classes out of the packages
 		List classes = new ArrayList();
-		for (int i = 0; i < packageNames.length; i++) {
-			UMLPackageMetadata pack = getPackageMetadata(proj, packageNames[i]);
-			UMLClassMetadata[] mdArray = getClasses(proj, pack);
-			Collections.addAll(classes, mdArray);
+		if (packageNames != null) {
+			for (int i = 0; i < packageNames.length; i++) {
+				UMLPackageMetadata pack = getPackageMetadata(proj, packageNames[i]);
+				UMLClassMetadata[] mdArray = getClasses(proj, pack);
+				Collections.addAll(classes, mdArray);
+			}
 		}
 		UMLClassMetadata[] classArray = new UMLClassMetadata[classes.size()];
 		classes.toArray(classArray);
@@ -137,20 +139,24 @@ public class DomainModelBuilder {
 
 		// classes
 		DomainModelExposedUMLClassCollection exposedClasses = new DomainModelExposedUMLClassCollection();
-		UMLClass[] umlClasses = new UMLClass[classes.length];
-		for (int i = 0; i < classes.length; i++) {
-			umlClasses[i] = CaDSRUtils.convertClass(classes[i]);
+		if (classes != null) {
+			UMLClass[] umlClasses = new UMLClass[classes.length];
+			for (int i = 0; i < classes.length; i++) {
+				umlClasses[i] = CaDSRUtils.convertClass(classes[i]);
+			}
+			exposedClasses.setUMLClass(umlClasses);
 		}
-		exposedClasses.setUMLClass(umlClasses);
 		model.setExposedUMLClassCollection(exposedClasses);
 
 		// associations
 		DomainModelExposedUMLAssociationCollection exposedAssociations = new DomainModelExposedUMLAssociationCollection();
-		gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[] umlAssociations = new gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[associations.length];
-		for (int i = 0; i < associations.length; i++) {
-			umlAssociations[i] = convertAssociation(associations[i]);
+		if (associations != null) {
+			gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[] umlAssociations = new gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[associations.length];
+			for (int i = 0; i < associations.length; i++) {
+				umlAssociations[i] = convertAssociation(associations[i]);
+			}
+			exposedAssociations.setUMLAssociation(umlAssociations);
 		}
-		exposedAssociations.setUMLAssociation(umlAssociations);
 		model.setExposedUMLAssociationCollection(exposedAssociations);
 		return model;
 	}
