@@ -22,6 +22,7 @@
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 	<property name="common.jar.name" value="${service.name}-common.jar" />
 	<property name="client.jar.name" value="${service.name}-client.jar" />
+	<property name="portal.jar.name" value="${service.name}-portal.jar" />
 	<property name="service.jar.name" value="${service.name}-service.jar" />
 	<property name="stubs.jar.name" value="${service.name}_stubs.jar" />
 
@@ -265,6 +266,9 @@
 		<jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
 			<include name="**/service/**" />
 		</jar>
+		<jar jarfile="${build.lib.dir}/${portal.jar.name}" basedir="${build.dest}">
+					<include name="**/portal/**" />
+		</jar>
 		<jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
 			<include name="**/*.xml" />
 			<include name="**/*.dtd" />
@@ -322,6 +326,35 @@
 				</fileset>
 			</batchtest>
 		</junit>
+	</target>
+	
+	<!-- Post Introduce Edit-->
+	<target name="portal" description="Run the dorian portal" depends="checkGlobus">
+		<java classname="org.projectmobius.portal.GridPortal" fork="yes">
+			<arg value="etc/gts-portal-conf.xml" />
+			<classpath>
+				<pathelement location="${stubs.dest}" />
+				<fileset dir="${build.lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.globus.dir}/lib">
+					<include name="*.jar" />
+					<exclude name="${stubs.jar.name}" />
+					<exclude name="${jar.name}" />
+					<exclude name="xml-apis.jar" />
+					<exclude name="xercesImpl.jar" />
+				</fileset>
+				<pathelement location="resources/portal/gts" />
+				<pathelement location="ext/resources/portal/common" />
+				<pathelement location="ext/resources/portal/gridca" />
+			</classpath>
+		</java>
 	</target>
 
 </project>
