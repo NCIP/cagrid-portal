@@ -17,5 +17,13 @@
     <target name="dorian" description="Run the Dorian Administrative GUI" >
         <ant dir="${basedir}/projects/dorian" antfile="build.xml" target="portal" inheritall="false" />
     </target>
+	
+	 <target name="gts" description="Run the GTS Administrative GUI" >
+	        <ant dir="${basedir}/projects/gts" antfile="build.xml" target="portal" inheritall="false" />
+	  </target>
+	
+	 <target name="syncWithTrustFabric" description="Syncs With Trust Fabric" >
+		        <ant dir="${basedir}/projects/syncgts" antfile="build.xml" target="syncOnce" inheritall="false" />
+	</target>
 
 </project>
