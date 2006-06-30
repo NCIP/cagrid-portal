@@ -95,7 +95,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		
 		// if the domain model was actually placed in the service's etc
 		// directory, then add the resource property for the domain model
-		if (new File(domainModelFile).exists()) {
+		if (!domainModelResourcePropertyExists(info)) {
 			addDomainModelResourceProperty(info);
 		}
 	}
@@ -368,6 +368,43 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			metadataArray = tmpArray;
 		}
 		propsList.setResourceProperty(metadataArray);
+	}
+	
+	
+	private void removeDomainModelResourceProperty(ServiceInformation info) {
+		ResourcePropertiesListType propsList = info.getServices().getService(0).getResourcePropertiesList();
+		if (propsList != null) {
+			ResourcePropertyType[] metadataArray = propsList.getResourceProperty();
+			Set cleaned = new HashSet();
+			if (metadataArray != null) {
+				for (int i = 0; i < metadataArray.length; i++) {
+					if (!metadataArray[i].getQName().equals(DataServiceConstants.DOMAIN_MODEL_QNAME)) {
+						cleaned.add(metadataArray[i]);
+					}
+				}
+			}
+			ResourcePropertyType[] cleanedArray = new ResourcePropertyType[cleaned.size()];
+			cleaned.toArray(cleanedArray);
+			propsList.setResourceProperty(cleanedArray);
+		}
+	}
+	
+	
+	private boolean domainModelResourcePropertyExists(ServiceInformation info) {
+		ResourcePropertiesListType propsList = info.getServices().getService()[0].getResourcePropertiesList();
+		if (propsList == null) {
+			return false;
+		}
+		ResourcePropertyType[] props = propsList.getResourceProperty();
+		if (props == null || props.length == 0) {
+			return false;
+		}
+		for (int i = 0; i < props.length; i++) {
+			if (props[i].getQName().equals(DataServiceConstants.DOMAIN_MODEL_QNAME)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	
