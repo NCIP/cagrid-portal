@@ -72,8 +72,8 @@ public class DataServiceConstants {
 	// cadsr info constants
 	public static final String CADSR_ELEMENT_NAME = "caDSRInformation";
 	public static final String CADSR_URL_ATTRIB = "url";
-	public static final String CADSR_PROJECT_ATTRIB = "project";
 	public static final String CADSR_PACKAGE_ATTRIB = "package";
+	public static final String CADSR_PROJECT_ID_ATTRIB = "projectId";
 	public static final String CADSR_SELECTED_CLASSES = "selectedClasses";
 	public static final String CADSR_CLASS = "class";
 	public static final String SUPPLIED_DOMAIN_MODEL = "suppliedDomainModel";

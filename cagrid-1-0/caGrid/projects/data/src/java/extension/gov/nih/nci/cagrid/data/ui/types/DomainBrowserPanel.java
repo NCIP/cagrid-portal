@@ -37,17 +37,17 @@ public class DomainBrowserPanel extends CaDSRBrowserPanel {
 	}
 
 
-	public synchronized void setSelectedProject(String proj) {
-		System.out.println("Trying to select project " + proj);
+	public synchronized void setSelectedProject(String projId) {
+		System.out.println("Trying to select project by id " + projId);
 		for (int i = 0; i < getProjectComboBox().getItemCount(); i++) {
 			ProjectDisplay disp = (ProjectDisplay) getProjectComboBox().getItemAt(i);
-			if (disp.getProject().getLongName().equals(proj)) {
+			if (disp.getProject().getId().equals(projId)) {
 				System.out.println("Project found");
 				getProjectComboBox().getModel().setSelectedItem(disp);
 				return;
 			}
 		}
-		System.out.println("Project " + proj + " not found");
+		System.out.println("Project id " + projId + " not found");
 	}
 
 

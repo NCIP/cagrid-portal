@@ -112,12 +112,12 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			if (cadsrElement != null) {
 				// if there's existing caDSR info in the data service, set the browser panel to show it
 				url = cadsrElement.getAttribute(DataServiceConstants.CADSR_URL_ATTRIB);
-				String project = cadsrElement.getAttribute(DataServiceConstants.CADSR_PROJECT_ATTRIB);
+				String projectId = cadsrElement.getAttribute(DataServiceConstants.CADSR_PROJECT_ID_ATTRIB);
 				String pack = cadsrElement.getAttribute(DataServiceConstants.CADSR_PACKAGE_ATTRIB);
 				domainBrowserPanel.setDefaultCaDSRURL(url);
 				domainBrowserPanel.getCadsr().setText(url);
 				domainBrowserPanel.blockingCadsrRefresh();
-				domainBrowserPanel.setSelectedProject(project);
+				domainBrowserPanel.setSelectedProject(projectId);
 				domainBrowserPanel.setSelectedPackage(pack);
 			} else {
 				// get the default caDSR url out of the extension config
@@ -462,10 +462,11 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		Element cadsr = new Element(DataServiceConstants.CADSR_ELEMENT_NAME);
 		cadsr.setAttribute(DataServiceConstants.CADSR_URL_ATTRIB,
 			getDomainBrowserPanel().getCadsr().getText());
-		cadsr.setAttribute(DataServiceConstants.CADSR_PROJECT_ATTRIB,
-			getDomainBrowserPanel().getSelectedProject().getLongName());
+		cadsr.setAttribute(DataServiceConstants.CADSR_PROJECT_ID_ATTRIB,
+			getDomainBrowserPanel().getSelectedProject().getId());
 		cadsr.setAttribute(DataServiceConstants.CADSR_PACKAGE_ATTRIB,
 			getDomainBrowserPanel().getSelectedPackage().getName());
+		getDomainBrowserPanel().getSelectedProject();
 		MessageElement cadsrElement = null;
 		try {
 			cadsrElement = AxisJdomUtils.fromElement(cadsr);

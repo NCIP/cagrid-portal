@@ -112,7 +112,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			ExtensionTools.getExtensionDataElement(data, DataServiceConstants.CADSR_ELEMENT_NAME));
 			LOG.debug("Extracting caDSR information from element");
 			String cadsrUrl = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_URL_ATTRIB);
-			String cadsrProject = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_ATTRIB);
+			String cadsrProjectId = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_ID_ATTRIB);
 			String cadsrPackage = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PACKAGE_ATTRIB);
 			// get selected classes
 			String[] selectedClasses = null;
@@ -160,10 +160,12 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 					// cadsr can now generate the data service DomainModel
 					CaDSRServiceClient cadsrClient = new CaDSRServiceClient(cadsrUrl);
 					// get the project
-					Project proj = getProject(cadsrClient, cadsrProject);
+					// Project proj = getProject(cadsrClient, cadsrProject);
+					Project proj = new Project();
+					proj.setId(cadsrProjectId);
 					if (proj == null) {
 						throw new CodegenExtensionException("caDSR service " + cadsrUrl 
-							+ " did not find project " + cadsrProject);
+							+ " did not find project with ID " + cadsrProjectId);
 					}
 					if (selectedClasses != null) {
 						UMLClassMetadata[] classMetadata = getUmlClassMetadata(
@@ -365,38 +367,6 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			metadataArray = tmpArray;
 		}
 		propsList.setResourceProperty(metadataArray);
-	}
-	
-	
-	private boolean domainModelResourcePropertyExists(ServiceInformation info) {
-		ResourcePropertiesListType propsList = info.getServices().getService()[0].getResourcePropertiesList();
-		if (propsList == null) {
-			return false;
-		}
-		ResourcePropertyType[] props = propsList.getResourceProperty();
-		if (props == null || props.length == 0) {
-			return false;
-		}
-		for (int i = 0; i < props.length; i++) {
-			if (props[i].getQName().equals(DataServiceConstants.DOMAIN_MODEL_QNAME)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	
-	private Project getProject(CaDSRServiceClient client, String projectName) throws RemoteException {
-		// get the project
-		Project proj = null;
-		Project[] allProjects = client.findAllProjects();
-		for (int i = 0; i < allProjects.length; i++) {
-			if (allProjects[i].getLongName().equals(projectName)) {
-				proj = allProjects[i];
-				break;
-			}
-		}
-		return proj;
 	}
 	
 	
