@@ -99,7 +99,7 @@ public class SyncProperties extends SyncTool {
 							getServiceInformation(), service));
 						Element newResourceEl = XMLUtilities.stringToDocument(confXMLString).getRootElement();
 						serviceEl.removeContent(resourceEl);
-						serviceEl.addContent(newResourceEl.detach());
+						serviceEl.addContent(resourceI, newResourceEl.detach());
 					} else if (resourceEl.getAttributeValue("name").equals("configuration")) {
 						// located a configuration element, need to
 						// populate it's attributes now...
@@ -109,7 +109,7 @@ public class SyncProperties extends SyncTool {
 							getServiceInformation(), service));
 						Element newResourceEl = XMLUtilities.stringToDocument(confXMLString).getRootElement();
 						serviceEl.removeContent(resourceEl);
-						serviceEl.addContent(newResourceEl.detach());
+						serviceEl.addContent(resourceI, newResourceEl.detach());
 					}
 				}
 			}
