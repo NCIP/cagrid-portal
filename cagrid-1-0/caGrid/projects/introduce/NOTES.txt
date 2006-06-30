@@ -11,7 +11,6 @@ I was adding faults to a method, and when I hit done, an error dialog poped up w
 on save etc i have seen unable to delete namespace2package.mappings.
 
 From BMI Tutorial:
-0) needs handouts for people to follow along
 6) Adding a resource property to a service context, doesn't refresh the JTree
 
 metadata code doesn't compile if you select an element that is xsd:type an XML schema type (e.g. string)
@@ -62,13 +61,13 @@ type browser issues:
 -(DONE)it lets you set the class name for XML schema types; does that work?
 -(DONE)does it really support editing the location of a schema? if it does, it needs to move the file that was pulled down from the gme (otherwise it wont exist)
 
-when modifying a service, conneciton to GME needs to happen in the background, and fail gracefully
-
 secure message privacy does not work (STEVE)
 
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+(DONE) when modifying a service, conneciton to GME needs to happen in the background, and fail gracefully
+
 security operationprovider needs to be hooked into build properly...
  - have copies of schema and jars... needs to get from artifacts
  
@@ -384,9 +383,5 @@ FUTURE WORK PROPOSED:
 6) Add Service Side Support for Rejecting Limited Proxies.
 
 
-=======================================================
- METADATA STUFF
-=======================================================
 icons from here: http://www.famfamfam.com/lab/icons/
 and http://tango-project.org/Tango_Icon_Gallery
-
