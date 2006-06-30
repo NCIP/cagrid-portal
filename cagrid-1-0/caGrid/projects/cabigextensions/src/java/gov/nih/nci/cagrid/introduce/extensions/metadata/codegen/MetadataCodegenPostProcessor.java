@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extensions.metadata.constants.MetadataConstants;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
+import gov.nih.nci.cagrid.metadata.ServiceMetadataHostingResearchCenter;
 import gov.nih.nci.cagrid.metadata.ServiceMetadataServiceDescription;
 import gov.nih.nci.cagrid.metadata.service.ContextProperty;
 import gov.nih.nci.cagrid.metadata.service.Fault;
@@ -25,6 +26,7 @@ import gov.nih.nci.cagrid.metadata.service.Service;
 import gov.nih.nci.cagrid.metadata.service.ServiceContext;
 import gov.nih.nci.cagrid.metadata.service.ServiceContextContextPropertyCollection;
 import gov.nih.nci.cagrid.metadata.service.ServiceContextOperationCollection;
+import gov.nih.nci.cagrid.metadata.service.ServicePointOfContactCollection;
 import gov.nih.nci.cagrid.metadata.service.ServiceServiceContextCollection;
 
 import java.io.File;
@@ -403,11 +405,25 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 			metadata.setServiceDescription(desc);
 		}
 
+		// every model needs a hosting center (container)
+		ServiceMetadataHostingResearchCenter hostingResearchCenter = metadata.getHostingResearchCenter();
+		if (hostingResearchCenter == null) {
+			hostingResearchCenter = new ServiceMetadataHostingResearchCenter();
+			metadata.setHostingResearchCenter(hostingResearchCenter);
+		}
+
 		// every service desc needs a service
 		Service serv = desc.getService();
 		if (serv == null) {
 			serv = new Service();
 			desc.setService(serv);
+		}
+
+		// every service needs a context collection
+		ServicePointOfContactCollection pointOfContactCollection = serv.getPointOfContactCollection();
+		if (pointOfContactCollection == null) {
+			pointOfContactCollection = new ServicePointOfContactCollection();
+			serv.setPointOfContactCollection(pointOfContactCollection);
 		}
 
 		// every service needs a context coll
