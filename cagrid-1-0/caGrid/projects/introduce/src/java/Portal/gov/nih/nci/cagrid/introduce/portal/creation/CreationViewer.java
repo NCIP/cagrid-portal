@@ -435,9 +435,17 @@ public class CreationViewer extends GridPortalComponent {
 		int doIdeleteResult = JOptionPane.OK_OPTION;
 		final File dirFile = new File(getDir().getText());
 		if (dirFile.exists() && dirFile.list().length != 0) {
-			doIdeleteResult = JOptionPane.showConfirmDialog(this, "The creation directory ("
-				+ dirFile.getAbsolutePath() + ") is not empty.  All information in the directory will be lost.",
-				"Confirm Overwrite", JOptionPane.YES_NO_OPTION);
+			doIdeleteResult = JOptionPane.NO_OPTION;
+			File duceXML = new File(dirFile.getAbsolutePath() + File.separator + "introduce.xml");
+			if (duceXML.exists()) {
+				doIdeleteResult = JOptionPane.showConfirmDialog(this, "The creation directory ("
+					+ dirFile.getAbsolutePath() + ") is not empty.  All information in the directory will be lost.",
+					"Confirm Overwrite", JOptionPane.YES_NO_OPTION);
+			} else {
+				JOptionPane.showMessageDialog(this, "The creation directory (" + dirFile.getAbsolutePath()
+					+ ") is not empty, and does not appear to be an Introduce-created service."
+					+ "  You must manually delete the directory, or specify a different directory.");
+			}
 		}
 
 		if (doIdeleteResult == JOptionPane.OK_OPTION) {
