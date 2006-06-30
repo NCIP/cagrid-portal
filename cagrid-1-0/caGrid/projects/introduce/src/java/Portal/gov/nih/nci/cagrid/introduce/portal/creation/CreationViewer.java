@@ -746,10 +746,12 @@ public class CreationViewer extends GridPortalComponent {
 		if (extSelectionPanel == null) {
 			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
 			gridBagConstraints22.gridy = 0;
-			gridBagConstraints22.gridx = 2;
+			gridBagConstraints22.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints22.gridx = 1;
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 			gridBagConstraints16.gridy = 0;
-			gridBagConstraints16.gridx = 1;
+			gridBagConstraints16.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints16.gridx = 2;
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints15.gridx = 0;
