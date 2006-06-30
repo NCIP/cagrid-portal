@@ -14,18 +14,17 @@ import org.jdom.output.DOMOutputter;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created May 9, 2006 
- * @version $Id: AxisJdomUtils.java,v 1.1 2006-06-08 20:07:46 oster Exp $ 
+ * @version $Id: AxisJdomUtils.java,v 1.2 2006-06-30 16:03:51 dervin Exp $ 
  */
 public class AxisJdomUtils {
 
 	public static Element fromMessageElement(MessageElement me) {
-		return ((new DOMBuilder())).build(me);
+		return (Element) ((new DOMBuilder())).build(me).detach();
 	}
 	
 	
 	public static MessageElement fromElement(Element elem) throws JDOMException {
-		Document doc = new Document();
-		doc.setRootElement(elem);
+		Document doc = new Document(elem);
 		org.w3c.dom.Document tempDoc = new DOMOutputter().output(doc);
 		return new MessageElement(tempDoc.getDocumentElement());
 	}
