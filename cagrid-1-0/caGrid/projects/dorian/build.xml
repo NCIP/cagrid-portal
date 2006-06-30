@@ -348,9 +348,8 @@
 	
 	<!-- Post Introduce Edit-->
 	<target name="portal" description="Run the dorian portal" depends="checkGlobus">
-		<java classname="org.projectmobius.portal.GridPortal" fork="yes">
+		<java classname="gov.nih.nci.cagrid.dorian.portal.DorianPortal" fork="yes">
 			<jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
-			<arg value="etc/dorian-portal-conf.xml" />
 			<classpath>
 				<pathelement location="${stubs.dest}" />
 				<fileset dir="${build.lib.dir}">
