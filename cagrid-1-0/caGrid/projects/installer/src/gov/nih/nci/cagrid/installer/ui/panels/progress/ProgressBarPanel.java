@@ -101,7 +101,9 @@ public class ProgressBarPanel extends JPanel {
 	private ThreadManager prepareTasks() {
 		
 		Installer is = Installer.getInstance();
-		
+		String GRID_RELEASE_URL=is.getProperty("GRID_RELEASE_URL");
+		String GRID_FILE=is.getProperty("GRID_FILE");
+		System.out.println("the value of GRID_RELEASE_URL is"+GRID_RELEASE_URL);
 		String GRID_HOME = is.getProperty("GRID_HOME");
 		String downloadDirName = GRID_HOME + File.separator + "downloads";
 		File downloadDir = new File(downloadDirName);
@@ -121,9 +123,7 @@ public class ProgressBarPanel extends JPanel {
 		 * "ftp://ftp.globus.org/pub/gt4/4.0/4.0.0/ws-core/bin//ws-core-4.0.0-bin.zip",
 		 * "ws-core-4.0.0-bin.zip", result, progressBar, tm);
 		 */
-		SwingWorker sw2 = new DownloadFileTask(downloadDirName,
-				"http://156.40.129.72:8080/cagrid/cagrid-1-0.zip",
-				"cagrid-1-0.zip", result, progressBar, tm);
+		SwingWorker sw2 = new DownloadFileTask(downloadDirName,GRID_RELEASE_URL,GRID_FILE, result, progressBar, tm);
 		File src = new File(downloadDirName, "cagrid-1-0.zip");
 
 		SwingWorker sw3 = new StringDisplayerTask(result,
