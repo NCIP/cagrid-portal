@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+
+    <!-- #############   Generic Bean intialization section #############                -->
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <!--include all hibernate mapping files for domain objects-->
+        <property name="mappingDirectoryLocations">
+            <list>
+                <value>classpath:gov/nih/nci/cagrid/portal/domain</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Database initi and sync tasks -->
+    <bean id="dbInitBean" class="gov.nih.nci.cagrid.portal.utils.DatabaseInitUtility">
+        <!--Set the indexes to aggregate from-->
+        <property name="indexList">
+            <set>
+                <value>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService</value>
+            </set>
+        </property>
+        <property name="manager">
+            <ref bean="indexManager"/>
+        </property>
+    </bean>
+
+    <!-- Debug logger advice    -->
+    <bean name="gov.nih.nci.cagrid.portal.utils.DebugBeforeAdvice"/>
+
+    <!-- #############   DAO #############                -->
+
+    <bean id="baseDAO"
+          class="gov.nih.nci.cagrid.portal.dao.hibernate.BaseHibernateDAOImpl">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+
+
+    <bean id="indexDAO"
+          class="gov.nih.nci.cagrid.portal.dao.hibernate.IndexDAOImpl"
+          parent="baseDAO">
+    </bean>
+
+
+    <!-- #############   Managers #############                -->
+
+    <!--Base Manager-->
+    <bean id="baseManager" class="gov.nih.nci.cagrid.portal.manager.BaseManagerImpl"
+          abstract="true">
+        <property name="baseDAO">
+            <ref bean="baseDAO"/>
+        </property>
+        <property name="indexDAO">
+            <ref bean="indexDAO"/>
+        </property>
+    </bean>
+
+    <bean name="indexManager"
+          class="gov.nih.nci.cagrid.portal.manager.IndexServiceManagerImpl"
+          parent="baseManager"/>
+
+
+</beans>

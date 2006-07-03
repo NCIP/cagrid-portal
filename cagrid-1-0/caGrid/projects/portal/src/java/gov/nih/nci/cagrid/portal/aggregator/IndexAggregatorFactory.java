@@ -23,8 +23,6 @@ public class IndexAggregatorFactory implements ApplicationListener, Runnable {
 
     /**
      * IOC through Constructor injection
-     * @param metadataCompliance
-     * @param idxManager
      */
     public IndexAggregatorFactory(boolean metadataCompliance, IndexServiceManager idxManager) {
         this.metadataCompliance = metadataCompliance;
@@ -48,7 +46,7 @@ public class IndexAggregatorFactory implements ApplicationListener, Runnable {
 
         for (ListIterator iter = indexes.listIterator(); iter.hasNext();) {
             IndexService idx = (IndexService) iter.next();
-            IndexAggregator idxAggr = new IndexAggregator(idx.getHandle(),this.metadataCompliance);
+            IndexAggregator idxAggr = new IndexAggregator(idx.getHandle(), this.metadataCompliance);
             idxAggr.run();
         }
 

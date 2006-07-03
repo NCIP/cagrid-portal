@@ -24,7 +24,7 @@ public class IndexService implements DomainObject, GridService {
     // Primary key
     private int key;
 
-    public IndexService(String epr)throws URI.MalformedURIException {
+    public IndexService(String epr) throws URI.MalformedURIException {
         //Use setter to throw appropriate exception
         this.setEpr(epr);
 
@@ -36,17 +36,6 @@ public class IndexService implements DomainObject, GridService {
     public IndexService() {
     }
 
-    /**
-     * @hibernate.list inverse="true"
-     * table="INDEX_REGISTERED_SERVICES_JOIN"
-     * outer-join="false"
-     * cascade="none"
-     * lazy="true"
-     * @hibernate.collection-key column="INDEX_ID_KEY"
-     * @hibernate.collection-many-to-many column="REGISTERED_SERVICE_ID_KEY"
-     * class="gov.nih.nci.cagrid.portal.domain.RegisteredService"
-     * @TODO change class to interface type
-     */
     public List getRegisteredServicesCollection() {
         return registeredServicesCollection;
     }
@@ -105,7 +94,7 @@ public class IndexService implements DomainObject, GridService {
     }
 
     /**
-     * @hibernate.id generator-class="native"
+     * @hibernate.id generator-class="increment"
      * column="ID_KEY"
      */
     public int getKey() {

@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <project name="portal" default="all" basedir=".">
 
-    <property name="webapp.name" value="cagrid-portal"/>
+
 
     <!-- Local Environment -->
-    <property environment="env" />
-    <property file="kherm-portal-build.properties" />
-    <property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
-    <property name="globus.lib.dir" location="${globus.dir}/lib" />
+    <property environment="env"/>
+    <property file="${user.name}-portal-build.properties"/>
+    <property name="globus.dir" location="${env.GLOBUS_LOCATION}"/>
+    <property name="globus.lib.dir" location="${globus.dir}/lib"/>
 
     <property name="tomcat.dir" location="${env.CATALINA_HOME}"/>
     <property name="tomcat.webapps.dir" location="${tomcat.dir}/webapps"/>
@@ -16,8 +16,12 @@
     <property name='javac.debug' value='true'/>
     <property name='javac.deprecation' value='true'/>
 
+    <!--        Source folders          -->
     <property name='java.src.dir' value='src/java'/>
     <property name='generated.src.dir' value='src/generated'/>
+    <property name='props.src.dir' value='src/properties'/>
+    <property name='scripts.src.dir' value='src/scripts'/>
+
 
     <property name="webcontent.dir" value="webcontent"/>
     <property name='webinf.dir' value='${webcontent.dir}/WEB-INF'/>
@@ -57,32 +61,37 @@
     <!-- Target for continous build. Use war target to build            -->
     <!-- actual app                                                     -->
     <!-- ============================================================== -->
-    <target name="all" depends="clean,compile,hibernate.xdoclet,copyResources" description="Builds the entire application" />
-
+    <target name="all" depends="clean,compile,hibernate,copyResources"
+            description="Builds the entire application"/>
 
     <!-- ============================================================== -->
-    <!-- Create war for deployment                                      -->
+    <!-- Deploy Target                                               -->
     <!-- ============================================================== -->
-    <target name="deployAsWar" depends="war" description="Deploy Application into Tomcat as a war">
+    <target name="deployExploded" depends="clean,cleanDeployment,compile,hibernate.xdoclet,copyResources" description="Deploy Application into tomcat">
+        <copydir src="${webcontent.dir}" dest="${tomcat.webapps.dir}/${project.name}" forceoverwrite="true"/>
+    </target>
+
+    <target name="deployAsWar" depends="war,cleanDeployment" description="Deploy Application into Tomcat as a war">
         <copyfile src="${build.dir}/${project.name}.war" dest="${tomcat.webapps.dir}"/>
     </target>
+
 
     <!-- ============================================================== -->
     <!-- Create war for deployment                                      -->
     <!-- ============================================================== -->
     <target name="war" depends="clean,compile,hibernate,copyResources">
-        <war  basedir="${webcontent.dir}"
-              destfile="${build.dir}/${project.name}.war"
-              webxml="${webinf.dir}/web.xml"
-              excludesfile="${webinf.dir}/web.xml">
+        <war basedir="${webcontent.dir}"
+             destfile="${build.dir}/${project.name}.war"
+             webxml="${webinf.dir}/web.xml"
+             excludesfile="${webinf.dir}/web.xml">
         </war>
     </target>
     <!-- ============================================================== -->
     <!-- Initialize build environment                                   -->
     <!-- ============================================================== -->
     <target name="init">
-        <mkdir dir="${build.dir}" />
-        <mkdir dir="${build.dest}" />
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dest}"/>
 
         <mkdir dir="${lib.dest}"/>
     </target>
@@ -92,9 +101,15 @@
     <!-- Not to be called directly                                      -->
     <!-- ============================================================== -->
     <target name="clean" description="Removes generated files.">
-        <delete dir="${build.dest}" />
+        <delete dir="${build.dest}"/>
         <delete dir="${lib.dest}"/>
         <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="cleanDeployment" description="Removes tomcat deployment">
+        <delete dir="${tomcat.webapps.dir}/${project.name}" failonerror="false"/>
+        <!--Delete the war file if one exists-->
+        <delete file="${tomcat.webapps.dir}/${project.name}.war"/>
     </target>
 
     <!-- ============================================================== -->
@@ -110,8 +125,6 @@
         </javac>
 
 
-
-
     </target>
 
     <target name="copyResources">
@@ -123,6 +136,13 @@
             <fileset dir="${ext.lib.dir}">
                 <include name="*.jar"/>
             </fileset>
+            <!--Copy Globus libraries-->
+             <fileset dir="${globus.lib.dir}">
+                 <include name="saaj.jar"/>
+                 <include name="axis.jar"/>
+                 <include name="addressing*.jar"/>
+                 <include name="jaxrpc.jar"/>
+             </fileset>
         </copy>
 
         <copy
@@ -131,31 +151,29 @@
                 filtering='true'
                 overwrite='true'>
             <filterset>
-                <filter token='hibernate.connection.driver.class' value='${hibernate.connection.driver.class}'/>
+                <filter token='hibernate.connection.driver_class' value='${hibernate.connection.driver_class}'/>
                 <filter token='hibernate.connection.url' value='${hibernate.connection.url}'/>
                 <filter token='hibernate.connection.username' value='${hibernate.connection.username}'/>
                 <filter token='hibernate.connection.password' value='${hibernate.connection.password}'/>
-                <filter token='hibernate.c3p0.min.size' value='${hibernate.c3p0.min.size}'/>
-                <filter token='hibernate.c3p0.max.size' value='${hibernate.c3p0.max.size}'/>
+                <filter token='hibernate.c3p0.min_size' value='${hibernate.c3p0.min_size}'/>
+                <filter token='hibernate.c3p0.max_size' value='${hibernate.c3p0.max_size}'/>
                 <filter token='hibernate.c3p0.timeout' value='${hibernate.c3p0.timeout}'/>
-                <filter token='hibernate.c3p0.max.statements' value='${hibernate.c3p0.max.statements}'/>
+                <filter token='hibernate.c3p0.max_statements' value='${hibernate.c3p0.max_statements}'/>
                 <filter token='hibernate.dialect' value='${hibernate.dialect}'/>
-                <filter token='hibernate.use.outer.join' value='${hibernate.use.outer.join}'/>
-                <filter token='hibernate.max.fetch.depth' value='${hibernate.max.fetch.depth}'/>
-
-            </filterset>
+                <filter token='hibernate.use_outer_join' value='${hibernate.use_outer_join}'/>
+                <filter token='hibernate.show_sql' value='${hibernate.show_sql}'/>
+           </filterset>
         </copy>
 
         <copy todir="${build.dest}">
-            <fileset dir="${java.src.dir}">
+            <fileset dir="${props.src.dir}">
                 <include name="*.xml"/>
+                <include name="*.properties"/>
             </fileset>
         </copy>
 
         <!--ToDo copy GLOBUS libs -->
     </target>
-
-
 
 
     <target name="hibernate" description="Does all the hibernate generation stuff"
@@ -165,7 +183,6 @@
 
 
     <target name="hibernate.xdoclet" depends="compile" description="Creates the hbm.xml files">
-
 
 
         <taskdef name="hibernatedoclet"
@@ -203,7 +220,7 @@
 
         <property name="generated.dir" location="${build.dest}"/>
         <property name="hibernate.list.file" location="${build.dest}/hibernate.cfg.xml"/>
-        <scriptdef language="beanshell" src="${basedir}/create_hbnfile.sh"/>
+        <scriptdef language="beanshell" src="${scripts.src.dir}/create_hbnfile.sh"/>
 
     </target>
 

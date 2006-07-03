@@ -22,5 +22,4 @@ public class IndexServiceManagerImpl extends BaseManagerImpl implements IndexSer
     }
 
 
-
 }

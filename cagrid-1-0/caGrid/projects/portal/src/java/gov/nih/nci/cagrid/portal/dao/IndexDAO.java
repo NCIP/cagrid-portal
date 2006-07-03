@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.portal.dao;
 
 
 import gov.nih.nci.cagrid.portal.domain.IndexService;
-import org.springframework.dao.DataAccessException;
 
 /**
  * @version 1.0

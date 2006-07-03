@@ -1,11 +1,10 @@
 package gov.nih.nci.cagrid.portal.dao.hibernate;
 
+import gov.nih.nci.cagrid.portal.dao.BaseDAO;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import java.util.List;
 import java.util.Collection;
-
-import gov.nih.nci.cagrid.portal.dao.BaseDAO;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,7 +19,7 @@ public class BaseHibernateDAOImpl extends HibernateDaoSupport implements BaseDAO
         return getHibernateTemplate().loadAll(type);
     }
 
-    public void saveOrUpdate(Collection objects){
+    public void saveOrUpdate(Collection objects) {
         getHibernateTemplate().saveOrUpdateAll(objects);
     }
 

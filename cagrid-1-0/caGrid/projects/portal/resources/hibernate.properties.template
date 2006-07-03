@@ -1,14 +1,14 @@
 
-hibernate.connection.driver.class @hibernate.connection.driver.class@
+hibernate.connection.driver_class @hibernate.connection.driver_class@
 hibernate.connection.url @hibernate.connection.url@
 hibernate.connection.username @hibernate.connection.username@
 hibernate.connection.password @hibernate.connection.password@
 
-hibernate.c3p0.min.size @hibernate.c3p0.min.size@
-hibernate.c3p0.max.size @hibernate.c3p0.max.size@
+ibernate.c3p0.min_size @hibernate.c3p0.min_size@
+hibernate.c3p0.max_size @hibernate.c3p0.max_size@
 hibernate.c3p0.timeout @hibernate.c3p0.timeout@
-hibernate.c3p0.max.statements @hibernate.c3p0.max.statements@
+hibernate.c3p0.max_statements @hibernate.c3p0.max_statements@
 
 hibernate.dialect @hibernate.dialect@
-hibernate.use.outer.join @hibernate.use.outer.join@
-hibernate.max.fetch.depth @hibernate.max.fetch.depth@
+hibernate.use_outer_join @hibernate.use_outer_join@
+hibernate.show_sql @hibernate.show_sql@

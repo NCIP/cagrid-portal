@@ -3,8 +3,8 @@ package gov.nih.nci.cagrid.portal.manager;
 import gov.nih.nci.cagrid.portal.dao.BaseDAO;
 import gov.nih.nci.cagrid.portal.dao.IndexDAO;
 
-import java.util.List;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Implementation of the BaseManager Interface
@@ -26,15 +26,15 @@ public class BaseManagerImpl implements BaseManager {
         return baseDAO;
     }
 
-    protected void setBaseDAO(BaseDAO baseDAO) {
+    public void setBaseDAO(BaseDAO baseDAO) {
         this.baseDAO = baseDAO;
     }
 
-    protected IndexDAO getIndexDAO() {
+    public IndexDAO getIndexDAO() {
         return indexDAO;
     }
 
-    protected void setIndexDAO(IndexDAO _indexDAO) {
+    public void setIndexDAO(IndexDAO _indexDAO) {
         this.indexDAO = _indexDAO;
     }
 

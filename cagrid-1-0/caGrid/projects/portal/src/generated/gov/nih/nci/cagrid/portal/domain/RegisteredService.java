@@ -13,6 +13,9 @@ import java.util.Collection;
  */
 public class RegisteredService implements GridService {
 
+// Hibernate identifier
+    private int key;
+
     private java.lang.String alias;
     private java.util.Collection indexServiceCollection;
     private ResearchCenter researchCenter;
@@ -27,18 +30,28 @@ public class RegisteredService implements GridService {
     }
 
     /**
-     * @hibernate.id column EPR
+     * @hibernate.id
+     * generator-class="increment"
+     * column="ID_KEY"
+     */
+    public int getKey() {
+        return key;
+    }
+
+    public void setKey(int key) {
+        this.key = key;
+    }
+
+    /**
+     * @hibernate.property
+     * column EPR
      * type string
      */
     public String getEpr() {
         return epr;
     }
 
-    /**
-     *
-     * @param epr
-     * @throws URI.MalformedURIException
-     */
+
     public void setEpr(String epr) throws URI.MalformedURIException {
         this.epr = epr;
 

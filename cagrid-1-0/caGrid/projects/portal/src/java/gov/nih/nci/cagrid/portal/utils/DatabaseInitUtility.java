@@ -27,18 +27,16 @@ public class DatabaseInitUtility implements InitializingBean {
     private Set indexList;
     private IndexServiceManager manager;
 
-    public void afterPropertiesSet() throws Exception {
+    public DatabaseInitUtility() {
+         System.out.println("Constructor: Intializing DATABASE...........................");
+    }
 
+    public void afterPropertiesSet() throws Exception {
+     System.out.println("Intializing DATABASE...........................");
         for(Iterator idxIter=indexList.iterator();idxIter.hasNext();){
             IndexService idx = new IndexService(idxIter.next().toString());
-
             manager. save(idx);
-
         }
-
-
-
-
     }
 
     public Set getIndexList() {
@@ -47,5 +45,13 @@ public class DatabaseInitUtility implements InitializingBean {
 
     public void setIndexList(Set indexList) {
         this.indexList = indexList;
+    }
+
+    public IndexServiceManager getManager() {
+        return manager;
+    }
+
+    public void setManager(IndexServiceManager manager) {
+        this.manager = manager;
     }
 }
