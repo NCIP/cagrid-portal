@@ -61,7 +61,7 @@
     <!-- Target for continous build. Use war target to build            -->
     <!-- actual app                                                     -->
     <!-- ============================================================== -->
-    <target name="all" depends="clean,compile,hibernate,copyResources"
+    <target name="all" depends="clean,compile,hibernate.xdoclet,copyResources"
             description="Builds the entire application"/>
 
     <!-- ============================================================== -->
