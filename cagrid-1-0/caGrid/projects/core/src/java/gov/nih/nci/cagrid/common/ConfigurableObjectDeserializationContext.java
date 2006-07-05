@@ -36,6 +36,9 @@ public class ConfigurableObjectDeserializationContext extends DeserializationCon
 		if (value == null) {
 			popElementHandler();
 			Deserializer deserializer = getDeserializerForClass(objectClass);
+			if (deserializer == null) {
+				throw new NullPointerException("No deserializer found for class " + objectClass.getName());
+			}
 			pushElementHandler(new EnvelopeHandler((SOAPHandler) deserializer));
 			parse();
 			value = deserializer.getValue();
