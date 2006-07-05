@@ -33,7 +33,6 @@ public class SchemaValidator {
 	
 	private SAXParserFactory factory;
 	private SAXParser parser;
-	private XMLReader xmlReader;
 	
 	/**
 	 * Initializes the schema validator to perform validation against an XML Schema
@@ -59,13 +58,6 @@ public class SchemaValidator {
 			
 			// configure the schema
 			parser.setProperty(JAXP_SCHEMA_SOURCE, schemaFilename);
-			
-			// create an XML reader from the parser
-			xmlReader = parser.getXMLReader();
-			
-			// set content and error handlers on the reader
-			xmlReader.setContentHandler(new SimpleErrorHandler());
-			xmlReader.setErrorHandler(new SimpleErrorHandler());
 		}  catch (ParserConfigurationException ex) {
 			throw new SchemaValidationException("Error configuring SAX parser: " + ex.getMessage(), ex);
 		} catch (SAXException ex) {
@@ -82,9 +74,17 @@ public class SchemaValidator {
 	 */
 	public void validate(String xml) throws SchemaValidationException {
 		InputSource xmlInput = new InputSource(new BufferedReader(new StringReader(xml)));
-		// only one document can be handled by the xml reader at once
-		synchronized (xmlReader) {
+		// only one document can be handled by the xml parser at once
+		synchronized (parser) {
 			try {
+				// create an XML reader from the parser
+				XMLReader xmlReader = parser.getXMLReader();
+				
+				// set content and error handlers on the reader
+				xmlReader.setContentHandler(new SimpleErrorHandler());
+				xmlReader.setErrorHandler(new SimpleErrorHandler());
+				
+				// parse the xml
 				xmlReader.parse(xmlInput);
 			} catch (Exception ex) {
 				throw new SchemaValidationException("Invalid Document: " + ex.getMessage(), ex);
