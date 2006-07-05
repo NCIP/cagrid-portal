@@ -52,7 +52,7 @@ public class TopPanel extends GridPanel {
 
 	public void synch() {
 		;
-		;
+		
 
 	}
 
