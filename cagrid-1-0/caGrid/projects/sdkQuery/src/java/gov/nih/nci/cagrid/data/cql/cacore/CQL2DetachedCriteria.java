@@ -38,6 +38,9 @@ public class CQL2DetachedCriteria {
 	
 	/**
 	 * Translates a CQLQuery into a Hibernate DetachedCriteria.
+	 * his translator assumes the CQLQuery has already passed validation for
+	 * at least schema correctness.  Invalid queries may still be processed with
+	 * undefined results.
 	 * 
 	 * @param query
 	 * 		A fully valid CQL query.
@@ -60,7 +63,21 @@ public class CQL2DetachedCriteria {
 	}
 	
 
-	private static DetachedCriteria populateObjectCritaria(DetachedCriteria objectCriteria, 
+	/**
+	 * Populates detached criteria with criterion to restrict the results
+	 * of a query
+	 * 
+	 * @param objectCriteria
+	 * 		The criteria object to populate
+	 * @param objectClass
+	 * 		The class of the object being restricted
+	 * @param objectType
+	 * 		The Object type restriction
+	 * @return
+	 * @throws MalformedQueryException
+	 * @throws QueryProcessingException
+	 */
+	private static void populateObjectCritaria(DetachedCriteria objectCriteria, 
 		Class objectClass, Object objectType) throws MalformedQueryException, QueryProcessingException {
 				
 		// handle association
@@ -79,53 +96,68 @@ public class CQL2DetachedCriteria {
 			Junction grouping = handleGroup(objectClass, objectType.getGroup());
 			objectCriteria.add(grouping);
 		}
-		return objectCriteria;
 	}
 	
 	
-	private static void handleAssociation(DetachedCriteria parentObjectCriteria, Class objectClass, Association association) throws MalformedQueryException, QueryProcessingException {
-		String role = association.getRoleName();
-		String associationType = association.getName();
-		if (role == null) {
+	/**
+	 * Adds criterion to a parent object's criteria to handle an association restriction
+	 * 
+	 * @param parentObjectCriteria
+	 * 		The present criteria of the parent object
+	 * @param parentObjectClass
+	 * 		The parent object's class
+	 * @param association
+	 * 		The association restriction to perform
+	 * 
+	 * @throws MalformedQueryException
+	 * @throws QueryProcessingException
+	 */
+	private static void handleAssociation(DetachedCriteria parentObjectCriteria, Class parentObjectClass, 
+		Association association) throws MalformedQueryException, QueryProcessingException {
+		String roleName = association.getRoleName();
+		String associationTypeName = association.getName();
+		if (roleName == null) {
 			// determine role based on object's type
-			Field[] objectFields = objectClass.getFields();
+			Field[] objectFields = parentObjectClass.getFields();
 			for (int i = 0; i < objectFields.length; i++) {
-				if (objectFields[i].getType().getName().equals(associationType)) {
-					if (role == null) {
-						role = objectFields[i].getName();
+				if (objectFields[i].getType().getName().equals(associationTypeName)) {
+					if (roleName == null) {
+						roleName = objectFields[i].getName();
 					} else {
 						// already found a field of the same type, so association is ambiguous
-						throw new MalformedQueryException("Association from " + objectClass.getName() + " to " + associationType + " is ambiguous: Specify a role name");
+						throw new MalformedQueryException("Association from " + parentObjectClass.getName() + " to " + associationTypeName + " is ambiguous: Specify a role name");
 					}
 				}
 			}
 		}
-		if (role == null) {
+		if (roleName == null) {
 			// still null?? no association to the object!
-			throw new MalformedQueryException("Association from " + objectClass.getName() + " to " + associationType + " does not exist.  Use only direct associations");
+			throw new MalformedQueryException("Association from " + parentObjectClass.getName() + " to " + associationTypeName + " does not exist.  Use only direct associations");
 		}
-		DetachedCriteria associationCriteria = parentObjectCriteria.createCriteria(role);
-		populateObjectCritaria(associationCriteria, objectClass, association);
+		// create an association criteria from parent to child
+		DetachedCriteria associationCriteria = parentObjectCriteria.createCriteria(roleName);
+		// populate the child criteria
+		Class associationClass = null;
+		try {
+			associationClass = Class.forName(associationTypeName);
+		} catch (Exception ex) {
+			throw new QueryProcessingException("Error obtaining nested object class: " + ex.getMessage(), ex);
+		}
+		populateObjectCritaria(associationCriteria, associationClass, association);
 	}
 	
 	
-	private static void validateObjectChildren(Object objectType) throws MalformedQueryException {
-		int childTypeCount = 0;
-		if (objectType.getAssociation() != null) {
-			childTypeCount++;
-		}
-		if (objectType.getAttribute() != null) {
-			childTypeCount++;
-		}
-		if (objectType.getGroup() != null) {
-			childTypeCount++;
-		}
-		if (childTypeCount > 1) {
-			throw new MalformedQueryException("NestedObject " + objectType.getName() + " contains more than one of Attribute, Associated Object, or Group");
-		}
-	}
-	
-	
+	/**
+	 * Produces Criterion to query for an attribute
+	 * 
+	 * @param objectClass
+	 * 		The object class to which the attribute belongs
+	 * @param attrib
+	 * 		The Attribute restriction
+	 * @return
+	 * @throws MalformedQueryException
+	 * @throws QueryProcessingException
+	 */
 	private static Criterion handleAttribute(Class objectClass, Attribute attrib) throws MalformedQueryException, QueryProcessingException {
 		String name = attrib.getName();
 		String value = attrib.getValue();
@@ -147,6 +179,16 @@ public class CQL2DetachedCriteria {
 	}
 	
 	
+	/**
+	 * Converts a property value to a typed object
+	 * 
+	 * @param property
+	 * @param value
+	 * @param objectType
+	 * @return
+	 * @throws MalformedQueryException
+	 * @throws QueryProcessingException
+	 */
 	private static java.lang.Object convertToObject(String property, String value, Class objectType) throws MalformedQueryException, QueryProcessingException {
 		Field field = null;
 		try {
@@ -208,7 +250,6 @@ public class CQL2DetachedCriteria {
 	
 	
 	private static Junction handleGroup(Class objectClass, Group group) throws MalformedQueryException, QueryProcessingException {
-		validateGroup(group);
 		Junction junction = null;
 		if (group.getLogicRelation().getValue().equals(LogicalOperator._AND)) {
 			junction = Restrictions.conjunction();
@@ -235,23 +276,5 @@ public class CQL2DetachedCriteria {
 			junction.add(subgroup);
 		}
 		return junction;
-	}
-	
-	
-	private static void validateGroup(Group group) throws MalformedQueryException {
-		// ensure there's at least two items in the group
-		int itemCount = 0;
-		if (group.getAssociation() != null) {
-			itemCount += group.getAssociation().length;
-		}
-		if (group.getAttribute() != null) {
-			itemCount += group.getAttribute().length;
-		}
-		if (group.getGroup() != null) {
-			itemCount += group.getGroup().length;
-		}
-		if (itemCount < 2) {
-			throw new MalformedQueryException("Groups must contain at least two items");
-		}
 	}
 }
