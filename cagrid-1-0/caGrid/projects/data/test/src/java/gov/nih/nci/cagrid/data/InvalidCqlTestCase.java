@@ -32,17 +32,8 @@ public class InvalidCqlTestCase extends TestCase {
 	
 	public InvalidCqlTestCase(String name) {
 		super(name);
-	}
-	
-	
-	protected void setUp() {
 		validator = new ObjectWalkingCQLValidator();
 		cqlDocsDir = System.getProperty("cql.docs.dir") + File.separator + "invalid";
-	}
-	
-	
-	protected void tearDown() {
-		validator = null;
 	}
 	
 	

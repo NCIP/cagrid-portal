@@ -37,17 +37,8 @@ public class ValidDomainTestCase extends TestCase {
 	
 	public ValidDomainTestCase(String name) {
 		super(name);
-	}
-	
-	
-	protected void setUp() {
 		validator = new ObjectWalkingCQLValidator();
 		cqlDocsDir = System.getProperty("cql.docs.dir");
-	}
-	
-	
-	protected void tearDown() {
-		validator = null;
 	}
 	
 	

@@ -31,17 +31,8 @@ public class ValidCqlTestCase extends TestCase {
 	
 	public ValidCqlTestCase(String name) {
 		super(name);
-	}
-	
-	
-	protected void setUp() {
 		validator = new ObjectWalkingCQLValidator();
-		cqlDocsDir = System.getProperty("cql.docs.dir");	
-	}
-	
-	
-	protected void tearDown() {
-		validator = null;
+		cqlDocsDir = System.getProperty("cql.docs.dir");
 	}
 	
 	

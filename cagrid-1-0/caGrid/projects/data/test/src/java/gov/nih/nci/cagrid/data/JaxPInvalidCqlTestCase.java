@@ -25,23 +25,13 @@ public class JaxPInvalidCqlTestCase extends TestCase {
 	
 	public JaxPInvalidCqlTestCase(String name) {
 		super(name);
-	}
-	
-	
-	protected void setUp() {
 		try {
 			validator = new SchemaValidator("schema/Data/1_gov.nih.nci.cagrid.CQLQuery.xsd");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		cqlDocsDir = System.getProperty("cql.docs.dir") + File.separator + "invalid";
-	}
-	
-	
-	protected void tearDown() {
-		validator = null;
-	}
-	
+	}	
 	
 	
 	private void checkQuery(String filename) {
