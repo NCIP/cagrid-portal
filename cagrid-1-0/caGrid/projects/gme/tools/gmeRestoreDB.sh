@@ -8,7 +8,7 @@
 #   of the mysqldump call.  The "root" username for the database can also be changed.
 #
 
-backupdir=$0
+backupdir=$1
 
 
 databases="GlobusGME_GME_REGISTRY GlobusGME_GME_SCHEMA_STORE GlobusGME_GME_SCHEMA_CACHE"

@@ -3,14 +3,14 @@
 #
 #	This script is designed to be used from a crontab.  The script will maintain 5
 #   rolling backups of the GME databases.  The gap in these backups will be depended 
-#   on the crontab.  The argument to this script is the backup directory.  This 
+#   on the crontab.  The argument to this script is the backup directory (IT MUST EXIST).  This 
 #   script is designed to work when there is no password on database.  If there is
 #   a password on the database just add a "-p <password>" after the "-u root" line
 #   of the mysqldump call.  The "root" username of the database can also be changed.
 #
 
 #make sure directory exists first
-backupdir=$0
+backupdir=$1
 
 echo Starting to backup databases
 
