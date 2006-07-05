@@ -500,7 +500,7 @@ public class DiscoveryClient {
 		DiscoveryClient client = null;
 		try {
 			if (args.length == 1) {
-				client = new DiscoveryClient(args[1]);
+				client = new DiscoveryClient(args[0]);
 			} else {
 				client = new DiscoveryClient();
 			}
