@@ -1,14 +1,13 @@
 package gov.nih.nci.cagrid.portal.utils;
 
-import org.springframework.aop.ThrowsAdvice;
 import org.apache.log4j.Category;
+import org.springframework.aop.ThrowsAdvice;
 
 /**
- *
  * This is a class that provided a Advice
  * that is applied to Portal beans by spring
  * at runtime.
- *
+ * <p/>
  * Created by IntelliJ IDEA.
  * User: kherm
  * Date: Jul 3, 2006
@@ -19,12 +18,17 @@ public class HandleThrowsAdvice implements ThrowsAdvice {
 
     /**
      * Takes appropriate action on
-     * an exception being thrown. 
-     *
-     * @param ex
-     * @throws Throwable
+     * an exception being thrown.
      */
-    public void afterThrowing(Exception ex) throws Throwable{
-        Category.getRoot().error(ex);
+
+    public final String _prefix = " Portal Exception: ";
+
+    public void afterThrowing(Exception ex) throws Throwable {
+
+        // ToDo remove this line
+        System.out.println("ADVICE INterceptor...........................");
+
+        Category.getRoot().error(_prefix + ex);
+
     }
 }

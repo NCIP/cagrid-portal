@@ -20,14 +20,28 @@ public class IndexService implements DomainObject, GridService {
     private String description;
     private String name;
     private EndpointReferenceType handle;
+    private boolean active;
 
     // Primary key
     private int key;
 
-    public IndexService(String epr) throws URI.MalformedURIException {
-        //Use setter to throw appropriate exception
-        this.setEpr(epr);
-
+    /**
+     * Self initialize the index Service bean
+     * 
+     * Should be used carefully only if you know
+     * the EPR will resolve to a service and the EPR
+     * is accessible
+     *
+     * by providing it a valid EPR
+     * @param handle
+     * @throws Exception
+     */
+    public IndexService(EndpointReferenceType handle) throws Exception{
+        // Use setters to keep all properties in sync
+        this.setHandle(handle);
+        this.setName(GridUtils.getServiceName(handle));
+        this.setDescription(GridUtils.getServiceDescription(handle));
+        this.setActive(GridUtils.isServiceActive(getHandle()));
     }
 
     /**
@@ -45,22 +59,29 @@ public class IndexService implements DomainObject, GridService {
     }
 
     /**
+     * set to private because its only intended
+     * to be used by hibernate
+     *
      * @hibernate.property column="SERVICE_EPR"
      * not-null="true"
+     * unique="true"
+     *
      */
-    public String getEpr() {
+    private String getEpr() {
         return epr;
     }
 
-
     /**
+     * set to private because its only intended
+     * to be used by hibernate
+     *
      * @throws URI.MalformedURIException Will throw an exception if epr string is not a valid URI
      */
-    public void setEpr(String epr) throws URI.MalformedURIException {
+    private void setEpr(String epr) throws URI.MalformedURIException {
         this.epr = epr;
 
-        // Once epr is set also set the handle property
-        setHandle(GridUtils.getEPR(epr));
+        // Once epr is set also set the handle(EPR) property
+        this.handle = GridUtils.getEPR(epr);
     }
 
     /**
@@ -85,12 +106,11 @@ public class IndexService implements DomainObject, GridService {
         this.name = name;
     }
 
-    public EndpointReferenceType getHandle() {
-        return handle;
-    }
 
     public void setHandle(EndpointReferenceType handle) {
         this.handle = handle;
+        // Keep it in sync with the epr(String)
+        this.epr = handle.getAddress().toString();
     }
 
     /**
@@ -113,12 +133,23 @@ public class IndexService implements DomainObject, GridService {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    /**
-     * @return Integer primary key
-     *         ToDo Should be Implemented by concrete classes
-     */
-    public Integer getPK() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+
+    public EndpointReferenceType getHandle() {
+        return handle;
     }
+
+    /**
+     *
+     * @hibernate.property
+     * column="ISACTIVE"
+     */
+    public boolean isActive() {
+      return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
 
 }

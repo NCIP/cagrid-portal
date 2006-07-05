@@ -19,6 +19,6 @@ public interface DomainObject {
      * @return Integer primary key
      *         ToDo Should be Implemented by concrete classes
      */
-    Integer getPK();
+    int getKey();
 
 }

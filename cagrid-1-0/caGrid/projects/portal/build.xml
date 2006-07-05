@@ -138,10 +138,7 @@
             </fileset>
             <!--Copy Globus libraries-->
              <fileset dir="${globus.lib.dir}">
-                 <include name="saaj.jar"/>
-                 <include name="axis.jar"/>
-                 <include name="addressing*.jar"/>
-                 <include name="jaxrpc.jar"/>
+                <include name="*.jar"/>
              </fileset>
         </copy>
 

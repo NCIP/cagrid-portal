@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.portal.utils;
 
-import org.springframework.aop.MethodBeforeAdvice;
 import org.apache.log4j.Category;
+import org.springframework.aop.MethodBeforeAdvice;
 
 import java.lang.reflect.Method;
 
@@ -18,6 +18,6 @@ public class DebugBeforeAdvice implements MethodBeforeAdvice {
         String className = method.getClass().getName();
         Category logCat = Category.getInstance(className);
 
-        logCat.debug("DEBUG: Class " + className  + "  Before metod " + method );
+        logCat.debug("DEBUG: Class " + className + "  Before metod " + method);
     }
 }

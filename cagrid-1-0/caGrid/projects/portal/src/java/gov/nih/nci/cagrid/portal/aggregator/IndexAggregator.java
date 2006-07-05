@@ -32,6 +32,7 @@ public class IndexAggregator implements Runnable {
         try {
             EndpointReferenceType[] services = discClient.getAllServices(metadataCompliance);
 
+
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

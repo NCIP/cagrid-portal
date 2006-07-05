@@ -161,4 +161,8 @@ public class RegisteredService implements GridService {
     public void setDomainModel(DomainModel domainModel) {
         this.domainModel = domainModel;
     }
+
+    public boolean isActive() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
