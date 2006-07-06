@@ -50,7 +50,7 @@ public class DomainModelBuilder {
 	private static Map classAssociations = null;
 
 	private ApplicationService cadsr = null;
-
+	private Project mostRecentCompleteProject = null;
 
 	public DomainModelBuilder(ApplicationService cadsr) {
 		this.cadsr = cadsr;
@@ -66,11 +66,11 @@ public class DomainModelBuilder {
 	public DomainModel getDomainModel(Project proj) throws RemoteException {
 		// find all packages in the project and hand off to
 		// getDomainModel(Package, String[]);
-		cachePackages(proj);
-		Map umlPackages = (Map) projectUmlPackages.get(proj);
+		Project completeProject = findCompleteProject(proj);
+		Map umlPackages = getPackagesFromProject(completeProject);
 		String[] packageNames = new String[umlPackages.keySet().size()];
 		umlPackages.keySet().toArray(packageNames);
-		return getDomainModel(proj, packageNames);
+		return getDomainModel(completeProject, packageNames);
 	}
 
 
@@ -85,12 +85,14 @@ public class DomainModelBuilder {
 	 * @throws RemoteException
 	 */
 	public DomainModel getDomainModel(Project proj, String[] packageNames) throws RemoteException {
+		// find the complete project
+		Project completeProject = findCompleteProject(proj);
 		// grab the classes out of the packages
 		List classes = new ArrayList();
 		if (packageNames != null) {
 			for (int i = 0; i < packageNames.length; i++) {
-				UMLPackageMetadata pack = getPackageMetadata(proj, packageNames[i]);
-				UMLClassMetadata[] mdArray = getClasses(proj, pack);
+				UMLPackageMetadata pack = getPackageMetadata(completeProject, packageNames[i]);
+				UMLClassMetadata[] mdArray = getClasses(completeProject, pack);
 				Collections.addAll(classes, mdArray);
 			}
 		}
@@ -101,7 +103,7 @@ public class DomainModelBuilder {
 		List associationMetadataList = new ArrayList();
 		for (int i = 0; i < classArray.length; i++) {
 			UMLClassMetadata clazz = classArray[i];
-			UMLAssociationMetadata[] mdArray = getAssociations(proj, clazz);
+			UMLAssociationMetadata[] mdArray = getAssociations(completeProject, clazz);
 			Collections.addAll(associationMetadataList, mdArray);
 		}
 		UMLAssociation[] associationArray = new UMLAssociation[associationMetadataList.size()];
@@ -111,7 +113,7 @@ public class DomainModelBuilder {
 		}
 
 		// hand off
-		return getDomainModel(proj, classArray, associationArray);
+		return getDomainModel(completeProject, classArray, associationArray);
 	}
 
 
@@ -130,12 +132,15 @@ public class DomainModelBuilder {
 	 */
 	public DomainModel getDomainModel(Project proj, UMLClassMetadata[] classes, UMLAssociation[] associations)
 		throws RemoteException {
+		// find the proper project from the caDSR first
+		Project completeProject = findCompleteProject(proj);
+		
 		DomainModel model = new DomainModel();
 		// project
-		model.setProjectDescription(proj.getDescription());
-		model.setProjectLongName(proj.getLongName());
-		model.setProjectShortName(proj.getShortName());
-		model.setProjectVersion(proj.getVersion());
+		model.setProjectDescription(completeProject.getDescription());
+		model.setProjectLongName(completeProject.getLongName());
+		model.setProjectShortName(completeProject.getShortName());
+		model.setProjectVersion(completeProject.getVersion());
 
 		// classes
 		DomainModelExposedUMLClassCollection exposedClasses = new DomainModelExposedUMLClassCollection();
@@ -149,9 +154,11 @@ public class DomainModelBuilder {
 		model.setExposedUMLClassCollection(exposedClasses);
 
 		// associations
-		DomainModelExposedUMLAssociationCollection exposedAssociations = new DomainModelExposedUMLAssociationCollection();
+		DomainModelExposedUMLAssociationCollection exposedAssociations = 
+			new DomainModelExposedUMLAssociationCollection();
 		if (associations != null) {
-			gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[] umlAssociations = new gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[associations.length];
+			gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[] umlAssociations = 
+				new gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[associations.length];
 			for (int i = 0; i < associations.length; i++) {
 				umlAssociations[i] = convertAssociation(associations[i]);
 			}
@@ -194,14 +201,13 @@ public class DomainModelBuilder {
 
 
 	private UMLPackageMetadata getPackageMetadata(Project proj, String packageName) throws RemoteException {
-		cachePackages(proj);
-		Map umlPackages = (Map) projectUmlPackages.get(proj);
+		Map umlPackages = getPackagesFromProject(proj);
 		UMLPackageMetadata pack = (UMLPackageMetadata) umlPackages.get(packageName);
 		return pack;
 	}
 
 
-	private void cachePackages(Project proj) throws RemoteException {
+	private Map getPackagesFromProject(Project proj) throws RemoteException {
 		if (projectUmlPackages == null) {
 			projectUmlPackages = new HashMap();
 		}
@@ -228,6 +234,7 @@ public class DomainModelBuilder {
 				throw new RemoteException("Error searching for packages: " + ex.getMessage(), ex);
 			}
 		}
+		return umlPackages;
 	}
 
 
@@ -288,8 +295,8 @@ public class DomainModelBuilder {
 			associationPrototype.setSourceUMLClassMetadata(clazz);
 			associationPrototype.setProject(proj);
 			try {
-				Iterator associationListIter = cadsr.search(UMLAssociationMetadata.class, associationPrototype)
-					.iterator();
+				Iterator associationListIter = cadsr.search(
+					UMLAssociationMetadata.class, associationPrototype).iterator();
 				List associationList = new ArrayList();
 				while (associationListIter.hasNext()) {
 					UMLAssociationMetadata metadata = (UMLAssociationMetadata) associationListIter.next();
@@ -312,5 +319,31 @@ public class DomainModelBuilder {
 			}
 		}
 		return associations;
+	}
+	
+	
+	private Project findCompleteProject(Project prototype) throws RemoteException {
+		if (prototype != mostRecentCompleteProject) {
+			List completeProjects = new ArrayList();
+			Iterator projectIter = null;
+			try {
+				projectIter = cadsr.search(Project.class, prototype).iterator();
+			} catch (ApplicationException ex) {
+				throw new RemoteException("Error retrieving complete project: " + ex.getMessage(), ex);
+			}
+			// should be ONLY ONE project from the caDSR
+			while (projectIter.hasNext()) {
+				completeProjects.add(projectIter.next());
+			}
+			if (completeProjects.size() == 1) {
+				mostRecentCompleteProject = (Project) completeProjects.get(0);
+			} else if (completeProjects.size() == 0) {
+				throw new RemoteException("No project found in caDSR");
+			} else {
+				throw new RemoteException("More than one project (" + completeProjects.size() 
+					+ ") found.  Prototype project is ambiguous");
+			}
+		}
+		return mostRecentCompleteProject;
 	}
 }
