@@ -302,7 +302,6 @@
             <batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
                 <fileset dir="${test.src.dir}">
                     <include name="**/PackageTest*.java" />
-                    <include name="**/*Test*.java" />
                 </fileset>
             </batchtest>
         </junit>
