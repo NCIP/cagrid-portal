@@ -1,7 +1,5 @@
 To Do:
 
-fix the CommonTools ant calls to uniformly handle things like path issues
-
 if add a new service with same namespace i get funny gui error.
 
 should generated two different interfaces in common..  (what is the use.  The server only implements non "provided" methods.  Has nothing to do with "importing")
@@ -68,6 +66,8 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+fix the CommonTools ant calls to uniformly handle things like path issues
+
 (DONE) when modifying a service, conneciton to GME needs to happen in the background, and fail gracefully
 
 security operationprovider needs to be hooked into build properly...
