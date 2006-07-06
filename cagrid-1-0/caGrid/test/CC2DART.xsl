@@ -33,7 +33,9 @@
                         <Name>.Note.Note</Name>
                         <Status>passed</Status>
                         <Measurement name="Name" type="text/string">CC Build Label</Measurement>
-                        <Measurement name="Note" type="text/text"><xsl:value-of select="@value"/></Measurement>
+                        <Measurement name="Note" type="text/text">
+                            <xsl:value-of select="@value"/>
+                        </Measurement>
                     </Test>
                 </xsl:when>
             </xsl:choose>
@@ -73,7 +75,7 @@
     </xsl:template>
     <xsl:template match="message">
         <xsl:text>
-</xsl:text>
+        </xsl:text>
         <xsl:value-of select="."/>
     </xsl:template>
     <xsl:template match="modifications">
@@ -86,9 +88,9 @@
                 <Name>.Update.Update.Update<xsl:value-of select="position()"/></Name>
                 <Status>passed</Status>
                 <!--
-                <Measurement name="Type" type="text/string">
+                    <Measurement name="Type" type="text/string">
                     <xsl:value-of select="@type"/>
-                </Measurement>
+                    </Measurement>
                 -->
                 <Measurement name="File" type="text/string">
                     <xsl:value-of select="file/filename"/>
@@ -107,9 +109,15 @@
                 </Measurement>
                 <Measurement name="PriorRevision" type="text/string">
                     <!-- CruiseControl with CVS doesn't provide prior revision, so lets hack a guess to be previous minor rev (Won't always be right, but better than nothing) -->
+                    <xsl:variable name="ind">
+                        <xsl:call-template name="lastIndexOf">
+                            <xsl:with-param name="string" select="revision"/>
+                            <xsl:with-param name="char" select="'.'"/>
+                        </xsl:call-template>
+                    </xsl:variable>
                     <xsl:value-of
-                        select="concat(substring-before(revision,'.'),concat('.',substring-after(revision,'.')
-                        - 1))"/>
+                        select="concat(substring(revision,1,string-length(revision)-string-length(substring(revision,$ind))),concat('.',(substring(revision,$ind+1)-1)))"
+                    />
                 </Measurement>
                 <Measurement name="Log" type="text/string">
                     <xsl:value-of select="comment"/>
@@ -136,12 +144,11 @@
                 </Measurement>
                 <Measurement name="Output" type="text/text">
                     <xsl:if test="not ($out='')"><xsl:text>
-</xsl:text>SYSTEM OUT><xsl:value-of
-                            select="$out"/>
+                    </xsl:text>SYSTEM OUT><xsl:value-of select="$out"/>
                     </xsl:if>
                     <xsl:if test="not ($err='')">
                         <xsl:text>
-</xsl:text>SYSTEM ERR><xsl:value-of select="$err"/>
+                        </xsl:text>SYSTEM ERR><xsl:value-of select="$err"/>
                     </xsl:if>
                     <xsl:if test="failure|error">
                         <xsl:value-of select="failure|error"/>
@@ -155,10 +162,8 @@
         <xsl:param name="durationString"/>
         <xsl:choose>
             <xsl:when test="contains($durationString,'minutes')">
-                <xsl:variable name="num"
-                    select="normalize-space(substring-before($durationString,'minutes'))"/>
-                <xsl:variable name="remaining"
-                    select="normalize-space(substring-after($durationString,'minutes'))"/>
+                <xsl:variable name="num" select="normalize-space(substring-before($durationString,'minutes'))"/>
+                <xsl:variable name="remaining" select="normalize-space(substring-after($durationString,'minutes'))"/>
                 <xsl:variable name="minsInSecs">
                     <xsl:value-of select="60 * $num"/>
                 </xsl:variable>
@@ -170,10 +175,8 @@
                 <xsl:value-of select="$minsInSecs + $recursion"/>
             </xsl:when>
             <xsl:when test="contains($durationString,'minute')">
-                <xsl:variable name="num"
-                    select="normalize-space(substring-before($durationString,'minute'))"/>
-                <xsl:variable name="remaining"
-                    select="normalize-space(substring-after($durationString,'minute'))"/>
+                <xsl:variable name="num" select="normalize-space(substring-before($durationString,'minute'))"/>
+                <xsl:variable name="remaining" select="normalize-space(substring-after($durationString,'minute'))"/>
                 <xsl:variable name="minsInSecs">
                     <xsl:value-of select="60 * $num"/>
                 </xsl:variable>
@@ -186,6 +189,31 @@
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="normalize-space(substring-before($durationString,'second'))"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template name="lastIndexOf">
+        <!-- declare that it takes two parameters 
+            - the string and the char -->
+        <xsl:param name="string"/>
+        <xsl:param name="char"/>
+        <xsl:param name="work"/>
+        <xsl:choose>
+            <!-- if the string contains the character... -->
+            <xsl:when test="contains($string, $char)">
+                <!-- call the template recursively... -->
+                <xsl:call-template name="lastIndexOf">
+                    <!-- with the string being the string after the character
+                    -->
+                    <xsl:with-param name="string" select="substring-after($string, $char)"/>
+                    <!-- and the character being the same as before -->
+                    <xsl:with-param name="char" select="$char"/>
+                    <xsl:with-param name="work" select="concat(concat($work,substring-before($string, $char)),'.')"/>
+                </xsl:call-template>
+            </xsl:when>
+            <!-- otherwise, return the value of the string -->
+            <xsl:otherwise>
+                <xsl:value-of select="string-length($work)"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
