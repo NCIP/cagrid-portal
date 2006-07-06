@@ -47,13 +47,44 @@ public class SyncToolsSimpleImportTest extends Story {
 	public String getDescription() {
 		return "Testing the Introduce code generation tools";
 	}
+	
+
+	protected boolean storySetUp() throws Throwable {
+		// TODO Auto-generated method stub
+		super.storySetUp();
+		RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
+		try {
+			step1.runStep();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		RemoveSkeletonStep step2 = new RemoveSkeletonStep(tci3);
+		try {
+			step2.runStep();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+	}
 
 
 	protected void storyTearDown() throws Throwable {
 		RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
-		step1.runStep();
+		try {
+			step1.runStep();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		RemoveSkeletonStep step2 = new RemoveSkeletonStep(tci3);
-		step2.runStep();
+		try {
+			step2.runStep();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 

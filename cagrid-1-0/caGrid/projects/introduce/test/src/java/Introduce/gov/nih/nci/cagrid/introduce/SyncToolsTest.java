@@ -98,9 +98,27 @@ public class SyncToolsTest extends Story {
 	public String getDescription() {
 		return "Testing the Introduce code generation tools";
 	}
+	
+	
+
+	protected boolean storySetUp() throws Throwable {
+		// TODO Auto-generated method stub
+		super.storySetUp();
+		RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
+		try {
+			step1.runStep();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+	}
+
+
 
 
 	protected void storyTearDown() throws Throwable {
+		super.storyTearDown();
 		RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
 		try {
 			step1.runStep();
