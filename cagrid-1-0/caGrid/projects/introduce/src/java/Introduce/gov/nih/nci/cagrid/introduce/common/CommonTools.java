@@ -186,17 +186,22 @@ public class CommonTools {
 		if (!dirF.isAbsolute()) {
 			dir = buildFileDir + File.separator + dir;
 		}
-		String os = System.getProperty("os.name");
-		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
-			dir = "\"" + dir + "\"";
-		} else {
-			dir = dir.replaceAll(" ", "\\ ");
-		}
-
+		dir = fixPathforOS(dir);
 		String cmd = " -Dservice.properties.file=" + dir + File.separator
 			+ IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES;
 		cmd = getAntCommand("deployTomcat", buildFileDir) + " " + cmd;
 		return cmd;
+	}
+
+
+	private static String fixPathforOS(String path) {
+		String os = System.getProperty("os.name");
+		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
+			path = "\"" + path + "\"";
+		} else {
+			path = path.replaceAll(" ", "\\ ");
+		}
+		return path;
 	}
 
 
@@ -206,12 +211,7 @@ public class CommonTools {
 		if (!dirF.isAbsolute()) {
 			dir = buildFileDir + File.separator + dir;
 		}
-		String os = System.getProperty("os.name");
-		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
-			dir = "\"" + dir + "\"";
-		} else {
-			dir = dir.replaceAll(" ", "\\ ");
-		}
+		dir = fixPathforOS(dir);
 
 		String cmd = " -Dservice.properties.file=" + buildFileDir + File.separator
 			+ IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES;
@@ -229,12 +229,7 @@ public class CommonTools {
 		if (!dirF.isAbsolute()) {
 			dir = buildFileDir + File.separator + dir;
 		}
-		String os = System.getProperty("os.name");
-		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
-			dir = "\"" + dir + "\"";
-		} else {
-			dir = dir.replaceAll(" ", "\\ ");
-		}
+		dir = fixPathforOS(dir);
 		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir + " -Dintroduce.skeleton.service.name=" + name
 			+ " -Dintroduce.skeleton.package=" + packagename + " -Dintroduce.skeleton.package.dir="
 			+ packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
@@ -254,12 +249,7 @@ public class CommonTools {
 		if (!dirF.isAbsolute()) {
 			dir = buildFileDir + File.separator + dir;
 		}
-		String os = System.getProperty("os.name");
-		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
-			dir = "\"" + dir + "\"";
-		} else {
-			dir = dir.replaceAll(" ", "\\ ");
-		}
+		dir = fixPathforOS(dir);
 		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir + " -Dintroduce.skeleton.service.name=" + name
 			+ " -Dintroduce.skeleton.package=" + packagename + " -Dintroduce.skeleton.package.dir="
 			+ packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
