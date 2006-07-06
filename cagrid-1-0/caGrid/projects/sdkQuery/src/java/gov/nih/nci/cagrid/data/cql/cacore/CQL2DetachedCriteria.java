@@ -100,7 +100,12 @@ public class CQL2DetachedCriteria {
 	
 	
 	/**
-	 * Adds criterion to a parent object's criteria to handle an association restriction
+	 * Adds criterion to a parent object's criteria to handle an association restriction.
+	 * Due to limitations of the Hibernate query engine, the following issues must be 
+	 * accounted for when using this method:
+	 * 
+	 * -- This method can only handle 'and' restrictions if multiple associations are made.
+	 * -- Multiple associations to the same object cannot be made.
 	 * 
 	 * @param parentObjectCriteria
 	 * 		The present criteria of the parent object
@@ -223,6 +228,13 @@ public class CQL2DetachedCriteria {
 	}
 	
 	
+	/**
+	 * Gets the restriction factory method for a given predicate
+	 * 
+	 * @param predicate
+	 * @return
+	 * @throws QueryProcessingException
+	 */
 	private static Method getRestrictionFactory(String predicate) throws QueryProcessingException {
 		if (restrictionFactories == null) {
 			restrictionFactories = new HashMap();
@@ -249,6 +261,17 @@ public class CQL2DetachedCriteria {
 	}
 	
 	
+	/**
+	 * Handles grouping
+	 * 
+	 * @param objectClass
+	 * 		The class of the object the group restriction is being applied to
+	 * @param group
+	 * 		The group restriction
+	 * @return
+	 * @throws MalformedQueryException
+	 * @throws QueryProcessingException
+	 */
 	private static Junction handleGroup(Class objectClass, Group group) throws MalformedQueryException, QueryProcessingException {
 		Junction junction = null;
 		if (group.getLogicRelation().getValue().equals(LogicalOperator._AND)) {
@@ -267,10 +290,11 @@ public class CQL2DetachedCriteria {
 		}
 		// associations
 		for (int i = 0; group.getAssociation() != null && i < group.getAssociation().length; i++) {
+			System.err.println("WARNING: associations ARE NOT PROCESSED on groups due to a Hibernate limitation");
 			// Criterion association = handleAssociation(objectClass, group.getAssociation(i));
 			// junction.add(association);
 		}
-		// groups
+		// subgroups
 		for (int i = 0; group.getGroup() != null && i < group.getGroup().length; i++) {
 			Junction subgroup = handleGroup(objectClass, group.getGroup(i));
 			junction.add(subgroup);
