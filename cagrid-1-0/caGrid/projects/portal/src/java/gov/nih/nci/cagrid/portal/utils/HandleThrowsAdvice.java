@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.portal.utils;
 import org.apache.log4j.Category;
 import org.springframework.aop.ThrowsAdvice;
 
+import java.lang.reflect.Method;
+
 /**
  * This is a class that provided a Advice
  * that is applied to Portal beans by spring
@@ -23,12 +25,19 @@ public class HandleThrowsAdvice implements ThrowsAdvice {
 
     public final String _prefix = " Portal Exception: ";
 
-    public void afterThrowing(Exception ex) throws Throwable {
-
-        // ToDo remove this line
-        System.out.println("ADVICE INterceptor...........................");
-
-        Category.getRoot().error(_prefix + ex);
-
+    /**
+     * Capture the most generic Exception
+     * being thrown
+     *
+     * @param m
+     * @param target
+     * @param ex
+     * @throws Throwable
+     */
+    void afterThrowing(Method m, Object target, Exception ex) throws Throwable {
+        Category cat = Category.getInstance(m.getClass());
+        // throw custom message
+        cat.error(_prefix + "## Class:" + target + " ::Method:" + m + " ## " + ex);
     }
+
 }

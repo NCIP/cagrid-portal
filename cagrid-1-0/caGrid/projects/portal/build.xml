@@ -1,17 +1,12 @@
 <?xml version="1.0"?>
 <project name="portal" default="all" basedir=".">
 
-
-
     <!-- Local Environment -->
     <property environment="env"/>
-    <property file="${user.name}-portal-build.properties"/>
+    <property name="project.name" value="portal"/>
+    <property file="${user.name}-${project.name}-build.properties"/>
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}"/>
     <property name="globus.lib.dir" location="${globus.dir}/lib"/>
-
-    <property name="tomcat.dir" location="${env.CATALINA_HOME}"/>
-    <property name="tomcat.webapps.dir" location="${tomcat.dir}/webapps"/>
-
 
     <property name='javac.debug' value='true'/>
     <property name='javac.deprecation' value='true'/>
@@ -33,6 +28,14 @@
 
     <property name='build.dir' value='build'/>
     <property name='build.dest' value='${webinf.dir}/classes'/>
+
+    <!--Set logging levels if not defined by ${username}-portal.properties file -->
+    <property name="log.level.root" value="WARN"/>
+    <property name="log.level.portal" value="WARN"/>
+    <property name="log.level.spring" value="WARN"/>
+
+    <property name="tomcat.dir" location="${env.CATALINA_HOME}"/>
+    <property name="tomcat.webapps.dir" location="${tomcat.dir}/webapps"/>
 
 
     <path id="portal.classpath">
@@ -64,14 +67,17 @@
     <target name="all" depends="clean,compile,hibernate.xdoclet,copyResources"
             description="Builds the entire application"/>
 
+
     <!-- ============================================================== -->
     <!-- Deploy Target                                               -->
     <!-- ============================================================== -->
-    <target name="deployExploded" depends="clean,cleanDeployment,compile,hibernate.xdoclet,copyResources" description="Deploy Application into tomcat">
+    <target name="deployExploded" depends="clean,cleanDeployment,compile,hibernate.xdoclet,copyResources,deployPreBuilt" description="Deploy Application into tomcat"/>
+
+    <target name="deployPreBuilt" description="Deploys pre-built webapp">
         <copydir src="${webcontent.dir}" dest="${tomcat.webapps.dir}/${project.name}" forceoverwrite="true"/>
     </target>
 
-    <target name="deployAsWar" depends="war,cleanDeployment" description="Deploy Application into Tomcat as a war">
+    <target name="deployAsWar" depends="cleanDeployment,war" description="Deploy Application into Tomcat as a war">
         <copyfile src="${build.dir}/${project.name}.war" dest="${tomcat.webapps.dir}"/>
     </target>
 
@@ -137,9 +143,9 @@
                 <include name="*.jar"/>
             </fileset>
             <!--Copy Globus libraries-->
-             <fileset dir="${globus.lib.dir}">
+            <fileset dir="${globus.lib.dir}">
                 <include name="*.jar"/>
-             </fileset>
+            </fileset>
         </copy>
 
         <copy
@@ -159,7 +165,26 @@
                 <filter token='hibernate.dialect' value='${hibernate.dialect}'/>
                 <filter token='hibernate.use_outer_join' value='${hibernate.use_outer_join}'/>
                 <filter token='hibernate.show_sql' value='${hibernate.show_sql}'/>
-           </filterset>
+            </filterset>
+        </copy>
+
+        <!--Unix works for all environments -->
+        <pathconvert targetos="unix" property="tomcat.log.dir">
+                <path location="${tomcat.dir}/logs"/>
+         </pathconvert>
+
+        <copy
+                file="${resources.dir}/log4j.xml.template"
+                tofile='${build.dest}/log4j.xml'
+                filtering="true"
+                overwrite="true">
+            <filterset>
+                <filter token='webapp.log.dir' value='${tomcat.log.dir}'/>
+                <filter token="webapp.project.name" value="${project.name}"/>
+                <filter token="log.level.root" value="${log.level.root}"/>
+                <filter token="log.level.portal" value="${log.level.portal}"/>
+                <filter token="log.level.spring" value="${log.level.spring}"/>
+            </filterset>
         </copy>
 
         <copy todir="${build.dest}">
