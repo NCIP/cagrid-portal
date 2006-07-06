@@ -1,7 +1,5 @@
 To Do:
 
-if add a new service with same namespace i get funny gui error.
-
 should generated two different interfaces in common..  (what is the use.  The server only implements non "provided" methods.  Has nothing to do with "importing")
   - one, for all the non-imported operations that the service implements
   - one, that extends that interface, that adds the imported methods, that only the client implements 
@@ -64,6 +62,9 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+
+(added validation) if add a new service with same namespace i get funny gui error.
+
 fix the CommonTools ant calls to uniformly handle things like path issues
 
 (DONE) when modifying a service, conneciton to GME needs to happen in the background, and fail gracefully

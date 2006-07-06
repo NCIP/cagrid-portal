@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -69,9 +70,7 @@ public class ModifyService extends GridPortalComponent {
 			getNamespaceTextField().setText(
 				service.getIntroduceServiceProperties().getProperty(
 					IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN)
-					+ "/"
-					+ service.getIntroduceServiceProperties().getProperty(
-						IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + "Context");
+					+ "Context");
 		}
 		if (service.getService().getPackageName() != null && service.getService().getPackageName().length() > 0) {
 			getServicePackageNameTextField().setText(service.getService().getPackageName());
@@ -163,11 +162,34 @@ public class ModifyService extends GridPortalComponent {
 
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
+					// make sure that service has a valid name
 					if (!CommonTools.isValidServiceName(serviceNameTextField.getText())) {
 						JOptionPane.showMessageDialog(ModifyService.this,
 							"Service Name is not valid.  Service name must be a java compatible class name. ("
 								+ CommonTools.ALLOWED_JAVA_CLASS_REGEX + ")");
 						return;
+					}
+					// make sure there are no collision problems
+					for (int i = 0; i < service.getServiceDescriptor().getServices().getService().length; i++) {
+						ServiceType testService = service.getServiceDescriptor().getServices().getService(i);
+						if (!testService.equals(service.getService())) {
+							if (namespaceTextField.getText().equals(testService.getNamespace())) {
+								JOptionPane
+									.showMessageDialog(ModifyService.this,
+										"Service Namespace is not valid.  Service namespace must be unique for this service context.)");
+							}
+							if (servicePackageNameTextField.getText().equals(testService.getPackageName())) {
+								JOptionPane
+									.showMessageDialog(ModifyService.this,
+										"Service Package Name is not valid.  Service Package Name must be unique for this service context.)");
+							}
+							if (serviceNameTextField.getText().equals(testService.getName())) {
+								JOptionPane
+									.showMessageDialog(ModifyService.this,
+										"Service Name is not valid.  Service Name must be unique for this service context.)");
+							}
+
+						}
 					}
 					service.getService().setName(serviceNameTextField.getText());
 					service.getService().setNamespace(namespaceTextField.getText());
