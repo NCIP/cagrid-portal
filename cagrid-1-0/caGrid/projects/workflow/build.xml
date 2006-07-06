@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<project default="all" basedir=".">
+    
+    <target name="all" depends="deploy"/>
+    
+    <target name="deploy">
+        <ant dir="SampleService1" target="deployGlobus"/>
+        <ant dir="SampleService2" target="deployGlobus"/>
+        <ant dir="SecureSample" target="deployGlobus"/>
+        <ant dir="WorkflowManagementService" target="deployGlobus"/>
+    </target>
+
+    <target name="clean">
+        <ant dir="SampleService1" target="clean"/>
+        <ant dir="SampleService2" target="clean"/>
+        <ant dir="SecureSample" target="clean"/>
+        <ant dir="WorkflowManagementService" target="clean"/>
+    </target>
+
+    <target name="test">
+        <ant dir="WorkflowManagementService" target="test"/>
+    </target>
+
+</project>
+
