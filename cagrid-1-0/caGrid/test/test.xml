@@ -5,10 +5,10 @@
 	<property name="test.logs.dir" value="${test.dir}/logs"/>
 	<property name="junit.results.dir" value="${test.logs.dir}/junit"/>
 	<!-- Get the HOSTNAME in an os independant way -->
-	<property name="env.HOSTNAME" value="${env.COMPUTERNAME}"/>
+	<property name="env.HOST" value="${env.COMPUTERNAME}"/>
 	<!-- For your dart client -->
 	<property name="dart.buildname" value="${os.name}-${os.arch}-${os.version}-JDK-${java.version}"/>
-	<property name="dart.site" value="${env.HOSTNAME}"/>
+	<property name="dart.site" value="${env.HOST}"/>
 	<!-- For the dart server-->
 	<property name="dart.port" value="8081"/>
 	<property name="dart.project" value="caGrid-1.0"/>
