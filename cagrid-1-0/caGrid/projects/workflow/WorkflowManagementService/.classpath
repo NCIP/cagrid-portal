@@ -2,9 +2,10 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="build/stubs-WorkflowManagementService/src"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
+	<classpathentry sourcepath="/AXIS_HOME" kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>
@@ -71,5 +72,6 @@
 	<classpathentry kind="lib" path="lib/abadmin.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/SimpleSecureService_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/SampleService1_stubs.jar"/>
+	<classpathentry kind="src" path="/SecureSample"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

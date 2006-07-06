@@ -346,4 +346,10 @@
         </java>
     </target>
 
+<target name="runCallService" depends="compile" description="Execute the client: ant  runPDDClient">
+        <java classname="gov.nih.nci.cagrid.workflow.wms.utils.SOAPClient" fork="yes">          
+            <classpath refid="service.run.classpath"/>
+        </java>
+    </target>
+
 </project>

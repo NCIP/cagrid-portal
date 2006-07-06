@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" name="gov.nih.nci.wms.tests.PackageTests" tests="2" time="9.153">
+<testsuite errors="0" failures="0" name="gov.nih.nci.wms.tests.PackageTests" tests="3" time="9.904">
   <properties>
     <property name="file.encoding.pkg" value="sun.io"></property>
     <property name="env.PROMPT" value="$P$G"></property>
@@ -75,7 +75,7 @@
     <property name="test.build.dest" value="C:\test\cagrid-1-0\caGrid\projects\workflow\WorkflowManagementService\build/test/classes"></property>
     <property name="ant.version" value="Apache Ant version 1.6.2 compiled on July 16 2004"></property>
     <property name="env.USERDOMAIN" value="MCS"></property>
-    <property name="env.WINDOWID" value="12582926"></property>
+    <property name="env.WINDOWID" value="2097166"></property>
     <property name="env.PROCESSOR_LEVEL" value="6"></property>
     <property name="os.name" value="Windows XP"></property>
     <property name="java.specification.vendor" value="Sun Microsystems Inc."></property>
@@ -172,12 +172,23 @@
     <property name="java.specification.version" value="1.5"></property>
     <property name="sun.arch.data.model" value="32"></property>
   </properties>
-  <testcase classname="gov.nih.nci.wms.tests.WMSTest" name="testBasic" time="5.267"></testcase>
-  <testcase classname="gov.nih.nci.wms.tests.WMSTest" name="testSecure" time="2.784"></testcase>
-  <system-out><![CDATA[Output <invokeResponse xmlns="http://workflow.cagrid.nci.nih.gov/SampleService1"><response>Service 1 got : Test</response></invokeResponse>
+  <testcase classname="gov.nih.nci.wms.tests.WMSTest" name="testBasic" time="5.598"></testcase>
+  <testcase classname="gov.nih.nci.wms.tests.WMSTest" name="testSecure" time="3.174"></testcase>
+  <testcase classname="gov.nih.nci.wms.tests.WMSTest" name="testAnnualDemo" time="0.0"></testcase>
+  <system-out><![CDATA[Serialized :<ns1:invoke xmlns:ns1="http://workflow.cagrid.nci.nih.gov/SampleService1">
+ <ns1:param xsi:type="xsd:string" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Test</ns1:param>
+</ns1:invoke>
 
-Output <invokeResponse xmlns="http://workflow.cagrid.nci.nih.gov/SampleService1"><response>Service 1 got : Test</response></invokeResponse>
+Contents: <ns1:invoke xmlns:ns1="http://workflow.cagrid.nci.nih.gov/SampleService1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <ns1:param xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">Test</ns1:param>
+</ns1:invoke>
+Serialized :<ns1:invoke xmlns:ns1="http://workflow.cagrid.nci.nih.gov/SampleService1">
+ <ns1:param xsi:type="xsd:string" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Test</ns1:param>
+</ns1:invoke>
 
+Contents: <ns1:invoke xmlns:ns1="http://workflow.cagrid.nci.nih.gov/SampleService1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <ns1:param xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">Test</ns1:param>
+</ns1:invoke>
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

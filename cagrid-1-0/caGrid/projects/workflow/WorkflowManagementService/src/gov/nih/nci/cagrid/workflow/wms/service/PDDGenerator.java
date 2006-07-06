@@ -125,7 +125,6 @@ public class PDDGenerator {
 
 	private static HashMap mapWsdlRefs(WSDLReferences[] wsdlRefs) {
 		HashMap map = new HashMap();
-		System.out.println("lenght: " + wsdlRefs.length);
 		for(int i=0;i<wsdlRefs.length;i++){
 			String qName = wsdlRefs[i].getWsdlNamespace().toString();
 			map.put(qName, wsdlRefs[i]);

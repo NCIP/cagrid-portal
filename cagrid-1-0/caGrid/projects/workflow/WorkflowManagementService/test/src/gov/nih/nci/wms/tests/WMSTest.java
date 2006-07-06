@@ -2,8 +2,6 @@ package gov.nih.nci.wms.tests;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.workflow.stubs.Invoke;
-import gov.nih.nci.cagrid.workflow.samples.secure.stubs.InvokeRequest;
-import gov.nih.nci.cagrid.workflow.samples.secure.stubs.InvokeResponse;
 import gov.nih.nci.cagrid.workflow.wms.stubs.WorkflowManagementServicePortType;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WMSInputType;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WMSOutputType;
@@ -14,7 +12,6 @@ import gov.nih.nci.cagrid.workflow.wms.stubs.service.WorkflowManagementServiceAd
 import java.io.File;
 import java.io.InputStream;
 import java.rmi.RemoteException;
-import java.net.URL;
 import org.apache.axis.types.URI;
 
 import javax.xml.namespace.QName;
@@ -22,6 +19,7 @@ import javax.xml.namespace.QName;
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.client.AxisClient;
 import org.apache.axis.configuration.FileProvider;
+import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.utils.ClassUtils;
@@ -29,6 +27,8 @@ import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.encoding.ObjectSerializer;
 import org.globus.wsrf.test.GridTestCase;
 import org.globus.wsrf.utils.AnyHelper;
+import org.w3c.dom.Element;
+
 
 public class WMSTest extends GridTestCase {
 	
@@ -52,13 +52,12 @@ public class WMSTest extends GridTestCase {
 		wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/SampleService1"));
 		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/SampleService1/SampleService1_flattened.wsdl");
 		wsdlRefArray[0].setWsdlNamespace(new URI("http://workflow.cagrid.nci.nih.gov/SampleService1"));
-		WMSInputType input =createInput("Simple","test/Simple.bpel", qname, (Object)invoke);
+		WMSInputType input =createInput("Simple","test/Simple.bpel",
+				qname, (Object)invoke, Invoke.class.getName());
 		input.setWsdlReferences(wsdlRefArray);
 		WMSOutputType output = runWorkflow(input);
-		String outputString = output.getOutputType().getOutputAsXMLString();
-		System.out.println("Output " +  outputString);
-		assertTrue(outputString != null);
-		assertTrue(output!=null);
+		assertTrue(output != null);
+		assertTrue(output.getOutputType().get_any()!=null);
 	}
 
 	public void testSecure() throws Exception {
@@ -67,7 +66,8 @@ public class WMSTest extends GridTestCase {
 		this.epr.setAddress(new Address(serviceUrl));
 		Invoke invoke = new Invoke("Test");
 		QName qname = new QName("http://workflow.cagrid.nci.nih.gov/SampleService1", "invoke");
-		WMSInputType input = createInput("SimpleSecure","SimpleSecure.bpel", qname, (Object)invoke);
+		WMSInputType input = createInput("SimpleSecure","SimpleSecure.bpel", 
+				qname, (Object)invoke, Invoke.class.getName());
 		WSDLReferences[] wsdlRefArray = new WSDLReferences[2];
 		wsdlRefArray[0] = new WSDLReferences();
 		wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/SampleService1"));
@@ -79,11 +79,15 @@ public class WMSTest extends GridTestCase {
 		wsdlRefArray[1].setWsdlNamespace(new URI("http://cagrid.nci.nih.gov/SecureSample"));
 		input.setWsdlReferences(wsdlRefArray);
 		WMSOutputType output = runWorkflow(input);
-		String outputString = output.getOutputType().getOutputAsXMLString();
-		System.out.println("Output " +  outputString);
-		assertTrue(outputString != null);
 		assertTrue(output!=null);
+		assertTrue(output.getOutputType().get_any() != null);
 		
+	}
+	
+	public void testAnnualDemo() throws Exception {
+		assertTrue(TEST_CONTAINER != null);
+		this.epr = new EndpointReferenceType();
+		this.epr.setAddress(new Address(serviceUrl));	
 	}
 	private WorkflowManagementServicePortType getPortType()
 			throws RemoteException {
@@ -140,13 +144,17 @@ public class WMSTest extends GridTestCase {
 
 	}
 	
-	public static WMSInputType createInput(String workflowName, String bpelFile, QName inputQName, Object inputObject) throws Exception {
+	public static WMSInputType createInput(String workflowName, 
+			String bpelFile, QName inputQName, Object inputObject, String className) throws Exception {
 		WMSInputType input = new WMSInputType();
 		String bpelProcess = Utils.fileToStringBuffer(new File(bpelFile)).toString();
 		
 		WorkflowInputType inputArgs = new WorkflowInputType();
-		
-		inputArgs.setInputAsXMLString(ObjectSerializer.toString(inputObject, inputQName));
+		System.out.println("Serialized :" + ObjectSerializer.toString(inputObject, inputQName));
+		Element e = ObjectSerializer.toElement(inputObject, inputQName);
+		MessageElement anyContent = AnyHelper.toAny(new MessageElement(e));
+		System.out.println("Contents: " + anyContent.toString());
+		inputArgs.set_any(new MessageElement[]{anyContent});
 		input.setBpelDoc(bpelProcess);
 		input.setInputArgs(inputArgs);
 		input.setWorkflowName(workflowName);

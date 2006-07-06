@@ -75,7 +75,7 @@
     <property name="test.build.dest" value="C:\test\cagrid-1-0\caGrid\projects\workflow\WorkflowManagementService\build/test/classes"></property>
     <property name="ant.version" value="Apache Ant version 1.6.2 compiled on July 16 2004"></property>
     <property name="env.USERDOMAIN" value="MCS"></property>
-    <property name="env.WINDOWID" value="12582926"></property>
+    <property name="env.WINDOWID" value="2097166"></property>
     <property name="env.PROCESSOR_LEVEL" value="6"></property>
     <property name="os.name" value="Windows XP"></property>
     <property name="java.specification.vendor" value="Sun Microsystems Inc."></property>
@@ -172,7 +172,7 @@
     <property name="java.specification.version" value="1.5"></property>
     <property name="sun.arch.data.model" value="32"></property>
   </properties>
-  <testcase classname="gov.nih.nci.wms.tests.WMSTest" name="testBasic" time="0.01">
+  <testcase classname="gov.nih.nci.wms.tests.WMSTest" name="testBasic" time="0.02">
     <failure type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError
 	at org.globus.wsrf.test.GridTestCase.setUp(GridTestCase.java:31)
 </failure>

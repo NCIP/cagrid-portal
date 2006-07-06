@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WMSInputType;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WMSOutputType;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WSDLReferences;
-import gov.nih.nci.cagrid.workflow.wms.stubs.service.WorkflowOuputType;
 
 import java.io.File;
 import java.rmi.RemoteException;
@@ -57,15 +56,20 @@ public class WorkflowManagementServiceImpl {
 		return ActiveBPELAdapter.deployBpr(bpelFileName ,workflowName, wsdlRefArray);
 	}
 	
-	private String invokeProcess(String partnerLinkName, String message) throws Exception {
-		return ActiveBPELAdapter.invokeProcess(partnerLinkName, message);
+	private WMSOutputType invokeProcess(String partnerLinkName, WMSInputType wmsInput) throws Exception {
+		return ActiveBPELAdapter.invokeProcess(partnerLinkName, wmsInput);
 	}
 	
+	/** This is the method to deploy and run workflow
+	 * @param wmsInput
+	 * @return
+	 * @throws RemoteException
+	 */
 	public WMSOutputType runWorkflow(WMSInputType wmsInput)
 			throws RemoteException {
 		String workflowName = wmsInput.getWorkflowName();
 		String bpelProcess = wmsInput.getBpelDoc();
-		String resultAsString = null;
+		WMSOutputType output;
 		File bpelFile = null;
 		try {
 			String bpelFileName = System.getProperty("java.io.tmpdir") + File.separator+ workflowName + ".bpel";
@@ -80,18 +84,13 @@ public class WorkflowManagementServiceImpl {
 		}
 		try {
 			String serviceName = workflowName + "Service";
-			resultAsString = invokeProcess(serviceName, 
-					wmsInput.getInputArgs().getInputAsXMLString());
+			output = invokeProcess(serviceName, 
+					wmsInput);
 					
-			System.out.println("Result: " + resultAsString);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RemoteException("Exception running the workflow:" + workflowName, e);
 		}
-		WMSOutputType output = new WMSOutputType();
-		WorkflowOuputType wOutput = new WorkflowOuputType();
-		wOutput.setOutputAsXMLString(resultAsString);
-		output.setOutputType(wOutput);
 		return output;
 	}
 
