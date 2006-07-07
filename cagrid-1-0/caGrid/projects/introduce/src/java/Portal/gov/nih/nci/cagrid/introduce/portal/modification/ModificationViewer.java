@@ -67,8 +67,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.namespace.QName;
 
@@ -842,7 +840,6 @@ public class ModificationViewer extends GridPortalComponent {
 			contentTabbedPane.addTab("Service Contexts", null, getResourceesTabbedPanel(), null);
 			contentTabbedPane.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
-					System.out.println("Changing state in modification viewer");
 					getNamespaceJTree().setNamespaces(info.getNamespaces());
 					getResourcesJTree().setServices(info.getServices());
 					getMethodsTable().clearTable();

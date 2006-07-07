@@ -187,16 +187,19 @@ public class ModifyService extends JDialog {
 								JOptionPane
 									.showMessageDialog(ModifyService.this,
 										"Service Namespace is not valid.  Service namespace must be unique for this service context.)");
+								return;
 							}
 							if (servicePackageNameTextField.getText().equals(testService.getPackageName())) {
 								JOptionPane
 									.showMessageDialog(ModifyService.this,
 										"Service Package Name is not valid.  Service Package Name must be unique for this service context.)");
+								return;
 							}
 							if (serviceNameTextField.getText().equals(testService.getName())) {
 								JOptionPane
 									.showMessageDialog(ModifyService.this,
 										"Service Name is not valid.  Service Name must be unique for this service context.)");
+								return;
 							}
 
 						}

@@ -51,7 +51,7 @@ public class ResourceManager {
 		return introduceCache.getAbsolutePath();
 	}
 	
-	
+
 	public static String getProperty(String key) throws Exception {
 		File lastDir = new File(getResourcePath() + File.separator
 			+ RESOURCE_FILE);
@@ -274,7 +274,6 @@ public class ResourceManager {
 			
 			Thread.sleep(5000);
 			
-			// Archive.restoreLatest("HelloWorld", "c:\\HelloWorld");
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
