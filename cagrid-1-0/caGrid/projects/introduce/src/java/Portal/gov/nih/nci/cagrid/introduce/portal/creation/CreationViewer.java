@@ -19,6 +19,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -46,7 +47,7 @@ import java.awt.Insets;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class CreationViewer extends GridPortalComponent {
+public class CreationViewer extends CreationViewerBaseComponent {
 
 	public static final String SCHEMA_DIR = "schema";
 
@@ -300,7 +301,19 @@ public class CreationViewer extends GridPortalComponent {
 			createButton.setIcon(IntroduceLookAndFeel.getCreateServiceIcon());
 			createButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					createService();
+					List extensions = new ArrayList();
+					for (int i = 0; i < getExtensionsTable().getRowCount(); i++) {
+						ServiceExtensionDescriptionType edt = null;
+						try {
+							edt = ExtensionsLoader.getInstance().getServiceExtensionByDisplayName(
+								getExtensionsTable().getRowData(i));
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+						extensions.add(edt.getDisplayName());
+					}
+					createService(getDir().getText(), getService().getText(), getServicePackage().getText(),
+						getNamespaceDomain().getText(), extensions);
 				}
 			});
 		}
@@ -435,136 +448,6 @@ public class CreationViewer extends GridPortalComponent {
 	}
 
 
-	private void createService() {
-		int doIdeleteResult = JOptionPane.OK_OPTION;
-		final File dirFile = new File(getDir().getText());
-		if (dirFile.exists() && dirFile.list().length != 0) {
-			doIdeleteResult = JOptionPane.NO_OPTION;
-			File duceXML = new File(dirFile.getAbsolutePath() + File.separator + "introduce.xml");
-			if (duceXML.exists()) {
-				doIdeleteResult = JOptionPane.showConfirmDialog(this, "The creation directory ("
-					+ dirFile.getAbsolutePath() + ") is not empty.  All information in the directory will be lost.",
-					"Confirm Overwrite", JOptionPane.YES_NO_OPTION);
-			} else {
-				JOptionPane.showMessageDialog(this, "The creation directory (" + dirFile.getAbsolutePath()
-					+ ") is not empty, and does not appear to be an Introduce-created service."
-					+ "  You must manually delete the directory, or specify a different directory.");
-			}
-		}
-
-		if (doIdeleteResult == JOptionPane.OK_OPTION) {
-			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(),
-				"Creating") {
-				public void process() {
-					try {
-
-						setProgressText("Validating service name...");
-						String serviceName = getService().getText();
-						String dirName = getDir().getText();
-						String packageName = getServicePackage().getText();
-						String serviceNsDomain = getNamespaceDomain().getText();
-						// String templateFilename =
-						// getMethodsTemplateFile().getText();
-						if (!CommonTools.isValidServiceName(serviceName)) {
-							setErrorMessage("Service Name is not valid.  Service name must be a java compatible class name. ("
-								+ CommonTools.ALLOWED_JAVA_CLASS_REGEX + ")");
-							return;
-						}
-						if (!CommonTools.isValidPackageName(packageName)) {
-							setErrorMessage("Package Name is not valid.  Service name must have a valid java Package Name");
-							return;
-						}
-
-						if (dirFile.exists()) {
-							setProgressText("Deleting existing directory...");
-							boolean deleted = Utils.deleteDir(dirFile);
-							if (!deleted) {
-								setErrorMessage("Unable to delete creation directory");
-								return;
-							}
-						}
-
-						setProgressText("Purging old archives...");
-						ResourceManager.purgeArchives(serviceName);
-
-						String serviceExtensions = "";
-						for (int i = 0; i < getExtensionsTable().getRowCount(); i++) {
-							ServiceExtensionDescriptionType edt = ExtensionsLoader.getInstance()
-								.getServiceExtensionByDisplayName(getExtensionsTable().getRowData(i));
-							serviceExtensions += edt.getName();
-							if (i < getExtensionsTable().getRowCount() - 1) {
-								serviceExtensions += ",";
-							}
-						}
-
-						setProgressText("Creating service...");
-
-						String cmd = CommonTools.getAntSkeletonCreationCommand(".", serviceName, dirName, packageName,
-							serviceNsDomain, serviceExtensions);
-						Process p = CommonTools.createAndOutputProcess(cmd);
-						p.waitFor();
-						if (p.exitValue() != 0) {
-							setErrorMessage("Error creating new service!");
-							return;
-						}
-
-						setProgressText("Invoking extension viewers...");
-						Properties properties = new Properties();
-						properties.load(new FileInputStream(getDir().getText() + File.separator
-							+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-						ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getDir()
-							.getText()
-							+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
-						ServiceInformation info = new ServiceInformation(introService, properties, new File(getDir()
-							.getText()));
-
-						for (int i = 0; i < getExtensionsTable().getRowCount(); i++) {
-							ServiceExtensionDescriptionType edt = ExtensionsLoader.getInstance()
-								.getServiceExtensionByDisplayName(getExtensionsTable().getRowData(i));
-							JDialog extDialog = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
-								.getCreationUIDialog(edt.getName(), info);
-							if (extDialog != null) {
-								extDialog.setVisible(true);
-							}
-						}
-
-						setProgressText("Invoking post creation processes...");
-						cmd = CommonTools.getAntSkeletonPostCreationCommand(".", serviceName, dirName, packageName,
-							serviceNsDomain, serviceExtensions);
-						p = CommonTools.createAndOutputProcess(cmd);
-						p.waitFor();
-						if (p.exitValue() != 0) {
-							setErrorMessage("Error during service post creations!");
-							return;
-						}
-
-						setProgressText("Building created service...");
-						cmd = CommonTools.getAntAllCommand(dirName);
-						p = CommonTools.createAndOutputProcess(cmd);
-						p.waitFor();
-						if (p.exitValue() == 0) {
-							setProgressText("Launching modification viewer...");
-							dispose();
-							PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-								new ModificationViewer(new File(dirName)));
-						} else {
-							setErrorMessage("Error creating new service!");
-							return;
-						}
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						setErrorMessage("Error: " + ex.getMessage());
-						return;
-					}
-				}
-			};
-
-			Thread th = new Thread(r);
-			th.start();
-
-		}
-	}
-
 
 	/**
 	 * This method initializes extensionsPanel
@@ -585,7 +468,7 @@ public class CreationViewer extends GridPortalComponent {
 			gridBagConstraints20.gridwidth = 3;
 			gridBagConstraints20.weightx = 1.0D;
 			gridBagConstraints20.weighty = 1.0D;
-			gridBagConstraints20.insets = new java.awt.Insets(5,2,5,2);
+			gridBagConstraints20.insets = new java.awt.Insets(5, 2, 5, 2);
 			gridBagConstraints20.gridy = 1;
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
 			gridBagConstraints19.gridx = 0;
@@ -746,11 +629,11 @@ public class CreationViewer extends GridPortalComponent {
 		if (extSelectionPanel == null) {
 			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
 			gridBagConstraints22.gridy = 0;
-			gridBagConstraints22.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints22.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints22.gridx = 1;
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 			gridBagConstraints16.gridy = 0;
-			gridBagConstraints16.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints16.gridx = 2;
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
