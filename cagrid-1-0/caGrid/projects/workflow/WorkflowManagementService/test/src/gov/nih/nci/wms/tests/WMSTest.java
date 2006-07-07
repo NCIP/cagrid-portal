@@ -150,10 +150,8 @@ public class WMSTest extends GridTestCase {
 		String bpelProcess = Utils.fileToStringBuffer(new File(bpelFile)).toString();
 		
 		WorkflowInputType inputArgs = new WorkflowInputType();
-		System.out.println("Serialized :" + ObjectSerializer.toString(inputObject, inputQName));
 		Element e = ObjectSerializer.toElement(inputObject, inputQName);
 		MessageElement anyContent = AnyHelper.toAny(new MessageElement(e));
-		System.out.println("Contents: " + anyContent.toString());
 		inputArgs.set_any(new MessageElement[]{anyContent});
 		input.setBpelDoc(bpelProcess);
 		input.setInputArgs(inputArgs);

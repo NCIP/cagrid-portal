@@ -21,9 +21,6 @@ import gov.nih.nci.cagrid.workflow.wms.utils.Base64;
 import AeAdminServices.BpelEngineAdminLocator;
 import AeAdminServices.RemoteDebugSoapBindingStub;
 
-import org.globus.wsrf.utils.AnyHelper;
-import org.w3c.dom.Element;
-
 public class ActiveBPELAdapter {
 	//TODO: Read this from service config.
 	protected static  String abAdminUrl = "http://localhost:8080/active-bpel/services/BpelEngineAdmin";
@@ -51,9 +48,6 @@ public class ActiveBPELAdapter {
 	
 	public static WMSOutputType invokeProcess(String partnerLinkName, WMSInputType wmsInput) throws Exception {
 		String serviceUrl = abServiceRoot + partnerLinkName;
-		System.out.println("ServiceURL:" + serviceUrl);
-		
-		//String output = SOAPClient.invokeStat(serviceUrl, message);
 		return callService(serviceUrl, wmsInput);
 	}
 	
@@ -81,9 +75,4 @@ public class ActiveBPELAdapter {
 		output.setOutputType(outputType);
 		return output;
 	}
-	
-	public static void main(String args[]) throws Exception {
-		
-	}
-
 }
