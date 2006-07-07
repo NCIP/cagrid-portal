@@ -236,6 +236,7 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 		try {
 			qpClass = getQueryProcessorClass();
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			PortalUtils.showErrorMessage("Error obtaining query processor class: " + ex.getMessage(), ex);
 			return;
 		}
@@ -243,9 +244,10 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 		try {
 			processor = (CQLQueryProcessor) qpClass.newInstance();
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			PortalUtils.showErrorMessage("Error getting an instance of query processor class: " + ex.getMessage(), ex);
 			return;
-		}		
+		}
 		Map requiredParams = processor.getRequiredParameters();
 		
 		// get any properties currently defined in the service
