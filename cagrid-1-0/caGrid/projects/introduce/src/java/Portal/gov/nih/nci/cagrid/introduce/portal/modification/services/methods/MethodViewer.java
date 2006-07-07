@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -41,8 +42,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
 import javax.xml.namespace.QName;
 
@@ -62,7 +65,7 @@ import org.projectmobius.portal.PortalResourceManager;
  */
 public class MethodViewer extends GridPortalBaseFrame {
 
-	MethodType method;
+	private MethodType method;
 
 	private JPanel mainPanel = null;
 
@@ -73,10 +76,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JScrollPane outputTypejScrollPane = null;
 
 	private OutputTypeTable outputTypeTable = null;
-
-	private JPanel inputPanel = null;
-
-	private JPanel outputTypePanel = null;
 
 	private JPanel buttonPanel = null;
 
@@ -140,12 +139,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JPanel inputTableControlsPanel = null;
 
-	private JLabel upButtonLabel = null;
-
-	private JLabel downButtonLabel = null;
-
-	private JPanel inputTableControlsPanel1 = null;
-
 	private JLabel upLabel = null;
 
 	private JLabel downLabel = null;
@@ -188,6 +181,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JLabel providerClassnameLabel = null;
 
+	private JSplitPane inputParamsSplitPane = null;
+
+	private JSplitPane outputTypeSplitPane = null;
+
 
 	public MethodViewer(MethodType method, ServiceInformation info) {
 		this.info = info;
@@ -200,6 +197,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private void initialize() {
 		this.setContentPane(getMainPanel());
 		this.setTitle("Build/Modify Operation");
+		this.setSize(new java.awt.Dimension(406,354));
 		this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 	}
 
@@ -248,8 +246,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JScrollPane getInputParamScrollPanel() {
 		if (inputParamScrollPanel == null) {
 			inputParamScrollPanel = new JScrollPane();
-			inputParamScrollPanel.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-			inputParamScrollPanel.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			inputParamScrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+			inputParamScrollPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			inputParamScrollPanel.setViewportView(getInputParamTable());
 		}
 		return inputParamScrollPanel;
@@ -277,8 +275,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JScrollPane getOutputTypejScrollPane() {
 		if (outputTypejScrollPane == null) {
 			outputTypejScrollPane = new JScrollPane();
-			outputTypejScrollPane.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-			outputTypejScrollPane.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			outputTypejScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+			outputTypejScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			outputTypejScrollPane.setViewportView(getOutputTypeTable());
 		}
 		return outputTypejScrollPane;
@@ -295,70 +293,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			outputTypeTable = new OutputTypeTable(this.method);
 		}
 		return outputTypeTable;
-	}
-
-
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getInputPanel() {
-		if (inputPanel == null) {
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints8.gridy = 0;
-			gridBagConstraints8.weightx = 1.0D;
-			gridBagConstraints8.weighty = 1.0D;
-			gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints8.gridx = 2;
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints7.gridx = 0;
-			gridBagConstraints7.gridy = 0;
-			gridBagConstraints7.weightx = 1.0D;
-			gridBagConstraints7.weighty = 1.0D;
-			gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
-			inputPanel = new JPanel();
-			inputPanel.setLayout(new GridBagLayout());
-			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input Parameters",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
-			inputPanel.add(getInputNamespacesPanel(), gridBagConstraints7);
-			inputPanel.add(getInputTypesTablePanel(), gridBagConstraints8);
-		}
-		return inputPanel;
-	}
-
-
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getOutputTypePanel() {
-		if (outputTypePanel == null) {
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.gridx = 1;
-			gridBagConstraints16.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints16.weighty = 1.0D;
-			gridBagConstraints16.weightx = 1.0D;
-			gridBagConstraints16.gridy = 0;
-			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			gridBagConstraints17.gridx = 0;
-			gridBagConstraints17.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints17.weightx = 1.0D;
-			gridBagConstraints17.weighty = 1.0D;
-			gridBagConstraints17.gridy = 0;
-			outputTypePanel = new JPanel();
-			outputTypePanel.setLayout(new GridBagLayout());
-			outputTypePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Output Type",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
-			outputTypePanel.add(getOutputNamespacePanel(), gridBagConstraints17);
-			outputTypePanel.add(getOutputTypesTablePanel(), gridBagConstraints16);
-		}
-		return outputTypePanel;
 	}
 
 
@@ -488,7 +422,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getAddInputParamButton() {
 		if (addInputParamButton == null) {
-			addInputParamButton = new JButton(IntroduceLookAndFeel.getAddIcon());
+			addInputParamButton = new JButton(PortalLookAndFeel.getAddIcon());
 			addInputParamButton.setText("Add");
 			addInputParamButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -538,7 +472,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			namePanel.setLayout(new GridBagLayout());
 			namePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Method Properties",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints2.gridx = 1;
 			gridBagConstraints2.gridheight = 2;
 			gridBagConstraints2.gridwidth = 1;
@@ -577,7 +511,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getRemoveButton() {
 		if (removeButton == null) {
-			removeButton = new JButton(IntroduceLookAndFeel.getRemoveIcon());
+			removeButton = new JButton(PortalLookAndFeel.getRemoveIcon());
 			removeButton.setText("Remove");
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -590,16 +524,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			});
 		}
 		return removeButton;
-	}
-
-
-	public void performModify(java.awt.event.ActionEvent e) {
-		try {
-			// getInputParamTable().modifySelectedRow(getDiscoveryPanel().createInput());
-		} catch (Exception e1) {
-			PortalUtils.showErrorMessage("Please select a parameter to edit.");
-		}
-		paint(getGraphics());
 	}
 
 
@@ -632,7 +556,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					dispose();
 				}
 			});
-			cancelButton.setIcon(IntroduceLookAndFeel.getCloseIcon());
+			cancelButton.setIcon(PortalLookAndFeel.getCloseIcon());
 		}
 		return cancelButton;
 	}
@@ -664,7 +588,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			exceptionsPanel.setLayout(new GridBagLayout());
 			exceptionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Faults",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			exceptionsPanel.add(getExceptionScrollPane(), gridBagConstraints11);
 			exceptionsPanel.add(getExceptionInputPanel(), gridBagConstraints12);
 		}
@@ -680,7 +604,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JScrollPane getExceptionScrollPane() {
 		if (exceptionScrollPane == null) {
 			exceptionScrollPane = new JScrollPane();
-			exceptionScrollPane.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			exceptionScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			exceptionScrollPane.setViewportView(getExceptionsTable());
 		}
 		return exceptionScrollPane;
@@ -743,7 +667,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getAddExceptionButton() {
 		if (addExceptionButton == null) {
-			addExceptionButton = new JButton(IntroduceLookAndFeel.getAddIcon());
+			addExceptionButton = new JButton(PortalLookAndFeel.getAddIcon());
 			addExceptionButton.setText("Add");
 			addExceptionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -767,7 +691,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getRemoveExceptionButton() {
 		if (removeExceptionButton == null) {
-			removeExceptionButton = new JButton(IntroduceLookAndFeel.getRemoveIcon());
+			removeExceptionButton = new JButton(PortalLookAndFeel.getRemoveIcon());
 			removeExceptionButton.setText("Remove");
 			removeExceptionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -832,7 +756,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 				this.method.getMethodSecurity());
 			securityContainerPanel.setBorder(BorderFactory.createTitledBorder(null,
 				"Method Level Security Configuration", TitledBorder.DEFAULT_JUSTIFICATION,
-				TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 		}
 		return securityContainerPanel;
 	}
@@ -846,8 +770,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTabbedPane getConfigureTabbedPane() {
 		if (configureTabbedPane == null) {
 			configureTabbedPane = new JTabbedPane();
-			configureTabbedPane.addTab("Inputs", null, getInputPanel(), null);
-			configureTabbedPane.addTab("Output", null, getOutputTypePanel(), null);
+			configureTabbedPane.addTab("Inputs", null, getInputParamsSplitPane(), null);
+			configureTabbedPane.addTab("Output", null, getOutputTypeSplitPane(), null);
 			configureTabbedPane.addTab("Faults", null, getExceptionsPanel(), null);
 
 		}
@@ -898,7 +822,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JScrollPane getInputNamespaceScrollPane() {
 		if (inputNamespaceScrollPane == null) {
 			inputNamespaceScrollPane = new JScrollPane();
-			inputNamespaceScrollPane.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			inputNamespaceScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			inputNamespaceScrollPane.setViewportView(getInputNamespaceTypesJTree());
 		}
 		return inputNamespaceScrollPane;
@@ -1023,7 +947,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			outputNamespacesTypeScrollPane = new JScrollPane();
 			outputNamespacesTypeScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Types",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			outputNamespacesTypeScrollPane.setViewportView(getOutputNamespacesJTree());
 		}
 		return outputNamespacesTypeScrollPane;
@@ -1149,7 +1073,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			inputTypesTablePanel.setLayout(new GridBagLayout());
 			inputTypesTablePanel.add(getInputParamScrollPanel(), gridBagConstraints21);
 			inputTypesTablePanel.add(getInputButtonPanel(), gridBagConstraints14);
-			inputTypesTablePanel.add(getInputTableControlsPanel1(), gridBagConstraints18);
+			inputTypesTablePanel.add(getInputTableControlsPanel(), gridBagConstraints18);
 		}
 		return inputTypesTablePanel;
 	}
@@ -1160,8 +1084,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getInputTableControlsPanel1() {
-		if (inputTableControlsPanel1 == null) {
+	private JPanel getInputTableControlsPanel() {
+		if (inputTableControlsPanel == null) {
 			GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
 			gridBagConstraints25.gridx = 0;
 			gridBagConstraints25.gridy = 0;
@@ -1196,12 +1120,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 				}
 
 			});
-			inputTableControlsPanel1 = new JPanel();
-			inputTableControlsPanel1.setLayout(new GridBagLayout());
-			inputTableControlsPanel1.add(upLabel, gridBagConstraints25);
-			inputTableControlsPanel1.add(downLabel, gridBagConstraints24);
+			inputTableControlsPanel = new JPanel();
+			inputTableControlsPanel.setLayout(new GridBagLayout());
+			inputTableControlsPanel.add(upLabel, gridBagConstraints25);
+			inputTableControlsPanel.add(downLabel, gridBagConstraints24);
 		}
-		return inputTableControlsPanel1;
+		return inputTableControlsPanel;
 	}
 
 
@@ -1495,7 +1419,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			servicesTypeScrollPane = new JScrollPane();
 			servicesTypeScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Client Handle Types",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			servicesTypeScrollPane.setViewportView(getServicesTypeTable());
 		}
 		return servicesTypeScrollPane;
@@ -1643,6 +1567,46 @@ public class MethodViewer extends GridPortalBaseFrame {
 			providerInformationPanel.add(getProviderClassnameTextField(), gridBagConstraints37);
 		}
 		return providerInformationPanel;
+	}
+
+
+	/**
+	 * This method initializes jSplitPane	
+	 * 	
+	 * @return javax.swing.JSplitPane	
+	 */
+	private JSplitPane getInputParamsSplitPane() {
+		if (inputParamsSplitPane == null) {
+			inputParamsSplitPane = new JSplitPane();
+			inputParamsSplitPane.setSize(new java.awt.Dimension(173,68));
+			inputParamsSplitPane.setOneTouchExpandable(true);
+			inputParamsSplitPane.setLeftComponent(getInputNamespacesPanel());
+			inputParamsSplitPane.setRightComponent(getInputTypesTablePanel());
+			inputParamsSplitPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Input Parameters", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+		}
+		return inputParamsSplitPane;
+	}
+
+
+	/**
+	 * This method initializes jSplitPane	
+	 * 	
+	 * @return javax.swing.JSplitPane	
+	 */
+	private JSplitPane getOutputTypeSplitPane() {
+		if (outputTypeSplitPane == null) {
+			outputTypeSplitPane = new JSplitPane();
+			outputTypeSplitPane.setSize(new java.awt.Dimension(192,90));
+			outputTypeSplitPane.setOneTouchExpandable(true);
+			outputTypeSplitPane.setLeftComponent(getOutputNamespacePanel());
+			outputTypeSplitPane.setRightComponent(getOutputTypesTablePanel());
+			outputTypeSplitPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Output Type",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+		}
+		return outputTypeSplitPane;
 	}
 } // @jve:decl-index=0:visual-constraint="4,12"
 
