@@ -1,4 +1,5 @@
 To Do:
+Modification viewer: any tabs with the namespaces tree need to use a JSplitPane.
 
 should generated two different interfaces in common..  (what is the use.  The server only implements non "provided" methods.  Has nothing to do with "importing")
   - one, for all the non-imported operations that the service implements
