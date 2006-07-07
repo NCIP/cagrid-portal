@@ -21,125 +21,79 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.xml.namespace.QName;
+import javax.swing.JSplitPane;
 
 public class ModifyResourcePropertiesPanel extends JPanel {
-
+	
 	private ResourcePropertiesListType properties;
-
+	
 	private NamespacesType namespaces;
-
-	private JPanel mainPanel = null;
-
-	private JPanel namespacesPanel = null;
-
+	
 	private JPanel resourcePropertiesPanel = null;
-
+	
 	private JScrollPane namespacesScrollPane = null;
-
+	
 	private JScrollPane resourcePropertiesScrollPane = null;
-
+	
 	private NamespacesJTree namespacesJTree = null;
-
+	
 	private ResourcePropertyTable resourcePropertiesTable = null;
-
+	
 	private JPanel buttonsPanel = null;
-
+	
 	private JButton addResourcePropertyButton = null;
-
+	
 	private JButton removeResourcePropertyButton = null;
-
+	
+	private JSplitPane mainSplitPane = null;
+	
 	private boolean showW3Cnamespaces;
-
+	
 	public ModifyResourcePropertiesPanel(ResourcePropertiesListType properties,
-			NamespacesType namespaces, boolean showW3Cnamespaces) {
+		NamespacesType namespaces, boolean showW3Cnamespaces) {
 		this.properties = properties;
 		this.namespaces = namespaces;
 		this.showW3Cnamespaces = showW3Cnamespaces;
 		initialize();
 	}
-
+	
 	private void initialize() {
-		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-		gridBagConstraints11.insets = new java.awt.Insets(0, 0, 0, 0);
-		gridBagConstraints11.gridy = 0;
-		gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraints11.weightx = 1.0D;
-		gridBagConstraints11.weighty = 1.0D;
-		gridBagConstraints11.gridx = 0;
+		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+		gridBagConstraints2.gridx = 0;
+		gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints2.gridy = 1;
+		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+		gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints1.gridy = 0;
+		gridBagConstraints1.weightx = 1.0;
+		gridBagConstraints1.weighty = 1.0D;
+		gridBagConstraints1.gridx = 0;
 		this.setLayout(new GridBagLayout());
-		this.add(getMainPanel(), gridBagConstraints11);
+		this.setSize(new java.awt.Dimension(314,211));
+		this.add(getMainSplitPane(), gridBagConstraints1);
+		this.add(getButtonsPanel(), gridBagConstraints2);	
 	}
-
+	
+	
 	public void reInitialize(ResourcePropertiesListType props, NamespacesType ns) {
 		this.properties = props;
 		this.namespaces = ns;
 		this.namespacesJTree.setNamespaces(ns);
 		this.resourcePropertiesTable.setResourceProperties(props);
 	}
-
+	
+	
 	public ResourcePropertyType[] getConfiguredResourceProperties()
-			throws Exception {
+	throws Exception {
 		int propertyCount = getResourcePropertiesTable().getRowCount();
 		ResourcePropertyType[] configuredProperties = new ResourcePropertyType[propertyCount];
 		for (int i = 0; i < propertyCount; i++) {
-			configuredProperties[i] = getResourcePropertiesTable()
-					.getRowData(i);
+			configuredProperties[i] = getResourcePropertiesTable().getRowData(i);
 		}
 		return configuredProperties;
 	}
-
-	/**
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getMainPanel() {
-		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-			gridBagConstraints9.gridx = 0;
-			gridBagConstraints9.gridwidth = 2;
-			gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints9.gridy = 1;
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.gridx = 0;
-			gridBagConstraints6.weightx = 0.3D;
-			gridBagConstraints6.weighty = 0.3D;
-			gridBagConstraints6.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints6.gridy = 0;
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.gridx = 1;
-			gridBagConstraints5.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints5.weightx = 0.8D;
-			gridBagConstraints5.weighty = 0.8D;
-			gridBagConstraints5.gridy = 0;
-			mainPanel = new JPanel();
-			mainPanel.setLayout(new GridBagLayout());
-			mainPanel.add(getResourcePropertiesPanel(), gridBagConstraints5);
-			mainPanel.add(getNamespacesPanel(), gridBagConstraints6);
-			mainPanel.add(getButtonsPanel(), gridBagConstraints9);
-		}
-		return mainPanel;
-	}
-
-	/**
-	 * This method initializes namespacesPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getNamespacesPanel() {
-		if (namespacesPanel == null) {
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints3.gridx = 0;
-			gridBagConstraints3.gridy = 0;
-			gridBagConstraints3.weightx = 1.0;
-			gridBagConstraints3.weighty = 1.0;
-			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-			namespacesPanel = new JPanel();
-			namespacesPanel.setLayout(new GridBagLayout());
-			namespacesPanel.add(getNamespacesScrollPane(), gridBagConstraints3);
-		}
-		return namespacesPanel;
-	}
-
+	
+	
 	/**
 	 * This method initializes resourcePropertiesPanel
 	 * 
@@ -157,11 +111,12 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			resourcePropertiesPanel = new JPanel();
 			resourcePropertiesPanel.setLayout(new GridBagLayout());
 			resourcePropertiesPanel.add(getResourcePropertiesScrollPane(),
-					gridBagConstraints4);
+				gridBagConstraints4);
 		}
 		return resourcePropertiesPanel;
 	}
-
+	
+	
 	/**
 	 * This method initializes namespacesScrollPane
 	 * 
@@ -174,7 +129,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		}
 		return namespacesScrollPane;
 	}
-
+	
+	
 	/**
 	 * This method initializes resourcePropertiesScrollPane
 	 * 
@@ -184,11 +140,12 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		if (resourcePropertiesScrollPane == null) {
 			resourcePropertiesScrollPane = new JScrollPane();
 			resourcePropertiesScrollPane
-					.setViewportView(getResourcePropertiesTable());
+				.setViewportView(getResourcePropertiesTable());
 		}
 		return resourcePropertiesScrollPane;
 	}
-
+	
+	
 	/**
 	 * This method initializes namespacesJTree
 	 * 
@@ -196,22 +153,20 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	 */
 	private NamespacesJTree getNamespacesJTree() {
 		if (namespacesJTree == null) {
-			namespacesJTree = new NamespacesJTree(this.namespaces,
-					showW3Cnamespaces);
-			namespacesJTree.addMouseListener(new MouseAdapter() {
-
+			namespacesJTree = new NamespacesJTree(this.namespaces, showW3Cnamespaces);
+			namespacesJTree.addMouseListener(new MouseAdapter() {				
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
 					if (e.getClickCount() == 2) {
 						addResourceProperty();
 					}
-				}
-
+				}				
 			});
 		}
 		return namespacesJTree;
 	}
-
+	
+	
 	/**
 	 * This method initializes resourcePropertiesTable
 	 * 
@@ -223,7 +178,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		}
 		return resourcePropertiesTable;
 	}
-
+	
+	
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -248,7 +204,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		}
 		return buttonsPanel;
 	}
-
+	
+	
 	/**
 	 * This method initializes jButton
 	 * 
@@ -260,27 +217,28 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			addResourcePropertyButton.setToolTipText("add new operation");
 			addResourcePropertyButton.setText("Add");
 			addResourcePropertyButton.setIcon(PortalLookAndFeel.getAddIcon());
-			addResourcePropertyButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							addResourceProperty();
-						}
-					});
+			addResourcePropertyButton.addActionListener(
+				new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					addResourceProperty();
+				}
+			});
 		}
 		return addResourcePropertyButton;
 	}
-
+	
+	
 	private void addResourceProperty() {
 		if (getNamespacesJTree().getCurrentNode() instanceof SchemaElementTypeTreeNode) {
 			NamespaceType nt = ((NamespaceType) ((NamespaceTypeTreeNode) getNamespacesJTree()
-					.getCurrentNode().getParent()).getUserObject());
+				.getCurrentNode().getParent()).getUserObject());
 			SchemaElementType st = ((SchemaElementType) ((SchemaElementTypeTreeNode) getNamespacesJTree()
-					.getCurrentNode()).getUserObject());
+				.getCurrentNode()).getUserObject());
 			ResourcePropertyType metadata = new ResourcePropertyType();
 			metadata.setQName(new QName(nt.getNamespace(), st.getType()));
 			metadata.setPopulateFromFile(false);
 			metadata.setRegister(false);
-
+			
 			if (properties != null && properties.getResourceProperty() != null) {
 				for (int i = 0; i < properties.getResourceProperty().length; i++) {
 					ResourcePropertyType rp = properties.getResourceProperty(i);
@@ -289,9 +247,9 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 					}
 				}
 			}
-
+			
 			getResourcePropertiesTable().addRow(metadata);
-
+			
 			// add new metadata to array in bean
 			// this seems to be a wierd way be adding things....
 			ResourcePropertyType[] metadatas;
@@ -300,17 +258,17 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 				newLength = properties.getResourceProperty().length + 1;
 				metadatas = new ResourcePropertyType[newLength];
 				System.arraycopy(properties.getResourceProperty(), 0,
-						metadatas, 0, properties.getResourceProperty().length);
+					metadatas, 0, properties.getResourceProperty().length);
 			} else {
 				newLength = 1;
 				metadatas = new ResourcePropertyType[newLength];
 			}
 			metadatas[newLength - 1] = metadata;
-			properties.setResourceProperty(metadatas);
-
+			properties.setResourceProperty(metadatas);			
 		}
 	}
-
+	
+	
 	/**
 	 * This method initializes jButton2
 	 * 
@@ -319,54 +277,60 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	private JButton getRemoveButton() {
 		if (removeResourcePropertyButton == null) {
 			removeResourcePropertyButton = new JButton();
-			removeResourcePropertyButton
-					.setToolTipText("remove selected operation");
+			removeResourcePropertyButton.setToolTipText("remove selected operation");
 			removeResourcePropertyButton.setText("Remove");
-			removeResourcePropertyButton.setIcon(PortalLookAndFeel
-					.getRemoveIcon());
-
-			removeResourcePropertyButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						// remove from table
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							ResourcePropertyType resource = null;
-							try {
-								resource = getResourcePropertiesTable()
-										.getRowData(
-												getResourcePropertiesTable()
-														.getSelectedRow());
-							} catch (Exception e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-							int row = getResourcePropertiesTable()
-									.getSelectedRow();
-							if ((row < 0)
-									|| (row >= getResourcePropertiesTable()
-											.getRowCount())) {
-								PortalUtils
-										.showErrorMessage("Please select a metdata type to remove.");
-								return;
-							}
-							getResourcePropertiesTable().removeRow(
-									getResourcePropertiesTable()
-											.getSelectedRow());
-							// remove from resource properties list
-							ResourcePropertyType[] metadatas;
-							int newLength = properties.getResourceProperty().length - 1;
-							metadatas = new ResourcePropertyType[newLength];
-							int resourcesCount = 0;
-							for (int i = 0; i < newLength; i++) {
-								ResourcePropertyType oldResource = properties
-										.getResourceProperty(i);
-								if (!resource.equals(oldResource)) {
-									metadatas[resourcesCount++] = oldResource;
-								}
-							}
-							properties.setResourceProperty(metadatas);
+			removeResourcePropertyButton.setIcon(PortalLookAndFeel.getRemoveIcon());			
+			removeResourcePropertyButton.addActionListener(
+				new java.awt.event.ActionListener() {
+				// remove from table
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					ResourcePropertyType resource = null;
+					try {
+						resource = getResourcePropertiesTable().getRowData(
+							getResourcePropertiesTable().getSelectedRow());
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					int row = getResourcePropertiesTable().getSelectedRow();
+					if ((row < 0)
+						|| (row >= getResourcePropertiesTable().getRowCount())) {
+						PortalUtils.showErrorMessage("Please select a metdata type to remove.");
+						return;
+					}
+					getResourcePropertiesTable().removeRow(
+						getResourcePropertiesTable().getSelectedRow());
+					// remove from resource properties list
+					ResourcePropertyType[] metadatas;
+					int newLength = properties.getResourceProperty().length - 1;
+					metadatas = new ResourcePropertyType[newLength];
+					int resourcesCount = 0;
+					for (int i = 0; i < newLength; i++) {
+						ResourcePropertyType oldResource = properties.getResourceProperty(i);
+						if (!resource.equals(oldResource)) {
+							metadatas[resourcesCount++] = oldResource;
 						}
-					});
+					}
+					properties.setResourceProperty(metadatas);
+				}
+			});
 		}
 		return removeResourcePropertyButton;
+	}
+	
+	
+	/**
+	 * This method initializes jSplitPane	
+	 * 	
+	 * @return javax.swing.JSplitPane	
+	 */
+	private JSplitPane getMainSplitPane() {
+		if (mainSplitPane == null) {
+			mainSplitPane = new JSplitPane();
+			mainSplitPane.setOneTouchExpandable(true);
+			mainSplitPane.setLeftComponent(getNamespacesScrollPane());
+			mainSplitPane.setRightComponent(getResourcePropertiesPanel());
+		}
+		return mainSplitPane;
 	}
 }

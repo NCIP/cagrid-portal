@@ -72,6 +72,7 @@ import javax.xml.namespace.QName;
 
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
+import javax.swing.JSplitPane;
 
 
 /**
@@ -134,11 +135,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 	private JTextField saveLocation = null;
 
-	private JPanel namespacePanel = null;
-
 	private JPanel discoveryPanel = null;
-
-	private JPanel namespaceConfigurationPanel = null;
 
 	private JPanel discoveryButtonPanel = null;
 
@@ -194,10 +191,9 @@ public class ModificationViewer extends GridPortalComponent {
 
 	private ServicesJTree resourcesJTree = null;
 
-	private JPanel resourcePropertiesPanel = null;
-
 	private ModifyResourcePropertiesPanel rpHolderPanel = null;
 
+	private JSplitPane typesSplitPane = null;
 
 	/**
 	 * This is the default constructor
@@ -418,7 +414,6 @@ public class ModificationViewer extends GridPortalComponent {
 		if (cancel == null) {
 			cancel = new JButton(PortalLookAndFeel.getCloseIcon());
 			cancel.setText("Cancel");
-			// cancel.setIcon(GumsLookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -705,15 +700,11 @@ public class ModificationViewer extends GridPortalComponent {
 							ex.printStackTrace();
 						}
 						getMethodsTable().sort();
-
 					}
-
 				});
 
 				th.start();
-
 			}
-
 		});
 	}
 
@@ -783,13 +774,11 @@ public class ModificationViewer extends GridPortalComponent {
 			undoButton.setToolTipText("roll back to last save state");
 			undoButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-
 					int decision = JOptionPane.showConfirmDialog(ModificationViewer.this,
 						"Are you sure you wish to roll back.");
 					if (decision == JOptionPane.OK_OPTION) {
 						BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance()
 							.getGridPortal(), "Undo") {
-
 							public void process() {
 								System.out.println("Loading in last known save for this project");
 								try {
@@ -811,9 +800,7 @@ public class ModificationViewer extends GridPortalComponent {
 										"Unable to roll back, there may be no older versions available");
 									return;
 								}
-
 							}
-
 						};
 						Thread th = new Thread(r);
 						th.start();
@@ -833,9 +820,9 @@ public class ModificationViewer extends GridPortalComponent {
 	private JTabbedPane getContentTabbedPane() {
 		if (contentTabbedPane == null) {
 			contentTabbedPane = new JTabbedPane();
-			contentTabbedPane.addTab("Types", null, getNamespacePanel(), null);
+			contentTabbedPane.addTab("Types", null, getTypesSplitPane(), null);
 			contentTabbedPane.addTab("Operations", null, getMethodsPanel(), null);
-			contentTabbedPane.addTab("Metadata", null, getResourcePropertiesPanel(), null);
+			contentTabbedPane.addTab("Metadata", null, getRpHolderPanel(), null);
 			contentTabbedPane.addTab("Service Properties", null, getServicePropertiesPanel(), null);
 			contentTabbedPane.addTab("Service Contexts", null, getResourceesTabbedPanel(), null);
 			contentTabbedPane.addChangeListener(new ChangeListener() {
@@ -980,35 +967,6 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes namespacePanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getNamespacePanel() {
-		if (namespacePanel == null) {
-			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			gridBagConstraints14.gridx = 1;
-			gridBagConstraints14.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints14.weighty = 0.8D;
-			gridBagConstraints14.weightx = 0.8D;
-			gridBagConstraints14.gridy = 0;
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.gridx = 0;
-			gridBagConstraints12.ipady = 0;
-			gridBagConstraints12.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints12.weighty = 0.5D;
-			gridBagConstraints12.weightx = 0.5D;
-			gridBagConstraints12.gridy = 0;
-			namespacePanel = new JPanel();
-			namespacePanel.setLayout(new GridBagLayout());
-			namespacePanel.add(getNamespaceConfigurationPanel(), gridBagConstraints12);
-			namespacePanel.add(getNamespaceConfPanel(), gridBagConstraints14);
-		}
-		return namespacePanel;
-	}
-
-
-	/**
 	 * This method initializes discoveryPanel
 	 * 
 	 * @return javax.swing.JPanel
@@ -1038,29 +996,6 @@ public class ModificationViewer extends GridPortalComponent {
 
 		}
 		return discoveryPanel;
-	}
-
-
-	/**
-	 * This method initializes namespaceConfigurationPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getNamespaceConfigurationPanel() {
-		if (namespaceConfigurationPanel == null) {
-			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
-			gridBagConstraints29.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints29.weighty = 1.0D;
-			gridBagConstraints29.gridx = 0;
-			gridBagConstraints29.gridy = 0;
-			gridBagConstraints29.gridwidth = 1;
-			gridBagConstraints29.gridheight = 2;
-			gridBagConstraints29.weightx = 1.0D;
-			namespaceConfigurationPanel = new JPanel();
-			namespaceConfigurationPanel.setLayout(new GridBagLayout());
-			namespaceConfigurationPanel.add(getNamespaceTableScrollPane(), gridBagConstraints29);
-		}
-		return namespaceConfigurationPanel;
 	}
 
 
@@ -1706,27 +1641,6 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	/**
-	 * This method initializes resourcePropertiesPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getResourcePropertiesPanel() {
-		if (resourcePropertiesPanel == null) {
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.weightx = 1.0D;
-			gridBagConstraints1.weighty = 1.0D;
-			gridBagConstraints1.gridx = 0;
-			resourcePropertiesPanel = new JPanel();
-			resourcePropertiesPanel.setLayout(new GridBagLayout());
-			resourcePropertiesPanel.add(getRpHolderPanel(), gridBagConstraints1);
-		}
-		return resourcePropertiesPanel;
-	}
-
-
-	/**
 	 * This method initializes rpHolderPanel
 	 * 
 	 * @return javax.swing.JPanel
@@ -1743,4 +1657,20 @@ public class ModificationViewer extends GridPortalComponent {
 		return rpHolderPanel;
 	}
 
-} // @jve:decl-index=0:visual-constraint="10,10"
+
+	/**
+	 * This method initializes jSplitPane	
+	 * 	
+	 * @return javax.swing.JSplitPane	
+	 */
+	private JSplitPane getTypesSplitPane() {
+		if (typesSplitPane == null) {
+			typesSplitPane = new JSplitPane();
+			typesSplitPane.setOneTouchExpandable(true);
+			typesSplitPane.setLeftComponent(getNamespaceTableScrollPane());
+			typesSplitPane.setRightComponent(getNamespaceConfPanel());
+			typesSplitPane.setDividerLocation(0.5d);
+		}
+		return typesSplitPane;
+	}
+}
