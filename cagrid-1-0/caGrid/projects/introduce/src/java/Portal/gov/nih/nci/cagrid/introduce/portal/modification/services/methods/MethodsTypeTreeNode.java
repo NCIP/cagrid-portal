@@ -75,7 +75,7 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
 	public MethodsTypeTreeNode(MethodsType methods, DefaultTreeModel model, ServiceInformation info) {
 		super();
 		this.methods = methods;
-		this.setUserObject("Methods");
+		this.setUserObject("Operations");
 		this.info = info;
 		this.menu = new MethodsPopUpMenu(this);
 		this.model = model;

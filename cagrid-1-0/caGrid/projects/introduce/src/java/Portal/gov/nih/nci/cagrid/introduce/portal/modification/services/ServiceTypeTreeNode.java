@@ -84,6 +84,10 @@ public class ServiceTypeTreeNode extends DefaultMutableTreeNode {
 	public ServiceInformation getInfo(){
 		return this.info;
 	}
+	
+	public DefaultTreeModel getModel(){
+		return model;
+	}
 
 
 	private void initialize() {

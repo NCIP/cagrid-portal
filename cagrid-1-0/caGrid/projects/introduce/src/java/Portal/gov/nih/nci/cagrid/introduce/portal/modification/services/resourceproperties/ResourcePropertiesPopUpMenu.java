@@ -52,9 +52,9 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
 					super.mousePressed(e);
 					ModifyResourcePropertiesComponent comp = new ModifyResourcePropertiesComponent(node
 						.getResourceProperties(), node.getInfo().getNamespaces(), true);
+					comp.setSize(600,300);
 					PortalUtils.centerWindow(comp);
 					comp.setVisible(true);
-					node.reInitialize(node.getResourceProperties());
 				}
 
 			});

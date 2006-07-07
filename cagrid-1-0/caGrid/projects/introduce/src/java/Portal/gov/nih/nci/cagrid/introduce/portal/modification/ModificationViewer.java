@@ -67,6 +67,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.namespace.QName;
 
@@ -77,7 +79,6 @@ import org.projectmobius.portal.PortalResourceManager;
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  */
 public class ModificationViewer extends GridPortalComponent {
 
@@ -689,14 +690,14 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		// TODO: check this.... setting this for now......
 		MethodViewer mv = new MethodViewer(method, info);
-		
+
 		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(mv);
-		//TODO: total hack for now to avoid tryin sort action listerners and
-		//      having to pass the table into the method modification viewer.
+		// TODO: total hack for now to avoid tryin sort action listerners and
+		// having to pass the table into the method modification viewer.
 		mv.getDoneButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Thread th = new Thread(new Runnable() {
-				
+
 					public void run() {
 						try {
 							Thread.sleep(100);
@@ -706,15 +707,15 @@ public class ModificationViewer extends GridPortalComponent {
 							ex.printStackTrace();
 						}
 						getMethodsTable().sort();
-				
+
 					}
-				
+
 				});
-				
+
 				th.start();
-				
+
 			}
-		
+
 		});
 	}
 
@@ -841,6 +842,7 @@ public class ModificationViewer extends GridPortalComponent {
 			contentTabbedPane.addTab("Service Contexts", null, getResourceesTabbedPanel(), null);
 			contentTabbedPane.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
+					System.out.println("Changing state in modification viewer");
 					getNamespaceJTree().setNamespaces(info.getNamespaces());
 					getResourcesJTree().setServices(info.getServices());
 					getMethodsTable().clearTable();
@@ -1363,7 +1365,7 @@ public class ModificationViewer extends GridPortalComponent {
 						loadServiceProps();
 						setLastSaved(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
 						this.setProgressText("");
-						
+
 						// reinitialize the GUI with changes from saved model
 						initialize();
 					} catch (Exception e1) {
@@ -1694,6 +1696,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (resourcesJTree == null) {
 			resourcesJTree = new ServicesJTree(info.getServices(), info);
 			resourcesJTree.addFocusListener(new FocusAdapter() {
+
 				public void focusGained(FocusEvent e) {
 					super.focusGained(e);
 					getResourcesJTree().setServices(info.getServices());

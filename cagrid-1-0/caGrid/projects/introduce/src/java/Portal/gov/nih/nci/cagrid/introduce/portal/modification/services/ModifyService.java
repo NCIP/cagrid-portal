@@ -10,18 +10,25 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 import org.projectmobius.portal.GridPortalComponent;
 
 
-public class ModifyService extends GridPortalComponent {
+public class ModifyService extends JDialog {
 
 	private SpecificServiceInformation service;
 
@@ -48,14 +55,17 @@ public class ModifyService extends GridPortalComponent {
 	private JLabel servicePackageNameLabel = null;
 
 	private JTextField servicePackageNameTextField = null;
+	
+	private ServiceTypeTreeNode node;
 
 
 	/**
 	 * This method initializes
 	 */
-	public ModifyService(SpecificServiceInformation service) {
+	public ModifyService(ServiceTypeTreeNode node, SpecificServiceInformation service) {
 		super();
 		this.service = service;
+		this.node = node;
 		initialize();
 		if (service.getService().getName() != null && service.getService().getName().length() > 0) {
 			getServiceNameTextField().setText(service.getService().getName());
@@ -194,6 +204,8 @@ public class ModifyService extends GridPortalComponent {
 					service.getService().setName(serviceNameTextField.getText());
 					service.getService().setNamespace(namespaceTextField.getText());
 					service.getService().setPackageName(servicePackageNameTextField.getText());
+					node.getModel().nodeStructureChanged(node);
+					node.getModel().nodeChanged(node);
 					dispose();
 				}
 

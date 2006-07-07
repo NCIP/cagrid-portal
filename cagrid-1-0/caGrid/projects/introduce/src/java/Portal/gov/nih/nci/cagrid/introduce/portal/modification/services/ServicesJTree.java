@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.portal.modification.services.resourcepropert
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
@@ -69,12 +71,30 @@ public class ServicesJTree extends JTree {
 	}
 
 
+	public void removeAllNodes(TreeNode node) {
+		if (node != null) {
+			// node is visited exactly once
+			if (!node.equals(this.root)) {
+				((DefaultTreeModel) getModel()).removeNodeFromParent((MutableTreeNode) node);
+			}
+
+			if (node.getChildCount() >= 0) {
+				for (Enumeration e = node.children(); e.hasMoreElements();) {
+					TreeNode n = (TreeNode) e.nextElement();
+					removeAllNodes(n);
+				}
+			}
+		}
+	}
+
+
 	public void setServices(ServicesType ns) {
+		removeAllNodes(root);
+		((DefaultTreeModel) this.getModel()).setRoot(null);
 		this.root = new ServicesTypeTreeNode(info);
-		this.model = new DefaultTreeModel(root, false);
+		((DefaultTreeModel) this.getModel()).setRoot(this.root);
 		this.services = ns;
-		this.root.setServices(this.services, this.model);
-		setModel(model);
+		this.root.setServices(this.services, (DefaultTreeModel) this.getModel());
 		expandAll(true);
 	}
 

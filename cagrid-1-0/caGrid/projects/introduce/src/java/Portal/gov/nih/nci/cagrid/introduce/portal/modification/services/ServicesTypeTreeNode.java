@@ -36,6 +36,10 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode {
 		this.model = model;
 	}
 	
+	public DefaultTreeModel getModel(){
+		return this.model;
+	}
+	
 	public ServiceInformation getInfo(){
 		return this.info;
 	}
@@ -44,11 +48,10 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode {
 		this.model = model;
 		this.services = services;
 		if (services.getService() != null) {
+			//starting from one because we want to skip service 0, service 0 is the main service.
 			for (int i = 1; i < services.getService().length; i++) {
-				//if(!services.getService(i).getName().equals(info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME))){
 					ServiceTypeTreeNode newNode = new ServiceTypeTreeNode(services.getService(i),info,model);
 					model.insertNodeInto(newNode, this, this.getChildCount());
-				//}
 			}
 		}
 	}
@@ -72,7 +75,7 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode {
 		return this.getUserObject().toString();
 	}
 	
-	public void addService(ServiceType type) {
+	public ServiceTypeTreeNode addService(ServiceType type) {
 			ServiceTypeTreeNode newNode = new ServiceTypeTreeNode(type,info,model);
 			model.insertNodeInto(newNode, this, this.getChildCount());
 			// keep servicestype consistant
@@ -86,6 +89,8 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode {
 			}
 			newServiceTypes[currentLength] = type;
 			services.setService(newServiceTypes);
+			
+			return newNode;
 	}
 	
 	public ServicesPopUpMenu getPopUpMenu(){

@@ -1,8 +1,10 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -72,8 +74,14 @@ public class ServicePopUpMenu extends JPopupMenu {
 
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
-					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-						new ModifyService(new SpecificServiceInformation(node.getInfo(), node.getServiceType())));
+					ModifyService comp = new ModifyService(node, new SpecificServiceInformation(node.getInfo(),
+						node.getServiceType()));
+					// PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+					// new ModifyService(newNode, new
+					// SpecificServiceInformation(node.getInfo(),service)));
+					comp.setSize(new Dimension(500,200));
+					PortalUtils.centerWindow(comp);
+					comp.setVisible(true);
 				}
 
 			});
