@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 
 import java.awt.Component;
 import java.io.BufferedInputStream;
@@ -295,10 +296,12 @@ public class ResourceManager {
 		} else {
 			chooser = new JFileChooser();
 		}
+		
 		chooser.setDialogTitle("Select Directory");
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooser.setMultiSelectionEnabled(false);
+			
 		int returnVal = chooser.showOpenDialog(comp);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			setProperty(ResourceManager.LAST_DIRECTORY, chooser
@@ -342,6 +345,7 @@ public class ResourceManager {
 		chooser.setDialogTitle(title);
 		chooser.setFileFilter(filter);
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		
 		int choice = chooser.showOpenDialog(invoker);
 		if (choice == JFileChooser.APPROVE_OPTION) {
 			File[] files = null;
