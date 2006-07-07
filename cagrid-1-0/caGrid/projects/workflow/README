@@ -1,0 +1,18 @@
+1. check out cagrid 1.0
+2. downloaded activebpel from  http://activebpel.org/download/files/2.1/final/activebpel-2.1-all.tar.gz
+2.1 tar zxf activebpel-2.1-all.tar.gz
+2.2 cd activebpel-2.1
+2.3 run install.sh or install.bat depending on your OS
+3. cd cagrid-1-0/caGrid/projects/workflow
+3.1 Fix the security settings of gridmap file in SecureSample/etc/*.xml 
+4. ant deploy 
+4.1 cd $GLOBUS_LOCATION 
+4.2 run ant -f share/globus_wsrf_common/tomcat/tomcat.xml redeploySecureTomcat -Dtomcat.dir=$CATALINA_HOME/
+5. grid-proxy-init
+6. start tomcat 
+6.1 point your browser to http://localhost:8080/BpelAdmin/config.jsp
+6.1.1 Check Auto create target path for Copy/To: 
+6.1.2 Uncheck Validate Input/Output messages against schema
+6.1.3 click Update
+7. run ant test from cagrid-1-0/caGrid/projects/workflow
+8. Workflows are deployed and executed. You can find status at http://localhost:8080/BpelAdmin
