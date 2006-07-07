@@ -26,6 +26,16 @@ import org.projectmobius.portal.PortalResourceManager;
 
 public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 
+	/**
+	 * Will call the create service engine component to create the base framework for
+	 * the grid service
+	 * 
+	 * @param dir	the path to the location to create the service
+	 * @param service	the name of the service
+	 * @param servicePackage	the package name to use for the created service
+	 * @param serviceNamespace	the namespace to be used for this services wsdl and stubs
+	 * @param extensions a list of strings with the display names of the extensions to be added
+	 */
 	public void createService(final String dir, final String service, final String servicePackage,
 		final String serviceNamespace, final List extensions) {
 		int doIdeleteResult = JOptionPane.OK_OPTION;
