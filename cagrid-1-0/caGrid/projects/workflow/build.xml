@@ -9,6 +9,7 @@
         <ant dir="SampleService2" target="deployGlobus"/>
         <ant dir="SecureSample" target="deployGlobus"/>
         <ant dir="WorkflowManagementService" target="deployGlobus"/>
+        <ant dir="WorkflowManagementService" target="deployGlobusHandler"/>
     </target>
 
     <target name="clean">

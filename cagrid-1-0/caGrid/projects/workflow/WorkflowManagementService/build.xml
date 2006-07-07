@@ -344,11 +344,14 @@
             <classpath refid="service.run.classpath"/>
         </java>
     </target>
+    <target name="deployGlobusHandler" depends="handlerjar" description="This is used to overwrite activebpels' client-config.wsdd with our client-config and deploys the globus authz handler jar and cog-axis.jar into $CATALINA_HOME/shared/lib so workflows invoking secure services work">
+        <copy overwrite="true" todir="${tomcat.dir}/shared/lib/" file="${build.lib.dir}/globus-authz.jar"/>
+        <copy overwrite="true=" todir="${tomcat.dir}/shared/classes" file="etc/ae-client-config.wsdd"/>
+        <copy overwrite="true" todir="${tomcat.dir}/shared/lib" file="${ext.globus.dir}/lib/cog-axis.jar"/> 
+    </target>
 
-<target name="runCallService" depends="compile" description="Execute the client: ant  runPDDClient">
-        <java classname="gov.nih.nci.cagrid.workflow.wms.utils.SOAPClient" fork="yes">          
-            <classpath refid="service.run.classpath"/>
-        </java>
+    <target name="handlerjar" depends="compile">
+        <jar destfile="${build.lib.dir}/globus-authz.jar" basedir="${build.dest}" includes="**/SimpleGlobusAuthorizationHandler.class"/>
     </target>
 
 </project>
