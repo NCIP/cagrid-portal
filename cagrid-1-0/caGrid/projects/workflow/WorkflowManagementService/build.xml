@@ -346,7 +346,7 @@
     </target>
     <target name="deployGlobusHandler" depends="handlerjar" description="This is used to overwrite activebpels' client-config.wsdd with our client-config and deploys the globus authz handler jar and cog-axis.jar into $CATALINA_HOME/shared/lib so workflows invoking secure services work">
         <copy overwrite="true" todir="${tomcat.dir}/shared/lib/" file="${build.lib.dir}/globus-authz.jar"/>
-        <copy overwrite="true=" todir="${tomcat.dir}/shared/classes" file="etc/ae-client-config.wsdd"/>
+        <copy overwrite="true" todir="${tomcat.dir}/shared/classes" file="etc/ae-client-config.wsdd"/>
         <copy overwrite="true" todir="${tomcat.dir}/shared/lib" file="${ext.globus.dir}/lib/cog-axis.jar"/> 
     </target>
 
