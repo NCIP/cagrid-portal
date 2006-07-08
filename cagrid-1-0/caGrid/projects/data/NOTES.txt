@@ -16,7 +16,7 @@ TODO:
   [D]:  -- should have mutiple select enabled so you can select multiple jars
 13[ ]: Need a simplified "SDK Backed" data service option (should set serializers, cql processor, add jars, etc automatically)
 14[D]: Type serialization table need to enable multi-select for setting serialization option
-
+14[ ]: Data GUI needs a way to select a whole project, multiple packages, and classes from them
 
 BUGS:
 Eclipse classpath is incorrect (duplicate entries for cagrid core)
