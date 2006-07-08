@@ -2,9 +2,24 @@
 
 <project default="all" basedir=".">
     
-    <target name="all" depends="deploy"/>
-    
+    <target name="all" depends="compile"/>
+   
+    <target name="compile">
+        <ant dir="SampleService1" target="compile"/>
+        <ant dir="SampleService2" target="compile"/>
+        <ant dir="SecureSample" target="compile"/>
+        <ant dir="WorkflowManagementService" target="compile"/>
+    </target>
+
     <target name="deploy">
+        <ant dir="SampleService1" target="deployTomcat"/>
+        <ant dir="SampleService2" target="deployTomcat"/>
+        <ant dir="SecureSample" target="deployTomcat"/>
+        <ant dir="WorkflowManagementService" target="deployTomcat"/>
+        <ant dir="WorkflowManagementService" target="deployGlobusHandler"/>
+    </target>
+
+    <target name="deployGlobus">
         <ant dir="SampleService1" target="deployGlobus"/>
         <ant dir="SampleService2" target="deployGlobus"/>
         <ant dir="SecureSample" target="deployGlobus"/>
