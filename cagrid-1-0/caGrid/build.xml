@@ -38,7 +38,7 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="cabigextensions, cadsr, core, cql2xpath, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, opensaml, sdkQuery, syncgts" />
+	<property name="projects.list" value="cabigextensions, cadsr, core, cql2xpath, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, opensaml, sdkQuery, syncgts, workflow" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
@@ -417,6 +417,13 @@
 			<artifact refid="core.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+    <!-- =============================================================== -->
+	<!-- CAGRID Workflow:                                               -->
+	<!-- =============================================================== -->
+	<target name="build-workflow" depends="prepare" description="Builds caGrid Cql2Xpath utility">
+		<ant dir="${projects.dir}/workflow" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
