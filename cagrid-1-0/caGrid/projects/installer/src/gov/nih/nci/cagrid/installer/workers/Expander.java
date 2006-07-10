@@ -9,11 +9,16 @@ import org.apache.tools.ant.taskdefs.Expand;
 public class Expander extends Expand {
 
 	public Expander(File src, File dest) {
-		project = new Project();
-		project.init();
-		taskType = "unzip";
-		taskName = "unzip";
-		target = new Target();
+		setProject(new Project());
+		//project = new Project();
+		this.getProject().init();
+		//project.init();
+		//taskType = "unzip";
+		this.setTaskType("unzip");
+		//taskName = "unzip";
+		this.setTaskName("unzip");
+		//target = new Target();
+		this.setOwningTarget(new Target());
 		this.setSrc(src);
 		this.setDest(dest);
 	}

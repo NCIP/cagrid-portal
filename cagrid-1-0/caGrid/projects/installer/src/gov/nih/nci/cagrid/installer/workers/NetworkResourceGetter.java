@@ -15,11 +15,16 @@ public class NetworkResourceGetter extends Get {
 		
 	  
 	  
-		project = new Project();
-		project.init();
-		taskType = "get";
-		taskName = "get";
-		target = new Target();
+		//project = new Project();
+		this.setProject(new Project());
+		this.getProject().init();
+		//project.init();
+		//taskType = "get";
+		this.setTaskName("get");
+		this.setTaskType("get");
+		this.setOwningTarget(new Target());
+		//taskName = "get";
+		//target = new Target();
 		
 		
 		
