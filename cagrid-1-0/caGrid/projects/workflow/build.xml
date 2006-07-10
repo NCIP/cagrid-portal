@@ -2,9 +2,14 @@
 
 <project default="all" basedir=".">
     
-    <target name="all" depends="compile"/>
-   
-    <target name="compile">
+    <target name="all"> 
+        <ant dir="SampleService1" target="all"/>
+        <ant dir="SampleService2" target="all"/>
+        <ant dir="SecureSample" target="all"/>
+        <ant dir="WorkflowManagementService" target="all"/>
+    </target>
+
+    <target name="build-workflow">
         <ant dir="SampleService1" target="compile"/>
         <ant dir="SampleService2" target="compile"/>
         <ant dir="SecureSample" target="compile"/>
