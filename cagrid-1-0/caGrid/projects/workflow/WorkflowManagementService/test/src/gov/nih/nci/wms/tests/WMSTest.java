@@ -1,7 +1,6 @@
 package gov.nih.nci.wms.tests;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.workflow.stubs.Invoke;
 import gov.nih.nci.cagrid.workflow.wms.stubs.WorkflowManagementServicePortType;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WMSInputType;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WMSOutputType;
@@ -10,11 +9,10 @@ import gov.nih.nci.cagrid.workflow.wms.stubs.service.WSDLReferences;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WorkflowManagementServiceAddressingLocator;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import org.apache.axis.types.URI;
-
-import javax.xml.namespace.QName;
 
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.client.AxisClient;
@@ -24,9 +22,9 @@ import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.utils.ClassUtils;
 import org.globus.gsi.GlobusCredential;
-import org.globus.wsrf.encoding.ObjectSerializer;
 import org.globus.wsrf.test.GridTestCase;
 import org.globus.wsrf.utils.AnyHelper;
+import org.globus.wsrf.utils.XmlUtils;
 import org.w3c.dom.Element;
 
 
@@ -34,7 +32,8 @@ public class WMSTest extends GridTestCase {
 	
 	private GlobusCredential proxy;
 	private EndpointReferenceType epr;
-	String serviceUrl = "https://spirulina.ci.uchicago.edu:8443/wsrf/services/cagrid/WorkflowManagementService";
+	private String serviceUrl = "https://spirulina.ci.uchicago.edu:8443/wsrf/services/cagrid/WorkflowManagementService";
+	
 	
 	public WMSTest(String name) {
 		super(name);
@@ -42,18 +41,16 @@ public class WMSTest extends GridTestCase {
 	}
 
 	public void testBasic() throws Exception {
+		String inputFile = "input.xml";
 		assertTrue(TEST_CONTAINER != null);
 		this.epr = new EndpointReferenceType();
 		this.epr.setAddress(new Address(serviceUrl));
-		Invoke invoke = new Invoke("Test");
-		QName qname = new QName("http://workflow.cagrid.nci.nih.gov/SampleService1", "invoke");
 		WSDLReferences[] wsdlRefArray = new WSDLReferences[1];
 		wsdlRefArray[0] = new WSDLReferences();
 		wsdlRefArray[0].setServiceUrl(new URI("http://spirulina.ci.uchicago.edu:8080/wsrf/services/cagrid/SampleService1"));
 		wsdlRefArray[0].setWsdlLocation("http://spirulina.ci.uchicago.edu:8080/wsrf/share/schema/SampleService1/SampleService1_flattened.wsdl");
 		wsdlRefArray[0].setWsdlNamespace(new URI("http://workflow.cagrid.nci.nih.gov/SampleService1"));
-		WMSInputType input =createInput("Simple","test/Simple.bpel",
-				qname, (Object)invoke, Invoke.class.getName());
+		WMSInputType input =createInput("Simple","test/Simple.bpel", inputFile);
 		input.setWsdlReferences(wsdlRefArray);
 		WMSOutputType output = runWorkflow(input);
 		assertTrue(output != null);
@@ -62,12 +59,10 @@ public class WMSTest extends GridTestCase {
 
 	public void testSecure() throws Exception {
 		assertTrue(TEST_CONTAINER != null);
+		String inputFile = "input.xml";
 		this.epr = new EndpointReferenceType();
 		this.epr.setAddress(new Address(serviceUrl));
-		Invoke invoke = new Invoke("Test");
-		QName qname = new QName("http://workflow.cagrid.nci.nih.gov/SampleService1", "invoke");
-		WMSInputType input = createInput("SimpleSecure","SimpleSecure.bpel", 
-				qname, (Object)invoke, Invoke.class.getName());
+		WMSInputType input = createInput("SimpleSecure","SimpleSecure.bpel", inputFile);
 		WSDLReferences[] wsdlRefArray = new WSDLReferences[2];
 		wsdlRefArray[0] = new WSDLReferences();
 		wsdlRefArray[0].setServiceUrl(new URI("http://spirulina.ci.uchicago.edu:8080/wsrf/services/cagrid/SampleService1"));
@@ -145,13 +140,14 @@ public class WMSTest extends GridTestCase {
 	}
 	
 	public static WMSInputType createInput(String workflowName, 
-			String bpelFile, QName inputQName, Object inputObject, String className) throws Exception {
+			String bpelFile, String inputFile) throws Exception {
 		WMSInputType input = new WMSInputType();
+		FileInputStream in = new FileInputStream(inputFile);
+		Element e2 = XmlUtils.newDocument(in).getDocumentElement();
+		System.out.println(XmlUtils.toString(e2));
 		String bpelProcess = Utils.fileToStringBuffer(new File(bpelFile)).toString();
-		
 		WorkflowInputType inputArgs = new WorkflowInputType();
-		Element e = ObjectSerializer.toElement(inputObject, inputQName);
-		MessageElement anyContent = AnyHelper.toAny(new MessageElement(e));
+		MessageElement anyContent = AnyHelper.toAny(new MessageElement(e2));
 		inputArgs.set_any(new MessageElement[]{anyContent});
 		input.setBpelDoc(bpelProcess);
 		input.setInputArgs(inputArgs);

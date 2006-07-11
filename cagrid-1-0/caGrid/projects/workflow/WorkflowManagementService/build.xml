@@ -339,8 +339,8 @@
 
 <target name="runPDDClient" depends="all" description="Execute the client: ant  runPDDClient">
         <java classname="gov.nih.nci.cagrid.workflow.wms.service.PDDGenerator" fork="yes">          
-            <arg value="SimpleSecure"/>
-            <arg value="SimpleSecure.bpel"/>
+            <arg value="AnnualDemoParallel"/>
+            <arg value="AnnualDemoParallel.bpel"/>
             <classpath refid="service.run.classpath"/>
         </java>
     </target>

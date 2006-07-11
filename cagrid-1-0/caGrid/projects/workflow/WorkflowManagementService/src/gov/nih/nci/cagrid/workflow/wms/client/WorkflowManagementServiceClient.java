@@ -17,7 +17,6 @@ import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.utils.AnyHelper;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.workflow.stubs.Invoke;
 import gov.nih.nci.cagrid.workflow.wms.stubs.WorkflowManagementServicePortType;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WMSInputType;
 import gov.nih.nci.cagrid.workflow.wms.stubs.service.WMSOutputType;
@@ -65,8 +64,6 @@ public class WorkflowManagementServiceClient implements WorkflowManagementServic
 		String bpelProcess = Utils.fileToStringBuffer(new File(bpelFile)).toString();
 		
 		WorkflowInputType inputArgs = new WorkflowInputType();
-		Invoke invoke = new Invoke("Hello");
-		inputArgs.set_any(AnyHelper.toAnyArray(invoke));
 		input.setBpelDoc(bpelProcess);
 		input.setInputArgs(inputArgs);
 		input.setWorkflowName("Test");

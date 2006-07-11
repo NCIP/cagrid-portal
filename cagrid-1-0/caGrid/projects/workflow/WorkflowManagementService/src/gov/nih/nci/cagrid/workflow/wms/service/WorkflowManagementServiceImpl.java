@@ -38,6 +38,10 @@ public class WorkflowManagementServiceImpl {
 
 	}
 
+	/**
+	 * @return
+	 * @throws Exception
+	 */
 	public ServiceConfiguration getConfiguration() throws Exception {
 		if (this.configuration != null) {
 			return this.configuration;
