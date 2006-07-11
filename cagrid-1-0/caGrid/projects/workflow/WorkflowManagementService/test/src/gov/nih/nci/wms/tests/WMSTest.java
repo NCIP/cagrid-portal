@@ -34,7 +34,7 @@ public class WMSTest extends GridTestCase {
 	
 	private GlobusCredential proxy;
 	private EndpointReferenceType epr;
-	String serviceUrl = "https://localhost:8443/wsrf/services/cagrid/WorkflowManagementService";
+	String serviceUrl = "https://spirulina.ci.uchicago.edu:8443/wsrf/services/cagrid/WorkflowManagementService";
 	
 	public WMSTest(String name) {
 		super(name);
@@ -49,8 +49,8 @@ public class WMSTest extends GridTestCase {
 		QName qname = new QName("http://workflow.cagrid.nci.nih.gov/SampleService1", "invoke");
 		WSDLReferences[] wsdlRefArray = new WSDLReferences[1];
 		wsdlRefArray[0] = new WSDLReferences();
-		wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/SampleService1"));
-		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/SampleService1/SampleService1_flattened.wsdl");
+		wsdlRefArray[0].setServiceUrl(new URI("http://spirulina.ci.uchicago.edu:8080/wsrf/services/cagrid/SampleService1"));
+		wsdlRefArray[0].setWsdlLocation("http://spirulina.ci.uchicago.edu:8080/wsrf/share/schema/SampleService1/SampleService1_flattened.wsdl");
 		wsdlRefArray[0].setWsdlNamespace(new URI("http://workflow.cagrid.nci.nih.gov/SampleService1"));
 		WMSInputType input =createInput("Simple","test/Simple.bpel",
 				qname, (Object)invoke, Invoke.class.getName());
@@ -70,12 +70,12 @@ public class WMSTest extends GridTestCase {
 				qname, (Object)invoke, Invoke.class.getName());
 		WSDLReferences[] wsdlRefArray = new WSDLReferences[2];
 		wsdlRefArray[0] = new WSDLReferences();
-		wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/SampleService1"));
-		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/SampleService1/SampleService1_flattened.wsdl");
+		wsdlRefArray[0].setServiceUrl(new URI("http://spirulina.ci.uchicago.edu:8080/wsrf/services/cagrid/SampleService1"));
+		wsdlRefArray[0].setWsdlLocation("http://spirulina.ci.uchicago.edu:8080/wsrf/share/schema/SampleService1/SampleService1_flattened.wsdl");
 		wsdlRefArray[0].setWsdlNamespace(new URI("http://workflow.cagrid.nci.nih.gov/SampleService1"));
 		wsdlRefArray[1] = new WSDLReferences();
-		wsdlRefArray[1].setServiceUrl(new URI("https://localhost:8443/wsrf/services/cagrid/SecureSample"));
-		wsdlRefArray[1].setWsdlLocation("http://localhost:8080/wsrf/share/schema/SecureSample/SecureSample_flattened.wsdl");
+		wsdlRefArray[1].setServiceUrl(new URI("https://spirulina.ci.uchicago.edu:8443/wsrf/services/cagrid/SecureSample"));
+		wsdlRefArray[1].setWsdlLocation("http://spirulina.ci.uchicago.edu:8080/wsrf/share/schema/SecureSample/SecureSample_flattened.wsdl");
 		wsdlRefArray[1].setWsdlNamespace(new URI("http://cagrid.nci.nih.gov/SecureSample"));
 		input.setWsdlReferences(wsdlRefArray);
 		WMSOutputType output = runWorkflow(input);
