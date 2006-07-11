@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="WorkFlowManagementService" targetNamespace="http://workflow.cagrid.nci.nih.gov//WorkFlowManagementService/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="http://workflow.cagrid.nci.nih.gov//WorkFlowManagementService/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://workflow.cagrid.nci.nih.gov//WorkFlowManagementService/bindings" location="WorkFlowManagementService_bindings.wsdl"/>
-  <wsdl:service name="WorkFlowManagementService">
-    <wsdl:port name="WorkFlowManagementServicePortTypePort" binding="binding:WorkFlowManagementServicePortTypeSOAPBinding">
-      <soap:address location="http://localhost:8080/wsrf/services/"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>
