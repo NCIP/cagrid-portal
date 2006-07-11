@@ -70,8 +70,6 @@
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/abadmin.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/SimpleSecureService_stubs.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/SampleService1_stubs.jar"/>
 	<classpathentry kind="src" path="/SecureSample"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

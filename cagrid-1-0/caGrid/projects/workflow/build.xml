@@ -2,21 +2,13 @@
 
 <project default="all" basedir=".">
     
-    <target name="all" depends="compileDeps, copyStubJars"> 
+    <target name="all">
         <ant dir="WorkflowManagementService" target="all"/>
-    </target>
-
-    <target name="compileDeps">
         <ant dir="SampleService1" target="all"/>
         <ant dir="SampleService2" target="all"/>
         <ant dir="SecureSample" target="all"/>
     </target>
 
-    <target name="copyStubJars" depends="compileDeps">
-        <copy file="SampleService1/build/lib/SampleService1_stubs.jar" todir="WorkflowManagementService/lib/"/> 
-        <copy file="SampleService2/build/lib/SampleService2_stubs.jar" todir="WorkflowManagementService/lib/"/> 
-        <copy file="SecureSample/build/lib/SecureSample_stubs.jar" todir="WorkflowManagementService/lib/"/> 
-    </target>
 
     <target name="deploy">
         <ant dir="SampleService1" target="deployTomcat"/>
