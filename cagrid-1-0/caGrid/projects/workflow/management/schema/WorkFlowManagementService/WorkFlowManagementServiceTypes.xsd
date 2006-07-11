@@ -9,10 +9,10 @@
      
     <xsd:import namespace="http://schemas.xmlsoap.org/ws/2003/03/business-process/" schemaLocation="./ws_2003_03_business-process_.xsd"/>
      
-    <xsd:element name="WorkFlowInputElement" type="tns:WorkFlowInputType"/>
-    <xsd:element name="WorkFlowOutputElement" type="tns:WorkFlowOutputType"/>
+    <xsd:element name="WMSInputElement" type="tns:WMSInputType"/>
+    <xsd:element name="WMSOutputElement" type="tns:WMSOutputType"/>
 
-    <xsd:complexType name="WorkFlowInputType">
+    <xsd:complexType name="WMSInputType">
         <xsd:annotation>
         <xsd:documentation>
             This type represents the input type for a BPEL workflow
@@ -26,25 +26,34 @@
             <xsd:element ref="bpws:process"
                         minOccurs="1"
                         maxOccurs="1"/>
-            <xsd:any namespace="##any"
-                    processContents="lax"
-                    minOccurs="0" 
-                    maxOccurs="unbounded" />
-             
+            <xsd:element name="inputArgs" 
+                        type="tns:WorkflowInputType"  
+                        maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="WorkflowInputType">
+        <xsd:sequence>
+            <xsd:any maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+     <xsd:complexType name="WorkflowOuputType">
+        <xsd:sequence>
+            <xsd:any maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:complexType name="WorkFlowOutputType">
+    <xsd:complexType name="WMSOutputType">
         <xsd:annotation>
         <xsd:documentation>
             This type represents the output from a workflow
         </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:any namespace="##any"
-                     processContents="lax"
-                     minOccurs="1"
-                     maxOccurs="unbounded"/>
+            <xsd:element name="outputType" 
+                        type="tns:WorkflowOuputType"  
+                        maxOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
                      

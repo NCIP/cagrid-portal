@@ -41,7 +41,7 @@
 							<element name="workflowInput">
 	      		  				<complexType>
 									<sequence>
-                                    <element ref="types:WorkFlowInputElement"/>
+                                    <element ref="types:WMSInputElement"/>
                   				 	</sequence>
 	      			        	</complexType>
 	      			        </element>
@@ -56,7 +56,7 @@
 					<complexType>
 						<sequence>
           		  
-					    <element ref="types:WorkFlowOutputElement"/>
+					    <element ref="types:WMSOutputElement"/>
 			                  		
 						</sequence>
 					</complexType>
