@@ -22,11 +22,19 @@ import org.globus.wsrf.Constants;
 public class WorkflowManagementServiceImpl {
 	private ServiceConfiguration configuration;
 
-	protected static String abAdminUrl = "http://localhost:8080/active-bpel/services/BpelEngineAdmin";
+	protected String abAdminRoot = "http://localhost:8080/active-bpel/services/";
 
 	protected static String BPEL_NS = "http://schemas.xmlsoap.org/ws/2003/03/business-process/";
 
 	public WorkflowManagementServiceImpl() throws RemoteException {
+       try {
+       if (getConfiguration().getAbEndpoint() != null) {
+           abAdminRoot = getConfiguration().getAbEndpoint();
+       }
+       } catch (Exception e) {
+           e.printStackTrace();
+           throw new RemoteException("Error starting workflow management service" + e.getMessage());
+       }
 
 	}
 
@@ -53,11 +61,12 @@ public class WorkflowManagementServiceImpl {
 	}
 
 	private String deploy(String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws Exception {
-		return ActiveBPELAdapter.deployBpr(bpelFileName ,workflowName, wsdlRefArray);
+        String abAdminUrl = this.abAdminRoot + "BpelEngineAdmin";
+		return ActiveBPELAdapter.deployBpr(abAdminUrl, bpelFileName ,workflowName, wsdlRefArray);
 	}
 	
 	private WMSOutputType invokeProcess(String partnerLinkName, WMSInputType wmsInput) throws Exception {
-		return ActiveBPELAdapter.invokeProcess(partnerLinkName, wmsInput);
+		return ActiveBPELAdapter.invokeProcess(abAdminRoot, partnerLinkName, wmsInput);
 	}
 	
 	/** This is the method to deploy and run workflow

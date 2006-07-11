@@ -24,5 +24,5 @@ public class ResourceConfiguration {
 	public void setRegistrationTemplateFile(String registrationTemplateFile) {
 		this.registrationTemplateFile = registrationTemplateFile;
 	}
-		
+
 }

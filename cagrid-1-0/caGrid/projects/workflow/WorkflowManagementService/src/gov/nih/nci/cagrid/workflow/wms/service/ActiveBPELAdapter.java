@@ -22,10 +22,6 @@ import AeAdminServices.BpelEngineAdminLocator;
 import AeAdminServices.RemoteDebugSoapBindingStub;
 
 public class ActiveBPELAdapter {
-	//TODO: Read this from service config.
-	protected static  String abAdminUrl = "http://localhost:8080/active-bpel/services/BpelEngineAdmin";
-	protected static  String abServiceRoot = "http://localhost:8080/active-bpel/services/";
-	
 	
 	/** Deploys the ActiveBPEL specific BPEL archive
 	 * @param bpelFileName
@@ -34,7 +30,7 @@ public class ActiveBPELAdapter {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String deployBpr(String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws Exception {
+	public static String deployBpr(String abAdminUrl, String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws Exception {
 		String returnString = "success";
 		String bprFileName = BPRCreator.makeBpr(bpelFileName,workflowName, wsdlRefArray);
 		BpelEngineAdminLocator locator = new BpelEngineAdminLocator();
@@ -46,7 +42,7 @@ public class ActiveBPELAdapter {
 	}
 	
 	
-	public static WMSOutputType invokeProcess(String partnerLinkName, WMSInputType wmsInput) throws Exception {
+	public static WMSOutputType invokeProcess(String abServiceRoot, String partnerLinkName, WMSInputType wmsInput) throws Exception {
 		String serviceUrl = abServiceRoot + partnerLinkName;
 		return callService(serviceUrl, wmsInput);
 	}

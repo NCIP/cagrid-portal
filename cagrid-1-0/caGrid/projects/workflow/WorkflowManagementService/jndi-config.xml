@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
-  <service name="SERVICE-INSTANCE-PREFIX/WorkflowManagement">
+  <service name="SERVICE-INSTANCE-PREFIX/WorkflowManagementService">
     <resource name="home" type="gov.nih.nci.cagrid.workflow.wms.service.globus.resource.BaseResourceHome">
       <resourceParams>
         <parameter>
@@ -34,8 +34,8 @@
           <value>org.globus.wsrf.jndi.BeanFactory</value>
         </parameter>
         <parameter>
-          <name>ABEndpoint</name>
-          <value>http://localhost:8080/active-bpel/servicesBpelEngineAdmin</value>
+          <name>abEndpoint</name>
+          <value>http://spirulina.ci.uchicago.edu:8080/active-bpel/services/</value>
         </parameter>
       </resourceParams>
     </resource>
