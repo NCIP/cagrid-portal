@@ -226,15 +226,12 @@ public class PDDGenerator {
 			throw e;
 		}
 		Document bpelDoc = db.parse(f);
-		WSDLReferences[] wsdlRefArray = new WSDLReferences[2];
+		WSDLReferences[] wsdlRefArray = new WSDLReferences[1];
 		wsdlRefArray[0] = new WSDLReferences();
-		wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/SampleService1"));
-		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/SampleService1/SampleService1_flattened.wsdl");
-		wsdlRefArray[0].setWsdlNamespace(new URI("http://workflow.cagrid.nci.nih.gov/SampleService1"));
-		wsdlRefArray[1] = new WSDLReferences();
-		wsdlRefArray[1].setServiceUrl(new URI("https://localhost:8443/wsrf/services/cagrid/SecureSample"));
-		wsdlRefArray[1].setWsdlLocation("http://localhost:8080/wsrf/share/schema/SecureSample/SecureSample_flattened.wsdl");
-		wsdlRefArray[1].setWsdlNamespace(new URI("http://cagrid.nci.nih.gov/SecureSample"));
+		wsdlRefArray[0].setServiceUrl(
+				new URI("http://localhost:8080/wsrf/services/CounterService"));
+		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/core/samples/counter/counter_flattened.wsdl");
+		wsdlRefArray[0].setWsdlNamespace(new URI("http://counter.com"));
 		
 		Document pdd = PDDGenerator.generatePDD(workflowName, 
 				bpelDoc, "TestService", wsdlRefArray);

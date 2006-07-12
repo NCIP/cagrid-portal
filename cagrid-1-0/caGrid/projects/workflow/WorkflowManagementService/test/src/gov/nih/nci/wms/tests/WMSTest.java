@@ -32,7 +32,8 @@ public class WMSTest extends GridTestCase {
 	
 	private GlobusCredential proxy;
 	private EndpointReferenceType epr;
-	private String serviceUrl = "https://spirulina.ci.uchicago.edu:8443/wsrf/services/cagrid/WorkflowManagementService";
+	private String serviceUrl = 
+		"https://spirulina.ci.uchicago.edu:8443/wsrf/services/cagrid/WorkflowManagementService";
 	
 	
 	public WMSTest(String name) {
@@ -41,7 +42,7 @@ public class WMSTest extends GridTestCase {
 	}
 
 	public void testBasic() throws Exception {
-		String inputFile = "input.xml";
+		String inputFile = "inputTest1.xml";
 		assertTrue(TEST_CONTAINER != null);
 		this.epr = new EndpointReferenceType();
 		this.epr.setAddress(new Address(serviceUrl));
@@ -82,7 +83,24 @@ public class WMSTest extends GridTestCase {
 	public void testAnnualDemo() throws Exception {
 		assertTrue(TEST_CONTAINER != null);
 		this.epr = new EndpointReferenceType();
+		this.epr.setAddress(new Address(serviceUrl));
+	}
+	public void testWSRFCounter() throws Exception {
+		assertTrue(TEST_CONTAINER != null);
+		String inputFile = "inputTest2.xml";
+		this.epr = new EndpointReferenceType();
 		this.epr.setAddress(new Address(serviceUrl));	
+		this.epr.setAddress(new Address(serviceUrl));
+		WMSInputType input = createInput("wsrf-bpel", "wsrf-bpel.bpel", inputFile);
+		WSDLReferences[] wsdlRefArray = new WSDLReferences[1];
+		wsdlRefArray[0] = new WSDLReferences();
+		wsdlRefArray[0].setServiceUrl(
+				new URI("http://spirulina.ci.uchicago.edu:8080/wsrf/services/CounterService"));
+		wsdlRefArray[0].setWsdlLocation("http://spirulina.ci.uchicago.edu:8080/wsrf/share/schema/core/samples/counter/counter_flattened.wsdl");
+		wsdlRefArray[0].setWsdlNamespace(new URI("http://counter.com"));
+		input.setWsdlReferences(wsdlRefArray);
+		WMSOutputType output = runWorkflow(input);
+		assertTrue(output!=null);
 	}
 	private WorkflowManagementServicePortType getPortType()
 			throws RemoteException {
