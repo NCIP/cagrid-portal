@@ -60,7 +60,7 @@ public class WMSTest extends GridTestCase {
 
 	public void testSecure() throws Exception {
 		assertTrue(TEST_CONTAINER != null);
-		String inputFile = "input.xml";
+		String inputFile = "inputTest1.xml";
 		this.epr = new EndpointReferenceType();
 		this.epr.setAddress(new Address(serviceUrl));
 		WMSInputType input = createInput("SimpleSecure","SimpleSecure.bpel", inputFile);
