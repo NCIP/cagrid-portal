@@ -1,5 +1,4 @@
 To Do:
-Modification viewer: any tabs with the namespaces tree need to use a JSplitPane.
 
 should generated two different interfaces in common..  (what is the use.  The server only implements non "provided" methods.  Has nothing to do with "importing")
   - one, for all the non-imported operations that the service implements
@@ -63,6 +62,7 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+Modification viewer: any tabs with the namespaces tree need to use a JSplitPane.
 
 (added validation) if add a new service with same namespace i get funny gui error.
 
