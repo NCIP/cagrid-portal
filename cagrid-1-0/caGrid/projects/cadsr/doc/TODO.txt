@@ -2,7 +2,7 @@ artifact for service security stuff
 
 caching using resources?
 
-discovery panel needs a progress bar 
+discovery panel should support "searching" as well
 
 
 
@@ -20,6 +20,7 @@ attribute name has classname: prefix
 
 
 ==================================================
+(DONE) discovery panel needs a progress bar 
 
 (DONE) generate DomainModel metadata extracts
 
