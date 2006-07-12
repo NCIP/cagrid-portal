@@ -125,6 +125,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	private JScrollPane getNamespacesScrollPane() {
 		if (namespacesScrollPane == null) {
 			namespacesScrollPane = new JScrollPane();
+			namespacesScrollPane.setPreferredSize(new java.awt.Dimension(240,240));
 			namespacesScrollPane.setViewportView(getNamespacesJTree());
 		}
 		return namespacesScrollPane;
@@ -328,6 +329,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		if (mainSplitPane == null) {
 			mainSplitPane = new JSplitPane();
 			mainSplitPane.setOneTouchExpandable(true);
+			mainSplitPane.setDividerLocation(.5);
 			mainSplitPane.setLeftComponent(getNamespacesScrollPane());
 			mainSplitPane.setRightComponent(getResourcePropertiesPanel());
 		}
