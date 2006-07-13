@@ -11,9 +11,9 @@
 	</xs:complexType>
 	<xs:element name="Extension" type="ExtensionType"></xs:element>
 	<xs:element name="ExtensionDescription">
-		<xs:annotation>The extension type states whether or not this is a discovery
+		<xs:annotation><xs:documentation>he extension type states whether or not this is a discovery
 		type or service type extension.  The extension preferencesPanel is a java classname
-		which extends the ExtensionPreferencesConfigurationPanel</xs:annotation>
+			which extends the ExtensionPreferencesConfigurationPanel</xs:documentation></xs:annotation>
 		<xs:complexType>
 			<xs:choice>
 				<xs:element ref="DiscoveryExtensionDescription"></xs:element>
@@ -75,7 +75,7 @@
 		<xs:attribute name="name" type="xs:string" use="required"/>
 	</xs:complexType>
 	
-	<xs:element name="Properties" minOccurs="0" maxOccurs="1">
+	<xs:element name="Properties">
 		<xs:annotation>
 			<xs:documentation>To be used for extension configuration properties</xs:documentation>
 		</xs:annotation>
