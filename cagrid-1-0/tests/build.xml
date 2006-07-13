@@ -79,6 +79,14 @@
 			<artifact refid="core.jars" />
 			<artifact refid="introduce.jars" />
 			<artifact refid="gme.globus.client.jars" />
+			<artifact refid="security.metadata.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="data.metadata.jars" />
+			<artifact refid="caCORE.jars" />
+			<artifact refid="graph.jars" />
+			<artifact refid="introduce.servicesecurity.jars" />
 		</resolveDependencies>
 		<ant dir="${tests.projects.dir}/coretests" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -101,6 +109,15 @@
 	</target>
 	<target name="build-gme">
 		<echo>gme must be built in the main caGrid build</echo>
+	</target>
+	<target name="build-metadata">
+		<echo>metadata must be built in the main caGrid build</echo>
+	</target>
+	<target name="build-graph">
+		<echo>graph must be built in the main caGrid build</echo>
+	</target>
+	<target name="build-introduceServiceSecurity">
+		<echo>graph must be built in the main caGrid build</echo>
 	</target>
 
 	<!-- ============================================================== -->
