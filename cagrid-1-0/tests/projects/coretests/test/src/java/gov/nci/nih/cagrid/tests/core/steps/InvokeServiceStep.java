@@ -254,4 +254,21 @@ public class InvokeServiceStep
 			for (File nextFile : files) addJars(nextFile, jars);
 		}
 	}
+	
+	public static void main(String[] args)
+		throws Throwable
+	{
+		File serviceDir = new File("C:\\tmp\\Service41220dir\\BasicAnalyticalServiceWithMetadata");
+		String serviceName = "BasicAnalyticalServiceWithMetadata";
+		File testDir = new File("test" + File.separator + "resources" + File.separator + "services" + File.separator + serviceName);
+		File methodDir = new File(testDir, "test\\resources\\0_reverseTranslate");
+		InvokeServiceStep step = new InvokeServiceStep(
+			serviceDir,
+			testDir,
+			methodDir,
+			InvokeServiceStep.parseParamName(methodDir),
+			"http://localhost:8080/wsrf/services/cagrid/BasicAnalyticalServiceWithMetadata"
+		);
+		step.runStep();
+	}
 }
