@@ -47,9 +47,11 @@ public class UserManager extends LoggingObject {
 
 
 	private void validateSpecifiedField(String fieldName, String name) throws InvalidUserPropertyFault {
-		if ((name == null) || (name.length() == 0)) {
+		try{
+			AddressValidator.validateField(fieldName, name);
+		}catch(Exception e){
 			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
-			fault.setFaultString("No " + fieldName + " specified.");
+			fault.setFaultString(e.getMessage());
 			throw fault;
 		}
 	}
