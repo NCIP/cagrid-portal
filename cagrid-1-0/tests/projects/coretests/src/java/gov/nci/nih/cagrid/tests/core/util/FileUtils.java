@@ -15,6 +15,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @author MCCON012
@@ -25,6 +27,23 @@ public class FileUtils
 	 * Only static methods
 	 */
 	private FileUtils() { }
+	
+	public static File[] listRecursively(File file, FileFilter filter)
+	{
+		if (! file.isDirectory()) {
+			if (filter == null || filter.accept(file)) return new File[] { file };
+			else return new File[0];
+		}
+		
+		ArrayList<File> fileList = new ArrayList<File>();
+		File[] files = file.listFiles();
+		for (File f : files) {
+			File[] fs = listRecursively(f, filter);
+			Collections.addAll(fileList, fs);
+		}
+		
+		return fileList.toArray(new File[0]);
+	}
 	
 	public static String readText(File file) 
 		throws IOException
