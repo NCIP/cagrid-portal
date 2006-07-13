@@ -83,6 +83,10 @@
 			<include name="**/*.jar" />
 		</fileset>
 		<path location="${test.classes.dir}"/>
+		<path location="${classes.dir}"/>
+		<fileset dir="${globus.dir}/lib">
+			<include name="**/*.jar" />
+		</fileset>
 	</path>
 
 	<!-- =============================================================== -->
