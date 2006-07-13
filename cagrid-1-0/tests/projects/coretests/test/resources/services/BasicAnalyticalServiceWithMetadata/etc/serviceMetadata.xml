@@ -1,44 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ServiceMetadata xmlns="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
-    xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
-    xmlns:serv="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
-   <serviceDescription>
-    	<serv:Service>
-    		<serv:name>BasicAnalyticalService</serv:name>
-    		<serv:version>0.1</serv:version>
-    		<serv:description>A basic analytical service with a single method, metadata, and security.  It is used for system testing.</serv:description>
-    		<serv:pointOfContactCollection>
-                <com:PointOfContact>
-                    <com:firstName>Patrick</com:firstName>
-                    <com:lastName>McConnell</com:lastName>
-                    <com:email>patrick.mcconnell@duke.edu</com:email>
-                    <com:affiliation>Duke Comprehensive Cancer Center</com:affiliation>
-                    <com:role>Maintainer</com:role>
-                </com:PointOfContact>
-            </serv:pointOfContactCollection>
-    	</serv:Service>
-     </serviceDescription>
-    <hostingResearchCenter>
-        <com:ResearchCenter>
-            <com:shortName>Duke</com:shortName>
-            <com:displayName>Duke Comprehensive Cancer Center</com:displayName>
-            <com:address>
-                <com:Address>
-                    <com:stateProvence>NC</com:stateProvence>
-                    <com:postalCode>27705</com:postalCode>
-                    <com:country>US</com:country>
-                </com:Address>
-            </com:address>
-            <com:researchCenterDescription/>
-            <com:pointOfContactCollection>
-                <com:PointOfContact>
-                    <com:firstName>Patrick</com:firstName>
-                    <com:lastName>McConnell</com:lastName>
-                    <com:email>patrick.mcconnell@duke.edu</com:email>
-                    <com:affiliation>Duke Comprehensive Cancer Center</com:affiliation>
-                    <com:role>Maintainer</com:role>
-                </com:PointOfContact>
-            </com:pointOfContactCollection>
-        </com:ResearchCenter>
-    </hostingResearchCenter>
-</ServiceMetadata>
+<ns1:ServiceMetadata xsi:type="ns1:ServiceMetadata" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <ns1:serviceDescription>
+  <ns2:Service description="The BasicAnalyticalServiceWithMetadata grid service, created with caGrid Introduce, version:1.0b." name="BasicAnalyticalServiceWithMetadata" version="1.0b" xsi:type="ns2:Service" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+   <ns2:pointOfContactCollection/>
+   <ns2:serviceContextCollection>
+    <ns2:ServiceContext description="" name="BasicAnalyticalServiceWithMetadata" xsi:type="ns2:ServiceContext">
+     <ns2:operationCollection>
+      <ns2:Operation description="" name="getServiceSecurityMetadata" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection/>
+       <ns2:Output qName="ns3:ServiceSecurityMetadata" dimentionality="1" isArray="false" xsi:type="ns2:Output" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="reverseTranslate" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="xsd:string" dimentionality="1" index="0" isArray="false" isRequired="false" name="dna" xsi:type="ns2:InputParameter" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="xsd:string" dimentionality="1" isArray="false" xsi:type="ns2:Output" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+     </ns2:operationCollection>
+     <ns2:contextPropertyCollection>
+      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata" xsi:type="ns2:ContextProperty"/>
+     </ns2:contextPropertyCollection>
+    </ns2:ServiceContext>
+   </ns2:serviceContextCollection>
+  </ns2:Service>
+ </ns1:serviceDescription>
+ <ns1:hostingResearchCenter/>
+</ns1:ServiceMetadata>

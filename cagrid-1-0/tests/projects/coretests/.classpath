@@ -3,20 +3,6 @@
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="src" path="test/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="test/lib/abbot.jar"/>
-	<classpathentry kind="lib" path="test/lib/ao-util.jar"/>
-	<classpathentry kind="lib" path="test/lib/docall.jar"/>
-	<classpathentry kind="lib" path="test/lib/gnu-regexp-110.jar"/>
-	<classpathentry kind="lib" path="test/lib/shaste-1.0.jar"/>
-	<classpathentry kind="lib" path="test/lib/uispec4j-0.15.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/asm-2.2.1.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/cobertura.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/jakarta-oro-2.0.8.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry sourcepath="/AXIS_SOURCE" kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
@@ -77,27 +63,49 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-discovery-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/cobertura.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/jakarta-oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
+	<classpathentry kind="lib" path="lib/antlr.jar"/>
 	<classpathentry kind="lib" path="lib/jaxme2-0.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/jaxme2-rt-0.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/jaxmeapi-0.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/jaxmejs-0.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/jaxmepm-0.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/jaxmexs-0.5.1.jar"/>
-	<classpathentry kind="lib" path="lib/antlr.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-core-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
+	<classpathentry kind="lib" path="test/lib/abbot.jar"/>
+	<classpathentry kind="lib" path="test/lib/ao-util.jar"/>
+	<classpathentry kind="lib" path="test/lib/docall.jar"/>
+	<classpathentry kind="lib" path="test/lib/gnu-regexp-110.jar"/>
+	<classpathentry kind="lib" path="test/lib/shaste-1.0.jar"/>
+	<classpathentry kind="lib" path="test/lib/uispec4j-0.15.jar"/>
+	<classpathentry kind="lib" path="ext/lib/acme.jar"/>
+	<classpathentry kind="lib" path="ext/lib/ant-contrib.jar"/>
+	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-caDSR-1.0-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-caDSR-1.0-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-caDSR-1.0-portal.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-caDSR-1.0-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-caDSR-1.0-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/acme.jar"/>
-	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-discovery-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-GlobalModelExchange_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-graph-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-core-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-portal-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-client-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-common-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-service-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-stubs-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-common-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-data-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-security-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cglib-full-2.0.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/client.jar"/>
@@ -121,8 +129,7 @@
 	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="lib" path="ext/lib/swidgets-0.1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/toolbar-1.1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-common-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-data-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/asm-2.2.1.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
