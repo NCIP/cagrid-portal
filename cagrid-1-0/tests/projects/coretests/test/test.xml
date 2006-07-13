@@ -41,6 +41,10 @@
 
 			<batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
+					<exclude name="**/*Abstract*.java" />
+					<exclude name="**/CaDSRServiceTest.java" />
+					<exclude name="**/IndexServiceTest.java" />
+					<exclude name="**/ServiceMetadataSerializationTest.java" />
 					<include name="**/*Test.java" />
 					<include name="**/*TestCase.java" />
 				</fileset>
