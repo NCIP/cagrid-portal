@@ -51,7 +51,9 @@ public class IntroduceServiceInfo
 				namespace = atts.getValue("namespace");
 				packageName = atts.getValue("packageName");
 			} else if (qname.endsWith("Method")) {
-				methodNames.add(atts.getValue("name"));
+				if ("false".equals(atts.getValue("isProvided"))) {
+					methodNames.add(atts.getValue("name"));
+				}
 			}
 		}
 	}
