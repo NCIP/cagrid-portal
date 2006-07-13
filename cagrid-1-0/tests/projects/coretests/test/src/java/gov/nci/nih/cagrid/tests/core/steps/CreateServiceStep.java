@@ -8,8 +8,10 @@ import gov.nci.nih.cagrid.tests.core.util.FileUtils;
 import gov.nci.nih.cagrid.tests.core.util.IntroduceServiceInfo;
 import gov.nci.nih.cagrid.tests.core.util.SourceUtils;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -28,10 +30,12 @@ public class CreateServiceStep
 	private String pkg;
 	private String namespace;
 	private File serviceXmlDescriptor;
+	private File schemaDir;
 	private File[] schemas;
 	private File implFile;
 	private File[] jars;
-	private File metadataFile;
+	private File[] etcFiles;
+	private Properties introduceProps;
 	
 	public CreateServiceStep(File introduceDir, File testDir, File tmpDir) 
 		throws ParserConfigurationException, SAXException, IOException
@@ -53,9 +57,9 @@ public class CreateServiceStep
 		this.serviceDir.mkdirs();
 		
 		// set schemas
-		File schemaDir = new File(testDir, "schema");
+		this.schemaDir = new File(testDir, "schema");
 		if (schemaDir.exists()) {
-			this.schemas = schemaDir.listFiles(new FileFilter() {
+			this.schemas = FileUtils.listRecursively(schemaDir, new FileFilter() {
 				public boolean accept(File file) {
 					return file.getName().endsWith(".xsd");
 				}
@@ -80,12 +84,25 @@ public class CreateServiceStep
 		}
 		
 		// set metadata file
-		this.metadataFile = new File(testDir, "etc" + File.separator + IntroduceServiceInfo.INTRODUCE_SERVICEMETADATA_FILENAME);
+		this.etcFiles = new File(testDir, "etc").listFiles(new FileFilter() {
+			public boolean accept(File file) {
+				return file.getName().endsWith(".xml");
+			}
+		});
+		
+		introduceProps = new Properties();
+		File introducePropFile = new File(testDir, "introduce.properties");
+		if (introducePropFile.exists()) {
+			BufferedInputStream is = new BufferedInputStream(new FileInputStream(introducePropFile));
+			introduceProps.load(is);
+			is.close();
+		}
 	}
 	
 	public CreateServiceStep(
 		File introduceDir, File serviceDir, String serviceName, String pkg, String namespace, 
-		File serviceXmlDescriptor, File[] schemas, File implFile, File[] jars, File metadataFile
+		File serviceXmlDescriptor, File schemaDir, File[] schemas, File implFile, File[] jars, File[] etcFiles, 
+		Properties introduceProps
 	) {
 		super();
 		
@@ -96,9 +113,11 @@ public class CreateServiceStep
 		this.namespace = namespace;
 		this.serviceXmlDescriptor = serviceXmlDescriptor;
 		this.schemas = schemas;
+		this.schemaDir = schemaDir;
 		this.implFile = implFile;
 		this.jars = jars;
-		this.metadataFile = metadataFile;
+		this.etcFiles = etcFiles;
+		this.introduceProps = introduceProps;
 	}
 	
 	public void runStep() 
@@ -111,7 +130,11 @@ public class CreateServiceStep
 		File schemaDir = new File(serviceDir, "schema" + File.separator + serviceName);
 		schemaDir.mkdirs();
 		for (File schema : schemas) {
-			FileUtils.copy(schema, new File(schemaDir, schema.getName()));
+			String path = schema.toString().substring(this.schemaDir.toString().length());
+			if (path.startsWith("/") || path.startsWith("\\")) path = path.substring(1);
+			File targetFile = new File(schemaDir, path);
+			targetFile.getParentFile().mkdirs();
+			FileUtils.copy(schema, targetFile);
 		}
 		
 		// copy interface
@@ -125,9 +148,11 @@ public class CreateServiceStep
 		}
 		
 		// copy metadata
-		if (metadataFile.exists()) {
+		if (etcFiles != null) {
 			File etcDir = new File(serviceDir, "etc");
-			FileUtils.copy(metadataFile, new File(etcDir, metadataFile.getName()));
+			for (File file : etcFiles) {
+				FileUtils.copy(file, new File(etcDir, file.getName()));
+			}
 		}
 
 		// synchronize
@@ -170,8 +195,14 @@ public class CreateServiceStep
 		sysProps.setProperty("introduce.skeleton.namespace.domain", namespace);
 		sysProps.setProperty("introduce.skeleton.extensions", "");
 		
+		for (Object key : introduceProps.keySet()) {
+			sysProps.setProperty((String) key, introduceProps.getProperty((String) key));
+		}
+		
 		// invoke ant
 		AntUtils.runAnt(introduceDir, null, IntroduceServiceInfo.INTRODUCE_CREATESERVICE_TASK, sysProps, null);
+		// invoke ant
+		AntUtils.runAnt(introduceDir, null, "postCreateService", sysProps, null);
 	}
 	
 	private void synchronizeSkeleton() 
@@ -193,7 +224,7 @@ public class CreateServiceStep
 		// invoke ant
 		AntUtils.runAnt(serviceDir, null, "all", null, null);
 	}
-
+	
 	public File getServiceDir()
 	{
 		return serviceDir;
