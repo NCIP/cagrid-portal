@@ -41,6 +41,12 @@ public class ProxyUtil {
 	}
 
 
+	public static void deleteDefaultProxy() {
+		File f = new File(ConfigUtil.discoverProxyLocation());
+		f.delete();
+	}
+
+
 	public static void saveProxyAsDefault(GlobusCredential proxy) throws Exception {
 		saveProxy(proxy, ConfigUtil.discoverProxyLocation());
 	}
