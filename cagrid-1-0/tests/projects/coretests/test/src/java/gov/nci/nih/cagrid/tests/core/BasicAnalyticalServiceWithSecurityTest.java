@@ -8,6 +8,7 @@ import gov.nci.nih.cagrid.tests.core.steps.CreateTempGlobusStep;
 import gov.nci.nih.cagrid.tests.core.steps.DeployGlobusServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.StartGlobusStep;
 import gov.nci.nih.cagrid.tests.core.steps.StopGlobusStep;
+import gov.nci.nih.cagrid.tests.core.steps.SyncGtsOnceStep;
 
 import java.io.File;
 import java.util.Vector;
@@ -30,6 +31,7 @@ public class BasicAnalyticalServiceWithSecurityTest
 		super.init("BasicAnalyticalServiceWithSecurity");
 
 		Vector steps = new Vector();
+		steps.add(new SyncGtsOnceStep());
 		steps.add(createServiceStep);
 		steps.add(new CreateTempGlobusStep(globus));
 		if (super.serviceInfo.isTransportSecurity()) {
