@@ -33,12 +33,13 @@ public class IntroduceServiceInfoTest
 			"test" + File.separator + "resources" + File.separator + "IntroduceServiceInfoTest" + File.separator + "introduce.xml"
 		)));
 		
-		assertEquals("http://tests.cagrid.nci.nih.gov/BasicAnalyticalService", info.getNamespace());
+		assertEquals("http://tests.cagrid.nci.nih.gov/BasicAnalyticalServiceWithSecurity", info.getNamespace());
 		assertEquals("gov.nih.nci.cagrid.tests", info.getPackageName());
-		assertEquals("BasicAnalyticalService", info.getServiceName());
+		assertEquals("BasicAnalyticalServiceWithSecurity", info.getServiceName());
 		String[] methodNames = info.getMethodNames();
 		assertEquals(1, methodNames.length);
 		assertEquals("reverseTranslate", methodNames[0]);
+		assertEquals(true, info.isTransportSecurity());
 	}
 	
 	public static void main(String[] args) throws Exception

@@ -26,6 +26,7 @@ public class IntroduceServiceInfo
 	private String namespace;
 	private String packageName;
 	private String[] methodNames;
+	private boolean transportSecurity = false;
 	
 	public IntroduceServiceInfo(File serviceXmlDescriptor) 
 		throws ParserConfigurationException, SAXException, IOException
@@ -54,6 +55,8 @@ public class IntroduceServiceInfo
 				if ("false".equals(atts.getValue("isProvided"))) {
 					methodNames.add(atts.getValue("name"));
 				}
+			} else if (qname.endsWith("TransportLevelSecurity")) {
+				transportSecurity = atts.getValue("xsi:type").endsWith("TransportLevelSecurity");
 			}
 		}
 	}
@@ -76,6 +79,11 @@ public class IntroduceServiceInfo
 	public String[] getMethodNames()
 	{
 		return methodNames;
+	}
+
+	public boolean isTransportSecurity()
+	{
+		return transportSecurity;
 	}
 
 }
