@@ -12,8 +12,8 @@
 	<!-- separate directoris (e.g. jars and conf files)                  -->
 	<!-- =============================================================== -->
 	<target name="defineTestsArtifacts" depends="prepare">
-		<artifact track="main" type="jars" id="BasicAnalyticalService.jars">
-			<fileset dir="${tests.projects.dir}/BasicAnalyticalService/build/lib">
+		<artifact track="main" type="jars" id="echo.jars">
+			<fileset dir="${tests.projects.dir}/echo/build/lib">
 				<include name="*.jar" />
 			</fileset>
 		</artifact>

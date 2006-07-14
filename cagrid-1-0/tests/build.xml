@@ -35,7 +35,7 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="coretests" />
+	<property name="projects.list" value="echo,coretests" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
@@ -68,10 +68,18 @@
 	</target>
 
 	<!-- =============================================================== -->
+	<!-- echo                                                            -->
+	<!-- =============================================================== -->
+	<target name="build-echo" depends="prepare" description="Builds ntsec">
+		<ant dir="${tests.projects.dir}/echo" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
 	<!-- coretests                                                       -->
 	<!-- =============================================================== -->
 	<target name="build-coretests" depends="prepare" description="Builds ntsec">
 		<resolveDependencies extdir="${tests.projects.dir}/coretests/ext">
+			<artifact refid="echo.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="cadsr.jars" />
