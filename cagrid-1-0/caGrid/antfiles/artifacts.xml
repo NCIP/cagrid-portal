@@ -144,6 +144,12 @@
 			</fileset>
 		</artifact>
 
+		<artifact track="main" type="jars" id="dorian.jars">
+			<antcall target="build-dorian" />
+			<fileset dir="${projects.dir}/dorian/build/lib">
+				<include name="*.jar" />
+			</fileset>
+		</artifact>
 
 		<artifact track="main" type="jars" id="gts.client.jars">
 			<antcall target="build-gts" />
