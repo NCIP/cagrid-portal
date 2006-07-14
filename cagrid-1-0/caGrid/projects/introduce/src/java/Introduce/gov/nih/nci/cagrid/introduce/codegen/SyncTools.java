@@ -280,7 +280,7 @@ public class SyncTools {
 
 		// STEP 4: write out namespace mappings and flatten the wsdl file then
 		// merge namespace
-		syncAndFlattenWSDL(info, schemaDir);
+		syncWSDL(info, schemaDir);
 
 		mergeNamespaces();
 
@@ -579,7 +579,7 @@ public class SyncTools {
 	}
 
 
-	private void syncAndFlattenWSDL(ServiceInformation info, File schemaDir) throws Exception {
+	private void syncWSDL(ServiceInformation info, File schemaDir) throws Exception {
 		// get the classnames from the axis symbol table
 		if (info.getServices().getService() != null) {
 			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
