@@ -31,6 +31,7 @@ public class GlobusHelper
 	private boolean secure;
 	private File tmpGlobusLocation;
 	private Process p;
+	private File securityDescriptor = new File("security-descriptor.xml");
 	
 	public GlobusHelper() 
 	{
@@ -151,6 +152,10 @@ public class GlobusHelper
 			cmd.add("-p");
 			cmd.add(String.valueOf(port));
 		}
+		if (secure && securityDescriptor != null) {
+			cmd.add("-containerDesc");
+			cmd.add(securityDescriptor.toString());
+		}
 		if (! secure) cmd.add("-nosec");
 
 		// build environment
@@ -181,8 +186,10 @@ public class GlobusHelper
 			);
 			locator.setEngine(new AxisClient(engineConfig));
 			
+			String url = "http://localhost:" + port + "/wsrf/services/CounterService";
+			if (secure) url = "https://localhost:" + port + "/wsrf/services/CounterService";
 			CounterPortType counter = locator.getCounterPortTypePort(new EndpointReferenceType(new Address(
-				"http://localhost:" + port + "/wsrf/services/CounterService"
+				url
 			)));
 			CreateCounterResponse response = counter.createCounter(new CreateCounter());	
 			EndpointReferenceType endpoint = response.getEndpointReference();
@@ -219,6 +226,16 @@ public class GlobusHelper
 	{
 		return tmpGlobusLocation;
 	}
+
+	public File getSecurityDescriptor()
+	{
+		return securityDescriptor;
+	}
+
+	public void setSecurityDescriptor(File securityDescriptor)
+	{
+		this.securityDescriptor = securityDescriptor;
+	}
 	
 	private static void sleep(long ms)
 	{
@@ -230,10 +247,10 @@ public class GlobusHelper
 	public static void main(String[] args)
 		throws Exception
 	{
-		GlobusHelper globus = new GlobusHelper();
+		GlobusHelper globus = new GlobusHelper(true);
 		globus.deployService(new File("."));
-		globus.startGlobus(8080);
-		globus.stopGlobus(8080);
+		globus.startGlobus(8443);
+		globus.stopGlobus(8443);
 		System.out.println("Done");
 	}
 }
