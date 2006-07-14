@@ -6,9 +6,11 @@ package gov.nci.nih.cagrid.tests.core;
 import gov.nci.nih.cagrid.tests.core.util.EnvUtils;
 import gov.nci.nih.cagrid.tests.core.util.FileUtils;
 import gov.nci.nih.cagrid.tests.core.util.StdIOThread;
+import gov.nih.nci.cagrid.tests.client.IntroduceEchoClient;
 
 import java.io.File;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import javax.xml.rpc.ServiceException;
@@ -18,6 +20,7 @@ import org.apache.axis.client.AxisClient;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.types.URI.MalformedURIException;
 import org.oasis.wsrf.lifetime.Destroy;
 
 import com.counter.CounterPortType;
@@ -27,11 +30,13 @@ import com.counter.service.CounterServiceAddressingLocator;
 
 public class GlobusHelper
 {
+	private boolean useCounterCheck = true;
 	private File tmpDir;
 	private boolean secure;
 	private File tmpGlobusLocation;
 	private Process p;
 	private File securityDescriptor = new File("security-descriptor.xml");
+	private Exception isGlobusRunningException;
 	
 	public GlobusHelper() 
 	{
@@ -114,11 +119,13 @@ public class GlobusHelper
 		this.p = runGlobusCommand("org.globus.wsrf.container.ServiceContainer", new Integer(port));
 		
 		// make sure it is running
+		isGlobusRunningException = null;
 		sleep(2000);
 		for (int i = 0; i < 10; i++) {
 			if (isGlobusRunning(port)) return;
 			sleep(500);
-		}		
+		}
+		isGlobusRunningException.printStackTrace();
 		throw new IOException("could not start Globus");
 	}
 	
@@ -175,11 +182,14 @@ public class GlobusHelper
 	
 	public boolean isGlobusRunning(int port)
 	{
+		if (useCounterCheck) return isGlobusRunningCounter(port);
+		else return isGlobusRunningEcho(port);
+	}
+	
+	public boolean isGlobusRunningCounter(int port)
+	{
 		try {
-//			Socket socket = new Socket("127.0.0.1", port);
-//			socket.close();
-//			return true;
-			
+			org.globus.axis.util.Util.registerTransport();
 			CounterServiceAddressingLocator locator = new CounterServiceAddressingLocator();
 			EngineConfiguration engineConfig = new FileProvider(
 				System.getenv("GLOBUS_LOCATION") + File.separator + "client-config.wsdd"
@@ -199,8 +209,28 @@ public class GlobusHelper
 			counter.destroy(new Destroy());
 			return true;
 		} catch (IOException e) {
+			this.isGlobusRunningException = e;
 			return false;
 		} catch (ServiceException e) {
+			this.isGlobusRunningException = e;
+			return false;
+		}
+	}
+	
+	public boolean isGlobusRunningEcho(int port)
+	{
+		String url = "http://localhost:" + port + "/wsrf/services/cagrid/IntroduceEcho";
+		if (secure) url = "https://localhost:" + port + "/wsrf/services/cagrid/IntroduceEcho";
+		
+		try {
+			IntroduceEchoClient client = new IntroduceEchoClient(url);
+			if (! "are you alive?".equals(client.echo("are you alive?"))) return false;
+			return true;
+		} catch (MalformedURIException e) {
+			this.isGlobusRunningException = e;
+			return false;
+		} catch (RemoteException e) {
+			this.isGlobusRunningException = e;
 			return false;
 		}
 	}
@@ -243,14 +273,14 @@ public class GlobusHelper
 		try { synchronized (sleep) { sleep.wait(ms); } }
 		catch(Exception e) { e.printStackTrace(); }
 	}
-	
-	public static void main(String[] args)
-		throws Exception
+
+	public boolean isUseCounterCheck()
 	{
-		GlobusHelper globus = new GlobusHelper(true);
-		globus.deployService(new File("."));
-		globus.startGlobus(8443);
-		globus.stopGlobus(8443);
-		System.out.println("Done");
+		return useCounterCheck;
+	}
+
+	public void setUseCounterCheck(boolean useCounterCheck)
+	{
+		this.useCounterCheck = useCounterCheck;
 	}
 }

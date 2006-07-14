@@ -30,6 +30,7 @@ public abstract class AbstractServiceTest
 	protected File introduceDir;
 	protected File tempDir;
 	protected File serviceDir;
+	protected IntroduceServiceInfo serviceInfo;
 	protected GlobusHelper globus;
 	protected EndpointReferenceType endpoint;
 	protected int port;
@@ -60,9 +61,22 @@ public abstract class AbstractServiceTest
 			throw new IllegalArgumentException("could not create temp dir", e);
 		}
 
+		// parse introduce service info
+		try {
+			serviceInfo = new IntroduceServiceInfo(new File(testDir, "introduce.xml"));
+		} catch (Exception e) {
+			throw new IllegalArgumentException("could not parse introduce.xml", e);
+		}
+		
 		// set globus helper and port
-		globus = new GlobusHelper(tempDir);
-		port = Integer.parseInt(System.getProperty("test.globus.port", "8080"));
+		String protocol = "http";
+		globus = new GlobusHelper(serviceInfo.isTransportSecurity(), tempDir);
+		if (serviceInfo.isTransportSecurity()) {
+			port = Integer.parseInt(System.getProperty("test.globus.secure.port", "8443"));
+			protocol = "https";
+		} else {
+			port = Integer.parseInt(System.getProperty("test.globus.port", "8080"));
+		}
 
 		// set createServiceStep
 		try {
@@ -74,7 +88,7 @@ public abstract class AbstractServiceTest
 
 		// set endpoint
 		try {
-			endpoint = new EndpointReferenceType(new Address("http://localhost:" + port + "/wsrf/services/cagrid/" + createServiceStep.getServiceName()));
+			endpoint = new EndpointReferenceType(new Address(protocol + "://localhost:" + port + "/wsrf/services/cagrid/" + createServiceStep.getServiceName()));
 		} catch (MalformedURIException e) {
 			throw new IllegalArgumentException("endpoint badly formed");
 		}

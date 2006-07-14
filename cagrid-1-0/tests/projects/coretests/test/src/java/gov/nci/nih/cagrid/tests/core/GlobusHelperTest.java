@@ -6,9 +6,11 @@ package gov.nci.nih.cagrid.tests.core;
 import gov.nci.nih.cagrid.tests.core.steps.CheckGlobusStep;
 import gov.nci.nih.cagrid.tests.core.steps.CleanupTempGlobusStep;
 import gov.nci.nih.cagrid.tests.core.steps.CreateTempGlobusStep;
+import gov.nci.nih.cagrid.tests.core.steps.DeployGlobusServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.StartGlobusStep;
 import gov.nci.nih.cagrid.tests.core.steps.StopGlobusStep;
 
+import java.io.File;
 import java.util.Vector;
 
 import junit.framework.TestResult;
@@ -24,6 +26,8 @@ public class GlobusHelperTest
 {
 	private GlobusHelper globus;
 	private int port;
+	private GlobusHelper secureGlobus;
+	private int securePort;
 	
 	public GlobusHelperTest()
 	{
@@ -43,15 +47,22 @@ public class GlobusHelperTest
 			globus.stopGlobus(port);
 			globus.cleanupTempGlobus();
 		}
-	}
+		if (secureGlobus != null) {
+			secureGlobus.stopGlobus(securePort);
+			secureGlobus.cleanupTempGlobus();
+		}
+}
 	
 	@SuppressWarnings("unchecked")
 	protected Vector steps()		
 	{
 		globus = new GlobusHelper();
 		port = Integer.parseInt(System.getProperty("test.globus.port", "8080"));
+		secureGlobus = new GlobusHelper(true);
+		securePort = Integer.parseInt(System.getProperty("test.globus.secure.port", "8443"));
 
 		Vector steps = new Vector();
+
 		steps.add(new CreateTempGlobusStep(globus));
 		steps.add(new StartGlobusStep(globus, port));
 		try {
@@ -61,6 +72,14 @@ public class GlobusHelperTest
 		}
 		steps.add(new StopGlobusStep(globus, port));
 		steps.add(new CleanupTempGlobusStep(globus));
+
+		steps.add(new CreateTempGlobusStep(secureGlobus));
+		secureGlobus.setUseCounterCheck(false);
+		steps.add(new DeployGlobusServiceStep(secureGlobus, new File("..", "echo")));
+		steps.add(new StartGlobusStep(secureGlobus, securePort));
+		steps.add(new StopGlobusStep(secureGlobus, securePort));
+		steps.add(new CleanupTempGlobusStep(secureGlobus));
+		
 		return steps;
 	}
 

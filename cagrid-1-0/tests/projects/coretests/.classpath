@@ -131,5 +131,10 @@
 	<classpathentry kind="lib" path="ext/lib/toolbar-1.1.1.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/asm-2.2.1.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-tests.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
