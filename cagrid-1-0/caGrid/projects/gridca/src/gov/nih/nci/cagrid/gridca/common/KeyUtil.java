@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.gridca.common;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -15,6 +17,7 @@ import java.security.SecureRandom;
 import org.bouncycastle.openssl.PEMReader;
 import org.globus.gsi.OpenSSLKey;
 import org.globus.gsi.bc.BouncyCastleOpenSSLKey;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -32,6 +35,7 @@ public class KeyUtil {
 		return kpGen.generateKeyPair();
 	}
 
+
 	public static KeyPair generateRSAKeyPair512() throws Exception {
 		SecurityUtil.init();
 		KeyPairGenerator kpGen = KeyPairGenerator.getInstance("RSA", "BC");
@@ -39,13 +43,13 @@ public class KeyUtil {
 		return kpGen.generateKeyPair();
 	}
 
-	public static void writePrivateKey(PrivateKey key, File file)
-			throws Exception {
+
+	public static void writePrivateKey(PrivateKey key, File file) throws Exception {
 		writePrivateKey(key, file, null);
 	}
 
-	public static void writePrivateKey(PrivateKey key, File file,
-			String password) throws Exception {
+
+	public static void writePrivateKey(PrivateKey key, File file, String password) throws Exception {
 		SecurityUtil.init();
 		OpenSSLKey ssl = new BouncyCastleOpenSSLKey(key);
 		if (password != null) {
@@ -54,8 +58,8 @@ public class KeyUtil {
 		ssl.writeTo(file.getAbsolutePath());
 	}
 
-	public static String writePrivateKey(PrivateKey key, String password)
-			throws Exception {
+
+	public static String writePrivateKey(PrivateKey key, String password) throws Exception {
 		SecurityUtil.init();
 		OpenSSLKey ssl = new BouncyCastleOpenSSLKey(key);
 		if (password != null) {
@@ -68,8 +72,17 @@ public class KeyUtil {
 		return s;
 	}
 
-	public static PrivateKey loadPrivateKey(File location, String password)
-			throws IOException, GeneralSecurityException {
+
+	public static void writePublicKey(PublicKey key, File path) throws IOException {
+		SecurityUtil.init();
+		PEMWriter pem = new PEMWriter(new FileWriter(path));
+		pem.writeObject(key);
+		pem.close();
+	}
+
+
+	public static PrivateKey loadPrivateKey(File location, String password) throws IOException,
+		GeneralSecurityException {
 		SecurityUtil.init();
 		OpenSSLKey key = new BouncyCastleOpenSSLKey(location.getAbsolutePath());
 		if (key.isEncrypted()) {
@@ -78,8 +91,9 @@ public class KeyUtil {
 		return key.getPrivateKey();
 	}
 
-	public static PrivateKey loadPrivateKey(InputStream in, String password)
-			throws IOException, GeneralSecurityException {
+
+	public static PrivateKey loadPrivateKey(InputStream in, String password) throws IOException,
+		GeneralSecurityException {
 		SecurityUtil.init();
 		OpenSSLKey key = new BouncyCastleOpenSSLKey(in);
 		if (key.isEncrypted()) {
@@ -88,18 +102,28 @@ public class KeyUtil {
 		return key.getPrivateKey();
 	}
 
-	public static PublicKey loadPublicKey(String key)
-			throws IOException, GeneralSecurityException {
+
+	public static PublicKey loadPublicKey(String key) throws IOException, GeneralSecurityException {
 		SecurityUtil.init();
 		StringReader in = new StringReader(key);
 		PEMReader reader = new PEMReader(in, null, "BC");
-		PublicKey pk =  (PublicKey) reader.readObject();
+		PublicKey pk = (PublicKey) reader.readObject();
 		reader.close();
 		return pk;
 	}
 
-	public static String writePublicKey(PublicKey key)
-			throws IOException {
+
+	public static PublicKey loadPublicKey(File location) throws IOException, GeneralSecurityException {
+		SecurityUtil.init();
+		FileReader in = new FileReader(location);
+		PEMReader reader = new PEMReader(in, null, "BC");
+		PublicKey pk = (PublicKey) reader.readObject();
+		reader.close();
+		return pk;
+	}
+
+
+	public static String writePublicKey(PublicKey key) throws IOException {
 		SecurityUtil.init();
 		StringWriter sw = new StringWriter();
 		PEMWriter pem = new PEMWriter(sw);

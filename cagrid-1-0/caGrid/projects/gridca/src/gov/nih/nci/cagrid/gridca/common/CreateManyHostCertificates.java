@@ -39,7 +39,7 @@ public class CreateManyHostCertificates {
 			PrivateKey cakey = KeyUtil.loadPrivateKey(new File(key), password);
 
 			String cert = location + "osu-cagrid-service-cacert.pem";
-			X509Certificate cacert = cacert = CertUtil.loadCertificate(new File(cert));
+			X509Certificate cacert = CertUtil.loadCertificate(new File(cert));
 			
 			List hostList = new ArrayList();
 			//hostList.add("cagrid01.bmi.ohio-state.edu");
@@ -47,8 +47,11 @@ public class CreateManyHostCertificates {
 			//hostList.add("cagrid03.bmi.ohio-state.edu");
 			//hostList.add("cagrid04.bmi.ohio-state.edu");
 			//hostList.add("cagrid05.bmi.ohio-state.edu");
-			hostList.add("gcity");
-			hostList.add("rosco");
+			hostList.add("ccis2005.duhs.duke.edu");
+			hostList.add("cagrid1.duhs.duke.edu");
+			hostList.add("cagrid2.duhs.duke.edu");
+			hostList.add("catrip1.duhs.duke.edu");
+			hostList.add("mendel.duhs.duke.edu");
 
 			for (int i = 0; i <hostList.size(); i++) {
 				String cn = (String)hostList.get(i);
