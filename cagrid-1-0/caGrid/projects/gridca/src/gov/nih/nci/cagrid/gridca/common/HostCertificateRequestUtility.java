@@ -1,9 +1,11 @@
 package gov.nih.nci.cagrid.gridca.common;
 
-import gov.nih.nci.cagrid.common.IOUtils;
 import gov.nih.nci.cagrid.common.Utils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.security.KeyPair;
 
 
@@ -18,9 +20,9 @@ public class HostCertificateRequestUtility {
 
 	public static void main(String[] args) {
 		try {
-			String caAdminEmail = "langella@bmi.osu.edu";
-			String emailSubject = "caGrid 1.0 Beta Host Certificate Request";
-			String days = "5";
+			String caAdminEmail = args[0];
+			String emailSubject = args[1];
+			String days = args[2];
 			boolean manual = true;
 			System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
 			System.out.println("*            GridCA Host Certificate Request Utility          *");
@@ -32,7 +34,7 @@ public class HostCertificateRequestUtility {
 			dir.mkdirs();
 			String hostname = null;
 			while (true) {
-				hostname = IOUtils.readLine("Enter Hostname", false);
+				hostname = readLine("Enter Hostname");
 				if (!validateHostname(hostname)) {
 					System.err.println("Invalid Hostname!!!");
 				} else {
@@ -47,7 +49,7 @@ public class HostCertificateRequestUtility {
 			if (publicKey.exists() || privateKey.exists() || cert.exists()) {
 				while (true) {
 					System.out.println("A key pair for the host " + hostname + " already exists!!!");
-					String cmd = IOUtils.readLine("Do you wish to overwite? (Y or N):", false);
+					String cmd = readLine("Do you wish to overwite? (Y or N):");
 					if ((cmd != null) && (cmd.equalsIgnoreCase("Y"))) {
 						publicKey.delete();
 						privateKey.delete();
@@ -104,6 +106,20 @@ public class HostCertificateRequestUtility {
 			System.exit(1);
 		}
 
+	}
+	
+	public static String readLine(String prompt) {
+		String s = null;
+		try {
+			System.out.println(prompt + ":");
+			System.out.flush();
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			s = br.readLine();
+		} catch (IOException ioe) {
+			System.out.println("IO error trying to read your name!");
+			System.exit(1);
+		}
+		return s;
 	}
 
 
