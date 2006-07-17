@@ -7,10 +7,20 @@
 		</xsd:annotation>
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="TargetObject" type="dcql:Object"/>
+				<xsd:element name="TargetObject" type="dcql:TargetObject"/>
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
+	<xsd:complexType name="TargetObject">
+	<xsd:annotation>
+	<xsd:documentation>Object always has a service URL</xsd:documentation> 
+	</xsd:annotation>
+		<xsd:complexContent>
+		<xsd:extension base="dcql:Object">
+			<xsd:attribute name="serviceURL" type="xsd:string" use="required"/>
+		</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
 	<xsd:complexType name="Object">
 		<xsd:annotation>
 			<xsd:documentation>Associated Object used as search criteria</xsd:documentation>
@@ -22,7 +32,7 @@
 			<xsd:element name="Group" type="dcql:Group" minOccurs="0"/>
 		</xsd:choice>
 		<xsd:attribute name="name" type="xsd:string" use="required"/>
-	</xsd:complexType>
+			</xsd:complexType>
 	<xsd:complexType name="Association">
 		<xsd:complexContent>
 			<xsd:extension base="dcql:Object">
@@ -45,7 +55,7 @@
 		</xsd:annotation>
 		<xsd:sequence>
 			<xsd:element name="JoinCondition" type="dcql:JoinCondition"/>
-			<xsd:element name="ForeignObject" type="dcql:Object"/>
+			<xsd:element name="ForeignObject" type="dcql:TargetObject"/>
 		</xsd:sequence>
 		<xsd:attribute name="roleName" type="xsd:string" use="optional"/>
 	</xsd:complexType>
