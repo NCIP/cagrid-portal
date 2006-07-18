@@ -28,8 +28,6 @@
         </property>
     </bean>
 
-    <!-- Debug logger advice    -->
-    <bean name="gov.nih.nci.cagrid.portal.utils.DebugBeforeAdvice"/>
 
     <!-- #############   DAO #############                -->
 

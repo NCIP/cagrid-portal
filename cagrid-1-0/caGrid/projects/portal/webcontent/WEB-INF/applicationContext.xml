@@ -3,8 +3,16 @@
 
 <beans>
     <import resource="classpath:applicationContext-data-access.xml"/>
+    <import resource="classpath:applicationContext-aggregators.xml"/>
 
-    <!-- Apply all compatible advices to the bean defiinition -->
-    <bean id="aapc" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+
+    <!-- Apply all logging advices to all bean defiinition -->
+    <bean name="LoggingAdvisor"
+          class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
+        <property name="usePrefix" value="true"/>
+    </bean>
+
+    <bean name="MethodLogginAdvisor"
+          class="gov.nih.nci.cagrid.portal.utils.MethodLoggingAdvisor"/>
 
 </beans>
