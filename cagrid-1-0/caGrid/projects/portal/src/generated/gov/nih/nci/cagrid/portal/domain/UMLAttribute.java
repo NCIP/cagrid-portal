@@ -33,7 +33,6 @@ public class UMLAttribute {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setDescription(java.lang.String newVal) {
@@ -41,7 +40,6 @@ public class UMLAttribute {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setId(int newVal) {
@@ -49,7 +47,6 @@ public class UMLAttribute {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setName(java.lang.String newVal) {

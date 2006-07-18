@@ -41,7 +41,6 @@ public class Operation {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setDescription(java.lang.String newVal) {
@@ -49,7 +48,6 @@ public class Operation {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setFaults(java.util.Collection newVal) {
@@ -57,7 +55,6 @@ public class Operation {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setInputParamters(java.util.Collection newVal) {
@@ -65,7 +62,6 @@ public class Operation {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setName(java.lang.String newVal) {
@@ -73,7 +69,6 @@ public class Operation {
     }
 
     /**
-     *
      * @param output
      */
     public void setOutput(OperationOutput output) {

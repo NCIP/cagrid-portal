@@ -46,7 +46,6 @@ public class SemanticMetadata {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setConceptCode(java.lang.String newVal) {
@@ -54,7 +53,6 @@ public class SemanticMetadata {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setConceptDefinition(java.lang.String newVal) {
@@ -62,7 +60,6 @@ public class SemanticMetadata {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setConceptName(java.lang.String newVal) {
@@ -70,7 +67,6 @@ public class SemanticMetadata {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setOrder(int newVal) {
@@ -78,7 +74,6 @@ public class SemanticMetadata {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setOrderLevel(int newVal) {
@@ -86,7 +81,6 @@ public class SemanticMetadata {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setPrimaryConcept(boolean newVal) {

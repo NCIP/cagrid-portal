@@ -29,9 +29,14 @@ public class RegisteredService implements GridService {
 
     }
 
+    public RegisteredService(EndpointReferenceType handle) {
+        this.setHandle(handle);
+        this.setName(GridUtils.getServiceName(handle));
+        this.setDescription(GridUtils.getServiceDescription(handle));
+    }
+
     /**
-     * @hibernate.id
-     * generator-class="increment"
+     * @hibernate.id generator-class="increment"
      * column="ID_KEY"
      */
     public int getKey() {
@@ -43,8 +48,7 @@ public class RegisteredService implements GridService {
     }
 
     /**
-     * @hibernate.property
-     * column EPR
+     * @hibernate.property column EPR
      * type string
      */
     public String getEpr() {
@@ -68,7 +72,6 @@ public class RegisteredService implements GridService {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setAlias(java.lang.String newVal) {
@@ -96,7 +99,6 @@ public class RegisteredService implements GridService {
     }
 
     /**
-     *
      * @param desc
      */
     public void setDescription(java.lang.String desc) {
@@ -104,7 +106,6 @@ public class RegisteredService implements GridService {
     }
 
     /**
-     *
      * @param name
      */
     public void setName(java.lang.String name) {
@@ -112,7 +113,6 @@ public class RegisteredService implements GridService {
     }
 
     /**
-     *
      * @param handle
      */
     public void setHandle(EndpointReferenceType handle) {

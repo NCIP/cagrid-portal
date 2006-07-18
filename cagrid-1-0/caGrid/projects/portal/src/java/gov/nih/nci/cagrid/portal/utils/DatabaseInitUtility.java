@@ -2,10 +2,8 @@ package gov.nih.nci.cagrid.portal.utils;
 
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import gov.nih.nci.cagrid.portal.manager.IndexServiceManager;
-import gov.nih.nci.cagrid.discovery.MetadataUtils;
-import gov.nih.nci.cagrid.metadata.ServiceMetadata;
-import org.springframework.beans.factory.InitializingBean;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -36,7 +34,7 @@ public class DatabaseInitUtility implements InitializingBean {
         for (Iterator idxIter = indexList.iterator(); idxIter.hasNext();) {
             EndpointReferenceType serviceEPR = GridUtils.getEPR(idxIter.next().toString());
             IndexService idxService = new IndexService(serviceEPR);
-            
+
             manager.save(idxService);
         }
     }

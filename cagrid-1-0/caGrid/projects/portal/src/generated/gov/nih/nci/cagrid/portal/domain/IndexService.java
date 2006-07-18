@@ -27,16 +27,17 @@ public class IndexService implements DomainObject, GridService {
 
     /**
      * Self initialize the index Service bean
-     * 
+     * <p/>
      * Should be used carefully only if you know
      * the EPR will resolve to a service and the EPR
      * is accessible
-     *
+     * <p/>
      * by providing it a valid EPR
+     *
      * @param handle
      * @throws Exception
      */
-    public IndexService(EndpointReferenceType handle) throws Exception{
+    public IndexService(EndpointReferenceType handle) throws Exception {
         // Use setters to keep all properties in sync
         this.setHandle(handle);
         this.setName(GridUtils.getServiceName(handle));
@@ -59,13 +60,22 @@ public class IndexService implements DomainObject, GridService {
     }
 
     /**
+     * Convinience method to add a registered service to the index
+     *
+     * @param service
+     */
+    public void addRegisteredService(RegisteredService service) {
+        this.registeredServicesCollection.add(service);
+    }
+
+
+    /**
      * set to private because its only intended
      * to be used by hibernate
      *
      * @hibernate.property column="SERVICE_EPR"
      * not-null="true"
      * unique="true"
-     *
      */
     private String getEpr() {
         return epr;
@@ -139,12 +149,10 @@ public class IndexService implements DomainObject, GridService {
     }
 
     /**
-     *
-     * @hibernate.property
-     * column="ISACTIVE"
+     * @hibernate.property column="ISACTIVE"
      */
     public boolean isActive() {
-      return active;
+        return active;
     }
 
     public void setActive(boolean active) {

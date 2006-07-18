@@ -10,6 +10,36 @@ Pre-requistie software
 
 
 ===========================================================================
+Configuration Information
+===========================================================================
+
+Portal needs a Database configured in the following way
+
+- Create DB with the portal/resources/Portal_Data_Model.SQL script
+- Configure the jdbc connection in ${username}-portal-build.properties
+   file.
+
+
+When deploying Portal, the only information needed to connect the Portal
+to caGrid are the URI's to the caGrid index services.
+
+Edit the portal/src/properties/applicationContext-data-access.xml file
+and look for the line
+    '<bean id="dbInitBean"'
+
+Add the index services that you want this portal to extract information
+from.
+
+<property name="indexList">
+ <set>
+  <value>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService</value>
+
+
+Replace the current entries in the indexList to your own
+
+
+
+===========================================================================
 Build Instructions
 ===========================================================================
 -Use the ${username}-portal-build.properties file to configure the build

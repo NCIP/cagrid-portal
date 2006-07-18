@@ -15,7 +15,6 @@ public class OperationOutput implements Parameter {
     }
 
     /**
-     *
      * @param umlClass
      */
     public void setUMLClass(UMLClass umlClass) {
@@ -23,7 +22,6 @@ public class OperationOutput implements Parameter {
     }
 
     /**
-     *
      * @param dimesionality
      */
     public void setDimensionality(int dimesionality) {

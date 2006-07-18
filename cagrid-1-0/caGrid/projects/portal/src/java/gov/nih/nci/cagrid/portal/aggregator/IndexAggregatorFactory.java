@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.portal.aggregator;
 
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import gov.nih.nci.cagrid.portal.manager.IndexServiceManager;
+import org.apache.log4j.Category;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 
@@ -21,11 +22,14 @@ public class IndexAggregatorFactory implements ApplicationListener, Runnable {
     private IndexServiceManager idxManager;
     private boolean metadataCompliance;
 
+    // Logger
+    private Category mLogger = Category.getInstance(getClass().getName());
+
     /**
      * IOC through Constructor injection
      */
-    public IndexAggregatorFactory(boolean metadataCompliance, IndexServiceManager idxManager) {
-        this.metadataCompliance = metadataCompliance;
+    public IndexAggregatorFactory(java.lang.Boolean metadataCompliance, IndexServiceManager idxManager) {
+        this.metadataCompliance = metadataCompliance.booleanValue();
         this.idxManager = idxManager;
     }
 
@@ -46,7 +50,8 @@ public class IndexAggregatorFactory implements ApplicationListener, Runnable {
 
         for (ListIterator iter = indexes.listIterator(); iter.hasNext();) {
             IndexService idx = (IndexService) iter.next();
-            IndexAggregator idxAggr = new IndexAggregator(idx.getHandle(), this.metadataCompliance);
+            IndexAggregator idxAggr = new IndexAggregator(idx, idxManager, this.metadataCompliance);
+            mLogger.debug("Index Aggregator started for index " + idx.getHandle().toString());
             idxAggr.run();
         }
 

@@ -1,6 +1,9 @@
 package gov.nih.nci.cagrid.portal.aggregator;
 
 import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
+import gov.nih.nci.cagrid.portal.domain.IndexService;
+import gov.nih.nci.cagrid.portal.domain.RegisteredService;
+import gov.nih.nci.cagrid.portal.manager.IndexServiceManager;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 
 /**
@@ -17,13 +20,20 @@ public class IndexAggregator implements Runnable {
 
     private DiscoveryClient discClient;
     private boolean metadataCompliance;
+    private IndexService indexService;
+    private IndexServiceManager idxMgr;
 
     /**
      * Initialize the runnable class with the
      * index service to aggregate from
      */
-    public IndexAggregator(EndpointReferenceType indexServiceEPR, boolean metadataCompliance) {
-        this.discClient = new DiscoveryClient(indexServiceEPR);
+    public IndexAggregator(IndexService indexService, IndexServiceManager idxMgr, boolean metadataCompliance) {
+        this.indexService = indexService;
+        // create discovery client for the index
+        this.discClient = new DiscoveryClient(indexService.getHandle());
+
+        // Inherit the manager
+        this.idxMgr = idxMgr;
         this.metadataCompliance = metadataCompliance;
     }
 
@@ -32,13 +42,13 @@ public class IndexAggregator implements Runnable {
         try {
             EndpointReferenceType[] services = discClient.getAllServices(metadataCompliance);
 
+            for (int i = 0; i < services.length; i++) {
+                indexService.addRegisteredService(new RegisteredService(services[i]));
+                idxMgr.save(indexService);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-
-
     }
-
-
 }

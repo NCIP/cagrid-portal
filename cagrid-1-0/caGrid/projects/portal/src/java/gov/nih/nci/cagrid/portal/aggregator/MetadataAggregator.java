@@ -23,6 +23,7 @@ public class MetadataAggregator implements ApplicationEventPublisherAware, Runna
      */
     public void onApplicationEvent(ApplicationEvent o0) {
 
+
     }
 
     public void run() {

@@ -45,7 +45,6 @@ public class DomainModel {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setLongName(java.lang.String newVal) {
@@ -53,7 +52,6 @@ public class DomainModel {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setProjectDescription(java.lang.String newVal) {
@@ -61,7 +59,6 @@ public class DomainModel {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setProjectVersion(java.lang.String newVal) {
@@ -69,7 +66,6 @@ public class DomainModel {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setServiceEPR(java.lang.String newVal) {
@@ -77,7 +73,6 @@ public class DomainModel {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setShortName(java.lang.String newVal) {

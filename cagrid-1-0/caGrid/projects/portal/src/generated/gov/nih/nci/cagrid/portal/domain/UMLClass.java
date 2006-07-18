@@ -56,7 +56,6 @@ public class UMLClass {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setClassName(java.lang.String newVal) {
@@ -64,7 +63,6 @@ public class UMLClass {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setDescription(java.lang.String newVal) {
@@ -72,7 +70,6 @@ public class UMLClass {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setId(int newVal) {
@@ -80,7 +77,6 @@ public class UMLClass {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setPackageName(java.lang.String newVal) {
@@ -88,7 +84,6 @@ public class UMLClass {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setProjectName(java.lang.String newVal) {
@@ -96,7 +91,6 @@ public class UMLClass {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setProjectVersion(java.lang.String newVal) {
@@ -104,7 +98,6 @@ public class UMLClass {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setServiceEPR(java.lang.String newVal) {

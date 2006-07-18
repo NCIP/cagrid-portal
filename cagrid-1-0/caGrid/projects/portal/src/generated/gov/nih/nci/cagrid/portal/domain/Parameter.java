@@ -13,13 +13,11 @@ public interface Parameter {
     public abstract boolean isArray();
 
     /**
-     *
      * @param dimesionality
      */
     public void setDimensionality(int dimesionality);
 
     /**
-     *
      * @param umlClass
      */
     public abstract void setUMLClass(UMLClass umlClass);

@@ -1,10 +1,9 @@
 package gov.nih.nci.cagrid.portal.utils;
 
+import gov.nih.nci.cagrid.discovery.MetadataUtils;
+import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
-import gov.nih.nci.cagrid.metadata.ServiceMetadata;
-import gov.nih.nci.cagrid.discovery.MetadataUtils;
-import gov.nih.nci.cagrid.portal.domain.GridService;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,66 +15,52 @@ import gov.nih.nci.cagrid.portal.domain.GridService;
 public final class GridUtils {
 
 
-   public static EndpointReferenceType getEPR(String epr) throws URI.MalformedURIException {
+    public static EndpointReferenceType getEPR(String epr) throws URI.MalformedURIException {
         return new EndpointReferenceType(new URI(epr));
     }
 
     /**
-     *
      * @param serviceEPR
      * @return Service Description
      */
-    public static String getServiceDescription(EndpointReferenceType serviceEPR){
-        try {
-            return GridUtils.getServiceMetadata(serviceEPR).getDescription();
-        } catch (Exception e) {
-            // Log exception and return null. Properties are sometimes not returned for services, if not set
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            return null;
-        }
+    public static String getServiceDescription(EndpointReferenceType serviceEPR) throws MetadataRetreivalException {
+        return GridUtils.getServiceMetadata(serviceEPR).getDescription();
     }
 
     /**
-     *
      * @param serviceEPR
-     * @return Service Name
-
+     * @return
+     * @throws MetadataRetreivalException
      */
-     public static String getServiceName(EndpointReferenceType serviceEPR){
-        try {
-            return GridUtils.getServiceMetadata(serviceEPR).getName();
-        } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            // Log exception and return null. Properties are sometimes not returned for services, if not set
-            return null;
-        }
-
+    public static String getServiceName(EndpointReferenceType serviceEPR) throws MetadataRetreivalException {
+        return GridUtils.getServiceMetadata(serviceEPR).getName();
     }
 
     /**
      * Will return the Service metadata object for a given
-     * grid service EPR
+     * grid service EPR.
+     *
      * @param serviceEPR
      * @return
-     * @throws Exception
+     * @throws MetadataRetreivalException
      */
-     public static gov.nih.nci.cagrid.metadata.service.Service getServiceMetadata(EndpointReferenceType serviceEPR)throws Exception{
-
-        return MetadataUtils.getServiceMetadata(serviceEPR).getServiceDescription().getService();
-
-
-
+    private static gov.nih.nci.cagrid.metadata.service.Service getServiceMetadata(EndpointReferenceType serviceEPR) throws MetadataRetreivalException {
+        try {
+            return MetadataUtils.getServiceMetadata(serviceEPR).getServiceDescription().getService();
+        } catch (Exception e) {
+            // wrap the generic exception into something more specific
+            throw new MetadataRetreivalException(e);
+        }
     }
 
     /**
-     *
      * @param service
      * @return boolean if service is alive and responding
      */
-     public static boolean isServiceActive(EndpointReferenceType service){
+    public static boolean isServiceActive(EndpointReferenceType service) {
         //ToDo implement
         return true;
 
 
-}
+    }
 }

@@ -54,7 +54,6 @@ public class ResearchCenter {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setDescription(java.lang.String newVal) {
@@ -62,7 +61,6 @@ public class ResearchCenter {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setDisplayName(java.lang.String newVal) {
@@ -70,7 +68,6 @@ public class ResearchCenter {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setHomepageURL(java.lang.String newVal) {
@@ -78,7 +75,6 @@ public class ResearchCenter {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setId(int newVal) {
@@ -86,7 +82,6 @@ public class ResearchCenter {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setImageURL(java.lang.String newVal) {
@@ -94,7 +89,6 @@ public class ResearchCenter {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setrssNewsURL(java.lang.String newVal) {
@@ -102,7 +96,6 @@ public class ResearchCenter {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setShortName(java.lang.String newVal) {

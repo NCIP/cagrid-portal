@@ -31,7 +31,6 @@ public class Statistics {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setActive(boolean newVal) {
@@ -39,7 +38,6 @@ public class Statistics {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setResponseTime(double newVal) {
@@ -47,7 +45,6 @@ public class Statistics {
     }
 
     /**
-     *
      * @param newVal
      */
     public void setTimestamp(double newVal) {

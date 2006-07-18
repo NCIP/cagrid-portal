@@ -71,7 +71,8 @@
     <!-- ============================================================== -->
     <!-- Deploy Target                                               -->
     <!-- ============================================================== -->
-    <target name="deployExploded" depends="clean,cleanDeployment,compile,hibernate.xdoclet,copyResources,deployPreBuilt" description="Deploy Application into tomcat"/>
+    <target name="deployExploded" depends="clean,cleanDeployment,compile,hibernate.xdoclet,copyResources,deployPreBuilt"
+            description="Deploy Application into tomcat"/>
 
     <target name="deployPreBuilt" description="Deploys pre-built webapp">
         <copydir src="${webcontent.dir}" dest="${tomcat.webapps.dir}/${project.name}" forceoverwrite="true"/>
@@ -170,8 +171,8 @@
 
         <!--Unix works for all environments -->
         <pathconvert targetos="unix" property="tomcat.log.dir">
-                <path location="${tomcat.dir}/logs"/>
-         </pathconvert>
+            <path location="${tomcat.dir}/logs"/>
+        </pathconvert>
 
         <copy
                 file="${resources.dir}/log4j.xml.template"
