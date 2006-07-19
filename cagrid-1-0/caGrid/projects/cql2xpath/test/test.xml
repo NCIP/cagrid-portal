@@ -9,7 +9,7 @@
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}"/>
 		
-		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
+		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}"/>
 			<jvmarg value="-Dbuild.dir=${classes.dir}"/>
 			<classpath>
@@ -22,5 +22,6 @@
 				</fileset>
 			</batchtest>
 		</junit>
+        <fail message="Tests failed! Check test reports." if="test.failed" />   
 	</target>
 </project>

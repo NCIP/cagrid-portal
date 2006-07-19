@@ -30,7 +30,7 @@
 	<target name="test" depends="checkGlobus, instrument">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true" fork="yes">
+		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
 			<sysproperty key="basedir" value="${basedir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
@@ -47,6 +47,7 @@
 				</fileset>
 			</batchtest>
 		</junit>
+        <fail message="Tests failed! Check test reports." if="test.failed" />   
 		<antcall target="testGUI" />
 	</target>
 
@@ -56,7 +57,7 @@
 		<!-- add hte add filters line here -->
 		<!-- then copy each of those scripts.template to scripts -->
 		
-		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
+		<junit dir="${basedir}" printsummary="yes" errorproperty="gui.test.failed" failureproperty="gui.test.failed" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}" />
 			<jvmarg value="-Dbasedir=${basedir}" />
 			<!--<sysproperty key="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -71,6 +72,7 @@
 				</fileset>
 			</batchtest>
 		</junit>
+        <fail message="Tests failed! Check test reports." if="gui.test.failed" />   
 	</target>
 
 	<target name="coverageReport" depends="test" description="Runs the tests and generates a test

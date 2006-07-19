@@ -33,7 +33,7 @@
     <!-- call the test target for each project and aggregates the log resutls  -->
     <target name="test" depends="compileTests, instrument" description="Runs the tests.">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${basedir}" printsummary="yes" haltonfailure="true" showoutput="true" fork="yes">
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
             <sysproperty key="build.dirs" value="${build.utils.dest};${build.extension.dest};${build.service.dest}" />
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Dbuild.dir=${test.classes.dir}" />
@@ -50,6 +50,7 @@
                 </fileset>
             </batchtest>
         </junit>
+        <fail message="Tests failed! Check test reports." if="test.failed" />
     </target>
 
 
