@@ -9,7 +9,7 @@
 	<property name="cobertura.report.dir" value="${build.dir}/coverage" />
 	<property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser" />
 
-	<target name="instrument">
+	<target name="instrument" depends="checkGlobus">
 		<taskdef classpathref="test.run.classpath" resource="tasks.properties" />
 		<mkdir dir="${instrumented.classes.dir}" />
 		<cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
@@ -20,7 +20,7 @@
 	</target>
 
 	<!-- call the test target for each project and aggregates the log resutls  -->
-	<target name="test" depends="checkGlobus,create_config_files, instrument">
+	<target name="test" depends="instrument, create_config_files">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
