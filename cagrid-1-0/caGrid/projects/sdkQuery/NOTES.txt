@@ -8,3 +8,5 @@ BUGS:
 Associations made inside groups are not processed due to limitations in the Hibernate detached criteria query.
 	-- All associations appear to be processed as an 'and' operation.  Until I can verify this behavior, association processing is disabled for BOTH 'and' and 'or' logic on groups.
 	-- Multiple associations to the same object cannot be made.
+	-- http://forum.hibernate.org/viewtopic.php?t=931249
+	-- http://opensource.atlassian.com/projects/hibernate/browse/HHH-879
