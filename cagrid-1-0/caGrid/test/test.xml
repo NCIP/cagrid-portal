@@ -128,20 +128,16 @@
         <!-- Hackaroo to strip out the xml pragmas (NOTE: this requires a literal exact match) -->
         <replace file="${dart.experimental.log}" summary="true" token="@BUILDSTAMP@" value="${BUILDSTAMP}" />
         <replace file="${dart.experimental.log}" summary="true">
-            <replacetoken>
-                <![CDATA[<?xml version="1.0" encoding="UTF-8" ?>]]></replacetoken>
+            <replacetoken><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>]]></replacetoken>
         </replace>
         <replace file="${dart.experimental.log}" summary="true">
-            <replacetoken>
-                <![CDATA[<?xml version="1.0" encoding="utf-8" ?>]]></replacetoken>
+            <replacetoken><![CDATA[<?xml version="1.0" encoding="utf-8" ?>]]></replacetoken>
         </replace>
         <replace file="${dart.experimental.log}" summary="true">
-            <replacetoken>
-                <![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]></replacetoken>
+            <replacetoken><![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]></replacetoken>
         </replace>
         <replace file="${dart.experimental.log}" summary="true">
-            <replacetoken>
-                <![CDATA[<?xml version="1.0" encoding="utf-8"?>]]></replacetoken>
+            <replacetoken><![CDATA[<?xml version="1.0" encoding="utf-8"?>]]></replacetoken>
         </replace>
         <ant target="publish">
             <property name="dart.logfile" value="${dart.experimental.log}" />
