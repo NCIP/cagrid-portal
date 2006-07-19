@@ -17,12 +17,11 @@ GSBT - Globus Service Build Tools
 	<property file="${user.home}/build.properties" />
 
 
+    <property name="project.name" value="caGrid-gridca"/>
 	<!-- Directory where GT4 is installed -->
 	<!-- Note that the buildfile requires an environment variable GLOBUS_LOCATION
 	     pointing to that directory -->
 	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
-
-
 
 	<!-- GT4 build files and directories-->
 	<property name="build.packages" location="${globus.location}/share/globus_wsrf_common/build-packages.xml" />
