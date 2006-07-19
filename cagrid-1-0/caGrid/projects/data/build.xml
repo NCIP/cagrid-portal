@@ -93,13 +93,6 @@
 	<!-- The Test Classpath                                                   -->
 	<!-- =============================================================== -->
 	<path id="test.classpath">
-		<pathelement path="${stubs.dest}"/>
-		<pathelement path="${build.common.dest}"/>
-		<pathelement path="${build.utils.dest}" />
-		<pathelement path="${build.extension.dest}"/>
-		<pathelement path="${build.service.dest}"/>
-		<pathelement path="${build.validation.dest}"/>
-		<pathelement path="${build.cql.dest}"/>
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -111,6 +104,9 @@
 		</fileset>
 		<fileset dir="${ext.test.lib.dir}">
 			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${build.jars.dir}">
+			<include name="**/*.jar"/>
 		</fileset>
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
