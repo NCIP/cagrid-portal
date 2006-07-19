@@ -52,6 +52,10 @@
 
 	<!-- setting the ant var introduce.test.gui will make the gui tests run, else they will not -->
 	<target name="testGUI" depends="checkGlobus" if="introduce.test.gui">
+		
+		<!-- add hte add filters line here -->
+		<!-- then copy each of those scripts.template to scripts -->
+		
 		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}" />
 			<jvmarg value="-Dbasedir=${basedir}" />
