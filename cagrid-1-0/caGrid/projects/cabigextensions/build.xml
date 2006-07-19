@@ -92,16 +92,16 @@
         <path id="test.classpath">
             <pathelement path="${classes.dir}" />
             <pathelement path="${test.dir}/resources" />
-            <fileset dir="${lib.dir}">
-                <include name="**/*.jar" />
-            </fileset>
-            <fileset dir="${ext.lib.dir}">
-                <include name="**/*.jar" />
-            </fileset>
             <fileset dir="${test.lib.dir}">
                 <include name="**/*.jar" />
             </fileset>
             <fileset dir="${ext.test.lib.dir}">
+                <include name="**/*.jar" />
+            </fileset>
+            <fileset dir="${lib.dir}">
+                <include name="**/*.jar" />
+            </fileset>
+            <fileset dir="${ext.lib.dir}">
                 <include name="**/*.jar" />
             </fileset>
             <fileset dir="${globus.dir}/lib">
