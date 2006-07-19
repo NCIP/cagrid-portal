@@ -1,11 +1,13 @@
 package gov.nih.nci.cagrid.data.cql.cacore;
 
+import gov.nih.nci.cagrid.cqlquery.Association;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +25,9 @@ public class CQL2HQL {
 	private static Map predicateValues;
 
 	/**
-	 * Translates a CQL query into an HQL string.
+	 * Translates a CQL query into an HQL string.  This translation process assumes the
+	 * CQL Query has passed validation.  Processing of invalid CQL may or may not procede
+	 * with undefined results.
 	 * 
 	 * @param query
 	 * @return
@@ -57,6 +61,10 @@ public class CQL2HQL {
 			hql.append(" where ");
 			processAttribute(hql, objAlias, obj.getAttribute());
 		}
+		if (obj.getAssociation() != null) {
+			hql.append(" where ");
+			processAssociation(hql, aliases, objAlias, objName, obj.getAssociation());
+		}
 	}
 	
 	
@@ -84,6 +92,73 @@ public class CQL2HQL {
 			String predValue = convertPredicate(predicate);
 			hql.append(" ").append(predValue).append(" '").append(attrib.getValue()).append("'");
 		}
+	}
+	
+	
+	/**
+	 * Processes an Association of a CQL Query.
+	 * 
+	 * @param hql
+	 * 		The existing HQL query fragment
+	 * @param parentAlias
+	 * 		The alias of the parent object
+	 * @param parentClass
+	 * 		The class of the parent object
+	 * @param assoc
+	 * 		The association to process into HQL
+	 * @throws QueryProcessingException
+	 */
+	private static void processAssociation(StringBuilder hql, Map aliases, String parentAlias, 
+		String parentName, Association assoc) throws QueryProcessingException {
+		// get the role name of the association
+		String roleName = getRoleName(parentName, assoc);
+		if (roleName == null) {
+			// still null?? no association to the object!
+			throw new QueryProcessingException("Association from type " + parentName + 
+				" to type " + assoc.getName() + " does not exist.  Use only direct associations");
+		}
+		hql.append(" ").append(parentAlias).append('.').append(roleName).append(" in (");
+		processObject(hql, aliases, assoc);
+		hql.append(")");
+	}
+	
+	
+	/**
+	 * Gets the role name of an association relative to its parent class.
+	 * 
+	 * @param parentName
+	 * 		The class name of the parent of the association
+	 * @param assoc
+	 * 		The associated object restriction
+	 * @return
+	 * 		The role name of the associated object
+	 * @throws QueryProcessingException
+	 */
+	private static String getRoleName(String parentName, Association assoc) throws QueryProcessingException {
+		String roleName = assoc.getRoleName();
+		if (roleName == null) {
+			// determine role based on object's type
+			Class parentClass = null;
+			try {
+				parentClass = Class.forName(parentName);
+			} catch (Exception ex) {
+				throw new QueryProcessingException("Could not load class: " + ex.getMessage(), ex);
+			}
+			String associationTypeName = assoc.getName();
+			Field[] objectFields = parentClass.getFields();
+			for (int i = 0; i < objectFields.length; i++) {
+				if (objectFields[i].getType().getName().equals(associationTypeName)) {
+					if (roleName == null) {
+						roleName = objectFields[i].getName();
+					} else {
+						// already found a field of the same type, so association is ambiguous
+						throw new QueryProcessingException("Association from " + parentClass.getName() + 
+							" to " + associationTypeName + " is ambiguous: Specify a role name");
+					}
+				}
+			}
+		}
+		return roleName;
 	}
 	
 	
