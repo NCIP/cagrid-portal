@@ -1,8 +1,12 @@
 package gov.nih.nci.cagrid.data;
 
-import gov.nih.nci.cagrid.common.SchemaValidator;
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.cqlquery.CQLQuery;
+import gov.nih.nci.cagrid.data.cql.validation.JaxPValidator;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 
 import junit.framework.TestCase;
 import junit.framework.TestResult;
@@ -20,13 +24,13 @@ import junit.textui.TestRunner;
  * @version $Id$ 
  */
 public class JaxPInvalidCqlTestCase extends TestCase {
-	private SchemaValidator validator;
+	private JaxPValidator validator;
 	private String cqlDocsDir;
 	
 	public JaxPInvalidCqlTestCase(String name) {
 		super(name);
 		try {
-			validator = new SchemaValidator("schema/Data/1_gov.nih.nci.cagrid.CQLQuery.xsd");
+			validator = new JaxPValidator("schema/Data/1_gov.nih.nci.cagrid.CQLQuery.xsd");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -35,10 +39,13 @@ public class JaxPInvalidCqlTestCase extends TestCase {
 	
 	
 	private void checkQuery(String filename) {
-		File queryFile = new File(cqlDocsDir + File.separator + filename);
 		try {
+			File queryFile = new File(cqlDocsDir + File.separator + filename);
 			System.out.println("Validating structure of CQL: " + queryFile.getCanonicalPath());
-			validator.validate(queryFile);
+			FileInputStream configStream = new FileInputStream(new File("client-config.wsdd"));
+			CQLQuery query = (CQLQuery) Utils.deserializeObject(
+				new FileReader(queryFile), CQLQuery.class, configStream);
+			validator.validateStructure(query);
 			fail("Query should have been invalid, was not");
 		} catch (Exception ex) {
 			System.out.println("Query verified invalid: " + ex.getMessage());

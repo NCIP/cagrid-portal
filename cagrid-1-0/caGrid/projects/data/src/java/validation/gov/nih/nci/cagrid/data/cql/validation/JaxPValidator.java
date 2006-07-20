@@ -4,12 +4,15 @@ import gov.nih.nci.cagrid.common.SchemaValidationException;
 import gov.nih.nci.cagrid.common.SchemaValidator;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.StringWriter;
 
-import org.globus.wsrf.encoding.ObjectSerializer;
+import javax.xml.namespace.QName;
 
 
 /** 
@@ -25,9 +28,11 @@ public class JaxPValidator extends CQLValidator {
 	private static DomainModelValidator domainValidator = null;
 	
 	private SchemaValidator validator;
+	private QName queryQname;
 	
 	public JaxPValidator(String xsdFilename) throws SchemaValidationException {
 		validator = new SchemaValidator(xsdFilename);
+		queryQname = new QName(DataServiceConstants.CQL_QUERY_URI, "CQLQuery");
 	}
 	
 	
@@ -35,7 +40,8 @@ public class JaxPValidator extends CQLValidator {
 		// have to convert the query back to XML to be handed off to the schema validator
 		StringWriter objectWriter = new StringWriter();
 		try {
-			ObjectSerializer.serialize(objectWriter, query, Utils.getRegisteredQName(query.getClass()));
+			FileInputStream configStream = new FileInputStream(new File("client-config.wsdd"));
+			Utils.serializeObject(query, queryQname, objectWriter, configStream);
 		} catch (Exception ex) {
 			throw new MalformedQueryException("Error serializing the query: " + ex.getMessage(), ex);
 		}
