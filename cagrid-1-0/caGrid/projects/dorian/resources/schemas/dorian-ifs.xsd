@@ -18,6 +18,23 @@
 			</xsd:sequence>
 	    </xsd:complexType>
 	    
+	    <xsd:element name="UserAttributeDescriptor" minOccurs="0" maxOccurs="1" type="ifs:UserAttributeDescriptor"/>
+	    <xsd:complexType name="UserAttributeDescriptor">
+			<xsd:sequence>
+			    <xsd:element name="Name" type="xsd:string"/>
+				<xsd:element name="RegularExpressionValueRestriction" type="xsd:string"/>
+			</xsd:sequence>
+	    </xsd:complexType>
+	    
+	    <xsd:element name="UserAttribute" minOccurs="0" maxOccurs="1" type="ifs:UserAttribute"/>
+	    <xsd:complexType name="UserAttribute">
+			<xsd:sequence>
+			    <xsd:element name="Name" type="xsd:string"/>
+				<xsd:element name="Value" type="xsd:string"/>
+			</xsd:sequence>
+	    </xsd:complexType>
+	    
+	    
 	    <xsd:element name="IFSUser" minOccurs="0" maxOccurs="1" type="ifs:IFSUser"/>
 	    <xsd:complexType name="IFSUser">
 			<xsd:sequence>

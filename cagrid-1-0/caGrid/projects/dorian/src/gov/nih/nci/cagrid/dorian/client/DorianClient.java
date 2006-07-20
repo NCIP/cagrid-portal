@@ -270,5 +270,12 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
         return boxedResult.getIFSUserPolicy();
       }
     }
+    public void temp() throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.IllegalUserAttributeFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"temp");
+        gov.nih.nci.cagrid.dorian.stubs.TempRequest params = new gov.nih.nci.cagrid.dorian.stubs.TempRequest();
+        gov.nih.nci.cagrid.dorian.stubs.TempResponse boxedResult = portType.temp(params);
+      }
+    }
 
 }

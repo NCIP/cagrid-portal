@@ -1,5 +1,17 @@
 <ns1:ServiceSkeleton introduceVersion="1.0b" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace location="./dorian-ifs.xsd" namespace="http://cagrid.nci.nih.gov/1/dorian-ifs" packageName="gov.nih.nci.cagrid.dorian.ifs.bean" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="TrustedIdP" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UserAttributeDescriptor" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UserAttribute" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="IFSUser" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="IFSUserFilter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ProxyLifetime" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="PublicKey" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="IFSUserPolicy" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="InvalidPasswordFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="CredentialsFault" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace location="" namespace="http://www.w3.org/2001/XMLSchema" packageName="" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="integer" xsi:type="ns2:SchemaElementType"/>
@@ -25,16 +37,6 @@
    <ns2:SchemaElement type="CommunicationMechanism" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Operation" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CommunicationStyle" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./dorian-ifs.xsd" namespace="http://cagrid.nci.nih.gov/1/dorian-ifs" packageName="gov.nih.nci.cagrid.dorian.ifs.bean" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="TrustedIdP" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="IFSUser" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="IFSUserFilter" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ProxyLifetime" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="PublicKey" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="IFSUserPolicy" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="InvalidPasswordFault" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CredentialsFault" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
  </ns2:Namespaces>
  <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -240,6 +242,13 @@
      <ns4:Exceptions>
       <ns4:Exception name="DorianInternalFault"/>
       <ns4:Exception name="PermissionDeniedFault"/>
+     </ns4:Exceptions>
+    </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="temp" xsi:type="ns4:MethodType">
+     <ns4:Inputs/>
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="IllegalUserAttributeFault"/>
      </ns4:Exceptions>
     </ns4:Method>
    </ns4:Methods>

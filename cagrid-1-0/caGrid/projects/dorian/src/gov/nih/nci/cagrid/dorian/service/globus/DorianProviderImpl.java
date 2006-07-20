@@ -115,4 +115,10 @@ public class DorianProviderImpl{
 		return boxedResult;
 	}
 
+	public gov.nih.nci.cagrid.dorian.stubs.TempResponse temp(gov.nih.nci.cagrid.dorian.stubs.TempRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.IllegalUserAttributeFault {
+		gov.nih.nci.cagrid.dorian.stubs.TempResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.TempResponse();
+		impl.temp();
+		return boxedResult;
+	}
+
 }
