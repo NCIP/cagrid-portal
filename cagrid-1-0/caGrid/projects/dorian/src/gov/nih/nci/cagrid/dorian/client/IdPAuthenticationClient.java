@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.dorian.client;
 
-import java.rmi.RemoteException;
-
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
@@ -11,6 +9,8 @@ import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+
+import java.rmi.RemoteException;
 
 import org.apache.axis.types.URI.MalformedURIException;
 

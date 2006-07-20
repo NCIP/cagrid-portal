@@ -2,8 +2,6 @@ package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.SimpleResourceManager;
-import gov.nih.nci.cagrid.dorian.service.idp.IdPConfiguration;
-import gov.nih.nci.cagrid.dorian.service.idp.ManualRegistrationPolicy;
 import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;

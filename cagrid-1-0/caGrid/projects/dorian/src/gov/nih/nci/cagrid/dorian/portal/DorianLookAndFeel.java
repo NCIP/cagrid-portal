@@ -89,5 +89,10 @@ public class DorianLookAndFeel extends PortalLookAndFeel {
 		return new javax.swing.ImageIcon(DorianLookAndFeel.class
 				.getResource("/edit-paste.png"));
 	}
+	
+	public final static ImageIcon getAttributesIcon() {
+		return new javax.swing.ImageIcon(DorianLookAndFeel.class
+				.getResource("/edit-paste.png"));
+	}
 
 }

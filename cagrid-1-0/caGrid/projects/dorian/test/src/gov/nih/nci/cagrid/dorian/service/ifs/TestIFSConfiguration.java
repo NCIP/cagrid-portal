@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.SimpleResourceManager;
-import gov.nih.nci.cagrid.dorian.service.ifs.IFSConfiguration;
 import gov.nih.nci.cagrid.dorian.test.Constants;
 
 import java.io.InputStream;

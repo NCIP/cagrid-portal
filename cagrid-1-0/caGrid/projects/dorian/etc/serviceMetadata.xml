@@ -171,12 +171,6 @@
         <ns2:Fault description="" name="PermissionDeniedFault" xsi:type="ns2:Fault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="temp" xsi:type="ns2:Operation">
-       <ns2:inputParameterCollection/>
-       <ns2:faultCollection>
-        <ns2:Fault description="" name="IllegalUserAttributeFault" xsi:type="ns2:Fault"/>
-       </ns2:faultCollection>
-      </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
       <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata" xsi:type="ns2:ContextProperty"/>

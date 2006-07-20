@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
+import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
@@ -815,6 +816,25 @@ public class TestDorian extends TestCase {
 		idp.setName(name);
 		idp.setUserPolicyClass(policyClass);
 		idp.setStatus(TrustedIdPStatus.Active);
+		SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
+		uid.setNamespaceURI(SAMLConstants.UID_ATTRIBUTE_NAMESPACE);
+		uid.setName(SAMLConstants.UID_ATTRIBUTE);
+		idp.setUserIdAttributeDescriptor(uid);
+
+		SAMLAttributeDescriptor firstName = new SAMLAttributeDescriptor();
+		firstName.setNamespaceURI(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE);
+		firstName.setName(SAMLConstants.FIRST_NAME_ATTRIBUTE);
+		idp.setFirstNameAttributeDescriptor(firstName);
+
+		SAMLAttributeDescriptor lastName = new SAMLAttributeDescriptor();
+		lastName.setNamespaceURI(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE);
+		lastName.setName(SAMLConstants.LAST_NAME_ATTRIBUTE);
+		idp.setLastNameAttributeDescriptor(lastName);
+
+		SAMLAttributeDescriptor email = new SAMLAttributeDescriptor();
+		email.setNamespaceURI(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE);
+		email.setName(SAMLConstants.EMAIL_ATTRIBUTE);
+		idp.setEmailAttributeDescriptor(email);
 
 		SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
 		methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");

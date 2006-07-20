@@ -6,7 +6,8 @@
 	xmlns:ifs="http://cagrid.nci.nih.gov/1/dorian-ifs"
 	xmlns:wsbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd">
 	
-	<xsd:element name="TrustedIdP" minOccurs="0" maxOccurs="1" type="ifs:TrustedIdP"/>
+	<xsd:element name="TrustedIdP" type="ifs:TrustedIdP"/>
+	  
 	  <xsd:complexType name="TrustedIdP">
 			<xsd:sequence>
 			    <xsd:element name="id" type="xsd:long"/>
@@ -14,28 +15,25 @@
 			    <xsd:element name="status" type="ifs:TrustedIdPStatus"/>
 				<xsd:element name="UserPolicyClass" type="xsd:string"/>
 				<xsd:element name="IdPCertificate" type="xsd:string"/>
-			    <xsd:element name="AuthenticationMethod" minOccurs="0" maxOccurs="unbounded" type="ifs:SAMLAuthenticationMethod"/>	
+				<xsd:element name="AuthenticationMethod" minOccurs="0" maxOccurs="unbounded" type="ifs:SAMLAuthenticationMethod"/>	
+			    <xsd:element name="UserIdAttributeDescriptor" type="ifs:SAMLAttributeDescriptor"/>
+			    <xsd:element name="FirstNameAttributeDescriptor" type="ifs:SAMLAttributeDescriptor"/>
+			    <xsd:element name="LastNameAttributeDescriptor" type="ifs:SAMLAttributeDescriptor"/>
+			    <xsd:element name="EmailAttributeDescriptor" type="ifs:SAMLAttributeDescriptor"/>
 			</xsd:sequence>
 	    </xsd:complexType>
 	    
-	    <xsd:element name="UserAttributeDescriptor" minOccurs="0" maxOccurs="1" type="ifs:UserAttributeDescriptor"/>
-	    <xsd:complexType name="UserAttributeDescriptor">
+
+	    <xsd:complexType name="SAMLAttributeDescriptor">
 			<xsd:sequence>
+			    <xsd:element name="NamespaceURI" type="xsd:string"/>
 			    <xsd:element name="Name" type="xsd:string"/>
-				<xsd:element name="RegularExpressionValueRestriction" type="xsd:string"/>
-			</xsd:sequence>
-	    </xsd:complexType>
-	    
-	    <xsd:element name="UserAttribute" minOccurs="0" maxOccurs="1" type="ifs:UserAttribute"/>
-	    <xsd:complexType name="UserAttribute">
-			<xsd:sequence>
-			    <xsd:element name="Name" type="xsd:string"/>
-				<xsd:element name="Value" type="xsd:string"/>
 			</xsd:sequence>
 	    </xsd:complexType>
 	    
 	    
-	    <xsd:element name="IFSUser" minOccurs="0" maxOccurs="1" type="ifs:IFSUser"/>
+	    
+	    <xsd:element name="IFSUser" type="ifs:IFSUser"/>
 	    <xsd:complexType name="IFSUser">
 			<xsd:sequence>
 			    <xsd:element name="IdPId" type="xsd:long"/>
@@ -50,7 +48,7 @@
 			</xsd:sequence>
 	    </xsd:complexType>
 	    
-	    <xsd:element name="IFSUserFilter" minOccurs="0" maxOccurs="1" type="ifs:IFSUserFilter"/>
+	    <xsd:element name="IFSUserFilter" type="ifs:IFSUserFilter"/>
 	    <xsd:complexType name="IFSUserFilter">
 			<xsd:sequence>
 			    <xsd:element name="IdPId" type="xsd:long"/>
@@ -64,7 +62,7 @@
 			</xsd:sequence>
 	    </xsd:complexType>
 	    
-	     <xsd:element name="ProxyLifetime" minOccurs="0" maxOccurs="1" type="ifs:ProxyLifetime"/>
+	     <xsd:element name="ProxyLifetime" type="ifs:ProxyLifetime"/>
 	    <xsd:complexType name="ProxyLifetime">
 			<xsd:sequence>
 			    <xsd:element name="hours" type="xsd:int"/>
@@ -115,7 +113,7 @@
   			</xsd:restriction>
  	  </xsd:simpleType>
  	  
- 	  <xsd:element name="PublicKey" minOccurs="0" maxOccurs="1" type="ifs:PublicKey"/>
+ 	  <xsd:element name="PublicKey" type="ifs:PublicKey"/>
  	  	<xsd:complexType name="PublicKey">
 			<xsd:sequence>
 				<xsd:element name="keyAsString" minOccurs="1" maxOccurs="1" type="xsd:string"/>
@@ -123,7 +121,7 @@
 		</xsd:complexType>
 	
 	
-	<xsd:element name="IFSUserPolicy" minOccurs="0" maxOccurs="1" type="ifs:IFSUserPolicy"/>
+	<xsd:element name="IFSUserPolicy" type="ifs:IFSUserPolicy"/>
 		<xsd:complexType name="IFSUserPolicy">
 			<xsd:sequence>
 				<xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string"/>
@@ -131,7 +129,7 @@
 			</xsd:sequence>
 	</xsd:complexType>
 	
-	<xsd:element name="InvalidPasswordFault" minOccurs="0" maxOccurs="1" type="ifs:InvalidPasswordFault"/>
+	<xsd:element name="InvalidPasswordFault" type="ifs:InvalidPasswordFault"/>
 	
 	 <xsd:complexType name="InvalidPasswordFault">
 				<xsd:complexContent>
@@ -139,7 +137,7 @@
 				</xsd:complexContent>
 	 </xsd:complexType>
 	 
-	 <xsd:element name="CredentialsFault" minOccurs="0" maxOccurs="1" type="ifs:CredentialsFault"/>
+	 <xsd:element name="CredentialsFault" type="ifs:CredentialsFault"/>
 	 <xsd:complexType name="CredentialsFault">
 				<xsd:complexContent>
 					<xsd:extension base="wsbf:BaseFaultType" />

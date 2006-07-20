@@ -1,9 +1,11 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
@@ -56,7 +58,10 @@ public class TrustedIdPManager extends LoggingObject {
 					+ "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + "NAME VARCHAR(255) NOT NULL,"
 					+ "IDP_SUBJECT VARCHAR(255) NOT NULL," + "STATUS VARCHAR(50) NOT NULL,"
 					+ "POLICY_CLASS VARCHAR(255) NOT NULL," + "IDP_CERTIFICATE TEXT NOT NULL,"
-					+ "INDEX document_index (NAME));";
+					+ "USER_ID_ATT_NS TEXT NOT NULL," + "USER_ID_ATT_NAME TEXT NOT NULL,"
+					+ "FIRST_NAME_ATT_NS TEXT NOT NULL," + "FIRST_NAME_ATT_NAME TEXT NOT NULL,"
+					+ "LAST_NAME_ATT_NS TEXT NOT NULL," + "LAST_NAME_ATT_NAME TEXT NOT NULL,"
+					+ "EMAIL_ATT_NS TEXT NOT NULL," + "EMAIL_ATT_NAME TEXT NOT NULL," + "INDEX document_index (NAME));";
 				db.update(trust);
 
 				String methods = "CREATE TABLE " + AUTH_METHODS_TABLE + " ("
@@ -178,6 +183,42 @@ public class TrustedIdPManager extends LoggingObject {
 			buildUpdate(needsUpdate, sql, "IDP_CERTIFICATE", idp.getIdPCertificate());
 		}
 
+		if ((idp.getUserIdAttributeDescriptor() != null)
+			&& (!idp.getUserIdAttributeDescriptor().equals(curr.getUserIdAttributeDescriptor()))) {
+			verifyUserIdAttributeDescriptor(idp.getUserIdAttributeDescriptor());
+			buildUpdate(needsUpdate, sql, "USER_ID_ATT_NS", idp.getUserIdAttributeDescriptor().getNamespaceURI());
+			needsUpdate = true;
+			buildUpdate(needsUpdate, sql, "USER_ID_ATT_NAME", idp.getUserIdAttributeDescriptor().getName());
+			
+		}
+
+		if ((idp.getFirstNameAttributeDescriptor() != null)
+			&& (!idp.getFirstNameAttributeDescriptor().equals(curr.getFirstNameAttributeDescriptor()))) {
+			verifyFirstNameAttributeDescriptor(idp.getFirstNameAttributeDescriptor());
+			buildUpdate(needsUpdate, sql, "FIRST_NAME_ATT_NS", idp.getFirstNameAttributeDescriptor().getNamespaceURI());
+			needsUpdate = true;
+			buildUpdate(needsUpdate, sql, "FIRST_NAME_ATT_NAME", idp.getFirstNameAttributeDescriptor().getName());
+			
+		}
+		
+		if ((idp.getLastNameAttributeDescriptor() != null)
+			&& (!idp.getLastNameAttributeDescriptor().equals(curr.getLastNameAttributeDescriptor()))) {
+			verifyFirstNameAttributeDescriptor(idp.getFirstNameAttributeDescriptor());
+			buildUpdate(needsUpdate, sql, "LAST_NAME_ATT_NS", idp.getLastNameAttributeDescriptor().getNamespaceURI());
+			needsUpdate = true;
+			buildUpdate(needsUpdate, sql, "LAST_NAME_ATT_NAME", idp.getLastNameAttributeDescriptor().getName());
+			
+		}
+
+		if ((idp.getEmailAttributeDescriptor() != null)
+			&& (!idp.getEmailAttributeDescriptor().equals(curr.getEmailAttributeDescriptor()))) {
+			verifyEmailAttributeDescriptor(idp.getEmailAttributeDescriptor());
+			buildUpdate(needsUpdate, sql, "EMAIL_ATT_NS", idp.getEmailAttributeDescriptor().getNamespaceURI());
+			needsUpdate = true;
+			buildUpdate(needsUpdate, sql, "EMAIL_ATT_NAME", idp.getEmailAttributeDescriptor().getName());
+			
+		}
+
 		try {
 			if (!idp.equals(curr)) {
 				if (needsUpdate) {
@@ -190,6 +231,7 @@ public class TrustedIdPManager extends LoggingObject {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Error updating the Trusted IdP " + idp.getName()
@@ -236,6 +278,25 @@ public class TrustedIdPManager extends LoggingObject {
 				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setUserPolicyClass(rs.getString("POLICY_CLASS"));
+				SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
+				uid.setNamespaceURI(rs.getString("USER_ID_ATT_NS"));
+				uid.setName(rs.getString("USER_ID_ATT_NAME"));
+				idp.setUserIdAttributeDescriptor(uid);
+
+				SAMLAttributeDescriptor firstName = new SAMLAttributeDescriptor();
+				firstName.setNamespaceURI(rs.getString("FIRST_NAME_ATT_NS"));
+				firstName.setName(rs.getString("FIRST_NAME_ATT_NAME"));
+				idp.setFirstNameAttributeDescriptor(firstName);
+
+				SAMLAttributeDescriptor lastName = new SAMLAttributeDescriptor();
+				lastName.setNamespaceURI(rs.getString("LAST_NAME_ATT_NS"));
+				lastName.setName(rs.getString("LAST_NAME_ATT_NAME"));
+				idp.setLastNameAttributeDescriptor(lastName);
+
+				SAMLAttributeDescriptor email = new SAMLAttributeDescriptor();
+				email.setNamespaceURI(rs.getString("EMAIL_ATT_NS"));
+				email.setName(rs.getString("EMAIL_ATT_NAME"));
+				idp.setEmailAttributeDescriptor(email);
 				idps.add(idp);
 			}
 			rs.close();
@@ -320,6 +381,25 @@ public class TrustedIdPManager extends LoggingObject {
 				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setUserPolicyClass(rs.getString("POLICY_CLASS"));
+				SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
+				uid.setNamespaceURI(rs.getString("USER_ID_ATT_NS"));
+				uid.setName(rs.getString("USER_ID_ATT_NAME"));
+				idp.setUserIdAttributeDescriptor(uid);
+
+				SAMLAttributeDescriptor firstName = new SAMLAttributeDescriptor();
+				firstName.setNamespaceURI(rs.getString("FIRST_NAME_ATT_NS"));
+				firstName.setName(rs.getString("FIRST_NAME_ATT_NAME"));
+				idp.setFirstNameAttributeDescriptor(firstName);
+
+				SAMLAttributeDescriptor lastName = new SAMLAttributeDescriptor();
+				lastName.setNamespaceURI(rs.getString("LAST_NAME_ATT_NS"));
+				lastName.setName(rs.getString("LAST_NAME_ATT_NAME"));
+				idp.setLastNameAttributeDescriptor(lastName);
+
+				SAMLAttributeDescriptor email = new SAMLAttributeDescriptor();
+				email.setNamespaceURI(rs.getString("EMAIL_ATT_NS"));
+				email.setName(rs.getString("EMAIL_ATT_NAME"));
+				idp.setEmailAttributeDescriptor(email);
 			} else {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
 				fault.setFaultString("The Trusted IdP " + id + " does not exist.");
@@ -360,6 +440,25 @@ public class TrustedIdPManager extends LoggingObject {
 				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setUserPolicyClass(rs.getString("POLICY_CLASS"));
+				SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
+				uid.setNamespaceURI(rs.getString("USER_ID_ATT_NS"));
+				uid.setName(rs.getString("USER_ID_ATT_NAME"));
+				idp.setUserIdAttributeDescriptor(uid);
+
+				SAMLAttributeDescriptor firstName = new SAMLAttributeDescriptor();
+				firstName.setNamespaceURI(rs.getString("FIRST_NAME_ATT_NS"));
+				firstName.setName(rs.getString("FIRST_NAME_ATT_NAME"));
+				idp.setFirstNameAttributeDescriptor(firstName);
+
+				SAMLAttributeDescriptor lastName = new SAMLAttributeDescriptor();
+				lastName.setNamespaceURI(rs.getString("LAST_NAME_ATT_NS"));
+				lastName.setName(rs.getString("LAST_NAME_ATT_NAME"));
+				idp.setLastNameAttributeDescriptor(lastName);
+
+				SAMLAttributeDescriptor email = new SAMLAttributeDescriptor();
+				email.setNamespaceURI(rs.getString("EMAIL_ATT_NS"));
+				email.setName(rs.getString("EMAIL_ATT_NAME"));
+				idp.setEmailAttributeDescriptor(email);
 			} else {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
 				fault.setFaultString("The Trusted IdP " + name + " does not exist.");
@@ -400,6 +499,27 @@ public class TrustedIdPManager extends LoggingObject {
 				idp.setStatus(TrustedIdPStatus.fromValue(rs.getString("STATUS")));
 				idp.setIdPCertificate(rs.getString("IDP_CERTIFICATE"));
 				idp.setUserPolicyClass(rs.getString("POLICY_CLASS"));
+
+				SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
+				uid.setNamespaceURI(rs.getString("USER_ID_ATT_NS"));
+				uid.setName(rs.getString("USER_ID_ATT_NAME"));
+				idp.setUserIdAttributeDescriptor(uid);
+
+				SAMLAttributeDescriptor firstName = new SAMLAttributeDescriptor();
+				firstName.setNamespaceURI(rs.getString("FIRST_NAME_ATT_NS"));
+				firstName.setName(rs.getString("FIRST_NAME_ATT_NAME"));
+				idp.setFirstNameAttributeDescriptor(firstName);
+
+				SAMLAttributeDescriptor lastName = new SAMLAttributeDescriptor();
+				lastName.setNamespaceURI(rs.getString("LAST_NAME_ATT_NS"));
+				lastName.setName(rs.getString("LAST_NAME_ATT_NAME"));
+				idp.setLastNameAttributeDescriptor(lastName);
+
+				SAMLAttributeDescriptor email = new SAMLAttributeDescriptor();
+				email.setNamespaceURI(rs.getString("EMAIL_ATT_NS"));
+				email.setName(rs.getString("EMAIL_ATT_NAME"));
+				idp.setEmailAttributeDescriptor(email);
+
 			} else {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
 				fault.setFaultString("The Trusted IdP " + dn + " does not exist.");
@@ -515,12 +635,46 @@ public class TrustedIdPManager extends LoggingObject {
 	}
 
 
+	private void verifyUserIdAttributeDescriptor(SAMLAttributeDescriptor des) throws InvalidTrustedIdPFault {
+		verifySAMLAttributeDescriptor(des, "User Id");
+	}
+
+
+	private void verifyFirstNameAttributeDescriptor(SAMLAttributeDescriptor des) throws InvalidTrustedIdPFault {
+		verifySAMLAttributeDescriptor(des, "First Name");
+	}
+
+
+	private void verifyLastNameAttributeDescriptor(SAMLAttributeDescriptor des) throws InvalidTrustedIdPFault {
+		verifySAMLAttributeDescriptor(des, "Last Name");
+	}
+
+
+	private void verifyEmailAttributeDescriptor(SAMLAttributeDescriptor des) throws InvalidTrustedIdPFault {
+		verifySAMLAttributeDescriptor(des, "Email");
+	}
+
+
+	private void verifySAMLAttributeDescriptor(SAMLAttributeDescriptor des, String name) throws InvalidTrustedIdPFault {
+		if ((des == null) || (Utils.clean(des.getNamespaceURI()) == null) || (Utils.clean(des.getName()) == null)) {
+			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
+			fault.setFaultString("Cannot add the Trusted IdP, it does not contain a valid " + name
+				+ " Attribute Descriptor");
+			throw fault;
+		}
+	}
+
+
 	public synchronized TrustedIdP addTrustedIdP(TrustedIdP idp) throws DorianInternalFault, InvalidTrustedIdPFault {
 		buildDatabase();
 		if (!determineTrustedIdPExistsByName(idp.getName())) {
 			String name = validateAndGetName(idp);
 			X509Certificate cert = validateAndGetCertificate(idp);
 			String policyClass = validateAndGetPolicy(idp.getUserPolicyClass()).getClassName();
+			verifyUserIdAttributeDescriptor(idp.getUserIdAttributeDescriptor());
+			verifyFirstNameAttributeDescriptor(idp.getFirstNameAttributeDescriptor());
+			verifyLastNameAttributeDescriptor(idp.getLastNameAttributeDescriptor());
+			verifyEmailAttributeDescriptor(idp.getEmailAttributeDescriptor());
 
 			if (!isCertificateUnique(idp.getIdPCertificate())) {
 				InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
@@ -532,12 +686,19 @@ public class TrustedIdPManager extends LoggingObject {
 			try {
 				long id = db.insertGetId("INSERT INTO " + TRUST_MANAGER_TABLE + " SET NAME='" + name
 					+ "',IDP_SUBJECT='" + cert.getSubjectDN().toString() + "', STATUS='" + idp.getStatus().getValue()
-					+ "', POLICY_CLASS='" + policyClass + "',IDP_CERTIFICATE='" + idp.getIdPCertificate() + "'");
+					+ "', POLICY_CLASS='" + policyClass + "',IDP_CERTIFICATE='" + idp.getIdPCertificate()
+					+ "', USER_ID_ATT_NS='" + idp.getUserIdAttributeDescriptor().getNamespaceURI()
+					+ "',USER_ID_ATT_NAME='" + idp.getUserIdAttributeDescriptor().getName() + "', FIRST_NAME_ATT_NS='"
+					+ idp.getFirstNameAttributeDescriptor().getNamespaceURI() + "',FIRST_NAME_ATT_NAME='"
+					+ idp.getFirstNameAttributeDescriptor().getName() + "', LAST_NAME_ATT_NS='"
+					+ idp.getLastNameAttributeDescriptor().getNamespaceURI() + "',LAST_NAME_ATT_NAME='"
+					+ idp.getLastNameAttributeDescriptor().getName() + "', EMAIL_ATT_NS='"
+					+ idp.getEmailAttributeDescriptor().getNamespaceURI() + "',EMAIL_ATT_NAME='"
+					+ idp.getEmailAttributeDescriptor().getName() + "'");
 				idp.setId(id);
 				for (int i = 0; i < idp.getAuthenticationMethod().length; i++) {
 					this.addAuthenticationMethod(idp.getId(), idp.getAuthenticationMethod(i));
 				}
-
 			} catch (Exception e) {
 				try {
 					this.removeTrustedIdP(idp.getId());

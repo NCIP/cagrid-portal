@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
-import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
@@ -226,12 +225,14 @@ public class IFS extends LoggingObject {
 		}
 
 		// If the user does not exist, add them
-		String uid = this.getAttribute(saml, SAMLConstants.UID_ATTRIBUTE_NAMESPACE, SAMLConstants.UID_ATTRIBUTE);
-		String email = this.getAttribute(saml, SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE, SAMLConstants.EMAIL_ATTRIBUTE);
-		String firstName = this.getAttribute(saml, SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE,
-			SAMLConstants.FIRST_NAME_ATTRIBUTE);
-		String lastName = this.getAttribute(saml, SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE,
-			SAMLConstants.LAST_NAME_ATTRIBUTE);
+		String uid = this.getAttribute(saml, idp.getUserIdAttributeDescriptor().getNamespaceURI(), idp
+			.getUserIdAttributeDescriptor().getName());
+		String email = this.getAttribute(saml, idp.getEmailAttributeDescriptor().getNamespaceURI(), idp
+			.getEmailAttributeDescriptor().getName());
+		String firstName = this.getAttribute(saml, idp.getFirstNameAttributeDescriptor().getNamespaceURI(), idp
+			.getFirstNameAttributeDescriptor().getName());
+		String lastName = this.getAttribute(saml, idp.getLastNameAttributeDescriptor().getNamespaceURI(), idp
+			.getLastNameAttributeDescriptor().getName());
 
 		AddressValidator.validateEmail(email);
 

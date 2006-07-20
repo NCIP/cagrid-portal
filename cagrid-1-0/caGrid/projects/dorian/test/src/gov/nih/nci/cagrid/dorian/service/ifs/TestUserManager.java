@@ -3,17 +3,15 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
+import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
-import gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy;
-import gov.nih.nci.cagrid.dorian.service.ifs.IFSConfiguration;
-import gov.nih.nci.cagrid.dorian.service.ifs.TrustedIdPManager;
-import gov.nih.nci.cagrid.dorian.service.ifs.UserManager;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
@@ -144,8 +142,8 @@ public class TestUserManager extends TestCase {
 			l7 = um.getUsers(f7);
 			assertEquals(1, l7.length);
 			assertEquals(user, l7[0]);
-			
-//			 Test querying by First Name 
+
+			// Test querying by First Name
 			IFSUserFilter f8 = new IFSUserFilter();
 			f8.setFirstName("nobody");
 			IFSUser[] l8 = um.getUsers(f8);
@@ -154,8 +152,8 @@ public class TestUserManager extends TestCase {
 			l8 = um.getUsers(f8);
 			assertEquals(1, l8.length);
 			assertEquals(user, l8[0]);
-			
-//			 Test querying by Last Name 
+
+			// Test querying by Last Name
 			IFSUserFilter f9 = new IFSUserFilter();
 			f9.setLastName("nobody");
 			IFSUser[] l9 = um.getUsers(f9);
@@ -205,7 +203,6 @@ public class TestUserManager extends TestCase {
 			u4.setEmail("newemail2@example.com");
 			um.updateUser(u4);
 			assertEquals(u4, um.getUser(u4.getGridId()));
-			
 
 			IFSUser u5 = um.getUser(user.getGridId());
 			u5.setGridId("changed grid id");
@@ -258,8 +255,8 @@ public class TestUserManager extends TestCase {
 				long idpCount = (i / 3) + 1;
 
 				String uname = prefix + i;
-				String firstName = firstNamePrefix +i;
-				String lastName = lastNamePrefix+i;
+				String firstName = firstNamePrefix + i;
+				String lastName = lastNamePrefix + i;
 
 				IFSUser user = new IFSUser();
 
@@ -357,28 +354,28 @@ public class TestUserManager extends TestCase {
 				l7 = um.getUsers(f7);
 				assertEquals(1, l7.length);
 				assertEquals(user, l7[0]);
-				
-//				 Test querying by First Name 
+
+				// Test querying by First Name
 				IFSUserFilter f8 = new IFSUserFilter();
 				f8.setFirstName("nobody");
 				IFSUser[] l8 = um.getUsers(f8);
 				assertEquals(0, l8.length);
 				f8.setFirstName(firstNamePrefix);
 				l8 = um.getUsers(f8);
-				assertEquals((i+1), l8.length);
+				assertEquals((i + 1), l8.length);
 				f8.setFirstName(user.getFirstName());
 				l8 = um.getUsers(f8);
 				assertEquals(1, l8.length);
 				assertEquals(user, l8[0]);
-				
-//				 Test querying by Last Name 
+
+				// Test querying by Last Name
 				IFSUserFilter f9 = new IFSUserFilter();
 				f9.setLastName("nobody");
 				IFSUser[] l9 = um.getUsers(f9);
 				assertEquals(0, l9.length);
 				f9.setLastName(lastNamePrefix);
 				l9 = um.getUsers(f9);
-				assertEquals((i+1), l9.length);
+				assertEquals((i + 1), l9.length);
 				f9.setLastName(user.getLastName());
 				l9 = um.getUsers(f9);
 				assertEquals(1, l9.length);
@@ -465,7 +462,7 @@ public class TestUserManager extends TestCase {
 
 
 	private IFSConfiguration getOneYearConf() throws Exception {
-        IFSConfiguration conf = new IFSConfiguration();
+		IFSConfiguration conf = new IFSConfiguration();
 		conf.setCredentialsValidYears(1);
 		conf.setCredentialsValidMonths(0);
 		conf.setCredentialsValidDays(0);
@@ -477,6 +474,27 @@ public class TestUserManager extends TestCase {
 		conf.setUserPolicies(Utils.getUserPolicies());
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName("Initial IdP");
+
+		SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
+		uid.setNamespaceURI(SAMLConstants.UID_ATTRIBUTE_NAMESPACE);
+		uid.setName(SAMLConstants.UID_ATTRIBUTE);
+		idp.setUserIdAttributeDescriptor(uid);
+
+		SAMLAttributeDescriptor firstName = new SAMLAttributeDescriptor();
+		firstName.setNamespaceURI(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE);
+		firstName.setName(SAMLConstants.FIRST_NAME_ATTRIBUTE);
+		idp.setFirstNameAttributeDescriptor(firstName);
+
+		SAMLAttributeDescriptor lastName = new SAMLAttributeDescriptor();
+		lastName.setNamespaceURI(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE);
+		lastName.setName(SAMLConstants.LAST_NAME_ATTRIBUTE);
+		idp.setLastNameAttributeDescriptor(lastName);
+
+		SAMLAttributeDescriptor email = new SAMLAttributeDescriptor();
+		email.setNamespaceURI(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE);
+		email.setName(SAMLConstants.EMAIL_ATTRIBUTE);
+		idp.setEmailAttributeDescriptor(email);
+
 		SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
 		methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
 		idp.setAuthenticationMethod(methods);

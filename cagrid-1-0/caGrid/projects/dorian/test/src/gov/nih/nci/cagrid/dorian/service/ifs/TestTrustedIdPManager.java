@@ -3,12 +3,11 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
+import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
-import gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalPolicy;
-import gov.nih.nci.cagrid.dorian.service.ifs.IFSConfiguration;
-import gov.nih.nci.cagrid.dorian.service.ifs.TrustedIdPManager;
 import gov.nih.nci.cagrid.dorian.stubs.InvalidAssertionFault;
 import gov.nih.nci.cagrid.dorian.stubs.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.dorian.test.Utils;
@@ -282,6 +281,25 @@ public class TestTrustedIdPManager extends TestCase {
 		idp.setStatus(TrustedIdPStatus.Active);
 		idp.setUserPolicyClass(AutoApprovalPolicy.class.getName());
 		idp.setAuthenticationMethod(getRandomMethodList());
+		SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
+		uid.setNamespaceURI(SAMLConstants.UID_ATTRIBUTE_NAMESPACE);
+		uid.setName(SAMLConstants.UID_ATTRIBUTE);
+		idp.setUserIdAttributeDescriptor(uid);
+
+		SAMLAttributeDescriptor firstName = new SAMLAttributeDescriptor();
+		firstName.setNamespaceURI(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE);
+		firstName.setName(SAMLConstants.FIRST_NAME_ATTRIBUTE);
+		idp.setFirstNameAttributeDescriptor(firstName);
+
+		SAMLAttributeDescriptor lastName = new SAMLAttributeDescriptor();
+		lastName.setNamespaceURI(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE);
+		lastName.setName(SAMLConstants.LAST_NAME_ATTRIBUTE);
+		idp.setLastNameAttributeDescriptor(lastName);
+
+		SAMLAttributeDescriptor email = new SAMLAttributeDescriptor();
+		email.setNamespaceURI(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE);
+		email.setName(SAMLConstants.EMAIL_ATTRIBUTE);
+		idp.setEmailAttributeDescriptor(email);
 
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 		String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;

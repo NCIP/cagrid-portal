@@ -11,10 +11,10 @@ public class SAMLConstants {
 	
 	public final static String UID_ATTRIBUTE_NAMESPACE = "http://cabig.nci.nih.org/dorian";
 	public final static String UID_ATTRIBUTE = "localUserId";
-	public final static String FIRST_NAME_ATTRIBUTE_NAMESPACE = "http://www.faqs.org/rfcs/rfc2256.html";
-	public final static String FIRST_NAME_ATTRIBUTE = "givenName";
-	public final static String LAST_NAME_ATTRIBUTE_NAMESPACE = "http://www.faqs.org/rfcs/rfc2256.html";
-	public final static String LAST_NAME_ATTRIBUTE = "sn";
-	public final static String EMAIL_ATTRIBUTE_NAMESPACE = "http://www.faqs.org/rfcs/rfc1274.html";
-	public final static String EMAIL_ATTRIBUTE = "mail";
+	public final static String FIRST_NAME_ATTRIBUTE_NAMESPACE = "urn:mace:shibboleth:1.0:attributeNamespace:uri";
+	public final static String FIRST_NAME_ATTRIBUTE = "urn:mace:dir:attribute-def:givenName";
+	public final static String LAST_NAME_ATTRIBUTE_NAMESPACE = "urn:mace:shibboleth:1.0:attributeNamespace:uri";
+	public final static String LAST_NAME_ATTRIBUTE = "urn:mace:dir:attribute-def:sn";
+	public final static String EMAIL_ATTRIBUTE_NAMESPACE = "urn:mace:shibboleth:1.0:attributeNamespace:uri";
+	public final static String EMAIL_ATTRIBUTE = "urn:mace:dir:attribute-def:mail";
 }

@@ -1,8 +1,11 @@
 package gov.nih.nci.cagrid.dorian.ifs.portal;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
+import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
+import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
@@ -39,7 +42,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.14 2006-06-06 04:29:18 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.15 2006-07-20 18:44:26 langella Exp $
  */
 public class TrustedIdPWindow extends GridPortalBaseFrame {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
@@ -57,6 +60,8 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 	private final static String INFO_PANEL = "IdP Information";
 
 	private final static String CERTIFICATE_PANEL = "Certificate";
+
+	private final static String ATTRIBUTES_PANEL = "Attributes";
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -135,6 +140,24 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 	private JCheckBox unspecifiedMethod = null;
 	private JLabel unspecifiedLabel = null;
 	private TrustedIdPsWindow window;
+	private JPanel attributesPanel = null;
+	private JPanel jPanel = null;
+	private JLabel jLabel = null;
+	private JTextField userIdNamespace = null;
+	private JLabel jLabel1 = null;
+	private JTextField userIdName = null;
+	private JLabel jLabel2 = null;
+	private JTextField firstNameNamespace = null;
+	private JLabel jLabel3 = null;
+	private JTextField firstName = null;
+	private JLabel jLabel4 = null;
+	private JLabel jLabel5 = null;
+	private JLabel jLabel6 = null;
+	private JLabel jLabel7 = null;
+	private JTextField lastNameNamespace = null;
+	private JTextField lastName = null;
+	private JTextField emailNamespace = null;
+	private JTextField email = null;
 
 
 	public TrustedIdPWindow(TrustedIdPsWindow window, String serviceId, GlobusCredential proxy, IFSUserPolicy[] policies) {
@@ -374,6 +397,26 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 
 			idp.setAuthenticationMethod(saml);
 
+			SAMLAttributeDescriptor uidDes = new SAMLAttributeDescriptor();
+			uidDes.setNamespaceURI(Utils.clean(this.getUserIdNamespace().getText()));
+			uidDes.setName(Utils.clean(this.getUserIdName().getText()));
+			idp.setUserIdAttributeDescriptor(uidDes);
+
+			SAMLAttributeDescriptor firstNameDes = new SAMLAttributeDescriptor();
+			firstNameDes.setNamespaceURI(Utils.clean(this.getFirstNameNamespace().getText()));
+			firstNameDes.setName(Utils.clean(this.getFirstName().getText()));
+			idp.setFirstNameAttributeDescriptor(firstNameDes);
+
+			SAMLAttributeDescriptor lastNameDes = new SAMLAttributeDescriptor();
+			lastNameDes.setNamespaceURI(Utils.clean(this.getLastNameNamespace().getText()));
+			lastNameDes.setName(Utils.clean(this.getLastName().getText()));
+			idp.setLastNameAttributeDescriptor(lastNameDes);
+
+			SAMLAttributeDescriptor emailDes = new SAMLAttributeDescriptor();
+			emailDes.setNamespaceURI(Utils.clean(this.getEmailNamespace().getText()));
+			emailDes.setName(Utils.clean(this.getEmail().getText()));
+			idp.setEmailAttributeDescriptor(emailDes);
+
 			String service = getService().getText();
 			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
 			IFSAdministrationClient client = new IFSAdministrationClient(service, c);
@@ -407,6 +450,7 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 					.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, DorianLookAndFeel.getTrustedIdPIcon(), getInfoPanel(), null);
 			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
+			jTabbedPane.addTab(ATTRIBUTES_PANEL, DorianLookAndFeel.getAttributesIcon(), getAttributesPanel(), null);
 		}
 		return jTabbedPane;
 	}
@@ -1073,6 +1117,311 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 			}
 		}
 		return unspecifiedMethod;
+	}
+
+
+	/**
+	 * This method initializes attributesPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getAttributesPanel() {
+		if (attributesPanel == null) {
+			attributesPanel = new JPanel();
+			attributesPanel.setLayout(new BorderLayout());
+			attributesPanel.add(getJPanel(), BorderLayout.NORTH);
+		}
+		return attributesPanel;
+	}
+
+
+	/**
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJPanel() {
+		if (jPanel == null) {
+			GridBagConstraints gridBagConstraints56 = new GridBagConstraints();
+			gridBagConstraints56.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints56.gridy = 7;
+			gridBagConstraints56.weightx = 1.0;
+			gridBagConstraints56.anchor = GridBagConstraints.WEST;
+			gridBagConstraints56.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints56.gridx = 1;
+			GridBagConstraints gridBagConstraints55 = new GridBagConstraints();
+			gridBagConstraints55.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints55.gridy = 6;
+			gridBagConstraints55.weightx = 1.0;
+			gridBagConstraints55.anchor = GridBagConstraints.WEST;
+			gridBagConstraints55.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints55.gridx = 1;
+			GridBagConstraints gridBagConstraints54 = new GridBagConstraints();
+			gridBagConstraints54.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints54.gridy = 5;
+			gridBagConstraints54.weightx = 1.0;
+			gridBagConstraints54.anchor = GridBagConstraints.WEST;
+			gridBagConstraints54.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints54.gridx = 1;
+			GridBagConstraints gridBagConstraints53 = new GridBagConstraints();
+			gridBagConstraints53.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints53.gridy = 4;
+			gridBagConstraints53.weightx = 1.0;
+			gridBagConstraints53.anchor = GridBagConstraints.WEST;
+			gridBagConstraints53.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints53.gridx = 1;
+			GridBagConstraints gridBagConstraints52 = new GridBagConstraints();
+			gridBagConstraints52.gridx = 0;
+			gridBagConstraints52.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints52.anchor = GridBagConstraints.WEST;
+			gridBagConstraints52.gridy = 7;
+			jLabel7 = new JLabel();
+			jLabel7.setText("Email Attribute");
+			GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
+			gridBagConstraints51.gridx = 0;
+			gridBagConstraints51.anchor = GridBagConstraints.WEST;
+			gridBagConstraints51.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints51.gridy = 6;
+			jLabel6 = new JLabel();
+			jLabel6.setText("Email Attribute Namespace");
+			GridBagConstraints gridBagConstraints50 = new GridBagConstraints();
+			gridBagConstraints50.gridx = 0;
+			gridBagConstraints50.anchor = GridBagConstraints.WEST;
+			gridBagConstraints50.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints50.gridy = 5;
+			jLabel5 = new JLabel();
+			jLabel5.setText("Last Name Attribute");
+			GridBagConstraints gridBagConstraints49 = new GridBagConstraints();
+			gridBagConstraints49.gridx = 0;
+			gridBagConstraints49.anchor = GridBagConstraints.WEST;
+			gridBagConstraints49.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints49.gridy = 4;
+			jLabel4 = new JLabel();
+			jLabel4.setText("Last Name Attribute Namespace");
+			GridBagConstraints gridBagConstraints48 = new GridBagConstraints();
+			gridBagConstraints48.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints48.gridy = 3;
+			gridBagConstraints48.weightx = 1.0;
+			gridBagConstraints48.anchor = GridBagConstraints.WEST;
+			gridBagConstraints48.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints48.gridx = 1;
+			GridBagConstraints gridBagConstraints47 = new GridBagConstraints();
+			gridBagConstraints47.gridx = 0;
+			gridBagConstraints47.anchor = GridBagConstraints.WEST;
+			gridBagConstraints47.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints47.gridy = 3;
+			jLabel3 = new JLabel();
+			jLabel3.setText("First Name Attribute");
+			GridBagConstraints gridBagConstraints46 = new GridBagConstraints();
+			gridBagConstraints46.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints46.gridx = 1;
+			gridBagConstraints46.gridy = 2;
+			gridBagConstraints46.anchor = GridBagConstraints.WEST;
+			gridBagConstraints46.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints46.weightx = 1.0;
+			GridBagConstraints gridBagConstraints45 = new GridBagConstraints();
+			gridBagConstraints45.gridx = 0;
+			gridBagConstraints45.anchor = GridBagConstraints.WEST;
+			gridBagConstraints45.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints45.gridy = 2;
+			jLabel2 = new JLabel();
+			jLabel2.setText("First Name Attribute Namespace");
+			GridBagConstraints gridBagConstraints44 = new GridBagConstraints();
+			gridBagConstraints44.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints44.gridy = 1;
+			gridBagConstraints44.weightx = 1.0;
+			gridBagConstraints44.anchor = GridBagConstraints.WEST;
+			gridBagConstraints44.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints44.gridx = 1;
+			GridBagConstraints gridBagConstraints43 = new GridBagConstraints();
+			gridBagConstraints43.gridx = 0;
+			gridBagConstraints43.anchor = GridBagConstraints.WEST;
+			gridBagConstraints43.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints43.gridy = 1;
+			jLabel1 = new JLabel();
+			jLabel1.setText("User Id Attribute");
+			GridBagConstraints gridBagConstraints42 = new GridBagConstraints();
+			gridBagConstraints42.anchor = GridBagConstraints.WEST;
+			gridBagConstraints42.gridx = 0;
+			gridBagConstraints42.gridy = 0;
+			gridBagConstraints42.insets = new Insets(2, 2, 2, 2);
+			GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
+			gridBagConstraints41.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints41.gridx = 1;
+			gridBagConstraints41.gridy = 0;
+			gridBagConstraints41.anchor = GridBagConstraints.WEST;
+			gridBagConstraints41.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints41.weighty = 0.0D;
+			gridBagConstraints41.weightx = 1.0;
+			jLabel = new JLabel();
+			jLabel.setText("User Id Attribute Namespace");
+			jPanel = new JPanel();
+			jPanel.setLayout(new GridBagLayout());
+			jPanel.add(jLabel, gridBagConstraints42);
+			jPanel.add(getUserIdNamespace(), gridBagConstraints41);
+			jPanel.add(jLabel1, gridBagConstraints43);
+			jPanel.add(getUserIdName(), gridBagConstraints44);
+			jPanel.add(jLabel2, gridBagConstraints45);
+			jPanel.add(getFirstNameNamespace(), gridBagConstraints46);
+			jPanel.add(jLabel3, gridBagConstraints47);
+			jPanel.add(getFirstName(), gridBagConstraints48);
+			jPanel.add(jLabel4, gridBagConstraints49);
+			jPanel.add(jLabel5, gridBagConstraints50);
+			jPanel.add(jLabel6, gridBagConstraints51);
+			jPanel.add(jLabel7, gridBagConstraints52);
+			jPanel.add(getLastNameNamespace(), gridBagConstraints53);
+			jPanel.add(getLastName(), gridBagConstraints54);
+			jPanel.add(getEmailNamespace(), gridBagConstraints55);
+			jPanel.add(getEmail(), gridBagConstraints56);
+			jPanel.setBorder(BorderFactory.createTitledBorder(null, "SAML Attribute Descriptions",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
+					.getPanelLabelColor()));
+		}
+		return jPanel;
+	}
+
+
+	/**
+	 * This method initializes userIdNamespace
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getUserIdNamespace() {
+		if (userIdNamespace == null) {
+			userIdNamespace = new JTextField();
+			if (newTrustedIdP) {
+				userIdNamespace.setText(SAMLConstants.UID_ATTRIBUTE_NAMESPACE);
+			} else {
+				userIdNamespace.setText(idp.getUserIdAttributeDescriptor().getNamespaceURI());
+			}
+		}
+		return userIdNamespace;
+	}
+
+
+	/**
+	 * This method initializes userIdName
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getUserIdName() {
+		if (userIdName == null) {
+			userIdName = new JTextField();
+			if (newTrustedIdP) {
+				userIdName.setText(SAMLConstants.UID_ATTRIBUTE);
+			} else {
+				userIdName.setText(idp.getUserIdAttributeDescriptor().getName());
+			}
+		}
+		return userIdName;
+	}
+
+
+	/**
+	 * This method initializes firstNameNamespace
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getFirstNameNamespace() {
+		if (firstNameNamespace == null) {
+			firstNameNamespace = new JTextField();
+			if (newTrustedIdP) {
+				firstNameNamespace.setText(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE);
+			} else {
+				firstNameNamespace.setText(idp.getFirstNameAttributeDescriptor().getNamespaceURI());
+			}
+		}
+		return firstNameNamespace;
+	}
+
+
+	/**
+	 * This method initializes firstName
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getFirstName() {
+		if (firstName == null) {
+			firstName = new JTextField();
+			if (newTrustedIdP) {
+				firstName.setText(SAMLConstants.FIRST_NAME_ATTRIBUTE);
+			} else {
+				firstName.setText(idp.getFirstNameAttributeDescriptor().getName());
+			}
+		}
+		return firstName;
+	}
+
+
+	/**
+	 * This method initializes lastNameNamespace
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getLastNameNamespace() {
+		if (lastNameNamespace == null) {
+			lastNameNamespace = new JTextField();
+			if (newTrustedIdP) {
+				lastNameNamespace.setText(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE);
+			} else {
+				lastNameNamespace.setText(idp.getLastNameAttributeDescriptor().getNamespaceURI());
+			}
+		}
+		return lastNameNamespace;
+	}
+
+
+	/**
+	 * This method initializes lastName
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getLastName() {
+		if (lastName == null) {
+			lastName = new JTextField();
+			if (newTrustedIdP) {
+				lastName.setText(SAMLConstants.LAST_NAME_ATTRIBUTE);
+			} else {
+				lastName.setText(idp.getLastNameAttributeDescriptor().getName());
+			}
+		}
+		return lastName;
+	}
+
+
+	/**
+	 * This method initializes emailNamespace
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getEmailNamespace() {
+		if (emailNamespace == null) {
+			emailNamespace = new JTextField();
+			if (newTrustedIdP) {
+				emailNamespace.setText(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE);
+			} else {
+				emailNamespace.setText(idp.getEmailAttributeDescriptor().getNamespaceURI());
+			}
+		}
+		return emailNamespace;
+	}
+
+
+	/**
+	 * This method initializes email
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getEmail() {
+		if (email == null) {
+			email = new JTextField();
+			if (newTrustedIdP) {
+				email.setText(SAMLConstants.EMAIL_ATTRIBUTE);
+			} else {
+				email.setText(idp.getEmailAttributeDescriptor().getName());
+			}
+		}
+		return email;
 	}
 
 }

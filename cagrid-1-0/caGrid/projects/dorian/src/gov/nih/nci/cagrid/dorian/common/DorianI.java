@@ -27,7 +27,6 @@ public void updateIFSUser(gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser user) throw
 public void removeIFSUser(gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser user) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.InvalidUserFault, gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault ;
 public gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser renewIFSUserCredentials(gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser user) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.InvalidUserFault, gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault ;
 public gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy[] getIFSUserPolicies() throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault ;
-public void temp() throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.IllegalUserAttributeFault ;
 
 }
 

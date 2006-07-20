@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthorityConf;
 import gov.nih.nci.cagrid.dorian.common.Database;
+import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
@@ -15,6 +16,7 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserRole;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
+import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
@@ -97,6 +99,27 @@ public class Dorian extends MobiusResourceManager {
 			idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
 			idp.setIdPCertificate(CertUtil.writeCertificate(this.identityProvider.getIdPCertificate()));
 			idp.setStatus(TrustedIdPStatus.Active);
+			SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
+			uid.setNamespaceURI(SAMLConstants.UID_ATTRIBUTE_NAMESPACE);
+			uid.setName(SAMLConstants.UID_ATTRIBUTE);
+			idp.setUserIdAttributeDescriptor(uid);
+
+			SAMLAttributeDescriptor firstName = new SAMLAttributeDescriptor();
+			firstName.setNamespaceURI(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE);
+			firstName.setName(SAMLConstants.FIRST_NAME_ATTRIBUTE);
+			idp.setFirstNameAttributeDescriptor(firstName);
+
+			SAMLAttributeDescriptor lastName = new SAMLAttributeDescriptor();
+			lastName.setNamespaceURI(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE);
+			lastName.setName(SAMLConstants.LAST_NAME_ATTRIBUTE);
+			idp.setLastNameAttributeDescriptor(lastName);
+
+			SAMLAttributeDescriptor email = new SAMLAttributeDescriptor();
+			email.setNamespaceURI(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE);
+			email.setName(SAMLConstants.EMAIL_ATTRIBUTE);
+			idp.setEmailAttributeDescriptor(email);
+			
+			
 			IFSUser usr = new IFSUser();
 			IdPUser idpUsr =identityProvider.getUser(IDP_ADMIN_USER_ID,IDP_ADMIN_USER_ID);
 			usr.setUID(idpUsr.getUserId());

@@ -4,7 +4,7 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
 	xmlns:idp="http://cagrid.nci.nih.gov/1/dorian-idp">
 	
-	 <xsd:element name="IdPUser" minOccurs="0" maxOccurs="1" type="idp:IdPUser"/>
+	 <xsd:element name="IdPUser" type="idp:IdPUser"/>
 	  <xsd:complexType name="IdPUser">
 			<xsd:sequence>
 				<xsd:element name="userId" type="xsd:string" minOccurs="1" maxOccurs="1"/>
@@ -25,7 +25,7 @@
 			</xsd:sequence>
 	    </xsd:complexType>
 	    
-	    <xsd:element name="Application" minOccurs="0" maxOccurs="1" type="idp:Application"/>
+	    <xsd:element name="Application" type="idp:Application"/>
 	    
 	    <xsd:complexType name="Application">
 			<xsd:sequence>
@@ -45,7 +45,7 @@
 			</xsd:sequence>
 	    </xsd:complexType>
 	    
-	     <xsd:element name="IdPUserFilter" minOccurs="0" maxOccurs="1" type="idp:IdPUserFilter"/>
+	     <xsd:element name="IdPUserFilter" type="idp:IdPUserFilter"/>
 	    
 	     <xsd:complexType name="IdPUserFilter">
 			<xsd:sequence>
@@ -82,7 +82,7 @@
   			</xsd:restriction>
  		 </xsd:simpleType>
  		 
- 		  <xsd:element name="BasicAuthCredential" minOccurs="0" maxOccurs="1" type="idp:BasicAuthCredential"/>
+ 		  <xsd:element name="BasicAuthCredential" type="idp:BasicAuthCredential"/>
  		 
  		 <xsd:complexType name="BasicAuthCredential">
 			<xsd:sequence>
@@ -91,7 +91,7 @@
 			</xsd:sequence>
 		</xsd:complexType>
 		
-		 <xsd:element name="ApplicationReview" minOccurs="0" maxOccurs="1" type="idp:ApplicationReview"/>
+		 <xsd:element name="ApplicationReview" type="idp:ApplicationReview"/>
 		
 		 <xsd:complexType name="ApplicationReview">
 			<xsd:sequence>
