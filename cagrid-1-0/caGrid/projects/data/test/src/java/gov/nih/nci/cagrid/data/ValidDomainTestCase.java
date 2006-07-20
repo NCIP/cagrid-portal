@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import junit.framework.TestCase;
@@ -48,11 +47,9 @@ public class ValidDomainTestCase extends TestCase {
 			InputSource queryInput = new InputSource(new FileReader(filename));
 			CQLQuery query = (CQLQuery) ObjectDeserializer.deserialize(queryInput, CQLQuery.class);
 			return query;
-		} catch (FileNotFoundException ex) {
-			System.out.println("File not found: " + filename);
-			fail(ex.getMessage());
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			fail(ex.getMessage());
 		}
 		return null;
 	}
@@ -65,7 +62,7 @@ public class ValidDomainTestCase extends TestCase {
 				domainModel = (DomainModel) ObjectDeserializer.deserialize(domainModelInput, DomainModel.class);
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				return null;
+				fail("Could not load domain model");
 			}
 		}
 		return domainModel;

@@ -47,9 +47,12 @@ public class JaxPInvalidCqlTestCase extends TestCase {
 				new FileReader(queryFile), CQLQuery.class, configStream);
 			validator.validateStructure(query);
 			fail("Query should have been invalid, was not");
-		} catch (Exception ex) {
+		} catch (MalformedQueryException ex) {
 			System.out.println("Query verified invalid: " + ex.getMessage());
 			assertTrue("Query verified invalid: " + ex.getMessage(), true);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			fail("Caught some other exception: " + ex.getMessage());
 		}
 	}
 	
