@@ -159,13 +159,16 @@ public class AssertionCredentialsManager extends LoggingObject {
 			String federation = cert.getSubjectDN().toString();
 			String ipAddress = null;
 			String subjectDNS = null;
+		
 
 			SAMLNameIdentifier ni1 = new SAMLNameIdentifier(uid, federation,
 				"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 			SAMLSubject sub = new SAMLSubject(ni1, null, null, null);
+			sub.addConfirmationMethod(SAMLSubject.CONF_BEARER);
 			SAMLNameIdentifier ni2 = new SAMLNameIdentifier(uid, federation,
 				"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
-			SAMLSubject sub2 = new SAMLSubject(ni2, null, null, null);
+			SAMLSubject sub2 = new SAMLSubject(ni2,null, null, null);
+			sub2.addConfirmationMethod(SAMLSubject.CONF_BEARER);
 			SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub,
 				"urn:oasis:names:tc:SAML:1.0:am:password", new Date(), ipAddress, subjectDNS, null);
 			
