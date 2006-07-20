@@ -18,6 +18,7 @@ public class ImageScaler {
 		try {
 			BufferedImage img = ImageIO.read(this.getClass().getClassLoader()
 					.getResource(imageName));
+			
 			GraphicsConfiguration gc = getDefaultConfiguration();
 			BufferedImage image = toCompatibleImage(img, gc);
 			resizedImage = getScaledInstance(image, width, height, gc);
