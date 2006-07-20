@@ -57,9 +57,6 @@
     <target name="coverageReport" depends="test" description="Runs the tests and generates a test
 		coverage report.">
         <cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
-            <fileset dir="${src.dir}">
-                <include name="**/*.java" />
-            </fileset>
             <fileset dir="${cql.src.dir}">
                 <include name="**/*.java" />
             </fileset>
