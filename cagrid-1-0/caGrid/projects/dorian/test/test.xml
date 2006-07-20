@@ -36,7 +36,7 @@
             </classpath>
             <formatter type="xml" />
             <test if="testcase" name="${testcase}" fork="yes" todir="${junit.results.dir}" />
-            <batchtest unless="testcase" fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
+            <batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
                 <fileset dir="${test.src.dir}">
                     <include name="**/Test*.java" />
                 </fileset>
