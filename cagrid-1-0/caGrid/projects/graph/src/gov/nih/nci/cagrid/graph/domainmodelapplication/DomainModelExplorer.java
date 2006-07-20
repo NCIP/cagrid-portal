@@ -133,7 +133,7 @@ public class DomainModelExplorer extends JLayeredPane
 					
 					if(c.getUmlAttributeCollection() != null)
 					{
-						if(c.getUmlAttributeCollection().getClass() != null)
+						if(c.getUmlAttributeCollection().getUMLAttribute() != null)
 						{
 							for(int j = 0; j < c.getUmlAttributeCollection().getUMLAttribute().length; j++)
 							{
