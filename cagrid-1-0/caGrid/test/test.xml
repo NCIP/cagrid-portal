@@ -35,6 +35,8 @@
         <filter token="Dart.Track" value="Experimental" />
         <copy file="${test.dir}/BuildNameTemplate.xml" tofile="${test.logs.dir}/BuildNameExperimental.xml" filtering="true" overwrite="true" />
     </target>
+    
+    
     <!-- =============================================================== -->
     <!-- Call test for each project and aggregates the log resutls       -->
     <!-- =============================================================== -->
@@ -64,6 +66,8 @@
         </for>
         <fail message="Tests failed! Consult the logs for details." if="test.failed" />
     </target>
+    
+    
     <!-- =============================================================== -->
     <!-- Set the proxy, and publish the results to dart                  -->
     <!-- =============================================================== -->
@@ -89,6 +93,8 @@
             <arg value="${dart.logfile}" />
         </java>
     </target>
+    
+    
     <!-- =============================================================== -->
     <!-- Run a dart experimental (currently only submits test results)   -->
     <!-- =============================================================== -->
