@@ -41,7 +41,7 @@ public class ResourcePropertyEditorDialog extends JDialog {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setTitle("Resource Property Editor Component");
+		this.setTitle("Resource Property Editor");
 		this.setContentPane(getMainPanel());
 		this.setSize(new java.awt.Dimension(371, 270));
 	}
