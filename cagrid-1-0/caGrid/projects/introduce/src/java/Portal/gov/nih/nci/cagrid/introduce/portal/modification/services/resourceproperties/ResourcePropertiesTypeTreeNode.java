@@ -76,7 +76,7 @@ public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode {
 	public ResourcePropertiesTypeTreeNode(ServiceType service, ResourcePropertiesListType methods, DefaultTreeModel model,
 		ServiceInformation info) {
 		super();
-		service = service;
+		this.service = service;
 		this.resourceProperties = methods;
 		this.setUserObject("Resource Properties");
 		this.model = model;

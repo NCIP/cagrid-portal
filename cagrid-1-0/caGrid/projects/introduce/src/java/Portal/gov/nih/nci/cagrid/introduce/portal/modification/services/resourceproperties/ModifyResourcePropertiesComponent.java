@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
+
 public class ModifyResourcePropertiesComponent extends JDialog {
 
 	private JPanel mainPanel = null;
@@ -27,12 +28,13 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 	private ServiceType service;
 	private File etcDir;
 	private File schemaDir;
-	
+
+
 	/**
-	 * This method initializes 
-	 * 
+	 * This method initializes
 	 */
-	public ModifyResourcePropertiesComponent(ServiceType service, NamespacesType namespaces, File etcDir, File schemaDir, boolean showW3Cnamespaces) {
+	public ModifyResourcePropertiesComponent(ServiceType service, NamespacesType namespaces, File etcDir,
+		File schemaDir, boolean showW3Cnamespaces) {
 		super();
 		this.service = service;
 		this.etcDir = etcDir;
@@ -43,20 +45,21 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 		initialize();
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 */
-	private void initialize() {
-        this.setSize(new java.awt.Dimension(401,244));
-        this.setContentPane(getMainPanel());
-			
-	}
 
 	/**
-	 * This method initializes mainPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes this
+	 */
+	private void initialize() {
+		this.setSize(new java.awt.Dimension(401, 244));
+		this.setContentPane(getMainPanel());
+
+	}
+
+
+	/**
+	 * This method initializes mainPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
@@ -80,22 +83,25 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 		return mainPanel;
 	}
 
+
 	/**
-	 * This method initializes resourcesPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes resourcesPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getResourcesPanel() {
 		if (resourcesPanel == null) {
-			resourcesPanel = new ModifyResourcePropertiesPanel(service,namespaces, etcDir, schemaDir, showW3Cnamespaces);
+			resourcesPanel = new ModifyResourcePropertiesPanel(service, namespaces, etcDir, schemaDir,
+				showW3Cnamespaces);
 		}
 		return resourcesPanel;
 	}
 
+
 	/**
-	 * This method initializes buttonPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes buttonPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
@@ -109,10 +115,11 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 		return buttonPanel;
 	}
 
+
 	/**
-	 * This method initializes doneButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes doneButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getDoneButton() {
 		if (doneButton == null) {
@@ -128,6 +135,5 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 		}
 		return doneButton;
 	}
-	
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"
