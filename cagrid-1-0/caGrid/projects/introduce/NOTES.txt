@@ -37,20 +37,21 @@ since you cant edit anything on any security tabs unless you have checked custom
 when you check custom, it should only enable the secure communication tab (as you cant edit any tabs until you check a form of secure com)
 when you check some for of secure comm, the other tabs should be enabled.
 
-type browser issues:
--(DONE)Try to create a new service on the desktop and throws an error
--(DONE)you can and shouldn't be able to remove the XML schema schema
--it shouldn't let you remove schema types that are being used by inputs,outputs,or metadata
--(DONE)it lets you set the package name for XML schema schema, and shouldn't
--(DONE)it lets you set the location for XML schema schema, and shouldn't
--(DONE)it lets you set the class name for XML schema types; does that work?
--(DONE)does it really support editing the location of a schema? if it does, it needs to move the file that was pulled down from the gme (otherwise it wont exist)
 
 secure message privacy does not work (STEVE)
 
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+type browser issues:
+-(DONE)Try to create a new service on the desktop and throws an error
+-(DONE)you can and shouldn't be able to remove the XML schema schema
+- (DONE)it shouldn't let you remove schema types that are being used by inputs,outputs,or metadata
+-(DONE)it lets you set the package name for XML schema schema, and shouldn't
+-(DONE)it lets you set the location for XML schema schema, and shouldn't
+-(DONE)it lets you set the class name for XML schema types; does that work?
+-(DONE)does it really support editing the location of a schema? if it does, it needs to move the file that was pulled down from the gme (otherwise it wont exist)
+
 From BMI Tutorial:
 6) Adding a resource property to a service context, doesn't refresh the JTree
 

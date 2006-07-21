@@ -12,12 +12,14 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
@@ -1070,7 +1072,9 @@ public class ModificationViewer extends GridPortalComponent {
 					try {
 						if (getNamespaceJTree().getCurrentNode() instanceof NamespaceTypeTreeNode) {
 							NamespaceType type = (NamespaceType) getNamespaceJTree().getCurrentNode().getUserObject();
-							if (!type.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+
+							if (!nsUsed(type) && !type.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+
 								getNamespaceJTree().removeSelectedNode();
 							}
 						}
@@ -1081,6 +1085,55 @@ public class ModificationViewer extends GridPortalComponent {
 			});
 		}
 		return namespaceRemoveButton;
+	}
+
+
+	private boolean nsUsed(NamespaceType ns) {
+		boolean used = false;
+		for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+			ServiceType service = info.getServices().getService(serviceI);
+			// check all the methods first
+			if (service.getMethods() != null && service.getMethods().getMethod() != null) {
+				for (int methodI = 0; methodI < service.getMethods().getMethod().length; methodI++) {
+					MethodType method = service.getMethods().getMethod(methodI);
+					// check all the inputs
+					if (method.getInputs() != null && method.getInputs().getInput() != null) {
+						for (int inputI = 0; inputI < method.getInputs().getInput().length; inputI++) {
+							MethodTypeInputsInput input = method.getInputs().getInput(inputI);
+							NamespaceType type = CommonTools.getNamespaceType(info.getNamespaces(), input.getQName()
+								.getNamespaceURI());
+							if (type.equals(ns)) {
+								return true;
+							}
+						}
+					}
+					// check the output
+					if (method.getOutput() != null) {
+						NamespaceType type = CommonTools.getNamespaceType(info.getNamespaces(), method.getOutput()
+							.getQName().getNamespaceURI());
+						if (type.equals(ns)) {
+							return true;
+						}
+					}
+
+				}
+			}
+			// check all the resource properties
+			if (service.getResourcePropertiesList() != null
+				&& service.getResourcePropertiesList().getResourceProperty() != null) {
+				for (int resourceI = 0; resourceI < service.getResourcePropertiesList().getResourceProperty().length; resourceI++) {
+					ResourcePropertyType rsp = service.getResourcePropertiesList().getResourceProperty(resourceI);
+					NamespaceType type = CommonTools.getNamespaceType(info.getNamespaces(), rsp.getQName()
+						.getNamespaceURI());
+					if (type.equals(ns)) {
+						return true;
+					}
+				}
+			}
+
+		}
+
+		return used;
 	}
 
 
