@@ -17,7 +17,7 @@ public class MetadataConstants {
 	// exposed resource properties
 	public static final String CAGRID_MD_NAME = "ServiceMetadata";
 	public static final QName CAGRID_MD_QNAME = new QName(CAGRID_MD_NAMESPACE, CAGRID_MD_NAME);
-	public static final String CAGRID_DATA_MD_NAME = "DataServiceMetadata";
+	public static final String CAGRID_DATA_MD_NAME = "DomainModel";
 	public static final QName CAGRID_DATA_MD_QNAME = new QName(CAGRID_DATA_MD_NAMESPACE, CAGRID_DATA_MD_NAME);
 
 }

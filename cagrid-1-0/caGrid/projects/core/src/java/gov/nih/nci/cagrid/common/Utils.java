@@ -202,6 +202,7 @@ public class Utils {
 		// output the message element through the serialization context
 		element.output(serializationContext);
 		writer.write("\n");
+		writer.close();
 	}
 
 

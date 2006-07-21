@@ -72,5 +72,9 @@
 	<classpathentry sourcepath="/caGrid-1.0-core" kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-common-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-data-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="ext/lib/cglib-full-2.0.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
