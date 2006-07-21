@@ -63,7 +63,8 @@ public class XMLEditorViewer extends ResourcePropertyEditorPanel {
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.weighty = 1.0D;
 		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-		this.setSize(new java.awt.Dimension(509,316));
+		this.setSize(new java.awt.Dimension(615,426));
+		this.setPreferredSize(new java.awt.Dimension(615,426));
 		this.setLayout(new GridBagLayout());
 		this.add(getSchemaViewer(), gridBagConstraints);
 	}

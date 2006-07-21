@@ -465,6 +465,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 										+ File.separator + nsType.getLocation()), schemaDir);
 								}
 								ResourcePropertyEditorDialog diag = new ResourcePropertyEditorDialog(mdec, resourcePropertyFile);
+								diag.pack();
 								PortalUtils.centerWindow(diag);
 								diag.setVisible(true);
 							}
