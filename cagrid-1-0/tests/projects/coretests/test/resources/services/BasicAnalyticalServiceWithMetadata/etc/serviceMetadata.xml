@@ -25,5 +25,16 @@
    </ns2:serviceContextCollection>
   </ns2:Service>
  </ns1:serviceDescription>
- <ns1:hostingResearchCenter/>
-</ns1:ServiceMetadata>
+ <ns1:hostingResearchCenter>
+  <ns36:ResearchCenter displayName="Duke Comprehensive Cancer Center" shortName="Duke"
+   xsi:type="ns36:ResearchCenter"
+   xmlns:ns36="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns36:Address country="US" postalCode="27705" stateProvence="NC" street1="DUMC Box 2717"
+    xsi:type="ns36:Address"/>
+   <ns36:pointOfContactCollection>
+    <ns36:PointOfContact affiliation="Duke" email="patrick.mcconnell@duke.edu" firstName="Patrick"
+     lastName="McConnell" role="Maintainer" xsi:type="ns36:PointOfContact"/>
+   </ns36:pointOfContactCollection>
+  </ns36:ResearchCenter>
+ </ns1:hostingResearchCenter>
+ </ns1:ServiceMetadata>
