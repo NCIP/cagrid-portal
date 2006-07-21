@@ -21,7 +21,7 @@ public class ServiceDiscoveryStep
 	extends Step
 {
 	private EndpointReferenceType indexServiceEndpoint;
-	private EndpointReferenceType domainServiceEndpoint;
+	private String domainServicePath;
 	private ServiceMetadata metadata;
 	
 	public ServiceDiscoveryStep(int port, EndpointReferenceType domainServiceEndpoint, File metadataFile) 
@@ -35,16 +35,19 @@ public class ServiceDiscoveryStep
 		super();
 		
 		this.indexServiceEndpoint = indexServiceEndpoint;
-		this.domainServiceEndpoint = domainServiceEndpoint;
 		this.metadata = (ServiceMetadata) Utils.deserializeDocument(metadataFile.toString(), ServiceMetadata.class);
+
+		domainServicePath = domainServiceEndpoint.getAddress().toString();
+		String search = ":" + domainServiceEndpoint.getAddress().getPort() + "/";
+		int index = domainServicePath.indexOf(search);
+		domainServicePath = domainServicePath.substring(index+search.length());
 	}
 	
 	public void runStep() throws Throwable
 	{
 		DiscoveryClient client = new DiscoveryClient(indexServiceEndpoint);
-		EndpointReferenceType[] allServices = client.getAllServices(false);
-		assertTrue(0 < allServices.length);
-		assertTrue(0 < client.getAllServices(true).length);
+		assertTrue(foundService(client.getAllServices(false)));
+		assertTrue(foundService(client.getAllServices(true)));
 		
 		// service
 		assertTrue(foundService(
@@ -60,6 +63,9 @@ public class ServiceDiscoveryStep
 		
 		// center
 		assertTrue(foundService(
+			client.discoverServicesByResearchCenter(metadata.getHostingResearchCenter().getResearchCenter().getShortName())
+		));
+		assertTrue(foundService(
 			client.discoverServicesByResearchCenter(metadata.getHostingResearchCenter().getResearchCenter().getDisplayName())
 		));
 		for (PointOfContact poc : metadata.getHostingResearchCenter().getResearchCenter().getPointOfContactCollection().getPointOfContact()) {
@@ -71,8 +77,10 @@ public class ServiceDiscoveryStep
 	
 	private boolean foundService(EndpointReferenceType[] endpoints)
 	{
+		if (endpoints == null) return false;
+		
 		for (EndpointReferenceType endpoint : endpoints) {
-			if (domainServiceEndpoint.toString().equals(endpoint.toString())) return true;
+			if (endpoint.getAddress().toString().endsWith(domainServicePath)) return true;
 		}
 		return false;
 	}
