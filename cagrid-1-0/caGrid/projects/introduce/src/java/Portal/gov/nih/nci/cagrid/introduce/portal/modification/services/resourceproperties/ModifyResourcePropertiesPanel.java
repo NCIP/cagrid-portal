@@ -33,6 +33,9 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.xml.namespace.QName;
@@ -204,8 +207,38 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	private ResourcePropertyTable getResourcePropertiesTable() {
 		if (resourcePropertiesTable == null) {
 			resourcePropertiesTable = new ResourcePropertyTable(this.properties);
+
+			SelectionListener listener = new SelectionListener(resourcePropertiesTable);
+			resourcePropertiesTable.getSelectionModel().addListSelectionListener(listener);
+			resourcePropertiesTable.getColumnModel().getSelectionModel().addListSelectionListener(listener);
+
 		}
 		return resourcePropertiesTable;
+	}
+
+
+	public class SelectionListener implements ListSelectionListener {
+		ResourcePropertyTable table;
+
+
+		SelectionListener(ResourcePropertyTable table) {
+			this.table = table;
+		}
+
+
+		public void valueChanged(ListSelectionEvent e) {
+			try {
+				if (table.getSelectedRow() >= 0) {
+					if (table.getRowData(table.getSelectedRow()).isPopulateFromFile()) {
+						getEditInstanceButton().setEnabled(true);
+					} else {
+						getEditInstanceButton().setEnabled(false);
+					}
+				}
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
 
