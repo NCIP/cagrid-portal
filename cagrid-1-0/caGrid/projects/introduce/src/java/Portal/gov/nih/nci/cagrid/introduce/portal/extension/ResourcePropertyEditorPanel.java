@@ -8,13 +8,13 @@ import javax.swing.JPanel;
 import org.jdom.Document;
 
 
-public abstract class ResourcePropertyEditorComponent extends JPanel {
+public abstract class ResourcePropertyEditorPanel extends JPanel {
 	private Document doc;
 	private File schemaFile;
 	private File schemaDir;
 
 
-	public ResourcePropertyEditorComponent(Document doc, File schemaFile, File schemaDir) {
+	public ResourcePropertyEditorPanel(Document doc, File schemaFile, File schemaDir) {
 		this.doc = doc;
 		this.schemaFile = schemaFile;
 		this.schemaDir = schemaDir;

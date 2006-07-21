@@ -52,17 +52,17 @@ public class ExtensionTools {
 	}
 
 
-	public static ResourcePropertyEditorComponent getMetadataEditorComponent(String extensionName, Document doc,
+	public static ResourcePropertyEditorPanel getMetadataEditorComponent(String extensionName, Document doc,
 		File schemaFile, File schemaDir) throws Exception {
 		ResourcePropertyEditorExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance()
 			.getResourcePropertyEditorExtension(extensionName);
-		if (extensionDesc != null && extensionDesc.getResourcePropertyEditorComponent() != null
-			&& !extensionDesc.getResourcePropertyEditorComponent().equals("")) {
-			Class c = Class.forName(extensionDesc.getResourcePropertyEditorComponent());
+		if (extensionDesc != null && extensionDesc.getResourcePropertyEditorPanel() != null
+			&& !extensionDesc.getResourcePropertyEditorPanel().equals("")) {
+			Class c = Class.forName(extensionDesc.getResourcePropertyEditorPanel());
 			Constructor con = c.getConstructor(new Class[]{Document.class, File.class, File.class});
 			con.newInstance(new Object[]{doc, schemaFile, schemaDir});
 			Object obj = c.newInstance();
-			return (ResourcePropertyEditorComponent) obj;
+			return (ResourcePropertyEditorPanel) obj;
 		}
 		return null;
 	}

@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
-import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorComponent;
+import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.editor.XMLEditorViewer;
 
 import java.io.File;
@@ -21,7 +21,7 @@ import javax.swing.JButton;
 
 
 public class ResourcePropertyEditorDialog extends JDialog {
-	private ResourcePropertyEditorComponent component;
+	private ResourcePropertyEditorPanel component;
 	private File resourcePropertyFile;
 	private JPanel mainPanel = null;
 	private JPanel editorPanel = null;
@@ -30,7 +30,7 @@ public class ResourcePropertyEditorDialog extends JDialog {
 	private JButton cancelButton = null;
 
 
-	public ResourcePropertyEditorDialog(ResourcePropertyEditorComponent component, File resourcePropertyFile) {
+	public ResourcePropertyEditorDialog(ResourcePropertyEditorPanel component, File resourcePropertyFile) {
 		this.component = component;
 		this.resourcePropertyFile = resourcePropertyFile;
 		initialize();

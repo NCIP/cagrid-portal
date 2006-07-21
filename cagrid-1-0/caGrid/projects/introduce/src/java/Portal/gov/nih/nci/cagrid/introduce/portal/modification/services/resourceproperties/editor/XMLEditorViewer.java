@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.JEditTextArea;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.XMLTokenMarker;
-import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorComponent;
+import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -31,7 +31,7 @@ import javax.swing.JButton;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class XMLEditorViewer extends ResourcePropertyEditorComponent {
+public class XMLEditorViewer extends ResourcePropertyEditorPanel {
 
 	private JPanel schemaViewer = null;
 	private JEditTextArea schemaTextPane = null;
