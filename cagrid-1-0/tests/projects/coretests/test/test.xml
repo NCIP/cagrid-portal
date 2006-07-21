@@ -44,7 +44,6 @@
 					<exclude name="**/*Abstract*.java" />
 					<exclude name="**/CaDSRServiceTest.java" />
 					<exclude name="**/IndexServiceTest.java" />
-					<exclude name="**/ServiceMetadataSerializationTest.java" />
 					<include name="**/*Test.java" />
 					<include name="**/*TestCase.java" />
 				</fileset>
