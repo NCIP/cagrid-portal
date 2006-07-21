@@ -27,6 +27,7 @@ public class ResourcePropertyEditorDialog extends JDialog {
 	private JPanel editorPanel = null;
 	private JPanel buttonPanel = null;
 	private JButton doneButton = null;
+	private JButton cancelButton = null;
 
 
 	public ResourcePropertyEditorDialog(ResourcePropertyEditorComponent component, File resourcePropertyFile) {
@@ -95,6 +96,7 @@ public class ResourcePropertyEditorDialog extends JDialog {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
 			buttonPanel.add(getDoneButton(), null);
+			buttonPanel.add(getCancelButton(), null);
 		}
 		return buttonPanel;
 	}
@@ -132,6 +134,25 @@ public class ResourcePropertyEditorDialog extends JDialog {
 			});
 		}
 		return doneButton;
+	}
+
+
+	/**
+	 * This method initializes cancelButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getCancelButton() {
+		if (cancelButton == null) {
+			cancelButton = new JButton();
+			cancelButton.setText("Cancel");
+			cancelButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dispose();
+				}
+			});
+		}
+		return cancelButton;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"

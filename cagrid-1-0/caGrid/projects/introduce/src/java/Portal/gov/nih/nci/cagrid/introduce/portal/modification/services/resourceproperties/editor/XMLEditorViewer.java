@@ -33,10 +33,8 @@ import javax.swing.JButton;
  */
 public class XMLEditorViewer extends ResourcePropertyEditorComponent {
 
-	private JPanel mainPanel = null;
 	private JPanel schemaViewer = null;
 	private JEditTextArea schemaTextPane = null;
-	private JPanel buttonPanel = null;
 	private JButton doneButton = null;
 
 
@@ -58,37 +56,16 @@ public class XMLEditorViewer extends ResourcePropertyEditorComponent {
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
+		gridBagConstraints.gridx = -1;
+		gridBagConstraints.gridy = -1;
+		gridBagConstraints.weightx = 1.0D;
+		gridBagConstraints.weighty = 1.0D;
+		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 		this.setSize(new java.awt.Dimension(671, 616));
 		this.setLayout(new GridBagLayout());
-		this.setTitle("Edit Resource Property XML");
-		this.add(getMainPanel(), new GridBagConstraints());
-	}
-
-
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getMainPanel() {
-		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.gridy = 1;
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.fill = GridBagConstraints.BOTH;
-			gridBagConstraints.gridx = -1;
-			gridBagConstraints.gridy = -1;
-			gridBagConstraints.weightx = 1.0D;
-			gridBagConstraints.weighty = 1.0D;
-			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-			mainPanel = new JPanel();
-			mainPanel.setLayout(new GridBagLayout());
-			mainPanel.add(getSchemaViewer(), gridBagConstraints);
-			mainPanel.add(getButtonPanel(), gridBagConstraints1);
-		}
-		return mainPanel;
+		this.add(getSchemaViewer(), gridBagConstraints);
 	}
 
 
@@ -135,46 +112,25 @@ public class XMLEditorViewer extends ResourcePropertyEditorComponent {
 
 
 	/**
-	 * This method initializes buttonPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getButtonPanel() {
-		if (buttonPanel == null) {
-			buttonPanel = new JPanel();
-			buttonPanel.add(getDoneButton(), null);
-		}
-		return buttonPanel;
-	}
-
-
-	/**
 	 * This method initializes doneButton
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getDoneButton() {
-		if (doneButton == null) {
-			doneButton = new JButton();
-			doneButton.setText("Done");
-			doneButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Document doc = null;
-					try {
-						doc = XMLUtilities.stringToDocument(getSchemaTextPane().getText());
-					} catch (MobiusException e1) {
-						e1.printStackTrace();
-					}
-					if (doc == null) {
-						JOptionPane.showMessageDialog(XMLEditorViewer.this, "ERROR: Invalid XML Document");
-					} else {
-						setDoc(doc);
-						dispose();
-					}
-				}
-			});
+	public boolean save() {
+
+		Document doc = null;
+		try {
+			doc = XMLUtilities.stringToDocument(getSchemaTextPane().getText());
+		} catch (MobiusException e1) {
+			e1.printStackTrace();
 		}
-		return doneButton;
+		if (doc == null) {
+			JOptionPane.showMessageDialog(XMLEditorViewer.this, "ERROR: Invalid XML Document");
+		} else {
+			setDoc(doc);
+			return true;
+		}
+		return false;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,4"
