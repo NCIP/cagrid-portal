@@ -80,6 +80,9 @@
 	<target name="build-coretests" depends="prepare" description="Builds ntsec">
 		<resolveDependencies extdir="${tests.projects.dir}/coretests/ext">
 			<artifact refid="echo.jars" />
+			<artifact refid="dorian.jars" />
+			<artifact refid="gridca.jars" />
+			<artifact refid="opensaml.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="cadsr.jars" />
@@ -125,6 +128,15 @@
 		<echo>graph must be built in the main caGrid build</echo>
 	</target>
 	<target name="build-introduceServiceSecurity">
+		<echo>graph must be built in the main caGrid build</echo>
+	</target>
+	<target name="build-dorian">
+		<echo>graph must be built in the main caGrid build</echo>
+	</target>
+	<target name="build-gridca">
+		<echo>graph must be built in the main caGrid build</echo>
+	</target>
+	<target name="build-opensaml">
 		<echo>graph must be built in the main caGrid build</echo>
 	</target>
 
