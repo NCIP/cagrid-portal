@@ -28,9 +28,6 @@ public class ExceptionsTable extends PortalBaseTable {
 	public ExceptionsTable(MethodType method) {
 		super(createTableModel());
 		this.method = method;
-		this.setColumnSelectionAllowed(false);
-		this.setRowSelectionAllowed(true);
-		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		initialize();
 	}
@@ -89,6 +86,10 @@ public class ExceptionsTable extends PortalBaseTable {
 
 
 	private void initialize() {
+		this.setColumnSelectionAllowed(false);
+		this.setRowSelectionAllowed(true);
+		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.getTableHeader().setReorderingAllowed(false);
 		this.getColumn(DATA1).setMaxWidth(0);
 		this.getColumn(DATA1).setMinWidth(0);
 		this.getColumn(DATA1).setPreferredWidth(0);

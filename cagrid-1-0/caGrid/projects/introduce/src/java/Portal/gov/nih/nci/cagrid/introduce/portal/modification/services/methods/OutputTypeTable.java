@@ -47,6 +47,7 @@ public class OutputTypeTable extends PortalBaseTable {
 
 
 	private void initialize() {
+		this.getTableHeader().setReorderingAllowed(false);
 		this.getColumn(DATA1).setMaxWidth(0);
 		this.getColumn(DATA1).setMinWidth(0);
 		this.getColumn(DATA1).setPreferredWidth(0);

@@ -32,9 +32,6 @@ public class ResourcePropertyTable extends PortalBaseTable {
 	public ResourcePropertyTable(ResourcePropertiesListType metadatas) {
 		super(createTableModel());
 		this.metadatas = metadatas;
-		this.setColumnSelectionAllowed(false);
-		this.setRowSelectionAllowed(true);
-		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		getModel().addTableModelListener(new TableModelListener() {
 			public void tableChanged(TableModelEvent e) {
 				if (e.getType() == TableModelEvent.UPDATE) {
@@ -65,6 +62,9 @@ public class ResourcePropertyTable extends PortalBaseTable {
 
 
 	public boolean isCellEditable(int row, int column) {
+		if(column == 0 || column == 1){
+			return false;
+		}
 		return true;
 	}
 	
@@ -126,6 +126,10 @@ public class ResourcePropertyTable extends PortalBaseTable {
 	
 
 	private void initialize() {
+		this.getTableHeader().setReorderingAllowed(false);
+		this.setColumnSelectionAllowed(false);
+		this.setRowSelectionAllowed(true);
+		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.getColumn(DATA).setMaxWidth(0);
 		this.getColumn(DATA).setMinWidth(0);
 		this.getColumn(DATA).setPreferredWidth(0);

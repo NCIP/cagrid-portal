@@ -34,7 +34,6 @@ public class ServicePropertiesTable extends PortalBaseTable {
 
 	public ServicePropertiesTable(ServiceInformation info) {
 		super(new MyDefaultTableModel());
-		setAutoCreateColumnsFromModel(false);
 		this.info = info;
 		initialize();
 	}
@@ -135,6 +134,8 @@ public class ServicePropertiesTable extends PortalBaseTable {
 
 
 	private void initialize() {
+		setAutoCreateColumnsFromModel(false);
+		this.getTableHeader().setReorderingAllowed(false);
 		this.getColumn(DATA1).setMaxWidth(0);
 		this.getColumn(DATA1).setMinWidth(0);
 		this.getColumn(DATA1).setPreferredWidth(0);
