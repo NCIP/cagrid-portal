@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.editor.XMLEditorViewer;
@@ -408,7 +409,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	private JButton getEditInstanceButton() {
 		if (editInstanceButton == null) {
 			editInstanceButton = new JButton();
-			editInstanceButton.setText("Edit Instance");
+			editInstanceButton.setText("View/Edit Instance");
+			editInstanceButton.setIcon(IntroduceLookAndFeel.getModifyIcon());
 			editInstanceButton.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
