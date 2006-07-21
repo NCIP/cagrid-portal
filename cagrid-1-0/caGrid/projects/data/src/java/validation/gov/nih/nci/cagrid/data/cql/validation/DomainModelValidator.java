@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cagrid.cqlquery.Association;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
@@ -80,26 +81,20 @@ public class DomainModelValidator {
 			throw new MalformedQueryException("Attribute '" + attrib.getName() + "' is not defined for the class "
 				+ classMd.getClassName());
 		}
-		// validateAttributeDataType(attrib, attribMd);
 	}
 
 
 	private void validateAttributeDataType(Attribute attrib, UMLAttribute attribMetadata)
 		throws MalformedQueryException {
-		// if the predicate is a binary operator, verify the value is
-		// of the correct type
+		// if the predicate is a binary operator, verify the value is of the correct type
 		if (attrib.getPredicate() != null
-			&& !(attrib.getPredicate().getValue().equals(Predicate._IS_NOT_NULL) || attrib.getPredicate().getValue()
-				.equals(Predicate._IS_NULL))) {
+			&& !(attrib.getPredicate().getValue().equals(Predicate._IS_NOT_NULL) 
+				|| attrib.getPredicate().getValue().equals(Predicate._IS_NULL))) {
 			String value = attrib.getValue();
-			// TODO: evaluate this somehow
-			/*
-			 * FIXME: attributeMetadata contanins a null semantic metadata
-			 * collection, so this throws null pointer exception. When that gets
-			 * fixed, turn this function back on
-			 */
-			String dataType = attribMetadata.getSemanticMetadataCollection().getSemanticMetadata(0).getConcept()
-				.getLongName();
+			// FIXME: This isn't right.  UMLAttributeMetadata has
+			// getDataElement().getValueDomain().getDatatypeName(), which is what I need
+			SemanticMetadata semanticMd = attribMetadata.getSemanticMetadataCollection().getSemanticMetadata(0); 
+			String dataType = semanticMd.getConcept().getLongName();
 			try {
 				if (dataType.equals(Integer.class.getName())) {
 					Integer.valueOf(value);
@@ -117,8 +112,8 @@ public class DomainModelValidator {
 					Character.valueOf(value.charAt(0));
 				}
 			} catch (Exception ex) {
-				throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value: " + value
-					+ "; but type is " + dataType, ex);
+				throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value: " 
+					+ value + "; but type is " + dataType, ex);
 			}
 		}
 	}
