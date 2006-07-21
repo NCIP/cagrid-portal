@@ -40,13 +40,13 @@ public class IndexServiceTest
 
 		Vector steps = new Vector();
 		steps.add(createServiceStep);
-		steps.add(new CreateTempGlobusStep(globus));
-		steps.add(new DeployGlobusServiceStep(globus, createServiceStep.getServiceDir()));
 		try {
 			steps.add(new AdvertiseServiceStep(port, serviceDir));
 		} catch (MalformedURIException e) {
 			throw new IllegalArgumentException("could not add advertise steps", e);
 		}
+		steps.add(new CreateTempGlobusStep(globus));
+		steps.add(new DeployGlobusServiceStep(globus, createServiceStep.getServiceDir()));
 		steps.add(new DeployGlobusServiceStep(globus, indexServiceDir, "deployIndexGlobus"));		
 		steps.add(new StartGlobusStep(globus, port));
 		try {
