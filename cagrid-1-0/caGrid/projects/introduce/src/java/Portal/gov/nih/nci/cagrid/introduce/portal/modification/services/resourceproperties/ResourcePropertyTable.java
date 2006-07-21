@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.util.Vector;
 
@@ -41,7 +43,6 @@ public class ResourcePropertyTable extends PortalBaseTable {
 					String type = (String) getValueAt(row, 1);
 					Boolean populateFromFile = (Boolean) getValueAt(row, 2);
 					Boolean register = (Boolean) getValueAt(row, 3);
-					
 					switch (e.getColumn()) {
 						case 0:
 						case 1:

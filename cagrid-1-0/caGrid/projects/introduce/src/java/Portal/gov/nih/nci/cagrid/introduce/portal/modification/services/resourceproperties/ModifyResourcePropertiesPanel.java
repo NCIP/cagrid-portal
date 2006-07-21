@@ -351,6 +351,16 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			}
 			metadatas[newLength - 1] = metadata;
 			properties.setResourceProperty(metadatas);
+
+			// set the file name for the resource property instance......
+			int i = 0;
+			for (i = 0; i < properties.getResourceProperty().length; i++) {
+				if (metadata.equals(properties.getResourceProperty(i))) {
+					break;
+				}
+			}
+			metadata.setFileLocation(service.getName() + "_"
+				+ CommonTools.getResourcePropertyVariableName(service.getResourcePropertiesList(), i) + ".xml");
 		}
 	}
 
