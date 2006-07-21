@@ -25,7 +25,7 @@ public class ServiceMetadataSerializationTest
 		throws Exception
 	{
 		File metadataFile = new File(System.getProperty("ServiceMetadataSerializationTest.file", 
-			"test" + File.separator + "data" + File.separator + "serviceMetadata.xml"
+			"test" + File.separator + "resources" + File.separator + "ServiceMetadataSerializationTest" + File.separator + "serviceMetadata.xml"
 		));
 		
 		ServiceMetadata m1 = (ServiceMetadata) Utils.deserializeDocument(
