@@ -136,5 +136,13 @@
 	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-tests.jar"/>
+	<classpathentry kind="lib" path="ext/lib/Dorian_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/Dorian-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/Dorian-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/Dorian-portal.jar"/>
+	<classpathentry kind="lib" path="ext/lib/Dorian-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/Dorian-tests.jar"/>
+	<classpathentry kind="lib" path="ext/lib/gridca.jar"/>
+	<classpathentry kind="lib" path="ext/lib/cagrid-opensaml-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
