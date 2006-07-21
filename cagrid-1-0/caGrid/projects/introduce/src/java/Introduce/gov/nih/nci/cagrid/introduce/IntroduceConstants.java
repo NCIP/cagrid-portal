@@ -58,7 +58,7 @@ public class IntroduceConstants {
 	public static final String DEPLOY_PROPERTIES_FILE = "deploy.properties";
 
 	// introduce specific constants
-	public static final String INTRODUCE_VERSION = "1.0b";
+	public static final String INTRODUCE_VERSION = ".9999";
 
 	public static final String INTRODUCE_XML_FILE = "introduce.xml";
 

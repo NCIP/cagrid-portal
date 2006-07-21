@@ -18,11 +18,26 @@
 			<xs:choice>
 				<xs:element ref="DiscoveryExtensionDescription"></xs:element>
 				<xs:element ref="ServiceExtensionDescription"></xs:element>
+				<xs:element ref="ResourcePropertyEditorExtensionDescription"></xs:element>
 			</xs:choice>
 			<xs:attribute name="extensionType" type="xs:string"/>
 			<xs:attribute name="extensionPreferencesPanel" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="ResourcePropertyEditorExtensionDescription" type="ResourcePropertyEditorExtensionDescriptionType"></xs:element>
+	<xs:complexType name="ResourcePropertyEditorExtensionDescriptionType">
+		<xs:sequence>
+			<xs:element name="ResourcePropertyEditorComponent" type="xs:string" minOccurs="1" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Must extend the ResourcePropertyEditorComponent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="Properties"/>
+		</xs:sequence>
+		<xs:attribute name="qname" type="xs:QName" use="required"/>
+		<xs:attribute name="displayName" type="xs:string" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
 	<xs:element name="DiscoveryExtensionDescription" type="DiscoveryExtensionDescriptionType"></xs:element>
 	<xs:complexType name="DiscoveryExtensionDescriptionType">
 		<xs:sequence>

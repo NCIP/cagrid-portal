@@ -45,6 +45,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
@@ -69,11 +70,13 @@ public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode {
 	private DefaultTreeModel model;
 	private ResourcePropertiesPopUpMenu menu;
 	private ServiceInformation info;
+	private ServiceType service;
 
 
-	public ResourcePropertiesTypeTreeNode(ResourcePropertiesListType methods, DefaultTreeModel model,
+	public ResourcePropertiesTypeTreeNode(ServiceType service, ResourcePropertiesListType methods, DefaultTreeModel model,
 		ServiceInformation info) {
 		super();
+		service = service;
 		this.resourceProperties = methods;
 		this.setUserObject("Resource Properties");
 		this.model = model;
@@ -186,6 +189,16 @@ public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode {
 
 	public ImageIcon getClosedIcon() {
 		return IntroduceLookAndFeel.getResourcePropertiesIcon();
+	}
+
+
+	public ServiceType getService() {
+		return service;
+	}
+
+
+	public void setService(ServiceType service) {
+		this.service = service;
 	}
 
 }

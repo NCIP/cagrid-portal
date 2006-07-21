@@ -2,12 +2,14 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -22,14 +24,20 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 	private NamespacesType namespaces;
 	private JButton doneButton = null;
 	private boolean showW3Cnamespaces;
+	private ServiceType service;
+	private File etcDir;
+	private File schemaDir;
 	
 	/**
 	 * This method initializes 
 	 * 
 	 */
-	public ModifyResourcePropertiesComponent(ResourcePropertiesListType properties, NamespacesType namespaces, boolean showW3Cnamespaces) {
+	public ModifyResourcePropertiesComponent(ServiceType service, NamespacesType namespaces, File etcDir, File schemaDir, boolean showW3Cnamespaces) {
 		super();
-		this.properties = properties;
+		this.service = service;
+		this.etcDir = etcDir;
+		this.schemaDir = schemaDir;
+		this.properties = service.getResourcePropertiesList();
 		this.namespaces = namespaces;
 		this.showW3Cnamespaces = showW3Cnamespaces;
 		initialize();
@@ -79,7 +87,7 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 	 */
 	private JPanel getResourcesPanel() {
 		if (resourcesPanel == null) {
-			resourcesPanel = new ModifyResourcePropertiesPanel(properties,namespaces,showW3Cnamespaces);
+			resourcesPanel = new ModifyResourcePropertiesPanel(service,namespaces, etcDir, schemaDir, showW3Cnamespaces);
 		}
 		return resourcesPanel;
 	}

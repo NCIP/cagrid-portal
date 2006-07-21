@@ -25,6 +25,7 @@ public class ResourcePropertyTable extends PortalBaseTable {
 	public static String TYPE = "Type";
 	public static String POPULATE_FROM_FILE = "Populate From File";
 	public static String REGISTER = "Register";
+	public static String DATA = "Data";
 
 	private ResourcePropertiesListType metadatas;
 
@@ -77,7 +78,7 @@ public class ResourcePropertyTable extends PortalBaseTable {
 		Boolean populateFromFile = (Boolean) getValueAt(row, 2);
 		Boolean register = (Boolean) getValueAt(row, 3);
 
-		ResourcePropertyType metadata = new ResourcePropertyType();
+		ResourcePropertyType metadata = (ResourcePropertyType) getValueAt(row, 4);
 
 		if (namespace != null && !namespace.equals("") && type != null && !type.equals("")) {
 			metadata.setQName(new QName(namespace,type));
@@ -99,6 +100,7 @@ public class ResourcePropertyTable extends PortalBaseTable {
 		v.add(metadata.getQName().getLocalPart());
 		v.add(new Boolean(metadata.isPopulateFromFile()));
 		v.add(new Boolean(metadata.isRegister()));
+		v.add(metadata);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
 		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
@@ -124,6 +126,9 @@ public class ResourcePropertyTable extends PortalBaseTable {
 	
 
 	private void initialize() {
+		this.getColumn(DATA).setMaxWidth(0);
+		this.getColumn(DATA).setMinWidth(0);
+		this.getColumn(DATA).setPreferredWidth(0);
 		while (getRowCount() != 0) {
 			removeRow(0);
 		}		
@@ -168,6 +173,7 @@ public class ResourcePropertyTable extends PortalBaseTable {
 			addColumn(TYPE);
 			addColumn(POPULATE_FROM_FILE);
 			addColumn(REGISTER);
+			addColumn(DATA);
 		}
 
 

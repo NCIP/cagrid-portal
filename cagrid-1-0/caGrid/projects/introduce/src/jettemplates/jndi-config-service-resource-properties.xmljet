@@ -37,7 +37,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 				<parameter>
 					<name><%=name%>File</name>
 					<!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the <%=name%> extract -->
-					<value>ETC-PATH/<%=name%>.xml</value>
+					<value>ETC-PATH/<%=metadata.getFileLocation()%></value>
 				</parameter><%
 				}
 			}

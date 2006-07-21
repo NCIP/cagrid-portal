@@ -2,11 +2,17 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.beans.extension.ResourcePropertyEditorExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorComponent;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.editor.XMLEditorViewer;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
@@ -14,49 +20,74 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeT
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileWriter;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.xml.namespace.QName;
 import javax.swing.JSplitPane;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.xml.namespace.QName;
+
+import org.jdom.Document;
+import org.projectmobius.common.XMLUtilities;
+
 
 public class ModifyResourcePropertiesPanel extends JPanel {
-	
+
 	private ResourcePropertiesListType properties;
-	
+
 	private NamespacesType namespaces;
-	
+
 	private JPanel resourcePropertiesPanel = null;
-	
+
 	private JScrollPane namespacesScrollPane = null;
-	
+
 	private JScrollPane resourcePropertiesScrollPane = null;
-	
+
 	private NamespacesJTree namespacesJTree = null;
-	
+
 	private ResourcePropertyTable resourcePropertiesTable = null;
-	
+
 	private JPanel buttonsPanel = null;
-	
+
 	private JButton addResourcePropertyButton = null;
-	
+
 	private JButton removeResourcePropertyButton = null;
-	
+
 	private JSplitPane mainSplitPane = null;
-	
+
 	private boolean showW3Cnamespaces;
-	
-	public ModifyResourcePropertiesPanel(ResourcePropertiesListType properties,
-		NamespacesType namespaces, boolean showW3Cnamespaces) {
-		this.properties = properties;
+
+	private JButton editInstanceButton = null;
+
+	private File etcDir;
+
+	private File schemaDir;
+
+	private ServiceType service;
+
+
+	public ModifyResourcePropertiesPanel(ServiceType service, NamespacesType namespaces, File etcDir, File schemaDir,
+		boolean showW3Cnamespaces) {
+		this.service = service;
+		this.etcDir = etcDir;
+		this.schemaDir = schemaDir;
+		this.properties = service.getResourcePropertiesList();
 		this.namespaces = namespaces;
 		this.showW3Cnamespaces = showW3Cnamespaces;
 		initialize();
 	}
-	
+
+
 	private void initialize() {
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.gridx = 0;
@@ -69,22 +100,21 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		gridBagConstraints1.weighty = 1.0D;
 		gridBagConstraints1.gridx = 0;
 		this.setLayout(new GridBagLayout());
-		this.setSize(new java.awt.Dimension(314,211));
+		this.setSize(new java.awt.Dimension(314, 211));
 		this.add(getMainSplitPane(), gridBagConstraints1);
-		this.add(getButtonsPanel(), gridBagConstraints2);	
+		this.add(getButtonsPanel(), gridBagConstraints2);
 	}
-	
-	
+
+
 	public void reInitialize(ResourcePropertiesListType props, NamespacesType ns) {
 		this.properties = props;
 		this.namespaces = ns;
 		this.namespacesJTree.setNamespaces(ns);
 		this.resourcePropertiesTable.setResourceProperties(props);
 	}
-	
-	
-	public ResourcePropertyType[] getConfiguredResourceProperties()
-	throws Exception {
+
+
+	public ResourcePropertyType[] getConfiguredResourceProperties() throws Exception {
 		int propertyCount = getResourcePropertiesTable().getRowCount();
 		ResourcePropertyType[] configuredProperties = new ResourcePropertyType[propertyCount];
 		for (int i = 0; i < propertyCount; i++) {
@@ -92,8 +122,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		}
 		return configuredProperties;
 	}
-	
-	
+
+
 	/**
 	 * This method initializes resourcePropertiesPanel
 	 * 
@@ -110,13 +140,12 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
 			resourcePropertiesPanel = new JPanel();
 			resourcePropertiesPanel.setLayout(new GridBagLayout());
-			resourcePropertiesPanel.add(getResourcePropertiesScrollPane(),
-				gridBagConstraints4);
+			resourcePropertiesPanel.add(getResourcePropertiesScrollPane(), gridBagConstraints4);
 		}
 		return resourcePropertiesPanel;
 	}
-	
-	
+
+
 	/**
 	 * This method initializes namespacesScrollPane
 	 * 
@@ -125,13 +154,13 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	private JScrollPane getNamespacesScrollPane() {
 		if (namespacesScrollPane == null) {
 			namespacesScrollPane = new JScrollPane();
-			namespacesScrollPane.setPreferredSize(new java.awt.Dimension(240,240));
+			namespacesScrollPane.setPreferredSize(new java.awt.Dimension(240, 240));
 			namespacesScrollPane.setViewportView(getNamespacesJTree());
 		}
 		return namespacesScrollPane;
 	}
-	
-	
+
+
 	/**
 	 * This method initializes resourcePropertiesScrollPane
 	 * 
@@ -140,13 +169,12 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	private JScrollPane getResourcePropertiesScrollPane() {
 		if (resourcePropertiesScrollPane == null) {
 			resourcePropertiesScrollPane = new JScrollPane();
-			resourcePropertiesScrollPane
-				.setViewportView(getResourcePropertiesTable());
+			resourcePropertiesScrollPane.setViewportView(getResourcePropertiesTable());
 		}
 		return resourcePropertiesScrollPane;
 	}
-	
-	
+
+
 	/**
 	 * This method initializes namespacesJTree
 	 * 
@@ -155,19 +183,19 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	private NamespacesJTree getNamespacesJTree() {
 		if (namespacesJTree == null) {
 			namespacesJTree = new NamespacesJTree(this.namespaces, showW3Cnamespaces);
-			namespacesJTree.addMouseListener(new MouseAdapter() {				
+			namespacesJTree.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
 					if (e.getClickCount() == 2) {
 						addResourceProperty();
 					}
-				}				
+				}
 			});
 		}
 		return namespacesJTree;
 	}
-	
-	
+
+
 	/**
 	 * This method initializes resourcePropertiesTable
 	 * 
@@ -179,8 +207,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		}
 		return resourcePropertiesTable;
 	}
-	
-	
+
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -188,13 +216,18 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 	 */
 	private JPanel getButtonsPanel() {
 		if (buttonsPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 2;
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 0;
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints8.gridx = 1;
 			gridBagConstraints8.gridy = 0;
 			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 0;
 			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -202,11 +235,12 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			buttonsPanel.setLayout(new GridBagLayout());
 			buttonsPanel.add(getAddButton(), gridBagConstraints);
 			buttonsPanel.add(getRemoveButton(), gridBagConstraints8);
+			buttonsPanel.add(getEditInstanceButton(), gridBagConstraints11);
 		}
 		return buttonsPanel;
 	}
-	
-	
+
+
 	/**
 	 * This method initializes jButton
 	 * 
@@ -218,8 +252,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			addResourcePropertyButton.setToolTipText("add new operation");
 			addResourcePropertyButton.setText("Add");
 			addResourcePropertyButton.setIcon(PortalLookAndFeel.getAddIcon());
-			addResourcePropertyButton.addActionListener(
-				new java.awt.event.ActionListener() {
+			addResourcePropertyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					addResourceProperty();
 				}
@@ -227,19 +260,19 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		}
 		return addResourcePropertyButton;
 	}
-	
-	
+
+
 	private void addResourceProperty() {
 		if (getNamespacesJTree().getCurrentNode() instanceof SchemaElementTypeTreeNode) {
-			NamespaceType nt = ((NamespaceType) ((NamespaceTypeTreeNode) getNamespacesJTree()
-				.getCurrentNode().getParent()).getUserObject());
+			NamespaceType nt = ((NamespaceType) ((NamespaceTypeTreeNode) getNamespacesJTree().getCurrentNode()
+				.getParent()).getUserObject());
 			SchemaElementType st = ((SchemaElementType) ((SchemaElementTypeTreeNode) getNamespacesJTree()
 				.getCurrentNode()).getUserObject());
 			ResourcePropertyType metadata = new ResourcePropertyType();
 			metadata.setQName(new QName(nt.getNamespace(), st.getType()));
 			metadata.setPopulateFromFile(false);
 			metadata.setRegister(false);
-			
+
 			if (properties != null && properties.getResourceProperty() != null) {
 				for (int i = 0; i < properties.getResourceProperty().length; i++) {
 					ResourcePropertyType rp = properties.getResourceProperty(i);
@@ -248,9 +281,9 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 					}
 				}
 			}
-			
+
 			getResourcePropertiesTable().addRow(metadata);
-			
+
 			// add new metadata to array in bean
 			// this seems to be a wierd way be adding things....
 			ResourcePropertyType[] metadatas;
@@ -258,18 +291,18 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			if (properties != null && properties.getResourceProperty() != null) {
 				newLength = properties.getResourceProperty().length + 1;
 				metadatas = new ResourcePropertyType[newLength];
-				System.arraycopy(properties.getResourceProperty(), 0,
-					metadatas, 0, properties.getResourceProperty().length);
+				System.arraycopy(properties.getResourceProperty(), 0, metadatas, 0,
+					properties.getResourceProperty().length);
 			} else {
 				newLength = 1;
 				metadatas = new ResourcePropertyType[newLength];
 			}
 			metadatas[newLength - 1] = metadata;
-			properties.setResourceProperty(metadatas);			
+			properties.setResourceProperty(metadatas);
 		}
 	}
-	
-	
+
+
 	/**
 	 * This method initializes jButton2
 	 * 
@@ -280,9 +313,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			removeResourcePropertyButton = new JButton();
 			removeResourcePropertyButton.setToolTipText("remove selected operation");
 			removeResourcePropertyButton.setText("Remove");
-			removeResourcePropertyButton.setIcon(PortalLookAndFeel.getRemoveIcon());			
-			removeResourcePropertyButton.addActionListener(
-				new java.awt.event.ActionListener() {
+			removeResourcePropertyButton.setIcon(PortalLookAndFeel.getRemoveIcon());
+			removeResourcePropertyButton.addActionListener(new java.awt.event.ActionListener() {
 				// remove from table
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					ResourcePropertyType resource = null;
@@ -294,13 +326,11 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 						e1.printStackTrace();
 					}
 					int row = getResourcePropertiesTable().getSelectedRow();
-					if ((row < 0)
-						|| (row >= getResourcePropertiesTable().getRowCount())) {
+					if ((row < 0) || (row >= getResourcePropertiesTable().getRowCount())) {
 						PortalUtils.showErrorMessage("Please select a metdata type to remove.");
 						return;
 					}
-					getResourcePropertiesTable().removeRow(
-						getResourcePropertiesTable().getSelectedRow());
+					getResourcePropertiesTable().removeRow(getResourcePropertiesTable().getSelectedRow());
 					// remove from resource properties list
 					ResourcePropertyType[] metadatas;
 					int newLength = properties.getResourceProperty().length - 1;
@@ -318,12 +348,12 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 		}
 		return removeResourcePropertyButton;
 	}
-	
-	
+
+
 	/**
-	 * This method initializes jSplitPane	
-	 * 	
-	 * @return javax.swing.JSplitPane	
+	 * This method initializes jSplitPane
+	 * 
+	 * @return javax.swing.JSplitPane
 	 */
 	private JSplitPane getMainSplitPane() {
 		if (mainSplitPane == null) {
@@ -334,5 +364,92 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			mainSplitPane.setRightComponent(getResourcePropertiesPanel());
 		}
 		return mainSplitPane;
+	}
+
+
+	/**
+	 * This method initializes editInstanceButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getEditInstanceButton() {
+		if (editInstanceButton == null) {
+			editInstanceButton = new JButton();
+			editInstanceButton.setText("Edit Instance");
+			editInstanceButton.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					if (getResourcePropertiesTable().getSelectedRow() >= 0) {
+						try {
+							ResourcePropertyType type = getResourcePropertiesTable().getRowData(
+								getResourcePropertiesTable().getSelectedRow());
+							if (type.isPopulateFromFile()) {
+								Document doc = null;
+								File resourcePropertyFile = null;
+								if (type.getFileLocation() != null && !type.getFileLocation().equals("")) {
+									// file has already been created
+									resourcePropertyFile = new File(etcDir.getAbsolutePath() + File.separator
+										+ type.getFileLocation());
+									System.out.println("Loading resource properties file : " + resourcePropertyFile);
+									doc = XMLUtilities.fileNameToDocument(resourcePropertyFile.getAbsolutePath());
+								} else {
+									// file has not been created yet, we will
+									// create it, set the path to file, and then
+									// call the editor
+									int i = 0;
+									for (i = 0; i < properties.getResourceProperty().length; i++) {
+										if (type.equals(properties.getResourceProperty(i))) {
+											break;
+										}
+									}
+									System.out.println("Creating a new resource properties file");
+									type.setFileLocation(service.getName()
+										+ "_"
+										+ CommonTools.getResourcePropertyVariableName(service
+											.getResourcePropertiesList(), i) + ".xml");
+									resourcePropertyFile = new File(etcDir.getAbsolutePath() + File.separator
+										+ type.getFileLocation());
+								}
+
+								QName qname = type.getQName();
+								NamespaceType nsType = CommonTools
+									.getNamespaceType(namespaces, qname.getNamespaceURI());
+
+								ResourcePropertyEditorExtensionDescriptionType mde = ExtensionTools
+									.getResourcePropertyEditorExtensionDescriptor(qname);
+								ResourcePropertyEditorComponent mdec = null;
+
+								if (mde != null) {
+									mdec = ExtensionTools
+										.getMetadataEditorComponent(mde.getName(), doc, new File(schemaDir
+											.getAbsolutePath()
+											+ File.separator + nsType.getLocation()), schemaDir);
+								} else {
+									// use the default editor....
+									mdec = new XMLEditorViewer(doc, new File(schemaDir.getAbsolutePath()
+										+ File.separator + nsType.getLocation()), schemaDir);
+								}
+								PortalUtils.centerWindow(mdec);
+								mdec.setVisible(true);
+								doc = mdec.getDoc();
+
+								// write the xml file back out for this
+								// properties
+								FileWriter fw = new FileWriter(resourcePropertyFile);
+								fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
+								fw.close();
+							}
+
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+
+				}
+
+			});
+
+		}
+		return editInstanceButton;
 	}
 }

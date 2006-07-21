@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -18,7 +19,6 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
 
 	/**
 	 * This method initializes
-	 * 
 	 */
 	public ResourcePropertiesPopUpMenu(ResourcePropertiesTypeTreeNode node) {
 		super();
@@ -29,7 +29,6 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
 
 	/**
 	 * This method initializes this
-	 * 
 	 */
 	private void initialize() {
 		this.add(getModifyResourcePropetiesMenuItem());
@@ -50,9 +49,12 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
 			modifyResourcePropetiesMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
-					ModifyResourcePropertiesComponent comp = new ModifyResourcePropertiesComponent(node
-						.getResourceProperties(), node.getInfo().getNamespaces(), true);
-					comp.setSize(600,300);
+					ModifyResourcePropertiesComponent comp = new ModifyResourcePropertiesComponent(
+						node.getService(), node.getInfo().getNamespaces(),
+						new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator + "etc"),
+						new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator + "schema"
+							+ File.separator + node.getInfo().getServices().getService(0).getName()), true);
+					comp.setSize(600, 300);
 					PortalUtils.centerWindow(comp);
 					comp.setVisible(true);
 				}

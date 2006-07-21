@@ -1,7 +1,8 @@
-Migration to Security Metadata
+Migration from 1.0B to .9999 mainstream
 
-1) Remove no longer valid security configuration from introduce.xml (ClientCommunication, ClientAuthorization, and Delegation).
-2) Copy ServiceSecurity jars into project lib directory
-3) Copy ServiceSecurity schema and wsdl to project schema directory
-4) Modify client to correspond to the Jet client.
-5) Add securityMetadata entry to wsdd (<parameter name="securityMetadata" value="ETC-PATH/HelloWorld-security-metadata.xml" />)
+A new field to the ResourcePropertiesType was added called fileLocation.  This field
+is used to tell introduce what file to use for reading in a populateFromFile resource
+property.  If you do not metadata files aleady filed out then you should not see a problem.
+If you do be sure that you go into this introduce.xml file and set that location to be relative
+to the etc directory and pointing to the file which represents that particular resource
+property instance document.

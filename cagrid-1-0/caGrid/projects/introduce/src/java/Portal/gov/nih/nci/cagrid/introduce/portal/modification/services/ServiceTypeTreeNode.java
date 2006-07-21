@@ -96,7 +96,7 @@ public class ServiceTypeTreeNode extends DefaultMutableTreeNode {
 			model.insertNodeInto(newNode, this, this.getChildCount());
 		}
 		if (serviceType.getResourcePropertiesList() != null) {
-			ResourcePropertiesTypeTreeNode newNode = new ResourcePropertiesTypeTreeNode(serviceType
+			ResourcePropertiesTypeTreeNode newNode = new ResourcePropertiesTypeTreeNode(serviceType, serviceType
 				.getResourcePropertiesList(), model, info);
 		model.insertNodeInto(newNode, this, this.getChildCount());
 		}

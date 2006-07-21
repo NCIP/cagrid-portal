@@ -104,5 +104,7 @@
 	<classpathentry kind="lib" path="lib/jhall.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-security-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

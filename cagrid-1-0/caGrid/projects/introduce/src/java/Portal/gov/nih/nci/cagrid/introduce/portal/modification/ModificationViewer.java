@@ -195,6 +195,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 	private JSplitPane typesSplitPane = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -1651,17 +1652,19 @@ public class ModificationViewer extends GridPortalComponent {
 				ResourcePropertiesListType properties = new ResourcePropertiesListType();
 				info.getServices().getService(0).setResourcePropertiesList(properties);
 			}
-			rpHolderPanel = new ModifyResourcePropertiesPanel(info.getServices().getService(0)
-				.getResourcePropertiesList(), info.getNamespaces(), false);
+			rpHolderPanel = new ModifyResourcePropertiesPanel(info.getServices().getService(0), info.getNamespaces(),
+				new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "etc"), new File(info
+					.getBaseDirectory().getAbsolutePath()
+					+ File.separator + "schema" + File.separator + info.getServices().getService(0).getName()), false);
 		}
 		return rpHolderPanel;
 	}
 
 
 	/**
-	 * This method initializes jSplitPane	
-	 * 	
-	 * @return javax.swing.JSplitPane	
+	 * This method initializes jSplitPane
+	 * 
+	 * @return javax.swing.JSplitPane
 	 */
 	private JSplitPane getTypesSplitPane() {
 		if (typesSplitPane == null) {
