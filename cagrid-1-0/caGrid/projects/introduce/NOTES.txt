@@ -1,9 +1,5 @@
 To Do:
 
-should generated two different interfaces in common..  (what is the use.  The server only implements non "provided" methods.  Has nothing to do with "importing")
-  - one, for all the non-imported operations that the service implements
-  - one, that extends that interface, that adds the imported methods, that only the client implements 
-
 I was adding faults to a method, and when I hit done, an error dialog poped up with method "java.util.Vector" and removed my faults
 
 on save etc i have seen unable to delete namespace2package.mappings.
@@ -23,10 +19,6 @@ assumption is made that when a method is imported from a wsdl that all the messa
 jaxmejs is leaving file handles laying around somewhere. (update.. System.gc call is owrking for now, might have to patch jaxmejs)
 
 solve timing problems in the addComplexTypeTest.....
-
-metadata tab should have a "create value" (or something) button for each metadata value that is populateFromFile
-  - should launch a specialized graphical editor (based on QName), or a generic XSD-based editor if no custom renderer is present 
-  - introduce needs a new extension type (metadata populator) to register QName->Classname (of panel editor)
 
 add tests to system tests for (coverage report shows no coverage):
 - (DONE) SystemProperties
@@ -62,6 +54,15 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+(DONT LIKE THIS) should generated two different interfaces in common..  (what is the use.  The server only implements non "provided" methods.  Has nothing to do with "importing")
+  - one, for all the non-imported operations that the service implements
+  - one, that extends that interface, that adds the imported methods, that only the client implements 
+
+
+metadata tab should have a "create value" (or something) button for each metadata value that is populateFromFile
+  - should launch a specialized graphical editor (based on QName), or a generic XSD-based editor if no custom renderer is present 
+  - introduce needs a new extension type (metadata populator) to register QName->Classname (of panel editor)
+
 Modification viewer: any tabs with the namespaces tree need to use a JSplitPane.
 
 (added validation) if add a new service with same namespace i get funny gui error.
