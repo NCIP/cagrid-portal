@@ -43,7 +43,6 @@ public class ResourcePropertyEditorDialog extends JDialog {
 	private void initialize() {
 		this.setTitle("Resource Property Editor");
 		this.setContentPane(getMainPanel());
-		this.setSize(new java.awt.Dimension(371, 270));
 	}
 
 
@@ -81,7 +80,13 @@ public class ResourcePropertyEditorDialog extends JDialog {
 	private JPanel getEditorPanel() {
 		if (editorPanel == null) {
 			editorPanel = new JPanel(new GridBagLayout());
-			editorPanel.add(component, new GridBagConstraints());
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints.weightx = 1.0D;
+			gridBagConstraints.weighty = 1.0D;
+			gridBagConstraints.gridy = 0;
+			editorPanel.add(component, gridBagConstraints);
 		}
 		return editorPanel;
 	}
