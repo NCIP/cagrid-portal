@@ -464,15 +464,9 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 									mdec = new XMLEditorViewer(doc, new File(schemaDir.getAbsolutePath()
 										+ File.separator + nsType.getLocation()), schemaDir);
 								}
-								PortalUtils.centerWindow(mdec);
-								mdec.setVisible(true);
-								doc = mdec.getDoc();
-
-								// write the xml file back out for this
-								// properties
-								FileWriter fw = new FileWriter(resourcePropertyFile);
-								fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
-								fw.close();
+								ResourcePropertyEditorDialog diag = new ResourcePropertyEditorDialog(mdec, resourcePropertyFile);
+								PortalUtils.centerWindow(diag);
+								diag.setVisible(true);
 							}
 
 						} catch (Exception ex) {

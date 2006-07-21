@@ -3,22 +3,24 @@ package gov.nih.nci.cagrid.introduce.portal.extension;
 import java.io.File;
 
 import javax.swing.JDialog;
+import javax.swing.JPanel;
 
 import org.jdom.Document;
 
 
-public abstract class ResourcePropertyEditorComponent extends JDialog {
+public abstract class ResourcePropertyEditorComponent extends JPanel {
 	private Document doc;
 	private File schemaFile;
 	private File schemaDir;
 
 
 	public ResourcePropertyEditorComponent(Document doc, File schemaFile, File schemaDir) {
-		this.setModal(true);
 		this.doc = doc;
 		this.schemaFile = schemaFile;
 		this.schemaDir = schemaDir;
 	}
+	
+	public abstract boolean save();
 
 
 	public Document getDoc() {
