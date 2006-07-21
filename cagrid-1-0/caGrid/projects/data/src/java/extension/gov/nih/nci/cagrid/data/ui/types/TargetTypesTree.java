@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.EventObject;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -16,6 +17,8 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 /** 
@@ -28,73 +31,104 @@ import javax.swing.tree.TreeSelectionModel;
  * @version $Id$ 
  */
 public class TargetTypesTree extends JTree {
-	private NamespaceType namespaceType;
+	private DefaultTreeModel model;
+	private DefaultMutableTreeNode rootNode;
 	private List typeSelectionListeners;
 	
 	public TargetTypesTree() {
 		super();
 		typeSelectionListeners = new LinkedList();
-		setEditable(true);
 		setCellRenderer(new CellRenderer());
 		setCellEditor(new CellEditor());
-		setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
-		setRootVisible(false); // until namespaces are added
+		setEditable(true);
+		setShowsRootHandles(true);
+		this.rootNode = new DefaultMutableTreeNode();
+		this.model = new DefaultTreeModel(rootNode);
+		setModel(model);
+		setRootVisible(false); // namespaces attach to invisible root node
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 	}
 	
 	
-	public void setNamespace(NamespaceType ns) {
-		DomainTreeNode domainNode = new DomainTreeNode(this, ns);
-		setModel(new DefaultTreeModel(domainNode));
-		setRootVisible(true);
-		this.namespaceType = ns;
+	DefaultTreeModel getTreeModel() {
+		return model;
 	}
 	
 	
-	public void checkSchemaNodes() {
-		DomainTreeNode domainNode = (DomainTreeNode) ((DefaultTreeModel) getModel()).getRoot();
-		if (domainNode != null) {
-			for (int i = 0; i < domainNode.getChildCount(); i++) {
-				TypeTreeNode typeNode = (TypeTreeNode) domainNode.getChildAt(i);
-				typeNode.getCheckBox().setSelected(true);
+	public void addNamespaceType(NamespaceType ns) {
+		DomainTreeNode domainNode = new DomainTreeNode(this, ns);
+		rootNode.add(domainNode);
+		getTreeModel().reload(rootNode);
+		if (domainNode.getChildCount() != 0) {
+			TreeNode child = domainNode.getChildAt(0);
+			TreePath path = new TreePath(getTreeModel().getPathToRoot(child));
+			makeVisible(path);
+		}
+	}
+	
+	
+	public void clearTree() {
+		rootNode.removeAllChildren();
+	}
+	
+	
+	public void checkTypeNodes(NamespaceType ns, SchemaElementType[] types) {
+		for (int i = 0; i < rootNode.getChildCount(); i++) {
+			DomainTreeNode domainNode = (DomainTreeNode) rootNode.getChildAt(i);
+			if (domainNode.getNamespace().equals(ns)) {
+				domainNode.checkTypeNodes(types);
+				break;
 			}
 		}
 	}
 	
 	
-	public NamespaceType getOriginalNamespace() {
-		return namespaceType;
+	public NamespaceType[] getNamespaceTypes() {
+		NamespaceType[] namespaces = new NamespaceType[rootNode.getChildCount()];
+		for (int i = 0; i < rootNode.getChildCount(); i++) {
+			namespaces[i] = ((DomainTreeNode) rootNode.getChildAt(i)).getNamespace();
+		}
+		return namespaces;
 	}
 	
 	
-	public SchemaElementType[] getCheckedTypes() {
+	public SchemaElementType[] getCheckedTypes(NamespaceType namespace) {
 		List selected = new ArrayList();
-		DomainTreeNode domainNode = (DomainTreeNode) ((DefaultTreeModel) getModel()).getRoot();
-		int childCount = domainNode.getChildCount();
-		for (int i = 0; i < childCount; i++) {
-			TypeTreeNode typeNode = (TypeTreeNode) domainNode.getChildAt(i);
-			if (typeNode.isChecked()) {
-				selected.add(typeNode.getType());
+		// find the namespace node
+		for (int i = 0; i < rootNode.getChildCount(); i++) {
+			DomainTreeNode domainNode = (DomainTreeNode) rootNode.getChildAt(i);
+			if (domainNode.getNamespace().getNamespace().equals(namespace.getNamespace())) {
+				int childCount = domainNode.getChildCount();
+				for (int j = 0; j < childCount; j++) {
+					TypeTreeNode typeNode = (TypeTreeNode) domainNode.getChildAt(j);
+					if (typeNode.isChecked()) {
+						selected.add(typeNode.getType());
+					}
+				}
+				break;
 			}
-		}		
+		}
 		SchemaElementType[] types = new SchemaElementType[selected.size()];
 		selected.toArray(types);
 		return types;
 	}
 	
 	
-	/**
-	 * Creates a new namespace type from the one loaded into the tree
-	 * and the user's selection of schema element types to expose
-	 * @return
-	 */
-	public NamespaceType getUserDefinedNamespace() {
-		NamespaceType ns = new NamespaceType();
-		ns.setLocation(namespaceType.getLocation());
-		ns.setNamespace(namespaceType.getNamespace());
-		ns.setPackageName(namespaceType.getPackageName());
-		ns.setSchemaElement(getCheckedTypes());
-		return ns;
+	public SchemaElementType[] getAllCheckedTypes() {
+		List selected = new ArrayList();
+		Enumeration nodes = rootNode.depthFirstEnumeration();
+		while (nodes.hasMoreElements()) {
+			TreeNode treeNode = (TreeNode) nodes.nextElement();
+			if (treeNode instanceof TypeTreeNode) {
+				TypeTreeNode typeNode = (TypeTreeNode) treeNode;
+				if (typeNode.isChecked()) {
+					selected.add(typeNode.getType());
+				}
+			}
+		}
+		SchemaElementType[] types = new SchemaElementType[selected.size()];
+		selected.toArray(types);
+		return types;
 	}
 	
 	
@@ -108,24 +142,24 @@ public class TargetTypesTree extends JTree {
 	}
 	
 	
-	protected void fireTypeSelectionAdded(SchemaElementType addedType) {
+	protected void fireTypeSelectionAdded(NamespaceType namespace, SchemaElementType addedType) {
 		Iterator listenerIter = typeSelectionListeners.iterator();
 		TypeSelectionEvent event = null;
 		while (listenerIter.hasNext()) {
 			if (event == null) {
-				event = new TypeSelectionEvent(this, addedType);
+				event = new TypeSelectionEvent(this, namespace, addedType);
 			}
 			((TypeSelectionListener) listenerIter.next()).typeSelectionAdded(event);
 		}
 	}
 	
 	
-	protected void fireTypeSelectionRemoved(SchemaElementType removedType) {
+	protected void fireTypeSelectionRemoved(NamespaceType namespace, SchemaElementType removedType) {
 		Iterator listenerIter = typeSelectionListeners.iterator();
 		TypeSelectionEvent event = null;
 		while (listenerIter.hasNext()) {
 			if (event == null) {
-				event = new TypeSelectionEvent(this, removedType);
+				event = new TypeSelectionEvent(this, namespace, removedType);
 			}
 			((TypeSelectionListener) listenerIter.next()).typeSelectionRemoved(event);
 		}
@@ -135,7 +169,7 @@ public class TargetTypesTree extends JTree {
 	private static class CellRenderer extends DefaultTreeCellRenderer {
 		
 		public CellRenderer() {
-			
+			// super();
 		}
 		
 		
@@ -174,9 +208,13 @@ public class TargetTypesTree extends JTree {
 		
 		public Component getTreeCellEditorComponent(JTree tree, Object value,
 			boolean isSelected, boolean expanded, boolean leaf, int row) {
-			CheckBoxTreeNode checkNode = (CheckBoxTreeNode) value;
-			check = checkNode.getCheckBox();
-			return check;
+			if (value instanceof CheckBoxTreeNode) {
+				CheckBoxTreeNode checkNode = (CheckBoxTreeNode) value;
+				check = checkNode.getCheckBox();
+				return check;
+			} else {
+				return super.getTreeCellEditorComponent(tree, value, isSelected, expanded, leaf, row);
+			}
 		}
 	}
 }

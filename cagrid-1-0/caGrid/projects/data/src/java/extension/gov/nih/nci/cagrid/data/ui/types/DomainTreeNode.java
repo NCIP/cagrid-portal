@@ -28,13 +28,15 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 	
 	private NamespaceType namespace;
 	private TargetTypesTree parentTree;
-	private Map schemaTypes;
+	private Map checkBoxTypes;
+	private Map typeCheckBoxes;
 
 	public DomainTreeNode(TargetTypesTree tree, NamespaceType namespace) {
 		super();
 		this.parentTree = tree;
 		this.namespace = namespace;
-		this.schemaTypes = new HashMap();
+		this.checkBoxTypes = new HashMap();
+		this.typeCheckBoxes = new HashMap();
 		
 		setUserObject(namespace.getNamespace());
 		// add child nodes
@@ -52,9 +54,9 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 					JCheckBox checkBox = (JCheckBox) e.getSource();
 					if (checkBox.isSelected()) {
 						// TODO: get the node the check box belongs to
-						parentTree.fireTypeSelectionAdded((SchemaElementType) schemaTypes.get(checkBox));
+						parentTree.fireTypeSelectionAdded(getNamespace(), (SchemaElementType) checkBoxTypes.get(checkBox));
 					} else {
-						parentTree.fireTypeSelectionRemoved((SchemaElementType) schemaTypes.get(checkBox));
+						parentTree.fireTypeSelectionRemoved(getNamespace(), (SchemaElementType) checkBoxTypes.get(checkBox));
 					}
 				}
 			};
@@ -62,7 +64,8 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 			for (int i = 0; i < types.length; i++) {
 				TypeTreeNode node = new TypeTreeNode(types[i]);
 				node.getCheckBox().addItemListener(childListener);
-				schemaTypes.put(node.getCheckBox(), node.getType());
+				checkBoxTypes.put(node.getCheckBox(), node.getType());
+				typeCheckBoxes.put(node.getType(), node.getCheckBox());
 				add(node);
 			}
 		}
@@ -82,6 +85,16 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 	
 	public NamespaceType getNamespace() {
 		return this.namespace;
+	}
+	
+	
+	public void checkTypeNodes(SchemaElementType[] types) {
+		for (int i = 0; i < types.length; i++) {
+			JCheckBox check = (JCheckBox) typeCheckBoxes.get(types[i]);
+			if (check != null) {
+				check.setSelected(true);
+			}
+		}
 	}
 	
 	

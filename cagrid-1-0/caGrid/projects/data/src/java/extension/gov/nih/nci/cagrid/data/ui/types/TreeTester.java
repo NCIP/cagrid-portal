@@ -36,17 +36,19 @@ public class TreeTester extends JFrame {
 	private TargetTypesTree getTree() {
 		if (tree == null) {
 			tree = new TargetTypesTree();
-			tree.setNamespace(getNamespaces());
+			tree.addNamespaceType(getNamespaces()[0]);
+			tree.addNamespaceType(getNamespaces()[1]);
 		}
 		return tree;
 	}
 	
 	
-	private NamespaceType getNamespaces() {
-		NamespaceType ns = new NamespaceType();
-		ns.setNamespace("projectmobius.org/1/BookStore");
-		ns.setPackageName("org.projectmobius");
-		ns.setLocation(".");
+	private NamespaceType[] getNamespaces() {
+		NamespaceType[] ns = new NamespaceType[2];
+		NamespaceType bs = new NamespaceType();
+		bs.setNamespace("projectmobius.org/1/BookStore");
+		bs.setPackageName("org.projectmobius");
+		bs.setLocation(".");
 		SchemaElementType[] types = new SchemaElementType[4];
 		for (int i = 0; i < types.length; i++) {
 			SchemaElementType type = new SchemaElementType();
@@ -56,7 +58,23 @@ public class TreeTester extends JFrame {
 			type.setType("Book" + i);
 			types[i] = type;
 		}
-		ns.setSchemaElement(types);
+		bs.setSchemaElement(types);
+		ns[0] = bs;
+		NamespaceType foo = new NamespaceType();
+		foo.setNamespace("foo.bar.org/1/Zor");
+		foo.setPackageName("org.bar.foo");
+		foo.setLocation(".");
+		SchemaElementType[] types2 = new SchemaElementType[4];
+		for (int i = 0; i < types2.length; i++) {
+			SchemaElementType type = new SchemaElementType();
+			type.setClassName("Foo" + i);
+			type.setDeserializer("FakeDeserializer");
+			type.setSerializer("FakeSerializer");
+			type.setType("Foo" + i);
+			types2[i] = type;
+		}
+		foo.setSchemaElement(types2);
+		ns[1] = foo;
 		return ns;
 	}
 	

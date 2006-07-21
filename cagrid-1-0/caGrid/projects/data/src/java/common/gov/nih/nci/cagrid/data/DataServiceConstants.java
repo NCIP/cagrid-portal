@@ -72,16 +72,14 @@ public class DataServiceConstants {
 	// cadsr info constants
 	public static final String CADSR_ELEMENT_NAME = "caDSRInformation";
 	public static final String CADSR_URL_ATTRIB = "url";
-	public static final String CADSR_PACKAGE_ATTRIB = "package";
+	public static final String CADSR_PACKAGE_MAPPING = "package";
+	public static final String CADSR_PACKAGE_NAME = "name";
+	public static final String CADSR_PACKAGE_NAMESAPCE = "mappedNamespace";
+	public static final String CADSR_PACKAGE_SELECTED_CLASS = "selectedClass";
 	public static final String CADSR_PROJECT_NAME_ATTRIB = "projectName";
 	public static final String CADSR_PROJECT_VERSION_ATTRIB = "projectVersion";
-	public static final String CADSR_SELECTED_CLASSES = "selectedClasses";
-	public static final String CADSR_CLASS = "class";
 	public static final String SUPPLIED_DOMAIN_MODEL = "suppliedDomainModel";
-	
-	// target data model
-	public static final String DATA_MODEL_ELEMENT_NAME = "targetDataModel";
-	
+		
 	// DomainModel QName
 	public static final QName DOMAIN_MODEL_QNAME = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice", "DomainModel");
 	
