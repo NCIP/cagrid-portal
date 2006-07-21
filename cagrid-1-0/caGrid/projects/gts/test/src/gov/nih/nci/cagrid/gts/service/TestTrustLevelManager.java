@@ -463,7 +463,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 
 
 	protected void tearDown() throws Exception {
-		super.setUp();
+		super.tearDown();
 		try {
 			assertEquals(0, db.getDatabase().getUsedConnectionCount());
 			db.getDatabase().destroyDatabase();

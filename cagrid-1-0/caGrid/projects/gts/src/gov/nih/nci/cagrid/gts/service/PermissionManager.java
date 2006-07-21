@@ -403,9 +403,8 @@ public class PermissionManager {
 		}
 	}
 
-	public void destroy() throws GTSInternalFault {
+	public synchronized void destroy() throws GTSInternalFault {
 		try {
-			buildDatabase();
 			db.update("DROP TABLE IF EXISTS " + PermissionsTable.TABLE_NAME);
 			dbBuilt = false;
 		} catch (Exception e) {
