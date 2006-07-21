@@ -71,9 +71,7 @@ public class MethodsTable extends PortalBaseTable {
 
 	public MethodsTable(ServiceType service, File methodsDirectory, Properties serviceProperties) {
 		super(createTableModel());
-		setAutoCreateColumnsFromModel(false);
 		this.serviceType = service;
-		this.setRowSelectionAllowed(true);
 		initialize();
 	}
 
@@ -84,6 +82,10 @@ public class MethodsTable extends PortalBaseTable {
 
 
 	private void initialize() {
+		this.setAutoCreateColumnsFromModel(false);
+		this.setRowSelectionAllowed(true);
+		this.getTableHeader().setReorderingAllowed(false);
+		
 		for (int i = this.getRowCount() - 1; i == 0; i--) {
 			this.removeRow(i);
 		}

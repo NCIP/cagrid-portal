@@ -212,7 +212,25 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			SelectionListener listener = new SelectionListener(resourcePropertiesTable);
 			resourcePropertiesTable.getSelectionModel().addListSelectionListener(listener);
 			resourcePropertiesTable.getColumnModel().getSelectionModel().addListSelectionListener(listener);
+			resourcePropertiesTable.getModel().addTableModelListener(new TableModelListener() {
 
+				public void tableChanged(TableModelEvent e) {
+
+					try {
+						if (resourcePropertiesTable.getSelectedRow() >= 0) {
+							if (resourcePropertiesTable.getRowData(resourcePropertiesTable.getSelectedRow())
+								.isPopulateFromFile()) {
+								getEditInstanceButton().setEnabled(true);
+							} else {
+								getEditInstanceButton().setEnabled(false);
+							}
+						}
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+
+			});
 		}
 		return resourcePropertiesTable;
 	}
@@ -464,7 +482,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 									mdec = new XMLEditorViewer(doc, new File(schemaDir.getAbsolutePath()
 										+ File.separator + nsType.getLocation()), schemaDir);
 								}
-								ResourcePropertyEditorDialog diag = new ResourcePropertyEditorDialog(mdec, resourcePropertyFile);
+								ResourcePropertyEditorDialog diag = new ResourcePropertyEditorDialog(mdec,
+									resourcePropertyFile);
 								diag.pack();
 								PortalUtils.centerWindow(diag);
 								diag.setVisible(true);

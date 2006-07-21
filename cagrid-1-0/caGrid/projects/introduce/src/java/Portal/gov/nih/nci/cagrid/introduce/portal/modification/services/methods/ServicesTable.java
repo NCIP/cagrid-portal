@@ -30,9 +30,6 @@ public class ServicesTable extends PortalBaseTable {
 	public ServicesTable(ServicesType services) {
 		super(createTableModel());
 		this.services = services;
-		this.setColumnSelectionAllowed(false);
-		this.setRowSelectionAllowed(true);
-		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		initialize();
 	}
@@ -92,6 +89,10 @@ public class ServicesTable extends PortalBaseTable {
 
 
 	private void initialize() {
+		this.setColumnSelectionAllowed(false);
+		this.setRowSelectionAllowed(true);
+		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.getTableHeader().setReorderingAllowed(false);
 		this.getColumn(DATA1).setMaxWidth(0);
 		this.getColumn(DATA1).setMinWidth(0);
 		this.getColumn(DATA1).setPreferredWidth(0);
