@@ -14,17 +14,17 @@ public class DorianSubmitRegistrationStep
 	private String serviceURL;
 	private Application application;
 	
-	public DorianSubmitRegistrationStep(int port, Application application) 
+	public DorianSubmitRegistrationStep(Application application, int port) 
 	{
-		this("https://localhost:" + port + "/wsrf/services/cagrid/Dorian", application);
+		this(application, "https://localhost:" + port + "/wsrf/services/cagrid/Dorian");
 	}
 	
-	public DorianSubmitRegistrationStep(String serviceURL, Application application) 
+	public DorianSubmitRegistrationStep(Application application, String serviceURL) 
 	{
 		super();
 		
-		this.serviceURL = serviceURL;
 		this.application = application;
+		this.serviceURL = serviceURL;
 	}
 	
 	public void runStep() 
