@@ -67,7 +67,7 @@ public class DorianTest
 		globus = new GlobusHelper(true);
 		globus.setUseCounterCheck(false);
 		port = Integer.parseInt(System.getProperty("test.globus.secure.port", "8443"));
-		serviceDir = new File(System.getProperty("cadsr.dir",
+		serviceDir = new File(System.getProperty("dorian.dir",
 			".." + File.separator + ".." + File.separator + ".." + File.separator + 
 			"caGrid" + File.separator + "projects" + File.separator + "dorian"
 		));
@@ -129,6 +129,8 @@ public class DorianTest
 		// cleanup
 		steps.add(new GlobusStopStep(globus, port));
 		steps.add(new GlobusCleanupStep(globus));
+		steps.add(new DorianCleanupStep());
+		steps.add(new DorianDestroyDefaultProxyStep());
 		
 		return steps;
 	}
