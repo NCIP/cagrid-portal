@@ -74,6 +74,7 @@ public abstract class AbstractServiceTest
 		if (serviceInfo.isTransportSecurity()) {
 			port = Integer.parseInt(System.getProperty("test.globus.secure.port", "8443"));
 			protocol = "https";
+			globus.setUseCounterCheck(false);
 		} else {
 			port = Integer.parseInt(System.getProperty("test.globus.port", "8080"));
 		}
