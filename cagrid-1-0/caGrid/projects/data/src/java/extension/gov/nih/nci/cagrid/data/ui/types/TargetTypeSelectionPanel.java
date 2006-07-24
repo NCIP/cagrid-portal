@@ -29,7 +29,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -38,7 +37,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -48,16 +46,11 @@ import javax.swing.event.DocumentListener;
 import org.apache.axis.message.MessageElement;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.Namespace;
-import org.projectmobius.common.XMLUtilities;
-import org.projectmobius.common.gme.NoSuchSchemaException;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.portal.PortalResourceManager;
-import org.projectmobius.protocol.gme.SchemaNode;
 
 /** 
  *  TargetTypeSelectionPanel
@@ -169,17 +162,16 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private TargetTypesTree getTypesTree() {
 		if (typesTree == null) {
 			typesTree = new TargetTypesTree();
+			// listener for check and uncheck operations on the tree
 			typesTree.addTypeSelectionListener(new TypeSelectionListener() {
 				public void typeSelectionAdded(TypeSelectionEvent e) {
 					getTypesTable().addType(e.getNamespaceType(), e.getSchemaElementType());
-					addNamespacesToServiceDescription();
 					updateSelectedClasses();
 				}
 				
 				
 				public void typeSelectionRemoved(TypeSelectionEvent e) {
 					getTypesTable().removeSchemaElementType(e.getSchemaElementType());
-					addNamespacesToServiceDescription();
 					updateSelectedClasses();
 				}
 				
@@ -194,21 +186,26 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				}
 			});
 			
-			// packages
+			// if there's existing cadsr configuration, apply it
 			MessageElement cadsrMessageElement = ExtensionTools.getExtensionDataElement(
 				getExtensionTypeExtensionData(), DataServiceConstants.CADSR_ELEMENT_NAME);
 			if (cadsrMessageElement != null) {
+				// walk through packages
 				Element cadsrElement = AxisJdomUtils.fromMessageElement(cadsrMessageElement);
-				Iterator packageElemIter = cadsrElement.getChildren(DataServiceConstants.CADSR_PACKAGE_MAPPING).iterator();
+				Iterator packageElemIter = cadsrElement.getChildren(
+					DataServiceConstants.CADSR_PACKAGE_MAPPING).iterator();
 				while (packageElemIter.hasNext()) {
 					Element packageElement = (Element) packageElemIter.next();
-					String packageName = packageElement.getAttributeValue(DataServiceConstants.CADSR_PACKAGE_NAME);
-					String namespace = packageElement.getAttributeValue(DataServiceConstants.CADSR_PACKAGE_NAMESAPCE);
+					String packageName = packageElement.getAttributeValue(
+						DataServiceConstants.CADSR_PACKAGE_NAME);
+					String namespace = packageElement.getAttributeValue(
+						DataServiceConstants.CADSR_PACKAGE_NAMESAPCE);
 					packageToNamespace.put(packageName, namespace);
-					// find the namespace needed
+					// find the namespace needed for this package in the service description
+					NamespaceType[] serviceNamespaces = getServiceInfo().getNamespaces().getNamespace();
 					NamespaceType nsType = null;
-					for (int nsIndex = 0; nsIndex < getServiceInfo().getNamespaces().getNamespace().length; nsIndex++) {
-						NamespaceType ns = getServiceInfo().getNamespaces().getNamespace(nsIndex);
+					for (int nsIndex = 0; nsIndex < serviceNamespaces.length; nsIndex++) {
+						NamespaceType ns = serviceNamespaces[nsIndex];
 						if (ns.getNamespace().equals(namespace)) {
 							nsType = ns;
 							break;
@@ -217,7 +214,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 					if (nsType != null) {
 						// add the namespace to the types tree
 						typesTree.addNamespaceType(nsType);
-						// check off nodes on the types tree
+						// convert the set of type names selected in the cadsr info to an
+						// array of schema element types
 						Set typeNames = new HashSet();
 						Iterator selectedIter = packageElement.getChildren(DataServiceConstants.CADSR_PACKAGE_SELECTED_CLASS).iterator();
 						while (selectedIter.hasNext()) {
@@ -232,10 +230,11 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 						}
 						SchemaElementType[] types = new SchemaElementType[selectedTypes.size()];
 						selectedTypes.toArray(types);
+						
+						// check off type nodes on the types tree
 						typesTree.checkTypeNodes(nsType, types);
 					}
 				}
-
 			}
 		}
 		return typesTree;
@@ -332,7 +331,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			addPackageButton.setText("Add Package");
 			addPackageButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// verify we're in the same project
+					// verify we're in the same project as the other packages
 					Project selectedProject = getDomainBrowserPanel().getSelectedProject();
 					if (mostRecentProject == null) {
 						// if no project has been selected yet, make it the most recent
@@ -361,6 +360,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 							while (getTypesTable().getRowCount() != 0) {
 								getTypesTable().removeSchemaElementType(0);
 							}
+							// clear out the types tree
 							getTypesTree().clearTree();
 						} else {
 							shouldAddPackage = false;
@@ -369,11 +369,27 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 					if (shouldAddPackage) {
 						UMLPackageMetadata pack = getDomainBrowserPanel().getSelectedPackage();
 						if (pack != null) {
-							NamespaceType nsType = createNamespaceFromUmlPackage(pack);
+							// determine if the namespace type already exists in the service
+							String namespaceUri = NamespaceUtils.createNamespaceString(mostRecentProject, pack);
+							NamespaceType nsType = NamespaceUtils.getServiceNamespaceType(getServiceInfo(), namespaceUri);
+							if (nsType == null) {
+								// create a new namespace from the package
+								try {
+									nsType = NamespaceUtils.createNamespaceFromUmlPackage(
+										mostRecentProject, pack, getGME(), getSchemaDir());
+								} catch (Exception ex) {
+									ex.printStackTrace();
+									PortalUtils.showErrorMessage("Error creating namespace type", ex);
+								}
+								// add the new namespace to the service
+								if (nsType != null) {
+									CommonTools.addNamespace(getServiceInfo().getServiceDescriptor(), nsType);
+								}
+							}
+							// map the package to the new namespace and add it to the types tree
 							if (nsType != null) {
 								packageToNamespace.put(pack.getName(), nsType.getNamespace());
 								getTypesTree().addNamespaceType(nsType);
-								addNamespacesToServiceDescription();
 							}
 						}
 						storeCaDSRInfo();
@@ -382,92 +398,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			});
 		}
 		return addPackageButton;
-	}
-	
-	
-	private NamespaceType createNamespaceFromUmlPackage(UMLPackageMetadata pack) {
-		String namespaceString = null;
-		Project proj = getDomainBrowserPanel().getSelectedProject();
-		if (proj != null) {
-			String version = proj.getVersion();
-			if (version.indexOf(".") == -1) {
-				version += ".0";
-			}
-			namespaceString = "gme://" + proj.getShortName() + ".caBIG/" + version + "/" + pack.getName();
-			NamespaceType nsType = new NamespaceType();
-			try {
-				Namespace namespace = new Namespace(namespaceString);
-				List namespaceDomainList = getGME().getNamespaceDomainList();
-				if (!namespaceDomainList.contains(namespace.getDomain())) {
-					// prompt for alternate
-					String alternativeDomain = (String) JOptionPane.showInputDialog(this,
-						"The GME does not appear to contain schemas under the specified domain.\n"
-						+ "Select an alternative domain, or cancel if no viable option is available.\n"
-						+ "\nExpected domain: " + namespace.getDomain(), "Schema Location Error",
-						JOptionPane.ERROR_MESSAGE, null, namespaceDomainList.toArray(), null);
-					
-					if (alternativeDomain != null) {
-						namespace = new Namespace(namespace.getProtocol() + "://" + alternativeDomain + "/"
-							+ namespace.getName());
-					} else {
-						return null;
-					}
-				}
-				String schemaContents = null;
-				try {
-					schemaContents = getSchema(namespace);
-				} catch (NoSuchSchemaException e) {
-					// prompt for alternate
-					List schemas = getGME().getSchemaListForNamespaceDomain(namespace.getDomain());
-					Namespace alternativeSchema = (Namespace) JOptionPane.showInputDialog(this,
-						"Unable to locate schema for the selected caDSR package.\n"
-						+ "This package may not have a published Schema."
-						+ "\nSelect an alternative Schema, or cancel.\n\nExpected schema: " + namespace.getName(),
-						"Schema Location Error", JOptionPane.ERROR_MESSAGE, null, schemas.toArray(), null);
-					
-					if (alternativeSchema != null) {
-						namespace = alternativeSchema;
-					} else {
-						return null;
-					}
-					schemaContents = getSchema(namespace);
-				}
-				
-				// set the package name
-				String packageName = CommonTools.getPackageName(namespace);
-				nsType.setPackageName(packageName);
-				
-				nsType.setNamespace(namespace.getRaw());
-				ImportInfo ii = new ImportInfo(namespace);
-				nsType.setLocation("./" + ii.getFileName());
-				
-				// popualte the schema elements
-				gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(
-					nsType, XMLUtilities.stringToDocument(schemaContents));
-				// write the schema and its imports to the filesystem
-				getGME().cacheSchema(namespace, getSchemaDir());
-				return nsType;
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-		return null;
-	}
-	
-	
-	private void addNamespacesToServiceDescription() {
-		Set allNamespaces = new HashSet();
-		// namespaces derived from the selected UMLPackages are found in the types tree
-		NamespaceType[] derivedNamespaces = getTypesTree().getNamespaceTypes();
-		Collections.addAll(allNamespaces, derivedNamespaces);
-		// namespaces from the service already
-		NamespaceType[] serviceNamespaces = getServiceInfo().getServiceDescriptor().getNamespaces().getNamespace();
-		Collections.addAll(allNamespaces, serviceNamespaces);
-		
-		// store back to service description
-		NamespaceType[] allNsArray = new NamespaceType[allNamespaces.size()];
-		allNamespaces.toArray(allNsArray);
-		getServiceInfo().getServiceDescriptor().getNamespaces().setNamespace(allNsArray);
 	}
 	
 	
@@ -480,13 +410,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		}
 		return gmeHandle;
 	}
-	
-	
-	private String getSchema(Namespace namespace) throws Exception {
-		SchemaNode schema = getGME().getSchema(namespace, false);
-		return schema.getSchemaContents();
-	}
-	
 	
 	private File getSchemaDir() {
 		String dir = getServiceInfo().getBaseDirectory().getAbsolutePath() + File.separator +
@@ -698,25 +621,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			    public void changedUpdate(DocumentEvent e) {
 			    	setDomainModelFile();
 			    }
-			    
-			    
-			    private void setDomainModelFile() {
-			    	ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
-			    	String filename = getDomainModelNameTextField().getText();
-			    	if (filename == null || filename.length() == 0) {
-			    		ExtensionTools.removeExtensionDataElement(data, DataServiceConstants.SUPPLIED_DOMAIN_MODEL);
-			    	} else {
-			    		Element elem = new Element(DataServiceConstants.SUPPLIED_DOMAIN_MODEL);
-			    		elem.setText(filename);
-			    		try {
-			    			MessageElement messageElem = AxisJdomUtils.fromElement(elem);
-			    			ExtensionTools.updateExtensionDataElement(data, messageElem);
-			    		} catch (Exception ex) {
-			    			ex.printStackTrace();
-			    			PortalUtils.showErrorMessage("Error storing domain model filename", ex);
-			    		}
-			    	}
-			    }
 			});
 		}
 		return domainModelNameTextField;
@@ -751,4 +655,23 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		}
 		return domainModelSelectionPanel;
 	}
+	
+	
+	private void setDomainModelFile() {
+    	ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
+    	String filename = getDomainModelNameTextField().getText();
+    	if (filename == null || filename.length() == 0) {
+    		ExtensionTools.removeExtensionDataElement(data, DataServiceConstants.SUPPLIED_DOMAIN_MODEL);
+    	} else {
+    		Element elem = new Element(DataServiceConstants.SUPPLIED_DOMAIN_MODEL);
+    		elem.setText(filename);
+    		try {
+    			MessageElement messageElem = AxisJdomUtils.fromElement(elem);
+    			ExtensionTools.updateExtensionDataElement(data, messageElem);
+    		} catch (Exception ex) {
+    			ex.printStackTrace();
+    			PortalUtils.showErrorMessage("Error storing domain model filename", ex);
+    		}
+    	}
+    }
 }
