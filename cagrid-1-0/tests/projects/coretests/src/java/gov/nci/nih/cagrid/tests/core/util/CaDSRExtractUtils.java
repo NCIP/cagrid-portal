@@ -81,6 +81,7 @@ public class CaDSRExtractUtils
 	public static void main(String[] args) 
 		throws Exception
 	{
+		setAxisConfig(new File("etc" + File.separator + "cadsr" + File.separator + "client-config.wsdd"));
 		DomainModel model = findExtract(args[0], args[1]);
 		writeExtract(model, new File(args[2]));
 		readExtract(new File(args[2]));
