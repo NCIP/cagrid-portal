@@ -25,7 +25,7 @@ import org.globus.gsi.GlobusCredential;
 
 import com.atomicobject.haste.framework.Step;
 
-public class InvokeServiceStep
+public class ServiceInvokeStep
 	extends Step
 {
 	private File serviceDir;
@@ -41,7 +41,7 @@ public class InvokeServiceStep
 	
 	private Class cl;
 	
-	public InvokeServiceStep(
+	public ServiceInvokeStep(
 		File serviceDir, File testDir, File methodDir, String methodName, String url
 	) 
 		throws Exception 
@@ -71,7 +71,7 @@ public class InvokeServiceStep
 		this.proxy = null;
 	}
 
-	public InvokeServiceStep(
+	public ServiceInvokeStep(
 		File serviceDir, String className, String methodName, Object[] params, File resultsFile, 
 		String url, GlobusCredential proxy
 	) {
@@ -262,11 +262,11 @@ public class InvokeServiceStep
 		String serviceName = "BasicAnalyticalServiceWithMetadata";
 		File testDir = new File("test" + File.separator + "resources" + File.separator + "services" + File.separator + serviceName);
 		File methodDir = new File(testDir, "test\\resources\\0_reverseTranslate");
-		InvokeServiceStep step = new InvokeServiceStep(
+		ServiceInvokeStep step = new ServiceInvokeStep(
 			serviceDir,
 			testDir,
 			methodDir,
-			InvokeServiceStep.parseParamName(methodDir),
+			ServiceInvokeStep.parseParamName(methodDir),
 			"http://localhost:8080/wsrf/services/cagrid/BasicAnalyticalServiceWithMetadata"
 		);
 		step.runStep();

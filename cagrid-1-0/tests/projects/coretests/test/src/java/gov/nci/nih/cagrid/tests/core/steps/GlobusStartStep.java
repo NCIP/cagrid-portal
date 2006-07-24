@@ -7,13 +7,13 @@ import com.atomicobject.haste.framework.Step;
 
 import gov.nci.nih.cagrid.tests.core.GlobusHelper;
 
-public class StartGlobusStep
+public class GlobusStartStep
 	extends Step
 {
 	private GlobusHelper globus;
 	private int port;
 	
-	public StartGlobusStep(GlobusHelper globus, int port)
+	public GlobusStartStep(GlobusHelper globus, int port)
 	{
 		super();
 		

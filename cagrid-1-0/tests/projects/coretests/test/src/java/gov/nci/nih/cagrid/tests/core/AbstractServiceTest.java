@@ -3,8 +3,8 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
-import gov.nci.nih.cagrid.tests.core.steps.CreateServiceStep;
-import gov.nci.nih.cagrid.tests.core.steps.InvokeServiceStep;
+import gov.nci.nih.cagrid.tests.core.steps.ServiceCreateStep;
+import gov.nci.nih.cagrid.tests.core.steps.ServiceInvokeStep;
 import gov.nci.nih.cagrid.tests.core.util.FileUtils;
 import gov.nci.nih.cagrid.tests.core.util.IntroduceServiceInfo;
 
@@ -34,7 +34,7 @@ public abstract class AbstractServiceTest
 	protected GlobusHelper globus;
 	protected EndpointReferenceType endpoint;
 	protected int port;
-	protected CreateServiceStep createServiceStep;
+	protected ServiceCreateStep createServiceStep;
 	protected File metadataFile;
 
 	protected void init(String serviceName)
@@ -80,7 +80,7 @@ public abstract class AbstractServiceTest
 
 		// set createServiceStep
 		try {
-			createServiceStep = new CreateServiceStep(introduceDir, testDir, tempDir);
+			createServiceStep = new ServiceCreateStep(introduceDir, testDir, tempDir);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("could not instantiate CreateServiceStep", e);
 		}
@@ -114,16 +114,16 @@ public abstract class AbstractServiceTest
 		for (File dir : dirs) dirList.add(dir);
 		Collections.sort(dirList, new Comparator<File>() {
 			public int compare(File f1, File f2) {
-				return InvokeServiceStep.parseParamPos(f1) - InvokeServiceStep.parseParamPos(f2);
+				return ServiceInvokeStep.parseParamPos(f1) - ServiceInvokeStep.parseParamPos(f2);
 			}
 		});
 		dirs = dirList.toArray(new File[0]);
 		
 		// add steps
 		for (File methodDir : dirs) {
-			steps.add(new InvokeServiceStep(
+			steps.add(new ServiceInvokeStep(
 				serviceDir, testDir, 
-				methodDir, InvokeServiceStep.parseParamName(methodDir),
+				methodDir, ServiceInvokeStep.parseParamName(methodDir),
 				endpoint.getAddress().toString()
 			));
 		}

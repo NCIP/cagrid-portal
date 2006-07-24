@@ -12,32 +12,32 @@ import java.util.Properties;
 
 import com.atomicobject.haste.framework.Step;
 
-public class SyncGtsOnceStep
+public class GTSSyncOnceStep
 	extends Step
 {
 	private GlobusHelper globus;
 	private File gtsProject;
 	
-	public SyncGtsOnceStep()
+	public GTSSyncOnceStep()
 	{
 		this(new File(System.getProperty("syncgts.project.dir",
 			".." + File.separator + ".." + File.separator + ".." + File.separator + "caGrid" + File.separator + "projects" + File.separator + "syncgts"
 		)));
 	}
 	
-	public SyncGtsOnceStep(GlobusHelper globus)
+	public GTSSyncOnceStep(GlobusHelper globus)
 	{
 		this(new File(System.getProperty("syncgts.project.dir",
 			".." + File.separator + ".." + File.separator + ".." + File.separator + "caGrid" + File.separator + "projects" + File.separator + "syncgts"
 		)), globus);
 	}
 	
-	public SyncGtsOnceStep(File gtsProject)
+	public GTSSyncOnceStep(File gtsProject)
 	{
 		this(gtsProject, null);
 	}
 	
-	public SyncGtsOnceStep(File gtsProject, GlobusHelper globus)
+	public GTSSyncOnceStep(File gtsProject, GlobusHelper globus)
 	{
 		super();
 		

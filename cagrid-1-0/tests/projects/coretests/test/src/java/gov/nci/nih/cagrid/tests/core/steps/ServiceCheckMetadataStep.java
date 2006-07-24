@@ -16,13 +16,13 @@ import org.apache.axis.types.URI.MalformedURIException;
 
 import com.atomicobject.haste.framework.Step;
 
-public class CheckServiceMetadataStep
+public class ServiceCheckMetadataStep
 	extends Step
 {
 	private EndpointReferenceType endpoint;
 	private File localMetadata;
 	
-	public CheckServiceMetadataStep(
+	public ServiceCheckMetadataStep(
 		EndpointReferenceType endpoint,
 		File localMetadata
 	) {
@@ -55,7 +55,7 @@ public class CheckServiceMetadataStep
 		File metadataFile = new File(System.getProperty("GlobusHelperTest.file", 
 			"test" + File.separator + "data" + File.separator + "serviceMetadata.xml"
 		));
-		CheckServiceMetadataStep step = new CheckServiceMetadataStep(endpoint, metadataFile);
+		ServiceCheckMetadataStep step = new ServiceCheckMetadataStep(endpoint, metadataFile);
 		step.runStep();
 	}
 

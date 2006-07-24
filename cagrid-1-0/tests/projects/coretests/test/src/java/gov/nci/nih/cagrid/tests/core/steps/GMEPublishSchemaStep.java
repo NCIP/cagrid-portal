@@ -34,19 +34,19 @@ import org.xml.sax.SAXException;
 
 import com.atomicobject.haste.framework.Step;
 
-public class PublishSchemaStep
+public class GMEPublishSchemaStep
 	extends Step
 {
 	private EndpointReferenceType endpoint;
 	private File schemaFile;
 	
-	public PublishSchemaStep(int port, File schemaFile) 
+	public GMEPublishSchemaStep(int port, File schemaFile) 
 		throws MalformedURIException
 	{
 		this(new EndpointReferenceType(new Address("http://localhost:" + port + "/wsrf/services/cagrid/GlobalModelExchange")), schemaFile);
 	}
 
-	public PublishSchemaStep(EndpointReferenceType endpoint, File schemaFile)
+	public GMEPublishSchemaStep(EndpointReferenceType endpoint, File schemaFile)
 	{
 		super();
 		
@@ -117,7 +117,7 @@ public class PublishSchemaStep
 	public static void main(String[] args)
 		throws Throwable
 	{
-		new PublishSchemaStep(
+		new GMEPublishSchemaStep(
 			8080, 
 			new File("test", "resources" + File.separator + "GMEServiceTest" + File.separator + "schema" + File.separator + "1.0_gov.nih.nci.cagrid.metadata.common.xsd")//"3.0_gov.nih.nci.cadsr.domain.xsd")
 		).runStep(); 

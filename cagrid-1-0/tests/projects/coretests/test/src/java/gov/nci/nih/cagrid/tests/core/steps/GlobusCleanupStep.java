@@ -7,12 +7,12 @@ import com.atomicobject.haste.framework.Step;
 
 import gov.nci.nih.cagrid.tests.core.GlobusHelper;
 
-public class CleanupTempGlobusStep
+public class GlobusCleanupStep
 	extends Step
 {
 	private GlobusHelper globus;
 	
-	public CleanupTempGlobusStep(GlobusHelper globus)
+	public GlobusCleanupStep(GlobusHelper globus)
 	{
 		super();
 		

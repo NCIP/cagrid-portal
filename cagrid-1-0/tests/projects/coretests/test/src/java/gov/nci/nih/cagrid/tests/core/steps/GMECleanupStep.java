@@ -3,15 +3,15 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
-public class CleanupGMEStep
+public class GMECleanupStep
 	extends AbstractDbCleanupStep
 {
-	public CleanupGMEStep() 
+	public GMECleanupStep() 
 	{
 		super();
 	}
 	
-	public CleanupGMEStep(String dbUrl, String user, String password) 
+	public GMECleanupStep(String dbUrl, String user, String password) 
 	{
 		super(dbUrl, user, password);		
 	}
@@ -29,6 +29,6 @@ public class CleanupGMEStep
 	public static void main(String[] args)
 		throws Throwable
 	{
-		new CleanupGMEStep().runStep(); 
+		new GMECleanupStep().runStep(); 
 	}
 }

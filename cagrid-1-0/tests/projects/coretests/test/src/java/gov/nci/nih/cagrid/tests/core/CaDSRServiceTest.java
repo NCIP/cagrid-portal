@@ -3,13 +3,13 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
-import gov.nci.nih.cagrid.tests.core.steps.CheckCaDSRServiceStep;
-import gov.nci.nih.cagrid.tests.core.steps.CleanupTempGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.ConfigureCaDSRServiceStep;
-import gov.nci.nih.cagrid.tests.core.steps.CreateTempGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.DeployGlobusServiceStep;
-import gov.nci.nih.cagrid.tests.core.steps.StartGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.StopGlobusStep;
+import gov.nci.nih.cagrid.tests.core.steps.CaDSRCheckServiceStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusCleanupStep;
+import gov.nci.nih.cagrid.tests.core.steps.CaDSRServiceConfigStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 import gov.nci.nih.cagrid.tests.core.util.CaDSRExtractUtils;
 
 import java.io.File;
@@ -63,10 +63,10 @@ public class CaDSRServiceTest
 		CaDSRExtractUtils.setAxisConfig(new File("etc", "cadsr" + File.separator + "client-config.wsdd"));
 		
 		Vector steps = new Vector();
-		steps.add(new CreateTempGlobusStep(globus));
-		steps.add(new DeployGlobusServiceStep(globus, serviceDir));
-		steps.add(new ConfigureCaDSRServiceStep(globus));
-		steps.add(new StartGlobusStep(globus, port));
+		steps.add(new GlobusCreateStep(globus));
+		steps.add(new GlobusDeployServiceStep(globus, serviceDir));
+		steps.add(new CaDSRServiceConfigStep(globus));
+		steps.add(new GlobusStartStep(globus, port));
 		try {
 			File[] files = new File("test", "resources" + File.separator + "CheckCaDSRServiceStep").listFiles(new FileFilter() {
 				public boolean accept(File file) {
@@ -74,13 +74,13 @@ public class CaDSRServiceTest
 				}
 			});
 			for (File file : files) {
-				steps.add(new CheckCaDSRServiceStep(port, file));
+				steps.add(new CaDSRCheckServiceStep(port, file));
 			}
 		} catch (MalformedURIException e) {
 			throw new RuntimeException("unable to instantiate CheckCaDSRStep", e);
 		}
-		steps.add(new StopGlobusStep(globus, port));
-		steps.add(new CleanupTempGlobusStep(globus));
+		steps.add(new GlobusStopStep(globus, port));
+		steps.add(new GlobusCleanupStep(globus));
 		return steps;
 	}
 

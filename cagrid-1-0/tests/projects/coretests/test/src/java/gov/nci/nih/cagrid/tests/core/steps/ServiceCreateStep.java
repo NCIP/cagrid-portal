@@ -21,7 +21,7 @@ import org.xml.sax.SAXException;
 
 import com.atomicobject.haste.framework.Step;
 
-public class CreateServiceStep
+public class ServiceCreateStep
 	extends Step
 {
 	private File introduceDir;
@@ -37,7 +37,7 @@ public class CreateServiceStep
 	private File[] etcFiles;
 	private Properties introduceProps;
 	
-	public CreateServiceStep(File introduceDir, File testDir, File tmpDir) 
+	public ServiceCreateStep(File introduceDir, File testDir, File tmpDir) 
 		throws ParserConfigurationException, SAXException, IOException
 	{
 		super();
@@ -99,7 +99,7 @@ public class CreateServiceStep
 		}
 	}
 	
-	public CreateServiceStep(
+	public ServiceCreateStep(
 		File introduceDir, File serviceDir, String serviceName, String pkg, String namespace, 
 		File serviceXmlDescriptor, File schemaDir, File[] schemas, File implFile, File[] jars, File[] etcFiles, 
 		Properties introduceProps

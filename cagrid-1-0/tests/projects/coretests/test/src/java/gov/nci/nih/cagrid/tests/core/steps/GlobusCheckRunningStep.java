@@ -22,18 +22,18 @@ import com.counter.CreateCounter;
 import com.counter.CreateCounterResponse;
 import com.counter.service.CounterServiceAddressingLocator;
 
-public class CheckGlobusStep
+public class GlobusCheckRunningStep
 	extends Step
 {
 	private EndpointReferenceType endpoint;
 	
-	public CheckGlobusStep(int port) 
+	public GlobusCheckRunningStep(int port) 
 		throws MalformedURIException
 	{
 		this(new EndpointReferenceType(new Address("http://localhost:" + port + "/wsrf/services/CounterService")));
 	}
 
-	public CheckGlobusStep(EndpointReferenceType endpoint)
+	public GlobusCheckRunningStep(EndpointReferenceType endpoint)
 	{
 		super();
 		

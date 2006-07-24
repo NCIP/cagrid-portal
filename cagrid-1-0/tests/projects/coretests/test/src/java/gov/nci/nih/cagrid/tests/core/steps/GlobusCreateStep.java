@@ -7,22 +7,20 @@ import com.atomicobject.haste.framework.Step;
 
 import gov.nci.nih.cagrid.tests.core.GlobusHelper;
 
-public class StopGlobusStep
+public class GlobusCreateStep
 	extends Step
 {
 	private GlobusHelper globus;
-	private int port;
 	
-	public StopGlobusStep(GlobusHelper globus, int port)
+	public GlobusCreateStep(GlobusHelper globus)
 	{
 		super();
 		
 		this.globus = globus;
-		this.port = port;
 	}
 	
 	public void runStep() throws Throwable
 	{
-		globus.stopGlobus(port);
+		globus.createTempGlobus();
 	}
 }

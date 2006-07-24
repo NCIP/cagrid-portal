@@ -3,19 +3,19 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
-import gov.nci.nih.cagrid.tests.core.steps.CleanupTempGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.CreateTempGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.DeployGlobusServiceStep;
-import gov.nci.nih.cagrid.tests.core.steps.DestroyDefaultProxyStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusCleanupStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
+import gov.nci.nih.cagrid.tests.core.steps.DorianDestroyDefaultProxyStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianAddTrustedCAStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianApproveRegistrationStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianAuthenticateFailStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianAuthenticateStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianCleanupStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianSubmitRegistrationStep;
-import gov.nci.nih.cagrid.tests.core.steps.StartGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.StopGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.SyncGtsOnceStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
+import gov.nci.nih.cagrid.tests.core.steps.GTSSyncOnceStep;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 
@@ -57,7 +57,7 @@ public class DorianTest
 			globus.stopGlobus(port);
 			globus.cleanupTempGlobus();
 		}
-		new DestroyDefaultProxyStep().runStep();
+		new DorianDestroyDefaultProxyStep().runStep();
 		new DorianCleanupStep().runStep();
 	}
 	
@@ -79,15 +79,15 @@ public class DorianTest
 		Vector steps = new Vector();
 		
 		// initialize
-		steps.add(new CreateTempGlobusStep(globus));
-		steps.add(new SyncGtsOnceStep(globus));
-		steps.add(new DeployGlobusServiceStep(globus, serviceDir));
-		steps.add(new DeployGlobusServiceStep(globus, new File("..", "echo")));
-		steps.add(new StartGlobusStep(globus, port));
+		steps.add(new GlobusCreateStep(globus));
+		steps.add(new GTSSyncOnceStep(globus));
+		steps.add(new GlobusDeployServiceStep(globus, serviceDir));
+		steps.add(new GlobusDeployServiceStep(globus, new File("..", "echo")));
+		steps.add(new GlobusStartStep(globus, port));
 		
 		// successful authenticate
 		steps.add(new DorianAuthenticateStep("dorian", "password", port));
-		steps.add(new DestroyDefaultProxyStep());
+		steps.add(new DorianDestroyDefaultProxyStep());
 		
 		// failed authenticate
 		steps.add(new DorianAuthenticateFailStep("junk", "junk", port));
@@ -97,7 +97,7 @@ public class DorianTest
 		// add trusted ca
 		steps.add(new DorianAuthenticateStep("dorian", "password", port));
 		steps.add(new DorianAddTrustedCAStep(caFile, port));
-		steps.add(new DestroyDefaultProxyStep());
+		steps.add(new DorianDestroyDefaultProxyStep());
 		
 		// new users
 		File[] files = new File("test", "resources" + File.separator + "userApplications").listFiles(new FileFilter() {
@@ -115,20 +115,20 @@ public class DorianTest
 				DorianAuthenticateStep auth = new DorianAuthenticateStep("dorian", "password", port);
 				steps.add(auth);
 				steps.add(new DorianApproveRegistrationStep(application, port, auth));
-				steps.add(new DestroyDefaultProxyStep());
+				steps.add(new DorianDestroyDefaultProxyStep());
 
 				// check that we can authenticate
 				steps.add(new DorianAuthenticateStep(application.getUserId(), application.getPassword(), port));
 				steps.add(new DorianAuthenticateFailStep(application.getUserId(), application.getPassword().toUpperCase(), port));
-				steps.add(new DestroyDefaultProxyStep());				
+				steps.add(new DorianDestroyDefaultProxyStep());				
 			} catch (Exception e) {
 				throw new RuntimeException("unable add new user steps", e); 
 			}
 		}
 		
 		// cleanup
-		steps.add(new StopGlobusStep(globus, port));
-		steps.add(new CleanupTempGlobusStep(globus));
+		steps.add(new GlobusStopStep(globus, port));
+		steps.add(new GlobusCleanupStep(globus));
 		
 		return steps;
 	}

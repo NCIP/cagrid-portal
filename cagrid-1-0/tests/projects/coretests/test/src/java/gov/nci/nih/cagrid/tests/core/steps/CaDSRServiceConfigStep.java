@@ -11,12 +11,12 @@ import java.io.IOException;
 
 import com.atomicobject.haste.framework.Step;
 
-public class ConfigureCaDSRServiceStep
+public class CaDSRServiceConfigStep
 extends Step
 {
 	private GlobusHelper globusHelper;
 	
-	public ConfigureCaDSRServiceStep(GlobusHelper globusHelper) 
+	public CaDSRServiceConfigStep(GlobusHelper globusHelper) 
 	{
 		super();
 		

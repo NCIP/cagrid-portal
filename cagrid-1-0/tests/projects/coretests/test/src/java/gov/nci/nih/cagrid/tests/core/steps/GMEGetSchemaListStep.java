@@ -20,19 +20,19 @@ import org.xml.sax.InputSource;
 
 import com.atomicobject.haste.framework.Step;
 
-public class GetSchemaListStep
+public class GMEGetSchemaListStep
 	extends Step
 {
 	private EndpointReferenceType endpoint;
 	private File schemaFile;
 	
-	public GetSchemaListStep(int port, File schemaFile) 
+	public GMEGetSchemaListStep(int port, File schemaFile) 
 		throws MalformedURIException
 	{
 		this(new EndpointReferenceType(new Address("http://localhost:" + port + "/wsrf/services/cagrid/GlobalModelExchange")), schemaFile);
 	}
 
-	public GetSchemaListStep(EndpointReferenceType endpoint, File schemaFile)
+	public GMEGetSchemaListStep(EndpointReferenceType endpoint, File schemaFile)
 	{
 		super();
 		

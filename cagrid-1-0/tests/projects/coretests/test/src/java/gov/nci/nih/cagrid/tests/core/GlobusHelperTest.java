@@ -3,12 +3,12 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
-import gov.nci.nih.cagrid.tests.core.steps.CheckGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.CleanupTempGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.CreateTempGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.DeployGlobusServiceStep;
-import gov.nci.nih.cagrid.tests.core.steps.StartGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.StopGlobusStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusCheckRunningStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusCleanupStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 
 import java.io.File;
 import java.util.Vector;
@@ -63,22 +63,22 @@ public class GlobusHelperTest
 
 		Vector steps = new Vector();
 
-		steps.add(new CreateTempGlobusStep(globus));
-		steps.add(new StartGlobusStep(globus, port));
+		steps.add(new GlobusCreateStep(globus));
+		steps.add(new GlobusStartStep(globus, port));
 		try {
-			steps.add(new CheckGlobusStep(port));
+			steps.add(new GlobusCheckRunningStep(port));
 		} catch (MalformedURIException e) {
 			throw new IllegalArgumentException("endpoint badly formed", e);
 		}
-		steps.add(new StopGlobusStep(globus, port));
-		steps.add(new CleanupTempGlobusStep(globus));
+		steps.add(new GlobusStopStep(globus, port));
+		steps.add(new GlobusCleanupStep(globus));
 
-		steps.add(new CreateTempGlobusStep(secureGlobus));
+		steps.add(new GlobusCreateStep(secureGlobus));
 		secureGlobus.setUseCounterCheck(false);
-		steps.add(new DeployGlobusServiceStep(secureGlobus, new File("..", "echo")));
-		steps.add(new StartGlobusStep(secureGlobus, securePort));
-		steps.add(new StopGlobusStep(secureGlobus, securePort));
-		steps.add(new CleanupTempGlobusStep(secureGlobus));
+		steps.add(new GlobusDeployServiceStep(secureGlobus, new File("..", "echo")));
+		steps.add(new GlobusStartStep(secureGlobus, securePort));
+		steps.add(new GlobusStopStep(secureGlobus, securePort));
+		steps.add(new GlobusCleanupStep(secureGlobus));
 		
 		return steps;
 	}

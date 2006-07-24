@@ -7,10 +7,10 @@ import gov.nih.nci.cagrid.common.security.ProxyUtil;
 
 import com.atomicobject.haste.framework.Step;
 
-public class DestroyDefaultProxyStep
+public class DorianDestroyDefaultProxyStep
 	extends Step
 {
-	public DestroyDefaultProxyStep() 
+	public DorianDestroyDefaultProxyStep() 
 	{
 		super();
 	}

@@ -9,19 +9,19 @@ import com.atomicobject.haste.framework.Step;
 
 import gov.nci.nih.cagrid.tests.core.GlobusHelper;
 
-public class DeployGlobusServiceStep
+public class GlobusDeployServiceStep
 	extends Step
 {
 	private GlobusHelper globus;
 	private File serviceDir;
 	private String target;
 	
-	public DeployGlobusServiceStep(GlobusHelper globus, File serviceDir)
+	public GlobusDeployServiceStep(GlobusHelper globus, File serviceDir)
 	{
 		this(globus, serviceDir, null);
 	}
 	
-	public DeployGlobusServiceStep(GlobusHelper globus, File serviceDir, String target)
+	public GlobusDeployServiceStep(GlobusHelper globus, File serviceDir, String target)
 	{
 		super();
 		

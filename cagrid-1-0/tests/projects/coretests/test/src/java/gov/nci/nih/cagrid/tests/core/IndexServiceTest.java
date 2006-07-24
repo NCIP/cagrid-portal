@@ -3,13 +3,13 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
-import gov.nci.nih.cagrid.tests.core.steps.AdvertiseServiceStep;
-import gov.nci.nih.cagrid.tests.core.steps.CleanupTempGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.CreateTempGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.DeployGlobusServiceStep;
+import gov.nci.nih.cagrid.tests.core.steps.ServiceAdvertiseConfigStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusCleanupStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.ServiceDiscoveryStep;
-import gov.nci.nih.cagrid.tests.core.steps.StartGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.StopGlobusStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 
 import java.io.File;
 import java.util.Vector;
@@ -41,22 +41,22 @@ public class IndexServiceTest
 		Vector steps = new Vector();
 		steps.add(createServiceStep);
 		try {
-			steps.add(new AdvertiseServiceStep(port, serviceDir));
+			steps.add(new ServiceAdvertiseConfigStep(port, serviceDir));
 		} catch (MalformedURIException e) {
 			throw new IllegalArgumentException("could not add advertise steps", e);
 		}
-		steps.add(new CreateTempGlobusStep(globus));
-		steps.add(new DeployGlobusServiceStep(globus, createServiceStep.getServiceDir()));
-		steps.add(new DeployGlobusServiceStep(globus, indexServiceDir, "deployIndexGlobus"));		
-		steps.add(new StartGlobusStep(globus, port));
+		steps.add(new GlobusCreateStep(globus));
+		steps.add(new GlobusDeployServiceStep(globus, createServiceStep.getServiceDir()));
+		steps.add(new GlobusDeployServiceStep(globus, indexServiceDir, "deployIndexGlobus"));		
+		steps.add(new GlobusStartStep(globus, port));
 		try {
 			steps.add(new ServiceDiscoveryStep(port, super.endpoint, super.metadataFile));
 		} catch (Exception e) {
 			throw new IllegalArgumentException("could not add discovery step", e);
 		}
 		//steps.add(new CheckServiceMetadataStep(endpoint, metadataFile));
-		steps.add(new StopGlobusStep(globus, port));
-		steps.add(new CleanupTempGlobusStep(globus));
+		steps.add(new GlobusStopStep(globus, port));
+		steps.add(new GlobusCleanupStep(globus));
 		return steps;
 	}
 

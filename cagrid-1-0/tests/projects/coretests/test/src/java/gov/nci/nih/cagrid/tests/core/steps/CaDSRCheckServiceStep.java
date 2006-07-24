@@ -24,19 +24,19 @@ import org.apache.axis.types.URI.MalformedURIException;
 
 import com.atomicobject.haste.framework.Step;
 
-public class CheckCaDSRServiceStep
+public class CaDSRCheckServiceStep
 	extends Step
 {
 	private EndpointReferenceType endpoint;
 	private File extractFile;
 	
-	public CheckCaDSRServiceStep(int port, File extractFile) 
+	public CaDSRCheckServiceStep(int port, File extractFile) 
 		throws MalformedURIException
 	{
 		this(new EndpointReferenceType(new Address("http://localhost:" + port + "/wsrf/services/cagrid/CaDSRService")), extractFile);
 	}
 
-	public CheckCaDSRServiceStep(EndpointReferenceType endpoint, File extractFile)
+	public CaDSRCheckServiceStep(EndpointReferenceType endpoint, File extractFile)
 	{
 		super();
 		
@@ -214,7 +214,7 @@ public class CheckCaDSRServiceStep
 		throws Exception
 	{
 		CaDSRExtractUtils.setAxisConfig(new File("etc", "cadsr" + File.separator + "client-config.wsdd"));
-		new CheckCaDSRServiceStep(
+		new CaDSRCheckServiceStep(
 			new EndpointReferenceType(new Address("http://localhost:8080/wsrf/services/cagrid/CaDSRService")), 
 			new File("test", "resources" + File.separator + "CheckCaDSRServiceStep" + File.separator + "caTIES_extract.xml")
 		).runStep();

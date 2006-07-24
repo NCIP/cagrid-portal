@@ -3,15 +3,15 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
-import gov.nci.nih.cagrid.tests.core.steps.CleanupGMEStep;
-import gov.nci.nih.cagrid.tests.core.steps.CleanupTempGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.CreateTempGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.DeployGlobusServiceStep;
-import gov.nci.nih.cagrid.tests.core.steps.GetSchemaListStep;
-import gov.nci.nih.cagrid.tests.core.steps.GetSchemaStep;
-import gov.nci.nih.cagrid.tests.core.steps.PublishSchemaStep;
-import gov.nci.nih.cagrid.tests.core.steps.StartGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.StopGlobusStep;
+import gov.nci.nih.cagrid.tests.core.steps.GMECleanupStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusCleanupStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
+import gov.nci.nih.cagrid.tests.core.steps.GMEGetSchemaListStep;
+import gov.nci.nih.cagrid.tests.core.steps.GMEGetSchemaStep;
+import gov.nci.nih.cagrid.tests.core.steps.GMEPublishSchemaStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -51,7 +51,7 @@ public class GMEServiceTest
 			globus.cleanupTempGlobus();
 		}
 		
-		new CleanupGMEStep().runStep();
+		new GMECleanupStep().runStep();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -69,9 +69,9 @@ public class GMEServiceTest
 		);
 			
 		Vector steps = new Vector();
-		steps.add(new CreateTempGlobusStep(globus));
-		steps.add(new DeployGlobusServiceStep(globus, serviceDir));
-		steps.add(new StartGlobusStep(globus, port));
+		steps.add(new GlobusCreateStep(globus));
+		steps.add(new GlobusDeployServiceStep(globus, serviceDir));
+		steps.add(new GlobusStartStep(globus, port));
 		try {
 			File[] schemaDirs = schemaRoot.listFiles(new FileFilter() {
 				public boolean accept(File file) {
@@ -87,21 +87,21 @@ public class GMEServiceTest
 				});
 				
 				for (File schemaFile : schemaFiles) {
-					steps.add(new PublishSchemaStep(port, schemaFile));
+					steps.add(new GMEPublishSchemaStep(port, schemaFile));
 				}
 				for (File schemaFile : schemaFiles) {
-					steps.add(new GetSchemaStep(port, schemaFile));
+					steps.add(new GMEGetSchemaStep(port, schemaFile));
 				}
 				for (File schemaFile : schemaFiles) {
-					steps.add(new GetSchemaListStep(port, schemaFile));
+					steps.add(new GMEGetSchemaListStep(port, schemaFile));
 				}
 			}
 		} catch (MalformedURIException e) {
 			throw new IllegalArgumentException("unable to instantiate CheckCaDSRStep", e);
 		}
-		steps.add(new StopGlobusStep(globus, port));
-		steps.add(new CleanupGMEStep());
-		steps.add(new CleanupTempGlobusStep(globus));
+		steps.add(new GlobusStopStep(globus, port));
+		steps.add(new GMECleanupStep());
+		steps.add(new GlobusCleanupStep(globus));
 		return steps;
 	}
 

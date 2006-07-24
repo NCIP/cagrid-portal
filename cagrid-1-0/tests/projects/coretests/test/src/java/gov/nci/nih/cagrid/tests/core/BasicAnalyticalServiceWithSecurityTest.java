@@ -3,12 +3,12 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
-import gov.nci.nih.cagrid.tests.core.steps.CleanupTempGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.CreateTempGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.DeployGlobusServiceStep;
-import gov.nci.nih.cagrid.tests.core.steps.StartGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.StopGlobusStep;
-import gov.nci.nih.cagrid.tests.core.steps.SyncGtsOnceStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusCleanupStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
+import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
+import gov.nci.nih.cagrid.tests.core.steps.GTSSyncOnceStep;
 
 import java.io.File;
 import java.util.Vector;
@@ -31,23 +31,23 @@ public class BasicAnalyticalServiceWithSecurityTest
 		super.init("BasicAnalyticalServiceWithSecurity");
 
 		Vector steps = new Vector();
-		steps.add(new CreateTempGlobusStep(globus));
-		steps.add(new SyncGtsOnceStep(globus));
+		steps.add(new GlobusCreateStep(globus));
+		steps.add(new GTSSyncOnceStep(globus));
 		steps.add(createServiceStep);
 		if (super.serviceInfo.isTransportSecurity()) {
 			globus.setUseCounterCheck(false);
-			steps.add(new DeployGlobusServiceStep(globus, new File("..", "echo")));
+			steps.add(new GlobusDeployServiceStep(globus, new File("..", "echo")));
 		}
-		steps.add(new DeployGlobusServiceStep(globus, createServiceStep.getServiceDir()));
-		steps.add(new StartGlobusStep(globus, port));
+		steps.add(new GlobusDeployServiceStep(globus, createServiceStep.getServiceDir()));
+		steps.add(new GlobusStartStep(globus, port));
 		try {
 			addInvokeSteps(steps);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("could not add invoke steps", e);
 		}
 		//steps.add(new CheckServiceMetadataStep(endpoint, metadataFile));
-		steps.add(new StopGlobusStep(globus, port));
-		steps.add(new CleanupTempGlobusStep(globus));
+		steps.add(new GlobusStopStep(globus, port));
+		steps.add(new GlobusCleanupStep(globus));
 		return steps;
 	}
 
