@@ -8,6 +8,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 import junit.framework.Assert;
 
 public class BeanComparator
@@ -85,6 +87,10 @@ public class BeanComparator
 			return;
 		} else if (o1 instanceof String) {
 			test.assertEquals((String) o1, (String) o2);
+			return;
+		} else if (o1 instanceof QName) {
+			test.assertEquals(((QName) o1).getPrefix(), ((QName) o2).getPrefix());
+			test.assertEquals(((QName) o1).getLocalPart(), ((QName) o2).getLocalPart());
 			return;
 		}
 		
