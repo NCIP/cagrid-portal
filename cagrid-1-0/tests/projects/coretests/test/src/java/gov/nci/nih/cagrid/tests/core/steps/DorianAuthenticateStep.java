@@ -24,10 +24,39 @@ public class DorianAuthenticateStep
 	private String ifsService;
 	private int hours;
 	
+	public DorianAuthenticateStep(String userId, String password, int port) 
+	{
+		this(userId, password, "https://localhost:" + port + "/wsrf/services/cagrid/Dorian", "https://localhost:" + port + "/wsrf/services/cagrid/Dorian", 12);
+	}
+	
+	public DorianAuthenticateStep() 
+	{
+		this("dorian", "password");
+	}
+	
+	public DorianAuthenticateStep(String userId, String password)
+	{
+		this(userId, password, "https://localhost:8443/wsrf/services/cagrid/Dorian", "https://localhost:8443/wsrf/services/cagrid/Dorian", 12);
+	}
+	
+	public DorianAuthenticateStep(
+		String userId, String password, String serviceId, String ifsService, int hours
+	) {
+		super();
+		
+		this.userId = userId;
+		this.password = password;
+		this.serviceId = serviceId;
+		this.ifsService = ifsService;
+		this.hours = hours;
+	}
+	
 	public void runStep() 
 		throws Throwable
 	{
-		BasicAuthCredential authCred = new BasicAuthCredential(userId, password);
+		BasicAuthCredential authCred = new BasicAuthCredential();
+		authCred.setUserId(userId);
+		authCred.setPassword(password);
 		IdPAuthenticationClient client = new IdPAuthenticationClient(serviceId, authCred);
 		SAMLAssertion saml = client.authenticate();
 
@@ -35,5 +64,14 @@ public class DorianAuthenticateStep
 		GlobusCredential cred = c2.createProxy(saml, new ProxyLifetime(hours, 0, 0));
 		ProxyManager.getInstance().addProxy(cred);
 		ProxyUtil.saveProxyAsDefault(cred);
+	}
+	
+	public static void main(String[] args) throws Throwable
+	{
+		try {
+			new DorianAuthenticateStep().runStep();
+		} finally {
+			ProxyUtil.destroyDefaultProxy();
+		}
 	}
 }
