@@ -135,7 +135,7 @@ public class DorianTest
 	
 	public String getDescription()
 	{
-		return "CaDSRServiceTest";
+		return "DorianTest";
 	}
 	
 	/**
