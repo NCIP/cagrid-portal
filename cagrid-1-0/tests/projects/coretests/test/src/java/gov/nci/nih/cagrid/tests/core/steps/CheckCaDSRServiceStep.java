@@ -51,8 +51,8 @@ public class CheckCaDSRServiceStep
 		
 		DomainModel extract = null;
 		if (extractFile == null) {
-			//extract = CaDSRExtractUtils.findExtract(cadsr, "Genomic Identifiers");
-			extract = CaDSRExtractUtils.findExtract(cadsr, "caTIES");
+			extract = CaDSRExtractUtils.findExtract(cadsr, "Genomic Identifiers");
+			//extract = CaDSRExtractUtils.findExtract(cadsr, "caTIES");
 		} else {
 			extract = CaDSRExtractUtils.readExtract(extractFile);
 		}
@@ -102,7 +102,7 @@ public class CheckCaDSRServiceStep
 		for (UMLClass extractCl : extractCls) {
 			UMLClassMetadata cl = findClass(extractCl, cls);
 			assertNotNull(cl);
-			assertEquals(extractCl.getClassName(), cl.getFullyQualifiedName());
+			assertEquals(extractCl.getPackageName() + "." + extractCl.getClassName(), cl.getFullyQualifiedName());
 			assertEquals(extractCl.getDescription(), cl.getDescription());
 
 			SemanticMetadata[] extractMetadata = extractCl.getSemanticMetadataCollection().getSemanticMetadata();
@@ -142,7 +142,13 @@ public class CheckCaDSRServiceStep
 			UMLAttributeMetadata att = findAttribute(extractAtt, atts);
 			assertNotNull(att);
 			
-			assertEquals(extractAtt.getDescription(), att.description);
+			assertTrue(
+				(extractAtt.getDescription() == null && att.description == null) ||
+				(extractAtt.getDescription() == null && "".equals(att.description)) ||
+				("".equals(extractAtt.getDescription()) && att.description == null) ||
+				extractAtt.getDescription().equals(att.description)
+			);
+			//assertEquals(extractAtt.getDescription(), att.description);
 			assertEquals(getExtractAttributeName(extractAtt), att.name);
 		}
 	}
@@ -197,8 +203,9 @@ public class CheckCaDSRServiceStep
 
 	private UMLClassMetadata findClass(UMLClass extractCl, UMLClassMetadata[] cls)
 	{
+		String className = extractCl.getPackageName() + "." + extractCl.getClassName();
 		for (UMLClassMetadata cl : cls) {
-			if (extractCl.getClassName().equals(cl.getFullyQualifiedName())) return cl;
+			if (className.equals(cl.getFullyQualifiedName())) return cl;
 		}
 		return null;
 	}
@@ -206,9 +213,10 @@ public class CheckCaDSRServiceStep
 	public static void main(String[] args) 
 		throws Exception
 	{
+		CaDSRExtractUtils.setAxisConfig(new File("etc", "cadsr" + File.separator + "client-config.wsdd"));
 		new CheckCaDSRServiceStep(
-			new EndpointReferenceType(new Address("http://cagrid05.bmi.ohio-state.edu:8080/wsrf/services/cagrid/CaDSRService")), 
-			null
+			new EndpointReferenceType(new Address("http://localhost:8080/wsrf/services/cagrid/CaDSRService")), 
+			new File("test", "resources" + File.separator + "CheckCaDSRServiceStep" + File.separator + "caTIES_extract.xml")
 		).runStep();
 	}
 }
