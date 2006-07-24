@@ -31,9 +31,9 @@ public class BasicAnalyticalServiceWithSecurityTest
 		super.init("BasicAnalyticalServiceWithSecurity");
 
 		Vector steps = new Vector();
-		steps.add(new SyncGtsOnceStep());
-		steps.add(createServiceStep);
 		steps.add(new CreateTempGlobusStep(globus));
+		steps.add(new SyncGtsOnceStep(globus));
+		steps.add(createServiceStep);
 		if (super.serviceInfo.isTransportSecurity()) {
 			globus.setUseCounterCheck(false);
 			steps.add(new DeployGlobusServiceStep(globus, new File("..", "echo")));
