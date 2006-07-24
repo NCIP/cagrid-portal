@@ -13,6 +13,7 @@ import gov.nci.nih.cagrid.tests.core.steps.StopGlobusStep;
 import gov.nci.nih.cagrid.tests.core.util.CaDSRExtractUtils;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.Vector;
 
 import org.apache.axis.types.URI.MalformedURIException;
@@ -44,8 +45,6 @@ public class CaDSRServiceTest
 	protected void storyTearDown() 
 		throws Throwable
 	{
-		CaDSRExtractUtils.setAxisConfig(null);
-		
 		if (globus != null) {
 			globus.stopGlobus(port);
 			globus.cleanupTempGlobus();
@@ -61,7 +60,7 @@ public class CaDSRServiceTest
 			".." + File.separator + ".." + File.separator + ".." + File.separator + 
 			"caGrid" + File.separator + "projects" + File.separator + "cadsr"
 		));
-		CaDSRExtractUtils.setAxisConfig(new File("etc", "client-config.wsdd"));
+		CaDSRExtractUtils.setAxisConfig(new File("etc", "cadsr" + File.separator + "client-config.wsdd"));
 		
 		Vector steps = new Vector();
 		steps.add(new CreateTempGlobusStep(globus));
@@ -69,9 +68,16 @@ public class CaDSRServiceTest
 		steps.add(new ConfigureCaDSRServiceStep(globus));
 		steps.add(new StartGlobusStep(globus, port));
 		try {
-			steps.add(new CheckCaDSRServiceStep(port, null));
+			File[] files = new File("test", "resources" + File.separator + "CheckCaDSRServiceStep").listFiles(new FileFilter() {
+				public boolean accept(File file) {
+					return file.isFile() && file.getName().endsWith(".xml");
+				}
+			});
+			for (File file : files) {
+				steps.add(new CheckCaDSRServiceStep(port, file));
+			}
 		} catch (MalformedURIException e) {
-			throw new IllegalArgumentException("unable to instantiate CheckCaDSRStep", e);
+			throw new RuntimeException("unable to instantiate CheckCaDSRStep", e);
 		}
 		steps.add(new StopGlobusStep(globus, port));
 		steps.add(new CleanupTempGlobusStep(globus));
