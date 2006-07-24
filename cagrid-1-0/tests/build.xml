@@ -83,6 +83,7 @@
 			<artifact refid="dorian.jars" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="opensaml.jars" />
+			<artifact refid="opensaml.endorsed" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="cadsr.jars" />
