@@ -142,5 +142,7 @@
 	<classpathentry kind="lib" path="ext/lib/Dorian-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/gridca.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cagrid-opensaml-1.1.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
