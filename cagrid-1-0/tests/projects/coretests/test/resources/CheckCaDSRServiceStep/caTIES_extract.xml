@@ -1,0 +1,298 @@
+<extract projectDescription="caTIES application version for Grid Reference Implementation is based on this model." projectLongName="caTIES" projectShortName="caTIES" projectVersion="1" xsi:type="ns1:DomainModel" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice">
+ <ns1:exposedUMLAssociationCollection>
+  <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="0" roleName="executionCollection" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BC-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="pathologyReport" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BC-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="0" roleName="executionCollection" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BC-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="pathologyReport" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BC-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="patient" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BB-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="1" roleName="pathologyReportCollection" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BB-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="patient" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BB-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="1" roleName="pathologyReportCollection" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BB-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="1" roleName="pathologyReportCollection" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BA-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="patient" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BA-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="1" roleName="pathologyReportCollection" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BA-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="patient" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BA-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="pathologyReport" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BA-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="0" roleName="executionCollection" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BA-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="pathologyReport" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BA-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="0" roleName="executionCollection" xsi:type="ns1:UMLAssociationEdge">
+     <ns1:UMLClassReference refid="173832FC-A6BA-6E57-E044-0003BA3F9857" xsi:type="ns1:UMLClassReference"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+ </ns1:exposedUMLAssociationCollection>
+ <ns1:exposedUMLClassCollection>
+  <ns2:UMLClass className="PathologyReport" description="Description made by a pathologist of the gross and microscopic examination of a pathology specimen." id="173832FC-A6BA-6E57-E044-0003BA3F9857" packageName="edu.upmc.opi.cabig.caties.document.domain" projectName="caTIES" projectVersion="1" xsi:type="ns2:UMLClass" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns2:umlAttributeCollection>
+    <ns2:UMLAttribute description="Age of the patient at the time of specimen collection." name="patientAgeAtCollection" xsi:type="ns2:UMLAttribute">
+     <ns2:semanticMetadataCollection>
+      <ns3:SemanticMetadata id="173832FC-D111-6E57-E044-0003BA3F9857" conceptCode="C16960" conceptName="Patient" conceptDefinition="A person who requires medical care." isPrimaryConcept="true" order="0" xsi:type="ns3:SemanticMetadata" xmlns:ns3="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns4:SemanticMetadata id="173832FC-D146-6E57-E044-0003BA3F9857" conceptCode="C25150" conceptName="Age" conceptDefinition="A period or stage in life, usually stated in years since birth." isPrimaryConcept="false" order="1" xsi:type="ns4:SemanticMetadata" xmlns:ns4="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns5:SemanticMetadata id="173832FC-D33D-6E57-E044-0003BA3F9857" conceptCode="C25453" conceptName="Collection" conceptDefinition="The act of gathering something together." isPrimaryConcept="false" order="2" xsi:type="ns5:SemanticMetadata" xmlns:ns5="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns2:semanticMetadataCollection>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute description="The text of the pathology report." name="documentText" xsi:type="ns2:UMLAttribute">
+     <ns2:semanticMetadataCollection>
+      <ns6:SemanticMetadata id="173832FC-D31D-6E57-E044-0003BA3F9857" conceptCode="C25704" conceptName="Text" conceptDefinition="Text; the words of something written." isPrimaryConcept="true" order="0" xsi:type="ns6:SemanticMetadata" xmlns:ns6="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns7:SemanticMetadata id="173832FC-D740-6E57-E044-0003BA3F9857" conceptCode="C19498" conceptName="Document Type" conceptDefinition="A writing that contains information." isPrimaryConcept="false" order="1" xsi:type="ns7:SemanticMetadata" xmlns:ns7="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns2:semanticMetadataCollection>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute description="The xml representation of the document validated against the chirps schema." name="documentXml" xsi:type="ns2:UMLAttribute">
+     <ns2:semanticMetadataCollection>
+      <ns8:SemanticMetadata id="173832FC-D73D-6E57-E044-0003BA3F9857" conceptCode="C19498" conceptName="Document Type" conceptDefinition="A writing that contains information." isPrimaryConcept="false" order="1" xsi:type="ns8:SemanticMetadata" xmlns:ns8="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns9:SemanticMetadata id="173832FC-DB6E-6E57-E044-0003BA3F9857" conceptCode="C45967" conceptName="Extensible Markup Language" conceptDefinition="Extensible Markup Language (XML) is a general-purpose markup language for creating special-purpose markup languages. It is capable of describing many different kinds of data. Its primary purpose is to facilitate the sharing of data across different systems, particularly systems connected via the Internet. (from Wikipedia)" isPrimaryConcept="true" order="0" xsi:type="ns9:SemanticMetadata" xmlns:ns9="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns2:semanticMetadataCollection>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute description="The gate binary object encoding the text and used for coder processing" name="documentBinary" xsi:type="ns2:UMLAttribute">
+     <ns2:semanticMetadataCollection>
+      <ns10:SemanticMetadata id="173832FC-D73B-6E57-E044-0003BA3F9857" conceptCode="C19498" conceptName="Document Type" conceptDefinition="A writing that contains information." isPrimaryConcept="true" order="0" xsi:type="ns10:SemanticMetadata" xmlns:ns10="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns11:SemanticMetadata id="173832FC-DB70-6E57-E044-0003BA3F9857" conceptCode="C45969" conceptName="Binary" conceptDefinition="Consisting of two (e.g., units, components, elements, terms, possibilities) or based on two." isPrimaryConcept="false" order="1" xsi:type="ns11:SemanticMetadata" xmlns:ns11="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns2:semanticMetadataCollection>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute description="NCI Metathesaurus codes for any concept regardless of semantic type" name="conceptCodes" xsi:type="ns2:UMLAttribute">
+     <ns2:semanticMetadataCollection>
+      <ns12:SemanticMetadata id="173832FC-DB77-6E57-E044-0003BA3F9857" conceptCode="C45972" conceptName="NCI Metathesaurus Code" conceptDefinition="A concept unique identifier within the NCI Enterprise Vocabulary Service's NCI Metathesaurus." isPrimaryConcept="true" order="0" xsi:type="ns12:SemanticMetadata" xmlns:ns12="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns2:semanticMetadataCollection>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute description="NCI Metathesaurus codes for any explicitly negated concept regardless of semantic type" name="negatedConceptCodes" xsi:type="ns2:UMLAttribute">
+     <ns2:semanticMetadataCollection>
+      <ns13:SemanticMetadata id="173832FC-D43D-6E57-E044-0003BA3F9857" conceptCode="C25594" conceptName="Not" conceptDefinition="Not; used for negation of a word or group of words." isPrimaryConcept="false" order="1" xsi:type="ns13:SemanticMetadata" xmlns:ns13="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns14:SemanticMetadata id="173832FC-DB76-6E57-E044-0003BA3F9857" conceptCode="C45972" conceptName="NCI Metathesaurus Code" conceptDefinition="A concept unique identifier within the NCI Enterprise Vocabulary Service's NCI Metathesaurus." isPrimaryConcept="true" order="0" xsi:type="ns14:SemanticMetadata" xmlns:ns14="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns2:semanticMetadataCollection>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute description="A score indicating the quality of the processing and annotation of the report, for use in application developement quality management." name="qualityScore" xsi:type="ns2:UMLAttribute">
+     <ns2:semanticMetadataCollection>
+      <ns15:SemanticMetadata id="173832FC-D36C-6E57-E044-0003BA3F9857" conceptCode="C25283" conceptName="Quality" conceptDefinition="Quality; a degree or grade of excellence or worth; an essential and distinguishing attribute of something or someone." isPrimaryConcept="false" order="1" xsi:type="ns15:SemanticMetadata" xmlns:ns15="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns16:SemanticMetadata id="173832FC-D41A-6E57-E044-0003BA3F9857" conceptCode="C25338" conceptName="Score" conceptDefinition="A number or range of numeric values measuring performance, function, quality, or ability." isPrimaryConcept="true" order="0" xsi:type="ns16:SemanticMetadata" xmlns:ns16="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns2:semanticMetadataCollection>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute description="Unique identifier for pathology report object." name="id" xsi:type="ns2:UMLAttribute">
+     <ns2:semanticMetadataCollection>
+      <ns17:SemanticMetadata id="173832FC-CED7-6E57-E044-0003BA3F9857" conceptCode="C25364" conceptName="Identifier" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." isPrimaryConcept="true" order="0" xsi:type="ns17:SemanticMetadata" xmlns:ns17="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns2:semanticMetadataCollection>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute description="Unique identifier unrelated to exiting report identifiers; provides a key for reidentification in appropriate circumstances. " name="deidentifiedId" xsi:type="ns2:UMLAttribute">
+     <ns2:semanticMetadataCollection>
+      <ns18:SemanticMetadata id="173832FC-CD13-6E57-E044-0003BA3F9857" conceptCode="C25364" conceptName="Identifier" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." isPrimaryConcept="true" order="0" xsi:type="ns18:SemanticMetadata" xmlns:ns18="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns19:SemanticMetadata id="173832FC-DB6B-6E57-E044-0003BA3F9857" conceptCode="C45970" conceptName="Deidentification" conceptDefinition="Removal of text elements that would make data individually identifiable." isPrimaryConcept="false" order="1" xsi:type="ns19:SemanticMetadata" xmlns:ns19="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns2:semanticMetadataCollection>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute description="Identifies the original report when the current report is a copy." name="originalId" xsi:type="ns2:UMLAttribute">
+     <ns2:semanticMetadataCollection>
+      <ns20:SemanticMetadata id="173832FC-CD10-6E57-E044-0003BA3F9857" conceptCode="C25364" conceptName="Identifier" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." isPrimaryConcept="true" order="0" xsi:type="ns20:SemanticMetadata" xmlns:ns20="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns21:SemanticMetadata id="173832FC-D504-6E57-E044-0003BA3F9857" conceptCode="C25604" conceptName="Original" conceptDefinition="Preceding all others in time or being as first made or performed." isPrimaryConcept="false" order="1" xsi:type="ns21:SemanticMetadata" xmlns:ns21="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns2:semanticMetadataCollection>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute description="Uniquely identifies specimens accessioned into an organizational unit, such as a laboratory." name="accessionNumber" xsi:type="ns2:UMLAttribute">
+     <ns2:semanticMetadataCollection>
+      <ns22:SemanticMetadata id="173832FC-D245-6E57-E044-0003BA3F9857" conceptCode="C25402" conceptName="Accession Number" conceptDefinition="A control number unique to an object, used to identify it among the other objects in a collection." isPrimaryConcept="true" order="0" xsi:type="ns22:SemanticMetadata" xmlns:ns22="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns2:semanticMetadataCollection>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute description="Indicates the date and time that the specimen is received into the organizational unit" name="receivedDateTime" xsi:type="ns2:UMLAttribute">
+     <ns2:semanticMetadataCollection>
+      <ns23:SemanticMetadata id="173832FC-CF4C-6E57-E044-0003BA3F9857" conceptCode="C37939" conceptName="Date/Time" conceptDefinition="An expression of both date and time that an event has happened or will happened. (NCI)" isPrimaryConcept="true" order="0" xsi:type="ns23:SemanticMetadata" xmlns:ns23="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns24:SemanticMetadata id="173832FC-D36B-6E57-E044-0003BA3F9857" conceptCode="C25639" conceptName="Received" conceptDefinition="Received; taken, gotten, or acquired." isPrimaryConcept="false" order="1" xsi:type="ns24:SemanticMetadata" xmlns:ns24="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns2:semanticMetadataCollection>
+    </ns2:UMLAttribute>
+    <ns2:UMLAttribute description="Indicates the date and time that the specimen is collected from the patient." name="collectionDateTime" xsi:type="ns2:UMLAttribute">
+     <ns2:semanticMetadataCollection>
+      <ns25:SemanticMetadata id="173832FC-CF4B-6E57-E044-0003BA3F9857" conceptCode="C37939" conceptName="Date/Time" conceptDefinition="An expression of both date and time that an event has happened or will happened. (NCI)" isPrimaryConcept="true" order="0" xsi:type="ns25:SemanticMetadata" xmlns:ns25="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns26:SemanticMetadata id="173832FC-D340-6E57-E044-0003BA3F9857" conceptCode="C25453" conceptName="Collection" conceptDefinition="The act of gathering something together." isPrimaryConcept="false" order="1" xsi:type="ns26:SemanticMetadata" xmlns:ns26="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns2:semanticMetadataCollection>
+    </ns2:UMLAttribute>
+   </ns2:umlAttributeCollection>
+   <ns2:semanticMetadataCollection>
+    <ns27:SemanticMetadata id="173832FC-C826-6E57-E044-0003BA3F9857" conceptCode="C28277" conceptName="Pathology Report" conceptDefinition="The description of cells and tissues made by a pathologist based on microscopic evidence, and sometimes used to make a diagnosis of a disease." isPrimaryConcept="true" order="0" xsi:type="ns27:SemanticMetadata" xmlns:ns27="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   </ns2:semanticMetadataCollection>
+  </ns2:UMLClass>
+  <ns28:UMLClass className="Patient" description="A person who receives medical attention, care, or treatment." id="173832FC-A6BB-6E57-E044-0003BA3F9857" packageName="edu.upmc.opi.cabig.caties.document.domain" projectName="caTIES" projectVersion="1" xsi:type="ns28:UMLClass" xmlns:ns28="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns28:umlAttributeCollection>
+    <ns28:UMLAttribute description="Unique identifier for Patient object" name="id" xsi:type="ns28:UMLAttribute">
+     <ns28:semanticMetadataCollection>
+      <ns29:SemanticMetadata id="173832FC-CED9-6E57-E044-0003BA3F9857" conceptCode="C25364" conceptName="Identifier" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." isPrimaryConcept="true" order="0" xsi:type="ns29:SemanticMetadata" xmlns:ns29="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns28:semanticMetadataCollection>
+    </ns28:UMLAttribute>
+    <ns28:UMLAttribute description="Unique identifier unrelated to exiting patient identifiers; provides a key for reidentification in appropriate circumstances. " name="deidentifiedId" xsi:type="ns28:UMLAttribute">
+     <ns28:semanticMetadataCollection>
+      <ns30:SemanticMetadata id="173832FC-CD0E-6E57-E044-0003BA3F9857" conceptCode="C25364" conceptName="Identifier" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." isPrimaryConcept="false" order="1" xsi:type="ns30:SemanticMetadata" xmlns:ns30="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns31:SemanticMetadata id="173832FC-DB68-6E57-E044-0003BA3F9857" conceptCode="C45970" conceptName="Deidentification" conceptDefinition="Removal of text elements that would make data individually identifiable." isPrimaryConcept="true" order="0" xsi:type="ns31:SemanticMetadata" xmlns:ns31="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns28:semanticMetadataCollection>
+    </ns28:UMLAttribute>
+    <ns28:UMLAttribute description="Self-described racial origination." name="race" xsi:type="ns28:UMLAttribute">
+     <ns28:semanticMetadataCollection>
+      <ns32:SemanticMetadata id="173832FC-CCC4-6E57-E044-0003BA3F9857" conceptCode="C17049" conceptName="Race" conceptDefinition="Major living subspecies of man differentiated by genetic and physical characteristics. There are four racial groups: Australoid, Caucasoid, Mongoloid, and Negroid." isPrimaryConcept="true" order="0" xsi:type="ns32:SemanticMetadata" xmlns:ns32="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns28:semanticMetadataCollection>
+    </ns28:UMLAttribute>
+    <ns28:UMLAttribute description="Self described ethnic origination." name="ethnicity" xsi:type="ns28:UMLAttribute">
+     <ns28:semanticMetadataCollection>
+      <ns33:SemanticMetadata id="173832FC-D519-6E57-E044-0003BA3F9857" conceptCode="C16564" conceptName="Ethnic Group" conceptDefinition="A social group characterized by a distinctive social and cultural tradition maintained from generation to generation, a common history and origin and a sense of identification with the group; members of the group have distinctive features in their way of life, shared experiences and often a common genetic heritage; these features may be reflected in their experience of health and disease." isPrimaryConcept="true" order="0" xsi:type="ns33:SemanticMetadata" xmlns:ns33="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns28:semanticMetadataCollection>
+    </ns28:UMLAttribute>
+    <ns28:UMLAttribute description="collectionAge" name="birthDate" xsi:type="ns28:UMLAttribute">
+     <ns28:semanticMetadataCollection>
+      <ns34:SemanticMetadata id="173832FC-D343-6E57-E044-0003BA3F9857" conceptCode="C25296" conceptName="Birth Date" conceptDefinition="Birth Date; the calendar date on which a person was born." isPrimaryConcept="true" order="0" xsi:type="ns34:SemanticMetadata" xmlns:ns34="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns28:semanticMetadataCollection>
+    </ns28:UMLAttribute>
+    <ns28:UMLAttribute description="Self described gender." name="gender" xsi:type="ns28:UMLAttribute">
+     <ns28:semanticMetadataCollection>
+      <ns35:SemanticMetadata id="173832FC-CC6F-6E57-E044-0003BA3F9857" conceptCode="C17357" conceptName="Gender" conceptDefinition="Gender is the assemblage of properties that distinguish people on the basis of their societal roles." isPrimaryConcept="true" order="0" xsi:type="ns35:SemanticMetadata" xmlns:ns35="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns28:semanticMetadataCollection>
+    </ns28:UMLAttribute>
+   </ns28:umlAttributeCollection>
+   <ns28:semanticMetadataCollection>
+    <ns36:SemanticMetadata id="173832FC-C845-6E57-E044-0003BA3F9857" conceptCode="C16960" conceptName="Patient" conceptDefinition="A person who requires medical care." isPrimaryConcept="true" order="0" xsi:type="ns36:SemanticMetadata" xmlns:ns36="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   </ns28:semanticMetadataCollection>
+  </ns28:UMLClass>
+  <ns37:UMLClass className="Execution" description="The running of a computer application to perform a specific task." id="173832FC-A6BC-6E57-E044-0003BA3F9857" packageName="edu.upmc.opi.cabig.caties.document.domain" projectName="caTIES" projectVersion="1" xsi:type="ns37:UMLClass" xmlns:ns37="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns37:umlAttributeCollection>
+    <ns37:UMLAttribute description="The time at which the execution of the application began." name="startTime" xsi:type="ns37:UMLAttribute">
+     <ns37:semanticMetadataCollection>
+      <ns38:SemanticMetadata id="173832FC-CB9B-6E57-E044-0003BA3F9857" conceptCode="C25207" conceptName="Time" conceptDefinition="the continuum of experience in which events pass from the future through the present to the past." isPrimaryConcept="true" order="0" xsi:type="ns38:SemanticMetadata" xmlns:ns38="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns39:SemanticMetadata id="173832FC-D48E-6E57-E044-0003BA3F9857" conceptCode="C25431" conceptName="Begin" conceptDefinition="Have a beginning, in a temporal, spatial, or evaluative sense." isPrimaryConcept="false" order="1" xsi:type="ns39:SemanticMetadata" xmlns:ns39="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns37:semanticMetadataCollection>
+    </ns37:UMLAttribute>
+    <ns37:UMLAttribute description="The time at which the execution of the application ended." name="endTime" xsi:type="ns37:UMLAttribute">
+     <ns37:semanticMetadataCollection>
+      <ns40:SemanticMetadata id="173832FC-CB99-6E57-E044-0003BA3F9857" conceptCode="C25207" conceptName="Time" conceptDefinition="the continuum of experience in which events pass from the future through the present to the past." isPrimaryConcept="true" order="0" xsi:type="ns40:SemanticMetadata" xmlns:ns40="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns41:SemanticMetadata id="173832FC-D821-6E57-E044-0003BA3F9857" conceptCode="C25496" conceptName="End" conceptDefinition="The point or place at which something terminates in time, space, or extent." isPrimaryConcept="false" order="1" xsi:type="ns41:SemanticMetadata" xmlns:ns41="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns37:semanticMetadataCollection>
+    </ns37:UMLAttribute>
+    <ns37:UMLAttribute description="Unique identifier for Run objects" name="id" xsi:type="ns37:UMLAttribute">
+     <ns37:semanticMetadataCollection>
+      <ns42:SemanticMetadata id="173832FC-CED8-6E57-E044-0003BA3F9857" conceptCode="C25364" conceptName="Identifier" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." isPrimaryConcept="true" order="0" xsi:type="ns42:SemanticMetadata" xmlns:ns42="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns37:semanticMetadataCollection>
+    </ns37:UMLAttribute>
+   </ns37:umlAttributeCollection>
+   <ns37:semanticMetadataCollection>
+    <ns43:SemanticMetadata id="173832FC-CABC-6E57-E044-0003BA3F9857" conceptCode="C48293" conceptName="Execution" conceptDefinition="The act of carrying out some order or instruction to accomplish an aim." isPrimaryConcept="true" order="0" xsi:type="ns43:SemanticMetadata" xmlns:ns43="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   </ns37:semanticMetadataCollection>
+  </ns37:UMLClass>
+  <ns44:UMLClass className="Concept" description="A unit of knowledge created by a unique combination of characteristics. " id="173832FC-A6BD-6E57-E044-0003BA3F9857" packageName="edu.upmc.opi.cabig.caties.document.domain" projectName="caTIES" projectVersion="1" xsi:type="ns44:UMLClass" xmlns:ns44="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns44:umlAttributeCollection>
+    <ns44:UMLAttribute description="Unique identifier for ConceptLibrary objects" name="id" xsi:type="ns44:UMLAttribute">
+     <ns44:semanticMetadataCollection>
+      <ns45:SemanticMetadata id="173832FC-CEDB-6E57-E044-0003BA3F9857" conceptCode="C25364" conceptName="Identifier" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." isPrimaryConcept="true" order="0" xsi:type="ns45:SemanticMetadata" xmlns:ns45="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns44:semanticMetadataCollection>
+    </ns44:UMLAttribute>
+    <ns44:UMLAttribute description="Concept Unique Identifier" name="cui" xsi:type="ns44:UMLAttribute">
+     <ns44:semanticMetadataCollection>
+      <ns46:SemanticMetadata id="173832FC-D677-6E57-E044-0003BA3F9857" conceptCode="C42718" conceptName="Concept Unique Identifier" conceptDefinition="In the Unified Medical Language System (UMLS) of the National Library of Medicine (NLM) the concept unique identifier (CUI) is an 8-character identifier beginning with the letter &quot;C&quot; and followed by 7 digits.  Each concept is assigned such a CUI.  The CUI has no intrinsic meaning but remains constant through time and across versions." isPrimaryConcept="true" order="0" xsi:type="ns46:SemanticMetadata" xmlns:ns46="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns44:semanticMetadataCollection>
+    </ns44:UMLAttribute>
+    <ns44:UMLAttribute description="Semantic type identifier. A unique identifier for a semantic type where semantic type is a broad category used to group concepts within the UMLS and NCI Metathesaurus." name="tui" xsi:type="ns44:UMLAttribute">
+     <ns44:semanticMetadataCollection>
+      <ns47:SemanticMetadata id="173832FC-CD0D-6E57-E044-0003BA3F9857" conceptCode="C25364" conceptName="Identifier" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." isPrimaryConcept="true" order="0" xsi:type="ns47:SemanticMetadata" xmlns:ns47="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+      <ns48:SemanticMetadata id="173832FC-D670-6E57-E044-0003BA3F9857" conceptCode="C42732" conceptName="Semantic Type" conceptDefinition="The Semantic Type is the basic category or categories that describe a Concept.  In general, applying semantic types aids in allowing users (or computer programs) to draw conclusions about concepts by virtue of the categories to which they have been assigned.  We use a set of Semantic types developed for the UMLS Metathesaurus. There are currently 134 Semantic types in the UMLS." isPrimaryConcept="false" order="1" xsi:type="ns48:SemanticMetadata" xmlns:ns48="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns44:semanticMetadataCollection>
+    </ns44:UMLAttribute>
+    <ns44:UMLAttribute description="The word or words by which a unit of knowledge are known within a terminology system." name="name" xsi:type="ns44:UMLAttribute">
+     <ns44:semanticMetadataCollection>
+      <ns49:SemanticMetadata id="173832FC-D617-6E57-E044-0003BA3F9857" conceptCode="C42614" conceptName="Name" conceptDefinition="The words or language units by which a thing is known." isPrimaryConcept="true" order="0" xsi:type="ns49:SemanticMetadata" xmlns:ns49="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns44:semanticMetadataCollection>
+    </ns44:UMLAttribute>
+    <ns44:UMLAttribute description="The label associated with a broad category used to group concepts within the UMLS and NCI Metathesaurus." name="semanticType" xsi:type="ns44:UMLAttribute">
+     <ns44:semanticMetadataCollection>
+      <ns50:SemanticMetadata id="173832FC-D672-6E57-E044-0003BA3F9857" conceptCode="C42732" conceptName="Semantic Type" conceptDefinition="The Semantic Type is the basic category or categories that describe a Concept.  In general, applying semantic types aids in allowing users (or computer programs) to draw conclusions about concepts by virtue of the categories to which they have been assigned.  We use a set of Semantic types developed for the UMLS Metathesaurus. There are currently 134 Semantic types in the UMLS." isPrimaryConcept="true" order="0" xsi:type="ns50:SemanticMetadata" xmlns:ns50="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns44:semanticMetadataCollection>
+    </ns44:UMLAttribute>
+   </ns44:umlAttributeCollection>
+   <ns44:semanticMetadataCollection>
+    <ns51:SemanticMetadata id="173832FC-CAB9-6E57-E044-0003BA3F9857" conceptCode="C45728" conceptName="Concept" conceptDefinition="A unit of knowledge created by a unique combination of characteristics. (ISO 1087)" isPrimaryConcept="true" order="0" xsi:type="ns51:SemanticMetadata" xmlns:ns51="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   </ns44:semanticMetadataCollection>
+  </ns44:UMLClass>
+  <ns52:UMLClass className="ConceptClassification" description="A catagorization of concepts based on a particular context in which the report concept is used." id="173832FC-A6BE-6E57-E044-0003BA3F9857" packageName="edu.upmc.opi.cabig.caties.document.domain" projectName="caTIES" projectVersion="1" xsi:type="ns52:UMLClass" xmlns:ns52="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns52:umlAttributeCollection>
+    <ns52:UMLAttribute description="Unique identifier for concept classification object." name="id" xsi:type="ns52:UMLAttribute">
+     <ns52:semanticMetadataCollection>
+      <ns53:SemanticMetadata id="173832FC-CEDA-6E57-E044-0003BA3F9857" conceptCode="C25364" conceptName="Identifier" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." isPrimaryConcept="true" order="0" xsi:type="ns53:SemanticMetadata" xmlns:ns53="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns52:semanticMetadataCollection>
+    </ns52:UMLAttribute>
+    <ns52:UMLAttribute description="The words or language units by which the concept classification is known." name="name" xsi:type="ns52:UMLAttribute">
+     <ns52:semanticMetadataCollection>
+      <ns54:SemanticMetadata id="173832FC-D616-6E57-E044-0003BA3F9857" conceptCode="C42614" conceptName="Name" conceptDefinition="The words or language units by which a thing is known." isPrimaryConcept="true" order="0" xsi:type="ns54:SemanticMetadata" xmlns:ns54="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+     </ns52:semanticMetadataCollection>
+    </ns52:UMLAttribute>
+   </ns52:umlAttributeCollection>
+   <ns52:semanticMetadataCollection>
+    <ns55:SemanticMetadata id="173832FC-C888-6E57-E044-0003BA3F9857" conceptCode="C25161" conceptName="Classification" conceptDefinition="Classification; the grouping of things into classes or categories." isPrimaryConcept="true" order="0" xsi:type="ns55:SemanticMetadata" xmlns:ns55="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns56:SemanticMetadata id="173832FC-CAB8-6E57-E044-0003BA3F9857" conceptCode="C45728" conceptName="Concept" conceptDefinition="A unit of knowledge created by a unique combination of characteristics. (ISO 1087)" isPrimaryConcept="false" order="1" xsi:type="ns56:SemanticMetadata" xmlns:ns56="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   </ns52:semanticMetadataCollection>
+  </ns52:UMLClass>
+ </ns1:exposedUMLClassCollection>
+</extract>
