@@ -15,5 +15,7 @@ public interface IndexServiceManager extends BaseManager {
 
     IndexService findIndexServiceByEPR(EndpointReferenceType epr);
 
+    void save(Object obj);
+
 
 }

@@ -17,5 +17,13 @@ public interface IndexDAO {
 
     public IndexService getObjectByPK(Integer pk);
 
+    /**
+     * Return ID for a EPR string
+     *
+     * @param epr
+     * @return
+     */
+    public int getID4EPR(String epr);
+
 
 }

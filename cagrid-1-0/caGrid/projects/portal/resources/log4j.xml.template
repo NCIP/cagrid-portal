@@ -1,34 +1,42 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
-    <appender name="fileAppender"
-              class="org.apache.log4j.DailyRollingFileAppender">
+	<appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p %c{1} - %m%n"/>
+		</layout>
+	</appender>
 
-        <param name="File" value="@webapp.log.dir@/@webapp.project.name@.log" />
-        <param name="Append" value="true" />
-        <param name='DatePattern' value="'.'yyyy-MM-dd-HH"/>
-         <layout class='org.apache.log4j.PatternLayout'>
-            <param name='ConversionPattern' value='%-10r %-5p %-20c{1} %x - %m%n' />
-        </layout>
-    </appender>
+	<appender name="fileAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="@webapp.log.dir@/@webapp.project.name@.log"/>
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-10r %-5p %-20c{1} %x - %m%n"/>
+		</layout>
+	</appender>
 
-    <category name="gov.nih.nci.cagrid.portal" additivity="false">
-        <priority value="@log.level.portal@" />
-        <appender-ref ref="fileAppender" />
-    </category>
+	<category name="gov.nih.nci.cagrid.portal" additivity="false">
+		<priority value="@log.level.portal@"/>
+		<appender-ref ref="fileAppender"/>
+	</category>
 
-    <category name="org.springframework" additivity="false">
-            <priority value="@log.level.spring@" />
-            <appender-ref ref="fileAppender" />
-    </category>
+	<category name="org.springframework" additivity="false">
+		<priority value="@log.level.spring@"/>
+		<appender-ref ref="fileAppender"/>
+	</category>
 
+	<category name="gov.nih.nci.cagrid.portal.tests" additivity="false">
+		<priority value="@log.level.portal.tests@"/>
+		<appender-ref ref="consoleAppender"/>
+	</category>
 
-    <root>
-        <priority value="@log.level.root@" />
-        <appender-ref ref="fileAppender"/>
-    </root>
-
-
+	<root>
+		<priority value="@log.level.root@"/>
+		<appender-ref ref="fileAppender"/>
+	</root>
+	
 </log4j:configuration>

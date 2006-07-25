@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.manager;
 
 import gov.nih.nci.cagrid.portal.domain.IndexService;
+import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 
 /**
@@ -21,5 +22,22 @@ public class IndexServiceManagerImpl extends BaseManagerImpl implements IndexSer
 
     }
 
+    /**
+     * Override base implementation
+     *
+     * @param obj
+     */
+    public void save(Object obj) {
+        IndexService idx = (IndexService) obj;
+        try {
+            int id = indexDAO.getID4EPR(idx.getEpr());
+            idx.setKey(id);
+        } catch (RecordNotFoundException e) {
+            // New object since id does not exist
+            // Do nothing as this is not unexpected
+        }
 
+        baseDAO.saveOrUpdate(idx);
+    }
 }
+

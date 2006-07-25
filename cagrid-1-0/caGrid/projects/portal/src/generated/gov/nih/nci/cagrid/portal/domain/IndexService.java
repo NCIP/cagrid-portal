@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.domain;
 
+import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
 import gov.nih.nci.cagrid.portal.utils.GridUtils;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
@@ -20,7 +21,7 @@ public class IndexService implements DomainObject, GridService {
     private String description;
     private String name;
     private EndpointReferenceType handle;
-    private boolean active;
+    private boolean active = true;
 
     // Primary key
     private int key;
@@ -35,14 +36,20 @@ public class IndexService implements DomainObject, GridService {
      * by providing it a valid EPR
      *
      * @param handle
-     * @throws Exception
+     * @throws RuntimeException
      */
-    public IndexService(EndpointReferenceType handle) throws Exception {
+    public IndexService(EndpointReferenceType handle) {
         // Use setters to keep all properties in sync
         this.setHandle(handle);
-        this.setName(GridUtils.getServiceName(handle));
-        this.setDescription(GridUtils.getServiceDescription(handle));
         this.setActive(GridUtils.isServiceActive(getHandle()));
+
+        try {
+            this.setName(GridUtils.getServiceName(handle));
+            this.setDescription(GridUtils.getServiceDescription(handle));
+        } catch (MetadataRetreivalException e) {
+            // Do nothing none of them is a fatal exception
+        }
+
     }
 
     /**
@@ -51,6 +58,7 @@ public class IndexService implements DomainObject, GridService {
     public IndexService() {
     }
 
+    
     public List getRegisteredServicesCollection() {
         return registeredServicesCollection;
     }
@@ -76,8 +84,9 @@ public class IndexService implements DomainObject, GridService {
      * @hibernate.property column="SERVICE_EPR"
      * not-null="true"
      * unique="true"
+     * type="string"
      */
-    private String getEpr() {
+    public String getEpr() {
         return epr;
     }
 
@@ -96,6 +105,7 @@ public class IndexService implements DomainObject, GridService {
 
     /**
      * @hibernate.property column="DESCRIPTION"
+     * type="string"
      */
     public String getDescription() {
         return description;
@@ -107,6 +117,7 @@ public class IndexService implements DomainObject, GridService {
 
     /**
      * @hibernate.property column="NAME"
+     * type="string"
      */
     public String getName() {
         return name;
@@ -150,6 +161,7 @@ public class IndexService implements DomainObject, GridService {
 
     /**
      * @hibernate.property column="ISACTIVE"
+     * type="boolean"
      */
     public boolean isActive() {
         return active;

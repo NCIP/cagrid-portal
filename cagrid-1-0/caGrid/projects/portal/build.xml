@@ -17,17 +17,28 @@
     <property name='props.src.dir' value='src/properties'/>
     <property name='scripts.src.dir' value='src/scripts'/>
 
-
+    <!-- web folder                     -->
     <property name="webcontent.dir" value="webcontent"/>
     <property name='webinf.dir' value='${webcontent.dir}/WEB-INF'/>
+    <property name='webinf.classes.dir' value='${webinf.dir}/classes'/>
+    <property name='webinf.lib.dir' value='${webinf.dir}/lib'/>
     <property name="resources.dir" value="resources"/>
 
+    <!--Library folders                 -->
     <property name="lib.dir" value="lib"/>
-    <property name="lib.dest" value="${webinf.dir}/lib"/>
     <property name="ext.lib.dir" value="ext/lib"/>
 
     <property name='build.dir' value='build'/>
-    <property name='build.dest' value='${webinf.dir}/classes'/>
+    <property name='build.classes.dir' value='build/classes'/>
+    <property name="test.classes.dir" value="${build.dir}/classes" />
+
+    <!-- Important test directories and files -->
+    <property name="test.dir" value="test" />
+    <property name="test.src.dir" value="${test.dir}/src" />
+    <property name="test.log.dir" value="test/logs" />
+    <property name="test.lib.dir" value="test/lib" />
+    <property name="ext.test.lib.dir" value="ext/test/lib" />
+    <property name="junit.results.dir" value="${test.log.dir}/junit" />
 
     <!--Set logging levels if not defined by ${username}-portal.properties file -->
     <property name="log.level.root" value="WARN"/>
@@ -37,35 +48,75 @@
     <property name="tomcat.dir" location="${env.CATALINA_HOME}"/>
     <property name="tomcat.webapps.dir" location="${tomcat.dir}/webapps"/>
 
-
-    <path id="portal.classpath">
-        <fileset dir="${lib.dir}">
-            <include name="*.jar"/>
-        </fileset>
-        <fileset dir="${ext.lib.dir}">
-            <include name="*.jar"/>
-        </fileset>
-        <fileset dir="${globus.lib.dir}">
-            <include name="*.jar"/>
-        </fileset>
-    </path>
-
-    <path id="xdoclet.classpath">
-        <fileset dir="${lib.dir}/xdoclet">
-            <include name="*.jar"/>
-        </fileset>
-    </path>
-
+    <!--Custom javac                        -->
     <presetdef name="portal.javac">
         <javac source="1.4"/>
     </presetdef>
+
+    <target name="setClasspath">
+           <path id="portal.classpath">
+               <fileset dir="${lib.dir}">
+                   <include name="*.jar"/>
+               </fileset>
+               <fileset dir="${ext.lib.dir}">
+                   <include name="*.jar"/>
+               </fileset>
+               <fileset dir="${globus.lib.dir}">
+                   <include name="*.jar"/>
+               </fileset>
+           </path>
+
+           <path id="test.classpath">
+               <fileset dir="${ext.test.lib.dir}">
+                   <include name="**/*.jar" />
+               </fileset>
+               <fileset dir="${test.lib.dir}">
+                   <include name="**/*.jar"/>
+               </fileset>
+               <pathelement location="${webinf.classes.dir}"/>
+               <path refid="portal.classpath"/>
+           </path>
+           <path id="test.run.classpath">
+               <path refid="test.classpath"/>
+               <pathelement location="${test.classes.dir}"/>
+           </path>
+
+
+           <path id="xdoclet.classpath">
+               <fileset dir="${lib.dir}/xdoclet">
+                   <include name="*.jar"/>
+               </fileset>
+           </path>
+       </target>
 
     <!-- ============================================================== -->
     <!-- Target for continous build. Use war target to build            -->
     <!-- actual app                                                     -->
     <!-- ============================================================== -->
-    <target name="all" depends="clean,compile,hibernate.xdoclet,copyResources"
+    <target name="all" depends="clean,compile, compileTests, hibernate.xdoclet,copyResources"
             description="Builds the entire application"/>
+
+    <!-- ============================================================== -->
+    <!-- Initialize build environment                                   -->
+    <!-- ============================================================== -->
+    <target name="init" depends="setClasspath">
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${test.log.dir}" />
+        <mkdir dir="${webinf.lib.dir}"/>
+        <mkdir dir="${webinf.classes.dir}"/>
+    </target>
+
+
+    <!-- ============================================================== -->
+    <!-- Cleans up generated stuff                                      -->
+    <!-- Not to be called directly                                      -->
+    <!-- ============================================================== -->
+    <target name="clean" description="Removes generated files.">
+        <delete dir="${build.dir}"/>
+        <delete dir="${test.log.dir}"/>
+        <delete dir="${webinf.lib.dir}"/>
+        <delete dir="${webinf.classes.dir}"/>
+    </target>
 
 
     <!-- ============================================================== -->
@@ -93,25 +144,7 @@
              excludesfile="${webinf.dir}/web.xml">
         </war>
     </target>
-    <!-- ============================================================== -->
-    <!-- Initialize build environment                                   -->
-    <!-- ============================================================== -->
-    <target name="init">
-        <mkdir dir="${build.dir}"/>
-        <mkdir dir="${build.dest}"/>
 
-        <mkdir dir="${lib.dest}"/>
-    </target>
-
-    <!-- ============================================================== -->
-    <!-- Cleans up generated stuff                                      -->
-    <!-- Not to be called directly                                      -->
-    <!-- ============================================================== -->
-    <target name="clean" description="Removes generated files.">
-        <delete dir="${build.dest}"/>
-        <delete dir="${lib.dest}"/>
-        <delete dir="${build.dir}"/>
-    </target>
 
     <target name="cleanDeployment" description="Removes tomcat deployment">
         <delete dir="${tomcat.webapps.dir}/${project.name}" failonerror="false"/>
@@ -119,24 +152,10 @@
         <delete file="${tomcat.webapps.dir}/${project.name}.war"/>
     </target>
 
-    <!-- ============================================================== -->
-    <!-- Compile up generated stuff                                      -->
-    <!-- ============================================================== -->
-    <target name="compile" depends="init">
-
-        <javac source="1.4" destdir="${build.dest}" classpathref="portal.classpath">
-            <src>
-                <pathelement path="${generated.src.dir}"/>
-                <pathelement path="${java.src.dir}"/>
-            </src>
-        </javac>
-
-
-    </target>
 
     <target name="copyResources">
         <!--Copy libraries-->
-        <copy todir="${lib.dest}">
+        <copy todir="${webinf.lib.dir}">
             <fileset dir="${lib.dir}">
                 <include name="*.jar"/>
             </fileset>
@@ -151,7 +170,7 @@
 
         <copy
                 file='resources/hibernate.properties.template'
-                tofile='${build.dest}/hibernate.properties'
+                tofile='${webinf.classes.dir}/hibernate.properties'
                 filtering='true'
                 overwrite='true'>
             <filterset>
@@ -176,7 +195,7 @@
 
         <copy
                 file="${resources.dir}/log4j.xml.template"
-                tofile='${build.dest}/log4j.xml'
+                tofile='${webinf.classes.dir}/log4j.xml'
                 filtering="true"
                 overwrite="true">
             <filterset>
@@ -184,49 +203,87 @@
                 <filter token="webapp.project.name" value="${project.name}"/>
                 <filter token="log.level.root" value="${log.level.root}"/>
                 <filter token="log.level.portal" value="${log.level.portal}"/>
+                <filter token="log.level.portal.tests" value="${log.level.portal.tests}"/>
                 <filter token="log.level.spring" value="${log.level.spring}"/>
             </filterset>
         </copy>
 
-        <copy todir="${build.dest}">
+        <copy todir="${webinf.classes.dir}">
             <fileset dir="${props.src.dir}">
                 <include name="*.xml"/>
                 <include name="*.properties"/>
+                <include name="*.wsdd"/>
+            </fileset>
+        </copy>
+
+
+        <!--Also copy to WEB-INF -->
+        <copy todir="${webinf.classes.dir}">
+             <fileset dir="${build.classes.dir}">
+                    <include name="**/*"/>
+                    <exclude name="**/tests/*"/>
             </fileset>
         </copy>
 
         <!--ToDo copy GLOBUS libs -->
     </target>
 
-
-    <target name="hibernate" description="Does all the hibernate generation stuff"
-            depends="hibernate.xdoclet,file-list">
-
+    <!-- ============================================================== -->
+    <!-- Compile up generated stuff                                      -->
+    <!-- ============================================================== -->
+    <target name="compile" depends="init">
+        <javac source="1.4" destdir="${build.classes.dir}" classpathref="portal.classpath">
+            <src>
+                <pathelement path="${generated.src.dir}"/>
+                <pathelement path="${java.src.dir}"/>
+            </src>
+        </javac>
     </target>
 
 
+    <target name="compileTests" depends="compile">
+        <javac srcdir="${test.src.dir}" classpathref="test.classpath" destdir="${test.classes.dir}" failonerror="true"  />
+    </target>
+
+    <!-- call the test target for each project and aggregates the log resutls  -->
+    <target name="test" depends="compileTests" description="Runs the service's tests.">
+        <echo message="Test results dir: ${junit.results.dir}" />
+        <mkdir dir="${junit.results.dir}" />
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true">
+            <classpath refid="test.run.classpath" />
+            <sysproperty key="build.dir" value="${test.classes.dir}" />
+            <jvmarg value="-Dbuild.dir=${test.classes.dir}" />
+            <formatter type="xml" />
+            <batchtest fork="yes" todir="${junit.results.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/Test*.java" />
+                    <include name="**/*TestCase.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+        <fail message="Tests failed! Check test reports." if="test.failed" />
+    </target>
+
+    <target name="hibernate" description="Does all the hibernate generation stuff"
+            depends="hibernate.xdoclet,file-list"/>
+
     <target name="hibernate.xdoclet" depends="compile" description="Creates the hbm.xml files">
-
-
         <taskdef name="hibernatedoclet"
                  classname="xdoclet.modules.hibernate.HibernateDocletTask">
             <classpath refid="xdoclet.classpath"/>
         </taskdef>
 
         <hibernatedoclet
-                destdir="${build.dest}"
+                destdir="${build.classes.dir}"
                 excludedtags="@version,@author,@todo"
                 force="false"
                 mergedir="merge"
                 verbose="false">
-
             <fileset dir="${generated.src.dir}">
                 <include name="**/domain/**/*.java"/>
             </fileset>
-
             <hibernate version='3.0'/>
         </hibernatedoclet>
-
     </target>
 
     <target name="file-list"
@@ -236,16 +293,11 @@
                 <fileset dir="${lib.dir}/xdoclet">
                     <include name="**/*.jar"/>
                 </fileset>
-
-
             </classpath>
         </taskdef>
 
-        <property name="generated.dir" location="${build.dest}"/>
-        <property name="hibernate.list.file" location="${build.dest}/hibernate.cfg.xml"/>
+        <property name="generated.dir" location="${build.classes.dir}"/>
+        <property name="hibernate.list.file" location="${build.classes.dir}/hibernate.cfg.xml"/>
         <scriptdef language="beanshell" src="${scripts.src.dir}/create_hbnfile.sh"/>
-
     </target>
-
-
 </project>

@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.domain;
 
 import gov.nih.nci.cagrid.portal.utils.GridUtils;
+import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
 
@@ -31,8 +32,12 @@ public class RegisteredService implements GridService {
 
     public RegisteredService(EndpointReferenceType handle) {
         this.setHandle(handle);
-        this.setName(GridUtils.getServiceName(handle));
-        this.setDescription(GridUtils.getServiceDescription(handle));
+        try {
+            this.setName(GridUtils.getServiceName(handle));
+            this.setDescription(GridUtils.getServiceDescription(handle));
+        } catch (MetadataRetreivalException e) {
+            //do Nothing
+        }
     }
 
     /**

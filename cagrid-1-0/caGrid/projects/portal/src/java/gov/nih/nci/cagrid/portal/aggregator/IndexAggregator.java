@@ -16,7 +16,7 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
  * Time: 4:52:04 PM
  * To change this template use File | Settings | File Templates.
  */
-public class IndexAggregator implements Runnable {
+public class IndexAggregator extends AbstractAggregator {
 
     private DiscoveryClient discClient;
     private boolean metadataCompliance;
@@ -38,17 +38,18 @@ public class IndexAggregator implements Runnable {
     }
 
     public void run() {
-
         try {
             EndpointReferenceType[] services = discClient.getAllServices(metadataCompliance);
 
             for (int i = 0; i < services.length; i++) {
+                mLogger.debug("Adding " + services[i] + " to index.");
                 indexService.addRegisteredService(new RegisteredService(services[i]));
+                mLogger.debug("Saving index with " + indexService.getRegisteredServicesCollection().size() + " Registered Services.");
                 idxMgr.save(indexService);
             }
 
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            mLogger.error(e);
         }
     }
 }

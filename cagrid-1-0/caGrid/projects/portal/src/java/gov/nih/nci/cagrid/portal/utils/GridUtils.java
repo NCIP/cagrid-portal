@@ -49,7 +49,7 @@ public final class GridUtils {
             return MetadataUtils.getServiceMetadata(serviceEPR).getServiceDescription().getService();
         } catch (Exception e) {
             // wrap the generic exception into something more specific
-            throw new MetadataRetreivalException(e);
+            throw new MetadataRetreivalException("Error retreiving service metadata for " + serviceEPR.toString());
         }
     }
 
