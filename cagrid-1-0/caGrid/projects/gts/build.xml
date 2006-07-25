@@ -343,7 +343,7 @@
     </target>
 
     <!-- Post Introduce Edit-->
-    <target name="portal" description="Run the dorian portal" depends="checkGlobus">
+    <target name="portal" description="Run the GTS portal" depends="checkGlobus">
         <java classname="org.projectmobius.portal.GridPortal" fork="yes">
             <arg value="etc/gts-portal-conf.xml" />
             <classpath>
@@ -370,5 +370,30 @@
             </classpath>
         </java>
     </target>
+	
+	<target name="addAdmin" description="Add a administrator to the GTS" depends="checkGlobus">
+		<java classname="gov.nih.nci.cagrid.gts.tools.service.PermissionBootstapper" fork="yes">
+			<arg value="etc/gts-conf.xml" />
+			<classpath>
+				<pathelement location="${stubs.dest}" />
+				<fileset dir="${build.lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.globus.dir}/lib">
+					<include name="*.jar" />
+					<exclude name="${stubs.jar.name}" />
+					<exclude name="${jar.name}" />
+					<exclude name="xml-apis.jar" />
+					<exclude name="xercesImpl.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
 
 </project>
