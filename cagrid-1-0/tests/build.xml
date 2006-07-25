@@ -15,14 +15,18 @@
 	<property name="test.dir" location="${basedir}/test" />
 	<property name="share.dir" location="${cagrid.dir}/share" />
 	<property name="share.lib.dir" location="${share.dir}/lib" />
+	<property name="tests.share.dir" location="${basedir}/share" />
+	<property name="tests.share.lib.dir" location="${test.share.dir}/lib" />
 	<property name="test.lib.dir" location="${cagrid.dir}/test/lib" />
 	<property name="cagrid.antfiles.dir" location="${cagrid.dir}/antfiles" />
 	<property name="antfiles.dir" location="${basedir}/antfiles" />
 	<property name="cagrid.test.dir" location="${cagrid.dir}/test" />
+	<property name="reports.dir" location="${basedir}/reports"/>
 
 	<!-- IMPORT THE UTILITIES TARGETS -->
 	<import file="${cagrid.antfiles.dir}/artifacts.xml" />
 	<import file="${antfiles.dir}/artifacts.xml" />
+	<import file="${antfiles.dir}/report-utilities.xml" />
 	<import file="${cagrid.antfiles.dir}/ant-utilities.xml" />
 	<import file="${cagrid.antfiles.dir}/test-utilities.xml" />
 	<import file="${cagrid.antfiles.dir}/report-utilities.xml" />
