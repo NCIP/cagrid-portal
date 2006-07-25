@@ -3,6 +3,11 @@ package gov.nih.nci.cagrid.portal.tests;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
 /**
+ *
+ * Sets up the spring container for subclasses
+ * to use
+ *
+ * 
  * Created by IntelliJ IDEA.
  * User: kherm
  * Date: Jul 24, 2006
