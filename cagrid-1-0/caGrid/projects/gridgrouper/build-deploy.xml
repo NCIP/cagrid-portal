@@ -102,6 +102,10 @@
 			<fileset dir="lib">
 				<include name="*" />
 			</fileset>
+			<!-- Post Introduce Edit-->
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
 			<fileset dir="build/lib">
 				<include name="*" />
 			</fileset>
@@ -121,6 +125,10 @@
 			<fileset dir="${basedir}/lib">
 				<include name="*.jar" />
 			</fileset>
+			<!-- Post Introduce Edit-->
+					 <fileset dir="${ext.lib.dir}">
+						<include name="*.jar" />
+					</fileset>
 		</copy>
 		
 		<!-- prepare the server-config file -->

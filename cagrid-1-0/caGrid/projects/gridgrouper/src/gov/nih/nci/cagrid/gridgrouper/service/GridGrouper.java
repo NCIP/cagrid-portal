@@ -1,20 +1,13 @@
 package gov.nih.nci.cagrid.gridgrouper.service;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import edu.internet2.middleware.grouper.Group;
 import edu.internet2.middleware.grouper.GroupFinder;
 import edu.internet2.middleware.grouper.GroupNotFoundException;
 import edu.internet2.middleware.grouper.GrouperSession;
-import edu.internet2.middleware.grouper.NamingPrivilege;
-import edu.internet2.middleware.grouper.RegistryReset;
 import edu.internet2.middleware.grouper.Stem;
 import edu.internet2.middleware.grouper.StemFinder;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.grouper.SubjectFinder;
-import edu.internet2.middleware.subject.Subject;
-import gov.nih.nci.cagrid.gridgrouper.subject.GridUserSubjectSource;
 
 
 /**

@@ -16,6 +16,9 @@
     <!-- Important directories and files -->
     <property name="src.dir" value="src" />
     <property name="lib.dir" value="lib" />
+	<!-- Post Introduce Edit-->
+	<property name="conf.dir" value="conf" />
+    <property name="ext.lib.dir" value="ext/lib" />
     <property name="etc.dir" value="etc" />
     <property name="schema.dir" value="schema" />
     <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
@@ -129,6 +132,10 @@
             <fileset dir="${lib.dir}">
                 <include name="*.jar" />
             </fileset>
+        	<!-- Post Introduce Edit-->
+        	<fileset dir="${ext.lib.dir}">
+        							<include name="*.jar" />
+        						</fileset>
             <fileset dir="${ext.globus.dir}/lib">
                 <include name="*.jar" />
                 <exclude name="${stubs.jar.name}" />
@@ -154,10 +161,14 @@
         </path>
         <path id="test.run.classpath">
             <pathelement location="${test.build.dest}" />
+        	<!-- Post Introduce Edit-->
+        	<pathelement location="${test.dir}/resources" />
             <path refid="test.build.classpath" />
         </path>
         <path id="run.classpath">
             <pathelement location="${build.dest}" />
+        	<!-- Post Introduce Edit-->
+        	<pathelement location="${conf.dir}" />
             <path refid="service.build.classpath" />
         </path>
     </target>
@@ -268,7 +279,8 @@
 
 
     <!-- call the test target for each project and aggregates the log resutls  -->
-    <target name="test" depends="checkGlobus" description="Runs the service's tests.">
+   <!--
+	<target name="test" depends="checkGlobus" description="Runs the service's tests.">
         <echo message="Test results dir: ${junit.results.dir}" />
         <mkdir dir="${junit.results.dir}" />
         <junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
@@ -282,6 +294,10 @@
             </batchtest>
         </junit>
     </target>
+	-->
+	<!-- Post Introduce Edit-->
+	<!-- Load test files -->
+		<import file="test/test.xml" />
 
     <!-- Clean up all the intermediate files -->
     <target name="clean" description="Removes all generated build artifacts.">
