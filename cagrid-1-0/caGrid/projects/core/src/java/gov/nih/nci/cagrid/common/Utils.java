@@ -176,7 +176,8 @@ public class Utils {
 	 * @param qname
 	 *            The QName of the object
 	 * @param writer
-	 *            A writer to place XML into (eg: FileWriter, StringWriter)
+	 *            A writer to place XML into (eg: FileWriter, StringWriter).  If a file
+	 *            writer is used, be sure to close it!
 	 * @param wsdd
 	 *            A stream containing the WSDD configuration
 	 * @throws Exception
@@ -202,7 +203,8 @@ public class Utils {
 		// output the message element through the serialization context
 		element.output(serializationContext);
 		writer.write("\n");
-		writer.close();
+		// writer.close();
+		writer.flush();
 	}
 
 

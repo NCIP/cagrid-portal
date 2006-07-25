@@ -39,7 +39,9 @@ public class MetadataUtilsTest extends TestCase {
 
 			File tmpFile = File.createTempFile("metadata", ".xml");
 			tmpFile.deleteOnExit();
-			MetadataUtils.serializeServiceMetadata(model, new FileWriter(tmpFile));
+			FileWriter tmpFileWriter = new FileWriter(tmpFile);
+			MetadataUtils.serializeServiceMetadata(model, tmpFileWriter);
+			tmpFileWriter.close();
 			System.out.println("Wrote to file: " + tmpFile.getCanonicalPath());
 			assertTrue(tmpFile.exists());
 
@@ -64,7 +66,9 @@ public class MetadataUtilsTest extends TestCase {
 
 			File tmpFile = File.createTempFile("metadata", ".xml");
 			tmpFile.deleteOnExit();
-			MetadataUtils.serializeDomainModel(model, new FileWriter(tmpFile));
+			FileWriter tmpFileWriter = new FileWriter(tmpFile);
+			MetadataUtils.serializeDomainModel(model, tmpFileWriter);
+			tmpFileWriter.close();
 			System.out.println("Wrote to file: " + tmpFile.getCanonicalPath());
 			assertTrue(tmpFile.exists());
 
