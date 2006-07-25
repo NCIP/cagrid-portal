@@ -13,14 +13,24 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-public class BeanComapratorTest
+/**
+ * This is a unit test that validates the functionality of the BeanComparator class, which is used
+ * to compare the values of two Java bean objects. 
+ * @testType unit
+ * @author Patrick McConnell
+ */
+public class BeanComaparatorTest
 	extends TestCase
 {
-	public BeanComapratorTest(String name)
+	public BeanComaparatorTest(String name)
 	{
 		super(name);
 	}
 	
+	/**
+	 * Tests the comparison of a simple bean that has a string value and an array list with
+	 * a Boolean and a Float. 
+	 */
 	public void testFlat() 
 		throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
 	{
@@ -35,6 +45,10 @@ public class BeanComapratorTest
 		new BeanComparator(this).assertEquals(b1, b2);
 	}
 	
+	/**
+	 * Test the comparison of a more complex bean that has some simple types, a user object
+	 * in an array list, and an array of user objects.
+	 */
 	public void testEmbedded() 
 		throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
 	{
@@ -87,7 +101,7 @@ public class BeanComapratorTest
 	public static void main(String[] args) throws Exception
 	{
 		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(BeanComapratorTest.class));
+		TestResult result = runner.doRun(new TestSuite(BeanComaparatorTest.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
 }
