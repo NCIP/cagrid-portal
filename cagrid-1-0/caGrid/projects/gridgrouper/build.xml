@@ -17,7 +17,10 @@
     <property name="src.dir" value="src" />
     <property name="lib.dir" value="lib" />
 	<!-- Post Introduce Edit-->
-	<property name="conf.dir" value="conf" />
+	<property name="conf.dir" value="resources/conf" />
+	<property name="hbm.dir" value="resources/hbm" />
+	<!-- Post Introduce Edit-->
+	<property name="hibernate.props" value="${conf.dir}/grouper.hibernate.properties"/>
     <property name="ext.lib.dir" value="ext/lib" />
     <property name="etc.dir" value="etc" />
     <property name="schema.dir" value="schema" />
@@ -33,6 +36,11 @@
     <property name="test.src.dir" value="${test.dir}/src" />
     <property name="test.lib.dir" value="${test.dir}/lib" />
     <property name="test.log.dir" value="test/logs" />
+	
+	<!-- Post Introduce Edit-->
+	<property name="test.resources.dir" value="${test.dir}/resources" />
+	<!-- Post Introduce Edit-->
+	<property name="test.hibernate.props" value="${test.resources.dir}/grouper.hibernate.properties"/>
     <property name="ext.test.lib.dir" value="ext/test/lib" />
     <property name="junit.results.dir" value="${test.log.dir}/junit" />
 
@@ -41,6 +49,8 @@
 
     <!-- Auxiliary directory where all the intermediate files will be placed -->
     <property name="build.dir" location="build" />
+	<!-- Post Introduce Edit-->
+	<property name="build.sql" location="${build.dir}/sql"/>
     <!-- Directory for compiled service classes -->
     <property name="build.dest" location="${build.dir}/classes" />
     <property name="test.build.dest" value="${build.dir}/test/classes" />
@@ -104,6 +114,8 @@
     <target name="init" depends="checkGlobus, defineClasspaths">
         <mkdir dir="${build.dir}" />
         <mkdir dir="${build.dest}" />
+    	<!-- Post Introduce Edit-->
+    	 <mkdir dir="${build.sql}" />
         <mkdir dir="${test.build.dest}" />
         <mkdir dir="${test.log.dir}" />
         <mkdir dir="${build.lib.dir}" />
@@ -150,25 +162,27 @@
         </path>
         <path id="service.run.classpath">
             <pathelement location="${build.dest}" />
+        	<pathelement location="${conf.dir}" />
             <path refid="service.build.classpath" />
         </path>
         <path id="test.build.classpath">
             <fileset dir="${test.lib.dir}">
                 <include name="*.jar" />
             </fileset>
+        	<fileset dir="${ext.test.lib.dir}">
+        								<include name="*.jar" />
+        							</fileset>
             <pathelement location="${build.dest}" />
             <path refid="service.build.classpath" />
         </path>
         <path id="test.run.classpath">
             <pathelement location="${test.build.dest}" />
         	<!-- Post Introduce Edit-->
-        	<pathelement location="${test.dir}/resources" />
+        	<pathelement location="${test.resources.dir}" />
             <path refid="test.build.classpath" />
         </path>
         <path id="run.classpath">
             <pathelement location="${build.dest}" />
-        	<!-- Post Introduce Edit-->
-        	<pathelement location="${conf.dir}" />
             <path refid="service.build.classpath" />
         </path>
     </target>
@@ -279,8 +293,8 @@
 
 
     <!-- call the test target for each project and aggregates the log resutls  -->
-   <!--
-	<target name="test" depends="checkGlobus" description="Runs the service's tests.">
+   
+	<target name="test" depends="checkGlobus,testGrouperInit" description="Runs the service's tests.">
         <echo message="Test results dir: ${junit.results.dir}" />
         <mkdir dir="${junit.results.dir}" />
         <junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
@@ -294,10 +308,55 @@
             </batchtest>
         </junit>
     </target>
-	-->
+	
+	
 	<!-- Post Introduce Edit-->
-	<!-- Load test files -->
-		<import file="test/test.xml" />
+		 <target name="dropTestGrouperSchema" depends="jars">
+		    <taskdef name="testschemadrop"
+		      classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
+		      classpathref="test.run.classpath"
+		    />
+		    <testschemadrop
+		      properties="${test.hibernate.props}"
+		      quiet="yes"
+		      text="no"
+		      drop="yes"
+		      delimiter=";"
+		      output="${build.sql}/test-schema-export.sql">
+		      <fileset dir="${hbm.dir}">
+		        <include name="**/*.hbm.xml"/>
+		      </fileset>
+		    </testschemadrop>
+		</target>
+	
+	<!-- Post Introduce Edit-->
+	 <target name="createTestGrouperSchema" depends="dropTestGrouperSchema">
+	    <taskdef name="testschemacreate"
+	      classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
+	      classpathref="test.run.classpath"
+	    />
+	    <testschemacreate
+	      properties="${test.hibernate.props}"
+	      quiet="yes"
+	      text="no"
+	      drop="no"
+	      delimiter=";"
+	      output="${build.sql}/test-schema-export.sql">
+	      <fileset dir="${hbm.dir}">
+	        <include name="**/*.hbm.xml"/>
+	      </fileset>
+	    </testschemacreate>
+	</target>
+	<!-- Post Introduce Edit-->
+	  <target name="testGrouperInit" 
+	          depends="createTestGrouperSchema"
+	          description="initialize database"
+	  >
+
+	    <java fork="true"
+	          classpathref="test.run.classpath"
+	          classname="edu.internet2.middleware.grouper.RegistryInstall"/>
+	  </target>
 
     <!-- Clean up all the intermediate files -->
     <target name="clean" description="Removes all generated build artifacts.">
@@ -308,6 +367,55 @@
 
     <!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
     <target name="all" depends="jars" description="Builds the entire service." />
+	
+	
+	
+	<!-- Post Introduce Edit-->
+		 <target name="dropGrouperSchema" depends="jars">
+		    <taskdef name="schemadrop"
+		      classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
+		      classpathref="service.run.classpath"
+		    />
+		    <schemadrop
+		      properties="${hibernate.props}"
+		      quiet="yes"
+		      text="no"
+		      drop="yes"
+		      delimiter=";"
+		      output="${build.sql}/schema-export.sql">
+		      <fileset dir="${hbm.dir}">
+		        <include name="**/*.hbm.xml"/>
+		      </fileset>
+		    </schemadrop>
+		</target>
+	
+	<!-- Post Introduce Edit-->
+	 <target name="createGrouperSchema" depends="dropGrouperSchema">
+	    <taskdef name="schemacreate"
+	      classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
+	      classpathref="service.run.classpath"
+	    />
+	    <schemacreate
+	      properties="${hibernate.props}"
+	      quiet="yes"
+	      text="no"
+	      drop="no"
+	      delimiter=";"
+	      output="${build.sql}/schema-export.sql">
+	      <fileset dir="${hbm.dir}">
+	        <include name="**/*.hbm.xml"/>
+	      </fileset>
+	    </schemacreate>
+	</target>
+	<!-- Post Introduce Edit-->
+	  <target name="grouperInit" 
+	          depends="createGrouperSchema"
+	          description="initialize database"
+	  >
+	    <java fork="true"
+	          classpathref="service.run.classpath"
+	          classname="edu.internet2.middleware.grouper.RegistryInstall"/>
+	  </target>
 
     <target name="help" description="Prints usage information.">
         <echo message="================================================================================"/>
@@ -319,5 +427,5 @@
 		<echo message="|    Type 'ant -p' for a description of this service's build targets.          |"/>
         <echo message="================================================================================"/>
     </target>
-
+	
 </project>

@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="conf"/>
+	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="build/stubs-GridGrouper/src"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
+<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
@@ -73,7 +73,7 @@
 	<classpathentry kind="lib" path="lib/GroboTestingJUnit-1.2.1-core.jar"/>
 	<classpathentry kind="lib" path="lib/GroboUtilThread-1.0.0alpha2-core.jar"/>
 	<classpathentry sourcepath="/grouper-api-1.0" kind="lib" path="lib/grouper.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate2-2.1.8.jar"/>
+	<classpathentry sourcepath="/hibernate-2.1.8" kind="lib" path="lib/hibernate2-2.1.8.jar"/>
 	<classpathentry kind="lib" path="lib/hsqldb-1.7.2.11.jar"/>
 	<classpathentry kind="lib" path="lib/jta-1.0.1B.jar"/>
 	<classpathentry kind="lib" path="lib/jug-1.1.1.jar"/>

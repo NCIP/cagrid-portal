@@ -7,12 +7,12 @@ import javax.naming.InitialContext;
 import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
 
-/** 
- *  gov.nih.nci.cagrid.gridgrouperI
- *  TODO:DOCUMENT ME
- * 
- * @created by Introduce Toolkit version 1.0
- * 
+/**
+ * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
+ *          Exp $
  */
 public class GridGrouperImpl {
     private ServiceConfiguration configuration;

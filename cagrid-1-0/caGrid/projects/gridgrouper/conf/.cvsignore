@@ -1,4 +1,0 @@
-# $Id: .cvsignore,v 1.1 2006-07-25 01:53:59 langella Exp $
-grouper.hibernate.properties
-log4j.properties
-sources.xml

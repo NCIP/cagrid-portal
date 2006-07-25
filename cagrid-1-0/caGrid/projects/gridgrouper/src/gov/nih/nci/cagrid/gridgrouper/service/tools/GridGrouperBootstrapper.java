@@ -1,18 +1,12 @@
 package gov.nih.nci.cagrid.gridgrouper.service.tools;
 
-import edu.internet2.middleware.grouper.Group;
-import edu.internet2.middleware.grouper.GrouperSession;
-import edu.internet2.middleware.grouper.NamingPrivilege;
 import edu.internet2.middleware.grouper.RegistryReset;
-import edu.internet2.middleware.grouper.Stem;
-import edu.internet2.middleware.grouper.StemFinder;
-import edu.internet2.middleware.grouper.SubjectFinder;
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.IOUtils;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.service.GridGrouper;
-import gov.nih.nci.cagrid.gridgrouper.subject.GridUserSubject;
 import gov.nih.nci.cagrid.gridgrouper.subject.GridUserSubjectSource;
+import net.sf.hibernate.cfg.Configuration;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -40,6 +34,15 @@ public class GridGrouperBootstrapper {
 	public static final String RESET_REGISTRY_OPT_FULL = "reset";
 	public static final String HELP_OPT = "h";
 	public static final String HELP_OPT_FULL = "help";
+	
+	public static void createGrouperDatabaseSchema(){
+		try{
+		Configuration config = new Configuration();
+		
+		}catch(Exception e){
+			
+		}
+	}
 
 
 	public static void addAdminMember(String memberId) {
