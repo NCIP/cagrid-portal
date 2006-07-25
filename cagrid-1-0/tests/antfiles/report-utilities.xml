@@ -1,0 +1,43 @@
+<!-- ======================================================================= -->
+<!-- caGrid tests reports build file                                         -->
+<!-- ======================================================================= -->
+<project name="caGrid-tests_reports" basedir="." default="usage">
+
+	<target name="reports-junit">
+		<mkdir dir="${reports.dir}/junit"/>
+
+		<!-- junitreport -->
+		<junitreport todir="${reports.dir}/junit">
+			<fileset dir="test/logs">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report format="frames" todir="${reports.dir}/junit"/>
+			<report format="noframes" todir="${reports.dir}/junit"/>
+		</junitreport>
+
+		<!-- junitdocreport -->
+		<taskdef name="junitDocReport" classname="edu.duke.cabig.catrip.test.report.ant.JUnitDocReport">
+			<classpath>
+				<fileset dir="${tests.share.dir}/lib/junit-test-report">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</taskdef>
+
+		<junitDocReport format="html" useTestType="true" destfile="${reports.dir}/junit/junitDocReport.html">
+			<junitResults>
+				<fileset dir="${junit.results.dir}">
+					<include name="*.xml"/>
+				</fileset>
+			</junitResults>
+			<junitDocs>
+				<fileset dir="${tests.projects.dir}/coretests">
+					<include name="src/java"/>
+					<include name="test/src/java"/>
+				</fileset>
+			</junitDocs>
+		</junitDocReport>
+	</target>
+
+	<target name="reports" depends="reports-junit"/>
+</project>
