@@ -52,60 +52,10 @@ public class GridGrouper {
 				GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
 		}
 	}
-	
+
 
 	public Group getAdminGroup() {
 		return adminGroup;
-	}
-
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-
-		try {
-			RegistryReset.reset();
-			GrouperSession ses1 = GrouperSession.start(SubjectFinder.findById("GrouperSystem"));
-			Stem root = StemFinder.findRootStem(ses1);
-			Stem adminStem = root.addChildStem(GROUPER_ADMIN_STEM_NAME, GROUPER_ADMIN_STEM_DISPLAY_NAME);
-			Group admin = adminStem.addChildGroup(GROUPER_ADMIN_GROUP_NAME_EXTENTION,
-				GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
-			System.out.println(admin.getName());
-
-			GridUserSubjectSource source = new GridUserSubjectSource();
-			Subject gs2 = source.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=langella");
-			Subject gs3 = source.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=hastings");
-			admin.addMember(gs2);
-
-			GrouperSession ses2 = GrouperSession.start(gs2);
-			Stem root2 = StemFinder.findRootStem(ses2);
-			GrouperSession ses3 = GrouperSession.start(gs3);
-			Stem root3 = StemFinder.findRootStem(ses2);
-
-			Stem osu = root2.addChildStem("OSU", "Ohio State University");
-			Stem ub = root2.addChildStem("UB", "University at Buffalo");
-			Stem osuCS = osu.addChildStem("CS", "Computer Science");
-			osuCS.grantPriv(gs3, NamingPrivilege.CREATE);
-			Group osuCSFaculty = osuCS.addChildGroup("faculty", "Faculty");
-			Stem ubCS = ub.addChildStem("CS", "Computer Science");
-			printStems(root3, "");
-			Stem found = StemFinder.findByName(ses1, osuCS.getName());
-			System.out.println(found.getDisplayName());
-			// root.addChildStem(, displayExtension)
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-
-	public static void printStems(Stem stem, String buffer) {
-		System.out.println(buffer + stem.getDisplayExtension() + " (" + stem.getUuid() + ")");
-		Set s = stem.getChildStems();
-		Iterator itr = s.iterator();
-		while (itr.hasNext()) {
-			printStems((Stem) itr.next(), buffer + "    ");
-		}
 	}
 
 }

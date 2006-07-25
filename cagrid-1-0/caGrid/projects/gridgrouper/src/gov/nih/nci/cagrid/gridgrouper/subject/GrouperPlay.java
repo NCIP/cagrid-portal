@@ -39,7 +39,7 @@ public class GrouperPlay {
 	        Stem adminStem = root.addChildStem(GROUPER_ADMIN_STEM_NAME, GROUPER_ADMIN_STEM_DISPLAY_NAME);
 	        Group admin = adminStem.addChildGroup(GROUPER_ADMIN_GROUP_NAME_EXTENTION, GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
 	        System.out.println(admin.getName());
-			GridUserSubjectSource source = new GridUserSubjectSource("localhost");
+			GridUserSubjectSource source = new GridUserSubjectSource();
 			Subject gs2 = source.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=langella");
 			Subject gs3 = source.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=hastings");
 			admin.addMember(gs2);

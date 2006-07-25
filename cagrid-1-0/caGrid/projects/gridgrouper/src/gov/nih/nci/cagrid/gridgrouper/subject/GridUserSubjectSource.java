@@ -22,8 +22,8 @@ public class GridUserSubjectSource implements Source {
 	private Set subjectTypes;
 
 
-	public GridUserSubjectSource(String id) {
-		this.id = id;
+	public GridUserSubjectSource() {
+		this.id = "grid";
 		this.subjectTypes = new HashSet();
 		this.subjectTypes.add(SubjectTypeEnum.APPLICATION);
 	}
