@@ -1,16 +1,20 @@
-package gov.nih.nci.cagrid.gridgrouper.subject;
+package gov.nih.nci.cagrid.gridgrouper.service;
 
 import java.util.Iterator;
 import java.util.Set;
 
 import edu.internet2.middleware.grouper.Group;
+import edu.internet2.middleware.grouper.GroupFinder;
+import edu.internet2.middleware.grouper.GroupNotFoundException;
 import edu.internet2.middleware.grouper.GrouperSession;
 import edu.internet2.middleware.grouper.NamingPrivilege;
 import edu.internet2.middleware.grouper.RegistryReset;
 import edu.internet2.middleware.grouper.Stem;
 import edu.internet2.middleware.grouper.StemFinder;
+import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.grouper.SubjectFinder;
 import edu.internet2.middleware.subject.Subject;
+import gov.nih.nci.cagrid.gridgrouper.subject.GridUserSubjectSource;
 
 
 /**
@@ -20,36 +24,65 @@ import edu.internet2.middleware.subject.Subject;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GrouperPlay {
+public class GridGrouper {
+
+	public static final String GROUPER_SUPER_USER = "GrouperSystem";
+	public static final String GROUPER_ADMIN_STEM_NAME = "grouperadministration";
+	public static final String GROUPER_ADMIN_STEM_DISPLAY_NAME = "Grouper Administration";
+	public static final String GROUPER_ADMIN_GROUP_NAME_EXTENTION = "gridgrouperadministrators";
+	public static final String GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION = "Grid Grouper Administrators";
+	public static final String GROUPER_ADMIN_GROUP_NAME = "grouperadministration:gridgrouperadministrators";
+
+	private Group adminGroup;
+
+
+	public GridGrouper() throws Exception {
+		GrouperSession session = GrouperSession.start(SubjectFinder.findById(GROUPER_SUPER_USER));
+		Stem adminStem = null;
+		try {
+			adminStem = StemFinder.findByName(session, GROUPER_ADMIN_STEM_NAME);
+		} catch (StemNotFoundException e) {
+			Stem root = StemFinder.findRootStem(session);
+			adminStem = root.addChildStem(GROUPER_ADMIN_STEM_NAME, GROUPER_ADMIN_STEM_DISPLAY_NAME);
+		}
+		try {
+			adminGroup = GroupFinder.findByName(session, GROUPER_ADMIN_GROUP_NAME);
+		} catch (GroupNotFoundException gne) {
+			adminGroup = adminStem.addChildGroup(GROUPER_ADMIN_GROUP_NAME_EXTENTION,
+				GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
+		}
+	}
 	
-	public static final String GROUPER_ADMIN_STEM_NAME="grouperadministration";
-	public static final String GROUPER_ADMIN_STEM_DISPLAY_NAME="Grouper Administration";
-	public static final String GROUPER_ADMIN_GROUP_NAME_EXTENTION="gridgrouperadministrators";
-	public static final String GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION="Grid Grouper Administrators";
+
+	protected Group getAdminGroup() {
+		return adminGroup;
+	}
+
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
+
 		try {
 			RegistryReset.reset();
 			GrouperSession ses1 = GrouperSession.start(SubjectFinder.findById("GrouperSystem"));
 			Stem root = StemFinder.findRootStem(ses1);
-	        Stem adminStem = root.addChildStem(GROUPER_ADMIN_STEM_NAME, GROUPER_ADMIN_STEM_DISPLAY_NAME);
-	        Group admin = adminStem.addChildGroup(GROUPER_ADMIN_GROUP_NAME_EXTENTION, GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
-	        System.out.println(admin.getName());
+			Stem adminStem = root.addChildStem(GROUPER_ADMIN_STEM_NAME, GROUPER_ADMIN_STEM_DISPLAY_NAME);
+			Group admin = adminStem.addChildGroup(GROUPER_ADMIN_GROUP_NAME_EXTENTION,
+				GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
+			System.out.println(admin.getName());
+
 			GridUserSubjectSource source = new GridUserSubjectSource("localhost");
 			Subject gs2 = source.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=langella");
 			Subject gs3 = source.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=hastings");
 			admin.addMember(gs2);
-			
+
 			GrouperSession ses2 = GrouperSession.start(gs2);
 			Stem root2 = StemFinder.findRootStem(ses2);
 			GrouperSession ses3 = GrouperSession.start(gs3);
 			Stem root3 = StemFinder.findRootStem(ses2);
-			
-			
+
 			Stem osu = root2.addChildStem("OSU", "Ohio State University");
 			Stem ub = root2.addChildStem("UB", "University at Buffalo");
 			Stem osuCS = osu.addChildStem("CS", "Computer Science");

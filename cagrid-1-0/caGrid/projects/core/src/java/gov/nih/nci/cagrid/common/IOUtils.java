@@ -52,6 +52,7 @@ public class IOUtils {
 
 		try {
 			System.out.print(prompt + ":");
+			System.out.flush();
 			s = br.readLine();
 			while (force && ((s == null) || (s.trim().length() == 0))) {
 				System.out.print(prompt + ":");
