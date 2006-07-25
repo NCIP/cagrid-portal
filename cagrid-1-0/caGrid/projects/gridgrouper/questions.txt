@@ -1,0 +1,2 @@
+1) Are their view privelages on stemming?
+2) Is their anonymous subject or user in grouper?
