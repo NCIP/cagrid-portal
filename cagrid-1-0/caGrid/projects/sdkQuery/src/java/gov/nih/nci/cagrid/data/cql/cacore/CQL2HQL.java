@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.data.cql.cacore;
 import gov.nih.nci.cagrid.cqlquery.Association;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
+import gov.nih.nci.cagrid.cqlquery.Group;
+import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
 import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
@@ -65,6 +67,10 @@ public class CQL2HQL {
 			hql.append(" where ");
 			processAssociation(hql, aliases, objAlias, objName, obj.getAssociation());
 		}
+		if (obj.getGroup() != null) {
+			hql.append(" where ");
+			processGroup(hql, aliases, objName, obj.getGroup());
+		}
 	}
 	
 	
@@ -102,8 +108,8 @@ public class CQL2HQL {
 	 * 		The existing HQL query fragment
 	 * @param parentAlias
 	 * 		The alias of the parent object
-	 * @param parentClass
-	 * 		The class of the parent object
+	 * @param parentName
+	 * 		The class name of the parent object
 	 * @param assoc
 	 * 		The association to process into HQL
 	 * @throws QueryProcessingException
@@ -117,9 +123,73 @@ public class CQL2HQL {
 			throw new QueryProcessingException("Association from type " + parentName + 
 				" to type " + assoc.getName() + " does not exist.  Use only direct associations");
 		}
+		// make an HQL subquery for the object
 		hql.append(" ").append(parentAlias).append('.').append(roleName).append(" in (");
 		processObject(hql, aliases, assoc);
 		hql.append(")");
+	}
+	
+	
+	/**
+	 * Processes a Group of a CQL Query.
+	 * 
+	 * @param hql
+	 * 		The existing HQL query fragment
+	 * @param aliases
+	 * 		The map of aliases for objects
+	 * @param parentName
+	 * 		The type name of the parent object
+	 * @param group
+	 * 		The group to process into HQL
+	 * @throws QueryProcessingException
+	 */
+	private static void processGroup(StringBuilder hql, Map aliases, 
+		String parentName, Group group) throws QueryProcessingException {
+		String logic = convertLogicalOperator(group.getLogicRelation());
+		String parentAlias = alias(aliases, parentName);
+		
+		// flag indicating a logic clause is needed before adding further query parts
+		boolean logicClauseNeeded = false;
+		
+		// attributes
+		if (group.getAttribute() != null) {
+			for (int i = 0; i < group.getAttribute().length; i++) {
+				logicClauseNeeded = true;
+				processAttribute(hql, parentAlias, group.getAttribute(i));
+				if (i + 1 < group.getAttribute().length) {
+					hql.append(" ").append(logic).append(" ");
+				}
+			}
+		}
+		
+		// associations
+		if (group.getAssociation() != null) {
+			if (logicClauseNeeded) {
+				hql.append(" ").append(logic).append(" ");
+			}
+			for (int i = 0; i < group.getAssociation().length; i++) {
+				logicClauseNeeded = true;
+				processAssociation(hql, aliases, parentAlias, parentName, group.getAssociation(i));
+				if (i + 1 < group.getAssociation().length) {
+					hql.append(" ").append(logic).append(" ");
+				}
+			}
+		}
+		
+		// subgroups
+		if (group.getGroup() != null) {
+			if (logicClauseNeeded) {
+				hql.append(" ").append(logic).append(" ");
+			}
+			for (int i = 0; i < group.getGroup().length; i++) {
+				hql.append("( ");
+				processGroup(hql, aliases, parentName, group);
+				hql.append(" )");
+				if (i + 1 < group.getGroup().length) {
+					hql.append(" ").append(logic).append(" ");
+				}
+			}
+		}
 	}
 	
 	
@@ -205,7 +275,7 @@ public class CQL2HQL {
 	
 	
 	/**
-	 * Converts a predicate to its string equivalent.
+	 * Converts a predicate to its HQL string equivalent.
 	 * 
 	 * @param p
 	 * @return
@@ -222,5 +292,21 @@ public class CQL2HQL {
 			predicateValues.put(Predicate.NOT_EQUAL_TO, "!=");
 		}
 		return (String) predicateValues.get(p);
+	}
+	
+	
+	/**
+	 * Converts a logical operator to its HQL string equiavalent.
+	 * 
+	 * @param op
+	 * @return
+	 */
+	private static String convertLogicalOperator(LogicalOperator op) throws QueryProcessingException {
+		if (op.getValue().equals(LogicalOperator._AND)) {
+			return "AND";
+		} else if (op.getValue().equals(LogicalOperator._OR)) {
+			return "OR";
+		}
+		throw new QueryProcessingException("Logical operator '" + op.getValue() + "' is not recognized.");
 	}
 }
