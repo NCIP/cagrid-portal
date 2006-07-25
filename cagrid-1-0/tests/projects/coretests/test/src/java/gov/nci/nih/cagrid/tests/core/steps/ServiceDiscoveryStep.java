@@ -45,6 +45,8 @@ public class ServiceDiscoveryStep
 	
 	public void runStep() throws Throwable
 	{
+		Object sleep = new Object();
+		synchronized (sleep) { sleep.wait(3000); }
 		DiscoveryClient client = new DiscoveryClient(indexServiceEndpoint);
 		assertTrue(foundService(client.getAllServices(false)));
 		assertTrue(foundService(client.getAllServices(true)));
