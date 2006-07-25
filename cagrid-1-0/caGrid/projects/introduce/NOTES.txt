@@ -52,6 +52,10 @@ type browser issues:
 -(DONE)it lets you set the class name for XML schema types; does that work?
 -(DONE)does it really support editing the location of a schema? if it does, it needs to move the file that was pulled down from the gme (otherwise it wont exist)
 
+- Fix Package conflict problem.
+
+
+
 From BMI Tutorial:
 6) Adding a resource property to a service context, doesn't refresh the JTree
 
