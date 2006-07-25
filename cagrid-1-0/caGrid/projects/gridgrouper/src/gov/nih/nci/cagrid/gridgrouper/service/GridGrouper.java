@@ -54,7 +54,7 @@ public class GridGrouper {
 	}
 	
 
-	protected Group getAdminGroup() {
+	public Group getAdminGroup() {
 		return adminGroup;
 	}
 
@@ -73,7 +73,7 @@ public class GridGrouper {
 				GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
 			System.out.println(admin.getName());
 
-			GridUserSubjectSource source = new GridUserSubjectSource("localhost");
+			GridUserSubjectSource source = new GridUserSubjectSource();
 			Subject gs2 = source.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=langella");
 			Subject gs3 = source.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=hastings");
 			admin.addMember(gs2);
