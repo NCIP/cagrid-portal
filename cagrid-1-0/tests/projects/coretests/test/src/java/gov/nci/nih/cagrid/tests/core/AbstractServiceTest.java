@@ -22,6 +22,11 @@ import org.apache.axis.types.URI.MalformedURIException;
 
 import com.atomicobject.haste.framework.Story;
 
+/**
+ * This is a base class to be used for creating and invoking Introduce-built services.
+ * @see <a href="http://gforge.nci.nih.gov/plugins/scmcvs/cvsweb.php/cagrid-1-0/Documentation/docs/tests/cagrid-1-0-testing.doc?cvsroot=cagrid-1-0">cagrid-1-0-testing.doc</a> 
+ * @author Patrick McConnell
+ */
 public abstract class AbstractServiceTest
 	extends Story
 {

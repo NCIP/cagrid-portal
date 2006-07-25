@@ -16,6 +16,11 @@ import org.apache.axis.types.URI.MalformedURIException;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step modifies the etc/registration.xml file to register with a specific index service
+ * (likely http://localhost:8080/wsrf/services/DefaultIndexService).
+ * @author Patrick McConnell
+ */
 public class ServiceAdvertiseConfigStep
 	extends Step
 {

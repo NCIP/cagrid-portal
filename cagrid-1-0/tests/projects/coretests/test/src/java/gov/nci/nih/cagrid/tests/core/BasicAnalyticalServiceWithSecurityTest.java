@@ -21,6 +21,20 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+/**
+ * This is an integration test that tests the Introduce functionality of creating an 
+ * analytical service with transport-level security and deploying it.  It creates a 
+ * service from scratch, deploys it, and attempts to invoke a method on it.  Dorian
+ * is also deployed and used to gain user credentials.
+ * @testType integration
+ * @steps ServiceCreateStep, 
+ * @steps GlobusCreateStep, GTSSyncOnceStep, GlobusDeployServiceStep, GlobusStartStep
+ * @steps DorianAuthenticateStep, DorianAddTrustedCAStep
+ * @steps ServiceInvokeStep, ServiceCheckMetadataStep
+ * @steps GlobusStopStep, GlobusCleanupStep
+ * @steps DorianCleanupStep, DorianDestroyDefaultProxyStep
+ * @author Patrick McConnell
+ */
 public class BasicAnalyticalServiceWithSecurityTest
 	extends AbstractServiceTest
 {

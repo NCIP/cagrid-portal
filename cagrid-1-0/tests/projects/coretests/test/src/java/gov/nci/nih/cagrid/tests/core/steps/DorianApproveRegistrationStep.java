@@ -13,6 +13,11 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step approves a user application by finding the user in dorian and marking the account
+ * status as active.
+ * @author Patrick McConnell
+ */
 public class DorianApproveRegistrationStep
 	extends Step
 {

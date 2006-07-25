@@ -13,6 +13,11 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+/**
+ * This is a unit test that validates the serialization and deserialization of the ServiceMetadata class. 
+ * @testType unit
+ * @author Patrick McConnell
+ */
 public class ServiceMetadataSerializationTest
 	extends TestCase
 {
@@ -21,6 +26,9 @@ public class ServiceMetadataSerializationTest
 		super(name);
 	}
 	
+	/**
+	 * Deserializes a ServiceMetadata XML document twice and makes sure that the results are the same.
+	 */
 	public void testSerialization() 
 		throws Exception
 	{

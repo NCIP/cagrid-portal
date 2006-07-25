@@ -21,6 +21,11 @@ import org.xml.sax.SAXException;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step creates a new Introduce service by running a series of ant commands on an introduce.xml 
+ * and other files. 
+ * @author Patrick McConnell
+ */
 public class ServiceCreateStep
 	extends Step
 {

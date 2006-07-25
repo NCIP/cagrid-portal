@@ -34,6 +34,10 @@ import org.xml.sax.SAXException;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step publishes a schema and any of its imports to a running GME grid service.
+ * @author Patrick McConnell
+ */
 public class GMEPublishSchemaStep
 	extends Step
 {

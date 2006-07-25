@@ -3,23 +3,33 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
-import gov.nci.nih.cagrid.tests.core.steps.ServiceAdvertiseConfigStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCleanupStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
-import gov.nci.nih.cagrid.tests.core.steps.ServiceDiscoveryStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
+import gov.nci.nih.cagrid.tests.core.steps.ServiceAdvertiseConfigStep;
+import gov.nci.nih.cagrid.tests.core.steps.ServiceDiscoveryStep;
 
 import java.io.File;
 import java.util.Vector;
-
-import org.apache.axis.types.URI.MalformedURIException;
 
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+import org.apache.axis.types.URI.MalformedURIException;
+
+/**
+ * This is an integration test that tests the deployment of the index service and the discovery
+ * of services registering to it.
+ * @testType integration
+ * @steps ServiceCreateStep, ServiceAdvertiseConfigStep
+ * @steps GlobusCreateStep, GlobusDeployServiceStep, GlobusStartStep
+ * @steps ServiceDiscoveryStep
+ * @steps GlobusStopStep, GlobusCleanupStep
+ * @author Patrick McConnell
+ */
 public class IndexServiceTest
 	extends AbstractServiceTest
 {
@@ -62,7 +72,7 @@ public class IndexServiceTest
 
 	public String getDescription()
 	{
-		return "BasicAnalyticalServiceTest";
+		return "IndexServiceTest";
 	}
 
 	/**

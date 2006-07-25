@@ -24,6 +24,12 @@ import org.apache.axis.types.URI.MalformedURIException;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step will pull caDSR metadata from a caDSR grid service and compare it to a
+ * locally cached XML metadata extract.  It accomplishes this by comparing a number of
+ * fields in the project, classes, associations, and attributes.
+ * @author Patrick McConnell
+ */
 public class CaDSRCheckServiceStep
 	extends Step
 {

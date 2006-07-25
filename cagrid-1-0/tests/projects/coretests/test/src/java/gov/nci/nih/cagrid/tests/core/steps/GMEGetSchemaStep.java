@@ -29,6 +29,11 @@ import org.xml.sax.SAXException;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step gets a schemas from a running GME grid service and then compares it to a 
+ * local schema to determine that the schemas are the same. 
+ * @author Patrick McConnell
+ */
 public class GMEGetSchemaStep
 	extends Step
 {

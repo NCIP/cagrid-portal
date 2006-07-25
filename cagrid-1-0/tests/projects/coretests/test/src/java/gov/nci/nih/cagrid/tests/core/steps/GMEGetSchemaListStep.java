@@ -20,6 +20,11 @@ import org.xml.sax.InputSource;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step gets a list of schemas from a running GME grid service and then checks that a schema
+ * file is represented in the list.
+ * @author Patrick McConnell
+ */
 public class GMEGetSchemaListStep
 	extends Step
 {

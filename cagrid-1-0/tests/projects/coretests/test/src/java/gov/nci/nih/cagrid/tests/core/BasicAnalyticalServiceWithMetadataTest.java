@@ -16,6 +16,18 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+/**
+ * This is an integration test that tests the Introduce functionality of creating an 
+ * analytical service with service-level metadata and deploying it.  It creates a 
+ * service from scratch, deploys it, attempts to invoke a method on it, and then
+ * checks that it is exposing the correct metadata.
+ * @testType integration
+ * @steps ServiceCreateStep, 
+ * @steps GlobusCreateStep, GlobusDeployServiceStep, GlobusStartStep
+ * @steps ServiceInvokeStep, ServiceCheckMetadataStep
+ * @steps GlobusStopStep, GlobusCleanupStep
+ * @author Patrick McConnell
+ */
 public class BasicAnalyticalServiceWithMetadataTest
 	extends AbstractServiceTest
 {

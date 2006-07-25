@@ -29,6 +29,20 @@ import junit.textui.TestRunner;
 
 import com.atomicobject.haste.framework.Story;
 
+/**
+ * This is an integration test that tests some of the major functionality of Dorian.
+ * It syncs GTS and deploys the dorian service and an echo service to globus.  It
+ * authenticates the dorian user and then insures some authentication failures.  It then
+ * adds the dorian CA to the globus trusted CAs.  An application for a user account is submitted,
+ * approved, and the new user is authenticated. 
+ * @testType integration
+ * @steps GlobusCreateStep, GTSSyncOnceStep, GlobusDeployServiceStep, GlobusStartStep
+ * @steps DorianAuthenticateStep, DorianDestroyDefaultProxyStep, DorianAuthenticateFailStep
+ * @steps DorianAddTrustedCAStep, DorianSubmitRegistrationStep, DorianApproveRegistrationStep
+ * @steps GlobusStopStep, GlobusCleanupStep
+ * @steps DorianCleanupStep
+ * @author Patrick McConnell
+ */
 public class DorianTest
 	extends Story
 {

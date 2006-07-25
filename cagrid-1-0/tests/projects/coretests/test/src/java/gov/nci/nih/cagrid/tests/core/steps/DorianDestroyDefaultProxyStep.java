@@ -7,6 +7,10 @@ import gov.nih.nci.cagrid.common.security.ProxyUtil;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step destroys the globus default user proxy.
+ * @author Patrick McConnell
+ */
 public class DorianDestroyDefaultProxyStep
 	extends Step
 {

@@ -10,6 +10,11 @@ import java.io.File;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step downloads a dorian CA and writes it to a specified location, which is presumably the
+ * globus CA directory (user.home/globus/certificates/someFile_ca.#).
+ * @author Patrick McConnell
+ */
 public class DorianAddTrustedCAStep
 	extends Step
 {

@@ -11,6 +11,11 @@ import java.sql.Statement;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This is a base step for dropping database tables.  It is typically used to cleanup some work done
+ * by other steps.
+ * @author Patrick McConnell
+ */
 public abstract class AbstractDbCleanupStep
 	extends Step
 {

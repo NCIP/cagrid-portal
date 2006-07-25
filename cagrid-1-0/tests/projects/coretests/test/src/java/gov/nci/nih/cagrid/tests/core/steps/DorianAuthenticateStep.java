@@ -15,6 +15,10 @@ import org.globus.gsi.GlobusCredential;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step authenticates a user with dorian and saves the proxy as the globus default proxy.
+ * @author Patrick McConnell
+ */
 public class DorianAuthenticateStep
 	extends Step
 {

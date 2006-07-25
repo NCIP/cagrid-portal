@@ -17,6 +17,11 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step attempts to discover a service registered in an index service based upon a locally
+ * cached metadata XML file.
+ * @author Patrick McConnell
+ */
 public class ServiceDiscoveryStep
 	extends Step
 {

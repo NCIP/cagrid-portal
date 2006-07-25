@@ -22,6 +22,12 @@ import com.counter.CreateCounter;
 import com.counter.CreateCounterResponse;
 import com.counter.service.CounterServiceAddressingLocator;
 
+/**
+ * This step checks to see if globus is running by hitting the CounterService endpoint.  Note: this
+ * step will not work on a secure globus globus container.  Instead, you should deploy the echo service
+ * and then invoke it.
+ * @author Patrick McConnell
+ */
 public class GlobusCheckRunningStep
 	extends Step
 {

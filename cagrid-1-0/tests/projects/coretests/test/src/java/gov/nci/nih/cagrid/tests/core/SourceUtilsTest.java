@@ -18,6 +18,12 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+/**
+ * This is a unit test that tests the functionality of the SourceUtils class, 
+ * which is used to modify Java source code programmatically.
+ * @testType unit
+ * @author Patrick McConnell
+ */
 public class SourceUtilsTest
 	extends TestCase
 {
@@ -56,6 +62,10 @@ public class SourceUtilsTest
 //		assertEquals(1, countInFile(outFile, "main"));
 //	}
 	
+	/**
+	 * Tests the modifyImpl method by adding some functionality to Java source and then 
+	 * testing that the mods actually made it in.
+	 */
 	public void testModifyImpl() 
 		throws IOException
 	{

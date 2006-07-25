@@ -3,6 +3,10 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
+/**
+ * This step drops the dorian table from the configured database.
+ * @author Patrick McConnell
+ */
 public class DorianCleanupStep
 	extends AbstractDbCleanupStep
 {

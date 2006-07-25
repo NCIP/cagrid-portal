@@ -3,6 +3,11 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
+/**
+ * This step cleans up a GME deployment by dropping the databases globusgme_gme_registry,
+ * globusgme_gme_schema_cache, and globusgme_gme_schema_store.
+ * @author Patrick McConnell
+ */
 public class GMECleanupStep
 	extends AbstractDbCleanupStep
 {

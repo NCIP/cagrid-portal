@@ -15,6 +15,17 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+/**
+ * This is an integration test that tests the Introduce functionality of creating an 
+ * analytical service and deploying it.  It creates a service from scratch, deploys it,
+ * and then attempts to invoke a method on it.
+ * @testType integration
+ * @steps ServiceCreateStep, 
+ * @steps GlobusCreateStep, GlobusDeployServiceStep, GlobusStartStep
+ * @steps ServiceInvokeStep
+ * @steps GlobusStopStep, GlobusCleanupStep
+ * @author Patrick McConnell
+ */
 public class BasicAnalyticalServiceTest
 	extends AbstractServiceTest
 {

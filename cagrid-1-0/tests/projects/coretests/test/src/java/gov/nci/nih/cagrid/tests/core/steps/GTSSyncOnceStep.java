@@ -12,6 +12,11 @@ import java.util.Properties;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step runs the syncOnce ant task in the gts project directory to synchronize with the 
+ * central GTS service.
+ * @author Patrick McConnell
+ */
 public class GTSSyncOnceStep
 	extends Step
 {

@@ -21,6 +21,15 @@ import org.apache.axis.types.URI.MalformedURIException;
 
 import com.atomicobject.haste.framework.Story;
 
+/**
+ * This is a unit test that validates the functionality of the GlobusHelper class, which is used to
+ * create, start, stop, deploy services, and cleanup instances of Globus.
+ * @testType unit
+ * @steps GlobusCreateStep, GlobusStartStep 
+ * @steps GlobusDeployServiceStep, GlobusCheckRunningStep 
+ * @steps GlobusStopStep, GlobusCleanupStep
+ * @author Patrick McConnell
+ */
 public class GlobusHelperTest
 	extends Story
 {

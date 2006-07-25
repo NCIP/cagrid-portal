@@ -16,6 +16,11 @@ import org.apache.axis.types.URI.MalformedURIException;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step retrieves the service-level metadata from a running service and compares
+ * it to a locally cached service metadata XML file using a BeanComparator. 
+ * @author Patrick McConnell
+ */
 public class ServiceCheckMetadataStep
 	extends Step
 {

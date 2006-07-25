@@ -9,6 +9,11 @@ import com.atomicobject.haste.framework.Step;
 
 import gov.nci.nih.cagrid.tests.core.GlobusHelper;
 
+/**
+ * This step deploys a service to a temporary globus container by running the deployGlobus ant task
+ * in the service directory.
+ * @author Patrick McConnell
+ */
 public class GlobusDeployServiceStep
 	extends Step
 {

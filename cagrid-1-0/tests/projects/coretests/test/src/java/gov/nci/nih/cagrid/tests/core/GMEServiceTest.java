@@ -25,6 +25,16 @@ import org.apache.axis.types.URI.MalformedURIException;
 
 import com.atomicobject.haste.framework.Story;
 
+/**
+ * This is an integration test that tests the functionality of the GME grid service. 
+ * It deploys the service, adds some schemas, retrieves the schemas, and lists the schemas.
+ * @testType integration
+ * @steps ServiceCreateStep, 
+ * @steps GlobusCreateStep, GlobusDeployServiceStep, GlobusStartStep
+ * @steps GMEPublishSchemaStep, GMEGetSchemaStep, GMEGetSchemaListStep
+ * @steps GlobusStopStep, GMECleanupStep, GlobusCleanupStep
+ * @author Patrick McConnell
+ */
 public class GMEServiceTest
 	extends Story
 {

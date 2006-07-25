@@ -24,6 +24,17 @@ import junit.textui.TestRunner;
 
 import com.atomicobject.haste.framework.Story;
 
+/**
+ * This is an integration test that tests the functionality of the caDSR grid service. 
+ * It deploys the service and then compares a number of domain models against their
+ * cached XML extracts.
+ * @testType integration
+ * @steps ServiceCreateStep, 
+ * @steps GlobusCreateStep, GlobusDeployServiceStep, CaDSRServiceConfigStep, GlobusStartStep
+ * @steps CaDSRCheckServiceStep
+ * @steps GlobusStopStep, GlobusCleanupStep
+ * @author Patrick McConnell
+ */
 public class CaDSRServiceTest
 	extends Story
 {

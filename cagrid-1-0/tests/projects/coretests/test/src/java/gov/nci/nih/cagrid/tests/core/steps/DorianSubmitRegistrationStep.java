@@ -8,6 +8,10 @@ import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step submits to dorian an application for user account registration. 
+ * @author Patrick McConnell
+ */
 public class DorianSubmitRegistrationStep
 	extends Step
 {

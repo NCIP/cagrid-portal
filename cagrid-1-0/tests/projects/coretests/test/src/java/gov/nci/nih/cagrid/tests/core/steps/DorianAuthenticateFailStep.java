@@ -5,6 +5,11 @@ package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault;
 
+/**
+ * This step attempts to authenticate to dorian and insures that the authentication failed
+ * due to a permission denied fault.
+ * @author Patrick McConnell
+ */
 public class DorianAuthenticateFailStep
 	extends DorianAuthenticateStep
 {

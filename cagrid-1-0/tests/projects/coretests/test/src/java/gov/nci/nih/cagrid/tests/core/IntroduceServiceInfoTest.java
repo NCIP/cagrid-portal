@@ -17,6 +17,12 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+/**
+ * This is a unit test that validates the functionality of the IntroduceServiceInfo class, which is
+ * used to pull some information out of an introduce.xml file.
+ * @testType unit
+ * @author Patrick McConnell
+ */
 public class IntroduceServiceInfoTest
 	extends TestCase
 {
@@ -25,6 +31,9 @@ public class IntroduceServiceInfoTest
 		super(name);
 	}
 	
+	/**
+	 * Loads an introduce.xml file and then checks that a number of fields are loaded properly.
+	 */
 	public void testServiceInfo() 
 		throws ParserConfigurationException, SAXException, IOException
 	{

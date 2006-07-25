@@ -25,6 +25,11 @@ import org.globus.gsi.GlobusCredential;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step invokes a grid service by loading client classes at runtime and passing objects defined
+ * in files as parameters and comparing the results to an object defined in a file.
+ * @author Patrick McConnell
+ */
 public class ServiceInvokeStep
 	extends Step
 {
