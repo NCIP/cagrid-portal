@@ -4,7 +4,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="build/stubs-GridGrouper/src"/>
-<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
@@ -96,9 +96,5 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/ServiceSecurity_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/ServiceSecurity-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/ServiceSecurity-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/ServiceSecurity-service.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
