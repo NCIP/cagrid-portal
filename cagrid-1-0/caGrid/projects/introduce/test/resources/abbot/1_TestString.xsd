@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="gme://gov.nih.nci.cagrid.introduce/1/TestString" xmlns="gme://gov.nih.nci.cagrid.introduce/1/TestString" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/TestString" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="MyString" />
+  <xs:complexType name="MyString">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="mystring" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

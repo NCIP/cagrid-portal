@@ -49,6 +49,9 @@
 			<fileset dir="${ant.library.dir}">
 				<include name="*.jar"/>
 			</fileset>
+			<fileset dir ="${basedir}/extensions/lib">
+				<include name="*.jar"/>
+			</fileset>
 			<pathelement location="${basedir}/resources/portal/introduce"/>
 			<pathelement location="${ext.resources.dir}/portal/common"/>
 			<pathelement location="${basedir}/doc/help"/>

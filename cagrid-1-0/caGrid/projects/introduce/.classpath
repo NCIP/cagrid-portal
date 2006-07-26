@@ -106,5 +106,14 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-security-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="test/lib/bsh.jar"/>
+	<classpathentry kind="lib" path="test/lib/example.jar"/>
+	<classpathentry kind="lib" path="test/lib/gnu-regexp.jar"/>
+	<classpathentry kind="lib" path="test/lib/jdom.jar"/>
+	<classpathentry kind="lib" path="test/lib/jgraph.jar"/>
+	<classpathentry kind="lib" path="test/lib/junit.jar"/>
+	<classpathentry kind="lib" path="test/lib/MRJToolkitStubs.zip"/>
+	<classpathentry kind="lib" path="test/lib/xerces.jar"/>
+	<classpathentry kind="lib" path="test/lib/xml-apis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

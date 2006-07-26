@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AWTTestScript desc="AddSchemaStep">
+  <component class="javax.swing.JButton" icon="list-add.png" id="Add" index="0" parent="JPanel Instance 21" text="Add" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="list-add.png" id="Add 2" index="0" parent="JPanel Instance 23" text="Add" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" id="Browse" index="1" parent="JPanel Instance 3" text="Browse" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" id="Browse 2" index="1" parent="JPanel Instance 3" text="Browse" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" id="Browse 3" index="1" parent="FileTypesSelectionComponent Instance" text="Browse" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" id="Browse 4" index="1" parent="FileTypesSelectionComponent Instance" text="Browse" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" id="Browse 5" index="1" parent="FileTypesSelectionComponent Instance" text="Browse" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="edit-delete.png" id="Cancel" index="1" parent="JPanel Instance 4" text="Cancel" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="edit-delete.png" id="Cancel 10" index="2" parent="JPanel Instance 3" text="Cancel" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="edit-delete.png" id="Cancel 11" index="2" parent="JPanel Instance 3" text="Cancel" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="edit-delete.png" id="Cancel 2" index="2" parent="JPanel Instance 3" text="Cancel" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="edit-delete.png" id="Cancel 3" index="2" parent="JPanel Instance 3" text="Cancel" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="edit-delete.png" id="Cancel 4" index="2" parent="JPanel Instance 3" text="Cancel" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="edit-delete.png" id="Cancel 5" index="2" parent="JPanel Instance 3" text="Cancel" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="edit-delete.png" id="Cancel 6" index="2" parent="JPanel Instance 3" text="Cancel" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="edit-delete.png" id="Cancel 7" index="1" parent="JPanel Instance 11" text="Cancel" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="edit-delete.png" id="Cancel 8" index="2" parent="JPanel Instance 3" text="Cancel" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="edit-delete.png" id="Cancel 9" index="2" parent="JPanel Instance 3" text="Cancel" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JDialog" id="Confirm Overwrite" parent="Introduce: Grid Service Authoring Toolkit" title="Confirm Overwrite" />
+  <component class="javax.swing.JButton" icon="cog_add.png" id="Create" index="0" parent="JPanel Instance 4" text="Create" window="Introduce: Grid Service Authoring Toolkit" />
+  <component class="javax.swing.JButton" icon="cog_add.png" id="Create 2" index="0" parent="JPanel Instance 4" text="Create" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="cog_add.png" id="Create 3" index="0" parent="JPanel Instance 4" text="Create" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="cog_add.png" id="Create 4" index="0" parent="JPanel Instance 4" text="Create" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="cog_add.png" id="Create 5" index="0" parent="JPanel Instance 7" text="Create" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="cog_add.png" id="Create 6" index="0" parent="JPanel Instance 9" text="Create" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="cog_add.png" id="Create 7" index="0" parent="JPanel Instance 13" text="Create" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="cog_add.png" id="Create 8" index="0" parent="JPanel Instance 15" text="Create" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="cog_add.png" id="Create 9" index="0" parent="JPanel Instance 17" text="Create" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="gov.nih.nci.cagrid.introduce.portal.creation.CreationViewer" id="Create Grid Service" title="Create Grid Service" />
+  <component class="javax.swing.JButton" id="Create Service" index="0" parent="Tools" text="Create Service" window="Introduce: Grid Service Authoring Toolkit 5" />
+  <component class="javax.swing.JMenuItem" id="Create Service 2" index="0" parent="JPopupMenu Instance" text="Create Service" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="gov.nih.nci.cagrid.introduce.portal.creation.CreationViewer" id="CreationViewer Instance" title="" />
+  <component class="javax.swing.JTextField" id="File name:" index="1" label="File name:" parent="JPanel Instance 20" window="Confirm Overwrite" />
+  <component class="gov.nih.nci.cagrid.introduce.portal.modification.discovery.files.FileTypesSelectionComponent" id="FileTypesSelectionComponent Instance" index="1" parent="JTabbedPane Instance" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="org.projectmobius.portal.GridPortal" id="Introduce: Grid Service Authoring Toolkit" root="true" title="Introduce: Grid Service Authoring Toolkit" />
+  <component class="org.projectmobius.portal.GridPortal" id="Introduce: Grid Service Authoring Toolkit 2" root="true" title="Introduce: Grid Service Authoring Toolkit" />
+  <component class="org.projectmobius.portal.GridPortal" id="Introduce: Grid Service Authoring Toolkit 3" root="true" title="Introduce: Grid Service Authoring Toolkit" />
+  <component class="org.projectmobius.portal.GridPortal" id="Introduce: Grid Service Authoring Toolkit 4" root="true" title="Introduce: Grid Service Authoring Toolkit" />
+  <component class="org.projectmobius.portal.GridPortal" id="Introduce: Grid Service Authoring Toolkit 5" root="true" title="Introduce: Grid Service Authoring Toolkit" />
+  <component class="javax.swing.JFileChooser" id="JFileChooser Instance" index="0" parent="JPanel Instance 5" window="Confirm Overwrite" />
+  <component class="javax.swing.JLayeredPane" id="JLayeredPane Instance" index="1" parent="JRootPane Instance" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JLayeredPane" id="JLayeredPane Instance 2" index="1" parent="JRootPane Instance 2" window="Introduce: Grid Service Authoring Toolkit" />
+  <component class="javax.swing.JLayeredPane" id="JLayeredPane Instance 3" index="1" parent="JRootPane Instance 3" window="Confirm Overwrite" />
+  <component class="javax.swing.JLayeredPane" id="JLayeredPane Instance 4" index="1" parent="JRootPane Instance 4" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JLayeredPane" id="JLayeredPane Instance 5" index="1" parent="JRootPane Instance 5" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JLayeredPane" id="JLayeredPane Instance 6" index="1" parent="JRootPane Instance 6" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JLayeredPane" id="JLayeredPane Instance 7" index="1" parent="JRootPane Instance 7" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JLayeredPane" id="JLayeredPane Instance 8" index="1" parent="JRootPane Instance 8" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JLayeredPane" id="JLayeredPane Instance 9" index="1" parent="JRootPane Instance 9" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JMenuBar" id="JMenuBar Instance" index="2" parent="JLayeredPane Instance 2" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JOptionPane" id="JOptionPane Instance" index="0" parent="JPanel Instance 5" window="Confirm Overwrite" />
+  <component class="javax.swing.JPanel" id="JPanel Instance" index="1" parent="JLayeredPane Instance" window="Introduce: Grid Service Authoring Toolkit 3" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 10" index="0" parent="JLayeredPane Instance 6" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 11" index="1" parent="JPanel Instance 10" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 12" index="0" parent="JLayeredPane Instance 7" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 13" index="1" parent="JPanel Instance 12" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 14" index="0" parent="JLayeredPane Instance 8" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 15" index="1" parent="JPanel Instance 14" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 16" index="0" parent="JLayeredPane Instance 9" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 17" index="2" parent="JPanel Instance 16" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 18" index="2" parent="JFileChooser Instance" window="Confirm Overwrite" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 19" index="2" parent="JPanel Instance 18" window="Confirm Overwrite" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 2" index="0" parent="JLayeredPane Instance 2" window="Introduce: Grid Service Authoring Toolkit" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 20" index="2" parent="JPanel Instance 19" window="Confirm Overwrite" />
+  <component class="javax.swing.JPanel" hOrder="2" id="JPanel Instance 21" index="1" parent="JPanel Instance 3" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 22" index="4" parent="JPanel Instance 19" window="Confirm Overwrite" />
+  <component class="javax.swing.JPanel" hOrder="2" id="JPanel Instance 23" index="1" parent="JPanel Instance 3" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component borderTitle="Create Grid Service" class="javax.swing.JPanel" id="JPanel Instance 3" index="0" parent="JPanel Instance 2" window="Introduce: Grid Service Authoring Toolkit" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 4" index="1" parent="JPanel Instance 2" window="Introduce: Grid Service Authoring Toolkit" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 5" index="0" parent="JLayeredPane Instance 3" window="Confirm Overwrite" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 6" index="0" parent="JLayeredPane Instance 4" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 7" index="1" parent="JPanel Instance 6" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 8" index="0" parent="JLayeredPane Instance 5" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 9" index="1" parent="JPanel Instance 8" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JPopupMenu" id="JPopupMenu Instance" index="0" invoker="Tools 2" />
+  <component class="javax.swing.JRootPane" id="JRootPane Instance" index="0" parent="Introduce: Grid Service Authoring Toolkit" />
+  <component class="javax.swing.JRootPane" id="JRootPane Instance 2" index="0" parent="CreationViewer Instance" window="Introduce: Grid Service Authoring Toolkit" />
+  <component class="javax.swing.JRootPane" id="JRootPane Instance 3" index="0" parent="Confirm Overwrite" />
+  <component class="javax.swing.JRootPane" id="JRootPane Instance 4" index="0" parent="Create Grid Service" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JRootPane" id="JRootPane Instance 5" index="0" parent="Create Grid Service" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JRootPane" id="JRootPane Instance 6" index="0" parent="Create Grid Service" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JRootPane" id="JRootPane Instance 7" index="0" parent="Create Grid Service" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JRootPane" id="JRootPane Instance 8" index="0" parent="Create Grid Service" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JRootPane" id="JRootPane Instance 9" index="0" parent="Create Grid Service" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JTabbedPane" id="JTabbedPane Instance" index="0" parent="JPanel Instance 3" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JTextField" id="JTextField Instance" index="4" parent="JPanel Instance 3" window="Introduce: Grid Service Authoring Toolkit" />
+  <component class="javax.swing.JTextField" id="JTextField Instance 2" index="3" parent="JPanel Instance 3" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JTextField" id="JTextField Instance 3" index="6" parent="JPanel Instance 3" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JTextField" id="JTextField Instance 4" index="5" parent="JPanel Instance 3" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer" id="ModificationViewer Instance" title="" />
+  <component class="javax.swing.JMenuItem" id="Modify Service" index="1" parent="JPopupMenu Instance" text="Modify Service" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" id="Open" index="1" parent="JPanel Instance 22" text="Open" window="Confirm Overwrite" />
+  <component class="javax.swing.JButton" id="OptionPane.button" index="0" name="OptionPane.button" parent="OptionPane.buttonArea" text="Yes" window="Confirm Overwrite" />
+  <component class="javax.swing.JPanel" id="OptionPane.buttonArea" index="1" name="OptionPane.buttonArea" parent="JOptionPane Instance" window="Confirm Overwrite" />
+  <component class="gov.nih.nci.cagrid.common.portal.BusyDialog" id="Progress (Creating)" parent="Introduce: Grid Service Authoring Toolkit" title="Progress (Creating)" />
+  <component class="javax.swing.JButton" icon="save.png" id="Save" index="1" parent="JPanel Instance 3" text="Save" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="save.png" id="Save 2" index="1" parent="JPanel Instance 3" text="Save" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.JButton" icon="save.png" id="Save 3" index="1" parent="JPanel Instance 3" text="Save" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JToolBar" id="Tools" index="1" name="Tools" parent="JPanel Instance" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JMenu" id="Tools 2" index="1" parent="JMenuBar Instance" text="Tools" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <launch args="[conf/introduce/introduce-portal-conf.xml]" class="gov.nih.nci.cagrid.introduce.portal.Introduce" method="main" threaded="true" />
+  <sequence>
+    <action args="Modify Service" method="actionSelectMenuItem" />
+    <wait args="ModificationViewer Instance" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
+    <action args="ModificationViewer Instance,0,0" class="javax.swing.JInternalFrame" method="actionResize" />
+    <action args="ModificationViewer Instance,0,0" class="javax.swing.JInternalFrame" method="actionResize" />
+    <wait args="ModificationViewer Instance" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
+    <wait args="Confirm Overwrite" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
+    <action args="File name:,@TestDir@\test\TempIntroduceTestFiles\TestService" method="actionKeyString" />
+    <action args="Open" class="javax.swing.AbstractButton" method="actionClick" />
+    <wait args="Confirm Overwrite" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" />
+    <action args="ModificationViewer Instance,1003,673" class="javax.swing.JInternalFrame" method="actionResize" />
+    <action args="ModificationViewer Instance,1003,673" class="javax.swing.JInternalFrame" method="actionResize" />
+    <action args="JTabbedPane Instance,&quot;File System&quot;" class="javax.swing.JTabbedPane" method="actionSelectTab" />
+    <action args="Browse 5" class="javax.swing.AbstractButton" method="actionClick" />
+    <wait args="Confirm Overwrite" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
+    <action args="File name:,@TestDir@\test\TempIntroduceTestFiles\1_TestString.xsd" method="actionKeyString" />
+    <action args="Open" class="javax.swing.AbstractButton" method="actionClick" />
+    <wait args="Confirm Overwrite" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" />
+    <action args="Add 2" class="javax.swing.AbstractButton" method="actionClick" />
+    <action args="Save 3" class="javax.swing.AbstractButton" method="actionClick" />
+    <wait args="Confirm Overwrite" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
+    <action args="OptionPane.button" class="javax.swing.AbstractButton" method="actionClick" />
+    <wait args="Confirm Overwrite" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" timeout="100000" />
+    <action args="ModificationViewer Instance,1070,673" class="javax.swing.JInternalFrame" method="actionResize" />
+    <wait args="Progress (Creating)" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" timeout="100000" />
+    <action args="Introduce: Grid Service Authoring Toolkit 4" class="java.awt.Window" method="actionClose" />
+  </sequence>
+  <terminate />
+</AWTTestScript>
+

@@ -1,98 +1,127 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.TestCaseInfo;
-import gov.nih.nci.cagrid.introduce.TestCaseInfo1;
+import gov.nih.nci.cagrid.introduce.portal.steps.AddMultipleOperationsStep;
 import gov.nih.nci.cagrid.introduce.portal.steps.CreateServiceStep;
-import gov.nih.nci.cagrid.introduce.portal.steps.ModifyServiceStep;
+import gov.nih.nci.cagrid.introduce.portal.steps.AddSchemaStep;
+import gov.nih.nci.cagrid.introduce.portal.steps.AddOperationStep;
+import gov.nih.nci.cagrid.introduce.portal.steps.GeneralModifyServiceStep;
+import gov.nih.nci.cagrid.introduce.portal.steps.ModifyMultipleOperationsStep;
+import gov.nih.nci.cagrid.introduce.portal.steps.ModifyOperationStep;
+import gov.nih.nci.cagrid.introduce.portal.steps.RemoveMultipleOperationsStep;
+import gov.nih.nci.cagrid.introduce.portal.steps.RemoveOperationStep;
+import gov.nih.nci.cagrid.introduce.portal.steps.SecurityTestStep;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Vector;
 
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.projectmobius.portal.GridPortal;
-import org.uispec4j.Trigger;
-import org.uispec4j.UISpec4J;
-import org.uispec4j.Window;
-import org.uispec4j.interception.WindowInterceptor;
-
 import com.atomicobject.haste.framework.Story;
-
 
 public class IntroducePortalTest extends Story {
 	private TestCaseInfo tci;
-	private Window mainWindow = null;
-	private GridPortal myApp;
-	private CreateServiceStep createService;
-	private ModifyServiceStep modifyService;
-
+	private static final String testDir = "test/resources/TestService";
+	private	static final String tempDir = "test/TempIntroduceTestFiles";
+	private static final String testSchema = "test/resources/abbot/1_TestString.xsd";
+	private static final String tempTestSchema = tempDir + "/1_TestString.xsd";
 
 	protected Vector steps() {
-		System.out.println("TRYING TO SET THIS TEST UP.......................................");
-		UISpec4J.init();
-
-		mainWindow = WindowInterceptor.run(new Trigger() {
-			public void run() {
-				try {
-
-					String pathtobasedir = System.getProperty("basedir");
-					System.out.println(pathtobasedir);
-					if (pathtobasedir == null) {
-						System.err.println("basedir system property not set");
-						throw new Exception("basedir system property not set");
-					}
-
-					System.out.println("TRYING TO CREATE THE PORTAL WITH NO PROBLEMS...................");
-					myApp = new GridPortal(pathtobasedir + File.separator
-						+ "conf" + File.separator + "introduce" + File.separator + "introduce-portal-conf.xml");
-					System.out.println("CREATED THE PORTAL WITH NO PROBLEMS...................");
-					myApp.show();
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
-					e.printStackTrace();
-				}
-			}
-		});
-
-		System.out.println("DONE SETTING THIS TEST UP.......................................");
-
-		createService = new CreateServiceStep(mainWindow);
-		modifyService = new ModifyServiceStep(mainWindow);
-		this.tci = new TestCaseInfo1();
 
 		Vector steps = new Vector();
-		steps.add(createService);
-		// steps.add(modifyService);
+		try {
+			steps.add(new CreateServiceStep());
+			steps.add(new AddSchemaStep());
+			steps.add(new AddOperationStep());
+			steps.add(new ModifyOperationStep());
+			steps.add(new RemoveOperationStep());
+			steps.add(new AddMultipleOperationsStep());
+			steps.add(new ModifyMultipleOperationsStep());
+			steps.add(new RemoveMultipleOperationsStep());
+			steps.add(new GeneralModifyServiceStep());
+			steps.add(new SecurityTestStep());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return steps;
 	}
-
 
 	public String getDescription() {
 		return "Tests the code generation tools";
 	}
-
+	
+	protected boolean storySetUp() throws Throwable {
+		System.out.println("Initializing the testing environment.");
+		File tempTestDirectory = new File(testDir);
+		if(tempTestDirectory.exists()){
+			if(!(Utils.deleteDir(tempTestDirectory)))
+				fail("Unable to delete /test/resources/testService");
+		}
+		
+		File tempDirectory = new File(tempDir);
+		if(tempDirectory.exists()){
+			if(!(Utils.deleteDir(tempDirectory)))
+				fail("Unable to delete TempIntroduceTestFiles");
+		}
+		
+		boolean success = (tempTestDirectory).mkdir();
+	    if (!success) {
+	        fail("Error creating test service directory.");
+	    }
+	    
+	    success = (tempDirectory).mkdir();
+	    if (!success) {
+	        fail("Error creating temp directory.");
+	    }
+	    
+	    this.copy(new File(testSchema), new File (tempTestSchema));
+		return true;
+	}
 
 	protected void storyTearDown() throws Throwable {
-		// myApp.setVisible(false);
+		System.out.println("Cleaning up the testing environment.");
+		if(!(Utils.deleteDir(new File(testDir))))
+			fail("Unable to delete /test/resources/testService");
+		if(!(Utils.deleteDir(new File(tempDir))))
+			fail("Unable to delete TempIntroduceTestFiles");
 	}
 
-
-	// used to make sure that if we are going to use a junit testsuite to test
-	// this
-	// that the test suite will not error out looking for a single test......
 	public void testDummy() throws Throwable {
 	}
-
+	
+	private void copy(File src, File dst) throws IOException {
+        InputStream in = new FileInputStream(src);
+        OutputStream out = new FileOutputStream(dst);
+    
+        // Transfer bytes from in to out
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        in.close();
+        out.close();
+    }
 
 	/**
 	 * Convenience method for running all the Steps in this Story.
 	 */
 	public static void main(String args[]) {
 		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(IntroducePortalTest.class));
+		TestResult result = runner.doRun(new TestSuite(
+				IntroducePortalTest.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
+	
+	
 
 }

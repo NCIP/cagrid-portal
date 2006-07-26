@@ -3,18 +3,18 @@ package gov.nih.nci.cagrid.introduce.portal.steps;
 import junit.extensions.abbot.ScriptFixture;
 import junit.framework.TestResult;
 
-public class CreateServiceStep extends BaseStep {
+public class ModifyOperationStep extends BaseStep {
 
-	public CreateServiceStep() throws Exception {
+	public ModifyOperationStep() throws Exception {
 		super();
 	}
-
+	
 	public void runStep() throws Throwable {
-		System.out.println("Creating a service");
+		System.out.println("Modifying an Operation");
 
 		// create ScriptFixture to test script
 		ScriptFixture tester = new ScriptFixture(
-				"/test/resources/abbot/CreateServiceStep.xml");
+				"/test/resources/abbot/ModifyOperationStep.xml");
 
 		// create TestResult to hold the result of the test
 		TestResult tr = null;
@@ -24,11 +24,11 @@ public class CreateServiceStep extends BaseStep {
 			tr = tester.run();
 		} catch (Throwable e) {
 			e.printStackTrace();
-			fail("The create service step failed.");
+			fail("The modify operation step test failed.");
 		}
 		
 		if(tr.failureCount()>0){
-			fail("The create service step failed.");
+			fail("The modify operation step test failed.");
 		}
 	}
 
