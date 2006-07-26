@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.gridgrouper.grouper;
 
+
+import edu.internet2.middleware.grouper.StemNotFoundException;
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -8,5 +11,5 @@ package gov.nih.nci.cagrid.gridgrouper.grouper;
  *          Exp $
  */
 public interface Grouper {
-
+	  public Stem findStem(String name) throws StemNotFoundException;
 }

@@ -28,6 +28,7 @@
     <property name="common.jar.name" value="${service.name}-common.jar" />
     <property name="client.jar.name" value="${service.name}-client.jar" />
     <property name="service.jar.name" value="${service.name}-service.jar" />
+	<property name="resources.jar.name" value="${service.name}-resources.jar" />
     <property name="stubs.jar.name" value="${service.name}-stubs.jar" />
 	<property name="test.jar.name" value="${service.name}-tests.jar" />
 
@@ -154,6 +155,8 @@
                 <exclude name="${common.jar.name}" />
                 <exclude name="${client.jar.name}" />
                 <exclude name="${service.jar.name}" />
+            	<!-- Post Introduce Edit-->
+            	<exclude name="${resources.jar.name}" />
             </fileset>
         </path>
         <path id="service.build.classpath">
@@ -273,6 +276,11 @@
             <exclude name="**/client/**" />
             <exclude name="**/service/**" />
         </jar>
+    	
+    	<!-- Post Introduce Edit-->
+    	<jar jarfile="${build.lib.dir}/${resources.jar.name}" basedir="${conf.dir}">
+    	     <include name="**/*" />
+    	</jar>
     </target>
 
 

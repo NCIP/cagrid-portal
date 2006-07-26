@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.gridgrouper.service;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import edu.internet2.middleware.grouper.Group;
 import edu.internet2.middleware.grouper.GroupFinder;
 import edu.internet2.middleware.grouper.GroupNotFoundException;
@@ -8,6 +11,12 @@ import edu.internet2.middleware.grouper.Stem;
 import edu.internet2.middleware.grouper.StemFinder;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.grouper.SubjectFinder;
+import edu.internet2.middleware.subject.Subject;
+import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault;
+import gov.nih.nci.cagrid.gridgrouper.subject.GridSourceAdapter;
 
 
 /**
@@ -25,25 +34,96 @@ public class GridGrouper {
 	public static final String GROUPER_ADMIN_GROUP_NAME_EXTENTION = "gridgrouperadministrators";
 	public static final String GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION = "Grid Grouper Administrators";
 	public static final String GROUPER_ADMIN_GROUP_NAME = "grouperadministration:gridgrouperadministrators";
-
+	public static final String UNKNOWN_SUBJECT = "Unknown";
 	private Group adminGroup;
+	private GridSourceAdapter source;
+	private Log log;
 
 
-	public GridGrouper() throws Exception {
-		GrouperSession session = GrouperSession.start(SubjectFinder.findById(GROUPER_SUPER_USER));
-		Stem adminStem = null;
+	public GridGrouper() throws GridGrouperRuntimeFault {
 		try {
-			adminStem = StemFinder.findByName(session, GROUPER_ADMIN_STEM_NAME);
-		} catch (StemNotFoundException e) {
-			Stem root = StemFinder.findRootStem(session);
-			adminStem = root.addChildStem(GROUPER_ADMIN_STEM_NAME, GROUPER_ADMIN_STEM_DISPLAY_NAME);
+			log = LogFactory.getLog(this.getClass().getName());
+			this.source = new GridSourceAdapter("grid", "Grid Grouper: Grid Source Adapter");
+			GrouperSession session = GrouperSession.start(SubjectFinder.findById(GROUPER_SUPER_USER));
+			Stem adminStem = null;
+			try {
+				adminStem = StemFinder.findByName(session, GROUPER_ADMIN_STEM_NAME);
+			} catch (StemNotFoundException e) {
+				Stem root = StemFinder.findRootStem(session);
+				adminStem = root.addChildStem(GROUPER_ADMIN_STEM_NAME, GROUPER_ADMIN_STEM_DISPLAY_NAME);
+			}
+			try {
+				adminGroup = GroupFinder.findByName(session, GROUPER_ADMIN_GROUP_NAME);
+			} catch (GroupNotFoundException gne) {
+				adminGroup = adminStem.addChildGroup(GROUPER_ADMIN_GROUP_NAME_EXTENTION,
+					GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault.setFaultString("Error occurred initializing Grid Grouper: " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
 		}
+	}
+
+
+	public StemDescriptor getStem(String gridIdentity, String stemName) throws GridGrouperRuntimeFault,
+		StemNotFoundFault {
 		try {
-			adminGroup = GroupFinder.findByName(session, GROUPER_ADMIN_GROUP_NAME);
-		} catch (GroupNotFoundException gne) {
-			adminGroup = adminStem.addChildGroup(GROUPER_ADMIN_GROUP_NAME_EXTENTION,
-				GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
+			Subject subject = source.getSubject(gridIdentity);
+			GrouperSession session = GrouperSession.start(subject);
+			StemDescriptor des = null;
+			try {
+				Stem stem = StemFinder.findByName(session, stemName);
+				des = stemtoStemDescriptor(stem);
+			} catch (StemNotFoundException e) {
+				StemNotFoundFault fault = new StemNotFoundFault();
+				fault.setFaultString("The stem, " + stemName + "was not found.");
+				FaultHelper helper = new FaultHelper(fault);
+				helper.addFaultCause(e);
+				fault = (StemNotFoundFault) helper.getFault();
+				throw fault;
+			}
+			session.stop();
+			return des;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault.setFaultString("Error occurred getting the stem " + stemName + ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
 		}
+	}
+
+
+	private StemDescriptor stemtoStemDescriptor(Stem stem) throws Exception {
+		StemDescriptor des = new StemDescriptor();
+		des.setCreateSource(stem.getCreateSource());
+		des.setCreateSubject(stem.getCreateSubject().getId());
+		des.setCreateTime(stem.getCreateTime().getTime());
+		des.setDescription(stem.getDescription());
+		des.setDisplayExtension(stem.getDisplayExtension());
+		des.setDisplayName(stem.getDisplayName());
+		des.setExtension(stem.getExtension());
+		des.setModifySource(stem.getModifySource());
+		try {
+			des.setModifySubject(stem.getModifySubject().getId());
+		} catch (Exception ex) {
+			if (ex.getMessage().indexOf("has not been modified") != -1) {
+				des.setCreateSubject("");
+			} else {
+				throw ex;
+			}
+		}
+		des.setModifyTime(stem.getModifyTime().getTime());
+		des.setName(stem.getName());
+		des.setUUID(stem.getUuid());
+		return des;
 	}
 
 

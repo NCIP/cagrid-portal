@@ -5,8 +5,7 @@ import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.IOUtils;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.service.GridGrouper;
-import gov.nih.nci.cagrid.gridgrouper.subject.GridUserSubjectSource;
-import net.sf.hibernate.cfg.Configuration;
+import gov.nih.nci.cagrid.gridgrouper.subject.GridSourceAdapter;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -34,21 +33,12 @@ public class GridGrouperBootstrapper {
 	public static final String RESET_REGISTRY_OPT_FULL = "reset";
 	public static final String HELP_OPT = "h";
 	public static final String HELP_OPT_FULL = "help";
-	
-	public static void createGrouperDatabaseSchema(){
-		try{
-		Configuration config = new Configuration();
-		
-		}catch(Exception e){
-			
-		}
-	}
 
 
 	public static void addAdminMember(String memberId) {
 		try {
 			String userId = IOUtils.readLine("Enter User Id", true);
-			GridUserSubjectSource guss = new GridUserSubjectSource();
+			GridSourceAdapter guss = new GridSourceAdapter("grid", "Grid Grouper: Grid Source Adapter");
 			Subject admin = guss.getSubject(userId);
 			GridGrouper gg = new GridGrouper();
 			gg.getAdminGroup().addMember(admin);

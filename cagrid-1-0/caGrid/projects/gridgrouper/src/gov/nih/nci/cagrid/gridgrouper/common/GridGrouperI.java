@@ -10,9 +10,8 @@ import java.rmi.RemoteException;
  */
 public interface GridGrouperI {
 
-
-
-	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
+public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
+public gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor getStem(java.lang.String stemName) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault ;
 
 }
 

@@ -16,6 +16,7 @@ import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -24,23 +25,9 @@ import edu.internet2.middleware.subject.SubjectNotFoundException;
  *          Exp $
  */
 public interface Stem {
-	public Group addChildGroup(String extension, String displayExtension) throws GroupAddException,
-		InsufficientPrivilegeException;
 
-
-	public Stem addChildStem(String extension, String displayExtension) throws InsufficientPrivilegeException,
-		StemAddException;
-
-
-	public void delete() throws InsufficientPrivilegeException, StemDeleteException;
-
-
-	public Set getChildGroups();
-
-
-	public Set getChildStems();
-
-
+	//Stem Information
+	
 	public String getCreateSource();
 
 
@@ -48,11 +35,8 @@ public interface Stem {
 
 
 	public Date getCreateTime();
-
-
-	public Set getCreators() throws GrouperRuntimeException;
-
-
+	
+	
 	public String getDescription();
 
 
@@ -73,9 +57,33 @@ public interface Stem {
 
 	public Date getModifyTime();
 
-
 	public String getName();
+	
+	public String getUuid();
 
+	
+	// Stem Actions
+
+	public Group addChildGroup(String extension, String displayExtension) throws GroupAddException,
+		InsufficientPrivilegeException;
+
+
+	public Stem addChildStem(String extension, String displayExtension) throws InsufficientPrivilegeException,
+		StemAddException;
+
+
+	public void delete() throws InsufficientPrivilegeException, StemDeleteException;
+
+
+	public Set getChildGroups();
+
+
+	public Set getChildStems();
+
+	public Set getCreators() throws GrouperRuntimeException;
+
+
+	
 
 	public Stem getParentStem() throws StemNotFoundException;
 

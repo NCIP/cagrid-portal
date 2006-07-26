@@ -1,11 +1,15 @@
 package gov.nih.nci.cagrid.gridgrouper.service;
 
+import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
+
 import java.rmi.RemoteException;
 
 import javax.naming.InitialContext;
 
 import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
+import org.globus.wsrf.security.SecurityManager;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -15,12 +19,26 @@ import org.globus.wsrf.Constants;
  *          Exp $
  */
 public class GridGrouperImpl {
-    private ServiceConfiguration configuration;
-	
+	private ServiceConfiguration configuration;
+	private GridGrouper gridGrouper;
+
+
 	public GridGrouperImpl() throws RemoteException {
-	
+		this.gridGrouper = new GridGrouper();
 	}
-	
+
+
+	private String getCallerIdentity() {
+		String caller = SecurityManager.getManager().getCaller();
+		System.out.println("Caller: " + caller);
+		if ((caller == null) || (caller.equals("<anonymous>"))) {
+			return AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID;
+		} else {
+			return caller;
+		}
+	}
+
+
 	public ServiceConfiguration getConfiguration() throws Exception {
 		if (this.configuration != null) {
 			return this.configuration;
@@ -41,5 +59,10 @@ public class GridGrouperImpl {
 	}
 
 
-}
+	public gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor getStem(java.lang.String stemName)
+		throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault,
+		gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+		return gridGrouper.getStem(getCallerIdentity(), stemName);
+	}
 
+}

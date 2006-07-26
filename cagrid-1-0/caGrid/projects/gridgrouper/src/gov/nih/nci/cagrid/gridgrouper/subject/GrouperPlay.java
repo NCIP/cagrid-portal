@@ -21,35 +21,36 @@ import edu.internet2.middleware.subject.Subject;
  *          Exp $
  */
 public class GrouperPlay {
-	
-	public static final String GROUPER_ADMIN_STEM_NAME="grouperadministration";
-	public static final String GROUPER_ADMIN_STEM_DISPLAY_NAME="Grouper Administration";
-	public static final String GROUPER_ADMIN_GROUP_NAME_EXTENTION="gridgrouperadministrators";
-	public static final String GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION="Grid Grouper Administrators";
+
+	public static final String GROUPER_ADMIN_STEM_NAME = "grouperadministration";
+	public static final String GROUPER_ADMIN_STEM_DISPLAY_NAME = "Grouper Administration";
+	public static final String GROUPER_ADMIN_GROUP_NAME_EXTENTION = "gridgrouperadministrators";
+	public static final String GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION = "Grid Grouper Administrators";
+
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
+
 		try {
 			RegistryReset.reset();
 			GrouperSession ses1 = GrouperSession.start(SubjectFinder.findById("GrouperSystem"));
 			Stem root = StemFinder.findRootStem(ses1);
-	        Stem adminStem = root.addChildStem(GROUPER_ADMIN_STEM_NAME, GROUPER_ADMIN_STEM_DISPLAY_NAME);
-	        Group admin = adminStem.addChildGroup(GROUPER_ADMIN_GROUP_NAME_EXTENTION, GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
-	        System.out.println(admin.getName());
-			GridUserSubjectSource source = new GridUserSubjectSource();
+			Stem adminStem = root.addChildStem(GROUPER_ADMIN_STEM_NAME, GROUPER_ADMIN_STEM_DISPLAY_NAME);
+			Group admin = adminStem.addChildGroup(GROUPER_ADMIN_GROUP_NAME_EXTENTION,
+				GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
+			System.out.println(admin.getName());
+			GridSourceAdapter source = new GridSourceAdapter("grid", "Grid Grouper: Grid Source Adapter");
 			Subject gs2 = source.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=langella");
 			Subject gs3 = source.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=hastings");
 			admin.addMember(gs2);
-			
+
 			GrouperSession ses2 = GrouperSession.start(gs2);
 			Stem root2 = StemFinder.findRootStem(ses2);
 			GrouperSession ses3 = GrouperSession.start(gs3);
 			Stem root3 = StemFinder.findRootStem(ses2);
-			
-			
+
 			Stem osu = root2.addChildStem("OSU", "Ohio State University");
 			Stem ub = root2.addChildStem("UB", "University at Buffalo");
 			Stem osuCS = osu.addChildStem("CS", "Computer Science");
@@ -66,8 +67,17 @@ public class GrouperPlay {
 	}
 
 
-	public static void printStems(Stem stem, String buffer) {
+	public static void printStems(Stem stem, String buffer) throws Exception {
 		System.out.println(buffer + stem.getDisplayExtension() + " (" + stem.getUuid() + ")");
+		System.out.println(buffer + "  " + "[Description:" + stem.getDescription() + "]");
+		System.out.println(buffer + "  " + "[Create Source:" + stem.getCreateSource() + "]");
+		System.out.println(buffer+  "  " + "[Create Subject Id:"+stem.getCreateSubject().getId()+"]");
+		System.out.println(buffer+  "  " + "[Create Subject Name:"+stem.getCreateSubject().getName()+"]");
+		System.out.println(buffer+  "  " + "[Create Subject Source:"+stem.getCreateSubject().getSource().getClass().getName()+"]");
+		System.out.println(buffer + "  " + "[Create Time:" + stem.getCreateTime() + "]");
+		System.out.println(buffer + "  " + "[Modify Time:" + stem.getModifyTime() + "]");
+		System.out.println(buffer + "  " + "[Modify Source:" + stem.getModifySource() + "]");
+	    //System.out.println(buffer+"  "+" [Modify Subject:"+stem.getModifySubject().getName()+"]");
 		Set s = stem.getChildStems();
 		Iterator itr = s.iterator();
 		while (itr.hasNext()) {

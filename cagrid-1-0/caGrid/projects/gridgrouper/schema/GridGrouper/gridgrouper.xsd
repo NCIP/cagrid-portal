@@ -1,0 +1,22 @@
+<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/1/GridGrouper"
+	attributeFormDefault="qualified" elementFormDefault="qualified"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:grouper="http://cagrid.nci.nih.gov/1/GridGrouper">
+	<xsd:element name="StemDescriptor" type="grouper:StemDescriptor" />
+	<xsd:complexType name="StemDescriptor">
+		<xsd:sequence>
+			<xsd:element name="UUID" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="Name" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="DisplayName" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="Extension" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="DisplayExtension" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="Description" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="CreateSource" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="CreateSubject" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="CreateTime" minOccurs="1" maxOccurs="1" type="xsd:long" />
+			<xsd:element name="ModifySource" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="ModifySubject" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="ModifyTime" minOccurs="1" maxOccurs="1" type="xsd:long" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

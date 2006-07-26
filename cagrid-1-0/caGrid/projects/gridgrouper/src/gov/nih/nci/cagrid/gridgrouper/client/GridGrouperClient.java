@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
+import gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.common.GridGrouperI;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperPortType;
 import gov.nih.nci.cagrid.gridgrouper.stubs.service.GridGrouperServiceAddressingLocator;
@@ -87,11 +88,6 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 		}
 
 		return port;
-	}
-
-
-	public static void usage() {
-		System.out.println(GridGrouperClient.class.getName() + " -url <service url>");
 	}
 
 
@@ -227,7 +223,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 			} catch (org.ietf.jgss.GSSException ex) {
 				throw new RemoteException(ex.getMessage());
 			}
-		} else if ((anonymousAllowed) && (mechanism.isAnonymousPermitted())) {
+		} else if (anonymousAllowed) {
 			stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
 		}
 
@@ -249,19 +245,11 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 	public static void main(String[] args) {
 		System.out.println("Running the Grid Service Client");
 		try {
-			if (!(args.length < 2)) {
-				if (args[0].equals("-url")) {
-					GridGrouperClient client = new GridGrouperClient(args[1]);
-					// place client calls here if you want to use this main as a
-					// test....
-				} else {
-					usage();
-					System.exit(1);
-				}
-			} else {
-				usage();
-				System.exit(1);
-			}
+
+			GridGrouperClient client = new GridGrouperClient("https://localhost:8443/wsrf/services/cagrid/GridGrouper");
+			StemDescriptor des = client.getStem("");
+			System.out.println(des.getUUID());
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -277,6 +265,19 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 			gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataResponse boxedResult = portType
 				.getServiceSecurityMetadata(params);
 			return boxedResult.getServiceSecurityMetadata();
+		}
+	}
+
+
+	public gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor getStem(java.lang.String stemName)
+		throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault,
+		gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+		synchronized (portTypeMutex) {
+			configureStubSecurity((Stub) portType, "getStem");
+			gov.nih.nci.cagrid.gridgrouper.stubs.GetStemRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetStemRequest();
+			params.setStemName(stemName);
+			gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse boxedResult = portType.getStem(params);
+			return boxedResult.getStemDescriptor();
 		}
 	}
 
