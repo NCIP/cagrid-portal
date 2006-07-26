@@ -53,6 +53,8 @@ type browser issues:
 -(DONE)does it really support editing the location of a schema? if it does, it needs to move the file that was pulled down from the gme (otherwise it wont exist)
 
 - Fix Package conflict problem.
+- Remove non required reference to globus jar files in generated eclipse classpath.  For example the sample jars, these are not ALWAYS there.
+
 
 
 

@@ -434,6 +434,7 @@
 		<resolveDependencies extdir="${projects.dir}/cql2xpath/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="core.test.jars" />
+			<artifact refid="test.coverage.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
