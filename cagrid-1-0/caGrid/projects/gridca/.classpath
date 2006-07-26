@@ -20,8 +20,8 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/concurrent.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/resources/portal/common"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_stubs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
