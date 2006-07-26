@@ -50,18 +50,13 @@ public class TargetTypesTree extends JTree {
 	}
 	
 	
-	DefaultTreeModel getTreeModel() {
-		return model;
-	}
-	
-	
 	public void addNamespaceType(NamespaceType ns) {
 		DomainTreeNode domainNode = new DomainTreeNode(this, ns);
 		rootNode.add(domainNode);
-		getTreeModel().reload(rootNode);
+		model.reload(rootNode);
 		if (domainNode.getChildCount() != 0) {
 			TreeNode child = domainNode.getChildAt(0);
-			TreePath path = new TreePath(getTreeModel().getPathToRoot(child));
+			TreePath path = new TreePath(model.getPathToRoot(child));
 			makeVisible(path);
 		}
 	}

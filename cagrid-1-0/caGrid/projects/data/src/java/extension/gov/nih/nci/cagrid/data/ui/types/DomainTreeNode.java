@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JCheckBox;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultTreeModel;
 
 
@@ -46,14 +44,12 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 				public void itemStateChanged(ItemEvent e) {
 					if (allChildrenChecked()) {
 						getCheckBox().setSelected(true);
-					}
-					if (noChildrenChecked()) {
+					} else if (noChildrenChecked()) {
 						getCheckBox().setSelected(false);
 					}
 					// tell everybody that the type selection has been changed
 					JCheckBox checkBox = (JCheckBox) e.getSource();
 					if (checkBox.isSelected()) {
-						// TODO: get the node the check box belongs to
 						parentTree.fireTypeSelectionAdded(getNamespace(), (SchemaElementType) checkBoxTypes.get(checkBox));
 					} else {
 						parentTree.fireTypeSelectionRemoved(getNamespace(), (SchemaElementType) checkBoxTypes.get(checkBox));
@@ -70,8 +66,8 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 			}
 		}
 		// add listener to turn all children's check boxes on / off
-		getCheckBox().addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
+		getCheckBox().addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
 				int childCount = getChildCount();
 				for (int i = 0; i < childCount; i++) {
 					TypeTreeNode node = (TypeTreeNode) getChildAt(i);
@@ -98,7 +94,7 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 	}
 	
 	
-	private boolean allChildrenChecked() {
+	public boolean allChildrenChecked() {
 		int childCount = getChildCount();
 		for (int i = 0; i < childCount; i++) {
 			TypeTreeNode node = (TypeTreeNode) getChildAt(i);
@@ -110,7 +106,7 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 	}
 	
 	
-	private boolean noChildrenChecked() {
+	public boolean noChildrenChecked() {
 		int childCount = getChildCount();
 		for (int i = 0; i < childCount; i++) {
 			TypeTreeNode node = (TypeTreeNode) getChildAt(i);
