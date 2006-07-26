@@ -119,7 +119,7 @@ public class CQL2DetachedCriteria {
 	 */
 	private static void handleAssociation(DetachedCriteria parentObjectCriteria, Class parentObjectClass, 
 		Association association) throws MalformedQueryException, QueryProcessingException {
-		String roleName = association.getRoleName();
+		String roleName = getRoleName(parentObjectClass.getName(), association);
 		String associationTypeName = association.getName();
 		if (roleName == null) {
 			// determine role based on object's type
@@ -134,6 +134,7 @@ public class CQL2DetachedCriteria {
 					}
 				}
 			}
+			
 		}
 		if (roleName == null) {
 			// still null?? no association to the object!
@@ -181,6 +182,77 @@ public class CQL2DetachedCriteria {
 		} catch (Exception ex) {
 			throw new QueryProcessingException("Error generating criterion for attribute " + name + ":" + ex.getMessage(), ex);
 		}
+	}
+	
+	
+	/**
+	 * Gets the role name of an association relative to its parent class.
+	 * 
+	 * @param parentName
+	 * 		The class name of the parent of the association
+	 * @param assoc
+	 * 		The associated object restriction
+	 * @return
+	 * 		The role name of the associated object
+	 * @throws QueryProcessingException
+	 */
+	private static String getRoleName(String parentName, Association assoc) throws QueryProcessingException {
+		String roleName = assoc.getRoleName();
+		if (roleName == null) {
+			// determine role based on object's type
+			Class parentClass = null;
+			try {
+				parentClass = Class.forName(parentName);
+			} catch (Exception ex) {
+				throw new QueryProcessingException("Could not load class: " + ex.getMessage(), ex);
+			}
+			String associationTypeName = assoc.getName();
+			// search the fields
+			Field[] objectFields = parentClass.getFields();
+			for (int i = 0; i < objectFields.length; i++) {
+				if (objectFields[i].getType().getName().equals(associationTypeName)) {
+					if (roleName == null) {
+						roleName = objectFields[i].getName();
+					} else {
+						// already found a field of the same type, so association is ambiguous
+						throw new QueryProcessingException("Association from " + parentClass.getName() + 
+							" to " + associationTypeName + " is ambiguous: Specify a role name");
+					}
+				}
+			}
+			if (roleName == null) {
+				// search for setter method
+				Method[] allMethods = parentClass.getMethods();
+				for (int i = 0; i < allMethods.length; i++) {
+					Method current = allMethods[i];
+					if (current.getName().startsWith("set")) {
+						Class[] params = current.getParameterTypes();
+						if (params.length == 1 && params[0].getName().equals(associationTypeName)) {
+							// found a setter for the type
+							String potentialRoleName = current.getName().substring(3);
+							if (potentialRoleName.length() != 0) {
+								if (roleName == null) {
+									// lowercase first letter
+									if (potentialRoleName.length() == 1) {
+										roleName = potentialRoleName.toLowerCase();
+									} else {
+										roleName = Character.toLowerCase(potentialRoleName.charAt(0))
+											+ potentialRoleName.substring(1);
+									}
+								} else {
+									// already found a field of the same type, 
+									// so association is ambiguous
+									throw new QueryProcessingException("Association from " 
+										+ parentClass.getName() + " to " + associationTypeName 
+										+ " is ambiguous: Specify a role name");
+								}
+							}					
+						}
+					}
+				}
+			}
+		}
+		return roleName;
 	}
 	
 	
