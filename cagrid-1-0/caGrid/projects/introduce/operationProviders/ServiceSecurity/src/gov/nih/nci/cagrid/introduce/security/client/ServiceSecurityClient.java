@@ -33,12 +33,12 @@ import org.globus.wsrf.impl.security.authorization.NoAuthorization;
  * @created by Introduce Toolkit version 1.0
  */
 public class ServiceSecurityClient implements ServiceSecurityI {
-	private GlobusCredential proxy;
-	private EndpointReferenceType epr;
-	private ServiceSecurityMetadata securityMetadata;
-	private Map operations;
-	private Authorization authorization;
-	private String delegationMode;
+	protected GlobusCredential proxy;
+	protected EndpointReferenceType epr;
+	protected ServiceSecurityMetadata securityMetadata;
+	protected Map operations;
+	protected Authorization authorization;
+	protected String delegationMode;
 
 	static {
 		org.globus.axis.util.Util.registerTransport();
@@ -154,7 +154,7 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 	}
 
 
-	public void configureStubSecurity(Stub stub, String method) throws RemoteException {
+	protected void configureStubSecurity(Stub stub, String method) throws RemoteException {
 		
 		boolean https = false;	
 		if (epr.getAddress().getScheme().equals("https")) {
@@ -293,7 +293,7 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 	}
 
 
-	private void resetStub(Stub stub) {
+	protected void resetStub(Stub stub) {
 		stub.removeProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT);
 		stub.removeProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS);
 		stub.removeProperty(org.globus.wsrf.security.Constants.AUTHORIZATION);
