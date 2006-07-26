@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -183,7 +184,7 @@ public class CQL2HQL {
 			}
 			for (int i = 0; i < group.getGroup().length; i++) {
 				hql.append("( ");
-				processGroup(hql, aliases, parentName, group);
+				processGroup(hql, aliases, parentName, group.getGroup(i));
 				hql.append(" )");
 				if (i + 1 < group.getGroup().length) {
 					hql.append(" ").append(logic).append(" ");
@@ -215,6 +216,7 @@ public class CQL2HQL {
 				throw new QueryProcessingException("Could not load class: " + ex.getMessage(), ex);
 			}
 			String associationTypeName = assoc.getName();
+			// search the fields
 			Field[] objectFields = parentClass.getFields();
 			for (int i = 0; i < objectFields.length; i++) {
 				if (objectFields[i].getType().getName().equals(associationTypeName)) {
@@ -224,6 +226,37 @@ public class CQL2HQL {
 						// already found a field of the same type, so association is ambiguous
 						throw new QueryProcessingException("Association from " + parentClass.getName() + 
 							" to " + associationTypeName + " is ambiguous: Specify a role name");
+					}
+				}
+			}
+			if (roleName == null) {
+				// search for setter method
+				Method[] allMethods = parentClass.getMethods();
+				for (int i = 0; i < allMethods.length; i++) {
+					Method current = allMethods[i];
+					if (current.getName().startsWith("set")) {
+						Class[] params = current.getParameterTypes();
+						if (params.length == 1 && params[0].getName().equals(associationTypeName)) {
+							// found a setter for the type
+							String potentialRoleName = current.getName().substring(3);
+							if (potentialRoleName.length() != 0) {
+								if (roleName == null) {
+									// lowercase first letter
+									if (potentialRoleName.length() == 1) {
+										roleName = potentialRoleName.toLowerCase();
+									} else {
+										roleName = Character.toLowerCase(potentialRoleName.charAt(0))
+											+ potentialRoleName.substring(1);
+									}
+								} else {
+									// already found a field of the same type, 
+									// so association is ambiguous
+									throw new QueryProcessingException("Association from " 
+										+ parentClass.getName() + " to " + associationTypeName 
+										+ " is ambiguous: Specify a role name");
+								}
+							}					
+						}
 					}
 				}
 			}
