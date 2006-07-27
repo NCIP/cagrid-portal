@@ -1,5 +1,9 @@
 package gov.nih.nci.cagrid.gridgrouper.service;
 
+import java.rmi.RemoteException;
+import java.util.Iterator;
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -101,6 +105,45 @@ public class GridGrouper {
 	}
 
 
+	public StemDescriptor[] getChildStems(String gridIdentity, String parentStemName) throws RemoteException,
+		GridGrouperRuntimeFault, StemNotFoundFault {
+		try {
+			Subject subject = source.getSubject(gridIdentity);
+			GrouperSession session = GrouperSession.start(subject);
+			StemDescriptor[] children = null;
+			try {
+				Stem parent = StemFinder.findByName(session, parentStemName);
+				Set set = parent.getChildStems();
+				children = new StemDescriptor[set.size()];
+				Iterator itr = set.iterator();
+				int count = 0;
+				while (itr.hasNext()) {
+					children[count] = stemtoStemDescriptor((Stem) itr.next());
+					count++;
+				}
+			} catch (StemNotFoundException e) {
+				StemNotFoundFault fault = new StemNotFoundFault();
+				fault.setFaultString("The parent stem, " + parentStemName + "was not found.");
+				FaultHelper helper = new FaultHelper(fault);
+				helper.addFaultCause(e);
+				fault = (StemNotFoundFault) helper.getFault();
+				throw fault;
+			}
+			session.stop();
+			return children;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault.setFaultString("Error occurred getting the child stems for the parent stem, " + parentStemName + ": "
+				+ e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		}
+	}
+
+
 	private StemDescriptor stemtoStemDescriptor(Stem stem) throws Exception {
 		StemDescriptor des = new StemDescriptor();
 		des.setCreateSource(stem.getCreateSource());
@@ -115,7 +158,7 @@ public class GridGrouper {
 			des.setModifySubject(stem.getModifySubject().getId());
 		} catch (Exception ex) {
 			if (ex.getMessage().indexOf("has not been modified") != -1) {
-				des.setCreateSubject("");
+				des.setModifySubject("");
 			} else {
 				throw ex;
 			}

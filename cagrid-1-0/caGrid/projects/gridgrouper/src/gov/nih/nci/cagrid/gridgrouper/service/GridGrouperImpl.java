@@ -30,7 +30,7 @@ public class GridGrouperImpl {
 
 	private String getCallerIdentity() {
 		String caller = SecurityManager.getManager().getCaller();
-		System.out.println("Caller: " + caller);
+		//System.out.println("Caller: " + caller);
 		if ((caller == null) || (caller.equals("<anonymous>"))) {
 			return AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID;
 		} else {
@@ -63,6 +63,13 @@ public class GridGrouperImpl {
 		throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault,
 		gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		return gridGrouper.getStem(getCallerIdentity(), stemName);
+	}
+
+
+	public gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor[] getChildStems(java.lang.String parentStemName)
+		throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault,
+		gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+		return gridGrouper.getChildStems(getCallerIdentity(), parentStemName);
 	}
 
 }

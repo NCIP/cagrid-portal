@@ -11,5 +11,6 @@ import edu.internet2.middleware.grouper.StemNotFoundException;
  *          Exp $
  */
 public interface Grouper {
+	  public Stem getRootStem() throws StemNotFoundException;
 	  public Stem findStem(String name) throws StemNotFoundException;
 }
