@@ -41,6 +41,20 @@
           </sequence>
         </complexType>
       </element>
+      <element name="GetParentStemRequest">
+        <complexType>
+          <sequence>
+            <element name="childStemName" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetParentStemResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:StemDescriptor" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="GridGrouperRuntimeFault">
         <complexType>
           <complexContent>
@@ -75,6 +89,12 @@
   <message name="GetChildStemsResponse">
     <part name="parameters" element="tns:GetChildStemsResponse" />
   </message>
+  <message name="GetParentStemRequest">
+    <part name="parameters" element="tns:GetParentStemRequest" />
+  </message>
+  <message name="GetParentStemResponse">
+    <part name="parameters" element="tns:GetParentStemResponse" />
+  </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="tns:GridGrouperRuntimeFault" />
   </message>
@@ -96,6 +116,12 @@
     <operation name="getChildStems">
       <input message="tns:GetChildStemsRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetChildStemsRequest" />
       <output message="tns:GetChildStemsResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetChildStemsResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="StemNotFoundFault" message="tns:StemNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemNotFoundFaultFaultMessage" />
+    </operation>
+    <operation name="getParentStem">
+      <input message="tns:GetParentStemRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetParentStemRequest" />
+      <output message="tns:GetParentStemResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetParentStemResponse" />
       <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
       <fault name="StemNotFoundFault" message="tns:StemNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemNotFoundFaultFaultMessage" />
     </operation>

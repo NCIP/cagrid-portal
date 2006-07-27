@@ -19,15 +19,21 @@ public class GridGrouperProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsResponse getChildStems(gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
-		gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsResponse();
-		boxedResult.setStemDescriptor(impl.getChildStems(params.getParentStemName()));
+	public gov.nih.nci.cagrid.gridgrouper.stubs.GetParentStemResponse getParentStem(gov.nih.nci.cagrid.gridgrouper.stubs.GetParentStemRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.GetParentStemResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetParentStemResponse();
+		boxedResult.setStemDescriptor(impl.getParentStem(params.getChildStemName()));
 		return boxedResult;
 	}
 
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse getStem(gov.nih.nci.cagrid.gridgrouper.stubs.GetStemRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse();
 		boxedResult.setStemDescriptor(impl.getStem(params.getStemName()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsResponse getChildStems(gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsResponse();
+		boxedResult.setStemDescriptor(impl.getChildStems(params.getParentStemName()));
 		return boxedResult;
 	}
 

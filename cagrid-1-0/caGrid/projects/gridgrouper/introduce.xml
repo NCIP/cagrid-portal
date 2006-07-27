@@ -90,20 +90,30 @@
       <ns4:Exception name="StemNotFoundFault"/>
      </ns4:Exceptions>
     </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="getParentStem" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="xsd:string" isArray="false" name="childStemName" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns8:StemDescriptor" isArray="false" xmlns:ns8="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="GridGrouperRuntimeFault"/>
+      <ns4:Exception name="StemNotFoundFault"/>
+     </ns4:Exceptions>
+    </ns4:Method>
    </ns4:Methods>
-   <ns8:ResourcePropertiesList xsi:type="ns8:ResourcePropertiesListType" xmlns:ns8="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
-   <ns9:ServiceSecurity xsi:type="ns9:ServiceSecurity" xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns9:SecuritySetting xsi:type="ns9:SecuritySetting">Custom</ns9:SecuritySetting>
-    <ns9:TransportLevelSecurity xsi:type="ns9:TransportLevelSecurity">
-     <ns9:CommunicationMethod xsi:type="ns9:CommunicationMethod">Privacy</ns9:CommunicationMethod>
-    </ns9:TransportLevelSecurity>
-    <ns9:RunAsMode xsi:type="ns9:RunAsMode">System</ns9:RunAsMode>
-    <ns9:AnonymousClients xsi:type="ns9:AnonymousCommunication">No</ns9:AnonymousClients>
-    <ns9:ServiceAuthorization xsi:type="ns9:ServiceAuthorization">
-     <ns9:NoAuthorization xsi:type="ns9:NoAuthorization"/>
-    </ns9:ServiceAuthorization>
-   </ns9:ServiceSecurity>
+   <ns9:ResourcePropertiesList xsi:type="ns9:ResourcePropertiesListType" xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns10:ServiceSecurity xsi:type="ns10:ServiceSecurity" xmlns:ns10="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns10:SecuritySetting xsi:type="ns10:SecuritySetting">Custom</ns10:SecuritySetting>
+    <ns10:TransportLevelSecurity xsi:type="ns10:TransportLevelSecurity">
+     <ns10:CommunicationMethod xsi:type="ns10:CommunicationMethod">Privacy</ns10:CommunicationMethod>
+    </ns10:TransportLevelSecurity>
+    <ns10:RunAsMode xsi:type="ns10:RunAsMode">System</ns10:RunAsMode>
+    <ns10:AnonymousClients xsi:type="ns10:AnonymousCommunication">No</ns10:AnonymousClients>
+    <ns10:ServiceAuthorization xsi:type="ns10:ServiceAuthorization">
+     <ns10:NoAuthorization xsi:type="ns10:NoAuthorization"/>
+    </ns10:ServiceAuthorization>
+   </ns10:ServiceSecurity>
   </ns3:Service>
  </ns3:Services>
- <ns10:Extensions xsi:type="ns10:ExtensionsType" xmlns:ns10="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns11:Extensions xsi:type="ns11:ExtensionsType" xmlns:ns11="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
 </ns1:ServiceSkeleton>

@@ -231,12 +231,12 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 		}
 	}
 
-    public gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor[] getChildStems(java.lang.String parentStemName) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+    public gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor getParentStem(java.lang.String childStemName) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
       synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getChildStems");
-        gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsRequest();
-        params.setParentStemName(parentStemName);
-        gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsResponse boxedResult = portType.getChildStems(params);
+        configureStubSecurity((Stub)portType,"getParentStem");
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetParentStemRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetParentStemRequest();
+        params.setChildStemName(childStemName);
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetParentStemResponse boxedResult = portType.getParentStem(params);
         return boxedResult.getStemDescriptor();
       }
     }
@@ -254,6 +254,15 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
         gov.nih.nci.cagrid.gridgrouper.stubs.GetStemRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetStemRequest();
         params.setStemName(stemName);
         gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse boxedResult = portType.getStem(params);
+        return boxedResult.getStemDescriptor();
+      }
+    }
+    public gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor[] getChildStems(java.lang.String parentStemName) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"getChildStems");
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsRequest();
+        params.setParentStemName(parentStemName);
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsResponse boxedResult = portType.getChildStems(params);
         return boxedResult.getStemDescriptor();
       }
     }
