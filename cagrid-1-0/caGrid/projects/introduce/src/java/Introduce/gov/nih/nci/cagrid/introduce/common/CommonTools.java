@@ -26,7 +26,9 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
@@ -769,5 +771,89 @@ public class CommonTools {
 			}
 		}
 		return removed;
+	}
+	
+	
+	/**
+	 * Determines if schema element types from a namespace type are referenced in
+	 * other parts of the service (ie Methods, Exceptions)
+	 *  
+	 * @param nsType
+	 * @param info
+	 * @return
+	 */
+	public static boolean isNamespaceTypeInUse(NamespaceType nsType, ServiceDescription desc) {
+		String namespace = nsType.getNamespace();
+		ServiceType[] services = desc.getServices().getService();
+		for (int s = 0; s < services.length; s++) {
+			// resource properties
+			ResourcePropertiesListType propsList = services[s].getResourcePropertiesList();
+			if (propsList != null) {
+				for (int p = 0; propsList.getResourceProperty() != null 
+				&& p < propsList.getResourceProperty().length; p++) {
+					ResourcePropertyType prop = propsList.getResourceProperty(p);
+					if (prop.getQName().getNamespaceURI().equals(namespace)) {
+						return true;
+					}
+				}
+			}
+			// methods
+			MethodsType methods = services[s].getMethods();
+			if (methods != null) {
+				for (int m = 0; methods.getMethod() != null && m < methods.getMethod().length; m++) {
+					MethodType method = methods.getMethod(m);
+					// inputs
+					MethodTypeInputs inputs = method.getInputs();
+					if (inputs != null) {
+						for (int i = 0; inputs.getInput() != null 
+						&& i < inputs.getInput().length; i++) {
+							MethodTypeInputsInput input = inputs.getInput(i);
+							if (input.getQName().getNamespaceURI().equals(namespace)) {
+								return true;
+							}
+						}
+					}
+					// output
+					MethodTypeOutput output = method.getOutput();
+					if (output != null) {
+						if (output.getQName().getNamespaceURI().equals(namespace)) {
+							return true;
+						}
+					}
+					// exceptions
+					// TODO: This is disabled until exceptions can be typed from schema
+					/*
+					MethodTypeExceptions exceptions = method.getExceptions();
+					if (exceptions != null) {
+						for (int e = 0; exceptions.getException() != null 
+						&& e < exceptions.getException().length; e++) {
+							MethodTypeExceptionsException exception = exceptions.getException(e);
+							// TODO: verify exception QName against nsuri
+						}
+					}
+					*/
+				}
+			}
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * Determines if all schema element types used in the service are still
+	 * available in the service's namespace types.
+	 * 
+	 * @param desc
+	 * @return
+	 */
+	public static boolean usedTypesAvailable(ServiceDescription desc) {
+		return getUnavailableUsedTypes(desc).size() == 0;
+	}
+	
+	
+	public static Set getUnavailableUsedTypes(ServiceDescription desc) {
+		Set usedTypes = new HashSet();
+		
+		return null;
 	}
 }
