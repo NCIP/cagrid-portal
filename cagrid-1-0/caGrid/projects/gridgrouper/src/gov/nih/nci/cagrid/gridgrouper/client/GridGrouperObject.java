@@ -12,22 +12,13 @@ import org.apache.commons.logging.LogFactory;
  */
 public abstract class GridGrouperObject {
 	
-	private GridGrouperClient client;
 	private Log log;
 
 	public GridGrouperObject(){
 		this.log = LogFactory.getLog(this.getClass().getName());
 	}
 
-	public GridGrouperClient getClient() {
-		return client;
-	}
-
-	public void setClient(GridGrouperClient client) {
-		this.client = client;
-	}
-
-	public Log getLog() {
+	protected Log getLog() {
 		return log;
 	}
 	

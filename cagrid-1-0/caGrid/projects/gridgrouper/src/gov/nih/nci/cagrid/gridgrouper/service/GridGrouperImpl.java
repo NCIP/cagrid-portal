@@ -79,4 +79,24 @@ public class GridGrouperImpl {
 		return gridGrouper.getParentStem(getCallerIdentity(), childStemName);
 	}
 
+	public gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor updateStemDescription(
+			java.lang.String stemName, java.lang.String description)
+			throws RemoteException,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault {
+		return gridGrouper.updateStemDescription(getCallerIdentity(), stemName,
+				description);
+	}
+
+	public gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor updateStemDisplayExtension(
+			java.lang.String stemName, java.lang.String displayExtension)
+			throws RemoteException,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault {
+		return gridGrouper.updateStemDisplayExtension(getCallerIdentity(),
+				stemName, displayExtension);
+	}
+
 }

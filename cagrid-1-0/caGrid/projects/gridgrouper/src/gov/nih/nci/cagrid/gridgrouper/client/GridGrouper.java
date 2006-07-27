@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.globus.gsi.GlobusCredential;
@@ -23,6 +22,8 @@ import org.globus.gsi.GlobusCredential;
 public class GridGrouper extends GridGrouperObject implements Grouper {
 
 	protected static final String ROOT_STEM = "";
+
+	private GridGrouperClient client;
 
 	public GridGrouper(String serviceURI) {
 		this(serviceURI, null);
@@ -82,42 +83,12 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 		}
 	}
 
-	public static void main(String[] args) {
-		System.out.println("Running the Grid Service Client");
-		try {
-
-			GridGrouper grouper = new GridGrouper(
-					"https://localhost:8443/wsrf/services/cagrid/GridGrouper");
-			Stem stem = grouper.getRootStem();
-			printStems(stem, "");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+	protected GridGrouperClient getClient() {
+		return client;
 	}
 
-	public static void printStems(Stem stem, String buffer) throws Exception {
-		System.out.println(buffer + stem.getDisplayExtension() + " ("
-				+ stem.getUuid() + ")");
-		System.out.println(buffer + "  " + "[Description:"
-				+ stem.getDescription() + "]");
-		try{
-		System.out.println(buffer + "  " + "[Parent:"
-				+ stem.getParentStem().getDisplayExtension() + "]");
-		}catch(Exception e){}
-		System.out.println(buffer + "  " + "[Create Source:"
-				+ stem.getCreateSource() + "]");
-		System.out.println(buffer + "  " + "[Create Subject Id:"
-				+ stem.getCreateSubject().getId() + "]");
-		System.out.println(buffer + "  " + "[Create Time:"
-				+ stem.getCreateTime() + "]");
-		System.out.println(buffer + "  " + "[Modify Time:"
-				+ stem.getModifyTime() + "]");
-		Set s = stem.getChildStems();
-		Iterator itr = s.iterator();
-		while (itr.hasNext()) {
-			printStems((Stem) itr.next(), buffer + "    ");
-		}
+	protected void setClient(GridGrouperClient client) {
+		this.client = client;
 	}
 
 }

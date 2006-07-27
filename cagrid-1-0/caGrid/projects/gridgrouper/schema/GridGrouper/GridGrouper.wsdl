@@ -55,6 +55,36 @@
           </sequence>
         </complexType>
       </element>
+      <element name="UpdateStemDescriptionRequest">
+        <complexType>
+          <sequence>
+            <element name="stemName" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <element name="description" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="UpdateStemDescriptionResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:StemDescriptor" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="UpdateStemDisplayExtensionRequest">
+        <complexType>
+          <sequence>
+            <element name="stemName" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <element name="displayExtension" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="UpdateStemDisplayExtensionResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:StemDescriptor" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="GridGrouperRuntimeFault">
         <complexType>
           <complexContent>
@@ -63,6 +93,20 @@
         </complexType>
       </element>
       <element name="StemNotFoundFault">
+        <complexType>
+          <complexContent>
+            <extension base="wsrbf:BaseFaultType" />
+          </complexContent>
+        </complexType>
+      </element>
+      <element name="InsufficientPrivilegeFault">
+        <complexType>
+          <complexContent>
+            <extension base="wsrbf:BaseFaultType" />
+          </complexContent>
+        </complexType>
+      </element>
+      <element name="StemModifyFault">
         <complexType>
           <complexContent>
             <extension base="wsrbf:BaseFaultType" />
@@ -95,11 +139,29 @@
   <message name="GetParentStemResponse">
     <part name="parameters" element="tns:GetParentStemResponse" />
   </message>
+  <message name="UpdateStemDescriptionRequest">
+    <part name="parameters" element="tns:UpdateStemDescriptionRequest" />
+  </message>
+  <message name="UpdateStemDescriptionResponse">
+    <part name="parameters" element="tns:UpdateStemDescriptionResponse" />
+  </message>
+  <message name="UpdateStemDisplayExtensionRequest">
+    <part name="parameters" element="tns:UpdateStemDisplayExtensionRequest" />
+  </message>
+  <message name="UpdateStemDisplayExtensionResponse">
+    <part name="parameters" element="tns:UpdateStemDisplayExtensionResponse" />
+  </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="tns:GridGrouperRuntimeFault" />
   </message>
   <message name="StemNotFoundFaultFaultMessage">
     <part name="fault" element="tns:StemNotFoundFault" />
+  </message>
+  <message name="InsufficientPrivilegeFaultFaultMessage">
+    <part name="fault" element="tns:InsufficientPrivilegeFault" />
+  </message>
+  <message name="StemModifyFaultFaultMessage">
+    <part name="fault" element="tns:StemModifyFault" />
   </message>
   <!--============================================================
 
@@ -124,6 +186,20 @@
       <output message="tns:GetParentStemResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetParentStemResponse" />
       <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
       <fault name="StemNotFoundFault" message="tns:StemNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemNotFoundFaultFaultMessage" />
+    </operation>
+    <operation name="updateStemDescription">
+      <input message="tns:UpdateStemDescriptionRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/UpdateStemDescriptionRequest" />
+      <output message="tns:UpdateStemDescriptionResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/UpdateStemDescriptionResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
+      <fault name="StemModifyFault" message="tns:StemModifyFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemModifyFaultFaultMessage" />
+    </operation>
+    <operation name="updateStemDisplayExtension">
+      <input message="tns:UpdateStemDisplayExtensionRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/UpdateStemDisplayExtensionRequest" />
+      <output message="tns:UpdateStemDisplayExtensionResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/UpdateStemDisplayExtensionResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
+      <fault name="StemModifyFault" message="tns:StemModifyFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemModifyFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

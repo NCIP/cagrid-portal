@@ -20,4 +20,5 @@ public interface Grouper {
 
 	public Stem getParentStem(String childStemName)
 			throws StemNotFoundException;
+	
 }

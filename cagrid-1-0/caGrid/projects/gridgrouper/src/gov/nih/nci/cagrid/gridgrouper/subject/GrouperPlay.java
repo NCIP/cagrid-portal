@@ -42,8 +42,8 @@ public class GrouperPlay {
 				GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
 			System.out.println(admin.getName());
 			GridSourceAdapter source = new GridSourceAdapter("grid", "Grid Grouper: Grid Source Adapter");
-			Subject gs2 = source.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=langella");
-			Subject gs3 = source.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=hastings");
+			Subject gs2 = source.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=langella");
+			Subject gs3 = source.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=hastings");
 			admin.addMember(gs2);
 
 			GrouperSession ses2 = GrouperSession.start(gs2);

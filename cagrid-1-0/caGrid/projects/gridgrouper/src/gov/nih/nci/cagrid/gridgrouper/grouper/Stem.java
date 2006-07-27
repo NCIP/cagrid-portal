@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.gridgrouper.grouper;
 import java.util.Date;
 import java.util.Set;
 
+import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
+import edu.internet2.middleware.grouper.StemModifyException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
@@ -55,8 +57,8 @@ public interface Stem {
 	// Stem Actions
 	public Set getChildStems();
     public Stem getParentStem() throws StemNotFoundException; 
-	//public void setDescription(String value) throws InsufficientPrivilegeException, StemModifyException; 
-    //public void setDisplayExtension(String value) throws InsufficientPrivilegeException, StemModifyException;
+	public void setDescription(String value) throws InsufficientPrivilegeException, StemModifyException; 
+    public void setDisplayExtension(String value) throws InsufficientPrivilegeException, StemModifyException;
 
 	
 	  //public Group addChildGroup(String extension, String displayExtension) throws GroupAddException,InsufficientPrivilegeException; 

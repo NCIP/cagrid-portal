@@ -1,10 +1,15 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
+import edu.internet2.middleware.grouper.GrouperRuntimeException;
+import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
+import edu.internet2.middleware.grouper.StemModifyException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 import gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
+import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault;
 
 import java.util.Date;
 import java.util.Set;
@@ -18,7 +23,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GridGrouperStem implements Stem {
+public class GridGrouperStem extends GridGrouperObject implements Stem {
 
 	private StemDescriptor des;
 
@@ -95,6 +100,38 @@ public class GridGrouperStem implements Stem {
 						getName()).append("uuid", getUuid()).append("created",
 						getCreateTime()).append("modified", getModifyTime())
 				.toString();
+	}
+
+	public void setDescription(String value)
+			throws InsufficientPrivilegeException, StemModifyException {
+		try {
+			this.des = gridGrouper.getClient().updateStemDescription(getName(),
+					value);
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (StemModifyFault f) {
+			throw new StemModifyException(f.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+
+	}
+
+	public void setDisplayExtension(String value)
+			throws InsufficientPrivilegeException, StemModifyException {
+		try {
+			this.des = gridGrouper.getClient().updateStemDisplayExtension(
+					getName(), value);
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (StemModifyFault f) {
+			throw new StemModifyException(f.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+
 	}
 
 }
