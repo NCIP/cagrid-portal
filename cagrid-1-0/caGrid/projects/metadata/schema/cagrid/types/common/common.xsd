@@ -74,6 +74,7 @@
 		</xs:sequence>
 		<xs:attribute name="description" use="required" type="xs:string"/>
 		<xs:attribute name="name" use="required" type="xs:string"/>
+		<xs:attribute name="dataType" use="required" type="xs:string"/>
 	</xs:complexType>
 	<xs:element name="ResearchCenter" type="com:ResearchCenter"/>
 	<xs:complexType name="ResearchCenter">

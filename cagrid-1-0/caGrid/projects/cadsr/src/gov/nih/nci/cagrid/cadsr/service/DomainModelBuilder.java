@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.cadsr.service;
 
+import gov.nih.nci.cadsr.domain.DataElement;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
@@ -253,11 +254,15 @@ public class DomainModelBuilder {
 				List classList = new ArrayList();
 				while (classListIter.hasNext()) {
 					UMLClassMetadata metadata = (UMLClassMetadata) classListIter.next();
-					// ensure the attributes and semantic metadata are brought
-					// back
+					// ensure the attributes and semantic metadata are brought back
 					Iterator attribIter = metadata.getUMLAttributeMetadataCollection().iterator();
 					while (attribIter.hasNext()) {
 						UMLAttributeMetadata att = (UMLAttributeMetadata) attribIter.next();
+						DataElement de = att.getDataElement();
+						de.getContext();
+						de.getDataElementConcept().getObjectClass();
+						String typeName = de.getValueDomain().getDatatypeName();
+						LOG.debug(typeName);
 						if (att.getDescription() == null) {
 							att.setDescription("");
 						}
@@ -266,6 +271,7 @@ public class DomainModelBuilder {
 					while (smIter.hasNext()) {
 						SemanticMetadata sm = (SemanticMetadata) smIter.next();
 						LOG.debug(sm.getConceptCode());
+						LOG.debug(sm.getConcept().getLongName());
 					}
 					classList.add(metadata);
 				}
