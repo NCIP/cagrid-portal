@@ -1,17 +1,13 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
-import edu.internet2.middleware.subject.Source;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
-import edu.internet2.middleware.subject.provider.SourceManager;
 import gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -41,28 +37,11 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 
 
 	public Subject getCreateSubject() throws SubjectNotFoundException {
-		return buildSubject(des.getCreateSubject());
+		return SubjectUtils.getSubject(des.getCreateSubject(), true);
 	}
 
 
-	private Subject buildSubject(String id) throws SubjectNotFoundException {
-		try {
-			Collection sources = SourceManager.getInstance().getSources();
-			Iterator itr = sources.iterator();
-			while (itr.hasNext()) {
-				Source src = (Source) itr.next();
-				try {
-					Subject sub = src.getSubject(id);
-					return sub;
-				} catch (SubjectNotFoundException ex) {
-
-				}
-			}
-		} catch (Exception e) {
-			getLog().error(e.getMessage(), e);
-		}
-		throw new SubjectNotFoundException("The subject " + id + " could not be found.");
-	}
+	
 
 
 	public Date getCreateTime() {
@@ -96,7 +75,7 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 
 
 	public Subject getModifySubject() throws SubjectNotFoundException {
-		return buildSubject(des.getModifySubject());
+		return SubjectUtils.getSubject(des.getModifySubject(), true);
 	}
 
 

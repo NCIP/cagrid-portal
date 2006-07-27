@@ -23,7 +23,6 @@ import org.globus.gsi.GlobusCredential;
  */
 public class GridGrouper extends GridGrouperObject implements Grouper {
 
-	public static final GridSourceAdapter SOURCE = new GridSourceAdapter("grid", "Grid Grouper: Grid Source Adapter");
 	protected static final String ROOT_STEM = "";
 
 
