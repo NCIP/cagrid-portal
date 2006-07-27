@@ -1,9 +1,13 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
+import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.grouper.StemNotFoundException;
+import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.beans.StemPrivilege;
+import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Grouper;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault;
@@ -78,6 +82,46 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 			StemDescriptor des = getClient().getParentStem(
 					getStemIdentifier(childStemName));
 			return new GridGrouperStem(this, des);
+		} catch (StemNotFoundFault f) {
+			throw new StemNotFoundException(f.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public Set getStemPrivileges(String stemName, Subject subject)
+			throws StemNotFoundException {
+		try {
+			StemPrivilege[] privs = getClient().getStemPrivileges(
+					getStemIdentifier(stemName), subject.getId());
+			Set set = new HashSet();
+			if (privs != null) {
+				for (int i = 0; i < privs.length; i++) {
+					set.add(Privilege.getInstance(privs[i].getValue()));
+				}
+			}
+			return set;
+		} catch (StemNotFoundFault f) {
+			throw new StemNotFoundException(f.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public Set getSubjectsWithStemPrivilege(String stemName, Privilege privilege)
+			throws StemNotFoundException {
+		try {
+			String[] subs = getClient().getSubjectsWithStemPrivilege(
+					getStemIdentifier(stemName), StemPrivilege.fromValue(privilege.getName()));
+			Set set = new HashSet();
+			if (subs != null) {
+				for (int i = 0; i < subs.length; i++) {
+					set.add(SubjectUtils.getSubject(subs[i], true));
+				}
+			}
+			return set;
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
 		} catch (Exception e) {

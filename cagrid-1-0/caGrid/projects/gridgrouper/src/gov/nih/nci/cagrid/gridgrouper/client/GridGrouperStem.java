@@ -2,12 +2,15 @@ package gov.nih.nci.cagrid.gridgrouper.client;
 
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
+import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.grouper.StemModifyException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 import gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.beans.StemPrivilege;
+import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault;
@@ -121,6 +124,35 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 
+	}
+
+	public Set getCreators() {
+		try {
+			return gridGrouper.getSubjectsWithStemPrivilege(getName(),
+					Privilege.getInstance(StemPrivilege.create.getValue()));
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public Set getPrivs(Subject subj) {
+		try {
+			return gridGrouper.getStemPrivileges(getName(), subj);
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public Set getStemmers() {
+		try {
+			return gridGrouper.getSubjectsWithStemPrivilege(getName(),
+					Privilege.getInstance(StemPrivilege.stem.getValue()));
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
 	}
 
 	public void setDisplayExtension(String value)

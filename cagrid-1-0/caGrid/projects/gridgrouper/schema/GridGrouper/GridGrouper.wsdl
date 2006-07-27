@@ -115,6 +115,60 @@
           </sequence>
         </complexType>
       </element>
+      <element name="GetSubjectsWithStemPrivilegeRequest">
+        <complexType>
+          <sequence>
+            <element name="stem">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="privilege">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemPrivilege" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetSubjectsWithStemPrivilegeResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:SubjectIdentifier" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetStemPrivilegesRequest">
+        <complexType>
+          <sequence>
+            <element name="stem">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="subject">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:SubjectIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetStemPrivilegesResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:StemPrivilege" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="GridGrouperRuntimeFault">
         <complexType>
           <complexContent>
@@ -181,6 +235,18 @@
   <message name="UpdateStemDisplayExtensionResponse">
     <part name="parameters" element="tns:UpdateStemDisplayExtensionResponse" />
   </message>
+  <message name="GetSubjectsWithStemPrivilegeRequest">
+    <part name="parameters" element="tns:GetSubjectsWithStemPrivilegeRequest" />
+  </message>
+  <message name="GetSubjectsWithStemPrivilegeResponse">
+    <part name="parameters" element="tns:GetSubjectsWithStemPrivilegeResponse" />
+  </message>
+  <message name="GetStemPrivilegesRequest">
+    <part name="parameters" element="tns:GetStemPrivilegesRequest" />
+  </message>
+  <message name="GetStemPrivilegesResponse">
+    <part name="parameters" element="tns:GetStemPrivilegesResponse" />
+  </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="tns:GridGrouperRuntimeFault" />
   </message>
@@ -230,6 +296,18 @@
       <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
       <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
       <fault name="StemModifyFault" message="tns:StemModifyFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemModifyFaultFaultMessage" />
+    </operation>
+    <operation name="getSubjectsWithStemPrivilege">
+      <input message="tns:GetSubjectsWithStemPrivilegeRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetSubjectsWithStemPrivilegeRequest" />
+      <output message="tns:GetSubjectsWithStemPrivilegeResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetSubjectsWithStemPrivilegeResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="StemNotFoundFault" message="tns:StemNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemNotFoundFaultFaultMessage" />
+    </operation>
+    <operation name="getStemPrivileges">
+      <input message="tns:GetStemPrivilegesRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetStemPrivilegesRequest" />
+      <output message="tns:GetStemPrivilegesResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetStemPrivilegesResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="StemNotFoundFault" message="tns:StemNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemNotFoundFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

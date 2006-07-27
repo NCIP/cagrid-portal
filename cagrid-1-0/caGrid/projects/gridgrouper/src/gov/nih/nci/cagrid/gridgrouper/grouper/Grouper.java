@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.gridgrouper.grouper;
 
+import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.grouper.StemNotFoundException;
+import edu.internet2.middleware.subject.Subject;
 
 import java.util.Set;
 
@@ -20,5 +22,11 @@ public interface Grouper {
 
 	public Stem getParentStem(String childStemName)
 			throws StemNotFoundException;
-	
+
+	public Set getStemPrivileges(String stemName, Subject subject)
+			throws StemNotFoundException;
+
+	public Set getSubjectsWithStemPrivilege(String stemName, Privilege privilege)
+			throws StemNotFoundException;
+
 }

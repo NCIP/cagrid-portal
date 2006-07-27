@@ -62,16 +62,16 @@ public interface Stem {
     public Stem getParentStem() throws StemNotFoundException; 
 	public void setDescription(String value) throws InsufficientPrivilegeException, StemModifyException; 
     public void setDisplayExtension(String value) throws InsufficientPrivilegeException, StemModifyException;
-
+    public Set getCreators(); 
+	public Set getPrivs(Subject subj); 
+	public Set getStemmers(); 
 	
 	  //public Group addChildGroup(String extension, String displayExtension) throws GroupAddException,InsufficientPrivilegeException; 
 	  //public Stem addChildStem(String extension, String displayExtension) throws InsufficientPrivilegeException,StemAddException; 
 	 //public void delete() throws InsufficientPrivilegeException, StemDeleteException; 
 	  
 	  //public Set getChildGroups(); 
-	  //public Set getCreators() throws GrouperRuntimeException; 
-	  //public Set getPrivs(Subject subj); 
-	  //public Set getStemmers(); 
+	
       //public void grantPriv(Subject subj, Privilege priv) throws GrantPrivilegeException, InsufficientPrivilegeException, SchemaException;
 	  //public boolean hasCreate(Subject subj); 
 	  //public boolean hasStem(Subject subj) throws SchemaException; 

@@ -127,20 +127,42 @@
       <ns4:Exception name="StemModifyFault"/>
      </ns4:Exceptions>
     </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="getSubjectsWithStemPrivilege" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns16:StemIdentifier" isArray="false" name="stem" xmlns:ns16="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns17:StemPrivilege" isArray="false" name="privilege" xmlns:ns17="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns18:SubjectIdentifier" isArray="true" xmlns:ns18="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="GridGrouperRuntimeFault"/>
+      <ns4:Exception name="StemNotFoundFault"/>
+     </ns4:Exceptions>
+    </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="getStemPrivileges" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns19:StemIdentifier" isArray="false" name="stem" xmlns:ns19="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns20:SubjectIdentifier" isArray="false" name="subject" xmlns:ns20="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns21:StemPrivilege" isArray="true" xmlns:ns21="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="GridGrouperRuntimeFault"/>
+      <ns4:Exception name="StemNotFoundFault"/>
+     </ns4:Exceptions>
+    </ns4:Method>
    </ns4:Methods>
-   <ns16:ResourcePropertiesList xsi:type="ns16:ResourcePropertiesListType" xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
-   <ns17:ServiceSecurity xsi:type="ns17:ServiceSecurity" xmlns:ns17="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns17:SecuritySetting xsi:type="ns17:SecuritySetting">Custom</ns17:SecuritySetting>
-    <ns17:TransportLevelSecurity xsi:type="ns17:TransportLevelSecurity">
-     <ns17:CommunicationMethod xsi:type="ns17:CommunicationMethod">Privacy</ns17:CommunicationMethod>
-    </ns17:TransportLevelSecurity>
-    <ns17:RunAsMode xsi:type="ns17:RunAsMode">System</ns17:RunAsMode>
-    <ns17:AnonymousClients xsi:type="ns17:AnonymousCommunication">No</ns17:AnonymousClients>
-    <ns17:ServiceAuthorization xsi:type="ns17:ServiceAuthorization">
-     <ns17:NoAuthorization xsi:type="ns17:NoAuthorization"/>
-    </ns17:ServiceAuthorization>
-   </ns17:ServiceSecurity>
+   <ns22:ResourcePropertiesList xsi:type="ns22:ResourcePropertiesListType" xmlns:ns22="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns23:ServiceSecurity xsi:type="ns23:ServiceSecurity" xmlns:ns23="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns23:SecuritySetting xsi:type="ns23:SecuritySetting">Custom</ns23:SecuritySetting>
+    <ns23:TransportLevelSecurity xsi:type="ns23:TransportLevelSecurity">
+     <ns23:CommunicationMethod xsi:type="ns23:CommunicationMethod">Privacy</ns23:CommunicationMethod>
+    </ns23:TransportLevelSecurity>
+    <ns23:RunAsMode xsi:type="ns23:RunAsMode">System</ns23:RunAsMode>
+    <ns23:AnonymousClients xsi:type="ns23:AnonymousCommunication">No</ns23:AnonymousClients>
+    <ns23:ServiceAuthorization xsi:type="ns23:ServiceAuthorization">
+     <ns23:NoAuthorization xsi:type="ns23:NoAuthorization"/>
+    </ns23:ServiceAuthorization>
+   </ns23:ServiceSecurity>
   </ns3:Service>
  </ns3:Services>
- <ns18:Extensions xsi:type="ns18:ExtensionsType" xmlns:ns18="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns24:Extensions xsi:type="ns24:ExtensionsType" xmlns:ns24="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
 </ns1:ServiceSkeleton>

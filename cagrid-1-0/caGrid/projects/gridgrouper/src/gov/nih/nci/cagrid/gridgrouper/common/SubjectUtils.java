@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gridgrouper.client;
+package gov.nih.nci.cagrid.gridgrouper.common;
 
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
@@ -12,7 +12,10 @@ public class SubjectUtils {
 		"Grid Grouper: Grid Source Adapter");
 	public static final NonGridSourceAdapter NON_GRID_SOURCE = new NonGridSourceAdapter("Unknown",
 		"Grid Grouper: Unknown Source Adapter");
-
+	
+	public static Subject getSubject(String id) throws SubjectNotFoundException {
+		return getSubject(id,false);
+	}
 
 	public static Subject getSubject(String id, boolean allowNonGridSubject) throws SubjectNotFoundException {
 		try {
