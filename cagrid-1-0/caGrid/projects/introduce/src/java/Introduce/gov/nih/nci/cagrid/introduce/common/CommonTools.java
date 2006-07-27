@@ -852,8 +852,68 @@ public class CommonTools {
 	
 	
 	public static Set getUnavailableUsedTypes(ServiceDescription desc) {
+		// build up a set of used types
 		Set usedTypes = new HashSet();
+		ServiceType[] services = desc.getServices().getService();
+		for (int s = 0; s < services.length; s++) {
+			// resource properties
+			ResourcePropertiesListType propsList = services[s].getResourcePropertiesList();
+			if (propsList != null) {
+				for (int p = 0; propsList.getResourceProperty() != null 
+				&& p < propsList.getResourceProperty().length; p++) {
+					ResourcePropertyType prop = propsList.getResourceProperty(p);
+					usedTypes.add(prop.getQName());
+				}
+			}
+			// methods
+			MethodsType methods = services[s].getMethods();
+			if (methods != null) {
+				for (int m = 0; methods.getMethod() != null && m < methods.getMethod().length; m++) {
+					MethodType method = methods.getMethod(m);
+					// inputs
+					MethodTypeInputs inputs = method.getInputs();
+					if (inputs != null) {
+						for (int i = 0; inputs.getInput() != null 
+						&& i < inputs.getInput().length; i++) {
+							MethodTypeInputsInput input = inputs.getInput(i);
+							usedTypes.add(input.getQName());
+						}
+					}
+					// output
+					MethodTypeOutput output = method.getOutput();
+					if (output != null) {
+						usedTypes.add(output.getQName());
+					}
+					// exceptions
+					// TODO: This is disabled until exceptions can be typed from schema
+					/*
+					MethodTypeExceptions exceptions = method.getExceptions();
+					if (exceptions != null) {
+						for (int e = 0; exceptions.getException() != null 
+						&& e < exceptions.getException().length; e++) {
+							MethodTypeExceptionsException exception = exceptions.getException(e);
+							// TODO: verify exception QName against nsuri
+						}
+					}
+					*/
+				}
+			}
+		}
 		
-		return null;
+		// walk through namespace types removing QNames from used types
+		NamespacesType namespaces = desc.getNamespaces();
+		if (namespaces != null) {
+			for (int n = 0; namespaces.getNamespace() != null 
+			&& usedTypes.size() != 0 && n < namespaces.getNamespace().length; n++) {
+				NamespaceType nsType = namespaces.getNamespace(n);
+				for (int t = 0; nsType.getSchemaElement() != null 
+				&& t < nsType.getSchemaElement().length 
+				&& usedTypes.size() != 0; t++) {
+					SchemaElementType type = nsType.getSchemaElement(t);
+					usedTypes.remove(new QName(nsType.getNamespace(), type.getType()));
+				}
+			}
+		}
+		return usedTypes;
 	}
 }
