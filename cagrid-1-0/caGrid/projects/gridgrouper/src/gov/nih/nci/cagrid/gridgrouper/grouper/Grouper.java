@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gridgrouper.grouper;
 
-
 import edu.internet2.middleware.grouper.StemNotFoundException;
 
 import java.util.Set;
@@ -13,7 +12,12 @@ import java.util.Set;
  *          Exp $
  */
 public interface Grouper {
-	  public Stem getRootStem() throws StemNotFoundException;
-	  public Stem findStem(String name) throws StemNotFoundException;
-	  public Set getChildStems(String stemName);
+	public Stem getRootStem() throws StemNotFoundException;
+
+	public Stem findStem(String name) throws StemNotFoundException;
+
+	public Set getChildStems(String parentStemName);
+
+	public Stem getParentStem(String childStemName)
+			throws StemNotFoundException;
 }

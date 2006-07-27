@@ -11,7 +11,6 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -22,59 +21,49 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class GridGrouperStem implements Stem {
 
 	private StemDescriptor des;
-	private GridGrouper gridGrouper;
 
+	private GridGrouper gridGrouper;
 
 	protected GridGrouperStem(GridGrouper gridGrouper, StemDescriptor des) {
 		this.gridGrouper = gridGrouper;
 		this.des = des;
 	}
 
-
 	public String getCreateSource() {
 		return des.getCreateSource();
 	}
-
 
 	public Subject getCreateSubject() throws SubjectNotFoundException {
 		return SubjectUtils.getSubject(des.getCreateSubject(), true);
 	}
 
-
 	public Date getCreateTime() {
 		return new Date(des.getCreateTime());
 	}
-
 
 	public String getDescription() {
 		return des.getDescription();
 	}
 
-
 	public String getDisplayExtension() {
 		return des.getDisplayExtension();
 	}
-
 
 	public String getDisplayName() {
 		return des.getDisplayName();
 	}
 
-
 	public String getExtension() {
 		return des.getExtension();
 	}
-
 
 	public String getModifySource() {
 		return des.getModifySource();
 	}
 
-
 	public Subject getModifySubject() throws SubjectNotFoundException {
 		return SubjectUtils.getSubject(des.getModifySubject(), true);
 	}
-
 
 	public Date getModifyTime() {
 		if (des.getModifyTime() == 0) {
@@ -84,31 +73,28 @@ public class GridGrouperStem implements Stem {
 		}
 	}
 
-
 	public String getName() {
 		return des.getName();
 	}
-
 
 	public String getUuid() {
 		return des.getUUID();
 	}
 
-
 	public Set getChildStems() {
 		return gridGrouper.getChildStems(getName());
 	}
-	
 
 	public Stem getParentStem() throws StemNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		return gridGrouper.getParentStem(getName());
 	}
 
-
 	public String toString() {
-		return new ToStringBuilder(this).append("displayName", getDisplayName()).append("name", getName()).append(
-			"uuid", getUuid()).append("created", getCreateTime()).append("modified", getModifyTime()).toString();
+		return new ToStringBuilder(this)
+				.append("displayName", getDisplayName()).append("name",
+						getName()).append("uuid", getUuid()).append("created",
+						getCreateTime()).append("modified", getModifyTime())
+				.toString();
 	}
 
 }
