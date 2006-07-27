@@ -1,13 +1,12 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
-import edu.internet2.middleware.grouper.GrouperRuntimeException;
+import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 import gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -20,13 +19,14 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GridGrouperStem extends GridGrouperObject implements Stem {
+public class GridGrouperStem implements Stem {
 
 	private StemDescriptor des;
+	private GridGrouper gridGrouper;
 
 
-	protected GridGrouperStem(GridGrouperClient client, StemDescriptor des) {
-		this.setClient(client);
+	protected GridGrouperStem(GridGrouper gridGrouper, StemDescriptor des) {
+		this.gridGrouper = gridGrouper;
 		this.des = des;
 	}
 
@@ -39,9 +39,6 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 	public Subject getCreateSubject() throws SubjectNotFoundException {
 		return SubjectUtils.getSubject(des.getCreateSubject(), true);
 	}
-
-
-	
 
 
 	public Date getCreateTime() {
@@ -99,19 +96,13 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 
 
 	public Set getChildStems() {
-		try {
-			StemDescriptor[] children = getClient().getChildStems(this.getName());
-			Set set = new HashSet();
-			if (children != null) {
-				for (int i = 0; i < children.length; i++) {
-					set.add(new GridGrouperStem(getClient(), children[i]));
-				}
-			}
-			return set;
-		} catch (Exception e) {
-			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
-		}
+		return gridGrouper.getChildStems(getName());
+	}
+	
+
+	public Stem getParentStem() throws StemNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

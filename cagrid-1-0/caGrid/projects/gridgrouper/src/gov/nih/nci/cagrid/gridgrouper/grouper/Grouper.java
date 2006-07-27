@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.gridgrouper.grouper;
 
 import edu.internet2.middleware.grouper.StemNotFoundException;
 
+import java.util.Set;
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -13,4 +15,5 @@ import edu.internet2.middleware.grouper.StemNotFoundException;
 public interface Grouper {
 	  public Stem getRootStem() throws StemNotFoundException;
 	  public Stem findStem(String name) throws StemNotFoundException;
+	  public Set getChildStems(String stemName);
 }

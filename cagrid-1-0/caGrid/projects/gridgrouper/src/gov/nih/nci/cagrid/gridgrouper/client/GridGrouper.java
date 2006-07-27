@@ -1,15 +1,15 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Grouper;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault;
-import gov.nih.nci.cagrid.gridgrouper.subject.GridSourceAdapter;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.globus.gsi.GlobusCredential;
 
@@ -49,7 +49,7 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 	public Stem findStem(String name) throws StemNotFoundException {
 		try {
 			StemDescriptor des = getClient().getStem(name);
-			return new GridGrouperStem(getClient(), des);
+			return new GridGrouperStem(this, des);
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
 		} catch (Exception e) {
@@ -57,6 +57,22 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
+	public Set getChildStems(String stemName) {
+		try {
+			StemDescriptor[] children = getClient().getChildStems(stemName);
+			Set set = new HashSet();
+			if (children != null) {
+				for (int i = 0; i < children.length; i++) {
+					set.add(new GridGrouperStem(this, children[i]));
+				}
+			}
+			return set;
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+	
 	
 	public static void main(String[] args) {
 		System.out.println("Running the Grid Service Client");
