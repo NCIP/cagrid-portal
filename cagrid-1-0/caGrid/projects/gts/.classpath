@@ -76,7 +76,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-common-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-service-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-stubs-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/cglib-full-2.0.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/asm-2.2.1.jar"/>
@@ -87,5 +86,6 @@
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

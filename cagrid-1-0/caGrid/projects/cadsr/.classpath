@@ -56,7 +56,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-common-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-data-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="ext/lib/cglib-full-2.0.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-graph-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-core-1.0.jar"/>
@@ -94,5 +93,6 @@
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
+	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
