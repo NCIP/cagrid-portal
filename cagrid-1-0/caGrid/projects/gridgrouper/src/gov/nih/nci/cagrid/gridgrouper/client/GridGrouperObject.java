@@ -21,7 +21,5 @@ public abstract class GridGrouperObject {
 	protected Log getLog() {
 		return log;
 	}
-	
-	
 
 }

@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.gridgrouper.client;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor;
+import gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Grouper;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault;
@@ -44,7 +45,7 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 
 	public Stem findStem(String name) throws StemNotFoundException {
 		try {
-			StemDescriptor des = getClient().getStem(name);
+			StemDescriptor des = getClient().getStem(getStemIdentifier(name));
 			return new GridGrouperStem(this, des);
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
@@ -56,7 +57,8 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 
 	public Set getChildStems(String stemName) {
 		try {
-			StemDescriptor[] children = getClient().getChildStems(stemName);
+			StemDescriptor[] children = getClient().getChildStems(
+					getStemIdentifier(stemName));
 			Set set = new HashSet();
 			if (children != null) {
 				for (int i = 0; i < children.length; i++) {
@@ -73,7 +75,8 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 	public Stem getParentStem(String childStemName)
 			throws StemNotFoundException {
 		try {
-			StemDescriptor des = getClient().getParentStem(childStemName);
+			StemDescriptor des = getClient().getParentStem(
+					getStemIdentifier(childStemName));
 			return new GridGrouperStem(this, des);
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
@@ -89,6 +92,13 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 
 	protected void setClient(GridGrouperClient client) {
 		this.client = client;
+	}
+
+	protected StemIdentifier getStemIdentifier(String stemName) {
+		StemIdentifier id = new StemIdentifier();
+		id.setGridGrouperURL(getClient().getEndpointReference().toString());
+		id.setStemName(stemName);
+		return id;
 	}
 
 }

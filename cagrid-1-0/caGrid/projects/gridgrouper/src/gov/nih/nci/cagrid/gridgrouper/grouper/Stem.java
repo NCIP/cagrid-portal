@@ -8,6 +8,7 @@ import edu.internet2.middleware.grouper.StemModifyException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
+import gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier;
 
 
 /**
@@ -54,6 +55,8 @@ public interface Stem {
 	
 	public String getUuid();
 	
+	public StemIdentifier getStemIdentifier();
+	
 	// Stem Actions
 	public Set getChildStems();
     public Stem getParentStem() throws StemNotFoundException; 
@@ -63,12 +66,13 @@ public interface Stem {
 	
 	  //public Group addChildGroup(String extension, String displayExtension) throws GroupAddException,InsufficientPrivilegeException; 
 	  //public Stem addChildStem(String extension, String displayExtension) throws InsufficientPrivilegeException,StemAddException; 
-	 // public void delete() throws InsufficientPrivilegeException, StemDeleteException; 
+	 //public void delete() throws InsufficientPrivilegeException, StemDeleteException; 
 	  
 	  //public Set getChildGroups(); 
 	  //public Set getCreators() throws GrouperRuntimeException; 
 	  //public Set getPrivs(Subject subj); 
-	  //public Set getStemmers(); public void grantPriv(Subject subj, Privilege priv) throws GrantPrivilegeException, InsufficientPrivilegeException, SchemaException;
+	  //public Set getStemmers(); 
+      //public void grantPriv(Subject subj, Privilege priv) throws GrantPrivilegeException, InsufficientPrivilegeException, SchemaException;
 	  //public boolean hasCreate(Subject subj); 
 	  //public boolean hasStem(Subject subj) throws SchemaException; 
 	  //public void revokePriv(Subject subj, Privilege priv) throws InsufficientPrivilegeException, RevokePrivilegeException, SchemaException; 

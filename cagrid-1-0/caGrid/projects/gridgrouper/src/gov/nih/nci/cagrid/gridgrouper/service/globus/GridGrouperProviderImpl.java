@@ -19,33 +19,33 @@ public class GridGrouperProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDescriptionResponse updateStemDescription(gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDescriptionRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault {
-		gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDescriptionResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDescriptionResponse();
-		boxedResult.setStemDescriptor(impl.updateStemDescription(params.getStemName(),params.getDescription()));
-		return boxedResult;
-	}
-
-	public gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDisplayExtensionResponse updateStemDisplayExtension(gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDisplayExtensionRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault {
-		gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDisplayExtensionResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDisplayExtensionResponse();
-		boxedResult.setStemDescriptor(impl.updateStemDisplayExtension(params.getStemName(),params.getDisplayExtension()));
-		return boxedResult;
-	}
-
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse getStem(gov.nih.nci.cagrid.gridgrouper.stubs.GetStemRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse();
-		boxedResult.setStemDescriptor(impl.getStem(params.getStemName()));
+		boxedResult.setStemDescriptor(impl.getStem(params.getStem().getStemIdentifier()));
 		return boxedResult;
 	}
 
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsResponse getChildStems(gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsResponse();
-		boxedResult.setStemDescriptor(impl.getChildStems(params.getParentStemName()));
+		boxedResult.setStemDescriptor(impl.getChildStems(params.getParentStem().getStemIdentifier()));
 		return boxedResult;
 	}
 
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GetParentStemResponse getParentStem(gov.nih.nci.cagrid.gridgrouper.stubs.GetParentStemRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GetParentStemResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetParentStemResponse();
-		boxedResult.setStemDescriptor(impl.getParentStem(params.getChildStemName()));
+		boxedResult.setStemDescriptor(impl.getParentStem(params.getChildStem().getStemIdentifier()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDescriptionResponse updateStemDescription(gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDescriptionRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDescriptionResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDescriptionResponse();
+		boxedResult.setStemDescriptor(impl.updateStemDescription(params.getStem().getStemIdentifier(),params.getDescription()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDisplayExtensionResponse updateStemDisplayExtension(gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDisplayExtensionRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDisplayExtensionResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDisplayExtensionResponse();
+		boxedResult.setStemDescriptor(impl.updateStemDisplayExtension(params.getStem().getStemIdentifier(),params.getDisplayExtension()));
 		return boxedResult;
 	}
 

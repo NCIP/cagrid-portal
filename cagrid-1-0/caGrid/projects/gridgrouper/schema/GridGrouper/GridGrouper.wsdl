@@ -16,7 +16,13 @@
       <element name="GetStemRequest">
         <complexType>
           <sequence>
-            <element name="stemName" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <element name="stem">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
           </sequence>
         </complexType>
       </element>
@@ -30,7 +36,13 @@
       <element name="GetChildStemsRequest">
         <complexType>
           <sequence>
-            <element name="parentStemName" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <element name="parentStem">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
           </sequence>
         </complexType>
       </element>
@@ -44,7 +56,13 @@
       <element name="GetParentStemRequest">
         <complexType>
           <sequence>
-            <element name="childStemName" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <element name="childStem">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
           </sequence>
         </complexType>
       </element>
@@ -58,7 +76,13 @@
       <element name="UpdateStemDescriptionRequest">
         <complexType>
           <sequence>
-            <element name="stemName" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <element name="stem">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
             <element name="description" type="xs:string" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
@@ -73,7 +97,13 @@
       <element name="UpdateStemDisplayExtensionRequest">
         <complexType>
           <sequence>
-            <element name="stemName" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <element name="stem">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
             <element name="displayExtension" type="xs:string" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>

@@ -20,6 +20,7 @@ import edu.internet2.middleware.grouper.SubjectFinder;
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor;
+import gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault;
@@ -91,20 +92,20 @@ public class GridGrouper {
 		}
 	}
 
-	public StemDescriptor getStem(String gridIdentity, String stemName)
+	public StemDescriptor getStem(String gridIdentity, StemIdentifier stemId)
 			throws GridGrouperRuntimeFault, StemNotFoundFault {
 		GrouperSession session = null;
 		try {
 			Subject subject = source.getSubject(gridIdentity);
 			session = GrouperSession.start(subject);
 			StemDescriptor des = null;
-			Stem stem = StemFinder.findByName(session, stemName);
+			Stem stem = StemFinder.findByName(session, stemId.getStemName());
 			des = stemtoStemDescriptor(stem);
 
 			return des;
 		} catch (StemNotFoundException e) {
 			StemNotFoundFault fault = new StemNotFoundFault();
-			fault.setFaultString("The stem, " + stemName + "was not found.");
+			fault.setFaultString("The stem, " + stemId.getStemName() + "was not found.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (StemNotFoundFault) helper.getFault();
@@ -112,7 +113,7 @@ public class GridGrouper {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
-			fault.setFaultString("Error occurred getting the stem " + stemName
+			fault.setFaultString("Error occurred getting the stem " + stemId.getStemName()
 					+ ": " + e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
@@ -130,14 +131,14 @@ public class GridGrouper {
 	}
 
 	public StemDescriptor[] getChildStems(String gridIdentity,
-			String parentStemName) throws RemoteException,
+			StemIdentifier parentStemId) throws RemoteException,
 			GridGrouperRuntimeFault, StemNotFoundFault {
 		GrouperSession session = null;
 		try {
 			Subject subject = source.getSubject(gridIdentity);
 			session = GrouperSession.start(subject);
 			StemDescriptor[] children = null;
-			Stem parent = StemFinder.findByName(session, parentStemName);
+			Stem parent = StemFinder.findByName(session, parentStemId.getStemName());
 			Set set = parent.getChildStems();
 			children = new StemDescriptor[set.size()];
 			Iterator itr = set.iterator();
@@ -150,7 +151,7 @@ public class GridGrouper {
 			return children;
 		} catch (StemNotFoundException e) {
 			StemNotFoundFault fault = new StemNotFoundFault();
-			fault.setFaultString("The parent stem, " + parentStemName
+			fault.setFaultString("The parent stem, " + parentStemId.getStemName()
 					+ "was not found.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
@@ -161,7 +162,7 @@ public class GridGrouper {
 			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
 			fault
 					.setFaultString("Error occurred getting the child stems for the parent stem, "
-							+ parentStemName + ": " + e.getMessage());
+							+ parentStemId.getStemName() + ": " + e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GridGrouperRuntimeFault) helper.getFault();
@@ -178,14 +179,14 @@ public class GridGrouper {
 	}
 
 	public StemDescriptor getParentStem(String gridIdentity,
-			String childStemName) throws RemoteException,
+			StemIdentifier childStemId) throws RemoteException,
 			GridGrouperRuntimeFault, StemNotFoundFault {
 		GrouperSession session = null;
 		try {
 			Subject subject = source.getSubject(gridIdentity);
 			session = GrouperSession.start(subject);
 			StemDescriptor parent = null;
-			Stem child = StemFinder.findByName(session, childStemName);
+			Stem child = StemFinder.findByName(session, childStemId.getStemName());
 			Stem s = child.getParentStem();
 			parent = stemtoStemDescriptor(s);
 
@@ -193,7 +194,7 @@ public class GridGrouper {
 		} catch (StemNotFoundException e) {
 			StemNotFoundFault fault = new StemNotFoundFault();
 			fault.setFaultString("The parent stem for the child "
-					+ childStemName + " could not be found!!!");
+					+ childStemId.getStemName() + " could not be found!!!");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (StemNotFoundFault) helper.getFault();
@@ -203,7 +204,7 @@ public class GridGrouper {
 			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
 			fault
 					.setFaultString("Error occurred getting the parent stem for the child stem, "
-							+ childStemName + ": " + e.getMessage());
+							+ childStemId.getStemName() + ": " + e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GridGrouperRuntimeFault) helper.getFault();
@@ -220,7 +221,7 @@ public class GridGrouper {
 	}
 
 	public StemDescriptor updateStemDescription(String gridIdentity,
-			String stemName, String description) throws RemoteException,
+			StemIdentifier stemId, String description) throws RemoteException,
 			GridGrouperRuntimeFault, InsufficientPrivilegeFault,
 			StemModifyFault {
 		GrouperSession session = null;
@@ -228,7 +229,7 @@ public class GridGrouper {
 			Subject subject = source.getSubject(gridIdentity);
 			session = GrouperSession.start(subject);
 			StemDescriptor des = null;
-			Stem stem = StemFinder.findByName(session, stemName);
+			Stem stem = StemFinder.findByName(session, stemId.getStemName());
 			stem.setDescription(description);
 			des = stemtoStemDescriptor(stem);
 			return des;
@@ -249,7 +250,7 @@ public class GridGrouper {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
-			fault.setFaultString("Error occurred getting the stem " + stemName
+			fault.setFaultString("Error occurred getting the stem " + stemId.getStemName()
 					+ ": " + e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
@@ -267,7 +268,7 @@ public class GridGrouper {
 	}
 
 	public StemDescriptor updateStemDisplayExtension(String gridIdentity,
-			String stemName, String displayExtension) throws RemoteException,
+			StemIdentifier stemId, String displayExtension) throws RemoteException,
 			GridGrouperRuntimeFault, InsufficientPrivilegeFault,
 			StemModifyFault {
 		GrouperSession session = null;
@@ -275,7 +276,7 @@ public class GridGrouper {
 			Subject subject = source.getSubject(gridIdentity);
 			session = GrouperSession.start(subject);
 			StemDescriptor des = null;
-			Stem stem = StemFinder.findByName(session, stemName);
+			Stem stem = StemFinder.findByName(session, stemId.getStemName());
 			stem.setDisplayExtension(displayExtension);
 			des = stemtoStemDescriptor(stem);
 			return des;
@@ -296,7 +297,7 @@ public class GridGrouper {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
-			fault.setFaultString("Error occurred getting the stem " + stemName
+			fault.setFaultString("Error occurred getting the stem " + stemId.getStemName()
 					+ ": " + e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);

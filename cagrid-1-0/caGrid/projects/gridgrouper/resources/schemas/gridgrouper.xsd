@@ -19,4 +19,22 @@
 			<xsd:element name="ModifyTime" minOccurs="1" maxOccurs="1" type="xsd:long" />
 		</xsd:sequence>
 	</xsd:complexType>
+	
+	<xsd:element name="SubjectIdentifier" type="xsd:string" />
+
+	<xsd:element name="StemIdentifier" type="grouper:StemIdentifier" />
+	<xsd:complexType name="StemIdentifier">
+		<xsd:sequence>
+			<xsd:element name="gridGrouperURL" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="stemName" minOccurs="1" maxOccurs="1" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element name="StemPrivilege" type="grouper:StemPrivilege"/>
+	  <xsd:simpleType name="StemPrivilege">
+  			<xsd:restriction base="xsd:string">
+   				<xsd:enumeration value="create"/>
+   				<xsd:enumeration value="stem"/>	
+  			</xsd:restriction>
+ 	  </xsd:simpleType>
 </xsd:schema>
