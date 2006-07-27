@@ -1,5 +1,7 @@
 To Do:
 
+If a schema element type is in use by a method, the namespace type for the schema element cannot be removed.  Makes it 'impossible' to update schemas.
+
 I was adding faults to a method, and when I hit done, an error dialog poped up with method "java.util.Vector" and removed my faults
 
 on save etc i have seen unable to delete namespace2package.mappings.
