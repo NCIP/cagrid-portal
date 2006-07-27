@@ -1,11 +1,5 @@
 package gov.nih.nci.cagrid.data.cql.validation;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cagrid.cqlquery.Association;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
@@ -17,6 +11,11 @@ import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation;
+
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -81,6 +80,8 @@ public class DomainModelValidator {
 			throw new MalformedQueryException("Attribute '" + attrib.getName() + "' is not defined for the class "
 				+ classMd.getClassName());
 		}
+		// verify the data type being used is compatible
+		validateAttributeDataType(attrib, attribMd);
 	}
 
 
@@ -91,10 +92,7 @@ public class DomainModelValidator {
 			&& !(attrib.getPredicate().getValue().equals(Predicate._IS_NOT_NULL) 
 				|| attrib.getPredicate().getValue().equals(Predicate._IS_NULL))) {
 			String value = attrib.getValue();
-			// FIXME: This isn't right.  UMLAttributeMetadata has
-			// getDataElement().getValueDomain().getDatatypeName(), which is what I need
-			SemanticMetadata semanticMd = attribMetadata.getSemanticMetadataCollection().getSemanticMetadata(0); 
-			String dataType = semanticMd.getConcept().getLongName();
+			String dataType = attribMetadata.getDataType();
 			try {
 				if (dataType.equals(Integer.class.getName())) {
 					Integer.valueOf(value);
