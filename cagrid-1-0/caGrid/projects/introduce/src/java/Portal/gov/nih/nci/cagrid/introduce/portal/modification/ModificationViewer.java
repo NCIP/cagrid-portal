@@ -56,8 +56,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -65,6 +67,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
@@ -74,7 +77,6 @@ import javax.xml.namespace.QName;
 
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
-import javax.swing.JSplitPane;
 
 
 /**
@@ -1073,6 +1075,7 @@ public class ModificationViewer extends GridPortalComponent {
 						if (getNamespaceJTree().getCurrentNode() instanceof NamespaceTypeTreeNode) {
 							NamespaceType type = (NamespaceType) getNamespaceJTree().getCurrentNode().getUserObject();
 
+							// TODO: allow removal with warning and refresh / update existing schemas
 							if (!nsUsed(type) && !type.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 
 								getNamespaceJTree().removeSelectedNode();
@@ -1275,7 +1278,27 @@ public class ModificationViewer extends GridPortalComponent {
 		int confirmed = JOptionPane.showConfirmDialog(ModificationViewer.this, "Are you sure you want to save?",
 			"Confirm Save", JOptionPane.YES_NO_OPTION);
 		if (confirmed == JOptionPane.OK_OPTION) {
-			try {
+			// verify no needed namespace types have been removed or modified
+			if (!CommonTools.usedTypesAvailable(introService)) {
+				Set unavailable = CommonTools.getUnavailableUsedTypes(introService);
+				String[] message = {
+					"The following schema element types used in the service",
+					"are not available in the specified namespace types!",
+					"Please add schemas as appropriate.", "\n"
+				};
+				String[] err = new String[unavailable.size() + message.length];
+				System.arraycopy(message, 0, err, 0, message.length);
+				int index = message.length;
+				Iterator unavailableIter = unavailable.iterator();
+				while (unavailableIter.hasNext()) {
+					err[index] = unavailableIter.next().toString();
+					index++;
+				}
+				JOptionPane.showMessageDialog(ModificationViewer.this, err, 
+					"Unavailable types found", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+ 			try {
 				resetMethodSecurityIfServiceSecurityChanged();
 			} catch (Exception ex) {
 				ex.printStackTrace();
