@@ -76,6 +76,7 @@ public class InvalidDomainTestCase extends TestCase {
 		CQLQuery query = getQuery(cqlDocsDir + File.separator + "invalid" + File.separator + "domain" + File.separator + filename);
 		try {
 			validator.validateDomain(query, getDomainModel());
+			fail("Query should have been invalid, but passed validation");
 		} catch (MalformedQueryException ex) {
 			System.out.println("The query is invalid: " + ex.getMessage());
 			assertTrue("The query is invalid: " + ex.getMessage(), true);
