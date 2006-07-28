@@ -19,7 +19,7 @@ import org.xml.sax.InputSource;
 
 /** 
  *  ValidDomainTestCase
- *  TODO:DOCUMENT ME
+ *  Test case to verify the validity of CQL queries against the domain model
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
@@ -88,14 +88,8 @@ public class ValidDomainTestCase extends TestCase {
 	}
 	
 	
-	public void testDomainModelConformsToSchema() {
-		try {
-			SchemaValidator.validate(DOMAIN_MODEL_XSD, new File(DOMAIN_MODEL_FILE));
-			assertTrue(DOMAIN_MODEL_FILE + " appears valid against schema " + DOMAIN_MODEL_XSD, true);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			fail(DOMAIN_MODEL_FILE + " not valid against schema " + DOMAIN_MODEL_XSD + "\n\t" + ex.getMessage());
-		}
+	public void testValidGroupWithAttributes() {
+		checkQuery("groupWithValidAttributes.xml");
 	}
 	
 	
@@ -107,6 +101,17 @@ public class ValidDomainTestCase extends TestCase {
 		checkQuery("objectWithAssociation.xml");
 	}
 	*/
+	
+	
+	public void testDomainModelConformsToSchema() {
+		try {
+			SchemaValidator.validate(DOMAIN_MODEL_XSD, new File(DOMAIN_MODEL_FILE));
+			assertTrue(DOMAIN_MODEL_FILE + " appears valid against schema " + DOMAIN_MODEL_XSD, true);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			fail(DOMAIN_MODEL_FILE + " not valid against schema " + DOMAIN_MODEL_XSD + "\n\t" + ex.getMessage());
+		}
+	}
 	
 	
 	public static void main(String[] args) {

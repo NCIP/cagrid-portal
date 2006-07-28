@@ -102,6 +102,16 @@ public class InvalidDomainTestCase extends TestCase {
 	}
 	
 	
+	public void testInvalidAttributeDataType() {
+		checkQuery("invalidAttributeDataType.xml");
+	}
+	
+	
+	public void testGroupWithInvalidAtttibuteName() {
+		checkQuery("groupWithInvalidAttributeName.xml");
+	}
+	
+	
 	public void testDomainModelConformsToSchema() {
 		try {
 			SchemaValidator.validate(DOMAIN_MODEL_XSD, new File(DOMAIN_MODEL_FILE));
