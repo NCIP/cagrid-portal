@@ -128,17 +128,20 @@ public class DomainModelValidator {
 			UMLAssociation assocMd = associations[i];
 			UMLClass targetClassMd = DomainModelUtils.getReferencedUMLClass(model, assocMd
 				.getTargetUMLAssociationEdge().getUMLAssociationEdge().getUMLClassReference());
-			if (targetClassMd != null && targetClassMd.getClassName().equals(assoc.getName())) {
-				if (associationFound) {
-					// no role name, and already found an association of the
-					// same type
-					throw new MalformedQueryException("The association from " + current.getName() + " to "
-						+ assoc.getName() + " is ambiguous without a role name");
-				}
-				if (roleName != null) {
-					if (assocMd.getTargetUMLAssociationEdge().getUMLAssociationEdge().getRoleName().equals(roleName)) {
-						associationFound = true;
-						break;
+			if (targetClassMd != null) {
+				String targetClassName = targetClassMd.getPackageName() + "." + targetClassMd.getClassName();
+				if (targetClassName.equals(assoc.getName())) {
+					if (associationFound) {
+						// no role name, and already found an association 
+						// of the same type
+						throw new MalformedQueryException("The association from " + current.getName() + " to "
+							+ assoc.getName() + " is ambiguous without a role name");
+					}
+					if (roleName != null) {
+						if (assocMd.getTargetUMLAssociationEdge().getUMLAssociationEdge().getRoleName().equals(roleName)) {
+							associationFound = true;
+							break;
+						}
 					}
 				}
 			}
@@ -213,8 +216,11 @@ public class DomainModelValidator {
 
 				UMLClass referencedUMLClass = DomainModelUtils.getReferencedUMLClass(model, assoc
 					.getSourceUMLAssociationEdge().getUMLAssociationEdge().getUMLClassReference());
-				if (referencedUMLClass != null && referencedUMLClass.getClassName().equals(sourceClass)) {
-					associations.add(assoc);
+				if (referencedUMLClass != null) {
+					String refClassName = referencedUMLClass.getPackageName() + "." + referencedUMLClass.getClassName();
+					if (refClassName.equals(sourceClass)) {
+						associations.add(assoc);
+					}
 				}
 			}
 		}
