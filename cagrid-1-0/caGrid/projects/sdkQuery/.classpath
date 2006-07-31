@@ -79,5 +79,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-utils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-validation.jar"/>
 	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
+	<classpathentry kind="src" path="ext/resources"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

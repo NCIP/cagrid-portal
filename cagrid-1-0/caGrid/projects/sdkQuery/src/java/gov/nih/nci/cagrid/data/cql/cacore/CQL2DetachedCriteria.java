@@ -122,22 +122,6 @@ public class CQL2DetachedCriteria {
 		String roleName = getRoleName(parentObjectClass.getName(), association);
 		String associationTypeName = association.getName();
 		if (roleName == null) {
-			// determine role based on object's type
-			Field[] objectFields = parentObjectClass.getFields();
-			for (int i = 0; i < objectFields.length; i++) {
-				if (objectFields[i].getType().getName().equals(associationTypeName)) {
-					if (roleName == null) {
-						roleName = objectFields[i].getName();
-					} else {
-						// already found a field of the same type, so association is ambiguous
-						throw new MalformedQueryException("Association from " + parentObjectClass.getName() + " to " + associationTypeName + " is ambiguous: Specify a role name");
-					}
-				}
-			}
-			
-		}
-		if (roleName == null) {
-			// still null?? no association to the object!
 			throw new MalformedQueryException("Association from " + parentObjectClass.getName() + " to " + associationTypeName + " does not exist.  Use only direct associations");
 		}
 		// create an association criteria from parent to child

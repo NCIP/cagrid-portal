@@ -49,9 +49,9 @@
 	<!-- The Test Classpath                                              -->
 	<!-- =============================================================== -->
 	<path id="test.classpath">
-		<pathelement path="${build.utils.dest}" />
-		<pathelement path="${build.extension.dest}"/>
-		<pathelement path="${build.service.dest}"/>
+		<!-- 
+		<pathelement path="${basedir}/ext/resources"/>
+		-->
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -111,6 +111,7 @@
 	<target name="compileTests" depends="compile">
 		<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="${java.debug}" source="${java.source}">
 			<classpath>
+				<pathelement path="${build.dest}"/>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar"/>
 				</fileset>
