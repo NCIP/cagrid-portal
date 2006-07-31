@@ -13,10 +13,7 @@ import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -96,57 +93,11 @@ public class DomainModelValidator {
 			String value = attrib.getValue();
 			ValueDomain valueDomain = attribMetadata.getValueDomain();
 			if (valueDomain != null) {
-				String dataType = valueDomain.getDatatypeName();
 				try {
-					if (dataType.equals(Integer.class.getName())) {
-						int i = Integer.valueOf(value).intValue();
-						// test min value
-						if (valueDomain.getLowValueNumber() != null) {
-							int low = Integer.valueOf(valueDomain.getLowValueNumber()).intValue();
-							if (i < low) {
-								throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value: "
-									+ value + "; minimum accepted value is " + low);
-							}
-						}
-						// test high
-						if (valueDomain.getHighValueNumber() != null) {
-							int high = Integer.valueOf(valueDomain.getHighValueNumber()).intValue();
-							if (i > high) {
-								throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value: "
-									+ value + "; maximum accepted value is " + high);
-							}
-						}
-					} else if (dataType.equals(Long.class.getName())) {
-						long i = Long.valueOf(value).longValue();
-						// test low value
-						if (valueDomain.getLowValueNumber() != null) {
-							long low = Long.valueOf(valueDomain.getLowValueNumber()).longValue();
-							if (i < low) {
-								throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value: "
-									+ value + "; minimum accepted value is " + low);
-							}
-						}
-						// test high
-						if (valueDomain.getHighValueNumber() != null) {
-							long high = Long.valueOf(valueDomain.getHighValueNumber()).longValue();
-							if (i > high) {
-								throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value: "
-									+ value + "; maximum accepted value is " + high);
-							}
-						}
-					} else if (dataType.equals(Date.class.getName())) {
-						DateFormat.getInstance().parse(value);
-					} else if (dataType.equals(Boolean.class.getName())) {
-						Boolean.valueOf(value);
-					} else if (dataType.equals(Character.class.getName())) {
-						if (value.length() != 1) {
-							throw new MalformedQueryException("Characters can only be of length 1, not " + value.length());
-						}
-						Character.valueOf(value.charAt(0));
-					}
+					ValueDomainValidator.validate(value, valueDomain);
 				} catch (Exception ex) {
-					throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value: " 
-						+ value + "; but type is " + dataType, ex);
+					throw new MalformedQueryException("Query for attribute " + attrib.getName() 
+						+ " did not validate: " + ex.getMessage(), ex);
 				}
 			} else {
 				// TODO: warn no value domain found

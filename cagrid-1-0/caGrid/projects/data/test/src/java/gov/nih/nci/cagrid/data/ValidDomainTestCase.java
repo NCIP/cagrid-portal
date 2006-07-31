@@ -97,6 +97,7 @@ public class ValidDomainTestCase extends TestCase {
 	 * Until the caDSR accuratly returns target and source association edges, 
 	 * this test is turned off.  Presently it returns the same class for both
 	 * edges, which obviously isn't right
+	 
 	public void testValidObjectWithAssociation() {
 		checkQuery("objectWithAssociation.xml");
 	}
