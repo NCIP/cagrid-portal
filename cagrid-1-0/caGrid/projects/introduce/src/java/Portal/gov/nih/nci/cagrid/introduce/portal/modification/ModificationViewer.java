@@ -1723,36 +1723,37 @@ public class ModificationViewer extends GridPortalComponent {
 		if (namespaceReloadButton == null) {
 			namespaceReloadButton = new JButton();
 			namespaceReloadButton.setText("Reload");
-			namespaceReloadButton.setPreferredSize(new java.awt.Dimension(73,32));
+			namespaceReloadButton.setIcon(IntroduceLookAndFeel.getResyncIcon());
+			namespaceReloadButton.setPreferredSize(new java.awt.Dimension(100, 32));
 			namespaceReloadButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						if (getNamespaceJTree().getCurrentNode() instanceof NamespaceTypeTreeNode) {
-							NamespaceType type = (NamespaceType) getNamespaceJTree().getCurrentNode().getUserObject();
+						// build up the new namespace and it's schema
+						// elements and replace the old one
+						NamespaceType newType = ((NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane()
+							.getSelectedComponent()).createNamespaceType(new File(methodsDirectory
+							+ File.separator
+							+ "schema"
+							+ File.separator
+							+ info.getIntroduceServiceProperties().getProperty(
+								IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)));
 
-							if (!type.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-								// remove the old type
-								getNamespaceJTree().removeSelectedNode();
-
-								// build up the new namespace and it's schema
-								// elements and replace the old one
-								NamespaceType newType = ((NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane()
-									.getSelectedComponent()).createNamespaceType(new File(methodsDirectory
-									+ File.separator
-									+ "schema"
-									+ File.separator
-									+ info.getIntroduceServiceProperties().getProperty(
-										IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)));
-								if (newType != null) {
-									getNamespaceJTree().addNode(newType);
-								} else {
-									JOptionPane.showMessageDialog(ModificationViewer.this, "Error retrieving schema.");
+						if (newType != null) {
+							// set the old namespaceType to this new one
+							if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
+								for (int namespaceI = 0; namespaceI < info.getNamespaces().getNamespace().length; namespaceI++) {
+									NamespaceType tempType = info.getNamespaces().getNamespace()[namespaceI];
+									if (tempType.getNamespace().equals(newType.getNamespace())) {
+										info.getNamespaces().getNamespace()[namespaceI] = newType;
+										break;
+									}
 								}
-
-							} else {
-								PortalUtils.showMessage("Cannot remove " + IntroduceConstants.W3CNAMESPACE);
 							}
+							getNamespaceJTree().setNamespaces(info.getNamespaces());
+						} else {
+							JOptionPane.showMessageDialog(ModificationViewer.this, "Error retrieving schema.");
 						}
+
 					} catch (Exception ex) {
 						JOptionPane.showMessageDialog(ModificationViewer.this, "Please select namespace to Remove");
 					}
