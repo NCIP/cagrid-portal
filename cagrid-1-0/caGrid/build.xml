@@ -404,6 +404,7 @@
 			<artifact refid="data.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
+			<artifact refid="data.cql.testing.docs"/>
 		</resolveDependencies>
 		<ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
