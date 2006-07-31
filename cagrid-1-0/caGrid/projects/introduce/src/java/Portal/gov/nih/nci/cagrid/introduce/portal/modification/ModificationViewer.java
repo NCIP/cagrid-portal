@@ -197,6 +197,8 @@ public class ModificationViewer extends GridPortalComponent {
 
 	private JSplitPane typesSplitPane = null;
 
+	private JButton namespaceReloadButton = null;
+
 
 	/**
 	 * This is the default constructor
@@ -1009,6 +1011,10 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JPanel getDiscoveryButtonPanel() {
 		if (discoveryButtonPanel == null) {
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.gridx = 2;
+			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints1.gridy = 0;
 			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 			gridBagConstraints31.gridx = 1;
 			gridBagConstraints31.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -1021,6 +1027,7 @@ public class ModificationViewer extends GridPortalComponent {
 			discoveryButtonPanel.setLayout(new GridBagLayout());
 			discoveryButtonPanel.add(getNamespaceAddButton(), gridBagConstraints30);
 			discoveryButtonPanel.add(getNamespaceRemoveButton(), gridBagConstraints31);
+			discoveryButtonPanel.add(getNamespaceReloadButton(), gridBagConstraints1);
 		}
 		return discoveryButtonPanel;
 	}
@@ -1075,16 +1082,11 @@ public class ModificationViewer extends GridPortalComponent {
 
 							if (!type.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 								if (CommonTools.isNamespaceTypeInUse(type, introService)) {
-									String[] message = {
-										"The namespace " + type.getNamespace(),
-										"contains types in use by this service.",
-										"Procede with removing it?"
-									};
-									int choice = JOptionPane.showConfirmDialog(
-										ModificationViewer.this, message, "Namespace in use", JOptionPane.YES_NO_OPTION);
-									if (choice == JOptionPane.YES_OPTION) {
-										getNamespaceJTree().removeSelectedNode();
-									}
+									String[] message = {"The namespace " + type.getNamespace(),
+											"contains types in use by this service."};
+									JOptionPane.showMessageDialog(ModificationViewer.this, message);
+								} else {
+									getNamespaceJTree().removeSelectedNode();
 								}
 							} else {
 								PortalUtils.showMessage("Cannot remove " + IntroduceConstants.W3CNAMESPACE);
@@ -1241,11 +1243,9 @@ public class ModificationViewer extends GridPortalComponent {
 			// verify no needed namespace types have been removed or modified
 			if (!CommonTools.usedTypesAvailable(introService)) {
 				Set unavailable = CommonTools.getUnavailableUsedTypes(introService);
-				String[] message = {
-					"The following schema element types used in the service",
-					"are not available in the specified namespace types!",
-					"Please add schemas as appropriate.", "\n"
-				};
+				String[] message = {"The following schema element types used in the service",
+						"are not available in the specified namespace types!", "Please add schemas as appropriate.",
+						"\n"};
 				String[] err = new String[unavailable.size() + message.length];
 				System.arraycopy(message, 0, err, 0, message.length);
 				int index = message.length;
@@ -1254,11 +1254,11 @@ public class ModificationViewer extends GridPortalComponent {
 					err[index] = unavailableIter.next().toString();
 					index++;
 				}
-				JOptionPane.showMessageDialog(ModificationViewer.this, err, 
-					"Unavailable types found", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(ModificationViewer.this, err, "Unavailable types found",
+					JOptionPane.WARNING_MESSAGE);
 				return;
 			}
- 			try {
+			try {
 				resetMethodSecurityIfServiceSecurityChanged();
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -1711,5 +1711,54 @@ public class ModificationViewer extends GridPortalComponent {
 			typesSplitPane.setDividerLocation(0.5d);
 		}
 		return typesSplitPane;
+	}
+
+
+	/**
+	 * This method initializes namespaceReloadButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getNamespaceReloadButton() {
+		if (namespaceReloadButton == null) {
+			namespaceReloadButton = new JButton();
+			namespaceReloadButton.setText("Reload");
+			namespaceReloadButton.setPreferredSize(new java.awt.Dimension(73,32));
+			namespaceReloadButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						if (getNamespaceJTree().getCurrentNode() instanceof NamespaceTypeTreeNode) {
+							NamespaceType type = (NamespaceType) getNamespaceJTree().getCurrentNode().getUserObject();
+
+							if (!type.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+								// remove the old type
+								getNamespaceJTree().removeSelectedNode();
+
+								// build up the new namespace and it's schema
+								// elements and replace the old one
+								NamespaceType newType = ((NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane()
+									.getSelectedComponent()).createNamespaceType(new File(methodsDirectory
+									+ File.separator
+									+ "schema"
+									+ File.separator
+									+ info.getIntroduceServiceProperties().getProperty(
+										IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)));
+								if (newType != null) {
+									getNamespaceJTree().addNode(newType);
+								} else {
+									JOptionPane.showMessageDialog(ModificationViewer.this, "Error retrieving schema.");
+								}
+
+							} else {
+								PortalUtils.showMessage("Cannot remove " + IntroduceConstants.W3CNAMESPACE);
+							}
+						}
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(ModificationViewer.this, "Please select namespace to Remove");
+					}
+				}
+			});
+		}
+		return namespaceReloadButton;
 	}
 }
