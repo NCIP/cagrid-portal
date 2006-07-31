@@ -58,20 +58,20 @@ public class GridGrouperImpl {
 		return this.configuration;
 	}
 
-	public gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor getStem(gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier stem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+	public gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor getStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		return gridGrouper.getStem(getCallerIdentity(), stem);
 	}
 
-	public gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor[] getChildStems(gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier parentStem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+	public gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor[] getChildStems(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier parentStem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		return gridGrouper.getChildStems(getCallerIdentity(), parentStem);
 	}
 
-	public gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor getParentStem(gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier childStem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+	public gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor getParentStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier childStem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		return gridGrouper.getParentStem(getCallerIdentity(), childStem);
 	}
 
-	public synchronized gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor updateStemDescription(
-			gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier stem,
+	public synchronized gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor updateStemDescription(
+			gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,
 			java.lang.String description) throws RemoteException,
 			gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault,
 			gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault,
@@ -80,8 +80,8 @@ public class GridGrouperImpl {
 				description);
 	}
 
-	public synchronized gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor updateStemDisplayExtension(
-			gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier stem,
+	public synchronized gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor updateStemDisplayExtension(
+			gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,
 			java.lang.String displayExtension) throws RemoteException,
 			gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault,
 			gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault,
@@ -90,12 +90,12 @@ public class GridGrouperImpl {
 				stem, displayExtension);
 	}
 
-	public java.lang.String[] getSubjectsWithStemPrivilege(gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier stem,gov.nih.nci.cagrid.gridgrouper.beans.StemPrivilege privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+	public java.lang.String[] getSubjectsWithStemPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		return gridGrouper.getSubjectsWithStemPrivilege(getCallerIdentity(),
 				stem, privilege);
 	}
 
-	public gov.nih.nci.cagrid.gridgrouper.beans.StemPrivilege[] getStemPrivileges(gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier stem,java.lang.String subject) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+	public gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType[] getStemPrivileges(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,java.lang.String subject) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		return gridGrouper
 				.getStemPrivileges(getCallerIdentity(), stem, subject);
 	}

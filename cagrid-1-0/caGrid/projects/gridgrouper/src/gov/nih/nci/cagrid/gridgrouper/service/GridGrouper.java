@@ -12,7 +12,7 @@ import edu.internet2.middleware.grouper.GroupFinder;
 import edu.internet2.middleware.grouper.GroupNotFoundException;
 import edu.internet2.middleware.grouper.GrouperSession;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
-import edu.internet2.middleware.grouper.Privilege;
+import edu.internet2.middleware.grouper.NamingPrivilege;
 import edu.internet2.middleware.grouper.Stem;
 import edu.internet2.middleware.grouper.StemFinder;
 import edu.internet2.middleware.grouper.StemModifyException;
@@ -20,15 +20,14 @@ import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.grouper.SubjectFinder;
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor;
-import gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier;
-import gov.nih.nci.cagrid.gridgrouper.beans.StemPrivilege;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault;
-import gov.nih.nci.cagrid.gridgrouper.subject.GridSourceAdapter;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -319,7 +318,7 @@ public class GridGrouper {
 	}
 
 	public String[] getSubjectsWithStemPrivilege(String gridIdentity,
-			StemIdentifier stem, StemPrivilege privilege)
+			StemIdentifier stem, StemPrivilegeType privilege)
 			throws RemoteException, GridGrouperRuntimeFault, StemNotFoundFault {
 		GrouperSession session = null;
 		try {
@@ -327,9 +326,9 @@ public class GridGrouper {
 			session = GrouperSession.start(subject);
 			Stem target = StemFinder.findByName(session, stem.getStemName());
 			Set subs = null;
-			if (privilege.getValue().equals(StemPrivilege.create)) {
+			if (privilege.equals(StemPrivilegeType.create)) {
 				subs = target.getCreators();
-			} else if (privilege.getValue().equals(StemPrivilege.stem)) {
+			} else if (privilege.equals(StemPrivilegeType.stem)) {
 				subs = target.getStemmers();
 			} else {
 				throw new Exception(privilege.getValue()
@@ -381,7 +380,7 @@ public class GridGrouper {
 		}
 	}
 
-	public StemPrivilege[] getStemPrivileges(String gridIdentity,
+	public StemPrivilegeType[] getStemPrivileges(String gridIdentity,
 			StemIdentifier stem, String subject) throws RemoteException,
 			GridGrouperRuntimeFault, StemNotFoundFault {
 		GrouperSession session = null;
@@ -395,13 +394,13 @@ public class GridGrouper {
 			if (privs != null) {
 				size = privs.size();
 			}
-			StemPrivilege[] rights = new StemPrivilege[size];
+			StemPrivilegeType[] rights = new StemPrivilegeType[size];
 			if (privs != null) {
 				Iterator itr = privs.iterator();
 				int count = 0;
 				while (itr.hasNext()) {
-					Privilege p = (Privilege) itr.next();
-					rights[count] = StemPrivilege.fromValue(p.getName());
+					NamingPrivilege p = (NamingPrivilege) itr.next();
+					rights[count] = StemPrivilegeType.fromValue(p.getName());
 					count++;
 				}
 			}

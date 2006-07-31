@@ -52,9 +52,10 @@ public class GrouperPlay {
 			Stem root3 = StemFinder.findRootStem(ses2);
 
 			Stem osu = root2.addChildStem("OSU", "Ohio State University");
+			osu.grantPriv(gs3, NamingPrivilege.CREATE);
 			Stem ub = root2.addChildStem("UB", "University at Buffalo");
 			Stem osuCS = osu.addChildStem("CS", "Computer Science");
-			osuCS.grantPriv(gs3, NamingPrivilege.CREATE);
+			
 			Group osuCSFaculty = osuCS.addChildGroup("faculty", "Faculty");
 			Stem ubCS = ub.addChildStem("CS", "Computer Science");
 			printStems(root3, "");

@@ -51,13 +51,13 @@ public class GridGrouperProviderImpl{
 
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithStemPrivilegeResponse getSubjectsWithStemPrivilege(gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithStemPrivilegeRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithStemPrivilegeResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithStemPrivilegeResponse();
-		boxedResult.setSubjectIdentifier(impl.getSubjectsWithStemPrivilege(params.getStem().getStemIdentifier(),params.getPrivilege().getStemPrivilege()));
+		boxedResult.setSubjectIdentifier(impl.getSubjectsWithStemPrivilege(params.getStem().getStemIdentifier(),params.getPrivilege().getStemPrivilegeType()));
 		return boxedResult;
 	}
 
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GetStemPrivilegesResponse getStemPrivileges(gov.nih.nci.cagrid.gridgrouper.stubs.GetStemPrivilegesRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GetStemPrivilegesResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetStemPrivilegesResponse();
-		boxedResult.setStemPrivilege(impl.getStemPrivileges(params.getStem().getStemIdentifier(),params.getSubject().getSubjectIdentifier()));
+		boxedResult.setStemPrivilegeType(impl.getStemPrivileges(params.getStem().getStemIdentifier(),params.getSubject().getSubjectIdentifier()));
 		return boxedResult;
 	}
 

@@ -59,8 +59,6 @@
 	<classpathentry kind="lib" path="lib/ehcache-0.9.jar"/>
 	<classpathentry kind="lib" path="lib/GroboTestingJUnit-1.2.1-core.jar"/>
 	<classpathentry kind="lib" path="lib/GroboUtilThread-1.0.0alpha2-core.jar"/>
-	<classpathentry sourcepath="/grouper-api-1.0" kind="lib" path="lib/grouper.jar"/>
-	<classpathentry sourcepath="/hibernate-2.1.8" kind="lib" path="lib/hibernate2-2.1.8.jar"/>
 	<classpathentry kind="lib" path="lib/hsqldb-1.7.2.11.jar"/>
 	<classpathentry kind="lib" path="lib/jta-1.0.1B.jar"/>
 	<classpathentry kind="lib" path="lib/jug-1.1.1.jar"/>
@@ -83,5 +81,7 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/grouper.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate2-2.1.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

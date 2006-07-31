@@ -8,7 +8,7 @@ import edu.internet2.middleware.grouper.StemModifyException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
-import gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 
 
 /**

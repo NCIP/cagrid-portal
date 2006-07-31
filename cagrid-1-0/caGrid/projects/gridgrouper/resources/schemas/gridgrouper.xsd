@@ -30,8 +30,8 @@
 		</xsd:sequence>
 	</xsd:complexType>
 
-	<xsd:element name="StemPrivilege" type="grouper:StemPrivilege"/>
-	  <xsd:simpleType name="StemPrivilege">
+	<xsd:element name="StemPrivilegeType" type="grouper:StemPrivilegeType"/>
+	  <xsd:simpleType name="StemPrivilegeType">
   			<xsd:restriction base="xsd:string">
    				<xsd:enumeration value="create"/>
    				<xsd:enumeration value="stem"/>	

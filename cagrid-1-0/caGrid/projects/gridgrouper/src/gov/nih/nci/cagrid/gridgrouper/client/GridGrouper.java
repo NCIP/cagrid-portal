@@ -4,9 +4,9 @@ import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
-import gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor;
-import gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier;
-import gov.nih.nci.cagrid.gridgrouper.beans.StemPrivilege;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Grouper;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
@@ -93,7 +93,7 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 	public Set getStemPrivileges(String stemName, Subject subject)
 			throws StemNotFoundException {
 		try {
-			StemPrivilege[] privs = getClient().getStemPrivileges(
+			StemPrivilegeType[] privs = getClient().getStemPrivileges(
 					getStemIdentifier(stemName), subject.getId());
 			Set set = new HashSet();
 			if (privs != null) {
@@ -114,7 +114,7 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 			throws StemNotFoundException {
 		try {
 			String[] subs = getClient().getSubjectsWithStemPrivilege(
-					getStemIdentifier(stemName), StemPrivilege.fromValue(privilege.getName()));
+					getStemIdentifier(stemName), StemPrivilegeType.fromValue(privilege.getName()));
 			Set set = new HashSet();
 			if (subs != null) {
 				for (int i = 0; i < subs.length; i++) {

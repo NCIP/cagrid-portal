@@ -7,9 +7,9 @@ import edu.internet2.middleware.grouper.StemModifyException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
-import gov.nih.nci.cagrid.gridgrouper.beans.StemDescriptor;
-import gov.nih.nci.cagrid.gridgrouper.beans.StemIdentifier;
-import gov.nih.nci.cagrid.gridgrouper.beans.StemPrivilege;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
@@ -129,7 +129,7 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 	public Set getCreators() {
 		try {
 			return gridGrouper.getSubjectsWithStemPrivilege(getName(),
-					Privilege.getInstance(StemPrivilege.create.getValue()));
+					Privilege.getInstance(StemPrivilegeType.create.getValue()));
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
@@ -148,7 +148,7 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 	public Set getStemmers() {
 		try {
 			return gridGrouper.getSubjectsWithStemPrivilege(getName(),
-					Privilege.getInstance(StemPrivilege.stem.getValue()));
+					Privilege.getInstance(StemPrivilegeType.stem.getValue()));
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());

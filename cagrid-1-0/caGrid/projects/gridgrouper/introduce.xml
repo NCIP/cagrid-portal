@@ -1,10 +1,10 @@
 <ns1:ServiceSkeleton introduceVersion=".9999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns2:Namespace location="./gridgrouper.xsd" namespace="http://cagrid.nci.nih.gov/1/GridGrouper" packageName="gov.nih.nci.cagrid.gridgrouper.beans" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gridgrouper.xsd" namespace="http://cagrid.nci.nih.gov/1/GridGrouper" packageName="gov.nih.nci.cagrid.gridgrouper.bean" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="StemDescriptor" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SubjectIdentifier" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StemIdentifier" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="StemPrivilege" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="StemPrivilegeType" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
@@ -130,7 +130,7 @@
     <ns4:Method isImported="false" isProvided="false" name="getSubjectsWithStemPrivilege" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="ns16:StemIdentifier" isArray="false" name="stem" xmlns:ns16="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns17:StemPrivilege" isArray="false" name="privilege" xmlns:ns17="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns17:StemPrivilegeType" isArray="false" name="privilege" xmlns:ns17="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
      <ns4:Output qName="ns18:SubjectIdentifier" isArray="true" xmlns:ns18="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
@@ -143,7 +143,7 @@
       <ns4:Input qName="ns19:StemIdentifier" isArray="false" name="stem" xmlns:ns19="http://cagrid.nci.nih.gov/1/GridGrouper"/>
       <ns4:Input qName="ns20:SubjectIdentifier" isArray="false" name="subject" xmlns:ns20="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns21:StemPrivilege" isArray="true" xmlns:ns21="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns21:StemPrivilegeType" isArray="true" xmlns:ns21="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
       <ns4:Exception name="GridGrouperRuntimeFault"/>
       <ns4:Exception name="StemNotFoundFault"/>
