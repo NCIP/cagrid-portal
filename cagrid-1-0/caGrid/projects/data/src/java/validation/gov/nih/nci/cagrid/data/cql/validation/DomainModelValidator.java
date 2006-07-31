@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.cql.validation;
 
+import gov.nih.nci.cadsr.domain.ValueDomain;
 import gov.nih.nci.cagrid.cqlquery.Association;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
@@ -13,6 +14,7 @@ import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -92,26 +94,62 @@ public class DomainModelValidator {
 			&& !(attrib.getPredicate().getValue().equals(Predicate._IS_NOT_NULL) 
 				|| attrib.getPredicate().getValue().equals(Predicate._IS_NULL))) {
 			String value = attrib.getValue();
-			String dataType = attribMetadata.getDataType();
-			try {
-				if (dataType.equals(Integer.class.getName())) {
-					Integer.valueOf(value);
-					// TODO: max / min permissable values
-				} else if (dataType.equals(Long.class.getName())) {
-					Long.valueOf(value);
-				} else if (dataType.equals(Date.class.getName())) {
-					DateFormat.getInstance().parse(value);
-				} else if (dataType.equals(Boolean.class.getName())) {
-					Boolean.valueOf(value);
-				} else if (dataType.equals(Character.class.getName())) {
-					if (value.length() != 1) {
-						throw new MalformedQueryException("Characters can only be of length 1, not " + value.length());
+			ValueDomain valueDomain = attribMetadata.getValueDomain();
+			if (valueDomain != null) {
+				String dataType = valueDomain.getDatatypeName();
+				try {
+					if (dataType.equals(Integer.class.getName())) {
+						int i = Integer.valueOf(value).intValue();
+						// test min value
+						if (valueDomain.getLowValueNumber() != null) {
+							int low = Integer.valueOf(valueDomain.getLowValueNumber()).intValue();
+							if (i < low) {
+								throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value: "
+									+ value + "; minimum accepted value is " + low);
+							}
+						}
+						// test high
+						if (valueDomain.getHighValueNumber() != null) {
+							int high = Integer.valueOf(valueDomain.getHighValueNumber()).intValue();
+							if (i > high) {
+								throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value: "
+									+ value + "; maximum accepted value is " + high);
+							}
+						}
+					} else if (dataType.equals(Long.class.getName())) {
+						long i = Long.valueOf(value).longValue();
+						// test low value
+						if (valueDomain.getLowValueNumber() != null) {
+							long low = Long.valueOf(valueDomain.getLowValueNumber()).longValue();
+							if (i < low) {
+								throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value: "
+									+ value + "; minimum accepted value is " + low);
+							}
+						}
+						// test high
+						if (valueDomain.getHighValueNumber() != null) {
+							long high = Long.valueOf(valueDomain.getHighValueNumber()).longValue();
+							if (i > high) {
+								throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value: "
+									+ value + "; maximum accepted value is " + high);
+							}
+						}
+					} else if (dataType.equals(Date.class.getName())) {
+						DateFormat.getInstance().parse(value);
+					} else if (dataType.equals(Boolean.class.getName())) {
+						Boolean.valueOf(value);
+					} else if (dataType.equals(Character.class.getName())) {
+						if (value.length() != 1) {
+							throw new MalformedQueryException("Characters can only be of length 1, not " + value.length());
+						}
+						Character.valueOf(value.charAt(0));
 					}
-					Character.valueOf(value.charAt(0));
+				} catch (Exception ex) {
+					throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value: " 
+						+ value + "; but type is " + dataType, ex);
 				}
-			} catch (Exception ex) {
-				throw new MalformedQueryException("Attribute " + attrib.getName() + " queried with value: " 
-					+ value + "; but type is " + dataType, ex);
+			} else {
+				// TODO: warn no value domain found
 			}
 		}
 	}
@@ -137,11 +175,15 @@ public class DomainModelValidator {
 						throw new MalformedQueryException("The association from " + current.getName() + " to "
 							+ assoc.getName() + " is ambiguous without a role name");
 					}
-					if (roleName != null) {
-						if (assocMd.getTargetUMLAssociationEdge().getUMLAssociationEdge().getRoleName().equals(roleName)) {
-							associationFound = true;
-							break;
-						}
+					if (roleName != null && assocMd.getTargetUMLAssociationEdge()
+							.getUMLAssociationEdge().getRoleName().equals(roleName)) {
+						// association found with specidied role name
+						associationFound = true;
+						break;
+					} else {
+						// an association of the right type found, but no role name to compare
+						// so association is found, but must check for ambiguity
+						associationFound = true;
 					}
 				}
 			}

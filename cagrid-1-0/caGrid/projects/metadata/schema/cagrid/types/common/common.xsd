@@ -3,9 +3,12 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
 	xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
+	xmlns:cadsr="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"
 	elementFormDefault="qualified">
 	<xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
 		schemaLocation="../cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
+	<xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"
+		schemaLocation="../cadsr/3.0_gov.nih.nci.cadsr.domain.xsd"/>
 	<xs:element name="PointOfContact" type="com:PointOfContact"/>
 	<xs:complexType name="PointOfContact">
 		<xs:annotation>
@@ -71,10 +74,10 @@
 					</xs:choice>
 				</xs:complexType>
 			</xs:element>
+			<xs:element ref="cadsr:ValueDomain" minOccurs="0" maxOccurs="1"/>
 		</xs:sequence>
 		<xs:attribute name="description" use="required" type="xs:string"/>
 		<xs:attribute name="name" use="required" type="xs:string"/>
-		<xs:attribute name="dataType" use="required" type="xs:string"/>
 	</xs:complexType>
 	<xs:element name="ResearchCenter" type="com:ResearchCenter"/>
 	<xs:complexType name="ResearchCenter">

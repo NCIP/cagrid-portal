@@ -96,8 +96,10 @@ public class CaDSRUtils {
 			converted = new UMLAttribute();
 			converted.setDescription(attribMetadata.getDescription());
 			converted.setName(attribMetadata.getName());
-			String typeName = attribMetadata.getDataElement().getValueDomain().getDatatypeName();
-			converted.setDataType(typeName);
+			if (attribMetadata.getDataElement() != null 
+				&& attribMetadata.getDataElement().getValueDomain() != null) {
+				converted.setValueDomain(attribMetadata.getDataElement().getValueDomain());
+			}
 			SemanticMetadata[] smArray = convertSemanticMetadataCollection(attribMetadata
 				.getSemanticMetadataCollection());
 			converted.setSemanticMetadataCollection(new UMLAttributeSemanticMetadataCollection(smArray));
