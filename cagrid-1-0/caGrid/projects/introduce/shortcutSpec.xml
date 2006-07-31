@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+
+  <programGroup defaultName="Introduce" location="applications"/>
+
+   <shortcut
+     name="Introduce"
+     programGroup="no"
+     desktop="no"
+     applications="yes"
+     startMenu="no"
+     startup="no"
+     workingDirectory="$INSTALL_PATH"
+     target="ant"
+     initialState="noShow"
+     commandLine="introduce"
+     iconFile="$INSTALL_PATH/resources/portal/introduce/applications-internet.png"
+     iconIndex="0"
+     description="Launch the Introduce GDE">
+     <createForPack name="Base" />
+   </shortcut>
+
+</shortcuts>
