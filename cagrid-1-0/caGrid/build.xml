@@ -38,12 +38,12 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="cabigextensions, cadsr, core, cql2xpath, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, opensaml, sdkQuery, syncgts, workflow,gridgrouper" />
+	<property name="projects.list" value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, opensaml, sdkQuery, syncgts, workflow,gridgrouper" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects above -->
-	<property name="testable.projects.list" value="dorian, introduce, cabigextensions, core, discovery, cadsr, gridca, gts, syncgts, cql2xpath, data, sdkQuery" />
+	<property name="testable.projects.list" value="dorian, introduce, cabigextensions, core, discovery, cadsr, gridca, gts, syncgts, data, sdkQuery" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT PROVIDE INTRODUCE EXTENSIONS       -->
 	<!-- ================================================================================ -->
@@ -244,25 +244,7 @@
 			<artifact refid="metadata.schemas" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
-	</target>
-	
-	<!-- =============================================================== -->
-	<!-- Build Grid Grouper:                                             -->
-	<!-- =============================================================== -->
-	<target name="build-gridgrouper" depends="prepare" description="Builds the Grid Grouper project">
-		<resolveDependencies extdir="${projects.dir}/gridgrouper/ext">
-			<artifact refid="core.jars" />
-			<artifact refid="mds.jars" />
-			<artifact refid="common.test.jars" />
-			<artifact refid="core.test.jars" />
-			<artifact refid="core.resources" />
-			<artifact refid="introduce.servicesecurity.jars" />
-		</resolveDependencies>
-		<resolveDependencies extdir="${projects.dir}/gridgrouper/schema/GridGrouper">
-			<artifact refid="metadata.schemas" />
-		</resolveDependencies>
-		<ant dir="${projects.dir}/gridgrouper" inheritAll="false" antfile="build.xml" target="all" />
-	</target>
+	</target>		<!-- =============================================================== -->	<!-- Build Grid Grouper:                                             -->	<!-- =============================================================== -->	<target name="build-gridgrouper" depends="prepare" description="Builds the Grid Grouper project">		<resolveDependencies extdir="${projects.dir}/gridgrouper/ext">			<artifact refid="core.jars" />			<artifact refid="mds.jars" />			<artifact refid="common.test.jars" />			<artifact refid="core.test.jars" />			<artifact refid="core.resources" />			<artifact refid="introduce.servicesecurity.jars" />		</resolveDependencies>		<resolveDependencies extdir="${projects.dir}/gridgrouper/schema/GridGrouper">			<artifact refid="metadata.schemas" />		</resolveDependencies>		<ant dir="${projects.dir}/gridgrouper" inheritAll="false" antfile="build.xml" target="all" />	</target>
 
 
 	<!-- =============================================================== -->
@@ -427,22 +409,10 @@
 		<ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
-
-	<!-- =============================================================== -->
-	<!-- CAGRID Cql2Xpath:                                               -->
-	<!-- =============================================================== -->
-	<target name="build-cql2xpath" depends="prepare" description="Builds caGrid Cql2Xpath utility">
-		<resolveDependencies extdir="${projects.dir}/cql2xpath/ext">
-			<artifact refid="core.jars" />
-			<artifact refid="common.test.jars" />
-		</resolveDependencies>
-		<ant dir="${projects.dir}/cql2xpath" inheritAll="false" antfile="build.xml" target="all" />
-	</target>
-
-    <!-- =============================================================== -->
+    	<!-- =============================================================== -->
 	<!-- CAGRID Workflow:                                               -->
 	<!-- =============================================================== -->
-	<target name="build-workflow" depends="prepare" description="Builds caGrid Cql2Xpath utility">
+	<target name="build-workflow" depends="prepare" description="Builds caGrid workflow">
 		<ant dir="${projects.dir}/workflow" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
