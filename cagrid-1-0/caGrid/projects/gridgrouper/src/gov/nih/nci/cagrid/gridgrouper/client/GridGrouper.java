@@ -6,9 +6,11 @@ import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Grouper;
+import gov.nih.nci.cagrid.gridgrouper.grouper.NamingPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault;
 
@@ -93,12 +95,20 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 	public Set getStemPrivileges(String stemName, Subject subject)
 			throws StemNotFoundException {
 		try {
-			StemPrivilegeType[] privs = getClient().getStemPrivileges(
+			StemPrivilege[] privs = getClient().getStemPrivileges(
 					getStemIdentifier(stemName), subject.getId());
 			Set set = new HashSet();
 			if (privs != null) {
 				for (int i = 0; i < privs.length; i++) {
-					set.add(Privilege.getInstance(privs[i].getValue()));
+					NamingPrivilege priv = new GridGrouperNamingPrivilege(
+							privs[i].getStemName(), SubjectUtils
+									.getSubject(privs[i].getSubject()),
+							SubjectUtils.getSubject(privs[i].getOwner()),
+							Privilege.getInstance(privs[i].getPrivilegeType()
+									.getValue()), privs[i]
+									.getImplementationClass(), privs[i]
+									.isIsRevokable());
+					set.add(priv);
 				}
 			}
 			return set;
@@ -114,7 +124,8 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 			throws StemNotFoundException {
 		try {
 			String[] subs = getClient().getSubjectsWithStemPrivilege(
-					getStemIdentifier(stemName), StemPrivilegeType.fromValue(privilege.getName()));
+					getStemIdentifier(stemName),
+					StemPrivilegeType.fromValue(privilege.getName()));
 			Set set = new HashSet();
 			if (subs != null) {
 				for (int i = 0; i < subs.length; i++) {

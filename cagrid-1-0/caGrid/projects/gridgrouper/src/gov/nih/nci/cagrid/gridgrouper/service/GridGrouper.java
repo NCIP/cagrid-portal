@@ -22,6 +22,7 @@ import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
@@ -380,7 +381,7 @@ public class GridGrouper {
 		}
 	}
 
-	public StemPrivilegeType[] getStemPrivileges(String gridIdentity,
+	public StemPrivilege[] getStemPrivileges(String gridIdentity,
 			StemIdentifier stem, String subject) throws RemoteException,
 			GridGrouperRuntimeFault, StemNotFoundFault {
 		GrouperSession session = null;
@@ -394,13 +395,19 @@ public class GridGrouper {
 			if (privs != null) {
 				size = privs.size();
 			}
-			StemPrivilegeType[] rights = new StemPrivilegeType[size];
+			StemPrivilege[] rights = new StemPrivilege[size];
 			if (privs != null) {
 				Iterator itr = privs.iterator();
 				int count = 0;
 				while (itr.hasNext()) {
 					NamingPrivilege p = (NamingPrivilege) itr.next();
-					rights[count] = StemPrivilegeType.fromValue(p.getName());
+					rights[count] = new StemPrivilege();
+					rights[count].setStemName(p.getStem().getName());
+					rights[count].setImplementationClass(p.getImplementationName());
+					rights[count].setIsRevokable(p.isRevokable());
+					rights[count].setOwner(p.getOwner().getId());
+					rights[count].setPrivilegeType(StemPrivilegeType.fromValue(p.getName()));
+					rights[count].setSubject(p.getSubject().getId());
 					count++;
 				}
 			}

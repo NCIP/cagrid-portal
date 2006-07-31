@@ -57,7 +57,7 @@ public class GridGrouperProviderImpl{
 
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GetStemPrivilegesResponse getStemPrivileges(gov.nih.nci.cagrid.gridgrouper.stubs.GetStemPrivilegesRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GetStemPrivilegesResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetStemPrivilegesResponse();
-		boxedResult.setStemPrivilegeType(impl.getStemPrivileges(params.getStem().getStemIdentifier(),params.getSubject().getSubjectIdentifier()));
+		boxedResult.setStemPrivilege(impl.getStemPrivileges(params.getStem().getStemIdentifier(),params.getSubject().getSubjectIdentifier()));
 		return boxedResult;
 	}
 

@@ -29,6 +29,18 @@
 			<xsd:element name="stemName" minOccurs="1" maxOccurs="1" type="xsd:string" />
 		</xsd:sequence>
 	</xsd:complexType>
+	
+	<xsd:element name="StemPrivilege" type="grouper:StemPrivilege"/>
+	<xsd:complexType name="StemPrivilege">
+		<xsd:sequence>
+			<xsd:element name="StemName" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="PrivilegeType" minOccurs="1" maxOccurs="1" type="grouper:StemPrivilegeType" />
+			<xsd:element name="Subject" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="ImplementationClass" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="IsRevokable" minOccurs="1" maxOccurs="1" type="xsd:boolean" />
+			<xsd:element name="Owner" minOccurs="1" maxOccurs="1" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
 
 	<xsd:element name="StemPrivilegeType" type="grouper:StemPrivilegeType"/>
 	  <xsd:simpleType name="StemPrivilegeType">

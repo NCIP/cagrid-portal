@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
-import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
+import gov.nih.nci.cagrid.gridgrouper.grouper.NamingPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 
 import java.util.Iterator;
@@ -98,9 +98,9 @@ public class GridGrouperExample {
 		System.out.println(buffer + "  " + "Privileges for "+sub.getId()+":");
 		Iterator i3= privs.iterator();
 		while(i3.hasNext()){
-			Privilege priv = (Privilege)i3.next();
+			NamingPrivilege priv = (NamingPrivilege)i3.next();
 			System.out.println(buffer + "    " 
-					+ priv.getName());
+					+ priv.toString());
 		}
 		
 	

@@ -165,7 +165,7 @@
       <element name="GetStemPrivilegesResponse">
         <complexType>
           <sequence>
-            <element ref="ns0:StemPrivilegeType" minOccurs="1" maxOccurs="unbounded" />
+            <element ref="ns0:StemPrivilege" minOccurs="1" maxOccurs="unbounded" />
           </sequence>
         </complexType>
       </element>
