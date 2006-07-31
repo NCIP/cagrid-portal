@@ -881,7 +881,7 @@ public class CommonTools {
 					}
 					// output
 					MethodTypeOutput output = method.getOutput();
-					if (output != null) {
+					if (output != null && !output.getQName().getLocalPart().equals("void")) {
 						usedTypes.add(output.getQName());
 					}
 					// exceptions
