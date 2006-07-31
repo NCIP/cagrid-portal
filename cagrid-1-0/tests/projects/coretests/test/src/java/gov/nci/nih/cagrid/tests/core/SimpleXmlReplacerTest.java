@@ -17,6 +17,12 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+/**
+ * This is a unit test that validates the functionality of the SimpleXmlReplacer class, which replaces
+ * values in XML elements by looking line-by-line for matching elements.
+ * @testType unit
+ * @author Patrick McConnell
+ */
 public class SimpleXmlReplacerTest
 	extends TestCase
 {
@@ -30,36 +36,57 @@ public class SimpleXmlReplacerTest
 		
 	}
 	
+	/**
+	 * This tests whether SimpleXmlReplacer can replace a single value in a simple XML document.
+	 */
 	public void testSimple() throws Exception
 	{
 		performTest("simple");
 	}
 	
+	/**
+	 * This tests whether SimpleXmlReplacer can replace a single value in an element that has no end tag.
+	 */
 	public void testEmpty() throws Exception
 	{
 		performTest("empty");
 	}
 	
+	/**
+	 * This tests whether SimpleXmlReplacer can replace a single value in an element that has no content but does have an end tag.
+	 */
 	public void testZero() throws Exception
 	{
 		performTest("zero");
 	}
 	
+	/**
+	 * This tests whether SimpleXmlReplacer can replace a multiple values in a somewhat simple XML document.
+	 */
 	public void testMultiple() throws Exception
 	{
 		performTest("multiple");
 	}
 	
+	/**
+	 * This tests whether SimpleXmlReplacer can replace a single value in an element that has attributes.
+	 */
 	public void testAttributes() throws Exception
 	{
 		performTest("attributes");
 	}
 	
+	/**
+	 * This tests whether SimpleXmlReplacer can replace a single value in an element that has a space before the end of the start tag.
+	 */
 	public void testSpace() throws Exception
 	{
 		performTest("space");
 	}
 	
+	/**
+	 * This tests whether SimpleXmlReplacer properly throws an exception when a replacement cannot be found.
+	 */
 	public void testFail() throws Exception
 	{
 		Exception exception = null;
