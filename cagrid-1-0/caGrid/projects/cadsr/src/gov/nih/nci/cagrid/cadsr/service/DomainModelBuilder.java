@@ -88,35 +88,30 @@ public class DomainModelBuilder {
 	public DomainModel getDomainModel(Project proj, String[] packageNames) throws RemoteException {
 		// find the complete project
 		Project completeProject = findCompleteProject(proj);
-		List classes = new ArrayList();
-		List associations = new ArrayList();
 		// grab the classes out of the packages
+		List classes = new ArrayList();
 		if (packageNames != null) {
 			for (int i = 0; i < packageNames.length; i++) {
 				UMLPackageMetadata pack = getPackageMetadata(completeProject, packageNames[i]);
-				UMLClassMetadata[] classMdArray = getClasses(completeProject, pack);
-				Collections.addAll(classes, classMdArray);
-				// grab associations for each class		
-				for (int j = 0; j < classMdArray.length; j++) {
-					UMLClassMetadata clazz = classMdArray[j];
-					UMLAssociationMetadata[] assocMdArray = getAssociations(completeProject, clazz);
-					for (int k = 0; k < assocMdArray.length; k++) {
-						UMLAssociationMetadata assocMd = assocMdArray[k];
-						// HACK: caDSR isn't returning the correct source class (target is OK).
-						// HACK: Undo this 'fix' when it does return the correct thing.
-						assocMd.setSourceUMLClassMetadata(clazz);
-						UMLAssociation association = CaDSRUtils.convertAssociation(assocMd);
-						associations.add(association);
-					}					
-				}
+				UMLClassMetadata[] mdArray = getClasses(completeProject, pack);
+				Collections.addAll(classes, mdArray);
 			}
 		}
-		// convert lists to arrays
 		UMLClassMetadata[] classArray = new UMLClassMetadata[classes.size()];
 		classes.toArray(classArray);
-		
-		UMLAssociation[] associationArray = new UMLAssociation[associations.size()];
-		associations.toArray(associationArray);
+
+		// grab associations for each class
+		List associationMetadataList = new ArrayList();
+		for (int i = 0; i < classArray.length; i++) {
+			UMLClassMetadata clazz = classArray[i];
+			UMLAssociationMetadata[] mdArray = getAssociations(completeProject, clazz);
+			Collections.addAll(associationMetadataList, mdArray);
+		}
+		UMLAssociation[] associationArray = new UMLAssociation[associationMetadataList.size()];
+		for (int i = 0; i < associationMetadataList.size(); i++) {
+			UMLAssociationMetadata assocMd = (UMLAssociationMetadata) associationMetadataList.get(i);
+			associationArray[i] = CaDSRUtils.convertAssociation(assocMd);
+		}
 
 		// hand off
 		return getDomainModel(completeProject, classArray, associationArray);
