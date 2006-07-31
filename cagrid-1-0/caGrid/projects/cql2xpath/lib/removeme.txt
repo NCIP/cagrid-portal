@@ -1,1 +1,0 @@
-If no jars get added, remove me and my dir from the build.xml.
