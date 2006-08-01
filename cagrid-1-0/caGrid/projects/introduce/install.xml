@@ -51,10 +51,11 @@
     -->
     <packs>
         <pack name="Base" required="yes">
-            <description>Binary</description>
+            <description>Introduce 1.0 Binary Release</description>
             <file src="lib" targetdir="$INSTALL_PATH"/> <!-- Reccursive adding -->
-            <file src="build" targetdir="$INSTALL_PATH"/>
+            <file src="build/jars" targetdir="$INSTALL_PATH/build"/>
             <file src="resources" targetdir="$INSTALL_PATH"/>
+            <file src="operationProviders" targetdir="$INSTALL_PATH"/>
             <file src="antfiles" targetdir="$INSTALL_PATH"/>
             <file src="extensions" targetdir="$INSTALL_PATH"/>
             <file src="ext" targetdir="$INSTALL_PATH"/>
@@ -62,14 +63,15 @@
             <file src="schema" targetdir="$INSTALL_PATH"/>
             <file src="skeleton" targetdir="$INSTALL_PATH"/>
             <file src="test" targetdir="$INSTALL_PATH"/>
-            <file src="run.xml" targetdir="$INSTALL_PATH"/>
+            <singlefile src="run.xml" target="$INSTALL_PATH/build.xml"/>
+            <file src="doc" targetdir="$INSTALL_PATH"/> 
         </pack>
         <pack name="Docs" required="no">
-            <description>Documentation</description>
-            <file src="doc" targetdir="$INSTALL_PATH"/> <!-- Reccursive adding -->
+            <description>API Documentation</description>
+            <file src="build/javadoc" targetdir="$INSTALL_PATH/doc"/>
         </pack>
         <pack name="Sources" required="no">
-            <description>The sources</description>
+            <description>Source Code</description>
             <file src="src" targetdir="$INSTALL_PATH"/>
         </pack>
     </packs>
