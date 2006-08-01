@@ -2,8 +2,8 @@
 <%  gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
   	Properties properties = arguments.getIntroduceServiceProperties();
 	ResourcePropertiesListType metadataList = arguments.getService().getResourcePropertiesList();
-    String serviceName = properties.getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-    String namespaceDomain = properties.getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
+    String serviceName = arguments.getService().getName();
+    String namespaceDomain = arguments.getService().getNamespace();
     String modifiedServiceName = serviceName;
     if(serviceName.endsWith("Service")){
    		modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
@@ -15,7 +15,7 @@ import javax.xml.namespace.QName;
 
 
 public interface ResourceConstants {
-	public static final String SERVICE_NS = "<%=namespaceDomain%>/<%=serviceName%>";
+	public static final String SERVICE_NS = "<%=namespaceDomain%>";
 	public static final QName RESOURCE_KEY = new QName(SERVICE_NS, "<%=serviceName%>Key");
 	public static final QName RESOURCE_PROPERY_SET = new QName(SERVICE_NS, "<%=serviceName%>ResourceProperties");
 
