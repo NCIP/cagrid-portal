@@ -213,6 +213,20 @@
 				</include>
 			</fileset>
 		</artifact>
+		<artifact track="main" type="jars" id="ws.enum.jars">
+			<antcalls target="build-wsEnum"/>
+			<fileset dir="${projects.dir}/wsEnum/build/lib">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${projects.dir}/wsEnum/lib">
+				<include name="*.jar"/>
+			</fileset>
+		</artifact>
+		<artifact track="main" type="schemas" id="ws.enum.schemas">'
+			<fileset dir="${projects.dir}/wsEnum/schemas">
+				<include name="**/*.xsd"/>
+			</fileset>
+		</artifact>
 
 
 		<artifact track="main" type="resources" id="gridca.resources">

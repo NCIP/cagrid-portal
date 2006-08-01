@@ -38,7 +38,7 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, opensaml, sdkQuery, syncgts, workflow,gridgrouper" />
+	<property name="projects.list" value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
@@ -244,8 +244,25 @@
 			<artifact refid="metadata.schemas" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all" />
-	</target>		<!-- =============================================================== -->	<!-- Build Grid Grouper:                                             -->	<!-- =============================================================== -->	<target name="build-gridgrouper" depends="prepare" description="Builds the Grid Grouper project">		<resolveDependencies extdir="${projects.dir}/gridgrouper/ext">			<artifact refid="core.jars" />			<artifact refid="mds.jars" />			<artifact refid="common.test.jars" />			<artifact refid="core.test.jars" />			<artifact refid="core.resources" />			<artifact refid="introduce.servicesecurity.jars" />		</resolveDependencies>		<resolveDependencies extdir="${projects.dir}/gridgrouper/schema/GridGrouper">			<artifact refid="metadata.schemas" />		</resolveDependencies>		<ant dir="${projects.dir}/gridgrouper" inheritAll="false" antfile="build.xml" target="all" />	</target>
+	</target>
 
+	<!-- =============================================================== -->
+	<!-- Build Grid Grouper:                                             -->
+	<!-- =============================================================== -->
+	<target name="build-gridgrouper" depends="prepare" description="Builds the Grid Grouper project">
+		<resolveDependencies extdir="${projects.dir}/gridgrouper/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="core.resources" />
+			<artifact refid="introduce.servicesecurity.jars" />
+		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/gridgrouper/schema/GridGrouper">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gridgrouper" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
 
 	<!-- =============================================================== -->
 	<!-- Grid Trust Service:                                             -->
@@ -375,6 +392,20 @@
 
 
 	<!-- =============================================================== -->
+	<!-- CAGRID WsEnum:                                             	 -->
+	<!-- =============================================================== -->
+	<target name="build-wsEnum" if="isJDK1.5" depends="prepare" description="Builds caGrid WS-Enumeration components">
+		<resolveDependencies extdir="${projects.dir}/wsEnum/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/wsEnum" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+
+	<!-- =============================================================== -->
 	<!-- CAGRID SDK Data Service Query Processor:                        -->
 	<!-- =============================================================== -->
 	<target name="build-sdkQuery" if="isJDK1.5" depends="prepare" description="Builds caGrid SDK Query processor">
@@ -409,7 +440,7 @@
 		<ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
-    	<!-- =============================================================== -->
+	<!-- =============================================================== -->
 	<!-- CAGRID Workflow:                                               -->
 	<!-- =============================================================== -->
 	<target name="build-workflow" depends="prepare" description="Builds caGrid workflow">
