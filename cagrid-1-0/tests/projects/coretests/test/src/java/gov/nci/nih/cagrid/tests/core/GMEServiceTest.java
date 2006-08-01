@@ -4,6 +4,7 @@
 package gov.nci.nih.cagrid.tests.core;
 
 import gov.nci.nih.cagrid.tests.core.steps.GMECleanupStep;
+import gov.nci.nih.cagrid.tests.core.steps.GMEConfigureStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCleanupStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
@@ -30,7 +31,7 @@ import com.atomicobject.haste.framework.Story;
  * It deploys the service, adds some schemas, retrieves the schemas, and lists the schemas.
  * @testType integration
  * @steps ServiceCreateStep, 
- * @steps GlobusCreateStep, GlobusDeployServiceStep, GlobusStartStep
+ * @steps GlobusCreateStep, GlobusDeployServiceStep, GMEConfigureStep, GlobusStartStep
  * @steps GMEPublishSchemaStep, GMEGetSchemaStep, GMEGetSchemaListStep
  * @steps GlobusStopStep, GMECleanupStep, GlobusCleanupStep
  * @author Patrick McConnell
@@ -81,6 +82,7 @@ public class GMEServiceTest
 		Vector steps = new Vector();
 		steps.add(new GlobusCreateStep(globus));
 		steps.add(new GlobusDeployServiceStep(globus, serviceDir));
+		steps.add(new GMEConfigureStep(globus));
 		steps.add(new GlobusStartStep(globus, port));
 		try {
 			File[] schemaDirs = schemaRoot.listFiles(new FileFilter() {
