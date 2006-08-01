@@ -7,12 +7,16 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import edu.internet2.middleware.grouper.GrantPrivilegeException;
 import edu.internet2.middleware.grouper.Group;
 import edu.internet2.middleware.grouper.GroupFinder;
 import edu.internet2.middleware.grouper.GroupNotFoundException;
 import edu.internet2.middleware.grouper.GrouperSession;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.grouper.NamingPrivilege;
+import edu.internet2.middleware.grouper.Privilege;
+import edu.internet2.middleware.grouper.RevokePrivilegeException;
+import edu.internet2.middleware.grouper.SchemaException;
 import edu.internet2.middleware.grouper.Stem;
 import edu.internet2.middleware.grouper.StemFinder;
 import edu.internet2.middleware.grouper.StemModifyException;
@@ -25,8 +29,11 @@ import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.RevokePrivilegeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault;
 
@@ -464,6 +471,138 @@ public class GridGrouper {
 				return false;
 			}
 
+		} catch (StemNotFoundException e) {
+			StemNotFoundFault fault = new StemNotFoundFault();
+			fault.setFaultString("The stem " + stem.getStemName()
+					+ " could not be found!!!");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (StemNotFoundFault) helper.getFault();
+			throw fault;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault.setFaultString("Error determing if the subject " + subject
+					+ " has the privilege " + privilege.getValue()
+					+ " on the stem " + stem.getStemName() + ": "
+					+ e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		} finally {
+			if (session == null) {
+				try {
+					session.stop();
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
+	}
+
+	public boolean grantStemPrivilege(String gridIdentity, StemIdentifier stem,
+			String subject, StemPrivilegeType privilege)
+			throws GridGrouperRuntimeFault, StemNotFoundFault,
+			GrantPrivilegeFault, InsufficientPrivilegeFault, SchemaFault {
+		GrouperSession session = null;
+		try {
+			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			session = GrouperSession.start(subj);
+			Stem target = StemFinder.findByName(session, stem.getStemName());
+			target.grantPriv(SubjectUtils.getSubject(subject), Privilege
+					.getInstance(privilege.getValue()));
+			return true;
+		} catch (GrantPrivilegeException e) {
+			GrantPrivilegeFault fault = new GrantPrivilegeFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GrantPrivilegeFault) helper.getFault();
+			throw fault;
+		} catch (InsufficientPrivilegeException e) {
+			InsufficientPrivilegeFault fault = new InsufficientPrivilegeFault();
+			fault
+					.setFaultString("You do not have the right to manages privileges on the stem "
+							+ stem.getStemName() + ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (InsufficientPrivilegeFault) helper.getFault();
+			throw fault;
+		} catch (SchemaException e) {
+			SchemaFault fault = new SchemaFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (SchemaFault) helper.getFault();
+			throw fault;
+		} catch (StemNotFoundException e) {
+			StemNotFoundFault fault = new StemNotFoundFault();
+			fault.setFaultString("The stem " + stem.getStemName()
+					+ " could not be found!!!");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (StemNotFoundFault) helper.getFault();
+			throw fault;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault
+					.setFaultString("Error occurred getting the privileges for the subject "
+							+ subject
+							+ " on the stem "
+							+ stem.getStemName()
+							+ ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		} finally {
+			if (session == null) {
+				try {
+					session.stop();
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
+	}
+
+	public boolean revokeStemPrivilege(String gridIdentity,
+			StemIdentifier stem, String subject, StemPrivilegeType privilege)
+			throws GridGrouperRuntimeFault, StemNotFoundFault,
+			InsufficientPrivilegeFault, RevokePrivilegeFault, SchemaFault {
+		GrouperSession session = null;
+		try {
+			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			session = GrouperSession.start(subj);
+			Stem target = StemFinder.findByName(session, stem.getStemName());
+			target.revokePriv(SubjectUtils.getSubject(subject), Privilege
+					.getInstance(privilege.getValue()));
+			return true;
+		} catch (RevokePrivilegeException e) {
+			RevokePrivilegeFault fault = new RevokePrivilegeFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (RevokePrivilegeFault) helper.getFault();
+			throw fault;
+		} catch (InsufficientPrivilegeException e) {
+			InsufficientPrivilegeFault fault = new InsufficientPrivilegeFault();
+			fault
+					.setFaultString("You do not have the right to manages privileges on the stem "
+							+ stem.getStemName() + ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (InsufficientPrivilegeFault) helper.getFault();
+			throw fault;
+		} catch (SchemaException e) {
+			SchemaFault fault = new SchemaFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (SchemaFault) helper.getFault();
+			throw fault;
 		} catch (StemNotFoundException e) {
 			StemNotFoundFault fault = new StemNotFoundFault();
 			fault.setFaultString("The stem " + stem.getStemName()

@@ -3,7 +3,11 @@ package gov.nih.nci.cagrid.gridgrouper.grouper;
 import java.util.Date;
 import java.util.Set;
 
+import edu.internet2.middleware.grouper.GrantPrivilegeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
+import edu.internet2.middleware.grouper.Privilege;
+import edu.internet2.middleware.grouper.RevokePrivilegeException;
+import edu.internet2.middleware.grouper.SchemaException;
 import edu.internet2.middleware.grouper.StemModifyException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
@@ -67,6 +71,8 @@ public interface Stem {
 	public Set getStemmers(); 
 	public boolean hasCreate(Subject subj); 
 	public boolean hasStem(Subject subj); 
+    public void grantPriv(Subject subj, Privilege priv) throws GrantPrivilegeException, InsufficientPrivilegeException, SchemaException;
+	public void revokePriv(Subject subj, Privilege priv) throws InsufficientPrivilegeException, RevokePrivilegeException, SchemaException; 
 	
 	  //public Group addChildGroup(String extension, String displayExtension) throws GroupAddException,InsufficientPrivilegeException; 
 	  //public Stem addChildStem(String extension, String displayExtension) throws InsufficientPrivilegeException,StemAddException; 
@@ -74,7 +80,6 @@ public interface Stem {
 	  
 	  //public Set getChildGroups(); 
 	
-      //public void grantPriv(Subject subj, Privilege priv) throws GrantPrivilegeException, InsufficientPrivilegeException, SchemaException;
-	  //public void revokePriv(Subject subj, Privilege priv) throws InsufficientPrivilegeException, RevokePrivilegeException, SchemaException; 
+      
 	  	
 }

@@ -132,4 +132,30 @@ public class GridGrouperImpl {
 				privilege);
 	}
 
+	public boolean grantStemPrivilege(
+			gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,
+			java.lang.String subject,
+			gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType privilege)
+			throws RemoteException,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault {
+		return gridGrouper.grantStemPrivilege(getCallerIdentity(),stem, subject, privilege);
+	}
+
+	public boolean revokeStemPrivilege(
+			gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,
+			java.lang.String subject,
+			gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType privilege)
+			throws RemoteException,
+			gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.RevokePrivilegeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault {
+		return gridGrouper.revokeStemPrivilege(getCallerIdentity(),stem, subject, privilege);
+	}
+
 }

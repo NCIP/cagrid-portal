@@ -45,8 +45,10 @@ public class GridGrouperExample {
 	public static void updateStems(Stem stem, String displayExtension, String desrciption) throws Exception {
 		String dn = stem.getDisplayExtension();
 		int index = dn.indexOf(" [Updated]");
+		boolean isReset = false;
 		if(index != -1){
 			dn = dn.substring(0,index);
+			isReset = true;
 		}
 		stem.setDisplayExtension(dn+displayExtension);
 		stem.setDescription(desrciption);
@@ -55,6 +57,16 @@ public class GridGrouperExample {
 		while (itr.hasNext()) {
 			updateStems((Stem) itr.next(), displayExtension,desrciption);
 		}
+		Subject creator = SubjectUtils.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN="+stem.getUuid()+" Creator");
+		Subject stemmer = SubjectUtils.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN="+stem.getUuid()+" Stemmer");
+		if(isReset){
+			stem.revokePriv(creator, edu.internet2.middleware.grouper.NamingPrivilege.CREATE);
+			stem.revokePriv(stemmer, edu.internet2.middleware.grouper.NamingPrivilege.STEM);
+		}else{
+			stem.grantPriv(creator, edu.internet2.middleware.grouper.NamingPrivilege.CREATE);
+			stem.grantPriv(stemmer, edu.internet2.middleware.grouper.NamingPrivilege.STEM);
+		}
+		
 	}
 
 	public static void printStems(Stem stem, String buffer) throws Exception {
@@ -105,10 +117,7 @@ public class GridGrouperExample {
 		
 		System.out.println(buffer + "  Has Create Privilege [" +sub.getId()+"]?:"+stem.hasCreate(sub));
 		System.out.println(buffer + "  Has Stem Privilege [" +sub.getId()+"]?:"+stem.hasStem(sub));
-		
-	
-		
-		
+			
 		Set s = stem.getChildStems();
 		Iterator itr = s.iterator();
 		while (itr.hasNext()) {

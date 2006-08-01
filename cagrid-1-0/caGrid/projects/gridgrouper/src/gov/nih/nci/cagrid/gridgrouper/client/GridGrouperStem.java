@@ -1,9 +1,12 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
+import edu.internet2.middleware.grouper.GrantPrivilegeException;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.grouper.NamingPrivilege;
 import edu.internet2.middleware.grouper.Privilege;
+import edu.internet2.middleware.grouper.RevokePrivilegeException;
+import edu.internet2.middleware.grouper.SchemaException;
 import edu.internet2.middleware.grouper.StemModifyException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
@@ -13,7 +16,9 @@ import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault;
 
 import java.util.Date;
@@ -192,4 +197,44 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 		}
 	}
 
+	public void grantPriv(Subject subj, Privilege priv)
+			throws GrantPrivilegeException, InsufficientPrivilegeException,
+			SchemaException {
+		try {
+			StemPrivilegeType type = StemPrivilegeType
+					.fromValue(priv.getName());
+			gridGrouper.getClient().grantStemPrivilege(getStemIdentifier(),
+					subj.getId(), type);
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (GrantPrivilegeFault f) {
+			throw new GrantPrivilegeException(f.getFaultString());
+		} catch (SchemaFault f) {
+			throw new SchemaException(f.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+
+	}
+
+	public void revokePriv(Subject subj, Privilege priv)
+			throws InsufficientPrivilegeException, RevokePrivilegeException,
+			SchemaException {
+		try {
+			StemPrivilegeType type = StemPrivilegeType
+					.fromValue(priv.getName());
+			gridGrouper.getClient().revokeStemPrivilege(getStemIdentifier(),
+					subj.getId(), type);
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (GrantPrivilegeFault f) {
+			throw new RevokePrivilegeException(f.getFaultString());
+		} catch (SchemaFault f) {
+			throw new SchemaException(f.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
 }

@@ -19,12 +19,6 @@ public class GridGrouperProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.gridgrouper.stubs.HasStemPrivilegeResponse hasStemPrivilege(gov.nih.nci.cagrid.gridgrouper.stubs.HasStemPrivilegeRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
-		gov.nih.nci.cagrid.gridgrouper.stubs.HasStemPrivilegeResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.HasStemPrivilegeResponse();
-		boxedResult.setResponse(impl.hasStemPrivilege(params.getStem().getStemIdentifier(),params.getSubject().getSubjectIdentifier(),params.getPrivilege().getStemPrivilegeType()));
-		return boxedResult;
-	}
-
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse getStem(gov.nih.nci.cagrid.gridgrouper.stubs.GetStemRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse();
 		boxedResult.setStemDescriptor(impl.getStem(params.getStem().getStemIdentifier()));
@@ -64,6 +58,24 @@ public class GridGrouperProviderImpl{
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GetStemPrivilegesResponse getStemPrivileges(gov.nih.nci.cagrid.gridgrouper.stubs.GetStemPrivilegesRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GetStemPrivilegesResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetStemPrivilegesResponse();
 		boxedResult.setStemPrivilege(impl.getStemPrivileges(params.getStem().getStemIdentifier(),params.getSubject().getSubjectIdentifier()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gridgrouper.stubs.HasStemPrivilegeResponse hasStemPrivilege(gov.nih.nci.cagrid.gridgrouper.stubs.HasStemPrivilegeRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.HasStemPrivilegeResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.HasStemPrivilegeResponse();
+		boxedResult.setResponse(impl.hasStemPrivilege(params.getStem().getStemIdentifier(),params.getSubject().getSubjectIdentifier(),params.getPrivilege().getStemPrivilegeType()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gridgrouper.stubs.GrantStemPrivilegeResponse grantStemPrivilege(gov.nih.nci.cagrid.gridgrouper.stubs.GrantStemPrivilegeRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.GrantStemPrivilegeResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GrantStemPrivilegeResponse();
+		boxedResult.setResponse(impl.grantStemPrivilege(params.getStem().getStemIdentifier(),params.getSubject().getSubjectIdentifier(),params.getPrivilege().getStemPrivilegeType()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gridgrouper.stubs.RevokeStemPrivilegeResponse revokeStemPrivilege(gov.nih.nci.cagrid.gridgrouper.stubs.RevokeStemPrivilegeRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.RevokePrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.RevokeStemPrivilegeResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.RevokeStemPrivilegeResponse();
+		boxedResult.setResponse(impl.revokeStemPrivilege(params.getStem().getStemIdentifier(),params.getSubject().getSubjectIdentifier(),params.getPrivilege().getStemPrivilegeType()));
 		return boxedResult;
 	}
 

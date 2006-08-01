@@ -203,6 +203,74 @@
           </sequence>
         </complexType>
       </element>
+      <element name="GrantStemPrivilegeRequest">
+        <complexType>
+          <sequence>
+            <element name="stem">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="subject">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:SubjectIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="privilege">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemPrivilegeType" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GrantStemPrivilegeResponse">
+        <complexType>
+          <sequence>
+            <element name="response" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="RevokeStemPrivilegeRequest">
+        <complexType>
+          <sequence>
+            <element name="stem">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="subject">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:SubjectIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="privilege">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemPrivilegeType" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="RevokeStemPrivilegeResponse">
+        <complexType>
+          <sequence>
+            <element name="response" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="GridGrouperRuntimeFault">
         <complexType>
           <complexContent>
@@ -225,6 +293,27 @@
         </complexType>
       </element>
       <element name="StemModifyFault">
+        <complexType>
+          <complexContent>
+            <extension base="wsrbf:BaseFaultType" />
+          </complexContent>
+        </complexType>
+      </element>
+      <element name="GrantPrivilegeFault">
+        <complexType>
+          <complexContent>
+            <extension base="wsrbf:BaseFaultType" />
+          </complexContent>
+        </complexType>
+      </element>
+      <element name="SchemaFault">
+        <complexType>
+          <complexContent>
+            <extension base="wsrbf:BaseFaultType" />
+          </complexContent>
+        </complexType>
+      </element>
+      <element name="RevokePrivilegeFault">
         <complexType>
           <complexContent>
             <extension base="wsrbf:BaseFaultType" />
@@ -287,6 +376,18 @@
   <message name="HasStemPrivilegeResponse">
     <part name="parameters" element="tns:HasStemPrivilegeResponse" />
   </message>
+  <message name="GrantStemPrivilegeRequest">
+    <part name="parameters" element="tns:GrantStemPrivilegeRequest" />
+  </message>
+  <message name="GrantStemPrivilegeResponse">
+    <part name="parameters" element="tns:GrantStemPrivilegeResponse" />
+  </message>
+  <message name="RevokeStemPrivilegeRequest">
+    <part name="parameters" element="tns:RevokeStemPrivilegeRequest" />
+  </message>
+  <message name="RevokeStemPrivilegeResponse">
+    <part name="parameters" element="tns:RevokeStemPrivilegeResponse" />
+  </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="tns:GridGrouperRuntimeFault" />
   </message>
@@ -298,6 +399,15 @@
   </message>
   <message name="StemModifyFaultFaultMessage">
     <part name="fault" element="tns:StemModifyFault" />
+  </message>
+  <message name="GrantPrivilegeFaultFaultMessage">
+    <part name="fault" element="tns:GrantPrivilegeFault" />
+  </message>
+  <message name="SchemaFaultFaultMessage">
+    <part name="fault" element="tns:SchemaFault" />
+  </message>
+  <message name="RevokePrivilegeFaultFaultMessage">
+    <part name="fault" element="tns:RevokePrivilegeFault" />
   </message>
   <!--============================================================
 
@@ -354,6 +464,24 @@
       <output message="tns:HasStemPrivilegeResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/HasStemPrivilegeResponse" />
       <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
       <fault name="StemNotFoundFault" message="tns:StemNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemNotFoundFaultFaultMessage" />
+    </operation>
+    <operation name="grantStemPrivilege">
+      <input message="tns:GrantStemPrivilegeRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GrantStemPrivilegeRequest" />
+      <output message="tns:GrantStemPrivilegeResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GrantStemPrivilegeResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="StemNotFoundFault" message="tns:StemNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemNotFoundFaultFaultMessage" />
+      <fault name="GrantPrivilegeFault" message="tns:GrantPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GrantPrivilegeFaultFaultMessage" />
+      <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
+      <fault name="SchemaFault" message="tns:SchemaFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/SchemaFaultFaultMessage" />
+    </operation>
+    <operation name="revokeStemPrivilege">
+      <input message="tns:RevokeStemPrivilegeRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/RevokeStemPrivilegeRequest" />
+      <output message="tns:RevokeStemPrivilegeResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/RevokeStemPrivilegeResponse" />
+      <fault name="StemNotFoundFault" message="tns:StemNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemNotFoundFaultFaultMessage" />
+      <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
+      <fault name="RevokePrivilegeFault" message="tns:RevokePrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/RevokePrivilegeFaultFaultMessage" />
+      <fault name="SchemaFault" message="tns:SchemaFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/SchemaFaultFaultMessage" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />
