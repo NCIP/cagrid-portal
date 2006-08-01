@@ -79,6 +79,9 @@ public class DataServiceConstants {
 	public static final String CADSR_PROJECT_NAME_ATTRIB = "projectName";
 	public static final String CADSR_PROJECT_VERSION_ATTRIB = "projectVersion";
 	public static final String SUPPLIED_DOMAIN_MODEL = "suppliedDomainModel";
+	
+	// WS-Enumeration constants
+	public static final String WS_ENUM_ENABLED = "useWsEnum";
 		
 	// DomainModel QName
 	public static final QName DOMAIN_MODEL_QNAME = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice", "DomainModel");
