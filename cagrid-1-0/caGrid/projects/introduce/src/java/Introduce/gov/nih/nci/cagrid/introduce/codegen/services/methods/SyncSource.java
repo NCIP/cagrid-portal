@@ -475,7 +475,7 @@ public class SyncSource {
 
 			// insert the new client method
 			int endOfClass = fileContent.lastIndexOf("}");
-			clientMethod = createUnBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
+			clientMethod = createClientUnBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
 			clientMethod += ";\n";
 
 			fileContent.insert(endOfClass - 1, clientMethod);
@@ -887,7 +887,7 @@ public class SyncSource {
 		}
 
 		// remove the old method signature
-		String clientMethod = createUnBoxedSignatureStringFromMethod(oldMethod);
+		String clientMethod = createClientUnBoxedSignatureStringFromMethod(oldMethod);
 		int startOfMethod = startOfSignature(fileContent, clientMethod);
 		int endOfSignature = endOfSignature(fileContent, startOfMethod);
 
