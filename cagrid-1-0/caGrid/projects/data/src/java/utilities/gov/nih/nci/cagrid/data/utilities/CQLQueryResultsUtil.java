@@ -47,6 +47,21 @@ public class CQLQueryResultsUtil {
 	}
 	
 	
+	public static CQLQueryResults createQueryResults(List rawObjects, QName objectQname) {
+		CQLQueryResults results = new CQLQueryResults();
+		LinkedList resultObjects = new LinkedList();
+		Iterator objectIter = rawObjects.iterator();
+		while (objectIter.hasNext()) {
+			Object obj = objectIter.next();
+			resultObjects.add(createObjectResult(obj, objectQname));
+		}
+		CQLObjectResult[] objectResultArray = new CQLObjectResult[rawObjects.size()];
+		resultObjects.toArray(objectResultArray);
+		results.setObjectResult(objectResultArray);
+		return results;
+	}
+	
+	
 	private static MessageContext createMessageContext(InputStream configStream) {
 		EngineConfiguration config = new FileProvider(configStream);
 		AxisClient client = new AxisClient(config);
@@ -63,6 +78,15 @@ public class CQLQueryResultsUtil {
 			throw new NullPointerException("No qname found for class " + obj.getClass().getName() 
 				+ ". Check your client or server-config.wsdd");
 		}
+		MessageElement anyElement = new MessageElement(objectQname, obj);
+		objectResult.set_any(new MessageElement[] {anyElement});
+		return objectResult;
+	}
+	
+	
+	private static CQLObjectResult createObjectResult(Object obj, QName objectQname) {
+		CQLObjectResult objectResult = new CQLObjectResult();
+		objectResult.setType(obj.getClass().getName());
 		MessageElement anyElement = new MessageElement(objectQname, obj);
 		objectResult.set_any(new MessageElement[] {anyElement});
 		return objectResult;
