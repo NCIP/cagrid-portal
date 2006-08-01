@@ -206,6 +206,16 @@
     </ns32:ServiceAuthorization>
    </ns32:ServiceSecurity>
   </ns3:Service>
+  <ns3:Service name="GridGrouperStem" namespace="http://cagrid.nci.nih.gov/GridGrouperStem" packageName="gov.nih.nci.cagrid.gridgrouper.stem" resourceFrameworkType="base" xsi:type="ns3:ServiceType">
+   <ns33:Methods xsi:type="ns33:MethodsType" xmlns:ns33="gme://gov.nih.nci.cagrid.introduce/1/Methods">
+    <ns33:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns33:MethodType">
+     <ns33:Output qName="ns34:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns34="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+     <ns33:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
+     <ns33:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
+    </ns33:Method>
+   </ns33:Methods>
+   <ns35:ResourcePropertiesList xsi:type="ns35:ResourcePropertiesListType" xmlns:ns35="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+  </ns3:Service>
  </ns3:Services>
- <ns33:Extensions xsi:type="ns33:ExtensionsType" xmlns:ns33="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns36:Extensions xsi:type="ns36:ExtensionsType" xmlns:ns36="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
 </ns1:ServiceSkeleton>
