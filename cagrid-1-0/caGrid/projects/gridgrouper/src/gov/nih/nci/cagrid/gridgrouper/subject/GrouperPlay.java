@@ -11,6 +11,7 @@ import edu.internet2.middleware.grouper.Stem;
 import edu.internet2.middleware.grouper.StemFinder;
 import edu.internet2.middleware.grouper.SubjectFinder;
 import edu.internet2.middleware.subject.Subject;
+import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 
 
 /**
@@ -61,6 +62,7 @@ public class GrouperPlay {
 			printStems(root3, "");
 			Stem found = StemFinder.findByName(ses1, osuCS.getName());
 			System.out.println(found.getDisplayName());
+			System.out.println(osu.hasCreate(gs2));
 			// root.addChildStem(, displayExtension)
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,20 +71,61 @@ public class GrouperPlay {
 
 
 	public static void printStems(Stem stem, String buffer) throws Exception {
-		System.out.println(buffer + stem.getDisplayExtension() + " (" + stem.getUuid() + ")");
-		System.out.println(buffer + "  " + "[Description:" + stem.getDescription() + "]");
-		System.out.println(buffer + "  " + "[Create Source:" + stem.getCreateSource() + "]");
-		System.out.println(buffer+  "  " + "[Create Subject Id:"+stem.getCreateSubject().getId()+"]");
-		System.out.println(buffer+  "  " + "[Create Subject Name:"+stem.getCreateSubject().getName()+"]");
-		System.out.println(buffer+  "  " + "[Create Subject Source:"+stem.getCreateSubject().getSource().getClass().getName()+"]");
-		System.out.println(buffer + "  " + "[Create Time:" + stem.getCreateTime() + "]");
-		System.out.println(buffer + "  " + "[Modify Time:" + stem.getModifyTime() + "]");
-		System.out.println(buffer + "  " + "[Modify Source:" + stem.getModifySource() + "]");
-	    //System.out.println(buffer+"  "+" [Modify Subject:"+stem.getModifySubject().getName()+"]");
+		System.out.println(buffer + stem.getDisplayExtension() + " ("
+				+ stem.getUuid() + ")");
+		System.out.println(buffer + "  " + "Description:"
+				+ stem.getDescription());
+		try {
+			System.out.println(buffer + "  " + "Parent:"
+					+ stem.getParentStem().getDisplayExtension());
+		} catch (Exception e) {
+		}
+		System.out.println(buffer + "  " + "Create Source:"
+				+ stem.getCreateSource());
+		System.out.println(buffer + "  " + "Create Subject Id:"
+				+ stem.getCreateSubject().getId());
+		System.out.println(buffer + "  " + "Create Time:"
+				+ stem.getCreateTime());
+		System.out.println(buffer + "  " + "Modify Time:"
+				+ stem.getModifyTime());
+		
+		Set stemmers = stem.getStemmers();
+		System.out.println(buffer + "  " + "Stemmers:");
+		Iterator i2 = stemmers.iterator();
+		while(i2.hasNext()){
+			Subject sbj = (Subject)i2.next();
+			System.out.println(buffer + "    " 
+					+ sbj.getId());
+		}
+		
+		Set creators = stem.getCreators();
+		System.out.println(buffer + "  " + "Creators:");
+		Iterator i1 = creators.iterator();
+		while(i1.hasNext()){
+			Subject sbj = (Subject)i1.next();
+			System.out.println(buffer + "    " 
+					+ sbj.getId());
+		}
+		Subject sub = SubjectUtils.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=langella");
+		Set privs = stem.getPrivs(sub);
+		System.out.println(buffer + "  " + "Privileges for "+sub.getId()+":");
+		Iterator i3= privs.iterator();
+		while(i3.hasNext()){
+			NamingPrivilege priv = (NamingPrivilege)i3.next();
+			System.out.println(buffer + "    " 
+					+ priv.toString());
+		}
+		
+	
+		
+		
 		Set s = stem.getChildStems();
 		Iterator itr = s.iterator();
 		while (itr.hasNext()) {
-			printStems((Stem) itr.next(), buffer + "    ");
+			System.out.println();
+			System.out.println();
+			printStems((Stem) itr.next(), buffer);
+		
 		}
 	}
 

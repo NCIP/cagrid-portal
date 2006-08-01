@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gridgrouper.client;
 
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
+import edu.internet2.middleware.grouper.NamingPrivilege;
 import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.grouper.StemModifyException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
@@ -169,6 +170,26 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 
+	}
+
+	public boolean hasCreate(Subject subj) {
+		try {
+			return gridGrouper.hasStemPrivilege(getName(), subj,
+					NamingPrivilege.CREATE);
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public boolean hasStem(Subject subj) {
+		try {
+			return gridGrouper.hasStemPrivilege(getName(), subj,
+					NamingPrivilege.STEM);
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
 	}
 
 }

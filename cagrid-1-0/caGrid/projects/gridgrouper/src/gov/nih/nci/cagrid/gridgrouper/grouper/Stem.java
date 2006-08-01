@@ -65,6 +65,8 @@ public interface Stem {
     public Set getCreators(); 
 	public Set getPrivs(Subject subj); 
 	public Set getStemmers(); 
+	public boolean hasCreate(Subject subj); 
+	public boolean hasStem(Subject subj); 
 	
 	  //public Group addChildGroup(String extension, String displayExtension) throws GroupAddException,InsufficientPrivilegeException; 
 	  //public Stem addChildStem(String extension, String displayExtension) throws InsufficientPrivilegeException,StemAddException; 
@@ -73,8 +75,6 @@ public interface Stem {
 	  //public Set getChildGroups(); 
 	
       //public void grantPriv(Subject subj, Privilege priv) throws GrantPrivilegeException, InsufficientPrivilegeException, SchemaException;
-	  //public boolean hasCreate(Subject subj); 
-	  //public boolean hasStem(Subject subj) throws SchemaException; 
 	  //public void revokePriv(Subject subj, Privilege priv) throws InsufficientPrivilegeException, RevokePrivilegeException, SchemaException; 
 	  	
 }

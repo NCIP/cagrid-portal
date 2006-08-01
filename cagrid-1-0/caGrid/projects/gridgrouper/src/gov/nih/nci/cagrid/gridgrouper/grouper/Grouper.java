@@ -29,4 +29,7 @@ public interface Grouper {
 	public Set getSubjectsWithStemPrivilege(String stemName, Privilege privilege)
 			throws StemNotFoundException;
 
+	public boolean hasStemPrivilege(String stemName, Subject subject,
+			Privilege privilege) throws StemNotFoundException;;
+
 }

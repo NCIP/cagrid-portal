@@ -103,6 +103,9 @@ public class GridGrouperExample {
 					+ priv.toString());
 		}
 		
+		System.out.println(buffer + "  Has Create Privilege [" +sub.getId()+"]?:"+stem.hasCreate(sub));
+		System.out.println(buffer + "  Has Stem Privilege [" +sub.getId()+"]?:"+stem.hasStem(sub));
+		
 	
 		
 		

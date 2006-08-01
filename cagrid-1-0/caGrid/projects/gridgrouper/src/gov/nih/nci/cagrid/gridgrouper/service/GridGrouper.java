@@ -135,7 +135,7 @@ public class GridGrouper {
 			GridGrouperRuntimeFault, StemNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject subject = SubjectUtils.getSubject(gridIdentity,true);
+			Subject subject = SubjectUtils.getSubject(gridIdentity, true);
 			session = GrouperSession.start(subject);
 			StemDescriptor[] children = null;
 			Stem parent = StemFinder.findByName(session, parentStemId
@@ -386,11 +386,11 @@ public class GridGrouper {
 			GridGrouperRuntimeFault, StemNotFoundFault {
 		GrouperSession session = null;
 		try {
-	
-			Subject subj =SubjectUtils.getSubject(gridIdentity);
+
+			Subject subj = SubjectUtils.getSubject(gridIdentity);
 			session = GrouperSession.start(subj);
 			Stem target = StemFinder.findByName(session, stem.getStemName());
-			Set privs = target.getPrivs(SubjectUtils.getSubject(subject,true));
+			Set privs = target.getPrivs(SubjectUtils.getSubject(subject, true));
 			int size = 0;
 			if (privs != null) {
 				size = privs.size();
@@ -403,15 +403,67 @@ public class GridGrouper {
 					NamingPrivilege p = (NamingPrivilege) itr.next();
 					rights[count] = new StemPrivilege();
 					rights[count].setStemName(p.getStem().getName());
-					rights[count].setImplementationClass(p.getImplementationName());
+					rights[count].setImplementationClass(p
+							.getImplementationName());
 					rights[count].setIsRevokable(p.isRevokable());
 					rights[count].setOwner(p.getOwner().getId());
-					rights[count].setPrivilegeType(StemPrivilegeType.fromValue(p.getName()));
+					rights[count].setPrivilegeType(StemPrivilegeType
+							.fromValue(p.getName()));
 					rights[count].setSubject(p.getSubject().getId());
 					count++;
 				}
 			}
 			return rights;
+		} catch (StemNotFoundException e) {
+			StemNotFoundFault fault = new StemNotFoundFault();
+			fault.setFaultString("The stem " + stem.getStemName()
+					+ " could not be found!!!");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (StemNotFoundFault) helper.getFault();
+			throw fault;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault
+					.setFaultString("Error occurred getting the privileges for the subject "
+							+ subject
+							+ " on the stem "
+							+ stem.getStemName()
+							+ ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		} finally {
+			if (session == null) {
+				try {
+					session.stop();
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
+	}
+
+	public boolean hasStemPrivilege(String gridIdentity, StemIdentifier stem,
+			String subject, StemPrivilegeType privilege)
+			throws GridGrouperRuntimeFault, StemNotFoundFault {
+		GrouperSession session = null;
+		try {
+			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			session = GrouperSession.start(subj);
+			Stem target = StemFinder.findByName(session, stem.getStemName());
+			if (privilege == null) {
+				return false;
+			} else if (privilege.equals(StemPrivilegeType.create)) {
+				return target.hasCreate(SubjectUtils.getSubject(subject, true));
+			} else if (privilege.equals(StemPrivilegeType.stem)) {
+				return target.hasStem(SubjectUtils.getSubject(subject, true));
+			} else {
+				return false;
+			}
+
 		} catch (StemNotFoundException e) {
 			StemNotFoundFault fault = new StemNotFoundFault();
 			fault.setFaultString("The stem " + stem.getStemName()

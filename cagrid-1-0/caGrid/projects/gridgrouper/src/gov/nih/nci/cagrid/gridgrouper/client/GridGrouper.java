@@ -141,6 +141,21 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 		}
 	}
 
+	public boolean hasStemPrivilege(String stemName, Subject subject,
+			Privilege privilege) throws StemNotFoundException {
+		try {
+			StemPrivilegeType type = StemPrivilegeType.fromValue(privilege
+					.getName());
+			return getClient().hasStemPrivilege(getStemIdentifier(stemName),
+					subject.getId(), type);
+		} catch (StemNotFoundFault f) {
+			throw new StemNotFoundException(f.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
 	protected GridGrouperClient getClient() {
 		return client;
 	}
