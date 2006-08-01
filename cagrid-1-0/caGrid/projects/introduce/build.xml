@@ -2,60 +2,11 @@
 <!-- caGrid build file                                                       -->
 <!-- ======================================================================= -->
 <project name="introduce" default="introduce" basedir=".">
-	<!-- Environment -->
-	<property environment="env" />
-	<property file="${basedir}/build.properties" />
-	<property file="${user.dir}/build.properties" />
 
-	<!-- Information -->
-	<property name="project.name" value="caGrid-introduce" />
-	<property name="project.version" value="1.0" />
-
-	<!-- Source, Config, and Libraries -->
-	<property name="ext.dir" location="${basedir}/ext" />
-	<property name="src.dir" location="${basedir}/src/java" />
-	<property name="templates.src.dir" location="${basedir}/src/jettemplates" />
-	<property name="templates.created.src.dir" location="${basedir}/src/java/Introduce/gov/nih/nci/cagrid/introduce/templates" />
-	<property name="beans.created.src.dir" location="${basedir}/src/java/Introduce/gov/nih/nci/cagrid/introduce/beans" />
-	<property name="lib.dir" location="${basedir}/lib" />
-	<property name="ext.lib.dir" location="${ext.dir}/lib" />
-	<property name="schema.dir" location="${basedir}/schema" />
-	<property name="ext.schema.dir" location="${ext.dir}/schema" />
-	<property name="ext.resources.dir" location="${ext.dir}/resources" />
-	<property name="sde.schema.dir" location="${schema.dir}/types" />
-	<property name="resources.dir" location="${basedir}/resources" />
-
-	<!-- Generated stuff -->
-	<property name="build.dir" location="${basedir}/build" />
-	<property name="build.lib.dir" location="${build.dir}/jars" />
-	<property name="classes.dir" location="${build.dir}/classes" />
-	<property name="introduce.classes.dir" location="${classes.dir}/Introduce" />
-	<property name="portal.classes.dir" location="${classes.dir}/Portal" />
-	<property name="jars.dir" location="${build.dir}/jars" />
-	<property name="project.jar" location="${jars.dir}/${project.name}-${project.version}.jar" />
-	<property name="jars.prefix" value="${jars.dir}/${project.name}-" />
-	<property name="jars.sufix" value="-${project.version}.jar" />
-	<property name="junit.results.dir" value="${build.dir}/junit" />
-	<property name="javadoc.dir" value="${build.dir}/javadoc" />
-
-	<property name="java.source" value="1.4" />
-
-	<!-- testing stuff -->
-	<property name="test.dir" location="${basedir}/test" />
-	<property name="test.src.dir" location="${test.dir}/src/java" />
-	<property name="test.classes.dir" location="${build.dir}/test_classes" />
-	<property name="introduce.test.classes.dir" location="${test.classes.dir}/Introduce" />
-	<property name="portal.test.classes.dir" location="${test.classes.dir}/Portal" />
-	<property name="test.lib.dir" location="${test.dir}/lib" />
-	<property name="ext.test.lib.dir" location="${ext.dir}/test/lib" />
-	<property name="test.log.dir" location="${test.dir}/logs" />
-	<property name="test.project.jar" location="${jars.dir}/${project.name}-tests-${project.version}.jar" />
-
-	<!-- extensions stuff -->
-	<property name="extensions.lib.dir" location="${basedir}/extensions/lib" />
 
 	<!-- Load util files -->
 	<property name="antfiles.dir" value="${basedir}/antfiles" />
+	<import file="${antfiles.dir}/introduce-properties.xml" />
 	<import file="${antfiles.dir}/build-introduce.xml" />
 	<import file="${antfiles.dir}/build-portal.xml" />
 	<import file="${antfiles.dir}/introduce-utils.xml" />
@@ -72,27 +23,6 @@
 		<delete dir="${build.dir}" />
 		<delete dir="${templates.created.src.dir}" />
 		<delete dir="${beans.created.src.dir}" />
-	</target>
-
-	<!-- ============================================================== -->
-	<!-- Globus properties                                              -->
-	<!-- ============================================================== -->
-	<target name="checkGlobus" depends="setGlobus">
-		<condition property="globus.not.found">
-			<or>
-				<not>
-					<isset property="ext.globus.dir" />
-				</not>
-				<equals arg1="${ext.globus.dir}" arg2="" />
-			</or>
-		</condition>
-		<fail message="Globus installation is not set in either GLOBUS_LOCATION or ext.globus.dir" if="globus.not.found" />
-		<echo message="Globus: ${ext.globus.dir}" />
-	</target>
-	<target name="setGlobus" if="env.GLOBUS_LOCATION">
-		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
-		<property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
-		<property name="schema.src" location="${ext.globus.dir}/share/schema" />
 	</target>
 
 	<!-- =================================================================== -->

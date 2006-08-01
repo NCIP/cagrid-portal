@@ -5,7 +5,29 @@
 	<property name="conf.dir" location="conf"/>
 	<property name="introduce.portal.conf"
 		location="${conf.dir}/introduce/introduce-portal-conf.xml"/>
-	<target name="introduce" depends="build" description="Execute the Introduce GDE">
+	
+	<!-- ============================================================== -->
+	<!-- Globus properties                                              -->
+	<!-- ============================================================== -->
+	<target name="checkGlobus" depends="setGlobus">
+		<condition property="globus.not.found">
+			<or>
+				<not>
+					<isset property="ext.globus.dir" />
+				</not>
+				<equals arg1="${ext.globus.dir}" arg2="" />
+			</or>
+		</condition>
+		<fail message="Globus installation is not set in either GLOBUS_LOCATION or ext.globus.dir" if="globus.not.found" />
+		<echo message="Globus: ${ext.globus.dir}" />
+	</target>
+	<target name="setGlobus" if="env.GLOBUS_LOCATION">
+		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
+		<property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+		<property name="schema.src" location="${ext.globus.dir}/share/schema" />
+	</target>
+	
+	<target name="introduce" depends="checkGlobus" description="Execute the Introduce GDE">
 		<runPortal configfile="${introduce.portal.conf}"/>
 	</target>
 	<macrodef name="runPortal">
@@ -18,6 +40,7 @@
 			</java>
 		</sequential>
 	</macrodef>
+	
 	<!-- =================================================================== -->
 	<!-- GME Viewer                                                          -->
 	<!-- =================================================================== -->
