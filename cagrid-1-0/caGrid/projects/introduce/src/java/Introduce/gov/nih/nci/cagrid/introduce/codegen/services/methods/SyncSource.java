@@ -952,7 +952,7 @@ public class SyncSource {
 		int index = startingIndex;
 		boolean found = false;
 		boolean canFind = false;
-		while (!found) {
+		while (!found && index < sb.length() && index >= 0) {
 			char ch = sb.charAt(index);
 			if (ch == '{') {
 				canFind = true;
@@ -972,8 +972,11 @@ public class SyncSource {
 			while (ch == '\t' || ch == ' ') {
 				ch = sb.charAt(++index);
 			}
+			return index;
+		} else {
+			return -1;
 		}
-		return index;
+
 	}
 
 
