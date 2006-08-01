@@ -10,6 +10,10 @@ import java.io.File;
 
 import com.atomicobject.haste.framework.Step;
 
+/**
+ * This step sets the mysql username and password fields in gme-globus-config.xml of a deployed GME service
+ * @author Patrick McConnell
+ */
 public class GMEConfigureStep
 	extends Step
 {
