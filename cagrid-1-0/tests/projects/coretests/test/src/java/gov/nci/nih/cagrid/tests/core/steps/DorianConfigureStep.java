@@ -41,7 +41,7 @@ public class DorianConfigureStep
 	public void runStep() throws Throwable
 	{
 		File configFile = new File(globus.getTempGlobusLocation(), 
-			"etc" + File.separator + "GlobalModelExchange" + File.separator + "dorian-conf.xml"
+			"etc" + File.separator + "Dorian" + File.separator + "dorian-conf.xml"
 		);
 		SimpleXmlReplacer replacer = new SimpleXmlReplacer();
 		replacer.addReplacement("username", user);
