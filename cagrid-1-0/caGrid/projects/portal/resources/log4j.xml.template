@@ -21,7 +21,7 @@
 
 	<category name="gov.nih.nci.cagrid.portal" additivity="false">
 		<priority value="@log.level.portal@"/>
-		<appender-ref ref="fileAppender"/>
+		<appender-ref ref="consoleAppender"/>
 	</category>
 
 	<category name="org.springframework" additivity="false">

@@ -13,7 +13,7 @@ import java.util.TimerTask;
  */
 public abstract class AbstractAggregator extends TimerTask {
 
-    protected Category mLogger = Category.getInstance(getClass().getName());
+    protected Category _logger = Category.getInstance(getClass().getName());
     ;
 
 

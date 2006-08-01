@@ -37,7 +37,7 @@ public class IndexAggregatorFactory extends AbstractAggregator {
         for (ListIterator iter = indexes.listIterator(); iter.hasNext();) {
             IndexService idx = (IndexService) iter.next();
             IndexAggregator idxAggr = new IndexAggregator(idx, idxManager, this.metadataCompliance);
-            mLogger.debug("Index Aggregator started for index " + idx.getHandle().toString());
+            _logger.debug("Index Aggregator started for index " + idx.getHandle().toString());
             idxAggr.run();
         }
 

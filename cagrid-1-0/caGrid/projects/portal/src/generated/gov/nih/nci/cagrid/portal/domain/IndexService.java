@@ -2,10 +2,13 @@ package gov.nih.nci.cagrid.portal.domain;
 
 import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
 import gov.nih.nci.cagrid.portal.utils.GridUtils;
+
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
  * Represents a Index Service Instance
@@ -15,16 +18,14 @@ import java.util.List;
  * @hibernate.class table="INDEX_SERVICE"
  */
 public class IndexService implements DomainObject, GridService {
-
-    private List registeredServicesCollection;
+    // Primary pk
+    private Integer pk;
+    private Set registeredServicesCollection = new HashSet();
     private String epr;
     private String description;
     private String name;
     private EndpointReferenceType handle;
     private boolean active = true;
-
-    // Primary key
-    private int key;
 
     /**
      * Self initialize the index Service bean
@@ -49,7 +50,6 @@ public class IndexService implements DomainObject, GridService {
         } catch (MetadataRetreivalException e) {
             // Do nothing none of them is a fatal exception
         }
-
     }
 
     /**
@@ -58,24 +58,34 @@ public class IndexService implements DomainObject, GridService {
     public IndexService() {
     }
 
-    
-    public List getRegisteredServicesCollection() {
-        return registeredServicesCollection;
+    /**
+    * @hibernate.id generator-class="increment"
+    * column="ID_KEY"
+    */
+    public Integer getPk() {
+        return pk;
     }
 
-    public void setRegisteredServicesCollection(List registeredServicesCollection) {
-        this.registeredServicesCollection = registeredServicesCollection;
+    public void setPk(Integer pk) {
+        this.pk = pk;
     }
 
     /**
-     * Convinience method to add a registered service to the index
+     * @hibernate.set name="registeredServicesCollection"
+     *               cascade="save-update"
+     *               lazy="true"
+     * @hibernate.collection-key column="INDEX_ID_KEY"
+     * @hibernate.collection-one-to-many class="gov.nih.nci.cagrid.portal.domain.RegisteredService"
      *
-     * @param service
      */
-    public void addRegisteredService(RegisteredService service) {
-        this.registeredServicesCollection.add(service);
+    public Set getRegisteredServicesCollection() {
+        return registeredServicesCollection;
     }
 
+    public void setRegisteredServicesCollection(
+        Set registeredServicesCollection) {
+        this.registeredServicesCollection = registeredServicesCollection;
+    }
 
     /**
      * set to private because its only intended
@@ -87,7 +97,7 @@ public class IndexService implements DomainObject, GridService {
      * type="string"
      */
     public String getEpr() {
-        return epr;
+        return epr.trim();
     }
 
     /**
@@ -127,23 +137,11 @@ public class IndexService implements DomainObject, GridService {
         this.name = name;
     }
 
-
     public void setHandle(EndpointReferenceType handle) {
         this.handle = handle;
+
         // Keep it in sync with the epr(String)
         this.epr = handle.getAddress().toString();
-    }
-
-    /**
-     * @hibernate.id generator-class="increment"
-     * column="ID_KEY"
-     */
-    public int getKey() {
-        return key;
-    }
-
-    public void setKey(int key) {
-        this.key = key;
     }
 
     /**
@@ -151,9 +149,8 @@ public class IndexService implements DomainObject, GridService {
      *         ToDo Should be Implemented by concrerte classes
      */
     public boolean isEqual(DomainObject obj) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false; //To change body of implemented methods use File | Settings | File Templates.
     }
-
 
     public EndpointReferenceType getHandle() {
         return handle;
@@ -171,5 +168,18 @@ public class IndexService implements DomainObject, GridService {
         this.active = active;
     }
 
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        final IndexService that = (IndexService) o;
+
+        if (!epr.equals(that.epr)) return false;
+
+        return true;
+    }
+
+    public int hashCode() {
+        return epr.hashCode();
+    }
 }

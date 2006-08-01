@@ -3,6 +3,14 @@
 
 <beans>
 
+
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+
     <!-- #############   Generic Bean intialization section #############                -->
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
@@ -32,7 +40,7 @@
     <!-- #############   DAO #############                -->
 
     <bean id="baseDAO"
-          class="gov.nih.nci.cagrid.portal.dao.hibernate.BaseHibernateDAOImpl">
+          class="gov.nih.nci.cagrid.portal.dao.hibernate.BaseDAOImpl">
         <property name="sessionFactory">
             <ref bean="sessionFactory"/>
         </property>

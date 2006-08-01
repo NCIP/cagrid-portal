@@ -52,3 +52,13 @@ from main (Master) build
 - The project can be setup as a web project in an IDE, where webcontent
 directory is the web resources root directory. This way you can use the IDE
 to build the portal project as a web project
+
+
+===========================================================================
+Testing Instructions
+===========================================================================
+
+You will need a database to do testing (Nothing will be committed to the DB)
+To execute the tests just run 'ant testLocal' after setting your
+{username}-portal-build.properties file with correct settings for your local
+environment.

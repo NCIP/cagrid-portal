@@ -35,7 +35,7 @@ public class DatabaseInitUtility implements InitializingBean {
             EndpointReferenceType serviceEPR = GridUtils.getEPR(idxIter.next().toString());
             IndexService idxService = new IndexService(serviceEPR);
 
-            manager.save(idxService);
+            //manager.save(idxService);
         }
     }
 

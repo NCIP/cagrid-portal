@@ -22,22 +22,6 @@ public class BaseManagerImpl implements BaseManager {
     protected BaseDAO baseDAO;
     protected IndexDAO indexDAO;
 
-    protected BaseDAO getBaseDAO() {
-        return baseDAO;
-    }
-
-    public void setBaseDAO(BaseDAO baseDAO) {
-        this.baseDAO = baseDAO;
-    }
-
-    public IndexDAO getIndexDAO() {
-        return indexDAO;
-    }
-
-    public void setIndexDAO(IndexDAO _indexDAO) {
-        this.indexDAO = _indexDAO;
-    }
-
     /**
      * Returns All the persistent
      * object for given class
@@ -55,5 +39,16 @@ public class BaseManagerImpl implements BaseManager {
     public void save(Object obj) {
         baseDAO.saveOrUpdate(obj);
     }
+
+    /** Setter for Spring **/
+    public void setBaseDAO(BaseDAO baseDAO) {
+        this.baseDAO = baseDAO;
+    }
+
+    /** Setter for Spring **/
+    public void setIndexDAO(IndexDAO indexDAO) {
+        this.indexDAO = indexDAO;
+    }
+
 }
 

@@ -39,17 +39,16 @@ public class IndexAggregator extends AbstractAggregator {
 
     public void run() {
         try {
-            EndpointReferenceType[] services = discClient.getAllServices(metadataCompliance);
+            EndpointReferenceType[] serviceEPR = discClient.getAllServices(metadataCompliance);
 
-            for (int i = 0; i < services.length; i++) {
-                mLogger.debug("Adding " + services[i] + " to index.");
-                indexService.addRegisteredService(new RegisteredService(services[i]));
-                mLogger.debug("Saving index with " + indexService.getRegisteredServicesCollection().size() + " Registered Services.");
-                idxMgr.save(indexService);
+            for (int i = 0; i < serviceEPR.length; i++) {
+                _logger.debug("Adding " + serviceEPR[i] + " to index.");
+                 RegisteredService rService = new RegisteredService(serviceEPR[i]);
+                idxMgr.addRegisteredService(indexService,rService);
             }
 
         } catch (Exception e) {
-            mLogger.error(e);
+            _logger.error(e);
         }
     }
 }

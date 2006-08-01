@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.manager;
 
 import gov.nih.nci.cagrid.portal.domain.IndexService;
+import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 
 /**
@@ -11,11 +12,14 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
  * To change this template use File | Settings | File Templates.
  */
 public interface IndexServiceManager extends BaseManager {
-    IndexService findIndexServiceByPK(Integer key);
-
-    IndexService findIndexServiceByEPR(EndpointReferenceType epr);
 
     void save(Object obj);
 
 
+    /** Add or update a registered service
+     * belonging to this index
+     * @param idx
+     * @param service
+     */
+    IndexService addRegisteredService(IndexService idx, RegisteredService service);
 }

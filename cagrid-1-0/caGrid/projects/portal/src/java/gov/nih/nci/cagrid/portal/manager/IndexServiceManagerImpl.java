@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.portal.manager;
 
 import gov.nih.nci.cagrid.portal.domain.IndexService;
+import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
-import org.apache.axis.message.addressing.EndpointReferenceType;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,14 +13,9 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
  */
 public class IndexServiceManagerImpl extends BaseManagerImpl implements IndexServiceManager {
 
-    public IndexService findIndexServiceByPK(final Integer key) {
-        return (IndexService) indexDAO.getObjectByPK(key);
-    }
-
-    public IndexService findIndexServiceByEPR(EndpointReferenceType epr) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-
-    }
+    private Integer getID4EPR(String epr) throws RecordNotFoundException {
+           return indexDAO.getID4EPR(epr);
+       }
 
     /**
      * Override base implementation
@@ -30,8 +25,7 @@ public class IndexServiceManagerImpl extends BaseManagerImpl implements IndexSer
     public void save(Object obj) {
         IndexService idx = (IndexService) obj;
         try {
-            int id = indexDAO.getID4EPR(idx.getEpr());
-            idx.setKey(id);
+            idx.setPk(getID4EPR(idx.getEpr()));
         } catch (RecordNotFoundException e) {
             // New object since id does not exist
             // Do nothing as this is not unexpected
@@ -39,5 +33,18 @@ public class IndexServiceManagerImpl extends BaseManagerImpl implements IndexSer
 
         baseDAO.saveOrUpdate(idx);
     }
+
+
+    /** Add or update a registered service
+     * belonging to this index
+     * @param idx
+     * @param service
+     */
+    public IndexService addRegisteredService(IndexService idx, RegisteredService service){
+        return indexDAO.addRegisteredService(idx,service);
+
+    }
+
+
 }
 
