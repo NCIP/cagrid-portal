@@ -24,30 +24,34 @@ import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 
 
-/** 
-  *  CreationViewerBaseComponent
-  *  
-  *  This is the base component for developing and creation viewer.  A base implementation
-  *  is porvided, however, to create specific look-feel or additions one should extend this
-  *  panel and add this componenet to the introduce portal configuration.
-  * 
-  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
-  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
-  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
-  * 
-  * @created Jul 7, 2006 
-  */
+/**
+ * CreationViewerBaseComponent This is the base component for developing and
+ * creation viewer. A base implementation is porvided, however, to create
+ * specific look-feel or additions one should extend this panel and add this
+ * componenet to the introduce portal configuration.
+ * 
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
+ * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
+ * @created Jul 7, 2006
+ */
 public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 
 	/**
-	 * Will call the create service engine component to create the base framework for
-	 * the grid service
+	 * Will call the create service engine component to create the base
+	 * framework for the grid service
 	 * 
-	 * @param dir	the path to the location to create the service
-	 * @param service	the name of the service
-	 * @param servicePackage	the package name to use for the created service
-	 * @param serviceNamespace	the namespace to be used for this services wsdl and stubs
-	 * @param extensions a list of strings with the display names of the extensions to be added
+	 * @param dir
+	 *            the path to the location to create the service
+	 * @param service
+	 *            the name of the service
+	 * @param servicePackage
+	 *            the package name to use for the created service
+	 * @param serviceNamespace
+	 *            the namespace to be used for this services wsdl and stubs
+	 * @param extensions
+	 *            a list of strings with the display names of the extensions to
+	 *            be added
 	 */
 	public void createService(final String dir, final String service, final String servicePackage,
 		final String serviceNamespace, final List extensions) {
@@ -142,6 +146,10 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 								extDialog.setVisible(true);
 							}
 						}
+
+						Utils.serializeDocument(dir
+						+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE, introService,
+							IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
 						setProgressText("Invoking post creation processes...");
 						cmd = CommonTools.getAntSkeletonPostCreationCommand(".", serviceName, dirName, packageName,
