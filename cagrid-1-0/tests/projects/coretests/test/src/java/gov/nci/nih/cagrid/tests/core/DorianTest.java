@@ -3,6 +3,7 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
+import gov.nci.nih.cagrid.tests.core.steps.DorianConfigureStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCleanupStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
@@ -36,7 +37,7 @@ import com.atomicobject.haste.framework.Story;
  * adds the dorian CA to the globus trusted CAs.  An application for a user account is submitted,
  * approved, and the new user is authenticated. 
  * @testType integration
- * @steps GlobusCreateStep, GTSSyncOnceStep, GlobusDeployServiceStep, GlobusStartStep
+ * @steps GlobusCreateStep, GTSSyncOnceStep, GlobusDeployServiceStep, DorianConfigureStep, GlobusStartStep
  * @steps DorianAuthenticateStep, DorianDestroyDefaultProxyStep, DorianAuthenticateFailStep
  * @steps DorianAddTrustedCAStep, DorianSubmitRegistrationStep, DorianApproveRegistrationStep
  * @steps GlobusStopStep, GlobusCleanupStep
@@ -96,6 +97,7 @@ public class DorianTest
 		steps.add(new GlobusCreateStep(globus));
 		steps.add(new GTSSyncOnceStep(globus));
 		steps.add(new GlobusDeployServiceStep(globus, serviceDir));
+		steps.add(new DorianConfigureStep(globus));
 		steps.add(new GlobusDeployServiceStep(globus, new File("..", "echo")));
 		steps.add(new GlobusStartStep(globus, port));
 		
