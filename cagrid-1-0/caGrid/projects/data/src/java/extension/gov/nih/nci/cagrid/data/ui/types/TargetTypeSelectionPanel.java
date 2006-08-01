@@ -333,13 +333,10 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// verify we're in the same project as the other packages
 					Project selectedProject = getDomainBrowserPanel().getSelectedProject();
-					if (mostRecentProject == null) {
-						// if no project has been selected yet, make it the most recent
-						mostRecentProject = selectedProject;
-					}
 					boolean shouldAddPackage = true;
-					if (!mostRecentProject.getLongName().equals(selectedProject.getLongName()) ||
-						!mostRecentProject.getVersion().equals(selectedProject.getVersion())) {
+					if (mostRecentProject != null &&
+						(!mostRecentProject.getLongName().equals(selectedProject.getLongName()) ||
+						!mostRecentProject.getVersion().equals(selectedProject.getVersion()))) {
 						// not the same project, can't allow packages from more than one project!
 						String[] choices = {"Remove all other packages and insert", "Cancel"};
 						String[] message = {
@@ -370,13 +367,13 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 						UMLPackageMetadata pack = getDomainBrowserPanel().getSelectedPackage();
 						if (pack != null) {
 							// determine if the namespace type already exists in the service
-							String namespaceUri = NamespaceUtils.createNamespaceString(mostRecentProject, pack);
+							String namespaceUri = NamespaceUtils.createNamespaceString(selectedProject, pack);
 							NamespaceType nsType = NamespaceUtils.getServiceNamespaceType(getServiceInfo(), namespaceUri);
 							if (nsType == null) {
 								// create a new namespace from the package
 								try {
 									nsType = NamespaceUtils.createNamespaceFromUmlPackage(
-										mostRecentProject, pack, getGME(), getSchemaDir());
+										selectedProject, pack, getGME(), getSchemaDir());
 								} catch (Exception ex) {
 									ex.printStackTrace();
 									PortalUtils.showErrorMessage("Error creating namespace type", ex);
@@ -386,13 +383,15 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 									CommonTools.addNamespace(getServiceInfo().getServiceDescriptor(), nsType);
 								}
 							}
-							// map the package to the new namespace and add it to the types tree
 							if (nsType != null) {
+								// map the package to the new namespace and add it to the types tree
 								packageToNamespace.put(pack.getName(), nsType.getNamespace());
 								getTypesTree().addNamespaceType(nsType);
+								// change the most recently added project
+								mostRecentProject = selectedProject;
+								storeCaDSRInfo();
 							}
 						}
-						storeCaDSRInfo();
 					}
 				}
 			});
