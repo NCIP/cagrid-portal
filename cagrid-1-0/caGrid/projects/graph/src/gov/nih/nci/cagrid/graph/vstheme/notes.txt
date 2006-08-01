@@ -1,9 +1,0 @@
-TODO:
-
-mapping between outlines and views
-scrolling of the clipped-tabs-pane
-auto-hide of the outlines when last tab has been closed
-pager fix (should show proportional view even if not square)
-
-initialization of domain model outline tree
-cache based implementation of the tabbed browser (dont recreate recently used pages)
