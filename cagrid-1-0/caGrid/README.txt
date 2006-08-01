@@ -1,4 +1,3 @@
-This is in the Trunk.
 
 DIRECTORIES
 ========================================
@@ -18,7 +17,8 @@ For more information, refer to the Documentation module of the repository.  Spec
 CVS TAGS
 ========================================
 caGrid_Annual_Meeting_06 = Code used to demonstrate at caBIG Annual Meeting April 10th
+caGrid-1_0_beta_final = Code released for Beta release
+
 caGrid-1_0_release = (not yet used) Code released for 1.0
-caGrid-1_0_beta = (not yet used) Code released for Beta release
 caGrid-1_0_staging = (not yet used) Floating tag used to mark current staging code base
 caGrid-1_0_stableX = (not yet used) X=incrementing int, used to mark code base stable for use by early adopters
