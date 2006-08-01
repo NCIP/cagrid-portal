@@ -397,6 +397,7 @@
 	<target name="build-wsEnum" if="isJDK1.5" depends="prepare" description="Builds caGrid WS-Enumeration components">
 		<resolveDependencies extdir="${projects.dir}/wsEnum/ext">
 			<artifact refid="core.jars" />
+			<artifact refid="introduce.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
