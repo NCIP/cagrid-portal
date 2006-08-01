@@ -1,6 +1,6 @@
 #
 # Grouper Hibernate Configuration
-# $Id: grouper.hibernate.properties,v 1.1 2006-07-25 19:53:39 langella Exp $
+# $Id: grouper.hibernate.properties,v 1.1 2006/07/25 19:53:39 langella Exp $
 #
 
 # HSQLDB
