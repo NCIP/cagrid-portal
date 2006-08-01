@@ -21,6 +21,8 @@ TODO:
 17[ ]: Identifier Resolution Support (Possibly through an operation provider)
 
 BUGS:
+I added a package and it said that it could not find a schema, so I hit cancel.  No model was added to the models list (correctly).  Next I selected a different package, and it popped up the Package incompatibility dialog.  This should not pop up because there are no models added yet.
+
 Eclipse classpath is incorrect (duplicate entries for cagrid core)
 	-- Fixed 2006-06-07
 Type Serialization Table sizing is screwed up
