@@ -214,7 +214,7 @@
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="ws.enum.jars">
-			<antcalls target="build-wsEnum"/>
+			<antcall target="build-wsEnum"/>
 			<fileset dir="${projects.dir}/wsEnum/build/lib">
 				<include name="*.jar"/>
 			</fileset>
@@ -222,8 +222,8 @@
 				<include name="*.jar"/>
 			</fileset>
 		</artifact>
-		<artifact track="main" type="schemas" id="ws.enum.schemas">'
-			<fileset dir="${projects.dir}/wsEnum/schemas">
+		<artifact track="main" type="schemas" id="ws.enum.schemas">
+			<fileset dir="${projects.dir}/wsEnum/schema">
 				<include name="**/*.xsd"/>
 			</fileset>
 		</artifact>

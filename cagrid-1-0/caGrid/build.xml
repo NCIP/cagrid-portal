@@ -165,6 +165,8 @@
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="metadata.schemas" />
 			<artifact refid="introduce.jars" />
+			<artifact refid="ws.enum.jars"/>
+			<artifact refid="ws.enum.schemas"/>
 		</resolveDependencies>
 		<ant dir="${projects.dir}/cabigextensions" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -397,7 +399,6 @@
 	<target name="build-wsEnum" if="isJDK1.5" depends="prepare" description="Builds caGrid WS-Enumeration components">
 		<resolveDependencies extdir="${projects.dir}/wsEnum/ext">
 			<artifact refid="core.jars" />
-			<artifact refid="introduce.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
