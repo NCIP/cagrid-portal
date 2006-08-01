@@ -660,10 +660,10 @@ public class TrustedAuthorityManager {
 	}
 
 
-	public synchronized void destroy() throws GTSInternalFault {
+	public synchronized void clearDatabase() throws GTSInternalFault {
 		try {
-			db.update("DROP TABLE IF EXISTS " + TrustedAuthorityTable.TABLE_NAME);
-			dbBuilt = false;
+			buildDatabase();
+			db.update("delete FROM " + TrustedAuthorityTable.TABLE_NAME);
 		} catch (Exception e) {
 			this.log.error("Unexpected error in removing the database.", e);
 			GTSInternalFault fault = new GTSInternalFault();

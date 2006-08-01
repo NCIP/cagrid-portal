@@ -27,10 +27,10 @@ public class TestPermissionManager extends TestCase {
 	public void testCreateAndDestroy() {
 		try {
 			PermissionManager pm = new PermissionManager(db);
-			pm.destroy();
+			pm.clearDatabase();
 			pm.buildDatabase();
 			assertTrue(db.getDatabase().tableExists(PermissionsTable.TABLE_NAME));
-			pm.destroy();
+			pm.clearDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

@@ -45,10 +45,10 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 	public void testCreateAndDestroy() {
 		try {
 			TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
-			trust.destroy();
+			trust.clearDatabase();
 			trust.buildDatabase();
 			assertTrue(db.getDatabase().tableExists(TrustedAuthorityTable.TABLE_NAME));
-			trust.destroy();
+			trust.clearDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

@@ -42,7 +42,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 			DorianCertificateAuthorityConf conf = this
 					.getDorianCAConfNoAutoRenewalLong();
 			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
-			ca.destroyTable();
+			//ca.destroyTable();
 			try {
 				ca.getCACertificate();
 				assertTrue(false);
@@ -70,7 +70,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 			DorianCertificateAuthorityConf conf = this
 					.getDorianCAConfAutoRenewalLong();
 			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
-			ca.destroyTable();
+			//ca.destroyTable();
 			try {
 				ca.getCACertificate();
 				assertTrue(false);
@@ -98,7 +98,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 			DorianCertificateAuthorityConf conf = this
 					.getDorianCAConfAutoRenewalLong();
 			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
-			ca.destroyTable();
+			//ca.destroyTable();
 			createAndStoreCA(ca);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -111,7 +111,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 			DorianCertificateAuthorityConf conf = this
 					.getDorianCAConfAutoRenewalLong();
 			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
-			ca.destroyTable();
+			//ca.destroyTable();
 			createAndStoreCA(ca);
 			GregorianCalendar cal = new GregorianCalendar();
 			Date start = cal.getTime();
@@ -129,7 +129,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 			DorianCertificateAuthorityConf conf = this
 					.getDorianCAConfAutoRenewalLong();
 			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
-			ca.destroyTable();
+			//ca.destroyTable();
 			createAndStoreCA(ca);
 			GregorianCalendar cal = new GregorianCalendar();
 			Date start = cal.getTime();
@@ -157,7 +157,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 			DorianCertificateAuthorityConf conf = this
 					.getDorianCAConfAutoRenewalLong();
 			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
-			ca.destroyTable();
+			//ca.destroyTable();
 			createAndStoreCA(ca);
 			GregorianCalendar cal = new GregorianCalendar();
 			Date start = cal.getTime();
@@ -185,7 +185,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 			DorianCertificateAuthorityConf conf = this
 					.getDorianCAConfAutoRenewalLong();
 			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
-			ca.destroyTable();
+			//ca.destroyTable();
 			X509Certificate origRoot = createAndStoreCAShort(ca);
 			Thread.sleep(2500);
 			GregorianCalendar cal = new GregorianCalendar();
@@ -204,7 +204,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 		try {
 			DorianCertificateAuthorityConf conf = getDorianCAConfNoAutoRenewalLong();
 			DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
-			ca.destroyTable();
+			//ca.destroyTable();
 			createAndStoreCAShort(ca);
 			Thread.sleep(2500);
 			try {

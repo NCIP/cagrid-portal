@@ -214,7 +214,7 @@ public class TestCredentialsManager extends TestCase {
 			assertEquals(0, db.getUsedConnectionCount());
 			CredentialsManager.CREDENTIALS_TABLE = TABLE;
 			cred = new CredentialsManager(db);
-			cred.destroyTable();
+			//cred.destroyTable();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

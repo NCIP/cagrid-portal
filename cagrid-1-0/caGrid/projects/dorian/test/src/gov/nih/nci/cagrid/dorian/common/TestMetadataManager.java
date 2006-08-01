@@ -22,7 +22,7 @@ public class TestMetadataManager extends TestCase {
 	public void testDelete() {
 		try {
 			MetadataManager mm = new MetadataManager(db, TABLE);
-			mm.destroy();
+			//mm.destroy();
 			int count = 20;
 
 			// Test Insert;
@@ -53,7 +53,7 @@ public class TestMetadataManager extends TestCase {
 	public void testUpdate() {
 		try {
 			MetadataManager mm = new MetadataManager(db, TABLE);
-			mm.destroy();
+			//mm.destroy();
 			int count = 20;
 
 			// Test Insert;
@@ -88,7 +88,7 @@ public class TestMetadataManager extends TestCase {
 	public void testInsert() {
 		try {
 			MetadataManager mm = new MetadataManager(db, TABLE);
-			mm.destroy();
+			//mm.destroy();
 			int count = 20;
 
 			// Test Insert;

@@ -35,16 +35,16 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 	public void testCreateAndDestroy() {
 		TrustLevelManager trust = new TrustLevelManager(GTS_URI, this, db);
 		try {
-			trust.destroy();
+			trust.clearDatabase();
 			trust.buildDatabase();
 			assertTrue(db.getDatabase().tableExists(TrustLevelTable.TABLE_NAME));
-			trust.destroy();
+			trust.clearDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		} finally {
 			try {
-				trust.destroy();
+				trust.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -70,7 +70,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			fail(e.getMessage());
 		} finally {
 			try {
-				trust.destroy();
+				trust.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -106,7 +106,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			fail(e.getMessage());
 		} finally {
 			try {
-				trust.destroy();
+				trust.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -155,7 +155,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			fail(e.getMessage());
 		} finally {
 			try {
-				trust.destroy();
+				trust.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -264,7 +264,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			fail(e.getMessage());
 		} finally {
 			try {
-				trust.destroy();
+				trust.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -347,7 +347,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			fail(e.getMessage());
 		} finally {
 			try {
-				trust.destroy();
+				trust.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -395,7 +395,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			fail(e.getMessage());
 		} finally {
 			try {
-				trust.destroy();
+				trust.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -436,7 +436,7 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 			fail(e.getMessage());
 		} finally {
 			try {
-				trust.destroy();
+				trust.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

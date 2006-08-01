@@ -362,11 +362,11 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 	}
 
 
-	public void destroy() throws GTSInternalFault {
-		trust.destroy();
-		permissions.destroy();
-		trustLevelManager.destroy();
-		authority.destroy();
+	public void clear() throws GTSInternalFault {
+		trust.clearDatabase();
+		permissions.clearDatabase();
+		trustLevelManager.clearDatabase();
+		authority.clearDatabase();
 	}
 
 

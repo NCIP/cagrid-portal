@@ -36,16 +36,16 @@ public class TestGTSAuthorityManager extends TestCase {
 		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
 				getAuthoritySyncTime(), db);
 		try {
-			am.destroy();
+			am.clearDatabase();
 			am.buildDatabase();
 			assertTrue(db.getDatabase().tableExists(AuthorityTable.TABLE_NAME));
-			am.destroy();
+			am.clearDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		} finally {
 			try {
-				am.destroy();
+				am.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -170,7 +170,7 @@ public class TestGTSAuthorityManager extends TestCase {
 			assertTrue(false);
 		} finally {
 			try {
-				am.destroy();
+				am.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -272,7 +272,7 @@ public class TestGTSAuthorityManager extends TestCase {
 			assertTrue(false);
 		} finally {
 			try {
-				am.destroy();
+				am.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -295,7 +295,7 @@ public class TestGTSAuthorityManager extends TestCase {
 			assertTrue(false);
 		} finally {
 			try {
-				am.destroy();
+				am.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -369,7 +369,7 @@ public class TestGTSAuthorityManager extends TestCase {
 			assertTrue(false);
 		} finally {
 			try {
-				am.destroy();
+				am.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -457,7 +457,7 @@ public class TestGTSAuthorityManager extends TestCase {
 			assertTrue(false);
 		} finally {
 			try {
-				am.destroy();
+				am.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -541,7 +541,7 @@ public class TestGTSAuthorityManager extends TestCase {
 				db.getDatabase().releaseConnection(c);
 			}
 			try {
-				am.destroy();
+				am.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -574,7 +574,7 @@ public class TestGTSAuthorityManager extends TestCase {
 			assertTrue(false);
 		} finally {
 			try {
-				am.destroy();
+				am.clearDatabase();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
