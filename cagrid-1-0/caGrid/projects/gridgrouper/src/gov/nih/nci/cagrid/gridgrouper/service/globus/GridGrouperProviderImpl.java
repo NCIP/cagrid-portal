@@ -79,4 +79,10 @@ public class GridGrouperProviderImpl{
 		return boxedResult;
 	}
 
+	public gov.nih.nci.cagrid.gridgrouper.stubs.FindStemResponse findStem(gov.nih.nci.cagrid.gridgrouper.stubs.FindStemRequest params) throws RemoteException {
+		gov.nih.nci.cagrid.gridgrouper.stubs.FindStemResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.FindStemResponse();
+		boxedResult.setEndpointReference(impl.findStem(params.getStemIdentifier().getStemIdentifier()));
+		return boxedResult;
+	}
+
 }

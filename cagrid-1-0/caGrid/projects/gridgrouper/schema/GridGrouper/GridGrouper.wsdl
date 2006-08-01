@@ -9,9 +9,10 @@
                       
   ============================================================-->
   <types>
-    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns0="http://cagrid.nci.nih.gov/1/GridGrouper" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/GridGrouper" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns0="http://cagrid.nci.nih.gov/1/GridGrouper" xmlns:ns2="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/GridGrouper" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/1/GridGrouper" schemaLocation="./gridgrouper.xsd" />
+      <import namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing" schemaLocation="..\ws\addressing\WS-Addressing.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd\security.xsd" />
       <element name="GetStemRequest">
         <complexType>
@@ -271,6 +272,26 @@
           </sequence>
         </complexType>
       </element>
+      <element name="FindStemRequest">
+        <complexType>
+          <sequence>
+            <element name="stemIdentifier">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="FindStemResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns2:EndpointReference" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="GridGrouperRuntimeFault">
         <complexType>
           <complexContent>
@@ -388,6 +409,12 @@
   <message name="RevokeStemPrivilegeResponse">
     <part name="parameters" element="tns:RevokeStemPrivilegeResponse" />
   </message>
+  <message name="FindStemRequest">
+    <part name="parameters" element="tns:FindStemRequest" />
+  </message>
+  <message name="FindStemResponse">
+    <part name="parameters" element="tns:FindStemResponse" />
+  </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="tns:GridGrouperRuntimeFault" />
   </message>
@@ -482,6 +509,10 @@
       <fault name="RevokePrivilegeFault" message="tns:RevokePrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/RevokePrivilegeFaultFaultMessage" />
       <fault name="SchemaFault" message="tns:SchemaFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/SchemaFaultFaultMessage" />
       <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+    </operation>
+    <operation name="findStem">
+      <input message="tns:FindStemRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/FindStemRequest" />
+      <output message="tns:FindStemResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/FindStemResponse" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

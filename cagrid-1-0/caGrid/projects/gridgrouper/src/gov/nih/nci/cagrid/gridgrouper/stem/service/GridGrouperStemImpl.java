@@ -1,26 +1,28 @@
 package gov.nih.nci.cagrid.gridgrouper.stem.service;
 
+import gov.nih.nci.cagrid.gridgrouper.stem.service.globus.resource.StemResource;
+
 import java.rmi.RemoteException;
 
 import javax.naming.InitialContext;
 
 import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
+import org.globus.wsrf.ResourceContext;
 
-/** 
- *  gov.nih.nci.cagrid.gridgrouper.stemI
- *  TODO:DOCUMENT ME
+/**
+ * gov.nih.nci.cagrid.gridgrouper.stemI TODO:DOCUMENT ME
  * 
  * @created by Introduce Toolkit version 1.0
  * 
  */
 public class GridGrouperStemImpl {
-    private ServiceConfiguration configuration;
-	
+	private ServiceConfiguration configuration;
+
 	public GridGrouperStemImpl() throws RemoteException {
-	
+
 	}
-	
+
 	public ServiceConfiguration getConfiguration() throws Exception {
 		if (this.configuration != null) {
 			return this.configuration;
@@ -40,6 +42,9 @@ public class GridGrouperStemImpl {
 		return this.configuration;
 	}
 
+	public java.lang.String getStemName() throws RemoteException {
+		StemResource stemResource = (StemResource) ResourceContext.getResourceContext().getResource();
+		return stemResource.getStemName();
+	}
 
 }
-

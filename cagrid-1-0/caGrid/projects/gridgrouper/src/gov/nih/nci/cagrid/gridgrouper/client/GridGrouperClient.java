@@ -1,7 +1,10 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.common.GridGrouperI;
+import gov.nih.nci.cagrid.gridgrouper.stem.client.GridGrouperStemClient;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperPortType;
 import gov.nih.nci.cagrid.gridgrouper.stubs.service.GridGrouperServiceAddressingLocator;
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
@@ -13,6 +16,8 @@ import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadataOperations;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.HashMap;
+
+import javax.xml.namespace.QName;
 
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.client.AxisClient;
@@ -34,7 +39,6 @@ import org.globus.wsrf.impl.security.authorization.NoAuthorization;
 public class GridGrouperClient extends ServiceSecurityClient implements GridGrouperI {
 	protected GridGrouperPortType portType;
 	private Object portTypeMutex;
-	
 
 	public GridGrouperClient(String url) throws MalformedURIException, RemoteException {
 		this(url, null);
@@ -231,6 +235,37 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 		}
 	}
 
+	public static void main(String[] args) {
+		System.out.println("Running the Grid Service Client");
+		try {
+			if (!(args.length < 2)) {
+				if (args[0].equals("-url")) {
+					GridGrouperClient client = new GridGrouperClient(args[1]);
+					// place client calls here if you want to use this main as a
+					// test....
+
+					GridGrouperStemClient stemClient = client.findStem(new StemIdentifier());
+					EndpointReferenceType endpointReference = stemClient.getEndpointReference();
+
+					Utils.serializeDocument("test.epr", endpointReference, new QName(
+						"http://schemas.xmlsoap.org/ws/2004/03/addressing", "EndpointReference"));
+
+					System.out.println(stemClient.getStemName());
+
+				} else {
+					usage();
+					System.exit(1);
+				}
+			} else {
+				usage();
+				System.exit(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
@@ -373,6 +408,18 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
         params.setPrivilege(privilegeContainer);
         gov.nih.nci.cagrid.gridgrouper.stubs.RevokeStemPrivilegeResponse boxedResult = portType.revokeStemPrivilege(params);
         return boxedResult.isResponse();
+      }
+    }
+    public gov.nih.nci.cagrid.gridgrouper.stem.client.GridGrouperStemClient findStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stemIdentifier) throws RemoteException,org.apache.axis.types.URI.MalformedURIException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"findStem");
+        gov.nih.nci.cagrid.gridgrouper.stubs.FindStemRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.FindStemRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.FindStemRequestStemIdentifier stemIdentifierContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.FindStemRequestStemIdentifier();
+        stemIdentifierContainer.setStemIdentifier(stemIdentifier);
+        params.setStemIdentifier(stemIdentifierContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.FindStemResponse boxedResult = portType.findStem(params);
+        EndpointReferenceType ref = boxedResult.getEndpointReference();
+        return new gov.nih.nci.cagrid.gridgrouper.stem.client.GridGrouperStemClient(ref);
       }
     }
 

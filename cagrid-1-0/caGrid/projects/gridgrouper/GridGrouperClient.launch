@@ -5,13 +5,13 @@
 <listEntry value="4"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-url ${string_prompt:the service url}"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="gridgrouper"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="caGrid-1.0-gridgrouper"/>
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/gridgrouper"/>
+<listEntry value="/caGrid-1.0-gridgrouper"/>
 </listAttribute>
 <booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
 </launchConfiguration>

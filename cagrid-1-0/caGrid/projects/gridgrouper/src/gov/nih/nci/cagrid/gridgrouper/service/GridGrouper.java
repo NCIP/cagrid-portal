@@ -67,24 +67,19 @@ public class GridGrouper {
 	public GridGrouper() throws GridGrouperRuntimeFault {
 		try {
 			log = LogFactory.getLog(this.getClass().getName());
-			GrouperSession session = GrouperSession.start(SubjectFinder
-					.findById(GROUPER_SUPER_USER));
+			GrouperSession session = GrouperSession.start(SubjectFinder.findById(GROUPER_SUPER_USER));
 			Stem adminStem = null;
 			try {
-				adminStem = StemFinder.findByName(session,
-						GROUPER_ADMIN_STEM_NAME);
+				adminStem = StemFinder.findByName(session, GROUPER_ADMIN_STEM_NAME);
 			} catch (StemNotFoundException e) {
 				Stem root = StemFinder.findRootStem(session);
-				adminStem = root.addChildStem(GROUPER_ADMIN_STEM_NAME,
-						GROUPER_ADMIN_STEM_DISPLAY_NAME);
+				adminStem = root.addChildStem(GROUPER_ADMIN_STEM_NAME, GROUPER_ADMIN_STEM_DISPLAY_NAME);
 			}
 			try {
-				adminGroup = GroupFinder.findByName(session,
-						GROUPER_ADMIN_GROUP_NAME);
+				adminGroup = GroupFinder.findByName(session, GROUPER_ADMIN_GROUP_NAME);
 			} catch (GroupNotFoundException gne) {
-				adminGroup = adminStem.addChildGroup(
-						GROUPER_ADMIN_GROUP_NAME_EXTENTION,
-						GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
+				adminGroup = adminStem.addChildGroup(GROUPER_ADMIN_GROUP_NAME_EXTENTION,
+					GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

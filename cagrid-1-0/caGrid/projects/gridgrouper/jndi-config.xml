@@ -9,8 +9,20 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="gov.nih.nci.cagrid.gridgrouper.stem.service.globus.resource.BaseResourceHome">
+    <resource name="home" type="gov.nih.nci.cagrid.gridgrouper.stem.service.globus.resource.StemResourceHome">
       <resourceParams>
+        <parameter>
+          <name>resourceClass</name>
+          <value>gov.nih.nci.cagrid.gridgrouper.stem.service.globus.resource.StemResource</value>
+        </parameter>
+        <parameter>
+          <name>resourceKeyType</name>
+          <value>java.lang.Integer</value>
+        </parameter>
+        <parameter>
+          <name>resourceKeyName</name>
+          <value>{http://cagrid.nci.nih.gov/GridGrouperStem}GridGrouperStemKey</value>
+        </parameter>
         <parameter>
           <name>factory</name>
           <value>org.globus.wsrf.jndi.BeanFactory</value>
@@ -53,6 +65,7 @@
         </parameter>
       </resourceParams>
     </resource>
+    <resourceLink name="stemHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/GridGrouperStem/home" />
   </service>
 </jndiConfig>
 

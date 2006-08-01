@@ -109,5 +109,13 @@ public class GridGrouperStemClient extends ServiceSecurityClient implements Grid
         return boxedResult.getServiceSecurityMetadata();
       }
     }
+    public java.lang.String getStemName() throws RemoteException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"getStemName");
+        gov.nih.nci.cagrid.gridgrouper.stem.stubs.GetStemNameRequest params = new gov.nih.nci.cagrid.gridgrouper.stem.stubs.GetStemNameRequest();
+        gov.nih.nci.cagrid.gridgrouper.stem.stubs.GetStemNameResponse boxedResult = portType.getStemName(params);
+        return boxedResult.getResponse();
+      }
+    }
 
 }
