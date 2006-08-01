@@ -65,5 +65,24 @@
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/acme.jar"/>
+	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-discovery-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-graph-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-data-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="lib" path="ext/lib/client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/gef_modified.jar"/>
+	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
+	<classpathentry kind="lib" path="ext/lib/jmi-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/nsuml-0.4.20_modified.jar"/>
+	<classpathentry kind="lib" path="ext/lib/ocl-argo-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
+	<classpathentry kind="lib" path="ext/lib/swidgets-0.1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/toolbar-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

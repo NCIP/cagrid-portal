@@ -4,7 +4,7 @@ import javax.xml.namespace.QName;
 
 
 public interface ResourceConstants {
-	public static final String SERVICE_NS = "http://cadsr.cagrid.nci.nih.gov/CaDSRService";
+	public static final String SERVICE_NS = "http://cadsr.cagrid.nci.nih.gov";
 	public static final QName RESOURCE_KEY = new QName(SERVICE_NS, "CaDSRServiceKey");
 	public static final QName RESOURCE_PROPERY_SET = new QName(SERVICE_NS, "CaDSRServiceResourceProperties");
 

@@ -163,7 +163,10 @@
 			<artifact refid="core.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="common.metadata.jars" />
+            <artifact refid="data.metadata.jars" />      
 			<artifact refid="metadata.schemas" />
+            <artifact refid="graph.jars" />
+            <artifact refid="discovery.jars" />      
 			<artifact refid="introduce.jars" />
 			<artifact refid="ws.enum.jars"/>
 			<artifact refid="ws.enum.schemas"/>
@@ -176,9 +179,7 @@
 	<!-- =============================================================== -->
 	<target name="build-graph" depends="prepare" description="Builds graph">
 		<resolveDependencies extdir="${projects.dir}/graph/ext">
-			<artifact refid="core.jars" />
-			<artifact refid="caCORE.jars" />
-			<artifact refid="data.metadata.jars" />
+			<artifact refid="core.jars" />			
 		</resolveDependencies>
 		<ant dir="${projects.dir}/graph" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -441,6 +442,7 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/fqp" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
+
 
 	<!-- =============================================================== -->
 	<!-- CAGRID Workflow:                                               -->

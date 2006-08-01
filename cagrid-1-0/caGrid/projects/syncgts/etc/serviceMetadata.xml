@@ -16,11 +16,12 @@
                     <serv:contextPropertyCollection/>
                 </serv:ServiceContext>
             </serv:serviceContextCollection>
+            <serv:semanticMetadataCollection/>
         </serv:Service>
     </serviceDescription>
     <hostingResearchCenter>
         <com:ResearchCenter displayName="Ohio State University" shortName="OSU">
-            <com:Address country="US" postalCode="43210" stateProvence="OH" street1="333 W. 10th
+            <com:Address country="US" postalCode="43210" stateProvince="OH" street1="333 W. 10th
                 Ave."/>
             <com:pointOfContactCollection>
                 <com:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu"

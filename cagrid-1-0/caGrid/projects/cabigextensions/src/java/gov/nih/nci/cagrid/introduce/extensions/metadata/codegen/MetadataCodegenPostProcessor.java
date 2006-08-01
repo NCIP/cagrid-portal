@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.extensions.metadata.codegen;
 
+import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -21,12 +22,14 @@ import gov.nih.nci.cagrid.metadata.service.InputParameter;
 import gov.nih.nci.cagrid.metadata.service.Operation;
 import gov.nih.nci.cagrid.metadata.service.OperationFaultCollection;
 import gov.nih.nci.cagrid.metadata.service.OperationInputParameterCollection;
+import gov.nih.nci.cagrid.metadata.service.OperationSemanticMetadataCollection;
 import gov.nih.nci.cagrid.metadata.service.Output;
 import gov.nih.nci.cagrid.metadata.service.Service;
 import gov.nih.nci.cagrid.metadata.service.ServiceContext;
 import gov.nih.nci.cagrid.metadata.service.ServiceContextContextPropertyCollection;
 import gov.nih.nci.cagrid.metadata.service.ServiceContextOperationCollection;
 import gov.nih.nci.cagrid.metadata.service.ServicePointOfContactCollection;
+import gov.nih.nci.cagrid.metadata.service.ServiceSemanticMetadataCollection;
 import gov.nih.nci.cagrid.metadata.service.ServiceServiceContextCollection;
 
 import java.io.File;
@@ -47,7 +50,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcessor {
-	private static final String FILENAME = "serviceMetadata.xml";
+	private static final String DEFAULT_FILENAME = "serviceMetadata.xml";
 	private static final String MAIN_RF_TYPE = "main";
 
 	protected static Log LOG = LogFactory.getLog(MetadataCodegenPostProcessor.class.getName());
@@ -57,9 +60,11 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 		throws CodegenExtensionException {
 		ServiceMetadata metadata = null;
 
-		// read jndi file to determine where to store instance document? or just
-		// hard code it to etc/serviceMetadata.xml?
-		String filename = info.getBaseDirectory() + File.separator + "etc" + File.separator + FILENAME;
+		String filename = info.getBaseDirectory() + File.separator + "etc" + File.separator + getFilename(info);
+		if (filename == null) {
+			LOG.error("Unable to locate Service Metadata resource property, skipping metadata instance creation.");
+			return;
+		}
 
 		// look if the file already exists, and load it in, in case other
 		// aspects of it (such as cancer center info) are set by something else
@@ -88,6 +93,29 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 			throw new CodegenExtensionException("Error serializing metadata document.", e);
 		}
 
+	}
+
+
+	/**
+	 * @return
+	 */
+	private String getFilename(ServiceInformation info) {
+		ServiceType mainServ = info.getServiceDescriptor().getServices().getService()[0];
+		ResourcePropertyType[] resourceProperty = mainServ.getResourcePropertiesList().getResourceProperty();
+		for (int i = 0; i < resourceProperty.length; i++) {
+			ResourcePropertyType rp = resourceProperty[i];
+			if (rp.getQName().equals(MetadataConstants.SERVICE_METADATA_QNAME)) {
+				String fileLocation = rp.getFileLocation();
+				if (fileLocation == null || fileLocation.trim().equals("")) {
+					rp.setFileLocation(DEFAULT_FILENAME);
+				}
+
+				return rp.getFileLocation();
+
+			}
+		}
+
+		return null;
 	}
 
 
@@ -227,7 +255,7 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 			Output output = new Output();
 			output.setIsArray(methOut.isIsArray());
 			// this is here for expansion, but we only support 1 dim arrays
-			output.setDimentionality(1);
+			output.setDimensionality(1);
 			output.setQName(methOut.getQName());
 			operation.setOutput(output);
 		}
@@ -244,6 +272,11 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 			editOperationInputs(null, operation);
 		} else {
 			editOperationInputs(method.getInputs().getInput(), operation);
+		}
+
+		// SEMANTIC METADATA
+		if (operation.getSemanticMetadataCollection() == null) {
+			operation.setSemanticMetadataCollection(new OperationSemanticMetadataCollection(new SemanticMetadata[]{}));
 		}
 
 	}
@@ -283,7 +316,7 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 			}
 			param.setName(name);
 			// we only support 1 dim arrays
-			param.setDimentionality(1);
+			param.setDimensionality(1);
 			param.setIndex(i);
 			param.setIsArray(input.isIsArray());
 			// param.setIsRequired(???)
@@ -431,6 +464,13 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 		if (contCol == null) {
 			contCol = new ServiceServiceContextCollection();
 			serv.setServiceContextCollection(contCol);
+		}
+
+		// every service needs a semantic metadata collection
+		ServiceSemanticMetadataCollection semanticMetadataCollection = serv.getSemanticMetadataCollection();
+		if (semanticMetadataCollection == null) {
+			semanticMetadataCollection = new ServiceSemanticMetadataCollection();
+			serv.setSemanticMetadataCollection(semanticMetadataCollection);
 		}
 	}
 }
