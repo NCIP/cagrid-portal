@@ -317,9 +317,14 @@
         </junit>
     </target>
 	
+	<!-- Post Introduce Edit-->
+	<target name="createTestDatabase" description="" depends="jar">
+			<java classname="gov.nih.nci.cagrid.gridgrouper.testutils.MysqlDBUtil" fork="no" classpathref="test.run.classpath"/>
+	</target>
+	
 	
 	<!-- Post Introduce Edit-->
-		 <target name="dropTestGrouperSchema" depends="jars">
+		 <target name="dropTestGrouperSchema" depends="createTestDatabase">
 		    <taskdef name="testschemadrop"
 		      classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
 		      classpathref="test.run.classpath"
