@@ -62,17 +62,6 @@ public class SyncResource extends SyncTool {
 				// the preference is set and set to skip, so do nothing
 			} else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)) {
 				// not the base service do nothing....
-				BaseResourceTemplate baseResourceT = new BaseResourceTemplate();
-				String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(getServiceInformation(),
-					service));
-				File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
-					+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-					+ File.separator + "resource" + File.separator + "BaseResource.java");
-
-				FileWriter baseResourceFW = new FileWriter(baseResourceF);
-				baseResourceFW.write(baseResourceS);
-				baseResourceFW.close();
-
 				ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
 				String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
 					getServiceInformation(), service));
