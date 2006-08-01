@@ -301,8 +301,18 @@
 
 
     <!-- call the test target for each project and aggregates the log resutls  -->
-   
-	<target name="test" depends="checkGlobus,testGrouperInit" description="Runs the service's tests.">
+	<!-- Post Introduce Edit-->
+	  <target name="create_config_files" description="Creates conf files from examples.
+			Set property force.config.replace to true to force replacement.">
+	        <copy todir="${test.dir}/resources" overwrite="${force.config.replace}">
+	            <fileset dir="${test.dir}/resources">
+	                <include name="**/*.example" />
+	            </fileset>
+	            <mapper type="glob" from="*.example" to="*" />
+	        </copy>
+	    </target>
+	<!-- Post Introduce Edit-->
+	<target name="test" depends="checkGlobus,create_config_files,testGrouperInit" description="Runs the service's tests.">
         <echo message="Test results dir: ${junit.results.dir}" />
         <mkdir dir="${junit.results.dir}" />
         <junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
