@@ -42,6 +42,31 @@
 	</macrodef>
 	
 	<!-- =================================================================== -->
+	<!-- Create new service                                                  -->
+	<!-- =================================================================== -->
+	<target name="createService" description="Create new service">
+		<ant dir="${basedir}" antfile="antfiles/introduce-creator.xml" target="createService" inheritall="true" />
+	</target>
+	
+	
+	<!-- =================================================================== -->
+	<!-- Create new service                                                  -->
+	<!-- =================================================================== -->
+	<target name="postCreateService" description="Post Creation of new service">
+		<ant dir="${basedir}" antfile="antfiles/introduce-creator.xml" target="postCreateService" inheritall="true" />
+		<ant dir="${basedir}" antfile="antfiles/introduce-resync.xml" target="resyncService" inheritall="true" />
+	</target>
+	
+	
+	<!-- =================================================================== -->
+	<!-- Sync service                                                  -->
+	<!-- =================================================================== -->
+	<target name="resyncService" description="Uses the introduceMethods.xml to add and remove
+		methods to this service skeleton">
+		<ant dir="${basedir}" antfile="antfiles/introduce-resync.xml" target="resyncService" inheritall="true" />
+	</target>
+	
+	<!-- =================================================================== -->
 	<!-- GME Viewer                                                          -->
 	<!-- =================================================================== -->
 	<target name="gmeViewer" depends="checkGlobus" description="Execute the Gme Viewer">

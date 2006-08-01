@@ -14,8 +14,8 @@
      workingDirectory="$INSTALL_PATH"
      target="ant"
      initialState="noShow"
-     commandLine="introduce"
-     iconFile="$INSTALL_PATH/resources/portal/introduce/applications-internet.png"
+     commandLine="-f run.xml introduce"
+     iconFile="$INSTALL_PATH/resources/portal/introduce/introduce.ico"
      iconIndex="0"
      description="Launch the Introduce GDE">
      <createForPack name="Base" />

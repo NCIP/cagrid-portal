@@ -62,7 +62,7 @@
             <file src="schema" targetdir="$INSTALL_PATH"/>
             <file src="skeleton" targetdir="$INSTALL_PATH"/>
             <file src="test" targetdir="$INSTALL_PATH"/>
-            <file src="build.xml" targetdir="$INSTALL_PATH"/>
+            <file src="run.xml" targetdir="$INSTALL_PATH"/>
         </pack>
         <pack name="Docs" required="no">
             <description>Documentation</description>

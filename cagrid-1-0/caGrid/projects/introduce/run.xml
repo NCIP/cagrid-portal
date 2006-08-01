@@ -1,0 +1,11 @@
+<!-- ======================================================================= -->
+<!-- caGrid build file                                                       -->
+<!-- ======================================================================= -->
+<project name="introduce" default="introduce" basedir=".">
+	<!-- Load util files -->
+	<property name="antfiles.dir" value="${basedir}/antfiles"/>
+	<import file="${antfiles.dir}/introduce-properties.xml"/>
+	<import file="${antfiles.dir}/build-introduce.xml"/>
+	<import file="${antfiles.dir}/build-portal.xml"/>
+	<import file="${antfiles.dir}/introduce-utils.xml"/>
+</project>
