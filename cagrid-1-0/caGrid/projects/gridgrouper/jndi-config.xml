@@ -1,35 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
-  <service name="SERVICE-INSTANCE-PREFIX/GridGrouperStem">
-    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.gridgrouper.stem.service.ServiceConfiguration">
-      <resourceParams>
-        <parameter>
-          <name>factory</name>
-          <value>org.globus.wsrf.jndi.BeanFactory</value>
-        </parameter>
-      </resourceParams>
-    </resource>
-    <resource name="home" type="gov.nih.nci.cagrid.gridgrouper.stem.service.globus.resource.StemResourceHome">
-      <resourceParams>
-        <parameter>
-          <name>resourceClass</name>
-          <value>gov.nih.nci.cagrid.gridgrouper.stem.service.globus.resource.StemResource</value>
-        </parameter>
-        <parameter>
-          <name>resourceKeyType</name>
-          <value>java.lang.Integer</value>
-        </parameter>
-        <parameter>
-          <name>resourceKeyName</name>
-          <value>{http://cagrid.nci.nih.gov/GridGrouperStem}GridGrouperStemKey</value>
-        </parameter>
-        <parameter>
-          <name>factory</name>
-          <value>org.globus.wsrf.jndi.BeanFactory</value>
-        </parameter>
-      </resourceParams>
-    </resource>
-  </service>
   <service name="SERVICE-INSTANCE-PREFIX/GridGrouper">
     <resource name="configuration" type="gov.nih.nci.cagrid.gridgrouper.service.globus.resource.ResourceConfiguration">
       <resourceParams>
@@ -65,7 +35,6 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resourceLink name="stemHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/GridGrouperStem/home" />
   </service>
 </jndiConfig>
 
