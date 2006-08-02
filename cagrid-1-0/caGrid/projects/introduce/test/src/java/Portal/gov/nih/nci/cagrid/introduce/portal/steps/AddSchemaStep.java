@@ -13,7 +13,7 @@ public class AddSchemaStep extends BaseStep {
 		System.out.println("Adding a Schema");
 
 		// create ScriptFixture to test script
-		ScriptFixture tester = new ScriptFixture(
+		ScriptFixture tester = new ScriptFixture(this.getBaseDir()+
 				"/test/resources/abbot/AddSchemaStep.xml");
 
 		// create TestResult to hold the result of the test

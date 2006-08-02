@@ -13,7 +13,7 @@ public class CreateServiceStep extends BaseStep {
 		System.out.println("Creating a service");
 
 		// create ScriptFixture to test script
-		ScriptFixture tester = new ScriptFixture(
+		ScriptFixture tester = new ScriptFixture(this.getBaseDir()+
 				"/test/resources/abbot/CreateServiceStep.xml");
 
 		// create TestResult to hold the result of the test

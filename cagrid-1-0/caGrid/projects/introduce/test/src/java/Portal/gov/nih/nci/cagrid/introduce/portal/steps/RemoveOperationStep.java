@@ -13,7 +13,7 @@ public class RemoveOperationStep extends BaseStep {
 		System.out.println("Removing the Operation");
 
 		// create ScriptFixture to test script
-		ScriptFixture tester = new ScriptFixture(
+		ScriptFixture tester = new ScriptFixture(this.getBaseDir()+
 				"/test/resources/abbot/RemoveOperationStep.xml");
 
 		// create TestResult to hold the result of the test

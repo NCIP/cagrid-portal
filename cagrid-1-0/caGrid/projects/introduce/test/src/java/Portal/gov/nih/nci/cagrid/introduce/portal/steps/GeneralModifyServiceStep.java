@@ -13,7 +13,7 @@ public class GeneralModifyServiceStep extends BaseStep {
 		System.out.println("General Modify Service Step");
 
 		// create ScriptFixture to test script
-		ScriptFixture tester = new ScriptFixture(
+		ScriptFixture tester = new ScriptFixture(this.getBaseDir()+
 				"/test/resources/abbot/GeneralModifyServiceStep.xml");
 
 		// create TestResult to hold the result of the test

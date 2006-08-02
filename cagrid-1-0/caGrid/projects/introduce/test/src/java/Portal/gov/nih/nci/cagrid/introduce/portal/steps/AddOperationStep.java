@@ -13,7 +13,7 @@ public class AddOperationStep extends BaseStep {
 		System.out.println("Adding an Operation");
 
 		// create ScriptFixture to test script
-		ScriptFixture tester = new ScriptFixture(
+		ScriptFixture tester = new ScriptFixture(this.getBaseDir()+
 				"/test/resources/abbot/AddOperationStep.xml");
 
 		// create TestResult to hold the result of the test

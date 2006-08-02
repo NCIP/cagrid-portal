@@ -13,7 +13,7 @@ public class SecurityTestStep extends BaseStep {
 		System.out.println("Security Test Step");
 
 		// create ScriptFixture to test script
-		ScriptFixture tester = new ScriptFixture(
+		ScriptFixture tester = new ScriptFixture(this.getBaseDir()+
 				"/test/resources/abbot/SecurityTestStep.xml");
 
 		// create TestResult to hold the result of the test

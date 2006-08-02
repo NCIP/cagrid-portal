@@ -13,7 +13,7 @@ public class ModifyMultipleOperationsStep extends BaseStep {
 		System.out.println("Modifying Multiple Operations");
 
 		// create ScriptFixture to test script
-		ScriptFixture tester = new ScriptFixture(
+		ScriptFixture tester = new ScriptFixture(this.getBaseDir()+
 				"/test/resources/abbot/ModifyMultipleOperationsStep.xml");
 
 		// create TestResult to hold the result of the test
