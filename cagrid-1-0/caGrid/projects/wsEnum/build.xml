@@ -45,6 +45,7 @@
 
     <!-- source directories -->
     <property name="src.dir" location="${basedir}/src/java" />
+	<property name="enum.schemas.dir" location="${basedir}/schema"/>
 
     <!-- libraries -->
     <property name="lib.dir" location="${basedir}/lib" />
