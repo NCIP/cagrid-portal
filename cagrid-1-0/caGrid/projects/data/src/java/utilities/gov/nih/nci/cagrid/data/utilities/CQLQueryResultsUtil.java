@@ -4,9 +4,12 @@ import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 
 import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
 
@@ -14,6 +17,7 @@ import org.apache.axis.EngineConfiguration;
 import org.apache.axis.MessageContext;
 import org.apache.axis.client.AxisClient;
 import org.apache.axis.configuration.FileProvider;
+import org.apache.axis.description.TypeDesc;
 import org.apache.axis.message.MessageElement;
 
 /** 
@@ -25,8 +29,37 @@ import org.apache.axis.message.MessageElement;
  * @version $Id$ 
  */
 public class CQLQueryResultsUtil {
+	private static Map typeQNames = new HashMap();
 	
+	/**
+	 * Creates a CQLQueryResults object from a list of Java Objects.  QNames for each object
+	 * are determined as follows:
+	 * 1) The Axis TypeDesc is consulted
+	 * 2) If no QName is found, the Axis current MessageContext is queried
+	 * 3) An attempt is made to reflect-load and invoke the object's getTypeDesc method
+	 * 
+	 * If no QName is found after these efforts have been made, 
+	 * a null pointer exception is thrown
+	 * 
+	 * @param rawObjects
+	 * @return
+	 */
+	public static CQLQueryResults createQueryResults(List rawObjects) {
+		return createQueryResults(rawObjects, (InputStream) null);
+	}
+	
+	
+	/**
+	 * Creates a CQLQueryResults object from a list of Java Objects.  A message context
+	 * is created and configured with the given config stream for locating QNames,
+	 * serializers, and deserializers for the objects.
+	 * 
+	 * @param rawObjects
+	 * @param configStream
+	 * @return
+	 */
 	public static CQLQueryResults createQueryResults(List rawObjects, InputStream configStream) {
+		typeQNames.clear();
 		MessageContext context = null;
 		if (configStream != null) {
 			context = createMessageContext(configStream);
@@ -47,17 +80,30 @@ public class CQLQueryResultsUtil {
 	}
 	
 	
-	public static CQLQueryResults createQueryResults(List rawObjects, QName objectQname) {
+	/**
+	 * Creates a CQLQueryResults object from a list of objects with a given QName.
+	 * This method assumes that all of the objects in the list are of the
+	 * same type.
+	 * 
+	 * @param rawObjects
+	 * @param qname
+	 * @return
+	 */
+	public static CQLQueryResults createQueryResults(List rawObjects, QName qname) {
 		CQLQueryResults results = new CQLQueryResults();
-		LinkedList resultObjects = new LinkedList();
-		Iterator objectIter = rawObjects.iterator();
-		while (objectIter.hasNext()) {
-			Object obj = objectIter.next();
-			resultObjects.add(createObjectResult(obj, objectQname));
+		CQLObjectResult[] objResults = new CQLObjectResult[rawObjects.size()];
+		Iterator objIter = rawObjects.iterator();
+		int index = 0;
+		while (objIter.hasNext()) {
+			Object o = objIter.next();
+			CQLObjectResult object = new CQLObjectResult();
+			object.setType(o.getClass().getName());
+			MessageElement elem = new MessageElement(qname, o);
+			object.set_any(new MessageElement[] {elem});
+			objResults[index] = object;
+			index++;
 		}
-		CQLObjectResult[] objectResultArray = new CQLObjectResult[rawObjects.size()];
-		resultObjects.toArray(objectResultArray);
-		results.setObjectResult(objectResultArray);
+		results.setObjectResult(objResults);
 		return results;
 	}
 	
@@ -73,7 +119,7 @@ public class CQLQueryResultsUtil {
 	private static CQLObjectResult createObjectResult(Object obj, MessageContext context) {
 		CQLObjectResult objectResult = new CQLObjectResult();
 		objectResult.setType(obj.getClass().getName());
-		QName objectQname = context.getTypeMapping().getTypeQName(obj.getClass());
+		QName objectQname = getQName(obj, context);
 		if (objectQname == null) {
 			throw new NullPointerException("No qname found for class " + obj.getClass().getName() 
 				+ ". Check your client or server-config.wsdd");
@@ -84,11 +130,44 @@ public class CQLQueryResultsUtil {
 	}
 	
 	
-	private static CQLObjectResult createObjectResult(Object obj, QName objectQname) {
-		CQLObjectResult objectResult = new CQLObjectResult();
-		objectResult.setType(obj.getClass().getName());
-		MessageElement anyElement = new MessageElement(objectQname, obj);
-		objectResult.set_any(new MessageElement[] {anyElement});
-		return objectResult;
+	private static QName getQName(Object obj, MessageContext context) {
+		Class objectClass = obj.getClass();
+		// check cache
+		QName objectQname = (QName) typeQNames.get(objectClass);
+		if (objectQname == null) {
+			// check the type description registry
+			TypeDesc desc = TypeDesc.getTypeDescForClass(objectClass);
+			if (desc != null) {
+				objectQname = desc.getXmlType();
+				if (objectQname != null) {
+					typeQNames.put(objectClass, objectQname);
+					return objectQname;
+				}
+			}
+			// check the context
+			objectQname = context.getTypeMapping().getTypeQName(objectClass);
+			if (objectQname != null) {
+				typeQNames.put(objectClass, objectQname);
+				return objectQname;
+			}
+			// try to reflect-load the getTypeDesc method for axis beans...
+			// This assumes the QName of the element is the same as the QName
+			// of the element's type.  This may not always be the case.
+			// TODO: Figgure out a way to handle non-axis beans			
+			try { 
+				Method m = objectClass.getMethod("getTypeDesc", new Class[0]); 
+				m.setAccessible(true); 
+				TypeDesc typeDesc = (TypeDesc) m.invoke(obj, new Object[0]); 
+				objectQname = typeDesc.getXmlType();
+				if (objectQname != null) {
+					typeQNames.put(objectClass, objectQname);
+					return objectQname;
+				}
+			} catch (Exception e) { 
+				// oh well, we tried
+				return null;
+			}
+		}
+		return objectQname;
 	}
 }
