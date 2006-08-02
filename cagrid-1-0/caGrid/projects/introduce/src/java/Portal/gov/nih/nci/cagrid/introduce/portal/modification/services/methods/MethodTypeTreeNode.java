@@ -46,6 +46,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import javax.swing.ImageIcon;
@@ -65,11 +66,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
  */
 public class MethodTypeTreeNode extends DefaultMutableTreeNode {
 	private MethodPopUpMenu popUpMenu;
-	private ServiceInformation info;
+	private SpecificServiceInformation info;
 	MethodType method;
 
 
-	public MethodTypeTreeNode(MethodType methodType, ServiceInformation info) {
+	public MethodTypeTreeNode(MethodType methodType, SpecificServiceInformation info) {
 		super();
 		this.info = info;
 		popUpMenu = new MethodPopUpMenu(this);
@@ -103,7 +104,7 @@ public class MethodTypeTreeNode extends DefaultMutableTreeNode {
 	}
 
 
-	public ServiceInformation getInfo() {
+	public SpecificServiceInformation getInfo() {
 		return info;
 	}
 

@@ -24,6 +24,7 @@ import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
@@ -687,7 +688,7 @@ public class ModificationViewer extends GridPortalComponent {
 			return;
 		}
 		// TODO: check this.... setting this for now......
-		MethodViewer mv = new MethodViewer(method, info);
+		MethodViewer mv = new MethodViewer(method, new SpecificServiceInformation(info,info.getServices().getService(0)));
 
 		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(mv);
 		// TODO: total hack for now to avoid tryin sort action listerners and

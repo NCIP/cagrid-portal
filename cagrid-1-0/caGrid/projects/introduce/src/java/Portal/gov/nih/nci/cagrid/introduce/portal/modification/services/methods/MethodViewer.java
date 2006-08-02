@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.MethodSecurityPanel;
@@ -113,7 +114,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JPanel securityContainerPanel = null;
 
-	private ServiceInformation info;
+	private SpecificServiceInformation info;
 
 	private JTabbedPane configureTabbedPane = null;
 
@@ -186,7 +187,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JSplitPane outputTypeSplitPane = null;
 
 
-	public MethodViewer(MethodType method, ServiceInformation info) {
+	public MethodViewer(MethodType method, SpecificServiceInformation info) {
 		this.info = info;
 		this.method = method;
 		this.setTitle("Modify Method");
@@ -752,7 +753,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getSecurityContainerPanel() {
 		if (securityContainerPanel == null) {
-			securityContainerPanel = new MethodSecurityPanel(info.getServices().getService(0).getServiceSecurity(),
+			securityContainerPanel = new MethodSecurityPanel(info.getService().getServiceSecurity(),
 				this.method.getMethodSecurity());
 			securityContainerPanel.setBorder(BorderFactory.createTitledBorder(null,
 				"Method Level Security Configuration", TitledBorder.DEFAULT_JUSTIFICATION,
