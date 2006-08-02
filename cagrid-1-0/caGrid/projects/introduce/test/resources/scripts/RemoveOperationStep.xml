@@ -143,7 +143,7 @@
     <action args="ModificationViewer Instance,0,0" class="javax.swing.JInternalFrame" method="actionResize" />
     <wait args="ModificationViewer Instance" class="abbot.tester.ComponentTester" method="assertComponentShowing" timeout="100000" />
     <wait args="Confirm Overwrite" class="abbot.tester.ComponentTester" method="assertComponentShowing" timeout="100000" />
-    <action args="File name:,@TestDir@\test\TempIntroduceTestFiles\TestService" method="actionKeyString" />
+    <action args="File name:,@TestDir@/test/TempIntroduceTestFiles/TestService" method="actionKeyString" />
     <action args="Open" class="javax.swing.AbstractButton" method="actionClick" />
     <wait args="Confirm Overwrite" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" timeout="100000" />
     <action args="ModificationViewer Instance,1003,673" class="javax.swing.JInternalFrame" method="actionResize" />

@@ -91,7 +91,7 @@
     <action args="JTextField Instance 2,VK_TAB" method="actionKeyStroke" />
     <action args="JTextField Instance,select-all" class="javax.swing.JComponent" method="actionActionMap" />
     <action args="JTextField Instance,delete-previous" class="javax.swing.JComponent" method="actionActionMap" />
-    <action args="JTextField Instance,@TestDir@\test\Temp" method="actionKeyString" />
+    <action args="JTextField Instance,@TestDir@/test/Temp" method="actionKeyString" />
     <event component="JTextField Instance" keyCode="VK_SHIFT" kind="KEY_PRESSED" modifiers="SHIFT_MASK" type="KeyEvent" />
     <event component="JTextField Instance" keyCode="VK_SHIFT" kind="KEY_RELEASED" type="KeyEvent" />
     <action args="JTextField Instance,IntroduceTestFiles\TestService" method="actionKeyString" />
