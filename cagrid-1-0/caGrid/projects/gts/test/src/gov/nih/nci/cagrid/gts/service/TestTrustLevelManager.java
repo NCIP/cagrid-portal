@@ -466,7 +466,6 @@ public class TestTrustLevelManager extends TestCase implements TrustedAuthorityL
 		super.tearDown();
 		try {
 			assertEquals(0, db.getDatabase().getUsedConnectionCount());
-			//db.getDatabase().destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

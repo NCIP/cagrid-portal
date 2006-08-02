@@ -1,8 +1,9 @@
 package gov.nih.nci.cagrid.gts.common;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -56,34 +57,58 @@ public abstract class Database {
 		return getConnectionManager().getUsedConnectionCount();
 	}
 
-	public boolean tableExists(String tableName) throws DatabaseException {
-		boolean exists = false;
+	/*
+	 * public boolean tableExists(String tableName) throws DatabaseException {
+	 * boolean exists = false; Connection c = null; try { c =
+	 * this.getConnectionManager().getConnection(); DatabaseMetaData dbMetadata =
+	 * c.getMetaData(); String[] names = { "TABLE" }; names[0] = tableName; //
+	 * ResultSet tables = dbMetadata.getTables(null, "%", tableName, // names);
+	 * ResultSet tables = dbMetadata .getTables(null, null, tableName, null); if
+	 * (tables.next()) { exists = true; } tables.close();
+	 * this.getConnectionManager().releaseConnection(c); } catch (Exception e) {
+	 * try { this.getConnectionManager().releaseConnection(c); } catch
+	 * (Exception ex) { log.error(e.getMessage(), ex); }
+	 * log.error(e.getMessage(), e);
+	 * 
+	 * throw new DatabaseException(e.getMessage()); } return exists; }
+	 * 
+	 */
+
+	public boolean tableExists(final String tableName) throws DatabaseException {
 		Connection c = null;
+		PreparedStatement stmt = null;
+		ResultSet results = null;
 		try {
 			c = this.getConnectionManager().getConnection();
-			DatabaseMetaData dbMetadata = c.getMetaData();
-			String[] names = { "TABLE" };
-			names[0] = tableName;
-			// ResultSet tables = dbMetadata.getTables(null, "%", tableName,
-			// names);
-			ResultSet tables = dbMetadata
-					.getTables(null, null, tableName, null);
-			if (tables.next()) {
-				exists = true;
-			}
-			tables.close();
-			this.getConnectionManager().releaseConnection(c);
+			stmt = c.prepareStatement("SELECT COUNT(*) FROM " + tableName
+					+ " WHERE 1 = 2");
+			results = stmt.executeQuery();
+			return true; // if table does exist, no rows will ever be
+			// returned
+		} catch (SQLException e) {
+			return false; // if table does not exist, an exception will be
+			// thrown
 		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new DatabaseException(e.getMessage());
+		} finally {
+			try {
+				if (results != null) {
+					results.close();
+				}
+				if (stmt != null) {
+					stmt.close();
+				}
+			} catch (Exception ex) {
+				log.error(ex.getMessage(), ex);
+			}
 			try {
 				this.getConnectionManager().releaseConnection(c);
 			} catch (Exception ex) {
-				log.error(e.getMessage(), ex);
+				log.error(ex.getMessage(), ex);
 			}
-			log.error(e.getMessage(), e);
 
-			throw new DatabaseException(e.getMessage());
 		}
-		return exists;
 	}
 
 }
