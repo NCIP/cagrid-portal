@@ -11,7 +11,6 @@ import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 import gov.nih.nci.cagrid.gts.test.Utils;
 import junit.framework.TestCase;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -23,25 +22,30 @@ public class TestPermissionManager extends TestCase {
 
 	private DBManager db;
 
-
 	public void testCreateAndDestroy() {
+		PermissionManager pm = new PermissionManager(db);
 		try {
-			PermissionManager pm = new PermissionManager(db);
 			pm.clearDatabase();
 			pm.buildDatabase();
-			assertTrue(db.getDatabase().tableExists(PermissionsTable.TABLE_NAME));
+			assertTrue(db.getDatabase()
+					.tableExists(PermissionsTable.TABLE_NAME));
 			pm.clearDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		} finally {
+			try {
+				pm.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-
 	public void testAddPermission() {
+		PermissionManager pm = new PermissionManager(db);
 		try {
-			PermissionManager pm = new PermissionManager(db);
-
+			pm.clearDatabase();
 			Permission p1 = new Permission();
 			p1.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 			p1.setRole(Role.TrustServiceAdmin);
@@ -51,20 +55,26 @@ public class TestPermissionManager extends TestCase {
 			Permission p2 = new Permission();
 			p2.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 			p2.setRole(Role.TrustAuthorityManager);
-			p2.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
+			p2
+					.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
 			pm.addPermission(p2);
 			assertTrue(pm.doesPermissionExist(p2));
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		} finally {
+			try {
+				pm.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-
 	public void testRevokePermission() {
+		PermissionManager pm = new PermissionManager(db);
 		try {
-			PermissionManager pm = new PermissionManager(db);
-
+			pm.clearDatabase();
 			Permission p1 = new Permission();
 			p1.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 			p1.setRole(Role.TrustServiceAdmin);
@@ -74,7 +84,8 @@ public class TestPermissionManager extends TestCase {
 			Permission p2 = new Permission();
 			p2.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 			p2.setRole(Role.TrustAuthorityManager);
-			p2.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
+			p2
+					.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
 			pm.addPermission(p2);
 			assertTrue(pm.doesPermissionExist(p2));
 			pm.revokePermission(p1);
@@ -83,14 +94,19 @@ public class TestPermissionManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		} finally {
+			try {
+				pm.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-
 	public void testRevokeNonExistingPermission() {
+		PermissionManager pm = new PermissionManager(db);
 		try {
-			PermissionManager pm = new PermissionManager(db);
-
+			pm.clearDatabase();
 			Permission p = new Permission();
 			p.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 			p.setRole(Role.TrustAuthorityManager);
@@ -106,14 +122,19 @@ public class TestPermissionManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		} finally {
+			try {
+				pm.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-
 	public void testAddInvalidPermissions() {
+		PermissionManager pm = new PermissionManager(db);
 		try {
-			PermissionManager pm = new PermissionManager(db);
-
+			pm.clearDatabase();
 			// Test adding the same permission twice
 
 			Permission p1 = new Permission();
@@ -175,7 +196,8 @@ public class TestPermissionManager extends TestCase {
 				Permission p7 = new Permission();
 				p7.setGridIdentity("O=Test Organization,OU=Test Unit,CN=User");
 				p7.setRole(Role.TrustServiceAdmin);
-				p7.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
+				p7
+						.setTrustedAuthorityName("O=Test Organization,OU=Test Unit,CN=CA");
 				pm.addPermission(p7);
 				fail("Should not be able to specify a TrustServiceAdmin permission that applies to one TrustAuthority.");
 			} catch (IllegalPermissionFault f) {
@@ -185,15 +207,20 @@ public class TestPermissionManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		} finally {
+			try {
+				pm.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
 
-
 	public void testFindPermissions() {
+		PermissionManager pm = new PermissionManager(db);
 		try {
-			PermissionManager pm = new PermissionManager(db);
-
+			pm.clearDatabase();
 			int count = 5;
 			String dnPrefix = "O=Organization ABC,OU=Unit XYZ,CN=User";
 			String dnPrefix1 = dnPrefix + " X";
@@ -224,7 +251,7 @@ public class TestPermissionManager extends TestCase {
 				perms2[i].setTrustedAuthorityName(ta);
 				pm.addPermission(perms2[i]);
 				assertTrue(pm.doesPermissionExist(perms2[i]));
-				assertTrue(pm.isUserTrustedAuthorityAdmin(ta,dn2));
+				assertTrue(pm.isUserTrustedAuthorityAdmin(ta, dn2));
 
 				PermissionFilter fy = new PermissionFilter();
 				fy.setGridIdentity(perms2[i].getGridIdentity());
@@ -281,10 +308,15 @@ public class TestPermissionManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
+		} finally {
+			try {
+				pm.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
-
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -297,12 +329,11 @@ public class TestPermissionManager extends TestCase {
 		}
 	}
 
-
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		try {
 			assertEquals(0, db.getDatabase().getUsedConnectionCount());
-			db.getDatabase().destroyDatabase();
+			// db.getDatabase().destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

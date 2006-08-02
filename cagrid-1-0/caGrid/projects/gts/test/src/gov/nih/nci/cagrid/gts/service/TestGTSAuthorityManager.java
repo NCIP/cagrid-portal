@@ -37,7 +37,6 @@ public class TestGTSAuthorityManager extends TestCase {
 				getAuthoritySyncTime(), db);
 		try {
 			am.clearDatabase();
-			am.buildDatabase();
 			assertTrue(db.getDatabase().tableExists(AuthorityTable.TABLE_NAME));
 			am.clearDatabase();
 		} catch (Exception e) {
@@ -56,6 +55,7 @@ public class TestGTSAuthorityManager extends TestCase {
 		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
 				getAuthoritySyncTime(), db);
 		try {
+			am.clearDatabase();
 			TimeToLive ttl = new TimeToLive();
 			ttl.setHours(1);
 			ttl.setMinutes(1);
@@ -181,6 +181,7 @@ public class TestGTSAuthorityManager extends TestCase {
 		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
 				getAuthoritySyncTime(), db);
 		try {
+			am.clearDatabase();
 			TimeToLive ttl = new TimeToLive();
 			ttl.setHours(10);
 			ttl.setMinutes(10);
@@ -283,6 +284,7 @@ public class TestGTSAuthorityManager extends TestCase {
 		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
 				getAuthoritySyncTime(), db);
 		try {
+			am.clearDatabase();
 			AuthorityGTS a1 = getAuthority("GTS 1", 1);
 			assertFalse(am.doesAuthorityExist(a1.getServiceURI()));
 			assertEquals(0, am.getAuthorityCount());
@@ -309,6 +311,7 @@ public class TestGTSAuthorityManager extends TestCase {
 		AuthorityGTS[] a = new AuthorityGTS[count];
 
 		try {
+			am.clearDatabase();
 			for (int i = 0; i < count; i++) {
 				a[i] = getAuthority("GTS " + i, 1);
 				assertFalse(am.doesAuthorityExist(a[i].getServiceURI()));
@@ -383,6 +386,7 @@ public class TestGTSAuthorityManager extends TestCase {
 		AuthorityGTS[] a = new AuthorityGTS[count];
 
 		try {
+			am.clearDatabase();
 			for (int i = 0; i < count; i++) {
 				a[i] = getAuthority("GTS " + i, 1);
 				assertFalse(am.doesAuthorityExist(a[i].getServiceURI()));
@@ -471,6 +475,7 @@ public class TestGTSAuthorityManager extends TestCase {
 		AuthorityGTS[] a = new AuthorityGTS[count];
 		Connection c = null;
 		try {
+			am.clearDatabase();
 			for (int i = 0; i < count; i++) {
 				a[i] = getAuthority("GTS " + i, 1);
 				assertFalse(am.doesAuthorityExist(a[i].getServiceURI()));
@@ -552,6 +557,7 @@ public class TestGTSAuthorityManager extends TestCase {
 		GTSAuthorityManager am = new GTSAuthorityManager(GTS_URI,
 				getAuthoritySyncTime(), db);
 		try {
+			am.clearDatabase();
 			AuthorityGTS a1 = getAuthority("GTS 1", 1);
 			assertFalse(am.doesAuthorityExist(a1.getServiceURI()));
 			assertEquals(0, am.getAuthorityCount());
@@ -627,7 +633,7 @@ public class TestGTSAuthorityManager extends TestCase {
 		super.tearDown();
 		try {
 			assertEquals(0, db.getDatabase().getUsedConnectionCount());
-			db.getDatabase().destroyDatabase();
+			//db.getDatabase().destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

@@ -56,8 +56,8 @@ public class TestGTS extends TestCase {
 	public void testCreateAndDestroy() {
 		try {
 			GTS gts = new GTS(Utils.getGTSConfiguration(), GTS_URI);
-			// Make sure we start fresh
-			gts.clear();
+			gts.clearDatabase();
+			assertEquals(0, gts.getDatabase().getUsedConnectionCount());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -71,7 +71,7 @@ public class TestGTS extends TestCase {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
-			gts.clear();
+			gts.clearDatabase();
 
 			try {
 				gts.findPermissions(new PermissionFilter(), ADMIN_USER);
@@ -130,10 +130,12 @@ public class TestGTS extends TestCase {
 			assertTrue(false);
 		} finally {
 			try {
-				gts.clear();
+				gts.clearDatabase();
+				assertEquals(0, gts.getDatabase().getUsedConnectionCount());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
 		}
 
 	}
@@ -147,7 +149,7 @@ public class TestGTS extends TestCase {
 			String user2 = "O=Test Organization,OU=Test Unit,CN=User2";
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
-			gts.clear();
+			gts.clearDatabase();
 
 			try {
 				gts.findPermissions(new PermissionFilter(), ADMIN_USER);
@@ -322,7 +324,8 @@ public class TestGTS extends TestCase {
 		} finally {
 			if (gts != null) {
 				try {
-					gts.clear();
+					gts.clearDatabase();
+					assertEquals(0, gts.getDatabase().getUsedConnectionCount());
 				} catch (Exception e) {
 					FaultUtil.printFault(e);
 				}
@@ -338,7 +341,7 @@ public class TestGTS extends TestCase {
 
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
-			gts.clear();
+			gts.clearDatabase();
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
 			pb.addAdminUser(ADMIN_USER);
 			addTrustLevels(gts, ADMIN_USER);
@@ -361,14 +364,15 @@ public class TestGTS extends TestCase {
 			}
 			assertEquals(0, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 
-			gts.clear();
+			gts.clearDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		} finally {
 			if (gts != null) {
 				try {
-					gts.clear();
+					gts.clearDatabase();
+					assertEquals(0, gts.getDatabase().getUsedConnectionCount());
 				} catch (Exception e) {
 					FaultUtil.printFault(e);
 				}
@@ -385,7 +389,7 @@ public class TestGTS extends TestCase {
 
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
-			gts.clear();
+			gts.clearDatabase();
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
 			pb.addAdminUser(ADMIN_USER);
@@ -481,14 +485,15 @@ public class TestGTS extends TestCase {
 
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 
-			gts.clear();
+			gts.clearDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		} finally {
 			if (gts != null) {
 				try {
-					gts.clear();
+					gts.clearDatabase();
+					assertEquals(0, gts.getDatabase().getUsedConnectionCount());
 				} catch (Exception e) {
 					FaultUtil.printFault(e);
 				}
@@ -504,7 +509,7 @@ public class TestGTS extends TestCase {
 
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
-			gts.clear();
+			gts.clearDatabase();
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
 			pb.addAdminUser(ADMIN_USER);
 			TrustLevel l1 = new TrustLevel();
@@ -548,7 +553,8 @@ public class TestGTS extends TestCase {
 		} finally {
 			if (gts != null) {
 				try {
-					gts.clear();
+					gts.clearDatabase();
+					assertEquals(0, gts.getDatabase().getUsedConnectionCount());
 				} catch (Exception e) {
 					FaultUtil.printFault(e);
 				}
@@ -656,7 +662,8 @@ public class TestGTS extends TestCase {
 		} finally {
 			if (gts != null) {
 				try {
-					gts.clear();
+					gts.clearDatabase();
+					assertEquals(0, gts.getDatabase().getUsedConnectionCount());
 				} catch (Exception e) {
 					FaultUtil.printFault(e);
 				}
@@ -672,7 +679,7 @@ public class TestGTS extends TestCase {
 
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
-			gts.clear();
+			gts.clearDatabase();
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
 			pb.addAdminUser(ADMIN_USER);
@@ -801,7 +808,8 @@ public class TestGTS extends TestCase {
 		} finally {
 			if (gts != null) {
 				try {
-					gts.clear();
+					gts.clearDatabase();
+					assertEquals(0, gts.getDatabase().getUsedConnectionCount());
 				} catch (Exception e) {
 					FaultUtil.printFault(e);
 				}
@@ -817,7 +825,7 @@ public class TestGTS extends TestCase {
 
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
-			gts.clear();
+			gts.clearDatabase();
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
 			pb.addAdminUser(ADMIN_USER);
@@ -917,7 +925,8 @@ public class TestGTS extends TestCase {
 		} finally {
 			if (gts != null) {
 				try {
-					gts.clear();
+					gts.clearDatabase();
+					assertEquals(0, gts.getDatabase().getUsedConnectionCount());
 				} catch (Exception e) {
 					FaultUtil.printFault(e);
 				}
@@ -932,7 +941,7 @@ public class TestGTS extends TestCase {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
-			gts.clear();
+			gts.clearDatabase();
 
 			// Add the admin user
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
@@ -1030,7 +1039,8 @@ public class TestGTS extends TestCase {
 		} finally {
 			if (gts != null) {
 				try {
-					gts.clear();
+					gts.clearDatabase();
+					assertEquals(0, gts.getDatabase().getUsedConnectionCount());
 				} catch (Exception e) {
 					FaultUtil.printFault(e);
 				}
@@ -1045,7 +1055,7 @@ public class TestGTS extends TestCase {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
-			gts.clear();
+			gts.clearDatabase();
 
 			// Add the admin user
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
@@ -1198,7 +1208,8 @@ public class TestGTS extends TestCase {
 		} finally {
 			if (gts != null) {
 				try {
-					gts.clear();
+					gts.clearDatabase();
+					assertEquals(0, gts.getDatabase().getUsedConnectionCount());
 				} catch (Exception e) {
 					FaultUtil.printFault(e);
 				}
@@ -1214,7 +1225,8 @@ public class TestGTS extends TestCase {
 			GTSConfiguration conf = Utils.getGTSConfiguration();
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
-			gts.clear();
+			gts.clearDatabase();
+			assertEquals(0, gts.getDatabase().getUsedConnectionCount());
 
 			// Add the admin user
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
@@ -1346,7 +1358,8 @@ public class TestGTS extends TestCase {
 		} finally {
 			if (gts != null) {
 				try {
-					gts.clear();
+					gts.clearDatabase();
+					assertEquals(0, gts.getDatabase().getUsedConnectionCount());
 				} catch (Exception e) {
 					FaultUtil.printFault(e);
 				}
