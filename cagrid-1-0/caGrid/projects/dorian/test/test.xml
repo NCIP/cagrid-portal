@@ -18,9 +18,19 @@
             </fileset>
         </cobertura-instrument>
     </target>
+	
+	<!-- Post Introduce Edit-->
+		<target name="nuke" description="Nukes the Dorian Test DB">
+			<java classname="gov.nih.nci.cagrid.dorian.test.Nuker" fork="no">
+				  <classpath>
+				      <path refid="test.run.classpath" />
+				      <pathelement location="${test.dir}/resources" />
+				  </classpath>
+			</java>
+		</target>
 
     <!-- call the test target for each project and aggregates the log resutls  -->
-    <target name="test" depends="instrument, create_config_files">
+    <target name="test" depends="instrument, create_config_files,nuke">
         <echo message="Test results dir: ${junit.results.dir}" />
         <mkdir dir="${junit.results.dir}" />
         <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true">

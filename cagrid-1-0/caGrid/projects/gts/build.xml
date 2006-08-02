@@ -308,9 +308,18 @@
     <!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
     <target name="all" depends="jars" />
 
+	<!-- Post Introduce Edit-->
+		<target name="nuke" description="Nukes the GTS Test DB">
+			<java classname="gov.nih.nci.cagrid.gts.test.Nuker" fork="no">
+				  <classpath>
+				      <path refid="test.run.classpath" />
+				      <pathelement location="${test.dir}/resources" />
+				  </classpath>
+			</java>
+		</target>
 
     <!-- call the test target for each project and aggregates the log resutls  -->
-    <target name="test" depends="checkGlobus,create_config_files">
+    <target name="test" depends="checkGlobus,create_config_files,nuke">
         <echo message="Test results dir: ${junit.results.dir}" />
         <mkdir dir="${junit.results.dir}" />
         <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true">

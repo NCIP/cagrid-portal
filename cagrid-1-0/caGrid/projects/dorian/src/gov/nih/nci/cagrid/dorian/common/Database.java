@@ -17,7 +17,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.15 2006-08-02 15:01:13 langella Exp $
+ * @version $Id: Database.java,v 1.16 2006-08-02 17:32:56 langella Exp $
  */
 public class Database extends LoggingObject {
 
@@ -201,6 +201,10 @@ public class Database extends LoggingObject {
 
 	public int getRootUsedConnectionCount() {
 		return this.root.getUsedConnectionCount();
+	}
+
+	public String getDatabaseName() {
+		return database;
 	}
 
 }
