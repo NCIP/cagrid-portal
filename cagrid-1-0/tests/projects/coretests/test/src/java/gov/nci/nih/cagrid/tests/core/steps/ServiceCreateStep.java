@@ -164,7 +164,7 @@ public class ServiceCreateStep
 		synchronizeSkeleton();
 		
 		// add implementation
-		addImplementation();
+		if (implFile.exists()) addImplementation();
 		
 		// rebuild
 		buildSkeleton();
