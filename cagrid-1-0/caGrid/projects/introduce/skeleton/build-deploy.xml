@@ -53,16 +53,17 @@
 	
 	<!-- deploy  a gar to tomcat -->
 	<target name="deployTomcat" depends="addFilters, all" description="Deploys to CATALINA_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
-		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
-		
+		<echo message="Deploying service ${service.deployment.path} under Tomcat at ${tomcat.dir}" />
+
 		<!-- Configure Tomcat destination for skeletons -->
 		<pathconvert dirsep="_" property="service.deployment.dir.name">
 			<path>
 				<pathelement path="${service.deployment.path}" />
 			</path>
-			<map from="${basedir}" to="" />
-			<map from="/" to="" />
+			<map from="${basedir}\" to="" />
+			<map from="${basedir}/" to="" />
 		</pathconvert>
+		
 		<property name="service.deployment.dir" value="${tomcat.deploy.dir}/etc/${service.deployment.dir.name}" />
 		<!-- prepare the deployment directory -->
 		<mkdir dir="${service.deployment.dir}" />
