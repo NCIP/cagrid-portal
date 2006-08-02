@@ -129,7 +129,7 @@ public class TestCredentialsManager extends TestCase {
 		}
 	}
 
-
+/*
 	public void testInsertAndObtainBadPassword() {
 		try {
 			createAndStoreCA();
@@ -142,7 +142,7 @@ public class TestCredentialsManager extends TestCase {
 			assertTrue(false);
 		}
 	}
-
+*/
 
 	private void createAndStoreCA() throws Exception {
 		KeyPair rootPair = KeyUtil.generateRSAKeyPair1024();
