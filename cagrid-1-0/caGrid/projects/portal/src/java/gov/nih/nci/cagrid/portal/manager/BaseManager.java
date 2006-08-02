@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
 import java.util.Collection;
 import java.util.List;
 
+
 /**
  * BaseManager Interface that all Managers
  * will implement
@@ -16,7 +17,6 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public interface BaseManager {
-
     /**
      * Returns All the persistent
      * object for given class

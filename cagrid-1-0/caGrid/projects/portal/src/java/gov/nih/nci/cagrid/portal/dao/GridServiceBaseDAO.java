@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.portal.dao;
 
 import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
 
+
 /**
  * Created by IntelliJ IDEA.
  * User: kherm
@@ -10,13 +11,11 @@ import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
  * To change this template use File | Settings | File Templates.
  */
 public interface GridServiceBaseDAO {
-
-     /**
-     * Return ID for a EPR string
-     *
-     * @param epr
-     * @return int id
-     */
-     public Integer getID4EPR(String epr) throws RecordNotFoundException;
-
+    /**
+    * Return ID for a EPR string
+    *
+    * @param epr
+    * @return int id
+    */
+    public Integer getID4EPR(String epr) throws RecordNotFoundException;
 }

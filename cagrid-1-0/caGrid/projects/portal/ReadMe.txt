@@ -58,7 +58,16 @@ to build the portal project as a web project
 Testing Instructions
 ===========================================================================
 
-You will need a database to do testing (Nothing will be committed to the DB)
 To execute the tests just run 'ant testLocal' after setting your
 {username}-portal-build.properties file with correct settings for your local
 environment.
+
+All JUnit test cases are named *TestCase
+All unit tests extend an abstract spring class and run in a mock environment
+ created by spring and don't need an application/web server
+
+
+You will need a database to run some of the tests (Nothing will be committed
+to the DB). The tests are in the "test" directory. The test cases that need
+a DB to execute are named *LocalTestCase
+Other test cases can be executed without any backend

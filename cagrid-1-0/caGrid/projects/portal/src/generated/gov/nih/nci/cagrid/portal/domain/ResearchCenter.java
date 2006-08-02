@@ -2,12 +2,12 @@ package gov.nih.nci.cagrid.portal.domain;
 
 import java.util.Collection;
 
+
 /**
  * @version 1.0
  * @created 19-Jun-2006 4:08:50 PM
  */
 public class ResearchCenter {
-
     private java.lang.String description;
     private java.lang.String displayName;
     private java.lang.String homepageURL;
@@ -18,11 +18,9 @@ public class ResearchCenter {
     private java.util.Collection registeredServicesCollection;
 
     public ResearchCenter() {
-
     }
 
     public void finalize() throws Throwable {
-
     }
 
     public java.lang.String getDescription() {
@@ -114,8 +112,8 @@ public class ResearchCenter {
         return registeredServicesCollection;
     }
 
-    public void setRegisteredServicesCollection(Collection registeredServicesCollection) {
+    public void setRegisteredServicesCollection(
+        Collection registeredServicesCollection) {
         this.registeredServicesCollection = registeredServicesCollection;
     }
-
 }

@@ -1,9 +1,10 @@
-package gov.nih.nci.cagrid.portal.tests;
+package gov.nih.nci.cagrid.portal.manager;
 
 import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
+import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
-import gov.nih.nci.cagrid.portal.manager.IndexServiceManager;
+
 import org.apache.axis.message.addressing.EndpointReferenceType;
 
 import java.util.List;
@@ -17,7 +18,8 @@ import java.util.ListIterator;
  * Time: 10:30:15 AM
  * To change this template use File | Settings | File Templates.
  */
-public class IndexServiceDAOLocalTest extends BaseSpringDAOAbstractTest {
+public class IndexServiceManagerLocalTestCaseCase
+    extends BaseSpringDataAccessAbstractTestCase {
     IndexServiceManager indexManager;
 
     /**
@@ -25,7 +27,6 @@ public class IndexServiceDAOLocalTest extends BaseSpringDAOAbstractTest {
      */
     public void testIndexServiceDAO() {
         List indexes = indexManager.loadAll(IndexService.class);
-
 
         for (ListIterator iter = indexes.listIterator(); iter.hasNext();) {
             IndexService idx = (IndexService) iter.next();
@@ -35,8 +36,8 @@ public class IndexServiceDAOLocalTest extends BaseSpringDAOAbstractTest {
                 EndpointReferenceType[] services = disc.getAllServices(true);
 
                 logger.debug("Index service has " +
-                        idx.getRegisteredServicesCollection().size() +
-                        " registered services");
+                    idx.getRegisteredServicesCollection().size() +
+                    " registered services");
 
                 for (int i = 0; i < services.length; i++) {
                     RegisteredService rService = new RegisteredService(services[i]);
@@ -44,19 +45,15 @@ public class IndexServiceDAOLocalTest extends BaseSpringDAOAbstractTest {
                 }
 
                 logger.debug("New Index Service has " +
-                        idx.getRegisteredServicesCollection().size() +
-                        "regisgetered Services");
+                    idx.getRegisteredServicesCollection().size() +
+                    "regisgetered Services");
             } catch (Exception e) {
                 fail(e.getMessage());
             }
         }
-
     }
 
     public void setIndexManager(IndexServiceManager indexManager) {
         this.indexManager = indexManager;
     }
-
-
-
 }

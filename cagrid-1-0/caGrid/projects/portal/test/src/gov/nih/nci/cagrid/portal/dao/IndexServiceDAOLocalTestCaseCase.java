@@ -1,13 +1,11 @@
-package gov.nih.nci.cagrid.portal.tests;
+package gov.nih.nci.cagrid.portal.dao;
 
 import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
-import gov.nih.nci.cagrid.portal.dao.IndexDAO;
-import gov.nih.nci.cagrid.portal.domain.IndexService;
+import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
 import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
-import gov.nih.nci.cagrid.portal.utils.DatabaseInitUtility;
 import gov.nih.nci.cagrid.portal.utils.GridUtils;
+
 import org.apache.axis.message.addressing.EndpointReferenceType;
-import org.apache.axis.types.URI;
 
 import java.util.Iterator;
 
@@ -19,9 +17,9 @@ import java.util.Iterator;
  * Time: 2:31:46 PM
  * To change this template use File | Settings | File Templates.
  */
-public class IndexServiceLocalTest extends BaseSpringaAbstractTest {
+public class IndexServiceDAOLocalTestCaseCase
+    extends BaseSpringDataAccessAbstractTestCase {
     // Dependency injected by spring
-    DatabaseInitUtility initBean;
     IndexDAO indexDAO;
 
     /**
@@ -42,37 +40,10 @@ public class IndexServiceLocalTest extends BaseSpringaAbstractTest {
     }
 
     /**
-     * Test the Index service can be properly initialized
-     * configured
-     */
-    public void testIndexService() {
-        // Make sure there is atlease one index in the initializer
-        assertEquals(initBean.getIndexList().isEmpty(), false);
-
-        for (Iterator iter = initBean.getIndexList().iterator();
-                iter.hasNext();) {
-            String indexEPR = (String) iter.next();
-            EndpointReferenceType idxEPR = null;
-
-            try {
-                idxEPR = GridUtils.getEPR(indexEPR);
-            } catch (URI.MalformedURIException e) {
-                fail("Index EPR not correct " + e.getMessage());
-            }
-
-            assertNotNull(idxEPR);
-
-            IndexService idxService = new IndexService(idxEPR);
-            assertNotNull(idxService);
-        }
-    }
-
-    /**
      * Get the list of ALL services in the index
      */
     public void testIndexServicesDiscovery() {
-        for (Iterator iter = initBean.getIndexList().iterator();
-                iter.hasNext();) {
+        for (Iterator iter = rootIndexSet.iterator(); iter.hasNext();) {
             EndpointReferenceType[] services = null;
 
             try {
@@ -111,10 +82,6 @@ public class IndexServiceLocalTest extends BaseSpringaAbstractTest {
                 }
             }
         }
-    }
-
-    public void setInitBean(DatabaseInitUtility initBean) {
-        this.initBean = initBean;
     }
 
     public void setIndexDAO(IndexDAO indexDAO) {

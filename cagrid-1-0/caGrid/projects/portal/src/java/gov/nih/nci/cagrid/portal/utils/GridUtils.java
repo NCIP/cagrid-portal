@@ -2,8 +2,10 @@ package gov.nih.nci.cagrid.portal.utils;
 
 import gov.nih.nci.cagrid.discovery.MetadataUtils;
 import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
+
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,9 +15,8 @@ import org.apache.axis.types.URI;
  * To change this template use File | Settings | File Templates.
  */
 public final class GridUtils {
-
-
-    public static EndpointReferenceType getEPR(String epr) throws URI.MalformedURIException {
+    public static EndpointReferenceType getEPR(String epr)
+        throws URI.MalformedURIException {
         return new EndpointReferenceType(new URI(epr));
     }
 
@@ -23,7 +24,8 @@ public final class GridUtils {
      * @param serviceEPR
      * @return Service Description
      */
-    public static String getServiceDescription(EndpointReferenceType serviceEPR) throws MetadataRetreivalException {
+    public static String getServiceDescription(EndpointReferenceType serviceEPR)
+        throws MetadataRetreivalException {
         return GridUtils.getServiceMetadata(serviceEPR).getDescription();
     }
 
@@ -32,7 +34,8 @@ public final class GridUtils {
      * @return
      * @throws MetadataRetreivalException
      */
-    public static String getServiceName(EndpointReferenceType serviceEPR) throws MetadataRetreivalException {
+    public static String getServiceName(EndpointReferenceType serviceEPR)
+        throws MetadataRetreivalException {
         return GridUtils.getServiceMetadata(serviceEPR).getName();
     }
 
@@ -44,12 +47,16 @@ public final class GridUtils {
      * @return
      * @throws MetadataRetreivalException
      */
-    private static gov.nih.nci.cagrid.metadata.service.Service getServiceMetadata(EndpointReferenceType serviceEPR) throws MetadataRetreivalException {
+    private static gov.nih.nci.cagrid.metadata.service.Service getServiceMetadata(
+        EndpointReferenceType serviceEPR) throws MetadataRetreivalException {
         try {
-            return MetadataUtils.getServiceMetadata(serviceEPR).getServiceDescription().getService();
+            return MetadataUtils.getServiceMetadata(serviceEPR)
+                                .getServiceDescription().getService();
         } catch (Exception e) {
             // wrap the generic exception into something more specific
-            throw new MetadataRetreivalException("Error retreiving service metadata for " + serviceEPR.toString());
+            throw new MetadataRetreivalException(
+                "Error retreiving service metadata for " +
+                serviceEPR.toString());
         }
     }
 
@@ -60,7 +67,5 @@ public final class GridUtils {
     public static boolean isServiceActive(EndpointReferenceType service) {
         //ToDo implement
         return true;
-
-
     }
 }

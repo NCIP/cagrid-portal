@@ -1,8 +1,8 @@
-package gov.nih.nci.cagrid.portal.tests;
+package gov.nih.nci.cagrid.portal.utils;
 
+import gov.nih.nci.cagrid.portal.BaseSpringaAbstractTestCase;
 import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
-import gov.nih.nci.cagrid.portal.utils.DatabaseInitUtility;
-import gov.nih.nci.cagrid.portal.utils.GridUtils;
+
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
 
@@ -16,7 +16,7 @@ import java.util.Iterator;
  * Time: 10:30:21 AM
  * To change this template use File | Settings | File Templates.
  */
-public class InitBeanTestCase extends BaseSpringaAbstractTest {
+public class InitBeanTestCaseCase extends BaseSpringaAbstractTestCase {
     DatabaseInitUtility initBean;
 
     protected void onSetUp() throws Exception {
@@ -28,8 +28,7 @@ public class InitBeanTestCase extends BaseSpringaAbstractTest {
     }
 
     public void testNameRetreival() {
-        for (Iterator iter = initBean.getIndexList().iterator();
-                iter.hasNext();) {
+        for (Iterator iter = initBean.getIndexSet().iterator(); iter.hasNext();) {
             try {
                 EndpointReferenceType epr = GridUtils.getEPR((String) iter.next());
                 assertNotNull(epr);

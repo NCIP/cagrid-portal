@@ -1,6 +1,10 @@
-package gov.nih.nci.cagrid.portal.tests;
+package gov.nih.nci.cagrid.portal;
+
+import gov.nih.nci.cagrid.portal.utils.DatabaseInitUtility;
 
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
+
+import java.util.HashSet;
 
 
 /**
@@ -15,13 +19,28 @@ import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
  * Time: 11:06:03 AM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class BaseSpringaAbstractTest
+public abstract class BaseSpringaAbstractTestCase
     extends AbstractDependencyInjectionSpringContextTests {
+    private DatabaseInitUtility initBean;
+
+    //root index is a collection of indexes that portal aggregates from
+    public HashSet rootIndexSet = new HashSet();
+
+    protected void onSetUp() throws Exception {
+        super.onSetUp(); //To change body of overridden methods use File | Settings | File Templates.
+
+        rootIndexSet = initBean.getIndexSet();
+    }
+
     protected String[] getConfigLocations() {
         return new String[] {
             "classpath*:/**/applicationContext-data-access.xml",
             "classpath*:/**/applicationContext.xml",
             "classpath*:/**/applicationContext-aggregators.xml",
         };
+    }
+
+    public void setInitBean(DatabaseInitUtility initBean) {
+        this.initBean = initBean;
     }
 }

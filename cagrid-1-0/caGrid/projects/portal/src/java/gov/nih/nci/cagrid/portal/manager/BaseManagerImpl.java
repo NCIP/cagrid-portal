@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.portal.dao.IndexDAO;
 import java.util.Collection;
 import java.util.List;
 
+
 /**
  * Implementation of the BaseManager Interface
  * <p/>
@@ -17,8 +18,6 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class BaseManagerImpl implements BaseManager {
-
-
     protected BaseDAO baseDAO;
     protected IndexDAO indexDAO;
 
@@ -49,6 +48,4 @@ public class BaseManagerImpl implements BaseManager {
     public void setIndexDAO(IndexDAO indexDAO) {
         this.indexDAO = indexDAO;
     }
-
 }
-

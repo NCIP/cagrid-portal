@@ -178,12 +178,19 @@ public class RegisteredService implements GridService {
     }
 
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if ((o == null) || (getClass() != o.getClass())) {
+            return false;
+        }
 
         final RegisteredService that = (RegisteredService) o;
 
-        if (!epr.equals(that.epr)) return false;
+        if (!epr.equals(that.epr)) {
+            return false;
+        }
 
         return true;
     }

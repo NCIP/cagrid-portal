@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.exception;
 
+
 /**
  * Will be thrown if an appropriate record
  * is not found in the database
@@ -12,7 +13,6 @@ package gov.nih.nci.cagrid.portal.exception;
  * To change this template use File | Settings | File Templates.
  */
 public class RecordNotFoundException extends RuntimeException {
-
     /**
      * Constructs a new runtime exception with <code>null</code> as its
      * detail message.  The cause is not initialized, and may subsequently be

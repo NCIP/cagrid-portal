@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.portal.domain;
 
+
 /**
  * @version 1.0
  * @created 19-Jun-2006 4:08:50 PM
  */
 public class SemanticMetadata {
-
     private java.lang.String conceptCode;
     private java.lang.String conceptDefinition;
     private java.lang.String conceptName;
@@ -14,11 +14,9 @@ public class SemanticMetadata {
     private boolean primaryConcept;
 
     public SemanticMetadata() {
-
     }
 
     public void finalize() throws Throwable {
-
     }
 
     public java.lang.String getConceptCode() {
@@ -86,6 +84,4 @@ public class SemanticMetadata {
     public void setPrimaryConcept(boolean newVal) {
         primaryConcept = newVal;
     }
-
-
 }

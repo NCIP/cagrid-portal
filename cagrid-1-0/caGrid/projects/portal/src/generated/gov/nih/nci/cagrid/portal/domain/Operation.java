@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.portal.domain;
 
+
 /**
  * @version 1.0
  * @created 19-Jun-2006 4:05:30 PM
  */
 public class Operation {
-
     private java.lang.String description;
     private java.util.Collection faults;
     private java.util.Collection inputParamters;
@@ -13,11 +13,9 @@ public class Operation {
     private OperationOutput output;
 
     public Operation() {
-
     }
 
     public void finalize() throws Throwable {
-
     }
 
     public java.lang.String getDescription() {
@@ -74,5 +72,4 @@ public class Operation {
     public void setOutput(OperationOutput output) {
         this.output = output;
     }
-
 }

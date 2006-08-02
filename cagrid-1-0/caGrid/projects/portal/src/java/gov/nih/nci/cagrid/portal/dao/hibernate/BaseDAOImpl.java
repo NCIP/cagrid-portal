@@ -1,15 +1,19 @@
 package gov.nih.nci.cagrid.portal.dao.hibernate;
 
 import gov.nih.nci.cagrid.portal.dao.BaseDAO;
-import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.springframework.dao.DataAccessException;
+import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
+
 import org.apache.log4j.Category;
+
+import org.springframework.dao.DataAccessException;
+
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import java.util.Collection;
 import java.util.List;
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,11 +23,10 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class BaseDAOImpl extends HibernateDaoSupport implements BaseDAO {
-
     Category _logger;
 
     protected void initDao() throws Exception {
-        super.initDao();    //To change body of overridden methods use File | Settings | File Templates.
+        super.initDao(); //To change body of overridden methods use File | Settings | File Templates.
         _logger = Category.getInstance(getClass());
     }
 
@@ -38,6 +41,4 @@ public class BaseDAOImpl extends HibernateDaoSupport implements BaseDAO {
     public void saveOrUpdate(Object obj) {
         getHibernateTemplate().saveOrUpdate(obj);
     }
-
-    
 }

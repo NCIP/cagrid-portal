@@ -1,21 +1,19 @@
 package gov.nih.nci.cagrid.portal.domain;
 
+
 /**
  * @version 1.0
  * @created 19-Jun-2006 4:08:50 PM
  */
 public class Statistics {
-
     private boolean active;
     private double responseTime;
     private double timestamp;
 
     public Statistics() {
-
     }
 
     public void finalize() throws Throwable {
-
     }
 
     public double getResponseTime() {
@@ -50,5 +48,4 @@ public class Statistics {
     public void setTimestamp(double newVal) {
         timestamp = newVal;
     }
-
 }

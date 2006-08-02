@@ -2,12 +2,12 @@ package gov.nih.nci.cagrid.portal.domain;
 
 import java.util.Collection;
 
+
 /**
  * @version 1.0
  * @created 19-Jun-2006 4:05:30 PM
  */
 public class DomainModel {
-
     private java.lang.String longName;
     private java.lang.String projectDescription;
     private java.lang.String projectVersion;
@@ -17,11 +17,9 @@ public class DomainModel {
     private java.util.Collection umlClassCollection;
 
     public DomainModel() {
-
     }
 
     public void finalize() throws Throwable {
-
     }
 
     public java.lang.String getLongName() {
@@ -94,5 +92,4 @@ public class DomainModel {
     public void setUmlClassCollection(Collection umlClassCollection) {
         this.umlClassCollection = umlClassCollection;
     }
-
 }

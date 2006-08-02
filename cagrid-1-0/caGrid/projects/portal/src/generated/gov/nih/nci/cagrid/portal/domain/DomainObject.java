@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.domain;
 
+
 /**
  * Created by IntelliJ IDEA.
  * User: kherm
@@ -8,7 +9,6 @@ package gov.nih.nci.cagrid.portal.domain;
  * To change this template use File | Settings | File Templates.
  */
 public interface DomainObject {
-
     /**
      * @return boolean
      *         ToDo Should be Implemented by concrerte classes
@@ -20,5 +20,4 @@ public interface DomainObject {
      *         ToDo Should be Implemented by concrete classes
      */
     Integer getPk();
-
 }

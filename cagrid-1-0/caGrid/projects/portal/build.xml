@@ -101,7 +101,7 @@
     <!-- ============================================================== -->
     <target name="init" depends="setClasspath">
         <mkdir dir="${build.classes.dir}"/>
-        <mkdir dir="${test.log.dir}" />
+
         <mkdir dir="${webinf.lib.dir}"/>
         <mkdir dir="${webinf.classes.dir}"/>
     </target>
@@ -115,6 +115,7 @@
         <delete dir="${test.log.dir}"/>
         <delete dir="${webinf.lib.dir}"/>
         <delete dir="${webinf.classes.dir}"/>
+
     </target>
 
 
@@ -230,13 +231,17 @@
         </javac>
     </target>
 
+    <target name="prepareTest">
+            <delete dir="${test.log.dir}"/>
+            <mkdir dir="${test.log.dir}"/>
+    </target>
 
     <target name="compileTests" depends="compile">
         <javac srcdir="${test.src.dir}" classpathref="test.classpath" destdir="${test.classes.dir}" failonerror="true"  />
     </target>
 
     <!-- call the test target for each project and aggregates the log resutls  -->
-    <target name="testLocal" depends="compileTests" description="Runs the service's tests.">
+    <target name="testLocal" depends="prepareTest,compileTests" description="Runs the service's tests.">
         <echo message="Test results dir: ${junit.results.dir}" />
         <mkdir dir="${junit.results.dir}" />
         <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true">
@@ -246,8 +251,8 @@
             <formatter type="xml" />
             <batchtest fork="yes" todir="${junit.results.dir}">
                 <fileset dir="${test.src.dir}">
-                    <include name="**/*LocalTest.java" />
-                    <include name="**/*TestCase.java" />
+
+                    <include name="**/MainTestSuite.java" />
                 </fileset>
             </batchtest>
         </junit>

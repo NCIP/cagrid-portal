@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.portal.domain;
 
+
 /**
  * @version 1.0
  * @created 19-Jun-2006 4:08:50 PM
  */
 public class UMLAttribute {
-
     private java.lang.String description;
     private int id;
     private java.lang.String name;
@@ -13,11 +13,9 @@ public class UMLAttribute {
     public SemanticMetadata semanticMetadataCollection;
 
     public UMLAttribute() {
-
     }
 
     public void finalize() throws Throwable {
-
     }
 
     public java.lang.String getDescription() {
@@ -65,7 +63,8 @@ public class UMLAttribute {
         return semanticMetadataCollection;
     }
 
-    public void setSemanticMetadataCollection(SemanticMetadata semanticMetadataCollection) {
+    public void setSemanticMetadataCollection(
+        SemanticMetadata semanticMetadataCollection) {
         this.semanticMetadataCollection = semanticMetadataCollection;
     }
 }

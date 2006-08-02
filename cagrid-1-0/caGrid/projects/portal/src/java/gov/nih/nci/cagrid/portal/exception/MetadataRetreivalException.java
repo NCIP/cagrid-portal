@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.exception;
 
+
 /**
  * unchecked exception when there is a problem
  * retreiving appropriate metadata
@@ -11,7 +12,6 @@ package gov.nih.nci.cagrid.portal.exception;
  * To change this template use File | Settings | File Templates.
  */
 public class MetadataRetreivalException extends RuntimeException {
-
     public MetadataRetreivalException(String message, Throwable cause) {
         super(message, cause);
     }

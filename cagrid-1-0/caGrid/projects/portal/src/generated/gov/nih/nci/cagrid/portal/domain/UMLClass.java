@@ -2,12 +2,12 @@ package gov.nih.nci.cagrid.portal.domain;
 
 import java.util.Collection;
 
+
 /**
  * @version 1.0
  * @created 19-Jun-2006 4:08:51 PM
  */
 public class UMLClass {
-
     private java.lang.String className;
     private java.lang.String description;
     private int id;
@@ -20,11 +20,9 @@ public class UMLClass {
     private java.util.Collection semanticMetadataCollection;
 
     public UMLClass() {
-
     }
 
     public void finalize() throws Throwable {
-
     }
 
     public java.lang.String getClassName() {
@@ -124,7 +122,8 @@ public class UMLClass {
         return semanticMetadataCollection;
     }
 
-    public void setSemanticMetadataCollection(Collection semanticMetadataCollection) {
+    public void setSemanticMetadataCollection(
+        Collection semanticMetadataCollection) {
         this.semanticMetadataCollection = semanticMetadataCollection;
     }
 }

@@ -169,12 +169,19 @@ public class IndexService implements DomainObject, GridService {
     }
 
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if ((o == null) || (getClass() != o.getClass())) {
+            return false;
+        }
 
         final IndexService that = (IndexService) o;
 
-        if (!epr.equals(that.epr)) return false;
+        if (!epr.equals(that.epr)) {
+            return false;
+        }
 
         return true;
     }
