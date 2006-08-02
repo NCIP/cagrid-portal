@@ -1,5 +1,9 @@
 To Do:
 
+service contexts need a way to edit service security
+
+service contexts backend for service properties need to have resourceLinks to the main serviceconfiguration instead of own entry in jndi, and share the same serviceconfiguration class
+
 Add an option to have all method implementations call a generic method.  Something like: Object performMethod(String methodName, Object[] params, String[] paramNames).  This will simplify grid implementations that call into an existing implementation object.  It is similar to Java proxy - see java.lang.reflect.InvocationHandler.
 
 I was adding faults to a method, and when I hit done, an error dialog poped up with method "java.util.Vector" and removed my faults
