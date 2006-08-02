@@ -94,7 +94,7 @@
     <action args="JTextField Instance,@TestDir@/test/Temp" method="actionKeyString" />
     <event component="JTextField Instance" keyCode="VK_SHIFT" kind="KEY_PRESSED" modifiers="SHIFT_MASK" type="KeyEvent" />
     <event component="JTextField Instance" keyCode="VK_SHIFT" kind="KEY_RELEASED" type="KeyEvent" />
-    <action args="JTextField Instance,IntroduceTestFiles\TestService" method="actionKeyString" />
+    <action args="JTextField Instance,IntroduceTestFiles/TestService" method="actionKeyString" />
     <action args="JTextField Instance,VK_TAB" method="actionKeyStroke" />
     <action args="Browse 2,VK_TAB" method="actionKeyStroke" />
     <action args="JTextField Instance 4,VK_TAB" method="actionKeyStroke" />
