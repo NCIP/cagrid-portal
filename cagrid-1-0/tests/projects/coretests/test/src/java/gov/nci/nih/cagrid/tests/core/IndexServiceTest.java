@@ -10,6 +10,7 @@ import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 import gov.nci.nih.cagrid.tests.core.steps.ServiceAdvertiseConfigStep;
 import gov.nci.nih.cagrid.tests.core.steps.ServiceDiscoveryStep;
+import gov.nci.nih.cagrid.tests.core.steps.SleepStep;
 
 import java.io.File;
 import java.util.Vector;
@@ -26,7 +27,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @testType integration
  * @steps ServiceCreateStep, ServiceAdvertiseConfigStep
  * @steps GlobusCreateStep, GlobusDeployServiceStep, GlobusStartStep
- * @steps ServiceDiscoveryStep
+ * @steps SleepStep, ServiceDiscoveryStep
  * @steps GlobusStopStep, GlobusCleanupStep
  * @author Patrick McConnell
  */
@@ -59,12 +60,12 @@ public class IndexServiceTest
 		steps.add(new GlobusDeployServiceStep(globus, createServiceStep.getServiceDir()));
 		steps.add(new GlobusDeployServiceStep(globus, indexServiceDir, "deployIndexGlobus"));		
 		steps.add(new GlobusStartStep(globus, port));
+		steps.add(new SleepStep(3000));
 		try {
 			steps.add(new ServiceDiscoveryStep(port, super.endpoint, super.metadataFile));
 		} catch (Exception e) {
 			throw new IllegalArgumentException("could not add discovery step", e);
 		}
-		//steps.add(new CheckServiceMetadataStep(endpoint, metadataFile));
 		steps.add(new GlobusStopStep(globus, port));
 		steps.add(new GlobusCleanupStep(globus));
 		return steps;
