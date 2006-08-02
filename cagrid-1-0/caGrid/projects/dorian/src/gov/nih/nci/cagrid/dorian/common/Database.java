@@ -5,7 +5,9 @@ import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.projectmobius.db.ConnectionManager;
 import org.projectmobius.db.DatabaseException;
@@ -15,7 +17,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.14 2006-07-20 18:44:26 langella Exp $
+ * @version $Id: Database.java,v 1.15 2006-08-02 15:01:13 langella Exp $
  */
 public class Database extends LoggingObject {
 
@@ -88,31 +90,44 @@ public class Database extends LoggingObject {
 	}
 
 	public boolean tableExists(String tableName) throws DorianInternalFault {
-		boolean exists = false;
 		Connection c = null;
+		PreparedStatement stmt = null;
+		ResultSet results = null;
 		try {
-			c = dorian.getConnection();
-			DatabaseMetaData dbMetadata = c.getMetaData();
-			String[] names = { "TABLE" };
-			names[0] = tableName;
-			ResultSet tables = dbMetadata
-					.getTables(null, "%", tableName, names);
-			if (tables.next()) {
-				exists = true;
-			}
-			tables.close();
-			dorian.releaseConnection(c);
+			c = this.dorian.getConnection();
+			stmt = c.prepareStatement("SELECT COUNT(*) FROM " + tableName
+					+ " WHERE 1 = 2");
+			results = stmt.executeQuery();
+			return true; // if table does exist, no rows will ever be
+			// returned
+		} catch (SQLException e) {
+			return false; // if table does not exist, an exception will be
+			// thrown
 		} catch (Exception e) {
-			dorian.releaseConnection(c);
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Unexpected Database Error");
+			fault.setFaultString("Unexpected Database Error " + e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
-			fault = (DorianInternalFault) helper.getFault();
-			throw fault;
+			throw (DorianInternalFault) helper.getFault();
+		} finally {
+			try {
+				if (results != null) {
+					results.close();
+				}
+				if (stmt != null) {
+					stmt.close();
+				}
+			} catch (Exception ex) {
+				log.error(ex.getMessage(), ex);
+			}
+			try {
+				this.dorian.releaseConnection(c);
+			} catch (Exception ex) {
+				log.error(ex.getMessage(), ex);
+			}
+
 		}
-		return exists;
 	}
 
 	public void update(String sql) throws DorianInternalFault {

@@ -22,13 +22,13 @@ Move to Support IMF SAML Standard
 Add policy chaining 
 
 
-
 Testing Tasks
 --------------
 (DONE) 1) moving testing resources (e.g. resources/ca-test) to test/resources (e.g. resources/ca-test)
 (DONE) 2) Add test/resources to testing classpath
 (DONE) 3) Change to loading resources using classloader instead of filesystem
-e.g.
+
+We.g.
 	FROM: 
 	=====
 	public static String DB_CONFIG = "resources" + File.separator + "general-test" + File.separator + "db-config.xml";
