@@ -8,7 +8,7 @@ package gov.nih.nci.cagrid.gts.service.db;
  *          Exp $
  */
 public abstract class TrustLevelTable {
-	public static final String TABLE_NAME = "TRUST_LEVELS";
+	public static final String TABLE_NAME = "trust_levels";
 
 	public static final String NAME = "NAME";
 

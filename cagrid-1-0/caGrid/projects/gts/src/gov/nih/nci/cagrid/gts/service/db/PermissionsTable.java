@@ -8,7 +8,7 @@ package gov.nih.nci.cagrid.gts.service.db;
  *          Exp $
  */
 public abstract class PermissionsTable {
-	public static final String TABLE_NAME = "PERMISSIONS";
+	public static final String TABLE_NAME = "permissions";
 
 	public static final String GRID_IDENTITY = "GRID_IDENTITY";
 

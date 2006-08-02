@@ -18,11 +18,11 @@ import org.projectmobius.db.ConnectionManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Utils.java,v 1.8 2006-08-02 13:05:49 langella Exp $
+ * @version $Id: Utils.java,v 1.9 2006-08-02 13:54:13 langella Exp $
  */
 public class Utils {
 
-	private static final String DB = "TEST_GTS";
+	private static final String DB = "test_gts";
 
 	private static DBManager dbManager = null;
 

@@ -8,7 +8,7 @@ package gov.nih.nci.cagrid.gts.service.db;
  *          Exp $
  */
 public abstract class TrustedAuthorityTable {
-	public static final String TABLE_NAME = "TRUSTED_AUTHORITIES";
+	public static final String TABLE_NAME = "trusted_authorities";
 
 	public static final String NAME = "NAME";
 

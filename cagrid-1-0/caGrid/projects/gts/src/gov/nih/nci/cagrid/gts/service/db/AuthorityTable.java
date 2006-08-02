@@ -9,7 +9,7 @@ package gov.nih.nci.cagrid.gts.service.db;
  */
 public abstract class AuthorityTable {
 
-	public static final String TABLE_NAME = "GTS_AUTHORITIES";
+	public static final String TABLE_NAME = "gts_authorities";
 
 	public static final String GTS_URI = "GTS_URI";
 
