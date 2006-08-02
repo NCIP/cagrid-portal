@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.dorian.common;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.bean.Metadata;
-import gov.nih.nci.cagrid.dorian.ca.DorianCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import junit.framework.TestCase;
 
@@ -15,14 +14,16 @@ import junit.framework.TestCase;
  */
 public class TestMetadataManager extends TestCase {
 
-	private static final String TABLE = "TEST_METADATA";
+	private static final String TABLE = "test_metadata";
 
 	private Database db;
 
 	public void testDelete() {
+
+		MetadataManager mm = new MetadataManager(db, TABLE);
 		try {
-			MetadataManager mm = new MetadataManager(db, TABLE);
-			//mm.destroy();
+			mm.clearDatabase();
+			// mm.destroy();
 			int count = 20;
 
 			// Test Insert;
@@ -30,7 +31,7 @@ public class TestMetadataManager extends TestCase {
 				Metadata data = new Metadata();
 				data.setName("name" + i);
 				data.setValue("value" + i);
-				data.setDescription("description"+i);
+				data.setDescription("description" + i);
 				mm.insert(data);
 				Metadata out = mm.get(data.getName());
 				assertNotNull(out);
@@ -47,13 +48,19 @@ public class TestMetadataManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} 
+		} finally {
+			try {
+				mm.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void testUpdate() {
+		MetadataManager mm = new MetadataManager(db, TABLE);
 		try {
-			MetadataManager mm = new MetadataManager(db, TABLE);
-			//mm.destroy();
+			mm.clearDatabase();
 			int count = 20;
 
 			// Test Insert;
@@ -61,7 +68,7 @@ public class TestMetadataManager extends TestCase {
 				Metadata data = new Metadata();
 				data.setName("name" + i);
 				data.setValue("value" + i);
-				data.setDescription("description"+i);
+				data.setDescription("description" + i);
 				mm.insert(data);
 				Metadata out = mm.get(data.getName());
 				assertNotNull(out);
@@ -72,7 +79,7 @@ public class TestMetadataManager extends TestCase {
 				Metadata data = new Metadata();
 				data.setName("name" + i);
 				data.setValue("changedvalue" + i);
-				data.setDescription("description"+i);
+				data.setDescription("description" + i);
 				mm.update(data);
 				Metadata out = mm.get(data.getName());
 				assertNotNull(out);
@@ -82,13 +89,19 @@ public class TestMetadataManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		} finally {
+			try {
+				mm.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public void testInsert() {
+		MetadataManager mm = new MetadataManager(db, TABLE);
 		try {
-			MetadataManager mm = new MetadataManager(db, TABLE);
-			//mm.destroy();
+			mm.clearDatabase();
 			int count = 20;
 
 			// Test Insert;
@@ -96,7 +109,7 @@ public class TestMetadataManager extends TestCase {
 				Metadata data = new Metadata();
 				data.setName("name" + i);
 				data.setValue("value" + i);
-				data.setDescription("description"+i);
+				data.setDescription("description" + i);
 				mm.insert(data);
 				Metadata out = mm.get(data.getName());
 				assertNotNull(out);
@@ -106,26 +119,30 @@ public class TestMetadataManager extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
-		} 
+		}finally {
+			try {
+				mm.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
-			db=Utils.getDB();
-			assertEquals(0,db.getUsedConnectionCount());
-			DorianCertificateAuthority.CA_TABLE = TABLE;
+			db = Utils.getDB();
+			assertEquals(0, db.getUsedConnectionCount());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
-	
+
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
-			assertEquals(0,db.getUsedConnectionCount());
-			db.destroyDatabase();
+			assertEquals(0, db.getUsedConnectionCount());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

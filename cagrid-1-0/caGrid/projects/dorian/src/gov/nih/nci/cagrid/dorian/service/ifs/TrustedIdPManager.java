@@ -36,9 +36,9 @@ public class TrustedIdPManager extends LoggingObject {
 
 	private Database db;
 
-	private final static String TRUST_MANAGER_TABLE = "TRUST_MANAGER";
+	private final static String TRUST_MANAGER_TABLE = "trust_manager";
 
-	private final static String AUTH_METHODS_TABLE = "TRUST_MANAGER_AUTH_METHODS";
+	private final static String AUTH_METHODS_TABLE = "trust_manager_auth_methods";
 
 	private boolean dbBuilt = false;
 
@@ -50,7 +50,12 @@ public class TrustedIdPManager extends LoggingObject {
 		this.conf = conf;
 	}
 
-
+	public void clearDatabase() throws DorianInternalFault {
+		buildDatabase();
+		db.update("DROP TABLE IF EXISTS " + TRUST_MANAGER_TABLE);
+		db.update("DROP TABLE IF EXISTS " + AUTH_METHODS_TABLE);
+		dbBuilt = false;
+	}
 	private void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
 			if (!this.db.tableExists(TRUST_MANAGER_TABLE)) {
@@ -800,10 +805,5 @@ public class TrustedIdPManager extends LoggingObject {
 		db.update("delete from " + AUTH_METHODS_TABLE);
 	}
 
-
-	public void destroyTable() throws DorianInternalFault {
-		db.update("DROP TABLE IF EXISTS " + TRUST_MANAGER_TABLE);
-		dbBuilt = false;
-	}
 
 }

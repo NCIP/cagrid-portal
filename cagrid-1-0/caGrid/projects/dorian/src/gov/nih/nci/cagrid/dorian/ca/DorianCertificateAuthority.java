@@ -31,7 +31,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  */
 public class DorianCertificateAuthority extends LoggingObject implements CertificateAuthority {
 
-	public static String CA_TABLE = "CERTIFICATE_AUTHORITY";
+	public static String CA_TABLE = "certificate_authority";
 
 	private Database db;
 
@@ -70,6 +70,7 @@ public class DorianCertificateAuthority extends LoggingObject implements Certifi
 	private void buildDatabase() throws CertificateAuthorityFault {
 		try {
 			if (!dbBuilt) {
+				db.createDatabaseIfNeeded();
 				if (!this.db.tableExists(CA_TABLE)) {
 					String users = "CREATE TABLE " + CA_TABLE + " (" + "ID VARCHAR(255) NOT NULL PRIMARY KEY,"
 						+ "CERTIFICATE TEXT NOT NULL," + "PRIVATE_KEY TEXT NOT NULL," + "INDEX document_index (ID));";
@@ -94,10 +95,10 @@ public class DorianCertificateAuthority extends LoggingObject implements Certifi
 	}
 
 
-	public void destroyTable() throws CertificateAuthorityFault {
+	public void clearDatabase() throws CertificateAuthorityFault {
 		try {
-			db.update("DROP TABLE IF EXISTS " + CA_TABLE);
-			dbBuilt = false;
+			buildDatabase();
+			db.update("delete from " + CA_TABLE);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();

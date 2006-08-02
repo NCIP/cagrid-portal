@@ -72,11 +72,13 @@ public class TestIFS extends TestCase {
 
 
 	public void testRenewUserCredentials() {
+		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
-			IFS ifs = new IFS(conf, db, ca);
+		
+			ifs = new IFS(conf, db, ca);
 			String uid = "user";
 			String adminSubject = UserManager.getUserSubject(ca.getCACertificate().getSubjectDN().getName(), idp
 				.getIdp().getId(), INITIAL_ADMIN);
@@ -109,18 +111,24 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
+		}finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-
 	}
 
 
 	public void testFindRemoveUpdateUsers() {
+		IFS ifs = null;
 		try {
 			int times = 3;
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
-			IFS ifs = new IFS(conf, db, ca);
+			ifs = new IFS(conf, db, ca);
 			String uidPrefix = "user";
 			String adminSubject = UserManager.getUserSubject(ca.getCACertificate().getSubjectDN().getName(), idp
 				.getIdp().getId(), INITIAL_ADMIN);
@@ -169,18 +177,25 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
+		}finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
 
 
 	public void testCreateProxy() {
+		IFS ifs = null;
 		try {
 
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
-			IFS ifs = new IFS(conf, db, ca);
+			ifs = new IFS(conf, db, ca);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
@@ -189,19 +204,26 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
+		}finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
 
 
 	public void testCreateProxySuspendedIdP() {
+		IFS ifs = null;
 		try {
 
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			idp.getIdp().setStatus(TrustedIdPStatus.Suspended);
 			IFSConfiguration conf = getConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
-			IFS ifs = new IFS(conf, db, ca);
+			ifs = new IFS(conf, db, ca);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
@@ -214,18 +236,25 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
+		}finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
 
 
 	public void testCreateProxyAutoApproval() {
+		IFS ifs = null;
 		try {
 			String username = "user";
 			IdPContainer idp = this.getTrustedIdpAutoApprove("My IdP");
 			IFSConfiguration conf = getExpiringCredentialsConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
-			IFS ifs = new IFS(conf, db, ca);
+			ifs = new IFS(conf, db, ca);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
 				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
@@ -250,17 +279,24 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
+		}finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testCreateProxyManualApproval() {
+		IFS ifs = null;
 		try {
 			String username = "user";
 			IdPContainer idp = this.getTrustedIdpManualApprove("My IdP");
 			IFSConfiguration conf = getExpiringCredentialsConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
-			IFS ifs = new IFS(conf, db, ca);
+			ifs = new IFS(conf, db, ca);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
 				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
@@ -276,18 +312,24 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
+		}finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testCreateProxyAutoApprovalAutoRenewal() {
+		IFS ifs = null;
 		try {
-
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			String username = "user";
 			IFSConfiguration conf = getExpiringCredentialsConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
-			IFS ifs = new IFS(conf, db, ca);
+			ifs = new IFS(conf, db, ca);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
 				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
@@ -313,17 +355,24 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
+		}finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testCreateProxyManualApprovalAutoRenewal() {
+		IFS ifs = null;
 		try {
 			String username = "user";
 			IdPContainer idp = this.getTrustedIdpManualApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getExpiringCredentialsConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
-			IFS ifs = new IFS(conf, db, ca);
+			ifs = new IFS(conf, db, ca);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
 				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
@@ -359,16 +408,23 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
+		}finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testCreateProxyInvalidProxyValid() {
+		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
-			IFS ifs = new IFS(conf, db, ca);
+		    ifs = new IFS(conf, db, ca);
 			Thread.sleep(500);
 			try {
 				ProxyLifetime valid = new ProxyLifetime();
@@ -385,16 +441,23 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
+		}finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testCreateProxyInvalidAuthenticationMethod() {
+		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
-			IFS ifs = new IFS(conf, db, ca);
+			ifs = new IFS(conf, db, ca);
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
@@ -406,18 +469,25 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
+		}finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testCreateProxyUntrustedIdP() {
+		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			IdPContainer idp2 = this.getTrustedIdpAutoApproveAutoRenew("My IdP 2");
 
 			IFSConfiguration conf = getConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
-			IFS ifs = new IFS(conf, db, ca);
+			ifs = new IFS(conf, db, ca);
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
@@ -429,16 +499,23 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
+		}finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testCreateProxyExpiredAssertion() {
+		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
-			IFS ifs = new IFS(conf, db, ca);
+			ifs = new IFS(conf, db, ca);
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
@@ -450,16 +527,23 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
+		}finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testGetTrustedIdPs() {
+		IFS ifs = null;
 		try {
 			IdPContainer idp0 = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getExpiringCredentialsConf();
 			conf.setInitalTrustedIdP(idp0.getIdp());
-			IFS ifs = new IFS(conf, db, ca);
+			ifs = new IFS(conf, db, ca);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
 				.getSubjectDN().getName(), idp0.getIdp().getId(), conf.getInitialUser().getUID()));
 			int times = 3;
@@ -500,6 +584,12 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
+		}finally {
+			try {
+				ifs.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -748,7 +838,6 @@ public class TestIFS extends TestCase {
 		try {
 			assertEquals(0, db.getUsedConnectionCount());
 			assertEquals(0, db.getRootUsedConnectionCount());
-			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());

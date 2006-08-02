@@ -28,7 +28,7 @@ import org.bouncycastle.jce.PKCS10CertificationRequest;
  */
 public class TestCredentialsManager extends TestCase {
 
-	private static final String TABLE = "TEST_CREDENTIALS";
+	private static final String TABLE = "test_credentials";
 
 	private static final String CA_USER = "CA";
 
@@ -225,8 +225,8 @@ public class TestCredentialsManager extends TestCase {
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
+			cred.clearDatabase();
 			assertEquals(0, db.getUsedConnectionCount());
-			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

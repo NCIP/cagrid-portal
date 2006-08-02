@@ -1,7 +1,7 @@
 <dorian>
 	<resource name="DorianConfiguration" class="gov.nih.nci.cagrid.dorian.service.DorianConfiguration">
 		<dorian-config>
-			<dorian-internal-id>TEST_DORIAN</dorian-internal-id>
+			<dorian-internal-id>test_dorianN</dorian-internal-id>
 		    <database>
 			<name/>
 			<driver>com.mysql.jdbc.Driver</driver>

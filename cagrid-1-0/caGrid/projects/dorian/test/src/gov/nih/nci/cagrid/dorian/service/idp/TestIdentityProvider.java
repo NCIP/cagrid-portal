@@ -47,9 +47,10 @@ public class TestIdentityProvider extends TestCase {
 
 
 	public void testAutomaticRegistration() {
+		IdentityProvider idp = null;
 		try {
 
-			IdentityProvider idp = new IdentityProvider(conf, db, ca);
+			idp = new IdentityProvider(conf, db, ca);
 			conf.setRegistrationPolicy(new AutomaticRegistrationPolicy());
 			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
 			Application a = createApplication();
@@ -64,13 +65,21 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testManualRegistration() {
+		IdentityProvider idp = null;
 		try {
-			IdentityProvider idp = new IdentityProvider(conf, db, ca);
+
+			idp = new IdentityProvider(conf, db, ca);
 			conf.setRegistrationPolicy(new ManualRegistrationPolicy());
 			assertEquals(ManualRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
 			Application a = createApplication();
@@ -90,13 +99,21 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testBadRegisterWithIdP() {
+		IdentityProvider idp = null;
 		try {
-			IdentityProvider idp = new IdentityProvider(conf, db, ca);
+
+			idp = new IdentityProvider(conf, db, ca);
 			conf.setRegistrationPolicy(new AutomaticRegistrationPolicy());
 			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
 			// Application a = createApplication();
@@ -135,13 +152,21 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testBadRemoveIdPUserNoSuchUser() {
+		IdentityProvider idp = null;
 		try {
-			IdentityProvider idp = new IdentityProvider(conf, db, ca);
+
+			idp = new IdentityProvider(conf, db, ca);
 			conf.setRegistrationPolicy(new AutomaticRegistrationPolicy());
 			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
 			Application a = createApplication();
@@ -161,13 +186,21 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testBadRegisterWithIdPTwoIdenticalUsers() {
+		IdentityProvider idp = null;
 		try {
-			IdentityProvider idp = new IdentityProvider(conf, db, ca);
+
+			idp = new IdentityProvider(conf, db, ca);
 			conf.setRegistrationPolicy(new AutomaticRegistrationPolicy());
 			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
 			Application a = createApplication();
@@ -179,13 +212,20 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 
 	public void testMultipleUsers() {
+		IdentityProvider idp = null;
 		try {
-			IdentityProvider idp = new IdentityProvider(conf, db, ca);
+			idp = new IdentityProvider(conf, db, ca);
 			conf.setRegistrationPolicy(new ManualRegistrationPolicy());
 			assertEquals(ManualRegistrationPolicy.class.getName(), conf.getRegistrationPolicy().getClass().getName());
 			BasicAuthCredential cred = getAdminCreds();
@@ -240,6 +280,12 @@ public class TestIdentityProvider extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -422,7 +468,6 @@ public class TestIdentityProvider extends TestCase {
 		super.setUp();
 		try {
 			assertEquals(0, db.getUsedConnectionCount());
-			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

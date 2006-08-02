@@ -350,6 +350,7 @@ public class TestTrustedIdPManager extends TestCase {
 			conf.setUserPolicies(Utils.getUserPolicies());
 			ca = Utils.getCA(db);
 			tm = new TrustedIdPManager(conf, db);
+			tm.clearDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -361,7 +362,7 @@ public class TestTrustedIdPManager extends TestCase {
 		super.setUp();
 		try {
 			assertEquals(0, db.getUsedConnectionCount());
-			db.destroyDatabase();
+			tm.clearDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

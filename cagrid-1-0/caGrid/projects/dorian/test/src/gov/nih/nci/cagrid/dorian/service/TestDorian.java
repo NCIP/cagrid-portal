@@ -189,7 +189,7 @@ public class TestDorian extends TestCase {
 		} finally {
 			try {
 				assertEquals(0, jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
+				jm.clearDatabase();
 				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
@@ -289,7 +289,7 @@ public class TestDorian extends TestCase {
 		} finally {
 			try {
 				assertEquals(0, jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
+				jm.clearDatabase();
 				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
@@ -324,7 +324,7 @@ public class TestDorian extends TestCase {
 		} finally {
 			try {
 				assertEquals(0, jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
+				jm.clearDatabase();
 				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
@@ -336,9 +336,6 @@ public class TestDorian extends TestCase {
 
 	public void testAutoApprovalAutoRenewal() {
 		try {
-			if (jm != null) {
-				jm.getDatabase().destroyDatabase();
-			}
 			jm = new Dorian(expiringCredentialsResource, "localhost");
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
@@ -376,7 +373,7 @@ public class TestDorian extends TestCase {
 		} finally {
 			try {
 				assertEquals(0, jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
+				jm.clearDatabase();
 				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
@@ -388,9 +385,6 @@ public class TestDorian extends TestCase {
 
 	public void testManualApprovalAutoRenewal() {
 		try {
-			if (jm != null) {
-				jm.getDatabase().destroyDatabase();
-			}
 			jm = new Dorian(expiringCredentialsResource, "localhost");
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
@@ -437,7 +431,7 @@ public class TestDorian extends TestCase {
 		} finally {
 			try {
 				assertEquals(0, jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
+				jm.clearDatabase();
 				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
@@ -449,9 +443,6 @@ public class TestDorian extends TestCase {
 
 	public void testAutoApprovalManualRenewal() {
 		try {
-			if (jm != null) {
-				jm.getDatabase().destroyDatabase();
-			}
 			jm = new Dorian(expiringCredentialsResource, "localhost");
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
@@ -500,7 +491,7 @@ public class TestDorian extends TestCase {
 		} finally {
 			try {
 				assertEquals(0, jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
+				jm.clearDatabase();
 				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);
@@ -512,9 +503,6 @@ public class TestDorian extends TestCase {
 
 	public void testManualApprovalManualRenewal() {
 		try {
-			if (jm != null) {
-				jm.getDatabase().destroyDatabase();
-			}
 			jm = new Dorian(expiringCredentialsResource, "localhost");
 			assertNotNull(jm.getConfiguration());
 			assertNotNull(jm.getDatabase());
@@ -571,7 +559,7 @@ public class TestDorian extends TestCase {
 		} finally {
 			try {
 				assertEquals(0, jm.getDatabase().getUsedConnectionCount());
-				jm.getDatabase().destroyDatabase();
+				jm.clearDatabase();
 				jm = null;
 			} catch (Exception e) {
 				FaultUtil.printFault(e);

@@ -25,7 +25,7 @@ import java.sql.Statement;
  */
 public class CredentialsManager extends LoggingObject {
 
-	public static String CREDENTIALS_TABLE = "CREDENTIALS";
+	public static String CREDENTIALS_TABLE = "credentials";
 
 	private Database db;
 
@@ -228,9 +228,9 @@ public class CredentialsManager extends LoggingObject {
 	}
 
 
-	public void destroyTable() throws DorianInternalFault {
-		db.update("DROP TABLE IF EXISTS " + CREDENTIALS_TABLE);
-		dbBuilt = false;
+	public void clearDatabase() throws DorianInternalFault {
+		buildDatabase();
+		db.update("delete from " + CREDENTIALS_TABLE);
 	}
 
 }

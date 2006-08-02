@@ -133,9 +133,9 @@ public class MetadataManager extends LoggingObject {
 		}
 	}
 
-	public void destroy() throws DorianInternalFault {
-		db.update("DROP TABLE IF EXISTS " + table);
-		dbBuilt = false;
+	public void clearDatabase() throws DorianInternalFault {
+		this.buildDatabase();
+		db.update("DELETE FROM " + table);
 	}
 
 	private void buildDatabase() throws DorianInternalFault {

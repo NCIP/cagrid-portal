@@ -53,9 +53,7 @@ public class TestUserManager extends TestCase {
 
 	public void testSingleUser() {
 		try {
-
 			// Test adding user
-
 			IFSUser user = new IFSUser();
 			user.setIdPId(INIT_USER + 1);
 			user.setUID("user");
@@ -545,8 +543,8 @@ public class TestUserManager extends TestCase {
 	protected void tearDown() throws Exception {
 		super.setUp();
 		try {
+			um.clearDatabase();
 			assertEquals(0, db.getUsedConnectionCount());
-			db.destroyDatabase();
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

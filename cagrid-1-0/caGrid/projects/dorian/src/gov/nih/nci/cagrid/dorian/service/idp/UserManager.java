@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class UserManager extends LoggingObject {
 
-	private static final String IDP_USERS_TABLE = "IDP_USERS";
+	private static final String IDP_USERS_TABLE = "idp_users";
 
 	private Database db;
 
@@ -569,9 +569,9 @@ public class UserManager extends LoggingObject {
 	}
 
 
-	public void destroy() throws DorianInternalFault {
-		db.update("DROP TABLE IF EXISTS " + IDP_USERS_TABLE);
-		dbBuilt = false;
+	public void clearDatabase() throws DorianInternalFault {
+		this.buildDatabase();
+		db.update("delete FROM " + IDP_USERS_TABLE);
 	}
 
 }
