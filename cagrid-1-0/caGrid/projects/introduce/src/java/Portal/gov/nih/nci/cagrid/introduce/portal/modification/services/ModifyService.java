@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -55,8 +56,10 @@ public class ModifyService extends JDialog {
 	private JLabel servicePackageNameLabel = null;
 
 	private JTextField servicePackageNameTextField = null;
-	
+
 	private ServiceTypeTreeNode node;
+
+	private JPanel securityPanel = null;
 
 
 	/**
@@ -105,7 +108,6 @@ public class ModifyService extends JDialog {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.setSize(new java.awt.Dimension(335, 221));
 		this.setContentPane(getMainPanel());
 		this.setTitle("Modify Service");
 
@@ -119,6 +121,12 @@ public class ModifyService extends JDialog {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 0;
+			gridBagConstraints12.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints12.weightx = 1.0D;
+			gridBagConstraints12.weighty = 1.0D;
+			gridBagConstraints12.gridy = 1;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
@@ -129,11 +137,12 @@ public class ModifyService extends JDialog {
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.weightx = 1.0D;
-			gridBagConstraints.gridy = 1;
+			gridBagConstraints.gridy = 2;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(getButtonPanel(), gridBagConstraints);
 			mainPanel.add(getContentPanel(), gridBagConstraints2);
+			mainPanel.add(getSecurityPanel(), gridBagConstraints12);
 		}
 		return mainPanel;
 	}
@@ -146,9 +155,13 @@ public class ModifyService extends JDialog {
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 0;
+			gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints11.gridy = 1;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.insets = new java.awt.Insets(5, 5, 5, 5);
-			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.gridy = 2;
 			gridBagConstraints1.gridx = 0;
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new GridBagLayout());
@@ -343,6 +356,19 @@ public class ModifyService extends JDialog {
 			servicePackageNameTextField = new JTextField();
 		}
 		return servicePackageNameTextField;
+	}
+
+
+	/**
+	 * This method initializes securityPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getSecurityPanel() {
+		if (securityPanel == null) {
+			securityPanel = new ServiceSecurityPanel(service.getService().getServiceSecurity());
+		}
+		return securityPanel;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"

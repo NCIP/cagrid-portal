@@ -69,17 +69,18 @@ public class ServicePopUpMenu extends JPopupMenu {
 	private JMenuItem getModificationMenuItem() {
 		if (modificationMenuItem == null) {
 			modificationMenuItem = new JMenuItem();
-			modificationMenuItem.setText("Modify Service");
+			modificationMenuItem.setText("Modify Service Context");
 			modificationMenuItem.addMouseListener(new MouseAdapter() {
 
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
+					
 					ModifyService comp = new ModifyService(node, new SpecificServiceInformation(node.getInfo(),
 						node.getServiceType()));
 					// PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 					// new ModifyService(newNode, new
 					// SpecificServiceInformation(node.getInfo(),service)));
-					comp.setSize(new Dimension(500,200));
+					comp.pack();
 					PortalUtils.centerWindow(comp);
 					comp.setVisible(true);
 				}
