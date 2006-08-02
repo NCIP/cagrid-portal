@@ -14,13 +14,16 @@ import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionListener;
 import gov.nih.nci.cagrid.data.ui.browser.QueryProcessorClassConfigDialog;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
+import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
@@ -77,7 +80,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private JTextField domainModelNameTextField = null;
 	private JPanel domainModelSelectionPanel = null;
 	
-	private transient XMLDataModelService gmeHandle = null;
 	private transient Project mostRecentProject = null;
 	private transient Map packageToNamespace = null;
 	
@@ -401,14 +403,26 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	
 	private XMLDataModelService getGME() throws MobiusException {
-		if (gmeHandle == null) {
-			String serviceId = ExtensionTools.getProperty(getExtensionDescription().getProperties(), "GME_URL");
-			GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-			gmeHandle = (XMLDataModelService) GridServiceResolver.getInstance()
-				.getGridService(serviceId);
+		String serviceId = null;
+		// try to find the GME url as configured in the introduce properties
+		List discoveryExtensions = ExtensionsLoader.getInstance().getDiscoveryExtensions();
+		for (int i = 0; i < discoveryExtensions.size(); i++) {
+			DiscoveryExtensionDescriptionType disc = (DiscoveryExtensionDescriptionType) discoveryExtensions.get(i);
+			if (disc.getName().equals("gme_discovery")) {
+				Properties props = disc.getProperties();
+				serviceId = ExtensionTools.getProperty(props, "GME_URL");
+			}				
 		}
+		if (serviceId == null) {
+			// get GME url from properties
+			serviceId = ExtensionTools.getProperty(getExtensionDescription().getProperties(), "GME_URL");
+		}
+		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
+		XMLDataModelService gmeHandle = (XMLDataModelService) GridServiceResolver.getInstance()
+			.getGridService(serviceId);
 		return gmeHandle;
 	}
+	
 	
 	private File getSchemaDir() {
 		String dir = getServiceInfo().getBaseDirectory().getAbsolutePath() + File.separator +

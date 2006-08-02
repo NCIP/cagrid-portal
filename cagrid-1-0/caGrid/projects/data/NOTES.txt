@@ -17,9 +17,9 @@ TODO:
 13[ ]: Need a simplified "SDK Backed" data service option (should set serializers, cql processor, add jars, etc automatically)
 14[D]: Type serialization table need to enable multi-select for setting serialization option
 15[D]: Data GUI needs a way to select a whole project, multiple packages, and classes from them
-16[ ]: Query Results Iterator / WS-Enumeration support (wsEnum project)
+16[I]: Query Results Iterator / WS-Enumeration support (wsEnum project)
 17[ ]: Identifier Resolution Support (Possibly through an operation provider)
-18[ ]: Pull GME url from introduce properties
+18[D]: Pull GME url from introduce properties
 
 BUGS:
 I added a package and it said that it could not find a schema, so I hit cancel.  No model was added to the models list (correctly).  Next I selected a different package, and it popped up the Package incompatibility dialog.  This should not pop up because there are no models added yet.
