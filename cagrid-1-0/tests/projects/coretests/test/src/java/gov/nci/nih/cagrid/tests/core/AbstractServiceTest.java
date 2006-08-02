@@ -41,7 +41,9 @@ public abstract class AbstractServiceTest
 	protected int port;
 	protected ServiceCreateStep createServiceStep;
 	protected File metadataFile;
-
+	protected File gmeServiceDir;
+	protected File cadsrServiceDir;
+	
 	protected void init(String serviceName)
 	{
 		// service name
@@ -100,7 +102,17 @@ public abstract class AbstractServiceTest
 		}
 		
 		// set metadataFile
-		metadataFile = new File(testDir, "etc" + File.separator + IntroduceServiceInfo.INTRODUCE_SERVICEMETADATA_FILENAME);		
+		metadataFile = new File(testDir, "etc" + File.separator + IntroduceServiceInfo.INTRODUCE_SERVICEMETADATA_FILENAME);
+		
+		// set gme and cadsr service dirs
+		gmeServiceDir = new File(System.getProperty("gme.dir",
+			".." + File.separator + ".." + File.separator + ".." + File.separator + 
+			"caGrid" + File.separator + "projects" + File.separator + "gme"
+		));		
+		cadsrServiceDir = new File(System.getProperty("cadsr.dir",
+			".." + File.separator + ".." + File.separator + ".." + File.separator + 
+			"caGrid" + File.separator + "projects" + File.separator + "cadsr"
+		));
 	}
 	
 	@SuppressWarnings("unchecked")
