@@ -105,7 +105,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-data-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-security-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="ext/lib/cglib-full-2.0.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/gef_modified.jar"/>
 	<classpathentry kind="lib" path="ext/lib/GlobalModelExchange.jar"/>
