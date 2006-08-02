@@ -109,7 +109,7 @@
 			</fileset>
 		</copy>
 		<!--copy over the schema service files-->
-		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}/${service.deployment.dir.name}">
+		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}/${introduce.skeleton.service.name}">
 			<fileset dir="build/schema/${introduce.skeleton.service.name}">
 				<include name="**\*" />
 			</fileset>
