@@ -67,24 +67,19 @@ public class ServicesPopUpMenu extends JPopupMenu {
 					service.setMethods(new MethodsType());
 					service.setResourcePropertiesList(new ResourcePropertiesListType());
 					service.setResourceFrameworkType(IntroduceConstants.INTRODUCE_BASE_RESOURCE);
-					try {
-						service.setServiceSecurity((ServiceSecurity) ObjectSerializer.clone(node.getInfo()
-							.getServices().getService(0).getServiceSecurity()));
-					} catch (SerializationException e1) {
-						e1.printStackTrace();
-					} catch (DeserializationException e1) {
-						e1.printStackTrace();
-					}
+					
+						service.setServiceSecurity(new ServiceSecurity());
+					
 					ServiceTypeTreeNode newNode = node.addService(service);
 					ModifyService comp = new ModifyService(newNode, new SpecificServiceInformation(node.getInfo(),
 						service));
 					// PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 					// new ModifyService(newNode, new
 					// SpecificServiceInformation(node.getInfo(),service)));
-					comp.setSize(new Dimension(500, 200));
+					comp.setSize(new Dimension(500,200));
 					PortalUtils.centerWindow(comp);
 					comp.setVisible(true);
-
+					
 				}
 
 			});
