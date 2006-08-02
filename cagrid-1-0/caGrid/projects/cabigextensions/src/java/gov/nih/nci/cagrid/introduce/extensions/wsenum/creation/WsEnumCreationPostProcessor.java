@@ -12,11 +12,13 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
 import java.io.File;
+import java.util.List;
 import java.util.Properties;
 
 import javax.xml.namespace.QName;
@@ -60,21 +62,40 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		throws CreationExtensionException {
 		String serviceName = props.getProperty(
 			IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-		// copy the schema
-		File enumSchemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
-			+ File.separator + "schema" + File.separator + "enumeration.xsd");
-		File schemaOutFile= new File(serviceDir.getAbsolutePath() + File.separator 
-			+ "schema" + File.separator + serviceName + File.separator + "enumeration.xsd");
+		// copy the schemas
+		File schemaBaseDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "cagrid_wsEnum"
+			+ File.separator + "schema" + File.separator);
+		List schemas = Utils.recursiveListFiles(schemaBaseDir, new FileFilters.XSDFileFilter());
+		for (int i = 0; i < schemas.size(); i++) {
+			File schemaFile = (File) schemas.get(i);
+			File schemaOutFile = new File(serviceDir.getAbsolutePath() + File.separator 
+				+ "schema" + File.separator + serviceName + File.separator + schemaFile.getName());
+			try {
+				Utils.copyFile(schemaFile, schemaOutFile);
+			} catch (Exception ex) {
+				throw new CreationExtensionException("Error copying enumeration schema file: " + ex.getMessage(), ex);
+			}
+		}
+		
+		// copy the wsdl
+		File enumWsdlFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "cagrid_wsEnum"
+			+ File.separator + "schema" + File.separator + "enumeration.wsdl");
+		File enumWsdlOut = new File(serviceDir.getAbsolutePath() + File.separator 
+			+ "schema" + File.separator + serviceName + File.separator + "enumeration.wsdl");
 		try {
-			Utils.copyFile(enumSchemaFile, schemaOutFile);
+			Utils.copyFile(enumWsdlFile, enumWsdlOut);
 		} catch (Exception ex) {
-			throw new CreationExtensionException("Error copying enumeration schema file: " + ex.getMessage(), ex);
+			throw new CreationExtensionException("Error copying enumeration wsdl file: " + ex.getMessage(), ex);
 		}
 		
 		// add the namespace type for the enumeration schema
 		NamespaceType nsType = null;
 		try {
-			nsType = CommonTools.createNamespaceType(schemaOutFile.getAbsolutePath());
+			File enumSchema = new File(serviceDir.getAbsolutePath() + File.separator 
+				+ "schema" + File.separator + serviceName + File.separator + "enumeration.xsd");
+			nsType = CommonTools.createNamespaceType(enumSchema.getAbsolutePath());
+			// fix the schema location on the namespace type
+			nsType.setLocation("."  + File.separator + "enumeration.xsd");
 		} catch (MobiusException ex) {
 			throw new CreationExtensionException("Error creating namespace type from schema: " + ex.getMessage(), ex);
 		}
