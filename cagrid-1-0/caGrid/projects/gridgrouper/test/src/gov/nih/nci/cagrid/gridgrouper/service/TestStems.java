@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.service;
 
+import netscape.security.PrivilegeTable;
 import edu.internet2.middleware.grouper.RegistryReset;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
@@ -162,30 +163,50 @@ public class TestStems extends TestCase {
 			assertEquals(USER_A, privs[0].getSubject());
 			assertEquals(StemPrivilegeType.stem, privs[0].getPrivilegeType());
 			assertEquals(root.getName(), privs[0].getStemName());
-			
+
 			StemPrivilege[] privs2 = grouper.getStemPrivileges(
 					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
 					getStemIdentifier(root), ADMIN_USER);
 			assertNotNull(privs2);
 			assertEquals(0, privs2.length);
-			
-			//TODO: Should I be able to call with anon user?
 
-			String[] subs1 = grouper.getSubjectsWithStemPrivilege(
-					ADMIN_USER,
+			// TODO: Should I be able to call with anon user?s
+			String[] subs1 = grouper.getSubjectsWithStemPrivilege(ADMIN_USER,
 					getStemIdentifier(root), StemPrivilegeType.stem);
 			assertNotNull(subs1);
 			assertEquals(1, subs1.length);
 			assertEquals(USER_A, subs1[0]);
-			
-			//TODO: Should I be able to call with anon user?
-			
-			String[] subs2 = grouper.getSubjectsWithStemPrivilege(
-					ADMIN_USER,
+
+			// TODO: Should I be able to call with anon user?
+			String[] subs2 = grouper.getSubjectsWithStemPrivilege(ADMIN_USER,
 					getStemIdentifier(root), StemPrivilegeType.create);
 			assertNotNull(subs2);
 			assertEquals(0, subs2.length);
-			
+
+			try {
+
+				grouper
+						.revokeStemPrivilege(
+								AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+								getStemIdentifier(root), USER_A,
+								StemPrivilegeType.stem);
+				fail("Should have failed, insufficient privilege!!!");
+			} catch (InsufficientPrivilegeFault e) {
+
+			}
+
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(root), USER_A, StemPrivilegeType.stem));
+
+			grouper.revokeStemPrivilege(
+					USER_A,
+					getStemIdentifier(root), USER_A, StemPrivilegeType.stem);
+
+			assertFalse(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(root), USER_A, StemPrivilegeType.stem));
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
