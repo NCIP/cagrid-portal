@@ -150,6 +150,7 @@
 			<artifact refid="discovery.jars" />
             <artifact refid="syncgts.client.jars"/>
              <artifact refid="syncgts.config.docs"/>
+			<artifact refid="security.metadata.jars" />
         </resolveDependencies>
         <ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -244,6 +245,7 @@
 			<artifact refid="opensaml.endorsed" />
 			<artifact refid="gts.client.jars" />
 			<artifact refid="introduce.servicesecurity.jars" />
+			<artifact refid="security.metadata.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/dorian/schema/Dorian">
 			<artifact refid="metadata.schemas" />
@@ -262,6 +264,7 @@
 			<artifact refid="core.test.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="introduce.servicesecurity.jars" />
+			<artifact refid="security.metadata.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/gridgrouper/schema/GridGrouper">
 			<artifact refid="metadata.schemas" />
@@ -285,6 +288,7 @@
 			<artifact refid="gridca.resources" />
 			<artifact refid="mobius.jars" />
 			<artifact refid="introduce.servicesecurity.jars" />
+			<artifact refid="security.metadata.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/gts/schema/GTS">
 			<artifact refid="metadata.schemas" />
@@ -307,6 +311,7 @@
 			<artifact refid="mobius.jars" />
 			<artifact refid="gts.client.jars" />
 			<artifact refid="introduce.servicesecurity.jars" />
+			<artifact refid="security.metadata.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/syncgts/schema/SyncGTS">
 			<artifact refid="metadata.schemas" />

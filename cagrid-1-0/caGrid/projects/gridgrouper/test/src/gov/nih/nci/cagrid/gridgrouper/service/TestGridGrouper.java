@@ -38,7 +38,7 @@ public class TestGridGrouper extends TestCase {
 
 			}
 
-			GridGrouper gg = new GridGrouper();
+			new GridGrouper();
 			try {
 				StemFinder.findByName(session, GridGrouper.GROUPER_ADMIN_STEM_NAME);
 

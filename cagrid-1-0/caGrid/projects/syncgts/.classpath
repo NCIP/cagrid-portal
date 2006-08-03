@@ -69,7 +69,6 @@
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-data-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-security-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
