@@ -4,6 +4,7 @@ import edu.internet2.middleware.grouper.RegistryReset;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.service.tools.GridGrouperBootstrapper;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
@@ -36,12 +37,14 @@ public class TestStems extends TestCase {
 			assertNotNull(displayExtension);
 			assertNotNull(description);
 			String updatedDisplayExtension = displayExtension + " Update";
-			String updatedDescription = displayExtension + " Description Update";
+			String updatedDescription = displayExtension
+					+ " Description Update";
 
 			try {
 				grouper.updateStemDisplayExtension(
 						AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
 						getStemIdentifier(root), updatedDisplayExtension);
+				fail("Should have failed, insufficient privilege!!!");
 			} catch (InsufficientPrivilegeFault f) {
 
 			}
@@ -50,36 +53,111 @@ public class TestStems extends TestCase {
 				grouper.updateStemDescription(
 						AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
 						getStemIdentifier(root), updatedDescription);
+				fail("Should have failed, insufficient privilege!!!");
 			} catch (InsufficientPrivilegeFault f) {
 
 			}
-			
+
 			checkStem(grouper.getStem(
 					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
 					getRootStemIdentifier()), displayExtension, description);
 
 			// Now create an admin user and do the update
 			GridGrouperBootstrapper.addAdminMember(ADMIN_USER);
+			assertTrue(grouper
+					.hasStemPrivilege(
+							AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+							getStemIdentifier(root), ADMIN_USER,
+							StemPrivilegeType.stem));
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(root), ADMIN_USER,
+					StemPrivilegeType.create));
 			grouper.updateStemDisplayExtension(ADMIN_USER,
 					getStemIdentifier(root), updatedDisplayExtension);
 
 			grouper.updateStemDescription(ADMIN_USER, getStemIdentifier(root),
 					updatedDescription);
-			
+
 			checkStem(grouper.getStem(
 					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
-					getRootStemIdentifier()), updatedDisplayExtension, updatedDescription);
-			
+					getRootStemIdentifier()), updatedDisplayExtension,
+					updatedDescription);
+
 			grouper.updateStemDisplayExtension(ADMIN_USER,
 					getStemIdentifier(root), displayExtension);
 
 			grouper.updateStemDescription(ADMIN_USER, getStemIdentifier(root),
 					description);
-			
+
 			checkStem(grouper.getStem(
 					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
 					getRootStemIdentifier()), displayExtension, description);
+
+			// Now try with another user
+
+			assertFalse(grouper
+					.hasStemPrivilege(
+							AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+							getStemIdentifier(root), USER_A,
+							StemPrivilegeType.stem));
+			assertFalse(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(root), USER_A,
+					StemPrivilegeType.create));
+
+			try {
+				grouper.grantStemPrivilege(AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, getStemIdentifier(root),
+						USER_A, StemPrivilegeType.stem);
+				fail("Should have failed, insufficient privilege!!!");
+			} catch (InsufficientPrivilegeFault e) {
+
+			}
 			
+			assertFalse(grouper
+					.hasStemPrivilege(
+							AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+							getStemIdentifier(root), USER_A,
+							StemPrivilegeType.stem));
+			assertFalse(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(root), USER_A,
+					StemPrivilegeType.create));
+			
+			grouper.grantStemPrivilege(ADMIN_USER, getStemIdentifier(root),
+					USER_A, StemPrivilegeType.stem);
+			
+			assertTrue(grouper
+					.hasStemPrivilege(
+							AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+							getStemIdentifier(root), USER_A,
+							StemPrivilegeType.stem));
+			assertFalse(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(root), USER_A,
+					StemPrivilegeType.create));
+
+			//TODO: Start here
+			grouper.updateStemDisplayExtension(USER_A,
+					getStemIdentifier(root), updatedDisplayExtension);
+
+			grouper.updateStemDescription(USER_A, getStemIdentifier(root),
+					updatedDescription);
+
+			checkStem(grouper.getStem(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getRootStemIdentifier()), updatedDisplayExtension,
+					updatedDescription);
+
+			grouper.updateStemDisplayExtension(USER_A,
+					getStemIdentifier(root), displayExtension);
+
+			grouper.updateStemDescription(USER_A, getStemIdentifier(root),
+					description);
+
+			checkStem(grouper.getStem(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getRootStemIdentifier()), displayExtension, description);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -87,10 +165,11 @@ public class TestStems extends TestCase {
 		}
 
 	}
-	
-	private void checkStem(StemDescriptor des, String displayExtension, String description){
-		assertEquals(displayExtension,des.getDisplayExtension());
-		assertEquals(description,des.getDescription());
+
+	private void checkStem(StemDescriptor des, String displayExtension,
+			String description) {
+		assertEquals(displayExtension, des.getDisplayExtension());
+		assertEquals(description, des.getDescription());
 	}
 
 	private StemIdentifier getStemIdentifier(StemDescriptor des) {
