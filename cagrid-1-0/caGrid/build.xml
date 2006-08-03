@@ -148,8 +148,10 @@
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="data.metadata.jars" />
 			<artifact refid="discovery.jars" />
-		</resolveDependencies>
-		<ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="all" />
+            <artifact refid="syncgts.client.jars"/>
+             <artifact refid="syncgts.config.docs"/>
+        </resolveDependencies>
+        <ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
