@@ -232,9 +232,7 @@
       </element>
       <element name="GrantStemPrivilegeResponse">
         <complexType>
-          <sequence>
-            <element name="response" type="xs:boolean" minOccurs="1" maxOccurs="1" />
-          </sequence>
+          <sequence />
         </complexType>
       </element>
       <element name="RevokeStemPrivilegeRequest">
@@ -266,9 +264,7 @@
       </element>
       <element name="RevokeStemPrivilegeResponse">
         <complexType>
-          <sequence>
-            <element name="response" type="xs:boolean" minOccurs="1" maxOccurs="1" />
-          </sequence>
+          <sequence />
         </complexType>
       </element>
       <element name="AddChildStemRequest">

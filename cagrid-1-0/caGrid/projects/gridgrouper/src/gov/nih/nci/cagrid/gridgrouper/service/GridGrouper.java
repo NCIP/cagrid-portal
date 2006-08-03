@@ -505,7 +505,7 @@ public class GridGrouper {
 		}
 	}
 
-	public boolean grantStemPrivilege(String gridIdentity, StemIdentifier stem,
+	public void grantStemPrivilege(String gridIdentity, StemIdentifier stem,
 			String subject, StemPrivilegeType privilege)
 			throws GridGrouperRuntimeFault, StemNotFoundFault,
 			GrantPrivilegeFault, InsufficientPrivilegeFault, SchemaFault {
@@ -516,7 +516,6 @@ public class GridGrouper {
 			Stem target = StemFinder.findByName(session, stem.getStemName());
 			target.grantPriv(SubjectUtils.getSubject(subject), Privilege
 					.getInstance(privilege.getValue()));
-			return true;
 		} catch (GrantPrivilegeException e) {
 			GrantPrivilegeFault fault = new GrantPrivilegeFault();
 			fault.setFaultString(e.getMessage());
@@ -572,8 +571,8 @@ public class GridGrouper {
 		}
 	}
 
-	public boolean revokeStemPrivilege(String gridIdentity,
-			StemIdentifier stem, String subject, StemPrivilegeType privilege)
+	public void revokeStemPrivilege(String gridIdentity, StemIdentifier stem,
+			String subject, StemPrivilegeType privilege)
 			throws GridGrouperRuntimeFault, StemNotFoundFault,
 			InsufficientPrivilegeFault, RevokePrivilegeFault, SchemaFault {
 		GrouperSession session = null;
@@ -583,7 +582,6 @@ public class GridGrouper {
 			Stem target = StemFinder.findByName(session, stem.getStemName());
 			target.revokePriv(SubjectUtils.getSubject(subject), Privilege
 					.getInstance(privilege.getValue()));
-			return true;
 		} catch (RevokePrivilegeException e) {
 			RevokePrivilegeFault fault = new RevokePrivilegeFault();
 			fault.setFaultString(e.getMessage());

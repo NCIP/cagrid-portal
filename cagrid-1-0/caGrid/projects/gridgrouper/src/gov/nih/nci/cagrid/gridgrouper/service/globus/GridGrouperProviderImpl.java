@@ -69,13 +69,13 @@ public class GridGrouperProviderImpl{
 
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GrantStemPrivilegeResponse grantStemPrivilege(gov.nih.nci.cagrid.gridgrouper.stubs.GrantStemPrivilegeRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GrantStemPrivilegeResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GrantStemPrivilegeResponse();
-		boxedResult.setResponse(impl.grantStemPrivilege(params.getStem().getStemIdentifier(),params.getSubject().getSubjectIdentifier(),params.getPrivilege().getStemPrivilegeType()));
+		impl.grantStemPrivilege(params.getStem().getStemIdentifier(),params.getSubject().getSubjectIdentifier(),params.getPrivilege().getStemPrivilegeType());
 		return boxedResult;
 	}
 
 	public gov.nih.nci.cagrid.gridgrouper.stubs.RevokeStemPrivilegeResponse revokeStemPrivilege(gov.nih.nci.cagrid.gridgrouper.stubs.RevokeStemPrivilegeRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.RevokePrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.RevokeStemPrivilegeResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.RevokeStemPrivilegeResponse();
-		boxedResult.setResponse(impl.revokeStemPrivilege(params.getStem().getStemIdentifier(),params.getSubject().getSubjectIdentifier(),params.getPrivilege().getStemPrivilegeType()));
+		impl.revokeStemPrivilege(params.getStem().getStemIdentifier(),params.getSubject().getSubjectIdentifier(),params.getPrivilege().getStemPrivilegeType());
 		return boxedResult;
 	}
 

@@ -168,7 +168,7 @@
       <ns4:Input qName="ns26:SubjectIdentifier" isArray="false" name="subject" xmlns:ns26="http://cagrid.nci.nih.gov/1/GridGrouper"/>
       <ns4:Input qName="ns27:StemPrivilegeType" isArray="false" name="privilege" xmlns:ns27="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="xsd:boolean" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
       <ns4:Exception name="GridGrouperRuntimeFault"/>
       <ns4:Exception name="StemNotFoundFault"/>
@@ -183,7 +183,7 @@
       <ns4:Input qName="ns29:SubjectIdentifier" isArray="false" name="subject" xmlns:ns29="http://cagrid.nci.nih.gov/1/GridGrouper"/>
       <ns4:Input qName="ns30:StemPrivilegeType" isArray="false" name="privilege" xmlns:ns30="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="xsd:boolean" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
       <ns4:Exception name="StemNotFoundFault"/>
       <ns4:Exception name="InsufficientPrivilegeFault"/>
