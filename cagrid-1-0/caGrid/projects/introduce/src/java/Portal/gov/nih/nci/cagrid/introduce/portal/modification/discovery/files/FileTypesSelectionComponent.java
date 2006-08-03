@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.files;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
@@ -13,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeD
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -119,7 +121,6 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 	public NamespaceType createNamespaceType(File schemaDestinationDir) {
 		NamespaceType input = new NamespaceType();
-
 		try {
 			// set the package name
 			String packageName = CommonTools.getPackageName(currentNamespace);
@@ -131,13 +132,23 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 			copySchemas(currentFile, schemaDestinationDir, new HashSet());
 		} catch (Exception e) {
 			e.printStackTrace();
-
+			PortalUtils.showErrorMessage("Error copying schemas", e);
 			return null;
 		}
 		return input;
 	}
 
 
+	/**
+	 * Copies the schema to a destination directory and follows schema imports.
+	 * The imports must define a schemaLocation or this will fail with a 
+	 * FileNotFound exctption
+	 * 
+	 * @param fileName
+	 * @param copyToDirectory
+	 * @param visitedSchemas
+	 * @throws Exception
+	 */
 	public static void copySchemas(String fileName, File copyToDirectory, Set visitedSchemas) throws Exception {
 		File schemaFile = new File(fileName);
 		System.out.println("Copying schema " + fileName + " to " + copyToDirectory.getCanonicalPath());
@@ -152,6 +163,9 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 			for (int i = 0; i < importEls.size(); i++) {
 				org.jdom.Element importEl = (org.jdom.Element) importEls.get(i);
 				String location = importEl.getAttributeValue("schemaLocation");
+				if (location == null) {
+					throw new FileNotFoundException("Schema " + fileName + " imports namespace " + importEl.getAttributeValue("namespace") + " with no schemaLocation");
+				}
 				File currentPath = schemaFile.getCanonicalFile().getParentFile();
 				if (!schemaFile.equals(new File(currentPath.getCanonicalPath() + File.separator + location))) {
 					File importedSchema = new File(currentPath + File.separator + location);
@@ -165,7 +179,6 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 				}
 			}
 		}
-
 	}
 
 
@@ -196,5 +209,4 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 		}
 		return filenameText;
 	}
-
-} // @jve:decl-index=0:visual-constraint="16,10"
+}
