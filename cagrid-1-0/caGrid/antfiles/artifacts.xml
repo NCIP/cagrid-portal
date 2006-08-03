@@ -168,6 +168,30 @@
 			</fileset>
 		</artifact>
 
+		<artifact track="main" type="jars" id="syncgts.client.jars">
+			<antcall target="build-syncgts" />
+			<fileset dir="${projects.dir}/syncgts/build/lib">
+				<include name="SyncGTS_stubs.jar" />
+				<include name="SyncGTS-common.jar" />
+				<include name="SyncGTS-client.jar" />
+			</fileset>
+			<fileset dir="${projects.dir}/metadata/build/lib">
+				<include name="*.jar" />
+				<exclude name="*test*.jar" />
+			</fileset>
+			<fileset dir="${projects.dir}/metadata/ext/lib">
+				<include name="*.jar" />
+				<exclude name="*test*.jar" />
+			</fileset>
+		</artifact>
+		
+		<!-- syncGts description and configuration files -->
+		<artifact track="main" type="resources" id="syncgts.config.docs">
+			<fileset dir="${projects.dir}/syncgts/etc">
+				<include name="sync-description.xml" />
+			</fileset>
+		</artifact>
+		
 
 		<artifact track="main" type="jars" id="cadsr.jars">
 			<antcall target="build-cadsr" />
