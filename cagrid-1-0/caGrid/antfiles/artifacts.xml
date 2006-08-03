@@ -158,11 +158,11 @@
 				<include name="GTS-common.jar" />
 				<include name="GTS-client.jar" />
 			</fileset>
-			<fileset dir="${projects.dir}/metadata/build/lib">
+			<fileset dir="${projects.dir}/gts/lib">
 				<include name="*.jar" />
 				<exclude name="*test*.jar" />
 			</fileset>
-			<fileset dir="${projects.dir}/metadata/ext/lib">
+			<fileset dir="${projects.dir}/gts/ext/lib">
 				<include name="*.jar" />
 				<exclude name="*test*.jar" />
 			</fileset>
@@ -175,11 +175,11 @@
 				<include name="SyncGTS-common.jar" />
 				<include name="SyncGTS-client.jar" />
 			</fileset>
-			<fileset dir="${projects.dir}/metadata/build/lib">
+			<fileset dir="${projects.dir}/syncgts/lib">
 				<include name="*.jar" />
 				<exclude name="*test*.jar" />
 			</fileset>
-			<fileset dir="${projects.dir}/metadata/ext/lib">
+			<fileset dir="${projects.dir}/syncgts/ext/lib">
 				<include name="*.jar" />
 				<exclude name="*test*.jar" />
 			</fileset>
