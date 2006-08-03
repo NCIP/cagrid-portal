@@ -249,6 +249,7 @@
 		<artifact track="main" type="schemas" id="ws.enum.schemas">
 			<fileset dir="${projects.dir}/wsEnum/schema">
 				<include name="enumeration.xsd"/>
+				<include name="addressing.xsd"/>
 				<include name="enumeration.wsdl"/>
 			</fileset>
 		</artifact>
