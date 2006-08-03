@@ -241,7 +241,7 @@ public class SyncTools {
 			String namespace = (String) iter.next();
 			excludeLine += " -x " + namespace;
 		}
-		serviceProperties.setProperty("introduce.ns.excludes", excludeLine);
+		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludeLine);
 
 		// write all the services into the services list property
 		String servicesList = "";
