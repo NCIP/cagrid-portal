@@ -123,9 +123,9 @@
     <action args="Save 3" class="javax.swing.AbstractButton" method="actionClick" />
     <wait args="Confirm Overwrite" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
     <action args="OptionPane.button" class="javax.swing.AbstractButton" method="actionClick" />
-    <wait args="Confirm Overwrite" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" timeout="100000" />
+    <wait args="Confirm Overwrite" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" timeout="@Timeout@" />
     <action args="ModificationViewer Instance,1070,673" class="javax.swing.JInternalFrame" method="actionResize" />
-    <wait args="Progress (Creating)" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" timeout="100000" />
+    <wait args="Progress (Creating)" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" timeout="@Timeout@" />
     <action args="Introduce: Grid Service Authoring Toolkit 4" class="java.awt.Window" method="actionClose" />
   </sequence>
   <terminate />

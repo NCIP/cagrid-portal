@@ -185,10 +185,10 @@
     <action args="Remove 3" class="javax.swing.AbstractButton" method="actionClick" />
     <action args="Remove 3" class="javax.swing.AbstractButton" method="actionClick" />
     <action args="Save 9" class="javax.swing.AbstractButton" method="actionClick" />
-    <wait args="Confirm Save" class="abbot.tester.ComponentTester" method="assertComponentShowing" timeout="100000" />
+    <wait args="Confirm Save" class="abbot.tester.ComponentTester" method="assertComponentShowing" timeout="@Timeout@" />
     <action args="OptionPane.button" class="javax.swing.AbstractButton" method="actionClick" />
-    <wait args="Confirm Save" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" timeout="100000" />
-    <wait args="Progress (Creating)" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" timeout="100000" />
+    <wait args="Confirm Save" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" timeout="@Timeout@" />
+    <wait args="Progress (Creating)" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" timeout="@Timeout@" />
     <action args="Introduce: Grid Service Authoring Toolkit 4" class="java.awt.Window" method="actionClose" />
   </sequence>
   <terminate />

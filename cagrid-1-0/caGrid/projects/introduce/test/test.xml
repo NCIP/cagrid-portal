@@ -56,6 +56,7 @@
 		
 		<!-- add hte add filters line here -->
 		<filter token="TestDir" value="${basedir}"/>
+		<filter token="Timeout" value="100000"/>
 		<!-- then copy each of those scripts.template to scripts -->
 		<copy todir="${basedir}/test/resources/abbot" filtering="true" overwrite="true">
 		        <fileset dir="${basedir}/test/resources/scripts"/>
