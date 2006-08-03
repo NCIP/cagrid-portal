@@ -72,5 +72,10 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-security-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="lib" path="ext/lib/SyncGTS_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/SyncGTS-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/SyncGTS-common.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
