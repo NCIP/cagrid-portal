@@ -28,7 +28,7 @@ import org.globus.gsi.GlobusCredential;
  */
 public class GridGrouper extends GridGrouperObject implements Grouper {
 
-	protected static final String ROOT_STEM = "";
+	public static final String ROOT_STEM = "";
 
 	private GridGrouperClient client;
 
