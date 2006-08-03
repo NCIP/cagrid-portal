@@ -56,5 +56,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/wsrf_core_stubs_enum.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
