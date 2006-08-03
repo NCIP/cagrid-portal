@@ -8,45 +8,54 @@
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}"/>
     <property name="globus.lib.dir" location="${globus.dir}/lib"/>
 
-    <property name='javac.debug' value='true'/>
-    <property name='javac.deprecation' value='true'/>
+    <!-- ext directories -->
+    <property name="ext.dir" value="ext"/>
 
     <!--        Source folders          -->
-    <property name='java.src.dir' value='src/java'/>
-    <property name='generated.src.dir' value='src/generated'/>
-    <property name='props.src.dir' value='src/properties'/>
-    <property name='scripts.src.dir' value='src/scripts'/>
+    <property name="src.dir" value="src"/>
+    <property name='java.src.dir' value='${src.dir}/java'/>
+    <property name='generated.src.dir' value='${src.dir}/generated'/>
+    <property name='props.src.dir' value='${src.dir}/properties'/>
+    <property name='scripts.src.dir' value='${src.dir}/scripts'/>
 
     <!-- web folder                     -->
     <property name="webcontent.dir" value="webcontent"/>
     <property name='webinf.dir' value='${webcontent.dir}/WEB-INF'/>
     <property name='webinf.classes.dir' value='${webinf.dir}/classes'/>
     <property name='webinf.lib.dir' value='${webinf.dir}/lib'/>
-    <property name="resources.dir" value="resources"/>
 
-    <!--Library folders                 -->
+    <!-- Library folders -->
     <property name="lib.dir" value="lib"/>
-    <property name="ext.lib.dir" value="ext/lib"/>
+    <property name="ext.lib.dir" value="${ext.dir}/lib"/>
 
+    <!-- Resource folders -->
+    <property name="resources.dir" value="resources"/>
+    <property name="ext.resources.dir" value="${ext.dir}/resources"/>
+
+    <!-- build directories -->
     <property name='build.dir' value='${webinf.dir}'/>
     <property name='build.classes.dir' value='${build.dir}/classes'/>
-    <property name="test.classes.dir" value="${build.dir}/classes" />
 
     <!-- Important test directories and files -->
     <property name="test.dir" value="test" />
     <property name="test.src.dir" value="${test.dir}/src" />
+    <property name="test.classes.dir" value="${build.classes.dir}" />
     <property name="test.log.dir" value="test/logs" />
     <property name="test.lib.dir" value="test/lib" />
-    <property name="ext.test.lib.dir" value="ext/test/lib" />
+    <property name="ext.test.lib.dir" value="${ext.dir}/test/lib" />
     <property name="junit.results.dir" value="${test.log.dir}/junit" />
+
+    <!-- Tomcat directories -->
+    <property name="tomcat.dir" location="${env.CATALINA_HOME}"/>
+    <property name="tomcat.webapps.dir" location="${tomcat.dir}/webapps"/>
 
     <!--Set logging levels if not defined by ${username}-portal.properties file -->
     <property name="log.level.root" value="WARN"/>
     <property name="log.level.portal" value="WARN"/>
     <property name="log.level.spring" value="WARN"/>
 
-    <property name="tomcat.dir" location="${env.CATALINA_HOME}"/>
-    <property name="tomcat.webapps.dir" location="${tomcat.dir}/webapps"/>
+    <property name='javac.debug' value='true'/>
+    <property name='javac.deprecation' value='true'/>
 
     <!--Custom javac                        -->
     <presetdef name="portal.javac">
@@ -168,8 +177,13 @@
             </fileset>
         </copy>
 
+
+        <!-- copy syncgts description file -->
+        <copy file="${ext.resources.dir}/sync-description.xml" todir="${webinf.classes.dir}"/>
+
+        <!-- Copy Resources -->
         <copy
-                file='resources/hibernate.properties.template'
+                file='${resources.dir}/hibernate.properties.template'
                 tofile='${webinf.classes.dir}/hibernate.properties'
                 filtering='true'
                 overwrite='true'>
@@ -187,6 +201,7 @@
                 <filter token='hibernate.show_sql' value='${hibernate.show_sql}'/>
             </filterset>
         </copy>
+
 
         <!--Unix works for all environments -->
         <pathconvert targetos="unix" property="tomcat.log.dir">

@@ -15,7 +15,7 @@ public class ManagerTestSuite {
     public static Test suite() {
         TestSuite manager = new TestSuite();
 
-        manager.addTestSuite(IndexServiceManagerLocalTestCaseCase.class);
+        manager.addTestSuite(IndexServiceManagerLocalTestCase.class);
 
         return manager;
     }

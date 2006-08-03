@@ -2,8 +2,10 @@ package gov.nih.nci.cagrid.portal.utils;
 
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import gov.nih.nci.cagrid.portal.manager.IndexServiceManager;
+import gov.nih.nci.cagrid.portal.exception.PortalInitializationException;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.types.URI;
 
 import org.springframework.beans.factory.InitializingBean;
 
@@ -32,13 +34,16 @@ public class DatabaseInitUtility implements InitializingBean {
     public DatabaseInitUtility() {
     }
 
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() throws PortalInitializationException {
         for (Iterator idxIter = indexSet.iterator(); idxIter.hasNext();) {
-            EndpointReferenceType serviceEPR = GridUtils.getEPR(idxIter.next()
-                                                                       .toString());
-            IndexService idxService = new IndexService(serviceEPR);
-
-            //manager.save(idxService);
+            try {
+                EndpointReferenceType serviceEPR = GridUtils.getEPR(idxIter.next()
+                                                                           .toString());
+                IndexService idxService = new IndexService(serviceEPR);
+                manager.save(idxService);
+            } catch (URI.MalformedURIException e) {
+                  throw new PortalInitializationException(e);
+            }
         }
     }
 

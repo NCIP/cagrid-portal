@@ -18,7 +18,7 @@ import java.util.ListIterator;
  * Time: 10:30:15 AM
  * To change this template use File | Settings | File Templates.
  */
-public class IndexServiceManagerLocalTestCaseCase
+public class IndexServiceManagerLocalTestCase
     extends BaseSpringDataAccessAbstractTestCase {
     IndexServiceManager indexManager;
 

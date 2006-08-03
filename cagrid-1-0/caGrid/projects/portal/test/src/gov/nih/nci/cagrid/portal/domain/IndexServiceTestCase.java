@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.portal.BaseSpringaAbstractTestCase;
  * Time: 9:26:11 AM
  * To change this template use File | Settings | File Templates.
  */
-public class IndexServiceTestCaseCase extends BaseSpringaAbstractTestCase {
+public class IndexServiceTestCase extends BaseSpringaAbstractTestCase {
     public void testIndexService() {
     }
 }

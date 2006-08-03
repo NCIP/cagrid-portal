@@ -36,6 +36,15 @@
         </property>
     </bean>
 
+    <!-- First thing to do is to sync with GTS to establish trust -->
+        <bean id="syncGTSInitBean" class="gov.nih.nci.cagrid.portal.utils.SyncGTSInitUtility">
+            <!--Set the indexes to aggregate from-->
+            <property name="syncGTSDescriptionFile">
+               <value>classpath:sync-description.xml</value>
+            </property>
+        </bean>
+
+
 
     <!-- #############   DAO #############                -->
 

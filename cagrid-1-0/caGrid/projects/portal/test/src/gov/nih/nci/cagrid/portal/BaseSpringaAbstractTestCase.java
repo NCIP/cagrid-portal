@@ -35,8 +35,7 @@ public abstract class BaseSpringaAbstractTestCase
     protected String[] getConfigLocations() {
         return new String[] {
             "classpath*:/**/applicationContext-data-access.xml",
-            "classpath*:/**/applicationContext.xml",
-            "classpath*:/**/applicationContext-aggregators.xml",
+            "classpath*:/**/applicationContext-data-access-mock.xml",
         };
     }
 

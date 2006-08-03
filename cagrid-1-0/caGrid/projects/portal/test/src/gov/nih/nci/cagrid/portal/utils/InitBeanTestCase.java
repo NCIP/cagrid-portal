@@ -3,11 +3,10 @@ package gov.nih.nci.cagrid.portal.utils;
 import gov.nih.nci.cagrid.portal.BaseSpringaAbstractTestCase;
 import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
 
-import org.apache.axis.message.addressing.EndpointReferenceType;
-import org.apache.axis.types.URI;
-
 import java.util.Iterator;
 
+import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.types.URI;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,7 +15,7 @@ import java.util.Iterator;
  * Time: 10:30:21 AM
  * To change this template use File | Settings | File Templates.
  */
-public class InitBeanTestCaseCase extends BaseSpringaAbstractTestCase {
+public class InitBeanTestCase extends BaseSpringaAbstractTestCase {
     DatabaseInitUtility initBean;
 
     protected void onSetUp() throws Exception {

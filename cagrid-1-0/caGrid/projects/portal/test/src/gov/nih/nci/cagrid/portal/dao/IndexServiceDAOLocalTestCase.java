@@ -17,7 +17,7 @@ import java.util.Iterator;
  * Time: 2:31:46 PM
  * To change this template use File | Settings | File Templates.
  */
-public class IndexServiceDAOLocalTestCaseCase
+public class IndexServiceDAOLocalTestCase
     extends BaseSpringDataAccessAbstractTestCase {
     // Dependency injected by spring
     IndexDAO indexDAO;

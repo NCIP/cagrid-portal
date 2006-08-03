@@ -15,7 +15,7 @@ public class DAOTestSuite {
     public static Test suite() {
         TestSuite dao = new TestSuite();
 
-        dao.addTest(new IndexServiceDAOLocalTestCaseCase());
+        dao.addTest(new IndexServiceDAOLocalTestCase());
 
         return dao;
     }

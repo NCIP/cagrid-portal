@@ -25,7 +25,7 @@
         </property>
         <property name="delay">
             <!--Put a delay so doesn't start before DB initialized-->
-            <value>6000</value>
+            <value>60000</value>
         </property>
     </bean>
 
