@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gridgrouper.service;
 
-import netscape.security.PrivilegeTable;
 import edu.internet2.middleware.grouper.RegistryReset;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
@@ -9,6 +8,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.service.tools.GridGrouperBootstrapper;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.StemDeleteFault;
 import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
 import junit.framework.TestCase;
 
@@ -199,13 +199,155 @@ public class TestStems extends TestCase {
 					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
 					getStemIdentifier(root), USER_A, StemPrivilegeType.stem));
 
-			grouper.revokeStemPrivilege(
-					USER_A,
-					getStemIdentifier(root), USER_A, StemPrivilegeType.stem);
+			grouper.revokeStemPrivilege(USER_A, getStemIdentifier(root),
+					USER_A, StemPrivilegeType.stem);
 
 			assertFalse(grouper.hasStemPrivilege(
 					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
 					getStemIdentifier(root), USER_A, StemPrivilegeType.stem));
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+
+	}
+
+	public void testChildStems() {
+		try {
+			StemDescriptor root = grouper.getStem(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getRootStemIdentifier());
+			assertNotNull(root);
+			GridGrouperBootstrapper.addAdminMember(ADMIN_USER);
+			String extensionChildX = "X";
+			String extensionChildX1 = "X.1";
+			try {
+				grouper.addChildStem(USER_A, getStemIdentifier(root),
+						extensionChildX, extensionChildX);
+				fail("Should have failed, insufficient privilege!!!");
+			} catch (InsufficientPrivilegeFault e) {
+
+			}
+
+			grouper.grantStemPrivilege(ADMIN_USER, getStemIdentifier(root),
+					USER_A, StemPrivilegeType.stem);
+
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(root), USER_A, StemPrivilegeType.stem));
+
+			StemDescriptor childX = grouper.addChildStem(USER_A,
+					getStemIdentifier(root), extensionChildX, extensionChildX);
+			assertEquals(extensionChildX, childX.getExtension());
+			assertEquals(extensionChildX, childX.getDisplayExtension());
+
+			StemDescriptor[] c1 = grouper.getChildStems(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(root));
+			assertNotNull(c1);
+			assertEquals(2, c1.length);
+
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(childX), USER_A, StemPrivilegeType.stem));
+			try {
+				grouper.grantStemPrivilege(
+						AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+						getStemIdentifier(childX), USER_A,
+						StemPrivilegeType.create);
+				fail("Should have failed, insufficient privilege!!!");
+			} catch (InsufficientPrivilegeFault e) {
+
+			}
+			grouper.grantStemPrivilege(USER_A, getStemIdentifier(childX),
+					USER_A, StemPrivilegeType.create);
+			assertTrue(grouper
+					.hasStemPrivilege(
+							AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+							getStemIdentifier(childX), USER_A,
+							StemPrivilegeType.create));
+			assertEquals(grouper.getStem(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getRootStemIdentifier()), grouper.getParentStem(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(childX)));
+
+			StemDescriptor childX1 = grouper.addChildStem(USER_A,
+					getStemIdentifier(childX), extensionChildX1,
+					extensionChildX1);
+			assertEquals(extensionChildX1, childX1.getExtension());
+			assertEquals(extensionChildX1, childX1.getDisplayExtension());
+
+			StemDescriptor[] c2 = grouper.getChildStems(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(childX));
+			assertNotNull(c2);
+			assertEquals(1, c2.length);
+
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(childX1), USER_A, StemPrivilegeType.stem));
+			try {
+				grouper.grantStemPrivilege(
+						AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+						getStemIdentifier(childX1), USER_A,
+						StemPrivilegeType.create);
+				fail("Should have failed, insufficient privilege!!!");
+			} catch (InsufficientPrivilegeFault e) {
+
+			}
+			grouper.grantStemPrivilege(USER_A, getStemIdentifier(childX1),
+					USER_A, StemPrivilegeType.create);
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(childX1), USER_A,
+					StemPrivilegeType.create));
+			assertEquals(grouper.getStem(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(childX)), grouper.getParentStem(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(childX1)));
+			try {
+				grouper.deleteStem(USER_A, getStemIdentifier(childX));
+				fail("Should not to be able to delete stem, it has child stems!!!");
+			} catch (StemDeleteFault e) {
+
+			}
+
+			try {
+				grouper.deleteStem(
+						AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+						getStemIdentifier(childX1));
+				fail("Should have failed, insufficient privilege!!!");
+			} catch (InsufficientPrivilegeFault e) {
+
+			}
+
+			grouper.deleteStem(USER_A, getStemIdentifier(childX1));
+			
+			StemDescriptor[] c3 = grouper.getChildStems(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(childX));
+			assertNotNull(c3);
+			assertEquals(0, c3.length);
+			
+			try {
+				grouper.deleteStem(
+						AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+						getStemIdentifier(childX));
+				fail("Should have failed, insufficient privilege!!!");
+			} catch (InsufficientPrivilegeFault e) {
+
+			}
+
+			grouper.deleteStem(USER_A, getStemIdentifier(childX));
+			
+			StemDescriptor[] c4 = grouper.getChildStems(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+					getStemIdentifier(root));
+			assertNotNull(c4);
+			assertEquals(1, c4.length);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
