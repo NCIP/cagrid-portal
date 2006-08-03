@@ -96,6 +96,8 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 			nsType = CommonTools.createNamespaceType(enumSchema.getAbsolutePath());
 			// fix the schema location on the namespace type
 			nsType.setLocation("."  + File.separator + "enumeration.xsd");
+			// change the package mapping
+			nsType.setPackageName("org.xmlsoap.schemas.ws._2004._09.enumeration");
 		} catch (MobiusException ex) {
 			throw new CreationExtensionException("Error creating namespace type from schema: " + ex.getMessage(), ex);
 		}
@@ -171,6 +173,11 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		releaseParameter.setQName(new QName(WS_ENUMERATION_URI, "Release"));
 		releaseInputs.setInput(new MethodTypeInputsInput[] {releaseParameter});
 		releaseMethod.setInputs(releaseInputs);
+		// even void return methods require a method output
+		MethodTypeOutput releaseOutput = new MethodTypeOutput();
+		releaseOutput.setQName(new QName("", "void"));
+		releaseOutput.setIsArray(false);
+		releaseMethod.setOutput(releaseOutput);
 		setMethodImportInformation(releaseMethod);
 		CommonTools.addMethod(service, releaseMethod);
 	}
@@ -184,7 +191,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		info.setWsdlFile("enumeration.wsdl");
 		String packName = EnumProvider.class.getPackage().getName();
 		info.setPackageName(packName);
-		info.setPortTypeName("EnumerationPortType"); // FIXME: ???
+		info.setPortTypeName("DataSource"); // FIXME: ???
 		MethodTypeProviderInformation provider = new MethodTypeProviderInformation();
 		provider.setProviderClass(EnumProvider.class.getName());
 		method.setImportInformation(info);
