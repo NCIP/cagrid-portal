@@ -18,6 +18,8 @@ import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.grouper.RevokePrivilegeException;
 import edu.internet2.middleware.grouper.SchemaException;
 import edu.internet2.middleware.grouper.Stem;
+import edu.internet2.middleware.grouper.StemAddException;
+import edu.internet2.middleware.grouper.StemDeleteException;
 import edu.internet2.middleware.grouper.StemFinder;
 import edu.internet2.middleware.grouper.StemModifyException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
@@ -34,6 +36,8 @@ import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.RevokePrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.StemAddFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.StemDeleteFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault;
 
@@ -633,6 +637,116 @@ public class GridGrouper {
 				}
 			}
 		}
+	}
+
+	public StemDescriptor addChildStem(String gridIdentity,
+			StemIdentifier stem, String extension, String displayExtension)
+			throws GridGrouperRuntimeFault, InsufficientPrivilegeFault,
+			StemAddFault, StemNotFoundFault {
+		GrouperSession session = null;
+		try {
+			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			session = GrouperSession.start(subj);
+			Stem target = StemFinder.findByName(session, stem.getStemName());
+			Stem child = target.addChildStem(extension, displayExtension);
+			return stemtoStemDescriptor(child);
+		} catch (StemAddException e) {
+			StemAddFault fault = new StemAddFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (StemAddFault) helper.getFault();
+			throw fault;
+		} catch (InsufficientPrivilegeException e) {
+			InsufficientPrivilegeFault fault = new InsufficientPrivilegeFault();
+			fault
+					.setFaultString("You do not have the right to add children to the stem "
+							+ stem.getStemName() + ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (InsufficientPrivilegeFault) helper.getFault();
+			throw fault;
+		} catch (StemNotFoundException e) {
+			StemNotFoundFault fault = new StemNotFoundFault();
+			fault.setFaultString("The stem " + stem.getStemName()
+					+ " could not be found!!!");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (StemNotFoundFault) helper.getFault();
+			throw fault;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault.setFaultString("Error occurred adding the child " + extension
+					+ " to the stem " + stem.getStemName() + ": "
+					+ e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		} finally {
+			if (session == null) {
+				try {
+					session.stop();
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
+	}
+
+	public void deleteStem(String gridIdentity, StemIdentifier stem)
+			throws GridGrouperRuntimeFault, InsufficientPrivilegeFault,
+			StemDeleteFault, StemNotFoundFault {
+		GrouperSession session = null;
+		try {
+			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			session = GrouperSession.start(subj);
+			Stem target = StemFinder.findByName(session, stem.getStemName());
+			target.delete();
+		} catch (StemDeleteException e) {
+			StemDeleteFault fault = new StemDeleteFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (StemDeleteFault) helper.getFault();
+			throw fault;
+		} catch (InsufficientPrivilegeException e) {
+			InsufficientPrivilegeFault fault = new InsufficientPrivilegeFault();
+			fault
+					.setFaultString("You do not have the right to add children to the stem "
+							+ stem.getStemName() + ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (InsufficientPrivilegeFault) helper.getFault();
+			throw fault;
+		} catch (StemNotFoundException e) {
+			StemNotFoundFault fault = new StemNotFoundFault();
+			fault.setFaultString("The stem " + stem.getStemName()
+					+ " could not be found!!!");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (StemNotFoundFault) helper.getFault();
+			throw fault;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault.setFaultString("An error occurred in deleting the stem "
+					+ stem.getStemName() + ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		} finally {
+			if (session == null) {
+				try {
+					session.stop();
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
+
 	}
 
 	private StemDescriptor stemtoStemDescriptor(Stem stem) throws Exception {

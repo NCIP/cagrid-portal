@@ -271,6 +271,46 @@
           </sequence>
         </complexType>
       </element>
+      <element name="AddChildStemRequest">
+        <complexType>
+          <sequence>
+            <element name="stem">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="extension" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <element name="displayExtension" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="AddChildStemResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:StemDescriptor" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DeleteStemRequest">
+        <complexType>
+          <sequence>
+            <element name="stem">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:StemIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DeleteStemResponse">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
       <element name="GridGrouperRuntimeFault">
         <complexType>
           <complexContent>
@@ -314,6 +354,20 @@
         </complexType>
       </element>
       <element name="RevokePrivilegeFault">
+        <complexType>
+          <complexContent>
+            <extension base="wsrbf:BaseFaultType" />
+          </complexContent>
+        </complexType>
+      </element>
+      <element name="StemAddFault">
+        <complexType>
+          <complexContent>
+            <extension base="wsrbf:BaseFaultType" />
+          </complexContent>
+        </complexType>
+      </element>
+      <element name="StemDeleteFault">
         <complexType>
           <complexContent>
             <extension base="wsrbf:BaseFaultType" />
@@ -388,6 +442,18 @@
   <message name="RevokeStemPrivilegeResponse">
     <part name="parameters" element="tns:RevokeStemPrivilegeResponse" />
   </message>
+  <message name="AddChildStemRequest">
+    <part name="parameters" element="tns:AddChildStemRequest" />
+  </message>
+  <message name="AddChildStemResponse">
+    <part name="parameters" element="tns:AddChildStemResponse" />
+  </message>
+  <message name="DeleteStemRequest">
+    <part name="parameters" element="tns:DeleteStemRequest" />
+  </message>
+  <message name="DeleteStemResponse">
+    <part name="parameters" element="tns:DeleteStemResponse" />
+  </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="tns:GridGrouperRuntimeFault" />
   </message>
@@ -408,6 +474,12 @@
   </message>
   <message name="RevokePrivilegeFaultFaultMessage">
     <part name="fault" element="tns:RevokePrivilegeFault" />
+  </message>
+  <message name="StemAddFaultFaultMessage">
+    <part name="fault" element="tns:StemAddFault" />
+  </message>
+  <message name="StemDeleteFaultFaultMessage">
+    <part name="fault" element="tns:StemDeleteFault" />
   </message>
   <!--============================================================
 
@@ -482,6 +554,22 @@
       <fault name="RevokePrivilegeFault" message="tns:RevokePrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/RevokePrivilegeFaultFaultMessage" />
       <fault name="SchemaFault" message="tns:SchemaFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/SchemaFaultFaultMessage" />
       <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+    </operation>
+    <operation name="addChildStem">
+      <input message="tns:AddChildStemRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/AddChildStemRequest" />
+      <output message="tns:AddChildStemResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/AddChildStemResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
+      <fault name="StemAddFault" message="tns:StemAddFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemAddFaultFaultMessage" />
+      <fault name="StemNotFoundFault" message="tns:StemNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemNotFoundFaultFaultMessage" />
+    </operation>
+    <operation name="deleteStem">
+      <input message="tns:DeleteStemRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/DeleteStemRequest" />
+      <output message="tns:DeleteStemResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/DeleteStemResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
+      <fault name="StemDeleteFault" message="tns:StemDeleteFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemDeleteFaultFaultMessage" />
+      <fault name="StemNotFoundFault" message="tns:StemNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/StemNotFoundFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

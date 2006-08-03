@@ -18,7 +18,7 @@ public class GridGrouperExample {
 					"https://localhost:8443/wsrf/services/cagrid/GridGrouper");
 			Stem stem = grouper.getRootStem();
 			printStems(stem, "");
-			
+
 			System.out.println();
 			System.out.println();
 			System.out.println("Updating.............");
@@ -26,7 +26,7 @@ public class GridGrouperExample {
 			System.out.println();
 			updateStems(stem, " [Updated]", "This is a stem!!!");
 			printStems(stem, "");
-			
+
 			System.out.println();
 			System.out.println();
 			System.out.println("Reseting.............");
@@ -34,39 +34,60 @@ public class GridGrouperExample {
 			System.out.println();
 			updateStems(stem, "", "");
 			printStems(stem, "");
-			
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
 	}
 
-	public static void updateStems(Stem stem, String displayExtension, String desrciption) throws Exception {
+	public static void updateStems(Stem stem, String displayExtension,
+			String desrciption) throws Exception {
 		String dn = stem.getDisplayExtension();
 		int index = dn.indexOf(" [Updated]");
+		String childExtension = "CHILD";
+		String childDisplayExtension = "Test Child";
 		boolean isReset = false;
-		if(index != -1){
-			dn = dn.substring(0,index);
+		if (index != -1) {
+			dn = dn.substring(0, index);
 			isReset = true;
 		}
-		stem.setDisplayExtension(dn+displayExtension);
+		stem.setDisplayExtension(dn + displayExtension);
 		stem.setDescription(desrciption);
 		Set s = stem.getChildStems();
 		Iterator itr = s.iterator();
 		while (itr.hasNext()) {
-			updateStems((Stem) itr.next(), displayExtension,desrciption);
+			updateStems((Stem) itr.next(), displayExtension, desrciption);
 		}
-		Subject creator = SubjectUtils.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN="+stem.getUuid()+" Creator");
-		Subject stemmer = SubjectUtils.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN="+stem.getUuid()+" Stemmer");
-		if(isReset){
-			stem.revokePriv(creator, edu.internet2.middleware.grouper.NamingPrivilege.CREATE);
-			stem.revokePriv(stemmer, edu.internet2.middleware.grouper.NamingPrivilege.STEM);
-		}else{
-			stem.grantPriv(creator, edu.internet2.middleware.grouper.NamingPrivilege.CREATE);
-			stem.grantPriv(stemmer, edu.internet2.middleware.grouper.NamingPrivilege.STEM);
+		Subject creator = SubjectUtils
+				.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN="
+						+ stem.getUuid() + " Creator");
+		Subject stemmer = SubjectUtils
+				.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN="
+						+ stem.getUuid() + " Stemmer");
+		if (isReset) {
+			stem.revokePriv(creator,
+					edu.internet2.middleware.grouper.NamingPrivilege.CREATE);
+			stem.revokePriv(stemmer,
+					edu.internet2.middleware.grouper.NamingPrivilege.STEM);
+		} else {
+			stem.grantPriv(creator,
+					edu.internet2.middleware.grouper.NamingPrivilege.CREATE);
+			stem.grantPriv(stemmer,
+					edu.internet2.middleware.grouper.NamingPrivilege.STEM);
 		}
+
+		if((!isReset) && (!stem.getExtension().equals(childExtension))){
+			System.out.println("Adding child to the stem "+stem.getDisplayName());
+			stem.addChildStem(childExtension, childDisplayExtension);
+		}
+		if (stem.getExtension().equals(childExtension)) {
+			System.out.println("Deleting the stem "+stem.getDisplayName());
+		    stem.delete();
+		}
+
 		
+
 	}
 
 	public static void printStems(Stem stem, String buffer) throws Exception {
@@ -87,44 +108,45 @@ public class GridGrouperExample {
 				+ stem.getCreateTime());
 		System.out.println(buffer + "  " + "Modify Time:"
 				+ stem.getModifyTime());
-		
+
 		Set stemmers = stem.getStemmers();
 		System.out.println(buffer + "  " + "Stemmers:");
 		Iterator i2 = stemmers.iterator();
-		while(i2.hasNext()){
-			Subject sbj = (Subject)i2.next();
-			System.out.println(buffer + "    " 
-					+ sbj.getId());
+		while (i2.hasNext()) {
+			Subject sbj = (Subject) i2.next();
+			System.out.println(buffer + "    " + sbj.getId());
 		}
-		
+
 		Set creators = stem.getCreators();
 		System.out.println(buffer + "  " + "Creators:");
 		Iterator i1 = creators.iterator();
-		while(i1.hasNext()){
-			Subject sbj = (Subject)i1.next();
-			System.out.println(buffer + "    " 
-					+ sbj.getId());
+		while (i1.hasNext()) {
+			Subject sbj = (Subject) i1.next();
+			System.out.println(buffer + "    " + sbj.getId());
 		}
-		Subject sub = SubjectUtils.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=langella");
+		Subject sub = SubjectUtils
+				.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=langella");
 		Set privs = stem.getPrivs(sub);
-		System.out.println(buffer + "  " + "Privileges for "+sub.getId()+":");
-		Iterator i3= privs.iterator();
-		while(i3.hasNext()){
-			NamingPrivilege priv = (NamingPrivilege)i3.next();
-			System.out.println(buffer + "    " 
-					+ priv.toString());
+		System.out.println(buffer + "  " + "Privileges for " + sub.getId()
+				+ ":");
+		Iterator i3 = privs.iterator();
+		while (i3.hasNext()) {
+			NamingPrivilege priv = (NamingPrivilege) i3.next();
+			System.out.println(buffer + "    " + priv.toString());
 		}
-		
-		System.out.println(buffer + "  Has Create Privilege [" +sub.getId()+"]?:"+stem.hasCreate(sub));
-		System.out.println(buffer + "  Has Stem Privilege [" +sub.getId()+"]?:"+stem.hasStem(sub));
-			
+
+		System.out.println(buffer + "  Has Create Privilege [" + sub.getId()
+				+ "]?:" + stem.hasCreate(sub));
+		System.out.println(buffer + "  Has Stem Privilege [" + sub.getId()
+				+ "]?:" + stem.hasStem(sub));
+
 		Set s = stem.getChildStems();
 		Iterator itr = s.iterator();
 		while (itr.hasNext()) {
 			System.out.println();
 			System.out.println();
 			printStems((Stem) itr.next(), buffer);
-		
+
 		}
 	}
 

@@ -79,4 +79,16 @@ public class GridGrouperProviderImpl{
 		return boxedResult;
 	}
 
+	public gov.nih.nci.cagrid.gridgrouper.stubs.AddChildStemResponse addChildStem(gov.nih.nci.cagrid.gridgrouper.stubs.AddChildStemRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemAddFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.AddChildStemResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.AddChildStemResponse();
+		boxedResult.setStemDescriptor(impl.addChildStem(params.getStem().getStemIdentifier(),params.getExtension(),params.getDisplayExtension()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gridgrouper.stubs.DeleteStemResponse deleteStem(gov.nih.nci.cagrid.gridgrouper.stubs.DeleteStemRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemDeleteFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.DeleteStemResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteStemResponse();
+		impl.deleteStem(params.getStem().getStemIdentifier());
+		return boxedResult;
+	}
+
 }

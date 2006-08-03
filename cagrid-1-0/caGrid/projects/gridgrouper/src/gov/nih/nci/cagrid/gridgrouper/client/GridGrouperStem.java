@@ -7,6 +7,8 @@ import edu.internet2.middleware.grouper.NamingPrivilege;
 import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.grouper.RevokePrivilegeException;
 import edu.internet2.middleware.grouper.SchemaException;
+import edu.internet2.middleware.grouper.StemAddException;
+import edu.internet2.middleware.grouper.StemDeleteException;
 import edu.internet2.middleware.grouper.StemModifyException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
@@ -19,6 +21,8 @@ import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.StemAddFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.StemDeleteFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault;
 
 import java.util.Date;
@@ -237,4 +241,36 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
+
+	public Stem addChildStem(String extension, String displayExtension)
+			throws InsufficientPrivilegeException, StemAddException {
+		try {
+			StemDescriptor stem = gridGrouper.getClient().addChildStem(
+					this.getStemIdentifier(), extension, displayExtension);
+			return new GridGrouperStem(this.gridGrouper, stem);
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (StemAddFault f) {
+			throw new StemAddException(f.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public void delete() throws InsufficientPrivilegeException,
+			StemDeleteException {
+		try {
+			gridGrouper.getClient().deleteStem(this.getStemIdentifier());
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (StemDeleteFault f) {
+			throw new StemDeleteException(f.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+
+	}
+
 }

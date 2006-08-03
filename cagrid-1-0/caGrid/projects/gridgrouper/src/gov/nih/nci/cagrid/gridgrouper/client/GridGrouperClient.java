@@ -375,5 +375,28 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
         return boxedResult.isResponse();
       }
     }
+    public gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor addChildStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,java.lang.String extension,java.lang.String displayExtension) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemAddFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"addChildStem");
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddChildStemRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.AddChildStemRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddChildStemRequestStem stemContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddChildStemRequestStem();
+        stemContainer.setStemIdentifier(stem);
+        params.setStem(stemContainer);
+        params.setExtension(extension);
+        params.setDisplayExtension(displayExtension);
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddChildStemResponse boxedResult = portType.addChildStem(params);
+        return boxedResult.getStemDescriptor();
+      }
+    }
+    public void deleteStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemDeleteFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"deleteStem");
+        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteStemRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteStemRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteStemRequestStem stemContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteStemRequestStem();
+        stemContainer.setStemIdentifier(stem);
+        params.setStem(stemContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteStemResponse boxedResult = portType.deleteStem(params);
+      }
+    }
 
 }
