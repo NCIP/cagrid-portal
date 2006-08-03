@@ -277,8 +277,12 @@
 		</jar>
 		<!-- Post Introduce Edit-->
 		<jar jarfile="${build.lib.dir}/${portal.jar.name}" basedir="${build.dest}">
-					<include name="**/portal/**" />
+			    <fileset dir="${build.dest}" includes="**/portal/**"/>
+			    <fileset dir="resources/portal/dorian"/>
+			    <fileset dir="ext/resources/portal/common"/>
+			    <fileset dir="ext/resources/portal/gridca"/>
 		</jar>
+		
 		<jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
 			<include name="**/service/**" />
 			<!-- Post Introduce Edit-->
