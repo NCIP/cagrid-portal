@@ -3,19 +3,21 @@ package gov.nih.nci.cagrid.gridgrouper.ui;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 
 import org.projectmobius.portal.GridPortalComponent;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import java.awt.Font;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTree;
 
 public class GroupManagementBrowser extends GridPortalComponent {
 
@@ -40,6 +42,10 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	private JScrollPane treePane = null;
 
 	private JTree groupTree = null;
+
+	private JProgressBar progress = null;
+
+	private JButton load = null;
 
 	/**
 	 * This is the default constructor
@@ -110,11 +116,21 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	 */
 	private JPanel getTreePanel() {
 		if (treePanel == null) {
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints8.gridy = 4;
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.gridx = 0;
+			gridBagConstraints7.insets = new Insets(2, 10, 2, 10);
+			gridBagConstraints7.weightx = 1.0D;
+			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints7.gridy = 5;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.fill = GridBagConstraints.BOTH;
 			gridBagConstraints6.weighty = 1.0;
 			gridBagConstraints6.gridx = 0;
-			gridBagConstraints6.gridy = 4;
+			gridBagConstraints6.gridy = 6;
 			gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints6.weightx = 1.0;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
@@ -150,6 +166,8 @@ public class GroupManagementBrowser extends GridPortalComponent {
 			treePanel.add(jLabel1, gridBagConstraints4);
 			treePanel.add(getCredentials(), gridBagConstraints5);
 			treePanel.add(getTreePane(), gridBagConstraints6);
+			treePanel.add(getProgress(), gridBagConstraints7);
+			treePanel.add(getLoad(), gridBagConstraints8);
 		}
 		return treePanel;
 	}
@@ -214,6 +232,45 @@ public class GroupManagementBrowser extends GridPortalComponent {
 			groupTree = new JTree();
 		}
 		return groupTree;
+	}
+
+	/**
+	 * This method initializes progress	
+	 * 	
+	 * @return javax.swing.JProgressBar	
+	 */
+	private JProgressBar getProgress() {
+		if (progress == null) {
+			progress = new JProgressBar();
+			progress.setForeground(GridGrouperLookAndFeel.getPanelLabelColor());
+			progress.setString("");
+			progress.setStringPainted(true);
+		}
+		return progress;
+	}
+
+	/**
+	 * This method initializes load	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getLoad() {
+		if (load == null) {
+			load = new JButton();
+			load.setText("Load");
+			load.setIcon(GridGrouperLookAndFeel.getLoadIcon());
+		}
+		return load;
+	}
+	
+	public void updateProgress(final boolean working, final String s) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				getProgress().setString(s);
+				getProgress().setIndeterminate(working);
+			}
+		});
+
 	}
 
 }
