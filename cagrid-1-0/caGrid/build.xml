@@ -263,6 +263,8 @@
 			<artifact refid="common.test.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="core.resources" />
+			<artifact refid="gridca.jars" />
+		    <artifact refid="gridca.resources" />
 			<artifact refid="introduce.servicesecurity.jars" />
 			<artifact refid="security.metadata.jars" />
 		</resolveDependencies>
