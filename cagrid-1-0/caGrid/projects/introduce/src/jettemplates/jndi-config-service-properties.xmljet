@@ -4,11 +4,13 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
    ServiceProperties properties = info.getServiceProperties();
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.namespace.domain");
  	ServiceType service = info.getService();
+ 	ServiceType baseService = info.getServices().getService(0);
 	String serviceName = service.getName();
 	String modifiedServiceName = serviceName;
    	if(serviceName.endsWith("Service")){
    		modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    	} 
+   	if(service.equals(baseService)){
 %><resource xmlns="http://wsrf.globus.org/jndi/config" name="serviceconfiguration" type="<%=service.getPackageName()%>.service.ServiceConfiguration">
 			<resourceParams>
 				<parameter>
@@ -26,3 +28,10 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 	}%>		
 	</resourceParams>
 </resource>
+<%
+} else {
+%>
+<resourceLink name="serviceconfiguration" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/<%=baseService.getName()%>/serviceconfiguration" />
+<%
+}
+%>

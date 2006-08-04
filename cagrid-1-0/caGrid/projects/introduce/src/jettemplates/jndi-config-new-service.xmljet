@@ -40,4 +40,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 				</parameter>		
 			</resourceParams>
 		</resource>
+		<%
+		}
+		%>
 	</service>
