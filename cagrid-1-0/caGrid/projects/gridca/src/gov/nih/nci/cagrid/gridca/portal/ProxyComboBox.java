@@ -16,36 +16,50 @@ import org.globus.gsi.GlobusCredential;
  *          Exp $
  */
 public class ProxyComboBox extends JComboBox {
-	
+
 	private static final String DEFAULT_PROXY = "Globus Default Proxy";
 
+	private static final String NO_PROXY = "None";
+
 	public ProxyComboBox() {
+		this(false);
+	}
+
+	public ProxyComboBox(boolean none) {
 		List creds = ProxyManager.getInstance().getProxies();
+		if (none) {
+			addItem(new ProxyCaddy(NO_PROXY, null));
+		}
 		addItem(new ProxyCaddy(DEFAULT_PROXY, null));
 		for (int i = 0; i < creds.size(); i++) {
 			addItem(new ProxyCaddy((GlobusCredential) creds.get(i)));
 		}
 	}
-	
+
 	public ProxyComboBox(GlobusCredential cred) {
-		this();
+		this(false);
 		this.setSelectedItem(new ProxyCaddy(cred));
 	}
-	
-	public ProxyCaddy getSelectedProxyCaddy(){
-		ProxyCaddy caddy =  ((ProxyCaddy)this.getSelectedItem());
+
+	public ProxyComboBox(GlobusCredential cred, boolean none) {
+		this(none);
+		this.setSelectedItem(new ProxyCaddy(cred));
+	}
+
+	public ProxyCaddy getSelectedProxyCaddy() {
+		ProxyCaddy caddy = ((ProxyCaddy) this.getSelectedItem());
 		return caddy;
 	}
-	
-	public GlobusCredential getSelectedProxy() throws Exception{
-		ProxyCaddy caddy =  ((ProxyCaddy)this.getSelectedItem());
-		if(caddy.getIdentity().equals(DEFAULT_PROXY)){
-			try{
-			caddy.setProxy(ProxyUtil.getDefaultProxy());
-			}catch(Exception e){
+
+	public GlobusCredential getSelectedProxy() throws Exception {
+		ProxyCaddy caddy = ((ProxyCaddy) this.getSelectedItem());
+		if (caddy.getIdentity().equals(DEFAULT_PROXY)) {
+			try {
+				caddy.setProxy(ProxyUtil.getDefaultProxy());
+			} catch (Exception e) {
 				throw new Exception("No default proxy found!!!");
 			}
-			if(caddy.getProxy().getTimeLeft()==0){
+			if (caddy.getProxy().getTimeLeft() == 0) {
 				throw new Exception("The default proxy has expired!!!");
 			}
 		}
