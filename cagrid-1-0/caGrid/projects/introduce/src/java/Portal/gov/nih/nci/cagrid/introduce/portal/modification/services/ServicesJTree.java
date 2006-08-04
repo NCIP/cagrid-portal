@@ -34,9 +34,9 @@ public class ServicesJTree extends JTree {
 
 
 	public ServicesJTree(ServicesType services, ServiceInformation info) {
+		this.info = info;
 		setCellRenderer(new ServicesTreeRenderer());
 		setServices(services);
-		this.info = info;
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);

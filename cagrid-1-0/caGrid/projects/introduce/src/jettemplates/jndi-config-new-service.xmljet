@@ -2,6 +2,7 @@
 imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.*" %>
 <% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument;
    ServiceProperties properties = info.getServiceProperties();
+   ServiceType baseService = info.getServices().getService(0);
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.namespace.domain");
  	ServiceType service = info.getService();
 	String serviceName = service.getName();
@@ -40,14 +41,10 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 			</resourceParams>
 		</resource>
 		<%
+		} else {
+		%>
+		<resourceLink name="configuration" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/<%=baseService.getName()%>/configuration" />
+		<%
 		}
 		%>
-		<resource name="serviceconfiguration" type="<%=service.getPackageName()%>.service.ServiceConfiguration">
-			<resourceParams>
-				<parameter>
-					<name>factory</name>
-					<value>org.globus.wsrf.jndi.BeanFactory</value>
-				</parameter>
-			</resourceParams>
-		</resource>
 	</service>

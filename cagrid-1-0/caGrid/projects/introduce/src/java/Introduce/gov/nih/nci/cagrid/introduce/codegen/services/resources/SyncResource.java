@@ -47,15 +47,6 @@ public class SyncResource extends SyncTool {
 	public void sync() throws SynchronizationException {
 		try {
 
-			ServiceConfigurationTemplate serviceConfT = new ServiceConfigurationTemplate();
-			String serviceConfS = serviceConfT
-				.generate(new SpecificServiceInformation(getServiceInformation(), service));
-			File serviceConfF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
-				+ File.separator + "service" + File.separator + "ServiceConfiguration.java");
-			FileWriter serviceConfFW = new FileWriter(serviceConfF);
-			serviceConfFW.write(serviceConfS);
-			serviceConfFW.close();
-
 			if (service.getResourcePropertiesList() != null
 				&& service.getResourcePropertiesList().getSynchronizeResourceFramework() != null
 				&& !service.getResourcePropertiesList().getSynchronizeResourceFramework().booleanValue()) {
@@ -108,6 +99,16 @@ public class SyncResource extends SyncTool {
 				resourceContanstsFW.close();
 
 			} else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)) {
+				
+				ServiceConfigurationTemplate serviceConfT = new ServiceConfigurationTemplate();
+				String serviceConfS = serviceConfT
+					.generate(new SpecificServiceInformation(getServiceInformation(), service));
+				File serviceConfF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
+					+ File.separator + "service" + File.separator + "ServiceConfiguration.java");
+				FileWriter serviceConfFW = new FileWriter(serviceConfF);
+				serviceConfFW.write(serviceConfS);
+				serviceConfFW.close();
+				
 				MainResourceTemplate baseResourceT = new MainResourceTemplate();
 				String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(getServiceInformation(),
 					service));

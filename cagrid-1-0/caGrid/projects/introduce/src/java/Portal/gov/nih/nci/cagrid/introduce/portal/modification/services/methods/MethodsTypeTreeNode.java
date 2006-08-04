@@ -43,6 +43,7 @@
 
 package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -88,8 +89,10 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
 		if (methods != null && methods.getMethod() != null) {
 			for (int i = 0; i < methods.getMethod().length; i++) {
 				MethodType method = methods.getMethod(i);
-				MethodTypeTreeNode newNode = new MethodTypeTreeNode(method, info);
-				model.insertNodeInto(newNode, this, this.getChildCount());
+				if (!method.getName().equals(IntroduceConstants.SERVICE_SECURITY_METADATA_METHOD)) {
+					MethodTypeTreeNode newNode = new MethodTypeTreeNode(method, info);
+					model.insertNodeInto(newNode, this, this.getChildCount());
+				}
 			}
 		}
 	}
