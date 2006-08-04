@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -17,7 +19,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 
+import org.globus.gsi.GlobusCredential;
+import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalComponent;
+import org.projectmobius.portal.PortalResourceManager;
 
 public class GroupManagementBrowser extends GridPortalComponent {
 
@@ -210,9 +215,9 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes treePane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes treePane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getTreePane() {
 		if (treePane == null) {
@@ -223,21 +228,21 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes groupTree	
-	 * 	
-	 * @return javax.swing.JTree	
+	 * This method initializes groupTree
+	 * 
+	 * @return javax.swing.JTree
 	 */
 	private JTree getGroupTree() {
 		if (groupTree == null) {
-			groupTree = new JTree();
+			groupTree = new GridGrouperTree();
 		}
 		return groupTree;
 	}
 
 	/**
-	 * This method initializes progress	
-	 * 	
-	 * @return javax.swing.JProgressBar	
+	 * This method initializes progress
+	 * 
+	 * @return javax.swing.JProgressBar
 	 */
 	private JProgressBar getProgress() {
 		if (progress == null) {
@@ -250,19 +255,50 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes load	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes load
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getLoad() {
 		if (load == null) {
 			load = new JButton();
 			load.setText("Load");
+			load.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							loadGridGrouper();
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+
+				}
+			});
 			load.setIcon(GridGrouperLookAndFeel.getLoadIcon());
 		}
 		return load;
 	}
-	
+
+	private void loadGridGrouper() {
+		try {
+			String uri = ((GridGrouperServiceList) this.services)
+					.getSelectedService();
+			GlobusCredential cred = ((ProxyComboBox) this.credentials)
+					.getSelectedProxy();
+			GridGrouper grouper = new GridGrouper(uri, cred);
+			((GridGrouperTree) this.groupTree).getRootNode().setGridGrouper(
+					grouper);
+		} catch (Exception e) {
+			PortalUtils.showErrorMessage(e);
+		}
+
+	}
+
 	public void updateProgress(final boolean working, final String s) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

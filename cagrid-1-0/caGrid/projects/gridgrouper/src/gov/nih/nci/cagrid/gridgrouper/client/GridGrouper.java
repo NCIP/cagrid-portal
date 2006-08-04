@@ -171,4 +171,8 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 		return id;
 	}
 
+	public String getName() {
+		return getClient().getEndpointReference().toString();
+	}
+
 }
