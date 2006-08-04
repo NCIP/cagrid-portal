@@ -55,16 +55,34 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * 
  * @created Jul 12, 2004
- * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006-08-04 03:49:26 langella Exp $
+ * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
+ *          Exp $
  */
 
 public abstract class GridGrouperBaseTreeNode extends DefaultMutableTreeNode {
 
-	public GridGrouperBaseTreeNode() {
+	private GroupManagementBrowser browser;
+
+	private GridGrouperTree tree;
+
+	public GridGrouperBaseTreeNode(GroupManagementBrowser browser) {
+		this.browser = browser;
+	}
+
+	public GridGrouperTree getTree() {
+		if (tree == null) {
+			tree = getBrowser().getGroupTree();
+		}
+		return tree;
+	}
+
+	public GroupManagementBrowser getBrowser() {
+		return this.browser;
 	}
 
 	public abstract ImageIcon getIcon();
 
 	public abstract String toString();
+	
 
 }

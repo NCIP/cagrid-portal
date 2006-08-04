@@ -43,7 +43,13 @@
 
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
+import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperStem;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
+
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 
@@ -60,17 +66,57 @@ import javax.swing.ImageIcon;
  */
 public class StemTreeNode extends GridGrouperBaseTreeNode {
 
-	private Stem stem;
 
-	public StemTreeNode(Stem stem) {
+	private GridGrouperStem stem;
+
+	private boolean rootStem;
+
+	public StemTreeNode(GroupManagementBrowser browser, GridGrouperStem stem,
+			boolean root) {
+		super(browser);
+		this.rootStem = root;
 		this.stem = stem;
 	}
 
+	public void loadStem() throws Exception{
+		this.removeAllChildren();
+			Set set = stem.getChildStems();
+			Iterator itr = set.iterator();
+			while (itr.hasNext()) {
+				Stem stem = (Stem) itr.next();
+				StemTreeNode node = new StemTreeNode(getBrowser(),
+						((GridGrouperStem) stem),false);
+				synchronized (getTree()) {
+					this.add(node);
+					getTree().reload(this);
+				}
+				node.loadStem();
+			}
+	}
+
 	public ImageIcon getIcon() {
-		return GridGrouperLookAndFeel.getStemIcon();
+		if (this.rootStem) {
+			return GridGrouperLookAndFeel.getGrouperIcon16x16();
+		} else {
+			return GridGrouperLookAndFeel.getStemIcon();
+		}
+
 	}
 
 	public String toString() {
-		return this.stem.getDisplayExtension();
+		if (this.rootStem) {
+			return stem.getGridGrouper().getName();
+		} else {
+			return stem.getDisplayExtension();
+		}
 	}
+
+	public boolean isRootStem() {
+		return rootStem;
+	}
+
+	public GridGrouper getGridGrouper() {
+		return stem.getGridGrouper();
+	}
+
 }

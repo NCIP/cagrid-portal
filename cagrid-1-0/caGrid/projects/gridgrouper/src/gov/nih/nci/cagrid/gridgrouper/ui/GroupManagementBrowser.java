@@ -1,25 +1,16 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
-import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
-
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 
-import org.globus.gsi.GlobusCredential;
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
@@ -34,23 +25,23 @@ public class GroupManagementBrowser extends GridPortalComponent {
 
 	private JPanel treePanel = null;
 
-	private JLabel jLabel = null;
-
-	private JComboBox services = null;
-
 	private JPanel contentPanel = null;
-
-	private JLabel jLabel1 = null;
-
-	private JComboBox credentials = null;
 
 	private JScrollPane treePane = null;
 
-	private JTree groupTree = null;
+	private GridGrouperTree groupTree = null;
 
 	private JProgressBar progress = null;
 
-	private JButton load = null;
+	private JPanel buttonPanel = null;
+
+	private JButton addGridGrouper = null;
+
+	private JButton removeGridGrouper = null;
+
+	private JButton view = null;
+
+	private JButton refesh = null;
 
 	/**
 	 * This is the default constructor
@@ -69,7 +60,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		this.setSize(800, 500);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Group Management Browser");
-		this.setFrameIcon(GridGrouperLookAndFeel.getGroupIcon());
+		this.setFrameIcon(GridGrouperLookAndFeel.getGrouperIcon22x22());
 	}
 
 	/**
@@ -121,72 +112,29 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	 */
 	private JPanel getTreePanel() {
 		if (treePanel == null) {
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.gridx = 0;
-			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints8.gridy = 4;
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.gridy = 2;
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.gridx = 0;
 			gridBagConstraints7.insets = new Insets(2, 10, 2, 10);
 			gridBagConstraints7.weightx = 1.0D;
 			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.gridy = 5;
+			gridBagConstraints7.gridy = 1;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.fill = GridBagConstraints.BOTH;
 			gridBagConstraints6.weighty = 1.0;
 			gridBagConstraints6.gridx = 0;
-			gridBagConstraints6.gridy = 6;
+			gridBagConstraints6.gridy = 0;
 			gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints6.weightx = 1.0;
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints5.gridx = 0;
-			gridBagConstraints5.gridy = 3;
-			gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints5.weightx = 1.0;
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.gridx = 0;
-			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints4.gridy = 2;
-			jLabel1 = new JLabel();
-			jLabel1.setText("Credentials");
-			jLabel1.setFont(new Font("Dialog", Font.BOLD, 14));
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 1;
-			gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints2.weightx = 1.0;
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints1.gridy = 0;
-			jLabel = new JLabel();
-			jLabel.setText("Grid Grouper");
-			jLabel.setFont(new Font("Dialog", Font.BOLD, 14));
 			treePanel = new JPanel();
 			treePanel.setLayout(new GridBagLayout());
-			treePanel.add(jLabel, gridBagConstraints1);
-			treePanel.add(getServices(), gridBagConstraints2);
-			treePanel.add(jLabel1, gridBagConstraints4);
-			treePanel.add(getCredentials(), gridBagConstraints5);
 			treePanel.add(getTreePane(), gridBagConstraints6);
 			treePanel.add(getProgress(), gridBagConstraints7);
-			treePanel.add(getLoad(), gridBagConstraints8);
+			treePanel.add(getButtonPanel(), gridBagConstraints1);
 		}
 		return treePanel;
-	}
-
-	/**
-	 * This method initializes services
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getServices() {
-		if (services == null) {
-			services = new GridGrouperServiceList();
-		}
-		return services;
 	}
 
 	/**
@@ -200,18 +148,6 @@ public class GroupManagementBrowser extends GridPortalComponent {
 			contentPanel.setLayout(new GridBagLayout());
 		}
 		return contentPanel;
-	}
-
-	/**
-	 * This method initializes credentials
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getCredentials() {
-		if (credentials == null) {
-			credentials = new ProxyComboBox(true);
-		}
-		return credentials;
 	}
 
 	/**
@@ -232,9 +168,9 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	 * 
 	 * @return javax.swing.JTree
 	 */
-	private JTree getGroupTree() {
+	public GridGrouperTree getGroupTree() {
 		if (groupTree == null) {
-			groupTree = new GridGrouperTree();
+			groupTree = new GridGrouperTree(this);
 		}
 		return groupTree;
 	}
@@ -254,20 +190,73 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		return progress;
 	}
 
+
+	public void updateProgress(final boolean working, final String s) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				getProgress().setString(s);
+				getProgress().setIndeterminate(working);
+			}
+		});
+
+	}
+
 	/**
-	 * This method initializes load
-	 * 
-	 * @return javax.swing.JButton
+	 * This method initializes buttonPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
 	 */
-	private JButton getLoad() {
-		if (load == null) {
-			load = new JButton();
-			load.setText("Load");
-			load.addActionListener(new java.awt.event.ActionListener() {
+	private JPanel getButtonPanel() {
+		if (buttonPanel == null) {
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 1;
+			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.weightx = 1.0D;
+			gridBagConstraints8.gridy = 1;
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.gridx = 0;
+			gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints5.weightx = 1.0D;
+			gridBagConstraints5.gridy = 1;
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.gridx = 1;
+			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints4.weightx = 1.0D;
+			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints4.gridy = 0;
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.gridx = 0;
+			gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints2.weightx = 1.0D;
+			gridBagConstraints2.gridy = 0;
+			buttonPanel = new JPanel();
+			buttonPanel.setLayout(new GridBagLayout());
+			buttonPanel.add(getAddGridGrouper(), gridBagConstraints2);
+			buttonPanel.add(getRemoveGridGrouper(), gridBagConstraints4);
+			buttonPanel.add(getView(), gridBagConstraints5);
+			buttonPanel.add(getRefesh(), gridBagConstraints8);
+		}
+		return buttonPanel;
+	}
+
+	/**
+	 * This method initializes addGridGrouper	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getAddGridGrouper() {
+		if (addGridGrouper == null) {
+			addGridGrouper = new JButton();
+			addGridGrouper.setText("Add Grid Grouper");
+			addGridGrouper.setIcon(GridGrouperLookAndFeel.getGrouperAddIcon22x22());
+			addGridGrouper.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
-							loadGridGrouper();
+							PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new AddGridGrouperWindow(getGroupTree().getRootNode()),400,150);
 						}
 					};
 					try {
@@ -279,34 +268,66 @@ public class GroupManagementBrowser extends GridPortalComponent {
 
 				}
 			});
-			load.setIcon(GridGrouperLookAndFeel.getLoadIcon());
 		}
-		return load;
+		return addGridGrouper;
 	}
 
-	private void loadGridGrouper() {
-		try {
-			String uri = ((GridGrouperServiceList) this.services)
-					.getSelectedService();
-			GlobusCredential cred = ((ProxyComboBox) this.credentials)
-					.getSelectedProxy();
-			GridGrouper grouper = new GridGrouper(uri, cred);
-			((GridGrouperTree) this.groupTree).getRootNode().setGridGrouper(
-					grouper);
-		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
-		}
+	/**
+	 * This method initializes removeGridGrouper	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getRemoveGridGrouper() {
+		if (removeGridGrouper == null) {
+			removeGridGrouper = new JButton();
+			removeGridGrouper.setText("Remove Grid Grouper");
+			removeGridGrouper.setIcon(GridGrouperLookAndFeel.getGrouperRemoveIcon22x22());
+			removeGridGrouper.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							getGroupTree().getRootNode().removeSelectedGridGrouper();
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
 
+				}
+			});
+		}
+		return removeGridGrouper;
 	}
 
-	public void updateProgress(final boolean working, final String s) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				getProgress().setString(s);
-				getProgress().setIndeterminate(working);
-			}
-		});
+	/**
+	 * This method initializes view	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getView() {
+		if (view == null) {
+			view = new JButton();
+			view.setText("View");
+			view.setIcon(GridGrouperLookAndFeel.getQueryIcon());
+		}
+		return view;
+	}
 
+	/**
+	 * This method initializes refesh	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getRefesh() {
+		if (refesh == null) {
+			refesh = new JButton();
+			refesh.setText("Refresh");
+			refesh.setIcon(GridGrouperLookAndFeel.getLoadIcon());
+		}
+		return refesh;
 	}
 
 }

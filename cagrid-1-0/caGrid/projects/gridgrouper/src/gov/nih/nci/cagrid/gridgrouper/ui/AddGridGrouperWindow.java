@@ -1,0 +1,223 @@
+package gov.nih.nci.cagrid.gridgrouper.ui;
+
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
+
+import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.globus.gsi.GlobusCredential;
+import org.projectmobius.common.MobiusRunnable;
+import org.projectmobius.portal.GridPortalComponent;
+import org.projectmobius.portal.PortalResourceManager;
+
+public class AddGridGrouperWindow extends GridPortalComponent {
+
+	private static final long serialVersionUID = 1L;
+
+	private JPanel jContentPane = null;
+
+	private JPanel mainPanel = null;
+
+	private JPanel treePanel = null;
+
+	private JLabel jLabel = null;
+
+	private JComboBox services = null;
+
+	private JLabel jLabel1 = null;
+
+	private JComboBox credentials = null;
+
+	private JButton load = null;
+
+	private GridGroupersTreeNode root;
+
+	/**
+	 * This is the default constructor
+	 */
+	public AddGridGrouperWindow(GridGroupersTreeNode node) {
+		super();
+		this.root = node;
+		initialize();
+	}
+
+	/**
+	 * This method initializes this
+	 * 
+	 * @return void
+	 */
+	private void initialize() {
+		this.setSize(400, 150);
+		this.setContentPane(getJContentPane());
+		this.setTitle("Add Grid Grouper");
+		this.setFrameIcon(GridGrouperLookAndFeel.getGrouperIcon22x22());
+	}
+
+	/**
+	 * This method initializes jContentPane
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJContentPane() {
+		if (jContentPane == null) {
+			jContentPane = new JPanel();
+			jContentPane.setLayout(new BorderLayout());
+			jContentPane.add(getMainPanel(), BorderLayout.CENTER);
+		}
+		return jContentPane;
+	}
+
+	/**
+	 * This method initializes mainPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getMainPanel() {
+		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.anchor = GridBagConstraints.WEST;
+			gridBagConstraints.gridy = 0;
+			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints.fill = GridBagConstraints.BOTH;
+			gridBagConstraints.weightx = 1.0D;
+			gridBagConstraints.weighty = 1.0D;
+			gridBagConstraints.gridx = 0;
+			mainPanel = new JPanel();
+			mainPanel.setLayout(new GridBagLayout());
+			mainPanel.add(getTreePanel(), gridBagConstraints);
+		}
+		return mainPanel;
+	}
+
+	/**
+	 * This method initializes treePanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getTreePanel() {
+		if (treePanel == null) {
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints8.gridwidth = 2;
+			gridBagConstraints8.gridy = 4;
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints5.gridx = 1;
+			gridBagConstraints5.gridy = 1;
+			gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints5.anchor = GridBagConstraints.WEST;
+			gridBagConstraints5.weightx = 1.0;
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.gridx = 0;
+			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints4.anchor = GridBagConstraints.WEST;
+			gridBagConstraints4.gridy = 1;
+			jLabel1 = new JLabel();
+			jLabel1.setText("Credentials");
+			jLabel1.setFont(new Font("Dialog", Font.BOLD, 14));
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints2.gridx = 1;
+			gridBagConstraints2.gridy = 0;
+			gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints2.anchor = GridBagConstraints.WEST;
+			gridBagConstraints2.weightx = 1.0;
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints1.anchor = GridBagConstraints.WEST;
+			gridBagConstraints1.gridy = 0;
+			jLabel = new JLabel();
+			jLabel.setText("Grid Grouper");
+			jLabel.setFont(new Font("Dialog", Font.BOLD, 14));
+			treePanel = new JPanel();
+			treePanel.setLayout(new GridBagLayout());
+			treePanel.add(jLabel, gridBagConstraints1);
+			treePanel.add(getServices(), gridBagConstraints2);
+			treePanel.add(jLabel1, gridBagConstraints4);
+			treePanel.add(getCredentials(), gridBagConstraints5);
+			treePanel.add(getLoad(), gridBagConstraints8);
+		}
+		return treePanel;
+	}
+
+	/**
+	 * This method initializes services
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getServices() {
+		if (services == null) {
+			services = new GridGrouperServiceList();
+		}
+		return services;
+	}
+
+	/**
+	 * This method initializes credentials
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getCredentials() {
+		if (credentials == null) {
+			credentials = new ProxyComboBox(true);
+		}
+		return credentials;
+	}
+
+	/**
+	 * This method initializes load
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getLoad() {
+		if (load == null) {
+			load = new JButton();
+			load.setText("Add");
+			load.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							loadGridGrouper();
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+
+				}
+			});
+			load.setIcon(GridGrouperLookAndFeel.getGrouperAddIcon22x22());
+		}
+		return load;
+	}
+
+	private void loadGridGrouper() {
+		try {
+			String uri = ((GridGrouperServiceList) this.services)
+					.getSelectedService();
+			GlobusCredential cred = ((ProxyComboBox) this.credentials)
+					.getSelectedProxy();
+			this.dispose();
+			GridGrouper grouper = new GridGrouper(uri, cred);
+			this.root.addGridGrouper(grouper);
+		} catch (Exception e) {
+			PortalUtils.showErrorMessage(e);
+		}
+
+	}
+}

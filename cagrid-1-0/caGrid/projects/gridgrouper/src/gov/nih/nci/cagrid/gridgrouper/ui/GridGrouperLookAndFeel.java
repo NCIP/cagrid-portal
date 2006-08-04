@@ -12,9 +12,32 @@ import javax.swing.ImageIcon;
  *          Exp $
  */
 public class GridGrouperLookAndFeel extends PortalLookAndFeel {
-	public final static ImageIcon getGroupIcon() {
+	public final static ImageIcon getGrouperIcon22x22() {
 		return new javax.swing.ImageIcon(GridGrouperLookAndFeel.class
-				.getResource("/system-users.png"));
+				.getResource("/grouper_logo_22x22.png"));
+	}
+	
+	public final static ImageIcon getGrouperAddIcon22x22() {
+		return new javax.swing.ImageIcon(GridGrouperLookAndFeel.class
+				.getResource("/grid_grouper_add_22x22.jpg"));
+	}
+	
+	
+	public final static ImageIcon getGrouperRemoveIcon22x22() {
+		return new javax.swing.ImageIcon(GridGrouperLookAndFeel.class
+				.getResource("/grid_grouper_remove_22x22.png"));
+	}
+	
+	public final static ImageIcon getGridGrouperServicesIcon16x16() {
+		return new javax.swing.ImageIcon(GridGrouperLookAndFeel.class
+				.getResource("/applications-internet-16x16.png"));
+	}
+	
+	
+	
+	public final static ImageIcon getGrouperIcon16x16() {
+		return new javax.swing.ImageIcon(GridGrouperLookAndFeel.class
+				.getResource("/grouper_logo_16x16.png"));
 	}
 	
 	public final static ImageIcon getLoadIcon() {

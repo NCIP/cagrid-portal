@@ -61,21 +61,21 @@ import javax.swing.tree.TreePath;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * 
  * @created Jul 12, 2004
- * @version $Id: GridGrouperTree.java,v 1.1 2006-08-04 03:49:26 langella Exp $
+ * @version $Id: GridGrouperTree.java,v 1.2 2006-08-04 19:42:13 langella Exp $
  */
 
 public class GridGrouperTree extends JTree {
 
-	private GridGrouperTreeNode rootNode;
+	private GridGroupersTreeNode rootNode;
 
-	public GridGrouperTree() {
+	public GridGrouperTree(GroupManagementBrowser browser) {
 		super();
-		this.rootNode = new GridGrouperTreeNode(this);
+		this.rootNode = new GridGroupersTreeNode(browser);
 		setModel(new DefaultTreeModel(this.rootNode));
 		this.setCellRenderer(new GridGrouperTreeRenderer());
 	}
 
-	public GridGrouperTreeNode getRootNode() {
+	public GridGroupersTreeNode getRootNode() {
 		return this.rootNode;
 	}
 
@@ -118,16 +118,14 @@ public class GridGrouperTree extends JTree {
 	 * @param reloadPoint
 	 *            The node from which to reload
 	 */
-	public void reload(TreeNode reloadPoint) {
-		synchronized (this.getModel()) {
+	public synchronized void reload(TreeNode reloadPoint) {
 			((DefaultTreeModel) this.getModel()).reload(reloadPoint);
-		}
 	}
 
 	/**
 	 * Reload from the root
 	 */
-	public void reload() {
+	public synchronized void reload() {
 		this.reload(getRootNode());
 	}
 

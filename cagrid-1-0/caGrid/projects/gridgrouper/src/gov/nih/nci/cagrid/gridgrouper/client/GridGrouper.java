@@ -172,7 +172,7 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 	}
 
 	public String getName() {
-		return getClient().getEndpointReference().toString();
+		return getClient().getEndpointReference().getAddress().toString();
 	}
 
 }

@@ -270,7 +270,10 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
-
+	}
+	
+	public GridGrouper getGridGrouper(){
+		return gridGrouper;
 	}
 
 }

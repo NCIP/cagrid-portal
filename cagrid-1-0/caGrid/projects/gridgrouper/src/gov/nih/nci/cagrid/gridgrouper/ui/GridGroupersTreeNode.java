@@ -45,10 +45,11 @@ package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
+import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperStem;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 
-import java.util.Iterator;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 
@@ -63,42 +64,76 @@ import javax.swing.ImageIcon;
  * @version $Id: MakoGridServiceTreeNode.java,v 1.21 2005/04/20 17:28:54 ervin
  *          Exp $
  */
-public class GridGrouperTreeNode extends GridGrouperBaseTreeNode {
+public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 
-	private GridGrouper grouper;
+	private Map groupers;
 
-	private GridGrouperTree tree;
-
-	public GridGrouperTreeNode(GridGrouperTree tree) {
-		this.tree = tree;
+	public GridGroupersTreeNode(GroupManagementBrowser browser) {
+		super(browser);
+		this.groupers = new HashMap();
 	}
 
-	public void setGridGrouper(GridGrouper grouper) {
-		this.removeAllChildren();
-		try {
-			Stem root = grouper.getRootStem();
-			Set set = root.getChildStems();
-			Iterator itr = set.iterator();
-			while (itr.hasNext()) {
-				Stem stem = (Stem) itr.next();
-				StemTreeNode node = new StemTreeNode(stem);
-				this.add(node);
+	public void addGridGrouper(GridGrouper grouper) {
+		if (groupers.containsKey(grouper.getName())) {
+			PortalUtils.showErrorMessage("The Grid Grouper Service "
+					+ grouper.getName() + " has already been added!!!");
+		} else {
+			getBrowser().updateProgress(true,
+					"Loading Grid Grouper Service.... ");
+			try {
+				Stem root = grouper.getRootStem();
+				StemTreeNode node = new StemTreeNode(getBrowser(),
+						((GridGrouperStem) root), true);
+				synchronized (getTree()) {
+					this.add(node);
+					getTree().reload(this);
+				}
+				node.loadStem();
+				getBrowser().updateProgress(false,
+						"Grid Grouper Service Successfully Loaded!!!");
+				this.groupers.put(grouper.getName(), node);
+			} catch (Exception e) {
+				PortalUtils.showErrorMessage(e);
+				getBrowser().updateProgress(false,
+						"Error loading Grid Grouper Service!!!");
 			}
-		    tree.reload();
-		} catch (Exception e) {
-			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+
 		}
+
+	}
+
+	public void removeSelectedGridGrouper() {
+		GridGrouperBaseTreeNode node = this.getTree().getCurrentNode();
+		if (node == null) {
+			PortalUtils
+					.showErrorMessage("No service selected, please select a Grid Grouper Service!!!");
+		} else {
+			if (node instanceof StemTreeNode) {
+				StemTreeNode stn = (StemTreeNode) node;
+				if (stn.isRootStem()) {
+					synchronized (getTree()) {
+						stn.removeFromParent();
+						this.groupers.remove(stn.getGridGrouper().getName());
+						getTree().reload(this);
+					}
+				} else {
+					PortalUtils
+							.showErrorMessage("No service selected, please select a Grid Grouper Service!!!");
+				}
+			} else {
+				PortalUtils
+						.showErrorMessage("No service selected, please select a Grid Grouper Service!!!");
+			}
+		}
+
 	}
 
 	public ImageIcon getIcon() {
-		return GridGrouperLookAndFeel.getStemIcon();
+		return GridGrouperLookAndFeel.getGridGrouperServicesIcon16x16();
 	}
 
 	public String toString() {
-		if (grouper == null) {
-			return "Grid Grouper";
-		}
-		return this.grouper.getName();
+
+		return "Grid Grouper Service(s)";
 	}
 }
