@@ -1,8 +1,8 @@
 To Do:
 
-service contexts need a way to edit service security
+Need to add support importing methods from other wsdl which does not use our common message names....
 
-service contexts backend for service properties need to have resourceLinks to the main serviceconfiguration instead of own entry in jndi, and share the same serviceconfiguration class
+Need to add "resourceLink" for each sub service to each other service so that they can look them up and create instances....
 
 Add an option to have all method implementations call a generic method.  Something like: Object performMethod(String methodName, Object[] params, String[] paramNames).  This will simplify grid implementations that call into an existing implementation object.  It is similar to Java proxy - see java.lang.reflect.InvocationHandler.
 
@@ -49,6 +49,9 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+service contexts backend for service properties need to have resourceLinks to the main serviceconfiguration instead of own entry in jndi, and share the same serviceconfiguration class
+
+service contexts need a way to edit service security
 
 If a schema element type is in use by a method, the namespace type for the schema element cannot be removed.  Makes it 'impossible' to update schemas.
 
