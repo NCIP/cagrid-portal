@@ -1,6 +1,7 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service" class="ServiceImplTemplate" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service" class="ServiceImplTemplate" imports="gov.nih.nci.cagrid.introduce.beans.service.*" %>
 <% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
    String serviceName = info.getService().getName();
+   ServiceType baseService = info.getServices().getService(0);
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
    String modifiedServiceName = serviceName;
    if(serviceName.endsWith("Service")){
@@ -10,6 +11,8 @@
 package <%=info.getService().getPackageName()%>.service;
 
 import java.rmi.RemoteException;
+
+import <%=baseService.getPackageName()%>.service.ServiceConfiguration;
 
 import javax.naming.InitialContext;
 
