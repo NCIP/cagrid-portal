@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.apache.axis.message.MessageElement;
-import org.apache.axis.utils.XMLUtils;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.xml.sax.InputSource;
 
@@ -69,11 +68,9 @@ public class CQLObjectResultIterator implements Iterator {
 			if (configStream != null) {
 				return Utils.deserializeObject(new StringReader(documentString), objectClass, 
 					getConsumableInputStream());
-			} else {
-				
-				org.w3c.dom.Document doc = XMLUtils.newDocument(
-					new InputSource(new StringReader(documentString)));
-				return ObjectDeserializer.toObject(doc.getDocumentElement(), objectClass);
+			} else {				
+				InputSource objectSource = new InputSource(new StringReader(documentString));
+				return ObjectDeserializer.deserialize(objectSource, objectClass);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
