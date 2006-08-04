@@ -86,8 +86,8 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry sourcepath="/grouper-api-1.0" kind="lib" path="lib/grouper.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate2-2.1.8.jar"/>
-	<classpathentry kind="lib" path="test/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-security-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/gridca.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
