@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="ext/resources/portal/gridca"/>
 	<classpathentry kind="src" path="resources/ui/gridgrouper"/>
 	<classpathentry kind="src" path="ext/resources/portal/common"/>
 	<classpathentry kind="src" path="test/src"/>
@@ -86,5 +87,7 @@
 	<classpathentry sourcepath="/grouper-api-1.0" kind="lib" path="lib/grouper.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate2-2.1.8.jar"/>
 	<classpathentry kind="lib" path="test/lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-security-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/gridca.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
