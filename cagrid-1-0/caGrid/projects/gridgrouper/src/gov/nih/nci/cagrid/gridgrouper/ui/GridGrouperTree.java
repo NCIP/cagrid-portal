@@ -61,7 +61,7 @@ import javax.swing.tree.TreePath;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * 
  * @created Jul 12, 2004
- * @version $Id: GridGrouperTree.java,v 1.2 2006-08-04 19:42:13 langella Exp $
+ * @version $Id: GridGrouperTree.java,v 1.3 2006-08-05 03:30:32 langella Exp $
  */
 
 public class GridGrouperTree extends JTree {
@@ -84,9 +84,7 @@ public class GridGrouperTree extends JTree {
 		if (currentSelection != null) {
 			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection
 					.getLastPathComponent();
-			if (currentNode != this.getRootNode()) {
 				return (GridGrouperBaseTreeNode) currentNode;
-			}
 		}
 		return null;
 	}

@@ -52,6 +52,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
+import javax.swing.tree.TreeNode;
 
 /**
  * 
@@ -66,7 +67,6 @@ import javax.swing.ImageIcon;
  */
 public class StemTreeNode extends GridGrouperBaseTreeNode {
 
-
 	private GridGrouperStem stem;
 
 	private boolean rootStem;
@@ -78,20 +78,46 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		this.stem = stem;
 	}
 
-	public void loadStem() throws Exception{
+	public void loadStem() throws Exception {
 		this.removeAllChildren();
-			Set set = stem.getChildStems();
-			Iterator itr = set.iterator();
-			while (itr.hasNext()) {
-				Stem stem = (Stem) itr.next();
-				StemTreeNode node = new StemTreeNode(getBrowser(),
-						((GridGrouperStem) stem),false);
-				synchronized (getTree()) {
-					this.add(node);
-					getTree().reload(this);
+		Set set = stem.getChildStems();
+		Iterator itr = set.iterator();
+		while (itr.hasNext()) {
+			Stem stem = (Stem) itr.next();
+			StemTreeNode node = new StemTreeNode(getBrowser(),
+					((GridGrouperStem) stem), false);
+			synchronized (getTree()) {
+				this.add(node);
+				TreeNode parent = this.getParent();
+				if (parent != null) {
+					getTree().reload(parent);
+				} else {
+					getTree().reload();
 				}
-				node.loadStem();
 			}
+			node.loadStem();
+		}
+	}
+
+	public void refresh() {
+		int id = getBrowser().getProgress().startEvent(
+				"Refreshing " + toString() + ".... ");
+		try {
+			stem = (GridGrouperStem) stem.getGridGrouper().findStem(
+					stem.getName());
+			if (parent != null) {
+				getTree().reload(parent);
+			} else {
+				getTree().reload();
+			}
+			loadStem();
+			getBrowser().getProgress().stopEvent(id,
+					"Refreshed " + toString() + "!!!");
+		} catch (Exception e) {
+			getBrowser().getProgress().stopEvent(id,
+					"Error refreshing " + toString() + "!!!");
+			PortalUtils.showErrorMessage(e);
+		}
 	}
 
 	public ImageIcon getIcon() {
@@ -100,7 +126,6 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		} else {
 			return GridGrouperLookAndFeel.getStemIcon();
 		}
-
 	}
 
 	public String toString() {

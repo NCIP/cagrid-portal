@@ -84,5 +84,7 @@ public abstract class GridGrouperBaseTreeNode extends DefaultMutableTreeNode {
 
 	public abstract String toString();
 	
+	public abstract void refresh();
+	
 
 }

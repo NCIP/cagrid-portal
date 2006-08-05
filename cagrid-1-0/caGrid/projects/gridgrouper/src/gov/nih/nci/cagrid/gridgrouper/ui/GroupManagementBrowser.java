@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -41,16 +41,13 @@ public class GroupManagementBrowser extends GridPortalComponent {
 
 	private JButton view = null;
 
-	private JButton refesh = null;
-	
-	private List events;
+	private JButton refresh = null;
 
 	/**
 	 * This is the default constructor
 	 */
 	public GroupManagementBrowser() {
 		super();
-		this.events = new ArrayList();
 		initialize();
 	}
 
@@ -231,7 +228,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 			buttonPanel.add(getAddGridGrouper(), gridBagConstraints2);
 			buttonPanel.add(getRemoveGridGrouper(), gridBagConstraints4);
 			buttonPanel.add(getView(), gridBagConstraints5);
-			buttonPanel.add(getRefesh(), gridBagConstraints8);
+			buttonPanel.add(getRefresh(), gridBagConstraints8);
 		}
 		return buttonPanel;
 	}
@@ -311,17 +308,38 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	}
 
 	/**
-	 * This method initializes refesh	
+	 * This method initializes refresh	
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
-	private JButton getRefesh() {
-		if (refesh == null) {
-			refesh = new JButton();
-			refesh.setText("Refresh");
-			refesh.setIcon(GridGrouperLookAndFeel.getLoadIcon());
+	private JButton getRefresh() {
+		if (refresh == null) {
+			refresh = new JButton();
+			refresh.setText("Refresh");
+			refresh.setIcon(GridGrouperLookAndFeel.getLoadIcon());
+			refresh.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							GridGrouperBaseTreeNode node = getGroupTree().getCurrentNode();
+							if(node!=null){
+								node.refresh();
+							}else{
+								PortalUtils.showErrorMessage("Please select a node to refresh!!!");
+							}
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+
+				}
+			});
 		}
-		return refesh;
+		return refresh;
 	}
 
 }

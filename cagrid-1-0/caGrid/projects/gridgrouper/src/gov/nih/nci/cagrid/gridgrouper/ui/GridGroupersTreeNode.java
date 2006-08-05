@@ -49,9 +49,13 @@ import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperStem;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
+
+import org.projectmobius.common.MobiusRunnable;
+import org.projectmobius.portal.PortalResourceManager;
 
 /**
  * 
@@ -73,7 +77,7 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 		this.groupers = new HashMap();
 	}
 
-	public void addGridGrouper(GridGrouper grouper) {
+	public synchronized void addGridGrouper(GridGrouper grouper) {
 		if (groupers.containsKey(grouper.getName())) {
 			PortalUtils.showErrorMessage("The Grid Grouper Service "
 					+ grouper.getName() + " has already been added!!!");
@@ -100,6 +104,30 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 
 		}
 
+	}
+	
+	
+	public synchronized void refresh() {
+		Map old = groupers;
+		groupers = new HashMap();
+		this.removeAllChildren();
+		Iterator itr = old.values().iterator();
+		while(itr.hasNext()){
+			final StemTreeNode node  = (StemTreeNode)itr.next();
+			MobiusRunnable runner = new MobiusRunnable() {
+				public void execute() {
+					addGridGrouper(node.getGridGrouper());
+				}
+			};
+			try {
+				PortalResourceManager.getInstance().getThreadManager()
+						.executeInBackground(runner);
+			} catch (Exception t) {
+				t.getMessage();
+			}
+			
+		}
+		
 	}
 
 	public void removeSelectedGridGrouper() {
