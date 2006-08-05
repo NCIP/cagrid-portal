@@ -75,13 +75,13 @@ public class DorianCertificateAuthority extends LoggingObject implements Certifi
 					String users = "CREATE TABLE " + CA_TABLE + " (" + "ID VARCHAR(255) NOT NULL PRIMARY KEY,"
 						+ "CERTIFICATE TEXT NOT NULL," + "PRIVATE_KEY TEXT NOT NULL," + "INDEX document_index (ID));";
 					db.update(users);
-
+					this.dbBuilt = true;
 					if (conf.isAutoCreate()) {
 						this
 							.createCertifcateAuthorityCredentials(conf.getAutoCreateSubject(), conf.getAutoCreateDate());
 					}
 				}
-				this.dbBuilt = true;
+				
 			}
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
