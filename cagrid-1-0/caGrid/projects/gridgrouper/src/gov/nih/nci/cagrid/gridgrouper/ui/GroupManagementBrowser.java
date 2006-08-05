@@ -4,12 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalComponent;
@@ -31,7 +31,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 
 	private GridGrouperTree groupTree = null;
 
-	private JProgressBar progress = null;
+	private GridGrouperProgressBar progress = null;
 
 	private JPanel buttonPanel = null;
 
@@ -42,12 +42,15 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	private JButton view = null;
 
 	private JButton refesh = null;
+	
+	private List events;
 
 	/**
 	 * This is the default constructor
 	 */
 	public GroupManagementBrowser() {
 		super();
+		this.events = new ArrayList();
 		initialize();
 	}
 
@@ -180,9 +183,9 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	 * 
 	 * @return javax.swing.JProgressBar
 	 */
-	private JProgressBar getProgress() {
+	public GridGrouperProgressBar getProgress() {
 		if (progress == null) {
-			progress = new JProgressBar();
+			progress = new GridGrouperProgressBar();
 			progress.setForeground(GridGrouperLookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
@@ -191,15 +194,6 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	}
 
 
-	public void updateProgress(final boolean working, final String s) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				getProgress().setString(s);
-				getProgress().setIndeterminate(working);
-			}
-		});
-
-	}
 
 	/**
 	 * This method initializes buttonPanel	

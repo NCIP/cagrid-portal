@@ -78,7 +78,7 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 			PortalUtils.showErrorMessage("The Grid Grouper Service "
 					+ grouper.getName() + " has already been added!!!");
 		} else {
-			getBrowser().updateProgress(true,
+			int id = getBrowser().getProgress().startEvent(
 					"Loading Grid Grouper Service.... ");
 			try {
 				Stem root = grouper.getRootStem();
@@ -89,12 +89,12 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 					getTree().reload(this);
 				}
 				node.loadStem();
-				getBrowser().updateProgress(false,
+				getBrowser().getProgress().stopEvent(id,
 						"Grid Grouper Service Successfully Loaded!!!");
 				this.groupers.put(grouper.getName(), node);
 			} catch (Exception e) {
 				PortalUtils.showErrorMessage(e);
-				getBrowser().updateProgress(false,
+				getBrowser().getProgress().stopEvent(id,
 						"Error loading Grid Grouper Service!!!");
 			}
 
