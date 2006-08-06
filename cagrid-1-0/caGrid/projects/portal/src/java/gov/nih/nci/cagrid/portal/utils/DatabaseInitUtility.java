@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.portal.utils;
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import gov.nih.nci.cagrid.portal.manager.IndexServiceManager;
 import gov.nih.nci.cagrid.portal.exception.PortalInitializationException;
+import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
@@ -38,11 +39,12 @@ public class DatabaseInitUtility implements InitializingBean {
         for (Iterator idxIter = indexSet.iterator(); idxIter.hasNext();) {
             try {
                 EndpointReferenceType serviceEPR = GridUtils.getEPR(idxIter.next()
-                                                                           .toString());
+                        .toString());
                 IndexService idxService = new IndexService(serviceEPR);
+
                 manager.save(idxService);
             } catch (URI.MalformedURIException e) {
-                  throw new PortalInitializationException(e);
+                throw new PortalInitializationException(e);
             }
         }
     }

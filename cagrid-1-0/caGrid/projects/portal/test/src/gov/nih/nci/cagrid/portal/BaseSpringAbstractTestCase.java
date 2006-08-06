@@ -19,17 +19,18 @@ import java.util.HashSet;
  * Time: 11:06:03 AM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class BaseSpringaAbstractTestCase
+public abstract class BaseSpringAbstractTestCase
     extends AbstractDependencyInjectionSpringContextTests {
-    private DatabaseInitUtility initBean;
-
     //root index is a collection of indexes that portal aggregates from
     public HashSet rootIndexSet = new HashSet();
 
     protected void onSetUp() throws Exception {
         super.onSetUp(); //To change body of overridden methods use File | Settings | File Templates.
 
-        rootIndexSet = initBean.getIndexSet();
+        rootIndexSet.add(
+            "http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService");
+
+        //rootIndexSet.add("http://cagrid04.bmi.ohio-state.edu:7080/wsrf/services/DefaultIndexService");
     }
 
     protected String[] getConfigLocations() {
@@ -37,9 +38,5 @@ public abstract class BaseSpringaAbstractTestCase
             "classpath*:/**/applicationContext-data-access.xml",
             "classpath*:/**/applicationContext-data-access-mock.xml",
         };
-    }
-
-    public void setInitBean(DatabaseInitUtility initBean) {
-        this.initBean = initBean;
     }
 }

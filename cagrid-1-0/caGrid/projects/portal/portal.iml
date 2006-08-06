@@ -329,6 +329,123 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/GTS-common.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/GTS-client.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/globus_wsrf_mds_aggregator.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/globus_wsrf_servicegroup_stubs.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/globus_wsrf_mds_aggregator_stubs.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-introduce-security-common-1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/GTS_stubs.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-introduce-security-service-1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-introduce-security-client-1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/gridca.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-introduce-security-stubs-1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/globus_wsrf_servicegroup.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/quartz-1.5.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
@@ -350,6 +467,26 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/caGrid-discovery-1.0.jar" />
       <url>jar://$MODULE_DIR$/ext/lib/caGrid-discovery-1.0.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-introduce-security-client-1.0.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-introduce-security-client-1.0.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-introduce-security-common-1.0.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-introduce-security-common-1.0.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-introduce-security-service-1.0.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-introduce-security-service-1.0.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-introduce-security-stubs-1.0.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-introduce-security-stubs-1.0.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -380,6 +517,46 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/client.jar" />
       <url>jar://$MODULE_DIR$/ext/lib/client.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/globus_wsrf_mds_aggregator.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/globus_wsrf_mds_aggregator.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/globus_wsrf_mds_aggregator_stubs.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/globus_wsrf_mds_aggregator_stubs.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/globus_wsrf_servicegroup.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/globus_wsrf_servicegroup.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/globus_wsrf_servicegroup_stubs.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/globus_wsrf_servicegroup_stubs.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/gridca.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/gridca.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/GTS-client.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/GTS-client.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/GTS-common.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/GTS-common.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/GTS_stubs.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/GTS_stubs.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -460,6 +637,11 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/mysql-connector-java-3.1.13-bin.jar" />
       <url>jar://$MODULE_DIR$/lib/mysql-connector-java-3.1.13-bin.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/quartz-1.5.2.jar" />
+      <url>jar://$MODULE_DIR$/lib/quartz-1.5.2.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />

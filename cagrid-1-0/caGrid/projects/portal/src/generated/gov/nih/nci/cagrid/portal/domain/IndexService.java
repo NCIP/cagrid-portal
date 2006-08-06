@@ -27,6 +27,10 @@ public class IndexService implements DomainObject, GridService {
     private EndpointReferenceType handle;
     private boolean active = true;
 
+
+    public IndexService(String epr) throws URI.MalformedURIException {
+        this(GridUtils.getEPR(epr));
+    }
     /**
      * Self initialize the index Service bean
      * <p/>
@@ -37,18 +41,27 @@ public class IndexService implements DomainObject, GridService {
      * by providing it a valid EPR
      *
      * @param handle
-     * @throws RuntimeException
+
      */
-    public IndexService(EndpointReferenceType handle) {
+    public IndexService(EndpointReferenceType handle){
         // Use setters to keep all properties in sync
         this.setHandle(handle);
-        this.setActive(GridUtils.isServiceActive(getHandle()));
+    }
 
-        try {
-            this.setName(GridUtils.getServiceName(handle));
-            this.setDescription(GridUtils.getServiceDescription(handle));
-        } catch (MetadataRetreivalException e) {
-            // Do nothing none of them is a fatal exception
+    /**
+     * Constructor that will self load metadata
+     * @param handle
+     * @param loadMetadata
+
+     */
+    public IndexService(EndpointReferenceType handle, boolean loadMetadata)
+            throws MetadataRetreivalException
+    {
+        this(handle);
+        if(loadMetadata){
+            setName(GridUtils.getServiceName(handle));
+            setDescription(GridUtils.getServiceDescription(handle));
+            setActive(GridUtils.isServiceActive(handle));
         }
     }
 
@@ -59,9 +72,9 @@ public class IndexService implements DomainObject, GridService {
     }
 
     /**
-    * @hibernate.id generator-class="increment"
-    * column="ID_KEY"
-    */
+     * @hibernate.id generator-class="increment"
+     * column="ID_KEY"
+     */
     public Integer getPk() {
         return pk;
     }
@@ -70,20 +83,13 @@ public class IndexService implements DomainObject, GridService {
         this.pk = pk;
     }
 
-    /**
-     * @hibernate.set name="registeredServicesCollection"
-     *               cascade="save-update"
-     *               lazy="true"
-     * @hibernate.collection-key column="INDEX_ID_KEY"
-     * @hibernate.collection-one-to-many class="gov.nih.nci.cagrid.portal.domain.RegisteredService"
-     *
-     */
+
     public Set getRegisteredServicesCollection() {
         return registeredServicesCollection;
     }
 
     public void setRegisteredServicesCollection(
-        Set registeredServicesCollection) {
+            Set registeredServicesCollection) {
         this.registeredServicesCollection = registeredServicesCollection;
     }
 
@@ -141,7 +147,7 @@ public class IndexService implements DomainObject, GridService {
         this.handle = handle;
 
         // Keep it in sync with the epr(String)
-        this.epr = handle.getAddress().toString();
+        this.epr = handle.getAddress().toString().trim();
     }
 
     /**

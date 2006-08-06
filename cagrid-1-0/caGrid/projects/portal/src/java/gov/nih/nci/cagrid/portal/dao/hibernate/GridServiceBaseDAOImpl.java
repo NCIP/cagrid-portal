@@ -28,10 +28,10 @@ public class GridServiceBaseDAOImpl extends BaseDAOImpl {
         try {
             _logger.debug("Getting ID for service:" + epr + ".");
 
-            //List resultSet =  getHibernateTemplate().find("Select index.pk from IndexService index where index.epr = ?", epr);
-            List resultSet = getSession()
-                                 .createSQLQuery("Select id_key from INDEX_SERVICE where service_epr = '" +
-                    epr + "';").list();
+
+            List resultSet =  getHibernateTemplate().find("Select index.pk from IndexService index where index.epr = ?", epr);
+            //List resultSet = getSession().createSQLQuery("Select id_key from INDEX_SERVICE where service_epr = '" + eprStr + "';").list();
+
 
             /** if epr is not index then try
              * the services table
@@ -41,10 +41,8 @@ public class GridServiceBaseDAOImpl extends BaseDAOImpl {
                     "EPR not found in index service. Trying Registered Services" +
                     epr + ".");
 
-                //resultSet =  getHibernateTemplate().find("Select service.pk from RegisteredService service where service.epr = ?", epr);
-                resultSet = getSession()
-                                .createSQLQuery("Select id_key from REGISTERED_SERVICES where service_epr = '" +
-                        epr + "';").list();
+                resultSet =  getHibernateTemplate().find("Select service.pk from RegisteredService service where service.epr = ?", epr);
+                //resultSet = getSession().createSQLQuery("Select id_key from REGISTERED_SERVICES where service_epr = '" + epr + "';").list();
             }
 
             //return the first id as it should be unizue there should only be one

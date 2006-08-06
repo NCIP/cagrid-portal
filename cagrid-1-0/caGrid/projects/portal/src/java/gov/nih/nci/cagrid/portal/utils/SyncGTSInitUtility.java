@@ -1,10 +1,11 @@
 package gov.nih.nci.cagrid.portal.utils;
 
-import org.springframework.beans.factory.InitializingBean;
-import gov.nih.nci.cagrid.syncgts.core.SyncGTSDefault;
-import gov.nih.nci.cagrid.syncgts.core.SyncGTS;
-import gov.nih.nci.cagrid.syncgts.bean.SyncDescription;
 import gov.nih.nci.cagrid.portal.exception.PortalInitializationException;
+import gov.nih.nci.cagrid.syncgts.bean.SyncDescription;
+import gov.nih.nci.cagrid.syncgts.core.SyncGTS;
+import gov.nih.nci.cagrid.syncgts.core.SyncGTSDefault;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.core.io.Resource;
 
 /**
  *
@@ -21,23 +22,25 @@ import gov.nih.nci.cagrid.portal.exception.PortalInitializationException;
  */
 public class SyncGTSInitUtility implements InitializingBean {
 
-    private String syncGTSDescriptionFile;
+    private org.springframework.core.io.Resource  syncGTSDescriptionFile;
 
     public void afterPropertiesSet() throws PortalInitializationException  {
-        SyncGTSDefault.setServiceSyncDescriptionLocation(syncGTSDescriptionFile);
-        try {
-            SyncDescription description = SyncGTSDefault.getSyncDescription();
+        try{
 
+            SyncGTSDefault.setServiceSyncDescriptionLocation(syncGTSDescriptionFile.getFile().getAbsolutePath());
+            SyncDescription description = SyncGTSDefault.getSyncDescription();
             SyncGTS sync = SyncGTS.getInstance();
+            System.out.println("Synching with GTS");
             sync.syncOnce(description);
         } catch (Exception e) {
+            System.out.println("Error syncing" + e.getMessage());
             throw new PortalInitializationException(e);
 
         }
+        System.out.println("Synching with GTS SUCESSFUL");
     }
 
-    public void setSyncGTSDescriptionFile(String syncGTSDescriptionFile) {
+    public void setSyncGTSDescriptionFile(Resource syncGTSDescriptionFile) {
         this.syncGTSDescriptionFile = syncGTSDescriptionFile;
     }
-
 }

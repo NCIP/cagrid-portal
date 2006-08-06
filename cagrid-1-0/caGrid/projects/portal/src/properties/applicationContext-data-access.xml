@@ -22,30 +22,8 @@
         </property>
     </bean>
 
-    <!-- Database initi and sync tasks -->
-    <bean id="initBean" class="gov.nih.nci.cagrid.portal.utils.DatabaseInitUtility">
-        <!--Set the indexes to aggregate from-->
-        <property name="indexSet">
-            <set>
-                <value>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService</value>
-                <value>http://cagrid04.bmi.ohio-state.edu:7080/wsrf/services/DefaultIndexService</value>
-            </set>
-        </property>
-        <property name="manager">
-            <ref bean="indexManager"/>
-        </property>
-    </bean>
 
-    <!-- First thing to do is to sync with GTS to establish trust -->
-        <bean id="syncGTSInitBean" class="gov.nih.nci.cagrid.portal.utils.SyncGTSInitUtility">
-            <!--Set the indexes to aggregate from-->
-            <property name="syncGTSDescriptionFile">
-               <value>classpath:sync-description.xml</value>
-            </property>
-        </bean>
-
-
-
+   
     <!-- #############   DAO #############                -->
 
     <bean id="baseDAO"

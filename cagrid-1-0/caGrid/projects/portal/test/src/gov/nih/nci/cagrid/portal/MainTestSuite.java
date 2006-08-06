@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.portal;
 
-import gov.nih.nci.cagrid.portal.dao.DAOTestSuite;
 import gov.nih.nci.cagrid.portal.domain.DomainTestSuite;
 import gov.nih.nci.cagrid.portal.manager.ManagerTestSuite;
 import gov.nih.nci.cagrid.portal.utils.UtilsTestSuite;
@@ -23,7 +22,6 @@ public class MainTestSuite {
         main.addTest(UtilsTestSuite.suite());
         main.addTest(DomainTestSuite.suite());
         main.addTest(ManagerTestSuite.suite());
-        main.addTest(DAOTestSuite.suite());
 
         return main;
     }

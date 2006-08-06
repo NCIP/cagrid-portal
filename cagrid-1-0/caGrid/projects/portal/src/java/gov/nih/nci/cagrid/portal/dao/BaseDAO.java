@@ -17,4 +17,11 @@ public interface BaseDAO {
     public void saveOrUpdate(Collection objects);
 
     public void saveOrUpdate(Object obj);
+
+    /**
+     * Attach an object back
+     * to the session
+     * @param obj
+     */
+    public void merge(Object obj);
 }

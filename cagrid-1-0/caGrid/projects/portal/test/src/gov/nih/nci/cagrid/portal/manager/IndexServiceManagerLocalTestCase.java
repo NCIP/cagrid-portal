@@ -4,9 +4,11 @@ import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
 import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
+import gov.nih.nci.cagrid.portal.utils.GridUtils;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -21,6 +23,24 @@ import java.util.ListIterator;
 public class IndexServiceManagerLocalTestCase
     extends BaseSpringDataAccessAbstractTestCase {
     IndexServiceManager indexManager;
+
+    /**
+     * WIll test storing index services
+     * into the DB
+     */
+    public void testStoreIndex() {
+        for (Iterator iter = rootIndexSet.iterator(); iter.hasNext();) {
+            try {
+                EndpointReferenceType idxService = GridUtils.getEPR((String) iter.next());
+
+                IndexService idx = new IndexService(idxService, true);
+                logger.debug("Storing index service using manager");
+                indexManager.save(idx);
+            } catch (Exception e) {
+                fail(e.getMessage());
+            }
+        }
+    }
 
     /**
      * Mock insert services into index
@@ -40,7 +60,13 @@ public class IndexServiceManagerLocalTestCase
                     " registered services");
 
                 for (int i = 0; i < services.length; i++) {
-                    RegisteredService rService = new RegisteredService(services[i]);
+                    RegisteredService rService = new RegisteredService(services[i],
+                            true);
+                    logger.debug("name:" + rService.getName() +
+                        " from GridUtils" +
+                        GridUtils.getServiceName(rService.getHandle()));
+                    logger.debug("desc:" + rService.getDescription());
+
                     indexManager.addRegisteredService(idx, rService);
                 }
 
@@ -51,6 +77,8 @@ public class IndexServiceManagerLocalTestCase
                 fail(e.getMessage());
             }
         }
+
+        
     }
 
     public void setIndexManager(IndexServiceManager indexManager) {

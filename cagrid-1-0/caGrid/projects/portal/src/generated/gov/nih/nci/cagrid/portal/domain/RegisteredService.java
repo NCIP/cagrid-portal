@@ -18,7 +18,6 @@ import java.util.Set;
 public class RegisteredService implements GridService {
     // Hibernate identifier
     private Integer pk;
-    private java.lang.String alias;
     private ResearchCenter researchCenter;
     private IndexService indexService;
     public java.util.Set statisticsCollection;
@@ -27,18 +26,31 @@ public class RegisteredService implements GridService {
     private String epr;
     private EndpointReferenceType handle;
     private String version;
+    private String name;
+    private String description;
+
 
     public RegisteredService() {
     }
 
     public RegisteredService(EndpointReferenceType handle) {
         this.setHandle(handle);
+    }
 
-        try {
-            this.setName(GridUtils.getServiceName(handle));
-            this.setDescription(GridUtils.getServiceDescription(handle));
-        } catch (MetadataRetreivalException e) {
-            //do Nothing
+    public RegisteredService(EndpointReferenceType handle,boolean loadMetadata)
+
+    {
+        this(handle);
+        if(loadMetadata){
+
+            try {
+                setName(GridUtils.getServiceName(handle));
+                setDescription(GridUtils.getServiceDescription(handle));
+                setVersion(GridUtils.getServiceVersion(handle));
+            } catch (MetadataRetreivalException e) {
+                //do nothing just log it
+            }
+
         }
     }
 
@@ -69,18 +81,6 @@ public class RegisteredService implements GridService {
         setHandle(GridUtils.getEPR(epr));
     }
 
-    /**
-     * @hibernate.property column="ALIAS"
-     * type="string"
-     */
-    public java.lang.String getAlias() {
-        return alias;
-    }
-
-    public void setAlias(java.lang.String newVal) {
-        alias = newVal;
-    }
-
     public EndpointReferenceType getHandle() {
         return this.handle;
     }
@@ -88,23 +88,28 @@ public class RegisteredService implements GridService {
     /**
      * @hibernate.property column="NAME"
      * type="string"
+     * @return
      */
-    public java.lang.String getName() {
-        return null;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
      * @hibernate.property column="DESCRIPTION"
      * type="string"
+     *
+     * @return
      */
-    public java.lang.String getDescription() {
-        return null;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescription(java.lang.String desc) {
-    }
-
-    public void setName(java.lang.String name) {
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setHandle(EndpointReferenceType handle) {
@@ -144,6 +149,7 @@ public class RegisteredService implements GridService {
         this.domainModel = domainModel;
     }
 
+
     public boolean isActive() {
         return false; //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -161,13 +167,14 @@ public class RegisteredService implements GridService {
         this.version = version;
     }
 
+
     /**
      * @hibernate.many-to-one name="indexService"
      *                        column="INDEX_ID_KEY"
      *                         class="gov.nih.nci.cagrid.portal.domain.IndexService"
                                 not-null="true"
-     *                          inverse="true"
-     *                          lazy="true"
+     *
+     *
      */
     public IndexService getIndex() {
         return indexService;

@@ -15,8 +15,8 @@ public class UtilsTestSuite {
     public static Test suite() {
         TestSuite manager = new TestSuite();
 
-        manager.addTestSuite(InitBeanTestCase.class);
-        manager.addTestSuite(GridUtilsTestCase.class);
+
+        
 
         return manager;
     }

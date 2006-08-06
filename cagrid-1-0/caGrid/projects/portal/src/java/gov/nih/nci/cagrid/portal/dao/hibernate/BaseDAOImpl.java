@@ -41,4 +41,9 @@ public class BaseDAOImpl extends HibernateDaoSupport implements BaseDAO {
     public void saveOrUpdate(Object obj) {
         getHibernateTemplate().saveOrUpdate(obj);
     }
+
+    public void merge(Object obj) {
+        _logger.debug("Merging object to session");
+        getSession().merge(obj);
+    }
 }

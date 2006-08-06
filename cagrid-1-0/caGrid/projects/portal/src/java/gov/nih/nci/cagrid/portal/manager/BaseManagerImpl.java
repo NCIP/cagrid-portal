@@ -6,6 +6,8 @@ import gov.nih.nci.cagrid.portal.dao.IndexDAO;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.Category;
+
 
 /**
  * Implementation of the BaseManager Interface
@@ -20,6 +22,9 @@ import java.util.List;
 public class BaseManagerImpl implements BaseManager {
     protected BaseDAO baseDAO;
     protected IndexDAO indexDAO;
+    protected Category _logger = Category.getInstance(getClass().getName());
+
+
 
     /**
      * Returns All the persistent
