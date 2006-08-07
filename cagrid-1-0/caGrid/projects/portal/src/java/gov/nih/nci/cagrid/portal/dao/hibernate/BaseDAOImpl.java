@@ -1,13 +1,8 @@
 package gov.nih.nci.cagrid.portal.dao.hibernate;
 
 import gov.nih.nci.cagrid.portal.dao.BaseDAO;
-import gov.nih.nci.cagrid.portal.domain.IndexService;
-import gov.nih.nci.cagrid.portal.domain.RegisteredService;
-import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
 
 import org.apache.log4j.Category;
-
-import org.springframework.dao.DataAccessException;
 
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 

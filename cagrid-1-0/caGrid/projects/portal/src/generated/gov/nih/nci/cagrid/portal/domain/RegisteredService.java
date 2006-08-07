@@ -23,12 +23,11 @@ public class RegisteredService implements GridService {
     public java.util.Set statisticsCollection;
     public Operation operations;
     private DomainModel domainModel;
-    private String epr;
+    private String EPR;
     private EndpointReferenceType handle;
     private String version;
     private String name;
     private String description;
-
 
     public RegisteredService() {
     }
@@ -37,20 +36,14 @@ public class RegisteredService implements GridService {
         this.setHandle(handle);
     }
 
-    public RegisteredService(EndpointReferenceType handle,boolean loadMetadata)
-
-    {
+    public RegisteredService(EndpointReferenceType handle, boolean loadMetadata)
+        throws MetadataRetreivalException {
         this(handle);
-        if(loadMetadata){
 
-            try {
-                setName(GridUtils.getServiceName(handle));
-                setDescription(GridUtils.getServiceDescription(handle));
-                setVersion(GridUtils.getServiceVersion(handle));
-            } catch (MetadataRetreivalException e) {
-                //do nothing just log it
-            }
-
+        if (loadMetadata) {
+            setName(GridUtils.getServiceName(handle));
+            setDescription(GridUtils.getServiceDescription(handle));
+            setVersion(GridUtils.getServiceVersion(handle));
         }
     }
 
@@ -70,15 +63,15 @@ public class RegisteredService implements GridService {
      * @hibernate.property column="SERVICE_EPR"
      * type="string"
      */
-    public String getEpr() {
-        return epr;
+    public String getEPR() {
+        return EPR;
     }
 
-    private void setEpr(String epr) throws URI.MalformedURIException {
-        this.epr = epr;
+    private void setEPR(String EPR) throws URI.MalformedURIException {
+        this.EPR = EPR;
 
         // Once epr is set also set the handle property
-        setHandle(GridUtils.getEPR(epr));
+        setHandle(GridUtils.getEPR(EPR));
     }
 
     public EndpointReferenceType getHandle() {
@@ -114,9 +107,13 @@ public class RegisteredService implements GridService {
 
     public void setHandle(EndpointReferenceType handle) {
         this.handle = handle;
-        this.epr = handle.getAddress().toString();
+        this.EPR = handle.getAddress().toString();
     }
 
+    /**
+     * @hibernate.many-to-one column="RC_ID_KEY"
+     * @return
+     */
     public ResearchCenter getResearchCenter() {
         return researchCenter;
     }
@@ -149,7 +146,6 @@ public class RegisteredService implements GridService {
         this.domainModel = domainModel;
     }
 
-
     public boolean isActive() {
         return false; //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -166,7 +162,6 @@ public class RegisteredService implements GridService {
     public void setVersion(String version) {
         this.version = version;
     }
-
 
     /**
      * @hibernate.many-to-one name="indexService"
@@ -195,7 +190,7 @@ public class RegisteredService implements GridService {
 
         final RegisteredService that = (RegisteredService) o;
 
-        if (!epr.equals(that.epr)) {
+        if (!EPR.equals(that.EPR)) {
             return false;
         }
 
@@ -203,6 +198,6 @@ public class RegisteredService implements GridService {
     }
 
     public int hashCode() {
-        return epr.hashCode();
+        return EPR.hashCode();
     }
 }

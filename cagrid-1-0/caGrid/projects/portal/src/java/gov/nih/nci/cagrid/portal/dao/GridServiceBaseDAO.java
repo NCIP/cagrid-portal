@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
  * Time: 8:22:55 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface GridServiceBaseDAO {
+public interface GridServiceBaseDAO extends BaseDAO {
     /**
     * Return ID for a EPR string
     *

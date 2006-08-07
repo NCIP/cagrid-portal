@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.portal.manager;
 
-import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
-
 import java.util.Collection;
 import java.util.List;
 

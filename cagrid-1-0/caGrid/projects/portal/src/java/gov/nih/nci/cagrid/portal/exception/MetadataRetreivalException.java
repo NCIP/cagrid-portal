@@ -11,7 +11,7 @@ package gov.nih.nci.cagrid.portal.exception;
  * Time: 5:24:14 PM
  * To change this template use File | Settings | File Templates.
  */
-public class MetadataRetreivalException extends RuntimeException {
+public class MetadataRetreivalException extends Exception {
     public MetadataRetreivalException(String message, Throwable cause) {
         super(message, cause);
     }

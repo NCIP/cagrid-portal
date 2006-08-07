@@ -7,12 +7,19 @@
 
 
     <!-- Apply all logging advices to all bean defiinition -->
-    <bean name="LoggingAdvisor"
-          class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
-        <property name="usePrefix" value="true"/>
+    <bean name="myBeanNameProxyCreator"
+          class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <value>metadataAggregator,initBean,syncGTSInitBean</value>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>loggingAdvisor</value>
+            </list>
+        </property>
     </bean>
 
-    <bean name="MethodLogginAdvisor"
+    <bean name="loggingAdvisor"
           class="gov.nih.nci.cagrid.portal.utils.MethodLoggingAdvisor"/>
 
 
@@ -30,12 +37,12 @@
            <!--Set the indexes to aggregate from-->
            <property name="indexSet">
                <set>
-                   <value>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService</value>
                    <value>http://cagrid04.bmi.ohio-state.edu:7080/wsrf/services/DefaultIndexService</value>
+                    <value>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService</value>
                </set>
            </property>
            <property name="manager">
-               <ref bean="indexManager"/>
+               <ref bean="gridServiceManager"/>
            </property>
        </bean>
 

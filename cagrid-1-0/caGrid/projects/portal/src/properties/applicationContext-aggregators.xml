@@ -3,6 +3,13 @@
 
 <beans>
 
+    <bean id="metadataAggregatorFactory"
+          class="gov.nih.nci.cagrid.portal.aggregator.MetadataAggregatorFactory">
+        <constructor-arg index="0">
+            <ref bean="gridServiceManager"/>
+        </constructor-arg>
+        </bean>
+
 
     <bean id="indexAggregatorFactory"
           class="gov.nih.nci.cagrid.portal.aggregator.IndexAggregatorFactory">
@@ -10,7 +17,7 @@
             <value>false</value>
         </constructor-arg>
         <constructor-arg index="1">
-            <ref bean="indexManager"/>
+            <ref bean="gridServiceManager"/>
         </constructor-arg>
     </bean>
 
@@ -21,11 +28,11 @@
         </property>
         <property name="period">
             <!--Run it every 10 mins-->
-            <value>60000</value>
+            <value>600000</value>
         </property>
         <property name="delay">
             <!--Put a delay so doesn't start before DB initialized-->
-            <value>6000</value>
+            <value>10000</value>
         </property>
     </bean>
 

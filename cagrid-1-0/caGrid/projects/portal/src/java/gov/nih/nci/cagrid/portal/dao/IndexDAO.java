@@ -1,8 +1,5 @@
 package gov.nih.nci.cagrid.portal.dao;
 
-import gov.nih.nci.cagrid.portal.domain.IndexService;
-import gov.nih.nci.cagrid.portal.domain.RegisteredService;
-
 
 /**
  * @version 1.0

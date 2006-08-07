@@ -4,8 +4,11 @@ import gov.nih.nci.cagrid.portal.exception.PortalInitializationException;
 import gov.nih.nci.cagrid.syncgts.bean.SyncDescription;
 import gov.nih.nci.cagrid.syncgts.core.SyncGTS;
 import gov.nih.nci.cagrid.syncgts.core.SyncGTSDefault;
+
 import org.springframework.beans.factory.InitializingBean;
+
 import org.springframework.core.io.Resource;
+
 
 /**
  *
@@ -21,13 +24,13 @@ import org.springframework.core.io.Resource;
  * To change this template use File | Settings | File Templates.
  */
 public class SyncGTSInitUtility implements InitializingBean {
+    private org.springframework.core.io.Resource syncGTSDescriptionFile;
 
-    private org.springframework.core.io.Resource  syncGTSDescriptionFile;
+    public void afterPropertiesSet() throws PortalInitializationException {
+        try {
+            SyncGTSDefault.setServiceSyncDescriptionLocation(syncGTSDescriptionFile.getFile()
+                                                                                   .getAbsolutePath());
 
-    public void afterPropertiesSet() throws PortalInitializationException  {
-        try{
-
-            SyncGTSDefault.setServiceSyncDescriptionLocation(syncGTSDescriptionFile.getFile().getAbsolutePath());
             SyncDescription description = SyncGTSDefault.getSyncDescription();
             SyncGTS sync = SyncGTS.getInstance();
             System.out.println("Synching with GTS");
@@ -35,8 +38,8 @@ public class SyncGTSInitUtility implements InitializingBean {
         } catch (Exception e) {
             System.out.println("Error syncing" + e.getMessage());
             throw new PortalInitializationException(e);
-
         }
+
         System.out.println("Synching with GTS SUCESSFUL");
     }
 

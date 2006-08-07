@@ -23,7 +23,6 @@
     </bean>
 
 
-   
     <!-- #############   DAO #############                -->
 
     <bean id="baseDAO"
@@ -33,6 +32,10 @@
         </property>
     </bean>
 
+    <bean id="gridServiceBaseDAO"
+          class="gov.nih.nci.cagrid.portal.dao.hibernate.GridServiceBaseDAOImpl"
+          parent="baseDAO">
+    </bean>
 
     <bean id="indexDAO"
           class="gov.nih.nci.cagrid.portal.dao.hibernate.IndexDAOImpl"
@@ -51,10 +54,13 @@
         <property name="indexDAO">
             <ref bean="indexDAO"/>
         </property>
+        <property name="gridServiceBaseDAO">
+            <ref bean="gridServiceBaseDAO"/>
+        </property>
     </bean>
 
-    <bean name="indexManager"
-          class="gov.nih.nci.cagrid.portal.manager.IndexServiceManagerImpl"
+    <bean name="gridServiceManager"
+          class="gov.nih.nci.cagrid.portal.manager.GridServiceManagerImpl"
           parent="baseManager"/>
 
 

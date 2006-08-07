@@ -21,16 +21,16 @@ public class IndexService implements DomainObject, GridService {
     // Primary pk
     private Integer pk;
     private Set registeredServicesCollection = new HashSet();
-    private String epr;
+    private String EPR;
     private String description;
     private String name;
     private EndpointReferenceType handle;
     private boolean active = true;
 
-
-    public IndexService(String epr) throws URI.MalformedURIException {
-        this(GridUtils.getEPR(epr));
+    public IndexService(String EPR) throws URI.MalformedURIException {
+        this(GridUtils.getEPR(EPR));
     }
+
     /**
      * Self initialize the index Service bean
      * <p/>
@@ -43,7 +43,7 @@ public class IndexService implements DomainObject, GridService {
      * @param handle
 
      */
-    public IndexService(EndpointReferenceType handle){
+    public IndexService(EndpointReferenceType handle) {
         // Use setters to keep all properties in sync
         this.setHandle(handle);
     }
@@ -55,10 +55,10 @@ public class IndexService implements DomainObject, GridService {
 
      */
     public IndexService(EndpointReferenceType handle, boolean loadMetadata)
-            throws MetadataRetreivalException
-    {
+        throws MetadataRetreivalException {
         this(handle);
-        if(loadMetadata){
+
+        if (loadMetadata) {
             setName(GridUtils.getServiceName(handle));
             setDescription(GridUtils.getServiceDescription(handle));
             setActive(GridUtils.isServiceActive(handle));
@@ -83,13 +83,12 @@ public class IndexService implements DomainObject, GridService {
         this.pk = pk;
     }
 
-
     public Set getRegisteredServicesCollection() {
         return registeredServicesCollection;
     }
 
     public void setRegisteredServicesCollection(
-            Set registeredServicesCollection) {
+        Set registeredServicesCollection) {
         this.registeredServicesCollection = registeredServicesCollection;
     }
 
@@ -102,8 +101,8 @@ public class IndexService implements DomainObject, GridService {
      * unique="true"
      * type="string"
      */
-    public String getEpr() {
-        return epr.trim();
+    public String getEPR() {
+        return EPR.trim();
     }
 
     /**
@@ -112,11 +111,11 @@ public class IndexService implements DomainObject, GridService {
      *
      * @throws URI.MalformedURIException Will throw an exception if epr string is not a valid URI
      */
-    private void setEpr(String epr) throws URI.MalformedURIException {
-        this.epr = epr;
+    private void setEPR(String EPR) throws URI.MalformedURIException {
+        this.EPR = EPR;
 
         // Once epr is set also set the handle(EPR) property
-        this.handle = GridUtils.getEPR(epr);
+        this.handle = GridUtils.getEPR(EPR);
     }
 
     /**
@@ -147,7 +146,7 @@ public class IndexService implements DomainObject, GridService {
         this.handle = handle;
 
         // Keep it in sync with the epr(String)
-        this.epr = handle.getAddress().toString().trim();
+        this.EPR = handle.getAddress().toString().trim();
     }
 
     /**
@@ -185,7 +184,7 @@ public class IndexService implements DomainObject, GridService {
 
         final IndexService that = (IndexService) o;
 
-        if (!epr.equals(that.epr)) {
+        if (!EPR.equals(that.EPR)) {
             return false;
         }
 
@@ -193,6 +192,6 @@ public class IndexService implements DomainObject, GridService {
     }
 
     public int hashCode() {
-        return epr.hashCode();
+        return EPR.hashCode();
     }
 }

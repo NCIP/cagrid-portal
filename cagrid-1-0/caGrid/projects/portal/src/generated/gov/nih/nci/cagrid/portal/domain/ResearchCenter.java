@@ -4,51 +4,171 @@ import java.util.Collection;
 
 
 /**
+ * @hibernate.class table="RESEARCH_CENTER"
  * @version 1.0
  * @created 19-Jun-2006 4:08:50 PM
  */
 public class ResearchCenter {
+    private java.lang.String country;
     private java.lang.String description;
     private java.lang.String displayName;
+    private java.lang.String geoCoords;
     private java.lang.String homepageURL;
-    private int id;
     private java.lang.String imageURL;
-    private java.lang.String rssNewsURL;
+    private java.lang.String locality;
+    private java.lang.String postalCode;
+    private Integer pk;
+    private java.lang.String street1;
+    private java.lang.String street2;
+    private java.lang.String state;
     private java.lang.String shortName;
     private java.util.Collection registeredServicesCollection;
+    private java.lang.String rssNewsURL;
 
     public ResearchCenter() {
     }
 
-    public void finalize() throws Throwable {
+    /**
+     * @hibernate.id column="ID_KEY"
+     * generator-class="increment"
+     * @return
+     */
+    public Integer getPk() {
+        return pk;
     }
 
+    /**
+     * @hibernate.property column="COUNTRY"
+     * @return
+     */
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getGeoCoords() {
+        return geoCoords;
+    }
+
+    public void setGeoCoords(String geoCoords) {
+        this.geoCoords = geoCoords;
+    }
+
+    /**
+     * @hibernate.property column="LOCALITY"
+     * @return
+     */
+    public String getLocality() {
+        return locality;
+    }
+
+    public void setLocality(String locality) {
+        this.locality = locality;
+    }
+
+    /**
+     * @hibernate.property column="POSTAL_CODE"
+     * @return
+     */
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    /**
+     * @hibernate.property column="STREET1"
+     * @return
+     */
+    public String getStreet1() {
+        return street1;
+    }
+
+    public void setStreet1(String street1) {
+        this.street1 = street1;
+    }
+
+    /**
+     * @hibernate.property column="STREET2"
+     */
+    public String getStreet2() {
+        return street2;
+    }
+
+    public void setStreet2(String street2) {
+        this.street2 = street2;
+    }
+
+    /**
+     * @hibernate.property column="STATE"
+     */
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public void setPk(Integer pk) {
+        this.pk = pk;
+    }
+
+    /**
+     * @hibernate.property column="DESCRIPTION"
+     * @return
+     */
     public java.lang.String getDescription() {
         return description;
     }
 
+    /**
+     * @hibernate.property column="DISPLAY_NAME"
+     * @return
+     */
     public java.lang.String getDisplayName() {
         return displayName;
     }
 
+    /**
+     * @hibernate.property column="HOMEPAGE_URL"
+     * @return
+     */
     public java.lang.String getHomepageURL() {
         return homepageURL;
     }
 
-    public int getId() {
-        return id;
-    }
-
+    /**
+     * @hibernate.property column="IMAGE_URL"
+     * @return
+     */
     public java.lang.String getImageURL() {
         return imageURL;
     }
 
-    public java.lang.String getrssNewsURL() {
+    /**
+     * @hibernate.property column="SHORT_NAME"
+     * @return
+     */
+    public java.lang.String getShortName() {
+        return shortName;
+    }
+
+    /**
+     * @hibernate.property column="RSS_NEWS_URL"
+     * @return
+     */
+    public String getRssNewsURL() {
         return rssNewsURL;
     }
 
-    public java.lang.String getShortName() {
-        return shortName;
+    public Collection getRegisteredServicesCollection() {
+        return registeredServicesCollection;
     }
 
     /**
@@ -75,22 +195,8 @@ public class ResearchCenter {
     /**
      * @param newVal
      */
-    public void setId(int newVal) {
-        id = newVal;
-    }
-
-    /**
-     * @param newVal
-     */
     public void setImageURL(java.lang.String newVal) {
         imageURL = newVal;
-    }
-
-    /**
-     * @param newVal
-     */
-    public void setrssNewsURL(java.lang.String newVal) {
-        rssNewsURL = newVal;
     }
 
     /**
@@ -100,20 +206,34 @@ public class ResearchCenter {
         shortName = newVal;
     }
 
-    public String getRssNewsURL() {
-        return rssNewsURL;
-    }
-
     public void setRssNewsURL(String rssNewsURL) {
         this.rssNewsURL = rssNewsURL;
-    }
-
-    public Collection getRegisteredServicesCollection() {
-        return registeredServicesCollection;
     }
 
     public void setRegisteredServicesCollection(
         Collection registeredServicesCollection) {
         this.registeredServicesCollection = registeredServicesCollection;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if ((o == null) || (getClass() != o.getClass())) {
+            return false;
+        }
+
+        final ResearchCenter that = (ResearchCenter) o;
+
+        if (!geoCoords.equals(that.geoCoords)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public int hashCode() {
+        return geoCoords.hashCode();
     }
 }

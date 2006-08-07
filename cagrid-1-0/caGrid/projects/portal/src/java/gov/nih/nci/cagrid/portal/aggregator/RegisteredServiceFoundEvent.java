@@ -1,14 +1,16 @@
 package gov.nih.nci.cagrid.portal.aggregator;
 
+import gov.nih.nci.cagrid.portal.domain.RegisteredService;
+
 import org.springframework.context.ApplicationEvent;
-import gov.nih.nci.cagrid.portal.domain.GridService;
+
 
 /**
  * Whenever an aggregator finsihes
  * processing, it can fire off this
  * event (with itself as source) to
  * alert other aggregators that it has finished processing
- * 
+ *
  *
  * Created by IntelliJ IDEA.
  * User: kherm
@@ -16,17 +18,15 @@ import gov.nih.nci.cagrid.portal.domain.GridService;
  * Time: 11:14:42 PM
  * To change this template use File | Settings | File Templates.
  */
-public class AggregatorFinishedEvent extends ApplicationEvent {
+public class RegisteredServiceFoundEvent extends ApplicationEvent {
+    private RegisteredService rService;
 
-    // The service (index or registry) that the source aggregator was processing
-    GridService service;
-
-    public AggregatorFinishedEvent(Object source, GridService service) {
+    public RegisteredServiceFoundEvent(Object source, RegisteredService rService) {
         super(source);
-        this.service = service;
+        this.rService = rService;
     }
 
-    public GridService getService() {
-        return service;
+    public RegisteredService getrService() {
+        return rService;
     }
 }

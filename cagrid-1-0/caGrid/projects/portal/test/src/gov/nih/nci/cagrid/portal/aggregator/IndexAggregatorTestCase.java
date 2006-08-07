@@ -2,16 +2,12 @@ package gov.nih.nci.cagrid.portal.aggregator;
 
 import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
 import gov.nih.nci.cagrid.portal.domain.IndexService;
-import gov.nih.nci.cagrid.portal.manager.IndexServiceManager;
-
-import org.apache.axis.message.addressing.EndpointReferenceType;
+import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
 
 import org.springframework.scheduling.timer.ScheduledTimerTask;
 import org.springframework.scheduling.timer.TimerFactoryBean;
 
 import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.Timer;
 import java.util.TimerTask;
 
 
@@ -24,7 +20,7 @@ import java.util.TimerTask;
  */
 public class IndexAggregatorTestCase
     extends BaseSpringDataAccessAbstractTestCase {
-    IndexServiceManager idxManager;
+    GridServiceManager idxManager;
 
     /**
      * Will test the index aggregator factory
@@ -48,12 +44,12 @@ public class IndexAggregatorTestCase
 
         //Start the index aggregator task
         TimerFactoryBean factory = new TimerFactoryBean();
-
+        schedule[0].getTimerTask().run();
         factory.setScheduledTimerTasks(schedule);
         factory.afterPropertiesSet();
     }
 
-    public void setIdxManager(IndexServiceManager idxManager) {
+    public void setIdxManager(GridServiceManager idxManager) {
         this.idxManager = idxManager;
     }
 }

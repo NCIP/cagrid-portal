@@ -8,7 +8,4 @@ import gov.nih.nci.cagrid.portal.dao.IndexDAO;
  * @created 22-Jun-2006 6:56:33 PM
  */
 public class IndexDAOImpl extends GridServiceBaseDAOImpl implements IndexDAO {
-
-
-
 }

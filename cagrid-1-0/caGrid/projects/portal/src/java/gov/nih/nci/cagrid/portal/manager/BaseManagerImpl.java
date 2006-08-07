@@ -1,12 +1,13 @@
 package gov.nih.nci.cagrid.portal.manager;
 
 import gov.nih.nci.cagrid.portal.dao.BaseDAO;
+import gov.nih.nci.cagrid.portal.dao.GridServiceBaseDAO;
 import gov.nih.nci.cagrid.portal.dao.IndexDAO;
+
+import org.apache.log4j.Category;
 
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.log4j.Category;
 
 
 /**
@@ -22,9 +23,8 @@ import org.apache.log4j.Category;
 public class BaseManagerImpl implements BaseManager {
     protected BaseDAO baseDAO;
     protected IndexDAO indexDAO;
+    protected GridServiceBaseDAO gridServiceBaseDAO;
     protected Category _logger = Category.getInstance(getClass().getName());
-
-
 
     /**
      * Returns All the persistent
@@ -52,5 +52,13 @@ public class BaseManagerImpl implements BaseManager {
     /** Setter for Spring **/
     public void setIndexDAO(IndexDAO indexDAO) {
         this.indexDAO = indexDAO;
+    }
+
+    public void set_logger(Category _logger) {
+        this._logger = _logger;
+    }
+
+    public void setGridServiceBaseDAO(GridServiceBaseDAO gridServiceBaseDAO) {
+        this.gridServiceBaseDAO = gridServiceBaseDAO;
     }
 }

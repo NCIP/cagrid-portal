@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.portal.utils;
 
+import gov.nih.nci.cagrid.portal.exception.PortalInitializationException;
+
 import org.apache.log4j.Category;
 
 import org.springframework.aop.AfterReturningAdvice;
@@ -7,8 +9,6 @@ import org.springframework.aop.MethodBeforeAdvice;
 import org.springframework.aop.ThrowsAdvice;
 
 import java.lang.reflect.Method;
-
-import gov.nih.nci.cagrid.portal.exception.PortalInitializationException;
 
 
 /**
@@ -23,7 +23,7 @@ import gov.nih.nci.cagrid.portal.exception.PortalInitializationException;
  * To change this template use File | Settings | File Templates.
  */
 public class MethodLoggingAdvisor implements MethodBeforeAdvice,
-        AfterReturningAdvice, ThrowsAdvice {
+    AfterReturningAdvice, ThrowsAdvice {
     /**
      * Takes appropriate action on
      * an exception being thrown.
@@ -36,7 +36,7 @@ public class MethodLoggingAdvisor implements MethodBeforeAdvice,
     }
 
     public void before(Method method, Object[] objects, Object target)
-            throws Throwable {
+        throws Throwable {
         Category cat = Category.getInstance(target.getClass());
         cat.debug(_debugPrefix + "Begin Method " + method.getName());
     }
@@ -51,24 +51,23 @@ public class MethodLoggingAdvisor implements MethodBeforeAdvice,
      * @throws Throwable
      */
     void afterThrowing(Method m, Object target, Exception ex)
-            throws Throwable {
+        throws Throwable {
         Category cat = Category.getInstance(m.getClass());
+        cat.debug("Exception Thrown. Caught by interceptor");
 
         // Catch the Fatal Exception type
         //@Todo send email to admin
-        if(ex.getCause().getClass() == PortalInitializationException.class){
+        if (ex.getCause().getClass() == PortalInitializationException.class) {
             cat.fatal(_fatalPrefix, ex);
-        }
-
-        else{
-        // throw custom message
-        cat.error("Exception Interceptor" + _errPrefix + "## Class:" + target + " ::Method:" + m +
-                " ## " + ex);
+        } else {
+            // throw custom message
+            cat.error("Exception Interceptor" + _errPrefix + "## Class:" +
+                target + " ::Method:" + m + " ## " + ex);
         }
     }
 
     public void afterReturning(Object object, Method method, Object[] objects,
-                               Object target) throws Throwable {
+        Object target) throws Throwable {
         Category cat = Category.getInstance(target.getClass());
         cat.debug(_debugPrefix + "End Method " + method.getName());
     }

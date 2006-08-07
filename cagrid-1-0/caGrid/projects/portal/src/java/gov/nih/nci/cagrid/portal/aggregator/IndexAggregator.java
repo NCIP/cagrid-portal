@@ -3,8 +3,9 @@ package gov.nih.nci.cagrid.portal.aggregator;
 import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
-import gov.nih.nci.cagrid.portal.manager.IndexServiceManager;
 import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
+import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
+import gov.nih.nci.cagrid.portal.utils.GridUtils;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
 
@@ -21,17 +22,18 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
  */
 public class IndexAggregator extends AbstractAggregator {
     private DiscoveryClient discClient;
-    private boolean metadataCompliance;
+    private boolean metadataCompliance = true;
     private IndexService indexService;
-    private IndexServiceManager idxMgr;
+    private GridServiceManager idxMgr;
 
     /**
      * Initialize the runnable class with the
      * index service to aggregate from
      */
     public IndexAggregator(IndexService indexService,
-        IndexServiceManager idxMgr, boolean metadataCompliance) {
+        GridServiceManager idxMgr, boolean metadataCompliance) {
         this.indexService = indexService;
+
         // Inherit the manager
         this.idxMgr = idxMgr;
         this.metadataCompliance = metadataCompliance;
@@ -41,22 +43,57 @@ public class IndexAggregator extends AbstractAggregator {
     }
 
     public void run() {
+        _logger.debug("Index Aggregator started for" +
+            this.indexService.getEPR());
+
+        EndpointReferenceType[] serviceEPR = new EndpointReferenceType[0];
+
         try {
-            _logger.debug("Index Aggregator started for" + this.indexService.getEpr());
-            EndpointReferenceType[] serviceEPR = discClient.getAllServices(metadataCompliance);
-           _logger.debug("Found " + serviceEPR.length + " services in the index");
-
-            for (int i = 0; i < serviceEPR.length; i++) {
-                _logger.debug("Adding " + serviceEPR[i] + " to index.");
-
-                RegisteredService rService = new RegisteredService(serviceEPR[i],true);
-                idxMgr.addRegisteredService(indexService, rService);
-            }
+            serviceEPR = discClient.getAllServices(metadataCompliance);
         } catch (Exception e) {
             _logger.error(e);
-            _logger.debug("ERROR creating REGISTERED SERVICE");
         }
-        _logger.debug("Index Aggregator for " + this.indexService.getName() + " exiting");
-        ctx.publishEvent(new AggregatorFinishedEvent(this,indexService));
+
+        _logger.debug("Found " + serviceEPR.length + " services in the index");
+
+        for (int i = 0; i < serviceEPR.length; i++) {
+            _logger.debug("Adding " + serviceEPR[i] + " to index.");
+
+            RegisteredService rService = null;
+
+            rService = new RegisteredService(serviceEPR[i]);
+            rService.setIndex(indexService);
+
+            try {
+                rService.setDescription(GridUtils.getServiceDescription(
+                        serviceEPR[i]));
+                rService.setName(GridUtils.getServiceDescription(serviceEPR[i]));
+            } catch (MetadataRetreivalException e) {
+                _logger.info(e);
+            } finally {
+                idxMgr.save(rService);
+            }
+
+            try {
+                _logger.debug("Found Service. Publishing Event");
+                ctx.publishEvent(new RegisteredServiceFoundEvent(this, rService));
+            } catch (NullPointerException e) {
+                _logger.error(
+                    "IndexAggregator does not have a proper context to publish events");
+            }
+
+            _logger.debug("Event Published");
+        }
+
+        _logger.debug("Index Aggregator for " + this.indexService.getName() +
+            " exiting");
+    }
+
+    public void setIndexService(IndexService indexService) {
+        this.indexService = indexService;
+    }
+
+    public void setIdxMgr(GridServiceManager idxMgr) {
+        this.idxMgr = idxMgr;
     }
 }

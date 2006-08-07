@@ -1,10 +1,13 @@
 package gov.nih.nci.cagrid.portal.aggregator;
 
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.scheduling.timer.TimerFactoryBean;
-import org.springframework.scheduling.timer.ScheduledTimerTask;
+import gov.nih.nci.cagrid.portal.domain.RegisteredService;
+import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
 
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.context.event.ContextRefreshedEvent;
+
+import java.util.Timer;
 import java.util.TimerTask;
 
 
@@ -17,32 +20,39 @@ import java.util.TimerTask;
  * @created 22-Jun-2006 6:56:33 PM
  */
 public class MetadataAggregatorFactory extends AbstractAggregator {
-    public MetadataAggregatorFactory() {
+    private static int reloaded = -1;
+    private GridServiceManager gridServiceMgr;
+
+    public MetadataAggregatorFactory(GridServiceManager gridServiceMgr) {
+        this.gridServiceMgr = gridServiceMgr;
     }
-
-
-
-
 
     public void run() {
     }
 
-
     public void onApplicationEvent(ApplicationEvent applicationEvent) {
-      _logger.debug("Event received .....................");
-        if(applicationEvent.getSource() instanceof IndexAggregator)
-        {
-            AggregatorFinishedEvent event = (AggregatorFinishedEvent)applicationEvent;
-            //schedule a Metadata Aggregator
-            _logger.debug("Scheduling metadata aggregator for service" + event.getService().getName());
-            TimerTask serviceMDAggr = new MetadataAggregator(event.getService());
-            ScheduledTimerTask[] schedule = new ScheduledTimerTask[]{
-                                                       new ScheduledTimerTask(serviceMDAggr)
-                                                        };
+        _logger.debug("Event received .....................");
 
-            TimerFactoryBean factory = new TimerFactoryBean();
-            factory.setScheduledTimerTasks(schedule);
-            factory.afterPropertiesSet();
+        if (applicationEvent instanceof RegisteredServiceFoundEvent) {
+            RegisteredServiceFoundEvent eventIndexRegistered = (RegisteredServiceFoundEvent) applicationEvent;
+            RegisteredService rService = eventIndexRegistered.getrService();
+
+            //schedule a Metadata Aggregator
+            _logger.debug("Scheduling metadata aggregator for service" +
+                rService.getName());
+
+            TimerTask serviceMDAggr = new MetadataAggregator(rService,
+                    gridServiceMgr);
+            Timer timer = new Timer(true);
+            timer.schedule(serviceMDAggr, 1);
+        } else if (applicationEvent instanceof ContextRefreshedEvent) {
+            reloaded++;
+            _logger.info("Context was reloaded or loaded for the first time. " +
+                reloaded);
+        } else if (applicationEvent instanceof ContextClosedEvent) {
+            _logger.info("Context was closed.");
+        } else {
+            _logger.info("EVENT: " + applicationEvent.getClass().getName());
         }
     }
 }

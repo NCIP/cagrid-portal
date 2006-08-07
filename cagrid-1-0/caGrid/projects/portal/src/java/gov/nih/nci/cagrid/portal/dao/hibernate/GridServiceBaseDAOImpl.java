@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.dao.hibernate;
 
+import gov.nih.nci.cagrid.portal.dao.GridServiceBaseDAO;
 import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
 
 import java.util.List;
@@ -12,7 +13,8 @@ import java.util.List;
  * Time: 8:20:54 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GridServiceBaseDAOImpl extends BaseDAOImpl {
+public class GridServiceBaseDAOImpl extends BaseDAOImpl
+    implements GridServiceBaseDAO {
     /**
      * Return ID for a EPR string
      *
@@ -28,27 +30,21 @@ public class GridServiceBaseDAOImpl extends BaseDAOImpl {
         try {
             _logger.debug("Getting ID for service:" + epr + ".");
 
-
-            List resultSet =  getHibernateTemplate().find("Select index.pk from IndexService index where index.epr = ?", epr);
-            //List resultSet = getSession().createSQLQuery("Select id_key from INDEX_SERVICE where service_epr = '" + eprStr + "';").list();
-
+            List resultSet = getHibernateTemplate().find("Select index.pk from IndexService index where index.EPR = ?",
+                    epr);
 
             /** if epr is not index then try
              * the services table
              */
             if (resultSet.isEmpty()) {
-                _logger.debug(
-                    "EPR not found in index service. Trying Registered Services" +
-                    epr + ".");
-
-                resultSet =  getHibernateTemplate().find("Select service.pk from RegisteredService service where service.epr = ?", epr);
-                //resultSet = getSession().createSQLQuery("Select id_key from REGISTERED_SERVICES where service_epr = '" + epr + "';").list();
+                resultSet = getHibernateTemplate().find("Select service.pk from RegisteredService service where service.EPR = ?",
+                        epr);
             }
 
             //return the first id as it should be unizue there should only be one
             idx = (Integer) resultSet.get(0);
         } catch (IndexOutOfBoundsException e) {
-            logger.debug("Record not found for service: " + epr);
+            logger.warn("Record not found for service: " + epr);
             throw new RecordNotFoundException();
         }
 

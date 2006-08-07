@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.exception;
 
+
 /**
  *
  * Denotes a fatal exception in
@@ -12,8 +13,7 @@ package gov.nih.nci.cagrid.portal.exception;
  * Time: 10:12:16 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PortalInitializationException extends Exception{
-
+public class PortalInitializationException extends RuntimeException {
     public PortalInitializationException(Throwable cause) {
         super(cause);
     }

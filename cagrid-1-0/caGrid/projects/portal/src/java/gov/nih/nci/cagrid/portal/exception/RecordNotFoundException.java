@@ -12,7 +12,7 @@ package gov.nih.nci.cagrid.portal.exception;
  * Time: 4:46:32 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RecordNotFoundException extends RuntimeException {
+public class RecordNotFoundException extends Exception {
     /**
      * Constructs a new runtime exception with <code>null</code> as its
      * detail message.  The cause is not initialized, and may subsequently be
