@@ -55,14 +55,12 @@ import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
 /**
- * 
- * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
+ * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
- * @created Nov 22, 2004
- * @version $Id: MakoGridServiceTreeNode.java,v 1.21 2005/04/20 17:28:54 ervin
+ * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
 public class StemTreeNode extends GridGrouperBaseTreeNode {
@@ -143,5 +141,11 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 	public GridGrouper getGridGrouper() {
 		return stem.getGridGrouper();
 	}
+
+	public GridGrouperStem getStem() {
+		return stem;
+	}
+	
+	
 
 }

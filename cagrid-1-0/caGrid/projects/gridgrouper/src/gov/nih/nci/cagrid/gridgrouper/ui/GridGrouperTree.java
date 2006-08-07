@@ -53,17 +53,14 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 /**
- * Generic Grid Service Tree
- * 
- * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
+ * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
- * @created Jul 12, 2004
- * @version $Id: GridGrouperTree.java,v 1.3 2006-08-05 03:30:32 langella Exp $
+ * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
+ *          Exp $
  */
-
 public class GridGrouperTree extends JTree {
 
 	private GridGroupersTreeNode rootNode;
