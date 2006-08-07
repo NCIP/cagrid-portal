@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
+import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 
@@ -7,14 +8,18 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JScrollPane;
-import javax.swing.JButton;
 
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.PortalResourceManager;
@@ -89,6 +94,19 @@ public class StemBrowser extends JPanel {
 	private JTextArea description = null;
 
 	private JButton updateStem = null;
+
+	private JPanel privsList = null;
+
+	private JScrollPane jScrollPane1 = null;
+
+	private StemPrivilegesTable privs = null;
+
+	private JPanel privButtons = null;
+
+	private JButton getPrivileges = null;
+
+	private JButton removePrivilege = null;
+	
 
 	/**
 	 * This is the default constructor
@@ -294,8 +312,15 @@ public class StemBrowser extends JPanel {
 	 */
 	private JPanel getPrivileges() {
 		if (privileges == null) {
+			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+			gridBagConstraints22.gridx = 0;
+			gridBagConstraints22.fill = GridBagConstraints.BOTH;
+			gridBagConstraints22.weighty = 1.0D;
+			gridBagConstraints22.weightx = 1.0D;
+			gridBagConstraints22.gridy = 0;
 			privileges = new JPanel();
 			privileges.setLayout(new GridBagLayout());
+			privileges.add(getPrivsList(), gridBagConstraints22);
 		}
 		return privileges;
 	}
@@ -603,5 +628,172 @@ public class StemBrowser extends JPanel {
 			node.refresh();
 			this.monitorUpdate();
 		}
+	}
+
+	/**
+	 * This method initializes privsList
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getPrivsList() {
+		if (privsList == null) {
+			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
+			gridBagConstraints23.gridx = 0;
+			gridBagConstraints23.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints23.weightx = 1.0D;
+			gridBagConstraints23.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints23.gridy = 1;
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = GridBagConstraints.BOTH;
+			gridBagConstraints21.weighty = 1.0;
+			gridBagConstraints21.gridx = 0;
+			gridBagConstraints21.gridy = 0;
+			gridBagConstraints21.weightx = 1.0;
+			privsList = new JPanel();
+			privsList.setLayout(new GridBagLayout());
+			privsList.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Privileges",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					GridGrouperLookAndFeel.getPanelLabelColor()));
+			privsList.add(getJScrollPane1(), gridBagConstraints21);
+			privsList.add(getPrivButtons(), gridBagConstraints23);
+		}
+		return privsList;
+	}
+
+	/**
+	 * This method initializes jScrollPane1
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getJScrollPane1() {
+		if (jScrollPane1 == null) {
+			jScrollPane1 = new JScrollPane();
+			jScrollPane1.setViewportView(getPrivs());
+		}
+		return jScrollPane1;
+	}
+
+	/**
+	 * This method initializes privs
+	 * 
+	 * @return javax.swing.JTable
+	 */
+	private StemPrivilegesTable getPrivs() {
+		if (privs == null) {
+			privs = new StemPrivilegesTable();
+		}
+		return privs;
+	}
+
+	/**
+	 * This method initializes privButtons
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getPrivButtons() {
+		if (privButtons == null) {
+			GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
+			gridBagConstraints25.gridx = 0;
+			gridBagConstraints25.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints25.gridy = 0;
+			GridBagConstraints gridBagConstraints24 = new GridBagConstraints();
+			gridBagConstraints24.gridx = 1;
+			gridBagConstraints24.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints24.gridy = 0;
+			privButtons = new JPanel();
+			privButtons.setLayout(new GridBagLayout());
+			privButtons.add(getGetPrivileges(), gridBagConstraints25);
+			privButtons.add(getRemovePrivilege(), gridBagConstraints24);
+		}
+		return privButtons;
+	}
+
+	/**
+	 * This method initializes getPrivileges
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getGetPrivileges() {
+		if (getPrivileges == null) {
+			getPrivileges = new JButton();
+			getPrivileges.setText("Get Privileges");
+			getPrivileges
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							MobiusRunnable runner = new MobiusRunnable() {
+								public void execute() {
+									loadPrivileges();
+								}
+							};
+							try {
+								PortalResourceManager.getInstance()
+										.getThreadManager()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
+							}
+						}
+
+					});
+		}
+		return getPrivileges;
+	}
+
+	public void loadPrivileges() {
+		synchronized (getPrivs()) {
+			int eid = node.getBrowser().getProgress().startEvent("Loading the privileges for "+stem.getDisplayExtension()+"...");
+			try {
+				
+				getPrivs().clearTable();
+				Map map = new HashMap();
+				Set s1 = stem.getStemmers();
+				Iterator itr1 = s1.iterator();
+				while (itr1.hasNext()) {
+					Subject sub = (Subject) itr1.next();
+					StemPrivilegeCaddy caddy = new StemPrivilegeCaddy(sub
+							.getId());
+					caddy.setStem(true);
+					map.put(caddy.getIdentity(), caddy);
+				}
+
+				Set s2 = stem.getCreators();
+				Iterator itr2 = s2.iterator();
+				while (itr2.hasNext()) {
+					Subject sub = (Subject) itr2.next();
+					StemPrivilegeCaddy caddy = null;
+					if (map.containsKey(sub.getId())) {
+						caddy = (StemPrivilegeCaddy) map.get(sub.getId());
+					} else {
+						caddy = new StemPrivilegeCaddy(sub.getId());
+						map.put(caddy.getIdentity(), caddy);
+					}
+					caddy.setCreate(true);
+				}
+
+				Iterator itr3 = map.values().iterator();
+				while (itr3.hasNext()) {
+					getPrivs().addPrivilege((StemPrivilegeCaddy) itr3.next());
+				}
+				node.getBrowser().getProgress().stopEvent(eid,"Loaded the privileges for "+stem.getDisplayExtension()+"!!!");
+			} catch (Exception e) {
+				node.getBrowser().getProgress().stopEvent(eid,"Error loading the privileges for "+stem.getDisplayExtension()+"!!!");
+				PortalUtils.showErrorMessage(e);
+			}
+		}
+	}
+
+	/**
+	 * This method initializes removePrivilege
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getRemovePrivilege() {
+		if (removePrivilege == null) {
+			removePrivilege = new JButton();
+			removePrivilege.setText("Remove Privilege");
+		}
+		return removePrivilege;
 	}
 }
