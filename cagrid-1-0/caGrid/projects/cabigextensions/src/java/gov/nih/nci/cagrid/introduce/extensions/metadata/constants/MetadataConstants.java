@@ -10,7 +10,7 @@ public interface MetadataConstants {
 	public static final String EXTENSION_NAME = "cagrid_metadata";
 
 	// metadata schema constants
-	public static final String METADATA_SCHEMA_LOCATION = "metadata" + File.separator + "cagrid" + File.separator
+	public static final String METADATA_SCHEMA_LOCATION = "cagrid" + File.separator
 		+ "types";
 	public static final String CADSR_METADATA_SCHEMA_LOCATION = METADATA_SCHEMA_LOCATION + File.separator + "cadsr";
 	public static final String CADSR_DOMAIN_SCHEMA = CADSR_METADATA_SCHEMA_LOCATION + File.separator

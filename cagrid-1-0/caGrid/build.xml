@@ -162,6 +162,7 @@
 	<target name="build-cabigextensions" if="isJDK1.5" depends="prepare" description="Builds the caBIG Introduce extensions">
 		<resolveDependencies extdir="${projects.dir}/cabigextensions/ext">
 			<artifact refid="core.jars" />
+			<artifact refid="ant-contrib.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="test.coverage.jars" />
