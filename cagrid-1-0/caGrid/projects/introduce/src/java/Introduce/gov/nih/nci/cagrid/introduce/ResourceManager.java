@@ -340,6 +340,8 @@ public class ResourceManager {
 		} else {
 			chooser = new JFileChooser();
 		}
+		chooser.setApproveButtonText("Open");
+		chooser.setApproveButtonToolTipText("Open");
 		chooser.setMultiSelectionEnabled(multiSelect);
 		chooser.setDialogTitle(title);
 		chooser.setFileFilter(filter);
