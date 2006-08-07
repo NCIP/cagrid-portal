@@ -294,6 +294,22 @@ public class GroupManagementBrowser extends GridPortalComponent {
 			view = new JButton();
 			view.setText("View");
 			view.setIcon(GridGrouperLookAndFeel.getQueryIcon());
+			view.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							getTabbedContent().addNode(getGroupTree().getCurrentNode());
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+
+				}
+			});
 		}
 		return view;
 	}

@@ -56,4 +56,9 @@ public class GridGrouperLookAndFeel extends PortalLookAndFeel {
 		return new javax.swing.ImageIcon(GridGrouperLookAndFeel.class
 				.getResource("/chart_organisation.png"));
 	}
+	
+	public final static ImageIcon getCloseTab() {
+		return new javax.swing.ImageIcon(GridGrouperLookAndFeel.class
+				.getResource("/closeTab.gif"));
+	}
 }

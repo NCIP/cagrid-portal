@@ -179,4 +179,8 @@ public class StemBrowser extends JPanel {
 		return credentials;
 	}
 
+	public StemTreeNode getStemNode() {
+		return node;
+	}
+
 }

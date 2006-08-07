@@ -1,10 +1,16 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
-import javax.swing.JTabbedPane;
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+
+import java.awt.Component;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -18,9 +24,16 @@ import java.awt.GridBagConstraints;
 public class ContentManager extends JTabbedPane {
 
 	private static final long serialVersionUID = 1L;
+
 	private JPanel welcomePanel = null;
+
 	private static final String WELCOME = "Grid Grouper";
+
 	private JLabel gridGrouperImage = null;
+
+	private Map stems = new HashMap(); // @jve:decl-index=0:
+
+	private Map groups = new HashMap();
 
 	/**
 	 * This is the default constructor
@@ -37,23 +50,81 @@ public class ContentManager extends JTabbedPane {
 	 */
 	private void initialize() {
 		this.setSize(300, 200);
+		this.addTab(WELCOME, GridGrouperLookAndFeel.getGrouperIcon22x22(),
+				getWelcomePanel(), null);
+	}
 
-		this.addTab(WELCOME, GridGrouperLookAndFeel.getGrouperIcon22x22(), getWelcomePanel(), null);
+	public void addNode(GridGrouperBaseTreeNode node) {
+		if (node instanceof StemTreeNode) {
+			this.addStem((StemTreeNode) node);
+		} else {
+			PortalUtils
+					.showErrorMessage("Please select a stem or group to view!!!");
+		}
+	}
+
+	public void removeNode(GridGrouperBaseTreeNode node)
+			throws Exception {
+		if (node instanceof StemTreeNode) {
+			this.removeStem((StemTreeNode) node);
+		} else {
+			PortalUtils
+					.showErrorMessage("Please select a stem or group to remove!!!");
+		}
+	}
+
+	public void addStem(StemTreeNode node) {
+		String stemName = node.getStem().getName();
+		this.removeStem(node, true);
+		StemBrowser browser = new StemBrowser(node);
+		stems.put(stemName, browser);
+		this.addTab(node.getStem().getDisplayExtension(), new CombinedIcon(new ContentManagerTabCloseIcon(),
+				GridGrouperLookAndFeel.getStemIcon()), browser, null);
+		this.remove(getWelcomePanel());
+		this.setSelectedComponent(browser);
+
+	}
+
+	public void removeSelectedNode() {
+		Component c = this.getSelectedComponent();
+		if (c instanceof StemBrowser) {
+			StemBrowser sb = (StemBrowser) c;
+			removeStem(sb.getStemNode());
+		}
+	}
+
+	public void removeStem(StemTreeNode node) {
+		this.removeStem(node, false);
+	}
+
+	private void removeStem(StemTreeNode node, boolean internal) {
+		String stemName = node.getStem().getName();
+		if (stems.containsKey(stemName)) {
+			StemBrowser sb = (StemBrowser) stems.remove(stemName);
+			this.remove(sb);
+		}
+		if (!internal) {
+			if ((stems.size() == 0) && (groups.size() == 0)) {
+				this.addTab(WELCOME, GridGrouperLookAndFeel
+						.getGrouperIcon22x22(), getWelcomePanel(), null);
+				this.setSelectedComponent(getWelcomePanel());
+			}
+		}
 	}
 
 	/**
-	 * This method initializes welcomePanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes welcomePanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getWelcomePanel() {
 		if (welcomePanel == null) {
-			gridGrouperImage = new JLabel(GridGrouperLookAndFeel.getGrouperIconNoBackground());
+			gridGrouperImage = new JLabel(GridGrouperLookAndFeel
+					.getGrouperIconNoBackground());
 			welcomePanel = new JPanel();
 			welcomePanel.setLayout(new GridBagLayout());
 			welcomePanel.add(gridGrouperImage, new GridBagConstraints());
 		}
 		return welcomePanel;
 	}
-
 }
