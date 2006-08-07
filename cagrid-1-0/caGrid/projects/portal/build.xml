@@ -4,7 +4,7 @@
     <!-- Local Environment -->
     <property environment="env"/>
     <property name="project.name" value="portal"/>
-    <property file="${user.name}-${project.name}-build.properties"/>
+    <property file="${project.name}-build.properties"/>
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}"/>
     <property name="globus.lib.dir" location="${globus.dir}/lib"/>
 
