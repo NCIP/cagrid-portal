@@ -15,7 +15,7 @@ public class CombinedIcon implements Icon {
 	/**
 	 * Creates a new instance of CombinedIcon.
 	 */
-	public CombinedIcon(Icon icon1, Icon icon2) {
+	public CombinedIcon(Icon icon1,Icon icon2) {
 		mIcon1 = icon1;
 		mIcon2 = icon2;
 	}
