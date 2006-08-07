@@ -10,18 +10,27 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
 
+/**
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
+ * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
+ * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
+ * 
+ * @created Jul 12, 2004
+ * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
+ *          Exp $
+ */
 public class GroupManagementBrowser extends GridPortalComponent {
 
 	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
-
-	private JPanel mainPanel = null;
 
 	private JPanel treePanel = null;
 
@@ -42,6 +51,10 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	private JButton view = null;
 
 	private JButton refresh = null;
+
+	private JSplitPane jSplitPane = null;
+
+	private ContentManager tabbedContent = null;
 
 	/**
 	 * This is the default constructor
@@ -72,37 +85,9 @@ public class GroupManagementBrowser extends GridPortalComponent {
 		if (jContentPane == null) {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new BorderLayout());
-			jContentPane.add(getMainPanel(), BorderLayout.CENTER);
+			jContentPane.add(getJSplitPane(), BorderLayout.CENTER);
 		}
 		return jContentPane;
-	}
-
-	/**
-	 * This method initializes mainPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getMainPanel() {
-		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 1;
-			gridBagConstraints3.weightx = 1.0D;
-			gridBagConstraints3.weighty = 1.0D;
-			gridBagConstraints3.gridy = 0;
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.anchor = GridBagConstraints.WEST;
-			gridBagConstraints.gridy = 0;
-			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints.fill = GridBagConstraints.BOTH;
-			gridBagConstraints.weightx = 0.0D;
-			gridBagConstraints.weighty = 1.0D;
-			gridBagConstraints.gridx = 0;
-			mainPanel = new JPanel();
-			mainPanel.setLayout(new GridBagLayout());
-			mainPanel.add(getTreePanel(), gridBagConstraints);
-			mainPanel.add(getContentPanel(), gridBagConstraints3);
-		}
-		return mainPanel;
 	}
 
 	/**
@@ -144,8 +129,15 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	 */
 	private JPanel getContentPanel() {
 		if (contentPanel == null) {
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.fill = GridBagConstraints.BOTH;
+			gridBagConstraints.weighty = 1.0;
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.gridy = 0;
+			gridBagConstraints.weightx = 1.0;
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
+			contentPanel.add(getTabbedContent(), gridBagConstraints);
 		}
 		return contentPanel;
 	}
@@ -340,6 +332,32 @@ public class GroupManagementBrowser extends GridPortalComponent {
 			});
 		}
 		return refresh;
+	}
+
+	/**
+	 * This method initializes jSplitPane	
+	 * 	
+	 * @return javax.swing.JSplitPane	
+	 */
+	private JSplitPane getJSplitPane() {
+		if (jSplitPane == null) {
+			jSplitPane = new JSplitPane();
+			jSplitPane.setLeftComponent(getTreePanel());
+			jSplitPane.setRightComponent(getContentPanel());
+		}
+		return jSplitPane;
+	}
+
+	/**
+	 * This method initializes tabbedContent	
+	 * 	
+	 * @return javax.swing.JTabbedPane	
+	 */
+	private ContentManager getTabbedContent() {
+		if (tabbedContent == null) {
+			tabbedContent = new ContentManager();
+		}
+		return tabbedContent;
 	}
 
 }
