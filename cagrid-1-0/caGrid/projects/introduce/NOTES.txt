@@ -1,10 +1,18 @@
 To Do:
 
+look into whether we should have services return EPR-wrappers instead of EPRs themselves
+  -this is keeping with the strongly-typed aspect
+  -if i know an operation returns a pointer to one of my contexts... i should specify that explicitly instead of returning a generic EPR
+
+GUI needs a way to group common preferences that extensions can use (such as GME URL), intead of each having to define/use their own
+
+need to handle faults better
+ -bare minimum:  need an editible dropdown containing the currently used fault types that people can select from (dynamically populated from current types
+ -ideal: also allow user to select a fault from the type selection component (verify it extends from base fault, etc)
+
 Need to add support importing methods from other wsdl which does not use our common message names....
 
 Need to add "resourceLink" for each sub service to each other service so that they can look them up and create instances....
-
-Add an option to have all method implementations call a generic method.  Something like: Object performMethod(String methodName, Object[] params, String[] paramNames).  This will simplify grid implementations that call into an existing implementation object.  It is similar to Java proxy - see java.lang.reflect.InvocationHandler.
 
 I was adding faults to a method, and when I hit done, an error dialog poped up with method "java.util.Vector" and removed my faults
 
@@ -14,8 +22,6 @@ metadata code doesn't compile if you select an element that is xsd:type an XML s
 
 Introduce Portal (or something it uses) is leaving file handles open
   - when i create a service, then close the mod viewer, and try to create it again, it can't delete the creation dir
-
-add support for having fault types in the types browser....
 
 assumption is made that when a method is imported from a wsdl that all the messages for that method are of that wsdl's namespace....
 
@@ -54,6 +60,8 @@ service contexts backend for service properties need to have resourceLinks to th
 service contexts need a way to edit service security
 
 If a schema element type is in use by a method, the namespace type for the schema element cannot be removed.  Makes it 'impossible' to update schemas.
+
+(WONT DO... COULD BE DONE WITH EXTENSIONS) Add an option to have all method implementations call a generic method.  Something like: Object performMethod(String methodName, Object[] params, String[] paramNames).  This will simplify grid implementations that call into an existing implementation object.  It is similar to Java proxy - see java.lang.reflect.InvocationHandler.
 
 type browser issues:
 -(DONE)Try to create a new service on the desktop and throws an error
