@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- ================================================================= -->
-<!-- caGrid 1.0 caBIG Introduce Extensions build file                                        -->
+<!-- caGrid 1.0 caBIG Introduce Extensions build file                  -->
 <!-- ================================================================= -->
 
 <project name="core" default="compile" basedir=".">
@@ -34,7 +34,21 @@
 
     <!-- extension info -->
     <property name="metadata.extension.description.file" value="${basedir}/extensions/cagrid_metadata/extension.xml" />
+    <property name="wsenum.extension.description.file" value="${basedir}/extensions/cagrid_wsEnum/extension.xml" />
     <property name="introduce.extensions.dir" location="../introduce/extensions" />
+	
+	<!-- macrodef for installing an introduce extension -->
+    <macrodef name="installExtension">
+    	<attribute name="description"/>
+        <attribute name="destination"/>
+    	<attribute name="mkdirs" default="NOT SET"/>
+    	<attribute name="libs" default="NOT SET"/>
+    	<attribute name="schemas" default="NOT SET"/>
+        <sequential>
+            
+        </sequential>
+    </macrodef>
+
 
 
     <import file="test/test.xml" />
@@ -151,7 +165,7 @@
 
 
     <!-- ============================================================== -->
-    <!-- Creates the test jar files                                          -->
+    <!-- Creates the jar files                                          -->
     <!-- ============================================================== -->
     <target name="jar" depends="compile" description="Builds the Jar Files">
         <mkdir dir="${jar.dir}" />
@@ -164,7 +178,7 @@
     </target>
 
     <!-- ============================================================== -->
-    <!-- Creates the jar files                                          -->
+    <!-- Creates the test jar files                                     -->
     <!-- ============================================================== -->
     <target name="jar-tests" depends="compile-tests" description="Builds the Jar Files">
         <mkdir dir="${jar.dir}" />
@@ -177,7 +191,7 @@
 
 
     <!-- TODO: Make this a macrodef when we have more than 1 extension -->
-    <!-- Build and install extensions for introduce -->
+    <!-- Build and install metadata extension for introduce -->
     <target name="installIntroduceExtensions" depends="all" description="Builds and installs the caBIG extensions into Introduce.">
 
         <delete dir="${introduce.extensions.dir}/cagrid_metadata" />
@@ -206,6 +220,39 @@
             </fileset>
         </copy>
     </target>
+	
+	
+	<!-- build and install WS-Enumeration extension for introduce -->
+	<target name="installWsEnumExtension" depends="all" description="Builds and installs the WS-Enumeration extensions into Introduce">
+		<!-- make directories for extension -->
+		<delete dir="${introduce.extensions.dir}/cagrid_wsEnum"/>
+		<mkdir dir="${introduce.extensions.dir}/cagrid_wsEnum"/>
+		<mkdir dir="${introduce.extensions.dir}/cagrid_wsEnum/schema"/>
+		
+		<!-- copy extension description file -->
+		<copy todir="${introduce.extensions.dir}/cagrid_wsEnum" file="${wsenum.extension.description.file}"/>
+		
+		<!-- needed schemas and wsdl -->
+		<copy todir="${introduce.extensions.dir}/cagrid_wsEnum/schema">
+			<fileset dir="${ext.schema.dir}">
+				<include name="*.xsd"/>
+				<include name="*.wsdl"/>
+			</fileset>
+		</copy>
+		
+		<!-- extension libraries -->
+		 <copy todir="${introduce.extensions.dir}/lib">
+		 	<fileset dir="${lib.dir}">
+		    	<include name="*.jar" />
+		    </fileset>
+		    <fileset dir="${ext.lib.dir}">
+		    	<include name="*.jar" />
+		    </fileset>
+		    <fileset dir="${jar.dir}">
+		    	<include name="**/*.jar" />
+			</fileset>
+		</copy>
+	</target>
 
     <!-- ============================================================== -->
     <!-- Builds from scratch                                                -->
