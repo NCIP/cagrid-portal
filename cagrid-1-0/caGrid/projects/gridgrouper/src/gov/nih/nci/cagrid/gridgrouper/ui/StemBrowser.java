@@ -1,14 +1,23 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 
-import java.awt.GridBagLayout;
-
-import javax.swing.JPanel;
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.JButton;
+
+import org.projectmobius.common.MobiusRunnable;
+import org.projectmobius.portal.PortalResourceManager;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -41,6 +50,46 @@ public class StemBrowser extends JPanel {
 
 	private JTextField credentials = null;
 
+	private JTabbedPane stemDetails = null;
+
+	private JPanel details = null;
+
+	private JPanel privileges = null;
+
+	private JPanel childStems = null;
+
+	private JPanel groups = null;
+
+	private JPanel detailsPanel = null;
+
+	private JLabel jLabel3 = null;
+
+	private JTextField groupId = null;
+
+	private JLabel jLabel4 = null;
+
+	private JTextField displayName = null;
+
+	private JLabel jLabel5 = null;
+
+	private JTextField systemName = null;
+
+	private JLabel displayExtensionLabel = null;
+
+	private JTextField displayExtension = null;
+
+	private JLabel jLabel6 = null;
+
+	private JTextField systemExtension = null;
+
+	private JLabel jLabel7 = null;
+
+	private JScrollPane jScrollPane = null;
+
+	private JTextArea description = null;
+
+	private JButton updateStem = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -50,16 +99,23 @@ public class StemBrowser extends JPanel {
 		this.stem = node.getStem();
 		initialize();
 		this.setStem();
+
 	}
 
 	private void setStem() {
 		this.serviceURI.setText(this.node.getGridGrouper().getName());
-		this.stemName.setText(stem.getDisplayExtension());
+		this.stemName.setText(stem.getDisplayName());
 		if (node.getGridGrouper().getProxyIdentity() == null) {
 			this.credentials.setText("None");
 		} else {
 			this.credentials.setText(node.getGridGrouper().getProxyIdentity());
 		}
+		this.groupId.setText(stem.getUuid());
+		this.getDisplayName().setText(stem.getDisplayName());
+		this.getSystemName().setText(stem.getName());
+		this.getDisplayExtension().setText(stem.getDisplayExtension());
+		this.getSystemExtension().setText(stem.getExtension());
+		this.getDescription().setText(stem.getDescription());
 	}
 
 	/**
@@ -68,6 +124,13 @@ public class StemBrowser extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.fill = GridBagConstraints.BOTH;
+		gridBagConstraints11.weighty = 1.0;
+		gridBagConstraints11.gridx = 0;
+		gridBagConstraints11.gridy = 1;
+		gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints11.weightx = 1.0;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.anchor = GridBagConstraints.NORTH;
@@ -75,9 +138,11 @@ public class StemBrowser extends JPanel {
 		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.gridy = 0;
-		this.setSize(300, 200);
+		this.setSize(400, 400);
 		this.setLayout(new GridBagLayout());
 		this.add(getStemProperties(), gridBagConstraints);
+		this.add(getStemDetails(), gridBagConstraints11);
+
 	}
 
 	/**
@@ -136,6 +201,15 @@ public class StemBrowser extends JPanel {
 			stemProperties.add(getStemName(), gridBagConstraints4);
 			stemProperties.add(jLabel2, gridBagConstraints5);
 			stemProperties.add(getCredentials(), gridBagConstraints6);
+			stemProperties
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Grid Grouper Stem",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, GridGrouperLookAndFeel
+											.getPanelLabelColor()));
 		}
 		return stemProperties;
 	}
@@ -183,4 +257,351 @@ public class StemBrowser extends JPanel {
 		return node;
 	}
 
+	/**
+	 * This method initializes stemDetails
+	 * 
+	 * @return javax.swing.JTabbedPane
+	 */
+	private JTabbedPane getStemDetails() {
+		if (stemDetails == null) {
+			stemDetails = new JTabbedPane();
+			stemDetails.addTab("Details", null, getDetails(), null);
+			stemDetails.addTab("Privileges", null, getPrivileges(), null);
+			stemDetails.addTab("Child Stems", null, getChildStems(), null);
+			stemDetails.addTab("Groups", null, getGroups(), null);
+		}
+		return stemDetails;
+	}
+
+	/**
+	 * This method initializes details
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getDetails() {
+		if (details == null) {
+			details = new JPanel();
+			details.setLayout(new BorderLayout());
+			details.add(getDetailsPanel(), BorderLayout.CENTER);
+		}
+		return details;
+	}
+
+	/**
+	 * This method initializes privileges
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getPrivileges() {
+		if (privileges == null) {
+			privileges = new JPanel();
+			privileges.setLayout(new GridBagLayout());
+		}
+		return privileges;
+	}
+
+	/**
+	 * This method initializes childStems
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getChildStems() {
+		if (childStems == null) {
+			childStems = new JPanel();
+			childStems.setLayout(new GridBagLayout());
+		}
+		return childStems;
+	}
+
+	/**
+	 * This method initializes groups
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getGroups() {
+		if (groups == null) {
+			groups = new JPanel();
+			groups.setLayout(new GridBagLayout());
+		}
+		return groups;
+	}
+
+	/**
+	 * This method initializes detailsPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getDetailsPanel() {
+		if (detailsPanel == null) {
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.gridx = 0;
+			gridBagConstraints20.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints20.gridwidth = 2;
+			gridBagConstraints20.gridy = 7;
+			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
+			gridBagConstraints19.fill = GridBagConstraints.BOTH;
+			gridBagConstraints19.weighty = 1.0;
+			gridBagConstraints19.gridx = 0;
+			gridBagConstraints19.gridy = 6;
+			gridBagConstraints19.gridwidth = 2;
+			gridBagConstraints19.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints19.weightx = 1.0;
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.gridx = 0;
+			gridBagConstraints18.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints18.gridwidth = 2;
+			gridBagConstraints18.gridy = 5;
+			jLabel7 = new JLabel();
+			jLabel7.setText("Description");
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints17.gridy = 4;
+			gridBagConstraints17.weightx = 1.0;
+			gridBagConstraints17.anchor = GridBagConstraints.WEST;
+			gridBagConstraints17.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints17.gridx = 1;
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.anchor = GridBagConstraints.WEST;
+			gridBagConstraints16.gridx = 0;
+			gridBagConstraints16.gridy = 4;
+			gridBagConstraints16.insets = new Insets(2, 2, 2, 2);
+			jLabel6 = new JLabel();
+			jLabel6.setText("System Extension");
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints15.gridy = 3;
+			gridBagConstraints15.weightx = 1.0;
+			gridBagConstraints15.anchor = GridBagConstraints.WEST;
+			gridBagConstraints15.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints15.gridx = 1;
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.gridx = 0;
+			gridBagConstraints14.anchor = GridBagConstraints.WEST;
+			gridBagConstraints14.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints14.gridy = 3;
+			displayExtensionLabel = new JLabel();
+			displayExtensionLabel.setText("Display Extension");
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints13.gridy = 2;
+			gridBagConstraints13.weightx = 1.0;
+			gridBagConstraints13.anchor = GridBagConstraints.WEST;
+			gridBagConstraints13.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints13.gridx = 1;
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 0;
+			gridBagConstraints12.anchor = GridBagConstraints.WEST;
+			gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints12.gridy = 2;
+			jLabel5 = new JLabel();
+			jLabel5.setText("System Name");
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.weightx = 1.0;
+			gridBagConstraints10.anchor = GridBagConstraints.WEST;
+			gridBagConstraints10.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridx = 1;
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.gridx = 0;
+			gridBagConstraints9.anchor = GridBagConstraints.WEST;
+			gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints9.gridy = 1;
+			jLabel4 = new JLabel();
+			jLabel4.setText("Display Name");
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.gridx = 1;
+			gridBagConstraints8.gridy = 0;
+			gridBagConstraints8.anchor = GridBagConstraints.WEST;
+			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints8.weightx = 1.0;
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.anchor = GridBagConstraints.WEST;
+			gridBagConstraints7.gridy = 0;
+			gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints7.gridx = 0;
+			jLabel3 = new JLabel();
+			jLabel3.setText("Group Id");
+			detailsPanel = new JPanel();
+			detailsPanel.setLayout(new GridBagLayout());
+			detailsPanel.add(jLabel3, gridBagConstraints7);
+			detailsPanel.add(getGroupId(), gridBagConstraints8);
+			detailsPanel.add(jLabel4, gridBagConstraints9);
+			detailsPanel.add(getDisplayName(), gridBagConstraints10);
+			detailsPanel.add(jLabel5, gridBagConstraints12);
+			detailsPanel.add(getSystemName(), gridBagConstraints13);
+			detailsPanel.add(displayExtensionLabel, gridBagConstraints14);
+			detailsPanel.add(getDisplayExtension(), gridBagConstraints15);
+			detailsPanel.add(jLabel6, gridBagConstraints16);
+			detailsPanel.add(getSystemExtension(), gridBagConstraints17);
+			detailsPanel.add(jLabel7, gridBagConstraints18);
+			detailsPanel.add(getJScrollPane(), gridBagConstraints19);
+			detailsPanel.add(getUpdateStem(), gridBagConstraints20);
+		}
+		return detailsPanel;
+	}
+
+	/**
+	 * This method initializes groupId
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getGroupId() {
+		if (groupId == null) {
+			groupId = new JTextField();
+			groupId.setEnabled(true);
+			groupId.setEditable(false);
+		}
+		return groupId;
+	}
+
+	/**
+	 * This method initializes displayName
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getDisplayName() {
+		if (displayName == null) {
+			displayName = new JTextField();
+			displayName.setEditable(false);
+		}
+		return displayName;
+	}
+
+	/**
+	 * This method initializes systemName
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getSystemName() {
+		if (systemName == null) {
+			systemName = new JTextField();
+			systemName.setEditable(false);
+		}
+		return systemName;
+	}
+
+	/**
+	 * This method initializes displayExtension
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getDisplayExtension() {
+		if (displayExtension == null) {
+			displayExtension = new JTextField();
+			displayExtension
+					.addCaretListener(new javax.swing.event.CaretListener() {
+						public void caretUpdate(javax.swing.event.CaretEvent e) {
+							monitorUpdate();
+						}
+					});
+
+		}
+		return displayExtension;
+	}
+
+	private void monitorUpdate() {
+		if (!getDisplayExtension().getText().equals(stem.getDisplayExtension())) {
+			this.getUpdateStem().setEnabled(true);
+		} else if (!getDescription().getText().equals(stem.getDescription())) {
+			this.getUpdateStem().setEnabled(true);
+		} else {
+			this.getUpdateStem().setEnabled(false);
+		}
+	}
+
+	/**
+	 * This method initializes systemExtension
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getSystemExtension() {
+		if (systemExtension == null) {
+			systemExtension = new JTextField();
+			systemExtension.setEditable(false);
+		}
+		return systemExtension;
+	}
+
+	/**
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getJScrollPane() {
+		if (jScrollPane == null) {
+			jScrollPane = new JScrollPane();
+			jScrollPane.setViewportView(getDescription());
+		}
+		return jScrollPane;
+	}
+
+	/**
+	 * This method initializes description
+	 * 
+	 * @return javax.swing.JTextArea
+	 */
+	private JTextArea getDescription() {
+		if (description == null) {
+			description = new JTextArea();
+			description.setLineWrap(true);
+			description.addCaretListener(new javax.swing.event.CaretListener() {
+				public void caretUpdate(javax.swing.event.CaretEvent e) {
+					monitorUpdate();
+				}
+			});
+		}
+		return description;
+	}
+
+	/**
+	 * This method initializes updateStem
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getUpdateStem() {
+		if (updateStem == null) {
+			updateStem = new JButton();
+			updateStem.setText("Update Stem");
+			updateStem.setEnabled(false);
+			updateStem.setIcon(GridGrouperLookAndFeel.getStemIcon());
+			updateStem.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							updateStem();
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+
+			});
+		}
+		return updateStem;
+	}
+
+	private void updateStem() {
+		try {
+			if (!getDisplayExtension().getText().equals(
+					stem.getDisplayExtension())) {
+				stem.setDisplayExtension(getDisplayExtension().getText());
+			} else if (!getDescription().getText()
+					.equals(stem.getDescription())) {
+				stem.setDescription(getDescription().getText());
+			}
+			node.refresh();
+			setStem();
+			this.monitorUpdate();
+		} catch (Exception e) {
+			PortalUtils.showErrorMessage(e);
+			node.refresh();
+			this.monitorUpdate();
+		}
+	}
 }

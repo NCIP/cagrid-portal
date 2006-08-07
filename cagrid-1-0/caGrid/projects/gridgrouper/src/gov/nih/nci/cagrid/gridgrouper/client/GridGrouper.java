@@ -176,11 +176,7 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 	}
 
 	public String getProxyIdentity() {
-		if (getClient().getProxy() != null) {
-			return getClient().getProxy().getIdentity();
-		} else {
-			return null;
-		}
+		return getClient().getProxyIdentity();
 	}
 
 }
