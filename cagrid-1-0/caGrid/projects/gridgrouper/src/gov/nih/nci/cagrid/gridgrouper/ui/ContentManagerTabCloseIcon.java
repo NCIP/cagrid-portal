@@ -5,8 +5,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.Icon;
-import javax.swing.JTabbedPane;
 
 public class ContentManagerTabCloseIcon implements Icon {
 	private final Icon mIcon;
@@ -36,7 +36,6 @@ public class ContentManagerTabCloseIcon implements Icon {
 		if (null == mTabbedPane) {
 			mTabbedPane = (ContentManager) c;
 			mTabbedPane.addMouseListener(new MouseAdapter() {
-				@Override
 				public void mouseReleased(MouseEvent e) {
 					// asking for isConsumed is *very* important, otherwise more
 					// than one tab might get closed!
