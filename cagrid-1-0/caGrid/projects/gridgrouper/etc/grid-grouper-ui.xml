@@ -9,8 +9,8 @@
 	  	     <![CDATA[<html><h2>Grid Grouper</h2><h3>Authors:</h3><a href="mailto:hastings@bmi.osu.edu">Shannon Hastings</a> and <a href="mailto:langella@bmi.osu.edu">Stephen Langella</a> and <a href="mailto:oster@bmi.osu.edu">Scott Oster</a>]]>	
 	  	</about>
 	  	<dimensions>
-	  		<width>850</width>
-	  		<height>750</height>
+	  		<width>1024</width>
+	  		<height>768</height>
 	  	</dimensions>
 	  </application>
 	  <components>
@@ -19,10 +19,10 @@
 	  		<title>Group Management</title>
 	  		<description>Group Management Browser</description>
 	  		<class>gov.nih.nci.cagrid.gridgrouper.ui.GroupManagementBrowser</class>
-	  		<icon>/system-users.png</icon>
+	  		<icon>/grouper_logo_no_background_22x22.png</icon>
 	  		<dimensions>
-	  			<width>800</width>
-	  			<height>500</height>
+	  			<width>900</width>
+	  			<height>600</height>
 	  		</dimensions>
 	  	</component>
 	  

@@ -11,7 +11,7 @@ import javax.swing.table.TableColumn;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: StemPrivilegesTable.java,v 1.1 2006-08-07 20:31:23 langella Exp $
+ * @version $Id: StemPrivilegesTable.java,v 1.2 2006-08-08 17:11:44 langella Exp $
  */
 public class StemPrivilegesTable extends PortalBaseTable {
 	public final static String CADDY = "Caddy";
@@ -20,7 +20,7 @@ public class StemPrivilegesTable extends PortalBaseTable {
 
 	public final static String CREATOR = "Create";
 
-	public final static String STEMMER = "Stemmer";
+	public final static String STEMMER = "Stem";
 
 	public StemPrivilegesTable() {
 		super(createTableModel());
@@ -29,9 +29,15 @@ public class StemPrivilegesTable extends PortalBaseTable {
 		c.setMinWidth(0);
 		c.setPreferredWidth(0);
 		c.setResizable(false);
-
-		c = this.getColumn(IDENTITY);
-		c.setMinWidth(300);
+		
+		c = this.getColumn(CREATOR);
+		c.setMinWidth(60);
+		c.setMaxWidth(60);
+		c.setPreferredWidth(0);
+		
+		c = this.getColumn(STEMMER);
+		c.setMinWidth(60);
+		c.setMaxWidth(60);
 		c.setPreferredWidth(0);
 
 		this.clearTable();
