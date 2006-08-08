@@ -25,7 +25,7 @@ public abstract class AbstractDbCleanupStep
 	
 	public AbstractDbCleanupStep() 
 	{
-		this("jdbc:mysql://localhost/test", "root", "");
+		this("jdbc:mysql://localhost/mysql", "root", "");
 	}
 	
 	public AbstractDbCleanupStep(String dbUrl, String user, String password) 
