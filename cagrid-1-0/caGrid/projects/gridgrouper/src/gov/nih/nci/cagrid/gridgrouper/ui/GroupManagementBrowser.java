@@ -368,7 +368,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	 * 	
 	 * @return javax.swing.JTabbedPane	
 	 */
-	private ContentManager getTabbedContent() {
+	protected ContentManager getTabbedContent() {
 		if (tabbedContent == null) {
 			tabbedContent = new ContentManager();
 		}

@@ -9,6 +9,8 @@ import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -17,6 +19,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -25,6 +28,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.PortalResourceManager;
@@ -124,6 +128,24 @@ public class StemBrowser extends JPanel {
 
 	private JButton addPriv = null;
 
+	private JPanel stemsPanel = null;
+
+	private JScrollPane jScrollPane2 = null;
+
+	private StemsTable childStemsTable = null;
+
+	private JPanel addStemPanel = null;
+
+	private JLabel jLabel10 = null;
+
+	private JTextField childName = null;
+
+	private JLabel jLabel11 = null;
+
+	private JTextField childDisplayName = null;
+
+	private JButton addChildStem = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -150,6 +172,15 @@ public class StemBrowser extends JPanel {
 		this.getDisplayExtension().setText(stem.getDisplayExtension());
 		this.getSystemExtension().setText(stem.getExtension());
 		this.getDescription().setText(stem.getDescription());
+		getChildStemsTable().clearTable();
+		int count = node.getChildCount();
+		for (int i = 0; i < count; i++) {
+			GridGrouperBaseTreeNode child = (GridGrouperBaseTreeNode) node
+					.getChildAt(i);
+			if (child instanceof StemTreeNode) {
+				getChildStemsTable().addStem((StemTreeNode) child);
+			}
+		}
 	}
 
 	/**
@@ -299,10 +330,14 @@ public class StemBrowser extends JPanel {
 	private JTabbedPane getStemDetails() {
 		if (stemDetails == null) {
 			stemDetails = new JTabbedPane();
-			stemDetails.addTab("Details", GridGrouperLookAndFeel.getDetailsIcon(), getDetails(), null);
-			stemDetails.addTab("Privileges", GridGrouperLookAndFeel.getPrivilegesIcon(), getPrivileges(), null);
-			stemDetails.addTab("Child Stems", GridGrouperLookAndFeel.getStemIcon(), getChildStems(), null);
-			stemDetails.addTab("Groups", GridGrouperLookAndFeel.getGroupIcon(), getGroups(), null);
+			stemDetails.addTab("Details", GridGrouperLookAndFeel
+					.getDetailsIcon(), getDetails(), null);
+			stemDetails.addTab("Privileges", GridGrouperLookAndFeel
+					.getPrivilegesIcon(), getPrivileges(), null);
+			stemDetails.addTab("Child Stems", GridGrouperLookAndFeel
+					.getStemIcon(), getChildStems(), null);
+			stemDetails.addTab("Groups", GridGrouperLookAndFeel.getGroupIcon(),
+					getGroups(), null);
 		}
 		return stemDetails;
 	}
@@ -355,8 +390,29 @@ public class StemBrowser extends JPanel {
 	 */
 	private JPanel getChildStems() {
 		if (childStems == null) {
+			GridBagConstraints gridBagConstraints34 = new GridBagConstraints();
+			gridBagConstraints34.gridx = 0;
+			gridBagConstraints34.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints34.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints34.weightx = 1.0D;
+			gridBagConstraints34.gridy = 1;
+			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
+			gridBagConstraints32.gridx = 0;
+			gridBagConstraints32.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints32.fill = GridBagConstraints.BOTH;
+			gridBagConstraints32.weightx = 1.0D;
+			gridBagConstraints32.weighty = 1.0D;
+			gridBagConstraints32.gridy = 0;
+			gridBagConstraints32.gridx = 0;
+			gridBagConstraints32.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints32.weightx = 1.0D;
+			gridBagConstraints32.weighty = 1.0D;
+			gridBagConstraints32.fill = GridBagConstraints.BOTH;
+			gridBagConstraints32.gridy = 0;
 			childStems = new JPanel();
 			childStems.setLayout(new GridBagLayout());
+			childStems.add(getStemsPanel(), gridBagConstraints32);
+			childStems.add(getAddStemPanel(), gridBagConstraints34);
 		}
 		return childStems;
 	}
@@ -842,7 +898,7 @@ public class StemBrowser extends JPanel {
 														new RemoveStemPrivilegeWindow(
 																sb, caddy),
 														500, 200);
-										
+
 									} catch (Exception e) {
 										PortalUtils.showErrorMessage(e);
 									}
@@ -968,11 +1024,11 @@ public class StemBrowser extends JPanel {
 
 								String id = Utils
 										.clean(getIdentity().getText());
-								if (id == null) {
-									PortalUtils
-											.showErrorMessage("Please enter a valid identity!!!");
-								}
+
 								Subject sub = SubjectUtils.getSubject(id);
+								if (id == null) {
+									getIdentity().setText(sub.getId());
+								}
 								stem.grantPriv(sub,
 										(Privilege) getStemPrivilege()
 												.getSelectedItem());
@@ -1001,5 +1057,187 @@ public class StemBrowser extends JPanel {
 
 	public Stem getStem() {
 		return stem;
+	}
+
+	/**
+	 * This method initializes stemsPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getStemsPanel() {
+		if (stemsPanel == null) {
+			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
+			gridBagConstraints33.fill = GridBagConstraints.BOTH;
+			gridBagConstraints33.weighty = 1.0;
+			gridBagConstraints33.weightx = 1.0;
+			stemsPanel = new JPanel();
+			stemsPanel.setLayout(new GridBagLayout());
+			stemsPanel.add(getJScrollPane2(), gridBagConstraints33);
+			stemsPanel.setBorder(javax.swing.BorderFactory
+					.createTitledBorder(
+							null,
+							"Child Stems",
+							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+							javax.swing.border.TitledBorder.DEFAULT_POSITION,
+							null, GridGrouperLookAndFeel
+									.getPanelLabelColor()));
+		}
+		return stemsPanel;
+	}
+
+	/**
+	 * This method initializes jScrollPane2
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getJScrollPane2() {
+		if (jScrollPane2 == null) {
+			jScrollPane2 = new JScrollPane();
+			jScrollPane2.setViewportView(getChildStemsTable());
+		}
+		return jScrollPane2;
+	}
+
+	/**
+	 * This method initializes childStemsTable
+	 * 
+	 * @return javax.swing.JTable
+	 */
+	private StemsTable getChildStemsTable() {
+		if (childStemsTable == null) {
+			childStemsTable = new StemsTable();
+		}
+		return childStemsTable;
+	}
+
+	/**
+	 * This method initializes addStemPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getAddStemPanel() {
+		if (addStemPanel == null) {
+			GridBagConstraints gridBagConstraints39 = new GridBagConstraints();
+			gridBagConstraints39.gridx = 0;
+			gridBagConstraints39.gridwidth = 2;
+			gridBagConstraints39.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints39.gridy = 2;
+			GridBagConstraints gridBagConstraints38 = new GridBagConstraints();
+			gridBagConstraints38.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints38.gridy = 1;
+			gridBagConstraints38.weightx = 1.0;
+			gridBagConstraints38.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints38.anchor = GridBagConstraints.WEST;
+			gridBagConstraints38.gridx = 1;
+			GridBagConstraints gridBagConstraints37 = new GridBagConstraints();
+			gridBagConstraints37.anchor = GridBagConstraints.WEST;
+			gridBagConstraints37.gridy = 1;
+			gridBagConstraints37.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints37.gridx = 0;
+			jLabel11 = new JLabel();
+			jLabel11.setText("Local Display Name");
+			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
+			gridBagConstraints36.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints36.gridx = 1;
+			gridBagConstraints36.gridy = 0;
+			gridBagConstraints36.anchor = GridBagConstraints.WEST;
+			gridBagConstraints36.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints36.weightx = 1.0;
+			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
+			gridBagConstraints35.anchor = GridBagConstraints.WEST;
+			gridBagConstraints35.gridy = 0;
+			gridBagConstraints35.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints35.gridx = 0;
+			jLabel10 = new JLabel();
+			jLabel10.setText("Local Name");
+			addStemPanel = new JPanel();
+			addStemPanel.setLayout(new GridBagLayout());
+			addStemPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Stem", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(62, 109, 181)));
+			addStemPanel.add(jLabel10, gridBagConstraints35);
+			addStemPanel.add(getChildName(), gridBagConstraints36);
+			addStemPanel.add(jLabel11, gridBagConstraints37);
+			addStemPanel.add(getChildDisplayName(), gridBagConstraints38);
+			addStemPanel.add(getAddChildStem(), gridBagConstraints39);
+		}
+		return addStemPanel;
+	}
+
+	/**
+	 * This method initializes childName	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getChildName() {
+		if (childName == null) {
+			childName = new JTextField();
+		}
+		return childName;
+	}
+
+	/**
+	 * This method initializes childDisplayName	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getChildDisplayName() {
+		if (childDisplayName == null) {
+			childDisplayName = new JTextField();
+		}
+		return childDisplayName;
+	}
+
+	/**
+	 * This method initializes addChildStem	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getAddChildStem() {
+		if (addChildStem == null) {
+			addChildStem = new JButton();
+			addChildStem.setText("Add Child Stem");
+			addChildStem.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			addChildStem.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							int eid = node.getBrowser().getProgress()
+									.startEvent("Adding child stem....");
+							try {
+
+								String ext = Utils.clean(childName.getText());
+								if(ext == null){
+									PortalUtils.showErrorMessage("You must enter a local name for the stem!!!");
+									return;
+								}
+								
+								String disExt = Utils.clean(childDisplayName.getText()); 
+								if(disExt == null){
+									PortalUtils.showErrorMessage("You must enter a local display name for the stem!!!");
+									return;
+								}
+								
+								stem.addChildStem(ext, disExt);
+								node.refresh();
+								setStem();
+								node.getBrowser().getProgress().stopEvent(eid,
+										"Successfully added child stem!!!");
+							} catch (Exception e) {
+								node.getBrowser().getProgress().stopEvent(eid,
+										"Error adding child stem!!!");
+								PortalUtils.showErrorMessage(e);
+							}
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+
+			});
+		}
+		return addChildStem;
 	}
 }
