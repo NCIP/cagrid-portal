@@ -146,6 +146,12 @@ public class StemBrowser extends JPanel {
 
 	private JButton addChildStem = null;
 
+	private JPanel buttonPanel = null;
+
+	private JButton viewStem = null;
+
+	private JButton removeStem = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -1066,21 +1072,28 @@ public class StemBrowser extends JPanel {
 	 */
 	private JPanel getStemsPanel() {
 		if (stemsPanel == null) {
+			GridBagConstraints gridBagConstraints40 = new GridBagConstraints();
+			gridBagConstraints40.gridx = 0;
+			gridBagConstraints40.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints40.weightx = 1.0D;
+			gridBagConstraints40.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints40.gridy = 1;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.fill = GridBagConstraints.BOTH;
 			gridBagConstraints33.weighty = 1.0;
+			gridBagConstraints33.gridx = 0;
+			gridBagConstraints33.gridy = 0;
+			gridBagConstraints33.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints33.weightx = 1.0;
 			stemsPanel = new JPanel();
 			stemsPanel.setLayout(new GridBagLayout());
+			stemsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Child Stems",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					GridGrouperLookAndFeel.getPanelLabelColor()));
 			stemsPanel.add(getJScrollPane2(), gridBagConstraints33);
-			stemsPanel.setBorder(javax.swing.BorderFactory
-					.createTitledBorder(
-							null,
-							"Child Stems",
-							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-							javax.swing.border.TitledBorder.DEFAULT_POSITION,
-							null, GridGrouperLookAndFeel
-									.getPanelLabelColor()));
+			stemsPanel.add(getButtonPanel(), gridBagConstraints40);
 		}
 		return stemsPanel;
 	}
@@ -1111,9 +1124,9 @@ public class StemBrowser extends JPanel {
 	}
 
 	/**
-	 * This method initializes addStemPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes addStemPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getAddStemPanel() {
 		if (addStemPanel == null) {
@@ -1152,7 +1165,10 @@ public class StemBrowser extends JPanel {
 			jLabel10.setText("Local Name");
 			addStemPanel = new JPanel();
 			addStemPanel.setLayout(new GridBagLayout());
-			addStemPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Stem", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(62, 109, 181)));
+			addStemPanel.setBorder(BorderFactory.createTitledBorder(null,
+					"Add Stem", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+							Font.BOLD, 12), new Color(62, 109, 181)));
 			addStemPanel.add(jLabel10, gridBagConstraints35);
 			addStemPanel.add(getChildName(), gridBagConstraints36);
 			addStemPanel.add(jLabel11, gridBagConstraints37);
@@ -1163,9 +1179,9 @@ public class StemBrowser extends JPanel {
 	}
 
 	/**
-	 * This method initializes childName	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes childName
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getChildName() {
 		if (childName == null) {
@@ -1175,9 +1191,9 @@ public class StemBrowser extends JPanel {
 	}
 
 	/**
-	 * This method initializes childDisplayName	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes childDisplayName
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getChildDisplayName() {
 		if (childDisplayName == null) {
@@ -1187,9 +1203,9 @@ public class StemBrowser extends JPanel {
 	}
 
 	/**
-	 * This method initializes addChildStem	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes addChildStem
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getAddChildStem() {
 		if (addChildStem == null) {
@@ -1201,29 +1217,32 @@ public class StemBrowser extends JPanel {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
 							int eid = node.getBrowser().getProgress()
-									.startEvent("Adding child stem....");
+									.startEvent("Adding a child stem....");
 							try {
 
 								String ext = Utils.clean(childName.getText());
-								if(ext == null){
-									PortalUtils.showErrorMessage("You must enter a local name for the stem!!!");
+								if (ext == null) {
+									PortalUtils
+											.showErrorMessage("You must enter a local name for the stem!!!");
 									return;
 								}
-								
-								String disExt = Utils.clean(childDisplayName.getText()); 
-								if(disExt == null){
-									PortalUtils.showErrorMessage("You must enter a local display name for the stem!!!");
+
+								String disExt = Utils.clean(childDisplayName
+										.getText());
+								if (disExt == null) {
+									PortalUtils
+											.showErrorMessage("You must enter a local display name for the stem!!!");
 									return;
 								}
-								
+
 								stem.addChildStem(ext, disExt);
 								node.refresh();
 								setStem();
 								node.getBrowser().getProgress().stopEvent(eid,
-										"Successfully added child stem!!!");
+										"Successfully added a child stem!!!");
 							} catch (Exception e) {
 								node.getBrowser().getProgress().stopEvent(eid,
-										"Error adding child stem!!!");
+										"Error adding a child stem!!!");
 								PortalUtils.showErrorMessage(e);
 							}
 						}
@@ -1239,5 +1258,105 @@ public class StemBrowser extends JPanel {
 			});
 		}
 		return addChildStem;
+	}
+
+	/**
+	 * This method initializes buttonPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getButtonPanel() {
+		if (buttonPanel == null) {
+			GridBagConstraints gridBagConstraints42 = new GridBagConstraints();
+			gridBagConstraints42.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints42.gridy = 0;
+			gridBagConstraints42.gridx = 1;
+			GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
+			gridBagConstraints41.gridx = 0;
+			gridBagConstraints41.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints41.gridy = 0;
+			buttonPanel = new JPanel();
+			buttonPanel.setLayout(new GridBagLayout());
+			buttonPanel.add(getViewStem(), gridBagConstraints41);
+			buttonPanel.add(getRemoveStem(), gridBagConstraints42);
+		}
+		return buttonPanel;
+	}
+
+	/**
+	 * This method initializes viewStem
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getViewStem() {
+		if (viewStem == null) {
+			viewStem = new JButton();
+			viewStem.setText("View Stem");
+			viewStem.setIcon(GridGrouperLookAndFeel.getStemIcon());
+			viewStem.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						getChildStemsTable().doubleClick();
+					} catch (Exception ex) {
+						PortalUtils.showErrorMessage(ex);
+					}
+				}
+			});
+		}
+		return viewStem;
+	}
+
+	/**
+	 * This method initializes removeStem
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getRemoveStem() {
+		if (removeStem == null) {
+			removeStem = new JButton();
+			removeStem.setText("Remove Stem");
+			removeStem.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
+			removeStem.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+
+							StemTreeNode child = null;
+							try {
+								child = getChildStemsTable().getSelectedStem();
+							} catch (Exception ex) {
+								PortalUtils.showErrorMessage(ex);
+								return;
+							}
+
+							int eid = node.getBrowser().getProgress()
+									.startEvent("Removing child stem....");
+							try {
+								child.getStem().delete();
+								node.refresh();
+								setStem();
+								node
+										.getBrowser()
+										.getProgress()
+										.stopEvent(eid,
+												"Successfully removed the child stem!!!");
+							} catch (Exception e) {
+								node.getBrowser().getProgress().stopEvent(eid,
+										"Error removing the child stem!!!");
+								PortalUtils.showErrorMessage(e);
+							}
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+
+			});
+		}
+		return removeStem;
 	}
 }
