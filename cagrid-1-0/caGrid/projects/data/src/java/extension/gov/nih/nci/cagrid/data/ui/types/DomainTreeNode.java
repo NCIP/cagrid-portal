@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.data.ui.types;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.HashMap;
@@ -39,8 +41,8 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 		// add child nodes
 		SchemaElementType[] types = namespace.getSchemaElement();
 		if (types != null) {
-			ItemListener childListener = new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
+			ActionListener childListener = new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
 					if (allChildrenChecked()) {
 						getCheckBox().setSelected(true);
 					} else if (noChildrenChecked()) {
@@ -58,21 +60,26 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 			// add the nodes
 			for (int i = 0; i < types.length; i++) {
 				TypeTreeNode node = new TypeTreeNode(types[i]);
-				node.getCheckBox().addItemListener(childListener);
+				node.getCheckBox().addActionListener(childListener);
 				checkBoxTypes.put(node.getCheckBox(), node.getType());
 				typeCheckBoxes.put(node.getType(), node.getCheckBox());
 				add(node);
 			}
 		}
 		// add listener to turn all children's check boxes on / off
-		getCheckBox().addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
+		getCheckBox().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				int childCount = getChildCount();
 				for (int i = 0; i < childCount; i++) {
 					TypeTreeNode node = (TypeTreeNode) getChildAt(i);
 					node.getCheckBox().setSelected(isChecked());
 					((DefaultTreeModel) parentTree.getModel()).nodeChanged(node);
 				}
+			}
+		});
+		getCheckBox().addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				((DefaultTreeModel) parentTree.getModel()).nodeChanged(DomainTreeNode.this);
 			}
 		});
 	}
