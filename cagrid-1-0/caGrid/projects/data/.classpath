@@ -109,5 +109,9 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-service-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-stubs-1.0.jar"/>
 	<classpathentry kind="src" path="test/resources"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-wsEnum.jar"/>
+	<classpathentry kind="lib" path="ext/lib/wsrf_core_enum.jar"/>
+	<classpathentry kind="lib" path="ext/lib/wsrf_core_stubs_enum.jar"/>
+	<classpathentry kind="src" path="src/java/wsEnum"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
