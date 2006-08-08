@@ -30,13 +30,12 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 	private Map typeCheckBoxes;
 
 	public DomainTreeNode(TargetTypesTree tree, NamespaceType namespace) {
-		super();
+		super(namespace.getNamespace());
 		this.parentTree = tree;
 		this.namespace = namespace;
 		this.checkBoxTypes = new HashMap();
 		this.typeCheckBoxes = new HashMap();
 		
-		setUserObject(namespace.getNamespace());
 		// add child nodes
 		SchemaElementType[] types = namespace.getSchemaElement();
 		if (types != null) {

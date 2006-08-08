@@ -18,10 +18,9 @@ public class TypeTreeNode extends CheckBoxTreeNode {
 	private SchemaElementType type;
 	
 	public TypeTreeNode(SchemaElementType type) {
-		super();
+		super(type.getType());
 		setAllowsChildren(false);
 		this.type = type;
-		setUserObject(type.getType());
 	}
 	
 	

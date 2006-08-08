@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+import javax.swing.UIManager;
 
 /** 
  *  TreeTester
@@ -87,7 +88,9 @@ public class TreeTester extends JFrame {
 	private JScrollPane getJScrollPane() {
 		if (treeScrollPane == null) {
 			treeScrollPane = new JScrollPane();
-			treeScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Tree!", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			treeScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Tree!", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 			treeScrollPane.setViewportView(getTree());
 		}
 		return treeScrollPane;
@@ -95,6 +98,11 @@ public class TreeTester extends JFrame {
 
 
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		JFrame tester = new TreeTester();
 		tester.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}

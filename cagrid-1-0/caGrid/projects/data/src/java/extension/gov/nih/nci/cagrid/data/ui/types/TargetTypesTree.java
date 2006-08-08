@@ -173,8 +173,6 @@ public class TargetTypesTree extends JTree {
 			super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, focused);
 			if (value instanceof CheckBoxTreeNode) {
 				CheckBoxTreeNode cbNode = (CheckBoxTreeNode) value;
-				cbNode.getCheckBox().setText(cbNode.toString());
-				cbNode.getCheckBox().setForeground(getForeground());
 				cbNode.getCheckBox().setBackground(getBackground());
 				return cbNode.getCheckBox();
 			}

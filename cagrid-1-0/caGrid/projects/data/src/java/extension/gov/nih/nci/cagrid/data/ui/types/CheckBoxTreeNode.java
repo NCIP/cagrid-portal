@@ -16,9 +16,10 @@ public abstract class CheckBoxTreeNode extends DefaultMutableTreeNode {
 
 	private JCheckBox check;
 	
-	public CheckBoxTreeNode() {
+	public CheckBoxTreeNode(String nodeText) {
 		super();
-		check = new JCheckBox();
+		check = new JCheckBox(nodeText);
+		setUserObject(nodeText);
 	}
 	
 	
