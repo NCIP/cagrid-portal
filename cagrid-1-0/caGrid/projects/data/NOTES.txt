@@ -20,6 +20,7 @@ TODO:
 16[I]: Query Results Iterator / WS-Enumeration support (wsEnum project)
 17[ ]: Identifier Resolution Support (Possibly through an operation provider)
 18[D]: Pull GME url from introduce properties
+19[ ]: Block caDSR refresh on modification viewer open should only happen when a data model has already been selected. (e.g. when creating a new data service, the call to cadsr should be threaded and not prevent the modification viewer from opening) 
 
 BUGS:
 I added a package and it said that it could not find a schema, so I hit cancel.  No model was added to the models list (correctly).  Next I selected a different package, and it popped up the Package incompatibility dialog.  This should not pop up because there are no models added yet.
