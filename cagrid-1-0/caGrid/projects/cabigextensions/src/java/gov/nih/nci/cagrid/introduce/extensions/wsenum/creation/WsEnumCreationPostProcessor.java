@@ -18,6 +18,7 @@ import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.List;
 import java.util.Properties;
 
@@ -43,11 +44,15 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		// get the service directory
 		File serviceDir = new File(props.getProperty(
 			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+		// add the namespace and schemas for WS-Enumeration
 		addEnumerationNamespace(serviceDir, desc, props);
 		// get the service type
 		String serviceName = props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 		ServiceType service = CommonTools.getService(desc.getServices(), serviceName);
+		// add the methods for WS-Enumeration
 		addEnumerationMethods(service);
+		// add the modified Globus WsCore 4.0.2 jars to the service
+		addWsEnumLibraries(serviceDir);
 	}
 	
 	
@@ -196,5 +201,24 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		provider.setProviderClass(EnumProvider.class.getName());
 		method.setImportInformation(info);
 		method.setProviderInformation(provider);
+	}
+	
+	
+	private static void addWsEnumLibraries(File serviceDir) throws CreationExtensionException {
+		File libDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "lib");
+		List enumLibs = Utils.recursiveListFiles(libDir, new FileFilter() {
+			public boolean accept(File pathname) {
+				return pathname.getName().endsWith("_enum.jar");
+			}
+		});
+		for (int i = 0; i < enumLibs.size(); i++) {
+			File lib = (File) enumLibs.get(i);
+			File out = new File(serviceDir.getAbsolutePath() + File.separator + "lib" + File.separator + lib.getName());
+			try {
+				Utils.copyFile(lib, out);
+			} catch (Exception ex) {
+				throw new CreationExtensionException(ex.getMessage(), ex);
+			}
+		}
 	}
 }
