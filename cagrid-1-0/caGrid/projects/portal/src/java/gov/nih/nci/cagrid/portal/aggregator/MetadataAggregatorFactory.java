@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.portal.aggregator;
 
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
-
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;

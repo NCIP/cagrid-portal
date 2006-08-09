@@ -1,9 +1,7 @@
 package gov.nih.nci.cagrid.portal.utils;
 
 import gov.nih.nci.cagrid.portal.exception.PortalInitializationException;
-
 import org.apache.log4j.Category;
-
 import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.aop.MethodBeforeAdvice;
 import org.springframework.aop.ThrowsAdvice;

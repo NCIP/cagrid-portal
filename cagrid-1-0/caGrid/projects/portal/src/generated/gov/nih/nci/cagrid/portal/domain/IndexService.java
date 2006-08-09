@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.portal.domain;
 
 import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
 import gov.nih.nci.cagrid.portal.utils.GridUtils;
-
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
 
@@ -17,7 +16,7 @@ import java.util.Set;
  * @created 19-Jun-2006 4:08:50 PM
  * @hibernate.class table="INDEX_SERVICE"
  */
-public class IndexService implements DomainObject, GridService {
+public class IndexService implements GridService {
     // Primary pk
     private Integer pk;
     private Set registeredServicesCollection = new HashSet();
@@ -147,14 +146,6 @@ public class IndexService implements DomainObject, GridService {
 
         // Keep it in sync with the epr(String)
         this.EPR = handle.getAddress().toString().trim();
-    }
-
-    /**
-     * @return boolean
-     *         ToDo Should be Implemented by concrerte classes
-     */
-    public boolean isEqual(DomainObject obj) {
-        return false; //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public EndpointReferenceType getHandle() {

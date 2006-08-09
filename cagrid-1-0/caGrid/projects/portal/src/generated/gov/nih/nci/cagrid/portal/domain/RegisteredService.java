@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.portal.domain;
 
 import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
 import gov.nih.nci.cagrid.portal.utils.GridUtils;
-
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
 
@@ -28,6 +27,7 @@ public class RegisteredService implements GridService {
     private String version;
     private String name;
     private String description;
+
 
     public RegisteredService() {
     }
@@ -112,6 +112,7 @@ public class RegisteredService implements GridService {
 
     /**
      * @hibernate.many-to-one column="RC_ID_KEY"
+     * cascade="save-update"
      * @return
      */
     public ResearchCenter getResearchCenter() {
@@ -178,6 +179,8 @@ public class RegisteredService implements GridService {
     public void setIndex(IndexService indexService) {
         this.indexService = indexService;
     }
+
+
 
     public boolean equals(Object o) {
         if (this == o) {

@@ -1,7 +1,8 @@
 package gov.nih.nci.cagrid.portal.dao;
 
+import org.springframework.dao.DataAccessException;
+
 import java.util.Collection;
-import java.util.List;
 
 
 /**
@@ -12,16 +13,11 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public interface BaseDAO {
-    public List loadAll(Class type);
 
-    public void saveOrUpdate(Collection objects);
+    public void saveOrUpdate(Collection objects) throws DataAccessException;
 
-    public void saveOrUpdate(Object obj);
+    public void saveOrUpdate(Object obj) throws DataAccessException;
 
-    /**
-     * Attach an object back
-     * to the session
-     * @param obj
-     */
-    public void merge(Object obj);
+    public java.util.List loadAll(Class cls) throws DataAccessException;
+
 }

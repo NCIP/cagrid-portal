@@ -3,10 +3,8 @@ package gov.nih.nci.cagrid.portal.utils;
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import gov.nih.nci.cagrid.portal.exception.PortalInitializationException;
 import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
-
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
-
 import org.springframework.beans.factory.InitializingBean;
 
 import java.util.HashSet;

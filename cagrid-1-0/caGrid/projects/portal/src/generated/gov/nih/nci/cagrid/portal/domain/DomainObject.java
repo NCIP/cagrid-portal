@@ -9,11 +9,6 @@ package gov.nih.nci.cagrid.portal.domain;
  * To change this template use File | Settings | File Templates.
  */
 public interface DomainObject {
-    /**
-     * @return boolean
-     *         ToDo Should be Implemented by concrerte classes
-     */
-    boolean isEqual(DomainObject obj);
 
     /**
      * @return Integer primary key

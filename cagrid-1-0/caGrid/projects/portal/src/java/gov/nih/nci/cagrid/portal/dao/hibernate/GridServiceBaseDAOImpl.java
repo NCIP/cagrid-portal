@@ -1,6 +1,10 @@
 package gov.nih.nci.cagrid.portal.dao.hibernate;
 
 import gov.nih.nci.cagrid.portal.dao.GridServiceBaseDAO;
+import gov.nih.nci.cagrid.portal.domain.DomainObject;
+import gov.nih.nci.cagrid.portal.domain.IndexService;
+import gov.nih.nci.cagrid.portal.domain.RegisteredService;
+import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
 
 import java.util.List;
@@ -15,41 +19,38 @@ import java.util.List;
  */
 public class GridServiceBaseDAOImpl extends BaseDAOImpl
     implements GridServiceBaseDAO {
-    /**
-     * Return ID for a EPR string
+
+    /** Will return the business key depending
+     * on the type of object
      *
-     * @param epr
-     * @return int id
+     * @param obj
+     * @return
+     * @throws RecordNotFoundException
      */
-    public Integer getID4EPR(String epr) throws RecordNotFoundException {
-        /**
-         * Since epr is unique there can be only one or none
-         */
-        Integer idx = null;
+    public Integer getBusinessKey(DomainObject obj) throws RecordNotFoundException {
+        List resultSet = null;
 
-        try {
-            _logger.debug("Getting ID for service:" + epr + ".");
-
-            List resultSet = getHibernateTemplate().find("Select index.pk from IndexService index where index.EPR = ?",
-                    epr);
-
-            /** if epr is not index then try
-             * the services table
-             */
-            if (resultSet.isEmpty()) {
+        if(obj instanceof IndexService){
+            IndexService idx = (IndexService)obj;
+             resultSet = getHibernateTemplate().find("Select index.pk from IndexService index where index.EPR = ?", idx.getEPR() );
+        }
+        else if(obj instanceof RegisteredService){
+            RegisteredService service = (RegisteredService)obj;
                 resultSet = getHibernateTemplate().find("Select service.pk from RegisteredService service where service.EPR = ?",
-                        epr);
-            }
-
-            //return the first id as it should be unizue there should only be one
-            idx = (Integer) resultSet.get(0);
-        } catch (IndexOutOfBoundsException e) {
-            logger.warn("Record not found for service: " + epr);
+                        service.getEPR());
+        }
+        else if(obj instanceof ResearchCenter){
+            ResearchCenter rc = (ResearchCenter)obj;
+                resultSet = getHibernateTemplate().find("Select service.pk from ResearchCenter rc where rc.geoCoords = ?",
+                        rc.getGeoCoords());
+        }
+        Integer id;
+        try {
+             id = (Integer)resultSet.get(0);
+        } catch (Exception e) {
             throw new RecordNotFoundException();
         }
 
-        _logger.debug("ID:" + idx + " found for EPR");
-
-        return idx;
+        return id;
     }
 }

@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.portal.aggregator;
 
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
-
 import org.springframework.context.ApplicationEvent;
 
 

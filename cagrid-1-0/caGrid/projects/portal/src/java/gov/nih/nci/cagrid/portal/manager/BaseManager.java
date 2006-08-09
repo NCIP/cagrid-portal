@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.portal.manager;
 
 import java.util.Collection;
-import java.util.List;
 
 
 /**
@@ -15,15 +14,10 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public interface BaseManager {
-    /**
-     * Returns All the persistent
-     * object for given class
-     *
-     * @return List
-     */
-    public List loadAll(Class cls);
 
     public void saveAll(Collection objects);
 
     public void save(Object obj);
+
+    public java.util.List loadAll(Class cls);
 }

@@ -1,9 +1,8 @@
 package gov.nih.nci.cagrid.portal.dao.hibernate;
 
 import gov.nih.nci.cagrid.portal.dao.BaseDAO;
-
 import org.apache.log4j.Category;
-
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import java.util.Collection;
@@ -25,20 +24,17 @@ public class BaseDAOImpl extends HibernateDaoSupport implements BaseDAO {
         _logger = Category.getInstance(getClass());
     }
 
-    public List loadAll(Class type) {
-        return getHibernateTemplate().loadAll(type);
-    }
-
-    public void saveOrUpdate(Collection objects) {
+    public void saveOrUpdate(Collection objects) throws DataAccessException {
         getHibernateTemplate().saveOrUpdateAll(objects);
     }
 
-    public void saveOrUpdate(Object obj) {
+    public void saveOrUpdate(Object obj) throws DataAccessException {
         getHibernateTemplate().saveOrUpdate(obj);
     }
 
-    public void merge(Object obj) {
-        _logger.debug("Merging object to session");
-        getSession().merge(obj);
+    public List loadAll(Class cls) throws DataAccessException {
+        return getHibernateTemplate().loadAll(cls);
     }
+
+
 }

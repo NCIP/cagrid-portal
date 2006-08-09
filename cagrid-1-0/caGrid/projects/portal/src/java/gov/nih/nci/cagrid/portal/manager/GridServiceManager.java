@@ -11,5 +11,6 @@ import gov.nih.nci.cagrid.portal.domain.GridService;
  * To change this template use File | Settings | File Templates.
  */
 public interface GridServiceManager extends BaseManager {
+    
     public void save(GridService obj);
 }

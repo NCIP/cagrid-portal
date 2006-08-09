@@ -4,9 +4,7 @@ import gov.nih.nci.cagrid.portal.exception.PortalInitializationException;
 import gov.nih.nci.cagrid.syncgts.bean.SyncDescription;
 import gov.nih.nci.cagrid.syncgts.core.SyncGTS;
 import gov.nih.nci.cagrid.syncgts.core.SyncGTSDefault;
-
 import org.springframework.beans.factory.InitializingBean;
-
 import org.springframework.core.io.Resource;
 
 

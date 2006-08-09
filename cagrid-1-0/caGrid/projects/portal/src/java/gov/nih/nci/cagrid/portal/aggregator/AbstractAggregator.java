@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.portal.aggregator;
 
 import org.apache.log4j.Category;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;

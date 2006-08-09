@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.domain;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -8,7 +9,7 @@ import java.util.Collection;
  * @version 1.0
  * @created 19-Jun-2006 4:08:50 PM
  */
-public class ResearchCenter {
+public class ResearchCenter implements DomainObject {
     private java.lang.String country;
     private java.lang.String description;
     private java.lang.String displayName;
@@ -22,7 +23,8 @@ public class ResearchCenter {
     private java.lang.String street2;
     private java.lang.String state;
     private java.lang.String shortName;
-    private java.util.Collection registeredServicesCollection;
+    private java.util.List registeredServiceCollection;
+    private java.util.List pocCollection = new ArrayList();
     private java.lang.String rssNewsURL;
 
     public ResearchCenter() {
@@ -167,9 +169,6 @@ public class ResearchCenter {
         return rssNewsURL;
     }
 
-    public Collection getRegisteredServicesCollection() {
-        return registeredServicesCollection;
-    }
 
     /**
      * @param newVal
@@ -210,9 +209,35 @@ public class ResearchCenter {
         this.rssNewsURL = rssNewsURL;
     }
 
-    public void setRegisteredServicesCollection(
-        Collection registeredServicesCollection) {
-        this.registeredServicesCollection = registeredServicesCollection;
+
+      /**
+     * @hibernate.collection-one-to-many
+     * column="RC_ID_KEY"
+     * class="PointOfContact"
+     * cascade="save-update"
+      * inverse="true"
+     */
+    public List getPocCollection() {
+        return pocCollection;
+    }
+
+    public void setPocCollection(List pocCollection) {
+        this.pocCollection = pocCollection;
+    }
+
+    /**
+     * @hibernate.collection-one-to-many
+     * column="RC_ID_KEY"
+     * class="ResearchCenter"
+     * cascade="none"
+     * @return
+     */
+    public List getRegisteredServiceCollection() {
+        return registeredServiceCollection;
+    }
+
+    public void setRegisteredServiceCollection(List registeredServiceCollection) {
+        this.registeredServiceCollection = registeredServiceCollection;
     }
 
     public boolean equals(Object o) {

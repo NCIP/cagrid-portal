@@ -11,7 +11,7 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
  * @version 1.0
  * @created 19-Jun-2006 4:08:50 PM
  */
-public interface GridService {
+public interface GridService extends DomainObject {
     public void setPk(Integer pk);
 
     public Integer getPk();

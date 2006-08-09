@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.portal.manager;
 import gov.nih.nci.cagrid.portal.dao.BaseDAO;
 import gov.nih.nci.cagrid.portal.dao.GridServiceBaseDAO;
 import gov.nih.nci.cagrid.portal.dao.IndexDAO;
-
 import org.apache.log4j.Category;
 
 import java.util.Collection;
@@ -26,22 +25,16 @@ public class BaseManagerImpl implements BaseManager {
     protected GridServiceBaseDAO gridServiceBaseDAO;
     protected Category _logger = Category.getInstance(getClass().getName());
 
-    /**
-     * Returns All the persistent
-     * object for given class
-     *
-     * @return List
-     */
-    public List loadAll(Class cls) {
-        return baseDAO.loadAll(cls);
-    }
-
     public void saveAll(Collection objects) {
         baseDAO.saveOrUpdate(objects);
     }
 
     public void save(Object obj) {
         baseDAO.saveOrUpdate(obj);
+    }
+
+    public List loadAll(Class cls) {
+        return baseDAO.loadAll(cls);
     }
 
     /** Setter for Spring **/
