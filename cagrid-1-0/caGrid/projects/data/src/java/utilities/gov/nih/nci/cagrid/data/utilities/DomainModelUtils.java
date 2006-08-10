@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.cql.validation;
+package gov.nih.nci.cagrid.data.utilities;
 
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;

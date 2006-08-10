@@ -318,7 +318,7 @@
 
 
     <!-- compiles the validation code -->
-    <target name="compileValidation" depends="compileStubs, compileCommon">
+    <target name="compileValidation" depends="compileStubs, compileCommon, compileUtils">
         <javac srcdir="${validation.src.dir}" destdir="${build.validation.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
                 <fileset dir="${lib.dir}">
@@ -329,6 +329,7 @@
                 </fileset>
                 <pathelement location="${stubs.dest}" />
                 <pathelement location="${build.common.dest}" />
+            	<pathelement location="${build.utils.dest}" />
                 <fileset dir="${globus.dir}/lib">
                     <include name="*.jar" />
                 </fileset>

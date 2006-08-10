@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.cqlquery.Group;
 import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
+import gov.nih.nci.cagrid.data.utilities.DomainModelUtils;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
