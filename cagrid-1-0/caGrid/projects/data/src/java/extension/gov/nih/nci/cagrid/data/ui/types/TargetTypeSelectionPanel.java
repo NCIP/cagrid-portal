@@ -122,6 +122,11 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				// url of the cadsr service
 				url = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_URL_ATTRIB);
 				
+				// configure selected items in the cadsr panel
+				domainBrowserPanel.setDefaultCaDSRURL(url);
+				domainBrowserPanel.getCadsr().setText(url);
+				domainBrowserPanel.blockingCadsrRefresh();
+				
 				// project name and version
 				String projectName = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_NAME_ATTRIB);
 				String projectVersion = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_VERSION_ATTRIB);
@@ -139,10 +144,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 						.getAttributeValue(DataServiceConstants.CADSR_PACKAGE_NAME);
 				}
 				
-				// configure selected items in the cadsr panel
-				domainBrowserPanel.setDefaultCaDSRURL(url);
-				domainBrowserPanel.getCadsr().setText(url);
-				domainBrowserPanel.blockingCadsrRefresh();
 				domainBrowserPanel.setSelectedProject(projectName, projectVersion);
 				if (lastPackageName != null) {
 					domainBrowserPanel.setSelectedPackage(lastPackageName);
@@ -153,7 +154,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				if (url != null) {
 					domainBrowserPanel.setDefaultCaDSRURL(url);
 					domainBrowserPanel.getCadsr().setText(url);
-					domainBrowserPanel.blockingCadsrRefresh();
+					domainBrowserPanel.cadsrRefresh();
 				}
 			}
 		}

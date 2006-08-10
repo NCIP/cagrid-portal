@@ -70,23 +70,28 @@ public class DomainBrowserPanel extends CaDSRBrowserPanel {
 			"Loading caDSR information") {
 			public void process() {
 				setProgressText("Refreshing information from caDSR . . .");
-				getProjectComboBox().removeAllItems();
-				try {
-					CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
-					Project[] projects = cadsrService.findAllProjects();
-					if (projects != null) {
-						for (int i = 0; i < projects.length; i++) {
-							getProjectComboBox().addItem(new ProjectDisplay(projects[i]));
-						}
-					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
-					JOptionPane.showMessageDialog(DomainBrowserPanel.this,
-						"Error communicating with caDSR; please check the caDSR URL!");
-				}
+				cadsrRefresh();
 			}
 		};
 		refresher.run();
 		System.out.println("Done refreshing from caDSR");
+	}
+	
+	
+	public void cadsrRefresh() {
+		getProjectComboBox().removeAllItems();
+		try {
+			CaDSRServiceI cadsrService = new CaDSRServiceClient(getCadsr().getText());
+			Project[] projects = cadsrService.findAllProjects();
+			if (projects != null) {
+				for (int i = 0; i < projects.length; i++) {
+					getProjectComboBox().addItem(new ProjectDisplay(projects[i]));
+				}
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			JOptionPane.showMessageDialog(DomainBrowserPanel.this,
+				"Error communicating with caDSR; please check the caDSR URL!");
+		}
 	}
 }
