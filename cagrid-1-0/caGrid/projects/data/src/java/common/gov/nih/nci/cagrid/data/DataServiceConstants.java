@@ -80,8 +80,12 @@ public class DataServiceConstants {
 	public static final String CADSR_PROJECT_VERSION_ATTRIB = "projectVersion";
 	public static final String SUPPLIED_DOMAIN_MODEL = "suppliedDomainModel";
 	
-	// WS-Enumeration constants
-	public static final String WS_ENUM_ENABLED = "useWsEnum";
+	// feature selection constants
+	public static final String DS_FEATURES = "serviceFeatures";
+	public static final String USE_WS_ENUM = "useWsEnum";
+	public static final String USE_GRID_IDENTIFIERS = "useGridIdentifiers";
+	public static final String USE_SDK_DATA_SOURCE = "useSdkDataSource";
+	public static final String USE_CUSTOM_DATA_SORUCE = "useCustomDataSource";
 		
 	// DomainModel QName
 	public static final QName DOMAIN_MODEL_QNAME = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice", "DomainModel");
