@@ -12,7 +12,7 @@
 	</target>
 	
 	<target name="resyncService" depends="checkResyncInputProps, prepareResyncSkeleton" description="Uses the introduceMethods.xml to add and remove methods to this service skeleton">
-		<java classname="gov.nih.nci.cagrid.introduce.codegen.SyncTools" fork="no" failonerror="true">
+		<java classname="gov.nih.nci.cagrid.introduce.codegen.SyncTools" fork="yes" failonerror="true">
 			<arg value="-d" />
 			<arg value="${introduce.skeleton.destination.dir}" />
 			<classpath>

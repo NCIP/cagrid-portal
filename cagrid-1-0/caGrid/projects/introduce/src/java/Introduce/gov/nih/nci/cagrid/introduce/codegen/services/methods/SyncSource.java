@@ -23,10 +23,7 @@ import java.util.StringTokenizer;
 
 import org.apache.axis.utils.JavaUtils;
 import org.apache.ws.jaxme.js.JavaMethod;
-import org.apache.ws.jaxme.js.JavaSource;
-import org.apache.ws.jaxme.js.JavaSourceFactory;
 import org.apache.ws.jaxme.js.Parameter;
-import org.apache.ws.jaxme.js.util.JavaParser;
 
 
 /**
@@ -49,18 +46,14 @@ public class SyncSource {
 
 	private String serviceProviderImpl;
 
-	// private String packageName;
-
 	private ServiceInformation serviceInfo;
 
 	private ServiceType service;
 
 
 	public SyncSource(File baseDir, ServiceInformation info, ServiceType service) {
-		// this.baseDir = baseDir;
 		this.service = service;
 		this.serviceInfo = info;
-		// this.packageName = service.getPackageName() + ".stubs";
 		serviceClient = baseDir.getAbsolutePath() + File.separator + "src" + File.separator
 			+ CommonTools.getPackageDir(service) + File.separator + "client" + File.separator + service.getName()
 			+ "Client.java";
@@ -142,7 +135,7 @@ public class SyncSource {
 	public String createClientUnBoxedSignatureStringFromMethod(MethodType method) {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
-		String methodName = method.getName();
+		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
 		String returnType = null;
 		if (returnTypeEl.getQName().getNamespaceURI().equals("")
 			&& returnTypeEl.getQName().getLocalPart().equals("void")) {
@@ -200,7 +193,7 @@ public class SyncSource {
 	public String createUnBoxedSignatureStringFromMethod(MethodType method) {
 		String methodString = "";
 		MethodTypeOutput returnTypeEl = method.getOutput();
-		String methodName = method.getName();
+		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
 		String returnType = null;
 		if (returnTypeEl.getQName().getNamespaceURI().equals("")
 			&& returnTypeEl.getQName().getLocalPart().equals("void")) {
@@ -258,7 +251,7 @@ public class SyncSource {
 
 	public String createUnBoxedSignatureStringFromMethod(JavaMethod method) throws Exception {
 		String methodString = "";
-		String methodName = method.getName();
+		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
 		String returnType = "";
 		if (buildServicesClientHandleClassNameList().contains(
 			method.getType().getPackageName() + "." + method.getType().getClassName())) {
@@ -297,7 +290,7 @@ public class SyncSource {
 
 	public String createClientUnBoxedSignatureStringFromMethod(JavaMethod method) throws Exception {
 		String methodString = "";
-		String methodName = method.getName();
+		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
 		String returnType = "";
 		if (method.getType().getPackageName().length() > 0) {
 			returnType += method.getType().getPackageName() + ".";
@@ -329,80 +322,17 @@ public class SyncSource {
 	}
 
 
-	public String getBoxedOutputTypeName(String input) {
-		String returnType = TemplateUtils.upperCaseFirstCharacter(input) + "Response";
-		return returnType;
-	}
-
-
 	public String createBoxedSignatureStringFromMethod(MethodType method) throws Exception {
-		String packageName = service.getPackageName() + ".stubs";
-		if (method.isIsImported()) {
-			packageName = method.getImportInformation().getPackageName();
-		}
-
 		String methodString = "";
 
-		String methodName = method.getName();
-		String returnType = null;
-		returnType = packageName + "." + getBoxedOutputTypeName(methodName);
+		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
 
-		methodString += "public " + returnType + " " + methodName + "(";
+		methodString += "public " + method.getOutputMessageClass() + " " + methodName + "(";
 
 		// boxed
-		methodString += packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params";
+		methodString += method.getInputMessageClass() + " params";
 
 		methodString += ")";
-		return methodString;
-	}
-
-
-	public String createBoxedSignatureStringFromMethod(JavaMethod method) throws Exception {
-		String methodString = "";
-		String methodName = method.getName();
-		String returnType = "";
-
-		JavaSource sourceI;
-		JavaSourceFactory jsf;
-		JavaParser jp;
-
-		jsf = new JavaSourceFactory();
-		jp = new JavaParser(jsf);
-
-		jp.parse(new File(serviceProviderImpl));
-		sourceI = (JavaSource) jsf.getJavaSources().next();
-		sourceI.setForcingFullyQualifiedName(true);
-
-		System.out.println(sourceI.getClassName());
-
-		JavaMethod[] methods = sourceI.getMethods();
-
-		String packageName = "";
-		for (int i = 0; i < methods.length; i++) {
-			if (methods[i].getName().equals(methodName)) {
-				packageName = methods[i].getType().getPackageName();
-				break;
-			}
-		}
-
-		// need to box the output type
-		returnType = packageName + "." + getBoxedOutputTypeName(methodName);
-
-		methodString += "public " + returnType + " " + methodName + "(";
-		// Parameter[] inputs = method.getParams();
-		// always boxed for now
-		// if (inputs.length > 1 || inputs.length == 0) {
-
-		// boxed
-		methodString += packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params";
-
-		methodString += ")";
-
-		jsf = null;
-		jp = null;
-		sourceI = null;
-		System.gc();
-
 		return methodString;
 	}
 
@@ -467,7 +397,8 @@ public class SyncSource {
 			int endOfMethod = startOfMethod + restOfFile.indexOf(";") + 1;
 
 			if (startOfMethod == -1 || endOfMethod == -1) {
-				System.err.println("WARNING: Unable to locate method in I : " + method.getName());
+				System.err.println("WARNING: Unable to locate method in I : "
+					+ TemplateUtils.lowerCaseFirstCharacter(method.getName()));
 				return;
 			}
 
@@ -504,13 +435,9 @@ public class SyncSource {
 
 
 	public void addClientImpl(MethodType method) {
-		String packageName = service.getPackageName() + ".stubs";
-		if (method.isIsImported()) {
-			packageName = method.getImportInformation().getPackageName();
-		}
 
 		StringBuffer fileContent = null;
-		String methodName = method.getName();
+		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
 		try {
 			fileContent = Utils.fileToStringBuffer(new File(this.serviceClient));
 		} catch (Exception e) {
@@ -525,7 +452,8 @@ public class SyncSource {
 		clientMethod += "{\n";
 		clientMethod += lineStart + "synchronized(portTypeMutex){\n";
 		lineStart += "  ";
-		clientMethod += lineStart + "configureStubSecurity((Stub)portType,\"" + method.getName() + "\");\n";
+		clientMethod += lineStart + "configureStubSecurity((Stub)portType,\""
+			+ TemplateUtils.lowerCaseFirstCharacter(method.getName()) + "\");\n";
 
 		// put in the call to the client
 		String var = "portType";
@@ -533,78 +461,104 @@ public class SyncSource {
 		String methodString = lineStart;
 		MethodTypeOutput returnTypeEl = method.getOutput();
 
-		// always a boxed call now becuase using complex types in the wsdl
-		// create handle for the boxed wrapper
-		methodString += packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request params = new "
-			+ packageName + "." + TemplateUtils.upperCaseFirstCharacter(methodName) + "Request();\n";
-		// set the values fo the boxed wrapper
-		if (method.getInputs() != null && method.getInputs().getInput() != null) {
-			for (int j = 0; j < method.getInputs().getInput().length; j++) {
-				SchemaInformation inNamespace = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), method
-					.getInputs().getInput(j).getQName());
-				String paramName = method.getInputs().getInput(j).getName();
-				String containerClassName = method.getInputs().getInput(j).getContainerClassName();
-				String containerMethodCall = TemplateUtils.upperCaseFirstCharacter(JavaUtils.xmlNameToJava(inNamespace
-					.getType().getType()));
-				methodString += lineStart;
-				if (inNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-					methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "(" + paramName
-						+ ");\n";
-				} else {
-					methodString += containerClassName + " " + paramName + "Container = new " + containerClassName
-						+ "();\n";
+		if (method.getIsUnBoxable().booleanValue()) {
+			// always a boxed call now becuase using complex types in the wsdl
+			// create handle for the boxed wrapper
+			methodString += method.getInputMessageClass() + " params = new " + method.getInputMessageClass() + "();\n";
+			// set the values fo the boxed wrapper
+			if (method.getInputs() != null && method.getInputs().getInput() != null) {
+				for (int j = 0; j < method.getInputs().getInput().length; j++) {
+					SchemaInformation inNamespace = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(),
+						method.getInputs().getInput(j).getQName());
+					String paramName = method.getInputs().getInput(j).getName();
+					String containerClassName = method.getInputs().getInput(j).getContainerClass();
+					String containerMethodCall = TemplateUtils.upperCaseFirstCharacter(JavaUtils
+						.xmlNameToJava(inNamespace.getType().getType()));
 					methodString += lineStart;
-					methodString += paramName + "Container.set" + containerMethodCall + "(" + paramName + ");\n";
-					methodString += lineStart;
-					methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "(" + paramName
-						+ "Container);\n";
+					if (inNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+						methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "("
+							+ paramName + ");\n";
+					} else {
+						methodString += containerClassName + " " + paramName + "Container = new " + containerClassName
+							+ "();\n";
+						methodString += lineStart;
+						methodString += paramName + "Container.set" + containerMethodCall + "(" + paramName + ");\n";
+						methodString += lineStart;
+						methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "("
+							+ paramName + "Container);\n";
+					}
 				}
 			}
-		}
-		// make the call
-		methodString += lineStart;
-
-		// always boxed returns now because of complex types in wsdl
-		String returnTypeBoxed = getBoxedOutputTypeName(methodName);
-		methodString += packageName + "." + returnTypeBoxed + " boxedResult = " + var + "." + methodName
-			+ "(params);\n";
-
-		if (!returnTypeEl.getQName().getNamespaceURI().equals("")
-			&& !returnTypeEl.getQName().getLocalPart().equals("void")) {
+			// make the call
 			methodString += lineStart;
-			SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), returnTypeEl
-				.getQName());
-			if (info.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-				if (info.getType().getType().equals("boolean") && !returnTypeEl.isIsArray()) {
-					methodString += "return boxedResult.isResponse();\n";
-				} else {
-					methodString += "return boxedResult.getResponse();\n";
-				}
-			} else {
-				if (returnTypeEl.getIsClientHandle() != null && returnTypeEl.getIsClientHandle().booleanValue()) {
-					// create the client handle and put the EPR in it
-					// then return the client handle...
-					if (returnTypeEl.isIsArray()) {
-						methodString += returnTypeEl.getClientHandleClass() + "[] clientArray = null;\n";
-						methodString += lineStart + "if(boxedResult.getEndpointReference()!=null){\n";
-						methodString += lineStart + "  clientArray = new " + returnTypeEl.getClientHandleClass()
-							+ "[boxedResult.getEndpointReference().length];\n";
-						methodString += lineStart
-							+ "  for(int i = 0; i < boxedResult.getEndpointReference().length; i++){\n";
-						methodString += lineStart + "	   clientArray[i] = new " + returnTypeEl.getClientHandleClass()
-							+ "(boxedResult.getEndpointReference(i));\n";
-						methodString += lineStart + "  }\n";
-						methodString += lineStart + "}\n";
-						methodString += lineStart + "return clientArray;\n";
+
+			// always boxed returns now because of complex types in wsdl
+			methodString += method.getOutputMessageClass() + " boxedResult = " + var + "." + methodName + "(params);\n";
+
+			if (!returnTypeEl.getQName().getNamespaceURI().equals("")
+				&& !returnTypeEl.getQName().getLocalPart().equals("void")) {
+				methodString += lineStart;
+				SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), returnTypeEl
+					.getQName());
+				if (info.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+					if (info.getType().getType().equals("boolean") && !returnTypeEl.isIsArray()) {
+						methodString += "return boxedResult.isResponse();\n";
 					} else {
-						methodString += "EndpointReferenceType ref = boxedResult.get";
-						methodString += TemplateUtils.upperCaseFirstCharacter(info.getType().getType()) + "();\n";
-						methodString += lineStart + "return new " + returnTypeEl.getClientHandleClass() + "(ref);\n";
+						methodString += "return boxedResult.getResponse();\n";
 					}
 				} else {
-					methodString += "return boxedResult.get"
-						+ TemplateUtils.upperCaseFirstCharacter(info.getType().getType()) + "();\n";
+					if (returnTypeEl.getIsClientHandle() != null && returnTypeEl.getIsClientHandle().booleanValue()) {
+						// create the client handle and put the EPR in it
+						// then return the client handle...
+						if (returnTypeEl.isIsArray()) {
+							methodString += returnTypeEl.getClientHandleClass() + "[] clientArray = null;\n";
+							methodString += lineStart + "if(boxedResult.getEndpointReference()!=null){\n";
+							methodString += lineStart + "  clientArray = new " + returnTypeEl.getClientHandleClass()
+								+ "[boxedResult.getEndpointReference().length];\n";
+							methodString += lineStart
+								+ "  for(int i = 0; i < boxedResult.getEndpointReference().length; i++){\n";
+							methodString += lineStart + "	   clientArray[i] = new "
+								+ returnTypeEl.getClientHandleClass() + "(boxedResult.getEndpointReference(i));\n";
+							methodString += lineStart + "  }\n";
+							methodString += lineStart + "}\n";
+							methodString += lineStart + "return clientArray;\n";
+						} else {
+							methodString += "EndpointReferenceType ref = boxedResult.get";
+							methodString += TemplateUtils.upperCaseFirstCharacter(info.getType().getType()) + "();\n";
+							methodString += lineStart + "return new " + returnTypeEl.getClientHandleClass()
+								+ "(ref);\n";
+						}
+					} else {
+						methodString += "return boxedResult.get"
+							+ TemplateUtils.upperCaseFirstCharacter(info.getType().getType()) + "();\n";
+					}
 				}
+			}
+
+		} else {
+			// is the method is unboxable then i need to just call it straight
+			// up.
+			if (method.getOutput() != null) {
+				methodString += "return ";
+			}
+			methodString += var + "." + TemplateUtils.lowerCaseFirstCharacter(method.getName());
+			if (method.getInputs() != null && method.getInputs().getInput() != null) {
+				SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), method
+					.getInputs().getInput(0).getQName());
+				String packageName = info.getType().getPackageName();
+				String classType = null;
+				if (packageName != null && packageName.length() > 0) {
+					classType = packageName + "." + info.getType().getClassName();
+				} else {
+					classType = info.getType().getClassName();
+				}
+				if (method.getInputs().getInput(0).isIsArray()) {
+					classType += "[]";
+				}
+				String paramName = method.getInputs().getInput(0).getName();
+				methodString += "(" + paramName + ");\n";
+			} else {
+				methodString += "();\n";
 			}
 		}
 
@@ -654,10 +608,6 @@ public class SyncSource {
 
 
 	public void addProviderImpl(MethodType method) throws Exception {
-		String packageName = service.getPackageName() + ".stubs";
-		if (method.isIsImported()) {
-			packageName = method.getImportInformation().getPackageName();
-		}
 
 		StringBuffer fileContent = null;
 		try {
@@ -668,90 +618,103 @@ public class SyncSource {
 
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
-		// slh -- in migration to globus 4 we need to check here for autoboxing
-		// and get appropriate
-		String clientMethod = "\n\t" + createBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
 
-		// clientMethod += " throws RemoteException";
-		clientMethod += "{\n";
-
-		// create the unboxed call to the implementation
 		String var = "impl";
 		String lineStart = "\t\t";
+		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
 
-		String methodName = method.getName();
+		String clientMethod = "";
 		String methodString = "";
-		MethodTypeOutput returnTypeEl = method.getOutput();
 
-		// unbox the params
-		String params = "";
+		// can i create the unboxed call to the implementation
+		if (method.getIsUnBoxable().booleanValue()) {
+			// slh -- in migration to globus 4 we need to check here for
+			// autoboxing
+			// and get appropriate
+			clientMethod = "\n\t" + createBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
 
-		if (method.getInputs() != null && method.getInputs().getInput() != null) {
-			// always unbox now
-			if (method.getInputs().getInput().length >= 1) {
-				// inputs were boxed and need to be unboxed
-				for (int j = 0; j < method.getInputs().getInput().length; j++) {
-					SchemaInformation inNamespace = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(),
-						method.getInputs().getInput(j).getQName());
-					String paramName = method.getInputs().getInput(j).getName();
-					if (inNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-						if (inNamespace.getType().getType().equals("boolean")
-							&& !method.getInputs().getInput(j).isIsArray()) {
-							params += "params.is" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
+			// clientMethod += " throws RemoteException";
+			clientMethod += "{\n";
+
+			methodString = "";
+			MethodTypeOutput returnTypeEl = method.getOutput();
+
+			// unbox the params
+			String params = "";
+
+			if (method.getInputs() != null && method.getInputs().getInput() != null) {
+				// always unbox now
+				if (method.getInputs().getInput().length >= 1) {
+					// inputs were boxed and need to be unboxed
+					for (int j = 0; j < method.getInputs().getInput().length; j++) {
+						SchemaInformation inNamespace = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(),
+							method.getInputs().getInput(j).getQName());
+						String paramName = method.getInputs().getInput(j).getName();
+						if (inNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+							if (inNamespace.getType().getType().equals("boolean")
+								&& !method.getInputs().getInput(j).isIsArray()) {
+								params += "params.is" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
+							} else {
+								params += "params.get" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
+							}
 						} else {
-							params += "params.get" + TemplateUtils.upperCaseFirstCharacter(paramName) + "()";
+							params += "params.get"
+								+ TemplateUtils.upperCaseFirstCharacter(paramName)
+								+ "().get"
+								+ TemplateUtils.upperCaseFirstCharacter(JavaUtils.xmlNameToJava(inNamespace.getType()
+									.getType())) + "()";
 						}
-					} else {
-						params += "params.get"
-							+ TemplateUtils.upperCaseFirstCharacter(paramName)
-							+ "().get"
-							+ TemplateUtils.upperCaseFirstCharacter(JavaUtils.xmlNameToJava(inNamespace.getType()
-								.getType())) + "()";
+						if (j < method.getInputs().getInput().length - 1) {
+							params += ",";
+						}
 					}
-					if (j < method.getInputs().getInput().length - 1) {
-						params += ",";
-					}
-				}
-			} else {
-				// inputs are not boxed and can just be passed through
-				for (int j = 0; j < method.getInputs().getInput().length; j++) {
-					String paramName = method.getInputs().getInput(j).getName();
-					params += paramName;
-					if (j < method.getInputs().getInput().length - 1) {
-						params += ",";
+				} else {
+					// inputs are not boxed and can just be passed through
+					for (int j = 0; j < method.getInputs().getInput().length; j++) {
+						String paramName = method.getInputs().getInput(j).getName();
+						params += paramName;
+						if (j < method.getInputs().getInput().length - 1) {
+							params += ",";
+						}
 					}
 				}
 			}
-		}
 
-		// return the boxed type
-		String returnTypeBoxed = getBoxedOutputTypeName(methodName);
+			// need to unbox on the way out
+			methodString += lineStart;
+			methodString += method.getOutputMessageClass() + " boxedResult = new " + method.getOutputMessageClass()
+				+ "();\n";
+			methodString += lineStart;
+			if (returnTypeEl.getQName().getNamespaceURI().equals("")
+				&& returnTypeEl.getQName().getLocalPart().equals("void")) {
+				// just call but dont set anything
+				methodString += var + "." + methodName + "(" + params + ");\n";
+			} else {
+				SchemaInformation outputNamespace = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(),
+					returnTypeEl.getQName());
+				if (outputNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+					methodString += "boxedResult.setResponse(" + var + "." + methodName + "(" + params + "));\n";
+				} else {
+					methodString += "boxedResult.set"
+						+ TemplateUtils.upperCaseFirstCharacter(outputNamespace.getType().getType()) + "(" + var + "."
+						+ methodName + "(" + params + "));\n";
+				}
+			}
+			methodString += lineStart;
+			methodString += "return boxedResult;\n";
+			clientMethod += methodString;
+			clientMethod += "\t}\n";
 
-		// need to unbox on the way out
-		methodString += lineStart;
-		methodString += packageName + "." + returnTypeBoxed + " boxedResult = new " + packageName + "."
-			+ returnTypeBoxed + "();\n";
-		methodString += lineStart;
-		if (returnTypeEl.getQName().getNamespaceURI().equals("")
-			&& returnTypeEl.getQName().getLocalPart().equals("void")) {
-			// just call but dont set anything
-			methodString += var + "." + methodName + "(" + params + ");\n";
 		} else {
-			SchemaInformation outputNamespace = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(),
-				returnTypeEl.getQName());
-			if (outputNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-				methodString += "boxedResult.setResponse(" + var + "." + methodName + "(" + params + "));\n";
-			} else {
-				methodString += "boxedResult.set"
-					+ TemplateUtils.upperCaseFirstCharacter(outputNamespace.getType().getType()) + "(" + var + "."
-					+ methodName + "(" + params + "));\n";
-			}
-		}
-		methodString += lineStart;
-		methodString += "return boxedResult;\n";
+			// create a boxed call
+			clientMethod = "\n\t" + createBoxedSignatureStringFromMethod(method) + " " + createExceptions(method);
+			clientMethod += "{\n";
+			clientMethod += "\t\treturn " + var + "." + methodName + "(params);\n";
 
-		clientMethod += methodString;
-		clientMethod += "\t}\n";
+			clientMethod += methodString;
+			clientMethod += "\t}\n";
+		}
+
 		fileContent.insert(endOfClass - 1, clientMethod);
 
 		try {
@@ -852,13 +815,104 @@ public class SyncSource {
 			e.printStackTrace();
 		}
 
+		// find the method
+		String searchString = "public " + method.getName();
+		int startLocation = -1;
+		BufferedReader br = new BufferedReader(new StringReader(fileContent.toString()));
+		// tokenizer to compress all parts, then start matching the parts
+		int charsRead = 0;
+		try {
+			String line1 = null;
+			String line2 = null;
+			String line3 = null;
+
+			line1 = br.readLine();
+			if (line1 != null) {
+				line1 += "\n";
+				line2 = br.readLine();
+				if (line2 != null) {
+					line2 += "\n";
+					line3 = br.readLine();
+					if (line3 != null) {
+						line3 += "\n";
+					}
+				}
+			}
+
+			String matchedLine = null;
+			boolean found = false;
+
+			while (line1 != null && !found) {
+				matchedLine = line1;
+				// if the line is empty just skip it...
+				if (!line1.equals("\n")) {
+					if (line2 != null) {
+						matchedLine += line2;
+						if (line3 != null) {
+							matchedLine += line3;
+						}
+					}
+
+					StringTokenizer searchStringTokenizer = new StringTokenizer(searchString, " \t\n\r\f(),");
+					StringTokenizer lineTokenizer = new StringTokenizer(matchedLine, " \t\n\r\f(),");
+					int matchCount = 0;
+					// this could be advanced to support multiple lines......
+					while (searchStringTokenizer.hasMoreTokens() && lineTokenizer.hasMoreTokens()) {
+						String searchToken = searchStringTokenizer.nextToken();
+						String lineToken = lineTokenizer.nextToken();
+						if (searchToken.equals(lineToken)) {
+							matchCount++;
+							if (matchCount == 1) {
+								lineTokenizer.nextToken();
+								matchCount++;
+							}
+							if (matchCount == 3) {
+								found = true;
+								break;
+							}
+						} else {
+							break;
+						}
+					}
+				}
+				if (!found) {
+					charsRead += line1.length();
+					line1 = line2;
+					line2 = line3;
+					line3 = br.readLine();
+					if (line3 != null) {
+						line3 += "\n";
+					}
+				}
+			}
+			if (!found) {
+				startLocation = -1;
+			}
+			// if the last line i found the match then lets look for the start
+			// of the method
+			if (found) {
+				StringTokenizer searchStringTokenizer = new StringTokenizer(searchString);
+				String startToken = searchStringTokenizer.nextToken();
+				int index = charsRead + matchedLine.indexOf(startToken);
+
+				char prevChar = fileContent.toString().charAt(--index);
+				while (prevChar != '\n' && (prevChar == ' ' || prevChar == '\t')) {
+					prevChar = fileContent.toString().charAt(--index);
+				}
+				index++;
+				startLocation = index;
+				;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		// remove the method
-		String clientMethod = createBoxedSignatureStringFromMethod(method);
-		int startOfMethod = startOfSignature(fileContent, clientMethod);
+		int startOfMethod = startLocation;
 		int endOfMethod = bracketMatch(fileContent, startOfMethod);
 
 		if (startOfMethod == -1 || endOfMethod == -1) {
-			System.err.println("WARNING: Unable to locate method in providerImpl : " + method.getName());
+			System.err.println("WARNING: Unable to locate method in providerImpl: " + method.getName());
 			return;
 		}
 

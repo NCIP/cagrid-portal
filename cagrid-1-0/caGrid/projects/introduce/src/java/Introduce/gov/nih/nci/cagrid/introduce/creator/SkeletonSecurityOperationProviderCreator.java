@@ -22,7 +22,6 @@ import org.apache.tools.ant.BuildException;
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * 
  */
 public class SkeletonSecurityOperationProviderCreator {
 
@@ -58,6 +57,8 @@ public class SkeletonSecurityOperationProviderCreator {
 		ii.setPackageName("gov.nih.nci.cagrid.introduce.security");
 		ii.setPortTypeName("ServiceSecurityPortType");
 		ii.setWsdlFile(SERVICE_SECURITY_WSDL);
+		ii.setInputMessage(new QName(SECURITY_SERVICE_NS, "GetServiceSecurityMetadataRequest"));
+		ii.setOutputMessage(new QName(SECURITY_SERVICE_NS, "GetServiceSecurityMetadataResponse"));
 		method.setIsImported(true);
 		method.setImportInformation(ii);
 

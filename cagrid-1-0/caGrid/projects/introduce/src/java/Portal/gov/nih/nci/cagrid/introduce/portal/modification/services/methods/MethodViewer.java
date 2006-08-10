@@ -186,6 +186,21 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JSplitPane outputTypeSplitPane = null;
 
+	private JPanel messagePanel = null;
+
+	private JLabel inputLabel = null;
+
+	private JLabel outputLabel = null;
+
+	private JTextField inputMessageNamespaceTextField = null;
+
+	private JTextField outputMessageNamespaceTextField = null;
+
+	private JCheckBox messagesCheckBox = null;
+
+	private JTextField inputMessageNameTextField = null;
+
+	private JTextField outputMessageNameTextField = null;
 
 	public MethodViewer(MethodType method, SpecificServiceInformation info) {
 		this.info = info;
@@ -198,7 +213,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private void initialize() {
 		this.setContentPane(getMainPanel());
 		this.setTitle("Build/Modify Operation");
-		this.setSize(new java.awt.Dimension(406,354));
+		this.setSize(new java.awt.Dimension(402, 418));
 		this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 	}
 
@@ -393,6 +408,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 								importInfo.setPortTypeName(getServiceNameTextField().getText());
 								importInfo.setPackageName(getPackageNameTextField().getText());
 								importInfo.setWsdlFile(getWsdlFileTextField().getText());
+								if(!getInputMessageNamespaceTextField().getText().equals("") && !getInputMessageNameTextField().getText().equals("")){
+									importInfo.setInputMessage(new QName(getInputMessageNamespaceTextField().getText(),getInputMessageNameTextField().getText()));
+								}
+								if(!getOutputMessageNamespaceTextField().getText().equals("") && !getOutputMessageNameTextField().getText().equals("")){
+									importInfo.setOutputMessage(new QName(getOutputMessageNamespaceTextField().getText(),getOutputMessageNameTextField().getText()));
+								}
 								method.setImportInformation(importInfo);
 							}
 						} else {
@@ -753,8 +774,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getSecurityContainerPanel() {
 		if (securityContainerPanel == null) {
-			securityContainerPanel = new MethodSecurityPanel(info.getService().getServiceSecurity(),
-				this.method.getMethodSecurity());
+			securityContainerPanel = new MethodSecurityPanel(info.getService().getServiceSecurity(), this.method
+				.getMethodSecurity());
 			securityContainerPanel.setBorder(BorderFactory.createTitledBorder(null,
 				"Method Level Security Configuration", TitledBorder.DEFAULT_JUSTIFICATION,
 				TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
@@ -1180,35 +1201,21 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes importInformationPanel
+	 * Yabba dabba do
 	 * 
-	 * @ret p providerClassNameLabel.setText("JLabel");
-	 *      gridBagConstraints38.insets = new java.awt.Insets(2,2,2,2);
-	 *      importInformationPanel.add(getProviderClassTextField(),
-	 *      gridBagConstraints38); providerClassLabel.setText("Provider Cl
-	 *      importInformationPanel.add(providerClassNameLabel,
-	 *      gridBagConstraints40); ass"); gridBagConstraints38.fill =
-	 *      java.awt.GridBagConstraints.HORIZONTAL; gridBagConstraints38.insets =
-	 *      new java.awt.Insets(2,2,2,2);
-	 *      importInformationPanel.add(providerClassLabel,
-	 *      gridBagConstraints38);
-	 *      importInformationPanel.add(getProviderClassTextField(),
-	 *      gridBagConstraints40); roviderClassLabel.setText("Provider Class");
-	 *      gridBagConstraints41.fill = java.awt.GridBagConstraints.HORIZONTAL;
-	 *      gridBagConstraints41.insets = new java.awt.Insets(2,2,2,2);
-	 *      importInformationPanel.add(providerClassLabel,
-	 *      gridBagConstraints41); gridBagConstraints40.insets = new
-	 *      java.awt.Insets(2,2,2,2);
-	 *      importInformationPanel.add(getProviderClassTextField(),
-	 *      gridBagConstraints40); urn javax.swing.JPanel
+	 * @return
 	 */
 	private JPanel getImportInformationPanel() {
 		if (importInformationPanel == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.gridy = 5;
+			gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints7.gridwidth = 2;
 			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
 			gridBagConstraints36.gridx = 0;
 			gridBagConstraints36.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints36.gridwidth = 2;
-			gridBagConstraints36.gridy = 5;
+			gridBagConstraints36.gridy = 6;
 			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
 			gridBagConstraints23.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints23.gridy = 0;
@@ -1275,6 +1282,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			importInformationPanel.add(getWsdlFileTextField(), gridBagConstraints35);
 			importInformationPanel.add(packageNameLabel, gridBagConstraints40);
 			importInformationPanel.add(getPackageNameTextField(), gridBagConstraints41);
+			importInformationPanel.add(getMessagePanel(), gridBagConstraints7);
 			importInformationPanel.add(getProviderInformationPanel(), gridBagConstraints36);
 		}
 		return importInformationPanel;
@@ -1562,7 +1570,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			providerInformationPanel.setLayout(new GridBagLayout());
 			providerInformationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
 				"Provider Information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
 			providerInformationPanel.add(getIsProvidedCheckBox(), gridBagConstraints38);
 			providerInformationPanel.add(providerClassnameLabel, gridBagConstraints34);
 			providerInformationPanel.add(getProviderClassnameTextField(), gridBagConstraints37);
@@ -1572,19 +1580,19 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes jSplitPane	
-	 * 	
-	 * @return javax.swing.JSplitPane	
+	 * This method initializes jSplitPane
+	 * 
+	 * @return javax.swing.JSplitPane
 	 */
 	private JSplitPane getInputParamsSplitPane() {
 		if (inputParamsSplitPane == null) {
 			inputParamsSplitPane = new JSplitPane();
-			inputParamsSplitPane.setSize(new java.awt.Dimension(173,68));
+			inputParamsSplitPane.setSize(new java.awt.Dimension(173, 68));
 			inputParamsSplitPane.setOneTouchExpandable(true);
 			inputParamsSplitPane.setLeftComponent(getInputNamespacesPanel());
 			inputParamsSplitPane.setRightComponent(getInputTypesTablePanel());
-			inputParamsSplitPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
-				null, "Input Parameters", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+			inputParamsSplitPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input Parameters",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 		}
 		return inputParamsSplitPane;
@@ -1592,14 +1600,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes jSplitPane	
-	 * 	
-	 * @return javax.swing.JSplitPane	
+	 * This method initializes jSplitPane
+	 * 
+	 * @return javax.swing.JSplitPane
 	 */
 	private JSplitPane getOutputTypeSplitPane() {
 		if (outputTypeSplitPane == null) {
 			outputTypeSplitPane = new JSplitPane();
-			outputTypeSplitPane.setSize(new java.awt.Dimension(192,90));
+			outputTypeSplitPane.setSize(new java.awt.Dimension(192, 90));
 			outputTypeSplitPane.setOneTouchExpandable(true);
 			outputTypeSplitPane.setLeftComponent(getOutputNamespacePanel());
 			outputTypeSplitPane.setRightComponent(getOutputTypesTablePanel());
@@ -1608,6 +1616,170 @@ public class MethodViewer extends GridPortalBaseFrame {
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 		}
 		return outputTypeSplitPane;
+	}
+
+
+	/**
+	 * This method initializes messagePanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getMessagePanel() {
+		if (messagePanel == null) {
+			GridBagConstraints gridBagConstraints44 = new GridBagConstraints();
+			gridBagConstraints44.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints44.gridy = 2;
+			gridBagConstraints44.weightx = 1.0;
+			gridBagConstraints44.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints44.gridx = 2;
+			GridBagConstraints gridBagConstraints43 = new GridBagConstraints();
+			gridBagConstraints43.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints43.gridy = 1;
+			gridBagConstraints43.weightx = 1.0;
+			gridBagConstraints43.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints43.gridx = 2;
+			GridBagConstraints gridBagConstraints42 = new GridBagConstraints();
+			gridBagConstraints42.gridx = 0;
+			gridBagConstraints42.gridy = 0;
+			GridBagConstraints gridBagConstraints39 = new GridBagConstraints();
+			gridBagConstraints39.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints39.gridy = 2;
+			gridBagConstraints39.weightx = 1.0;
+			gridBagConstraints39.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints39.gridx = 1;
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints17.gridy = 1;
+			gridBagConstraints17.weightx = 1.0;
+			gridBagConstraints17.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints17.gridx = 1;
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints16.gridy = 2;
+			gridBagConstraints16.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints16.gridx = 0;
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints8.gridy = 1;
+			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.gridx = 0;
+			outputLabel = new JLabel();
+			outputLabel.setText("Output Message QName");
+			inputLabel = new JLabel();
+			inputLabel.setText("Input Message QName");
+			messagePanel = new JPanel();
+			messagePanel.setLayout(new GridBagLayout());
+			messagePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Messages",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			messagePanel.add(inputLabel, gridBagConstraints8);
+			messagePanel.add(outputLabel, gridBagConstraints16);
+			messagePanel.add(getInputMessageNamespaceTextField(), gridBagConstraints17);
+			messagePanel.add(getOutputMessageNamespaceTextField(), gridBagConstraints39);
+			messagePanel.add(getMessagesCheckBox(), gridBagConstraints42);
+			messagePanel.add(getInputMessageNameTextField(), gridBagConstraints43);
+			messagePanel.add(getOutputMessageNameTextField(), gridBagConstraints44);
+		}
+		return messagePanel;
+	}
+
+
+	/**
+	 * This method initializes inputMessageTextField
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getInputMessageNamespaceTextField() {
+		if (inputMessageNamespaceTextField == null) {
+			inputMessageNamespaceTextField = new JTextField();
+		}
+		return inputMessageNamespaceTextField;
+	}
+
+
+	/**
+	 * This method initializes ouputMessageTextField
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getOutputMessageNamespaceTextField() {
+		if (outputMessageNamespaceTextField == null) {
+			outputMessageNamespaceTextField = new JTextField();
+		}
+		return outputMessageNamespaceTextField;
+	}
+
+
+	/**
+	 * This method initializes messagesCheckBox	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getMessagesCheckBox() {
+		if (messagesCheckBox == null) {
+			messagesCheckBox = new JCheckBox();
+			messagesCheckBox.setText("customize message imports");
+			messagesCheckBox.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if(messagesCheckBox.isSelected()){
+						getInputMessageNamespaceTextField().setEnabled(true);
+						getInputMessageNamespaceTextField().setEditable(true);
+						getInputMessageNameTextField().setEnabled(true);
+						getInputMessageNameTextField().setEditable(true);
+						getOutputMessageNamespaceTextField().setEnabled(true);
+						getOutputMessageNamespaceTextField().setEditable(true);
+						getOutputMessageNameTextField().setEnabled(true);
+						getOutputMessageNameTextField().setEditable(true);
+					} else {
+						getInputMessageNamespaceTextField().setEnabled(false);
+						getInputMessageNamespaceTextField().setEditable(false);
+						getInputMessageNameTextField().setEnabled(false);
+						getInputMessageNameTextField().setEditable(false);
+						getOutputMessageNamespaceTextField().setEnabled(false);
+						getOutputMessageNamespaceTextField().setEditable(false);
+						getOutputMessageNameTextField().setEnabled(false);
+						getOutputMessageNameTextField().setEditable(false);
+					}
+				}
+			});
+			
+			getInputMessageNamespaceTextField().setEnabled(false);
+			getInputMessageNamespaceTextField().setEditable(false);
+			getInputMessageNameTextField().setEnabled(false);
+			getInputMessageNameTextField().setEditable(false);
+			getOutputMessageNamespaceTextField().setEnabled(false);
+			getOutputMessageNamespaceTextField().setEditable(false);
+			getOutputMessageNameTextField().setEnabled(false);
+			getOutputMessageNameTextField().setEditable(false);
+			
+		}
+		return messagesCheckBox;
+	}
+
+
+	/**
+	 * This method initializes inputMessageNameTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getInputMessageNameTextField() {
+		if (inputMessageNameTextField == null) {
+			inputMessageNameTextField = new JTextField();
+		}
+		return inputMessageNameTextField;
+	}
+
+
+	/**
+	 * This method initializes outputMessageNameTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getOutputMessageNameTextField() {
+		if (outputMessageNameTextField == null) {
+			outputMessageNameTextField = new JTextField();
+		}
+		return outputMessageNameTextField;
 	}
 } // @jve:decl-index=0:visual-constraint="4,12"
 

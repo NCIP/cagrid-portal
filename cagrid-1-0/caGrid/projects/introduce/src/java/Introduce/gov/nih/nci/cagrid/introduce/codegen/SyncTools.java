@@ -40,6 +40,9 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -50,6 +53,7 @@ import java.util.Set;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.symbolTable.Element;
+import org.apache.axis.wsdl.symbolTable.MessageEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.Type;
 import org.apache.axis.wsdl.toJava.Emitter;
@@ -63,6 +67,8 @@ import org.jdom.Document;
 import org.projectmobius.common.MalformedNamespaceException;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
+
+import com.ibm.wsdl.PartImpl;
 
 
 /**
@@ -111,6 +117,19 @@ public class SyncTools {
 			for (int i = 0; i < symbolTables.size(); i++) {
 
 				type = ((SymbolTable) symbolTables.get(i)).getType(qname);
+				if (type != null) {
+					break;
+				}
+			}
+			return type;
+		}
+
+
+		public MessageEntry getMessageEntry(QName qname) {
+			MessageEntry type = null;
+			for (int i = 0; i < symbolTables.size(); i++) {
+
+				type = ((SymbolTable) symbolTables.get(i)).getMessageEntry(qname);
 				if (type != null) {
 					break;
 				}
@@ -241,7 +260,7 @@ public class SyncTools {
 			String namespace = (String) iter.next();
 			excludeLine += " -x " + namespace;
 		}
-		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludeLine);
+		serviceProperties.setProperty("introduce.ns.excludes", excludeLine);
 
 		// write all the services into the services list property
 		String servicesList = "";
@@ -381,6 +400,7 @@ public class SyncTools {
 				if (service.getMethods() != null && service.getMethods().getMethod() != null) {
 					for (int i = 0; i < service.getMethods().getMethod().length; i++) {
 						MethodType mtype = service.getMethods().getMethod(i);
+						mtype.setIsUnBoxable(new Boolean(true));
 						// process the inputs
 						if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
 							for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
@@ -389,10 +409,14 @@ public class SyncTools {
 									inputParam.getQName());
 								if (!namespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 									QName qname = null;
-									if (mtype.isIsImported()) {
-										qname = new QName(mtype.getImportInformation().getNamespace(), ">>"
-											+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
+									if (mtype.isIsImported() && mtype.getImportInformation().getInputMessage() != null) {
+										qname = new QName(mtype.getImportInformation().getInputMessage()
+											.getNamespaceURI(), ">>"
+											+ mtype.getImportInformation().getInputMessage().getLocalPart() + ">"
 											+ inputParam.getName());
+									} else if (mtype.isIsImported()) {
+										qname = new QName(mtype.getImportInformation().getNamespace(), ">>"
+											+ mtype.getName() + "Request>" + inputParam.getName());
 									} else {
 										qname = new QName(service.getNamespace(), ">>"
 											+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
@@ -400,22 +424,93 @@ public class SyncTools {
 									}
 
 									Type type = table.getType(qname);
-									if (type == null) {
+									if (type == null && !mtype.isIsImported()) {
 										table.dump(System.err);
 										throw new SynchronizationException(
 											"Unable to find Element in symbol table for: " + qname);
-									}
-
-									if (mtype.isIsImported()) {
-										inputParam.setContainerClassName(mtype.getImportInformation().getPackageName()
-											+ "." + getRelativeClassName(type.getName()));
+									} else if (type == null && mtype.isIsImported()) {
+										mtype.setIsUnBoxable(new Boolean(false));
+										System.out
+											.println("There may not be a container class for the element becuase it is being imported and does not seem to be an introduce generated service");
 									} else {
-										inputParam.setContainerClassName(service.getPackageName() + ".stubs."
-											+ getRelativeClassName(type.getName()));
+
+										if (mtype.isIsImported()) {
+											inputParam.setContainerClass(mtype.getImportInformation().getPackageName()
+												+ "." + getRelativeClassName(type.getName()));
+										} else {
+											inputParam.setContainerClass(service.getPackageName() + ".stubs."
+												+ getRelativeClassName(type.getName()));
+										}
 									}
 								}
 
 							}
+						}
+
+						// process the messages so that we can find the types
+						// and the part names
+						System.out.println("LOOKING AT METHOD: " + mtype.getName());
+						// populate the input message class name
+						QName messageQName = null;
+						if (mtype.isIsImported() && mtype.getImportInformation().getInputMessage() != null
+							&& !mtype.getImportInformation().getInputMessage().equals("")) {
+							messageQName = mtype.getImportInformation().getInputMessage();
+						} else if (mtype.isIsImported()) {
+							messageQName = new QName(mtype.getImportInformation().getNamespace(), TemplateUtils
+								.upperCaseFirstCharacter(mtype.getName())
+								+ "Request");
+						} else {
+							messageQName = new QName(service.getNamespace(), TemplateUtils
+								.upperCaseFirstCharacter(mtype.getName())
+								+ "Request");
+						}
+						MessageEntry type = table.getMessageEntry(messageQName);
+
+						if (type != null) {
+							Object obj = type.getMessage().getParts().values().iterator().next();
+							PartImpl messagePart = (PartImpl) obj;
+							Element element = table.getElement(messagePart.getElementName());
+							if (element != null) {
+								mtype.setInputMessageClass(element.getName());
+								mtype.setBoxedInputParameter(TemplateUtils.lowerCaseFirstCharacter(messagePart
+									.getName()));
+							} else {
+								System.out.println("WARNING: Cannot find input message element: "
+									+ messagePart.getElementName());
+							}
+						} else {
+							System.out.println("WARNING: Cannot find input message entry: " + messageQName);
+						}
+
+						// pupulate the output message class name
+						messageQName = null;
+						if (mtype.isIsImported() && mtype.getImportInformation().getOutputMessage() != null
+							&& !mtype.getImportInformation().getOutputMessage().equals("")) {
+							messageQName = mtype.getImportInformation().getOutputMessage();
+						} else if (mtype.isIsImported()) {
+							messageQName = new QName(mtype.getImportInformation().getNamespace(), TemplateUtils
+								.upperCaseFirstCharacter(mtype.getName())
+								+ "Response");
+						} else {
+							messageQName = new QName(service.getNamespace(), TemplateUtils
+								.upperCaseFirstCharacter(mtype.getName())
+								+ "Response");
+						}
+						type = table.getMessageEntry(messageQName);
+
+						if (type != null) {
+							PartImpl messagePart = (PartImpl) type.getMessage().getParts().values().iterator().next();
+							Element element = table.getElement(messagePart.getElementName());
+							if (element != null) {
+								mtype.setOutputMessageClass(element.getName());
+								mtype.setBoxedOutputParameter(TemplateUtils.lowerCaseFirstCharacter(messagePart
+									.getName()));
+							} else {
+								System.out.println("WARNING: Cannot find output message element: "
+									+ messagePart.getElementName());
+							}
+						} else {
+							System.out.println("WARNING: Cannot find output message entry: " + messageQName);
 						}
 
 					}

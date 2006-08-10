@@ -26,8 +26,8 @@
 								<xs:attribute name="qName" type="xs:QName" use="required"/>
 								<xs:attribute name="isArray" type="xs:boolean" use="required"/>
 								<xs:attribute name="name" type="xs:string" use="required"/>
-								<xs:attribute name="containerClassName" type="xs:string"
-									use="optional"/>
+								<xs:attribute name="containerClass" type="xs:string" use="optional"
+								/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -59,6 +59,8 @@
 					<xs:attribute name="namespace" type="xs:string" use="required"/>
 					<xs:attribute name="packageName" type="xs:string" use="required"/>
 					<xs:attribute name="wsdlFile" type="xs:string" use="required"/>
+					<xs:attribute name="inputMessage" type="xs:QName" use="optional"/>
+					<xs:attribute name="outputMessage" type="xs:QName" use="optional"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="ProviderInformation" minOccurs="0" maxOccurs="1">
@@ -70,5 +72,10 @@
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="isImported" type="xs:boolean" use="required"/>
 		<xs:attribute name="isProvided" type="xs:boolean" use="required"/>
+		<xs:attribute name="inputMessageClass" type="xs:string" use="optional"/>
+		<xs:attribute name="outputMessageClass" type="xs:string" use="optional"/>
+		<xs:attribute name="isUnBoxable" type="xs:boolean" use="optional"/>
+		<xs:attribute name="boxedInputParameter" type="xs:string" use="optional"/>
+		<xs:attribute name="boxedOutputParameter" type="xs:string" use="optional"/>
 	</xs:complexType>
 </xs:schema>
