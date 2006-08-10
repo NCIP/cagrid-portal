@@ -14,8 +14,8 @@
 	<property name="java.source" value="1.4" />
 
     <!-- Information -->
-    <property name="project.name" value="caGrid-sdkQuery" />
-    <property name="project.version" value="1.0" />
+	<property name="cagrid.version" value="1.0" />
+    <property name="project.name" value="sdkQuery" />
 
 	<!-- build output dirs -->
     <property name="build.dir" location="build" />
@@ -23,7 +23,7 @@
     <property name="build.jars.dir" location="build/lib" />
 	
 	<!-- jar names -->
-	<property name="project.jar.name" value="${project.name}-${project.version}.jar"/>
+	<property name="project.jar.name" value="caGrid-${cagrid.version}-${project.name}.jar"/>
 		
 	<!-- jar files -->
 	<property name="project.jar.file" value="${build.jars.dir}/${project.jar.name}"/>
@@ -35,14 +35,14 @@
 	<property name="lib.dir" location="${basedir}/lib"/>
 	<property name="ext.lib.dir" location="${basedir}/ext/lib"/>
 	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib"/>
-		
+	
 	<!-- testing stuff -->
 	<property name="test.dir" location="${basedir}/test" />
 	<property name="test.src.dir" location="${test.dir}/src/java" />
 	<property name="test.classes.dir" location="${build.dir}/test/classes" />
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="test.logs.dir" location="${test.dir}/logs" />
-	<property name="test.project.jar" location="${build.jars.dir}/${project.name}-tests-${project.version}.jar" />
+	<property name="test.project.jar" location="${build.jars.dir}/${project.jar.name}-tests-${project.version}.jar" />
 	<import file="test/test.xml" />
 	
 	<!-- =============================================================== -->
