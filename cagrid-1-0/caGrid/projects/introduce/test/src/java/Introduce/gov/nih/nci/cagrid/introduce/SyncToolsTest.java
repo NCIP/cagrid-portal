@@ -119,13 +119,13 @@ public class SyncToolsTest extends Story {
 
 	protected void storyTearDown() throws Throwable {
 		super.storyTearDown();
-//		RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
-//		try {
-//			step1.runStep();
-//		} catch (Throwable e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
+		try {
+			step1.runStep();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		StopGlobusStep step2 = new StopGlobusStep(helper);
 		try {
 			step2.runStep();
