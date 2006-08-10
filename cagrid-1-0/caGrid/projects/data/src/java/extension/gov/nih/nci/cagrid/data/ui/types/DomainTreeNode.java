@@ -48,6 +48,10 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 					} else if (noChildrenChecked()) {
 						getCheckBox().setSelected(false);
 					}
+				}
+			};
+			ItemListener childItemListener = new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
 					// tell everybody that the type selection has been changed
 					JCheckBox checkBox = (JCheckBox) e.getSource();
 					if (checkBox.isSelected()) {
@@ -61,6 +65,7 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 			for (int i = 0; i < types.length; i++) {
 				TypeTreeNode node = new TypeTreeNode(types[i]);
 				node.getCheckBox().addActionListener(childListener);
+				node.getCheckBox().addItemListener(childItemListener);
 				checkBoxTypes.put(node.getCheckBox(), node.getType());
 				typeCheckBoxes.put(node.getType(), node.getCheckBox());
 				add(node);
@@ -77,6 +82,7 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 				}
 			}
 		});
+		// repaint the node when it changes
 		getCheckBox().addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				((DefaultTreeModel) parentTree.getModel()).nodeChanged(DomainTreeNode.this);
