@@ -2,14 +2,12 @@ package gov.nih.nci.cagrid.gridgrouper.grouper;
 
 import edu.internet2.middleware.grouper.AttributeNotFoundException;
 import edu.internet2.middleware.grouper.CompositeType;
-import edu.internet2.middleware.grouper.Field;
 import edu.internet2.middleware.grouper.GrantPrivilegeException;
 import edu.internet2.middleware.grouper.GroupDeleteException;
 import edu.internet2.middleware.grouper.GroupModifyException;
 import edu.internet2.middleware.grouper.GroupType;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
-import edu.internet2.middleware.grouper.Member;
 import edu.internet2.middleware.grouper.MemberAddException;
 import edu.internet2.middleware.grouper.MemberDeleteException;
 import edu.internet2.middleware.grouper.Privilege;
@@ -101,9 +99,6 @@ public interface Group {
 	public void delete() throws GroupDeleteException,
 			InsufficientPrivilegeException;
 
-	public void deleteAttribute(String attr) throws AttributeNotFoundException,
-			GroupModifyException, InsufficientPrivilegeException;
-
 	public void deleteCompositeMember() throws InsufficientPrivilegeException,
 			MemberDeleteException;
 
@@ -115,10 +110,6 @@ public interface Group {
 			SchemaException;
 
 	public Set getAdmins() throws GrouperRuntimeException;
-
-	public String getAttribute(String attr) throws AttributeNotFoundException;
-
-	public Map getAttributes();
 
 	public Set getCompositeMembers();
 
@@ -196,10 +187,6 @@ public interface Group {
 			throws InsufficientPrivilegeException, RevokePrivilegeException,
 			SchemaException;
 
-	public void setAttribute(String attr, String value)
-			throws AttributeNotFoundException, GroupModifyException,
-			InsufficientPrivilegeException;
-
 	// Not sure if we will support
 	public void addType(GroupType type) throws GroupModifyException,
 			InsufficientPrivilegeException, SchemaException;
@@ -213,7 +200,16 @@ public interface Group {
 
 	public boolean hasType(GroupType type);
 
-	public Member toMember() throws GrouperRuntimeException;
+	public void deleteAttribute(String attr) throws AttributeNotFoundException,
+			GroupModifyException, InsufficientPrivilegeException;
+
+	public String getAttribute(String attr) throws AttributeNotFoundException;
+
+	public Map getAttributes();
+
+	public void setAttribute(String attr, String value)
+			throws AttributeNotFoundException, GroupModifyException,
+			InsufficientPrivilegeException;
 
 	public Subject toSubject() throws GrouperRuntimeException;
 }
