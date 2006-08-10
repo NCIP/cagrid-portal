@@ -19,7 +19,10 @@ Add support for copying endorsed libraries to globus (DONE)
 Update CRL for Suspended IdP (DONE)
 Multiple CA Support
 Move to Support IMF SAML Standard
+Command Line Tool for Importing an existing CA
 Add policy chaining 
+Generic Attributes
+
 
 
 Testing Tasks
