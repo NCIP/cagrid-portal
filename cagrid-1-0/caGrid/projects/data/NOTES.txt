@@ -14,7 +14,7 @@ TODO:
 11[D]: Using add jar should do the "copy" right away in the GUI and the extension data should store the local path
 12[D]: .classpath should add in jars that "add jar" copy in, as well those it copies in on creation (metadata stuff, etc)
   [D]:  -- should have mutiple select enabled so you can select multiple jars
-13[ ]: Need a simplified "SDK Backed" data service option (should set serializers, cql processor, add jars, etc automatically)
+13[I]: Need a simplified "SDK Backed" data service option (should set serializers, cql processor, add jars, etc automatically)
 14[D]: Type serialization table need to enable multi-select for setting serialization option
 15[D]: Data GUI needs a way to select a whole project, multiple packages, and classes from them
 16[I]: Query Results Iterator / WS-Enumeration support (wsEnum project)
