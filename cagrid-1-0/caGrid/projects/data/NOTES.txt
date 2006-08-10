@@ -21,6 +21,7 @@ TODO:
 17[ ]: Identifier Resolution Support (Possibly through an operation provider)
 18[D]: Pull GME url from introduce properties
 19[D]: Block caDSR refresh on modification viewer open should only happen when a data model has already been selected. (e.g. when creating a new data service, the call to cadsr should be threaded and not prevent the modification viewer from opening) 
+20[I]: Addition to CQL of queries to return attributes and addition to CQLResult to handle them
 
 BUGS:
 I added a package and it said that it could not find a schema, so I hit cancel.  No model was added to the models list (correctly).  Next I selected a different package, and it popped up the Package incompatibility dialog.  This should not pop up because there are no models added yet.
