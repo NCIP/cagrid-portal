@@ -63,8 +63,8 @@ public class DataServiceEnumImpl extends DataServiceImpl {
 		try {
 			// create a resource for the new iteration
 			EnumResourceHome resourceHome = EnumResourceHome.getEnumResourceHome();
-			// create a persistent resource
-			EnumResource resource = resourceHome.createEnumeration(enumIter, true);
+			// create a transient resource
+			EnumResource resource = resourceHome.createEnumeration(enumIter, false);
 			ResourceKey key = resourceHome.getKey(resource);
 			EnumerationContextType enumContext = 
 				EnumProvider.createEnumerationContextType(key);
