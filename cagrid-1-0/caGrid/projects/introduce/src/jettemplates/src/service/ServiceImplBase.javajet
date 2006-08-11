@@ -1,0 +1,76 @@
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service" class="ServiceImplBaseTemplate" imports="gov.nih.nci.cagrid.introduce.beans.service.*" %>
+<% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
+   String serviceName = info.getService().getName();
+   ServiceType baseService = info.getServices().getService(0);
+   String namespaceDomain = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
+   String modifiedServiceName = serviceName;
+   if(serviceName.endsWith("Service")){
+   	modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
+   }
+%>
+package <%=info.getService().getPackageName()%>.service;
+
+import java.rmi.RemoteException;
+
+import <%=baseService.getPackageName()%>.service.ServiceConfiguration;
+
+import javax.naming.InitialContext;
+
+import org.apache.axis.MessageContext;
+import org.globus.wsrf.Constants;
+import org.globus.wsrf.ResourceHome;
+
+/** 
+ *  <%=info.getService().getPackageName()%>
+ *  TODO:DOCUMENT ME
+ * 
+ * @created by Introduce Toolkit version 1.0
+ * 
+ */
+public abstract class <%=info.getService().getName()%>ImplBase {
+    private ServiceConfiguration configuration;
+	
+	public <%=info.getService().getName()%>ImplBase() throws RemoteException {
+	
+	}
+	
+	public ServiceConfiguration getConfiguration() throws Exception {
+		if (this.configuration != null) {
+			return this.configuration;
+		}
+		MessageContext ctx = MessageContext.getCurrentContext();
+
+		String servicePath = ctx.getTargetService();
+
+		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
+		try {
+			javax.naming.Context initialContext = new InitialContext();
+			this.configuration = (ServiceConfiguration) initialContext.lookup(jndiName);
+		} catch (Exception e) {
+			throw new Exception("Unable to instantiate service configuration.", e);
+		}
+
+		return this.configuration;
+	}
+	
+	public ResourceHome getResourceHome(String resourceKey) throws Exception {
+		MessageContext ctx = MessageContext.getCurrentContext();
+
+		ResourceHome resourceHome = null;
+		
+		String servicePath = ctx.getTargetService();
+
+		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/" + resourceKey;
+		try {
+			javax.naming.Context initialContext = new InitialContext();
+			resourceHome = (ResourceHome) initialContext.lookup(jndiName);
+		} catch (Exception e) {
+			throw new Exception("Unable to instantiate resource home. : " + resourceKey, e);
+		}
+
+		return resourceHome;
+	}
+
+
+}
+

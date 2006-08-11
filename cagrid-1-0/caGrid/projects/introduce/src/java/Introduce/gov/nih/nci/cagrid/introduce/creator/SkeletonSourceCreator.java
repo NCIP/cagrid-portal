@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.client.ClientConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceITemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceProviderImplTemplate;
@@ -82,6 +83,15 @@ public class SkeletonSourceCreator {
 		iFW.write(iS);
 		iFW.close();
 
+		ServiceImplBaseTemplate implBaseT = new ServiceImplBaseTemplate();
+		String implBaseS = implBaseT.generate(new SpecificServiceInformation(info, service));
+		File implBaseF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
+			+ File.separator + "service" + File.separator + service.getName() + "ImplBase.java");
+
+		FileWriter implBaseFW = new FileWriter(implBaseF);
+		implBaseFW.write(implBaseS);
+		implBaseFW.close();
+
 		ServiceImplTemplate implT = new ServiceImplTemplate();
 		String implS = implT.generate(new SpecificServiceInformation(info, service));
 		File implF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
@@ -110,7 +120,6 @@ public class SkeletonSourceCreator {
 		FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
 		resourceContanstsFW.write(resourceContanstsS);
 		resourceContanstsFW.close();
-
 
 		if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)) {
 
@@ -176,7 +185,7 @@ public class SkeletonSourceCreator {
 			FileWriter serviceConfFW = new FileWriter(serviceConfF);
 			serviceConfFW.write(serviceConfS);
 			serviceConfFW.close();
-			
+
 			MainResourceTemplate baseResourceT = new MainResourceTemplate();
 			String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(info, service));
 			File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
