@@ -64,6 +64,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.jdom.Document;
+import org.jdom.Namespace;
 import org.projectmobius.common.MalformedNamespaceException;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
@@ -567,12 +568,25 @@ public class SyncTools {
 
 				// if this is a new service we need to add it's new "service"
 				// element to the WSDD
-
 				NewServerConfigTemplate newServerConfigT = new NewServerConfigTemplate();
 				String newServerConfigS = newServerConfigT.generate(new SpecificServiceInformation(info, newService));
 				org.jdom.Element newServiceElement = XMLUtilities.stringToDocument(newServerConfigS).getRootElement();
 				serverConfigDoc.getRootElement().addContent(0, newServiceElement.detach());
 
+				
+				//when i add this new service i need to make a resource link in every other service for this services resource home
+				//<resourceLink name="home" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/HelloWorld/home" />
+				org.jdom.Element resourceLinkEl = new org.jdom.Element("resourceLink",Namespace.getNamespace("http://wsrf.globus.org/jndi/config"));
+				resourceLinkEl.setAttribute("name",TemplateUtils.lowerCaseFirstCharacter(newService.getName()) + "Home");
+				resourceLinkEl.setAttribute("target", "java:comp/env/services/SERVICE-INSTANCE-PREFIX/" + newService.getName()+ "/home");
+				List children = serverConfigJNDIDoc.getRootElement().getChildren();
+				for(int childI = 0; childI < children.size(); childI++){
+					org.jdom.Element child = (org.jdom.Element)children.get(childI);
+					if(child.getName().equals("service")){
+						child.addContent((org.jdom.Element)resourceLinkEl.clone());
+					}
+				}
+				
 				// if this is a new service we need to add it's new "service"
 				// element to the JNDI
 				NewServiceJNDIConfigTemplate jndiConfigT = new NewServiceJNDIConfigTemplate();

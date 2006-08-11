@@ -538,7 +538,7 @@ public class SyncSource {
 		} else {
 			// is the method is unboxable then i need to just call it straight
 			// up.
-			if (method.getOutput() != null) {
+			if (method.getOutput() != null && !method.getOutput().getQName().getLocalPart().equals("void")) {
 				methodString += "return ";
 			}
 			methodString += var + "." + TemplateUtils.lowerCaseFirstCharacter(method.getName());

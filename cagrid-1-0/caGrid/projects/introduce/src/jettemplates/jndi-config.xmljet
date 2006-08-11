@@ -20,9 +20,6 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 				</parameter>
 			</resourceParams>
 		</resource>
-		<%
-		if(service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)){
-		%>
 		<resource name="configuration" type="<%=service.getPackageName()%>.service.globus.resource.ResourceConfiguration">
 			<resourceParams>
 				<parameter>
@@ -41,9 +38,6 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 				</parameter>			
 			</resourceParams>
 		</resource>
-		<%
-		}
-		%>
 		<resource name="serviceconfiguration" type="<%=service.getPackageName()%>.service.ServiceConfiguration">
 			<resourceParams>
 				<parameter>
