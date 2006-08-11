@@ -8,4 +8,7 @@ Applying the patch:
 2. Copy patch files and apply.sh to WS-Core location
 3. Execute apply.sh
 4. Rebuild WS-Core (ant all)
-
+5. Redeploy WS-Core to Tomcat:
+	a. cd "%GLOBUS_LOCATION%"
+	b. ant -f share\globus_wsrf_common\tomcat\tomcat.xml deployTomcat -Dtomcat.dir="%CATALINA_HOME%"
+ 
