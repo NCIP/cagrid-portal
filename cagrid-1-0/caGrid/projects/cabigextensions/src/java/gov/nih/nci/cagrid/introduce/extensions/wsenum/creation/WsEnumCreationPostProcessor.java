@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -119,7 +120,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 	private static void addEnumerationMethods(ServiceType service) throws CreationExtensionException {
 		// Pull method
 		MethodType pullMethod = new MethodType();
-		pullMethod.setName("pull");
+		pullMethod.setName("PullOp");
 		MethodTypeInputs pullInputs = new MethodTypeInputs();
 		MethodTypeInputsInput pullParameter = new MethodTypeInputsInput();
 		pullParameter.setIsArray(false);
@@ -131,12 +132,12 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		pullOutput.setIsArray(false);
 		pullOutput.setQName(new QName(WS_ENUMERATION_URI, "PullResponse"));
 		pullMethod.setOutput(pullOutput);
-		setMethodImportInformation(pullMethod);
+		setMethodImportInformation(pullMethod, "PullMessage", "PullResponseMessage");
 		CommonTools.addMethod(service, pullMethod);
 		
 		// Renew method
 		MethodType renewMethod = new MethodType();
-		renewMethod.setName("renew");
+		renewMethod.setName("RenewOp");
 		MethodTypeInputs renewInputs = new MethodTypeInputs();
 		MethodTypeInputsInput renewParameter = new MethodTypeInputsInput();
 		renewParameter.setIsArray(false);
@@ -148,12 +149,12 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		renewOutput.setIsArray(false);
 		renewOutput.setQName(new QName(WS_ENUMERATION_URI, "RenewResponse"));
 		renewMethod.setOutput(renewOutput);
-		setMethodImportInformation(renewMethod);
+		setMethodImportInformation(renewMethod, "RenewMessage", "RenewResponseMessage");
 		CommonTools.addMethod(service, renewMethod);
 		
 		// GetStatus method
 		MethodType getStatusMethod = new MethodType();
-		getStatusMethod.setName("getStatus");
+		getStatusMethod.setName("GetStatusOp");
 		MethodTypeInputs getStatusInputs = new MethodTypeInputs();
 		MethodTypeInputsInput getStatusParam = new MethodTypeInputsInput();
 		getStatusParam.setIsArray(false);
@@ -165,12 +166,12 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		getStatusOutput.setIsArray(false);
 		getStatusOutput.setQName(new QName(WS_ENUMERATION_URI, "GetStatusResponse"));
 		getStatusMethod.setOutput(getStatusOutput);
-		setMethodImportInformation(getStatusMethod);
+		setMethodImportInformation(getStatusMethod, "GetStatusMessage", "GetStatusResponseMessage");
 		CommonTools.addMethod(service, getStatusMethod);
 		
 		// Release method
 		MethodType releaseMethod = new MethodType();
-		releaseMethod.setName("release");
+		releaseMethod.setName("ReleaseOp");
 		MethodTypeInputs releaseInputs = new MethodTypeInputs();
 		MethodTypeInputsInput releaseParameter = new MethodTypeInputsInput();
 		releaseParameter.setIsArray(false);
@@ -183,12 +184,12 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		releaseOutput.setQName(new QName("", "void"));
 		releaseOutput.setIsArray(false);
 		releaseMethod.setOutput(releaseOutput);
-		setMethodImportInformation(releaseMethod);
+		setMethodImportInformation(releaseMethod, "ReleaseMessage", "RepeaseResponseMessage");
 		CommonTools.addMethod(service, releaseMethod);
 	}
 	
 	
-	private static void setMethodImportInformation(MethodType method) {
+	private static void setMethodImportInformation(MethodType method, String inputName, String outputName) {
 		method.setIsImported(true);
 		method.setIsProvided(true);
 		MethodTypeImportInformation info = new MethodTypeImportInformation();
@@ -197,6 +198,11 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		String packName = EnumProvider.class.getPackage().getName();
 		info.setPackageName(packName);
 		info.setPortTypeName("DataSource"); // FIXME: ???
+		// input and output message types
+		QName inputQname = new QName(WS_ENUMERATION_URI, inputName);
+		info.setInputMessage(inputQname);
+		QName outputQname = new QName(WS_ENUMERATION_URI, outputName);
+		info.setOutputMessage(outputQname);
 		MethodTypeProviderInformation provider = new MethodTypeProviderInformation();
 		provider.setProviderClass(EnumProvider.class.getName());
 		method.setImportInformation(info);
@@ -211,14 +217,22 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 				return pathname.getName().endsWith("_enum.jar");
 			}
 		});
+		File[] copiedLibs = new File[enumLibs.size()];
 		for (int i = 0; i < enumLibs.size(); i++) {
 			File lib = (File) enumLibs.get(i);
 			File out = new File(serviceDir.getAbsolutePath() + File.separator + "lib" + File.separator + lib.getName());
+			copiedLibs[i] = out;
 			try {
 				Utils.copyFile(lib, out);
 			} catch (Exception ex) {
 				throw new CreationExtensionException(ex.getMessage(), ex);
 			}
+		}
+		File classpathFile = new File(serviceDir.getAbsolutePath() + File.separator + ".classpath");
+		try {
+			ExtensionUtilities.syncEclipseClasspath(classpathFile, copiedLibs);
+		} catch (Exception ex) {
+			throw new CreationExtensionException(ex.getMessage(), ex);
 		}
 	}
 }
