@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
-import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
@@ -248,10 +247,11 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 			PortalUtils.showErrorMessage("Error getting an instance of query processor class: " + ex.getMessage(), ex);
 			return;
 		}
+		// get parameters required by the query processor
 		Map requiredParams = processor.getRequiredParameters();
 		
-		// get any properties currently defined in the service
-		Map currentProperties = getCurrentServiceProperties();
+		// get any properties currently defined for the query processor
+		Map currentProperties = getCurrentQueryProcessorParams();
 		
 		// merge the two maps
 		Map configuredParams = new HashMap();
@@ -285,14 +285,17 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 	}
 	
 	
-	private Map getCurrentServiceProperties() {
+	private Map getCurrentQueryProcessorParams() {
 		Map props = new HashMap();
-		if (serviceInfo.getServiceProperties() != null 
-			&& serviceInfo.getServiceProperties().getProperty() != null) {
-			ServicePropertiesProperty[] serviceProps = 
-				serviceInfo.getServiceProperties().getProperty();
-			for (int i = 0; i < serviceProps.length; i++) {
-				props.put(serviceProps[i].getKey(), serviceProps[i].getValue());
+		MessageElement propsMe = ExtensionTools.getExtensionDataElement(extensionData, DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
+		if (propsMe != null) {
+			Element propsElement = AxisJdomUtils.fromMessageElement(propsMe);
+			Iterator propIter = propsElement.getChildren(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_ELEMENT).iterator();
+			while (propIter.hasNext()) {
+				Element propElement = (Element) propIter.next();
+				String name = propElement.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_NAME);
+				String value = propElement.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_VALUE);
+				props.put(name, value);
 			}
 		}
 		return props;
@@ -313,14 +316,25 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 	
 	
 	private void storeProperties() {
+		// blow away QP config properties element in extension data
+		ExtensionTools.removeExtensionDataElement(extensionData, DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
+		
+		// create new element for configured properties
+		Element configuredProperties = new Element(DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
 		for (int i = 0; i < getPropertiesPanel().getComponentCount(); i++) {
 			PropertyRow row = (PropertyRow) getPropertiesPanel().getComponent(i);
-			if (row.isDirty()) {
-				CommonTools.setServiceProperty(
-					serviceInfo, row.getPropertyName(), row.getValue());
-			}
+			Element propertyElem = new Element(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_ELEMENT);
+			propertyElem.setAttribute(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_NAME, row.getPropertyName());
+			propertyElem.setAttribute(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_VALUE, row.getValue());
+			configuredProperties.addContent(propertyElem);
 		}
-		dispose();
+		try {
+			MessageElement configuredPropertiesMe = AxisJdomUtils.fromElement(configuredProperties);
+			ExtensionTools.updateExtensionDataElement(extensionData, configuredPropertiesMe);
+			dispose();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 	

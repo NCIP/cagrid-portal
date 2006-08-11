@@ -58,6 +58,13 @@ public class DataServiceConstants {
 	public static final String QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT = "QueryProcessorJars";
 	public static final String QUERY_PROCESSOR_JAR_ELEMENT = "Jar";
 	
+	// query processor config constants
+	public static final String QUERY_PROCESSOR_CONFIG_PREFIX = "cqlQueryProcessorConfig_";
+	public static final String QUERY_PROCESSOR_CONFIG_ELEMENT = "queryProcessorConfig";
+	public static final String QUERY_PROCESSOR_PROPERTY_ELEMENT = "property";
+	public static final String QUERY_PROCESSOR_PROPERTY_NAME = "name";
+	public static final String QUERY_PROCESSOR_PROPERTY_VALUE = "value";
+	
 	/*
 	public static final String[] QUERY_METHOD_EXCEPTIONS = new String[] {
 		QueryProcessingException.class.getName(), MalformedQueryException.class.getName()

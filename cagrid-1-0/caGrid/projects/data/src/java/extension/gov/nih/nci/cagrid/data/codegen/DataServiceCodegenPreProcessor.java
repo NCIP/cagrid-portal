@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -28,16 +27,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.axis.message.MessageElement;
@@ -248,102 +243,51 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		if (props.getProperty() == null) {
 			props.setProperty(new ServicePropertiesProperty[]{});
 		}
-		String qpClassname = getQueryProcesorClass(desc, info);
-		if (qpClassname != null) {
-			// find the QP class
-			String serviceDir = info.getIntroduceServiceProperties().getProperty(
-				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR);
-			// get the eclipse classpath document
-			Set libs = new HashSet();
+		// delete any old query processor parameters from service properties
+		List keptProperties = new ArrayList();
+		for (int i = 0; i < props.getProperty().length; i++) {
+			if (!props.getProperty(i).getKey().startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
+				keptProperties.add(props.getProperty(i));
+			}
+		}
+		
+		// verify we've got a query processor class configured
+		String qpClassname = CommonTools.getServicePropertyValue(
+			info, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+		if (qpClassname != null && qpClassname.length() != 0) {
+			// get the query processor parameters
 			ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-			MessageElement qpLibsElement = ExtensionTools.getExtensionDataElement(data,
-				DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
-			if (qpLibsElement != null) {
-				Element qpLibs = AxisJdomUtils.fromMessageElement(qpLibsElement);
-				Iterator jarElemIter = qpLibs.getChildren(DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT,
-					qpLibs.getNamespace()).iterator();
-				while (jarElemIter.hasNext()) {
-					String jarFilename = ((Element) jarElemIter.next()).getText();
-					libs.add(new File(serviceDir + File.separator + "lib" + File.separator + jarFilename));
+			MessageElement paramMe = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
+			Element paramElement = AxisJdomUtils.fromMessageElement(paramMe);
+			Iterator paramElemIter = paramElement.getChildren(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_ELEMENT).iterator();
+			while (paramElemIter.hasNext()) {
+				Element paramElem = (Element) paramElemIter.next();
+				String name = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX 
+					+ paramElem.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_NAME);
+				if (!CommonTools.isValidJavaField(name)) {
+					throw new CodegenExtensionException("The query processor's required parameter " + name
+						+ " is not a valid Java field name.");
 				}
+				String value = paramElem.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_VALUE);
+				// add a new property to the service props list
+				keptProperties.add(new ServicePropertiesProperty(name, value));
 			}
-			// load the class from the additional libraries and current
-			// classpath
-			URL[] libUrls = new URL[libs.size()];
-			Iterator libIter = libs.iterator();
-			int i = 0;
-			while (libIter.hasNext()) {
-				libUrls[i] = ((File) libIter.next()).toURL();
-			}
-			ClassLoader qpLoader = new URLClassLoader(libUrls, getClass().getClassLoader());
-			Class qpClass = qpLoader.loadClass(qpClassname);
-			CQLQueryProcessor processor = (CQLQueryProcessor) qpClass.newInstance();
-			// get the map of required deploy properties
-			Map params = processor.getRequiredParameters();
-			List qpProperties = new ArrayList();
-			if (params != null) {
-				// add the parameters
-				Iterator paramKeyIter = params.keySet().iterator();
-				while (paramKeyIter.hasNext()) {
-					String key = (String) paramKeyIter.next();
-					// verify the keys of the required params list are valid
-					// Java identifiers
-					if (!CommonTools.isValidJavaField(key)) {
-						throw new CodegenExtensionException("The query processor's required parameter " + key
-							+ " is not a valid Java field name.");
-					}
-					if (!hasProperty(props, key)) {
-						ServicePropertiesProperty prop = new ServicePropertiesProperty();
-						String value = (String) params.get(key);
-						if (value == null) {
-							value = "";
-						}
-						prop.setKey(key);
-						prop.setValue(value);
-						qpProperties.add(prop);
-					}
-				}
-				// add the query processor class name to the properties
-				for (int p = 0; p < props.getProperty().length; p++) {
-					if (props.getProperty(p).getKey().equals(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
-						props.getProperty(p).setValue(qpClassname);
-					}
-				}
-				// write all the properties back into the service properties
-				// bean
-				qpProperties.addAll(Arrays.asList(props.getProperty()));
-				ServicePropertiesProperty[] allProperties = new ServicePropertiesProperty[qpProperties.size()];
-				qpProperties.toArray(allProperties);
-				props.setProperty(allProperties);
-				info.setServiceProperties(props);
-			}
-		}
-	}
-
-
-	private boolean hasProperty(ServiceProperties props, String key) {
-		if (props != null && props.getProperty() != null) {
-			for (int i = 0; i < props.getProperty().length; i++) {
-				if (props.getProperty(i).getKey().equals(key)) {
-					return true;
+			// add the query processor class name to the properties
+			for (int i = 0; i < keptProperties.size(); i++) {
+				ServicePropertiesProperty prop = (ServicePropertiesProperty) keptProperties.get(i);
+				if (prop.getKey().equals(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
+					prop.setValue(qpClassname);
+					break;
 				}
 			}
 		}
-		return false;
+		// write the properties back to the service info
+		ServicePropertiesProperty[] allProperties = new ServicePropertiesProperty[keptProperties.size()];
+		keptProperties.toArray(allProperties);
+		props.setProperty(allProperties);
+		info.setServiceProperties(props);
 	}
-
-
-	private String getQueryProcesorClass(ServiceExtensionDescriptionType desc, ServiceInformation info) {
-		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-		MessageElement qpEntry = ExtensionTools.getExtensionDataElement(data,
-			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-		if (qpEntry != null) {
-			String queryProcessorClass = qpEntry.getValue();
-			return queryProcessorClass;
-		}
-		return null;
-	}
-
+	
 
 	private String getSuppliedDomainModelFilename(ServiceExtensionDescriptionType desc, ServiceInformation info) {
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
@@ -358,7 +302,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 
 	private void addDomainModelResourceProperty(ServiceInformation info) {
 		ResourcePropertyType domainMetadata = new ResourcePropertyType();
-		domainMetadata.setPopulateFromFile(true); // no metadata file yet...
+		domainMetadata.setPopulateFromFile(true);
 		domainMetadata.setRegister(true);
 		domainMetadata.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
 		ResourcePropertiesListType propsList = info.getServices().getService(0).getResourcePropertiesList();

@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.data.service;
 
+import gov.nih.nci.cagrid.data.DataServiceConstants;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -23,6 +25,10 @@ import org.globus.wsrf.Constants;
 public class ServiceConfigUtil {
 
 	public static Map getConfigurationMap() throws Exception {
+		String getterPrefix = "get" 
+			+ Character.toUpperCase(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.charAt(0)) 
+			+ DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.substring(1);
+		
 		Map configMap = new HashMap();
 		
 		MessageContext context = MessageContext.getCurrentContext();
@@ -35,11 +41,11 @@ public class ServiceConfigUtil {
 			Method[] configMethods = configClass.getMethods();
 			for (int i = 0; i < configMethods.length; i++) {
 				Method current = configMethods[i];
-				if (current.getName().startsWith("get") 
+				if (current.getName().startsWith(getterPrefix) 
 					&& current.getReturnType().equals(String.class)
 					&& Modifier.isPublic(current.getModifiers())) {
 					String value = (String) current.invoke(serviceConfig, new Object[] {});
-					String key = current.getName().substring(3);
+					String key = current.getName().substring(getterPrefix.length());
 					// lowercase first character
 					key = String.valueOf(Character.toLowerCase(key.charAt(0))) + key.substring(1); 
 					configMap.put(key, value);

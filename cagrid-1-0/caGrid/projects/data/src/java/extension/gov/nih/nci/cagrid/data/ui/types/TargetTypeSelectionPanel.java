@@ -479,6 +479,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		if (className != null) {
 			CommonTools.setServiceProperty(
 				getServiceInfo(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className);
+			// blow away the query processor class properties from the extension data
+			ExtensionTools.removeExtensionDataElement(getExtensionTypeExtensionData(), DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
 		}
 	}
 	
