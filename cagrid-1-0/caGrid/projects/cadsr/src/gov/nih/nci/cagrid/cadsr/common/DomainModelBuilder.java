@@ -34,14 +34,18 @@ import org.hibernate.FetchMode;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.SimpleExpression;
 
 import commonj.work.Work;
 import commonj.work.WorkManager;
 
 
 /**
- * DomainModelBuilder Builds a DomainModel
+ * DomainModelBuilder Builds a DomainModel using a thread pool for concurrent
+ * requests to the remote ApplicationService.
  * 
  * TODO: attempt to handle remote connection refusals by sleeping for a few
  * seconds and retrying?
@@ -245,7 +249,7 @@ public class DomainModelBuilder {
 					public void run() {
 						try {
 							setUmlClass(convertClass(proj.getShortName(), proj.getVersion(), classMD));
-						} catch (ApplicationException e) {
+						} catch (Exception e) {
 							LOG.error("Error converting class:" + classMD.getFullyQualifiedName(), e);
 						}
 					}
@@ -291,7 +295,12 @@ public class DomainModelBuilder {
 				final UMLAssociationMetadata assocMD = associations[i];
 				AssociationConversionWork work = new AssociationConversionWork() {
 					public void run() {
-						setUMLAssociation(convertAssociation(assocMD));
+						try {
+							setUMLAssociation(convertAssociation(assocMD));
+						} catch (Exception e) {
+							LOG.error("Error converting association:" + assocMD.getSourceRoleName() + " --> "
+								+ assocMD.getTargetRoleName(), e);
+						}
 					}
 				};
 				workers[i] = work;
@@ -328,7 +337,7 @@ public class DomainModelBuilder {
 
 
 	private gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation convertAssociation(
-		UMLAssociationMetadata coreAssociation) {
+		UMLAssociationMetadata coreAssociation) throws ApplicationException, DomainModelGenerationException {
 		LOG.debug("Converting association:" + coreAssociation.getSourceRoleName() + " -> "
 			+ coreAssociation.getTargetRoleName());
 
@@ -344,7 +353,6 @@ public class DomainModelBuilder {
 		if (sourceEdge.getRoleName() == null) {
 			sourceEdge.setRoleName("");
 		}
-		sourceEdge.setUMLClassReference(new UMLClassReference(coreAssociation.getSourceUMLClassMetadata().getId()));
 		convertedSourceEdge.setUMLAssociationEdge(sourceEdge);
 		converted.setSourceUMLAssociationEdge(convertedSourceEdge);
 
@@ -357,11 +365,49 @@ public class DomainModelBuilder {
 		if (targetEdge.getRoleName() == null) {
 			targetEdge.setRoleName("");
 		}
-		targetEdge.setUMLClassReference(new UMLClassReference(coreAssociation.getTargetUMLClassMetadata().getId()));
 		convertedTargetEdge.setUMLAssociationEdge(targetEdge);
 		converted.setTargetUMLAssociationEdge(convertedTargetEdge);
 
+		// umlproject.UMLAssociationMetadata is broken so need to issue
+		// my own hibernate query to get UMLClass (could have just called
+		// getters otherwise)
+		setUMLClassReferences(coreAssociation, converted);
+
 		return converted;
+	}
+
+
+	private void setUMLClassReferences(UMLAssociationMetadata coreAssociation, UMLAssociation domainAssociation)
+		throws ApplicationException, DomainModelGenerationException {
+
+		SimpleExpression idRes = Restrictions.eq("id", coreAssociation.getId());
+		ProjectionList projection = Projections.projectionList().add(Projections.property("sourceUMLClassMetadata.id"))
+			.add(Projections.property("targetUMLClassMetadata.id"));
+		DetachedCriteria criteria = DetachedCriteria.forClass(UMLAssociationMetadata.class);
+		criteria.add(idRes);
+		criteria.setProjection(projection);
+
+		long start = System.currentTimeMillis();
+		List rList = this.cadsr.query(criteria, UMLAssociationMetadata.class.getName());
+		Iterator iterator = rList.iterator();
+		if (iterator == null || !iterator.hasNext()) {
+			throw new DomainModelGenerationException("Unable to located source and target ids for association!");
+		}
+		// should have length 2, with src, target
+		Object[] ids = (Object[]) iterator.next();
+		if (ids == null || ids.length != 2) {
+			throw new DomainModelGenerationException("Unexpected result during query for association ids!");
+		}
+
+		domainAssociation.getSourceUMLAssociationEdge().getUMLAssociationEdge().setUMLClassReference(
+			new UMLClassReference((String) ids[0]));
+
+		domainAssociation.getTargetUMLAssociationEdge().getUMLAssociationEdge().setUMLClassReference(
+			new UMLClassReference((String) ids[1]));
+
+		double duration = (System.currentTimeMillis() - start) / 1000.0;
+		LOG.info("Association id fetch took " + duration + " seconds.");
+
 	}
 
 

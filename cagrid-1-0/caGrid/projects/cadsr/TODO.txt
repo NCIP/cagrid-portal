@@ -8,6 +8,8 @@ caching using resources?
 
 discovery panel should support "searching" as well
 
+reimplement generateDomainModel(proj,class,assoc)
+  - change to association excludes?
 
 
 caCORE BUGS:
@@ -16,7 +18,7 @@ caCORE provided XSD's have the wrong namespace (caCORE.cabig instead of caCORE.c
 
 returning too many classes when there are package aliases
 
-returning same class for association source and target
+(FIXED WITH WORKAROUND TO GET MANUALLY BY QUERY )returning same class for association source and target
 
 unable to populate associations as client calls back to ApplServ even if associations are set
 
