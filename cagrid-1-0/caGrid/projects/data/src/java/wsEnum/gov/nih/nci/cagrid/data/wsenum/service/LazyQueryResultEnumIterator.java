@@ -52,7 +52,7 @@ public class LazyQueryResultEnumIterator implements EnumIterator {
 		// Build SOAPElement array and return IterationResult
 		SOAPElement[] elements = new SOAPElement[soapElements.size()];
 		soapElements.toArray(elements);
-		IterationResult result = new IterationResult(elements, lazyResults.hasNext());
+		IterationResult result = new IterationResult(elements, !lazyResults.hasNext());
 		return result;
 	}
 	
