@@ -172,6 +172,8 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		importInfo.setPackageName(DataServiceConstants.DATA_SERVICE_PACKAGE);
 		importInfo.setPortTypeName(DataServiceConstants.DATA_SERVICE_PORT_TYPE_NAME);
 		importInfo.setWsdlFile("DataService.wsdl");
+		importInfo.setInputMessage(new QName("http://gov.nih.nci.cagrid.data/DataService", "QueryRequest"));
+		importInfo.setOutputMessage(new QName("http://gov.nih.nci.cagrid.data/DataService", "QueryResponse"));
 		queryMethod.setIsImported(true);
 		queryMethod.setImportInformation(importInfo);
 		// query method is provided

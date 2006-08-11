@@ -124,6 +124,13 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		dsNamespaces.toArray(nsArray);
 		namespaces.setNamespace(nsArray);
 		description.setNamespaces(namespaces);
+		// add the CQL and CQLResult namespaces to the ns excludes
+		/*
+		String excludes = props.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES);
+		excludes += " -x " + DataServiceConstants.CQL_QUERY_URI;
+		excludes += " -x " + DataServiceConstants.CQL_RESULT_SET_URI;
+		props.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);
+		*/
 		// query method
 		System.out.println("Building query method");
 		MethodsType methods = dataService.getMethods();
