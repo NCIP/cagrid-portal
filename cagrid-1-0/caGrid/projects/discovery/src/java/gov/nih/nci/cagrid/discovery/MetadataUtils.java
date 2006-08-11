@@ -38,7 +38,7 @@ public class MetadataUtils {
 		if (metadata == null || writer == null) {
 			throw new IllegalArgumentException("Null is not a valid argument");
 		}
-		Utils.serializeObject(metadata, MetadataConstants.CAGRID_DATA_MD_QNAME, writer, ClassUtils.getResourceAsStream(
+		Utils.serializeObject(metadata, MetadataConstants.CAGRID_MD_QNAME, writer, ClassUtils.getResourceAsStream(
 			MetadataUtils.class, METADATA_WSDD));
 	}
 
@@ -56,7 +56,7 @@ public class MetadataUtils {
 		if (domainModel == null || writer == null) {
 			throw new IllegalArgumentException("Null is not a valid argument");
 		}
-		Utils.serializeObject(domainModel, MetadataConstants.CAGRID_MD_QNAME, writer, ClassUtils.getResourceAsStream(
+		Utils.serializeObject(domainModel, MetadataConstants.CAGRID_DATA_MD_QNAME, writer, ClassUtils.getResourceAsStream(
 			MetadataUtils.class, METADATA_WSDD));
 	}
 
