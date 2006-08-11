@@ -218,6 +218,9 @@ public class TestDorianCertificateAuthority extends TestCase {
 		DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
 		try {
 			ca.clearDatabase();
+//			give a chance for others to run right before we enter timing sensitive code
+			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+			Thread.currentThread().yield();
 			X509Certificate origRoot = createAndStoreCAShort(ca);
 			Thread.sleep(5500);
 			GregorianCalendar cal = new GregorianCalendar();
@@ -244,6 +247,9 @@ public class TestDorianCertificateAuthority extends TestCase {
 		try {
 			ca.clearDatabase();
 			// ca.destroyTable();
+//			give a chance for others to run right before we enter timing sensitive code
+			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+			Thread.currentThread().yield();
 			createAndStoreCAShort(ca);
 			Thread.sleep(5500);
 			try {
