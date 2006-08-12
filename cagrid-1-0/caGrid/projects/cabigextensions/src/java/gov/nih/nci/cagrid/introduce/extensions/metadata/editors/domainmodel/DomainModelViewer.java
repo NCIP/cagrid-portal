@@ -129,6 +129,8 @@ public class DomainModelViewer extends JPanel {
 						if (source == null || target == null) {
 							System.err
 								.println("ERROR: can't process the association, as it references an unexposed class... ignoring!");
+							System.err.println("Source ID:"+sourceEdge.getUMLClassReference().getRefid());
+							System.err.println("Target ID:"+targetEdge.getUMLClassReference().getRefid());
 						} else {
 							System.err.println("processing");
 							getUMLDiagram().addAssociation(source, target, sourceEdge.getRoleName(),

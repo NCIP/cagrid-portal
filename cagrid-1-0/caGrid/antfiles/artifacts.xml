@@ -313,8 +313,8 @@
 				<include name="mobius-castor-0.9.4.3-xml.jar" />
 			</fileset>
 			<fileset dir="${projects.dir}/gme/build/lib">
-				<include name="caGrid-GlobalModelExchange.jar" />
-				<include name="caGrid-GlobalModelExchange_stubs.jar" />
+				<include name="caGrid-1.0-GlobalModelExchange.jar" />
+				<include name="caGrid-1.0-GlobalModelExchange_stubs.jar" />
 			</fileset>
 		</artifact>
 	</target>

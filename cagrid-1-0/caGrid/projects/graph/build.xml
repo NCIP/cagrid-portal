@@ -6,16 +6,17 @@
 <project name="graph" default="compile" basedir=".">
 	<property file="build.properties" />
 
-	<property name="project.name" value="caGrid-graph" />
+
 	<property name="project.version" value="1.0" />
+	<property name="project.name" value="caGrid-${project.version}}-graph" />
 
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="classes.dir" value="${build.dir}/classes" />
 	<property name="jar.dir" value="${build.dir}/jars" />
-	<property name="project.jarfile" value="${jar.dir}/${project.name}-${project.version}.jar" />
+	<property name="project.jarfile" value="${jar.dir}/${project.name}.jar" />
 	<property name="lib.dir" value="${basedir}/lib" />
-	<property name="ext.lib.dir" value="${basedir}/ext/lib"/>
+	<property name="ext.lib.dir" value="${basedir}/ext/lib" />
 
 
 	<!-- =============================================================== -->
@@ -26,7 +27,7 @@
 			<include name="**/*.jar" />
 		</fileset>
 		<fileset dir="${ext.lib.dir}">
-			<include name="**/*.jar"/>
+			<include name="**/*.jar" />
 		</fileset>
 	</path>
 

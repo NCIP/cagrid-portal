@@ -9,8 +9,8 @@
 	<property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 
 	<!-- Information -->
-	<property name="project.name" value="caGrid-metadata" />
 	<property name="project.version" value="1.0" />
+	<property name="project.name" value="caGrid-${project.version}-metadata" />
 
 	<property name="ext.lib.dir" value="ext/lib" />
 
@@ -21,9 +21,9 @@
 	<property name="stubs.dir" location="build/stubs" />
 	<property name="stubs.src" location="build/stubs/src" />
 	<property name="stubs.dest" location="build/stubs/classes" />
-	<property name="common.jar.name" value="${project.name}-common-${project.version}.jar" />
-	<property name="data.jar.name" value="${project.name}-data-${project.version}.jar" />
-	<property name="security.jar.name" value="${project.name}-security-${project.version}.jar" />
+	<property name="common.jar.name" value="${project.name}-common.jar" />
+	<property name="data.jar.name" value="${project.name}-data.jar" />
+	<property name="security.jar.name" value="${project.name}-security.jar" />
 
 	<property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
 
