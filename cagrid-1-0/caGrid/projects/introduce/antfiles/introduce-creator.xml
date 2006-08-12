@@ -6,8 +6,7 @@
 	<property environment="env"/>
 	<property name="ext.globus.location" location="${env.GLOBUS_LOCATION}"/>
 	<property name="introduce.skeleton.dir" location="${basedir}/skeleton"/>
-	<property name="introduce.skeleton.destination.dir.default"
-		location="${user.home}/caGridServiceSkeleton"/>
+	<property name="introduce.skeleton.destination.dir.default" location="${user.home}/caGridServiceSkeleton"/>
 	<property name="introduce.skeleton.service.name.default" value="ExampleService"/>
 	<property name="introduce.skeleton.package.default" value="gov.nih.nci.cagrid"/>
 	<property name="introduce.skeleton.package.dir.default" value="gov/nih/nci/cagrid"/>
@@ -19,7 +18,9 @@
 	<target name="checkGlobus" depends="setGlobus">
 		<condition property="globus.not.found">
 			<or>
-				<not><isset property="ext.globus.dir"/></not>
+				<not>
+					<isset property="ext.globus.dir"/>
+				</not>
 				<equals arg1="${ext.globus.dir}" arg2=""/>
 			</or>
 		</condition>
@@ -28,8 +29,8 @@
 	</target>
 	<target name="setGlobus" if="env.GLOBUS_LOCATION">
 		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}"/>
-		<property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
-		<property name="schema.src" location="${ext.globus.dir}/share/schema" />
+		<property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml"/>
+		<property name="schema.src" location="${ext.globus.dir}/share/schema"/>
 	</target>
 	<taskdef name="createSkeleton" classname="gov.nih.nci.cagrid.introduce.creator.SkeletonCreator">
 		<classpath>
@@ -53,8 +54,7 @@
 			</fileset>
 		</classpath>
 	</taskdef>
-	<taskdef name="postCreateSkeleton"
-		classname="gov.nih.nci.cagrid.introduce.creator.SkeletonPostCreator">
+	<taskdef name="postCreateSkeleton" classname="gov.nih.nci.cagrid.introduce.creator.SkeletonPostCreator">
 		<classpath>
 			<fileset dir="${lib.dir}">
 				<include name="*.jar"/>
@@ -77,8 +77,7 @@
 		</classpath>
 	</taskdef>
 	<target name="usage">
-		<echo message="Not to be called directly.  This file contains utilities to be used in other
-			build files."/>
+		<echo message="Not to be called directly.  This file contains utilities to be used in other    build files."/>
 	</target>
 	<target name="createService" description="Will create an anaytical skeleton deployment"
 		depends="checkGlobus, checkInputProps, copySkeleton, setActivePath"> </target>
@@ -86,8 +85,7 @@
 		<postCreateSkeleton/>
 	</target>
 	<target name="setActivePath">
-		<property name="active.skeleton.destination.dir"
-			value="${introduce.skeleton.destination.dir}"/>
+		<property name="active.skeleton.destination.dir" value="${introduce.skeleton.destination.dir}"/>
 	</target>
 	<target name="copySkeleton" depends="prepareSkeleton">
 		<copy todir="${introduce.skeleton.destination.dir}">
@@ -95,26 +93,22 @@
 				<include name="**\*"/>
 			</fileset>
 		</copy>
-		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true"
-			includeemptydirs="false">
+		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true" includeemptydirs="false">
 			<fileset dir="${ext.lib.dir}">
-				<include name="*caGrid-core*"/>
+				<include name="caGrid*-core.jar"/>
 			</fileset>
 		</copy>
 		<!-- call our creation ant task -->
 		<createSkeleton/>
 		<!-- do replacements on the basic service files -->
-		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings" token=":"
-			value="\:"/>
-		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings" token="\\:"
-			value="\:"/>
+		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings" token=":" value="\:"/>
+		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings" token="\\:" value="\:"/>
 		<!-- create the propertites files for this project-->
 		<propertyfile file="${introduce.skeleton.destination.dir}/introduce.properties"
 			comment="Service introdue properties">
 			<entry key="introduce.skeleton.service.name" value="${introduce.skeleton.service.name}"/>
 			<entry key="introduce.skeleton.timestamp" value="0"/>
-			<entry key="introduce.skeleton.namespace.domain"
-				value="${introduce.skeleton.namespace.domain}"/>
+			<entry key="introduce.skeleton.namespace.domain" value="${introduce.skeleton.namespace.domain}"/>
 			<entry key="introduce.skeleton.services.list" value="${introduce.skeleton.service.name}"/>
 			<entry key="introduce.skeleton.extensions" value="${introduce.skeleton.extensions}"/>
 		</propertyfile>
@@ -143,28 +137,25 @@
 		</condition>
 	</target>
 	<target name="prepareSkeleton" unless="noInputNeeded">
-		<input message="Please enter the destination for your service skeleton
-			[${introduce.skeleton.destination.dir.default}]:"
+		<input
+			message="Please enter the destination for your service skeleton    [${introduce.skeleton.destination.dir.default}]:"
 			addproperty="introduce.skeleton.destination.dir"
 			defaultvalue="${introduce.skeleton.destination.dir.default}"/>
-		<input message="Please enter the name for this service (no spaces)
-			[${introduce.skeleton.service.name.default}]:"
-			addproperty="introduce.skeleton.service.name"
-			defaultvalue="${introduce.skeleton.service.name.default}"/>
-		<input message="Please enter the package you would like to use for this service's source.
-			[${introduce.skeleton.package.default}]:" addproperty="introduce.skeleton.package"
-			defaultvalue="${introduce.skeleton.package.default}"/>
-		<input message="Please enter the package directory you would like to use for this service's
-			source. (this should match the package name above)
-			[${introduce.skeleton.package.dir.default}]:"
-			addproperty="introduce.skeleton.package.dir"
-			defaultvalue="${introduce.skeleton.package.dir.default}"/>
-		<input message="Please enter the namespace domain of the introduce.
-			[${introduce.skeleton.namespace.domain.default}]:"
+		<input
+			message="Please enter the name for this service (no spaces)    [${introduce.skeleton.service.name.default}]:"
+			addproperty="introduce.skeleton.service.name" defaultvalue="${introduce.skeleton.service.name.default}"/>
+		<input
+			message="Please enter the package you would like to use for this service's source.    [${introduce.skeleton.package.default}]:"
+			addproperty="introduce.skeleton.package" defaultvalue="${introduce.skeleton.package.default}"/>
+		<input
+			message="Please enter the package directory you would like to use for this service's    source. (this should match the package name above)    [${introduce.skeleton.package.dir.default}]:"
+			addproperty="introduce.skeleton.package.dir" defaultvalue="${introduce.skeleton.package.dir.default}"/>
+		<input
+			message="Please enter the namespace domain of the introduce.    [${introduce.skeleton.namespace.domain.default}]:"
 			addproperty="introduce.skeleton.namespace.domain"
 			defaultvalue="${introduce.skeleton.namespace.domain.default}"/>
-		<input message="Please enter any service extensions (separate by commas).
-			[${introduce.skeleton.extensions.default}]:" addproperty="introduce.skeleton.extensions"
-			defaultvalue="${introduce.skeleton.extensions.default}"/>
+		<input
+			message="Please enter any service extensions (separate by commas).    [${introduce.skeleton.extensions.default}]:"
+			addproperty="introduce.skeleton.extensions" defaultvalue="${introduce.skeleton.extensions.default}"/>
 	</target>
 </project>
