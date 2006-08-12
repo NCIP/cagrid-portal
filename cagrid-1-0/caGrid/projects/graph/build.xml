@@ -8,7 +8,7 @@
 
 
 	<property name="project.version" value="1.0" />
-	<property name="project.name" value="caGrid-${project.version}}-graph" />
+	<property name="project.name" value="caGrid-${project.version}-graph" />
 
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="build.dir" value="${basedir}/build" />
