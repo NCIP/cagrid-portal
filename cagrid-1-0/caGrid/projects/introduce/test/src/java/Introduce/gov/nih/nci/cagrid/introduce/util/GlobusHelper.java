@@ -30,7 +30,6 @@ public class GlobusHelper {
 	private Process p;
 
 
-
 	public GlobusHelper(boolean secure, File tmpDir, int port) {
 		super();
 
@@ -121,8 +120,11 @@ public class GlobusHelper {
 			cmd.add("-p");
 			cmd.add(String.valueOf(port));
 		}
-		if (!secure)
+		if (!secure) {
 			cmd.add("-nosec");
+		}
+		
+		cmd.add("-debug");
 
 		// build environment
 		String[] envp = new String[]{
@@ -132,7 +134,8 @@ public class GlobusHelper {
 		envp = EnvUtils.overrideEnv(envp);
 
 		// start globus
-		Process p = Runtime.getRuntime().exec((String[]) cmd.toArray(new String[0]), envp, new File(tmpGlobusLocation.getAbsolutePath()));
+		Process p = Runtime.getRuntime().exec((String[]) cmd.toArray(new String[0]), envp,
+			new File(tmpGlobusLocation.getAbsolutePath()));
 		new StdIOThread(p.getInputStream()).start();
 		new StdIOThread(p.getErrorStream()).start();
 		return p;
