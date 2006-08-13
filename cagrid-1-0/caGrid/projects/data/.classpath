@@ -53,7 +53,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
@@ -63,17 +62,11 @@
 	<classpathentry kind="lib" path="ext/lib/GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-core-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-portal-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-GlobalModelExchange_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius-castor-0.9.4.3-xml.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-caDSR-1.0-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-caDSR-1.0-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-caDSR-1.0-portal.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-caDSR-1.0-service.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="src" path="test/src/java"/>
 	<classpathentry kind="lib" path="ext/test/lib/asm-2.2.1.jar"/>
@@ -90,10 +83,8 @@
 	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="src" path="src/java/validation"/>
 	<classpathentry kind="src" path="src/java/common"/>
-	<classpathentry kind="lib" path="ext/test/lib/caGrid-core-tests-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/acme.jar"/>
 	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-graph-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/gef_modified.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jmi-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/nsuml-0.4.20_modified.jar"/>
@@ -101,9 +92,6 @@
 	<classpathentry kind="lib" path="ext/lib/swidgets-0.1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/toolbar-1.1.1.jar"/>
 	<classpathentry kind="src" path="src/java/cql"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-common-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-data-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-caDSR-1.0-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-client-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-common-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-service-1.0.jar"/>
@@ -111,7 +99,19 @@
 	<classpathentry kind="src" path="test/resources"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-wsEnum.jar"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_enum.jar"/>
-	<classpathentry kind="lib" path="ext/lib/wsrf_core_stubs_enum.jar"/>
 	<classpathentry kind="src" path="src/java/wsEnum"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-caDSR-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-caDSR-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-caDSR-portal.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-caDSR-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-caDSR-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GlobalModelExchange_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GlobalModelExchange.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-graph.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-data.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.0-core-tests.jar"/>
+	<classpathentry kind="lib" path="ext/lib/wsrf_core_stubs_enum.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
