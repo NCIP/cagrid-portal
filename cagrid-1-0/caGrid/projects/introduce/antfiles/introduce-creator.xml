@@ -95,7 +95,7 @@
 		</copy>
 		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true" includeemptydirs="false">
 			<fileset dir="${ext.lib.dir}">
-				<include name="caGrid*-core.jar"/>
+				<include name="caGrid-1.0-core.jar"/>
 			</fileset>
 		</copy>
 		<!-- call our creation ant task -->
