@@ -19,7 +19,7 @@ import uml.classdiagram.ClassdiagramNode;
 
 public class UMLDiagram extends JLayeredPane {
 	protected Diagram diagram;
-	public    UMLViewer viewer;
+	public UMLViewer viewer;
 	protected UMLMenuBar menubar;
 	protected UMLStatusBar statusBar;
 
@@ -27,16 +27,16 @@ public class UMLDiagram extends JLayeredPane {
 
 	protected Vector classes = new Vector();
 	protected Vector assocs = new Vector();
-	
+
 	public boolean inactiveState = true;
 
-	public UMLViewer getViewer()
-	{
+
+	public UMLViewer getViewer() {
 		return this.viewer;
 	}
 
-	public UMLDiagram() 
-	{
+
+	public UMLDiagram() {
 		super();
 
 		diagram = new Diagram();
@@ -53,7 +53,7 @@ public class UMLDiagram extends JLayeredPane {
 		this.add(statusBar);
 
 		this.addComponentListener(new UMLDiagramComponentListener());
-		
+
 		this.setPreferredSize(new Dimension(500, 500));
 
 	}
@@ -70,12 +70,11 @@ public class UMLDiagram extends JLayeredPane {
 			return false;
 
 		gc.refresh();
-		
+
 		gc.setVisible(false);
 		this.classes.addElement(gc);
 		this.diagram.add(gc);
 		this.layouter.add(new ClassdiagramNode(gc));
-		
 
 		return true;
 
@@ -88,15 +87,16 @@ public class UMLDiagram extends JLayeredPane {
 
 	}
 
-	
-	public void unHighlightAll()
-	{
+
+	public void unHighlightAll() {
 		this.viewer.unHighlightAll();
 	}
 
-	public boolean addAssociation(UMLClass gc1, UMLClass gc2, String label1, String label2, String multiplicity1,
-		String multiplicity2) {
-		UMLClassAssociation edge = new UMLClassAssociation(label1, multiplicity1, label2, multiplicity2);
+
+	public boolean addAssociation(UMLClass gc1, UMLClass gc2, String sourceRoleName, String sourceMultiplicity,
+		String targetRoleName, String targetMultiplicity) {
+		UMLClassAssociation edge = new UMLClassAssociation(sourceRoleName, sourceMultiplicity, targetRoleName,
+			targetMultiplicity);
 
 		edge.setSourceFigNode(gc1);
 		edge.setSourcePortFig(gc1);
@@ -105,13 +105,12 @@ public class UMLDiagram extends JLayeredPane {
 		edge.setDestPortFig(gc2);
 
 		edge.setVisible(false);
-		
+
 		this.diagram.add(edge);
 		this.diagram.add(edge.sourceLabel);
 		this.diagram.add(edge.destinationLabel);
 		this.diagram.add(edge.sourceMultiplicity);
 		this.diagram.add(edge.destinationMultiplicity);
-
 		this.diagram.add(edge.sourceArrow);
 		this.diagram.add(edge.destinationArrow);
 
@@ -121,26 +120,23 @@ public class UMLDiagram extends JLayeredPane {
 
 		return true;
 	}
-	
-	public void scrollToShowClass(String name)
-	{
-		for(int k = 0; k < this.classes.size(); k++)
-		{
+
+
+	public void scrollToShowClass(String name) {
+		for (int k = 0; k < this.classes.size(); k++) {
 			UMLClass c = (UMLClass) classes.get(k);
-			
-			if(c.name.equals(name))
-			{
+
+			if (c.name.equals(name)) {
 				this.viewer.getScrollPane().getViewport().setViewPosition(c.getLocation());
 				this.highlightClass(c);
 				return;
 			}
 		}
-		
+
 	}
 
 
-	public void addFig(Fig f) 
-	{
+	public void addFig(Fig f) {
 		this.diagram.add(f);
 
 	}
@@ -151,14 +147,12 @@ public class UMLDiagram extends JLayeredPane {
 	}
 
 
-	public void zoom(int percent) 
-	{
+	public void zoom(int percent) {
 
 	}
 
 
-	public void refresh() 
-	{
+	public void refresh() {
 		this.viewer.setDiagram(this.diagram);
 
 		for (int k = 0; k < this.classes.size(); k++) {
@@ -166,31 +160,27 @@ public class UMLDiagram extends JLayeredPane {
 			gc.setVisible(true);
 			viewer.diagram.diagram.getLayer().bringToFront(gc);
 		}
-		
-		
+
 		performLayout();
 		repositionLabelsAndArrowHeads();
-		
+
 		this.viewer.updateDrawingSizeToIncludeAllFigs();
-		
+
 		this.inactiveState = false;
-		
-		
+
 	}
-	
-	public void clear()
-	{
+
+
+	public void clear() {
 		this.inactiveState = true;
 		this.layouter = new ClassdiagramLayouter();
-		
-		for(int k = 0; k < this.classes.size(); k++)
-		{
+
+		for (int k = 0; k < this.classes.size(); k++) {
 			UMLClass gc = (UMLClass) this.classes.get(k);
 			this.diagram.remove(gc);
 		}
-		
-		for(int k = 0; k < this.assocs.size(); k++)
-		{
+
+		for (int k = 0; k < this.assocs.size(); k++) {
 			UMLClassAssociation edge = (UMLClassAssociation) this.assocs.get(k);
 			this.diagram.remove(edge);
 			this.diagram.remove(edge.sourceArrow);
@@ -200,7 +190,7 @@ public class UMLDiagram extends JLayeredPane {
 			this.diagram.remove(edge.sourceMultiplicity);
 			this.diagram.remove(edge.destinationMultiplicity);
 		}
-		
+
 		this.classes = new Vector();
 		this.assocs = new Vector();
 	}
@@ -209,23 +199,18 @@ public class UMLDiagram extends JLayeredPane {
 	public void performLayout() {
 
 		layouter.layout();
-	
+
 	}
 
 
 	protected void repositionLabelsAndArrowHeads() {
-		
 		UMLClassAssociation edge = null;
-	
+
 		for (int c = 0; c < this.assocs.size(); c++) {
-				edge = (UMLClassAssociation) this.assocs.elementAt(c);
-	
-				edge.repositionLabelsAndArrowHeads();
-	
-				this.repaint();
-	
+			edge = (UMLClassAssociation) this.assocs.elementAt(c);
+			edge.repositionLabelsAndArrowHeads();
+			this.repaint();
 		}
-		
 	}
 
 }
