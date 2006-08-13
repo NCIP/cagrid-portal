@@ -68,14 +68,11 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-wsEnum.jar"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_enum.jar"/>
 	<classpathentry kind="lib" path="ext/lib/acme.jar"/>
-	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-discovery-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-graph-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-metadata-data-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/gef_modified.jar"/>
 	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jmi-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
@@ -86,5 +83,8 @@
 	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="lib" path="ext/lib/swidgets-0.1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/toolbar-1.1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/gef_modified.jar"/>
+	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-graph.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
