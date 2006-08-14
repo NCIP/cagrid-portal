@@ -1,3 +1,2 @@
 http\://cagrid.nci.nih.gov/1/BulkDataTransfer=gov.nih.nci.cagrid.bdt.beans
 http\://cagrid.nci.nih.gov/1/BulkDataTransferMetadata=gov.nih.nci.cagrid.bdt.metadata.beans
-http\://schemas.xmlsoap.org/ws/2004/08/addressing=org.xmlsoap.schemas.addressing
