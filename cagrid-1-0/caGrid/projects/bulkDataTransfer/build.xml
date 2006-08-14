@@ -39,6 +39,7 @@
     <property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
 
     <!-- schemas and namespace mappings -->
+    <property name="schema.dir" location="${basedir}/schema" />
     <property name="schema.src" location="${globus.dir}/share/schema" />
     <property name="schema.dest" location="${build.dir}/schema" />
     <property name="mapping.src" value="${basedir}/NStoPkg.properties" />
