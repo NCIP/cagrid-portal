@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
+import edu.internet2.middleware.grouper.GroupDeleteException;
+import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
@@ -100,4 +102,8 @@ public class GridGrouperGroup extends GridGrouperObject implements Group {
 		return gridGrouper;
 	}
 
+	public void delete() throws GroupDeleteException, InsufficientPrivilegeException {
+		//TODO: Implement this
+	}
+	
 }

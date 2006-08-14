@@ -152,6 +152,30 @@ public class StemBrowser extends JPanel {
 
 	private JButton removeStem = null;
 
+	private JPanel groupsPanel = null;
+
+	private JPanel addGroupsPanel = null;
+
+	private JScrollPane groupsPane = null;
+
+	private GroupsTable groupsTable = null;
+
+	private JPanel groupsButtonPanel = null;
+
+	private JButton viewGroup = null;
+
+	private JButton removeButton = null;
+
+	private JLabel jLabel12 = null;
+
+	private JTextField groupExtension = null;
+
+	private JTextField groupDisplayExtension = null;
+
+	private JLabel jLabel13 = null;
+
+	private JButton addGroup = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -179,12 +203,16 @@ public class StemBrowser extends JPanel {
 		this.getSystemExtension().setText(stem.getExtension());
 		this.getDescription().setText(stem.getDescription());
 		getChildStemsTable().clearTable();
+		getGroupsTable().clearTable();
 		int count = node.getChildCount();
 		for (int i = 0; i < count; i++) {
 			GridGrouperBaseTreeNode child = (GridGrouperBaseTreeNode) node
 					.getChildAt(i);
 			if (child instanceof StemTreeNode) {
 				getChildStemsTable().addStem((StemTreeNode) child);
+			}
+			if (child instanceof GroupTreeNode) {
+				getGroupsTable().addGroup((GroupTreeNode) child);
 			}
 		}
 	}
@@ -342,8 +370,8 @@ public class StemBrowser extends JPanel {
 					.getPrivilegesIcon(), getPrivileges(), null);
 			stemDetails.addTab("Child Stems", GridGrouperLookAndFeel
 					.getStemIcon(), getChildStems(), null);
-			stemDetails.addTab("Groups", GridGrouperLookAndFeel.getGroupIcon22x22(),
-					getGroups(), null);
+			stemDetails.addTab("Groups", GridGrouperLookAndFeel
+					.getGroupIcon22x22(), getGroups(), null);
 		}
 		return stemDetails;
 	}
@@ -430,8 +458,23 @@ public class StemBrowser extends JPanel {
 	 */
 	private JPanel getGroups() {
 		if (groups == null) {
+			GridBagConstraints gridBagConstraints44 = new GridBagConstraints();
+			gridBagConstraints44.gridx = 0;
+			gridBagConstraints44.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints44.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints44.weightx = 1.0D;
+			gridBagConstraints44.gridy = 1;
+			GridBagConstraints gridBagConstraints43 = new GridBagConstraints();
+			gridBagConstraints43.gridx = 0;
+			gridBagConstraints43.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints43.weightx = 1.0D;
+			gridBagConstraints43.weighty = 1.0D;
+			gridBagConstraints43.fill = GridBagConstraints.BOTH;
+			gridBagConstraints43.gridy = 0;
 			groups = new JPanel();
 			groups.setLayout(new GridBagLayout());
+			groups.add(getGroupsPanel(), gridBagConstraints43);
+			groups.add(getAddGroupsPanel(), gridBagConstraints44);
 		}
 		return groups;
 	}
@@ -1358,5 +1401,295 @@ public class StemBrowser extends JPanel {
 			});
 		}
 		return removeStem;
+	}
+
+	/**
+	 * This method initializes groupsPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getGroupsPanel() {
+		if (groupsPanel == null) {
+			GridBagConstraints gridBagConstraints46 = new GridBagConstraints();
+			gridBagConstraints46.gridx = 0;
+			gridBagConstraints46.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints46.gridy = 1;
+			GridBagConstraints gridBagConstraints45 = new GridBagConstraints();
+			gridBagConstraints45.fill = GridBagConstraints.BOTH;
+			gridBagConstraints45.weighty = 1.0;
+			gridBagConstraints45.gridx = 0;
+			gridBagConstraints45.gridy = 0;
+			gridBagConstraints45.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints45.weightx = 1.0;
+			groupsPanel = new JPanel();
+			groupsPanel.setLayout(new GridBagLayout());
+			groupsPanel.setBorder(BorderFactory.createTitledBorder(null,
+					"Child Group(s)", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+							Font.BOLD, 12), new Color(62, 109, 181)));
+			groupsPanel.add(getGroupsPane(), gridBagConstraints45);
+			groupsPanel.add(getGroupsButtonPanel(), gridBagConstraints46);
+		}
+		return groupsPanel;
+	}
+
+	/**
+	 * This method initializes addGroupsPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getAddGroupsPanel() {
+		if (addGroupsPanel == null) {
+			GridBagConstraints gridBagConstraints53 = new GridBagConstraints();
+			gridBagConstraints53.gridx = 0;
+			gridBagConstraints53.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints53.gridwidth = 2;
+			gridBagConstraints53.gridy = 2;
+			GridBagConstraints gridBagConstraints52 = new GridBagConstraints();
+			gridBagConstraints52.anchor = GridBagConstraints.WEST;
+			gridBagConstraints52.gridy = 1;
+			gridBagConstraints52.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints52.gridx = 0;
+			jLabel13 = new JLabel();
+			jLabel13.setText("Local Display Name");
+			GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
+			gridBagConstraints51.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints51.gridy = 1;
+			gridBagConstraints51.weightx = 1.0;
+			gridBagConstraints51.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints51.gridx = 1;
+			GridBagConstraints gridBagConstraints50 = new GridBagConstraints();
+			gridBagConstraints50.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints50.anchor = GridBagConstraints.WEST;
+			gridBagConstraints50.gridx = 1;
+			gridBagConstraints50.gridy = 0;
+			gridBagConstraints50.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints50.weightx = 1.0;
+			GridBagConstraints gridBagConstraints49 = new GridBagConstraints();
+			gridBagConstraints49.anchor = GridBagConstraints.WEST;
+			gridBagConstraints49.gridy = 0;
+			gridBagConstraints49.gridx = 0;
+			jLabel12 = new JLabel();
+			jLabel12.setText("Local Name");
+			addGroupsPanel = new JPanel();
+			addGroupsPanel.setLayout(new GridBagLayout());
+			addGroupsPanel.setBorder(BorderFactory.createTitledBorder(null,
+					"Add Group", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+							Font.BOLD, 12), new Color(62, 109, 181)));
+			addGroupsPanel.add(jLabel13, gridBagConstraints52);
+			addGroupsPanel.add(jLabel12, gridBagConstraints49);
+			addGroupsPanel.add(getGroupExtension(), gridBagConstraints50);
+			addGroupsPanel.add(getGroupDisplayExtension(), gridBagConstraints51);
+			addGroupsPanel.add(getAddGroup(), gridBagConstraints53);
+		}
+		return addGroupsPanel;
+	}
+
+	/**
+	 * This method initializes groupsPane
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getGroupsPane() {
+		if (groupsPane == null) {
+			groupsPane = new JScrollPane();
+			groupsPane.setViewportView(getGroupsTable());
+		}
+		return groupsPane;
+	}
+
+	/**
+	 * This method initializes groupsTable
+	 * 
+	 * @return javax.swing.JTable
+	 */
+	private GroupsTable getGroupsTable() {
+		if (groupsTable == null) {
+			groupsTable = new GroupsTable();
+		}
+		return groupsTable;
+	}
+
+	/**
+	 * This method initializes groupsButtonPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getGroupsButtonPanel() {
+		if (groupsButtonPanel == null) {
+			GridBagConstraints gridBagConstraints48 = new GridBagConstraints();
+			gridBagConstraints48.gridx = 1;
+			gridBagConstraints48.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints48.gridy = 0;
+			GridBagConstraints gridBagConstraints47 = new GridBagConstraints();
+			gridBagConstraints47.gridx = 0;
+			gridBagConstraints47.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints47.gridy = 0;
+			groupsButtonPanel = new JPanel();
+			groupsButtonPanel.setLayout(new GridBagLayout());
+			groupsButtonPanel.add(getViewGroup(), gridBagConstraints47);
+			groupsButtonPanel.add(getRemoveButton(), gridBagConstraints48);
+		}
+		return groupsButtonPanel;
+	}
+
+	/**
+	 * This method initializes viewGroup
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getViewGroup() {
+		if (viewGroup == null) {
+			viewGroup = new JButton();
+			viewGroup.setText("View Group");
+			viewGroup.setIcon(GridGrouperLookAndFeel.getQueryIcon());
+			viewGroup.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						getGroupsTable().doubleClick();
+					} catch (Exception ex) {
+						PortalUtils.showErrorMessage(ex);
+					}
+				}
+			});
+		}
+		return viewGroup;
+	}
+
+	/**
+	 * This method initializes removeButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getRemoveButton() {
+		if (removeButton == null) {
+			removeButton = new JButton();
+			removeButton.setText("Remove Group");
+			removeButton.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
+			removeButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+
+							GroupTreeNode child = null;
+							try {
+								child = getGroupsTable().getSelectedGroup();
+							} catch (Exception ex) {
+								PortalUtils.showErrorMessage(ex);
+								return;
+							}
+
+							int eid = node.getBrowser().getProgress()
+									.startEvent("Removing the child group....");
+							try {
+								child.getGroup().delete();
+								node.refresh();
+								setStem();
+								node
+										.getBrowser()
+										.getProgress()
+										.stopEvent(eid,
+												"Successfully removed the child group!!!");
+							} catch (Exception e) {
+								node.getBrowser().getProgress().stopEvent(eid,
+										"Error removing the child group!!!");
+								PortalUtils.showErrorMessage(e);
+							}
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+
+			});
+		}
+		return removeButton;
+	}
+
+	/**
+	 * This method initializes groupExtension	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getGroupExtension() {
+		if (groupExtension == null) {
+			groupExtension = new JTextField();
+		}
+		return groupExtension;
+	}
+
+	/**
+	 * This method initializes groupDisplayExtension	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getGroupDisplayExtension() {
+		if (groupDisplayExtension == null) {
+			groupDisplayExtension = new JTextField();
+		}
+		return groupDisplayExtension;
+	}
+
+	/**
+	 * This method initializes addGroup	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getAddGroup() {
+		if (addGroup == null) {
+			addGroup = new JButton();
+			addGroup.setText("Add Group");
+			addGroup.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			addGroup.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							int eid = node.getBrowser().getProgress()
+									.startEvent("Adding a child group....");
+							try {
+
+								String ext = Utils.clean(getGroupExtension().getText());
+								if (ext == null) {
+									PortalUtils
+											.showErrorMessage("You must enter a local name for the group!!!");
+									return;
+								}
+
+								String disExt = Utils.clean(getGroupDisplayExtension()
+										.getText());
+								if (disExt == null) {
+									PortalUtils
+											.showErrorMessage("You must enter a local display name for the group!!!");
+									return;
+								}
+
+								stem.addChildGroup(ext, disExt);
+								node.refresh();
+								setStem();
+								node.getBrowser().getProgress().stopEvent(eid,
+										"Successfully added a child group!!!");
+							} catch (Exception e) {
+								node.getBrowser().getProgress().stopEvent(eid,
+										"Error adding a child group!!!");
+								PortalUtils.showErrorMessage(e);
+							}
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+
+			});
+		}
+		return addGroup;
 	}
 }

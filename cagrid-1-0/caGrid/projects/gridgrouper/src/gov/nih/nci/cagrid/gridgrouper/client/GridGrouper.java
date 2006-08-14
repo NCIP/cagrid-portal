@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.gridgrouper.grouper.Group;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Grouper;
 import gov.nih.nci.cagrid.gridgrouper.grouper.NamingPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault;
 
@@ -60,7 +61,10 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 			return new GridGrouperStem(this, des);
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
-		} catch (Exception e) {
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		}catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -77,7 +81,10 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 				}
 			}
 			return set;
-		} catch (Exception e) {
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		}catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -91,7 +98,10 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 			return new GridGrouperStem(this, des);
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
-		} catch (Exception e) {
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		}catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -119,7 +129,10 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 			return set;
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
-		} catch (Exception e) {
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		}catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -140,6 +153,9 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 			return set;
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
+		}catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
@@ -155,7 +171,10 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 					subject.getId(), type);
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
-		} catch (Exception e) {
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		}catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -168,6 +187,9 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 			return new GridGrouperGroup(this, des);
 		} catch (GroupNotFoundFault f) {
 			throw new GroupNotFoundException(f.getFaultString());
+		}catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());

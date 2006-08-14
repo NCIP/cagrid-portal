@@ -22,6 +22,7 @@ import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Group;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupAddFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault;
@@ -134,7 +135,10 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (StemModifyFault f) {
 			throw new StemModifyException(f.getFaultString());
-		} catch (Exception e) {
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		}catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -179,7 +183,10 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (StemModifyFault f) {
 			throw new StemModifyException(f.getFaultString());
-		} catch (Exception e) {
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		}catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -220,7 +227,10 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 			throw new GrantPrivilegeException(f.getFaultString());
 		} catch (SchemaFault f) {
 			throw new SchemaException(f.getFaultString());
-		} catch (Exception e) {
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		}catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -241,7 +251,10 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 			throw new RevokePrivilegeException(f.getFaultString());
 		} catch (SchemaFault f) {
 			throw new SchemaException(f.getFaultString());
-		} catch (Exception e) {
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		}catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -257,6 +270,9 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (StemAddFault f) {
 			throw new StemAddException(f.getFaultString());
+		}catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
@@ -271,6 +287,9 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (StemDeleteFault f) {
 			throw new StemDeleteException(f.getFaultString());
+		}catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
@@ -287,7 +306,10 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (GroupAddFault f) {
 			throw new GroupAddException(f.getFaultString());
-		} catch (Exception e) {
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		}catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -304,7 +326,10 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 				}
 			}
 			return set;
-		} catch (Exception e) {
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		}catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}

@@ -60,6 +60,9 @@ public interface Group {
 	
 
 	// Action Methods
+	
+	public void delete() throws GroupDeleteException,
+	InsufficientPrivilegeException;
 
 	/*public void setDescription(String value) throws GroupModifyException,
 			InsufficientPrivilegeException;
@@ -102,8 +105,7 @@ public interface Group {
 	public boolean canWriteField(Subject subj, Field f)
 			throws IllegalArgumentException, SchemaException;
 
-	public void delete() throws GroupDeleteException,
-			InsufficientPrivilegeException;
+	
 
 	public void deleteCompositeMember() throws InsufficientPrivilegeException,
 			MemberDeleteException;
