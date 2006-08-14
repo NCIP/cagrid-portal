@@ -154,7 +154,17 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				if (url != null) {
 					domainBrowserPanel.setDefaultCaDSRURL(url);
 					domainBrowserPanel.getCadsr().setText(url);
-					domainBrowserPanel.cadsrRefresh();
+					Thread refreshment = new Thread() {
+						public void run() {
+							domainBrowserPanel.cadsrRefresh();
+						}
+					};
+					try {
+						refreshment.start();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						PortalUtils.showErrorMessage("Error refreshing from caDSR", ex);
+					}
 				}
 			}
 		}
