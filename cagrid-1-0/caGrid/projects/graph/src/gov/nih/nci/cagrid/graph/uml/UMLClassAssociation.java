@@ -37,12 +37,13 @@ public class UMLClassAssociation extends FigEdgePoly {
 	protected static Font unhighlightFont = new Font("verdana", Font.PLAIN, 11);
 
 
-	public UMLClassAssociation(String sl, String sm, String dl, String dm) {
+	public UMLClassAssociation(String sourceRoleName, String sourceMultiplicity, String targetRoleName,
+		String targetMultiplicity) {
 		super();
-		this.sourceLabel = new Text(this.getX(), this.getY(), sl, this);
-		this.sourceMultiplicity = new Text(this.getX(), this.getY(), sm, this);
-		this.destinationLabel = new Text(this.getX(), this.getY(), dl, this);
-		this.destinationMultiplicity = new Text(this.getX(), this.getY(), dm, this);
+		this.sourceLabel = new Text(this.getX(), this.getY(), sourceRoleName == null ? "" : sourceRoleName, this);
+		this.sourceMultiplicity = new Text(this.getX(), this.getY(), sourceMultiplicity == null ? "" : sourceMultiplicity, this);
+		this.destinationLabel = new Text(this.getX(), this.getY(), targetRoleName == null ? "" : targetRoleName, this);
+		this.destinationMultiplicity = new Text(this.getX(), this.getY(), targetMultiplicity == null ? "" : targetMultiplicity, this);
 
 		this.sourceArrow = new UMLClassAssociationArrowHead();
 		this.destinationArrow = new UMLClassAssociationArrowHead();
