@@ -1292,7 +1292,7 @@ public class StemBrowser extends JPanel {
 		if (viewStem == null) {
 			viewStem = new JButton();
 			viewStem.setText("View Stem");
-			viewStem.setIcon(GridGrouperLookAndFeel.getStemIcon());
+			viewStem.setIcon(GridGrouperLookAndFeel.getQueryIcon());
 			viewStem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
