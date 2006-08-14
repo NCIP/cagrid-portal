@@ -1,0 +1,123 @@
+The IDSvcInterface API requires a Handle System backend.  Downloading
+options:
+
+ * Download the official release from http://handle.net/download.html.  (This
+does not contain the GT-integrated code for recognizing the Globus
+credentials.)
+
+ * Check out a CVS copy of the GT-integrated Handle System code from
+:pserver:anonymous@piggy.cnri.reston.va.us:/usr/local/cvsroot, module
+Handle-Globus.
+
+Install the Handle System according to the instructions in install.txt.
+
+Now, because delegated sub-prefixes have not yet been implemented in the
+Handle System, we have to create a workaround for this.  There are two
+options.  One is to set it up to bypass the root naming server and query
+your handle server directly.  (For the following steps, replace "123" with
+the prefix you received from registering in step 5 of install.txt.)
+
+ * Run the Handle Server as described in step 7 in install.txt.
+
+ * If you are using MySQL, use the following table definitions:
+create table nas (
+	na varchar(255) not null,
+	PRIMARY KEY(na)
+) ;
+create table handles (
+	prefix varchar(255) not null,
+	handle varchar(255) not null,
+	idx int4 not null,
+	type blob,
+	data blob,
+	ttl_type int2,
+	ttl int4,
+	timestamp int4,
+	refs blob,
+	admin_read bool,
+	admin_write bool,
+	pub_read bool,
+	pub_write bool,
+	PRIMARY KEY(prefix, handle, idx)
+);
+
+ * If you are using Oracle, use the following table definitions:
+create table nas (
+	na raw(512) primary key
+);
+create table handles (
+	prefix raw(512) not null,
+	handle raw(512) not null,
+	idx number(10) not null,
+	type raw(128),
+	data raw(600),
+	ttl_type number(5),
+	ttl number(10),
+	timestamp number(10),
+	refs varchar2(512),
+	admin_read varchar2(5),
+	admin_write varchar2(5),
+	pub_read varchar2(5),
+	pub_write varchar2(5)
+);
+create index handle_idx on handles(prefix,handle);
+
+ * Because all handle values must be local, we need to create a local handle
+to your admin key.  Run the admin tool as described in step 8 of install.txt.
+Go to "Create Handle", give it a name like "123/PublicKey", then go to "Add
+Admin" and add an admin record (such as 0.NA/123 index 200).  Click "OK".
+Then go to "Add Custom Data".  Select type "HS_PUBKEY" and click on "Value
+Data".  Click on "Load Key", and enter your admin public key (probably
+something like /hs/svr_1/admpub.bin).  Click "OK", then click "OK" again to
+close the "Add Custom Data" window.  Click "Create" to create the handle.
+
+ * Stop the Admin Tool and Handle Server.
+
+ * Copy /hs/svr_1/siteinfo.bin to ~/.handle/resolver_site.
+
+ * Create the file ~/.handle/local_nas with the naming authority of your
+server on a single line.  (e.g. 0.NA/123)
+
+ * Open the file /hs/svr_1/config.dct.  Somewhere inside the main block of
+properties, add the following properties (the lines that do not begin with
+'#'):
+     "IDSvcInterface_class" = "net.handle.server.HandleServerIDInterface"
+       # replace 123 with your own server prefix
+     "server_prefix" = "123"
+       # optional:  use this line to increase performance at the expense of longer URLs (maximum length is 32)
+   "min_hash_length" = "32"
+     "auth_handle" = "123/PublicKey"
+       # replace with the handle index for the key you just created
+     "auth_index" = "300"
+       # replace with the full path to the private admin key
+     "privKey_filename" = "c:\\hs\\svr_1\\admpriv.bin"
+       # replace with the passphrase you chose in step 4 in install.txt
+     "privKey_passphrase" = "****"
+
+Now look for the line that says
+     "server_config" = {
+Inside this block, add the line
+     "server_admin_full_access" = "true"
+And inside the block that says
+     "server_admins" = (
+add the line
+     "300:123/PublicKey"
+
+
+Another option is to use the Handle repository API directly.  This will preclude
+the use of remotely-located handles once the delegated sub-prefixes has been
+implemented, but the setup is a lot easier:
+
+ * Open the file /hs/svr_1/config.dct.  Somewhere inside the main block of
+properties, add the following properties (the lines that do not begin with
+'#'):
+     "IDSvcInterface_class" = "net.handle.server.HandleRepositoryIDInterface"
+       # replace 123 with your own server prefix
+     "server_prefix" = "123"
+       # optional:  use this line to increase performance at the expense of longer URLs (maximum length is 32)
+     "min_hash_length" = "32"
+
+
+
+In either case, once the setup is complete, compile the interface with
+"ant build".  Compile and run the example code with "ant example-run".

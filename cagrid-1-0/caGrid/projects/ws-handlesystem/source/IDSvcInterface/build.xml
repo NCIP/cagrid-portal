@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="build" name="IDSvcInterface">
+
+	<property environment="env"/>
+	<property name="java.home" value="${env.JAVA_HOME}"/>
+
+	<property name="build" value="build"/>
+	<property name="src" value="src"/>
+	<property name="doc" value="doc"/>
+	<path id="env.classpath">
+		<pathelement path="${env.CLASSPATH}"/>
+	</path>
+	<path id="handle.jar">
+		<pathelement location="../../lib/handle.jar"/>
+	</path>
+
+	<target name="clean">
+		<delete dir="${build}" includeEmptyDirs="true"/>
+		<delete dir="${doc}" includeEmptyDirs="true"/>
+	</target>
+
+	<target name="init">
+		<mkdir dir="${build}"/>
+		<mkdir dir="${doc}"/>
+	</target>
+
+	<target name="build" depends="init">
+		<javac
+			fork="true"
+			srcdir="${src}"
+			destdir="${build}"
+			includes="net/handle/server/**">
+			<classpath refid="handle.jar"/>
+		</javac>
+	</target>
+
+	<target name="doc" depends="init">
+		<javadoc packagenames="*"
+			sourcepath="${src}"
+			destdir="${doc}">
+			<classpath refid="handle.jar"/>
+		</javadoc>
+	</target>
+
+	<target name="example-build" depends="build">
+		<javac
+			fork="true"
+			srcdir="${src}"
+			destdir="${build}"
+			includes="example/**">
+			<classpath refid="handle.jar"/>
+			<classpath>
+				<pathelement location="${build}"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="example-run" depends="example-build">
+		<java classname="example.example">
+			<classpath refid="env.classpath"/><!-- for any externally-defined classes, like JDBC -->
+			<classpath refid="handle.jar"/>
+			<classpath>
+				<pathelement location="${build}"/>
+				<pathelement location="${java.home}/lib/ext/sunjce_provider.jar"/><!-- why is this not already in the classpath? -->
+			</classpath>
+		</java>
+	</target>
+
+</project>
