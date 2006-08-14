@@ -21,19 +21,6 @@ public class BDTResource implements Resource, ResourceIdentifier, ResourceLifeti
 	private ResourcePropertySet propSet;
 	private Calendar terminationTime;
 
-	// one of the service specific "values" of your resource
-	private String bdtName;
-
-
-	public String getStemName() {
-		return this.bdtName;
-	}
-
-
-	public void setStemName(String bdtName) {
-		this.bdtName = bdtName;
-	}
-
 
 	/**
 	 * @see org.globus.wsrf.ResourceIdentifier#getID()
