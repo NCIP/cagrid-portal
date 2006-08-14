@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema
-	targetNamespace="http://cagrid.nci.nih.gov/BulkDataTransferMetadata"
-	xmlns:tns="http://cagrid.nci.nih.gov/BulkDataTransferMetadata"
+	targetNamespace="http://cagrid.nci.nih.gov/1/BulkDataTransferMetadata"
+	xmlns:tns="http://cagrid.nci.nih.gov/1/BulkDataTransferMetadata"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
 	elementFormDefault="qualified" 
 	blockDefault="#all">
