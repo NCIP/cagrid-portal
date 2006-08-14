@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
 import edu.internet2.middleware.grouper.GrantPrivilegeException;
+import edu.internet2.middleware.grouper.GroupAddException;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.grouper.NamingPrivilege;
@@ -13,12 +14,15 @@ import edu.internet2.middleware.grouper.StemModifyException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
+import gov.nih.nci.cagrid.gridgrouper.grouper.Group;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GroupAddFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemAddFault;
@@ -26,6 +30,7 @@ import gov.nih.nci.cagrid.gridgrouper.stubs.StemDeleteFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -271,8 +276,41 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
-	
-	public GridGrouper getGridGrouper(){
+
+	public Group addChildGroup(String extension, String displayExtension)
+			throws GroupAddException, InsufficientPrivilegeException {
+		try {
+			GroupDescriptor grp = gridGrouper.getClient().addChildGroup(
+					this.getStemIdentifier(), extension, displayExtension);
+			return new GridGrouperGroup(this.gridGrouper, grp);
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (GroupAddFault f) {
+			throw new GroupAddException(f.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public Set getChildGroups() {
+		try {
+			GroupDescriptor[] children = gridGrouper.getClient()
+					.getChildGroups(getStemIdentifier());
+			Set set = new HashSet();
+			if (children != null) {
+				for (int i = 0; i < children.length; i++) {
+					set.add(new GridGrouperGroup(gridGrouper, children[i]));
+				}
+			}
+			return set;
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public GridGrouper getGridGrouper() {
 		return gridGrouper;
 	}
 

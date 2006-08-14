@@ -1,17 +1,22 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
+import edu.internet2.middleware.grouper.GroupNotFoundException;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
+import gov.nih.nci.cagrid.gridgrouper.grouper.Group;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Grouper;
 import gov.nih.nci.cagrid.gridgrouper.grouper.NamingPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault;
 
 import java.util.HashSet;
@@ -156,6 +161,19 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 		}
 	}
 
+	public Group findGroup(String name) throws GroupNotFoundException {
+		try {
+			GroupDescriptor des = getClient()
+					.getGroup(getGroupIdentifier(name));
+			return new GridGrouperGroup(this, des);
+		} catch (GroupNotFoundFault f) {
+			throw new GroupNotFoundException(f.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
 	protected GridGrouperClient getClient() {
 		return client;
 	}
@@ -168,6 +186,13 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 		StemIdentifier id = new StemIdentifier();
 		id.setGridGrouperURL(getClient().getEndpointReference().toString());
 		id.setStemName(stemName);
+		return id;
+	}
+
+	protected GroupIdentifier getGroupIdentifier(String groupName) {
+		GroupIdentifier id = new GroupIdentifier();
+		id.setGridGrouperURL(getClient().getEndpointReference().toString());
+		id.setGroupName(groupName);
 		return id;
 	}
 

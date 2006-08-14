@@ -30,20 +30,24 @@ import java.util.Set;
 public interface Group {
 
 	// Property Methods
-
+	
+	public String getUuid();
+	
+	public String getName() throws GrouperRuntimeException;
+	
+	public String getDisplayName() throws GrouperRuntimeException;
+	
+	public String getExtension();
+	
+	public String getDisplayExtension() throws GrouperRuntimeException;
+	
+	public String getDescription();
+	
 	public String getCreateSource();
 
 	public Subject getCreateSubject() throws SubjectNotFoundException;
 
 	public Date getCreateTime();
-
-	public String getDescription();
-
-	public String getDisplayExtension() throws GrouperRuntimeException;
-
-	public String getDisplayName() throws GrouperRuntimeException;
-
-	public String getExtension();
 
 	public String getModifySource();
 
@@ -51,11 +55,13 @@ public interface Group {
 
 	public Date getModifyTime();
 
-	public String getName() throws GrouperRuntimeException;
+	
+	
+	
 
 	// Action Methods
 
-	public void setDescription(String value) throws GroupModifyException,
+	/*public void setDescription(String value) throws GroupModifyException,
 			InsufficientPrivilegeException;
 
 	public void setExtension(String value) throws GroupModifyException,
@@ -211,5 +217,5 @@ public interface Group {
 			throws AttributeNotFoundException, GroupModifyException,
 			InsufficientPrivilegeException;
 
-	public Subject toSubject() throws GrouperRuntimeException;
+	public Subject toSubject() throws GrouperRuntimeException;*/
 }
