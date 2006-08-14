@@ -9,8 +9,6 @@ import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -28,7 +26,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.border.TitledBorder;
 
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.PortalResourceManager;
@@ -176,6 +173,22 @@ public class StemBrowser extends JPanel {
 
 	private JButton addGroup = null;
 
+	private JLabel jLabel14 = null;
+
+	private JTextField created = null;
+
+	private JLabel jLabel15 = null;
+
+	private JLabel jLabel16 = null;
+
+	private JLabel jLabel17 = null;
+
+	private JTextField creator = null;
+
+	private JTextField lastModified = null;
+
+	private JTextField lastModifiedBy = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -202,6 +215,18 @@ public class StemBrowser extends JPanel {
 		this.getDisplayExtension().setText(stem.getDisplayExtension());
 		this.getSystemExtension().setText(stem.getExtension());
 		this.getDescription().setText(stem.getDescription());
+		this.getCreated().setText(stem.getCreateTime().toString());
+		try {
+			this.getCreator().setText(stem.getCreateSubject().getId());
+		} catch (Exception e) {
+
+		}
+		this.getLastModified().setText(stem.getModifyTime().toString());
+		try {
+			this.getLastModifiedBy().setText(stem.getModifySubject().getId());
+		} catch (Exception e) {
+
+		}
 		getChildStemsTable().clearTable();
 		getGroupsTable().clearTable();
 		int count = node.getChildCount();
@@ -486,16 +511,72 @@ public class StemBrowser extends JPanel {
 	 */
 	private JPanel getDetailsPanel() {
 		if (detailsPanel == null) {
+			GridBagConstraints gridBagConstraints61 = new GridBagConstraints();
+			gridBagConstraints61.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints61.gridy = 8;
+			gridBagConstraints61.weightx = 1.0;
+			gridBagConstraints61.anchor = GridBagConstraints.WEST;
+			gridBagConstraints61.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints61.gridx = 1;
+			GridBagConstraints gridBagConstraints60 = new GridBagConstraints();
+			gridBagConstraints60.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints60.gridy = 7;
+			gridBagConstraints60.weightx = 1.0;
+			gridBagConstraints60.anchor = GridBagConstraints.WEST;
+			gridBagConstraints60.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints60.gridx = 1;
+			GridBagConstraints gridBagConstraints59 = new GridBagConstraints();
+			gridBagConstraints59.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints59.gridy = 6;
+			gridBagConstraints59.weightx = 1.0;
+			gridBagConstraints59.anchor = GridBagConstraints.WEST;
+			gridBagConstraints59.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints59.gridx = 1;
+			GridBagConstraints gridBagConstraints58 = new GridBagConstraints();
+			gridBagConstraints58.gridx = 0;
+			gridBagConstraints58.anchor = GridBagConstraints.WEST;
+			gridBagConstraints58.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints58.gridy = 8;
+			jLabel17 = new JLabel();
+			jLabel17.setText("Last Modified By");
+			GridBagConstraints gridBagConstraints57 = new GridBagConstraints();
+			gridBagConstraints57.gridx = 0;
+			gridBagConstraints57.anchor = GridBagConstraints.WEST;
+			gridBagConstraints57.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints57.gridy = 7;
+			jLabel16 = new JLabel();
+			jLabel16.setText("Last Modified");
+			GridBagConstraints gridBagConstraints56 = new GridBagConstraints();
+			gridBagConstraints56.gridx = 0;
+			gridBagConstraints56.anchor = GridBagConstraints.WEST;
+			gridBagConstraints56.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints56.gridy = 6;
+			jLabel15 = new JLabel();
+			jLabel15.setText("Created By");
+			GridBagConstraints gridBagConstraints55 = new GridBagConstraints();
+			gridBagConstraints55.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints55.gridy = 5;
+			gridBagConstraints55.weightx = 1.0;
+			gridBagConstraints55.anchor = GridBagConstraints.WEST;
+			gridBagConstraints55.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints55.gridx = 1;
+			GridBagConstraints gridBagConstraints54 = new GridBagConstraints();
+			gridBagConstraints54.gridx = 0;
+			gridBagConstraints54.anchor = GridBagConstraints.WEST;
+			gridBagConstraints54.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints54.gridy = 5;
+			jLabel14 = new JLabel();
+			jLabel14.setText("Created");
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
 			gridBagConstraints20.gridx = 0;
 			gridBagConstraints20.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints20.gridwidth = 2;
-			gridBagConstraints20.gridy = 7;
+			gridBagConstraints20.gridy = 11;
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
 			gridBagConstraints19.fill = GridBagConstraints.BOTH;
 			gridBagConstraints19.weighty = 1.0;
 			gridBagConstraints19.gridx = 0;
-			gridBagConstraints19.gridy = 6;
+			gridBagConstraints19.gridy = 10;
 			gridBagConstraints19.gridwidth = 2;
 			gridBagConstraints19.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints19.weightx = 1.0;
@@ -503,7 +584,7 @@ public class StemBrowser extends JPanel {
 			gridBagConstraints18.gridx = 0;
 			gridBagConstraints18.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints18.gridwidth = 2;
-			gridBagConstraints18.gridy = 5;
+			gridBagConstraints18.gridy = 9;
 			jLabel7 = new JLabel();
 			jLabel7.setText("Description");
 			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
@@ -588,14 +669,22 @@ public class StemBrowser extends JPanel {
 			detailsPanel.add(getDisplayExtension(), gridBagConstraints15);
 			detailsPanel.add(jLabel6, gridBagConstraints16);
 			detailsPanel.add(getSystemExtension(), gridBagConstraints17);
+			detailsPanel.setBorder(BorderFactory.createTitledBorder(null,
+					"Stem Details",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					GridGrouperLookAndFeel.getPanelLabelColor()));
 			detailsPanel.add(jLabel7, gridBagConstraints18);
 			detailsPanel.add(getJScrollPane(), gridBagConstraints19);
 			detailsPanel.add(getUpdateStem(), gridBagConstraints20);
-			detailsPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Stem Details",javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION,
-					null, GridGrouperLookAndFeel
-							.getPanelLabelColor()));
+			detailsPanel.add(jLabel14, gridBagConstraints54);
+			detailsPanel.add(getCreated(), gridBagConstraints55);
+			detailsPanel.add(jLabel15, gridBagConstraints56);
+			detailsPanel.add(jLabel16, gridBagConstraints57);
+			detailsPanel.add(jLabel17, gridBagConstraints58);
+			detailsPanel.add(getCreator(), gridBagConstraints59);
+			detailsPanel.add(getLastModified(), gridBagConstraints60);
+			detailsPanel.add(getLastModifiedBy(), gridBagConstraints61);
 		}
 		return detailsPanel;
 	}
@@ -749,7 +838,8 @@ public class StemBrowser extends JPanel {
 			if (!getDisplayExtension().getText().equals(
 					stem.getDisplayExtension())) {
 				stem.setDisplayExtension(getDisplayExtension().getText());
-			} else if (!getDescription().getText()
+			} 
+			if (!getDescription().getText()
 					.equals(stem.getDescription())) {
 				stem.setDescription(getDescription().getText());
 			}
@@ -1138,9 +1228,8 @@ public class StemBrowser extends JPanel {
 			stemsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
 					null, "Child Stems",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION,
-					null, GridGrouperLookAndFeel
-							.getPanelLabelColor()));
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					GridGrouperLookAndFeel.getPanelLabelColor()));
 			stemsPanel.add(getJScrollPane2(), gridBagConstraints33);
 			stemsPanel.add(getButtonPanel(), gridBagConstraints40);
 		}
@@ -1215,10 +1304,10 @@ public class StemBrowser extends JPanel {
 			addStemPanel = new JPanel();
 			addStemPanel.setLayout(new GridBagLayout());
 			addStemPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Add Stem", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION,
-					null, GridGrouperLookAndFeel
-							.getPanelLabelColor()));
+					"Add Stem",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					GridGrouperLookAndFeel.getPanelLabelColor()));
 			addStemPanel.add(jLabel10, gridBagConstraints35);
 			addStemPanel.add(getChildName(), gridBagConstraints36);
 			addStemPanel.add(jLabel11, gridBagConstraints37);
@@ -1431,10 +1520,10 @@ public class StemBrowser extends JPanel {
 			groupsPanel = new JPanel();
 			groupsPanel.setLayout(new GridBagLayout());
 			groupsPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Child Group(s)", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION,
-					null, GridGrouperLookAndFeel
-							.getPanelLabelColor()));
+					"Child Group(s)",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					GridGrouperLookAndFeel.getPanelLabelColor()));
 			groupsPanel.add(getGroupsPane(), gridBagConstraints45);
 			groupsPanel.add(getGroupsButtonPanel(), gridBagConstraints46);
 		}
@@ -1482,14 +1571,15 @@ public class StemBrowser extends JPanel {
 			addGroupsPanel = new JPanel();
 			addGroupsPanel.setLayout(new GridBagLayout());
 			addGroupsPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Add Group",javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION,
-					null, GridGrouperLookAndFeel
-							.getPanelLabelColor()));
+					"Add Group",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					GridGrouperLookAndFeel.getPanelLabelColor()));
 			addGroupsPanel.add(jLabel13, gridBagConstraints52);
 			addGroupsPanel.add(jLabel12, gridBagConstraints49);
 			addGroupsPanel.add(getGroupExtension(), gridBagConstraints50);
-			addGroupsPanel.add(getGroupDisplayExtension(), gridBagConstraints51);
+			addGroupsPanel
+					.add(getGroupDisplayExtension(), gridBagConstraints51);
 			addGroupsPanel.add(getAddGroup(), gridBagConstraints53);
 		}
 		return addGroupsPanel;
@@ -1567,9 +1657,9 @@ public class StemBrowser extends JPanel {
 	}
 
 	/**
-	 * This method initializes removeButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes removeButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getRemoveButton() {
 		if (removeButton == null) {
@@ -1621,9 +1711,9 @@ public class StemBrowser extends JPanel {
 	}
 
 	/**
-	 * This method initializes groupExtension	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes groupExtension
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getGroupExtension() {
 		if (groupExtension == null) {
@@ -1633,9 +1723,9 @@ public class StemBrowser extends JPanel {
 	}
 
 	/**
-	 * This method initializes groupDisplayExtension	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes groupDisplayExtension
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getGroupDisplayExtension() {
 		if (groupDisplayExtension == null) {
@@ -1645,9 +1735,9 @@ public class StemBrowser extends JPanel {
 	}
 
 	/**
-	 * This method initializes addGroup	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes addGroup
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getAddGroup() {
 		if (addGroup == null) {
@@ -1662,15 +1752,17 @@ public class StemBrowser extends JPanel {
 									.startEvent("Adding a child group....");
 							try {
 
-								String ext = Utils.clean(getGroupExtension().getText());
+								String ext = Utils.clean(getGroupExtension()
+										.getText());
 								if (ext == null) {
 									PortalUtils
 											.showErrorMessage("You must enter a local name for the group!!!");
 									return;
 								}
 
-								String disExt = Utils.clean(getGroupDisplayExtension()
-										.getText());
+								String disExt = Utils
+										.clean(getGroupDisplayExtension()
+												.getText());
 								if (disExt == null) {
 									PortalUtils
 											.showErrorMessage("You must enter a local display name for the group!!!");
@@ -1700,5 +1792,57 @@ public class StemBrowser extends JPanel {
 			});
 		}
 		return addGroup;
+	}
+
+	/**
+	 * This method initializes created
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getCreated() {
+		if (created == null) {
+			created = new JTextField();
+			created.setEditable(false);
+		}
+		return created;
+	}
+
+	/**
+	 * This method initializes creator
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getCreator() {
+		if (creator == null) {
+			creator = new JTextField();
+			creator.setEditable(false);
+		}
+		return creator;
+	}
+
+	/**
+	 * This method initializes lastModified
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getLastModified() {
+		if (lastModified == null) {
+			lastModified = new JTextField();
+			lastModified.setEditable(false);
+		}
+		return lastModified;
+	}
+
+	/**
+	 * This method initializes lastModifiedBy
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getLastModifiedBy() {
+		if (lastModifiedBy == null) {
+			lastModifiedBy = new JTextField();
+			lastModifiedBy.setEditable(false);
+		}
+		return lastModifiedBy;
 	}
 }

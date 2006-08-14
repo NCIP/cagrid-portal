@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperGroup;
+import gov.nih.nci.cagrid.gridgrouper.grouper.Group;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -35,9 +35,9 @@ public class GroupBrowser extends JPanel {
 
 	private GroupTreeNode node;
 
-	private GridGrouperGroup group;
+	private Group group;
 
-	private JPanel stemProperties = null;
+	private JPanel groupProperties = null;
 
 	private JLabel jLabel = null;
 
@@ -87,7 +87,23 @@ public class GroupBrowser extends JPanel {
 
 	private JTextArea description = null;
 
-	private JButton updateStem = null;
+	private JButton updateGroup = null;
+
+	private JLabel jLabel14 = null;
+
+	private JTextField created = null;
+
+	private JLabel jLabel15 = null;
+
+	private JLabel jLabel16 = null;
+
+	private JLabel jLabel17 = null;
+
+	private JTextField creator = null;
+
+	private JTextField lastModified = null;
+
+	private JTextField lastModifiedBy = null;
 
 	/**
 	 * This is the default constructor
@@ -115,6 +131,18 @@ public class GroupBrowser extends JPanel {
 		this.getDisplayExtension().setText(group.getDisplayExtension());
 		this.getSystemExtension().setText(group.getExtension());
 		this.getDescription().setText(group.getDescription());
+		this.getCreated().setText(group.getCreateTime().toString());
+		try {
+			this.getCreator().setText(group.getCreateSubject().getId());
+		} catch (Exception e) {
+
+		}
+		this.getLastModified().setText(group.getModifyTime().toString());
+		try {
+			this.getLastModifiedBy().setText(group.getModifySubject().getId());
+		} catch (Exception e) {
+
+		}
 	}
 
 	/**
@@ -139,18 +167,18 @@ public class GroupBrowser extends JPanel {
 		gridBagConstraints.gridy = 0;
 		this.setSize(400, 400);
 		this.setLayout(new GridBagLayout());
-		this.add(getStemProperties(), gridBagConstraints);
+		this.add(getGroupProperties(), gridBagConstraints);
 		this.add(getGroupDetails(), gridBagConstraints11);
 
 	}
 
 	/**
-	 * This method initializes stemProperties
+	 * This method initializes groupProperties
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getStemProperties() {
-		if (stemProperties == null) {
+	private JPanel getGroupProperties() {
+		if (groupProperties == null) {
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints6.gridy = 2;
@@ -192,15 +220,15 @@ public class GroupBrowser extends JPanel {
 			gridBagConstraints1.weightx = 1.0;
 			jLabel = new JLabel();
 			jLabel.setText("Grid Grouper");
-			stemProperties = new JPanel();
-			stemProperties.setLayout(new GridBagLayout());
-			stemProperties.add(jLabel, gridBagConstraints2);
-			stemProperties.add(getServiceURI(), gridBagConstraints1);
-			stemProperties.add(jLabel1, gridBagConstraints3);
-			stemProperties.add(getGroupName(), gridBagConstraints4);
-			stemProperties.add(jLabel2, gridBagConstraints5);
-			stemProperties.add(getCredentials(), gridBagConstraints6);
-			stemProperties
+			groupProperties = new JPanel();
+			groupProperties.setLayout(new GridBagLayout());
+			groupProperties.add(jLabel, gridBagConstraints2);
+			groupProperties.add(getServiceURI(), gridBagConstraints1);
+			groupProperties.add(jLabel1, gridBagConstraints3);
+			groupProperties.add(getGroupName(), gridBagConstraints4);
+			groupProperties.add(jLabel2, gridBagConstraints5);
+			groupProperties.add(getCredentials(), gridBagConstraints6);
+			groupProperties
 					.setBorder(javax.swing.BorderFactory
 							.createTitledBorder(
 									null,
@@ -210,7 +238,7 @@ public class GroupBrowser extends JPanel {
 									null, GridGrouperLookAndFeel
 											.getPanelLabelColor()));
 		}
-		return stemProperties;
+		return groupProperties;
 	}
 
 	/**
@@ -317,16 +345,72 @@ public class GroupBrowser extends JPanel {
 	 */
 	private JPanel getDetailsPanel() {
 		if (detailsPanel == null) {
+			GridBagConstraints gridBagConstraints61 = new GridBagConstraints();
+			gridBagConstraints61.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints61.gridy = 8;
+			gridBagConstraints61.weightx = 1.0;
+			gridBagConstraints61.anchor = GridBagConstraints.WEST;
+			gridBagConstraints61.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints61.gridx = 1;
+			GridBagConstraints gridBagConstraints60 = new GridBagConstraints();
+			gridBagConstraints60.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints60.gridy = 7;
+			gridBagConstraints60.weightx = 1.0;
+			gridBagConstraints60.anchor = GridBagConstraints.WEST;
+			gridBagConstraints60.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints60.gridx = 1;
+			GridBagConstraints gridBagConstraints59 = new GridBagConstraints();
+			gridBagConstraints59.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints59.gridy = 6;
+			gridBagConstraints59.weightx = 1.0;
+			gridBagConstraints59.anchor = GridBagConstraints.WEST;
+			gridBagConstraints59.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints59.gridx = 1;
+			GridBagConstraints gridBagConstraints58 = new GridBagConstraints();
+			gridBagConstraints58.gridx = 0;
+			gridBagConstraints58.anchor = GridBagConstraints.WEST;
+			gridBagConstraints58.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints58.gridy = 8;
+			jLabel17 = new JLabel();
+			jLabel17.setText("Last Modified By");
+			GridBagConstraints gridBagConstraints57 = new GridBagConstraints();
+			gridBagConstraints57.gridx = 0;
+			gridBagConstraints57.anchor = GridBagConstraints.WEST;
+			gridBagConstraints57.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints57.gridy = 7;
+			jLabel16 = new JLabel();
+			jLabel16.setText("Last Modified");
+			GridBagConstraints gridBagConstraints56 = new GridBagConstraints();
+			gridBagConstraints56.gridx = 0;
+			gridBagConstraints56.anchor = GridBagConstraints.WEST;
+			gridBagConstraints56.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints56.gridy = 6;
+			jLabel15 = new JLabel();
+			jLabel15.setText("Created By");
+			GridBagConstraints gridBagConstraints55 = new GridBagConstraints();
+			gridBagConstraints55.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints55.gridy = 5;
+			gridBagConstraints55.weightx = 1.0;
+			gridBagConstraints55.anchor = GridBagConstraints.WEST;
+			gridBagConstraints55.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints55.gridx = 1;
+			GridBagConstraints gridBagConstraints54 = new GridBagConstraints();
+			gridBagConstraints54.gridx = 0;
+			gridBagConstraints54.anchor = GridBagConstraints.WEST;
+			gridBagConstraints54.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints54.gridy = 5;
+			jLabel14 = new JLabel();
+			jLabel14.setText("Created");
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
 			gridBagConstraints20.gridx = 0;
 			gridBagConstraints20.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints20.gridwidth = 2;
-			gridBagConstraints20.gridy = 7;
+			gridBagConstraints20.gridy = 11;
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
 			gridBagConstraints19.fill = GridBagConstraints.BOTH;
 			gridBagConstraints19.weighty = 1.0;
 			gridBagConstraints19.gridx = 0;
-			gridBagConstraints19.gridy = 6;
+			gridBagConstraints19.gridy = 10;
 			gridBagConstraints19.gridwidth = 2;
 			gridBagConstraints19.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints19.weightx = 1.0;
@@ -334,7 +418,7 @@ public class GroupBrowser extends JPanel {
 			gridBagConstraints18.gridx = 0;
 			gridBagConstraints18.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints18.gridwidth = 2;
-			gridBagConstraints18.gridy = 5;
+			gridBagConstraints18.gridy = 9;
 			jLabel7 = new JLabel();
 			jLabel7.setText("Description");
 			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
@@ -419,14 +503,22 @@ public class GroupBrowser extends JPanel {
 			detailsPanel.add(getDisplayExtension(), gridBagConstraints15);
 			detailsPanel.add(jLabel6, gridBagConstraints16);
 			detailsPanel.add(getSystemExtension(), gridBagConstraints17);
-			detailsPanel.add(jLabel7, gridBagConstraints18);
-			detailsPanel.add(getJScrollPane(), gridBagConstraints19);
-			detailsPanel.add(getUpdateStem(), gridBagConstraints20);
 			detailsPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Group Details",
+					"Stem Details",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
 					GridGrouperLookAndFeel.getPanelLabelColor()));
+			detailsPanel.add(jLabel7, gridBagConstraints18);
+			detailsPanel.add(getJScrollPane(), gridBagConstraints19);
+			detailsPanel.add(getUpdateGroup(), gridBagConstraints20);
+			detailsPanel.add(jLabel14, gridBagConstraints54);
+			detailsPanel.add(getCreated(), gridBagConstraints55);
+			detailsPanel.add(jLabel15, gridBagConstraints56);
+			detailsPanel.add(jLabel16, gridBagConstraints57);
+			detailsPanel.add(jLabel17, gridBagConstraints58);
+			detailsPanel.add(getCreator(), gridBagConstraints59);
+			detailsPanel.add(getLastModified(), gridBagConstraints60);
+			detailsPanel.add(getLastModifiedBy(), gridBagConstraints61);
 		}
 		return detailsPanel;
 	}
@@ -493,11 +585,11 @@ public class GroupBrowser extends JPanel {
 	private void monitorUpdate() {
 		if (!getDisplayExtension().getText()
 				.equals(group.getDisplayExtension())) {
-			this.getUpdateStem().setEnabled(true);
+			this.getUpdateGroup().setEnabled(true);
 		} else if (!getDescription().getText().equals(group.getDescription())) {
-			this.getUpdateStem().setEnabled(true);
+			this.getUpdateGroup().setEnabled(true);
 		} else {
-			this.getUpdateStem().setEnabled(false);
+			this.getUpdateGroup().setEnabled(false);
 		}
 	}
 
@@ -546,21 +638,21 @@ public class GroupBrowser extends JPanel {
 	}
 
 	/**
-	 * This method initializes updateStem
+	 * This method initializes updateGroup
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getUpdateStem() {
-		if (updateStem == null) {
-			updateStem = new JButton();
-			updateStem.setText("Update Group");
-			updateStem.setEnabled(false);
-			updateStem.setIcon(GridGrouperLookAndFeel.getGroupIcon22x22());
-			updateStem.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getUpdateGroup() {
+		if (updateGroup == null) {
+			updateGroup = new JButton();
+			updateGroup.setText("Update Group");
+			updateGroup.setEnabled(false);
+			updateGroup.setIcon(GridGrouperLookAndFeel.getStemIcon());
+			updateGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
-							updateStem();
+							updateGroup();
 						}
 					};
 					try {
@@ -573,16 +665,16 @@ public class GroupBrowser extends JPanel {
 
 			});
 		}
-		return updateStem;
+		return updateGroup;
 	}
 
-	private void updateStem() {
+	private void updateGroup() {
 		try {
 			if (!getDisplayExtension().getText().equals(
 					group.getDisplayExtension())) {
 				// group.setDisplayExtension(getDisplayExtension().getText());
-			} else if (!getDescription().getText().equals(
-					group.getDescription())) {
+			}
+			if (!getDescription().getText().equals(group.getDescription())) {
 				// group.setDescription(getDescription().getText());
 			}
 			node.refresh();
@@ -593,5 +685,57 @@ public class GroupBrowser extends JPanel {
 			node.refresh();
 			this.monitorUpdate();
 		}
+	}
+
+	/**
+	 * This method initializes created
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getCreated() {
+		if (created == null) {
+			created = new JTextField();
+			created.setEditable(false);
+		}
+		return created;
+	}
+
+	/**
+	 * This method initializes creator
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getCreator() {
+		if (creator == null) {
+			creator = new JTextField();
+			creator.setEditable(false);
+		}
+		return creator;
+	}
+
+	/**
+	 * This method initializes lastModified
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getLastModified() {
+		if (lastModified == null) {
+			lastModified = new JTextField();
+			lastModified.setEditable(false);
+		}
+		return lastModified;
+	}
+
+	/**
+	 * This method initializes lastModifiedBy
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getLastModifiedBy() {
+		if (lastModifiedBy == null) {
+			lastModifiedBy = new JTextField();
+			lastModifiedBy.setEditable(false);
+		}
+		return lastModifiedBy;
 	}
 }
