@@ -91,6 +91,14 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		if (!domainModelResourcePropertyExists(info)) {
 			addDomainModelResourceProperty(info);
 		}
+		
+		// if the domainModel.xml doesn't exist, don't try to populate the
+		// domain model metadata on service startup
+		File dmFile = new File(domainModelFile);
+		ResourcePropertyType property = getDomainModelResourceProperty(info);
+		if (property != null) {
+			property.setPopulateFromFile(dmFile.exists());
+		}
 	}
 
 
@@ -321,24 +329,21 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		}
 		propsList.setResourceProperty(metadataArray);
 	}
-
-
-	private void removeDomainModelResourceProperty(ServiceInformation info) {
+	
+	
+	private ResourcePropertyType getDomainModelResourceProperty(ServiceInformation info) {
 		ResourcePropertiesListType propsList = info.getServices().getService(0).getResourcePropertiesList();
 		if (propsList != null) {
 			ResourcePropertyType[] metadataArray = propsList.getResourceProperty();
-			Set cleaned = new HashSet();
 			if (metadataArray != null) {
 				for (int i = 0; i < metadataArray.length; i++) {
-					if (!metadataArray[i].getQName().equals(DataServiceConstants.DOMAIN_MODEL_QNAME)) {
-						cleaned.add(metadataArray[i]);
+					if (metadataArray[i].getQName().equals(DataServiceConstants.DOMAIN_MODEL_QNAME)) {
+						return metadataArray[i];
 					}
 				}
 			}
-			ResourcePropertyType[] cleanedArray = new ResourcePropertyType[cleaned.size()];
-			cleaned.toArray(cleanedArray);
-			propsList.setResourceProperty(cleanedArray);
 		}
+		return null;
 	}
 
 
