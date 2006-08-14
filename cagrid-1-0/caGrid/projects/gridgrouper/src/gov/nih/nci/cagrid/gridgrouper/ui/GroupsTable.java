@@ -12,7 +12,7 @@ import javax.swing.table.TableColumn;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: GroupsTable.java,v 1.1 2006-08-14 19:05:57 langella Exp $
+ * @version $Id: GroupsTable.java,v 1.2 2006-08-14 20:05:01 langella Exp $
  */
 public class GroupsTable extends PortalBaseTable {
 	public final static String GROUP = "Groups";
@@ -57,7 +57,7 @@ public class GroupsTable extends PortalBaseTable {
 	public void doubleClick() throws Exception {
 		GroupTreeNode node =  getSelectedGroup();
 		PortalUtils.showMessage("Why is everybody always clicking on me?");
-		//node.getBrowser().getTabbedContent().addNode(node);
+		node.getBrowser().getTabbedContent().addNode(node);
 	}
 
 	public void singleClick() throws Exception {

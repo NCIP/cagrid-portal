@@ -33,7 +33,7 @@ public class ContentManager extends JTabbedPane {
 
 	private Map stems = new HashMap(); // @jve:decl-index=0:
 
-	private Map groups = new HashMap();
+	private Map groups = new HashMap(); // @jve:decl-index=0:
 
 	/**
 	 * This is the default constructor
@@ -57,14 +57,15 @@ public class ContentManager extends JTabbedPane {
 	public void addNode(GridGrouperBaseTreeNode node) {
 		if (node instanceof StemTreeNode) {
 			this.addStem((StemTreeNode) node);
+		} else if (node instanceof GroupTreeNode) {
+			this.addGroup((GroupTreeNode) node);
 		} else {
 			PortalUtils
 					.showErrorMessage("Please select a stem or group to view!!!");
 		}
 	}
 
-	public void removeNode(GridGrouperBaseTreeNode node)
-			throws Exception {
+	public void removeNode(GridGrouperBaseTreeNode node) throws Exception {
 		if (node instanceof StemTreeNode) {
 			this.removeStem((StemTreeNode) node);
 		} else {
@@ -78,11 +79,24 @@ public class ContentManager extends JTabbedPane {
 		this.removeStem(node, true);
 		StemBrowser browser = new StemBrowser(node);
 		stems.put(stemName, browser);
-		this.addTab(node.getStem().getDisplayExtension(), new CombinedIcon(new ContentManagerTabCloseIcon(),
-				GridGrouperLookAndFeel.getStemIcon()), browser, null);
+		this.addTab(node.getStem().getDisplayExtension(), new CombinedIcon(
+				new ContentManagerTabCloseIcon(), GridGrouperLookAndFeel
+						.getStemIcon()), browser, null);
 		this.remove(getWelcomePanel());
 		this.setSelectedComponent(browser);
 
+	}
+
+	public void addGroup(GroupTreeNode node) {
+		String stemName = node.getGroup().getName();
+		this.removeGroup(node, true);
+		GroupBrowser browser = new GroupBrowser(node);
+		groups.put(stemName, browser);
+		this.addTab(node.getGroup().getDisplayExtension(), new CombinedIcon(
+				new ContentManagerTabCloseIcon(), GridGrouperLookAndFeel
+						.getGroupIcon16x16()), browser, null);
+		this.remove(getWelcomePanel());
+		this.setSelectedComponent(browser);
 	}
 
 	public void removeSelectedNode() {
@@ -90,6 +104,25 @@ public class ContentManager extends JTabbedPane {
 		if (c instanceof StemBrowser) {
 			StemBrowser sb = (StemBrowser) c;
 			removeStem(sb.getStemNode());
+		}
+	}
+
+	public void removeGroup(GroupTreeNode node) {
+		this.removeGroup(node, false);
+	}
+
+	private void removeGroup(GroupTreeNode node, boolean internal) {
+		String stemName = node.getGroup().getName();
+		if (groups.containsKey(stemName)) {
+			GroupBrowser sb = (GroupBrowser) groups.remove(stemName);
+			this.remove(sb);
+		}
+		if (!internal) {
+			if ((stems.size() == 0) && (groups.size() == 0)) {
+				this.addTab(WELCOME, GridGrouperLookAndFeel
+						.getGrouperIcon22x22(), getWelcomePanel(), null);
+				this.setSelectedComponent(getWelcomePanel());
+			}
 		}
 	}
 
