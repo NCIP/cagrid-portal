@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="all" name="ws-handlesystem delegate build file">
+	<property name="id.service.location" location="source\IDSvcInterface"/>
+
+	<target name="clean">
+		 <ant dir="${id.service.location}" target="clean"/>
+	</target>
+
+	<target name="all">
+		 <ant dir="${id.service.location}" target="build"/>
+	</target>
+</project>

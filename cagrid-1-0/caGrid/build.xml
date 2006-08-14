@@ -437,7 +437,7 @@
 	<!-- CAGRID WS-HANDLESYSTEM:                                             	 -->
 	<!-- =============================================================== -->
 	<target name="build-ws-handlesystem" depends="prepare" description="Builds caGrid WS-handlesystem components">
-		<ant dir="${projects.dir}/ws-handlesystem" inheritAll="false" antfile="build.xml" target="build" />
+		<ant dir="${projects.dir}/ws-handlesystem" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
