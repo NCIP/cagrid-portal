@@ -46,15 +46,8 @@ package gov.nih.nci.cagrid.gridgrouper.ui;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperGroup;
-import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperStem;
-import gov.nih.nci.cagrid.gridgrouper.grouper.Group;
-import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
-
-import java.util.Iterator;
-import java.util.Set;
 
 import javax.swing.ImageIcon;
-import javax.swing.tree.TreeNode;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -65,67 +58,26 @@ import javax.swing.tree.TreeNode;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class StemTreeNode extends GridGrouperBaseTreeNode {
+public class GroupTreeNode extends GridGrouperBaseTreeNode {
 
-	private GridGrouperStem stem;
+	private GridGrouperGroup group;
 
-	private boolean rootStem;
-
-	public StemTreeNode(GroupManagementBrowser browser, GridGrouperStem stem,
-			boolean root) {
+	public GroupTreeNode(GroupManagementBrowser browser,
+			GridGrouperGroup group) {
 		super(browser);
-		this.rootStem = root;
-		this.stem = stem;
-	}
-
-	public void loadStem() throws Exception {
-		this.removeAllChildren();
-		Set set = stem.getChildStems();
-		Iterator itr = set.iterator();
-		while (itr.hasNext()) {
-			Stem stem = (Stem) itr.next();
-			StemTreeNode node = new StemTreeNode(getBrowser(),
-					((GridGrouperStem) stem), false);
-			synchronized (getTree()) {
-				this.add(node);
-				TreeNode parent = this.getParent();
-				if (parent != null) {
-					getTree().reload(parent);
-				} else {
-					getTree().reload();
-				}
-			}
-			node.loadStem();
-		}
-		Set grps = stem.getChildGroups();
-		Iterator itr2 = grps.iterator();
-		while (itr2.hasNext()) {
-			Group group = (Group)itr2.next();
-			GroupTreeNode node = new GroupTreeNode(getBrowser(),(GridGrouperGroup)group);
-			synchronized (getTree()) {
-				this.add(node);
-				TreeNode parent = this.getParent();
-				if (parent != null) {
-					getTree().reload(parent);
-				} else {
-					getTree().reload();
-				}
-			}
-		}
+		this.group = group;
 	}
 
 	public void refresh() {
 		int id = getBrowser().getProgress().startEvent(
 				"Refreshing " + toString() + ".... ");
 		try {
-			stem = (GridGrouperStem) stem.getGridGrouper().findStem(
-					stem.getName());
+
 			if (parent != null) {
 				getTree().reload(parent);
 			} else {
 				getTree().reload();
 			}
-			loadStem();
 			getBrowser().getProgress().stopEvent(id,
 					"Refreshed " + toString() + "!!!");
 		} catch (Exception e) {
@@ -136,33 +88,19 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 	}
 
 	public ImageIcon getIcon() {
-		if (this.rootStem) {
-			return GridGrouperLookAndFeel.getGrouperIcon16x16();
-		} else {
-			return GridGrouperLookAndFeel.getStemIcon();
-		}
+		return GridGrouperLookAndFeel.getGroupIcon16x16();
 	}
 
 	public String toString() {
-		if (this.rootStem) {
-			return stem.getGridGrouper().getName();
-		} else {
-			return stem.getDisplayExtension();
-		}
-	}
-
-	public boolean isRootStem() {
-		return rootStem;
+		return group.getDisplayExtension();
 	}
 
 	public GridGrouper getGridGrouper() {
-		return stem.getGridGrouper();
+		return group.getGridGrouper();
 	}
 
-	public GridGrouperStem getStem() {
-		return stem;
+	public GridGrouperGroup getGroup() {
+		return group;
 	}
-	
-	
 
 }

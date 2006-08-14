@@ -342,7 +342,7 @@ public class StemBrowser extends JPanel {
 					.getPrivilegesIcon(), getPrivileges(), null);
 			stemDetails.addTab("Child Stems", GridGrouperLookAndFeel
 					.getStemIcon(), getChildStems(), null);
-			stemDetails.addTab("Groups", GridGrouperLookAndFeel.getGroupIcon(),
+			stemDetails.addTab("Groups", GridGrouperLookAndFeel.getGroupIcon22x22(),
 					getGroups(), null);
 		}
 		return stemDetails;
