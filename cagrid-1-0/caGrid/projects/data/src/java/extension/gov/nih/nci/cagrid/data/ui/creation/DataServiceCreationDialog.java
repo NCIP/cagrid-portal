@@ -2,9 +2,12 @@ package gov.nih.nci.cagrid.data.ui.creation;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.CreationExtensionUIDialog;
@@ -12,17 +15,22 @@ import gov.nih.nci.cagrid.introduce.portal.extension.CreationExtensionUIDialog;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.apache.axis.message.MessageElement;
 import org.jdom.Element;
+import org.projectmobius.portal.PortalResourceManager;
 
 /** 
  *  DataServiceCreationDialog
@@ -34,6 +42,7 @@ import org.jdom.Element;
  * @version $Id$ 
  */
 public class DataServiceCreationDialog extends CreationExtensionUIDialog {
+	public static final String WS_ENUM_EXTENSION_NAME = "cagrid_wsEnum";
 
 	private JPanel mainPanel = null;
 	private JCheckBox wsEnumCheckBox = null;
@@ -49,7 +58,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 		super(desc, info);
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				setWsEnumStatus();
+				setFeatureStatus();
 			}
 		});
 		initialize();
@@ -107,6 +116,41 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 		if (wsEnumCheckBox == null) {
 			wsEnumCheckBox = new JCheckBox();
 			wsEnumCheckBox.setText("Use WS-Enumeration");
+			wsEnumCheckBox.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if (wsEnumCheckBox.isSelected()) {
+						if (wsEnumExtensionInstalled()) {
+							if (!wsEnumExtensionUsed()) {
+								// add the ws Enumeration extension
+								ExtensionDescription ext = 
+									ExtensionsLoader.getInstance().getExtension(WS_ENUM_EXTENSION_NAME);
+								ExtensionType extType = new ExtensionType();
+								extType.setName(ext.getServiceExtensionDescription().getName());
+								extType.setExtensionType(ext.getExtensionType());
+								ExtensionType[] serviceExtensions = getServiceInfo().getExtensions().getExtension();
+								ExtensionType[] allExtensions = new ExtensionType[serviceExtensions.length];
+								System.arraycopy(serviceExtensions, 0, allExtensions, 0, serviceExtensions.length);
+								allExtensions[allExtensions.length - 1] = extType;
+								getServiceInfo().getExtensions().setExtension(allExtensions);
+							}
+						} else {
+							// extension not installed, complain loudly
+							String[] message = {
+								"The extension " + WS_ENUM_EXTENSION_NAME,
+								"is not installed in Introduce.",
+								"Are you sure you wish to enable this feature?"
+							};
+							int choice = JOptionPane.showConfirmDialog(
+								PortalResourceManager.getInstance().getGridPortal(),
+								message, "WS-Enumeration not installed", JOptionPane.YES_NO_OPTION);
+							if (choice == JOptionPane.NO_OPTION) {
+								// you have chosen wisely
+								wsEnumCheckBox.setSelected(false);
+							}
+						}
+					}
+				}
+			});
 		}
 		return wsEnumCheckBox;
 	}
@@ -123,7 +167,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 			okButton.setText("OK");
 			okButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					setWsEnumStatus();
+					setFeatureStatus();
 					dispose();
 				}
 			});
@@ -235,7 +279,9 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 			gridBagConstraints2.gridy = 0;
 			dataSourcePanel = new JPanel();
 			dataSourcePanel.setLayout(new GridBagLayout());
-			dataSourcePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Source", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			dataSourcePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Source", 
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 			dataSourcePanel.add(getCustomDataRadioButton(), gridBagConstraints2);
 			dataSourcePanel.add(getSdkDataRadioButton(), gridBagConstraints3);
 		}
@@ -243,7 +289,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 	}
 	
 	
-	private void setWsEnumStatus() {
+	private void setFeatureStatus() {
 		ExtensionTypeExtensionData data = 
 			ExtensionTools.getExtensionData(getExtensionDescription(), getServiceInfo());
 		Element featuresElement = new Element(DataServiceConstants.DS_FEATURES);
@@ -262,5 +308,30 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 			ex.printStackTrace();
 			PortalUtils.showErrorMessage("Error storing configuration", ex);
 		}
+	}
+	
+	
+	private boolean wsEnumExtensionInstalled() {
+		List extensionDescriptors = ExtensionsLoader.getInstance().getServiceExtensions();
+		for (int i = 0; i < extensionDescriptors.size(); i++) {
+			ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) extensionDescriptors.get(i);
+			if (ex.getName().equals(WS_ENUM_EXTENSION_NAME)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	private boolean wsEnumExtensionUsed() {
+		ServiceInformation info = getServiceInfo();
+		if (info.getExtensions() != null && info.getExtensions().getExtension() != null) {
+			for (int i = 0; i < info.getExtensions().getExtension().length; i++) {
+				if (info.getExtensions().getExtension(i).getName().equals(WS_ENUM_EXTENSION_NAME)) {
+					return true;
+				}
+			}
+		}		
+		return false;
 	}
 }
