@@ -575,7 +575,7 @@ public class StemBrowser extends JPanel {
 			gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints7.gridx = 0;
 			jLabel3 = new JLabel();
-			jLabel3.setText("Group Id");
+			jLabel3.setText("Stem Id");
 			detailsPanel = new JPanel();
 			detailsPanel.setLayout(new GridBagLayout());
 			detailsPanel.add(jLabel3, gridBagConstraints7);
@@ -591,6 +591,11 @@ public class StemBrowser extends JPanel {
 			detailsPanel.add(jLabel7, gridBagConstraints18);
 			detailsPanel.add(getJScrollPane(), gridBagConstraints19);
 			detailsPanel.add(getUpdateStem(), gridBagConstraints20);
+			detailsPanel.setBorder(BorderFactory.createTitledBorder(null,
+					"Stem Details",javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION,
+					null, GridGrouperLookAndFeel
+							.getPanelLabelColor()));
 		}
 		return detailsPanel;
 	}
@@ -1133,8 +1138,9 @@ public class StemBrowser extends JPanel {
 			stemsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
 					null, "Child Stems",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					GridGrouperLookAndFeel.getPanelLabelColor()));
+					javax.swing.border.TitledBorder.DEFAULT_POSITION,
+					null, GridGrouperLookAndFeel
+							.getPanelLabelColor()));
 			stemsPanel.add(getJScrollPane2(), gridBagConstraints33);
 			stemsPanel.add(getButtonPanel(), gridBagConstraints40);
 		}
@@ -1209,9 +1215,10 @@ public class StemBrowser extends JPanel {
 			addStemPanel = new JPanel();
 			addStemPanel.setLayout(new GridBagLayout());
 			addStemPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Add Stem", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-							Font.BOLD, 12), new Color(62, 109, 181)));
+					"Add Stem", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION,
+					null, GridGrouperLookAndFeel
+							.getPanelLabelColor()));
 			addStemPanel.add(jLabel10, gridBagConstraints35);
 			addStemPanel.add(getChildName(), gridBagConstraints36);
 			addStemPanel.add(jLabel11, gridBagConstraints37);
@@ -1424,9 +1431,10 @@ public class StemBrowser extends JPanel {
 			groupsPanel = new JPanel();
 			groupsPanel.setLayout(new GridBagLayout());
 			groupsPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Child Group(s)", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-							Font.BOLD, 12), new Color(62, 109, 181)));
+					"Child Group(s)", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION,
+					null, GridGrouperLookAndFeel
+							.getPanelLabelColor()));
 			groupsPanel.add(getGroupsPane(), gridBagConstraints45);
 			groupsPanel.add(getGroupsButtonPanel(), gridBagConstraints46);
 		}
@@ -1474,9 +1482,10 @@ public class StemBrowser extends JPanel {
 			addGroupsPanel = new JPanel();
 			addGroupsPanel.setLayout(new GridBagLayout());
 			addGroupsPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Add Group", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-							Font.BOLD, 12), new Color(62, 109, 181)));
+					"Add Group",javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION,
+					null, GridGrouperLookAndFeel
+							.getPanelLabelColor()));
 			addGroupsPanel.add(jLabel13, gridBagConstraints52);
 			addGroupsPanel.add(jLabel12, gridBagConstraints49);
 			addGroupsPanel.add(getGroupExtension(), gridBagConstraints50);
