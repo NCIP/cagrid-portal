@@ -38,7 +38,7 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum" />
+	<property name="projects.list" value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
@@ -417,6 +417,20 @@
 			<artifact refid="test.coverage.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/wsEnum" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+	
+	<!-- =============================================================== -->
+	<!-- CAGRID WS-TRANSFER:                                             	 -->
+	<!-- =============================================================== -->
+	<target name="build-ws-transfer" depends="prepare" description="Builds caGrid WS-transfer components">
+		<ant dir="${projects.dir}/ws-transfer" inheritAll="false" antfile="build.xml" target="deploy" />
+	</target>
+	
+	<!-- =============================================================== -->
+	<!-- CAGRID WS-NAMING:                                             	 -->
+	<!-- =============================================================== -->
+	<target name="build-ws-naming" depends="prepare" description="Builds caGrid WS-namingr components">
+		<ant dir="${projects.dir}/ws-naming" inheritAll="false" antfile="build.xml" target="deploy" />
 	</target>
 
 
