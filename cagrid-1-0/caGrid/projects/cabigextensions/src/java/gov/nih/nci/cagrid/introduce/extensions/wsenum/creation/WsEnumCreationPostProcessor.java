@@ -39,6 +39,7 @@ import org.projectmobius.common.MobiusException;
  */
 public class WsEnumCreationPostProcessor implements CreationExtensionPostProcessor {
 	
+	public static final String PORT_TYPE_NAME = "DataSource";
 	public static final String WS_ENUMERATION_URI = "http://schemas.xmlsoap.org/ws/2004/09/enumeration";
 
 	public void postCreate(ServiceDescription desc, Properties props) throws CreationExtensionException {
@@ -197,7 +198,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		info.setWsdlFile("enumeration.wsdl");
 		String packName = EnumProvider.class.getPackage().getName();
 		info.setPackageName(packName);
-		info.setPortTypeName("DataSource"); // FIXME: ???
+		info.setPortTypeName(PORT_TYPE_NAME); // FIXME: ???
 		// input and output message types
 		QName inputQname = new QName(WS_ENUMERATION_URI, inputName);
 		info.setInputMessage(inputQname);
