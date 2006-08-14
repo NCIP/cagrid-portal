@@ -94,9 +94,7 @@ public class DomainModelBuilder {
 		}
 
 		// get all associations in project, preloading source and target classes
-		criteria = DetachedCriteria.forClass(UMLAssociationMetadata.class).setFetchMode("sourceUMLClassMetadata",
-			FetchMode.JOIN).setFetchMode("targetUMLClassMetadata", FetchMode.JOIN).setResultTransformer(
-			CriteriaSpecification.DISTINCT_ROOT_ENTITY).createCriteria("project").add(
+		criteria = DetachedCriteria.forClass(UMLAssociationMetadata.class).createCriteria("project").add(
 			Restrictions.eq("id", proj.getId()));
 		UMLAssociationMetadata[] assocArr;
 		try {
@@ -298,8 +296,7 @@ public class DomainModelBuilder {
 						try {
 							setUMLAssociation(convertAssociation(assocMD));
 						} catch (Exception e) {
-							LOG.error("Error converting association:" + assocMD.getSourceRoleName() + " --> "
-								+ assocMD.getTargetRoleName(), e);
+							LOG.error("Error converting association:" + associationToString(assocMD), e);
 						}
 					}
 				};
@@ -338,8 +335,9 @@ public class DomainModelBuilder {
 
 	private gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation convertAssociation(
 		UMLAssociationMetadata coreAssociation) throws ApplicationException, DomainModelGenerationException {
-		LOG.debug("Converting association:" + coreAssociation.getSourceRoleName() + " -> "
-			+ coreAssociation.getTargetRoleName());
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Converting association:" + associationToString(coreAssociation));
+		}
 
 		gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation converted = new gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation();
 		converted.setBidirectional(coreAssociation.getIsBidirectional().booleanValue());
@@ -369,7 +367,8 @@ public class DomainModelBuilder {
 		converted.setTargetUMLAssociationEdge(convertedTargetEdge);
 
 		// umlproject.UMLAssociationMetadata is broken so need to issue
-		// my own hibernate query to get UMLClass (could have just called
+		// my own hibernate query to get associated UMLClasses (could have just
+		// called
 		// getters otherwise)
 		setUMLClassReferences(coreAssociation, converted);
 
@@ -488,6 +487,16 @@ public class DomainModelBuilder {
 		System.arraycopy(semanticMetadata.toArray(), 0, smArray, 0, semanticMetadata.size());
 
 		return smArray;
+	}
+
+
+	private static String associationToString(UMLAssociationMetadata assoc) {
+		return assoc.getSourceRoleName() + "(" + assoc.getSourceLowCardinality() + "..."
+			+ assoc.getSourceHighCardinality() + ")"
+			+ ((assoc.getIsBidirectional() != null && assoc.getIsBidirectional().booleanValue()) ? "<" : "") + " -->"
+			+ assoc.getTargetRoleName() + "(" + assoc.getTargetLowCardinality() + "..."
+			+ assoc.getTargetHighCardinality() + ")";
+
 	}
 
 

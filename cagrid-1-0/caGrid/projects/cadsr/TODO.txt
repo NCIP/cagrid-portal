@@ -1,15 +1,13 @@
-artifact for service security stuff
-
 add service property for setting thread pool size
 
 resource/context for non-blocking domainmodel generation
-
-caching using resources?
 
 discovery panel should support "searching" as well
 
 reimplement generateDomainModel(proj,class,assoc)
   - change to association excludes?
+
+
 
 
 caCORE BUGS:
@@ -24,6 +22,16 @@ unable to populate associations as client calls back to ApplServ even if associa
 
 
 ==================================================
+(DONE) apply association work around to caDSRServiceImpl 
+
+(DONE) fix association rendering in UMLDiagram (its all messed up)
+
+(DONE) artifact for service security stuff
+
+(DONE) move caDSR Portal progress panel's to steve new threaded one?
+
+(DONE) add a "--SELECT AN ITEM--" option to all combo boxes in CaDSRBrowserPanel
+
 (DONE) attribute name has classname: prefix
 
 (DONE) discovery panel needs a progress bar 

@@ -6,6 +6,7 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -22,12 +23,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JProgressBar;
-import javax.swing.SwingUtilities;
 
 
 public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener, PackageSelectedListener {
 
+	private static final String NO_SELECTION = "-- SELECT AN ITEM --";
 	private JPanel queryPanel = null;
 	private JButton queryButton = null;
 	protected File schemaDir;
@@ -48,7 +48,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	private List projectSelectionListeners = null;
 	private List classSelectionListeners = null;
 	private JPanel progressPanel = null;
-	private JProgressBar jProgressBar = null;
+	private MultiEventProgressBar multiEventProgressBar = null;
 
 
 	public CaDSRBrowserPanel() {
@@ -165,12 +165,12 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 
 	public void discoverFromCaDSR() {
-		startProgress("Discovering from caDSR...");
+		final int progressEventID = getMultiEventProgressBar().startEvent("Discovering from caDSR...");
 		makeCombosEnabled(false);
 
-		getProjectComboBox().removeAllItems();
-		getPackageComboBox().removeAllItems();
-		getClassComboBox().removeAllItems();
+		resetProjectComboBox();
+		resetPackageComboBox();
+		resetClassComboBox();
 
 		Thread t = new Thread() {
 			public void run() {
@@ -189,9 +189,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 					JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
 						"Error communicating with caDSR; please check the caDSR URL!");
 				} finally {
-					if (getProjectComboBox().getItemCount() == 0) {
-						finishProgress();
-					}
+					getMultiEventProgressBar().stopEvent(progressEventID, "");
 				}
 			}
 
@@ -200,43 +198,21 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	}
 
 
-	public void startProgress(final String message) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				getJProgressBar().setVisible(true);
-				getJProgressBar().setIndeterminate(true);
-				if (message != null && !message.trim().equals("")) {
-					getJProgressBar().setString(message);
-					getJProgressBar().setStringPainted(true);
-				}
-			}
-		});
-
+	protected void resetClassComboBox() {
+		getClassComboBox().removeAllItems();
+		getClassComboBox().addItem(NO_SELECTION);
 	}
 
 
-	public void updateProgress(final String message, final int min, final int max, final int current) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				getJProgressBar().setIndeterminate(false);
-				getJProgressBar().setString(message);
-				getJProgressBar().setStringPainted(true);
-				getJProgressBar().setMinimum(min);
-				getJProgressBar().setMaximum(max);
-				getJProgressBar().setValue(current);
-			}
-		});
-
+	protected void resetPackageComboBox() {
+		getPackageComboBox().removeAllItems();
+		getPackageComboBox().addItem(NO_SELECTION);
 	}
 
 
-	public void finishProgress() {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				getJProgressBar().setVisible(false);
-				getJProgressBar().setIndeterminate(false);
-			}
-		});
+	protected void resetProjectComboBox() {
+		getProjectComboBox().removeAllItems();
+		getProjectComboBox().addItem(NO_SELECTION);
 	}
 
 
@@ -259,27 +235,27 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 
 
 	public Project getSelectedProject() {
-		ProjectDisplay p = (ProjectDisplay) projectComboBox.getSelectedItem();
-		if (p != null) {
-			return p.getProject();
+		Object obj = getProjectComboBox().getSelectedItem();
+		if (obj != null && obj instanceof ProjectDisplay) {
+			return ((ProjectDisplay) obj).getProject();
 		}
 		return null;
 	}
 
 
 	public UMLPackageMetadata getSelectedPackage() {
-		PackageDisplay p = (PackageDisplay) getPackageComboBox().getSelectedItem();
-		if (p != null) {
-			return p.getPackage();
+		Object obj = getPackageComboBox().getSelectedItem();
+		if (obj != null && obj instanceof PackageDisplay) {
+			return ((PackageDisplay) obj).getPackage();
 		}
 		return null;
 	}
 
 
 	public UMLClassMetadata getSelectedClass() {
-		ClassDisplay c = (ClassDisplay) getClassComboBox().getSelectedItem();
-		if (c != null) {
-			return c.getClazz();
+		Object obj = getClassComboBox().getSelectedItem();
+		if (obj != null && obj instanceof ClassDisplay) {
+			return ((ClassDisplay) obj).getClazz();
 		}
 		return null;
 	}
@@ -293,10 +269,11 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	protected JComboBox getProjectComboBox() {
 		if (projectComboBox == null) {
 			projectComboBox = new JComboBox();
+			projectComboBox.addItem(NO_SELECTION);
 			projectComboBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED && projectComboBox.getSelectedItem() != null) {
-						Project project = getSelectedProject();
+					Project project = getSelectedProject();
+					if (e.getStateChange() == ItemEvent.SELECTED && project != null) {
 						for (int i = 0; i < projectSelectionListeners.size(); i++) {
 							ProjectSelectedListener listener = (ProjectSelectedListener) projectSelectionListeners
 								.get(i);
@@ -318,10 +295,11 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	protected JComboBox getPackageComboBox() {
 		if (packageComboBox == null) {
 			packageComboBox = new JComboBox();
+			packageComboBox.addItem(NO_SELECTION);
 			packageComboBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED && getPackageComboBox().getSelectedItem() != null) {
-						UMLPackageMetadata pkg = getSelectedPackage();
+					UMLPackageMetadata pkg = getSelectedPackage();
+					if (e.getStateChange() == ItemEvent.SELECTED && pkg != null) {
 						for (int i = 0; i < packageSelectionListeners.size(); i++) {
 							PackageSelectedListener listener = (PackageSelectedListener) packageSelectionListeners
 								.get(i);
@@ -430,10 +408,11 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	private JComboBox getClassComboBox() {
 		if (classComboBox == null) {
 			classComboBox = new JComboBox();
+			classComboBox.addItem(NO_SELECTION);
 			classComboBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED && getClassComboBox().getSelectedItem() != null) {
-						UMLClassMetadata clazz = getSelectedClass();
+					UMLClassMetadata clazz = getSelectedClass();
+					if (e.getStateChange() == ItemEvent.SELECTED && clazz != null) {
 						for (int i = 0; i < classSelectionListeners.size(); i++) {
 							ClassSelectedListener listener = (ClassSelectedListener) classSelectionListeners.get(i);
 							listener.handleClassSelection(clazz);
@@ -549,7 +528,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 			gridBagConstraints11.gridx = 0;
 			progressPanel = new JPanel();
 			progressPanel.setLayout(new GridBagLayout());
-			progressPanel.add(getJProgressBar(), gridBagConstraints11);
+			progressPanel.add(getMultiEventProgressBar(), gridBagConstraints11);
 		}
 		return progressPanel;
 	}
@@ -560,14 +539,11 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	 * 
 	 * @return javax.swing.JProgressBar
 	 */
-	private JProgressBar getJProgressBar() {
-		if (jProgressBar == null) {
-			jProgressBar = new JProgressBar();
-			// jProgressBar.setIndeterminate(true);
-			jProgressBar.setVisible(false);
-			// jProgressBar.setStringPainted(true);
+	public MultiEventProgressBar getMultiEventProgressBar() {
+		if (multiEventProgressBar == null) {
+			multiEventProgressBar = new MultiEventProgressBar(true);
 		}
-		return jProgressBar;
+		return multiEventProgressBar;
 	}
 
 
@@ -584,8 +560,10 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 	public void handleProjectSelection(final Project project) {
 		// System.out.println("Handle Project:" + project.getShortName());
 		makeCombosEnabled(false);
-		startProgress("Updating Packages for " + project.getShortName());
-		getPackageComboBox().removeAllItems();
+		final int progressEventID = getMultiEventProgressBar().startEvent(
+			"Updating Packages for " + project.getShortName());
+		resetPackageComboBox();
+		resetClassComboBox();
 
 		Thread t = new Thread() {
 			public void run() {
@@ -603,9 +581,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 					JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
 						"Error communicating with caDSR; please check the caDSR URL!");
 				} finally {
-					if (getPackageComboBox().getItemCount() == 0 || !isShowClassSelection()) {
-						finishProgress();
-					}
+					getMultiEventProgressBar().stopEvent(progressEventID, "Done.");
 				}
 			}
 		};
@@ -625,8 +601,9 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 		if (isShowClassSelection()) {
 			makeCombosEnabled(false);
 
-			startProgress("Updating Classes for Package " + pkg.getName());
-			getClassComboBox().removeAllItems();
+			final int progressEventID = getMultiEventProgressBar().startEvent(
+				"Updating Classes for Package " + pkg.getName());
+			resetClassComboBox();
 
 			Thread t = new Thread() {
 				public void run() {
@@ -645,7 +622,7 @@ public class CaDSRBrowserPanel extends JPanel implements ProjectSelectedListener
 						JOptionPane.showMessageDialog(CaDSRBrowserPanel.this,
 							"Error communicating with caDSR; please check the caDSR URL!");
 					} finally {
-						finishProgress();
+						getMultiEventProgressBar().stopEvent(progressEventID, "Done.");
 					}
 				}
 			};

@@ -434,7 +434,7 @@ public class CaDSRServiceImpl {
 				for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
 					UMLAssociationMetadata assoc = (UMLAssociationMetadata) resultsIterator.next();
 					LOG.debug("target role:" + assoc.getTargetRoleName());
-					arr[index++] = CaDSRUtils.convertAssociation(assoc);
+					arr[index++] = CaDSRUtils.convertAssociation(getApplicationService(), assoc);
 				}
 				return arr;
 			} catch (Exception e) {
@@ -495,7 +495,7 @@ public class CaDSRServiceImpl {
 					String assocKey = (String) resultsIterator.next();
 					UMLAssociationMetadata assoc = (UMLAssociationMetadata) joinedMap.get(assocKey);
 					LOG.debug("target role:" + assoc.getTargetRoleName());
-					arr[index++] = CaDSRUtils.convertAssociation(assoc);
+					arr[index++] = CaDSRUtils.convertAssociation(getApplicationService(), assoc);
 				}
 				return arr;
 			} catch (Exception e) {
@@ -527,7 +527,7 @@ public class CaDSRServiceImpl {
 				for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
 					UMLAssociationMetadata assoc = (UMLAssociationMetadata) resultsIterator.next();
 					LOG.debug("target role:" + assoc.getTargetRoleName());
-					arr[index++] = CaDSRUtils.convertAssociation(assoc);
+					arr[index++] = CaDSRUtils.convertAssociation(getApplicationService(), assoc);
 				}
 				return arr;
 			} catch (Exception e) {

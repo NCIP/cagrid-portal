@@ -258,6 +258,8 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 
 	public void handlePackageSelection(UMLPackageMetadata pkg) {
+		//TODO: when caDSR supports mappings.. look up the schema here
+		
 		Project proj = getCaDSRPanel().getSelectedProject();
 		if (proj != null) {
 			// TODO: need to get Context
