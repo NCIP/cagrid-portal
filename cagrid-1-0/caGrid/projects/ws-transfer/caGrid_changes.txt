@@ -1,4 +1,4 @@
 removed service\java\test\src\org\globus\integratedTest  as it requires both ws-naming and ws-transfer
   -needs to go in system test area
-
+added .cvsignores
 
