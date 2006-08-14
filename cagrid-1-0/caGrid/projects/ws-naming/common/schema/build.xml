@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+
+<project default="all" basedir=".">
+
+    <!-- Build file to generate and deploy stubs for Resolution Service and
+    data test service -->
+
+    <!-- Get defined properties -->
+    <property environment="env"/>
+    <property file="build.properties"/>
+    <property file="${user.home}/build.properties"/>
+
+    <property name="java.debug" value="on"/>
+
+    <!-- get install location -->
+    <property name="env.GLOBUS_LOCATION" value="../../../../install"/>
+    <property name="deploy.dir" location="${env.GLOBUS_LOCATION}"/>
+    <property name="abs.deploy.dir" location="${deploy.dir}"/>
+
+    <!-- Refer to standard build files from deployment -->
+    <property name="build.packages" location=
+        "${abs.deploy.dir}/share/globus_wsrf_common/build-packages.xml"/>
+
+    <!-- package name for this gar -->
+    <property name="package.name" value="globus_resolution_schema"/>
+    <property name="gar.name" value="${package.name}.gar"/>
+
+    <!-- Existing directories -->
+    <property name="schema.src" location="${abs.deploy.dir}/share/schema"/>
+    <property name="local.schema.src" value="resolutionService"/>
+
+    <!-- Directories created on build -->
+    <property name="build.dir"  location="build"/>
+    <property name="build.lib.dir" location="build/lib"/>
+
+    <!-- Schema fileset for gar -->
+    <property name="garschema.id" value="garschema"/>
+    <fileset dir="${local.schema.src}" id="garschema"/>
+    <fileset dir="." id="garschema">
+        <include name="resolutionService/**/*"/>
+    </fileset>
+
+    <target name="dist">
+        <ant antfile="${build.packages}" target="makeGar">
+            <reference refid="${garschema.id}"/>
+        </ant>
+    </target>
+
+    <target name="clean">
+        <delete failonerror="false" dir="tmp"/>
+        <delete failonerror="false" file="${gar.name}"/>
+    </target>
+
+    <target name="deploy" depends="dist">
+        <ant antfile="${build.packages}" target="deployGar">
+            <property name="gar.id" value="${package.name}"/>
+        </ant>
+    </target>
+
+    <target name="undeploy">
+        <ant antfile="${build.packages}" target="undeployGar">
+            <property name="gar.id" value="${package.name}"/>
+        </ant>
+    </target>
+
+    <target name="all" depends="deploy"/>
+
+</project>

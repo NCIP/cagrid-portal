@@ -1,0 +1,91 @@
+Notes:
+=====
+- Building against GT 4.0.2 tag
+
+Issues:
+=======
+
+Looking at ws-transfer specification:
+
+1) Definition lacks a port name.
+2) No part element for Empty message, GT tooling fails to process WSDL
+
+As per discussion, modified WSDL to work with GT tooling.
+
+Questions
+==========
+
+- Where should the code live ?
+- Package names for the code ?
+- How do we push feedback on ws-transfer interface to authors ?
+
+Transfer Service Prototype
+==========================
+
+This service provides functionality to retrieve an arbitrary
+resource. This implementation only supports the "get" method and
+returns a xsd:any XML blob. The service uses a URI as the resource
+key, which can be potentially reused as the Endpoint Identifier (EPI).
+
+The transfer service interacts with the data applicatoin to actually
+retrieve the data. The service allows for the data application to
+register an object that implements the
+org.globus.transfer.DataServiceInterface. The resource key (which is a
+URI) and the distingushed name of the client is passed as parameter to
+a method invocation on the registered object. The XML blob
+representing the resource is retrieved and returned the to client.
+
+Implementaion Details
+======================
+
+The service code is checked into playground/java/ws-transfer
+
+(A) To deploy the service:
+--------------------------
+
+(1) set GLOBUS_LOCATION=/path/to/GT/4.0.2/install
+(2) cd playground/java/ws-transfer
+(3) ant deploy
+(4) ant javadocs (to generate java docs)
+
+(B) To configure the service:
+------------------------------
+
+The default configuration has the key qname set to URI and that is
+required for EPIs to be used as key.
+
+The key name can be configured by modifying parameter
+"resourceKeyName" in
+$GLOBUS_LOCATION/etc/globus_transfer_service/deploy-jndi-config.xml
+
+(C) To test the service:
+------------------------
+
+(0) Valid credentials are required to test the service
+(1) set GLOBUS_LOCATION=/path/to/GT/4.0.2/install
+(2) cd playground/java/ws-transfer/service/java/test
+(3) ant test
+
+(D) To run integrated tests (ws-resolution and ws-transfer service)
+-------------------------------------------------------------------
+
+These test configure the resolution service such that EPI is resolved
+as EPR to transfer service.
+
+(1) set GLOBUS_LOCATION=/path/to/GT/4.0.2/install
+(2) cd playground/java/ws-transfer
+(3) ant deployAll
+(4) cd playground/java/ws-transfer/service/java/test
+(5) ant integratedTest
+
+(E) To integrate with Data Application
+---------------------------------------
+
+(1) Implement the org.globus.transfer.DataServiceInterface.
+(2) Create an instance of (1) and register with service. Following API
+can be used to do that:
+        org.globus.transfer.util.ResolutionUtil.registerDataService()
+(3) Note that the Transfer service and the Data Application should
+be in same JVM.
+
+

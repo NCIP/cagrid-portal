@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+
+<project default="all" basedir=".">
+
+    <!-- package name for this gar -->
+    <property name="package.name" value="globus_transfer_service"/>
+
+    <!-- Values redundant from share build file -->
+    <property environment="env"/>
+
+    <property name="java.debug" value="on"/>
+    <property name="java.deprecation" value="true"/>
+
+    <property name="env.GLOBUS_LOCATION" value="../../../../../install"/>
+    <property name="deploy.dir" location="${env.GLOBUS_LOCATION}"/>
+    <property name="abs.deploy.dir" location="${deploy.dir}"/>
+
+    <!-- Refer to standard build files for deployment -->
+    <property name="build.packages" location=
+        "${abs.deploy.dir}/share/globus_wsrf_common/build-packages.xml"/>
+
+    <property name="src.dir"  location="src"/>
+
+    <property name="jar.name" value="${package.name}.jar"/>
+    <property name="gar.name" value="${package.name}.gar"/>
+
+    <!-- Directories created on build -->
+    <property name="build.dir"  location="build"/>
+    <property name="build.dest" location="build/classes"/>
+    <property name="build.lib.dir" location="build/lib"/>
+
+    <property name="garjars.id" value="garjars"/>
+    <fileset dir="${build.lib.dir}" id="garjars"/>
+
+    <property name="garetc.id" value="garEtc"/>
+    <fileset dir="etc" id="garEtc"/>    
+
+    <!-- Initialize stuff -->
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dest}"/>
+        <mkdir dir="${build.lib.dir}"/>
+    </target>
+
+    <!-- Class path with no local lib directory -->
+    <path id="classpath">
+         <fileset dir="${abs.deploy.dir}/lib">
+              <include name="*.jar"/>
+         </fileset>
+    </path>
+
+    <!-- Compile -->
+    <target name="compile" depends="init">
+	<copy todir="${build.dest}" >
+	      <fileset dir="src" includes="**/*.properties" />
+	      <fileset dir="src" includes="**/*.xml" />
+	</copy>
+        <javac srcdir="${src.dir}" destdir="${build.dest}"
+            debug="${java.debug}" deprecation="${java.deprecation}"
+            classpathref="classpath"> 
+            <include name="**/*.java"/>
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="${build.lib.dir}/${jar.name}"
+            basedir="${build.dest}"/>
+    </target>
+
+    <target name="dist" depends="jar">
+        <ant antfile="${build.packages}" target="makeGar">
+            <reference refid="${garjars.id}"/>
+            <reference refid="${garetc.id}"/>
+        </ant>
+    </target>
+
+    <target name="deploy" depends="dist">
+        <ant antfile="${build.packages}" target="deployGar">
+            <property name="gar.id" value="${package.name}"/>
+        </ant>
+    </target>
+
+    <target name="undeploy">
+        <ant antfile="${build.packages}" target="undeployGar">
+            <property name="gar.id" value="${package.name}"/>
+        </ant>
+    </target>
+
+
+    <target name="clean">
+        <delete dir="tmp"/>
+        <delete dir="${build.dir}"/>
+        <delete file="${gar.name}"/>
+    </target>
+
+    <target name="all" depends="deploy"/>
+
+</project>

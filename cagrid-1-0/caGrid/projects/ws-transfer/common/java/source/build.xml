@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+
+<project default="all" basedir=".">
+
+    <!-- Build file to generate and deploy stubs for transfer service-->
+
+    <!-- Get defined properties -->
+    <property environment="env"/>
+    <property file="build.properties"/>
+    <property file="${user.home}/build.properties"/>
+
+    <property name="java.debug" value="on"/>
+
+    <!-- get install location -->
+    <property name="env.GLOBUS_LOCATION" value="../../../../install"/>
+    <property name="deploy.dir" location="${env.GLOBUS_LOCATION}"/>
+    <property name="abs.deploy.dir" location="${deploy.dir}"/>
+
+    <!-- Refer to standard build files from deployment -->
+    <property name="build.packages" location=
+        "${abs.deploy.dir}/share/globus_wsrf_common/build-packages.xml"/>
+    <property name="build.stubs" location=
+        "${abs.deploy.dir}/share/globus_wsrf_tools/build-stubs.xml"/>
+
+    <!-- package name for this gar -->
+    <property name="package.name" value="globus_transfer_stubs_java"/>
+    <property name="gar.name" value="${package.name}.gar"/>
+
+    <!-- Property to access schema -->
+    <property name="schema.dir.name" value="transferService"/>
+
+    <!-- Existing directories -->
+    <property name="share.dir" value="share"/>
+
+    <!-- NS mapping file -->    
+    <property name="mapping.src" value="${share.dir}/NStoPkg.properties"/>
+
+    <!-- Directories created on build -->
+    <property name="build.dir"  location="build"/>
+    <property name="build.dest" location="build/classes"/>
+    <property name="build.lib.dir" location="build/lib"/>
+
+    <!-- Stub directories created on build -->
+    <property name="stubs.dir" location="build/stubs"/>
+    <property name="stubs.src" location="build/stubs/src"/>
+    <property name="stubs.dest" location="build/stubs/classes"/>
+    <property name="stubs.jar.name" value="${package.name}.jar"/>
+
+    <!-- Jars for gar -->
+    <property name="garjars.id" value="garjars"/>
+    <fileset dir="${build.lib.dir}" id="garjars"/>
+    <!-- Share directory for gar -->
+    <property name="garshare.id" value="garshare"/>
+    <fileset dir="${share.dir}" id="garshare"/>
+
+    <property name="schema.src" location="${deploy.dir}/share/schema/${schema.dir.name}"/>
+
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dest}"/>
+        <mkdir dir="${build.lib.dir}"/>
+
+        <mkdir dir="${stubs.dir}"/>
+        <mkdir dir="${stubs.src}"/>
+        <mkdir dir="${stubs.dest}"/>
+
+        <!-- Check of stubs are avaliable -->
+        <available property="stubs.present" type="dir"
+            file="${stubs.dest}/org/globus/transfer" />
+    </target>
+
+    <target name="stubs" unless="stubs.present" depends="init">
+
+        <!-- merge specific mappings w/ defaults -->
+        <property name="mapping.dst" value="${build.dir}/NStoPkg.properties"/>
+        <ant antfile="${build.stubs}" target="mergePackageMapping"/>
+
+        <ant antfile="${build.stubs}" target="generateStubs">
+            <property name="source.stubs.dir" 
+            location="${schema.src}"/>
+            <property name="target.stubs.dir" location="${stubs.src}"/>
+            <property name="wsdl.file" value="transfer_service.wsdl"/>
+            <property name="mapping.file" value="${mapping.dst}"/>
+        </ant>
+
+    </target>
+
+    <target name="compileStubs" depends="stubs">
+        <javac srcdir="${stubs.src}" destdir="${stubs.dest}"
+            debug="${java.debug}">
+            <include name="**/*.java"/>
+            <classpath>
+                <fileset dir="${abs.deploy.dir}/lib">
+                    <include name="*.jar"/>
+                    <exclude name="${stubs.jar.name}"/>
+               </fileset>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="compile" depends="compileStubs"/>
+
+    <target name="jarStubs" depends="compileStubs">
+        <jar destfile="${build.lib.dir}/${stubs.jar.name}"
+            basedir="${stubs.dest}"/>
+    </target>
+
+    <target name="jar" depends="compile, jarStubs"/>
+
+    <target name="dist" depends="jar">
+        <ant antfile="${build.packages}" target="makeGar">
+            <reference refid="${garjars.id}"/>
+            <reference refid="${garshare.id}"/>
+        </ant>
+    </target>
+
+    <target name="clean">
+        <delete failonerror="false" dir="tmp"/>
+        <delete failonerror="false" dir="${build.dir}"/>
+        <delete failonerror="false" file="${gar.name}"/>
+    </target>
+
+    <target name="deploy" depends="dist">
+        <ant antfile="${build.packages}" target="deployGar">
+            <property name="gar.id" value="${package.name}"/>
+        </ant>
+    </target>
+
+    <target name="undeploy">
+        <ant antfile="${build.packages}" target="undeployGar">
+            <property name="gar.id" value="${package.name}"/>
+        </ant>
+    </target>
+
+    <target name="all" depends="deploy"/>
+
+</project>

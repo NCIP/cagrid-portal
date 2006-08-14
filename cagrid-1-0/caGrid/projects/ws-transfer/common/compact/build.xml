@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+
+<project default="all" basedir=".">
+
+    <!-- Build file to generate bindings for ws-transfer service -->
+
+    <!-- Get defined properties -->
+    <property environment="env"/>
+    <property file="build.properties"/>
+    <property file="${user.home}/build.properties"/>
+
+    <!-- get install location -->
+    <property name="env.GLOBUS_LOCATION" value="../../../../install"/>
+    <property name="deploy.dir" location="${env.GLOBUS_LOCATION}"/>
+    <property name="abs.deploy.dir" location="${deploy.dir}"/>
+
+    <property name="schema.src" location="${abs.deploy.dir}/share/schema"/>
+
+    <property name="build.dir"  location="build"/>
+    <property name="transfer.build.dir"  
+        location="${build.dir}/transferService"/>
+
+    <!-- Refer to standard build files from deployment -->
+    <property name="build.stubs" location=
+        "${abs.deploy.dir}/share/globus_wsrf_tools/build-stubs.xml"/>
+
+    <property name="schema.dest" location="../schema"/>
+    <property name="transfer.schema.dest" 
+        location="../schema/transferService"/>
+
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+
+        <copy toDir="${build.dir}">
+            <fileset dir=".">
+               <include name="transferService/**/*"/>
+            </fileset>
+            <fileset dir="${schema.src}" casesensitive="yes">
+                <include name="wsrf/**/*"/>
+                <include name="ws/**/*"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="generateBindings" depends="init">
+
+        <ant antfile="${build.stubs}" target="generateBinding">
+            <property name="source.binding.dir" 
+                value="${transfer.build.dir}"/>
+            <property name="target.binding.dir" 
+                value="${transfer.build.dir}"/>
+            <property name="porttype.wsdl" 
+                value="transfer_port_type.wsdl"/>
+            <property name="binding.root" value="transfer"/>
+        </ant>
+
+    </target>
+
+    <target name="copySchema" depends="generateBindings">
+       <copy toDir="${transfer.schema.dest}">
+           <fileset dir="${transfer.build.dir}"/>
+       </copy>
+    </target>
+
+    <target name="all" depends="copySchema"/>
+
+    <target name="clean">
+        <delete failonerror="false" dir="${build.dir}"/>
+    </target>
+</project>

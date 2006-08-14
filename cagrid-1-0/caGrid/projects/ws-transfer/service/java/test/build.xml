@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+
+<project default="all" basedir=".">
+
+    <!-- package name for this gar -->
+    <property name="package.name" value="globus_transfer_test"/>
+
+    <!-- Values redundant from share build file -->
+    <property environment="env"/>
+
+    <property name="java.debug" value="on"/>
+    <property name="java.deprecation" value="true"/>
+
+    <property name="env.GLOBUS_LOCATION" value="../../../../../install"/>
+    <property name="deploy.dir" location="${env.GLOBUS_LOCATION}"/>
+    <property name="abs.deploy.dir" location="${deploy.dir}"/>
+
+    <property name="junit.jvmarg" value="-Dignore" />
+
+    <property name="test.server.url" value="http://localhost:8080/wsrf/services/"/>
+    <property name="secure.test.server.url" value="https://localhost:8443/wsrf/services/"/>
+
+    <!-- Refer to standard build files for deployment -->
+    <property name="build.packages" location=
+        "${abs.deploy.dir}/share/globus_wsrf_common/build-packages.xml"/>
+
+    <property name="test.reports.dir" value="test-reports"/>
+
+    <property name="src.dir"  location="src"/>
+
+    <property name="jar.name" value="${package.name}.jar"/>
+    <property name="gar.name" value="${package.name}.gar"/>
+
+    <!-- Directories created on build -->
+    <property name="build.dir"  location="build"/>
+    <property name="build.dest" location="build/classes"/>
+    <property name="build.lib.dir" location="build/lib"/>
+
+    <property name="garjars.id" value="garjars"/>
+    <fileset dir="${build.lib.dir}" id="garjars"/>
+
+    <!-- Initialize stuff -->
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dest}"/>
+        <mkdir dir="${build.lib.dir}"/>
+    </target>
+
+    <!-- Class path with no local lib directory -->
+    <path id="classpath">
+         <fileset dir="${abs.deploy.dir}/lib">
+              <include name="*.jar"/>
+         </fileset>
+    </path>
+
+    <!-- Compile -->
+    <target name="compile" depends="init">
+	<copy todir="${build.dest}" >
+	      <fileset dir="src" includes="**/*.properties" />
+	      <fileset dir="src" includes="**/*.xml" />
+	</copy>
+        <javac srcdir="${src.dir}" destdir="${build.dest}"
+            debug="${java.debug}" deprecation="${java.deprecation}"
+            classpathref="classpath"> 
+            <include name="**/*.java"/>
+            <exclude name="**integratedTest/*.java"/>
+        </javac>
+    </target>
+
+    <!-- Compile -->
+    <target name="compileInt" depends="init">
+	<copy todir="${build.dest}" >
+	      <fileset dir="src" includes="**/*.properties" />
+	      <fileset dir="src" includes="**/*.xml" />
+	</copy>
+        <javac srcdir="${src.dir}" destdir="${build.dest}"
+            debug="${java.debug}" deprecation="${java.deprecation}"
+            classpathref="classpath"> 
+            <include name="**/*.java"/>
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="${build.lib.dir}/${jar.name}"
+            basedir="${build.dest}"/>
+    </target>
+
+    <target name="jarInt" depends="compileInt">
+        <jar destfile="${build.lib.dir}/${jar.name}"
+            basedir="${build.dest}"/>
+    </target>
+
+    <target name="dist" depends="jar">
+        <ant antfile="${build.packages}" target="makeGar">
+            <reference refid="${garjars.id}"/>
+        </ant>
+    </target>
+
+    <target name="distInt" depends="jar">
+        <ant antfile="${build.packages}" target="makeGar">
+            <reference refid="${garjars.id}"/>
+        </ant>
+    </target>
+
+    <target name="deploy" depends="dist">
+        <ant antfile="${build.packages}" target="deployGar">
+            <property name="gar.id" value="${package.name}"/>
+        </ant>
+    </target>
+
+    <target name="deployInt" depends="distInt">
+        <ant antfile="${build.packages}" target="deployGar">
+            <property name="gar.id" value="${package.name}"/>
+        </ant>
+    </target>
+
+    <target name="undeploy">
+        <ant antfile="${build.packages}" target="undeployGar">
+            <property name="gar.id" value="${package.name}"/>
+        </ant>
+    </target>
+
+
+    <target name="clean">
+        <delete dir="tmp"/>
+        <delete dir="${build.dir}"/>
+        <delete file="${gar.name}"/>
+        <delete failonerror="false" dir="${test.reports.dir}"/>
+    </target>
+
+    <target name="all" depends="deploy"/>
+
+    <target name="test" depends="compile">
+      <property name="server.arg" value="-Dignore" />
+      <antcall target="runTests"/>
+    </target>
+
+    <target name="runTests">
+         <mkdir dir="${test.reports.dir}"/>
+         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" 
+              fork="yes">
+              <classpath>
+                   <pathelement location="${abs.deploy.dir}"/>
+                   <fileset dir="${abs.deploy.dir}/lib">
+                        <include name="*.jar"/>
+                   </fileset>
+              </classpath>
+              <formatter type="xml" />
+              <batchtest todir="${test.reports.dir}">
+                  <fileset dir="${build.dir}/classes">
+                       <include 
+                            name="**/PackageTests.class"/>
+                  </fileset>
+              </batchtest>
+        <jvmarg value="-Djava.endorsed.dirs=${deploy.dir}/endorsed"/>
+        <jvmarg value="-Dorg.globus.wsrf.container.server.id=${server.id}"/>
+        <jvmarg line="${server.arg}" />
+        <jvmarg line="${junit.jvmarg}" />
+        <sysproperty key="GLOBUS_LOCATION" value="${deploy.dir}"/>
+         </junit>
+    </target>
+
+    <target name="integratedTest" depends="compileInt">
+      <property name="server.arg" value="-Dignore" />
+      <antcall target="runIntegratedTest"/>
+    </target>
+
+    <target name="runIntegratedTest">
+         <mkdir dir="${test.reports.dir}"/>
+         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" 
+              fork="yes">
+              <classpath>
+                   <pathelement location="${abs.deploy.dir}"/>
+                   <fileset dir="${abs.deploy.dir}/lib">
+                        <include name="*.jar"/>
+                   </fileset>
+              </classpath>
+              <formatter type="xml" />
+              <batchtest todir="${test.reports.dir}">
+                  <fileset dir="${build.dir}/classes">
+                       <include 
+                            name="**/IntegratedTests.class"/>
+                  </fileset>
+              </batchtest>
+        <jvmarg value="-Djava.endorsed.dirs=${deploy.dir}/endorsed"/>
+        <jvmarg value="-Dorg.globus.wsrf.container.server.id=${server.id}"/>
+        <jvmarg line="${server.arg}" />
+        <jvmarg line="${junit.jvmarg}" />
+        <sysproperty key="GLOBUS_LOCATION" value="${deploy.dir}"/>
+         </junit>
+    </target>
+
+</project>

@@ -1,0 +1,86 @@
+Notes:
+=====
+- Building against GT 4.0.2 tag
+
+Issues:
+=======
+
+1) WS Addressing, namespace is different from specification, for
+tooling purposes.
+2) Latest specification has a different ns for the schema block in
+WSDL, but elements that use that are not qualified with that namespace
+(WSDL is invalid).
+3) Changed resolve to anyURI rather than anyXML
+
+Questions
+==========
+
+- Where should the code live ?
+- Package names for the code ?
+
+Resolution Service Prototype
+============================
+
+Resolution service provides functionality to resolve an Endpoint
+Identifier (EPI) into a corresponding EPR. This implementaion of the
+service only supports the "resolve" method in the "Naming" porttype
+specified in the ws-naming specification.
+
+The service can be configured to resolve EPI of any service (or
+resource). But a given deployment of resolution service can only
+resolve EPIs for onex service. The address and the resource key QName
+of the service to reolve EPIs for needs to be configured.
+
+The resolution service interacts with the data application to
+determine if the said EPI has a mapping. The resolution service allows
+for the data application to register an object of the
+org.globus.resolution.DataServiceInterface and uses the interface to
+verify exisitence of the EPI.
+
+The service requires the client to authenticate when invoking the
+resolve method. The distingushed name of the client is also passed as
+parameter to the DataServiceInterface.
+
+Implementaion Details
+======================
+
+The service code is checked into playground/java/ws-naming.
+
+(A) To deploy the service:
+--------------------------
+
+(1) set GLOBUS_LOCATION=/path/to/GT/4.0.2/install
+(2) cd playground/java/ws-naming
+(3) ant deploy
+(4) ant javadocs (to generate java docs)
+
+(B) To configure the service:
+------------------------------
+
+(1) Modify
+$GLOBUS_LOCATION/etc/globus_resolution_service/deploy-jndi-config.xml
+
+        (1.1) Set <value> of parameter with name "resolvedKeyQName" to
+        the the Qname of the key of the service whose EPR is required.
+
+        (1.2) Set <value> of parameter with name "address" to the URL
+        of the service to whose EPR the EPI is being resolved to.
+
+(C) To test the service:
+------------------------
+
+(0) Valid credentials are required to test the service
+(1) set GLOBUS_LOCATION=/path/to/GT/4.0.2/install
+(2) cd playground/java/ws-naming/service/java/test
+(3) ant test
+
+(D) To integrate with Data Application
+---------------------------------------
+
+(1) Implement the org.globus.resolution.DataServiceInterface.
+(2) Create an instance of (1) and register with service. Following API
+can be used to do that:
+        org.globus.resolution.util.ResolutionUtil.registerDataService()
+(3) Note that the Resolution service and the Data Application should
+be in same JVM.
+
