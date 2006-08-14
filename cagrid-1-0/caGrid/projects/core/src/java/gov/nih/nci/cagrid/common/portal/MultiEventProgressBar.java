@@ -65,8 +65,8 @@ public class MultiEventProgressBar extends JProgressBar {
 		Integer bid = new Integer(eventID);
 		events.remove(bid);
 		if (events.size() == 0) {
-			this.setVisible(!this.hideWhenComplete);
 			updateProgress(false, message);
+			this.setVisible(!this.hideWhenComplete);
 		} else {
 			Integer min = null;
 			Iterator itr = events.keySet().iterator();
@@ -79,6 +79,13 @@ public class MultiEventProgressBar extends JProgressBar {
 			String s = (String) events.get(min);
 			updateProgress(true, s);
 		}
+	}
+
+
+	public synchronized void stopAll(String message) {
+		events.clear();
+		updateProgress(false, message);
+		this.setVisible(!this.hideWhenComplete);
 	}
 
 
