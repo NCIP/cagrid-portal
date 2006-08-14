@@ -1,1 +1,2 @@
 removed source\documents\caBIG_IdentifierSvcFramework_Architecture_060506_fs.doc as it was not in CVS as binary (and belongs elsewhere in caGrid)
+added .cvsignores
