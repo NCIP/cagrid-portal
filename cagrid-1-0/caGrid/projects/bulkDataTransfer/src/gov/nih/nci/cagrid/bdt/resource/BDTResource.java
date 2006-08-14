@@ -22,16 +22,16 @@ public class BDTResource implements Resource, ResourceIdentifier, ResourceLifeti
 	private Calendar terminationTime;
 
 	// one of the service specific "values" of your resource
-	private String stemName;
+	private String bdtName;
 
 
 	public String getStemName() {
-		return this.stemName;
+		return this.bdtName;
 	}
 
 
-	public void setStemName(String stemName) {
-		this.stemName = stemName;
+	public void setStemName(String bdtName) {
+		this.bdtName = bdtName;
 	}
 
 

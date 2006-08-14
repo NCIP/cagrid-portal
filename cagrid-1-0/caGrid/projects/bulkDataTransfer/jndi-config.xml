@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
+    <service name="SERVICE-INSTANCE-PREFIX/BDTHandlerService">
+        <resource name="home" type="gov.nih.nci.cagrid.bdt.resource.BDTResourceHome">
+            <resourceParams>
+                <parameter>
+                    <name>resourceClass</name>
+                    <value>gov.nih.nci.cagrid.bdt.resource.BDTResource</value>
+                </parameter>
+                <parameter>
+                    <name>resourceKeyType</name>
+                    <value>java.lang.String</value>
+                </parameter>
+                <parameter>
+                    <name>resourceKeyName</name>
+                    <value>{http://cagrid.nci.nih.gov/BDTHandlerService}BDTResourceKey</value>
+                </parameter>
+                <parameter>
+                    <name>factory</name>
+                    <value>org.globus.wsrf.jndi.BeanFactory</value>
+                </parameter>
+            </resourceParams>
+        </resource>
+    </service>
+</jndiConfig>
+
