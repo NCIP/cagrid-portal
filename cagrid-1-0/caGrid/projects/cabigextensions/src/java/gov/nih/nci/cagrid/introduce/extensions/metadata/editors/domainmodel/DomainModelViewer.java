@@ -132,7 +132,6 @@ public class DomainModelViewer extends JPanel {
 							System.err.println("Source ID:" + sourceEdge.getUMLClassReference().getRefid());
 							System.err.println("Target ID:" + targetEdge.getUMLClassReference().getRefid());
 						} else {
-							System.err.println("processing");
 							getUMLDiagram().addAssociation(source, target, sourceEdge.getRoleName(),
 								sourceEdge.getMinCardinality() + ".." + sourceEdge.getMaxCardinality(),
 								targetEdge.getRoleName(),
