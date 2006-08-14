@@ -39,6 +39,7 @@ import org.projectmobius.common.MobiusException;
  */
 public class WsEnumCreationPostProcessor implements CreationExtensionPostProcessor {
 	
+	public static final String ENUMERATION_PACKAGE_NAME = "org.xmlsoap.schemas.ws._2004._09.enumeration";
 	public static final String PORT_TYPE_NAME = "DataSource";
 	public static final String WS_ENUMERATION_URI = "http://schemas.xmlsoap.org/ws/2004/09/enumeration";
 
@@ -104,7 +105,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 			// fix the schema location on the namespace type
 			nsType.setLocation("."  + File.separator + "enumeration.xsd");
 			// change the package mapping
-			nsType.setPackageName("org.xmlsoap.schemas.ws._2004._09.enumeration");
+			nsType.setPackageName(ENUMERATION_PACKAGE_NAME);
 		} catch (MobiusException ex) {
 			throw new CreationExtensionException("Error creating namespace type from schema: " + ex.getMessage(), ex);
 		}
