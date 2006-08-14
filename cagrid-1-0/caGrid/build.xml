@@ -38,7 +38,7 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming" />
+	<property name="projects.list" value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
@@ -429,8 +429,15 @@
 	<!-- =============================================================== -->
 	<!-- CAGRID WS-NAMING:                                             	 -->
 	<!-- =============================================================== -->
-	<target name="build-ws-naming" depends="prepare" description="Builds caGrid WS-namingr components">
+	<target name="build-ws-naming" depends="prepare" description="Builds caGrid WS-naming components">
 		<ant dir="${projects.dir}/ws-naming" inheritAll="false" antfile="build.xml" target="deploy" />
+	</target>
+	
+	<!-- =============================================================== -->
+	<!-- CAGRID WS-HANDLESYSTEM:                                             	 -->
+	<!-- =============================================================== -->
+	<target name="build-ws-handlesystem" depends="prepare" description="Builds caGrid WS-handlesystem components">
+		<ant dir="${projects.dir}/ws-handlesystem" inheritAll="false" antfile="build.xml" target="build" />
 	</target>
 
 
