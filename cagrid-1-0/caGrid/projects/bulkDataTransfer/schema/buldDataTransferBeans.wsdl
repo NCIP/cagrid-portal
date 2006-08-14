@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="BulkDataTransfer" xmlns="http://schemas.xmlsoap.org/wsdl/" >
+	<import location="bulkDataTransfer.xsd"/>
+    <import location="bulkDataTransferMetadata.xsd"/>
+</definitions>
+

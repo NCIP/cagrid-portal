@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema targetNamespace="http://cagrid.nci.nih.gov/BulkDataTransfer"
+	xmlns:tns="http://cagrid.nci.nih.gov/BulkDataTransfer"
+	xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" blockDefault="#all">
+	<xs:import namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+		schemaLocation="addressing.xsd"/>
+	
+	<!-- BDTResultsHandler -->
+	<xs:element name="BDTResultsHandler">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Results" type="wsa:EndpointReferenceType" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- BDTResultsResource -->
+	<xs:element name="BDTResultsResource">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Results" minOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Result" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="identifier" type="xs:string"/>
+									<xs:attribute name="index" type="xs:integer"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="numberOfResults" type="xs:integer"/>
+						<xs:attribute name="timeCreated" type="xs:dateTime"/>
+						<xs:attribute name="identifier" type="xs:string"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>
