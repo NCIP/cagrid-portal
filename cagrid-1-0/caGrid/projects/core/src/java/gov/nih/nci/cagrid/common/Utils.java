@@ -206,6 +206,30 @@ public class Utils {
 		// writer.close();
 		writer.flush();
 	}
+	
+	
+	public static void serializeObject(Object obj, QName qname, Writer writer) throws Exception {
+		// derive a message element for the object
+		MessageElement element = (MessageElement) ObjectSerializer.toSOAPElement(obj, qname);
+		// create a message context
+		MessageContext messageContext = new MessageContext(new AxisServer());
+		messageContext.setEncodingStyle("");
+		messageContext.setProperty(AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+		// the following two properties prevent xsd types from appearing in
+		// every single element in the serialized XML
+		messageContext.setProperty(AxisEngine.PROP_EMIT_ALL_TYPES, Boolean.FALSE);
+		messageContext.setProperty(AxisEngine.PROP_SEND_XSI, Boolean.FALSE);
+
+		// create a serialization context to use the new message context
+		SerializationContext serializationContext = new SerializationContext(writer, messageContext);
+		serializationContext.setPretty(true);
+
+		// output the message element through the serialization context
+		element.output(serializationContext);
+		writer.write("\n");
+		// writer.close();
+		writer.flush();
+	}
 
 
 	/**
