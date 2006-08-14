@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import org.projectmobius.client.gme.ImportInfo;
+import org.projectmobius.common.MalformedNamespaceException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.common.gme.NoSuchSchemaException;
@@ -56,63 +57,81 @@ public class NamespaceUtils {
 		if (project != null) {
 			namespaceString = createNamespaceString(project, pack);
 			NamespaceType nsType = new NamespaceType();
-			try {
-				Namespace namespace = new Namespace(namespaceString);
-				List namespaceDomainList = gmeHandle.getNamespaceDomainList();
-				if (!namespaceDomainList.contains(namespace.getDomain())) {
-					// prompt for alternate
-					String alternativeDomain = (String) JOptionPane.showInputDialog(
-						PortalResourceManager.getInstance().getGridPortal(),
-						"The GME does not appear to contain schemas under the specified domain.\n"
-						+ "Select an alternative domain, or cancel if no viable option is available.\n"
-						+ "\nExpected domain: " + namespace.getDomain(), "Schema Location Error",
-						JOptionPane.ERROR_MESSAGE, null, namespaceDomainList.toArray(), null);
-					
-					if (alternativeDomain != null) {
-						namespace = new Namespace(namespace.getProtocol() + "://" + alternativeDomain + "/"
-							+ namespace.getName());
-					} else {
-						return null;
-					}
-				}
-				String schemaContents = null;
+			Namespace namespace = null;
+			do {
 				try {
-					schemaContents = getSchema(gmeHandle, namespace);
-				} catch (NoSuchSchemaException e) {
-					// prompt for alternate
-					List schemas = gmeHandle.getSchemaListForNamespaceDomain(namespace.getDomain());
-					Namespace alternativeSchema = (Namespace) JOptionPane.showInputDialog(
-						PortalResourceManager.getInstance().getGridPortal(),
-						"Unable to locate schema for the selected caDSR package.\n"
-						+ "This package may not have a published Schema."
-						+ "\nSelect an alternative Schema, or cancel.\n\nExpected schema: " + namespace.getName(),
-						"Schema Location Error", JOptionPane.ERROR_MESSAGE, null, schemas.toArray(), null);
-					
-					if (alternativeSchema != null) {
-						namespace = alternativeSchema;
-					} else {
-						return null;
+					namespace = new Namespace(namespaceString);
+				} catch (MalformedNamespaceException ex) {
+					// show error message
+					String[] error = {
+						namespaceString,
+						"could not be parsed as a namespace:",
+						ex.getMessage(),
+						"Specify a corrected namespace."
+					};
+					JOptionPane.showMessageDialog(PortalResourceManager.getInstance().getGridPortal(), 
+						error, "Malformed Namespace", JOptionPane.ERROR_MESSAGE);
+					// ask for a correct one
+					namespaceString = JOptionPane.showInputDialog(PortalResourceManager.getInstance().getGridPortal(),
+						"Specify Corrected Namespace", namespaceString);
+					if (namespaceString == null) {
+						// user canceled correcting namespace
+						throw new MalformedNamespaceException(ex.getMessage(), ex);
 					}
-					schemaContents = getSchema(gmeHandle, namespace);
 				}
+			} while (namespace == null);
+			List namespaceDomainList = gmeHandle.getNamespaceDomainList();
+			if (namespace == null || !namespaceDomainList.contains(namespace.getDomain())) {
+				// prompt for alternate
+				String alternativeDomain = (String) JOptionPane.showInputDialog(
+					PortalResourceManager.getInstance().getGridPortal(),
+					"The GME does not appear to contain schemas under the specified domain.\n"
+					+ "Select an alternative domain, or cancel if no viable option is available.\n"
+					+ "\nExpected domain: " + namespace.getDomain(), "Schema Location Error",
+					JOptionPane.ERROR_MESSAGE, null, namespaceDomainList.toArray(), null);
 				
-				// set the package name
-				String packageName = CommonTools.getPackageName(namespace);
-				nsType.setPackageName(packageName);
-				
-				nsType.setNamespace(namespace.getRaw());
-				ImportInfo ii = new ImportInfo(namespace);
-				nsType.setLocation("./" + ii.getFileName());
-				
-				// popualte the schema elements
-				gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(
-					nsType, XMLUtilities.stringToDocument(schemaContents));
-				// write the schema and its imports to the filesystem
-				gmeHandle.cacheSchema(namespace, schemaDir);
-				return nsType;
-			} catch (Exception ex) {
-				ex.printStackTrace();
+				if (alternativeDomain != null) {
+					namespace = new Namespace(namespace.getProtocol() + "://" + alternativeDomain + "/"
+						+ namespace.getName());
+				} else {
+					return null;
+				}
 			}
+			String schemaContents = null;
+			try {
+				schemaContents = getSchema(gmeHandle, namespace);
+			} catch (NoSuchSchemaException e) {
+				// prompt for alternate
+				List schemas = gmeHandle.getSchemaListForNamespaceDomain(namespace.getDomain());
+				Namespace alternativeSchema = (Namespace) JOptionPane.showInputDialog(
+					PortalResourceManager.getInstance().getGridPortal(),
+					"Unable to locate schema for the selected caDSR package.\n"
+					+ "This package may not have a published Schema."
+					+ "\nSelect an alternative Schema, or cancel.\n\nExpected schema: " + namespace.getName(),
+					"Schema Location Error", JOptionPane.ERROR_MESSAGE, null, schemas.toArray(), null);
+				
+				if (alternativeSchema != null) {
+					namespace = alternativeSchema;
+				} else {
+					return null;
+				}
+				schemaContents = getSchema(gmeHandle, namespace);
+			}
+			
+			// set the package name
+			String packageName = CommonTools.getPackageName(namespace);
+			nsType.setPackageName(packageName);
+			
+			nsType.setNamespace(namespace.getRaw());
+			ImportInfo ii = new ImportInfo(namespace);
+			nsType.setLocation("./" + ii.getFileName());
+			
+			// popualte the schema elements
+			gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(
+				nsType, XMLUtilities.stringToDocument(schemaContents));
+			// write the schema and its imports to the filesystem
+			gmeHandle.cacheSchema(namespace, schemaDir);
+			return nsType;
 		}
 		return null;
 	}
