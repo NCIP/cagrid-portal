@@ -369,6 +369,24 @@
           </sequence>
         </complexType>
       </element>
+      <element name="DeleteGroupRequest">
+        <complexType>
+          <sequence>
+            <element name="group">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:GroupIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DeleteGroupResponse">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
       <element name="GridGrouperRuntimeFault">
         <complexType>
           <complexContent>
@@ -440,6 +458,13 @@
         </complexType>
       </element>
       <element name="GroupAddFault">
+        <complexType>
+          <complexContent>
+            <extension base="wsrbf:BaseFaultType" />
+          </complexContent>
+        </complexType>
+      </element>
+      <element name="GroupDeleteFault">
         <complexType>
           <complexContent>
             <extension base="wsrbf:BaseFaultType" />
@@ -544,6 +569,12 @@
   <message name="AddChildGroupResponse">
     <part name="parameters" element="tns:AddChildGroupResponse" />
   </message>
+  <message name="DeleteGroupRequest">
+    <part name="parameters" element="tns:DeleteGroupRequest" />
+  </message>
+  <message name="DeleteGroupResponse">
+    <part name="parameters" element="tns:DeleteGroupResponse" />
+  </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="tns:GridGrouperRuntimeFault" />
   </message>
@@ -576,6 +607,9 @@
   </message>
   <message name="GroupAddFaultFaultMessage">
     <part name="fault" element="tns:GroupAddFault" />
+  </message>
+  <message name="GroupDeleteFaultFaultMessage">
+    <part name="fault" element="tns:GroupDeleteFault" />
   </message>
   <!--============================================================
 
@@ -684,6 +718,14 @@
       <output message="tns:AddChildGroupResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/AddChildGroupResponse" />
       <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
       <fault name="GroupAddFault" message="tns:GroupAddFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupAddFaultFaultMessage" />
+      <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
+    </operation>
+    <operation name="deleteGroup">
+      <input message="tns:DeleteGroupRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/DeleteGroupRequest" />
+      <output message="tns:DeleteGroupResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/DeleteGroupResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
+      <fault name="GroupDeleteFault" message="tns:GroupDeleteFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupDeleteFaultFaultMessage" />
       <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">

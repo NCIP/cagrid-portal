@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 
 import edu.internet2.middleware.grouper.GrantPrivilegeException;
 import edu.internet2.middleware.grouper.Group;
+import edu.internet2.middleware.grouper.GroupDeleteException;
 import edu.internet2.middleware.grouper.GroupFinder;
 import edu.internet2.middleware.grouper.GroupNotFoundException;
 import edu.internet2.middleware.grouper.GrouperSession;
@@ -36,6 +37,7 @@ import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupAddFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.RevokePrivilegeFault;
@@ -864,7 +866,7 @@ public class GridGrouper {
 			session = GrouperSession.start(subject);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
 			return grouptoGroupDescriptor(grp);
-		} catch (GroupNotFoundFault e) {
+		} catch (GroupNotFoundException e) {
 			GroupNotFoundFault fault = new GroupNotFoundFault();
 			fault.setFaultString("The group, " + group.getGroupName()
 					+ "was not found.");
@@ -890,6 +892,58 @@ public class GridGrouper {
 				}
 			}
 		}
+	}
+
+	public void deleteGroup(String gridIdentity, GroupIdentifier group)
+			throws GridGrouperRuntimeFault, GroupNotFoundFault,
+			GroupDeleteFault, InsufficientPrivilegeFault {
+		GrouperSession session = null;
+		try {
+			Subject subject = SubjectUtils.getSubject(gridIdentity);
+			session = GrouperSession.start(subject);
+			Group grp = GroupFinder.findByName(session, group.getGroupName());
+			grp.delete();
+		} catch (GroupNotFoundException e) {
+			GroupNotFoundFault fault = new GroupNotFoundFault();
+			fault.setFaultString("The group, " + group.getGroupName()
+					+ "was not found.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GroupNotFoundFault) helper.getFault();
+			throw fault;
+		} catch (GroupDeleteException e) {
+			GroupDeleteFault fault = new GroupDeleteFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GroupDeleteFault) helper.getFault();
+			throw fault;
+		} catch (InsufficientPrivilegeException e) {
+			InsufficientPrivilegeFault fault = new InsufficientPrivilegeFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (InsufficientPrivilegeFault) helper.getFault();
+			throw fault;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault.setFaultString("Error occurred deleting the group "
+					+ group.getGroupName() + ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		} finally {
+			if (session == null) {
+				try {
+					session.stop();
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
+
 	}
 
 	public Group getAdminGroup() {

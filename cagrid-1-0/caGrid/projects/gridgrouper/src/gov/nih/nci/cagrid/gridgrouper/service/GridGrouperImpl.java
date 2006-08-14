@@ -209,4 +209,14 @@ public class GridGrouperImpl {
 				displayExtension);
 	}
 
+	public void deleteGroup(
+			gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group)
+			throws RemoteException,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
+		gridGrouper.deleteGroup(getCallerIdentity(), group);
+	}
+
 }

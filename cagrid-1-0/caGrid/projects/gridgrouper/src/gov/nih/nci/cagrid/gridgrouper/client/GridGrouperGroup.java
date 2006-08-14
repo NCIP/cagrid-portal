@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
 import edu.internet2.middleware.grouper.GroupDeleteException;
+import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
@@ -8,6 +9,9 @@ import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Group;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 
 import java.util.Date;
 
@@ -87,8 +91,6 @@ public class GridGrouperGroup extends GridGrouperObject implements Group {
 		return des.getUUID();
 	}
 
-	
-
 	public String toString() {
 		return new ToStringBuilder(this)
 				.append("displayName", getDisplayName()).append("name",
@@ -97,13 +99,25 @@ public class GridGrouperGroup extends GridGrouperObject implements Group {
 				.toString();
 	}
 
-	
-	public GridGrouper getGridGrouper(){
+	public GridGrouper getGridGrouper() {
 		return gridGrouper;
 	}
 
-	public void delete() throws GroupDeleteException, InsufficientPrivilegeException {
-		//TODO: Implement this
+	public void delete() throws GroupDeleteException,
+			InsufficientPrivilegeException {
+		try {
+			gridGrouper.getClient().deleteGroup(getGroupIdentifier());
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (GroupDeleteFault f) {
+			throw new GroupDeleteException(f.getFaultString());
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
 	}
-	
+
 }
