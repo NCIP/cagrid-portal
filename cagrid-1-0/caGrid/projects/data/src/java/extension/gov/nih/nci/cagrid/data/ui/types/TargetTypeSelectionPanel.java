@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.ui.types;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
+import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.PromptButtonDialog;
@@ -66,7 +67,7 @@ import org.projectmobius.portal.PortalResourceManager;
  */
 public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
-	private DomainBrowserPanel domainBrowserPanel = null;
+	private CaDSRBrowserPanel domainBrowserPanel = null;
 	private TargetTypesTree typesTree = null;
 	private JScrollPane typesTreeScrollPane = null;
 	private DataServiceTypesTable typesTable = null;
@@ -110,9 +111,9 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	}
 	
 	
-	private DomainBrowserPanel getDomainBrowserPanel() {
+	private CaDSRBrowserPanel getDomainBrowserPanel() {
 		if (domainBrowserPanel == null) {
-			domainBrowserPanel = new DomainBrowserPanel(true, false);
+			domainBrowserPanel = new CaDSRBrowserPanel(true, false);
 			String url = null;
 			MessageElement cadsrMessageElement = ExtensionTools.getExtensionDataElement(
 				getExtensionTypeExtensionData(), DataServiceConstants.CADSR_ELEMENT_NAME);
@@ -122,11 +123,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				// url of the cadsr service
 				url = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_URL_ATTRIB);
 				
-				// configure selected items in the cadsr panel
-				domainBrowserPanel.setDefaultCaDSRURL(url);
-				domainBrowserPanel.getCadsr().setText(url);
-				domainBrowserPanel.blockingCadsrRefresh();
-				
 				// project name and version
 				String projectName = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_NAME_ATTRIB);
 				String projectVersion = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_VERSION_ATTRIB);
@@ -135,37 +131,15 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				mostRecentProject = new Project();
 				mostRecentProject.setLongName(projectName);
 				mostRecentProject.setVersion(projectVersion);
-				
-				// last package name in the list
-				String lastPackageName = null;
-				List packages = cadsrElement.getChildren(DataServiceConstants.CADSR_PACKAGE_MAPPING);
-				if (packages != null && packages.size() != 0) {
-					lastPackageName = ((Element) packages.get(packages.size() - 1))
-						.getAttributeValue(DataServiceConstants.CADSR_PACKAGE_NAME);
-				}
-				
-				domainBrowserPanel.setSelectedProject(projectName, projectVersion);
-				if (lastPackageName != null) {
-					domainBrowserPanel.setSelectedPackage(lastPackageName);
-				}
 			} else {
 				// get the default caDSR url out of the extension config
 				url = ExtensionTools.getProperty(getExtensionDescription().getProperties(), "CADSR_URL");
-				if (url != null) {
-					domainBrowserPanel.setDefaultCaDSRURL(url);
-					domainBrowserPanel.getCadsr().setText(url);
-					Thread refreshment = new Thread() {
-						public void run() {
-							domainBrowserPanel.cadsrRefresh();
-						}
-					};
-					try {
-						refreshment.start();
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						PortalUtils.showErrorMessage("Error refreshing from caDSR", ex);
-					}
-				}
+			}
+			if (url != null) {
+				// configure selected items in the cadsr panel
+				domainBrowserPanel.setDefaultCaDSRURL(url);
+				domainBrowserPanel.getCadsr().setText(url);
+				domainBrowserPanel.discoverFromCaDSR();
 			}
 		}
 		return domainBrowserPanel;
