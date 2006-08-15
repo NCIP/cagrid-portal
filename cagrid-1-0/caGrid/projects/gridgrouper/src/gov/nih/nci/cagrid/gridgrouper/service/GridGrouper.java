@@ -240,6 +240,7 @@ public class GridGrouper {
 			}
 		}
 	}
+	
 
 	public StemDescriptor updateStemDescription(String gridIdentity,
 			StemIdentifier stemId, String description) throws RemoteException,

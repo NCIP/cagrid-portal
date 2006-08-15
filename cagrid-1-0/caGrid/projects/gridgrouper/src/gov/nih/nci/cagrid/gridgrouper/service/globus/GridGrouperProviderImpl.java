@@ -19,12 +19,6 @@ public class GridGrouperProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupResponse deleteGroup(gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
-		gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupResponse();
-		impl.deleteGroup(params.getGroup().getGroupIdentifier());
-		return boxedResult;
-	}
-
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse getStem(gov.nih.nci.cagrid.gridgrouper.stubs.GetStemRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse();
 		boxedResult.setStemDescriptor(impl.getStem(params.getStem().getStemIdentifier()));
@@ -112,6 +106,12 @@ public class GridGrouperProviderImpl{
 	public gov.nih.nci.cagrid.gridgrouper.stubs.AddChildGroupResponse addChildGroup(gov.nih.nci.cagrid.gridgrouper.stubs.AddChildGroupRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupAddFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.AddChildGroupResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.AddChildGroupResponse();
 		boxedResult.setGroupDescriptor(impl.addChildGroup(params.getStem().getStemIdentifier(),params.getExtension(),params.getDisplayExtension()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupResponse deleteGroup(gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupResponse();
+		impl.deleteGroup(params.getGroup().getGroupIdentifier());
 		return boxedResult;
 	}
 

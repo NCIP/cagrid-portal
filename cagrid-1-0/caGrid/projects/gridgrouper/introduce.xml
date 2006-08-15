@@ -7,6 +7,8 @@
    <ns2:SchemaElement type="SubjectIdentifier" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StemIdentifier" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StemPrivilege" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="StemUpdate" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GroupUpdate" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StemPrivilegeType" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">

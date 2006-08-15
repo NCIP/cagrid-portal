@@ -286,16 +286,6 @@ public class GridGrouperClient extends ServiceSecurityClient implements
 		}
 	}
 
-    public void deleteGroup(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"deleteGroup");
-        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupRequest();
-        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupRequestGroup();
-        groupContainer.setGroupIdentifier(group);
-        params.setGroup(groupContainer);
-        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupResponse boxedResult = portType.deleteGroup(params);
-      }
-    }
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
@@ -494,6 +484,16 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         params.setDisplayExtension(displayExtension);
         gov.nih.nci.cagrid.gridgrouper.stubs.AddChildGroupResponse boxedResult = portType.addChildGroup(params);
         return boxedResult.getGroupDescriptor();
+      }
+    }
+    public void deleteGroup(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"deleteGroup");
+        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupRequestGroup();
+        groupContainer.setGroupIdentifier(group);
+        params.setGroup(groupContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupResponse boxedResult = portType.deleteGroup(params);
       }
     }
 
