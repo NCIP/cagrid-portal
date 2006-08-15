@@ -6,15 +6,6 @@
 	<xs:import namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing"
 		schemaLocation="WS-Addressing.xsd"/>
 	
-	<!-- BDTResultsHandler -->
-	<xs:element name="BDTResultsHandler">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="Results" type="wsa:EndpointReferenceType" minOccurs="0"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	
 	<!-- BDTResultsResource -->
 	<xs:element name="BDTResultsResource">
 		<xs:complexType>
