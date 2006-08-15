@@ -95,14 +95,18 @@ public class TestGroups extends TestCase {
 			Subject subject = SubjectUtils.getSubject(SUPER_USER);
 			GrouperSession session = GrouperSession.start(subject);
 			Group group = GroupFinder.findByName(session, grp.getName());
-            grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grp), USER_A);
-		
+			grouper
+					.addMember(SUPER_USER, Utils.getGroupIdentifier(grp),
+							USER_A);
+
 			Group subGroup = GroupFinder.findByName(session, subgrp.getName());
-			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(subgrp), USER_B);
+			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(subgrp),
+					USER_B);
 
 			printMembers(group);
 			printMembers(subGroup);
-			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grp), subGroup.toSubject().getId());
+			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grp),
+					subGroup.toSubject().getId());
 			printMembers(group);
 
 		} catch (Exception e) {
@@ -112,7 +116,7 @@ public class TestGroups extends TestCase {
 
 	}
 
-	private void printMembers(Group group) throws Exception{
+	private void printMembers(Group group) throws Exception {
 		System.out.println();
 		System.out.println("All Members of " + group.getName());
 		System.out.println("-------------------------------------------------");
@@ -121,7 +125,8 @@ public class TestGroups extends TestCase {
 		Iterator itr = set.iterator();
 		while (itr.hasNext()) {
 			Member m = (Member) itr.next();
-			System.out.println(m.getSubject().getName());
+			System.out.println(m.getSubject().getName() + " - "
+					+ m.getSubject().getSource().getClass().getName());
 		}
 		set = null;
 		itr = null;

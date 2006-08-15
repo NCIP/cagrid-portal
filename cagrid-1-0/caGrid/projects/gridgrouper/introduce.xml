@@ -1,6 +1,7 @@
 <ns1:ServiceSkeleton introduceVersion=".9999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace location="./gridgrouper.xsd" namespace="http://cagrid.nci.nih.gov/1/GridGrouper" packageName="gov.nih.nci.cagrid.gridgrouper.bean" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="MemberDescriptor" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GroupIdentifier" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GroupDescriptor" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StemDescriptor" xsi:type="ns2:SchemaElementType"/>
@@ -10,6 +11,7 @@
    <ns2:SchemaElement type="StemUpdate" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GroupUpdate" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StemPrivilegeType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="MemberFilter" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
@@ -281,20 +283,31 @@
       <ns4:Exception name="MemberAddFault"/>
      </ns4:Exceptions>
     </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="getMembers" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns45:GroupIdentifier" isArray="false" name="group" xmlns:ns45="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns46:MemberFilter" isArray="false" name="filter" xmlns:ns46="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns47:MemberDescriptor" isArray="true" xmlns:ns47="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="GridGrouperRuntimeFault"/>
+      <ns4:Exception name="GroupNotFoundFault"/>
+     </ns4:Exceptions>
+    </ns4:Method>
    </ns4:Methods>
-   <ns45:ResourcePropertiesList xsi:type="ns45:ResourcePropertiesListType" xmlns:ns45="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
-   <ns46:ServiceSecurity xsi:type="ns46:ServiceSecurity" xmlns:ns46="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns46:SecuritySetting xsi:type="ns46:SecuritySetting">Custom</ns46:SecuritySetting>
-    <ns46:TransportLevelSecurity xsi:type="ns46:TransportLevelSecurity">
-     <ns46:CommunicationMethod xsi:type="ns46:CommunicationMethod">Privacy</ns46:CommunicationMethod>
-    </ns46:TransportLevelSecurity>
-    <ns46:RunAsMode xsi:type="ns46:RunAsMode">System</ns46:RunAsMode>
-    <ns46:AnonymousClients xsi:type="ns46:AnonymousCommunication">No</ns46:AnonymousClients>
-    <ns46:ServiceAuthorization xsi:type="ns46:ServiceAuthorization">
-     <ns46:NoAuthorization xsi:type="ns46:NoAuthorization"/>
-    </ns46:ServiceAuthorization>
-   </ns46:ServiceSecurity>
+   <ns48:ResourcePropertiesList xsi:type="ns48:ResourcePropertiesListType" xmlns:ns48="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns49:ServiceSecurity xsi:type="ns49:ServiceSecurity" xmlns:ns49="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns49:SecuritySetting xsi:type="ns49:SecuritySetting">Custom</ns49:SecuritySetting>
+    <ns49:TransportLevelSecurity xsi:type="ns49:TransportLevelSecurity">
+     <ns49:CommunicationMethod xsi:type="ns49:CommunicationMethod">Privacy</ns49:CommunicationMethod>
+    </ns49:TransportLevelSecurity>
+    <ns49:RunAsMode xsi:type="ns49:RunAsMode">System</ns49:RunAsMode>
+    <ns49:AnonymousClients xsi:type="ns49:AnonymousCommunication">No</ns49:AnonymousClients>
+    <ns49:ServiceAuthorization xsi:type="ns49:ServiceAuthorization">
+     <ns49:NoAuthorization xsi:type="ns49:NoAuthorization"/>
+    </ns49:ServiceAuthorization>
+   </ns49:ServiceSecurity>
   </ns3:Service>
  </ns3:Services>
- <ns47:Extensions xsi:type="ns47:ExtensionsType" xmlns:ns47="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns50:Extensions xsi:type="ns50:ExtensionsType" xmlns:ns50="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
 </ns1:ServiceSkeleton>

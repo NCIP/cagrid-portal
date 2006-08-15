@@ -230,4 +230,13 @@ public class GridGrouperImpl {
 		gridGrouper.addMember(getCallerIdentity(), group, subject);
 	}
 
+	public gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor[] getMembers(
+			gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,
+			gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter filter)
+			throws RemoteException,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+		return gridGrouper.getMembers(getCallerIdentity(), group, filter);
+	}
+
 }

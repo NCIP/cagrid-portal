@@ -3,6 +3,18 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:grouper="http://cagrid.nci.nih.gov/1/GridGrouper">
 	
+	
+	<xsd:element name="MemberDescriptor" type="grouper:MemberDescriptor" />
+	<xsd:complexType name="MemberDescriptor">
+		<xsd:sequence>
+			<xsd:element name="UUID" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="SubjectId" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="SubjectName" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="MemberType" minOccurs="1" maxOccurs="1" type="grouper:MemberType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	
 	<xsd:element name="GroupIdentifier" type="grouper:GroupIdentifier" />
 	<xsd:complexType name="GroupIdentifier">
 		<xsd:sequence>
@@ -92,4 +104,21 @@
    				<xsd:enumeration value="stem"/>	
   			</xsd:restriction>
  	  </xsd:simpleType>
+ 	  
+	  <xsd:simpleType name="MemberType">
+  			<xsd:restriction base="xsd:string">
+   				<xsd:enumeration value="GrouperGroup"/>
+   				<xsd:enumeration value="Grid"/>	
+   				<xsd:enumeration value="Other"/>	
+  			</xsd:restriction>
+ 	 </xsd:simpleType>
+ 	 
+ 	 <xsd:element name="MemberFilter" type="grouper:MemberFilter"/>
+ 	   <xsd:simpleType name="MemberFilter">
+  			<xsd:restriction base="xsd:string">
+   				<xsd:enumeration value="All"/>
+   				<xsd:enumeration value="ImmediateMembers"/>	
+   				<xsd:enumeration value="EffectiveMembers"/>	
+  			</xsd:restriction>
+ 	 </xsd:simpleType>
 </xsd:schema>

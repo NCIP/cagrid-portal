@@ -424,6 +424,33 @@
           <sequence />
         </complexType>
       </element>
+      <element name="GetMembersRequest">
+        <complexType>
+          <sequence>
+            <element name="group">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:GroupIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="filter">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:MemberFilter" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetMembersResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:MemberDescriptor" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="GridGrouperRuntimeFault">
         <complexType>
           <complexContent>
@@ -632,6 +659,12 @@
   <message name="AddMemberResponse">
     <part name="parameters" element="tns:AddMemberResponse" />
   </message>
+  <message name="GetMembersRequest">
+    <part name="parameters" element="tns:GetMembersRequest" />
+  </message>
+  <message name="GetMembersResponse">
+    <part name="parameters" element="tns:GetMembersResponse" />
+  </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="tns:GridGrouperRuntimeFault" />
   </message>
@@ -799,6 +832,12 @@
       <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
       <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
       <fault name="MemberAddFault" message="tns:MemberAddFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/MemberAddFaultFaultMessage" />
+    </operation>
+    <operation name="getMembers">
+      <input message="tns:GetMembersRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetMembersRequest" />
+      <output message="tns:GetMembersResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetMembersResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />
