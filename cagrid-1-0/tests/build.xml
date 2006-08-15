@@ -39,12 +39,12 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="echo,coretests" />
+	<property name="projects.list" value="echo,cqlprocessors,coretests" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects above -->
-	<property name="testable.projects.list" value="coretests" />
+	<property name="testable.projects.list" value="cqlprocessors,coretests" />
 
 	<!-- =============================================================== -->
 	<!-- Bootstrap the build by setting up the structure and building    -->
@@ -74,14 +74,27 @@
 	<!-- =============================================================== -->
 	<!-- echo                                                            -->
 	<!-- =============================================================== -->
-	<target name="build-echo" depends="prepare" description="Builds ntsec">
+	<target name="build-echo" depends="prepare" description="Builds echo">
 		<ant dir="${tests.projects.dir}/echo" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
+	<!-- =============================================================== -->
+	<!-- echo                                                            -->
+	<!-- =============================================================== -->
+	<target name="build-cqlprocessors" depends="prepare" description="Builds cqlprocessors">
+		<resolveDependencies extdir="${tests.projects.dir}/cqlprocessors/ext">
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="core.jars" />
+			<artifact refid="data.jars" />
+		</resolveDependencies>
+		<ant dir="${tests.projects.dir}/cqlprocessors" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 	<!-- =============================================================== -->
 	<!-- coretests                                                       -->
 	<!-- =============================================================== -->
-	<target name="build-coretests" depends="prepare" description="Builds ntsec">
+	<target name="build-coretests" depends="prepare" description="Builds coretests">
 		<resolveDependencies extdir="${tests.projects.dir}/coretests/ext">
 			<artifact refid="echo.jars" />
 			<artifact refid="dorian.jars" />
@@ -133,16 +146,19 @@
 		<echo>graph must be built in the main caGrid build</echo>
 	</target>
 	<target name="build-introduceServiceSecurity">
-		<echo>graph must be built in the main caGrid build</echo>
+		<echo>introduceServiceSecurity must be built in the main caGrid build</echo>
 	</target>
 	<target name="build-dorian">
-		<echo>graph must be built in the main caGrid build</echo>
+		<echo>dorian must be built in the main caGrid build</echo>
 	</target>
 	<target name="build-gridca">
-		<echo>graph must be built in the main caGrid build</echo>
+		<echo>gridca must be built in the main caGrid build</echo>
 	</target>
 	<target name="build-opensaml">
-		<echo>graph must be built in the main caGrid build</echo>
+		<echo>opensaml must be built in the main caGrid build</echo>
+	</target>
+	<target name="build-data">
+		<echo>data must be built in the main caGrid build</echo>
 	</target>
 
 	<!-- ============================================================== -->
