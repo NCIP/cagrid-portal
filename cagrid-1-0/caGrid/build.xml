@@ -38,7 +38,7 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem" />
+	<property name="projects.list" value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, bulkDataTransfer" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
@@ -403,6 +403,19 @@
 			<artifact refid="ws.enum.schemas"/>
 		</resolveDependencies>
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+	
+	<!-- =============================================================== -->
+	<!-- CAGRID BulkDataTransfer:                                        -->
+	<!-- =============================================================== -->
+	<target name="build-bulkDataTransfer" if="isJDK1.5" depends="prepare" description="Builds caGrid BulkDataTransfer Services components">
+		<resolveDependencies extdir="${projects.dir}/data/ext">
+			<artifact refid="introduce.jars" />
+			<artifact refid="introduce.resources" />
+			<artifact refid="ws.enum.jars"/>
+			<artifact refid="ws.enum.schemas"/>
+		</resolveDependencies>
+		<ant dir="${projects.dir}/bulkDataTransfer" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
