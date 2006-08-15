@@ -1,6 +1,7 @@
-http\://cagrid.nci.nih.gov/BDTHandler=gov.nih.nci.cagrid.bdt.stubs
-http\://cagrid.nci.nih.gov/BDTHandler/bindings=gov.nih.nci.cagrid.bdt.stubs.bindings
-http\://cagrid.nci.nih.gov/BDTHandler/service=gov.nih.nci.cagrid.bdt.stubs.service
+http\://cagrid.nci.nih.gov/BDTHandlerService=gov.nih.nci.cagrid.bdt.stubs
+http\://cagrid.nci.nih.gov/BDTHandlerService/bindings=gov.nih.nci.cagrid.bdt.stubs.bindings
+http\://cagrid.nci.nih.gov/BDTHandlerService/service=gov.nih.nci.cagrid.bdt.stubs.service
 http\://security.introduce.cagrid.nci.nih.gov/ServiceSecurity=gov.nih.nci.cagrid.introduce.security
 
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.metadata.security
+http\://cagrid.nci.nih.gov/BDTHandlerServiceReference=bdthandlerservicereference
