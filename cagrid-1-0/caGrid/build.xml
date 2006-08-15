@@ -401,6 +401,7 @@
 			<artifact refid="graph.jars" />
 			<artifact refid="ws.enum.jars"/>
 			<artifact refid="ws.enum.schemas"/>
+			<artifact refid="security.metadata.schemas"/>
 		</resolveDependencies>
 		<ant dir="${projects.dir}/data" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
