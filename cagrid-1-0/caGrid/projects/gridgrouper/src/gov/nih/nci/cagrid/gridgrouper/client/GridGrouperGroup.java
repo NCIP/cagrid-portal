@@ -1,16 +1,19 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
 import edu.internet2.middleware.grouper.GroupDeleteException;
+import edu.internet2.middleware.grouper.GroupModifyException;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Group;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GroupModifyFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 
 import java.util.Date;
@@ -111,6 +114,67 @@ public class GridGrouperGroup extends GridGrouperObject implements Group {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (GroupDeleteFault f) {
 			throw new GroupDeleteException(f.getFaultString());
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public void setDescription(String value) throws GroupModifyException,
+			InsufficientPrivilegeException {
+		try {
+			GroupUpdate update = new GroupUpdate();
+			update.setDescription(value);
+			this.des=gridGrouper.getClient().updateGroup(this.getGroupIdentifier(),
+					update);
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (GroupModifyFault f) {
+			throw new GroupModifyException(f.getFaultString());
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+
+	}
+
+	public void setDisplayExtension(String value) throws GroupModifyException,
+			InsufficientPrivilegeException {
+		try {
+			GroupUpdate update = new GroupUpdate();
+			update.setDisplayExtension(value);
+			this.des=gridGrouper.getClient().updateGroup(this.getGroupIdentifier(),
+					update);
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (GroupModifyFault f) {
+			throw new GroupModifyException(f.getFaultString());
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public void setExtension(String value) throws GroupModifyException,
+			InsufficientPrivilegeException {
+		try {
+			GroupUpdate update = new GroupUpdate();
+			update.setExtension(value);
+			this.des=gridGrouper.getClient().updateGroup(this.getGroupIdentifier(),
+					update);
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (GroupModifyFault f) {
+			throw new GroupModifyException(f.getFaultString());
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());

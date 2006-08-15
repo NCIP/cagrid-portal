@@ -75,10 +75,10 @@ public class ContentManager extends JTabbedPane {
 	}
 
 	public void addStem(StemTreeNode node) {
-		String stemName = node.getStem().getName();
+		String stemId = node.getStem().getUuid();
 		this.removeStem(node, true);
 		StemBrowser browser = new StemBrowser(node);
-		stems.put(stemName, browser);
+		stems.put(stemId, browser);
 		this.addTab(node.getStem().getDisplayExtension(), new CombinedIcon(
 				new ContentManagerTabCloseIcon(), GridGrouperLookAndFeel
 						.getStemIcon()), browser, null);
@@ -88,10 +88,10 @@ public class ContentManager extends JTabbedPane {
 	}
 
 	public void addGroup(GroupTreeNode node) {
-		String stemName = node.getGroup().getName();
+		String groupId = node.getGroup().getUuid();
 		this.removeGroup(node, true);
 		GroupBrowser browser = new GroupBrowser(node);
-		groups.put(stemName, browser);
+		groups.put(groupId, browser);
 		this.addTab(node.getGroup().getDisplayExtension(), new CombinedIcon(
 				new ContentManagerTabCloseIcon(), GridGrouperLookAndFeel
 						.getGroupIcon16x16()), browser, null);
@@ -105,6 +105,11 @@ public class ContentManager extends JTabbedPane {
 			StemBrowser sb = (StemBrowser) c;
 			removeStem(sb.getStemNode());
 		}
+		
+		if (c instanceof GroupBrowser) {
+			GroupBrowser sb = (GroupBrowser) c;
+			removeGroup(sb.getGroupNode());
+		}
 	}
 
 	public void removeGroup(GroupTreeNode node) {
@@ -112,9 +117,9 @@ public class ContentManager extends JTabbedPane {
 	}
 
 	private void removeGroup(GroupTreeNode node, boolean internal) {
-		String stemName = node.getGroup().getName();
-		if (groups.containsKey(stemName)) {
-			GroupBrowser sb = (GroupBrowser) groups.remove(stemName);
+		String groupId = node.getGroup().getUuid();
+		if (groups.containsKey(groupId)) {
+			GroupBrowser sb = (GroupBrowser) groups.remove(groupId);
 			this.remove(sb);
 		}
 		if (!internal) {
@@ -131,9 +136,9 @@ public class ContentManager extends JTabbedPane {
 	}
 
 	private void removeStem(StemTreeNode node, boolean internal) {
-		String stemName = node.getStem().getName();
-		if (stems.containsKey(stemName)) {
-			StemBrowser sb = (StemBrowser) stems.remove(stemName);
+		String stemId = node.getStem().getUuid();
+		if (stems.containsKey(stemId)) {
+			StemBrowser sb = (StemBrowser) stems.remove(stemId);
 			this.remove(sb);
 		}
 		if (!internal) {

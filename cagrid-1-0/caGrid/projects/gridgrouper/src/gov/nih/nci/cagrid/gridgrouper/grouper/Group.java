@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.gridgrouper.grouper;
 import java.util.Date;
 
 import edu.internet2.middleware.grouper.GroupDeleteException;
+import edu.internet2.middleware.grouper.GroupModifyException;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.subject.Subject;
@@ -52,7 +53,7 @@ public interface Group {
 	public void delete() throws GroupDeleteException,
 	InsufficientPrivilegeException;
 
-	/*public void setDescription(String value) throws GroupModifyException,
+	public void setDescription(String value) throws GroupModifyException,
 			InsufficientPrivilegeException;
 
 	public void setExtension(String value) throws GroupModifyException,
@@ -60,7 +61,7 @@ public interface Group {
 
 	public void setDisplayExtension(String value) throws GroupModifyException,
 			InsufficientPrivilegeException;
-
+/*
 	public Set getOptins() throws GrouperRuntimeException;
 
 	public Set getOptouts() throws GrouperRuntimeException;

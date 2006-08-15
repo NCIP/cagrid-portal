@@ -11,6 +11,7 @@ import edu.internet2.middleware.grouper.GrantPrivilegeException;
 import edu.internet2.middleware.grouper.Group;
 import edu.internet2.middleware.grouper.GroupDeleteException;
 import edu.internet2.middleware.grouper.GroupFinder;
+import edu.internet2.middleware.grouper.GroupModifyException;
 import edu.internet2.middleware.grouper.GroupNotFoundException;
 import edu.internet2.middleware.grouper.GrouperSession;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
@@ -29,6 +30,7 @@ import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege;
@@ -39,6 +41,7 @@ import gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupAddFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GroupModifyFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.RevokePrivilegeFault;
@@ -242,23 +245,27 @@ public class GridGrouper {
 		}
 	}
 
-	public StemDescriptor updateStem(String gridIdentity, StemIdentifier stem, StemUpdate update)
-			throws GridGrouperRuntimeFault, InsufficientPrivilegeFault,
-			StemModifyFault {
+	public StemDescriptor updateStem(String gridIdentity, StemIdentifier stem,
+			StemUpdate update) throws GridGrouperRuntimeFault,
+			InsufficientPrivilegeFault, StemModifyFault {
 		GrouperSession session = null;
 		try {
 			Subject subject = SubjectUtils.getSubject(gridIdentity);
 			session = GrouperSession.start(subject);
 			StemDescriptor des = null;
 			Stem target = StemFinder.findByName(session, stem.getStemName());
-			if((update.getDescription()!=null)&&(!update.getDescription().equals(target.getDescription()))){
+			if ((update.getDescription() != null)
+					&& (!update.getDescription()
+							.equals(target.getDescription()))) {
 				target.setDescription(update.getDescription());
 			}
-			
-			if((update.getDisplayExtension()!=null)&&(!update.getDisplayExtension().equals(target.getDisplayExtension()))){
+
+			if ((update.getDisplayExtension() != null)
+					&& (!update.getDisplayExtension().equals(
+							target.getDisplayExtension()))) {
 				target.setDisplayExtension(update.getDisplayExtension());
 			}
-			
+
 			des = stemtoStemDescriptor(target);
 			return des;
 		} catch (InsufficientPrivilegeException e) {
@@ -295,8 +302,6 @@ public class GridGrouper {
 		}
 
 	}
-
-	
 
 	public String[] getSubjectsWithStemPrivilege(String gridIdentity,
 			StemIdentifier stem, StemPrivilegeType privilege)
@@ -907,6 +912,73 @@ public class GridGrouper {
 			}
 		}
 
+	}
+
+	public GroupDescriptor updateGroup(String gridIdentity,
+			GroupIdentifier group, GroupUpdate update)
+			throws GridGrouperRuntimeFault, GroupNotFoundFault,
+			GroupModifyFault, InsufficientPrivilegeFault {
+		GrouperSession session = null;
+		try {
+			Subject subject = SubjectUtils.getSubject(gridIdentity);
+			session = GrouperSession.start(subject);
+			Group grp = GroupFinder.findByName(session, group.getGroupName());
+			if ((update.getDescription() != null)
+					&& (!update.getDescription().equals(grp.getDescription()))) {
+				grp.setDescription(update.getDescription());
+			}
+
+			if ((update.getExtension() != null)
+					&& (!update.getExtension().equals(grp.getExtension()))) {
+				grp.setExtension(update.getExtension());
+			}
+
+			if ((update.getDisplayExtension() != null)
+					&& (!update.getDisplayExtension().equals(
+							grp.getDisplayExtension()))) {
+				grp.setDisplayExtension(update.getDisplayExtension());
+			}
+			return grouptoGroupDescriptor(grp);
+		} catch (GroupNotFoundException e) {
+			GroupNotFoundFault fault = new GroupNotFoundFault();
+			fault.setFaultString("The group, " + group.getGroupName()
+					+ "was not found.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GroupNotFoundFault) helper.getFault();
+			throw fault;
+		} catch (GroupModifyException e) {
+			GroupModifyFault fault = new GroupModifyFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GroupModifyFault) helper.getFault();
+			throw fault;
+		} catch (InsufficientPrivilegeException e) {
+			InsufficientPrivilegeFault fault = new InsufficientPrivilegeFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (InsufficientPrivilegeFault) helper.getFault();
+			throw fault;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault.setFaultString("Error occurred updating the group "
+					+ group.getGroupName() + ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		} finally {
+			if (session == null) {
+				try {
+					session.stop();
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
 	}
 
 	public Group getAdminGroup() {

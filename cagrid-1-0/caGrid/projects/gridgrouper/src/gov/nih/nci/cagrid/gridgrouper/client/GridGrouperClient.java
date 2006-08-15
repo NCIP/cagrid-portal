@@ -286,6 +286,20 @@ public class GridGrouperClient extends ServiceSecurityClient implements
 		}
 	}
 
+    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor updateGroup(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate update) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupModifyFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"updateGroup");
+        gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequestGroup();
+        groupContainer.setGroupIdentifier(group);
+        params.setGroup(groupContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequestUpdate updateContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequestUpdate();
+        updateContainer.setGroupUpdate(update);
+        params.setUpdate(updateContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupResponse boxedResult = portType.updateGroup(params);
+        return boxedResult.getGroupDescriptor();
+      }
+    }
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");

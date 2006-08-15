@@ -588,7 +588,9 @@ public class GroupBrowser extends JPanel {
 			this.getUpdateGroup().setEnabled(true);
 		} else if (!getDescription().getText().equals(group.getDescription())) {
 			this.getUpdateGroup().setEnabled(true);
-		} else {
+		}else if (!getSystemExtension().getText().equals(group.getExtension())) {
+			this.getUpdateGroup().setEnabled(true);
+		}  else {
 			this.getUpdateGroup().setEnabled(false);
 		}
 	}
@@ -601,7 +603,12 @@ public class GroupBrowser extends JPanel {
 	private JTextField getSystemExtension() {
 		if (systemExtension == null) {
 			systemExtension = new JTextField();
-			systemExtension.setEditable(false);
+			systemExtension.setEditable(true);
+			systemExtension.addCaretListener(new javax.swing.event.CaretListener() {
+				public void caretUpdate(javax.swing.event.CaretEvent e) {
+					monitorUpdate();
+				}
+			});
 		}
 		return systemExtension;
 	}
@@ -647,7 +654,7 @@ public class GroupBrowser extends JPanel {
 			updateGroup = new JButton();
 			updateGroup.setText("Update Group");
 			updateGroup.setEnabled(false);
-			updateGroup.setIcon(GridGrouperLookAndFeel.getStemIcon());
+			updateGroup.setIcon(GridGrouperLookAndFeel.getGroupIcon22x22());
 			updateGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
@@ -670,12 +677,17 @@ public class GroupBrowser extends JPanel {
 
 	private void updateGroup() {
 		try {
+			
+			if (!getSystemExtension().getText().equals(
+					group.getExtension())) {
+				 group.setExtension(getSystemExtension().getText());
+			}
 			if (!getDisplayExtension().getText().equals(
 					group.getDisplayExtension())) {
-				// group.setDisplayExtension(getDisplayExtension().getText());
+				 group.setDisplayExtension(getDisplayExtension().getText());
 			}
 			if (!getDescription().getText().equals(group.getDescription())) {
-				// group.setDescription(getDescription().getText());
+				group.setDescription(getDescription().getText());
 			}
 			node.refresh();
 			setGroup();
@@ -737,5 +749,8 @@ public class GroupBrowser extends JPanel {
 			lastModifiedBy.setEditable(false);
 		}
 		return lastModifiedBy;
+	}
+	protected GroupTreeNode getGroupNode(){
+		return node;
 	}
 }
