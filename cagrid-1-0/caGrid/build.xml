@@ -410,7 +410,7 @@
 	<!-- CAGRID BulkDataTransfer:                                        -->
 	<!-- =============================================================== -->
 	<target name="build-bulkDataTransfer" if="isJDK1.5" depends="prepare" description="Builds caGrid BulkDataTransfer Services components">
-		<resolveDependencies extdir="${projects.dir}/data/ext">
+		<resolveDependencies extdir="${projects.dir}/bulkDataTransfer/ext">
 			<artifact refid="introduce.jars" />
 			<artifact refid="introduce.resources" />
 			<artifact refid="ws.enum.jars"/>

@@ -197,21 +197,6 @@
         </ant>
     </target>
     
-    <!-- Generate the stub source files -->
-    <!-- This is done with a GT4 tool -->
-    <target name="createBeans" depends="init">
-        <ant antfile="${build.stubs}" target="mergePackageMapping">
-            <property name="mapping.src" location="${metadata.dir}/namespace2package.mappings" />
-            <property name="mapping.dst" location="${build.dir}/namespace2package.mappings" />
-        </ant>
-        <ant antfile="${build.stubs}" target="generateStubs">
-            <property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
-            <property name="source.stubs.dir" location="${metadata.dir}" />
-            <property name="target.stubs.dir" location="${src.dir}" />
-            <property name="wsdl.file" value="bulkDataTransferBeans.wsdl" />
-            <property name="ns.excludes" value="${GT4.ns.excludes}" />
-        </ant>
-    </target>
 
     <!-- Generate the stub source files -->
     <!-- This is done with a GT4 tool -->
@@ -236,7 +221,7 @@
 
 
     <!-- Compile the implementation classes (service, resource, etc.) -->
-    <target name="compile" depends="createBeans, compileStubs" description="Compiles the service.">
+    <target name="compile" depends="compileStubs" description="Compiles the service.">
         <javac srcdir="${src.dir}" classpathref="service.build.classpath" includes="**" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
 
         <!-- Copy the source code, wsdd, properties, etc to the build dir for include in the jar -->
@@ -307,7 +292,6 @@
         <delete dir="tmp" />
         <delete dir="${build.dir}" />
         <delete file="${gar.name}" />
-        <delete dir="${metadata.beans.src.dir}"/>
     </target>
 
     <!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
