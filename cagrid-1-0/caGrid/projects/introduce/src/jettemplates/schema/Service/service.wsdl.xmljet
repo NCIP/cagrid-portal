@@ -198,6 +198,14 @@
     		}
   		}
       	%>
+      	     <element name="<%=service.getName()%>">
+        		<complexType>
+          			<sequence >
+            			<element ref="wsa:EndpointReference"></element>
+          			</sequence>
+        		</complexType>
+      		</element>
+      		
             <element name="<%=service.getName()%>ResourceProperties">
                 <complexType>
                     <sequence>
