@@ -250,7 +250,9 @@ public class SyncTools {
 
 		// before we actually process anything we must create the code and conf
 		// required for any new services which were added.....
+		
 		createNewServices(info);
+		
 
 		// STEP 3: generate a set of namespaces to not make classes/stubs for as
 		// the user specified them explicitly, then save them to the build
