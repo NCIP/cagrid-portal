@@ -202,6 +202,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JTextField outputMessageNameTextField = null;
 
+
 	public MethodViewer(MethodType method, SpecificServiceInformation info) {
 		this.info = info;
 		this.method = method;
@@ -408,11 +409,15 @@ public class MethodViewer extends GridPortalBaseFrame {
 								importInfo.setPortTypeName(getServiceNameTextField().getText());
 								importInfo.setPackageName(getPackageNameTextField().getText());
 								importInfo.setWsdlFile(getWsdlFileTextField().getText());
-								if(!getInputMessageNamespaceTextField().getText().equals("") && !getInputMessageNameTextField().getText().equals("")){
-									importInfo.setInputMessage(new QName(getInputMessageNamespaceTextField().getText(),getInputMessageNameTextField().getText()));
+								if (!getInputMessageNamespaceTextField().getText().equals("")
+									&& !getInputMessageNameTextField().getText().equals("")) {
+									importInfo.setInputMessage(new QName(getInputMessageNamespaceTextField().getText(),
+										getInputMessageNameTextField().getText()));
 								}
-								if(!getOutputMessageNamespaceTextField().getText().equals("") && !getOutputMessageNameTextField().getText().equals("")){
-									importInfo.setOutputMessage(new QName(getOutputMessageNamespaceTextField().getText(),getOutputMessageNameTextField().getText()));
+								if (!getOutputMessageNamespaceTextField().getText().equals("")
+									&& !getOutputMessageNameTextField().getText().equals("")) {
+									importInfo.setOutputMessage(new QName(getOutputMessageNamespaceTextField()
+										.getText(), getOutputMessageNameTextField().getText()));
 								}
 								method.setImportInformation(importInfo);
 							}
@@ -1447,59 +1452,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
 					if (e.getClickCount() == 2) {
-						// make sure the EPR namespace is in the nstypes list
-						// if not add it
-						if (CommonTools
-							.getNamespaceType(info.getNamespaces(), IntroduceConstants.WSADDRESING_NAMESPACE) == null) {
-							// add the addressing schema and it's schema
-							// elements.....
-							IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance()
-								.getResource(IntroducePortalConf.RESOURCE);
-							NamespaceType outputType = new NamespaceType();
-							outputType.setNamespace(IntroduceConstants.WSADDRESING_NAMESPACE);
-							outputType.setLocation(IntroduceConstants.WSADDRESING_LOCATION);
-
-							File schemasDir = new File(conf.getGlobusLocation() + File.separator + "share"
-								+ File.separator + "schema");
-							File foundSchema;
-							try {
-								foundSchema = CommonTools.findSchema(IntroduceConstants.WSADDRESING_NAMESPACE,
-									schemasDir);
-							} catch (Exception ex) {
-								JOptionPane.showMessageDialog(MethodViewer.this,
-									"Error: Please verify you Globus Location in the Preferences");
-								return;
-							}
-							try {
-								gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(
-									outputType, XMLUtilities.fileNameToDocument(foundSchema.getAbsolutePath()));
-							} catch (MobiusException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							} catch (Exception e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-							int currentLength = 0;
-							if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
-								currentLength = info.getNamespaces().getNamespace().length;
-							}
-							NamespaceType[] newNamespaceTypes = new NamespaceType[currentLength + 1];
-							if (currentLength > 0) {
-								System.arraycopy(info.getNamespaces().getNamespace(), 0, newNamespaceTypes, 0,
-									currentLength);
-							}
-							newNamespaceTypes[currentLength] = outputType;
-							info.getNamespaces().setNamespace(newNamespaceTypes);
-						}
 
 						// set the epr type as this outputType
 						MethodTypeOutput output = new MethodTypeOutput();
-						output.setQName(new QName(IntroduceConstants.WSADDRESING_NAMESPACE,
-							IntroduceConstants.WSADDRESING_EPR_TYPE));
-						output.setIsArray(false);
-						output.setIsClientHandle(new Boolean(true));
 						try {
+							output.setQName(new QName(getServicesTypeTable().getSelectedRowData().getNamespace()
+								+ "Reference", getServicesTypeTable().getSelectedRowData().getName() + "Reference"));
+							output.setIsArray(false);
+							output.setIsClientHandle(new Boolean(true));
 							output.setClientHandleClass(getServicesTypeTable().getSelectedRowData().getPackageName()
 								+ "." + "client" + "." + getServicesTypeTable().getSelectedRowData().getName()
 								+ "Client");
@@ -1630,13 +1590,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints44.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints44.gridy = 2;
 			gridBagConstraints44.weightx = 1.0;
-			gridBagConstraints44.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints44.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints44.gridx = 2;
 			GridBagConstraints gridBagConstraints43 = new GridBagConstraints();
 			gridBagConstraints43.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints43.gridy = 1;
 			gridBagConstraints43.weightx = 1.0;
-			gridBagConstraints43.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints43.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints43.gridx = 2;
 			GridBagConstraints gridBagConstraints42 = new GridBagConstraints();
 			gridBagConstraints42.gridx = 0;
@@ -1645,13 +1605,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints39.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints39.gridy = 2;
 			gridBagConstraints39.weightx = 1.0;
-			gridBagConstraints39.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints39.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints39.gridx = 1;
 			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
 			gridBagConstraints17.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints17.gridy = 1;
 			gridBagConstraints17.weightx = 1.0;
-			gridBagConstraints17.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints17.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints17.gridx = 1;
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -1711,9 +1671,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes messagesCheckBox	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes messagesCheckBox
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getMessagesCheckBox() {
 		if (messagesCheckBox == null) {
@@ -1721,7 +1681,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			messagesCheckBox.setText("customize message imports");
 			messagesCheckBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if(messagesCheckBox.isSelected()){
+					if (messagesCheckBox.isSelected()) {
 						getInputMessageNamespaceTextField().setEnabled(true);
 						getInputMessageNamespaceTextField().setEditable(true);
 						getInputMessageNameTextField().setEnabled(true);
@@ -1742,7 +1702,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					}
 				}
 			});
-			
+
 			getInputMessageNamespaceTextField().setEnabled(false);
 			getInputMessageNamespaceTextField().setEditable(false);
 			getInputMessageNameTextField().setEnabled(false);
@@ -1751,16 +1711,16 @@ public class MethodViewer extends GridPortalBaseFrame {
 			getOutputMessageNamespaceTextField().setEditable(false);
 			getOutputMessageNameTextField().setEnabled(false);
 			getOutputMessageNameTextField().setEditable(false);
-			
+
 		}
 		return messagesCheckBox;
 	}
 
 
 	/**
-	 * This method initializes inputMessageNameTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes inputMessageNameTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getInputMessageNameTextField() {
 		if (inputMessageNameTextField == null) {
@@ -1771,9 +1731,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 	/**
-	 * This method initializes outputMessageNameTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes outputMessageNameTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getOutputMessageNameTextField() {
 		if (outputMessageNameTextField == null) {

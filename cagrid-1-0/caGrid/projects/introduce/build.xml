@@ -127,6 +127,8 @@
 		<jetc destdir="${src.dir}/Introduce"
 			template="${templates.src.dir}/schema/Service/service.wsdl.xmljet"/>
 		<jetc destdir="${src.dir}/Introduce"
+			template="${templates.src.dir}/schema/Service/service.xsd.xmljet"/>
+		<jetc destdir="${src.dir}/Introduce"
 			template="${templates.src.dir}/docs/api/doxyfile.txtjet"/>
 		<jetc destdir="${src.dir}/Introduce"
 			template="${templates.src.dir}/src/client/ServiceClient.javajet"/>

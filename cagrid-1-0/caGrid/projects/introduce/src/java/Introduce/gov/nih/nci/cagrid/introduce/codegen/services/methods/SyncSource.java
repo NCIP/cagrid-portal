@@ -524,7 +524,7 @@ public class SyncSource {
 							methodString += lineStart + "return clientArray;\n";
 						} else {
 							methodString += "EndpointReferenceType ref = boxedResult.get";
-							methodString += TemplateUtils.upperCaseFirstCharacter(info.getType().getType()) + "();\n";
+							methodString += TemplateUtils.upperCaseFirstCharacter(info.getType().getType()) + "().getEndpointReference();\n";
 							methodString += lineStart + "return new " + returnTypeEl.getClientHandleClass()
 								+ "(ref);\n";
 						}

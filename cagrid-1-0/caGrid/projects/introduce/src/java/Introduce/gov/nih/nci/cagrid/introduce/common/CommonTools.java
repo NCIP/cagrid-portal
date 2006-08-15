@@ -332,9 +332,20 @@ public class CommonTools {
 	}
 
 
+	/**
+	 * This method will create a namespaceType fully populated with the schema elements.
+	 * It will default the location to the relative path from the file name i.e. "./filename"
+	 * Be sure to change the location if this file is not going to be in the toplevel schema/Servicename
+	 * directory of your service.
+	 * 
+	 * @param relativeFromDirectory
+	 * @param xsdFilenameFromRelativeDirectory
+	 * @return
+	 * @throws MobiusException
+	 */
 	public static NamespaceType createNamespaceType(String xsdFilename) throws MobiusException {
 		NamespaceType namespaceType = new NamespaceType();
-		namespaceType.setLocation(xsdFilename);
+		namespaceType.setLocation("./" + new File(xsdFilename).getName());
 		Document schemaDoc = XMLUtilities.fileNameToDocument(xsdFilename);
 
 		String rawNamespace = schemaDoc.getRootElement().getAttributeValue("targetNamespace");
