@@ -105,7 +105,6 @@ public class CreationViewer extends CreationViewerBaseComponent {
 	 */
 	private void initialize() {
 		this.setContentPane(getMainPanel());
-		this.setContentPane(getMainPanel());
 		this.setFrameIcon(IntroduceLookAndFeel.getCreateServiceIcon());
 		this.setTitle("Create Grid Service");
 	}
@@ -487,8 +486,8 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			addExtensionButton.setText("Add");
 			addExtensionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (!((String) serviceStyleSeletor.getSelectedItem()).equals("NONE")) {
-						getExtensionsTable().addRow((String) serviceStyleSeletor.getSelectedItem());
+					if (!((String) getServiceStyleSeletor().getSelectedItem()).equals("NONE")) {
+						getExtensionsTable().addRow((String) getServiceStyleSeletor().getSelectedItem());
 					}
 				}
 			});
