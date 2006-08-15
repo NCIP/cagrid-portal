@@ -48,6 +48,9 @@
    <ns2:SchemaElement type="ENTITIES" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="unsignedByte" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
+  <ns2:Namespace location="./BDTHandlerServiceReference.xsd" namespace="http://cagrid.nci.nih.gov/BDTHandlerServiceReference" packageName="bdthandlerservicereference" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="BDTHandlerServiceReference" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd\security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CommunicationMechanism" xsi:type="ns2:SchemaElementType"/>
@@ -60,7 +63,7 @@
   </ns2:Namespace>
  </ns2:Namespaces>
  <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns3:Service name="BDTHandlerService" namespace="http://cagrid.nci.nih.gov/BDTHandler" packageName="gov.nih.nci.cagrid.bdt" resourceFrameworkType="main" xsi:type="ns3:ServiceType">
+  <ns3:Service name="BDTHandlerService" namespace="http://cagrid.nci.nih.gov/BDTHandlerService" packageName="gov.nih.nci.cagrid.bdt" resourceFrameworkType="main" xsi:type="ns3:ServiceType">
    <ns4:Methods xsi:type="ns4:MethodsType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Methods">
     <ns4:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns4:MethodType">
      <ns4:Output qName="ns5:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
