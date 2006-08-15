@@ -16,7 +16,7 @@ import edu.internet2.middleware.subject.SubjectNotFoundException;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public interface Group {
+public interface GroupI {
 
 	// Property Methods
 	

@@ -12,10 +12,10 @@ import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
-import gov.nih.nci.cagrid.gridgrouper.grouper.Group;
-import gov.nih.nci.cagrid.gridgrouper.grouper.Grouper;
-import gov.nih.nci.cagrid.gridgrouper.grouper.NamingPrivilege;
-import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
+import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
+import gov.nih.nci.cagrid.gridgrouper.grouper.GrouperI;
+import gov.nih.nci.cagrid.gridgrouper.grouper.NamingPrivilegeI;
+import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault;
@@ -32,7 +32,7 @@ import org.globus.gsi.GlobusCredential;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GridGrouper extends GridGrouperObject implements Grouper {
+public class GridGrouper extends GridGrouperObject implements GrouperI {
 
 	public static final String ROOT_STEM = "";
 
@@ -51,14 +51,14 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 		}
 	}
 
-	public Stem getRootStem() throws StemNotFoundException {
+	public StemI getRootStem() throws StemNotFoundException {
 		return findStem(ROOT_STEM);
 	}
 
-	public Stem findStem(String name) throws StemNotFoundException {
+	public StemI findStem(String name) throws StemNotFoundException {
 		try {
 			StemDescriptor des = getClient().getStem(getStemIdentifier(name));
-			return new GridGrouperStem(this, des);
+			return new Stem(this, des);
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
 		} catch (GridGrouperRuntimeFault e) {
@@ -77,7 +77,7 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 			Set set = new HashSet();
 			if (children != null) {
 				for (int i = 0; i < children.length; i++) {
-					set.add(new GridGrouperStem(this, children[i]));
+					set.add(new Stem(this, children[i]));
 				}
 			}
 			return set;
@@ -90,12 +90,12 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 		}
 	}
 
-	public Stem getParentStem(String childStemName)
+	public StemI getParentStem(String childStemName)
 			throws StemNotFoundException {
 		try {
 			StemDescriptor des = getClient().getParentStem(
 					getStemIdentifier(childStemName));
-			return new GridGrouperStem(this, des);
+			return new Stem(this, des);
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
 		} catch (GridGrouperRuntimeFault e) {
@@ -115,7 +115,7 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 			Set set = new HashSet();
 			if (privs != null) {
 				for (int i = 0; i < privs.length; i++) {
-					NamingPrivilege priv = new GridGrouperNamingPrivilege(
+					NamingPrivilegeI priv = new NamingPrivilege(
 							privs[i].getStemName(), SubjectUtils
 									.getSubject(privs[i].getSubject()),
 							SubjectUtils.getSubject(privs[i].getOwner()),
@@ -180,11 +180,11 @@ public class GridGrouper extends GridGrouperObject implements Grouper {
 		}
 	}
 
-	public Group findGroup(String name) throws GroupNotFoundException {
+	public GroupI findGroup(String name) throws GroupNotFoundException {
 		try {
 			GroupDescriptor des = getClient()
 					.getGroup(getGroupIdentifier(name));
-			return new GridGrouperGroup(this, des);
+			return new Group(this, des);
 		} catch (GroupNotFoundFault f) {
 			throw new GroupNotFoundException(f.getFaultString());
 		}catch (GridGrouperRuntimeFault e) {

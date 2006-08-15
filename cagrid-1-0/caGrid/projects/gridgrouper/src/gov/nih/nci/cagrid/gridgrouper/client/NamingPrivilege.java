@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.gridgrouper.client;
 
 import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.subject.Subject;
-import gov.nih.nci.cagrid.gridgrouper.grouper.NamingPrivilege;
+import gov.nih.nci.cagrid.gridgrouper.grouper.NamingPrivilegeI;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -13,7 +13,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GridGrouperNamingPrivilege implements NamingPrivilege {
+public class NamingPrivilege implements NamingPrivilegeI {
 
 	// Private Instance Variables
 	private boolean isRevokable;
@@ -29,7 +29,7 @@ public class GridGrouperNamingPrivilege implements NamingPrivilege {
 	private Subject subj;
 
 	// Constructors
-	public GridGrouperNamingPrivilege(String stemName, Subject subj,
+	public NamingPrivilege(String stemName, Subject subj,
 			Subject owner, Privilege priv, String klass, boolean isRevokable) {
 		this.isRevokable = isRevokable;
 		this.className = klass;

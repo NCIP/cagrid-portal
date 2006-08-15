@@ -24,7 +24,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public interface Stem {
+public interface StemI {
 
 	// Stem Information
 
@@ -57,7 +57,7 @@ public interface Stem {
 	// Stem Actions
 	public Set getChildStems();
 
-	public Stem getParentStem() throws StemNotFoundException;
+	public StemI getParentStem() throws StemNotFoundException;
 
 	public void setDescription(String value)
 			throws InsufficientPrivilegeException, StemModifyException;
@@ -83,13 +83,13 @@ public interface Stem {
 			throws InsufficientPrivilegeException, RevokePrivilegeException,
 			SchemaException;
 
-	public Stem addChildStem(String extension, String displayExtension)
+	public StemI addChildStem(String extension, String displayExtension)
 			throws InsufficientPrivilegeException, StemAddException;
 
 	public void delete() throws InsufficientPrivilegeException,
 			StemDeleteException;
 
-	public Group addChildGroup(String extension, String displayExtension)
+	public GroupI addChildGroup(String extension, String displayExtension)
 			throws GroupAddException, InsufficientPrivilegeException;
 
 	public Set getChildGroups();

@@ -2,8 +2,8 @@ package gov.nih.nci.cagrid.gridgrouper.client;
 
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
-import gov.nih.nci.cagrid.gridgrouper.grouper.NamingPrivilege;
-import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
+import gov.nih.nci.cagrid.gridgrouper.grouper.NamingPrivilegeI;
+import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -16,7 +16,7 @@ public class GridGrouperExample {
 
 			GridGrouper grouper = new GridGrouper(
 					"https://localhost:8443/wsrf/services/cagrid/GridGrouper");
-			Stem stem = grouper.getRootStem();
+			StemI stem = grouper.getRootStem();
 			printStems(stem, "");
 
 			System.out.println();
@@ -41,7 +41,7 @@ public class GridGrouperExample {
 		}
 	}
 
-	public static void updateStems(Stem stem, String displayExtension,
+	public static void updateStems(StemI stem, String displayExtension,
 			String desrciption) throws Exception {
 		String dn = stem.getDisplayExtension();
 		int index = dn.indexOf(" [Updated]");
@@ -57,7 +57,7 @@ public class GridGrouperExample {
 		Set s = stem.getChildStems();
 		Iterator itr = s.iterator();
 		while (itr.hasNext()) {
-			updateStems((Stem) itr.next(), displayExtension, desrciption);
+			updateStems((StemI) itr.next(), displayExtension, desrciption);
 		}
 		Subject creator = SubjectUtils
 				.getSubject("/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN="
@@ -90,7 +90,7 @@ public class GridGrouperExample {
 
 	}
 
-	public static void printStems(Stem stem, String buffer) throws Exception {
+	public static void printStems(StemI stem, String buffer) throws Exception {
 		System.out.println(buffer + stem.getDisplayExtension() + " ("
 				+ stem.getUuid() + ")");
 		System.out.println(buffer + "  " + "Description:"
@@ -131,7 +131,7 @@ public class GridGrouperExample {
 				+ ":");
 		Iterator i3 = privs.iterator();
 		while (i3.hasNext()) {
-			NamingPrivilege priv = (NamingPrivilege) i3.next();
+			NamingPrivilegeI priv = (NamingPrivilegeI) i3.next();
 			System.out.println(buffer + "    " + priv.toString());
 		}
 
@@ -145,7 +145,7 @@ public class GridGrouperExample {
 		while (itr.hasNext()) {
 			System.out.println();
 			System.out.println();
-			printStems((Stem) itr.next(), buffer);
+			printStems((StemI) itr.next(), buffer);
 
 		}
 	}

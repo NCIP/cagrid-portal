@@ -45,10 +45,10 @@ package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
-import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperGroup;
-import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperStem;
-import gov.nih.nci.cagrid.gridgrouper.grouper.Group;
-import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
+import gov.nih.nci.cagrid.gridgrouper.client.Group;
+import gov.nih.nci.cagrid.gridgrouper.client.Stem;
+import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
+import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -67,11 +67,11 @@ import javax.swing.tree.TreeNode;
  */
 public class StemTreeNode extends GridGrouperBaseTreeNode {
 
-	private GridGrouperStem stem;
+	private Stem stem;
 
 	private boolean rootStem;
 
-	public StemTreeNode(GroupManagementBrowser browser, GridGrouperStem stem,
+	public StemTreeNode(GroupManagementBrowser browser, Stem stem,
 			boolean root) {
 		super(browser);
 		this.rootStem = root;
@@ -83,9 +83,9 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		Set set = stem.getChildStems();
 		Iterator itr = set.iterator();
 		while (itr.hasNext()) {
-			Stem stem = (Stem) itr.next();
+			StemI stem = (StemI) itr.next();
 			StemTreeNode node = new StemTreeNode(getBrowser(),
-					((GridGrouperStem) stem), false);
+					((Stem) stem), false);
 			synchronized (getTree()) {
 				this.add(node);
 				TreeNode parent = this.getParent();
@@ -100,8 +100,8 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		Set grps = stem.getChildGroups();
 		Iterator itr2 = grps.iterator();
 		while (itr2.hasNext()) {
-			Group group = (Group)itr2.next();
-			GroupTreeNode node = new GroupTreeNode(getBrowser(),(GridGrouperGroup)group);
+			GroupI group = (GroupI)itr2.next();
+			GroupTreeNode node = new GroupTreeNode(getBrowser(),(Group)group);
 			synchronized (getTree()) {
 				this.add(node);
 				TreeNode parent = this.getParent();
@@ -118,7 +118,7 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		int id = getBrowser().getProgress().startEvent(
 				"Refreshing " + toString() + ".... ");
 		try {
-			stem = (GridGrouperStem) stem.getGridGrouper().findStem(
+			stem = (Stem) stem.getGridGrouper().findStem(
 					stem.getName());
 			if (parent != null) {
 				getTree().reload(parent);
@@ -159,7 +159,7 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		return stem.getGridGrouper();
 	}
 
-	public GridGrouperStem getStem() {
+	public Stem getStem() {
 		return stem;
 	}
 	

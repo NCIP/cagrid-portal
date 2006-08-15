@@ -20,8 +20,8 @@ import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemUpdate;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
-import gov.nih.nci.cagrid.gridgrouper.grouper.Group;
-import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
+import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
+import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupAddFault;
@@ -44,13 +44,13 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GridGrouperStem extends GridGrouperObject implements Stem {
+public class Stem extends GridGrouperObject implements StemI {
 
 	private StemDescriptor des;
 
 	private GridGrouper gridGrouper;
 
-	protected GridGrouperStem(GridGrouper gridGrouper, StemDescriptor des) {
+	protected Stem(GridGrouper gridGrouper, StemDescriptor des) {
 		this.gridGrouper = gridGrouper;
 		this.des = des;
 	}
@@ -115,7 +115,7 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 		return gridGrouper.getChildStems(getName());
 	}
 
-	public Stem getParentStem() throws StemNotFoundException {
+	public StemI getParentStem() throws StemNotFoundException {
 		return gridGrouper.getParentStem(getName());
 	}
 
@@ -265,12 +265,12 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 		}
 	}
 
-	public Stem addChildStem(String extension, String displayExtension)
+	public StemI addChildStem(String extension, String displayExtension)
 			throws InsufficientPrivilegeException, StemAddException {
 		try {
 			StemDescriptor stem = gridGrouper.getClient().addChildStem(
 					this.getStemIdentifier(), extension, displayExtension);
-			return new GridGrouperStem(this.gridGrouper, stem);
+			return new Stem(this.gridGrouper, stem);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (StemAddFault f) {
@@ -301,12 +301,12 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 		}
 	}
 
-	public Group addChildGroup(String extension, String displayExtension)
+	public GroupI addChildGroup(String extension, String displayExtension)
 			throws GroupAddException, InsufficientPrivilegeException {
 		try {
 			GroupDescriptor grp = gridGrouper.getClient().addChildGroup(
 					this.getStemIdentifier(), extension, displayExtension);
-			return new GridGrouperGroup(this.gridGrouper, grp);
+			return new Group(this.gridGrouper, grp);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (GroupAddFault f) {
@@ -327,7 +327,7 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 			Set set = new HashSet();
 			if (children != null) {
 				for (int i = 0; i < children.length; i++) {
-					set.add(new GridGrouperGroup(gridGrouper, children[i]));
+					set.add(new Group(gridGrouper, children[i]));
 				}
 			}
 			return set;

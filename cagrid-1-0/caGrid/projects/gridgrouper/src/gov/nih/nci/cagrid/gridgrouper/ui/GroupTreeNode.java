@@ -45,7 +45,7 @@ package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
-import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperGroup;
+import gov.nih.nci.cagrid.gridgrouper.client.Group;
 
 import javax.swing.ImageIcon;
 
@@ -60,10 +60,10 @@ import javax.swing.ImageIcon;
  */
 public class GroupTreeNode extends GridGrouperBaseTreeNode {
 
-	private GridGrouperGroup group;
+	private Group group;
 
 	public GroupTreeNode(GroupManagementBrowser browser,
-			GridGrouperGroup group) {
+			Group group) {
 		super(browser);
 		this.group = group;
 	}
@@ -99,7 +99,7 @@ public class GroupTreeNode extends GridGrouperBaseTreeNode {
 		return group.getGridGrouper();
 	}
 
-	public GridGrouperGroup getGroup() {
+	public Group getGroup() {
 		return group;
 	}
 

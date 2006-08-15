@@ -3,7 +3,6 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:grouper="http://cagrid.nci.nih.gov/1/GridGrouper">
 	
-
 	<xsd:element name="GroupIdentifier" type="grouper:GroupIdentifier" />
 	<xsd:complexType name="GroupIdentifier">
 		<xsd:sequence>

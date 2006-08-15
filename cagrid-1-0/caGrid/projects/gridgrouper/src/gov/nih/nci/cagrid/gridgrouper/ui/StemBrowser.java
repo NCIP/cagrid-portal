@@ -6,7 +6,7 @@ import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
-import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
+import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -45,7 +45,7 @@ public class StemBrowser extends JPanel {
 
 	private StemTreeNode node;
 
-	private Stem stem;
+	private StemI stem;
 
 	private JPanel stemProperties = null;
 
@@ -1199,7 +1199,7 @@ public class StemBrowser extends JPanel {
 		return addPriv;
 	}
 
-	public Stem getStem() {
+	public StemI getStem() {
 		return stem;
 	}
 

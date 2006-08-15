@@ -9,7 +9,7 @@ import edu.internet2.middleware.subject.Subject;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public interface NamingPrivilege {
+public interface NamingPrivilegeI {
 	  public String getStemName();
 	  public String getName();
 	  public Subject getSubject();

@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gridgrouper.grouper.Group;
+import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -35,7 +35,7 @@ public class GroupBrowser extends JPanel {
 
 	private GroupTreeNode node;
 
-	private Group group;
+	private GroupI group;
 
 	private JPanel groupProperties = null;
 

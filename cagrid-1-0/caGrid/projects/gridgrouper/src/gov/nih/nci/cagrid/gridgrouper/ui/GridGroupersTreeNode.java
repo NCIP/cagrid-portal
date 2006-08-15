@@ -45,8 +45,8 @@ package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
-import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperStem;
-import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
+import gov.nih.nci.cagrid.gridgrouper.client.Stem;
+import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -83,9 +83,9 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 			int id = getBrowser().getProgress().startEvent(
 					"Loading Grid Grouper Service.... ");
 			try {
-				Stem root = grouper.getRootStem();
+				StemI root = grouper.getRootStem();
 				StemTreeNode node = new StemTreeNode(getBrowser(),
-						((GridGrouperStem) root), true);
+						((Stem) root), true);
 				synchronized (getTree()) {
 					this.add(node);
 					getTree().reload(this);

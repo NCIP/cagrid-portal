@@ -1,13 +1,25 @@
 package gov.nih.nci.cagrid.gridgrouper.service;
 
+import edu.internet2.middleware.grouper.AccessPrivilege;
+import edu.internet2.middleware.grouper.Group;
+import edu.internet2.middleware.grouper.GroupFinder;
+import edu.internet2.middleware.grouper.GrouperSession;
+import edu.internet2.middleware.grouper.Member;
+import edu.internet2.middleware.grouper.Membership;
 import edu.internet2.middleware.grouper.RegistryReset;
+import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
+import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.service.tools.GridGrouperBootstrapper;
 import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
 import gov.nih.nci.cagrid.gridgrouper.testutils.Utils;
+
+import java.util.Iterator;
+import java.util.Set;
+
 import junit.framework.TestCase;
 
 /**
@@ -23,11 +35,11 @@ public class TestGroups extends TestCase {
 
 	private String SUPER_USER = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=super admin";
 
-	// private String ADMIN_USER =
-	// "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=admin";
+	private String ADMIN_USER = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=admin";
 
-	// private String USER_A =
-	// "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user a";
+	private String USER_A = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user a";
+
+	private String USER_B = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user b";
 
 	public void testAddGroupAndMembers() {
 		try {
@@ -55,19 +67,106 @@ public class TestGroups extends TestCase {
 			final String groupExtension = "mygroup";
 			final String groupDisplayExtension = "My Group";
 
-			grouper.addChildGroup(SUPER_USER, Utils.getStemIdentifier(test),
-					groupExtension, groupDisplayExtension);
+			GroupDescriptor grp = grouper.addChildGroup(SUPER_USER, Utils
+					.getStemIdentifier(test), groupExtension,
+					groupDisplayExtension);
+			assertEquals(groupExtension, grp.getExtension());
+			assertEquals(groupDisplayExtension, grp.getDisplayExtension());
 			GroupDescriptor[] grps = grouper.getChildGroups(SUPER_USER, Utils
 					.getStemIdentifier(test));
 			assertEquals(1, grps.length);
 			assertEquals(groupExtension, grps[0].getExtension());
 			assertEquals(groupDisplayExtension, grps[0].getDisplayExtension());
 
+			final String subGroupExtension = "mysubgroup";
+			final String subGroupDisplayExtension = "My Sub Group";
+
+			GroupDescriptor subgrp = grouper.addChildGroup(SUPER_USER, Utils
+					.getStemIdentifier(test), subGroupExtension,
+					subGroupDisplayExtension);
+			assertEquals(subGroupExtension, subgrp.getExtension());
+			assertEquals(subGroupDisplayExtension, subgrp.getDisplayExtension());
+
+			assertEquals(2, grouper.getChildGroups(SUPER_USER, Utils
+					.getStemIdentifier(test)).length);
+
+			// TODO: Finish this on down
+
+			Subject subject = SubjectUtils.getSubject(SUPER_USER);
+			GrouperSession session = GrouperSession.start(subject);
+			Group group = GroupFinder.findByName(session, grp.getName());
+
+			group.addMember(SubjectUtils.getSubject(USER_A));
+			group.grantPriv(SubjectUtils.getSubject(ADMIN_USER),
+					AccessPrivilege.ADMIN);
+
+			Group subGroup = GroupFinder.findByName(session, subgrp.getName());
+
+			subGroup.addMember(SubjectUtils.getSubject(USER_B));
+
+			printMembers(group);
+			printMembers(subGroup);
+			group.addMember(subGroup.toSubject());
+			printMembers(group);
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 
+	}
+
+	private void printMembers(Group group) throws Exception{
+		System.out.println();
+		System.out.println("All Members of " + group.getName());
+		System.out.println("-------------------------------------------------");
+		System.out.println();
+		Set set = group.getMembers();
+		Iterator itr = set.iterator();
+		while (itr.hasNext()) {
+			Member m = (Member) itr.next();
+			System.out.println(m.getSubject().getName());
+		}
+		set = null;
+		itr = null;
+
+		System.out.println();
+		System.out.println("Immediate Members of " + group.getName());
+		System.out.println("-------------------------------------------------");
+		System.out.println();
+		set = group.getImmediateMembers();
+		itr = set.iterator();
+		while (itr.hasNext()) {
+			Member m = (Member) itr.next();
+			System.out.println(m.getSubjectId());
+		}
+
+		set = null;
+		itr = null;
+
+		System.out.println();
+		System.out.println("Effective Members of " + group.getName());
+		System.out.println("-------------------------------------------------");
+		System.out.println();
+		set = group.getEffectiveMembers();
+		itr = set.iterator();
+		while (itr.hasNext()) {
+			Member m = (Member) itr.next();
+			System.out.println(m.getSubjectId());
+		}
+	}
+
+	private void printMemberships(Group group) throws Exception {
+		System.out.println();
+		System.out.println("All Memberships of " + group.getName());
+		System.out.println("-------------------------------------------------");
+		System.out.println();
+		Set set = group.getMemberships();
+		Iterator itr = set.iterator();
+		while (itr.hasNext()) {
+			Membership m = (Membership) itr.next();
+			System.out.println(m.getMember().getSubject().getId());
+		}
 	}
 
 	protected void setUp() throws Exception {

@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
-import gov.nih.nci.cagrid.gridgrouper.grouper.Group;
+import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupModifyFault;
@@ -27,13 +27,13 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GridGrouperGroup extends GridGrouperObject implements Group {
+public class Group extends GridGrouperObject implements GroupI {
 
 	private GroupDescriptor des;
 
 	private GridGrouper gridGrouper;
 
-	protected GridGrouperGroup(GridGrouper gridGrouper, GroupDescriptor des) {
+	protected Group(GridGrouper gridGrouper, GroupDescriptor des) {
 		this.gridGrouper = gridGrouper;
 		this.des = des;
 	}

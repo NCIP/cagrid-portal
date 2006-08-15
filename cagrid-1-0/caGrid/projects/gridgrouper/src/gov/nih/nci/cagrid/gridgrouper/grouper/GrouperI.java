@@ -14,14 +14,14 @@ import java.util.Set;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public interface Grouper {
-	public Stem getRootStem() throws StemNotFoundException;
+public interface GrouperI {
+	public StemI getRootStem() throws StemNotFoundException;
 
-	public Stem findStem(String name) throws StemNotFoundException;
+	public StemI findStem(String name) throws StemNotFoundException;
 
 	public Set getChildStems(String parentStemName);
 
-	public Stem getParentStem(String childStemName)
+	public StemI getParentStem(String childStemName)
 			throws StemNotFoundException;
 
 	public Set getStemPrivileges(String stemName, Subject subject)
@@ -35,6 +35,6 @@ public interface Grouper {
 
 	public String getName();
 
-	public Group findGroup(String name) throws GroupNotFoundException;
+	public GroupI findGroup(String name) throws GroupNotFoundException;
 
 }
