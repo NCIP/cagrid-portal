@@ -95,18 +95,14 @@ public class TestGroups extends TestCase {
 			Subject subject = SubjectUtils.getSubject(SUPER_USER);
 			GrouperSession session = GrouperSession.start(subject);
 			Group group = GroupFinder.findByName(session, grp.getName());
-
-			group.addMember(SubjectUtils.getSubject(USER_A));
-			group.grantPriv(SubjectUtils.getSubject(ADMIN_USER),
-					AccessPrivilege.ADMIN);
-
+            grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grp), USER_A);
+		
 			Group subGroup = GroupFinder.findByName(session, subgrp.getName());
-
-			subGroup.addMember(SubjectUtils.getSubject(USER_B));
+			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(subgrp), USER_B);
 
 			printMembers(group);
 			printMembers(subGroup);
-			group.addMember(subGroup.toSubject());
+			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grp), subGroup.toSubject().getId());
 			printMembers(group);
 
 		} catch (Exception e) {

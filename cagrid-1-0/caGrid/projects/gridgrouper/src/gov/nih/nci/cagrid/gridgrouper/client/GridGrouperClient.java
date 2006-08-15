@@ -286,18 +286,17 @@ public class GridGrouperClient extends ServiceSecurityClient implements
 		}
 	}
 
-    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor updateGroup(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate update) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupModifyFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
+    public void addMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.MemberAddFault {
       synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"updateGroup");
-        gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequest();
-        gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequestGroup();
+        configureStubSecurity((Stub)portType,"addMember");
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddMemberRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.AddMemberRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddMemberRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddMemberRequestGroup();
         groupContainer.setGroupIdentifier(group);
         params.setGroup(groupContainer);
-        gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequestUpdate updateContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequestUpdate();
-        updateContainer.setGroupUpdate(update);
-        params.setUpdate(updateContainer);
-        gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupResponse boxedResult = portType.updateGroup(params);
-        return boxedResult.getGroupDescriptor();
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddMemberRequestSubject subjectContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddMemberRequestSubject();
+        subjectContainer.setSubjectIdentifier(subject);
+        params.setSubject(subjectContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddMemberResponse boxedResult = portType.addMember(params);
       }
     }
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
@@ -498,6 +497,20 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         groupContainer.setGroupIdentifier(group);
         params.setGroup(groupContainer);
         gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupResponse boxedResult = portType.deleteGroup(params);
+      }
+    }
+    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor updateGroup(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate update) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupModifyFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"updateGroup");
+        gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequestGroup();
+        groupContainer.setGroupIdentifier(group);
+        params.setGroup(groupContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequestUpdate updateContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequestUpdate();
+        updateContainer.setGroupUpdate(update);
+        params.setUpdate(updateContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupResponse boxedResult = portType.updateGroup(params);
+        return boxedResult.getGroupDescriptor();
       }
     }
 

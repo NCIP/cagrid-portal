@@ -399,6 +399,31 @@
           </sequence>
         </complexType>
       </element>
+      <element name="AddMemberRequest">
+        <complexType>
+          <sequence>
+            <element name="group">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:GroupIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="subject">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:SubjectIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="AddMemberResponse">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
       <element name="GridGrouperRuntimeFault">
         <complexType>
           <complexContent>
@@ -484,6 +509,13 @@
         </complexType>
       </element>
       <element name="GroupModifyFault">
+        <complexType>
+          <complexContent>
+            <extension base="wsrbf:BaseFaultType" />
+          </complexContent>
+        </complexType>
+      </element>
+      <element name="MemberAddFault">
         <complexType>
           <complexContent>
             <extension base="wsrbf:BaseFaultType" />
@@ -594,6 +626,12 @@
   <message name="UpdateGroupResponse">
     <part name="parameters" element="tns:UpdateGroupResponse" />
   </message>
+  <message name="AddMemberRequest">
+    <part name="parameters" element="tns:AddMemberRequest" />
+  </message>
+  <message name="AddMemberResponse">
+    <part name="parameters" element="tns:AddMemberResponse" />
+  </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="tns:GridGrouperRuntimeFault" />
   </message>
@@ -632,6 +670,9 @@
   </message>
   <message name="GroupModifyFaultFaultMessage">
     <part name="fault" element="tns:GroupModifyFault" />
+  </message>
+  <message name="MemberAddFaultFaultMessage">
+    <part name="fault" element="tns:MemberAddFault" />
   </message>
   <!--============================================================
 
@@ -750,6 +791,14 @@
       <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
       <fault name="GroupModifyFault" message="tns:GroupModifyFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupModifyFaultFaultMessage" />
       <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
+    </operation>
+    <operation name="addMember">
+      <input message="tns:AddMemberRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/AddMemberRequest" />
+      <output message="tns:AddMemberResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/AddMemberResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
+      <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
+      <fault name="MemberAddFault" message="tns:MemberAddFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/MemberAddFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

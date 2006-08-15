@@ -4,6 +4,7 @@ import edu.internet2.middleware.grouper.GroupDeleteException;
 import edu.internet2.middleware.grouper.GroupModifyException;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
+import edu.internet2.middleware.grouper.MemberAddException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
@@ -15,6 +16,7 @@ import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupModifyFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.MemberAddFault;
 
 import java.util.Date;
 
@@ -128,8 +130,8 @@ public class Group extends GridGrouperObject implements GroupI {
 		try {
 			GroupUpdate update = new GroupUpdate();
 			update.setDescription(value);
-			this.des=gridGrouper.getClient().updateGroup(this.getGroupIdentifier(),
-					update);
+			this.des = gridGrouper.getClient().updateGroup(
+					this.getGroupIdentifier(), update);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (GroupModifyFault f) {
@@ -149,8 +151,8 @@ public class Group extends GridGrouperObject implements GroupI {
 		try {
 			GroupUpdate update = new GroupUpdate();
 			update.setDisplayExtension(value);
-			this.des=gridGrouper.getClient().updateGroup(this.getGroupIdentifier(),
-					update);
+			this.des = gridGrouper.getClient().updateGroup(
+					this.getGroupIdentifier(), update);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (GroupModifyFault f) {
@@ -169,8 +171,8 @@ public class Group extends GridGrouperObject implements GroupI {
 		try {
 			GroupUpdate update = new GroupUpdate();
 			update.setExtension(value);
-			this.des=gridGrouper.getClient().updateGroup(this.getGroupIdentifier(),
-					update);
+			this.des = gridGrouper.getClient().updateGroup(
+					this.getGroupIdentifier(), update);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (GroupModifyFault f) {
@@ -184,4 +186,23 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
+	public void addMember(Subject subj) throws InsufficientPrivilegeException,
+			MemberAddException {
+
+		try {
+			gridGrouper.getClient().addMember(getGroupIdentifier(),
+					subj.getId());
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (MemberAddFault f) {
+			throw new MemberAddException(f.getFaultString());
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+
+	}
 }
