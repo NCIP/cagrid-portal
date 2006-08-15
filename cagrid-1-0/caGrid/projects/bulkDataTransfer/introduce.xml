@@ -11,7 +11,7 @@
    <ns2:SchemaElement type="FaultTo" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ReplyAfter" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./bulkDataTransferMetadata.xsd" namespace="http://cagrid.nci.nih.gov/1/BulkDataTransferMetadata" packageName="bulkdatatransfermetadata" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace generateStubs="false" location="./bulkDataTransferMetadata.xsd" namespace="http://cagrid.nci.nih.gov/1/BulkDataTransferMetadata" packageName="gov.nih.nci.cagrid.bdt.metadata.beans" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="BulkDataTransferMetadata" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TransferProvider" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>

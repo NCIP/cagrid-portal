@@ -3,6 +3,6 @@ http\://cagrid.nci.nih.gov/BDTHandlerService/bindings=gov.nih.nci.cagrid.bdt.stu
 http\://cagrid.nci.nih.gov/BDTHandlerService/service=gov.nih.nci.cagrid.bdt.stubs.service
 http\://security.introduce.cagrid.nci.nih.gov/ServiceSecurity=gov.nih.nci.cagrid.introduce.security
 
-http\://cagrid.nci.nih.gov/1/BulkDataTransferMetadata=bulkdatatransfermetadata
+http\://cagrid.nci.nih.gov/1/BulkDataTransferMetadata=gov.nih.nci.cagrid.bdt.metadata.beans
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.metadata.security
 http\://cagrid.nci.nih.gov/BDTHandlerServiceReference=bdthandlerservicereference

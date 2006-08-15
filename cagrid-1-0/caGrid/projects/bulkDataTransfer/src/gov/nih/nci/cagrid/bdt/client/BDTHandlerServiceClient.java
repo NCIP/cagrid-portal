@@ -101,7 +101,15 @@ public class BDTHandlerServiceClient extends ServiceSecurityClient implements BD
 		}
 	}
 
-    public org.apache.axis.message.addressing.EndpointReferenceType getTransferProvider(bulkdatatransfermetadata.TransferProviderType transferProvider) throws RemoteException {
+    public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
+        gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataRequest();
+        gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
+        return boxedResult.getServiceSecurityMetadata();
+      }
+    }
+    public org.apache.axis.message.addressing.EndpointReferenceType getTransferProvider(gov.nih.nci.cagrid.bdt.metadata.beans.TransferProviderType transferProvider) throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getTransferProvider");
         gov.nih.nci.cagrid.bdt.stubs.GetTransferProviderRequest params = new gov.nih.nci.cagrid.bdt.stubs.GetTransferProviderRequest();
@@ -110,14 +118,6 @@ public class BDTHandlerServiceClient extends ServiceSecurityClient implements BD
         params.setTransferProvider(transferProviderContainer);
         gov.nih.nci.cagrid.bdt.stubs.GetTransferProviderResponse boxedResult = portType.getTransferProvider(params);
         return boxedResult.getEndpointReference();
-      }
-    }
-    public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
-        gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataRequest();
-        gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
-        return boxedResult.getServiceSecurityMetadata();
       }
     }
 

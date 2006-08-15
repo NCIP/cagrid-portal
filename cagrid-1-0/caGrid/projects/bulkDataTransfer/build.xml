@@ -209,7 +209,7 @@
             <property name="source.stubs.dir" location="${metadata.dir}" />
             <property name="target.stubs.dir" location="${src.dir}" />
             <property name="wsdl.file" value="bulkDataTransferBeans.wsdl" />
-            <property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
+            <property name="ns.excludes" value="${GT4.ns.excludes}" />
         </ant>
     </target>
 
