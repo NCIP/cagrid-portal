@@ -307,8 +307,5 @@
 		<echo message="|    Type 'ant -p' for a description of this service's build targets.          |"/>
         <echo message="================================================================================"/>
     </target>
-    
-    <target name="installIntroduceExtensions" depends="all">
-    </target>
 
 </project>
