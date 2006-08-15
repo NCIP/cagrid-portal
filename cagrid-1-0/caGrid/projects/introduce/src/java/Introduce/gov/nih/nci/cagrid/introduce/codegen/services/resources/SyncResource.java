@@ -9,7 +9,6 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.base.BaseResourceTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main.MainConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main.MainResourceTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.singleton.SingletonConfigurationTemplate;
