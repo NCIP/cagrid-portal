@@ -19,4 +19,10 @@ public class BDTHandlerServiceProviderImpl{
 	}
 	
 
+	public gov.nih.nci.cagrid.bdt.stubs.GetTransferProviderResponse getTransferProvider(gov.nih.nci.cagrid.bdt.stubs.GetTransferProviderRequest params) throws RemoteException {
+		gov.nih.nci.cagrid.bdt.stubs.GetTransferProviderResponse boxedResult = new gov.nih.nci.cagrid.bdt.stubs.GetTransferProviderResponse();
+		boxedResult.setEndpointReference(impl.getTransferProvider(params.getTransferProvider().getTransferProvider()));
+		return boxedResult;
+	}
+
 }

@@ -10,9 +10,8 @@ import java.rmi.RemoteException;
  */
 public interface BDTHandlerServiceI {
 
-
-
-	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
+	public org.apache.axis.message.addressing.EndpointReferenceType getTransferProvider(bulkdatatransfermetadata.TransferProviderType transferProvider) throws RemoteException ;
+public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 
 }
 

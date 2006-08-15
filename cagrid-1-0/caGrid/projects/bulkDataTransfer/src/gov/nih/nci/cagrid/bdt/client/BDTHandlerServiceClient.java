@@ -101,6 +101,17 @@ public class BDTHandlerServiceClient extends ServiceSecurityClient implements BD
 		}
 	}
 
+    public org.apache.axis.message.addressing.EndpointReferenceType getTransferProvider(bulkdatatransfermetadata.TransferProviderType transferProvider) throws RemoteException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"getTransferProvider");
+        gov.nih.nci.cagrid.bdt.stubs.GetTransferProviderRequest params = new gov.nih.nci.cagrid.bdt.stubs.GetTransferProviderRequest();
+        gov.nih.nci.cagrid.bdt.stubs.GetTransferProviderRequestTransferProvider transferProviderContainer = new gov.nih.nci.cagrid.bdt.stubs.GetTransferProviderRequestTransferProvider();
+        transferProviderContainer.setTransferProvider(transferProvider);
+        params.setTransferProvider(transferProviderContainer);
+        gov.nih.nci.cagrid.bdt.stubs.GetTransferProviderResponse boxedResult = portType.getTransferProvider(params);
+        return boxedResult.getEndpointReference();
+      }
+    }
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");

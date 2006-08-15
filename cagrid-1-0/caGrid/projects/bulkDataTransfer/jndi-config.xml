@@ -19,6 +19,14 @@
         </parameter>
       </resourceParams>
     </resource>
+    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.bdt.service.ServiceConfiguration">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+      </resourceParams>
+    </resource>
     <resource name="bdthome" type="gov.nih.nci.cagrid.bdt.resource.BDTResourceHome">
       <resourceParams>
         <parameter>
@@ -33,14 +41,6 @@
           <name>resourceKeyName</name>
           <value>{http://cagrid.nci.nih.gov/BDTHandlerService}BDTResourceKey</value>
         </parameter>
-        <parameter>
-          <name>factory</name>
-          <value>org.globus.wsrf.jndi.BeanFactory</value>
-        </parameter>
-      </resourceParams>
-    </resource>
-    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.bdt.service.ServiceConfiguration">
-      <resourceParams>
         <parameter>
           <name>factory</name>
           <value>org.globus.wsrf.jndi.BeanFactory</value>
