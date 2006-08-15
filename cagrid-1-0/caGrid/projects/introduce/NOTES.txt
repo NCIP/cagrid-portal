@@ -1,5 +1,8 @@
 To Do:
 
+i added a new method, hit cancel on the method viewer, and saved.  I then removed the new method and saved.
+  - the method still exists but isnt in the operationstable
+
 Add ETC_PATH as a service property
 
 When importing a method.  if methods names dont match bad stuff happens.
