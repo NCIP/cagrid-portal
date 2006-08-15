@@ -1,11 +1,11 @@
-- clean up exception handling
-- add Data service discovery
-- add xpath tests against xml with actual results
+
+- add concept discovery for operations and service
 
 
 
 
-
-
+-(DONE) add xpath tests against xml with actual results
+-(DONE) clean up exception handling
+-(DONE) add Data service discovery
 -(DONE - not a bug) handle secure communications
 

@@ -5,6 +5,9 @@ import gov.nih.nci.cagrid.discovery.MetadataConstants;
 import gov.nih.nci.cagrid.discovery.MetadataUtils;
 import gov.nih.nci.cagrid.discovery.ResourcePropertyHelper;
 import gov.nih.nci.cagrid.discovery.XPathUtils;
+import gov.nih.nci.cagrid.discovery.exceptions.QueryInvalidException;
+import gov.nih.nci.cagrid.discovery.exceptions.RemoteResourcePropertyRetrievalException;
+import gov.nih.nci.cagrid.discovery.exceptions.ResourcePropertyRetrievalException;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
@@ -19,6 +22,7 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.globus.wsrf.WSRFConstants;
+import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 
 
@@ -116,8 +120,12 @@ public class DiscoveryClient {
 	 *            returned. Otherwise, all services registered will be returned,
 	 *            regardless of whether or not any metadata has been aggregated.
 	 * @return EndpointReferenceType[] contain all registered services
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] getAllServices(boolean requireMetadataCompliance) throws Exception {
+	public EndpointReferenceType[] getAllServices(boolean requireMetadataCompliance)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		if (!requireMetadataCompliance) {
 			return discoverByFilter("*");
 		} else {
@@ -134,8 +142,12 @@ public class DiscoveryClient {
 	 * @param searchString
 	 *            the search string.
 	 * @return EndpointReferenceType[] matching the criteria
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] discoverServicesBySearchString(String searchString) throws Exception {
+	public EndpointReferenceType[] discoverServicesBySearchString(String searchString)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		return discoverByFilter(CONTENT_PATH + "//*[contains(text(),'" + searchString + "') or @*[contains(string(),'"
 			+ searchString + "')]]");
 	}
@@ -148,8 +160,12 @@ public class DiscoveryClient {
 	 * @param centerName
 	 *            research center name
 	 * @return EndpointReferenceType[] matching the criteria
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] discoverServicesByResearchCenter(String centerName) throws Exception {
+	public EndpointReferenceType[] discoverServicesByResearchCenter(String centerName)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		return discoverByFilter(MD_PATH + "/" + cagrid + ":hostingResearchCenter/" + com
 			+ ":ResearchCenter[@displayName='" + centerName + "' or @shortName='" + centerName + "']");
 	}
@@ -164,8 +180,12 @@ public class DiscoveryClient {
 	 * @param contact
 	 *            point of contact
 	 * @return EndpointReferenceType[] matching the criteria
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] discoverServicesByPointOfContact(PointOfContact contact) throws Exception {
+	public EndpointReferenceType[] discoverServicesByPointOfContact(PointOfContact contact)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		String pocPredicate = buildPOCPredicate(contact);
 
 		return discoverByFilter(MD_PATH + "[" + cagrid + ":hostingResearchCenter/" + com + ":ResearchCenter/" + com
@@ -181,8 +201,12 @@ public class DiscoveryClient {
 	 * @param serviceName
 	 *            The service's name
 	 * @return EndpointReferenceType[] matching the criteria
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] discoverServicesByName(String serviceName) throws Exception {
+	public EndpointReferenceType[] discoverServicesByName(String serviceName)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		return discoverByFilter(SERV_PATH + "[@name='" + serviceName + "']");
 	}
 
@@ -194,8 +218,12 @@ public class DiscoveryClient {
 	 * @param operationName
 	 *            The operation's name
 	 * @return EndpointReferenceType[] matching the criteria
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] discoverServicesByOperationName(String operationName) throws Exception {
+	public EndpointReferenceType[] discoverServicesByOperationName(String operationName)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		return discoverByFilter(OPER_PATH + "[@name='" + operationName + "']");
 	}
 
@@ -213,8 +241,12 @@ public class DiscoveryClient {
 	 * @param clazzPrototype
 	 *            The protype UMLClass
 	 * @return EndpointReferenceType[] matching the criteria
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] discoverServicesByOperationInput(UMLClass clazzPrototype) throws Exception {
+	public EndpointReferenceType[] discoverServicesByOperationInput(UMLClass clazzPrototype)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		String umlClassPredicate = buildUMLClassPredicate(clazzPrototype);
 
 		return discoverByFilter(OPER_PATH + "/" + serv + ":inputParameterCollection/" + serv + ":InputParam/" + com
@@ -235,8 +267,12 @@ public class DiscoveryClient {
 	 * @param clazzPrototype
 	 *            The protype UMLClass
 	 * @return EndpointReferenceType[] matching the criteria
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] discoverServicesByOperationOutput(UMLClass clazzPrototype) throws Exception {
+	public EndpointReferenceType[] discoverServicesByOperationOutput(UMLClass clazzPrototype)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		String umlClassPredicate = buildUMLClassPredicate(clazzPrototype);
 
 		return discoverByFilter(OPER_PATH + "/" + serv + ":Output/" + com + ":UMLClass[" + umlClassPredicate + "]");
@@ -257,8 +293,12 @@ public class DiscoveryClient {
 	 * @param clazzPrototype
 	 *            The protype UMLClass
 	 * @return EndpointReferenceType[] matching the criteria
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] discoverServicesByOperationClass(UMLClass clazzPrototype) throws Exception {
+	public EndpointReferenceType[] discoverServicesByOperationClass(UMLClass clazzPrototype)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		String umlClassPredicate = buildUMLClassPredicate(clazzPrototype);
 
 		return discoverByFilter(OPER_PATH + "[" + serv + ":Output/" + com + ":UMLClass[" + umlClassPredicate + "] or "
@@ -275,8 +315,12 @@ public class DiscoveryClient {
 	 * @param conceptCode
 	 *            The concept to look for
 	 * @return EndpointReferenceType[] matching the criteria
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] discoverServicesByConceptCode(String conceptCode) throws Exception {
+	public EndpointReferenceType[] discoverServicesByConceptCode(String conceptCode)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		String conceptPredicatedUMLClass = createConceptPredicatedUMLClass(conceptCode);
 
 		return discoverByFilter(OPER_PATH + "[" + serv + ":Output/" + conceptPredicatedUMLClass + " or " + serv
@@ -303,8 +347,12 @@ public class DiscoveryClient {
 	 * Query the registry for all registered data services
 	 * 
 	 * @return EndpointReferenceType[] contain all registered services
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] getAllDataServices() throws Exception {
+	public EndpointReferenceType[] getAllDataServices() throws RemoteResourcePropertyRetrievalException,
+		QueryInvalidException, ResourcePropertyRetrievalException {
 		return discoverByFilter(DATA_MD_PATH);
 	}
 
@@ -316,20 +364,26 @@ public class DiscoveryClient {
 	 * @param modelName
 	 *            The model to look for
 	 * @return EndpointReferenceType[] matching the criteria
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] discoverDataServicesByDomainModel(String modelName) throws Exception {
+	public EndpointReferenceType[] discoverDataServicesByDomainModel(String modelName)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		return discoverByFilter(DATA_MD_PATH + "[@projectShortName='" + modelName + "' or @projectLongName='"
 			+ modelName + "']");
 	}
 
 
-	public EndpointReferenceType[] discoverDataServicesByModelConceptCode(String conceptCode) throws Exception {
+	public EndpointReferenceType[] discoverDataServicesByModelConceptCode(String conceptCode)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		return discoverByFilter(DATA_MD_PATH + "/" + data + ":exposedUMLClassCollection/"
 			+ createConceptPredicatedUMLClass(conceptCode));
 	}
 
 
-	public EndpointReferenceType[] discoverDataServicesByExposedClass(UMLClass clazzPrototype) throws Exception {
+	public EndpointReferenceType[] discoverDataServicesByExposedClass(UMLClass clazzPrototype)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		String umlClassPredicate = buildUMLClassPredicate(clazzPrototype);
 
 		return discoverByFilter(DATA_MD_PATH + "/" + data + ":exposedUMLClassCollection/" + com + ":UMLClass["
@@ -338,7 +392,7 @@ public class DiscoveryClient {
 
 
 	public EndpointReferenceType[] discoverDataServicesByAssociationsWithClass(UMLClass clazzPrototype)
-		throws Exception {
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		String referenceFiler = data + ":UMLAssociationEdge/" + data + ":UMLClassReference/@refid=" + data
 			+ ":exposedUMLClassCollection/" + com + ":UMLClass[" + buildUMLClassPredicate(clazzPrototype) + "]/@id";
 
@@ -431,16 +485,24 @@ public class DiscoveryClient {
 	 * 
 	 * @param xpathPredicate
 	 *            predicate to apply to the "Entry" in Index Service
-	 * @return EndpointReferenceType[] of matching services
-	 * @throws Exception
+	 * @return EndpointReferenceType[] of matching services @
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
 	 */
-	protected EndpointReferenceType[] discoverByFilter(String xpathPredicate) throws Exception {
+	protected EndpointReferenceType[] discoverByFilter(String xpathPredicate)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		EndpointReferenceType[] results = null;
 
 		// query the service and deser the results
 		MessageElement[] elements = ResourcePropertyHelper.queryResourceProperties(indexEPR,
 			translateXPath(xpathPredicate));
-		Object[] objects = ObjectDeserializer.toObject(elements, EndpointReferenceType.class);
+		Object[] objects = null;
+		try {
+			objects = ObjectDeserializer.toObject(elements, EndpointReferenceType.class);
+		} catch (DeserializationException e) {
+			throw new ResourcePropertyRetrievalException("Unable to deserialize results to EPRs!", e);
+		}
 
 		// if we got results, cast them into what we are expected to return
 		if (objects != null) {
@@ -512,7 +574,7 @@ public class DiscoveryClient {
 		EndpointReferenceType[] allServices = null;
 		try {
 			allServices = client.getAllServices(true);
-		} catch (Exception e1) {
+		} catch (ResourcePropertyRetrievalException e1) {
 			e1.printStackTrace();
 			System.exit(-1);
 		}
@@ -528,7 +590,7 @@ public class DiscoveryClient {
 						System.out.println("Service is from:"
 							+ commonMetadata.getHostingResearchCenter().getResearchCenter().getDisplayName());
 					}
-				} catch (Exception e) {
+				} catch (ResourcePropertyRetrievalException e) {
 					// e.printStackTrace();
 					System.out.println("ERROR: Unable to access service's standard resource properties: "
 						+ e.getMessage());

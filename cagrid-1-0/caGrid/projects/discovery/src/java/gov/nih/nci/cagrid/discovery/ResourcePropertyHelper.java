@@ -10,6 +10,12 @@
 
 package gov.nih.nci.cagrid.discovery;
 
+import gov.nih.nci.cagrid.discovery.exceptions.InternalRuntimeException;
+import gov.nih.nci.cagrid.discovery.exceptions.InvalidResourcePropertyException;
+import gov.nih.nci.cagrid.discovery.exceptions.QueryInvalidException;
+import gov.nih.nci.cagrid.discovery.exceptions.RemoteResourcePropertyRetrievalException;
+import gov.nih.nci.cagrid.discovery.exceptions.ResourcePropertyRetrievalException;
+
 import java.rmi.RemoteException;
 
 import javax.xml.namespace.QName;
@@ -29,10 +35,14 @@ import org.oasis.wsrf.properties.GetMultipleResourceProperties_Element;
 import org.oasis.wsrf.properties.GetMultipleResourceProperties_PortType;
 import org.oasis.wsrf.properties.GetResourceProperty;
 import org.oasis.wsrf.properties.GetResourcePropertyResponse;
+import org.oasis.wsrf.properties.InvalidQueryExpressionFaultType;
+import org.oasis.wsrf.properties.InvalidResourcePropertyQNameFaultType;
+import org.oasis.wsrf.properties.QueryEvaluationErrorFaultType;
 import org.oasis.wsrf.properties.QueryExpressionType;
 import org.oasis.wsrf.properties.QueryResourcePropertiesResponse;
 import org.oasis.wsrf.properties.QueryResourceProperties_Element;
 import org.oasis.wsrf.properties.QueryResourceProperties_PortType;
+import org.oasis.wsrf.properties.UnknownQueryExpressionDialectFaultType;
 import org.oasis.wsrf.properties.WSResourcePropertiesServiceAddressingLocator;
 import org.w3c.dom.Element;
 
@@ -45,27 +55,26 @@ public class ResourcePropertyHelper {
 
 
 	public static MessageElement[] queryResourceProperties(EndpointReferenceType endpoint, String queryExpression)
-		throws Exception {
-		String dialect = WSRFConstants.XPATH_1_DIALECT;
+		throws ResourcePropertyRetrievalException, RemoteResourcePropertyRetrievalException, QueryInvalidException {
 
 		WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
 		QueryExpressionType query = new QueryExpressionType();
 
 		try {
-			query.setDialect(dialect);
+			query.setDialect(WSRFConstants.XPATH_1_DIALECT);
 		} catch (MalformedURIException e) {
-			// TODO: change to internal error
-			throw new Exception(e);
+			// this should never happen, and the user can't fix it if it does
+			throw new InternalRuntimeException(e);
 		}
 
 		query.setValue(queryExpression);
 
 		QueryResourceProperties_PortType port;
+
 		try {
 			port = locator.getQueryResourcePropertiesPort(endpoint);
 		} catch (ServiceException e) {
-			// TODO: change to user error
-			throw new Exception(e);
+			throw new RemoteResourcePropertyRetrievalException(e);
 		}
 
 		setAnonymous((Stub) port);
@@ -73,20 +82,17 @@ public class ResourcePropertyHelper {
 		QueryResourceProperties_Element request = new QueryResourceProperties_Element();
 		request.setQueryExpression(query);
 
-		QueryResourcePropertiesResponse response;
-		try {
-			response = port.queryResourceProperties(request);
-		} catch (RemoteException e) {
-			// TODO: change to user error
-			throw new Exception(e);
-		}
+		QueryResourcePropertiesResponse response = null;
+
+		response = issueRPQuery(port, request);
 
 		return response.get_any();
 
 	}
 
 
-	public static Element getResourceProperties(EndpointReferenceType endpoint) throws Exception {
+	public static Element getResourceProperties(EndpointReferenceType endpoint)
+		throws ResourcePropertyRetrievalException, RemoteResourcePropertyRetrievalException, QueryInvalidException {
 		String dialect = WSRFConstants.XPATH_1_DIALECT;
 		String queryExpression = "/";
 
@@ -96,7 +102,8 @@ public class ResourcePropertyHelper {
 		try {
 			query.setDialect(dialect);
 		} catch (MalformedURIException e) {
-			throw new Exception(e);
+			// this should never happen, and the user can't fix it if it does
+			throw new InternalRuntimeException(e);
 		}
 
 		query.setValue(queryExpression);
@@ -105,7 +112,7 @@ public class ResourcePropertyHelper {
 		try {
 			port = locator.getQueryResourcePropertiesPort(endpoint);
 		} catch (ServiceException e) {
-			throw new Exception(e);
+			throw new RemoteResourcePropertyRetrievalException(e);
 		}
 
 		setAnonymous((Stub) port);
@@ -113,12 +120,7 @@ public class ResourcePropertyHelper {
 		QueryResourceProperties_Element request = new QueryResourceProperties_Element();
 		request.setQueryExpression(query);
 
-		QueryResourcePropertiesResponse response;
-		try {
-			response = port.queryResourceProperties(request);
-		} catch (RemoteException e) {
-			throw new Exception(e);
-		}
+		QueryResourcePropertiesResponse response = issueRPQuery(port, request);
 
 		MessageElement messageElements[] = response.get_any();
 		if (messageElements == null) {
@@ -126,76 +128,124 @@ public class ResourcePropertyHelper {
 		}
 
 		if (messageElements.length > 1) {
-			throw new Exception("Resource property query returned " + Integer.toString(messageElements.length)
-				+ " elements; I only know how to deal with one");
+			throw new ResourcePropertyRetrievalException("Resource property query returned "
+				+ Integer.toString(messageElements.length) + " elements; I only know how to deal with one");
 		}
 		Element element;
 		try {
 			element = messageElements[0].getAsDOM();
 		} catch (Exception e) {
-			throw new Exception("Error parsing message element", e);
+			throw new ResourcePropertyRetrievalException("Error parsing message element(" + messageElements[0] + ")", e);
 		}
 		return element;
 
 	}
 
 
-	public static Element getResourceProperty(EndpointReferenceType endpoint, QName rpName) throws Exception {
+	public static Element getResourceProperty(EndpointReferenceType endpoint, QName rpName)
+		throws ResourcePropertyRetrievalException, RemoteResourcePropertyRetrievalException,
+		InvalidResourcePropertyException {
 		GetResourceProperty port;
 		WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
-		port = locator.getGetResourcePropertyPort(endpoint);
+		try {
+			port = locator.getGetResourcePropertyPort(endpoint);
+		} catch (ServiceException e) {
+			throw new RemoteResourcePropertyRetrievalException(e);
+		}
 
 		setAnonymous((Stub) port);
 
-		GetResourcePropertyResponse response;
+		GetResourcePropertyResponse response = null;
 
 		try {
 			response = port.getResourceProperty(rpName);
+		} catch (InvalidResourcePropertyQNameFaultType e) {
+			throw new InvalidResourcePropertyException(e);
 		} catch (RemoteException e) {
-			throw new Exception("Error getting resource property; " + "endpoint was '" + endpoint + "', name was '"
-				+ rpName.toString(), e);
+			throw new RemoteResourcePropertyRetrievalException("Error getting resource property; " + "endpoint was '"
+				+ endpoint + "', name was '" + rpName.toString(), e);
 		}
+
 		MessageElement[] messageElements = response.get_any();
 		if (messageElements == null) {
 			return (null);
 		}
 		if (messageElements.length > 1) {
-			throw new Exception("Get resource property returned " + Integer.toString(messageElements.length)
-				+ " elements; I only know how to deal with one");
+			throw new ResourcePropertyRetrievalException("Get resource property returned "
+				+ Integer.toString(messageElements.length) + " elements; I only know how to deal with one");
 		}
 		Element element;
 		try {
 			element = messageElements[0].getAsDOM();
 		} catch (Exception e) {
-			throw new Exception("Error parsing message element", e);
+			throw new ResourcePropertyRetrievalException("Error parsing message element(" + messageElements[0] + ")", e);
 		}
 		return element;
 	}
 
 
-	public static Element[] getResourceProperties(EndpointReferenceType endpoint, QName[] rpNames) throws Exception {
+	public static Element[] getResourceProperties(EndpointReferenceType endpoint, QName[] rpNames)
+		throws ResourcePropertyRetrievalException {
 
 		WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
-		GetMultipleResourceProperties_PortType port = locator.getGetMultipleResourcePropertiesPort(endpoint);
+		GetMultipleResourceProperties_PortType port;
+		try {
+			port = locator.getGetMultipleResourcePropertiesPort(endpoint);
+		} catch (ServiceException e) {
+			throw new RemoteResourcePropertyRetrievalException(e);
+		}
 
 		setAnonymous((Stub) port);
 
 		GetMultipleResourceProperties_Element request = new GetMultipleResourceProperties_Element();
 		request.setResourceProperty(rpNames);
 
-		GetMultipleResourcePropertiesResponse response = port.getMultipleResourceProperties(request);
+		GetMultipleResourcePropertiesResponse response;
+		try {
+			response = port.getMultipleResourceProperties(request);
+		} catch (InvalidResourcePropertyQNameFaultType e) {
+			throw new InvalidResourcePropertyException(e);
+		} catch (RemoteException e) {
+			throw new RemoteResourcePropertyRetrievalException(e);
+		}
 
-		System.out.println(AnyHelper.toSingleString(response));
-		return AnyHelper.toElement(response.get_any());
+		Element result[];
+		try {
+			result = AnyHelper.toElement(response.get_any());
+		} catch (Exception e) {
+			throw new ResourcePropertyRetrievalException("Error converting resource properties to elements: "
+				+ e.getMessage(), e);
+		}
+
+		return result;
 
 	}
 
 
 	private static void setAnonymous(Stub stub) {
-		//stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-		//	org.globus.wsrf.security.Constants.ENCRYPTION);
+		// stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
+		// org.globus.wsrf.security.Constants.ENCRYPTION);
 		stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
 		stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization.getInstance());
 		stub._setProperty(GSIConstants.GSI_AUTHORIZATION, org.globus.gsi.gssapi.auth.NoAuthorization.getInstance());
+	}
+
+
+	private static QueryResourcePropertiesResponse issueRPQuery(QueryResourceProperties_PortType port,
+		QueryResourceProperties_Element request) throws QueryInvalidException, RemoteResourcePropertyRetrievalException {
+		QueryResourcePropertiesResponse response = null;
+		try {
+			response = port.queryResourceProperties(request);
+		} catch (InvalidQueryExpressionFaultType e) {
+			throw new QueryInvalidException(e);
+		} catch (QueryEvaluationErrorFaultType e) {
+			throw new QueryInvalidException(e);
+		} catch (UnknownQueryExpressionDialectFaultType e) {
+			// shouldn't happen and user can't handle this
+			throw new InternalRuntimeException(e);
+		} catch (RemoteException e) {
+			throw new RemoteResourcePropertyRetrievalException(e);
+		}
+		return response;
 	}
 }

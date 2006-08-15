@@ -1,6 +1,9 @@
 package gov.nih.nci.cagrid.discovery;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.discovery.exceptions.InvalidResourcePropertyException;
+import gov.nih.nci.cagrid.discovery.exceptions.RemoteResourcePropertyRetrievalException;
+import gov.nih.nci.cagrid.discovery.exceptions.ResourcePropertyRetrievalException;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
@@ -9,6 +12,7 @@ import java.io.Writer;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.utils.ClassUtils;
+import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.w3c.dom.Element;
 
@@ -18,19 +22,33 @@ public class MetadataUtils {
 	private static final String METADATA_WSDD = "/gov/nih/nci/cagrid/discovery/Metadata-client-config.wsdd";
 
 
-	public static ServiceMetadata getServiceMetadata(EndpointReferenceType serviceEPR) throws Exception {
+	public static ServiceMetadata getServiceMetadata(EndpointReferenceType serviceEPR)
+		throws InvalidResourcePropertyException, RemoteResourcePropertyRetrievalException,
+		ResourcePropertyRetrievalException {
 		Element resourceProperty = ResourcePropertyHelper.getResourceProperty(serviceEPR,
 			MetadataConstants.CAGRID_MD_QNAME);
-
-		return (ServiceMetadata) ObjectDeserializer.toObject(resourceProperty, ServiceMetadata.class);
+		ServiceMetadata result;
+		try {
+			result = (ServiceMetadata) ObjectDeserializer.toObject(resourceProperty, ServiceMetadata.class);
+		} catch (DeserializationException e) {
+			throw new ResourcePropertyRetrievalException("Unable to deserailize ServiceMetadata: " + e.getMessage(), e);
+		}
+		return result;
 	}
 
 
-	public static DomainModel getDomainModel(EndpointReferenceType serviceEPR) throws Exception {
+	public static DomainModel getDomainModel(EndpointReferenceType serviceEPR) throws InvalidResourcePropertyException,
+		RemoteResourcePropertyRetrievalException, ResourcePropertyRetrievalException {
 		Element resourceProperty = ResourcePropertyHelper.getResourceProperty(serviceEPR,
 			MetadataConstants.CAGRID_DATA_MD_QNAME);
 
-		return (DomainModel) ObjectDeserializer.toObject(resourceProperty, DomainModel.class);
+		DomainModel result;
+		try {
+			result = (DomainModel) ObjectDeserializer.toObject(resourceProperty, DomainModel.class);
+		} catch (DeserializationException e) {
+			throw new ResourcePropertyRetrievalException("Unable to deserailize DomainModel: " + e.getMessage(), e);
+		}
+		return result;
 	}
 
 
@@ -56,8 +74,8 @@ public class MetadataUtils {
 		if (domainModel == null || writer == null) {
 			throw new IllegalArgumentException("Null is not a valid argument");
 		}
-		Utils.serializeObject(domainModel, MetadataConstants.CAGRID_DATA_MD_QNAME, writer, ClassUtils.getResourceAsStream(
-			MetadataUtils.class, METADATA_WSDD));
+		Utils.serializeObject(domainModel, MetadataConstants.CAGRID_DATA_MD_QNAME, writer, ClassUtils
+			.getResourceAsStream(MetadataUtils.class, METADATA_WSDD));
 	}
 
 
