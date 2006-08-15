@@ -201,11 +201,11 @@
     <!-- This is done with a GT4 tool -->
     <target name="createBeans" depends="init">
         <ant antfile="${build.stubs}" target="mergePackageMapping">
-            <property name="mapping.src" location="${mappings.file}" />
-            <property name="mapping.dst" location="${schema.dir}/namespace2package.mappings" />
+            <property name="mapping.src" location="${metadata.dir}/namespace2package.mappings" />
+            <property name="mapping.dst" location="${build.dir}/namespace2package.mappings" />
         </ant>
         <ant antfile="${build.stubs}" target="generateStubs">
-            <property name="mapping.file" location="${metadata.dir}/namespace2package.mappings" />
+            <property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
             <property name="source.stubs.dir" location="${metadata.dir}" />
             <property name="target.stubs.dir" location="${src.dir}" />
             <property name="wsdl.file" value="bulkDataTransferBeans.wsdl" />
