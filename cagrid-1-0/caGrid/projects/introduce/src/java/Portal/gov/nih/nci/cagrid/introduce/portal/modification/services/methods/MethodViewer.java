@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
@@ -11,12 +10,12 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
-import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.MethodSecurityPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
@@ -32,13 +31,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -51,10 +53,7 @@ import javax.swing.border.TitledBorder;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.utils.JavaUtils;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.portal.GridPortalBaseFrame;
-import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
@@ -118,7 +117,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JTabbedPane configureTabbedPane = null;
 
-	private JTextField exceptionEditText = null;
+	private JComboBox exceptionJComboBox = null;
 
 	private JPanel inputNamespacesPanel = null;
 
@@ -666,7 +665,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints15.gridheight = 1;
 			exceptionInputPanel = new JPanel();
 			exceptionInputPanel.setLayout(new GridBagLayout());
-			exceptionInputPanel.add(getExceptionEditText(), gridBagConstraints15);
+			exceptionInputPanel.add(getExceptionJComboBox(), gridBagConstraints15);
 			exceptionInputPanel.add(faultNameLabel, gridBagConstraints3);
 			exceptionInputPanel.add(getExceptionsInputButtonPanel(), gridBagConstraints27);
 		}
@@ -698,11 +697,27 @@ public class MethodViewer extends GridPortalBaseFrame {
 			addExceptionButton.setText("Add");
 			addExceptionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (CommonTools.isValidServiceName(getExceptionEditText().getText())) {
-						getExceptionsTable().addRow(getExceptionEditText().getText());
+					String exceptionName = (String) getExceptionJComboBox().getSelectedItem();
+					if (CommonTools.isValidServiceName(exceptionName)) {
+						for (int i = 0; i < getExceptionsTable().getRowCount(); i++) {
+							MethodTypeExceptionsException exception = null;
+							try {
+								exception = getExceptionsTable().getRowData(i);
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+							if (exception != null && exception.getName().equals(exceptionName)) {
+								JOptionPane.showMessageDialog(MethodViewer.this, "Exception (" + exceptionName
+									+ ") already thrown by method.");
+								return;
+							}
+						}
+
+						getExceptionsTable().addRow(exceptionName);
 					} else {
-						JOptionPane.showMessageDialog(MethodViewer.this,
-							"Invalid Exception Name:  Exception must be a valid java indentifier.");
+						JOptionPane.showMessageDialog(MethodViewer.this, "Invalid Exception Name(" + exceptionName
+							+ "):  Exception must be a valid java indentifier.");
+						return;
 					}
 				}
 			});
@@ -811,11 +826,41 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 * 
 	 * @return javax.swing.JTextField
 	 */
-	private JTextField getExceptionEditText() {
-		if (exceptionEditText == null) {
-			exceptionEditText = new JTextField();
+	private JComboBox getExceptionJComboBox() {
+		if (exceptionJComboBox == null) {
+			exceptionJComboBox = new JComboBox();
+			exceptionJComboBox.setEditable(true);
+			// populate with currently used exception names
+			ServiceType[] service = this.info.getServices().getService();
+			SortedSet exceptionNameSet = new TreeSet();
+			if (service != null) {
+				for (int i = 0; i < service.length; i++) {
+					MethodsType methodsType = service[i].getMethods();
+					if (methodsType != null) {
+						MethodType methods[] = methodsType.getMethod();
+						if (methods != null) {
+							for (int j = 0; j < methods.length; j++) {
+								MethodTypeExceptions exceptionsType = methods[j].getExceptions();
+								if (exceptionsType != null) {
+									MethodTypeExceptionsException[] exceptions = exceptionsType.getException();
+									if (exceptions != null) {
+										for (int e = 0; e < exceptions.length; e++) {
+											exceptionNameSet.add(exceptions[e].getName());
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			for (Iterator iter = exceptionNameSet.iterator(); iter.hasNext();) {
+				String usedExceptionName = (String) iter.next();
+				exceptionJComboBox.addItem(usedExceptionName);
+			}
+			
 		}
-		return exceptionEditText;
+		return exceptionJComboBox;
 	}
 
 

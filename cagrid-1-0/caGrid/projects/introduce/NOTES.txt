@@ -12,10 +12,6 @@ look into whether we should have services return EPR-wrappers instead of EPRs th
 
 GUI needs a way to group common preferences that extensions can use (such as GME URL), intead of each having to define/use their own
 
-need to handle faults better
- -bare minimum:  need an editible dropdown containing the currently used fault types that people can select from (dynamically populated from current types
- -ideal: also allow user to select a fault from the type selection component (verify it extends from base fault, etc)
-
 Need to add support importing methods from other wsdl which does not use our common message names....
 
 Need to add "resourceLink" for each sub service to each other service so that they can look them up and create instances....
@@ -61,6 +57,12 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+need to handle faults better
+(DONE)  -bare minimum:  need an editible dropdown containing the currently used fault types that people can select from (dynamically populated from current types
+ (MAYBE POST 1.0) -ideal: also allow user to select a fault from the type selection component (verify it extends from base fault, etc)
+
+
+
 service contexts backend for service properties need to have resourceLinks to the main serviceconfiguration instead of own entry in jndi, and share the same serviceconfiguration class
 
 service contexts need a way to edit service security

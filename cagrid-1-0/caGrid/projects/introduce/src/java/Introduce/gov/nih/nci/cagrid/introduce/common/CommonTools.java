@@ -142,13 +142,15 @@ public class CommonTools {
 
 
 	public static boolean isValidServiceName(String serviceName) {
-		if (serviceName.length() > 0) {
-			if (serviceName.substring(0, 1).toLowerCase().equals(serviceName.substring(0, 1))) {
-				return false;
-			}
-			if (!serviceName.matches(ALLOWED_JAVA_CLASS_REGEX)) {
-				return false;
-			}
+		if (serviceName == null || serviceName.trim().equals("")) {
+			return false;
+		}
+		
+		if (serviceName.substring(0, 1).toLowerCase().equals(serviceName.substring(0, 1))) {
+			return false;
+		}
+		if (!serviceName.matches(ALLOWED_JAVA_CLASS_REGEX)) {
+			return false;
 		}
 		return true;
 
@@ -333,10 +335,10 @@ public class CommonTools {
 
 
 	/**
-	 * This method will create a namespaceType fully populated with the schema elements.
-	 * It will default the location to the relative path from the file name i.e. "./filename"
-	 * Be sure to change the location if this file is not going to be in the toplevel schema/Servicename
-	 * directory of your service.
+	 * This method will create a namespaceType fully populated with the schema
+	 * elements. It will default the location to the relative path from the file
+	 * name i.e. "./filename" Be sure to change the location if this file is not
+	 * going to be in the toplevel schema/Servicename directory of your service.
 	 * 
 	 * @param relativeFromDirectory
 	 * @param xsdFilenameFromRelativeDirectory
@@ -783,12 +785,12 @@ public class CommonTools {
 		}
 		return removed;
 	}
-	
-	
+
+
 	/**
-	 * Determines if schema element types from a namespace type are referenced in
-	 * other parts of the service (ie Methods, Exceptions)
-	 *  
+	 * Determines if schema element types from a namespace type are referenced
+	 * in other parts of the service (ie Methods, Exceptions)
+	 * 
 	 * @param nsType
 	 * @param info
 	 * @return
@@ -800,8 +802,7 @@ public class CommonTools {
 			// resource properties
 			ResourcePropertiesListType propsList = services[s].getResourcePropertiesList();
 			if (propsList != null) {
-				for (int p = 0; propsList.getResourceProperty() != null 
-				&& p < propsList.getResourceProperty().length; p++) {
+				for (int p = 0; propsList.getResourceProperty() != null && p < propsList.getResourceProperty().length; p++) {
 					ResourcePropertyType prop = propsList.getResourceProperty(p);
 					if (prop.getQName().getNamespaceURI().equals(namespace)) {
 						return true;
@@ -816,8 +817,7 @@ public class CommonTools {
 					// inputs
 					MethodTypeInputs inputs = method.getInputs();
 					if (inputs != null) {
-						for (int i = 0; inputs.getInput() != null 
-						&& i < inputs.getInput().length; i++) {
+						for (int i = 0; inputs.getInput() != null && i < inputs.getInput().length; i++) {
 							MethodTypeInputsInput input = inputs.getInput(i);
 							if (input.getQName().getNamespaceURI().equals(namespace)) {
 								return true;
@@ -832,24 +832,24 @@ public class CommonTools {
 						}
 					}
 					// exceptions
-					// TODO: This is disabled until exceptions can be typed from schema
+					// TODO: This is disabled until exceptions can be typed from
+					// schema
 					/*
-					MethodTypeExceptions exceptions = method.getExceptions();
-					if (exceptions != null) {
-						for (int e = 0; exceptions.getException() != null 
-						&& e < exceptions.getException().length; e++) {
-							MethodTypeExceptionsException exception = exceptions.getException(e);
-							// TODO: verify exception QName against nsuri
-						}
-					}
-					*/
+					 * MethodTypeExceptions exceptions = method.getExceptions();
+					 * if (exceptions != null) { for (int e = 0;
+					 * exceptions.getException() != null && e <
+					 * exceptions.getException().length; e++) {
+					 * MethodTypeExceptionsException exception =
+					 * exceptions.getException(e); // TODO: verify exception
+					 * QName against nsuri } }
+					 */
 				}
 			}
 		}
 		return false;
 	}
-	
-	
+
+
 	/**
 	 * Determines if all schema element types used in the service are still
 	 * available in the service's namespace types.
@@ -860,8 +860,8 @@ public class CommonTools {
 	public static boolean usedTypesAvailable(ServiceDescription desc) {
 		return getUnavailableUsedTypes(desc).size() == 0;
 	}
-	
-	
+
+
 	public static Set getUnavailableUsedTypes(ServiceDescription desc) {
 		// build up a set of used types
 		Set usedTypes = new HashSet();
@@ -870,8 +870,7 @@ public class CommonTools {
 			// resource properties
 			ResourcePropertiesListType propsList = services[s].getResourcePropertiesList();
 			if (propsList != null) {
-				for (int p = 0; propsList.getResourceProperty() != null 
-				&& p < propsList.getResourceProperty().length; p++) {
+				for (int p = 0; propsList.getResourceProperty() != null && p < propsList.getResourceProperty().length; p++) {
 					ResourcePropertyType prop = propsList.getResourceProperty(p);
 					usedTypes.add(prop.getQName());
 				}
@@ -884,8 +883,7 @@ public class CommonTools {
 					// inputs
 					MethodTypeInputs inputs = method.getInputs();
 					if (inputs != null) {
-						for (int i = 0; inputs.getInput() != null 
-						&& i < inputs.getInput().length; i++) {
+						for (int i = 0; inputs.getInput() != null && i < inputs.getInput().length; i++) {
 							MethodTypeInputsInput input = inputs.getInput(i);
 							usedTypes.add(input.getQName());
 						}
@@ -896,30 +894,29 @@ public class CommonTools {
 						usedTypes.add(output.getQName());
 					}
 					// exceptions
-					// TODO: This is disabled until exceptions can be typed from schema
+					// TODO: This is disabled until exceptions can be typed from
+					// schema
 					/*
-					MethodTypeExceptions exceptions = method.getExceptions();
-					if (exceptions != null) {
-						for (int e = 0; exceptions.getException() != null 
-						&& e < exceptions.getException().length; e++) {
-							MethodTypeExceptionsException exception = exceptions.getException(e);
-							// TODO: verify exception QName against nsuri
-						}
-					}
-					*/
+					 * MethodTypeExceptions exceptions = method.getExceptions();
+					 * if (exceptions != null) { for (int e = 0;
+					 * exceptions.getException() != null && e <
+					 * exceptions.getException().length; e++) {
+					 * MethodTypeExceptionsException exception =
+					 * exceptions.getException(e); // TODO: verify exception
+					 * QName against nsuri } }
+					 */
 				}
 			}
 		}
-		
+
 		// walk through namespace types removing QNames from used types
 		NamespacesType namespaces = desc.getNamespaces();
 		if (namespaces != null) {
-			for (int n = 0; namespaces.getNamespace() != null 
-			&& usedTypes.size() != 0 && n < namespaces.getNamespace().length; n++) {
+			for (int n = 0; namespaces.getNamespace() != null && usedTypes.size() != 0
+				&& n < namespaces.getNamespace().length; n++) {
 				NamespaceType nsType = namespaces.getNamespace(n);
-				for (int t = 0; nsType.getSchemaElement() != null 
-				&& t < nsType.getSchemaElement().length 
-				&& usedTypes.size() != 0; t++) {
+				for (int t = 0; nsType.getSchemaElement() != null && t < nsType.getSchemaElement().length
+					&& usedTypes.size() != 0; t++) {
 					SchemaElementType type = nsType.getSchemaElement(t);
 					usedTypes.remove(new QName(nsType.getNamespace(), type.getType()));
 				}
