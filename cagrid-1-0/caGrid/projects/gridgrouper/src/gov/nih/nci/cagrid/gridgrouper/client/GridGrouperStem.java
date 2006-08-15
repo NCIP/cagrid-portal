@@ -18,6 +18,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemUpdate;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Group;
 import gov.nih.nci.cagrid.gridgrouper.grouper.Stem;
@@ -129,8 +130,10 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 	public void setDescription(String value)
 			throws InsufficientPrivilegeException, StemModifyException {
 		try {
-			this.des = gridGrouper.getClient().updateStemDescription(
-					getStemIdentifier(), value);
+			StemUpdate update = new StemUpdate();
+			update.setDescription(value);
+			this.des = gridGrouper.getClient().updateStem(
+					getStemIdentifier(), update);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (StemModifyFault f) {
@@ -177,8 +180,10 @@ public class GridGrouperStem extends GridGrouperObject implements Stem {
 	public void setDisplayExtension(String value)
 			throws InsufficientPrivilegeException, StemModifyException {
 		try {
-			this.des = gridGrouper.getClient().updateStemDisplayExtension(
-					getStemIdentifier(), value);
+			StemUpdate update = new StemUpdate();
+			update.setDisplayExtension(value);
+			this.des = gridGrouper.getClient().updateStem(
+					getStemIdentifier(), update);
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (StemModifyFault f) {

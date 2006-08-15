@@ -33,6 +33,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
+import gov.nih.nci.cagrid.gridgrouper.bean.StemUpdate;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
@@ -240,20 +241,25 @@ public class GridGrouper {
 			}
 		}
 	}
-	
 
-	public StemDescriptor updateStemDescription(String gridIdentity,
-			StemIdentifier stemId, String description) throws RemoteException,
-			GridGrouperRuntimeFault, InsufficientPrivilegeFault,
+	public StemDescriptor updateStem(String gridIdentity, StemIdentifier stem, StemUpdate update)
+			throws GridGrouperRuntimeFault, InsufficientPrivilegeFault,
 			StemModifyFault {
 		GrouperSession session = null;
 		try {
 			Subject subject = SubjectUtils.getSubject(gridIdentity);
 			session = GrouperSession.start(subject);
 			StemDescriptor des = null;
-			Stem stem = StemFinder.findByName(session, stemId.getStemName());
-			stem.setDescription(description);
-			des = stemtoStemDescriptor(stem);
+			Stem target = StemFinder.findByName(session, stem.getStemName());
+			if((update.getDescription()!=null)&&(!update.getDescription().equals(target.getDescription()))){
+				target.setDescription(update.getDescription());
+			}
+			
+			if((update.getDisplayExtension()!=null)&&(!update.getDisplayExtension().equals(target.getDisplayExtension()))){
+				target.setDisplayExtension(update.getDisplayExtension());
+			}
+			
+			des = stemtoStemDescriptor(target);
 			return des;
 		} catch (InsufficientPrivilegeException e) {
 			InsufficientPrivilegeFault fault = new InsufficientPrivilegeFault();
@@ -273,7 +279,7 @@ public class GridGrouper {
 			log.error(e.getMessage(), e);
 			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
 			fault.setFaultString("Error occurred getting the stem "
-					+ stemId.getStemName() + ": " + e.getMessage());
+					+ stem.getStemName() + ": " + e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GridGrouperRuntimeFault) helper.getFault();
@@ -287,54 +293,10 @@ public class GridGrouper {
 				}
 			}
 		}
+
 	}
 
-	public StemDescriptor updateStemDisplayExtension(String gridIdentity,
-			StemIdentifier stemId, String displayExtension)
-			throws RemoteException, GridGrouperRuntimeFault,
-			InsufficientPrivilegeFault, StemModifyFault {
-		GrouperSession session = null;
-		try {
-			Subject subject = SubjectUtils.getSubject(gridIdentity);
-			session = GrouperSession.start(subject);
-			StemDescriptor des = null;
-			Stem stem = StemFinder.findByName(session, stemId.getStemName());
-			stem.setDisplayExtension(displayExtension);
-			des = stemtoStemDescriptor(stem);
-			return des;
-		} catch (InsufficientPrivilegeException e) {
-			InsufficientPrivilegeFault fault = new InsufficientPrivilegeFault();
-			fault.setFaultString(e.getMessage());
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (InsufficientPrivilegeFault) helper.getFault();
-			throw fault;
-		} catch (StemModifyException e) {
-			StemModifyFault fault = new StemModifyFault();
-			fault.setFaultString(e.getMessage());
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (StemModifyFault) helper.getFault();
-			throw fault;
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
-			fault.setFaultString("Error occurred getting the stem "
-					+ stemId.getStemName() + ": " + e.getMessage());
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (GridGrouperRuntimeFault) helper.getFault();
-			throw fault;
-		} finally {
-			if (session == null) {
-				try {
-					session.stop();
-				} catch (Exception e) {
-					log.error(e.getMessage(), e);
-				}
-			}
-		}
-	}
+	
 
 	public String[] getSubjectsWithStemPrivilege(String gridIdentity,
 			StemIdentifier stem, StemPrivilegeType privilege)

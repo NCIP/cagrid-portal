@@ -37,15 +37,9 @@ public class GridGrouperProviderImpl{
 		return boxedResult;
 	}
 
-	public gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDescriptionResponse updateStemDescription(gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDescriptionRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault {
-		gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDescriptionResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDescriptionResponse();
-		boxedResult.setStemDescriptor(impl.updateStemDescription(params.getStem().getStemIdentifier(),params.getDescription()));
-		return boxedResult;
-	}
-
-	public gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDisplayExtensionResponse updateStemDisplayExtension(gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDisplayExtensionRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault {
-		gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDisplayExtensionResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemDisplayExtensionResponse();
-		boxedResult.setStemDescriptor(impl.updateStemDisplayExtension(params.getStem().getStemIdentifier(),params.getDisplayExtension()));
+	public gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemResponse updateStem(gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemResponse();
+		boxedResult.setStemDescriptor(impl.updateStem(params.getStem().getStemIdentifier(),params.getUpdate().getStemUpdate()));
 		return boxedResult;
 	}
 

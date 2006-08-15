@@ -73,16 +73,16 @@
 	<xsd:complexType name="StemUpdate">
 		<xsd:sequence>
 			<xsd:element name="DisplayExtension" minOccurs="0" maxOccurs="1" type="xsd:string" />
-			<xsd:element name="Description" minOccurs="0" maxOccurs="1" type="grouper:StemPrivilegeType" />
+			<xsd:element name="Description" minOccurs="0" maxOccurs="1" type="xsd:string" />
 		</xsd:sequence>
 	</xsd:complexType>
 	
 	<xsd:element name="GroupUpdate" type="grouper:GroupUpdate"/>
 	<xsd:complexType name="GroupUpdate">
 		<xsd:sequence>
-		    <xsd:element name="DExtension" minOccurs="0" maxOccurs="1" type="xsd:string" />
+		    <xsd:element name="Extension" minOccurs="0" maxOccurs="1" type="xsd:string" />
 			<xsd:element name="DisplayExtension" minOccurs="0" maxOccurs="1" type="xsd:string" />
-			<xsd:element name="Description" minOccurs="0" maxOccurs="1" type="grouper:StemPrivilegeType" />
+			<xsd:element name="Description" minOccurs="0" maxOccurs="1" type="xsd:string" />
 		</xsd:sequence>
 	</xsd:complexType>
 
