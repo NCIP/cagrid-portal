@@ -1,11 +1,17 @@
+reimplement generateDomainModel(proj,class,assoc)
+  - change to association excludes
+
+implement generateDomainModel(proj,class)
+
+
+add appropriate service faults and internal exceptions
+
 add service property for setting thread pool size
 
 resource/context for non-blocking domainmodel generation
 
 discovery panel should support "searching" as well
 
-reimplement generateDomainModel(proj,class,assoc)
-  - change to association excludes?
 
 
 
@@ -16,12 +22,17 @@ caCORE provided XSD's have the wrong namespace (caCORE.cabig instead of caCORE.c
 
 returning too many classes when there are package aliases
 
-(FIXED WITH WORKAROUND TO GET MANUALLY BY QUERY )returning same class for association source and target
+returning too many assocations
 
-unable to populate associations as client calls back to ApplServ even if associations are set
 
 
 ==================================================
+(DONE) change assocations in domainmodel to be closure over exposed classes
+
+(WORKAROUND -- made new bean ) unable to populate associations as client calls back to ApplServ even if associations are set
+
+(FIXED WITH WORKAROUND TO GET MANUALLY BY QUERY )returning same class for association source and target
+
 (DONE) apply association work around to caDSRServiceImpl 
 
 (DONE) fix association rendering in UMLDiagram (its all messed up)

@@ -18,14 +18,17 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationSourceUMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationTargetUMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLClassReference;
+import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -93,31 +96,71 @@ public class DomainModelBuilder {
 			throw new DomainModelGenerationException("Problem getting project's classes.", e);
 		}
 
-		// get all associations in project, preloading source and target classes
-		criteria = DetachedCriteria.forClass(UMLAssociationMetadata.class).createCriteria("project").add(
-			Restrictions.eq("id", proj.getId()));
 		UMLAssociationMetadata[] assocArr;
 		try {
-			assocArr = getProjectAssociations(proj, criteria);
+			assocArr = getProjectAssociationClosure(proj, classArr);
 		} catch (ApplicationException e) {
 			throw new DomainModelGenerationException("Problem getting project's associations.", e);
 		}
 
-		return createDomainModel(proj, classArr, assocArr);
+		return buildDomainModel(proj, classArr, assocArr);
 
 	}
 
 
+	private String createClassIDFilter(UMLClassMetadata[] classArr) {
+		// create a list of class IDs for building association closure
+		Set idSet = new HashSet();
+		if (classArr != null) {
+			for (int i = 0; i < classArr.length; i++) {
+				idSet.add(classArr[i].getId());
+			}
+		}
+
+		String classIDFilter = "";
+		StringBuffer sb = new StringBuffer();
+		// now build the criteria from the id set
+		for (Iterator iter = idSet.iterator(); iter.hasNext();) {
+			String classID = (String) iter.next();
+			sb.append("'" + classID + "'");
+			if (iter.hasNext()) {
+				sb.append(", ");
+			}
+		}
+		if (idSet.size() > 0) {
+			classIDFilter = " IN (" + sb.toString() + ")";
+		}
+
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Class filter was:" + classIDFilter);
+		}
+
+		return classIDFilter;
+	}
+
+
 	/**
+	 * Gets all of the associations of this project that are closed over the
+	 * classes specified in the classArr.
+	 * 
 	 * @param proj
-	 * @param criteria
+	 * @param classArr
 	 * @return
 	 * @throws ApplicationException
 	 */
-	private UMLAssociationMetadata[] getProjectAssociations(Project proj, DetachedCriteria criteria)
+	private UMLAssociationMetadata[] getProjectAssociationClosure(Project proj, UMLClassMetadata[] classArr)
 		throws ApplicationException {
+
+		// get all associations between classes we are exposing
+		String classIDFilter = createClassIDFilter(classArr);
+
+		// get all associations in project
+		HQLCriteria hql = new HQLCriteria("FROM UMLAssociationMetadata AS assoc WHERE assoc.project.id='"
+			+ proj.getId() + "' AND assoc.sourceUMLClassMetadata.id " + classIDFilter
+			+ " AND assoc.targetUMLClassMetadata.id " + classIDFilter);
+
 		long start = System.currentTimeMillis();
-		List rList = this.cadsr.query(criteria, UMLAssociationMetadata.class.getName());
+		List rList = this.cadsr.query(hql, UMLAssociationMetadata.class.getName());
 		UMLAssociationMetadata assocArr[] = new UMLAssociationMetadata[rList.size()];
 		// caCORE's toArray(arr) is broken (cacore bug #1382), so need to do
 		// this way
@@ -189,23 +232,14 @@ public class DomainModelBuilder {
 				throw new DomainModelGenerationException("Problem getting project's classes.", e);
 			}
 
-			// get all associations in project (where source class fqn like
-			// packageNames[0].% or packageNames[1].% ....), preloading source
-			// and target classes
-
-			criteria = DetachedCriteria.forClass(UMLAssociationMetadata.class).createAlias("sourceUMLClassMetadata",
-				"src").createAlias("src.UMLPackageMetadata", "pack").createAlias("targetUMLClassMetadata", "targ")
-				.setFetchMode("src", FetchMode.JOIN).setFetchMode("targ", FetchMode.JOIN).setResultTransformer(
-					CriteriaSpecification.DISTINCT_ROOT_ENTITY).add(disjunction).createCriteria("project").add(
-					Restrictions.eq("id", proj.getId()));
 			try {
-				assocArr = getProjectAssociations(proj, criteria);
+				assocArr = getProjectAssociationClosure(proj, classArr);
 			} catch (ApplicationException e) {
 				throw new DomainModelGenerationException("Problem getting project's associations.", e);
 			}
 
 		}
-		return createDomainModel(proj, classArr, assocArr);
+		return buildDomainModel(proj, classArr, assocArr);
 	}
 
 
@@ -223,7 +257,7 @@ public class DomainModelBuilder {
 	 * @throws DomainModelGenerationException
 	 * @throws RemoteException
 	 */
-	public DomainModel createDomainModel(final Project proj, UMLClassMetadata[] classes,
+	protected DomainModel buildDomainModel(final Project proj, UMLClassMetadata[] classes,
 		UMLAssociationMetadata[] associations) throws DomainModelGenerationException {
 
 		final DomainModel model = new DomainModel();
