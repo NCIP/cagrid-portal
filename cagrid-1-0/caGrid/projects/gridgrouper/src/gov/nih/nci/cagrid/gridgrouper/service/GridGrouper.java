@@ -1061,6 +1061,8 @@ public class GridGrouper {
 				set = target.getEffectiveMembers();
 			} else if (filter.equals(MemberFilter.ImmediateMembers)) {
 				set = target.getImmediateMembers();
+			}else if (filter.equals(MemberFilter.CompositeMembers)) {
+				set = target.getCompositeMembers();
 			} else {
 				throw new Exception("Unsuppoted member filter type!!!");
 			}
@@ -1170,6 +1172,8 @@ public class GridGrouper {
 				set = target.getEffectiveMemberships();
 			} else if (filter.equals(MemberFilter.ImmediateMembers)) {
 				set = target.getImmediateMemberships();
+			}else if (filter.equals(MemberFilter.CompositeMembers)) {
+				set = target.getCompositeMemberships();
 			} else {
 				throw new Exception("Unsuppoted member filter type!!!");
 			}

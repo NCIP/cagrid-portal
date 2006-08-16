@@ -33,6 +33,8 @@ public class TestGroups extends TestCase {
 
 	// private String ADMIN_USER =
 	// "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=admin";
+	
+	private String USER_PREFIX = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user";
 
 	private String USER_A = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user a";
 
@@ -203,6 +205,80 @@ public class TestGroups extends TestCase {
 
 	}
 
+	public void testComposites() {
+		try {
+			Map expected = new HashMap();
+			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
+
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
+							.getRootStemIdentifier(), SUPER_USER,
+					StemPrivilegeType.stem));
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
+							.getRootStemIdentifier(), SUPER_USER,
+					StemPrivilegeType.create));
+
+			StemDescriptor root = grouper.getStem(SUPER_USER, Utils
+					.getRootStemIdentifier());
+			assertNotNull(root);
+			assertEquals(root.getName(), Utils.getRootStemIdentifier()
+					.getStemName());
+
+			String testStem = "TestStem";
+			StemDescriptor test = grouper.addChildStem(SUPER_USER, Utils
+					.getRootStemIdentifier(), testStem, testStem);
+
+			final String groupExtensionX = "mygroupx";
+			final String groupDisplayExtensionX = "My Group X";
+
+			GroupDescriptor grpx = grouper.addChildGroup(SUPER_USER, Utils
+					.getStemIdentifier(test), groupExtensionX,
+					groupDisplayExtensionX);
+			assertEquals(groupExtensionX, grpx.getExtension());
+			assertEquals(groupDisplayExtensionX, grpx.getDisplayExtension());
+			GroupDescriptor[] grps = grouper.getChildGroups(SUPER_USER, Utils
+					.getStemIdentifier(test));
+			assertEquals(1, grps.length);
+			assertEquals(groupExtensionX, grps[0].getExtension());
+			assertEquals(groupDisplayExtensionX, grps[0].getDisplayExtension());
+
+			expected.clear();
+			verifyMembers(grpx, MemberFilter.All, 0, expected);
+			expected.clear();
+			verifyMembers(grpx, MemberFilter.EffectiveMembers, 0, expected);
+			expected.clear();
+			verifyMembers(grpx, MemberFilter.ImmediateMembers, 0, expected);
+			expected.clear();
+
+			final String groupExtensionY = "mygroupy";
+			final String groupDisplayExtensionY = "My Group Y";
+
+			GroupDescriptor grpy = grouper.addChildGroup(SUPER_USER, Utils
+					.getStemIdentifier(test), groupExtensionY,
+					groupDisplayExtensionY);
+			assertEquals(groupExtensionY, grpy.getExtension());
+			assertEquals(groupDisplayExtensionY, grpy.getDisplayExtension());
+			assertEquals(2, grouper.getChildGroups(SUPER_USER, Utils
+					.getStemIdentifier(test)).length);
+
+			expected.clear();
+			verifyMembers(grpy, MemberFilter.All, 0, expected);
+			expected.clear();
+			verifyMembers(grpy, MemberFilter.EffectiveMembers, 0, expected);
+			expected.clear();
+			verifyMembers(grpy, MemberFilter.ImmediateMembers, 0, expected);
+			expected.clear();
+			
+			
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		}
+
+	}
+
 	public void testMemberships() {
 		try {
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
@@ -323,7 +399,7 @@ public class TestGroups extends TestCase {
 
 			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(subgrp),
 					USER_B);
-			
+
 			expected.clear();
 			expected.put(USER_A, getGridMembership(USER_A, grp.getName(), null,
 					0));
@@ -340,7 +416,7 @@ public class TestGroups extends TestCase {
 
 			expected.clear();
 			verifyMemberships(grp, MemberFilter.EffectiveMembers, 0, expected);
-			
+
 			verifyMemberships(subgrp, MemberFilter.All, 0, expected);
 			verifyMemberships(subgrp, MemberFilter.EffectiveMembers, 0,
 					expected);
@@ -349,7 +425,7 @@ public class TestGroups extends TestCase {
 
 			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grp),
 					USER_A);
-			
+
 			expected.clear();
 			expected.put(subgrp.getUUID(), getGroupMembership(subgrp.getUUID(),
 					grp.getName(), null, 0));
@@ -365,7 +441,7 @@ public class TestGroups extends TestCase {
 
 			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grp),
 					subgrp.getUUID());
-			
+
 			verifyMemberships(grp, MemberFilter.All, 0, expected);
 			verifyMemberships(grp, MemberFilter.EffectiveMembers, 0, expected);
 			verifyMemberships(grp, MemberFilter.ImmediateMembers, 0, expected);
