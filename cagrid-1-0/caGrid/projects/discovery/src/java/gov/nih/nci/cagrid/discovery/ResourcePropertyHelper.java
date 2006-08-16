@@ -55,7 +55,7 @@ public class ResourcePropertyHelper {
 
 
 	public static MessageElement[] queryResourceProperties(EndpointReferenceType endpoint, String queryExpression)
-		throws ResourcePropertyRetrievalException, RemoteResourcePropertyRetrievalException, QueryInvalidException {
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException {
 
 		WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
 		QueryExpressionType query = new QueryExpressionType();
