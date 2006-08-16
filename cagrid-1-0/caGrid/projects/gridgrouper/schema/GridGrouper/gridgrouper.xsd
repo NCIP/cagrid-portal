@@ -3,6 +3,15 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:grouper="http://cagrid.nci.nih.gov/1/GridGrouper">
 	
+	<xsd:element name="MembershipDescriptor" type="grouper:MembershipDescriptor" />
+	<xsd:complexType name="MembershipDescriptor">
+		<xsd:sequence>
+		    <xsd:element name="Member" minOccurs="1" maxOccurs="1" type="grouper:MemberDescriptor" />
+			<xsd:element name="Group" minOccurs="1" maxOccurs="1" type="grouper:GroupDescriptor" />
+			<xsd:element name="ViaGroup" minOccurs="0" maxOccurs="1" type="grouper:GroupDescriptor" />
+			<xsd:element name="Depth" minOccurs="1" maxOccurs="1" type="xsd:int"/>
+		</xsd:sequence>
+	</xsd:complexType>
 	
 	<xsd:element name="MemberDescriptor" type="grouper:MemberDescriptor" />
 	<xsd:complexType name="MemberDescriptor">

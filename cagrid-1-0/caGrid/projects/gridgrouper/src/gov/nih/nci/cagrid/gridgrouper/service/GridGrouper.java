@@ -18,6 +18,7 @@ import edu.internet2.middleware.grouper.GrouperSourceAdapter;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.grouper.Member;
 import edu.internet2.middleware.grouper.MemberAddException;
+import edu.internet2.middleware.grouper.Membership;
 import edu.internet2.middleware.grouper.NamingPrivilege;
 import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.grouper.RevokePrivilegeException;
@@ -38,6 +39,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberType;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege;
@@ -1066,21 +1068,7 @@ public class GridGrouper {
 			int count = 0;
 			while (itr.hasNext()) {
 				Member m = (Member) itr.next();
-				members[count] = new MemberDescriptor();
-				members[count].setUUID(m.getUuid());
-				members[count].setSubjectId(m.getSubjectId());
-				members[count].setSubjectName(m.getSubject().getName());
-				if (m.getSubject().getSource().getClass().getName().equals(
-						GridSourceAdapter.class.getName())) {
-					members[count].setMemberType(MemberType.Grid);
-
-				} else if ((m.getSubjectType().equals(SubjectTypeEnum.GROUP))
-						&& (m.getSubject().getSource().getClass().getName()
-								.equals(GrouperSourceAdapter.class.getName()))) {
-					members[count].setMemberType(MemberType.GrouperGroup);
-				} else {
-					members[count].setMemberType(MemberType.Other);
-				}
+				members[count] = memberToMemberDescriptor(m);
 				count++;
 			}
 			return members;
@@ -1164,8 +1152,99 @@ public class GridGrouper {
 
 	}
 
+	public MembershipDescriptor[] getMemberships(String gridIdentity,
+			GroupIdentifier group, MemberFilter filter) throws RemoteException,
+			GridGrouperRuntimeFault, GroupNotFoundFault {
+		GrouperSession session = null;
+		try {
+			Subject caller = SubjectUtils.getSubject(gridIdentity);
+			session = GrouperSession.start(caller);
+			Group target = GroupFinder
+					.findByName(session, group.getGroupName());
+			Set set = null;
+			if (filter.equals(MemberFilter.All)) {
+				set = target.getMemberships();
+			} else if (filter.equals(MemberFilter.EffectiveMembers)) {
+				set = target.getEffectiveMemberships();
+			} else if (filter.equals(MemberFilter.ImmediateMembers)) {
+				set = target.getImmediateMemberships();
+			} else {
+				throw new Exception("Unsuppoted member filter type!!!");
+			}
+
+			MembershipDescriptor[] members = new MembershipDescriptor[set
+					.size()];
+			Iterator itr = set.iterator();
+			int count = 0;
+			while (itr.hasNext()) {
+				Membership m = (Membership) itr.next();
+				members[count] = new MembershipDescriptor();
+				members[count]
+						.setMember(memberToMemberDescriptor(m.getMember()));
+				members[count].setGroup(grouptoGroupDescriptor(m.getGroup()));
+				try {
+					members[count].setViaGroup(grouptoGroupDescriptor(m
+							.getViaGroup()));
+				} catch (GroupNotFoundException gnfe) {
+
+				}
+				
+				members[count].setDepth(m.getDepth());
+				count++;
+			}
+			return members;
+		} catch (GroupNotFoundException e) {
+			GroupNotFoundFault fault = new GroupNotFoundFault();
+			fault.setFaultString("The group, " + group.getGroupName()
+					+ "was not found.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GroupNotFoundFault) helper.getFault();
+			throw fault;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault
+					.setFaultString("Error occurred getting the members of the group "
+							+ group.getGroupName() + ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		} finally {
+			if (session == null) {
+				try {
+					session.stop();
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
+
+	}
+
 	public Group getAdminGroup() {
 		return adminGroup;
+	}
+
+	private MemberDescriptor memberToMemberDescriptor(Member m)
+			throws Exception {
+		MemberDescriptor member = new MemberDescriptor();
+		member.setUUID(m.getUuid());
+		member.setSubjectId(m.getSubjectId());
+		member.setSubjectName(m.getSubject().getName());
+		if (m.getSubject().getSource().getClass().getName().equals(
+				GridSourceAdapter.class.getName())) {
+			member.setMemberType(MemberType.Grid);
+
+		} else if ((m.getSubjectType().equals(SubjectTypeEnum.GROUP))
+				&& (m.getSubject().getSource().getClass().getName()
+						.equals(GrouperSourceAdapter.class.getName()))) {
+			member.setMemberType(MemberType.GrouperGroup);
+		} else {
+			member.setMemberType(MemberType.Other);
+		}
+		return member;
 	}
 
 	private GroupDescriptor grouptoGroupDescriptor(Group group)

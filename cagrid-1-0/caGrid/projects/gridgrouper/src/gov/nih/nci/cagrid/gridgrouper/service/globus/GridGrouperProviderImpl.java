@@ -19,12 +19,6 @@ public class GridGrouperProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfResponse isMemberOf(gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
-		gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfResponse();
-		boxedResult.setResponse(impl.isMemberOf(params.getGroup().getGroupIdentifier(),params.getMember().getSubjectIdentifier(),params.getFilter().getMemberFilter()));
-		return boxedResult;
-	}
-
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse getStem(gov.nih.nci.cagrid.gridgrouper.stubs.GetStemRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse();
 		boxedResult.setStemDescriptor(impl.getStem(params.getStem().getStemIdentifier()));
@@ -130,6 +124,18 @@ public class GridGrouperProviderImpl{
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersResponse getMembers(gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersResponse();
 		boxedResult.setMemberDescriptor(impl.getMembers(params.getGroup().getGroupIdentifier(),params.getFilter().getMemberFilter()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfResponse isMemberOf(gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfResponse();
+		boxedResult.setResponse(impl.isMemberOf(params.getGroup().getGroupIdentifier(),params.getMember().getSubjectIdentifier(),params.getFilter().getMemberFilter()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gridgrouper.stubs.GetMembershipsResponse getMemberships(gov.nih.nci.cagrid.gridgrouper.stubs.GetMembershipsRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.GetMembershipsResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetMembershipsResponse();
+		boxedResult.setMembershipDescriptor(impl.getMemberships(params.getGroup().getGroupIdentifier(),params.getFilter().getMemberFilter()));
 		return boxedResult;
 	}
 
