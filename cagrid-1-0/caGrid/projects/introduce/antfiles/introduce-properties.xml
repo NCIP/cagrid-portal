@@ -9,7 +9,7 @@
 	<property file="${user.dir}/build.properties" />
 	
 	<!-- Information -->
-	<property name="project.name" value="caGrid-introduce" />
+	<property name="project.name" value="Introduce" />
 	<property name="project.version" value="1.0" />
 	
 	<!-- Source, Config, and Libraries -->
@@ -33,8 +33,8 @@
 	<property name="introduce.classes.dir" location="${classes.dir}/Introduce" />
 	<property name="portal.classes.dir" location="${classes.dir}/Portal" />
 	<property name="jars.dir" location="${build.dir}/jars" />
-	<property name="project.jar" location="${jars.dir}/${project.name}-${project.version}.jar" />
-	<property name="jars.prefix" value="${jars.dir}/${project.name}-" />
+	<property name="project.jar" location="${jars.dir}/caGrid-1.0-${project.name}-${project.version}.jar" />
+	<property name="jars.prefix" value="${jars.dir}/caGrid-1.0-${project.name}-" />
 	<property name="jars.sufix" value="-${project.version}.jar" />
 	<property name="junit.results.dir" value="${build.dir}/junit" />
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
