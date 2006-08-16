@@ -674,4 +674,14 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
     		}
     	}
     }
+	
+	
+	/**
+	 * Temporary stub to get the build going again.
+	 * 
+	 * This method should reload all GUI components that rely on the service model
+	 */
+	public void resetGUI() {
+		// TODO: implement me
+	}
 }

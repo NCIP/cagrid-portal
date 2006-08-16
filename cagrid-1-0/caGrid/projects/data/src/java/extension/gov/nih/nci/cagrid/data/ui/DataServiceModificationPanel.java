@@ -192,4 +192,14 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		}
 		return targetTypesPanel;
 	}
+	
+	
+	/**
+	 * Temporary stub to get the build going again.
+	 * 
+	 * This method should reload all GUI components that rely on the service model
+	 */
+	public void resetGUI() {
+		// TODO: implement me
+	}
 }
