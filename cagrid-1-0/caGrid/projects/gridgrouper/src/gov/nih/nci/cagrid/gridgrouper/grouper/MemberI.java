@@ -1,14 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.grouper;
 
-import java.util.Set;
-
-import edu.internet2.middleware.grouper.Group;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
-import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
-import edu.internet2.middleware.grouper.SchemaException;
 import edu.internet2.middleware.subject.Source;
-import edu.internet2.middleware.subject.Subject;
-import edu.internet2.middleware.subject.SubjectNotFoundException;
 import edu.internet2.middleware.subject.SubjectType;
 
 public interface MemberI {
