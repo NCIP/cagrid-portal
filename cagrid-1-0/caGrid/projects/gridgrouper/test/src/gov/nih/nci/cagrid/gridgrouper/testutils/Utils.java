@@ -69,5 +69,37 @@ public class Utils {
 			System.out.println();
 		}
 	}
+	
+	public static void printCompositeMemberships(GroupDescriptor grp) throws Exception {
+		Subject subject = SubjectUtils
+				.getSubject(AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID);
+		GrouperSession session = GrouperSession.start(subject);
+		Group group = GroupFinder.findByName(session, grp.getName());
+		System.out.println();
+		System.out.println("Composite Memberships of " + group.getName());
+		System.out.println("-------------------------------------------------");
+		System.out.println();
+		Set set = group.getCompositeMemberships();
+		Iterator itr = set.iterator();
+		while (itr.hasNext()) {
+			Membership m = (Membership) itr.next();
+			System.out.println("Member Name: "
+					+ m.getMember().getSubject().getId());
+			System.out.println("Depth: " + m.getDepth());
+			System.out.println("Group: " + m.getGroup().getName());
+			try {
+				System.out.println("Via Group: " + m.getViaGroup().getName());
+			} catch (GroupNotFoundException e) {
+				System.out.println("Via Group: NONE");
+			}
+
+			try {
+				System.out.println("Via Owner: " + m.getVia().getUuid());
+			} catch (OwnerNotFoundException e) {
+				System.out.println("Via Owner: NONE");
+			}
+			System.out.println();
+		}
+	}
 
 }
