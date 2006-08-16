@@ -4,32 +4,37 @@
     <!-- Local Environment -->
     <property environment="env"/>
     <property name="project.name" value="portal"/>
-    <property file="${project.name}-build.properties"/>
+
+    <!--If installer has written a property file then use that-->
+    <property file="${user.home}/.portal-build.properties"/>
+    <!--else use local default file -->
+    <property file="portal-build.properties"/>
+
     <property name="globus.dir" location="${env.GLOBUS_LOCATION}"/>
     <property name="globus.lib.dir" location="${globus.dir}/lib"/>
 
     <!-- ext directories -->
-    <property name="ext.dir" value="ext"/>
+    <property name="ext.dir" value="${basedir}/ext"/>
 
     <!--        Source folders          -->
-    <property name="src.dir" value="src"/>
+    <property name="src.dir" value="${basedir}/src"/>
     <property name='java.src.dir' value='${src.dir}/java'/>
     <property name='generated.src.dir' value='${src.dir}/generated'/>
     <property name='props.src.dir' value='${src.dir}/properties'/>
     <property name='scripts.src.dir' value='${src.dir}/scripts'/>
 
     <!-- web folder                     -->
-    <property name="webcontent.dir" value="webcontent"/>
+    <property name="webcontent.dir" value="${basedir}/webcontent"/>
     <property name='webinf.dir' value='${webcontent.dir}/WEB-INF'/>
     <property name='webinf.classes.dir' value='${webinf.dir}/classes'/>
     <property name='webinf.lib.dir' value='${webinf.dir}/lib'/>
 
     <!-- Library folders -->
-    <property name="lib.dir" value="lib"/>
+    <property name="lib.dir" value="${basedir}/lib"/>
     <property name="ext.lib.dir" value="${ext.dir}/lib"/>
 
     <!-- Resource folders -->
-    <property name="resources.dir" value="resources"/>
+    <property name="resources.dir" value="${basedir}/resources"/>
     <property name="ext.resources.dir" value="${ext.dir}/resources"/>
 
     <!-- build directories -->
@@ -37,7 +42,7 @@
     <property name='build.classes.dir' value='${build.dir}/classes'/>
 
     <!-- Important test directories and files -->
-    <property name="test.dir" value="test" />
+    <property name="test.dir" value="${basedir}/test" />
     <property name="test.src.dir" value="${test.dir}/src" />
     <property name="test.classes.dir" value="${build.classes.dir}" />
     <property name="test.log.dir" value="test/logs" />
@@ -125,6 +130,8 @@
         <delete dir="${webinf.lib.dir}"/>
         <delete dir="${webinf.classes.dir}"/>
 
+        <!-- Delete war file if created -->
+        <delete file="${build.dir}/${project.name}.war"/>
     </target>
 
 
@@ -139,7 +146,7 @@
     </target>
 
     <target name="deployAsWar" depends="cleanDeployment,war" description="Deploy Application into Tomcat as a war">
-        <copyfile src="${build.dir}/${project.name}.war" dest="${tomcat.webapps.dir}"/>
+        <copy file="${build.dir}/${project.name}.war" todir="${tomcat.webapps.dir}"/>
     </target>
 
 
