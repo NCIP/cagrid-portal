@@ -22,6 +22,15 @@ public class MetadataUtils {
 	private static final String METADATA_WSDD = "/gov/nih/nci/cagrid/discovery/Metadata-client-config.wsdd";
 
 
+	/**
+	 * Obtain the service metadata from the specified service.
+	 * 
+	 * @param serviceEPR
+	 * @return
+	 * @throws InvalidResourcePropertyException
+	 * @throws RemoteResourcePropertyRetrievalException
+	 * @throws ResourcePropertyRetrievalException
+	 */
 	public static ServiceMetadata getServiceMetadata(EndpointReferenceType serviceEPR)
 		throws InvalidResourcePropertyException, RemoteResourcePropertyRetrievalException,
 		ResourcePropertyRetrievalException {
@@ -37,6 +46,15 @@ public class MetadataUtils {
 	}
 
 
+	/**
+	 * Obtain the data service metadata from the specified service.
+	 * 
+	 * @param serviceEPR
+	 * @return
+	 * @throws InvalidResourcePropertyException
+	 * @throws RemoteResourcePropertyRetrievalException
+	 * @throws ResourcePropertyRetrievalException
+	 */
 	public static DomainModel getDomainModel(EndpointReferenceType serviceEPR) throws InvalidResourcePropertyException,
 		RemoteResourcePropertyRetrievalException, ResourcePropertyRetrievalException {
 		Element resourceProperty = ResourcePropertyHelper.getResourceProperty(serviceEPR,
@@ -52,6 +70,14 @@ public class MetadataUtils {
 	}
 
 
+	/**
+	 * Write the XML representation of the specified metadata to the specified
+	 * writer. If either are null, an IllegalArgumentException will be thown.
+	 * 
+	 * @param metadata
+	 * @param writer
+	 * @throws Exception
+	 */
 	public static void serializeServiceMetadata(ServiceMetadata metadata, Writer writer) throws Exception {
 		if (metadata == null || writer == null) {
 			throw new IllegalArgumentException("Null is not a valid argument");
@@ -61,6 +87,16 @@ public class MetadataUtils {
 	}
 
 
+	/**
+	 * Create an instance of the service metadata from the specified reader. The
+	 * reader must point to a stream that contains an XML representation of the
+	 * metadata. If the reader is null, an IllegalArgumentException will be
+	 * thown.
+	 * 
+	 * @param xmlReader
+	 * @return
+	 * @throws Exception
+	 */
 	public static ServiceMetadata deserializeServiceMetadata(Reader xmlReader) throws Exception {
 		if (xmlReader == null) {
 			throw new IllegalArgumentException("Null is not a valid argument");
@@ -70,6 +106,14 @@ public class MetadataUtils {
 	}
 
 
+	/**
+	 * Write the XML representation of the specified metadata to the specified
+	 * writer. If either are null, an IllegalArgumentException will be thown.
+	 * 
+	 * @param domainModel
+	 * @param writer
+	 * @throws Exception
+	 */
 	public static void serializeDomainModel(DomainModel domainModel, Writer writer) throws Exception {
 		if (domainModel == null || writer == null) {
 			throw new IllegalArgumentException("Null is not a valid argument");
@@ -79,6 +123,16 @@ public class MetadataUtils {
 	}
 
 
+	/**
+	 * Create an instance of the data service metadata from the specified
+	 * reader. The reader must point to a stream that contains an XML
+	 * representation of the metadata. If the reader is null, an
+	 * IllegalArgumentException will be thown.
+	 * 
+	 * @param xmlReader
+	 * @return
+	 * @throws Exception
+	 */
 	public static DomainModel deserializeDomainModel(Reader xmlReader) throws Exception {
 		if (xmlReader == null) {
 			throw new IllegalArgumentException("Null is not a valid argument");
