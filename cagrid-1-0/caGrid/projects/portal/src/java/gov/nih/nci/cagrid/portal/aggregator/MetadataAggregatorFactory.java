@@ -46,12 +46,12 @@ public class MetadataAggregatorFactory extends AbstractAggregator {
             timer.schedule(serviceMDAggr, 1);
         } else if (applicationEvent instanceof ContextRefreshedEvent) {
             reloaded++;
-            _logger.info("Context was reloaded or loaded for the first time. " +
+            _logger.info("MetadataAggregator:Context was reloaded or loaded for the first time. " +
                 reloaded);
         } else if (applicationEvent instanceof ContextClosedEvent) {
-            _logger.info("Context was closed.");
+            _logger.info("MetadataAggregator:Context was closed.");
         } else {
-            _logger.info("EVENT: " + applicationEvent.getClass().getName());
+            _logger.info("MetadataAggregator: EVENT: " + applicationEvent.getClass().getName());
         }
     }
 }

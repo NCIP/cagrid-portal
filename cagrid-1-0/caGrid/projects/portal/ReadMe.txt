@@ -42,8 +42,13 @@ Replace the current entries in the indexList to your own
 ===========================================================================
 Build Instructions
 ===========================================================================
--Use the ${username}-portal-build.properties file to configure the build
+-Use the portal-build.properties file to configure the build
 for your environment.
+This file will be used in absense of the
+${user.home}/.portal-build.properties file.
+The ${user.home}/.portal-build.properties file is usually written by
+the caGrid Installer.
+
 
 - Use the build.xml file to build the project.
 (During development and source releases the Portal project is to be built

@@ -17,7 +17,6 @@ public class PointOfContact implements DomainObject{
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private ResearchCenter rc;
     private String role;
 
 
@@ -93,14 +92,6 @@ public class PointOfContact implements DomainObject{
         this.phoneNumber = phoneNumber;
     }
 
-    
-    public ResearchCenter getRc() {
-        return rc;
-    }
-
-    public void setRc(ResearchCenter rc) {
-        this.rc = rc;
-    }
 
     /**
      * @hibernate.property column="ROLE"

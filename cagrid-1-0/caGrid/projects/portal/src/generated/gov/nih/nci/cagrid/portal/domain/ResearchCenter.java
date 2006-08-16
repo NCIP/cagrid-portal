@@ -23,7 +23,6 @@ public class ResearchCenter implements DomainObject {
     private java.lang.String street2;
     private java.lang.String state;
     private java.lang.String shortName;
-    private java.util.List registeredServiceCollection;
     private java.util.List pocCollection = new ArrayList();
     private java.lang.String rssNewsURL;
 
@@ -223,21 +222,6 @@ public class ResearchCenter implements DomainObject {
 
     public void setPocCollection(List pocCollection) {
         this.pocCollection = pocCollection;
-    }
-
-    /**
-     * @hibernate.collection-one-to-many
-     * column="RC_ID_KEY"
-     * class="ResearchCenter"
-     * cascade="none"
-     * @return
-     */
-    public List getRegisteredServiceCollection() {
-        return registeredServiceCollection;
-    }
-
-    public void setRegisteredServiceCollection(List registeredServiceCollection) {
-        this.registeredServiceCollection = registeredServiceCollection;
     }
 
     public boolean equals(Object o) {

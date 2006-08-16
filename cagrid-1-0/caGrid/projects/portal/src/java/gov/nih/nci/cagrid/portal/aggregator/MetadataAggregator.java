@@ -100,13 +100,7 @@ public class MetadataAggregator extends AbstractAggregator {
             pocDomain.setEmail(poc.getEmail());
 
 
-            //persiste the POC domain object
-           // gridServiceMgr.save(domainRC);
-            //pocDomain.setRc(domainRC);
-           // gridServiceMgr.save(pocDomain);
 
-            //Add the POC to RC domain Object
-           // domainRC.getPocCollection().add(pocDomain);
 
         }
     }

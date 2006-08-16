@@ -68,40 +68,40 @@
     </presetdef>
 
     <target name="setClasspath">
-           <path id="portal.classpath">
-               <fileset dir="${lib.dir}">
-                   <include name="*.jar"/>
-               </fileset>
-               <fileset dir="${ext.lib.dir}">
-                   <include name="*.jar"/>
-               </fileset>
-               <fileset dir="${globus.lib.dir}">
-                   <include name="*.jar"/>
-               </fileset>
-           </path>
+        <path id="portal.classpath">
+            <fileset dir="${lib.dir}">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${ext.lib.dir}">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${globus.lib.dir}">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
 
-           <path id="test.classpath">
-               <fileset dir="${ext.test.lib.dir}">
-                   <include name="**/*.jar" />
-               </fileset>
-               <fileset dir="${test.lib.dir}">
-                   <include name="**/*.jar"/>
-               </fileset>
-               <pathelement location="${webinf.classes.dir}"/>
-               <path refid="portal.classpath"/>
-           </path>
-           <path id="test.run.classpath">
-               <path refid="test.classpath"/>
-               <pathelement location="${test.classes.dir}"/>
-           </path>
+        <path id="test.classpath">
+            <fileset dir="${ext.test.lib.dir}">
+                <include name="**/*.jar" />
+            </fileset>
+            <fileset dir="${test.lib.dir}">
+                <include name="**/*.jar"/>
+            </fileset>
+            <pathelement location="${webinf.classes.dir}"/>
+            <path refid="portal.classpath"/>
+        </path>
+        <path id="test.run.classpath">
+            <path refid="test.classpath"/>
+            <pathelement location="${test.classes.dir}"/>
+        </path>
 
 
-           <path id="xdoclet.classpath">
-               <fileset dir="${lib.dir}/xdoclet">
-                   <include name="*.jar"/>
-               </fileset>
-           </path>
-       </target>
+        <path id="xdoclet.classpath">
+            <fileset dir="${lib.dir}/xdoclet">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+    </target>
 
     <!-- ============================================================== -->
     <!-- Target for continous build. Use war target to build            -->
@@ -142,7 +142,9 @@
             description="Deploy Application into tomcat"/>
 
     <target name="deployPreBuilt" description="Deploys pre-built webapp">
-        <copydir src="${webcontent.dir}" dest="${tomcat.webapps.dir}/${project.name}" forceoverwrite="true"/>
+        <copy todir="${tomcat.webapps.dir}/${project.name}" overwrite="true">
+            <fileset dir="${webcontent.dir}"/>
+        </copy>
     </target>
 
     <target name="deployAsWar" depends="cleanDeployment,war" description="Deploy Application into Tomcat as a war">
@@ -173,6 +175,9 @@
         <!--Copy libraries-->
         <copy todir="${webinf.lib.dir}">
             <fileset dir="${lib.dir}">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${lib.dir}/myfaces">
                 <include name="*.jar"/>
             </fileset>
             <fileset dir="${ext.lib.dir}">
@@ -254,8 +259,8 @@
     </target>
 
     <target name="prepareTest">
-            <delete dir="${test.log.dir}"/>
-            <mkdir dir="${test.log.dir}"/>
+        <delete dir="${test.log.dir}"/>
+        <mkdir dir="${test.log.dir}"/>
     </target>
 
     <target name="compileTests" depends="compile">

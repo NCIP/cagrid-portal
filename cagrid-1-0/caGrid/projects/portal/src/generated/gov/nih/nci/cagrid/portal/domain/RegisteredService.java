@@ -32,6 +32,10 @@ public class RegisteredService implements GridService {
     public RegisteredService() {
     }
 
+    public RegisteredService(String epr) throws URI.MalformedURIException {
+        this(GridUtils.getEPR(epr));
+    }
+
     public RegisteredService(EndpointReferenceType handle) {
         this.setHandle(handle);
     }
@@ -168,7 +172,7 @@ public class RegisteredService implements GridService {
      * @hibernate.many-to-one name="indexService"
      *                        column="INDEX_ID_KEY"
      *                         class="gov.nih.nci.cagrid.portal.domain.IndexService"
-                                not-null="true"
+                                
      *
      *
      */
