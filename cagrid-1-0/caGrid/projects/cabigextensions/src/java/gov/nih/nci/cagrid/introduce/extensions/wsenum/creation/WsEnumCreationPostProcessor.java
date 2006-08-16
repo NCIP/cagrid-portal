@@ -183,7 +183,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		releaseOutput.setQName(new QName("", "void"));
 		releaseOutput.setIsArray(false);
 		releaseMethod.setOutput(releaseOutput);
-		setMethodImportInformation(releaseMethod, "ReleaseMessage", "RepeaseResponseMessage");
+		setMethodImportInformation(releaseMethod, "ReleaseMessage", "ReleaseResponseMessage");
 		CommonTools.addMethod(service, releaseMethod);
 	}
 	
