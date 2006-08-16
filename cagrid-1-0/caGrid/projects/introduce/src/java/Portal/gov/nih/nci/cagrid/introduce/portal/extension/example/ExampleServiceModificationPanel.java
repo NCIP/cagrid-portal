@@ -27,4 +27,15 @@ public class ExampleServiceModificationPanel extends ServiceModificationUIPanel 
 			
 	}
 
+
+	public void setServiceInfo(ServiceInformation serviceInfo) {
+		
+	}
+
+
+	protected void resetGUI() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

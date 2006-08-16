@@ -100,8 +100,6 @@ public class ModificationViewer extends GridPortalComponent {
 
 	private File methodsDirectory = null;
 
-	private ServiceDescription introService;
-
 	private Properties serviceProperties = null;
 
 	private JButton addMethodButton = null;
@@ -200,12 +198,15 @@ public class ModificationViewer extends GridPortalComponent {
 
 	private JButton namespaceReloadButton = null;
 
+	private List extensionPanels = null;
+
 
 	/**
 	 * This is the default constructor
 	 */
 	public ModificationViewer() {
 		super();
+		this.extensionPanels = new ArrayList();
 		// throw a thread out so that i can make sure that if the chooser is
 		// canceled i can dispose of this frame
 		Thread th = createChooserThread();
@@ -215,6 +216,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 	public ModificationViewer(File methodsDirectory) {
 		super();
+		this.extensionPanels = new ArrayList();
 		this.methodsDirectory = methodsDirectory;
 		try {
 			initialize();
@@ -281,6 +283,29 @@ public class ModificationViewer extends GridPortalComponent {
 	}
 
 
+	public void reInitialize(File methodsDirectory) throws Exception {
+		this.methodsDirectory = methodsDirectory;
+		this.initialize();
+		this.reInitializeGUI();
+	}
+
+
+	private void reInitializeGUI() throws Exception {
+		getNamespaceJTree().setNamespaces(info.getNamespaces());
+		getResourcesJTree().setServices(info.getServices());
+		getMethodsTable().clearTable();
+		getMethodsTable().setMethods(info.getServices().getService(0));
+		getRpHolderPanel().reInitialize(info.getServices().getService(0).getResourcePropertiesList(),
+			info.getNamespaces());
+		getServicePropertiesTable().refreshView();
+		this.resetMethodSecurityIfServiceSecurityChanged();
+		for (int i = 0; i < this.extensionPanels.size(); i++) {
+			ServiceModificationUIPanel panel = (ServiceModificationUIPanel) extensionPanels.get(i);
+			panel.setServiceInfo(this.info);
+		}
+	}
+
+
 	/**
 	 * This method initializes this
 	 * 
@@ -288,7 +313,8 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private void initialize() throws Exception {
 		if (this.methodsDirectory != null) {
-			this.introService = (ServiceDescription) Utils.deserializeDocument(this.methodsDirectory.getAbsolutePath()
+			ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(this.methodsDirectory
+				.getAbsolutePath()
 				+ File.separator + "introduce.xml", ServiceDescription.class);
 			if (introService.getIntroduceVersion() == null
 				|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
@@ -521,7 +547,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private MethodsTable getMethodsTable() {
 		if (methodsTable == null) {
-			methodsTable = new MethodsTable(introService.getServices().getService(0), this.methodsDirectory,
+			methodsTable = new MethodsTable(info.getServices().getService(0), this.methodsDirectory,
 				this.serviceProperties);
 			methodsTable.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
@@ -632,7 +658,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 	private void resetMethodSecurityIfServiceSecurityChanged() throws Exception {
 		boolean update = false;
-		ServiceSecurity service = introService.getServices().getService(0).getServiceSecurity();
+		ServiceSecurity service = info.getServices().getService(0).getServiceSecurity();
 		ServiceSecurity curr = securityPanel.getServiceSecurity();
 		// This should be cleaned up some
 		if ((service == null) && (curr == null)) {
@@ -645,10 +671,10 @@ public class ModificationViewer extends GridPortalComponent {
 			update = true;
 		}
 		if (update) {
-			MethodsType mt = this.introService.getServices().getService(0).getMethods();
+			MethodsType mt = this.info.getServices().getService(0).getMethods();
 			List changes = new ArrayList();
 			if (mt != null) {
-				introService.getServices().getService(0).setServiceSecurity(curr);
+				info.getServices().getService(0).setServiceSecurity(curr);
 				MethodType[] methods = mt.getMethod();
 				if (methods != null) {
 					for (int i = 0; i < methods.length; i++) {
@@ -688,7 +714,8 @@ public class ModificationViewer extends GridPortalComponent {
 			return;
 		}
 		// TODO: check this.... setting this for now......
-		MethodViewer mv = new MethodViewer(method, new SpecificServiceInformation(info,info.getServices().getService(0)));
+		MethodViewer mv = new MethodViewer(method, new SpecificServiceInformation(info, info.getServices()
+			.getService(0)));
 
 		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(mv);
 		// TODO: total hack for now to avoid tryin sort action listerners and
@@ -833,18 +860,15 @@ public class ModificationViewer extends GridPortalComponent {
 			contentTabbedPane.addTab("Service Contexts", null, getResourceesTabbedPanel(), null);
 			contentTabbedPane.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
-					getNamespaceJTree().setNamespaces(info.getNamespaces());
-					getResourcesJTree().setServices(info.getServices());
-					getMethodsTable().clearTable();
-					getMethodsTable().setMethods(info.getServices().getService(0));
-					getRpHolderPanel().reInitialize(info.getServices().getService(0).getResourcePropertiesList(),
-						info.getNamespaces());
-					getServicePropertiesTable().refreshView();
+					try {
+						reInitializeGUI();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
 				}
 			});
 			// diable the metadata tab if they've specified not to sync metadata
-			ResourcePropertiesListType metadataList = this.introService.getServices().getService(0)
-				.getResourcePropertiesList();
+			ResourcePropertiesListType metadataList = this.info.getServices().getService(0).getResourcePropertiesList();
 			if (metadataList != null && metadataList.getSynchronizeResourceFramework() != null
 				&& !metadataList.getSynchronizeResourceFramework().booleanValue()) {
 				// Disable the tab
@@ -853,7 +877,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 			contentTabbedPane.addTab("Security", null, getSecurityPanel(), null);
 			// add a tab for each extension...
-			ExtensionsType exts = introService.getExtensions();
+			ExtensionsType exts = info.getExtensions();
 			if (exts != null && exts.getExtension() != null) {
 				ExtensionType[] extsTypes = exts.getExtension();
 				for (int i = 0; i < extsTypes.length; i++) {
@@ -864,6 +888,7 @@ public class ModificationViewer extends GridPortalComponent {
 							&& !extDtype.getServiceModificationUIPanel().equals("")) {
 							ServiceModificationUIPanel extPanel = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
 								.getServiceModificationUIPanel(extDtype.getName(), info);
+							extensionPanels.add(extPanel);
 							contentTabbedPane.addTab(extDtype.getDisplayName(), null, extPanel, null);
 						}
 					} catch (Exception e) {
@@ -886,7 +911,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private ServiceSecurityPanel getSecurityPanel() {
 		if (securityPanel == null) {
 			try {
-				securityPanel = new ServiceSecurityPanel(introService.getServices().getService(0).getServiceSecurity());
+				securityPanel = new ServiceSecurityPanel(info.getServices().getService(0).getServiceSecurity());
 			} catch (Exception e) {
 				e.printStackTrace();
 				PortalUtils.showErrorMessage(e);
@@ -1082,7 +1107,7 @@ public class ModificationViewer extends GridPortalComponent {
 							NamespaceType type = (NamespaceType) getNamespaceJTree().getCurrentNode().getUserObject();
 
 							if (!type.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-								if (CommonTools.isNamespaceTypeInUse(type, introService)) {
+								if (CommonTools.isNamespaceTypeInUse(type, info.getServiceDescriptor())) {
 									String[] message = {"The namespace " + type.getNamespace(),
 											"contains types in use by this service."};
 									JOptionPane.showMessageDialog(ModificationViewer.this, message);
@@ -1124,7 +1149,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private NamespacesJTree getNamespaceJTree() {
 		if (namespaceJTree == null) {
-			namespaceJTree = new NamespacesJTree(introService.getNamespaces(), true);
+			namespaceJTree = new NamespacesJTree(info.getNamespaces(), true);
 			namespaceJTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
 				public void valueChanged(javax.swing.event.TreeSelectionEvent e) {
 					DefaultMutableTreeNode node = getNamespaceJTree().getCurrentNode();
@@ -1242,8 +1267,8 @@ public class ModificationViewer extends GridPortalComponent {
 			"Confirm Save", JOptionPane.YES_NO_OPTION);
 		if (confirmed == JOptionPane.OK_OPTION) {
 			// verify no needed namespace types have been removed or modified
-			if (!CommonTools.usedTypesAvailable(introService)) {
-				Set unavailable = CommonTools.getUnavailableUsedTypes(introService);
+			if (!CommonTools.usedTypesAvailable(info.getServiceDescriptor())) {
+				Set unavailable = CommonTools.getUnavailableUsedTypes(info.getServiceDescriptor());
 				String[] message = {"The following schema element types used in the service",
 						"are not available in the specified namespace types!", "Please add schemas as appropriate.",
 						"\n"};
@@ -1259,19 +1284,13 @@ public class ModificationViewer extends GridPortalComponent {
 					JOptionPane.WARNING_MESSAGE);
 				return;
 			}
-			try {
-				resetMethodSecurityIfServiceSecurityChanged();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				PortalUtils.showErrorMessage(ex);
-			}
 
 			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(), "Save") {
 				public void process() {
 					try {
 						// walk the namespaces and make sure they are valid
 						setProgressText("validating namespaces");
-						NamespacesType namespaces = introService.getNamespaces();
+						NamespacesType namespaces = info.getNamespaces();
 						if (namespaces != null && namespaces.getNamespace() != null) {
 							for (int i = 0; i < namespaces.getNamespace().length; i++) {
 								NamespaceType currentNs = namespaces.getNamespace(i);
@@ -1285,12 +1304,12 @@ public class ModificationViewer extends GridPortalComponent {
 							}
 						}
 
-						introService.getServices().getService(0).setServiceSecurity(securityPanel.getServiceSecurity());
+						info.getServices().getService(0).setServiceSecurity(securityPanel.getServiceSecurity());
 
 						// check the methods to make sure they are valid.......
-						if (introService.getServices() != null && introService.getServices().getService() != null) {
-							for (int serviceI = 0; serviceI < introService.getServices().getService().length; serviceI++) {
-								ServiceType service = introService.getServices().getService(serviceI);
+						if (info.getServices() != null && info.getServices().getService() != null) {
+							for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+								ServiceType service = info.getServices().getService(serviceI);
 								if (service.getMethods() != null && service.getMethods().getMethod() != null) {
 									List methodNames = new ArrayList();
 									if (service.getMethods() != null && service.getMethods().getMethod() != null) {
@@ -1313,7 +1332,7 @@ public class ModificationViewer extends GridPortalComponent {
 						// resync and build
 						setProgressText("writting service document");
 						Utils.serializeDocument(methodsDirectory.getAbsolutePath() + File.separator + "introduce.xml",
-							introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+							info.getServiceDescriptor(), IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
 						// call the sync tools
 						setProgressText("sychronizing skeleton");
@@ -1337,7 +1356,7 @@ public class ModificationViewer extends GridPortalComponent {
 						this.setProgressText("");
 
 						// reinitialize the GUI with changes from saved model
-						initialize();
+						reInitialize(methodsDirectory);
 					} catch (Exception e1) {
 						e1.printStackTrace();
 						setErrorMessage("Error: " + e1.getMessage());

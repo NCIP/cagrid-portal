@@ -145,7 +145,7 @@ public class CommonTools {
 		if (serviceName == null || serviceName.trim().equals("")) {
 			return false;
 		}
-		
+
 		if (serviceName.substring(0, 1).toLowerCase().equals(serviceName.substring(0, 1))) {
 			return false;
 		}
@@ -608,7 +608,7 @@ public class CommonTools {
 		int newMethodsI = 0;
 		for (int i = 0; i < methodsType.getMethod().length; i++) {
 			MethodType tmethod = methodsType.getMethod(i);
-			if (!(tmethod == method)) {
+			if (!(tmethod.equals(method))) {
 				newMethods[newMethodsI] = tmethod;
 				newMethodsI++;
 			}
