@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gridgrouper.service;
 
-import edu.internet2.middleware.grouper.AccessPrivilege;
 import edu.internet2.middleware.grouper.Group;
 import edu.internet2.middleware.grouper.GroupFinder;
 import edu.internet2.middleware.grouper.GrouperSession;
@@ -10,6 +9,9 @@ import edu.internet2.middleware.grouper.RegistryReset;
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
+import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
+import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
+import gov.nih.nci.cagrid.gridgrouper.bean.MemberType;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
@@ -17,7 +19,9 @@ import gov.nih.nci.cagrid.gridgrouper.service.tools.GridGrouperBootstrapper;
 import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
 import gov.nih.nci.cagrid.gridgrouper.testutils.Utils;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import junit.framework.TestCase;
@@ -86,11 +90,15 @@ public class TestGroups extends TestCase {
 					subGroupDisplayExtension);
 			assertEquals(subGroupExtension, subgrp.getExtension());
 			assertEquals(subGroupDisplayExtension, subgrp.getDisplayExtension());
-
 			assertEquals(2, grouper.getChildGroups(SUPER_USER, Utils
 					.getStemIdentifier(test)).length);
 
-			// TODO: Finish this on down
+			Map expected = new HashMap();
+			expected.clear();
+			// Test Members before any are added
+			verifyMembers(grp, MemberFilter.All, 0,expected);
+			verifyMembers(grp, MemberFilter.EffectiveMembers, 0,expected);
+			verifyMembers(grp, MemberFilter.ImmediateMembers, 0,expected);
 
 			Subject subject = SubjectUtils.getSubject(SUPER_USER);
 			GrouperSession session = GrouperSession.start(subject);
@@ -98,6 +106,17 @@ public class TestGroups extends TestCase {
 			grouper
 					.addMember(SUPER_USER, Utils.getGroupIdentifier(grp),
 							USER_A);
+			
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			verifyMembers(grp, MemberFilter.All, 1,expected);
+			
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			verifyMembers(grp, MemberFilter.ImmediateMembers, 1,expected);
+			
+			expected.clear();
+			verifyMembers(grp, MemberFilter.EffectiveMembers, 0,expected);
 
 			Group subGroup = GroupFinder.findByName(session, subgrp.getName());
 			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(subgrp),
@@ -112,6 +131,36 @@ public class TestGroups extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
+		}
+
+	}
+
+	private void verifyMembers(GroupDescriptor grp, MemberFilter filter,
+			int expectedCount, Map expected) {
+		try {
+			assertEquals(expectedCount, expected.size());
+			MemberDescriptor[] members = grouper.getMembers(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
+							.getGroupIdentifier(grp), filter);
+			assertEquals(expectedCount, members.length);
+
+			for (int i = 0; i < expectedCount; i++) {
+				if (expected.containsKey(members[i].getSubjectName())) {
+					MemberCaddy caddy = (MemberCaddy) expected
+							.remove(members[i].getSubjectName());
+					assertEquals(caddy.getMemberName(), members[i]
+							.getSubjectName());
+					assertEquals(caddy.getMemberType(), members[i]
+							.getMemberType());
+				} else {
+					fail("Member " + members[i].getSubjectName()
+							+ " not expected!!!");
+				}
+			}
+			assertEquals(0, expected.size());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Error verifying members");
 		}
 
 	}
@@ -179,6 +228,38 @@ public class TestGroups extends TestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		RegistryReset.reset();
+	}
+
+	private MemberCaddy getGridMember(String name) {
+		return new MemberCaddy(name, MemberType.Grid);
+	}
+
+	private MemberCaddy getNonGridMember(String name) {
+		return new MemberCaddy(name, MemberType.Other);
+	}
+
+	private MemberCaddy getGroupMember(String name) {
+		return new MemberCaddy(name, MemberType.GrouperGroup);
+	}
+
+	private class MemberCaddy {
+		private String memberName;
+
+		private MemberType memberType;
+
+		public MemberCaddy(String name, MemberType type) {
+			this.memberName = name;
+			this.memberType = type;
+		}
+
+		public String getMemberName() {
+			return memberName;
+		}
+
+		public MemberType getMemberType() {
+			return memberType;
+		}
+
 	}
 
 }
