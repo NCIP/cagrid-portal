@@ -33,7 +33,7 @@ public class TestGroups extends TestCase {
 
 	// private String ADMIN_USER =
 	// "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=admin";
-	
+
 	private String USER_PREFIX = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user";
 
 	private String USER_A = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user a";
@@ -62,38 +62,18 @@ public class TestGroups extends TestCase {
 			String testStem = "TestStem";
 			StemDescriptor test = grouper.addChildStem(SUPER_USER, Utils
 					.getRootStemIdentifier(), testStem, testStem);
-
+			Map expected = new HashMap();
 			final String groupExtension = "mygroup";
 			final String groupDisplayExtension = "My Group";
 
-			GroupDescriptor grp = grouper.addChildGroup(SUPER_USER, Utils
-					.getStemIdentifier(test), groupExtension,
-					groupDisplayExtension);
-			assertEquals(groupExtension, grp.getExtension());
-			assertEquals(groupDisplayExtension, grp.getDisplayExtension());
-			GroupDescriptor[] grps = grouper.getChildGroups(SUPER_USER, Utils
-					.getStemIdentifier(test));
-			assertEquals(1, grps.length);
-			assertEquals(groupExtension, grps[0].getExtension());
-			assertEquals(groupDisplayExtension, grps[0].getDisplayExtension());
+			GroupDescriptor grp = createAndCheckGroup(test, groupExtension,
+					groupDisplayExtension, 1);
 
 			final String subGroupExtension = "mysubgroup";
 			final String subGroupDisplayExtension = "My Sub Group";
 
-			GroupDescriptor subgrp = grouper.addChildGroup(SUPER_USER, Utils
-					.getStemIdentifier(test), subGroupExtension,
-					subGroupDisplayExtension);
-			assertEquals(subGroupExtension, subgrp.getExtension());
-			assertEquals(subGroupDisplayExtension, subgrp.getDisplayExtension());
-			assertEquals(2, grouper.getChildGroups(SUPER_USER, Utils
-					.getStemIdentifier(test)).length);
-
-			Map expected = new HashMap();
-			expected.clear();
-			// Test Members before any are added
-			verifyMembers(grp, MemberFilter.All, 0, expected);
-			verifyMembers(grp, MemberFilter.EffectiveMembers, 0, expected);
-			verifyMembers(grp, MemberFilter.ImmediateMembers, 0, expected);
+			GroupDescriptor subgrp = createAndCheckGroup(test,
+					subGroupExtension, subGroupDisplayExtension, 2);
 
 			grouper
 					.addMember(SUPER_USER, Utils.getGroupIdentifier(grp),
@@ -109,13 +89,6 @@ public class TestGroups extends TestCase {
 
 			expected.clear();
 			verifyMembers(grp, MemberFilter.EffectiveMembers, 0, expected);
-
-			expected.clear();
-			verifyMembers(subgrp, MemberFilter.All, 0, expected);
-			expected.clear();
-			verifyMembers(subgrp, MemberFilter.EffectiveMembers, 0, expected);
-			expected.clear();
-			verifyMembers(subgrp, MemberFilter.ImmediateMembers, 0, expected);
 
 			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(subgrp),
 					USER_B);
@@ -232,51 +205,56 @@ public class TestGroups extends TestCase {
 			final String groupExtensionX = "mygroupx";
 			final String groupDisplayExtensionX = "My Group X";
 
-			GroupDescriptor grpx = grouper.addChildGroup(SUPER_USER, Utils
-					.getStemIdentifier(test), groupExtensionX,
-					groupDisplayExtensionX);
-			assertEquals(groupExtensionX, grpx.getExtension());
-			assertEquals(groupDisplayExtensionX, grpx.getDisplayExtension());
-			GroupDescriptor[] grps = grouper.getChildGroups(SUPER_USER, Utils
-					.getStemIdentifier(test));
-			assertEquals(1, grps.length);
-			assertEquals(groupExtensionX, grps[0].getExtension());
-			assertEquals(groupDisplayExtensionX, grps[0].getDisplayExtension());
-
-			expected.clear();
-			verifyMembers(grpx, MemberFilter.All, 0, expected);
-			expected.clear();
-			verifyMembers(grpx, MemberFilter.EffectiveMembers, 0, expected);
-			expected.clear();
-			verifyMembers(grpx, MemberFilter.ImmediateMembers, 0, expected);
-			expected.clear();
+			GroupDescriptor grpx = createAndCheckGroup(test, groupExtensionX,
+					groupDisplayExtensionX, 1);
 
 			final String groupExtensionY = "mygroupy";
 			final String groupDisplayExtensionY = "My Group Y";
 
-			GroupDescriptor grpy = grouper.addChildGroup(SUPER_USER, Utils
-					.getStemIdentifier(test), groupExtensionY,
-					groupDisplayExtensionY);
-			assertEquals(groupExtensionY, grpy.getExtension());
-			assertEquals(groupDisplayExtensionY, grpy.getDisplayExtension());
-			assertEquals(2, grouper.getChildGroups(SUPER_USER, Utils
-					.getStemIdentifier(test)).length);
+			GroupDescriptor grpy = createAndCheckGroup(test, groupExtensionY,
+					groupDisplayExtensionY, 2);
 
-			expected.clear();
-			verifyMembers(grpy, MemberFilter.All, 0, expected);
-			expected.clear();
-			verifyMembers(grpy, MemberFilter.EffectiveMembers, 0, expected);
-			expected.clear();
-			verifyMembers(grpy, MemberFilter.ImmediateMembers, 0, expected);
-			expected.clear();
-			
-			
+			final String unionGroupExtension = "uniongroup";
+			final String unionGroupDisplayExtension = "Union Group Y";
+
+			GroupDescriptor union = createAndCheckGroup(test,
+					unionGroupExtension, unionGroupDisplayExtension, 3);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 
+	}
+
+	private GroupDescriptor createAndCheckGroup(StemDescriptor stem,
+			String extension, String displayExtension, int childGroupCount)
+			throws Exception {
+		GroupDescriptor grp = grouper.addChildGroup(SUPER_USER, Utils
+				.getStemIdentifier(stem), extension, displayExtension);
+		assertEquals(extension, grp.getExtension());
+		assertEquals(displayExtension, grp.getDisplayExtension());
+		assertEquals(childGroupCount, grouper.getChildGroups(SUPER_USER, Utils
+				.getStemIdentifier(stem)).length);
+		Map expected = new HashMap();
+		expected.clear();
+		verifyMembers(grp, MemberFilter.All, 0, expected);
+		expected.clear();
+		verifyMembers(grp, MemberFilter.EffectiveMembers, 0, expected);
+		expected.clear();
+		verifyMembers(grp, MemberFilter.ImmediateMembers, 0, expected);
+		expected.clear();
+		verifyMembers(grp, MemberFilter.CompositeMembers, 0, expected);
+
+		expected.clear();
+		verifyMemberships(grp, MemberFilter.All, 0, expected);
+		expected.clear();
+		verifyMemberships(grp, MemberFilter.EffectiveMembers, 0, expected);
+		expected.clear();
+		verifyMemberships(grp, MemberFilter.ImmediateMembers, 0, expected);
+		expected.clear();
+		verifyMemberships(grp, MemberFilter.CompositeMembers, 0, expected);
+		return grp;
 	}
 
 	public void testMemberships() {
@@ -302,37 +280,19 @@ public class TestGroups extends TestCase {
 			StemDescriptor test = grouper.addChildStem(SUPER_USER, Utils
 					.getRootStemIdentifier(), testStem, testStem);
 
+			Map expected = new HashMap();
 			final String groupExtension = "mygroup";
 			final String groupDisplayExtension = "My Group";
 
-			GroupDescriptor grp = grouper.addChildGroup(SUPER_USER, Utils
-					.getStemIdentifier(test), groupExtension,
-					groupDisplayExtension);
-			assertEquals(groupExtension, grp.getExtension());
-			assertEquals(groupDisplayExtension, grp.getDisplayExtension());
-			GroupDescriptor[] grps = grouper.getChildGroups(SUPER_USER, Utils
-					.getStemIdentifier(test));
-			assertEquals(1, grps.length);
-			assertEquals(groupExtension, grps[0].getExtension());
-			assertEquals(groupDisplayExtension, grps[0].getDisplayExtension());
+			GroupDescriptor grp = createAndCheckGroup(test, groupExtension,
+					groupDisplayExtension, 1);
 
 			final String subGroupExtension = "mysubgroup";
 			final String subGroupDisplayExtension = "My Sub Group";
 
-			GroupDescriptor subgrp = grouper.addChildGroup(SUPER_USER, Utils
-					.getStemIdentifier(test), subGroupExtension,
-					subGroupDisplayExtension);
-			assertEquals(subGroupExtension, subgrp.getExtension());
-			assertEquals(subGroupDisplayExtension, subgrp.getDisplayExtension());
-			assertEquals(2, grouper.getChildGroups(SUPER_USER, Utils
-					.getStemIdentifier(test)).length);
+			GroupDescriptor subgrp = createAndCheckGroup(test,
+					subGroupExtension, subGroupDisplayExtension, 2);
 
-			Map expected = new HashMap();
-			expected.clear();
-			// Test Members before any are added
-			verifyMemberships(grp, MemberFilter.All, 0, expected);
-			verifyMemberships(grp, MemberFilter.EffectiveMembers, 0, expected);
-			verifyMemberships(grp, MemberFilter.ImmediateMembers, 0, expected);
 			grouper
 					.addMember(SUPER_USER, Utils.getGroupIdentifier(grp),
 							USER_A);
@@ -350,11 +310,6 @@ public class TestGroups extends TestCase {
 			expected.clear();
 			verifyMemberships(grp, MemberFilter.EffectiveMembers, 0, expected);
 
-			verifyMemberships(subgrp, MemberFilter.All, 0, expected);
-			verifyMemberships(subgrp, MemberFilter.EffectiveMembers, 0,
-					expected);
-			verifyMemberships(subgrp, MemberFilter.ImmediateMembers, 0,
-					expected);
 			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(subgrp),
 					USER_B);
 
