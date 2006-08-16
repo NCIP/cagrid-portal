@@ -185,7 +185,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			DomainModel model = null;
 			try {
 				if (classMetadata.length != 0) {
-					model = cadsrClient.generateDomainModelForClasses(proj, classMetadata, associations);
+					// TODO; change this to use EXCLUDED associations
+					model = cadsrClient.generateDomainModelForClassesWithExcludes(proj, classMetadata, new UMLAssociation[] {});
 					if (model == null) {
 						throw new CodegenExtensionException("caDSR returned a null domain model.");
 					}
