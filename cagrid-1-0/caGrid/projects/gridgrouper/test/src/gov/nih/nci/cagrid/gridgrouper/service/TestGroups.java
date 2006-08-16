@@ -1,12 +1,9 @@
 package gov.nih.nci.cagrid.gridgrouper.service;
 
 import edu.internet2.middleware.grouper.Group;
-import edu.internet2.middleware.grouper.GroupFinder;
-import edu.internet2.middleware.grouper.GrouperSession;
 import edu.internet2.middleware.grouper.Member;
 import edu.internet2.middleware.grouper.Membership;
 import edu.internet2.middleware.grouper.RegistryReset;
-import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
@@ -14,7 +11,6 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberType;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
-import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.service.tools.GridGrouperBootstrapper;
 import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
 import gov.nih.nci.cagrid.gridgrouper.testutils.Utils;
@@ -96,37 +92,63 @@ public class TestGroups extends TestCase {
 			Map expected = new HashMap();
 			expected.clear();
 			// Test Members before any are added
-			verifyMembers(grp, MemberFilter.All, 0,expected);
-			verifyMembers(grp, MemberFilter.EffectiveMembers, 0,expected);
-			verifyMembers(grp, MemberFilter.ImmediateMembers, 0,expected);
+			verifyMembers(grp, MemberFilter.All, 0, expected);
+			verifyMembers(grp, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(grp, MemberFilter.ImmediateMembers, 0, expected);
 
-			Subject subject = SubjectUtils.getSubject(SUPER_USER);
-			GrouperSession session = GrouperSession.start(subject);
-			Group group = GroupFinder.findByName(session, grp.getName());
 			grouper
 					.addMember(SUPER_USER, Utils.getGroupIdentifier(grp),
 							USER_A);
-			
-			expected.clear();
-			expected.put(USER_A, getGridMember(USER_A));
-			verifyMembers(grp, MemberFilter.All, 1,expected);
-			
-			expected.clear();
-			expected.put(USER_A, getGridMember(USER_A));
-			verifyMembers(grp, MemberFilter.ImmediateMembers, 1,expected);
-			
-			expected.clear();
-			verifyMembers(grp, MemberFilter.EffectiveMembers, 0,expected);
 
-			Group subGroup = GroupFinder.findByName(session, subgrp.getName());
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			verifyMembers(grp, MemberFilter.All, 1, expected);
+
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			verifyMembers(grp, MemberFilter.ImmediateMembers, 1, expected);
+
+			expected.clear();
+			verifyMembers(grp, MemberFilter.EffectiveMembers, 0, expected);
+
+			expected.clear();
+			verifyMembers(subgrp, MemberFilter.All, 0, expected);
+			expected.clear();
+			verifyMembers(subgrp, MemberFilter.EffectiveMembers, 0, expected);
+			expected.clear();
+			verifyMembers(subgrp, MemberFilter.ImmediateMembers, 0, expected);
+
 			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(subgrp),
 					USER_B);
 
-			printMembers(group);
-			printMembers(subGroup);
-			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grp),
-					subGroup.toSubject().getId());
-			printMembers(group);
+			expected.clear();
+			expected.put(USER_B, getGridMember(USER_B));
+			verifyMembers(subgrp, MemberFilter.All, 1, expected);
+
+			expected.clear();
+			expected.put(USER_B, getGridMember(USER_B));
+			verifyMembers(subgrp, MemberFilter.ImmediateMembers, 1, expected);
+
+			expected.clear();
+			verifyMembers(subgrp, MemberFilter.EffectiveMembers, 0, expected);
+
+			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grp), subgrp
+					.getUUID());
+
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			expected.put(USER_B, getGridMember(USER_B));
+			expected.put(subgrp.getUUID(), getGroupMember(subgrp.getUUID()));
+			verifyMembers(grp, MemberFilter.All, 3, expected);
+
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			expected.put(subgrp.getUUID(), getGroupMember(subgrp.getUUID()));
+			verifyMembers(grp, MemberFilter.ImmediateMembers, 2, expected);
+
+			expected.clear();
+			expected.put(USER_B, getGridMember(USER_B));
+			verifyMembers(grp, MemberFilter.EffectiveMembers, 1, expected);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -145,15 +167,15 @@ public class TestGroups extends TestCase {
 			assertEquals(expectedCount, members.length);
 
 			for (int i = 0; i < expectedCount; i++) {
-				if (expected.containsKey(members[i].getSubjectName())) {
+				if (expected.containsKey(members[i].getSubjectId())) {
 					MemberCaddy caddy = (MemberCaddy) expected
-							.remove(members[i].getSubjectName());
-					assertEquals(caddy.getMemberName(), members[i]
-							.getSubjectName());
+							.remove(members[i].getSubjectId());
+					assertEquals(caddy.getMemberId(), members[i]
+							.getSubjectId());
 					assertEquals(caddy.getMemberType(), members[i]
 							.getMemberType());
 				} else {
-					fail("Member " + members[i].getSubjectName()
+					fail("Member " + members[i].getSubjectId()
 							+ " not expected!!!");
 				}
 			}
@@ -163,60 +185,6 @@ public class TestGroups extends TestCase {
 			fail("Error verifying members");
 		}
 
-	}
-
-	private void printMembers(Group group) throws Exception {
-		System.out.println();
-		System.out.println("All Members of " + group.getName());
-		System.out.println("-------------------------------------------------");
-		System.out.println();
-		Set set = group.getMembers();
-		Iterator itr = set.iterator();
-		while (itr.hasNext()) {
-			Member m = (Member) itr.next();
-			System.out.println(m.getSubject().getName() + " - "
-					+ m.getSubject().getSource().getClass().getName());
-		}
-		set = null;
-		itr = null;
-
-		System.out.println();
-		System.out.println("Immediate Members of " + group.getName());
-		System.out.println("-------------------------------------------------");
-		System.out.println();
-		set = group.getImmediateMembers();
-		itr = set.iterator();
-		while (itr.hasNext()) {
-			Member m = (Member) itr.next();
-			System.out.println(m.getSubjectId());
-		}
-
-		set = null;
-		itr = null;
-
-		System.out.println();
-		System.out.println("Effective Members of " + group.getName());
-		System.out.println("-------------------------------------------------");
-		System.out.println();
-		set = group.getEffectiveMembers();
-		itr = set.iterator();
-		while (itr.hasNext()) {
-			Member m = (Member) itr.next();
-			System.out.println(m.getSubjectId());
-		}
-	}
-
-	private void printMemberships(Group group) throws Exception {
-		System.out.println();
-		System.out.println("All Memberships of " + group.getName());
-		System.out.println("-------------------------------------------------");
-		System.out.println();
-		Set set = group.getMemberships();
-		Iterator itr = set.iterator();
-		while (itr.hasNext()) {
-			Membership m = (Membership) itr.next();
-			System.out.println(m.getMember().getSubject().getId());
-		}
 	}
 
 	protected void setUp() throws Exception {
@@ -243,17 +211,17 @@ public class TestGroups extends TestCase {
 	}
 
 	private class MemberCaddy {
-		private String memberName;
+		private String memberId;
 
 		private MemberType memberType;
 
-		public MemberCaddy(String name, MemberType type) {
-			this.memberName = name;
+		public MemberCaddy(String id, MemberType type) {
+			this.memberId = id;
 			this.memberType = type;
 		}
 
-		public String getMemberName() {
-			return memberName;
+		public String getMemberId() {
+			return memberId;
 		}
 
 		public MemberType getMemberType() {
