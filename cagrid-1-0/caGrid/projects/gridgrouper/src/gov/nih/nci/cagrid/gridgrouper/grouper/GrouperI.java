@@ -36,5 +36,9 @@ public interface GrouperI {
 	public String getName();
 
 	public GroupI findGroup(String name) throws GroupNotFoundException;
+	
+	public boolean isMemberOf(String subjectId, String groupName);
+	
+	public boolean isMemberOf(Subject subject, String groupName);
 
 }

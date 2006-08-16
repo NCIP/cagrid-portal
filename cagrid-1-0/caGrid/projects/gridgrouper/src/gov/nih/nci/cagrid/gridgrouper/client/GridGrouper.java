@@ -7,6 +7,7 @@ import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege;
@@ -64,7 +65,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
-		}catch (Exception e) {
+		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -84,7 +85,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
-		}catch (Exception e) {
+		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -101,7 +102,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
-		}catch (Exception e) {
+		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -115,14 +116,12 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			Set set = new HashSet();
 			if (privs != null) {
 				for (int i = 0; i < privs.length; i++) {
-					NamingPrivilegeI priv = new NamingPrivilege(
-							privs[i].getStemName(), SubjectUtils
-									.getSubject(privs[i].getSubject()),
-							SubjectUtils.getSubject(privs[i].getOwner()),
-							Privilege.getInstance(privs[i].getPrivilegeType()
-									.getValue()), privs[i]
-									.getImplementationClass(), privs[i]
-									.isIsRevokable());
+					NamingPrivilegeI priv = new NamingPrivilege(privs[i]
+							.getStemName(), SubjectUtils.getSubject(privs[i]
+							.getSubject()), SubjectUtils.getSubject(privs[i]
+							.getOwner()), Privilege.getInstance(privs[i]
+							.getPrivilegeType().getValue()), privs[i]
+							.getImplementationClass(), privs[i].isIsRevokable());
 					set.add(priv);
 				}
 			}
@@ -132,7 +131,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
-		}catch (Exception e) {
+		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -153,7 +152,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			return set;
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
-		}catch (GridGrouperRuntimeFault e) {
+		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
@@ -174,7 +173,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
-		}catch (Exception e) {
+		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
@@ -187,7 +186,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			return new Group(this, des);
 		} catch (GroupNotFoundFault f) {
 			throw new GroupNotFoundException(f.getFaultString());
-		}catch (GridGrouperRuntimeFault e) {
+		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
 		} catch (Exception e) {
@@ -224,6 +223,32 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 
 	public String getProxyIdentity() {
 		return getClient().getProxyIdentity();
+	}
+
+	public boolean isMemberOf(String subjectId, String groupName) {
+		try {
+			return getClient().isMemberOf(getGroupIdentifier(groupName),
+					subjectId, MemberFilter.All);
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public boolean isMemberOf(Subject subject, String groupName) {
+		try {
+			return getClient().isMemberOf(getGroupIdentifier(groupName),
+					subject.getId(), MemberFilter.All);
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
 	}
 
 }

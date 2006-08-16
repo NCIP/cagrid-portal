@@ -67,52 +67,54 @@ public interface GroupI {
 
 	// public void addMember(Subject subj, Field f) throws
 	// InsufficientPrivilegeException, MemberAddException, SchemaException;
-	
+
 	public Set getMembers() throws GrouperRuntimeException;
 
-	//public Set getMembers(Field f) throws SchemaException;
+	// public Set getMembers(Field f) throws SchemaException;
 
 	public Set getEffectiveMembers() throws GrouperRuntimeException;
 
-	//public Set getEffectiveMembers(Field f) throws SchemaException;
+	// public Set getEffectiveMembers(Field f) throws SchemaException;
 
 	public Set getImmediateMembers() throws GrouperRuntimeException;
 
-	//public Set getImmediateMembers(Field f) throws SchemaException;
+	// public Set getImmediateMembers(Field f) throws SchemaException;
 
+	public boolean hasEffectiveMember(Subject subj)
+			throws GrouperRuntimeException;
 
-//	public void deleteMember(Subject subj)
-//			throws InsufficientPrivilegeException, MemberDeleteException;
-//
-//	public void deleteMember(Subject subj, Field f)
-//			throws InsufficientPrivilegeException, MemberDeleteException,
-//			SchemaException;
-//
-//	public Set getCompositeMembers();
-//
-//	public Set getCompositeMemberships();
-//
-//	public void addCompositeMember(CompositeType type, Group left, Group right)
-//			throws InsufficientPrivilegeException, MemberAddException;
-//
-//	public void deleteCompositeMember() throws InsufficientPrivilegeException,
-//			MemberDeleteException;
-//
-//	public boolean hasEffectiveMember(Subject subj)
-//			throws GrouperRuntimeException;
-//
-//	public boolean hasEffectiveMember(Subject subj, Field f)
-//			throws SchemaException;
-//
-//	public boolean hasImmediateMember(Subject subj)
-//			throws GrouperRuntimeException;
-//
-//	public boolean hasImmediateMember(Subject subj, Field f)
-//			throws SchemaException;
-//
-//	public boolean hasMember(Subject subj) throws GrouperRuntimeException;
-//
-//	public boolean hasMember(Subject subj, Field f) throws SchemaException;
+	// public boolean hasEffectiveMember(Subject subj, Field f)
+	// throws SchemaException;
+	//
+	public boolean hasImmediateMember(Subject subj)
+			throws GrouperRuntimeException;
+
+	// public boolean hasImmediateMember(Subject subj, Field f)
+	// throws SchemaException;
+
+	public boolean hasMember(Subject subj) throws GrouperRuntimeException;
+
+	// public boolean hasMember(Subject subj, Field f) throws SchemaException;
+
+	// public void deleteMember(Subject subj)
+	// throws InsufficientPrivilegeException, MemberDeleteException;
+	//
+	// public void deleteMember(Subject subj, Field f)
+	// throws InsufficientPrivilegeException, MemberDeleteException,
+	// SchemaException;
+	//
+	// public Set getCompositeMembers();
+	//
+	// public Set getCompositeMemberships();
+	//
+	// public void addCompositeMember(CompositeType type, Group left, Group
+	// right)
+	// throws InsufficientPrivilegeException, MemberAddException;
+	//
+	// public void deleteCompositeMember() throws
+	// InsufficientPrivilegeException,
+	// MemberDeleteException;
+	//
 
 	// TODO: Support Below
 

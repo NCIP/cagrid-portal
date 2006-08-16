@@ -242,4 +242,33 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 	}
 
+	public boolean hasEffectiveMember(Subject subj)
+			throws GrouperRuntimeException {
+		return hasMember(subj, MemberFilter.EffectiveMembers);
+	}
+
+	public boolean hasImmediateMember(Subject subj)
+			throws GrouperRuntimeException {
+		return hasMember(subj, MemberFilter.ImmediateMembers);
+	}
+
+	public boolean hasMember(Subject subj) throws GrouperRuntimeException {
+		return hasMember(subj, MemberFilter.All);
+	}
+
+	private boolean hasMember(Subject member, MemberFilter filter)
+			throws GrouperRuntimeException {
+		try {
+
+			return getGridGrouper().getClient().isMemberOf(
+					getGroupIdentifier(), member.getId(), filter);
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
 }
