@@ -117,6 +117,8 @@ public interface GroupI {
 	// InsufficientPrivilegeException,
 	// MemberDeleteException;
 	//
+	// public boolean hasComposite()
+    // public boolean isComposite();
 
 	// Membership Operations
 
@@ -169,7 +171,6 @@ public interface GroupI {
 	//
 	// public boolean hasAdmin(Subject subj);
 	//
-	// public boolean hasComposite();
 	//
 	// public boolean hasOptin(Subject subj);
 	//
@@ -181,7 +182,6 @@ public interface GroupI {
 	//
 	// public boolean hasView(Subject subj);
 	//
-	// public boolean isComposite();
 	//
 	// public void revokePriv(Privilege priv)
 	// throws InsufficientPrivilegeException, RevokePrivilegeException,
