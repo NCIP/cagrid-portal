@@ -2,6 +2,9 @@ package gov.nih.nci.cagrid.gridgrouper.common;
 
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
+import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
+import gov.nih.nci.cagrid.gridgrouper.bean.MemberType;
+import gov.nih.nci.cagrid.gridgrouper.subject.GridGroupSubject;
 import gov.nih.nci.cagrid.gridgrouper.subject.GridSourceAdapter;
 import gov.nih.nci.cagrid.gridgrouper.subject.NonGridSourceAdapter;
 
@@ -32,4 +35,18 @@ public class SubjectUtils {
 
 	}
 
+	public static Subject getSubject(MemberDescriptor des)
+			throws SubjectNotFoundException {
+		if (des.getMemberType().equals(MemberType.Grid)) {
+			return GRID_SOURCE.getSubject(des.getSubjectId());
+		} else if (des.getMemberType().equals(MemberType.Other)) {
+			return NON_GRID_SOURCE.getSubject(des.getSubjectId());
+		} else if (des.getMemberType().equals(MemberType.GrouperGroup)) {
+			return new GridGroupSubject(des.getSubjectId(), des
+					.getSubjectName(), null);
+		} else {
+			throw new SubjectNotFoundException(des.getSubjectId()
+					+ " was not found.");
+		}
+	}
 }

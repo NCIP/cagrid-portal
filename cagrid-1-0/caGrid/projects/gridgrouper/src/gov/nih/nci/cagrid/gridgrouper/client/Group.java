@@ -10,6 +10,8 @@ import edu.internet2.middleware.subject.SubjectNotFoundException;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate;
+import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
+import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
@@ -19,6 +21,8 @@ import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.MemberAddFault;
 
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -205,4 +209,37 @@ public class Group extends GridGrouperObject implements GroupI {
 		}
 
 	}
+
+	public Set getEffectiveMembers() throws GrouperRuntimeException {
+		return getMembers(MemberFilter.EffectiveMembers);
+	}
+
+	public Set getImmediateMembers() throws GrouperRuntimeException {
+		return getMembers(MemberFilter.ImmediateMembers);
+	}
+
+	public Set getMembers() throws GrouperRuntimeException {
+		return getMembers(MemberFilter.All);
+	}
+
+	private Set getMembers(MemberFilter filter) throws GrouperRuntimeException {
+		try {
+			MemberDescriptor[] list = gridGrouper.getClient().getMembers(
+					getGroupIdentifier(), filter);
+			Set members = new LinkedHashSet();
+			if (list != null) {
+				for (int i = 0; i < list.length; i++) {
+					members.add(new Member(list[i]));
+				}
+			}
+			return members;
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
 }
