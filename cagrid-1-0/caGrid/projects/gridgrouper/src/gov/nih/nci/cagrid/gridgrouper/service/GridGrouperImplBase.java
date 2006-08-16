@@ -2,8 +2,6 @@ package gov.nih.nci.cagrid.gridgrouper.service;
 
 import java.rmi.RemoteException;
 
-import gov.nih.nci.cagrid.gridgrouper.service.ServiceConfiguration;
-
 import javax.naming.InitialContext;
 
 import org.apache.axis.MessageContext;

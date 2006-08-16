@@ -1,8 +1,5 @@
 package gov.nih.nci.cagrid.gridgrouper.testutils;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import edu.internet2.middleware.grouper.Group;
 import edu.internet2.middleware.grouper.GroupFinder;
 import edu.internet2.middleware.grouper.GroupNotFoundException;
@@ -16,6 +13,9 @@ import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
+
+import java.util.Iterator;
+import java.util.Set;
 
 public class Utils {
 

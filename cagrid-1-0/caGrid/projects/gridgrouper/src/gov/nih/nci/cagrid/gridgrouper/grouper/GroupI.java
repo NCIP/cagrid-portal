@@ -116,6 +116,20 @@ public interface GroupI {
 	// MemberDeleteException;
 	//
 
+	// Membership Operations
+
+	public Set getEffectiveMemberships() throws GrouperRuntimeException;
+
+	// public Set getEffectiveMemberships(Field f) throws SchemaException;
+
+	public Set getImmediateMemberships() throws GrouperRuntimeException;
+
+	// public Set getImmediateMemberships(Field f) throws SchemaException;
+
+	public Set getMemberships() throws GrouperRuntimeException;
+
+	// public Set getMemberships(Field f) throws SchemaException;
+
 	// TODO: Support Below
 
 	// public Set getOptins() throws GrouperRuntimeException;
@@ -142,17 +156,6 @@ public interface GroupI {
 	//
 	// public Set getAdmins() throws GrouperRuntimeException;
 	//
-	// public Set getEffectiveMemberships() throws GrouperRuntimeException;
-	//
-	// public Set getEffectiveMemberships(Field f) throws SchemaException;
-	//
-	// public Set getImmediateMemberships() throws GrouperRuntimeException;
-	//
-	// public Set getImmediateMemberships(Field f) throws SchemaException;
-	//
-	// public Set getMemberships() throws GrouperRuntimeException;
-	//
-	// public Set getMemberships(Field f) throws SchemaException;
 	//
 	// public Set getUpdaters() throws GrouperRuntimeException;
 	//

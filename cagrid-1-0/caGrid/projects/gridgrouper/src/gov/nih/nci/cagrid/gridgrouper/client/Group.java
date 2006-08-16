@@ -12,6 +12,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
@@ -269,6 +270,39 @@ public class Group extends GridGrouperObject implements GroupI {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
+	}
+
+	private Set getMemberships(MemberFilter filter)
+			throws GrouperRuntimeException {
+		try {
+			MembershipDescriptor[] list = gridGrouper.getClient()
+					.getMemberships(getGroupIdentifier(), filter);
+			Set members = new LinkedHashSet();
+			if (list != null) {
+				for (int i = 0; i < list.length; i++) {
+					members.add(new Membership(this.gridGrouper, list[i]));
+				}
+			}
+			return members;
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public Set getEffectiveMemberships() throws GrouperRuntimeException {
+		return this.getMemberships(MemberFilter.EffectiveMembers);
+	}
+
+	public Set getImmediateMemberships() throws GrouperRuntimeException {
+		return this.getMemberships(MemberFilter.ImmediateMembers);
+	}
+
+	public Set getMemberships() throws GrouperRuntimeException {
+		return this.getMemberships(MemberFilter.All);
 	}
 
 }

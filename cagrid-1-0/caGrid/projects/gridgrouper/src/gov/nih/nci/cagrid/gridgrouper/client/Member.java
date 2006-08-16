@@ -21,6 +21,8 @@ public class Member implements MemberI {
 	private MemberDescriptor des;
 
 	private Subject subject;
+	
+	private GridGrouper gridGrouper;
 
 	public Member(MemberDescriptor des) throws SubjectNotFoundException {
 		this.des = des;

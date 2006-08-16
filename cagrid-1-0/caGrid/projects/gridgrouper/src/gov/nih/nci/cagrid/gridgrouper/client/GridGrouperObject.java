@@ -11,10 +11,10 @@ import org.apache.commons.logging.LogFactory;
  *          Exp $
  */
 public abstract class GridGrouperObject {
-	
+
 	private Log log;
 
-	public GridGrouperObject(){
+	public GridGrouperObject() {
 		this.log = LogFactory.getLog(this.getClass().getName());
 	}
 
