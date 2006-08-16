@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE faces-config PUBLIC
-  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
-  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd" [
-<!ENTITY managed-beans_gen          SYSTEM "managed-beans_gen.xml">
-<!ENTITY sample-navigation-rules    SYSTEM "sample-navigation-rules.xml">
- <!ENTITY converters_gen    SYSTEM "converters_gen.xml">
-]>
+        "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+        "http://java.sun.com/dtd/web-facesconfig_1_0.dtd" [
+        <!ENTITY managed-beans_gen          SYSTEM "managed-beans_gen.xml">
+        <!ENTITY sample-navigation-rules    SYSTEM "sample-navigation-rules.xml">
+        <!ENTITY converters_gen    SYSTEM "converters_gen.xml">
+        ]>
 
 <faces-config>
 
