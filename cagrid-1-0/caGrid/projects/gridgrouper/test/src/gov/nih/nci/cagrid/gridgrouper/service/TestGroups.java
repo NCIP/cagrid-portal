@@ -1,8 +1,5 @@
 package gov.nih.nci.cagrid.gridgrouper.service;
 
-import edu.internet2.middleware.grouper.Group;
-import edu.internet2.middleware.grouper.Member;
-import edu.internet2.middleware.grouper.Membership;
 import edu.internet2.middleware.grouper.RegistryReset;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
@@ -16,9 +13,7 @@ import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
 import gov.nih.nci.cagrid.gridgrouper.testutils.Utils;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -35,7 +30,7 @@ public class TestGroups extends TestCase {
 
 	private String SUPER_USER = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=super admin";
 
-	private String ADMIN_USER = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=admin";
+	//private String ADMIN_USER = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=admin";
 
 	private String USER_A = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user a";
 
@@ -202,9 +197,6 @@ public class TestGroups extends TestCase {
 		return new MemberCaddy(name, MemberType.Grid);
 	}
 
-	private MemberCaddy getNonGridMember(String name) {
-		return new MemberCaddy(name, MemberType.Other);
-	}
 
 	private MemberCaddy getGroupMember(String name) {
 		return new MemberCaddy(name, MemberType.GrouperGroup);
