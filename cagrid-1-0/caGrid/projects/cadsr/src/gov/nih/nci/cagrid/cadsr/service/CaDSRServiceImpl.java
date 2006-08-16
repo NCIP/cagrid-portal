@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.cadsr.common.CaDSRUtils;
 import gov.nih.nci.cagrid.cadsr.common.DomainModelBuilder;
 import gov.nih.nci.cagrid.cadsr.common.DomainModelGenerationException;
 import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
+import gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
@@ -23,12 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.InitialContext;
-
-import org.apache.axis.MessageContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.globus.wsrf.Constants;
 import org.globus.wsrf.impl.work.WorkManagerImpl;
 
 import commonj.work.WorkManager;
@@ -39,7 +36,7 @@ import commonj.work.WorkManager;
  * 
  * @created by caGrid toolkit version 1.0
  */
-public class CaDSRServiceImpl {
+public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 	private static final int DEFAULT_POOL_SIZE = 10;
 
 	protected static Log LOG = LogFactory.getLog(CaDSRServiceImpl.class.getName());
@@ -47,7 +44,7 @@ public class CaDSRServiceImpl {
 	private WorkManager workManager = null;
 
 
-	public CaDSRServiceImpl() {
+	public CaDSRServiceImpl() throws RemoteException {
 
 	}
 
@@ -120,7 +117,8 @@ public class CaDSRServiceImpl {
 
 
 	public gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata[] findPackagesInProject(
-		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
+		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException,
+		gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all packages under project:" + project.getShortName());
@@ -152,7 +150,8 @@ public class CaDSRServiceImpl {
 
 
 	public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInProject(
-		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
+		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException,
+		gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all classes under project:" + project.getShortName());
@@ -184,7 +183,8 @@ public class CaDSRServiceImpl {
 
 
 	public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInPackage(
-		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String packageName) throws RemoteException {
+		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String packageName) throws RemoteException,
+		gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all classes under package:" + packageName);
@@ -220,7 +220,7 @@ public class CaDSRServiceImpl {
 
 	public gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata[] findAttributesInClass(
 		gov.nih.nci.cadsr.umlproject.domain.Project project, gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz)
-		throws RemoteException {
+		throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all attributes under class:" + clazz.getName());
@@ -254,7 +254,7 @@ public class CaDSRServiceImpl {
 
 	public gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata[] findSemanticMetadataForClass(
 		gov.nih.nci.cadsr.umlproject.domain.Project project, gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz)
-		throws RemoteException {
+		throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all semantics for class:" + clazz.getName());
@@ -287,7 +287,8 @@ public class CaDSRServiceImpl {
 
 	public gov.nih.nci.cadsr.domain.ValueDomain findValueDomainForAttribute(
 		gov.nih.nci.cadsr.umlproject.domain.Project project,
-		gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata attribute) throws RemoteException {
+		gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata attribute) throws RemoteException,
+		gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving value domain for attribute:" + attribute.getName());
@@ -328,28 +329,9 @@ public class CaDSRServiceImpl {
 	}
 
 
-	public ServiceConfiguration getConfiguration() throws Exception {
-		if (this.configuration != null) {
-			return this.configuration;
-		}
-		MessageContext ctx = MessageContext.getCurrentContext();
-
-		String servicePath = ctx.getTargetService();
-
-		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
-		try {
-			javax.naming.Context initialContext = new InitialContext();
-			this.configuration = (ServiceConfiguration) initialContext.lookup(jndiName);
-		} catch (Exception e) {
-			throw new Exception("Unable to instantiate service configuration.", e);
-		}
-
-		return this.configuration;
-	}
-
-
 	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForProject(
-		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
+		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException,
+		gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
 		ApplicationService cadsrService = null;
 		try {
 			cadsrService = getApplicationService();
@@ -370,7 +352,8 @@ public class CaDSRServiceImpl {
 
 
 	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForPackages(
-		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String[] packageNames) throws RemoteException {
+		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String[] packageNames) throws RemoteException,
+		gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
 		ApplicationService cadsrService = null;
 		try {
 			cadsrService = getApplicationService();
@@ -389,34 +372,9 @@ public class CaDSRServiceImpl {
 	}
 
 
-	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(
-		gov.nih.nci.cadsr.umlproject.domain.Project project,
-		gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] classes,
-		gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] associations) throws RemoteException {
-		ApplicationService cadsrService = null;
-		try {
-			cadsrService = getApplicationService();
-		} catch (Exception ex) {
-			LOG.error("Error obtaining connection to caDSR application service: " + ex.getMessage(), ex);
-		}
-		DomainModelBuilder builder = new DomainModelBuilder(cadsrService);
-		builder.setWorkManager(getWorkManager());
-
-		DomainModel model;
-		try {
-			// TODO: need to handle/convert associations
-			model = builder.createDomainModel(findCompleteProject(project), classes, null);
-		} catch (DomainModelGenerationException e) {
-			throw new RemoteException(e.getMessage(), e);
-		}
-
-		return model;
-	}
-
-
 	public gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] findAssociationsForClass(
 		gov.nih.nci.cadsr.umlproject.domain.Project project, gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz)
-		throws RemoteException {
+		throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
 
 		try {
 			ApplicationService appService = getApplicationService();
@@ -451,7 +409,8 @@ public class CaDSRServiceImpl {
 
 
 	public gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] findAssociationsInPackage(
-		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String packageName) throws RemoteException {
+		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String packageName) throws RemoteException,
+		gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all associations for package:" + packageName);
@@ -511,7 +470,8 @@ public class CaDSRServiceImpl {
 
 
 	public gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] findAssociationsInProject(
-		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException {
+		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException,
+		gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
 		try {
 			ApplicationService appService = getApplicationService();
 			LOG.debug("Using basic search. Retrieving all associations for project:" + project.getLongName());
@@ -558,7 +518,10 @@ public class CaDSRServiceImpl {
 		if (completeProjects.size() == 1) {
 			proj = (Project) completeProjects.get(0);
 		} else if (completeProjects.size() == 0) {
-			throw new RemoteException("No project found in caDSR");
+			InvalidProjectException fault = new InvalidProjectException();
+			fault.setFaultString("No project found in caDSR");
+
+			throw fault;
 		} else {
 			throw new RemoteException("More than one project (" + completeProjects.size()
 				+ ") found.  Prototype project is ambiguous");
@@ -580,4 +543,15 @@ public class CaDSRServiceImpl {
 	public void setWorkManager(WorkManager workManager) {
 		this.workManager = workManager;
 	}
+
+
+	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(
+		gov.nih.nci.cadsr.umlproject.domain.Project project,
+		gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] classes,
+		gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] excludedAssociations) throws RemoteException,
+		gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
+		// TODO: Implement this autogenerated method
+		throw new RemoteException("Not yet implemented");
+	}
+
 }

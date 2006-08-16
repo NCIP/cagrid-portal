@@ -27,11 +27,11 @@ public class DomainModelGenerationExample {
 
 				// create the model once
 				long start = System.currentTimeMillis();
-				 DomainModel domainModel = builder.createDomainModel(project,
-				 new String[]{"gov.nih.nci.common.domain"});
-				//DomainModel domainModel = builder.createDomainModel(project);
-//				MetadataUtils.serializeDomainModel(domainModel, new FileWriter(project.getShortName()
-//					+ "_DomainModel.xml"));
+				DomainModel domainModel = builder.createDomainModel(project, new String[]{"gov.nih.nci.cabio.domain"});
+				// DomainModel domainModel = builder.createDomainModel(project);
+				// MetadataUtils.serializeDomainModel(domainModel, new
+				// FileWriter(project.getShortName()
+				// + "_DomainModel.xml"));
 				double duration = (System.currentTimeMillis() - start) / 1000.0;
 				System.out.println("Domain Model generation took:" + duration + " seconds.");
 			}

@@ -112,14 +112,18 @@
       <ns4:Input qName="ns8:Project" isArray="false" name="project" xmlns:ns8="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
      </ns4:Inputs>
      <ns4:Output qName="ns9:UMLPackageMetadata" isArray="true" xmlns:ns9="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidProjectException"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="findClassesInProject" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="ns10:Project" isArray="false" name="project" xmlns:ns10="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
      </ns4:Inputs>
      <ns4:Output qName="ns11:UMLClassMetadata" isArray="true" xmlns:ns11="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidProjectException"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="findClassesInPackage" xsi:type="ns4:MethodType">
      <ns4:Inputs>
@@ -127,14 +131,18 @@
       <ns4:Input qName="xsd:string" isArray="false" name="packageName" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
      <ns4:Output qName="ns13:UMLClassMetadata" isArray="true" xmlns:ns13="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidProjectException"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="generateDomainModelForProject" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="ns14:Project" isArray="false" name="project" xmlns:ns14="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
      </ns4:Inputs>
      <ns4:Output qName="ns15:DomainModel" isArray="false" xmlns:ns15="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidProjectException"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="generateDomainModelForPackages" xsi:type="ns4:MethodType">
      <ns4:Inputs>
@@ -142,16 +150,20 @@
       <ns4:Input qName="xsd:string" isArray="true" name="packageNames" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
      <ns4:Output qName="ns17:DomainModel" isArray="false" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidProjectException"/>
+     </ns4:Exceptions>
     </ns4:Method>
-    <ns4:Method isImported="false" isProvided="false" name="generateDomainModelForClasses" xsi:type="ns4:MethodType">
+    <ns4:Method isImported="false" isProvided="false" name="generateDomainModelForClassesWithExcludes" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="ns18:Project" isArray="false" name="project" xmlns:ns18="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
       <ns4:Input qName="ns19:UMLClassMetadata" isArray="true" name="classes" xmlns:ns19="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
-      <ns4:Input qName="ns20:UMLAssociation" isArray="true" name="associations" xmlns:ns20="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"/>
+      <ns4:Input qName="ns20:UMLAssociation" isArray="true" name="excludedAssociations" xmlns:ns20="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"/>
      </ns4:Inputs>
      <ns4:Output qName="ns21:DomainModel" isArray="false" xmlns:ns21="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidProjectException"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="findAttributesInClass" xsi:type="ns4:MethodType">
      <ns4:Inputs>
@@ -159,7 +171,9 @@
       <ns4:Input qName="ns23:UMLClassMetadata" isArray="false" name="clazz" xmlns:ns23="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
      </ns4:Inputs>
      <ns4:Output qName="ns24:UMLAttributeMetadata" isArray="true" xmlns:ns24="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidProjectException"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="findSemanticMetadataForClass" xsi:type="ns4:MethodType">
      <ns4:Inputs>
@@ -167,7 +181,9 @@
       <ns4:Input qName="ns26:UMLClassMetadata" isArray="false" name="clazz" xmlns:ns26="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
      </ns4:Inputs>
      <ns4:Output qName="ns27:SemanticMetadata" isArray="true" xmlns:ns27="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidProjectException"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="findValueDomainForAttribute" xsi:type="ns4:MethodType">
      <ns4:Inputs>
@@ -175,7 +191,9 @@
       <ns4:Input qName="ns29:UMLAttributeMetadata" isArray="false" name="attribute" xmlns:ns29="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
      </ns4:Inputs>
      <ns4:Output qName="ns30:ValueDomain" isArray="false" xmlns:ns30="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidProjectException"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="findAssociationsForClass" xsi:type="ns4:MethodType">
      <ns4:Inputs>
@@ -183,7 +201,9 @@
       <ns4:Input qName="ns32:UMLClassMetadata" isArray="false" name="clazz" xmlns:ns32="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
      </ns4:Inputs>
      <ns4:Output qName="ns33:UMLAssociation" isArray="true" xmlns:ns33="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidProjectException"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="findAssociationsInPackage" xsi:type="ns4:MethodType">
      <ns4:Inputs>
@@ -191,14 +211,18 @@
       <ns4:Input qName="xsd:string" isArray="false" name="packageName" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
      <ns4:Output qName="ns35:UMLAssociation" isArray="true" xmlns:ns35="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidProjectException"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="findAssociationsInProject" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="ns36:Project" isArray="false" name="project" xmlns:ns36="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
      </ns4:Inputs>
      <ns4:Output qName="ns37:UMLAssociation" isArray="true" xmlns:ns37="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidProjectException"/>
+     </ns4:Exceptions>
     </ns4:Method>
    </ns4:Methods>
    <ns38:ResourcePropertiesList xsi:type="ns38:ResourcePropertiesListType" xmlns:ns38="gme://gov.nih.nci.cagrid.introduce/1/Resources">
