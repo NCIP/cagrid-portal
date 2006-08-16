@@ -8,6 +8,7 @@ import edu.internet2.middleware.grouper.GroupModifyException;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.grouper.MemberAddException;
+import edu.internet2.middleware.grouper.MemberDeleteException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 
@@ -96,8 +97,9 @@ public interface GroupI {
 
 	// public boolean hasMember(Subject subj, Field f) throws SchemaException;
 
-	// public void deleteMember(Subject subj)
-	// throws InsufficientPrivilegeException, MemberDeleteException;
+	public void deleteMember(Subject subj)
+			throws InsufficientPrivilegeException, MemberDeleteException;
+
 	//
 	// public void deleteMember(Subject subj, Field f)
 	// throws InsufficientPrivilegeException, MemberDeleteException,

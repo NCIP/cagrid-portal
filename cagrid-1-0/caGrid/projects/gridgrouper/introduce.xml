@@ -318,20 +318,33 @@
       <ns4:Exception name="GroupNotFoundFault"/>
      </ns4:Exceptions>
     </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="deleteMember" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns54:GroupIdentifier" isArray="false" name="group" xmlns:ns54="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns55:SubjectIdentifier" isArray="false" name="member" xmlns:ns55="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     </ns4:Inputs>
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="GridGrouperRuntimeFault"/>
+      <ns4:Exception name="InsufficientPrivilegeFault"/>
+      <ns4:Exception name="GroupNotFoundFault"/>
+      <ns4:Exception name="MemberDeleteFault"/>
+     </ns4:Exceptions>
+    </ns4:Method>
    </ns4:Methods>
-   <ns54:ResourcePropertiesList xsi:type="ns54:ResourcePropertiesListType" xmlns:ns54="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
-   <ns55:ServiceSecurity xsi:type="ns55:ServiceSecurity" xmlns:ns55="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns55:SecuritySetting xsi:type="ns55:SecuritySetting">Custom</ns55:SecuritySetting>
-    <ns55:TransportLevelSecurity xsi:type="ns55:TransportLevelSecurity">
-     <ns55:CommunicationMethod xsi:type="ns55:CommunicationMethod">Privacy</ns55:CommunicationMethod>
-    </ns55:TransportLevelSecurity>
-    <ns55:RunAsMode xsi:type="ns55:RunAsMode">System</ns55:RunAsMode>
-    <ns55:AnonymousClients xsi:type="ns55:AnonymousCommunication">No</ns55:AnonymousClients>
-    <ns55:ServiceAuthorization xsi:type="ns55:ServiceAuthorization">
-     <ns55:NoAuthorization xsi:type="ns55:NoAuthorization"/>
-    </ns55:ServiceAuthorization>
-   </ns55:ServiceSecurity>
+   <ns56:ResourcePropertiesList xsi:type="ns56:ResourcePropertiesListType" xmlns:ns56="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns57:ServiceSecurity xsi:type="ns57:ServiceSecurity" xmlns:ns57="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns57:SecuritySetting xsi:type="ns57:SecuritySetting">Custom</ns57:SecuritySetting>
+    <ns57:TransportLevelSecurity xsi:type="ns57:TransportLevelSecurity">
+     <ns57:CommunicationMethod xsi:type="ns57:CommunicationMethod">Privacy</ns57:CommunicationMethod>
+    </ns57:TransportLevelSecurity>
+    <ns57:RunAsMode xsi:type="ns57:RunAsMode">System</ns57:RunAsMode>
+    <ns57:AnonymousClients xsi:type="ns57:AnonymousCommunication">No</ns57:AnonymousClients>
+    <ns57:ServiceAuthorization xsi:type="ns57:ServiceAuthorization">
+     <ns57:NoAuthorization xsi:type="ns57:NoAuthorization"/>
+    </ns57:ServiceAuthorization>
+   </ns57:ServiceSecurity>
   </ns3:Service>
  </ns3:Services>
- <ns56:Extensions xsi:type="ns56:ExtensionsType" xmlns:ns56="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns58:Extensions xsi:type="ns58:ExtensionsType" xmlns:ns58="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
 </ns1:ServiceSkeleton>

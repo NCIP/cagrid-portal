@@ -5,6 +5,7 @@ import edu.internet2.middleware.grouper.GroupModifyException;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.grouper.MemberAddException;
+import edu.internet2.middleware.grouper.MemberDeleteException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
@@ -20,6 +21,7 @@ import gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupModifyFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.MemberAddFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.MemberDeleteFault;
 
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -303,6 +305,25 @@ public class Group extends GridGrouperObject implements GroupI {
 
 	public Set getMemberships() throws GrouperRuntimeException {
 		return this.getMemberships(MemberFilter.All);
+	}
+
+	public void deleteMember(Subject subj)
+			throws InsufficientPrivilegeException, MemberDeleteException {
+		try {
+			gridGrouper.getClient().deleteMember(getGroupIdentifier(),
+					subj.getId());
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (MemberDeleteFault f) {
+			throw new MemberDeleteException(f.getFaultString());
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+
 	}
 
 }

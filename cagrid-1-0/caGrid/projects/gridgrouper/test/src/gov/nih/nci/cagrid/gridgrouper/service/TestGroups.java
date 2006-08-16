@@ -147,6 +147,55 @@ public class TestGroups extends TestCase {
 			expected.put(USER_B, getGridMember(USER_B));
 			verifyMembers(grp, MemberFilter.EffectiveMembers, 1, expected);
 
+			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(subgrp),
+					USER_B);
+
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			expected.put(subgrp.getUUID(), getGroupMember(subgrp.getUUID()));
+			verifyMembers(grp, MemberFilter.All, 2, expected);
+
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			expected.put(subgrp.getUUID(), getGroupMember(subgrp.getUUID()));
+			verifyMembers(grp, MemberFilter.ImmediateMembers, 2, expected);
+
+			expected.clear();
+			verifyMembers(grp, MemberFilter.EffectiveMembers, 0, expected);
+
+			expected.clear();
+			verifyMembers(subgrp, MemberFilter.All, 0, expected);
+			expected.clear();
+			verifyMembers(subgrp, MemberFilter.EffectiveMembers, 0, expected);
+			expected.clear();
+			verifyMembers(subgrp, MemberFilter.ImmediateMembers, 0, expected);
+
+			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grp),
+					USER_A);
+
+			expected.clear();
+			expected.put(subgrp.getUUID(), getGroupMember(subgrp.getUUID()));
+			verifyMembers(grp, MemberFilter.All, 1, expected);
+
+			expected.clear();
+			expected.put(subgrp.getUUID(), getGroupMember(subgrp.getUUID()));
+			verifyMembers(grp, MemberFilter.ImmediateMembers, 1, expected);
+
+			expected.clear();
+			verifyMembers(grp, MemberFilter.EffectiveMembers, 0, expected);
+
+			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grp),
+					subgrp.getUUID());
+
+			expected.clear();
+			verifyMembers(grp, MemberFilter.All, 0, expected);
+
+			expected.clear();
+			verifyMembers(grp, MemberFilter.ImmediateMembers, 0, expected);
+
+			expected.clear();
+			verifyMembers(grp, MemberFilter.EffectiveMembers, 0, expected);
+
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -224,7 +273,6 @@ public class TestGroups extends TestCase {
 
 			expected.clear();
 			verifyMemberships(grp, MemberFilter.EffectiveMembers, 0, expected);
-			
 
 			verifyMemberships(subgrp, MemberFilter.All, 0, expected);
 			verifyMemberships(subgrp, MemberFilter.EffectiveMembers, 0,
@@ -234,43 +282,93 @@ public class TestGroups extends TestCase {
 			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(subgrp),
 					USER_B);
 
-
 			expected.clear();
-			expected.put(USER_B, getGridMembership(USER_B, subgrp.getName(), null,
-					0));
+			expected.put(USER_B, getGridMembership(USER_B, subgrp.getName(),
+					null, 0));
 			verifyMemberships(subgrp, MemberFilter.All, 1, expected);
 
 			expected.clear();
-			expected.put(USER_B, getGridMembership(USER_B, subgrp.getName(), null,
-					0));
-			verifyMemberships(subgrp, MemberFilter.ImmediateMembers, 1, expected);
+			expected.put(USER_B, getGridMembership(USER_B, subgrp.getName(),
+					null, 0));
+			verifyMemberships(subgrp, MemberFilter.ImmediateMembers, 1,
+					expected);
 
 			expected.clear();
-			verifyMemberships(subgrp, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMemberships(subgrp, MemberFilter.EffectiveMembers, 0,
+					expected);
 
 			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grp), subgrp
 					.getUUID());
-			
+
 			expected.clear();
 			expected.put(USER_A, getGridMembership(USER_A, grp.getName(), null,
 					0));
-			expected.put(USER_B, getGridMembership(USER_B, grp.getName(), subgrp.getName(),
-					1));
-			expected.put(subgrp.getUUID(), getGroupMembership(subgrp.getUUID(), grp.getName(), null,
-					0));
+			expected.put(USER_B, getGridMembership(USER_B, grp.getName(),
+					subgrp.getName(), 1));
+			expected.put(subgrp.getUUID(), getGroupMembership(subgrp.getUUID(),
+					grp.getName(), null, 0));
 			verifyMemberships(grp, MemberFilter.All, 3, expected);
 
 			expected.clear();
 			expected.put(USER_A, getGridMembership(USER_A, grp.getName(), null,
 					0));
-			expected.put(subgrp.getUUID(), getGroupMembership(subgrp.getUUID(), grp.getName(), null,
-					0));
+			expected.put(subgrp.getUUID(), getGroupMembership(subgrp.getUUID(),
+					grp.getName(), null, 0));
 			verifyMemberships(grp, MemberFilter.ImmediateMembers, 2, expected);
 
 			expected.clear();
-			expected.put(USER_B, getGridMembership(USER_B, grp.getName(), subgrp.getName(),
-					1));
+			expected.put(USER_B, getGridMembership(USER_B, grp.getName(),
+					subgrp.getName(), 1));
 			verifyMemberships(grp, MemberFilter.EffectiveMembers, 1, expected);
+
+			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(subgrp),
+					USER_B);
+			
+			expected.clear();
+			expected.put(USER_A, getGridMembership(USER_A, grp.getName(), null,
+					0));
+			expected.put(subgrp.getUUID(), getGroupMembership(subgrp.getUUID(),
+					grp.getName(), null, 0));
+			verifyMemberships(grp, MemberFilter.All, 2, expected);
+
+			expected.clear();
+			expected.put(USER_A, getGridMembership(USER_A, grp.getName(), null,
+					0));
+			expected.put(subgrp.getUUID(), getGroupMembership(subgrp.getUUID(),
+					grp.getName(), null, 0));
+			verifyMemberships(grp, MemberFilter.ImmediateMembers, 2, expected);
+
+			expected.clear();
+			verifyMemberships(grp, MemberFilter.EffectiveMembers, 0, expected);
+			
+			verifyMemberships(subgrp, MemberFilter.All, 0, expected);
+			verifyMemberships(subgrp, MemberFilter.EffectiveMembers, 0,
+					expected);
+			verifyMemberships(subgrp, MemberFilter.ImmediateMembers, 0,
+					expected);
+
+			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grp),
+					USER_A);
+			
+			expected.clear();
+			expected.put(subgrp.getUUID(), getGroupMembership(subgrp.getUUID(),
+					grp.getName(), null, 0));
+			verifyMemberships(grp, MemberFilter.All, 1, expected);
+
+			expected.clear();
+			expected.put(subgrp.getUUID(), getGroupMembership(subgrp.getUUID(),
+					grp.getName(), null, 0));
+			verifyMemberships(grp, MemberFilter.ImmediateMembers, 1, expected);
+
+			expected.clear();
+			verifyMemberships(grp, MemberFilter.EffectiveMembers, 0, expected);
+
+			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grp),
+					subgrp.getUUID());
+			
+			verifyMemberships(grp, MemberFilter.All, 0, expected);
+			verifyMemberships(grp, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMemberships(grp, MemberFilter.ImmediateMembers, 0, expected);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -278,8 +376,6 @@ public class TestGroups extends TestCase {
 		}
 
 	}
-
-	
 
 	private void verifyMembers(GroupDescriptor grp, MemberFilter filter,
 			int expectedCount, Map expected) {
@@ -332,7 +428,7 @@ public class TestGroups extends TestCase {
 					assertEquals(caddy.getMemberType(), members[i].getMember()
 							.getMemberType());
 					assertEquals(caddy.getDepth(), members[i].getDepth());
-			
+
 					assertEquals(caddy.getGroupName(), members[i].getGroup()
 							.getName());
 					String viaGN = null;
