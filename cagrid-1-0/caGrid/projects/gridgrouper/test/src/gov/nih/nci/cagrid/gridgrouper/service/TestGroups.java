@@ -169,6 +169,8 @@ public class TestGroups extends TestCase {
 							.getSubjectId());
 					assertEquals(caddy.getMemberType(), members[i]
 							.getMemberType());
+					assertTrue(grouper.isMemberOf(AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
+							.getGroupIdentifier(grp), caddy.getMemberId(), filter));
 				} else {
 					fail("Member " + members[i].getSubjectId()
 							+ " not expected!!!");

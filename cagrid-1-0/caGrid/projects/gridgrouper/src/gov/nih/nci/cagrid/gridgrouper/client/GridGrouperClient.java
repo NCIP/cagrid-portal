@@ -286,6 +286,23 @@ public class GridGrouperClient extends ServiceSecurityClient implements
 		}
 	}
 
+    public boolean isMemberOf(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String member,gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter filter) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"isMemberOf");
+        gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfRequestGroup();
+        groupContainer.setGroupIdentifier(group);
+        params.setGroup(groupContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfRequestMember memberContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfRequestMember();
+        memberContainer.setSubjectIdentifier(member);
+        params.setMember(memberContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfRequestFilter filterContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfRequestFilter();
+        filterContainer.setMemberFilter(filter);
+        params.setFilter(filterContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfResponse boxedResult = portType.isMemberOf(params);
+        return boxedResult.isResponse();
+      }
+    }
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");

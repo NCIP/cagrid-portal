@@ -1024,7 +1024,7 @@ public class GridGrouper {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
-			fault.setFaultString("Error occurred deleting the group "
+			fault.setFaultString("Error occurred adding a member to the group "
 					+ group.getGroupName() + ": " + e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
@@ -1095,8 +1095,9 @@ public class GridGrouper {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
-			fault.setFaultString("Error occurred deleting the group "
-					+ group.getGroupName() + ": " + e.getMessage());
+			fault
+					.setFaultString("Error occurred getting the members of the group "
+							+ group.getGroupName() + ": " + e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GridGrouperRuntimeFault) helper.getFault();
@@ -1110,6 +1111,57 @@ public class GridGrouper {
 				}
 			}
 		}
+	}
+
+	public boolean isMemberOf(String gridIdentity, GroupIdentifier group,
+			String member, MemberFilter filter) throws GridGrouperRuntimeFault,
+			GroupNotFoundFault {
+		GrouperSession session = null;
+		try {
+			Subject caller = SubjectUtils.getSubject(gridIdentity);
+			session = GrouperSession.start(caller);
+			Group target = GroupFinder
+					.findByName(session, group.getGroupName());
+			if (filter.equals(MemberFilter.All)) {
+				return target.hasMember(SubjectFinder.findById(member));
+			} else if (filter.equals(MemberFilter.EffectiveMembers)) {
+				return target
+						.hasEffectiveMember(SubjectFinder.findById(member));
+			} else if (filter.equals(MemberFilter.ImmediateMembers)) {
+				return target
+						.hasImmediateMember(SubjectFinder.findById(member));
+			} else {
+				throw new Exception("Unsuppoted member filter type!!!");
+			}
+
+		} catch (GroupNotFoundException e) {
+			GroupNotFoundFault fault = new GroupNotFoundFault();
+			fault.setFaultString("The group, " + group.getGroupName()
+					+ "was not found.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GroupNotFoundFault) helper.getFault();
+			throw fault;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault.setFaultString("Error occurred determining if " + member
+					+ " is a member of the group " + group.getGroupName()
+					+ ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		} finally {
+			if (session == null) {
+				try {
+					session.stop();
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
+
 	}
 
 	public Group getAdminGroup() {

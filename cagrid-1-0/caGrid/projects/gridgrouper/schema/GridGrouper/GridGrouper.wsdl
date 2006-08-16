@@ -451,6 +451,40 @@
           </sequence>
         </complexType>
       </element>
+      <element name="IsMemberOfRequest">
+        <complexType>
+          <sequence>
+            <element name="group">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:GroupIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="member">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:SubjectIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="filter">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:MemberFilter" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="IsMemberOfResponse">
+        <complexType>
+          <sequence>
+            <element name="response" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="GridGrouperRuntimeFault">
         <complexType>
           <complexContent>
@@ -665,6 +699,12 @@
   <message name="GetMembersResponse">
     <part name="parameters" element="tns:GetMembersResponse" />
   </message>
+  <message name="IsMemberOfRequest">
+    <part name="parameters" element="tns:IsMemberOfRequest" />
+  </message>
+  <message name="IsMemberOfResponse">
+    <part name="parameters" element="tns:IsMemberOfResponse" />
+  </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="tns:GridGrouperRuntimeFault" />
   </message>
@@ -836,6 +876,12 @@
     <operation name="getMembers">
       <input message="tns:GetMembersRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetMembersRequest" />
       <output message="tns:GetMembersResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetMembersResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
+    </operation>
+    <operation name="isMemberOf">
+      <input message="tns:IsMemberOfRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/IsMemberOfRequest" />
+      <output message="tns:IsMemberOfResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/IsMemberOfResponse" />
       <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
       <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
     </operation>
