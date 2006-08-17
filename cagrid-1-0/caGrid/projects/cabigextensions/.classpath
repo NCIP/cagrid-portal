@@ -51,8 +51,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry sourcepath="/caGrid-1.0-core" kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-core-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-portal-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.0-core-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
@@ -86,5 +84,7 @@
 	<classpathentry kind="lib" path="ext/lib/gef_modified.jar"/>
 	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-graph.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
