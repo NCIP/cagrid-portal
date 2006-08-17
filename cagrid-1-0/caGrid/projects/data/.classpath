@@ -60,8 +60,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/GlobalModelExchange.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-core-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-portal-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
@@ -92,10 +90,6 @@
 	<classpathentry kind="lib" path="ext/lib/swidgets-0.1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/toolbar-1.1.1.jar"/>
 	<classpathentry kind="src" path="src/java/cql"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-client-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-common-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-service-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-introduce-security-stubs-1.0.jar"/>
 	<classpathentry kind="src" path="test/resources"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-wsEnum.jar"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_enum.jar"/>
@@ -113,5 +107,11 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-data.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.0-core-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_stubs_enum.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-stubs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

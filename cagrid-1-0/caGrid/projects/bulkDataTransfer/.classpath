@@ -72,12 +72,12 @@
 	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/wsrf_core_enum.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-wsEnum.jar"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_enum.jar"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_stubs_enum.jar"/>
 	<classpathentry kind="lib" path="lib/wsrf_core_stubs_enum.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
