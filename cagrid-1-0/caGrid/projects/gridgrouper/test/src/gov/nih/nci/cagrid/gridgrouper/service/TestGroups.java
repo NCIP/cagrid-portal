@@ -261,6 +261,44 @@ public class TestGroups extends TestCase {
 			} catch (MemberAddFault e) {
 
 			}
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			expected.put(USER_B, getGridMember(USER_B));
+			expected.put(USER_C, getGridMember(USER_C));
+			verifyMembers(composite, MemberFilter.All, 3, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			expected.put(USER_B, getGridMember(USER_B));
+			expected.put(USER_C, getGridMember(USER_C));
+			verifyMembers(composite, MemberFilter.CompositeMembers, 3, expected);
+
+			expected.clear();
+			expected.put(USER_A, getGridMembership(USER_A, composite.getName(),
+					null, 0));
+			expected.put(USER_B, getGridMembership(USER_B, composite.getName(),
+					null, 0));
+			expected.put(USER_C, getGridMembership(USER_C, composite.getName(),
+					null, 0));
+			verifyMemberships(composite, MemberFilter.All, 3, expected);
+			expected.clear();
+			verifyMemberships(composite, MemberFilter.EffectiveMembers, 0,
+					expected);
+			expected.clear();
+			verifyMemberships(composite, MemberFilter.ImmediateMembers, 0,
+					expected);
+			expected.clear();
+			expected.put(USER_A, getGridMembership(USER_A, composite.getName(),
+					null, 0));
+			expected.put(USER_B, getGridMembership(USER_B, composite.getName(),
+					null, 0));
+			expected.put(USER_C, getGridMembership(USER_C, composite.getName(),
+					null, 0));
+			verifyMemberships(composite, MemberFilter.CompositeMembers, 3,
+					expected);
 
 			// TODO: FINISH FROM HERE DOWN
 			Subject subject = SubjectUtils.getSubject(SUPER_USER);
@@ -484,10 +522,13 @@ public class TestGroups extends TestCase {
 					assertEquals(caddy.getMemberId(), members[i].getSubjectId());
 					assertEquals(caddy.getMemberType(), members[i]
 							.getMemberType());
-					assertTrue(grouper.isMemberOf(
-							AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
-							Utils.getGroupIdentifier(grp), caddy.getMemberId(),
-							filter));
+					if (!filter.equals(MemberFilter.CompositeMembers)) {
+						assertTrue(grouper
+								.isMemberOf(
+										AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+										Utils.getGroupIdentifier(grp), caddy
+												.getMemberId(), filter));
+					}
 				} else {
 					fail("Member " + members[i].getSubjectId()
 							+ " not expected!!!");
@@ -527,10 +568,13 @@ public class TestGroups extends TestCase {
 						viaGN = members[i].getViaGroup().getName();
 					}
 					assertEquals(caddy.getViaGroupName(), viaGN);
-					assertTrue(grouper.isMemberOf(
-							AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
-							Utils.getGroupIdentifier(grp), caddy.getMemberId(),
-							filter));
+					if (!filter.equals(MemberFilter.CompositeMembers)) {
+						assertTrue(grouper
+								.isMemberOf(
+										AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID,
+										Utils.getGroupIdentifier(grp), caddy
+												.getMemberId(), filter));
+					}
 				} else {
 					fail("Membership " + members[i].getMember().getSubjectId()
 							+ " not expected!!!");
