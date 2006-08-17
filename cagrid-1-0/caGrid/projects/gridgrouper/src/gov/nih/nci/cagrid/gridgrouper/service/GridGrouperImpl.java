@@ -284,4 +284,15 @@ public class GridGrouperImpl {
 		return gridGrouper.addCompositeMember(getCallerIdentity(), type,
 				composite, left, right);
 	}
+
+	public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor deleteCompositeMember(
+			gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group)
+			throws RemoteException,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.MemberDeleteFault {
+		return gridGrouper.deleteCompositeMember(getCallerIdentity(), group);
+	}
+
 }

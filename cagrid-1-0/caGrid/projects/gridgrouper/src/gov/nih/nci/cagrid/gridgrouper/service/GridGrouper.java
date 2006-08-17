@@ -1279,6 +1279,7 @@ public class GridGrouper {
 		des.setName(group.getName());
 		des.setUUID(group.getUuid());
 		des.setHasComposite(group.hasComposite());
+		des.setIsComposite(group.isComposite());
 		return des;
 	}
 
@@ -1414,6 +1415,59 @@ public class GridGrouper {
 			fault
 					.setFaultString("Error occurred adding a composite member to the group "
 							+ composite.getGroupName() + ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		} finally {
+			if (session == null) {
+				try {
+					session.stop();
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
+	}
+
+	public GroupDescriptor deleteCompositeMember(String gridIdentity,
+			GroupIdentifier group) throws GridGrouperRuntimeFault,
+			GroupNotFoundFault, InsufficientPrivilegeFault, MemberDeleteFault {
+		GrouperSession session = null;
+		try {
+			Subject caller = SubjectUtils.getSubject(gridIdentity);
+			session = GrouperSession.start(caller);
+			Group grp = GroupFinder.findByName(session, group.getGroupName());
+			grp.deleteCompositeMember();
+			return grouptoGroupDescriptor(grp);
+		} catch (GroupNotFoundException e) {
+			GroupNotFoundFault fault = new GroupNotFoundFault();
+			fault.setFaultString("The group, " + group.getGroupName()
+					+ "was not found.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GroupNotFoundFault) helper.getFault();
+			throw fault;
+		} catch (MemberDeleteException e) {
+			MemberDeleteFault fault = new MemberDeleteFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (MemberDeleteFault) helper.getFault();
+			throw fault;
+		} catch (InsufficientPrivilegeException e) {
+			InsufficientPrivilegeFault fault = new InsufficientPrivilegeFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (InsufficientPrivilegeFault) helper.getFault();
+			throw fault;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault
+					.setFaultString("Error occurred deleting the composite member from the group "
+							+ group.getGroupName() + ": " + e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GridGrouperRuntimeFault) helper.getFault();

@@ -236,6 +236,12 @@ public class TestGroups extends TestCase {
 							.getGroupIdentifier(grpx), Utils
 							.getGroupIdentifier(grpy));
 			assertTrue(composite.isHasComposite());
+			assertFalse(grpx.isIsComposite());
+			assertFalse(grpy.isIsComposite());
+			grpx = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpx));
+			grpy = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpy));
+			assertTrue(grpx.isIsComposite());
+			assertTrue(grpy.isIsComposite());
 
 			// Negative Tests.
 			try {
@@ -271,7 +277,8 @@ public class TestGroups extends TestCase {
 			expected.put(USER_C, getGridMember(USER_C));
 			verifyMembers(composite, MemberFilter.CompositeMembers, 3, expected);
 
-			 //TODO: Possible Grouper BUG: Make sure that the Membership is working as intended.
+			// TODO: Possible Grouper BUG: Make sure that the Membership is
+			// working as intended.
 			expected.clear();
 			expected.put(USER_A, getGridMembership(USER_A, composite.getName(),
 					null, 0));
@@ -295,9 +302,10 @@ public class TestGroups extends TestCase {
 					null, 0));
 			verifyMemberships(composite, MemberFilter.CompositeMembers, 3,
 					expected);
-			
-			//Test Remove the shared user
-			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grpx), USER_B);
+
+			// Test Remove the shared user
+			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grpx),
+					USER_B);
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
 			expected.put(USER_B, getGridMember(USER_B));
@@ -312,9 +320,10 @@ public class TestGroups extends TestCase {
 			expected.put(USER_B, getGridMember(USER_B));
 			expected.put(USER_C, getGridMember(USER_C));
 			verifyMembers(composite, MemberFilter.CompositeMembers, 3, expected);
-			
-			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grpy), USER_B);
-			
+
+			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grpy),
+					USER_B);
+
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
 			expected.put(USER_C, getGridMember(USER_C));
@@ -327,6 +336,23 @@ public class TestGroups extends TestCase {
 			expected.put(USER_A, getGridMember(USER_A));
 			expected.put(USER_C, getGridMember(USER_C));
 			verifyMembers(composite, MemberFilter.CompositeMembers, 2, expected);
+
+			grouper.deleteCompositeMember(SUPER_USER, Utils
+					.getGroupIdentifier(composite));
+
+			expected.clear();
+			verifyMembers(composite, MemberFilter.All, 0, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.CompositeMembers, 0, expected);
+			
+			grpx = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpx));
+			grpy = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpy));
+			assertFalse(grpx.isIsComposite());
+			assertFalse(grpy.isIsComposite());
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

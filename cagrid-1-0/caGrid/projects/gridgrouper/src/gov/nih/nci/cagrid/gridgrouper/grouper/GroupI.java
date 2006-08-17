@@ -115,12 +115,11 @@ public interface GroupI {
 	public void addCompositeMember(CompositeType type, GroupI left, GroupI right)
 			throws InsufficientPrivilegeException, MemberAddException;
 
-	// public void deleteCompositeMember() throws
-	// InsufficientPrivilegeException,
-	// MemberDeleteException;
-	//
-
-	// public boolean isComposite();
+	//public void deleteCompositeMember() throws
+	//InsufficientPrivilegeException,
+	//MemberDeleteException;
+	
+	public boolean isComposite();
 
 	// Membership Operations
 

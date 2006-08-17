@@ -286,23 +286,14 @@ public class GridGrouperClient extends ServiceSecurityClient implements
 		}
 	}
 
-    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor addCompositeMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType type,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier composite,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier left,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier right) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.MemberAddFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor deleteCompositeMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.MemberDeleteFault {
       synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"addCompositeMember");
-        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequest();
-        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestType typeContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestType();
-        typeContainer.setGroupCompositeType(type);
-        params.setType(typeContainer);
-        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestComposite compositeContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestComposite();
-        compositeContainer.setGroupIdentifier(composite);
-        params.setComposite(compositeContainer);
-        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestLeft leftContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestLeft();
-        leftContainer.setGroupIdentifier(left);
-        params.setLeft(leftContainer);
-        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestRight rightContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestRight();
-        rightContainer.setGroupIdentifier(right);
-        params.setRight(rightContainer);
-        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberResponse boxedResult = portType.addCompositeMember(params);
+        configureStubSecurity((Stub)portType,"deleteCompositeMember");
+        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberRequestGroup();
+        groupContainer.setGroupIdentifier(group);
+        params.setGroup(groupContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberResponse boxedResult = portType.deleteCompositeMember(params);
         return boxedResult.getGroupDescriptor();
       }
     }
@@ -589,6 +580,26 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         memberContainer.setSubjectIdentifier(member);
         params.setMember(memberContainer);
         gov.nih.nci.cagrid.gridgrouper.stubs.DeleteMemberResponse boxedResult = portType.deleteMember(params);
+      }
+    }
+    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor addCompositeMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType type,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier composite,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier left,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier right) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.MemberAddFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"addCompositeMember");
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestType typeContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestType();
+        typeContainer.setGroupCompositeType(type);
+        params.setType(typeContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestComposite compositeContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestComposite();
+        compositeContainer.setGroupIdentifier(composite);
+        params.setComposite(compositeContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestLeft leftContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestLeft();
+        leftContainer.setGroupIdentifier(left);
+        params.setLeft(leftContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestRight rightContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestRight();
+        rightContainer.setGroupIdentifier(right);
+        params.setRight(rightContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberResponse boxedResult = portType.addCompositeMember(params);
+        return boxedResult.getGroupDescriptor();
       }
     }
 

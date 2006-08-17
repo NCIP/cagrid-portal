@@ -578,6 +578,26 @@
           </sequence>
         </complexType>
       </element>
+      <element name="DeleteCompositeMemberRequest">
+        <complexType>
+          <sequence>
+            <element name="group">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:GroupIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DeleteCompositeMemberResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:GroupDescriptor" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="GridGrouperRuntimeFault">
         <complexType>
           <complexContent>
@@ -823,6 +843,12 @@
   <message name="AddCompositeMemberResponse">
     <part name="parameters" element="tns:AddCompositeMemberResponse" />
   </message>
+  <message name="DeleteCompositeMemberRequest">
+    <part name="parameters" element="tns:DeleteCompositeMemberRequest" />
+  </message>
+  <message name="DeleteCompositeMemberResponse">
+    <part name="parameters" element="tns:DeleteCompositeMemberResponse" />
+  </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="tns:GridGrouperRuntimeFault" />
   </message>
@@ -1027,6 +1053,14 @@
       <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
       <fault name="MemberAddFault" message="tns:MemberAddFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/MemberAddFaultFaultMessage" />
       <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
+    </operation>
+    <operation name="deleteCompositeMember">
+      <input message="tns:DeleteCompositeMemberRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/DeleteCompositeMemberRequest" />
+      <output message="tns:DeleteCompositeMemberResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/DeleteCompositeMemberResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
+      <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
+      <fault name="MemberDeleteFault" message="tns:MemberDeleteFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/MemberDeleteFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

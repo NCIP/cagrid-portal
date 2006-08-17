@@ -48,6 +48,7 @@
 			<xsd:element name="ModifySubject" minOccurs="1" maxOccurs="1" type="xsd:string" />
 			<xsd:element name="ModifyTime" minOccurs="1" maxOccurs="1" type="xsd:long" />
 			<xsd:element name="HasComposite" minOccurs="1" maxOccurs="1" type="xsd:boolean" />
+			<xsd:element name="IsComposite" minOccurs="1" maxOccurs="1" type="xsd:boolean" />
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:element name="StemDescriptor" type="grouper:StemDescriptor" />
