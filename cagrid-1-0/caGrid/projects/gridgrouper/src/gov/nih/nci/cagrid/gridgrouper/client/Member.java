@@ -56,4 +56,8 @@ public class Member implements MemberI {
 		return des.getUUID();
 	}
 
+	public Subject getSubject() {
+		return subject;
+	}
+	
 }

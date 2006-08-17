@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.gridgrouper.grouper;
 
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.subject.Source;
+import edu.internet2.middleware.subject.Subject;
+import edu.internet2.middleware.subject.SubjectNotFoundException;
 import edu.internet2.middleware.subject.SubjectType;
 
 /**
@@ -26,7 +28,9 @@ public interface MemberI {
 	public String getSubjectTypeId();
 
 	public String getUuid();
-
+	
+	public Subject getSubject() throws SubjectNotFoundException;
+	
 	// Actions
 
 	// public boolean canAdmin(Group g) throws IllegalArgumentException;
@@ -67,7 +71,7 @@ public interface MemberI {
 	//
 	// public Set getPrivs(StemI ns);
 	//
-	// public Subject getSubject() throws SubjectNotFoundException;
+	// 
 	//
 	//	
 	//

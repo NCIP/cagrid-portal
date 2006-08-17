@@ -165,7 +165,7 @@ public class GroupBrowser extends JPanel {
 		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.gridy = 0;
-		this.setSize(400, 400);
+		this.setSize(500, 500);
 		this.setLayout(new GridBagLayout());
 		this.add(getGroupProperties(), gridBagConstraints);
 		this.add(getGroupDetails(), gridBagConstraints11);
