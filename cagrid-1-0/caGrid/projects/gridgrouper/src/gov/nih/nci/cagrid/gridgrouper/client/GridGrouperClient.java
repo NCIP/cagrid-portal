@@ -286,6 +286,26 @@ public class GridGrouperClient extends ServiceSecurityClient implements
 		}
 	}
 
+    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor addCompositeMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType type,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier composite,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier left,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier right) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.MemberAddFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"addCompositeMember");
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestType typeContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestType();
+        typeContainer.setGroupCompositeType(type);
+        params.setType(typeContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestComposite compositeContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestComposite();
+        compositeContainer.setGroupIdentifier(composite);
+        params.setComposite(compositeContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestLeft leftContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestLeft();
+        leftContainer.setGroupIdentifier(left);
+        params.setLeft(leftContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestRight rightContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequestRight();
+        rightContainer.setGroupIdentifier(right);
+        params.setRight(rightContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberResponse boxedResult = portType.addCompositeMember(params);
+        return boxedResult.getGroupDescriptor();
+      }
+    }
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");

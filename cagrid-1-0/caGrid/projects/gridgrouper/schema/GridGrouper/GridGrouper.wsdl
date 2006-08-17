@@ -537,6 +537,47 @@
           <sequence />
         </complexType>
       </element>
+      <element name="AddCompositeMemberRequest">
+        <complexType>
+          <sequence>
+            <element name="type">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:GroupCompositeType" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="composite">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:GroupIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="left">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:GroupIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="right">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:GroupIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="AddCompositeMemberResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:GroupDescriptor" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="GridGrouperRuntimeFault">
         <complexType>
           <complexContent>
@@ -776,6 +817,12 @@
   <message name="DeleteMemberResponse">
     <part name="parameters" element="tns:DeleteMemberResponse" />
   </message>
+  <message name="AddCompositeMemberRequest">
+    <part name="parameters" element="tns:AddCompositeMemberRequest" />
+  </message>
+  <message name="AddCompositeMemberResponse">
+    <part name="parameters" element="tns:AddCompositeMemberResponse" />
+  </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="tns:GridGrouperRuntimeFault" />
   </message>
@@ -972,6 +1019,14 @@
       <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
       <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
       <fault name="MemberDeleteFault" message="tns:MemberDeleteFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/MemberDeleteFaultFaultMessage" />
+    </operation>
+    <operation name="addCompositeMember">
+      <input message="tns:AddCompositeMemberRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/AddCompositeMemberRequest" />
+      <output message="tns:AddCompositeMemberResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/AddCompositeMemberResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
+      <fault name="MemberAddFault" message="tns:MemberAddFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/MemberAddFaultFaultMessage" />
+      <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

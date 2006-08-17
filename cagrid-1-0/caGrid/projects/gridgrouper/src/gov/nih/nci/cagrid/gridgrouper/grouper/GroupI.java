@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.gridgrouper.grouper;
 import java.util.Date;
 import java.util.Set;
 
+import edu.internet2.middleware.grouper.CompositeType;
 import edu.internet2.middleware.grouper.GroupDeleteException;
 import edu.internet2.middleware.grouper.GroupModifyException;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
@@ -60,7 +61,7 @@ public interface GroupI {
 
 	public void setDisplayExtension(String value) throws GroupModifyException,
 			InsufficientPrivilegeException;
-	
+
 	public boolean hasComposite();
 
 	// Member Operations
@@ -107,20 +108,19 @@ public interface GroupI {
 	// throws InsufficientPrivilegeException, MemberDeleteException,
 	// SchemaException;
 	//
-	// public Set getCompositeMembers();
-	//
-	// public Set getCompositeMemberships();
-	//
-	// public void addCompositeMember(CompositeType type, Group left, Group
-	// right)
-	// throws InsufficientPrivilegeException, MemberAddException;
-	//
+	public Set getCompositeMembers();
+
+	public Set getCompositeMemberships();
+
+	public void addCompositeMember(CompositeType type, GroupI left, GroupI right)
+			throws InsufficientPrivilegeException, MemberAddException;
+
 	// public void deleteCompositeMember() throws
 	// InsufficientPrivilegeException,
 	// MemberDeleteException;
 	//
 
-    // public boolean isComposite();
+	// public boolean isComposite();
 
 	// Membership Operations
 

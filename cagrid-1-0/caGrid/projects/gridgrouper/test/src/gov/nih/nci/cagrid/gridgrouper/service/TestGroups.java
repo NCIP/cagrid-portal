@@ -1,12 +1,12 @@
 package gov.nih.nci.cagrid.gridgrouper.service;
 
-import edu.internet2.middleware.grouper.CompositeType;
 import edu.internet2.middleware.grouper.Group;
 import edu.internet2.middleware.grouper.GroupFinder;
 import edu.internet2.middleware.grouper.GrouperSession;
 import edu.internet2.middleware.grouper.RegistryReset;
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
@@ -40,7 +40,7 @@ public class TestGroups extends TestCase {
 	private String USER_A = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user a";
 
 	private String USER_B = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user b";
-	
+
 	private String USER_C = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user c";
 
 	public void testMembers() {
@@ -181,7 +181,7 @@ public class TestGroups extends TestCase {
 
 	}
 
-	public void testComposites() {
+	public void testCompositeUnion() {
 		try {
 			Map expected = new HashMap();
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
@@ -210,39 +210,55 @@ public class TestGroups extends TestCase {
 
 			GroupDescriptor grpx = createAndCheckGroup(test, groupExtensionX,
 					groupDisplayExtensionX, 1);
-			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grpx), USER_A);
-			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grpx), USER_B);
+			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grpx),
+					USER_A);
+			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grpx),
+					USER_B);
 
 			final String groupExtensionY = "mygroupy";
 			final String groupDisplayExtensionY = "My Group Y";
 
 			GroupDescriptor grpy = createAndCheckGroup(test, groupExtensionY,
 					groupDisplayExtensionY, 2);
-			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grpy), USER_B);
-			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grpy), USER_C);
+			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grpy),
+					USER_B);
+			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grpy),
+					USER_C);
 
 			final String unionGroupExtension = "uniongroup";
 			final String unionGroupDisplayExtension = "Union Group Y";
+
 			
-			
-			//TODO: FINISH FROM HERE DOWN
-			//Create Composite Union Group
+			// Create Composite Union Group
 			GroupDescriptor union = createAndCheckGroup(test,
 					unionGroupExtension, unionGroupDisplayExtension, 3);
-
-			Subject subject = SubjectUtils
-					.getSubject(SUPER_USER);
+			assertFalse(union.isHasComposite());
+			union=grouper.addCompositeMember(SUPER_USER, GroupCompositeType.Union,
+					Utils.getGroupIdentifier(union), Utils
+							.getGroupIdentifier(grpx), Utils
+							.getGroupIdentifier(grpy));
+			assertTrue(union.isHasComposite());
+			
+		
+			
+//			 TODO: FINISH FROM HERE DOWN
+			
+			Subject subject = SubjectUtils.getSubject(SUPER_USER);
 			GrouperSession session = GrouperSession.start(subject);
 			Group group = GroupFinder.findByName(session, union.getName());
-			
-			group.addCompositeMember(CompositeType.UNION, GroupFinder.findByName(session, grpx.getName()), GroupFinder.findByName(session, grpy.getName()));
 			Utils.printMemberships(union);
 			Utils.printCompositeMemberships(union);
 			Group groupx = GroupFinder.findByName(session, grpx.getName());
 			Group groupy = GroupFinder.findByName(session, grpy.getName());
-			System.out.println(group.getName()+"Is Composite:"+group.isComposite()+" Has Composite: "+group.hasComposite());
-			System.out.println(groupx.getName()+"Is Composite:"+groupx.isComposite()+" Has Composite: "+groupx.hasComposite());
-			System.out.println(groupy.getName()+"Is Composite:"+groupy.isComposite()+" Has Composite: "+groupy.hasComposite());
+			System.out.println(group.getName() + "Is Composite:"
+					+ group.isComposite() + " Has Composite: "
+					+ group.hasComposite());
+			System.out.println(groupx.getName() + "Is Composite:"
+					+ groupx.isComposite() + " Has Composite: "
+					+ groupx.hasComposite());
+			System.out.println(groupy.getName() + "Is Composite:"
+					+ groupy.isComposite() + " Has Composite: "
+					+ groupy.hasComposite());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

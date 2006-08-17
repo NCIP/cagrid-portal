@@ -132,4 +132,13 @@
    				<xsd:enumeration value="CompositeMembers"/>	
   			</xsd:restriction>
  	 </xsd:simpleType>
+ 	 
+ 	  <xsd:element name="GroupCompositeType" type="grouper:GroupCompositeType"/>
+ 	   <xsd:simpleType name="GroupCompositeType">
+  			<xsd:restriction base="xsd:string">
+   				<xsd:enumeration value="Union"/>
+   				<xsd:enumeration value="Intersection"/>	
+   				<xsd:enumeration value="Complement"/>
+  			</xsd:restriction>
+ 	 </xsd:simpleType>
 </xsd:schema>

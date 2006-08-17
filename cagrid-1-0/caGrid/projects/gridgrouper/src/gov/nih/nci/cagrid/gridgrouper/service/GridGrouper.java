@@ -7,6 +7,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import edu.internet2.middleware.grouper.CompositeType;
 import edu.internet2.middleware.grouper.GrantPrivilegeException;
 import edu.internet2.middleware.grouper.Group;
 import edu.internet2.middleware.grouper.GroupDeleteException;
@@ -34,6 +35,7 @@ import edu.internet2.middleware.grouper.SubjectFinder;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.provider.SubjectTypeEnum;
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate;
@@ -1061,7 +1063,7 @@ public class GridGrouper {
 				set = target.getEffectiveMembers();
 			} else if (filter.equals(MemberFilter.ImmediateMembers)) {
 				set = target.getImmediateMembers();
-			}else if (filter.equals(MemberFilter.CompositeMembers)) {
+			} else if (filter.equals(MemberFilter.CompositeMembers)) {
 				set = target.getCompositeMembers();
 			} else {
 				throw new Exception("Unsuppoted member filter type!!!");
@@ -1172,7 +1174,7 @@ public class GridGrouper {
 				set = target.getEffectiveMemberships();
 			} else if (filter.equals(MemberFilter.ImmediateMembers)) {
 				set = target.getImmediateMemberships();
-			}else if (filter.equals(MemberFilter.CompositeMembers)) {
+			} else if (filter.equals(MemberFilter.CompositeMembers)) {
 				set = target.getCompositeMemberships();
 			} else {
 				throw new Exception("Unsuppoted member filter type!!!");
@@ -1342,6 +1344,76 @@ public class GridGrouper {
 			fault.setFaultString("Error occurred deleting the member " + member
 					+ " from the group " + group.getGroupName() + ": "
 					+ e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		} finally {
+			if (session == null) {
+				try {
+					session.stop();
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
+	}
+
+	public GroupDescriptor addCompositeMember(String gridIdentity,
+			GroupCompositeType type, GroupIdentifier composite,
+			GroupIdentifier left, GroupIdentifier right)
+			throws GridGrouperRuntimeFault, GroupNotFoundFault, MemberAddFault,
+			InsufficientPrivilegeFault {
+		GrouperSession session = null;
+		try {
+			Subject caller = SubjectUtils.getSubject(gridIdentity);
+			session = GrouperSession.start(caller);
+			Group grp = GroupFinder.findByName(session, composite
+					.getGroupName());
+			Group leftgrp = GroupFinder
+					.findByName(session, left.getGroupName());
+			Group rightgrp = GroupFinder.findByName(session, right
+					.getGroupName());
+			CompositeType ct = null;
+			if (type.equals(GroupCompositeType.Union)) {
+				ct = CompositeType.UNION;
+			} else if (type.equals(GroupCompositeType.Intersection)) {
+				ct = CompositeType.INTERSECTION;
+			} else if (type.equals(GroupCompositeType.Complement)) {
+				ct = CompositeType.COMPLEMENT;
+			} else {
+				throw new Exception("The composite type " + type.getValue()
+						+ " is not supported!!!");
+			}
+			grp.addCompositeMember(ct, leftgrp, rightgrp);
+			return grouptoGroupDescriptor(grp);
+		} catch (GroupNotFoundException e) {
+			GroupNotFoundFault fault = new GroupNotFoundFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GroupNotFoundFault) helper.getFault();
+			throw fault;
+		} catch (MemberAddException e) {
+			MemberAddFault fault = new MemberAddFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (MemberAddFault) helper.getFault();
+			throw fault;
+		} catch (InsufficientPrivilegeException e) {
+			InsufficientPrivilegeFault fault = new InsufficientPrivilegeFault();
+			fault.setFaultString(e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (InsufficientPrivilegeFault) helper.getFault();
+			throw fault;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault
+					.setFaultString("Error occurred adding a composite member to the group "
+							+ composite.getGroupName() + ": " + e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GridGrouperRuntimeFault) helper.getFault();

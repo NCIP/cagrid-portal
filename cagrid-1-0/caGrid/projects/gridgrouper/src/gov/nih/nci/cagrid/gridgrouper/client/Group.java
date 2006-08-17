@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
+import edu.internet2.middleware.grouper.CompositeType;
 import edu.internet2.middleware.grouper.GroupDeleteException;
 import edu.internet2.middleware.grouper.GroupModifyException;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
@@ -8,6 +9,7 @@ import edu.internet2.middleware.grouper.MemberAddException;
 import edu.internet2.middleware.grouper.MemberDeleteException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate;
@@ -225,6 +227,10 @@ public class Group extends GridGrouperObject implements GroupI {
 		return getMembers(MemberFilter.All);
 	}
 
+	public Set getCompositeMembers() {
+		return this.getMembers(MemberFilter.CompositeMembers);
+	}
+
 	private Set getMembers(MemberFilter filter) throws GrouperRuntimeException {
 		try {
 			MemberDescriptor[] list = gridGrouper.getClient().getMembers(
@@ -307,6 +313,10 @@ public class Group extends GridGrouperObject implements GroupI {
 		return this.getMemberships(MemberFilter.All);
 	}
 
+	public Set getCompositeMemberships() {
+		return this.getMemberships(MemberFilter.CompositeMembers);
+	}
+
 	public void deleteMember(Subject subj)
 			throws InsufficientPrivilegeException, MemberDeleteException {
 		try {
@@ -328,6 +338,38 @@ public class Group extends GridGrouperObject implements GroupI {
 
 	public boolean hasComposite() {
 		return des.isHasComposite();
+	}
+
+	public void addCompositeMember(CompositeType type, GroupI left, GroupI right)
+			throws InsufficientPrivilegeException, MemberAddException {
+		try {
+			GroupCompositeType ct = null;
+			if (type.equals(CompositeType.UNION)) {
+				ct = GroupCompositeType.Union;
+			} else if (type.equals(CompositeType.INTERSECTION)) {
+				ct = GroupCompositeType.Intersection;
+			} else if (type.equals(CompositeType.COMPLEMENT)) {
+				ct = GroupCompositeType.Complement;
+			} else {
+				throw new Exception("The composite type " + type.toString()
+						+ " is not supported!!!");
+			}
+			this.des = gridGrouper.getClient().addCompositeMember(ct,
+					this.getGroupIdentifier(),
+					((Group) left).getGroupIdentifier(),
+					((Group) right).getGroupIdentifier());
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (MemberAddFault f) {
+			throw new MemberAddException(f.getFaultString());
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+
 	}
 
 }
