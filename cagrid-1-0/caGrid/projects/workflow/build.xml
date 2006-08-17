@@ -6,14 +6,12 @@
         <ant dir="WorkflowManagementService" target="all"/>
         <ant dir="SampleService1" target="all"/>
         <ant dir="SampleService2" target="all"/>
-        <ant dir="SecureSample" target="all"/>
     </target>
 
 
     <target name="deploy">
         <ant dir="SampleService1" target="deployTomcat"/>
         <ant dir="SampleService2" target="deployTomcat"/>
-        <ant dir="SecureSample" target="deployTomcat"/>
         <ant dir="WorkflowManagementService" target="deployTomcat"/>
         <ant dir="WorkflowManagementService" target="deployGlobusHandler"/>
     </target>
@@ -21,7 +19,6 @@
     <target name="deployGlobus">
         <ant dir="SampleService1" target="deployGlobus"/>
         <ant dir="SampleService2" target="deployGlobus"/>
-        <ant dir="SecureSample" target="deployGlobus"/>
         <ant dir="WorkflowManagementService" target="deployGlobus"/>
         <ant dir="WorkflowManagementService" target="deployGlobusHandler"/>
     </target>
@@ -29,7 +26,6 @@
     <target name="clean">
         <ant dir="SampleService1" target="clean"/>
         <ant dir="SampleService2" target="clean"/>
-        <ant dir="SecureSample" target="clean"/>
         <ant dir="WorkflowManagementService" target="clean"/>
     </target>
 
