@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.cqlquery.Group;
 import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
 import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
+import gov.nih.nci.cagrid.cqlquery.TargetAttributes;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 
 import java.lang.reflect.Field;
@@ -39,8 +40,25 @@ public class CQL2HQL {
 	public static String translate(CQLQuery query) throws QueryProcessingException {
 		Map aliases = new HashMap();
 		StringBuilder hql = new StringBuilder();
+		if (query.getTargetAttributes() != null) {
+			String objAlias = alias(aliases, query.getTarget().getName());
+			processTargetAttributes(hql, objAlias, query.getTargetAttributes());
+		}
 		processObject(hql, aliases, query.getTarget());
 		return hql.toString();
+	}
+	
+	
+	private static void processTargetAttributes(StringBuilder hql, String objectAlias, TargetAttributes attribs) throws QueryProcessingException {
+		hql.append("select ");
+		for (int i = 0; i < attribs.getAttributeName().length; i++) {
+			hql.append(objectAlias).append(".").append(attribs.getAttributeName(i));
+			if (i + 1 < attribs.getAttributeName().length) {
+				hql.append(", ");
+			} else {
+				hql.append(" ");
+			}
+		}
 	}
 	
 	

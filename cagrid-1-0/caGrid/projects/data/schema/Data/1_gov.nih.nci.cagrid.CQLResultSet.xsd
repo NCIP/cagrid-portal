@@ -56,7 +56,7 @@
 		<xsd:complexContent>
 			<xsd:extension base="res:CQLResult">
 				<xsd:sequence>
-					<xsd:element name="Attribute" type="res:TBDAttribute"/>
+					<xsd:element name="Attribute" type="res:TargetAttribute" maxOccurs="unbounded"/>
 				</xsd:sequence>
 			</xsd:extension>
 		</xsd:complexContent>
@@ -66,10 +66,12 @@
 			<xsd:documentation>caGrid identifier, as yet TBD</xsd:documentation>
 		</xsd:annotation>
 	</xsd:complexType>
-	<xsd:complexType name="TBDAttribute">
+	<xsd:complexType name="TargetAttribute">
 		<xsd:annotation>
-			<xsd:documentation>caGrid object attribute, as yet TBD</xsd:documentation>
+			<xsd:documentation>an attribute (name and value) of an Object instance</xsd:documentation>
 		</xsd:annotation>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="value" type="xsd:anySimpleType" use="required"/>
 	</xsd:complexType>
 	<xsd:element name="CQLQueryResultCollection" type="res:CQLQueryResults"/>
 </xsd:schema>

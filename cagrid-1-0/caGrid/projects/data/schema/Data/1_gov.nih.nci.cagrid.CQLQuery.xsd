@@ -69,12 +69,25 @@
 		</xsd:annotation>
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="Target" type="cql:Object">
+				<xsd:element name="Target" type="cql:Object" minOccurs="1" maxOccurs="1">
 					<xsd:annotation>
 						<xsd:documentation>Defines the target data type of a CQL query</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="TargetAttributes" type="cql:TargetAttributes" minOccurs="0" maxOccurs="1">
+					<xsd:annotation>
+						<xsd:documentation>Optionally defines attributes of the target data type to be returned by the query</xsd:documentation>
 					</xsd:annotation>
 				</xsd:element>
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
+	<xsd:complexType name="TargetAttributes">
+		<xsd:annotation>
+			<xsd:documentation>Attributes of the target object to be returned</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="AttributeName" type="xsd:string" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
 </xsd:schema>

@@ -54,8 +54,15 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 
 	public CQLQueryResults processQuery(CQLQuery cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException {
-		List coreResultsList = queryCoreService(cqlQuery);		
-		CQLQueryResults results = CQLQueryResultsUtil.createQueryResults(coreResultsList, configStream);
+		List coreResultsList = queryCoreService(cqlQuery);
+		CQLQueryResults results = null;
+		// decide on object or attribute results
+		if (cqlQuery.getTargetAttributes() == null) {
+			results = CQLQueryResultsUtil.createQueryResults(coreResultsList, configStream);
+		} else {
+			results = CQLQueryResultsUtil.createAttributeQueryResults(
+				coreResultsList, cqlQuery.getTarget().getName(), cqlQuery.getTargetAttributes());
+		}
 		return results;
 	}
 	

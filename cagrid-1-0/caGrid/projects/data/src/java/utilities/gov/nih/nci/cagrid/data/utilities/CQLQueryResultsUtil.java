@@ -1,7 +1,10 @@
 package gov.nih.nci.cagrid.data.utilities;
 
+import gov.nih.nci.cagrid.cqlquery.TargetAttributes;
+import gov.nih.nci.cagrid.cqlresultset.CQLAttributeResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
+import gov.nih.nci.cagrid.cqlresultset.TargetAttribute;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -104,6 +107,44 @@ public class CQLQueryResultsUtil {
 			index++;
 		}
 		results.setObjectResult(objResults);
+		return results;
+	}
+	
+	
+	/**
+	 * Creates a CQLQueryResults object from the results of an attribute query.
+	 * 
+	 * @param rawAttribs
+	 * 		The raw attributes from the query.  The list is expected to contain
+	 * 		java.lang.Object[], with elements ordering following the
+	 * 		queryAttribs ordering 
+	 * @param targetName
+	 * 		The name of the target data type from which these attributes come
+	 * @param queryAttribs
+	 * 		The original query attributes
+	 * @return
+	 */
+	public static CQLQueryResults createAttributeQueryResults(
+		List rawAttribs, String targetName, TargetAttributes queryAttribs) {
+		CQLQueryResults results = new CQLQueryResults();
+		CQLAttributeResult[] attribResults = new CQLAttributeResult[rawAttribs.size()];
+		Iterator rawAttribIter = rawAttribs.iterator();
+		int index = 0;
+		while (rawAttribIter.hasNext()) {
+			Object[] attribs = (Object[]) rawAttribIter.next();
+			CQLAttributeResult attribResult = new CQLAttributeResult();
+			attribResult.setType(targetName);
+			TargetAttribute[] typeAttribs = new TargetAttribute[attribs.length];
+			for (int i = 0; i < attribs.length; i++) {
+				TargetAttribute typeAttrib = new TargetAttribute(
+					queryAttribs.getAttributeName(i), attribs[i].toString());
+				typeAttribs[i] = typeAttrib;
+			}
+			attribResult.setAttribute(typeAttribs);
+			attribResults[index] = attribResult;
+			index++;
+		}
+		results.setAttributeResult(attribResults);
 		return results;
 	}
 	

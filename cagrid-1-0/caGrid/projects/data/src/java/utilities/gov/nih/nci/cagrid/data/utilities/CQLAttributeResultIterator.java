@@ -34,6 +34,9 @@ public class CQLAttributeResultIterator implements Iterator {
 	}
 
 
+	/**
+	 * @return TypeAttribute[]
+	 */
 	public Object next() {
 		currentIndex++;
 		if (currentIndex >= results.length) {
