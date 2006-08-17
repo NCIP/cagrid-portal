@@ -259,8 +259,8 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 			public boolean accept(File pathname) {
 				String name = pathname.getName();
 				return (name.endsWith(".jar") && (name.startsWith("caGrid-1.0-data") 
-					|| name.startsWith("caGrid-core") || name.startsWith("caGrid-caDSR") 
-					|| name.startsWith("caGrid-metadata") || name.startsWith("castor") 
+					|| name.startsWith("caGrid-1.0-core") || name.startsWith("caGrid-1.0-caDSR") 
+					|| name.startsWith("caGrid-1.0-metadata") || name.startsWith("castor") 
 					|| name.startsWith("client") || name.startsWith("hibernate") 
 					|| name.startsWith("spring") || name.startsWith("cglib")));
 			}
