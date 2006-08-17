@@ -328,6 +328,33 @@
           </sequence>
         </complexType>
       </element>
+      <element name="GenerateDomainModelForClassesRequest">
+        <complexType>
+          <sequence>
+            <element name="project">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:Project" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="classes">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GenerateDomainModelForClassesResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns4:DomainModel" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="InvalidProjectException">
         <complexType>
           <complexContent>
@@ -429,6 +456,12 @@
   <message name="FindAssociationsInProjectResponse">
     <part name="parameters" element="tns:FindAssociationsInProjectResponse" />
   </message>
+  <message name="GenerateDomainModelForClassesRequest">
+    <part name="parameters" element="tns:GenerateDomainModelForClassesRequest" />
+  </message>
+  <message name="GenerateDomainModelForClassesResponse">
+    <part name="parameters" element="tns:GenerateDomainModelForClassesResponse" />
+  </message>
   <message name="InvalidProjectExceptionFaultMessage">
     <part name="fault" element="tns:InvalidProjectException" />
   </message>
@@ -504,6 +537,11 @@
     <operation name="findAssociationsInProject">
       <input message="tns:FindAssociationsInProjectRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindAssociationsInProjectRequest" />
       <output message="tns:FindAssociationsInProjectResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/FindAssociationsInProjectResponse" />
+      <fault name="InvalidProjectException" message="tns:InvalidProjectExceptionFaultMessage" wsa:Action="http://cadsr.cagrid.nci.nih.gov/InvalidProjectExceptionFaultMessage" />
+    </operation>
+    <operation name="generateDomainModelForClasses">
+      <input message="tns:GenerateDomainModelForClassesRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/GenerateDomainModelForClassesRequest" />
+      <output message="tns:GenerateDomainModelForClassesResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/GenerateDomainModelForClassesResponse" />
       <fault name="InvalidProjectException" message="tns:InvalidProjectExceptionFaultMessage" wsa:Action="http://cadsr.cagrid.nci.nih.gov/InvalidProjectExceptionFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">

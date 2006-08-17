@@ -3,16 +3,9 @@ reimplement generateDomainModel(proj,class,assoc)
 
 implement generateDomainModel(proj,class)
 
-
-add appropriate service faults and internal exceptions
-
-add service property for setting thread pool size
-
 resource/context for non-blocking domainmodel generation
 
 discovery panel should support "searching" as well
-
-
 
 
 
@@ -26,7 +19,17 @@ returning too many assocations
 
 
 
+
+
+
+
+
+
 ==================================================
+(DONE) add appropriate service faults and internal exceptions
+
+(DONE) add service property for setting thread pool size
+
 (DONE) change assocations in domainmodel to be closure over exposed classes
 
 (WORKAROUND -- made new bean ) unable to populate associations as client calls back to ApplServ even if associations are set

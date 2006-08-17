@@ -10,6 +10,8 @@ public class ServiceConfiguration {
 	
 	private String caCOREServiceURL;
 	
+	private String threadPoolSize;
+	
 
 	
 	public String getCaCOREServiceURL() {
@@ -18,6 +20,15 @@ public class ServiceConfiguration {
 	
 	public void setCaCOREServiceURL(String caCOREServiceURL) {
 		this.caCOREServiceURL = caCOREServiceURL;
+	}
+
+	
+	public String getThreadPoolSize() {
+		return threadPoolSize;
+	}
+	
+	public void setThreadPoolSize(String threadPoolSize) {
+		this.threadPoolSize = threadPoolSize;
 	}
 
 	

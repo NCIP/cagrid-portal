@@ -156,6 +156,17 @@
        </ns2:faultCollection>
        <ns2:semanticMetadataCollection/>
       </ns2:Operation>
+      <ns2:Operation description="" name="generateDomainModelForClasses" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns37:Project" dimensionality="1" index="0" isArray="false" isRequired="false" name="project" xsi:type="ns2:InputParameter" xmlns:ns37="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+        <ns2:InputParameter qName="ns38:UMLClassMetadata" dimensionality="1" index="1" isArray="true" isRequired="false" name="classes" xsi:type="ns2:InputParameter" xmlns:ns38="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns39:DomainModel" dimensionality="1" isArray="false" xsi:type="ns2:Output" xmlns:ns39="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="InvalidProjectException" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
       <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata" xsi:type="ns2:ContextProperty"/>
@@ -166,11 +177,11 @@
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter>
-  <ns37:ResearchCenter displayName="Ohio State University" shortName="OSU" xsi:type="ns37:ResearchCenter" xmlns:ns37="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-   <ns37:Address country="US" postalCode="43210" street1="333 W. 10th     Ave." xsi:type="ns37:Address"/>
-   <ns37:pointOfContactCollection>
-    <ns37:PointOfContact affiliation="OSU" email="oster@bmi.osu.edu" firstName="Scott" lastName="Oster" role="Maintainer" xsi:type="ns37:PointOfContact"/>
-   </ns37:pointOfContactCollection>
-  </ns37:ResearchCenter>
+  <ns40:ResearchCenter displayName="Ohio State University" shortName="OSU" xsi:type="ns40:ResearchCenter" xmlns:ns40="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns40:Address country="US" postalCode="43210" street1="333 W. 10th     Ave." xsi:type="ns40:Address"/>
+   <ns40:pointOfContactCollection>
+    <ns40:PointOfContact affiliation="OSU" email="oster@bmi.osu.edu" firstName="Scott" lastName="Oster" role="Maintainer" xsi:type="ns40:PointOfContact"/>
+   </ns40:pointOfContactCollection>
+  </ns40:ResearchCenter>
  </ns1:hostingResearchCenter>
 </ns1:ServiceMetadata>

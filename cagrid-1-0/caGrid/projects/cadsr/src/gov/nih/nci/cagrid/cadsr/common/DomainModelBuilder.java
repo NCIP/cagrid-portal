@@ -108,6 +108,60 @@ public class DomainModelBuilder {
 	}
 
 
+	/**
+	 * Gets a DomainModel that represents the project and packages
+	 * 
+	 * @param proj
+	 *            The project to build a domain model for
+	 * @param packageNames
+	 *            The names of packages to include in the domain model
+	 * @return
+	 * @throws RemoteException
+	 */
+	public DomainModel createDomainModel(Project proj, String[] packageNames) throws DomainModelGenerationException {
+		UMLClassMetadata classArr[] = null;
+		UMLAssociationMetadata[] assocArr = null;
+
+		if (packageNames != null && packageNames.length > 0) {
+			// build up the OR for all the package names
+			Disjunction disjunction = Restrictions.disjunction();
+			for (int i = 0; i < packageNames.length; i++) {
+				disjunction.add(Restrictions.eq("pack.name", packageNames[i]));
+			}
+
+			// get all classes in project (where fqn like packageNames[0].% or
+			// packageNames[1].% ....), preloading attributes, semantic metadata
+			DetachedCriteria criteria = DetachedCriteria.forClass(UMLClassMetadata.class).createAlias(
+				"UMLAttributeMetadataCollection", "atts").createAlias("UMLPackageMetadata", "pack").setFetchMode(
+				"atts", FetchMode.JOIN).setFetchMode("atts.semanticMetadataCollection", FetchMode.JOIN).setFetchMode(
+				"atts.semanticMetadataCollection", FetchMode.JOIN).setFetchMode("semanticMetadataCollection",
+				FetchMode.JOIN).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).add(disjunction)
+				.createCriteria("project").add(Restrictions.eq("id", proj.getId()));
+
+			try {
+				classArr = getProjectClasses(proj, criteria);
+			} catch (ApplicationException e) {
+				throw new DomainModelGenerationException("Problem getting project's classes.", e);
+			}
+
+			try {
+				assocArr = getProjectAssociationClosure(proj, classArr);
+			} catch (ApplicationException e) {
+				throw new DomainModelGenerationException("Problem getting project's associations.", e);
+			}
+
+		}
+		return buildDomainModel(proj, classArr, assocArr);
+	}
+
+
+	public DomainModel createDomainModel(Project proj, UMLClassMetadata[] exposedClasses)
+		throws DomainModelGenerationException {
+
+		throw new DomainModelGenerationException("Not yet implemented");
+	}
+
+
 	private String createClassIDFilter(UMLClassMetadata[] classArr) {
 		// create a list of class IDs for building association closure
 		Set idSet = new HashSet();
@@ -193,53 +247,6 @@ public class DomainModelBuilder {
 			+ " classes.");
 
 		return classArr;
-	}
-
-
-	/**
-	 * Gets a DomainModel that represents the project and packages
-	 * 
-	 * @param proj
-	 *            The project to build a domain model for
-	 * @param packageNames
-	 *            The names of packages to include in the domain model
-	 * @return
-	 * @throws RemoteException
-	 */
-	public DomainModel createDomainModel(Project proj, String[] packageNames) throws DomainModelGenerationException {
-		UMLClassMetadata classArr[] = null;
-		UMLAssociationMetadata[] assocArr = null;
-
-		if (packageNames != null && packageNames.length > 0) {
-			// build up the OR for all the package names
-			Disjunction disjunction = Restrictions.disjunction();
-			for (int i = 0; i < packageNames.length; i++) {
-				disjunction.add(Restrictions.eq("pack.name", packageNames[i]));
-			}
-
-			// get all classes in project (where fqn like packageNames[0].% or
-			// packageNames[1].% ....), preloading attributes, semantic metadata
-			DetachedCriteria criteria = DetachedCriteria.forClass(UMLClassMetadata.class).createAlias(
-				"UMLAttributeMetadataCollection", "atts").createAlias("UMLPackageMetadata", "pack").setFetchMode(
-				"atts", FetchMode.JOIN).setFetchMode("atts.semanticMetadataCollection", FetchMode.JOIN).setFetchMode(
-				"atts.semanticMetadataCollection", FetchMode.JOIN).setFetchMode("semanticMetadataCollection",
-				FetchMode.JOIN).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).add(disjunction)
-				.createCriteria("project").add(Restrictions.eq("id", proj.getId()));
-
-			try {
-				classArr = getProjectClasses(proj, criteria);
-			} catch (ApplicationException e) {
-				throw new DomainModelGenerationException("Problem getting project's classes.", e);
-			}
-
-			try {
-				assocArr = getProjectAssociationClosure(proj, classArr);
-			} catch (ApplicationException e) {
-				throw new DomainModelGenerationException("Problem getting project's associations.", e);
-			}
-
-		}
-		return buildDomainModel(proj, classArr, assocArr);
 	}
 
 

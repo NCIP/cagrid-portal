@@ -11,6 +11,10 @@
           <name>caCOREServiceURL</name>
           <value>@caCOREServiceURL@</value>
         </parameter>
+        <parameter>
+          <name>threadPoolSize</name>
+          <value>@threadPoolSize@</value>
+        </parameter>
       </resourceParams>
     </resource>
     <resource name="configuration" type="gov.nih.nci.cagrid.cadsr.service.globus.resource.ResourceConfiguration">

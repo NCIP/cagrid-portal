@@ -19,6 +19,12 @@ public class CaDSRServiceProviderImpl{
 	}
 	
 
+	public gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse generateDomainModelForClasses(gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequest params) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse();
+		boxedResult.setDomainModel(impl.generateDomainModelForClasses(params.getProject().getProject(),params.getClasses().getUMLClassMetadata()));
+		return boxedResult;
+	}
+
 	public gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse findAllProjects(gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsRequest params) throws RemoteException {
 		gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse();
 		boxedResult.setProject(impl.findAllProjects());

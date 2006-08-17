@@ -20,7 +20,7 @@ import org.globus.wsrf.ResourceHome;
 public abstract class CaDSRServiceImplBase {
     private ServiceConfiguration configuration;
 	
-	public CaDSRServiceImplBase() throws RemoteException {
+	public CaDSRServiceImplBase(){
 	
 	}
 	
@@ -42,7 +42,6 @@ public abstract class CaDSRServiceImplBase {
 
 		return this.configuration;
 	}
-	
 	
 	public ResourceHome getResourceHome(String resourceKey) throws Exception {
 		MessageContext ctx = MessageContext.getCurrentContext();
