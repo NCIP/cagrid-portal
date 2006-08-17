@@ -155,17 +155,11 @@
                 </sequence>
               </complexType>
             </element>
-            <element name="classes">
-              <complexType>
-                <sequence>
-                  <element ref="ns1:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
-                </sequence>
-              </complexType>
-            </element>
+            <element name="fullClassNames" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
             <element name="excludedAssociations">
               <complexType>
                 <sequence>
-                  <element ref="ns5:UMLAssociation" minOccurs="1" maxOccurs="unbounded" />
+                  <element ref="ns4:UMLAssociation" minOccurs="1" maxOccurs="unbounded" />
                 </sequence>
               </complexType>
             </element>
@@ -338,13 +332,7 @@
                 </sequence>
               </complexType>
             </element>
-            <element name="classes">
-              <complexType>
-                <sequence>
-                  <element ref="ns1:UMLClassMetadata" minOccurs="1" maxOccurs="unbounded" />
-                </sequence>
-              </complexType>
-            </element>
+            <element name="fullClassNames" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
           </sequence>
         </complexType>
       </element>

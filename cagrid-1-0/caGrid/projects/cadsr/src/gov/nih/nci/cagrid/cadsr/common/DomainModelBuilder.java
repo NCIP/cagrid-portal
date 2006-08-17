@@ -79,7 +79,8 @@ public class DomainModelBuilder {
 	 * @param proj
 	 * @return
 	 */
-	public DomainModel createDomainModel(Project proj) throws DomainModelGenerationException {
+	public DomainModel createDomainModel(Project project) throws DomainModelGenerationException {
+		Project proj = findCompleteProject(project);
 		// get all classes in project, preloading attributes, semantic
 		// metadata (current hibernate we are using doesn't process more
 		// than 1 preload, but this should work when we move forward)
@@ -118,7 +119,9 @@ public class DomainModelBuilder {
 	 * @return
 	 * @throws RemoteException
 	 */
-	public DomainModel createDomainModel(Project proj, String[] packageNames) throws DomainModelGenerationException {
+	public DomainModel createDomainModelForPackages(Project project, String[] packageNames)
+		throws DomainModelGenerationException {
+		Project proj = findCompleteProject(project);
 		UMLClassMetadata classArr[] = null;
 		UMLAssociationMetadata[] assocArr = null;
 
@@ -129,8 +132,8 @@ public class DomainModelBuilder {
 				disjunction.add(Restrictions.eq("pack.name", packageNames[i]));
 			}
 
-			// get all classes in project (where fqn like packageNames[0].% or
-			// packageNames[1].% ....), preloading attributes, semantic metadata
+			// get all classes in project (where package name =packageNames[0] or
+			// packageNames[1] ...), preloading attributes, semantic metadata
 			DetachedCriteria criteria = DetachedCriteria.forClass(UMLClassMetadata.class).createAlias(
 				"UMLAttributeMetadataCollection", "atts").createAlias("UMLPackageMetadata", "pack").setFetchMode(
 				"atts", FetchMode.JOIN).setFetchMode("atts.semanticMetadataCollection", FetchMode.JOIN).setFetchMode(
@@ -155,10 +158,42 @@ public class DomainModelBuilder {
 	}
 
 
-	public DomainModel createDomainModel(Project proj, UMLClassMetadata[] exposedClasses)
+	public DomainModel createDomainModelForClasses(Project project, String[] exposedClasses)
 		throws DomainModelGenerationException {
+		Project proj = findCompleteProject(project);
+		UMLClassMetadata classArr[] = null;
+		UMLAssociationMetadata[] assocArr = null;
 
-		throw new DomainModelGenerationException("Not yet implemented");
+		if (exposedClasses != null && exposedClasses.length > 0) {
+			// build up the OR for all the class names
+			Disjunction disjunction = Restrictions.disjunction();
+			for (int i = 0; i < exposedClasses.length; i++) {
+				disjunction.add(Restrictions.eq("fullyQualifiedName", exposedClasses[i]));
+			}
+
+			// get all classes in project (where fqn in classname[]), preloading
+			// attributes, semantic metadata
+			DetachedCriteria criteria = DetachedCriteria.forClass(UMLClassMetadata.class).createAlias(
+				"UMLAttributeMetadataCollection", "atts").setFetchMode("atts", FetchMode.JOIN).setFetchMode(
+				"atts.semanticMetadataCollection", FetchMode.JOIN).setFetchMode("atts.semanticMetadataCollection",
+				FetchMode.JOIN).setFetchMode("semanticMetadataCollection", FetchMode.JOIN).setResultTransformer(
+				CriteriaSpecification.DISTINCT_ROOT_ENTITY).add(disjunction).createCriteria("project").add(
+				Restrictions.eq("id", proj.getId()));
+
+			try {
+				classArr = getProjectClasses(proj, criteria);
+			} catch (ApplicationException e) {
+				throw new DomainModelGenerationException("Problem getting project's classes.", e);
+			}
+
+			try {
+				assocArr = getProjectAssociationClosure(proj, classArr);
+			} catch (ApplicationException e) {
+				throw new DomainModelGenerationException("Problem getting project's associations.", e);
+			}
+
+		}
+		return buildDomainModel(proj, classArr, assocArr);
 	}
 
 
@@ -538,6 +573,39 @@ public class DomainModelBuilder {
 			+ assoc.getTargetRoleName() + "(" + assoc.getTargetLowCardinality() + "..."
 			+ assoc.getTargetHighCardinality() + ")";
 
+	}
+
+
+	private Project findCompleteProject(Project prototype) throws DomainModelGenerationException {
+		if (prototype == null) {
+			throw new DomainModelGenerationException("Null project not valid.");
+		}
+
+		// clear this out and refresh it (in case its stale)
+		prototype.setId(null);
+
+		List completeProjects = new ArrayList();
+		Iterator projectIter = null;
+		Project proj = null;
+		try {
+			projectIter = this.cadsr.search(Project.class, prototype).iterator();
+		} catch (Exception ex) {
+			throw new DomainModelGenerationException("Error retrieving complete project: " + ex.getMessage(), ex);
+		}
+		// should be ONLY ONE project from the caDSR
+		while (projectIter.hasNext()) {
+			completeProjects.add(projectIter.next());
+		}
+		if (completeProjects.size() == 1) {
+			proj = (Project) completeProjects.get(0);
+		} else if (completeProjects.size() == 0) {
+			throw new DomainModelGenerationException("No project found in caDSR");
+		} else {
+			throw new DomainModelGenerationException("More than one project (" + completeProjects.size()
+				+ ") found.  Prototype project is ambiguous");
+		}
+
+		return proj;
 	}
 
 

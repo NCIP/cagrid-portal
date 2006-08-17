@@ -1,8 +1,6 @@
 reimplement generateDomainModel(proj,class,assoc)
   - change to association excludes
 
-implement generateDomainModel(proj,class)
-
 resource/context for non-blocking domainmodel generation
 
 discovery panel should support "searching" as well
@@ -26,6 +24,8 @@ returning too many assocations
 
 
 ==================================================
+(DONE) implement generateDomainModel(proj,class)
+
 (DONE) add appropriate service faults and internal exceptions
 
 (DONE) add service property for setting thread pool size

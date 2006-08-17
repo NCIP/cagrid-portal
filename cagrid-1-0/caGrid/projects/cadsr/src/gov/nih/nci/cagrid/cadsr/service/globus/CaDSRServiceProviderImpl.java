@@ -19,12 +19,6 @@ public class CaDSRServiceProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse generateDomainModelForClasses(gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequest params) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
-		gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse();
-		boxedResult.setDomainModel(impl.generateDomainModelForClasses(params.getProject().getProject(),params.getClasses().getUMLClassMetadata()));
-		return boxedResult;
-	}
-
 	public gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse findAllProjects(gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsRequest params) throws RemoteException {
 		gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse();
 		boxedResult.setProject(impl.findAllProjects());
@@ -69,7 +63,7 @@ public class CaDSRServiceProviderImpl{
 
 	public gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesResponse generateDomainModelForClassesWithExcludes(gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequest params) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
 		gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesResponse();
-		boxedResult.setDomainModel(impl.generateDomainModelForClassesWithExcludes(params.getProject().getProject(),params.getClasses().getUMLClassMetadata(),params.getExcludedAssociations().getUMLAssociation()));
+		boxedResult.setDomainModel(impl.generateDomainModelForClassesWithExcludes(params.getProject().getProject(),params.getFullClassNames(),params.getExcludedAssociations().getUMLAssociation()));
 		return boxedResult;
 	}
 
@@ -106,6 +100,12 @@ public class CaDSRServiceProviderImpl{
 	public gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectResponse findAssociationsInProject(gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectRequest params) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
 		gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectResponse();
 		boxedResult.setUMLAssociation(impl.findAssociationsInProject(params.getProject().getProject()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse generateDomainModelForClasses(gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequest params) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
+		gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse();
+		boxedResult.setDomainModel(impl.generateDomainModelForClasses(params.getProject().getProject(),params.getFullClassNames()));
 		return boxedResult;
 	}
 

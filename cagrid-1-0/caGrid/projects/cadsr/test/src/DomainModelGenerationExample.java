@@ -3,9 +3,6 @@ import gov.nih.nci.cagrid.cadsr.common.DomainModelBuilder;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
-import java.util.Iterator;
-import java.util.List;
-
 
 public class DomainModelGenerationExample {
 
@@ -13,28 +10,35 @@ public class DomainModelGenerationExample {
 		try {
 			ApplicationService appService = ApplicationService
 				.getRemoteInstance("http://cabio.nci.nih.gov/cacore31/http/remoteService");
-
-			Project proto = new Project();
-			proto.setVersion("3");
-			proto.setShortName("caCORE");
-			List rList = appService.search(Project.class, proto);
 			DomainModelBuilder builder = new DomainModelBuilder(appService);
 
-			for (Iterator resultsIterator = rList.iterator(); resultsIterator.hasNext();) {
-				Project project = (Project) resultsIterator.next();
-				System.out.println("Creating domain model for project: " + project.getLongName() + " (version:"
-					+ project.getVersion() + ")");
+			Project project = new Project();
+			project.setVersion("3");
+			project.setShortName("caCORE");
+			System.out.println("Creating domain model for project: " + project.getShortName() + " (version:"
+				+ project.getVersion() + ")");
 
-				// create the model once
-				long start = System.currentTimeMillis();
-				DomainModel domainModel = builder.createDomainModel(project, new String[]{"gov.nih.nci.cabio.domain"});
-				// DomainModel domainModel = builder.createDomainModel(project);
-				// MetadataUtils.serializeDomainModel(domainModel, new
-				// FileWriter(project.getShortName()
-				// + "_DomainModel.xml"));
-				double duration = (System.currentTimeMillis() - start) / 1000.0;
-				System.out.println("Domain Model generation took:" + duration + " seconds.");
-			}
+			long start = System.currentTimeMillis();
+
+			// Whole project
+			// DomainModel domainModel = builder.createDomainModel(project);
+
+			// For a single package
+			// DomainModel domainModel =
+			// builder.createDomainModelForPackages(project, new
+			// String[]{"gov.nih.nci.cabio.domain"});
+
+			// For a specific set of classes
+			DomainModel domainModel = builder.createDomainModelForClasses(project, new String[]{
+					"gov.nih.nci.cadsr.domain.Concept", "gov.nih.nci.cabio.domain.Gene",
+					"gov.nih.nci.cabio.domain.Taxon"});
+
+//			MetadataUtils.serializeDomainModel(domainModel, new FileWriter(project.getShortName() + "_"
+//				+ project.getVersion() + "_DomainModel.xml"));
+//	
+			double duration = (System.currentTimeMillis() - start) / 1000.0;
+			System.out.println("Domain Model generation took:" + duration + " seconds.");
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

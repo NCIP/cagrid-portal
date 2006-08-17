@@ -20,7 +20,7 @@ import org.globus.wsrf.ResourceHome;
 public abstract class CaDSRServiceImplBase {
     private ServiceConfiguration configuration;
 	
-	public CaDSRServiceImplBase(){
+	public CaDSRServiceImplBase() throws RemoteException {
 	
 	}
 	

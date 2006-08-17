@@ -183,20 +183,6 @@ public class CaDSRServiceClient extends ServiceSecurityClient implements CaDSRSe
 		}
 	}
 
-    public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] classes) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"generateDomainModelForClasses");
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequest params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequestClasses classesContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequestClasses();
-        classesContainer.setUMLClassMetadata(classes);
-        params.setClasses(classesContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse boxedResult = portType.generateDomainModelForClasses(params);
-        return boxedResult.getDomainModel();
-      }
-    }
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
@@ -279,16 +265,14 @@ public class CaDSRServiceClient extends ServiceSecurityClient implements CaDSRSe
         return boxedResult.getDomainModel();
       }
     }
-    public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] classes,gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] excludedAssociations) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
+    public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] fullClassNames,gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[] excludedAssociations) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"generateDomainModelForClassesWithExcludes");
         gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequest params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequest();
         gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestProject();
         projectContainer.setProject(project);
         params.setProject(projectContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestClasses classesContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestClasses();
-        classesContainer.setUMLClassMetadata(classes);
-        params.setClasses(classesContainer);
+        params.setFullClassNames(fullClassNames);
         gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestExcludedAssociations excludedAssociationsContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestExcludedAssociations();
         excludedAssociationsContainer.setUMLAssociation(excludedAssociations);
         params.setExcludedAssociations(excludedAssociationsContainer);
@@ -373,6 +357,18 @@ public class CaDSRServiceClient extends ServiceSecurityClient implements CaDSRSe
         params.setProject(projectContainer);
         gov.nih.nci.cagrid.cadsr.stubs.FindAssociationsInProjectResponse boxedResult = portType.findAssociationsInProject(params);
         return boxedResult.getUMLAssociation();
+      }
+    }
+    public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] fullClassNames) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"generateDomainModelForClasses");
+        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequest params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequest();
+        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesRequestProject();
+        projectContainer.setProject(project);
+        params.setProject(projectContainer);
+        params.setFullClassNames(fullClassNames);
+        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesResponse boxedResult = portType.generateDomainModelForClasses(params);
+        return boxedResult.getDomainModel();
       }
     }
 
