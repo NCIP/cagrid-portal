@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.introduce.extensions.metadata.editors.domainmodel;
 
 import gov.nih.nci.cagrid.discovery.MetadataUtils;
 import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
+import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation;
@@ -101,7 +102,8 @@ public class DomainModelViewer extends JPanel {
 					if (c.getUmlAttributeCollection() != null) {
 						if (c.getUmlAttributeCollection().getUMLAttribute() != null) {
 							for (int j = 0; j < c.getUmlAttributeCollection().getUMLAttribute().length; j++) {
-								C.addAttribute(c.getUmlAttributeCollection().getUMLAttribute()[j].getName(), " ");
+								UMLAttribute attribute = c.getUmlAttributeCollection().getUMLAttribute()[j];
+								C.addAttribute(attribute.getName(), attribute.getValueDomain().getDatatypeName());
 							}
 						}
 					}
@@ -109,7 +111,6 @@ public class DomainModelViewer extends JPanel {
 					getUMLDiagram().addClass(C);
 				}
 
-				// TODO: add assocs
 				if (this.domainModel.getExposedUMLAssociationCollection() != null
 					&& this.domainModel.getExposedUMLAssociationCollection().getUMLAssociation() != null) {
 
@@ -132,10 +133,19 @@ public class DomainModelViewer extends JPanel {
 							System.err.println("Source ID:" + sourceEdge.getUMLClassReference().getRefid());
 							System.err.println("Target ID:" + targetEdge.getUMLClassReference().getRefid());
 						} else {
-							getUMLDiagram().addAssociation(source, target, sourceEdge.getRoleName(),
-								sourceEdge.getMinCardinality() + ".." + sourceEdge.getMaxCardinality(),
+							getUMLDiagram().addAssociation(
+								source,
+								target,
+								sourceEdge.getRoleName(),
+								sourceEdge.getMinCardinality()
+									+ ".."
+									+ (sourceEdge.getMaxCardinality() == -1 ? "*" : String.valueOf(sourceEdge
+										.getMaxCardinality())),
 								targetEdge.getRoleName(),
-								targetEdge.getMinCardinality() + ".." + targetEdge.getMaxCardinality());
+								targetEdge.getMinCardinality()
+									+ ".."
+									+ (targetEdge.getMaxCardinality() == -1 ? "*" : String.valueOf(targetEdge
+										.getMaxCardinality())));
 						}
 
 					}

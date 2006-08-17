@@ -84,7 +84,7 @@
 	<classpathentry kind="lib" path="ext/lib/gef_modified.jar"/>
 	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-graph.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
