@@ -127,6 +127,14 @@ public class GroupBrowser extends JPanel {
 
 	private JButton listMembers = null;
 
+	private JLabel jLabel8 = null;
+
+	private JTextField hasComposite = null;
+
+	private JLabel jLabel9 = null;
+
+	private JTextField isComposite = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -165,6 +173,8 @@ public class GroupBrowser extends JPanel {
 		} catch (Exception e) {
 
 		}
+		this.getHasComposite().setText(String.valueOf(group.hasComposite()));
+		this.getIsComposite().setText(String.valueOf(group.isComposite()));
 	}
 
 	/**
@@ -386,6 +396,34 @@ public class GroupBrowser extends JPanel {
 	 */
 	private JPanel getDetailsPanel() {
 		if (detailsPanel == null) {
+			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
+			gridBagConstraints28.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints28.gridy = 10;
+			gridBagConstraints28.weightx = 1.0;
+			gridBagConstraints28.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints28.anchor = GridBagConstraints.WEST;
+			gridBagConstraints28.gridx = 1;
+			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
+			gridBagConstraints27.gridx = 0;
+			gridBagConstraints27.anchor = GridBagConstraints.WEST;
+			gridBagConstraints27.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints27.gridy = 10;
+			jLabel9 = new JLabel();
+			jLabel9.setText("Is Composite");
+			GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
+			gridBagConstraints26.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints26.gridy = 9;
+			gridBagConstraints26.weightx = 1.0;
+			gridBagConstraints26.anchor = GridBagConstraints.WEST;
+			gridBagConstraints26.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints26.gridx = 1;
+			GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
+			gridBagConstraints25.gridx = 0;
+			gridBagConstraints25.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints25.anchor = GridBagConstraints.WEST;
+			gridBagConstraints25.gridy = 9;
+			jLabel8 = new JLabel();
+			jLabel8.setText("Has Composite");
 			GridBagConstraints gridBagConstraints61 = new GridBagConstraints();
 			gridBagConstraints61.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints61.gridy = 8;
@@ -446,12 +484,12 @@ public class GroupBrowser extends JPanel {
 			gridBagConstraints20.gridx = 0;
 			gridBagConstraints20.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints20.gridwidth = 2;
-			gridBagConstraints20.gridy = 11;
+			gridBagConstraints20.gridy = 13;
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
 			gridBagConstraints19.fill = GridBagConstraints.BOTH;
 			gridBagConstraints19.weighty = 1.0;
 			gridBagConstraints19.gridx = 0;
-			gridBagConstraints19.gridy = 10;
+			gridBagConstraints19.gridy = 12;
 			gridBagConstraints19.gridwidth = 2;
 			gridBagConstraints19.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints19.weightx = 1.0;
@@ -459,7 +497,7 @@ public class GroupBrowser extends JPanel {
 			gridBagConstraints18.gridx = 0;
 			gridBagConstraints18.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints18.gridwidth = 2;
-			gridBagConstraints18.gridy = 9;
+			gridBagConstraints18.gridy = 11;
 			jLabel7 = new JLabel();
 			jLabel7.setText("Description");
 			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
@@ -560,6 +598,10 @@ public class GroupBrowser extends JPanel {
 			detailsPanel.add(getCreator(), gridBagConstraints59);
 			detailsPanel.add(getLastModified(), gridBagConstraints60);
 			detailsPanel.add(getLastModifiedBy(), gridBagConstraints61);
+			detailsPanel.add(jLabel8, gridBagConstraints25);
+			detailsPanel.add(getHasComposite(), gridBagConstraints26);
+			detailsPanel.add(jLabel9, gridBagConstraints27);
+			detailsPanel.add(getIsComposite(), gridBagConstraints28);
 		}
 		return detailsPanel;
 	}
@@ -899,13 +941,13 @@ public class GroupBrowser extends JPanel {
 	}
 
 	private void listMembers() {
-		
-			getListMembers().setEnabled(false);
-			getMemberFilter().setEnabled(false);
 
-			int eid = node.getBrowser().getProgress()
-					.startEvent("Listing group members....");
-			try {
+		getListMembers().setEnabled(false);
+		getMemberFilter().setEnabled(false);
+
+		int eid = node.getBrowser().getProgress().startEvent(
+				"Listing group members....");
+		try {
 			getMembersTable().clearTable();
 			String type = (String) getMemberFilter().getSelectedItem();
 			Set s = null;
@@ -925,16 +967,10 @@ public class GroupBrowser extends JPanel {
 				Membership m = (Membership) itr.next();
 				getMembersTable().addMember(m);
 			}
-			node
-			.getBrowser()
-			.getProgress()
-			.stopEvent(eid,
+			node.getBrowser().getProgress().stopEvent(eid,
 					"Successfully listed group members!!!");
 		} catch (Exception e) {
-			node
-			.getBrowser()
-			.getProgress()
-			.stopEvent(eid,
+			node.getBrowser().getProgress().stopEvent(eid,
 					"Error listing group members!!!");
 			PortalUtils.showErrorMessage(e);
 			node.refresh();
@@ -944,5 +980,31 @@ public class GroupBrowser extends JPanel {
 			getMemberFilter().setEnabled(true);
 
 		}
+	}
+
+	/**
+	 * This method initializes hasComposite
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getHasComposite() {
+		if (hasComposite == null) {
+			hasComposite = new JTextField();
+			hasComposite.setEditable(false);
+		}
+		return hasComposite;
+	}
+
+	/**
+	 * This method initializes isComposite
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getIsComposite() {
+		if (isComposite == null) {
+			isComposite = new JTextField();
+			isComposite.setEditable(false);
+		}
+		return isComposite;
 	}
 }
