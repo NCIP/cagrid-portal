@@ -1,0 +1,8 @@
+Provided libraries:
+lib/wsrf_core_enum.jar -- Implementation of WS-Enumeration provided by Globus Ws Core 4.0.2 after patch has been applied.
+lib/wsrf_core_stubs_enum.jar -- Stubs needed for WS-Enumeration provided by Globus Ws Core 4.0.2 after patch has been applied.
+build/lib/caGrid-1.0-wsEnum.jar -- Utilities and constants for WS-Enumeration project
+
+Tasks:
+1 [D]: Utilities to simplify creating an enumeration resource context and response from a List of objects.
+2 [I]: EnumIterator implementaion which can create / read an indexed file for persisting caCORE sdk objects.
