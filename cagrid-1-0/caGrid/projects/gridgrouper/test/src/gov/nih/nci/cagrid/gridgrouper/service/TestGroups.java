@@ -341,7 +341,7 @@ public class TestGroups extends TestCase {
 		}
 
 	}
-	
+
 	public void testCompositeIntersection() {
 		try {
 			Map expected = new HashMap();
@@ -472,7 +472,6 @@ public class TestGroups extends TestCase {
 
 	public void testNegativeComposites() {
 		try {
-			Map expected = new HashMap();
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
 
 			assertTrue(grouper.hasStemPrivilege(
