@@ -179,7 +179,7 @@ public class TestGroups extends TestCase {
 
 	}
 
-	public void testCompositeUnion() {
+	public void testUnionComposite() {
 		try {
 			Map expected = new HashMap();
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
@@ -342,7 +342,7 @@ public class TestGroups extends TestCase {
 
 	}
 
-	public void testCompositeIntersection() {
+	public void testIntersectionComposite() {
 		try {
 			Map expected = new HashMap();
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
@@ -437,6 +437,135 @@ public class TestGroups extends TestCase {
 			// Test Remove the shared user
 			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grpx),
 					USER_B);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.All, 0, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.CompositeMembers, 0, expected);
+
+			grouper.deleteCompositeMember(SUPER_USER, Utils
+					.getGroupIdentifier(composite));
+
+			expected.clear();
+			verifyMembers(composite, MemberFilter.All, 0, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.CompositeMembers, 0, expected);
+
+			grpx = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpx));
+			grpy = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpy));
+			assertFalse(grpx.isIsComposite());
+			assertFalse(grpy.isIsComposite());
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+
+	}
+	
+	public void testComplementComposite() {
+		try {
+			Map expected = new HashMap();
+			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
+
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
+							.getRootStemIdentifier(), SUPER_USER,
+					StemPrivilegeType.stem));
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
+							.getRootStemIdentifier(), SUPER_USER,
+					StemPrivilegeType.create));
+
+			StemDescriptor root = grouper.getStem(SUPER_USER, Utils
+					.getRootStemIdentifier());
+			assertNotNull(root);
+			assertEquals(root.getName(), Utils.getRootStemIdentifier()
+					.getStemName());
+
+			String testStem = "TestStem";
+			StemDescriptor test = grouper.addChildStem(SUPER_USER, Utils
+					.getRootStemIdentifier(), testStem, testStem);
+
+			final String groupExtensionX = "mygroupx";
+			final String groupDisplayExtensionX = "My Group X";
+
+			GroupDescriptor grpx = createAndCheckGroup(test, groupExtensionX,
+					groupDisplayExtensionX, 1);
+			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grpx),
+					USER_A);
+			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grpx),
+					USER_B);
+
+			final String groupExtensionY = "mygroupy";
+			final String groupDisplayExtensionY = "My Group Y";
+
+			GroupDescriptor grpy = createAndCheckGroup(test, groupExtensionY,
+					groupDisplayExtensionY, 2);
+			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grpy),
+					USER_B);
+			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grpy),
+					USER_C);
+
+			final String compositeGroupExtension = "compositegroup";
+			final String compositeGroupDisplayExtension = "Composite Group";
+
+			GroupDescriptor composite = createAndCheckGroup(test,
+					compositeGroupExtension, compositeGroupDisplayExtension, 3);
+			assertFalse(composite.isHasComposite());
+			composite = grouper.addCompositeMember(SUPER_USER,
+					GroupCompositeType.Complement, Utils
+							.getGroupIdentifier(composite), Utils
+							.getGroupIdentifier(grpx), Utils
+							.getGroupIdentifier(grpy));
+			assertTrue(composite.isHasComposite());
+			assertFalse(grpx.isIsComposite());
+			assertFalse(grpy.isIsComposite());
+			grpx = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpx));
+			grpy = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpy));
+			assertTrue(grpx.isIsComposite());
+			assertTrue(grpy.isIsComposite());
+			Utils.printMemberships(composite);
+
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			verifyMembers(composite, MemberFilter.All, 1, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			verifyMembers(composite, MemberFilter.CompositeMembers, 1, expected);
+
+			// TODO: Possible Grouper BUG: Make sure that the Membership is
+			// working as intended.
+			expected.clear();
+			expected.put(USER_A, getGridMembership(USER_A, composite.getName(),
+					null, 0));
+			verifyMemberships(composite, MemberFilter.All, 1, expected);
+			expected.clear();
+			verifyMemberships(composite, MemberFilter.EffectiveMembers, 0,
+					expected);
+			expected.clear();
+			verifyMemberships(composite, MemberFilter.ImmediateMembers, 0,
+					expected);
+			expected.clear();
+			expected.put(USER_A, getGridMembership(USER_A, composite.getName(),
+					null, 0));
+			verifyMemberships(composite, MemberFilter.CompositeMembers, 1,
+					expected);
+
+			// Test Remove the shared user
+			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grpx),
+					USER_A);
 			expected.clear();
 			verifyMembers(composite, MemberFilter.All, 0, expected);
 			expected.clear();
