@@ -1,10 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.service;
 
-import edu.internet2.middleware.grouper.Group;
-import edu.internet2.middleware.grouper.GroupFinder;
-import edu.internet2.middleware.grouper.GrouperSession;
 import edu.internet2.middleware.grouper.RegistryReset;
-import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
@@ -14,7 +10,6 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MemberType;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
-import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.service.tools.GridGrouperBootstrapper;
 import gov.nih.nci.cagrid.gridgrouper.stubs.MemberAddFault;
 import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
@@ -300,6 +295,38 @@ public class TestGroups extends TestCase {
 					null, 0));
 			verifyMemberships(composite, MemberFilter.CompositeMembers, 3,
 					expected);
+			
+			//Test Remove the shared user
+			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grpx), USER_B);
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			expected.put(USER_B, getGridMember(USER_B));
+			expected.put(USER_C, getGridMember(USER_C));
+			verifyMembers(composite, MemberFilter.All, 3, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			expected.put(USER_B, getGridMember(USER_B));
+			expected.put(USER_C, getGridMember(USER_C));
+			verifyMembers(composite, MemberFilter.CompositeMembers, 3, expected);
+			
+			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grpy), USER_B);
+			
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			expected.put(USER_C, getGridMember(USER_C));
+			verifyMembers(composite, MemberFilter.All, 2, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			expected.clear();
+			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			expected.clear();
+			expected.put(USER_A, getGridMember(USER_A));
+			expected.put(USER_C, getGridMember(USER_C));
+			verifyMembers(composite, MemberFilter.CompositeMembers, 2, expected);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
