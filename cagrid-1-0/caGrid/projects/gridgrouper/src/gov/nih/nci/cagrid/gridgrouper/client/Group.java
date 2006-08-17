@@ -376,4 +376,22 @@ public class Group extends GridGrouperObject implements GroupI {
 		return des.isIsComposite();
 	}
 
+	public void deleteCompositeMember() throws InsufficientPrivilegeException,
+			MemberDeleteException {
+		try {
+			gridGrouper.getClient().deleteCompositeMember(getGroupIdentifier());
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (MemberDeleteFault f) {
+			throw new MemberDeleteException(f.getFaultString());
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+
+	}
+
 }

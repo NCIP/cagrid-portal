@@ -103,7 +103,6 @@ public interface GroupI {
 	public void deleteMember(Subject subj)
 			throws InsufficientPrivilegeException, MemberDeleteException;
 
-	//
 	// public void deleteMember(Subject subj, Field f)
 	// throws InsufficientPrivilegeException, MemberDeleteException,
 	// SchemaException;
@@ -115,10 +114,9 @@ public interface GroupI {
 	public void addCompositeMember(CompositeType type, GroupI left, GroupI right)
 			throws InsufficientPrivilegeException, MemberAddException;
 
-	//public void deleteCompositeMember() throws
-	//InsufficientPrivilegeException,
-	//MemberDeleteException;
-	
+	public void deleteCompositeMember() throws InsufficientPrivilegeException,
+			MemberDeleteException;
+
 	public boolean isComposite();
 
 	// Membership Operations
