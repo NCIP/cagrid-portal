@@ -2,6 +2,10 @@ http\://cagrid.nci.nih.gov/BulkDataHandler=gov.nih.nci.cagrid.bdt.stubs
 http\://cagrid.nci.nih.gov/BulkDataHandler/bindings=gov.nih.nci.cagrid.bdt.stubs.bindings
 http\://cagrid.nci.nih.gov/BulkDataHandler/service=gov.nih.nci.cagrid.bdt.stubs.service
 http\://security.introduce.cagrid.nci.nih.gov/ServiceSecurity=gov.nih.nci.cagrid.introduce.security
+http\://schemas.xmlsoap.org/ws/2004/09/enumeration=org.globus.ws.enumeration
+http\://schemas.xmlsoap.org/ws/2004/09/enumeration=org.globus.ws.enumeration
+http\://schemas.xmlsoap.org/ws/2004/09/enumeration=org.globus.ws.enumeration
+http\://schemas.xmlsoap.org/ws/2004/09/enumeration=org.globus.ws.enumeration
 
 http\://cagrid.nci.nih.gov/BulkDataHandlerReference=bulkdatahandlerreference
 http\://schemas.xmlsoap.org/ws/2004/09/enumeration=org.xmlsoap.schemas.ws._2004._09.enumeration

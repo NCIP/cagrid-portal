@@ -83,16 +83,48 @@
      <ns4:ImportInformation inputMessage="ns6:GetServiceSecurityMetadataRequest" namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" outputMessage="ns6:GetServiceSecurityMetadataResponse" packageName="gov.nih.nci.cagrid.introduce.security" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl" xmlns:ns6="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity"/>
      <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
     </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="PullOp" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns7:Pull" isArray="false" name="pull" xmlns:ns7="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns8:PullResponse" isArray="false" xmlns:ns8="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns4:ImportInformation inputMessage="ns9:PullMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns9:PullResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns9="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns4:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="RenewOp" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns10:Renew" isArray="false" name="renew" xmlns:ns10="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns11:RenewResponse" isArray="false" xmlns:ns11="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns4:ImportInformation inputMessage="ns12:RenewMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns12:RenewResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns12="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns4:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="GetStatusOp" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns13:GetStatus" isArray="false" name="status" xmlns:ns13="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns14:GetStatusResponse" isArray="false" xmlns:ns14="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns4:ImportInformation inputMessage="ns15:GetStatusMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns15:GetStatusResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns15="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns4:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="ReleaseOp" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns16:Release" isArray="false" name="release" xmlns:ns16="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     </ns4:Inputs>
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:ImportInformation inputMessage="ns17:ReleaseMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns17:RepeaseResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns17="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns4:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
+    </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="createEnumeration" xsi:type="ns4:MethodType">
      <ns4:Inputs/>
-     <ns4:Output qName="ns7:EnumerateResponse" isArray="false" xmlns:ns7="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns4:Output qName="ns18:EnumerateResponse" isArray="false" xmlns:ns18="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
      <ns4:Exceptions/>
     </ns4:Method>
    </ns4:Methods>
-   <ns8:ResourcePropertiesList xsi:type="ns8:ResourcePropertiesListType" xmlns:ns8="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns19:ResourcePropertiesList xsi:type="ns19:ResourcePropertiesListType" xmlns:ns19="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
   </ns3:Service>
  </ns3:Services>
- <ns9:Extensions xsi:type="ns9:ExtensionsType" xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns9:Extension name="cagrid_wsEnum" xsi:type="ns9:ExtensionType"/>
- </ns9:Extensions>
+ <ns20:Extensions xsi:type="ns20:ExtensionsType" xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns20:Extension name="cagrid_wsEnum" xsi:type="ns20:ExtensionType"/>
+ </ns20:Extensions>
 </ns1:ServiceSkeleton>
