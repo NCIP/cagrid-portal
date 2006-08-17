@@ -348,7 +348,7 @@ public class TestGroups extends TestCase {
 			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
 			expected.clear();
 			verifyMembers(composite, MemberFilter.CompositeMembers, 0, expected);
-			
+
 			grpx = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpx));
 			grpy = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpy));
 			assertFalse(grpx.isIsComposite());
