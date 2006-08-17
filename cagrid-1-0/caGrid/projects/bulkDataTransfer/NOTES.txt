@@ -1,5 +1,0 @@
-TODO:
-
-add in ws-transfer ws-enumeration
-add in a config file to tell BDT file what transfer providers it will support
-design the TransferProvider Interface

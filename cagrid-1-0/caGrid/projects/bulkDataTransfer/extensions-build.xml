@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<project name="Introduce Extensions Build File" basedir=".">
-
-    <target name="installIntroduceExtensions" depends="all">
-    </target>
-
-</project>

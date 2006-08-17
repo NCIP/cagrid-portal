@@ -1,20 +1,5 @@
 <ns1:ServiceSkeleton introduceVersion=".9999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns2:Namespace location="..\ws\addressing\WS-Addressing.xsd" namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="EndpointReference" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="MessageID" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="RelatesTo" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="To" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Action" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="From" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ReplyTo" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="FaultTo" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ReplyAfter" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./bulkDataTransferMetadata.xsd" namespace="http://cagrid.nci.nih.gov/1/BulkDataTransferMetadata" packageName="gov.nih.nci.cagrid.bdt.metadata.beans" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="BulkDataTransferMetadata" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="TransferProvider" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
@@ -63,8 +48,8 @@
    <ns2:SchemaElement type="ENTITIES" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="unsignedByte" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./BDTHandlerServiceReference.xsd" namespace="http://cagrid.nci.nih.gov/BDTHandlerServiceReference" packageName="bdthandlerservicereference" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="BDTHandlerServiceReference" xsi:type="ns2:SchemaElementType"/>
+  <ns2:Namespace location="./BulkDataHandlerReference.xsd" namespace="http://cagrid.nci.nih.gov/BulkDataHandlerReference" packageName="bulkdatahandlerreference" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="BulkDataHandlerReference" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd\security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
@@ -76,25 +61,38 @@
    <ns2:SchemaElement type="GSITransport" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="None" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
+  <ns2:Namespace location=".\enumeration.xsd" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" packageName="org.xmlsoap.schemas.ws._2004._09.enumeration" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="Enumerate" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SupportedDialect" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="EnumerateResponse" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Pull" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="PullResponse" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Renew" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="RenewResponse" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GetStatus" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GetStatusResponse" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Release" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="EnumerationEnd" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
  </ns2:Namespaces>
  <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns3:Service name="BDTHandlerService" namespace="http://cagrid.nci.nih.gov/BDTHandlerService" packageName="gov.nih.nci.cagrid.bdt" resourceFrameworkType="main" xsi:type="ns3:ServiceType">
+  <ns3:Service name="BulkDataHandler" namespace="http://cagrid.nci.nih.gov/BulkDataHandler" packageName="gov.nih.nci.cagrid.bdt" resourceFrameworkType="main" xsi:type="ns3:ServiceType">
    <ns4:Methods xsi:type="ns4:MethodsType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Methods">
     <ns4:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns4:MethodType">
      <ns4:Output qName="ns5:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
      <ns4:ImportInformation inputMessage="ns6:GetServiceSecurityMetadataRequest" namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" outputMessage="ns6:GetServiceSecurityMetadataResponse" packageName="gov.nih.nci.cagrid.introduce.security" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl" xmlns:ns6="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity"/>
      <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
     </ns4:Method>
-    <ns4:Method isImported="false" isProvided="false" name="getTransferProvider" xsi:type="ns4:MethodType">
-     <ns4:Inputs>
-      <ns4:Input qName="ns7:TransferProvider" isArray="false" name="transferProvider" xmlns:ns7="http://cagrid.nci.nih.gov/1/BulkDataTransferMetadata"/>
-     </ns4:Inputs>
-     <ns4:Output qName="ns8:EndpointReference" isArray="false" xmlns:ns8="http://schemas.xmlsoap.org/ws/2004/03/addressing"/>
+    <ns4:Method isImported="false" isProvided="false" name="createEnumeration" xsi:type="ns4:MethodType">
+     <ns4:Inputs/>
+     <ns4:Output qName="ns7:EnumerateResponse" isArray="false" xmlns:ns7="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
      <ns4:Exceptions/>
     </ns4:Method>
    </ns4:Methods>
-   <ns9:ResourcePropertiesList xsi:type="ns9:ResourcePropertiesListType" xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns8:ResourcePropertiesList xsi:type="ns8:ResourcePropertiesListType" xmlns:ns8="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
   </ns3:Service>
  </ns3:Services>
- <ns10:Extensions xsi:type="ns10:ExtensionsType" xmlns:ns10="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns9:Extensions xsi:type="ns9:ExtensionsType" xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns9:Extension name="cagrid_wsEnum" xsi:type="ns9:ExtensionType"/>
+ </ns9:Extensions>
 </ns1:ServiceSkeleton>
