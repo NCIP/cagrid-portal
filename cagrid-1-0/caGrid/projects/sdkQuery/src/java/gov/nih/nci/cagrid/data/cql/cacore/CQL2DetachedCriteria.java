@@ -253,7 +253,7 @@ public class CQL2DetachedCriteria {
 	private static java.lang.Object convertToObject(String property, String value, Class objectType) throws MalformedQueryException, QueryProcessingException {
 		Field field = null;
 		try {
-			 field = objectType.getField(property);
+			 field = objectType.getDeclaredField(property);
 		} catch (NoSuchFieldException ex) {
 			throw new MalformedQueryException("No property " + property + " was found on type " + objectType.getName());
 		}
