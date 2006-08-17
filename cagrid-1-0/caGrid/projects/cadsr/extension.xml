@@ -6,8 +6,8 @@
   <ns1:Properties>
    <property key="GME_URL"
     value="http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"/>
-   <!-- <property key="CADSR_URL" value="http://cagrid05.bmi.ohio-state.edu:8080/wsrf/services/cagrid/CaDSRService"/> -->
-   <property key="CADSR_URL" value="http://localhost:8080/wsrf/services/cagrid/CaDSRService"/>
+   <property key="CADSR_URL" value="http://cagrid05.bmi.ohio-state.edu:8080/wsrf/services/cagrid/CaDSRService"/> 
+   <!-- <property key="CADSR_URL" value="http://localhost:8080/wsrf/services/cagrid/CaDSRService"/> -->
   </ns1:Properties>
  </ns1:DiscoveryExtensionDescription>
 </ns1:ExtensionDescription>
