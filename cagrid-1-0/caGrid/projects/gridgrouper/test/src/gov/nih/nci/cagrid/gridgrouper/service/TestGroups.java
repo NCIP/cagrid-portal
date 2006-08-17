@@ -276,6 +276,7 @@ public class TestGroups extends TestCase {
 			expected.put(USER_C, getGridMember(USER_C));
 			verifyMembers(composite, MemberFilter.CompositeMembers, 3, expected);
 
+			 //TODO: Possible Grouper BUG: Make sure that the Membership is working as intended.
 			expected.clear();
 			expected.put(USER_A, getGridMembership(USER_A, composite.getName(),
 					null, 0));
@@ -300,23 +301,6 @@ public class TestGroups extends TestCase {
 			verifyMemberships(composite, MemberFilter.CompositeMembers, 3,
 					expected);
 
-			// TODO: FINISH FROM HERE DOWN
-			Subject subject = SubjectUtils.getSubject(SUPER_USER);
-			GrouperSession session = GrouperSession.start(subject);
-			Group group = GroupFinder.findByName(session, composite.getName());
-			Utils.printMemberships(composite);
-			Utils.printCompositeMemberships(composite);
-			Group groupx = GroupFinder.findByName(session, grpx.getName());
-			Group groupy = GroupFinder.findByName(session, grpy.getName());
-			System.out.println(group.getName() + "Is Composite:"
-					+ group.isComposite() + " Has Composite: "
-					+ group.hasComposite());
-			System.out.println(groupx.getName() + "Is Composite:"
-					+ groupx.isComposite() + " Has Composite: "
-					+ groupx.hasComposite());
-			System.out.println(groupy.getName() + "Is Composite:"
-					+ groupy.isComposite() + " Has Composite: "
-					+ groupy.hasComposite());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
