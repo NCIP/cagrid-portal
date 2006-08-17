@@ -118,7 +118,7 @@
 
             <!-- welcome begins -->
             <table summary="" cellpadding="0" cellspacing="0" border="0" height="100%">
-                <tr><td class="welcomeTitle" height="20">WELCOME TO SITE NAME</td>
+                <tr><td class="welcomeTitle" height="20">Welcome to caGrid Portal</td>
                 </tr>
                 <tr>
                     <td class="welcomeContent" valign="top">
