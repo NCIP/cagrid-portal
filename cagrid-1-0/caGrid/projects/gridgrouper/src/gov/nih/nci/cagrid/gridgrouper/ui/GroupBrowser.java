@@ -1,15 +1,19 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.gridgrouper.client.Membership;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -30,6 +34,14 @@ import org.projectmobius.portal.PortalResourceManager;
  *          Exp $
  */
 public class GroupBrowser extends JPanel {
+
+	private static final String ALL_MEMBERS = "All Members"; // @jve:decl-index=0:
+
+	private static final String IMMEDIATE_MEMBERS = "Immediate Members";
+
+	private static final String EFFECTIVE_MEMBERS = "Effective Members";
+
+	private static final String COMPOSITE_MEMBERS = "Composite Members"; // @jve:decl-index=0:
 
 	private static final long serialVersionUID = 1L;
 
@@ -104,6 +116,16 @@ public class GroupBrowser extends JPanel {
 	private JTextField lastModified = null;
 
 	private JTextField lastModifiedBy = null;
+
+	private JPanel memberSearchPanel = null;
+
+	private JScrollPane jScrollPane1 = null;
+
+	private MembersTable membersTable = null;
+
+	private JComboBox memberFilter = null;
+
+	private JButton listMembers = null;
 
 	/**
 	 * This is the default constructor
@@ -332,8 +354,27 @@ public class GroupBrowser extends JPanel {
 	 */
 	private JPanel getMembers() {
 		if (members == null) {
+			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+			gridBagConstraints22.fill = GridBagConstraints.BOTH;
+			gridBagConstraints22.weighty = 1.0;
+			gridBagConstraints22.gridx = 0;
+			gridBagConstraints22.gridy = 1;
+			gridBagConstraints22.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints22.weightx = 1.0;
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = GridBagConstraints.NONE;
+			gridBagConstraints21.gridy = 0;
+			gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints21.gridx = 0;
 			members = new JPanel();
 			members.setLayout(new GridBagLayout());
+			members.setBorder(BorderFactory.createTitledBorder(null,
+					"Group Members",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					GridGrouperLookAndFeel.getPanelLabelColor()));
+			members.add(getMemberSearchPanel(), gridBagConstraints21);
+			members.add(getJScrollPane1(), gridBagConstraints22);
 		}
 		return members;
 	}
@@ -588,9 +629,9 @@ public class GroupBrowser extends JPanel {
 			this.getUpdateGroup().setEnabled(true);
 		} else if (!getDescription().getText().equals(group.getDescription())) {
 			this.getUpdateGroup().setEnabled(true);
-		}else if (!getSystemExtension().getText().equals(group.getExtension())) {
+		} else if (!getSystemExtension().getText().equals(group.getExtension())) {
 			this.getUpdateGroup().setEnabled(true);
-		}  else {
+		} else {
 			this.getUpdateGroup().setEnabled(false);
 		}
 	}
@@ -604,11 +645,12 @@ public class GroupBrowser extends JPanel {
 		if (systemExtension == null) {
 			systemExtension = new JTextField();
 			systemExtension.setEditable(true);
-			systemExtension.addCaretListener(new javax.swing.event.CaretListener() {
-				public void caretUpdate(javax.swing.event.CaretEvent e) {
-					monitorUpdate();
-				}
-			});
+			systemExtension
+					.addCaretListener(new javax.swing.event.CaretListener() {
+						public void caretUpdate(javax.swing.event.CaretEvent e) {
+							monitorUpdate();
+						}
+					});
 		}
 		return systemExtension;
 	}
@@ -677,14 +719,13 @@ public class GroupBrowser extends JPanel {
 
 	private void updateGroup() {
 		try {
-			
-			if (!getSystemExtension().getText().equals(
-					group.getExtension())) {
-				 group.setExtension(getSystemExtension().getText());
+
+			if (!getSystemExtension().getText().equals(group.getExtension())) {
+				group.setExtension(getSystemExtension().getText());
 			}
 			if (!getDisplayExtension().getText().equals(
 					group.getDisplayExtension())) {
-				 group.setDisplayExtension(getDisplayExtension().getText());
+				group.setDisplayExtension(getDisplayExtension().getText());
 			}
 			if (!getDescription().getText().equals(group.getDescription())) {
 				group.setDescription(getDescription().getText());
@@ -750,7 +791,158 @@ public class GroupBrowser extends JPanel {
 		}
 		return lastModifiedBy;
 	}
-	protected GroupTreeNode getGroupNode(){
+
+	protected GroupTreeNode getGroupNode() {
 		return node;
+	}
+
+	/**
+	 * This method initializes memberSearchPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getMemberSearchPanel() {
+		if (memberSearchPanel == null) {
+			GridBagConstraints gridBagConstraints24 = new GridBagConstraints();
+			gridBagConstraints24.gridx = 1;
+			gridBagConstraints24.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints24.gridy = 0;
+			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
+			gridBagConstraints23.fill = GridBagConstraints.NONE;
+			gridBagConstraints23.gridx = 0;
+			gridBagConstraints23.gridy = 0;
+			gridBagConstraints23.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints23.weightx = 1.0;
+			memberSearchPanel = new JPanel();
+			memberSearchPanel.setLayout(new GridBagLayout());
+			memberSearchPanel.setBorder(BorderFactory.createTitledBorder(null,
+					"Member Search",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					GridGrouperLookAndFeel.getPanelLabelColor()));
+			memberSearchPanel.add(getMemberFilter(), gridBagConstraints23);
+			memberSearchPanel.add(getListMembers(), gridBagConstraints24);
+		}
+		return memberSearchPanel;
+	}
+
+	/**
+	 * This method initializes jScrollPane1
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getJScrollPane1() {
+		if (jScrollPane1 == null) {
+			jScrollPane1 = new JScrollPane();
+			jScrollPane1.setViewportView(getMembersTable());
+		}
+		return jScrollPane1;
+	}
+
+	/**
+	 * This method initializes membersTable
+	 * 
+	 * @return javax.swing.JTable
+	 */
+	private MembersTable getMembersTable() {
+		if (membersTable == null) {
+			membersTable = new MembersTable();
+		}
+		return membersTable;
+	}
+
+	/**
+	 * This method initializes memberFilter
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getMemberFilter() {
+		if (memberFilter == null) {
+			memberFilter = new JComboBox();
+			memberFilter.addItem(ALL_MEMBERS);
+			memberFilter.addItem(IMMEDIATE_MEMBERS);
+			memberFilter.addItem(EFFECTIVE_MEMBERS);
+			memberFilter.addItem(COMPOSITE_MEMBERS);
+		}
+		return memberFilter;
+	}
+
+	/**
+	 * This method initializes listMembers
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getListMembers() {
+		if (listMembers == null) {
+			listMembers = new JButton();
+			listMembers.setText("List Members");
+			listMembers.setIcon(GridGrouperLookAndFeel.getQueryIcon());
+			listMembers.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							listMembers();
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+
+			});
+		}
+
+		return listMembers;
+	}
+
+	private void listMembers() {
+		
+			getListMembers().setEnabled(false);
+			getMemberFilter().setEnabled(false);
+
+			int eid = node.getBrowser().getProgress()
+					.startEvent("Listing group members....");
+			try {
+			getMembersTable().clearTable();
+			String type = (String) getMemberFilter().getSelectedItem();
+			Set s = null;
+			if (type.equals(EFFECTIVE_MEMBERS)) {
+				s = group.getEffectiveMemberships();
+			} else if (type.equals(IMMEDIATE_MEMBERS)) {
+				s = group.getImmediateMemberships();
+			} else if (type.equals(COMPOSITE_MEMBERS)) {
+				s = group.getCompositeMemberships();
+			} else if (type.equals(ALL_MEMBERS)) {
+				s = group.getMemberships();
+			} else {
+				throw new Exception("The member type " + type + " is unknown!!");
+			}
+			Iterator itr = s.iterator();
+			while (itr.hasNext()) {
+				Membership m = (Membership) itr.next();
+				getMembersTable().addMember(m);
+			}
+			node
+			.getBrowser()
+			.getProgress()
+			.stopEvent(eid,
+					"Successfully listed group members!!!");
+		} catch (Exception e) {
+			node
+			.getBrowser()
+			.getProgress()
+			.stopEvent(eid,
+					"Error listing group members!!!");
+			PortalUtils.showErrorMessage(e);
+			node.refresh();
+			e.printStackTrace();
+		} finally {
+			getListMembers().setEnabled(true);
+			getMemberFilter().setEnabled(true);
+
+		}
 	}
 }
