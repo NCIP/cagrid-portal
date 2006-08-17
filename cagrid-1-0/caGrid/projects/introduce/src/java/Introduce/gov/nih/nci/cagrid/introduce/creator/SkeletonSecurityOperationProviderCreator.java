@@ -25,7 +25,7 @@ import org.apache.tools.ant.BuildException;
  */
 public class SkeletonSecurityOperationProviderCreator {
 
-	private static final String JAR_PREFIX = "caGrid-introduce-security";
+	private static final String JAR_PREFIX = "caGrid-1.0-Introduce-security";
 	private static final String SERVICE_SECURITY_WSDL = "ServiceSecurity.wsdl";
 	private static final String SERVICE_SECURITY_XSD = "security.xsd";
 	private static final String SECURITY_SERVICE_NS = "http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity";

@@ -20,14 +20,13 @@
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 
 	<!--these are overriden from introduce -->
-	<property name="project.name" value="caGrid-introduce" />
-	<property name="project.version" value="1.0" />
+	<property name="project.name" value="caGrid-1.0-Introduce" />
 
 	<property name="jar.name" value="${project.name}-security" />
-	<property name="common.jar.name" value="${jar.name}-common-${project.version}.jar" />
-	<property name="client.jar.name" value="${jar.name}-client-${project.version}.jar" />
-	<property name="service.jar.name" value="${jar.name}-service-${project.version}.jar" />
-	<property name="stubs.jar.name" value="${jar.name}-stubs-${project.version}.jar" />
+	<property name="common.jar.name" value="${jar.name}-common.jar" />
+	<property name="client.jar.name" value="${jar.name}-client.jar" />
+	<property name="service.jar.name" value="${jar.name}-service.jar" />
+	<property name="stubs.jar.name" value="${jar.name}-stubs.jar" />
 
 
 	<!-- Basic Build directories -->
