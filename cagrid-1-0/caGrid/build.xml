@@ -43,7 +43,7 @@
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects above -->
-	<property name="testable.projects.list" value="dorian, introduce, cabigextensions, core, discovery, cadsr, gridca, gts, syncgts, data, sdkQuery, gridgrouper" />
+	<property name="testable.projects.list" value="dorian, introduce, cabigextensions, core, discovery, cadsr, gridca, gts, syncgts, data, sdkQuery, gridgrouper, wsEnum" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT PROVIDE INTRODUCE EXTENSIONS       -->
 	<!-- ================================================================================ -->
