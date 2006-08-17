@@ -326,4 +326,8 @@ public class Group extends GridGrouperObject implements GroupI {
 
 	}
 
+	public boolean hasComposite() {
+		return des.isHasComposite();
+	}
+
 }

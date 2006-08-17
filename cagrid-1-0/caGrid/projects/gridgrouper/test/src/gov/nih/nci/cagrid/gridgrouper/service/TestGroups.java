@@ -37,11 +37,6 @@ public class TestGroups extends TestCase {
 
 	private String SUPER_USER = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=super admin";
 
-	// private String ADMIN_USER =
-	// "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=admin";
-
-	private String USER_PREFIX = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user";
-
 	private String USER_A = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user a";
 
 	private String USER_B = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user b";
@@ -239,10 +234,15 @@ public class TestGroups extends TestCase {
 					.getSubject(SUPER_USER);
 			GrouperSession session = GrouperSession.start(subject);
 			Group group = GroupFinder.findByName(session, union.getName());
+			
 			group.addCompositeMember(CompositeType.UNION, GroupFinder.findByName(session, grpx.getName()), GroupFinder.findByName(session, grpy.getName()));
 			Utils.printMemberships(union);
 			Utils.printCompositeMemberships(union);
-
+			Group groupx = GroupFinder.findByName(session, grpx.getName());
+			Group groupy = GroupFinder.findByName(session, grpy.getName());
+			System.out.println(group.getName()+"Is Composite:"+group.isComposite()+" Has Composite: "+group.hasComposite());
+			System.out.println(groupx.getName()+"Is Composite:"+groupx.isComposite()+" Has Composite: "+groupx.hasComposite());
+			System.out.println(groupy.getName()+"Is Composite:"+groupy.isComposite()+" Has Composite: "+groupy.hasComposite());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -259,6 +259,7 @@ public class TestGroups extends TestCase {
 		assertEquals(displayExtension, grp.getDisplayExtension());
 		assertEquals(childGroupCount, grouper.getChildGroups(SUPER_USER, Utils
 				.getStemIdentifier(stem)).length);
+		assertFalse(grp.isHasComposite());
 		Map expected = new HashMap();
 		expected.clear();
 		verifyMembers(grp, MemberFilter.All, 0, expected);

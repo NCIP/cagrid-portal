@@ -60,6 +60,8 @@ public interface GroupI {
 
 	public void setDisplayExtension(String value) throws GroupModifyException,
 			InsufficientPrivilegeException;
+	
+	public boolean hasComposite();
 
 	// Member Operations
 
@@ -117,7 +119,7 @@ public interface GroupI {
 	// InsufficientPrivilegeException,
 	// MemberDeleteException;
 	//
-	// public boolean hasComposite()
+
     // public boolean isComposite();
 
 	// Membership Operations

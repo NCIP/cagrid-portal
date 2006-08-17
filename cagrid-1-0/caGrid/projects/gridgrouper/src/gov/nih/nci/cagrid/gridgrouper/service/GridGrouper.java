@@ -1276,6 +1276,7 @@ public class GridGrouper {
 		des.setModifyTime(group.getModifyTime().getTime());
 		des.setName(group.getName());
 		des.setUUID(group.getUuid());
+		des.setHasComposite(group.hasComposite());
 		return des;
 	}
 
