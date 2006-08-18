@@ -42,7 +42,7 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="echo,cqlprocessors,coretests" />
+	<property name="projects.list" value="echo,cqlprocessors,coretests,workflow-services" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
@@ -80,6 +80,11 @@
 	<target name="build-echo" depends="prepare" description="Builds echo">
 		<ant dir="${tests.projects.dir}/echo" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
+
+    <target name="build-workflow-services" description="Builds echo">
+        <ant dir="${tests.projects.dir}/workflow-services" inheritAll="false" antfile="build.xml" target="all"/>
+    </target>
+
 
 	<!-- =============================================================== -->
 	<!-- echo                                                            -->
