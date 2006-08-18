@@ -13,6 +13,7 @@
 	<property name="dart.project" value="caGrid-1.0" />
 	<property name="dart.server" value="vandelay.bmi.ohio-state.edu" />
 	<property name="dart.client.jar" value="${test.lib.dir}/DartClient-1.0.7.jar" />
+	<property name="build.name.template" location="${test.dir}/BuildNameTemplate.xml"/>
 
 	<!-- =============================================================== -->
 	<!-- Configure dart                                                  -->
@@ -22,11 +23,12 @@
 		<filter token="Dart.BuildName" value="${dart.buildname}" />
 		<filter token="Dart.Site" value="${dart.site}" />
 		<filter token="Dart.Track" value="Continuous" />
-		<copy file="${test.dir}/BuildNameTemplate.xml" tofile="${test.logs.dir}/BuildNameContinuous.xml" filtering="true" overwrite="true" />
+		
+		<copy file="${build.name.template}" tofile="${test.logs.dir}/BuildNameContinuous.xml" filtering="true" overwrite="true" />
 		<filter token="Dart.Track" value="Nightly" />
-		<copy file="${test.dir}/BuildNameTemplate.xml" tofile="${test.logs.dir}/BuildNameNightly.xml" filtering="true" overwrite="true" />
+		<copy file="${build.name.template}" tofile="${test.logs.dir}/BuildNameNightly.xml" filtering="true" overwrite="true" />
 		<filter token="Dart.Track" value="Experimental" />
-		<copy file="${test.dir}/BuildNameTemplate.xml" tofile="${test.logs.dir}/BuildNameExperimental.xml" filtering="true" overwrite="true" />
+		<copy file="${build.name.template}" tofile="${test.logs.dir}/BuildNameExperimental.xml" filtering="true" overwrite="true" />
 	</target>
 
 	<!-- =============================================================== -->
