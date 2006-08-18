@@ -102,9 +102,9 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 		while (objIter.hasNext()) {
 			StringWriter writer = new StringWriter();
 			Utils.serializeObject(objIter.next(), name, writer);
-			String xml = writer.toString();			
+			String xml = writer.toString().trim();
 			fileWriter.write(String.valueOf(xml.length()) + "\n");
-			fileWriter.write(xml + "\n");
+			fileWriter.write(xml);
 		}
 		fileWriter.flush();
 		fileWriter.close();
@@ -146,7 +146,7 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 			}
 		}
 		// if the xml text is null, we're at the end of the iteration
-		return wrapUpElements(soapElements, xml != null);
+		return wrapUpElements(soapElements, xml == null);
 	}
 	
 	
