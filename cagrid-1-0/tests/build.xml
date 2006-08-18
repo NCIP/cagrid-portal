@@ -32,6 +32,7 @@
 	<import file="${cagrid.antfiles.dir}/report-utilities.xml" />
 
 	<!-- IMPORT THE TEST TARGET -->
+	<property name="build.name.template" location="${cagrid.test.dir}/BuildNameTemplate.xml"/>
 	<import file="${test.dir}/test.xml" />
 	<import file="${cagrid.test.dir}/test-dart.xml" />
 
