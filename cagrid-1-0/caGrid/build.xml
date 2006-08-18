@@ -30,6 +30,7 @@
 	<import file="${antfiles.dir}/report-utilities.xml" />
 
 	<!-- IMPORT THE TEST TARGET -->
+	<import file="${test.dir}/test-dart.xml" />
 	<import file="${test.dir}/test.xml" />
 
 
