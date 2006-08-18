@@ -19,6 +19,7 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JLabel;
 
 
 /**
@@ -28,6 +29,9 @@ public class DomainModelViewer extends JPanel {
 	private DomainModel domainModel = null;
 	private UMLDiagram umlDiagram = null;
 	private JPanel graphPanel = null;
+	private JPanel infoPanel = null;
+	private JLabel domainLabel = null;
+	private JLabel projectDescLabel = null;
 
 
 	public DomainModelViewer() {
@@ -37,6 +41,10 @@ public class DomainModelViewer extends JPanel {
 
 
 	private void initialize() {
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints.gridy = 0;
+		gridBagConstraints.gridx = 0;
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.gridx = 0;
 		gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
@@ -46,6 +54,62 @@ public class DomainModelViewer extends JPanel {
 
 		this.setLayout(new GridBagLayout());
 		this.add(getGraphPanel(), gridBagConstraints1);
+		this.add(getInfoPanel(), gridBagConstraints);
+	}
+
+
+	/**
+	 * This method initializes infoPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getInfoPanel() {
+		if (infoPanel == null) {
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints3.gridy = 0;
+			gridBagConstraints3.weightx = 1;
+			gridBagConstraints3.weighty = 1;
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.gridx = 0;
+			gridBagConstraints4.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints4.gridy = 1;
+			gridBagConstraints4.weightx = 1;
+			gridBagConstraints4.weighty = 1;
+			infoPanel = new JPanel();
+			infoPanel.setLayout(new GridBagLayout());
+			infoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Service Domain Model",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			infoPanel.add(getDomainLabel(), gridBagConstraints3);
+			infoPanel.add(getDomainDescLabel(), gridBagConstraints4);
+		}
+		return infoPanel;
+	}
+
+
+	private JLabel getDomainLabel() {
+		if (this.domainLabel == null) {
+			domainLabel = new JLabel();
+			domainLabel.setText("Project Name Version: ");
+			domainLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
+		}
+
+		return domainLabel;
+	}
+
+
+	private JLabel getDomainDescLabel() {
+		if (this.projectDescLabel == null) {
+			projectDescLabel = new JLabel();
+			projectDescLabel.setText("Project Description");
+			projectDescLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
+		}
+
+		return this.projectDescLabel;
 	}
 
 
@@ -89,6 +153,11 @@ public class DomainModelViewer extends JPanel {
 		getUMLDiagram().clear();
 		// add classes
 		if (this.domainModel != null) {
+
+			getDomainLabel()
+				.setText(domainModel.getProjectLongName() + "  version: " + domainModel.getProjectVersion());
+			getDomainDescLabel().setText(domainModel.getProjectDescription());
+
 			// class ID->UMLClass
 			Map classMap = new HashMap();
 			if (this.domainModel.getExposedUMLClassCollection() != null
@@ -97,18 +166,20 @@ public class DomainModelViewer extends JPanel {
 				for (int k = 0; k < classArr.length; k++) {
 					gov.nih.nci.cagrid.metadata.common.UMLClass c = classArr[k];
 
-					gov.nih.nci.cagrid.graph.uml.UMLClass C = new gov.nih.nci.cagrid.graph.uml.UMLClass(trimClassName(c
-						.getClassName()));
+					gov.nih.nci.cagrid.graph.uml.UMLClass diagramClass = new gov.nih.nci.cagrid.graph.uml.UMLClass(
+						trimClassName(c.getClassName()));
 					if (c.getUmlAttributeCollection() != null) {
 						if (c.getUmlAttributeCollection().getUMLAttribute() != null) {
 							for (int j = 0; j < c.getUmlAttributeCollection().getUMLAttribute().length; j++) {
 								UMLAttribute attribute = c.getUmlAttributeCollection().getUMLAttribute()[j];
-								C.addAttribute(attribute.getName(), attribute.getValueDomain().getDatatypeName());
+								diagramClass.addAttribute(attribute.getValueDomain().getDatatypeName(), attribute
+									.getName());
 							}
 						}
 					}
-					classMap.put(c.getId(), C);
-					getUMLDiagram().addClass(C);
+					diagramClass.setToolTip(c.getDescription());
+					classMap.put(c.getId(), diagramClass);
+					getUMLDiagram().addClass(diagramClass);
 				}
 
 				if (this.domainModel.getExposedUMLAssociationCollection() != null
