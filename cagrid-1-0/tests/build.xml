@@ -33,6 +33,7 @@
 
 	<!-- IMPORT THE TEST TARGET -->
 	<property name="build.name.template" location="${cagrid.test.dir}/BuildNameTemplate.xml"/>
+	<property name="cc2dart.xls.file" location="${cagrid.test.dir}/CC2DART.xsl"/>
 	<import file="${test.dir}/test.xml" />
 	<import file="${cagrid.test.dir}/test-dart.xml" />
 
