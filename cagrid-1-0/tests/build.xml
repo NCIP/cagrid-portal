@@ -33,6 +33,7 @@
 
 	<!-- IMPORT THE TEST TARGET -->
 	<import file="${test.dir}/test.xml" />
+	<import file="${cagrid.test.dir}/test-dart.xml" />
 
 
 	<!-- ================================================================================ -->
