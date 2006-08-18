@@ -858,7 +858,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 				String usedExceptionName = (String) iter.next();
 				exceptionJComboBox.addItem(usedExceptionName);
 			}
-			
+
 		}
 		return exceptionJComboBox;
 	}
@@ -1697,6 +1697,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField getInputMessageNamespaceTextField() {
 		if (inputMessageNamespaceTextField == null) {
 			inputMessageNamespaceTextField = new JTextField();
+			if (method.isIsImported()) {
+				inputMessageNamespaceTextField.setText(method.getImportInformation().getInputMessage()
+					.getNamespaceURI());
+			}
 		}
 		return inputMessageNamespaceTextField;
 	}
@@ -1710,6 +1714,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField getOutputMessageNamespaceTextField() {
 		if (outputMessageNamespaceTextField == null) {
 			outputMessageNamespaceTextField = new JTextField();
+			if (method.isIsImported()) {
+				outputMessageNamespaceTextField.setText(method.getImportInformation().getOutputMessage()
+					.getNamespaceURI());
+			}
 		}
 		return outputMessageNamespaceTextField;
 	}
@@ -1770,6 +1778,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField getInputMessageNameTextField() {
 		if (inputMessageNameTextField == null) {
 			inputMessageNameTextField = new JTextField();
+			if (method.isIsImported()) {
+				inputMessageNameTextField.setText(method.getImportInformation().getInputMessage().getLocalPart());
+			}
 		}
 		return inputMessageNameTextField;
 	}
@@ -1783,6 +1794,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField getOutputMessageNameTextField() {
 		if (outputMessageNameTextField == null) {
 			outputMessageNameTextField = new JTextField();
+			if (method.isIsImported()) {
+				outputMessageNameTextField.setText(method.getImportInformation().getOutputMessage().getLocalPart());
+			}
 		}
 		return outputMessageNameTextField;
 	}

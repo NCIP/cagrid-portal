@@ -1,5 +1,10 @@
 To Do:
 
+if a namespace is imported by another schema but is also added to the NT list, which package name will be used?
+
+namespace to package map for an imported service MUST be the same package map as the namespace as imported
+if it is in the types list....
+
 i added a new method, hit cancel on the method viewer, and saved.  I then removed the new method and saved.
   - the method still exists but isnt in the operationstable
 

@@ -250,9 +250,8 @@ public class SyncTools {
 
 		// before we actually process anything we must create the code and conf
 		// required for any new services which were added.....
-		
+
 		createNewServices(info);
-		
 
 		// STEP 3: generate a set of namespaces to not make classes/stubs for as
 		// the user specified them explicitly, then save them to the build
@@ -351,7 +350,7 @@ public class SyncTools {
 	private void populateClassnames(ServiceInformation info, MultiServiceSymbolTable table)
 		throws MalformedNamespaceException, SynchronizationException {
 
-		// table.dump(System.out);
+		table.dump(System.out);
 		// get the classnames from the axis symbol table
 		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
@@ -472,14 +471,19 @@ public class SyncTools {
 						if (type != null) {
 							Object obj = type.getMessage().getParts().values().iterator().next();
 							PartImpl messagePart = (PartImpl) obj;
-							Element element = table.getElement(messagePart.getElementName());
-							if (element != null) {
+							if (messagePart.getElementName() != null) {
+								Element element = table.getElement(messagePart.getElementName());
+
 								mtype.setInputMessageClass(element.getName());
 								mtype.setBoxedInputParameter(TemplateUtils.lowerCaseFirstCharacter(messagePart
 									.getName()));
-							} else {
-								System.out.println("WARNING: Cannot find input message element: "
-									+ messagePart.getElementName());
+							} else if (messagePart.getTypeName() != null) {
+								Type messtype = table.getType(messagePart.getTypeName());
+								if (messtype != null) {
+									mtype.setInputMessageClass(messtype.getName());
+									mtype.setBoxedInputParameter(TemplateUtils.lowerCaseFirstCharacter(messagePart
+										.getName()));
+								}
 							}
 						} else {
 							System.out.println("WARNING: Cannot find input message entry: " + messageQName);
@@ -503,14 +507,17 @@ public class SyncTools {
 
 						if (type != null) {
 							PartImpl messagePart = (PartImpl) type.getMessage().getParts().values().iterator().next();
-							Element element = table.getElement(messagePart.getElementName());
-							if (element != null) {
+							if (messagePart.getElementName() != null) {
+								Element element = table.getElement(messagePart.getElementName());
 								mtype.setOutputMessageClass(element.getName());
 								mtype.setBoxedOutputParameter(TemplateUtils.lowerCaseFirstCharacter(messagePart
 									.getName()));
-							} else {
-								System.out.println("WARNING: Cannot find output message element: "
-									+ messagePart.getElementName());
+
+							} else if (messagePart.getTypeName() != null) {
+								Type messType = table.getType(messagePart.getTypeName());
+								mtype.setOutputMessageClass(messType.getName());
+								mtype.setBoxedOutputParameter(TemplateUtils.lowerCaseFirstCharacter(messagePart
+									.getName()));
 							}
 						} else {
 							System.out.println("WARNING: Cannot find output message entry: " + messageQName);
@@ -575,20 +582,25 @@ public class SyncTools {
 				org.jdom.Element newServiceElement = XMLUtilities.stringToDocument(newServerConfigS).getRootElement();
 				serverConfigDoc.getRootElement().addContent(0, newServiceElement.detach());
 
-				
-				//when i add this new service i need to make a resource link in every other service for this services resource home
-				//<resourceLink name="home" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/HelloWorld/home" />
-				org.jdom.Element resourceLinkEl = new org.jdom.Element("resourceLink",Namespace.getNamespace("http://wsrf.globus.org/jndi/config"));
-				resourceLinkEl.setAttribute("name",TemplateUtils.lowerCaseFirstCharacter(newService.getName()) + "Home");
-				resourceLinkEl.setAttribute("target", "java:comp/env/services/SERVICE-INSTANCE-PREFIX/" + newService.getName()+ "/home");
+				// when i add this new service i need to make a resource link in
+				// every other service for this services resource home
+				// <resourceLink name="home"
+				// target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/HelloWorld/home"
+				// />
+				org.jdom.Element resourceLinkEl = new org.jdom.Element("resourceLink", Namespace
+					.getNamespace("http://wsrf.globus.org/jndi/config"));
+				resourceLinkEl.setAttribute("name", TemplateUtils.lowerCaseFirstCharacter(newService.getName())
+					+ "Home");
+				resourceLinkEl.setAttribute("target", "java:comp/env/services/SERVICE-INSTANCE-PREFIX/"
+					+ newService.getName() + "/home");
 				List children = serverConfigJNDIDoc.getRootElement().getChildren();
-				for(int childI = 0; childI < children.size(); childI++){
-					org.jdom.Element child = (org.jdom.Element)children.get(childI);
-					if(child.getName().equals("service")){
-						child.addContent((org.jdom.Element)resourceLinkEl.clone());
+				for (int childI = 0; childI < children.size(); childI++) {
+					org.jdom.Element child = (org.jdom.Element) children.get(childI);
+					if (child.getName().equals("service")) {
+						child.addContent((org.jdom.Element) resourceLinkEl.clone());
 					}
 				}
-				
+
 				// if this is a new service we need to add it's new "service"
 				// element to the JNDI
 				NewServiceJNDIConfigTemplate jndiConfigT = new NewServiceJNDIConfigTemplate();

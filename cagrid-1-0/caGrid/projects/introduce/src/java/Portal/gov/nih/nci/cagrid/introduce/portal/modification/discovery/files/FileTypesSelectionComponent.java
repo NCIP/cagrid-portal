@@ -108,7 +108,7 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 						getNamespaceText().setText(currentNamespace.getRaw());
 					} catch (Exception ex) {
 						JOptionPane.showMessageDialog(FileTypesSelectionComponent.this,
-							"Please make sure the file is a valid XML Schema");
+							"Please make sure the file is a valid XML Schema: \"" + ex.getMessage() + "\"");
 					}
 				}
 			});
