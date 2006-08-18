@@ -25,7 +25,7 @@
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<echo message="Test source dir: ${test.src.dir}" />
 		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${basedir}" printsummary="yes" haltonfailure="true" haltonerror="true" showoutput="true">
+		<junit dir="${basedir}" printsummary="yes" haltonfailure="false" haltonerror="false" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}" />
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
 			
@@ -41,7 +41,9 @@
 			<formatter type="xml" usefile="true"/>
 			<formatter type="plain" usefile="false"/>
 
-			<batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
+			<batchtest fork="yes" haltonfailure="false" haltonerror="false" todir="${junit.results.dir}" 
+				failureproperty="test.failed" errorproperty="test.error"
+			>
 				<fileset dir="${test.src.dir}">
 					<exclude name="**/*Abstract*.java" />
 					<include name="**/*Test.java" />
@@ -49,6 +51,8 @@
 				</fileset>
 			</batchtest>
 		</junit>
+		<fail message="Tests failed! Consult the logs for details." if="test.failed" />
+		<fail message="Tests errored! Consult the logs for details." if="test.errored" />
 	</target>
 
 	<target name="coverageReport" depends="test" description="Runs the tests and generates a test coverage report.">
