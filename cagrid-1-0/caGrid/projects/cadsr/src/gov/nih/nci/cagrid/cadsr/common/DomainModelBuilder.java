@@ -239,6 +239,9 @@ public class DomainModelBuilder {
 	 */
 	private UMLAssociationMetadata[] getProjectAssociationClosure(Project proj, UMLClassMetadata[] classArr)
 		throws ApplicationException {
+		if(classArr ==null || classArr.length<=0){
+			return null;
+		}
 
 		// get all associations between classes we are exposing
 		String classIDFilter = createClassIDFilter(classArr);

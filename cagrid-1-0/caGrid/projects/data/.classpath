@@ -93,7 +93,6 @@
 	<classpathentry kind="src" path="test/resources"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-wsEnum.jar"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_enum.jar"/>
-	<classpathentry kind="src" path="src/java/wsEnum"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-caDSR-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-caDSR-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-caDSR-portal.jar"/>

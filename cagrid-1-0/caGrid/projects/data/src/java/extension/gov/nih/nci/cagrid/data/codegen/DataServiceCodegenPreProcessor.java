@@ -91,7 +91,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		if (!domainModelResourcePropertyExists(info)) {
 			addDomainModelResourceProperty(info);
 		}
-		
+
 		// if the domainModel.xml doesn't exist, don't try to populate the
 		// domain model metadata on service startup
 		File dmFile = new File(domainModelFile);
@@ -120,7 +120,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			} catch (Exception ex) {
 				throw new CodegenExtensionException("Error initializing caDSR client: " + ex.getMessage(), ex);
 			}
-			
+
 			// create the prototype project
 			String cadsrProjectName = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_NAME_ATTRIB);
 			String cadsrProjectVersion = cadsrElement
@@ -128,37 +128,28 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			Project proj = new Project();
 			proj.setShortName(cadsrProjectName);
 			proj.setVersion(cadsrProjectVersion);
-			
+
 			// sets for holding all selected classes and associations
 			Set allClasses = new HashSet();
-			Set allAssociations = new HashSet();
-			
+
 			// walk through the selected packages
 			Iterator packElementIter = cadsrElement.getChildren(DataServiceConstants.CADSR_PACKAGE_MAPPING).iterator();
 			while (packElementIter.hasNext()) {
 				Element packageElement = (Element) packElementIter.next();
 				String packName = packageElement.getAttributeValue(DataServiceConstants.CADSR_PACKAGE_NAME);
-				// get selected classes from the package 
+				// get selected classes from the package
 				List selectedClassList = packageElement.getChildren(DataServiceConstants.CADSR_PACKAGE_SELECTED_CLASS);
 				String[] packageClassNames = new String[selectedClassList.size()];
 				int index = 0;
 				Iterator selectedClassIter = selectedClassList.iterator();
 				while (selectedClassIter.hasNext()) {
 					Element selectedClassElement = (Element) selectedClassIter.next();
-					packageClassNames[index] = selectedClassElement.getText();
+					packageClassNames[index] = packName+"."+selectedClassElement.getText();
 					index++;
 				}
-				// get the UMLClassMetadata and UMLAssociations from caDSR
-				try {
-					UMLClassMetadata[] classMetadata = getUmlClassMetadata(cadsrClient, proj, packName,
-						packageClassNames);
-					UMLAssociation[] associations = getUmlClassAssociations(cadsrClient, proj, classMetadata);
-					// add them to the globally selected sets
-					Collections.addAll(allClasses, classMetadata);
-					Collections.addAll(allAssociations, associations);
-				} catch (RemoteException ex) {
-					throw new CodegenExtensionException("Error getting class or association metadata: " + ex.getMessage(), ex);
-				}
+				// add them to the globally selected sets
+				Collections.addAll(allClasses, packageClassNames);
+
 			}
 			// get the data service's description
 			ServiceType dataService = null;
@@ -175,18 +166,16 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				// this REALLY should never happen...
 				throw new CodegenExtensionException("No data service found in service information");
 			}
-			
+
 			// build the domain model
-			UMLClassMetadata[] classMetadata = new UMLClassMetadata[allClasses.size()];
-			allClasses.toArray(classMetadata);
-			UMLAssociation[] associations = new UMLAssociation[allAssociations.size()];
-			allAssociations.toArray(associations);
 			LOG.info("Contacting caDSR to build domain model.  This might take a while...");
 			DomainModel model = null;
 			try {
-				if (classMetadata.length != 0) {
+				if (allClasses.size() != 0) {
 					// TODO; change this to use EXCLUDED associations
-					model = cadsrClient.generateDomainModelForClassesWithExcludes(proj, classMetadata, new UMLAssociation[] {});
+					String classNames[] = new String[allClasses.size()];
+					classNames = (String[]) allClasses.toArray(classNames);
+					model = cadsrClient.generateDomainModelForClasses(proj, classNames);
 					if (model == null) {
 						throw new CodegenExtensionException("caDSR returned a null domain model.");
 					}
@@ -194,30 +183,29 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				System.out.println("Created data service Domain Model!");
 				LOG.info("Created data service Domain Model!");
 			} catch (Exception ex) {
-				throw new CodegenExtensionException(
-					"Error connecting to caDSR for metadata: " + ex.getMessage(), ex);
+				throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(), ex);
 			}
-			
+
 			// find the client-configuration.wsdd needed to serialize
 			// the domain model
-			String configFilename = ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
-			+ File.separator + "DomainModel-client-config.wsdd";
+			String configFilename = ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data" + File.separator
+				+ "DomainModel-client-config.wsdd";
 			LOG.debug("Serializing domain model to file " + domainModelFile);
 			LOG.debug("Using config filename " + configFilename);
 			try {
 				FileWriter domainModelFileWriter = new FileWriter(domainModelFile);
 				InputStream configInput = new FileInputStream(configFilename);
-				Utils.serializeObject(model, DataServiceConstants.DOMAIN_MODEL_QNAME, 
-					domainModelFileWriter, configInput);
+				Utils.serializeObject(model, DataServiceConstants.DOMAIN_MODEL_QNAME, domainModelFileWriter,
+					configInput);
 				domainModelFileWriter.flush();
 				domainModelFileWriter.close();
 				configInput.close();
 				LOG.debug("Serialized domain model");
 			} catch (Exception ex) {
-				throw new CodegenExtensionException("Error serializing the domain model to disk: "
-					+ ex.getMessage(), ex);
+				throw new CodegenExtensionException("Error serializing the domain model to disk: " + ex.getMessage(),
+					ex);
 			}
-			
+
 			// add the metadata to the service information as a resource
 			// property
 			ResourcePropertyType domainModelResourceProperty = new ResourcePropertyType();
@@ -259,19 +247,21 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				keptProperties.add(props.getProperty(i));
 			}
 		}
-		
+
 		// verify we've got a query processor class configured
-		String qpClassname = CommonTools.getServicePropertyValue(
-			info, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+		String qpClassname = CommonTools.getServicePropertyValue(info,
+			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
 		if (qpClassname != null && qpClassname.length() != 0) {
 			// get the query processor parameters
 			ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-			MessageElement paramMe = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
+			MessageElement paramMe = ExtensionTools.getExtensionDataElement(data,
+				DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
 			Element paramElement = AxisJdomUtils.fromMessageElement(paramMe);
-			Iterator paramElemIter = paramElement.getChildren(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_ELEMENT).iterator();
+			Iterator paramElemIter = paramElement.getChildren(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_ELEMENT)
+				.iterator();
 			while (paramElemIter.hasNext()) {
 				Element paramElem = (Element) paramElemIter.next();
-				String name = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX 
+				String name = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX
 					+ paramElem.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_NAME);
 				if (!CommonTools.isValidJavaField(name)) {
 					throw new CodegenExtensionException("The query processor's required parameter " + name
@@ -296,7 +286,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		props.setProperty(allProperties);
 		info.setServiceProperties(props);
 	}
-	
+
 
 	private String getSuppliedDomainModelFilename(ServiceExtensionDescriptionType desc, ServiceInformation info) {
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
@@ -330,8 +320,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		}
 		propsList.setResourceProperty(metadataArray);
 	}
-	
-	
+
+
 	private ResourcePropertyType getDomainModelResourceProperty(ServiceInformation info) {
 		ResourcePropertiesListType propsList = info.getServices().getService(0).getResourcePropertiesList();
 		if (propsList != null) {
