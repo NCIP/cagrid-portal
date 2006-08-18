@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -35,6 +36,9 @@ import org.globus.wsrf.encoding.SerializationException;
  * @version $Id$ 
  */
 public class SimplePersistantSDKObjectIterator implements EnumIterator {
+	
+	private static StringBuffer configFileContents = null;
+	
 	private File file = null;
 	private BufferedReader fileReader = null;
 	private QName objectQName = null;
@@ -45,6 +49,17 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 		this.fileReader = new BufferedReader(new FileReader(file));
 		this.objectQName = objectQName;
 		this.isReleased = false;
+	}
+	
+	
+	/**
+	 * Loads a wsdd config file for discovering type mappings needed to serialize / deserialize SDK objects
+	 * 
+	 * @param filename
+	 * @throws Exception
+	 */
+	public static void loadWsddConfig(String filename) throws Exception {
+		configFileContents = Utils.fileToStringBuffer(new File(filename));
 	}
 	
 	
@@ -101,7 +116,12 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 		Iterator objIter = objects.iterator();
 		while (objIter.hasNext()) {
 			StringWriter writer = new StringWriter();
-			Utils.serializeObject(objIter.next(), name, writer);
+			if (configFileContents != null) {
+				Utils.serializeObject(objIter.next(), name, writer, 
+					new ByteArrayInputStream(configFileContents.toString().getBytes()));
+			} else {
+				Utils.serializeObject(objIter.next(), name, writer);
+			}
 			String xml = writer.toString().trim();
 			fileWriter.write(String.valueOf(xml.length()) + "\n");
 			fileWriter.write(xml);
