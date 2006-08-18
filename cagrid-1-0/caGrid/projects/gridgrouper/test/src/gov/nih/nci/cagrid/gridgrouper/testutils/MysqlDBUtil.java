@@ -20,7 +20,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: MysqlDBUtil.java,v 1.1 2006-08-01 16:51:28 langella Exp $
+ * @version $Id: MysqlDBUtil.java,v 1.2 2006-08-18 17:28:26 langella Exp $
  */
 public class MysqlDBUtil {
 
@@ -83,7 +83,7 @@ public class MysqlDBUtil {
 			e.printStackTrace();
 			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
 			fault
-					.setFaultString("An error occured while trying to destroy the Dorian database ("
+					.setFaultString("An error occured while trying to destroy the Grid Grouper database ("
 							+ DB + ")");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
@@ -198,7 +198,7 @@ public class MysqlDBUtil {
 		Document doc = XMLUtilities.streamToDocument(resource);
 		ConnectionManager cm = new ConnectionManager(doc.getRootElement());
 		MysqlDBUtil db = new MysqlDBUtil(cm);
-		db.destroyDatabase();
+		//db.destroyDatabase();
 		db.createDatabaseIfNeeded();
 		return db;
 	}

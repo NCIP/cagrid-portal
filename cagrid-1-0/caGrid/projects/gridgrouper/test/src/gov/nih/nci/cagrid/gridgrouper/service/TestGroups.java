@@ -532,7 +532,7 @@ public class TestGroups extends TestCase {
 			grpy = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpy));
 			assertTrue(grpx.isIsComposite());
 			assertTrue(grpy.isIsComposite());
-			Utils.printMemberships(composite);
+			//Utils.printMemberships(composite);
 
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
