@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdlCatalog>
-    <wsdlEntry location="wsdl/callRproteomicsService.wsdl" classpath="wsdl/callRproteomicsService.wsdl"/>
-    <wsdlEntry location="http://ccis1716.duhs.duke.edu/wsrf/share/schema/_cagrid_RProteomics/RProteomics_flattened.wsdl" classpath="wsdl/RProteomics_flattened.wsdl"/>
-</wsdlCatalog>

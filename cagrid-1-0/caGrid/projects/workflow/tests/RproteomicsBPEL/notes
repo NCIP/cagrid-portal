@@ -1,5 +1,0 @@
-0. Install activeBPEL2.0 into your $CATALINA_HOME
-1. Before you try and run the client you should have a valid GT4 install and GLOBUS_LOCATION set to that location.
-
-2. Deploy JRProteomics dist from Patrick into $GLOBUS_LOCATION
-3. Run ant runClient. This should deploy the BPEL process into Tomcat and runs the sample workflow
