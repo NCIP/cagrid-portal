@@ -106,12 +106,14 @@ public class AddMemberWindow extends GridPortalComponent {
 
 	private JComboBox rightGroup = null;
 
+	private GroupBrowser browser;
 	/**
 	 * This is the default constructor
 	 */
-	public AddMemberWindow(GroupTreeNode node) {
+	public AddMemberWindow(GroupBrowser browser, GroupTreeNode node) {
 		super();
 		this.node = node;
+		this.browser = browser;
 		initialize();
 	}
 
@@ -393,7 +395,11 @@ public class AddMemberWindow extends GridPortalComponent {
 			} else {
 				try {
 					node.getGroup().addMember(SubjectUtils.getSubject(user));
+					if(browser.getHasListedMembers()){
+						browser.listMembers();
+					}
 					dispose();
+					
 					PortalUtils
 							.showMessage("The member was added successfully!!!");
 				} catch (Exception e) {
@@ -408,6 +414,9 @@ public class AddMemberWindow extends GridPortalComponent {
 			try {
 				node.getGroup().addMember(
 						caddy.getNode().getGroup().toSubject());
+				if(browser.getHasListedMembers()){
+					browser.listMembers();
+				}
 				dispose();
 				PortalUtils
 						.showMessage("The group member was added successfully!!!");
@@ -428,6 +437,10 @@ public class AddMemberWindow extends GridPortalComponent {
 				node.getGroup().addCompositeMember(ct,
 						left.getNode().getGroup(), right.getNode().getGroup());
 				this.node.refresh();
+				this.browser.setGroup();
+				if(browser.getHasListedMembers()){
+					browser.listMembers();
+				}
 				dispose();
 				PortalUtils
 						.showMessage("The composite member was added successfully!!!");

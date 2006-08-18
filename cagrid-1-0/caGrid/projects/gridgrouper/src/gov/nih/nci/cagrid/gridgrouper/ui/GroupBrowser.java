@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.PortalResourceManager;
 import java.awt.FlowLayout;
+import java.awt.event.KeyEvent;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -140,6 +141,12 @@ public class GroupBrowser extends JPanel {
 
 	private JButton addMember = null;
 
+	private JButton removeMemberButton = null;
+
+	private JButton removeCompositeButton = null;
+	
+	private boolean hasListedMembers = false;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -151,8 +158,12 @@ public class GroupBrowser extends JPanel {
 		this.setGroup();
 
 	}
+	
+	protected boolean getHasListedMembers(){
+		return hasListedMembers;
+	}
 
-	private void setGroup() {
+	protected void setGroup() {
 		this.serviceURI.setText(this.node.getGridGrouper().getName());
 		this.groupName.setText(group.getDisplayName());
 		if (node.getGridGrouper().getProxyIdentity() == null) {
@@ -180,6 +191,7 @@ public class GroupBrowser extends JPanel {
 		}
 		this.getHasComposite().setText(String.valueOf(group.hasComposite()));
 		this.getIsComposite().setText(String.valueOf(group.isComposite()));
+		this.getRemoveCompositeButton().setEnabled(group.hasComposite());
 	}
 
 	/**
@@ -950,7 +962,7 @@ public class GroupBrowser extends JPanel {
 		return listMembers;
 	}
 
-	private void listMembers() {
+	protected void listMembers() {
 
 		getListMembers().setEnabled(false);
 		getMemberFilter().setEnabled(false);
@@ -977,6 +989,7 @@ public class GroupBrowser extends JPanel {
 				Membership m = (Membership) itr.next();
 				getMembersTable().addMember(m);
 			}
+			hasListedMembers = true;
 			node.getBrowser().getProgress().stopEvent(eid,
 					"Successfully listed group members!!!");
 		} catch (Exception e) {
@@ -1028,6 +1041,8 @@ public class GroupBrowser extends JPanel {
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new FlowLayout());
 			buttonPanel.add(getAddMember(), null);
+			buttonPanel.add(getRemoveMemberButton(), null);
+			buttonPanel.add(getRemoveCompositeButton(), null);
 		}
 		return buttonPanel;
 	}
@@ -1042,6 +1057,7 @@ public class GroupBrowser extends JPanel {
 			addMember = new JButton();
 			addMember.setText("Add Member");
 			addMember.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			final GroupBrowser gp = this;
 			addMember.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
@@ -1051,7 +1067,7 @@ public class GroupBrowser extends JPanel {
 										.showErrorMessage("You cannot add a member to a composite group!!!");
 							} else {
 								AddMemberWindow window = new AddMemberWindow(
-										node);
+										gp, node);
 								PortalResourceManager.getInstance()
 										.getGridPortal()
 										.addGridPortalComponent(window, 600,
@@ -1071,4 +1087,97 @@ public class GroupBrowser extends JPanel {
 		}
 		return addMember;
 	}
+
+	/**
+	 * This method initializes removeMemberButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getRemoveMemberButton() {
+		if (removeMemberButton == null) {
+			removeMemberButton = new JButton();
+			removeMemberButton.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
+			removeMemberButton.setMnemonic(KeyEvent.VK_UNDEFINED);
+			removeMemberButton.setText("Remove Member");
+			removeMemberButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							MobiusRunnable runner = new MobiusRunnable() {
+								public void execute() {
+
+									try {
+										Membership m = getMembersTable()
+												.getSelectedMember();
+										node.getGroup().deleteMember(
+												m.getMember().getSubject());
+										if(getHasListedMembers()){
+											listMembers();
+										}
+
+									} catch (Exception e) {
+										e.printStackTrace();
+										PortalUtils.showErrorMessage(e.getMessage());
+									}
+
+								}
+							};
+							try {
+								PortalResourceManager.getInstance()
+										.getThreadManager()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
+							}
+						}
+
+					});
+		}
+		return removeMemberButton;
+	}
+
+	/**
+	 * This method initializes removeCompositeButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getRemoveCompositeButton() {
+		if (removeCompositeButton == null) {
+			removeCompositeButton = new JButton();
+			removeCompositeButton
+					.setIcon(GridGrouperLookAndFeel.getCloseIcon());
+			removeCompositeButton.setText("Remove Composite Member");
+			removeCompositeButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							MobiusRunnable runner = new MobiusRunnable() {
+								public void execute() {
+
+									try {
+										node.getGroup().deleteCompositeMember();
+										node.refresh();
+										setGroup();
+										if(getHasListedMembers()){
+											listMembers();
+										}
+									} catch (Exception e) {
+										e.printStackTrace();
+										PortalUtils.showErrorMessage(e);
+									}
+
+								}
+							};
+							try {
+								PortalResourceManager.getInstance()
+										.getThreadManager()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
+							}
+						}
+
+					});
+		}
+		return removeCompositeButton;
+	}
+
 }
