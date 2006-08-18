@@ -10,9 +10,13 @@ import org.globus.wsrf.jndi.Initializable;
 
 
 /**
- * This class implements a resource home
+ * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+ * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+ * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+ * @author <A href="mailto:ervin@bmi.osu.edu">David Ervin </A>
+ * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
+ *          Exp $
  */
-
 public class BaseResourceHome extends SingletonResourceHome implements Initializable {
 
 	static final Log logger = LogFactory.getLog(BaseResourceHome.class);
