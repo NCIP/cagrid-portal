@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<securityConfig xmlns="http://www.globus.org">
+  <proxy-file value="/tmp/x509up_u1247" />
+  <authz value="gridmap" />
+  <gridmap value="/autonfs/home/madduri/gridmap" />
+  <auth-method>
+    <GSISecureConversation>
+      <protection-level>
+        <privacy />
+        <integrity />
+      </protection-level>
+    </GSISecureConversation>
+    <GSISecureMessage>
+      <protection-level>
+        <privacy />
+        <integrity />
+      </protection-level>
+    </GSISecureMessage>
+    <GSITransport>
+      <protection-level>
+        <privacy />
+        <integrity />
+      </protection-level>
+    </GSITransport>
+  </auth-method>
+  <run-as>
+    <system-identity />
+  </run-as>
+</securityConfig>
+
+
