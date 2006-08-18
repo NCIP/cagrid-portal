@@ -10,6 +10,7 @@
     -->
     <property file="introduce.properties" />
     <property name="introduce.ns.excludes" value="" />
+    
     <property name="service.name" value="${introduce.skeleton.service.name}" />
     <property name="schema.path" value="${introduce.skeleton.service.name}" />
 
@@ -19,18 +20,21 @@
 	<!-- Post Introduce Edit-->
 	<property name="conf.dir" value="resources/conf" />
 	<property name="hbm.dir" value="resources/hbm" />
+	<property name="cagrid.jar.prefix" value="caGrid-1.0" />
+	<property name="gridgrouper.version" value="0.9" />
 	<!-- Post Introduce Edit-->
 	<property name="hibernate.props" value="${conf.dir}/grouper.hibernate.properties"/>
     <property name="ext.lib.dir" value="ext/lib" />
     <property name="etc.dir" value="etc" />
     <property name="schema.dir" value="schema" />
     <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
-    <property name="common.jar.name" value="${service.name}-common.jar" />
-    <property name="client.jar.name" value="${service.name}-client.jar" />
-    <property name="service.jar.name" value="${service.name}-service.jar" />
-	<property name="resources.jar.name" value="${service.name}-resources.jar" />
-    <property name="stubs.jar.name" value="${service.name}-stubs.jar" />
-	<property name="test.jar.name" value="${service.name}-tests.jar" />
+    <property name="common.jar.name" value="${cagrid.jar.prefix}-${service.name}-${gridgrouper.version}-common.jar" />
+    <property name="client.jar.name" value="${cagrid.jar.prefix}-${service.name}-${gridgrouper.version}-client.jar" />
+    <property name="service.jar.name" value="${cagrid.jar.prefix}-${service.name}-${gridgrouper.version}-service.jar" />
+	<property name="ui.jar.name" value="${cagrid.jar.prefix}-${service.name}-${gridgrouper.version}-ui.jar" />
+	<property name="resources.jar.name" value="${cagrid.jar.prefix}-${service.name}-${gridgrouper.version}-resources.jar" />
+    <property name="stubs.jar.name" value="${cagrid.jar.prefix}-${service.name}-${gridgrouper.version}-stubs.jar" />
+	<property name="test.jar.name" value="${cagrid.jar.prefix}-${service.name}-${gridgrouper.version}-tests.jar" />
 
     <!-- Important test directories and files -->
     <property name="test.dir" value="test" />
@@ -155,7 +159,9 @@
                 <exclude name="${common.jar.name}" />
                 <exclude name="${client.jar.name}" />
                 <exclude name="${service.jar.name}" />
+                
             	<!-- Post Introduce Edit-->
+            	<exclude name="${ui.jar.name}" />
             	<exclude name="${resources.jar.name}" />
             </fileset>
         </path>
@@ -271,10 +277,14 @@
         <jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
             <include name="**/service/**" />
         </jar>
+        <jar jarfile="${build.lib.dir}/${ui.jar.name}" basedir="${build.dest}">
+            <include name="**/ui/**" />
+        </jar>
         <jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
             <include name="**/*" />
             <exclude name="**/client/**" />
             <exclude name="**/service/**" />
+             <exclude name="**/ui/**" />
         </jar>
     	
     	<!-- Post Introduce Edit-->
