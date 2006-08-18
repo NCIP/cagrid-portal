@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.PortalResourceManager;
+import java.awt.FlowLayout;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -134,6 +135,10 @@ public class GroupBrowser extends JPanel {
 	private JLabel jLabel9 = null;
 
 	private JTextField isComposite = null;
+
+	private JPanel buttonPanel = null;
+
+	private JButton addMember = null;
 
 	/**
 	 * This is the default constructor
@@ -364,6 +369,10 @@ public class GroupBrowser extends JPanel {
 	 */
 	private JPanel getMembers() {
 		if (members == null) {
+			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
+			gridBagConstraints29.gridx = 0;
+			gridBagConstraints29.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints29.gridy = 2;
 			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
 			gridBagConstraints22.fill = GridBagConstraints.BOTH;
 			gridBagConstraints22.weighty = 1.0;
@@ -385,6 +394,7 @@ public class GroupBrowser extends JPanel {
 					GridGrouperLookAndFeel.getPanelLabelColor()));
 			members.add(getMemberSearchPanel(), gridBagConstraints21);
 			members.add(getJScrollPane1(), gridBagConstraints22);
+			members.add(getButtonPanel(), gridBagConstraints29);
 		}
 		return members;
 	}
@@ -1006,5 +1016,59 @@ public class GroupBrowser extends JPanel {
 			isComposite.setEditable(false);
 		}
 		return isComposite;
+	}
+
+	/**
+	 * This method initializes buttonPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getButtonPanel() {
+		if (buttonPanel == null) {
+			buttonPanel = new JPanel();
+			buttonPanel.setLayout(new FlowLayout());
+			buttonPanel.add(getAddMember(), null);
+		}
+		return buttonPanel;
+	}
+
+	/**
+	 * This method initializes addMember
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getAddMember() {
+		if (addMember == null) {
+			addMember = new JButton();
+			addMember.setText("Add Member");
+			addMember.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			addMember.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							if (node.getGroup().hasComposite()) {
+								PortalUtils
+										.showErrorMessage("You cannot add a member to a composite group!!!");
+							} else {
+								AddMemberWindow window = new AddMemberWindow(
+										node);
+								PortalResourceManager.getInstance()
+										.getGridPortal()
+										.addGridPortalComponent(window, 600,
+												300);
+							}
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+
+			});
+		}
+		return addMember;
 	}
 }

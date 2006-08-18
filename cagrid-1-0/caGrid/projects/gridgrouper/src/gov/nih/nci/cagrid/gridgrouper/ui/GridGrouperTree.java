@@ -43,6 +43,7 @@
 
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -76,12 +77,31 @@ public class GridGrouperTree extends JTree {
 		return this.rootNode;
 	}
 
+	public List getGroupNodes() {
+		List nodes = new ArrayList();
+		this.getGroupNodes(getRootNode(), nodes);
+		return nodes;
+	}
+
+	private void getGroupNodes(GridGrouperBaseTreeNode node, List nodes) {
+		int count = node.getChildCount();
+		for (int i = 0; i < count; i++) {
+			GridGrouperBaseTreeNode child = (GridGrouperBaseTreeNode) node
+					.getChildAt(i);
+			if (child instanceof GroupTreeNode) {
+				nodes.add(child);
+			} else if (child instanceof StemTreeNode) {
+				getGroupNodes(child, nodes);
+			}
+		}
+	}
+
 	public GridGrouperBaseTreeNode getCurrentNode() {
 		TreePath currentSelection = this.getSelectionPath();
 		if (currentSelection != null) {
 			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection
 					.getLastPathComponent();
-				return (GridGrouperBaseTreeNode) currentNode;
+			return (GridGrouperBaseTreeNode) currentNode;
 		}
 		return null;
 	}
@@ -114,7 +134,7 @@ public class GridGrouperTree extends JTree {
 	 *            The node from which to reload
 	 */
 	public synchronized void reload(TreeNode reloadPoint) {
-			((DefaultTreeModel) this.getModel()).reload(reloadPoint);
+		((DefaultTreeModel) this.getModel()).reload(reloadPoint);
 	}
 
 	/**

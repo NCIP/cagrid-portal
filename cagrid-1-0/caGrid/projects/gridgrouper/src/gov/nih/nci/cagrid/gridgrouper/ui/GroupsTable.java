@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 
 import java.util.Vector;
 
@@ -59,7 +58,6 @@ public class GroupsTable extends PortalBaseTable {
 
 	public void doubleClick() throws Exception {
 		GroupTreeNode node =  getSelectedGroup();
-		PortalUtils.showMessage("Why is everybody always clicking on me?");
 		node.getBrowser().getTabbedContent().addNode(node);
 	}
 

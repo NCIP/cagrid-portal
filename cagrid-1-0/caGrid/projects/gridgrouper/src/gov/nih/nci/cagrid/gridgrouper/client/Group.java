@@ -396,4 +396,15 @@ public class Group extends GridGrouperObject implements GroupI {
 
 	}
 
+	public Subject toSubject() throws GrouperRuntimeException {
+		try {
+			return SubjectUtils.getSubject(des);
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+	
+	
+
 }

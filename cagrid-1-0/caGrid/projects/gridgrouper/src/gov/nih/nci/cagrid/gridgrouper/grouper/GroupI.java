@@ -49,6 +49,8 @@ public interface GroupI {
 	public Subject getModifySubject() throws SubjectNotFoundException;
 
 	public Date getModifyTime();
+	
+	public Subject toSubject() throws GrouperRuntimeException;
 
 	// Action Methods
 
@@ -218,6 +220,6 @@ public interface GroupI {
 	// throws AttributeNotFoundException, GroupModifyException,
 	// InsufficientPrivilegeException;
 	//
-	// public Subject toSubject() throws GrouperRuntimeException;
+	
 
 }
