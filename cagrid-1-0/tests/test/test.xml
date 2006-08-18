@@ -46,6 +46,43 @@
 			</fileset>
 		</delete>
 		<mkdir dir="${junit.results.dir}"/>
+
+		<for list="${testable.projects.list}" parallel="false" param="project.name" trim="true">
+			<sequential>
+				<echo message="Testing project @{project.name}." />
+				<trycatch property="@{project.name}.test.failed.message">
+					<try>
+						<ant inheritall="false" dir="projects/@{project.name}" antfile="build.xml" target="test">
+							<property name="junit.results.dir" value="${junit.results.dir}" />
+						</ant>
+					</try>
+					<catch>
+						<fail message="@{project.name} Tests failed (${@{project.name}.test.failed.message})" if="test.failfast" />
+						<echo message="@{project.name} Tests failed (${@{project.name}.test.failed.message}), proceeding with other tests, but build will fail at completion." />
+						<property name="test.failed" value="true" />
+					</catch>
+				</trycatch>
+			</sequential>
+		</for>
+		<trycatch property="test.report.failed.message">
+			<try>
+				<mkdir dir="${junit.results.dir}/report" />
+				<junitreport todir="${junit.results.dir}">
+					<fileset dir="${junit.results.dir}">
+						<include name="TEST-*.xml" />
+					</fileset>
+					<report format="frames" todir="${junit.results.dir}/report" />
+				</junitreport>
+				<echo message="Created test report in ${junit.results.dir}/report" />
+			</try>
+			<catch>
+				<echo message="Test Report creation failed (${test.report.failed.message})!" />
+			</catch>
+		</trycatch>
+
+		<fail message="Tests failed! Consult the logs for details." if="test.failed" />
+
+<!--
 		<for list="${testable.projects.list}" parallel="true" param="project.name" trim="true">
 			<sequential>
 				<echo message="Testing project @{project.name}." />
@@ -54,6 +91,7 @@
 				</ant>
 			</sequential>
 		</for>
+-->
 	</target>
 
 	
