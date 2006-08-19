@@ -5,7 +5,10 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JLabel;
@@ -65,7 +68,7 @@ public class ContentManager extends JTabbedPane {
 		}
 	}
 
-	public void removeNode(GridGrouperBaseTreeNode node) throws Exception {
+	public void removeNode(GridGrouperBaseTreeNode node){
 		if (node instanceof StemTreeNode) {
 			this.removeStem((StemTreeNode) node);
 		} else if (node instanceof GroupTreeNode) {
@@ -174,6 +177,34 @@ public class ContentManager extends JTabbedPane {
 				this.setSelectedComponent(getWelcomePanel());
 			}
 		}
+	}
+
+	public void removeAllNodes(String gridGrouper){
+		Iterator stemItr = stems.values().iterator();
+		List nodesToRemove = new ArrayList();
+		while (stemItr.hasNext()) {
+			StemBrowser sb = (StemBrowser) stemItr.next();
+			if (gridGrouper.equals(sb.getStemNode().getStem().getGridGrouper()
+					.getName())) {
+				nodesToRemove.add(sb.getStemNode());
+			}
+		}
+
+		Iterator groupItr = groups.values().iterator();
+		while (groupItr.hasNext()) {
+			GroupBrowser sb = (GroupBrowser) groupItr.next();
+			if (gridGrouper.equals(sb.getGroupNode().getGroup()
+					.getGridGrouper().getName())) {
+				nodesToRemove.add(sb.getGroupNode());
+			}
+		}
+
+		for (int i = 0; i < nodesToRemove.size(); i++) {
+			GridGrouperBaseTreeNode node = (GridGrouperBaseTreeNode) nodesToRemove
+					.get(i);
+			this.removeNode(node);
+		}
+
 	}
 
 	/**

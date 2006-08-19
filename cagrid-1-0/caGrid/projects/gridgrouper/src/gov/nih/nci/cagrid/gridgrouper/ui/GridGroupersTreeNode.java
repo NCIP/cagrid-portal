@@ -103,15 +103,14 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 		}
 
 	}
-	
-	
+
 	public synchronized void refresh() {
 		Map old = groupers;
 		groupers = new HashMap();
 		this.removeAllChildren();
 		Iterator itr = old.values().iterator();
-		while(itr.hasNext()){
-			final StemTreeNode node  = (StemTreeNode)itr.next();
+		while (itr.hasNext()) {
+			final StemTreeNode node = (StemTreeNode) itr.next();
 			MobiusRunnable runner = new MobiusRunnable() {
 				public void execute() {
 					addGridGrouper(node.getGridGrouper());
@@ -123,9 +122,9 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 			} catch (Exception t) {
 				t.getMessage();
 			}
-			
+
 		}
-		
+
 	}
 
 	public void removeSelectedGridGrouper() {
@@ -140,6 +139,8 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 					synchronized (getTree()) {
 						stn.removeFromParent();
 						this.groupers.remove(stn.getGridGrouper().getName());
+						getBrowser().getContentManager().removeAllNodes(
+								stn.getGridGrouper().getName());
 						getTree().reload(this);
 					}
 				} else {
