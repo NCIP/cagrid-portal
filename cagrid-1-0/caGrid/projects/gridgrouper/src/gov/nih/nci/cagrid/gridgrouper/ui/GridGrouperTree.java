@@ -70,6 +70,7 @@ public class GridGrouperTree extends JTree {
 		super();
 		this.rootNode = new GridGroupersTreeNode(browser);
 		setModel(new DefaultTreeModel(this.rootNode));
+		this.addMouseListener(new GridGrouperTreeEventListener(this,browser));
 		this.setCellRenderer(new GridGrouperTreeRenderer());
 	}
 

@@ -71,8 +71,7 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 
 	private boolean rootStem;
 
-	public StemTreeNode(GroupManagementBrowser browser, Stem stem,
-			boolean root) {
+	public StemTreeNode(GroupManagementBrowser browser, Stem stem, boolean root) {
 		super(browser);
 		this.rootStem = root;
 		this.stem = stem;
@@ -84,8 +83,8 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		Iterator itr = set.iterator();
 		while (itr.hasNext()) {
 			StemI stem = (StemI) itr.next();
-			StemTreeNode node = new StemTreeNode(getBrowser(),
-					((Stem) stem), false);
+			StemTreeNode node = new StemTreeNode(getBrowser(), ((Stem) stem),
+					false);
 			synchronized (getTree()) {
 				this.add(node);
 				TreeNode parent = this.getParent();
@@ -100,8 +99,8 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		Set grps = stem.getChildGroups();
 		Iterator itr2 = grps.iterator();
 		while (itr2.hasNext()) {
-			GroupI group = (GroupI)itr2.next();
-			GroupTreeNode node = new GroupTreeNode(getBrowser(),(Group)group);
+			GroupI group = (GroupI) itr2.next();
+			GroupTreeNode node = new GroupTreeNode(getBrowser(), (Group) group);
 			synchronized (getTree()) {
 				this.add(node);
 				TreeNode parent = this.getParent();
@@ -118,17 +117,18 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		int id = getBrowser().getProgress().startEvent(
 				"Refreshing " + toString() + ".... ");
 		try {
-			stem = (Stem) stem.getGridGrouper().findStem(
-					stem.getName());
+			stem = (Stem) stem.getGridGrouper().findStem(stem.getName());
 			if (parent != null) {
 				getTree().reload(parent);
 			} else {
 				getTree().reload();
 			}
 			loadStem();
+			this.getBrowser().getContentManager().refreshStem(this);
 			getBrowser().getProgress().stopEvent(id,
 					"Refreshed " + toString() + "!!!");
 		} catch (Exception e) {
+			e.printStackTrace();
 			getBrowser().getProgress().stopEvent(id,
 					"Error refreshing " + toString() + "!!!");
 			PortalUtils.showErrorMessage(e);
@@ -162,7 +162,5 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 	public Stem getStem() {
 		return stem;
 	}
-	
-	
 
 }

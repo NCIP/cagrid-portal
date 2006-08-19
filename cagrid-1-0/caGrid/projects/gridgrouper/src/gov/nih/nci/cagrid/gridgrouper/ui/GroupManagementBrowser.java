@@ -136,7 +136,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 			gridBagConstraints.weightx = 1.0;
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
-			contentPanel.add(getTabbedContent(), gridBagConstraints);
+			contentPanel.add(getContentManager(), gridBagConstraints);
 		}
 		return contentPanel;
 	}
@@ -298,7 +298,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
 						public void execute() {
-							getTabbedContent().addNode(getGroupTree().getCurrentNode());
+							getContentManager().addNode(getGroupTree().getCurrentNode());
 						}
 					};
 					try {
@@ -368,7 +368,7 @@ public class GroupManagementBrowser extends GridPortalComponent {
 	 * 	
 	 * @return javax.swing.JTabbedPane	
 	 */
-	protected ContentManager getTabbedContent() {
+	protected ContentManager getContentManager() {
 		if (tabbedContent == null) {
 			tabbedContent = new ContentManager();
 		}

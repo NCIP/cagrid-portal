@@ -68,9 +68,35 @@ public class ContentManager extends JTabbedPane {
 	public void removeNode(GridGrouperBaseTreeNode node) throws Exception {
 		if (node instanceof StemTreeNode) {
 			this.removeStem((StemTreeNode) node);
+		} else if (node instanceof GroupTreeNode) {
+			this.removeGroup((GroupTreeNode) node);
 		} else {
 			PortalUtils
 					.showErrorMessage("Please select a stem or group to remove!!!");
+		}
+	}
+
+	public void refreshStem(StemTreeNode node) {
+		String stemId = node.getStem().getUuid();
+		if (stems.containsKey(stemId)) {
+			StemBrowser browse = (StemBrowser) stems.get(stemId);
+			for (int i = 0; i < getTabCount(); i++) {
+				if (getComponentAt(i) == browse) {
+					this.setTitleAt(i, node.getStem().getDisplayExtension());
+				}
+			}
+		}
+	}
+
+	public void refreshGroup(GroupTreeNode node) {
+		String groupId = node.getGroup().getUuid();
+		if (groups.containsKey(groupId)) {
+			GroupBrowser browse = (GroupBrowser) groups.get(groupId);
+			for (int i = 0; i < getTabCount(); i++) {
+				if (getComponentAt(i) == browse) {
+					this.setTitleAt(i, node.getGroup().getDisplayExtension());
+				}
+			}
 		}
 	}
 
@@ -105,7 +131,7 @@ public class ContentManager extends JTabbedPane {
 			StemBrowser sb = (StemBrowser) c;
 			removeStem(sb.getStemNode());
 		}
-		
+
 		if (c instanceof GroupBrowser) {
 			GroupBrowser sb = (GroupBrowser) c;
 			removeGroup(sb.getGroupNode());

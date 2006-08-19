@@ -58,7 +58,7 @@ public class GroupsTable extends PortalBaseTable {
 
 	public void doubleClick() throws Exception {
 		GroupTreeNode node =  getSelectedGroup();
-		node.getBrowser().getTabbedContent().addNode(node);
+		node.getBrowser().getContentManager().addNode(node);
 	}
 
 	public void singleClick() throws Exception {

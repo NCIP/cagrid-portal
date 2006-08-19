@@ -43,65 +43,75 @@
 
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
-import gov.nih.nci.cagrid.gridgrouper.client.Group;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
 
-import javax.swing.ImageIcon;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
+ * Event listener spawns popups for various node types in a Grid Service Tree
+ * 
+ * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
- * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
+ * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * 
- * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
- *          Exp $
+ * @created Nov 15, 2004
+ * @version $Id: GridServiceTreeEventListener.java,v 1.5 2004/12/15 20:31:14
+ *          ervin Exp $
  */
-public class GroupTreeNode extends GridGrouperBaseTreeNode {
+public class GridGrouperTreeEventListener extends MouseAdapter {
 
-	private Group group;
+	private GridGrouperTree tree;
 
-	public GroupTreeNode(GroupManagementBrowser browser,
-			Group group) {
-		super(browser);
-		this.group = group;
+	private GroupManagementBrowser browser;
+
+	private HashMap popupMappings;
+
+	public GridGrouperTreeEventListener(GridGrouperTree owningTree,
+			GroupManagementBrowser browser) {
+		this.tree = owningTree;
+		this.popupMappings = new HashMap();
+		this.browser = browser;
+		// this.associatePopup(GridServiceTreeNode.class, new RootPopupMenu(
+		// this.tree, viewer));
 	}
 
-	public void refresh() {
-		int id = getBrowser().getProgress().startEvent(
-				"Refreshing " + toString() + ".... ");
-		try {
+	/**
+	 * Associate a GridServiceTreeNode type with a popup menu
+	 * 
+	 * @param serviceType
+	 * @param popup
+	 */
+	public void associatePopup(Class nodeType, JPopupMenu popup) {
+		this.popupMappings.put(nodeType, popup);
+	}
 
-			if (parent != null) {
-				getTree().reload(parent);
-			} else {
-				getTree().reload();
+	public void mouseEntered(MouseEvent e) {
+		maybeShowPopup(e);
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		maybeShowPopup(e);
+	}
+
+	private void maybeShowPopup(MouseEvent e) {
+		if ((e.isPopupTrigger()) || (SwingUtilities.isRightMouseButton(e))) {
+			DefaultMutableTreeNode currentNode = this.tree.getCurrentNode();
+			JPopupMenu popup = null;
+			if (currentNode != null) {
+				popup = (JPopupMenu) popupMappings.get(currentNode.getClass());
+				System.out.println(currentNode.getClass().getName());
 			}
-			this.getBrowser().getContentManager().refreshGroup(this);
-			getBrowser().getProgress().stopEvent(id,
-					"Refreshed " + toString() + "!!!");
-		} catch (Exception e) {
-			getBrowser().getProgress().stopEvent(id,
-					"Error refreshing " + toString() + "!!!");
-			PortalUtils.showErrorMessage(e);
+			if (popup != null) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+
+		}else if (e.getClickCount() == 2) {
+			browser.getContentManager().addNode(this.tree.getCurrentNode());
 		}
 	}
-
-	public ImageIcon getIcon() {
-		return GridGrouperLookAndFeel.getGroupIcon16x16();
-	}
-
-	public String toString() {
-		return group.getDisplayExtension();
-	}
-
-	public GridGrouper getGridGrouper() {
-		return group.getGridGrouper();
-	}
-
-	public Group getGroup() {
-		return group;
-	}
-
 }
