@@ -201,7 +201,7 @@ public class StemBrowser extends JPanel {
 
 	}
 
-	private void setStem() {
+	protected void setStem() {
 		this.serviceURI.setText(this.node.getGridGrouper().getName());
 		this.stemName.setText(stem.getDisplayName());
 		if (node.getGridGrouper().getProxyIdentity() == null) {

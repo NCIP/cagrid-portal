@@ -104,7 +104,6 @@ public class GridGrouperTreeEventListener extends MouseAdapter {
 			if (currentNode != null) {
 				popup = (GridGrouperTreeNodeMenu) popupMappings.get(currentNode
 						.getClass());
-				System.out.println(currentNode.getClass().getName());
 			}
 			if (popup != null) {
 				if (currentNode.getChildCount() > 0) {

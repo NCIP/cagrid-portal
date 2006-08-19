@@ -62,8 +62,7 @@ public class GroupTreeNode extends GridGrouperBaseTreeNode {
 
 	private Group group;
 
-	public GroupTreeNode(GroupManagementBrowser browser,
-			Group group) {
+	public GroupTreeNode(GroupManagementBrowser browser, Group group) {
 		super(browser);
 		this.group = group;
 	}
