@@ -88,6 +88,7 @@ public class ContentManager extends JTabbedPane {
 					this.setTitleAt(i, node.getStem().getDisplayExtension());
 				}
 			}
+			browse.setStem();
 		}
 	}
 
@@ -100,6 +101,7 @@ public class ContentManager extends JTabbedPane {
 					this.setTitleAt(i, node.getGroup().getDisplayExtension());
 				}
 			}
+			browse.setGroup();
 		}
 	}
 
