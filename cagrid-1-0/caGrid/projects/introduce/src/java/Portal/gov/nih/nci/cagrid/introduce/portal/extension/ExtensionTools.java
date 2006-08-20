@@ -12,6 +12,7 @@ import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComp
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
@@ -52,16 +53,16 @@ public class ExtensionTools {
 	}
 
 
-	public static ResourcePropertyEditorPanel getMetadataEditorComponent(String extensionName, Document doc,
-		File schemaFile, File schemaDir) throws Exception {
+	public static ResourcePropertyEditorPanel getMetadataEditorComponent(String extensionName,
+		InputStream rpDataStream, File schemaFile, File schemaDir) throws Exception {
 		ResourcePropertyEditorExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance()
 			.getResourcePropertyEditorExtension(extensionName);
 		if (extensionDesc != null && extensionDesc.getResourcePropertyEditorPanel() != null
 			&& !extensionDesc.getResourcePropertyEditorPanel().equals("")) {
 			Class c = Class.forName(extensionDesc.getResourcePropertyEditorPanel());
-			Constructor con = c.getConstructor(new Class[]{Document.class, File.class, File.class});
-			con.newInstance(new Object[]{doc, schemaFile, schemaDir});
-			Object obj = c.newInstance();
+			Constructor con = c.getConstructor(new Class[]{InputStream.class, File.class, File.class});
+			Object obj = con.newInstance(new Object[]{rpDataStream, schemaFile, schemaDir});
+
 			return (ResourcePropertyEditorPanel) obj;
 		}
 		return null;
@@ -142,7 +143,7 @@ public class ExtensionTools {
 		for (int i = 0; i < metadataExtensions.size(); i++) {
 			ResourcePropertyEditorExtensionDescriptionType tmde = (ResourcePropertyEditorExtensionDescriptionType) metadataExtensions
 				.get(i);
-			if (tmde.getQname().equals(qname)) {
+			if (tmde != null && tmde.getQname() != null && tmde.getQname().equals(qname)) {
 				mde = tmde;
 				break;
 			}

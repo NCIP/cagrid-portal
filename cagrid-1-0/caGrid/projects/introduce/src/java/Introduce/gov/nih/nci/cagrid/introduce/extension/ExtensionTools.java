@@ -12,15 +12,14 @@ import java.util.List;
 
 import org.apache.axis.message.MessageElement;
 
+
 public class ExtensionTools {
 
-	public static CreationExtensionPostProcessor getCreationPostProcessor(
-			String extensionName) throws Exception {
-		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader
-				.getInstance().getServiceExtension(extensionName);
-		if (extensionDesc != null
-				&& extensionDesc.getCreationPostProcessor() != null
-				&& !extensionDesc.getCreationPostProcessor().equals("")) {
+	public static CreationExtensionPostProcessor getCreationPostProcessor(String extensionName) throws Exception {
+		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance().getServiceExtension(
+			extensionName);
+		if (extensionDesc != null && extensionDesc.getCreationPostProcessor() != null
+			&& !extensionDesc.getCreationPostProcessor().equals("")) {
 			Class c = Class.forName(extensionDesc.getCreationPostProcessor());
 			Object obj = c.newInstance();
 			return (CreationExtensionPostProcessor) obj;
@@ -28,13 +27,12 @@ public class ExtensionTools {
 		return null;
 	}
 
-	public static CodegenExtensionPostProcessor getCodegenPostProcessor(
-			String extensionName) throws Exception {
-		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader
-				.getInstance().getServiceExtension(extensionName);
-		if (extensionDesc != null
-				&& extensionDesc.getCodegenPostProcessor() != null
-				&& !extensionDesc.getCodegenPostProcessor().equals("")) {
+
+	public static CodegenExtensionPostProcessor getCodegenPostProcessor(String extensionName) throws Exception {
+		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance().getServiceExtension(
+			extensionName);
+		if (extensionDesc != null && extensionDesc.getCodegenPostProcessor() != null
+			&& !extensionDesc.getCodegenPostProcessor().equals("")) {
 			Class c = Class.forName(extensionDesc.getCodegenPostProcessor());
 			Object obj = c.newInstance();
 			return (CodegenExtensionPostProcessor) obj;
@@ -42,13 +40,12 @@ public class ExtensionTools {
 		return null;
 	}
 
-	public static CodegenExtensionPreProcessor getCodegenPreProcessor(
-			String extensionName) throws Exception {
-		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader
-				.getInstance().getServiceExtension(extensionName);
-		if (extensionDesc != null
-				&& extensionDesc.getCodegenPreProcessor() != null
-				&& !extensionDesc.getCodegenPreProcessor().equals("")) {
+
+	public static CodegenExtensionPreProcessor getCodegenPreProcessor(String extensionName) throws Exception {
+		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance().getServiceExtension(
+			extensionName);
+		if (extensionDesc != null && extensionDesc.getCodegenPreProcessor() != null
+			&& !extensionDesc.getCodegenPreProcessor().equals("")) {
 			Class c = Class.forName(extensionDesc.getCodegenPreProcessor());
 			Object obj = c.newInstance();
 			return (CodegenExtensionPreProcessor) obj;
@@ -69,7 +66,8 @@ public class ExtensionTools {
 
 		return value;
 	}
-	
+
+
 	public static PropertiesProperty getPropertyObject(Properties properties, String key) {
 		if (properties != null && properties.getProperty() != null) {
 			for (int i = 0; i < properties.getProperty().length; i++) {
@@ -81,19 +79,16 @@ public class ExtensionTools {
 
 		return null;
 	}
-	
 
 
-	public static ExtensionTypeExtensionData getExtensionData(
-			ServiceExtensionDescriptionType desc, ServiceInformation info) {
+	public static ExtensionTypeExtensionData getExtensionData(ServiceExtensionDescriptionType desc,
+		ServiceInformation info) {
 		String extensionName = desc.getName();
-		ExtensionType[] extensions = info.getServiceDescriptor()
-				.getExtensions().getExtension();
+		ExtensionType[] extensions = info.getServiceDescriptor().getExtensions().getExtension();
 		for (int i = 0; extensions != null && i < extensions.length; i++) {
 			if (extensions[i].getName().equals(extensionName)) {
 				if (extensions[i].getExtensionData() == null) {
-					extensions[i]
-							.setExtensionData(new ExtensionTypeExtensionData());
+					extensions[i].setExtensionData(new ExtensionTypeExtensionData());
 				}
 				return extensions[i].getExtensionData();
 			}
@@ -101,8 +96,8 @@ public class ExtensionTools {
 		return null;
 	}
 
-	public static MessageElement getExtensionDataElement(
-			ExtensionTypeExtensionData extensionData, String dataElement) {
+
+	public static MessageElement getExtensionDataElement(ExtensionTypeExtensionData extensionData, String dataElement) {
 		MessageElement[] dataEntries = extensionData.get_any();
 		for (int i = 0; dataEntries != null && i < dataEntries.length; i++) {
 			if (dataEntries[i].getLocalName().equals(dataElement)) {
@@ -112,11 +107,11 @@ public class ExtensionTools {
 		return null;
 	}
 
-	public static void updateExtensionDataElement(
-			ExtensionTypeExtensionData data, MessageElement element) {
+
+	public static void updateExtensionDataElement(ExtensionTypeExtensionData data, MessageElement element) {
 		MessageElement[] anys = data.get_any();
 		if (anys == null) {
-			anys = new MessageElement[] { element };
+			anys = new MessageElement[]{element};
 		} else {
 			// find the existing element of the same name, if it exists
 			boolean valueSet = false;
@@ -137,8 +132,8 @@ public class ExtensionTools {
 		data.set_any(anys);
 	}
 
-	public static void removeExtensionDataElement(
-			ExtensionTypeExtensionData data, String dataElementName) {
+
+	public static void removeExtensionDataElement(ExtensionTypeExtensionData data, String dataElementName) {
 		MessageElement[] dataEntries = data.get_any();
 		if (dataEntries != null) {
 			List cleanedEntries = new ArrayList(dataEntries.length);

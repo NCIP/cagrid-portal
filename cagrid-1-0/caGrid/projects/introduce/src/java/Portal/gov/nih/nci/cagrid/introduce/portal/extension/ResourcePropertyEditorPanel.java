@@ -1,34 +1,32 @@
 package gov.nih.nci.cagrid.introduce.portal.extension;
 
 import java.io.File;
+import java.io.InputStream;
 
 import javax.swing.JPanel;
 
-import org.jdom.Document;
-
 
 public abstract class ResourcePropertyEditorPanel extends JPanel {
-	private Document doc;
+	private InputStream rpInputStream;
 	private File schemaFile;
 	private File schemaDir;
 
 
-	public ResourcePropertyEditorPanel(Document doc, File schemaFile, File schemaDir) {
-		this.doc = doc;
+	public ResourcePropertyEditorPanel(InputStream doc, File schemaFile, File schemaDir) {
+		this.rpInputStream = doc;
 		this.schemaFile = schemaFile;
 		this.schemaDir = schemaDir;
 	}
-	
+
+
 	public abstract boolean save();
 
 
-	public Document getDoc() {
-		return doc;
-	}
+	public abstract InputStream getResultRPInputStream();
 
 
-	public void setDoc(Document doc) {
-		this.doc = doc;
+	protected InputStream getRPInputStream() {
+		return rpInputStream;
 	}
 
 
@@ -50,5 +48,4 @@ public abstract class ResourcePropertyEditorPanel extends JPanel {
 	public void setSchemaDir(File schemaDir) {
 		this.schemaDir = schemaDir;
 	}
-
 }

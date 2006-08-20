@@ -18,31 +18,28 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeN
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
 
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.xml.namespace.QName;
-
-import org.jdom.Document;
-import org.projectmobius.common.XMLUtilities;
 
 
 public class ModifyResourcePropertiesPanel extends JPanel {
@@ -442,19 +439,20 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			editInstanceButton.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
+					System.out.println("PROCESSING EVENT!");
 					if (getResourcePropertiesTable().getSelectedRow() >= 0) {
 						try {
 							ResourcePropertyType type = getResourcePropertiesTable().getRowData(
 								getResourcePropertiesTable().getSelectedRow());
 							if (type.isPopulateFromFile()) {
-								Document doc = null;
+								InputStream rpDataStream = null;
 								File resourcePropertyFile = null;
 								if (type.getFileLocation() != null && !type.getFileLocation().equals("")) {
 									// file has already been created
 									resourcePropertyFile = new File(etcDir.getAbsolutePath() + File.separator
 										+ type.getFileLocation());
 									System.out.println("Loading resource properties file : " + resourcePropertyFile);
-									doc = XMLUtilities.fileNameToDocument(resourcePropertyFile.getAbsolutePath());
+									rpDataStream = new FileInputStream(new File(resourcePropertyFile.getAbsolutePath()));
 								} else {
 									// file has not been created yet, we will
 									// create it, set the path to file, and then
@@ -472,6 +470,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 											.getResourcePropertiesList(), i) + ".xml");
 									resourcePropertyFile = new File(etcDir.getAbsolutePath() + File.separator
 										+ type.getFileLocation());
+									rpDataStream = new FileInputStream(new File(resourcePropertyFile.getAbsolutePath()));
 								}
 
 								QName qname = type.getQName();
@@ -483,16 +482,16 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 								ResourcePropertyEditorPanel mdec = null;
 
 								if (mde != null) {
-									mdec = ExtensionTools
-										.getMetadataEditorComponent(mde.getName(), doc, new File(schemaDir
-											.getAbsolutePath()
-											+ File.separator + nsType.getLocation()), schemaDir);
+									mdec = ExtensionTools.getMetadataEditorComponent(mde.getName(), rpDataStream,
+										new File(schemaDir.getAbsolutePath() + File.separator + nsType.getLocation()),
+										schemaDir);
 								} else {
 									// use the default editor....
-									mdec = new XMLEditorViewer(doc, new File(schemaDir.getAbsolutePath()
+									mdec = new XMLEditorViewer(rpDataStream, new File(schemaDir.getAbsolutePath()
 										+ File.separator + nsType.getLocation()), schemaDir);
 								}
-								ResourcePropertyEditorDialog diag = new ResourcePropertyEditorDialog(mdec,
+								ResourcePropertyEditorDialog diag = new ResourcePropertyEditorDialog(
+									(Frame) SwingUtilities.getRoot(ModifyResourcePropertiesPanel.this), mdec,
 									resourcePropertyFile);
 								diag.pack();
 								PortalUtils.centerWindow(diag);

@@ -82,7 +82,7 @@ public class ExtensionsLoader {
 								serviceExtensionDescriptors.add(extDesc.getServiceExtensionDescription());
 							} else if (extDesc.getExtensionType().equals(RESOURCE_PROPERTY_EDITOR_EXTENSION)) {
 								resourcePropertyEditorExtensionDescriptors
-									.add(extDesc.getServiceExtensionDescription());
+									.add(extDesc.getResourcePropertyEditorExtensionDescription());
 							} else {
 								System.out.println("Unsupported Extension Type: " + extDesc.getExtensionType());
 							}// TODO Auto-generated method stub

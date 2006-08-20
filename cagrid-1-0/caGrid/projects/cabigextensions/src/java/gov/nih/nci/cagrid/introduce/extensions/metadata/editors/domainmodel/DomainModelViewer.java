@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.introduce.extensions.metadata.editors.domainmodel;
 
 import gov.nih.nci.cagrid.discovery.MetadataUtils;
 import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
+import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
@@ -13,19 +14,22 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdge;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.File;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 
 /**
  * @author oster
  */
-public class DomainModelViewer extends JPanel {
+public class DomainModelViewer extends ResourcePropertyEditorPanel {
 	private DomainModel domainModel = null;
 	private UMLDiagram umlDiagram = null;
 	private JPanel graphPanel = null;
@@ -34,8 +38,15 @@ public class DomainModelViewer extends JPanel {
 	private JLabel projectDescLabel = null;
 
 
-	public DomainModelViewer() {
-		super();
+	public DomainModelViewer(InputStream doc, File schemaFile, File schemaDir) {
+		super(doc, schemaFile, schemaDir);
+		if (doc != null) {
+			try {
+				setDomainModel(MetadataUtils.deserializeDomainModel(new InputStreamReader(doc)));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		initialize();
 	}
 
@@ -115,7 +126,7 @@ public class DomainModelViewer extends JPanel {
 
 	public static void main(String[] args) {
 		JFrame f = new JFrame();
-		DomainModelViewer viewer = new DomainModelViewer();
+		DomainModelViewer viewer = new DomainModelViewer(null, null, null);
 
 		try {
 			DomainModel model = MetadataUtils.deserializeDomainModel(new FileReader("domainModel.xml"));
@@ -266,5 +277,15 @@ public class DomainModelViewer extends JPanel {
 			return name.trim();
 		}
 
+	}
+
+
+	public boolean save() {
+		return false;
+	}
+
+
+	public InputStream getResultRPInputStream() {
+		return null;
 	}
 }

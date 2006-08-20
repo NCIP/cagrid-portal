@@ -1,23 +1,20 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
 import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.editor.XMLEditorViewer;
 
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
+import java.io.InputStream;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.jdom.Document;
-import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import javax.swing.JButton;
 
 
 public class ResourcePropertyEditorDialog extends JDialog {
@@ -30,7 +27,8 @@ public class ResourcePropertyEditorDialog extends JDialog {
 	private JButton cancelButton = null;
 
 
-	public ResourcePropertyEditorDialog(ResourcePropertyEditorPanel component, File resourcePropertyFile) {
+	public ResourcePropertyEditorDialog(Frame owner, ResourcePropertyEditorPanel component, File resourcePropertyFile) {
+		super(owner);
 		this.component = component;
 		this.resourcePropertyFile = resourcePropertyFile;
 		initialize();
@@ -119,17 +117,21 @@ public class ResourcePropertyEditorDialog extends JDialog {
 			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (component.save()) {
-						Document doc = component.getDoc();
+						InputStream doc = component.getResultRPInputStream();
 
 						// write the xml file back out for this
 						// properties
 						FileWriter fw;
 						try {
 							fw = new FileWriter(resourcePropertyFile);
-							fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
+							// TODO: validate here?
+							fw.write(XMLUtilities.formatXML(XMLUtilities.streamToString(doc)));
 							fw.close();
 						} catch (Exception e1) {
 							e1.printStackTrace();
+							JOptionPane.showMessageDialog(ResourcePropertyEditorDialog.this,
+								"ERROR: Invalid XML Document");
+							return;
 						}
 
 						dispose();
