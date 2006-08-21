@@ -1,5 +1,7 @@
 To Do:
 
+refresh button in gme to view uploaded schemas without closing and opening
+
 if a namespace is imported by another schema but is also added to the NT list, which package name will be used?
 
 namespace to package map for an imported service MUST be the same package map as the namespace as imported
