@@ -50,6 +50,7 @@ public abstract class AbstractDbCleanupStep
 				try {
 					stmt.executeUpdate("drop database " + dbName);
 				} catch (SQLException e) {
+					System.out.println("SQLException=" + e.getMessage().toLowerCase());
 					if (e.getMessage().toLowerCase().indexOf("database doesn't exist") == -1) throw e;
 				}
 			}
