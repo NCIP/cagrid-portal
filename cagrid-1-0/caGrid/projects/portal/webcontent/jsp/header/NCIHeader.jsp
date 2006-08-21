@@ -1,15 +1,22 @@
-<tr>
-    <td>
-        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="hdrBG">
-            <tr>
-                <td width="283" height="37" align="left"><a href="http://www.cancer.gov"><img
-                        alt="National Cancer Institute" src="images/logotype.gif" width="283" height="37"
-                        border="0"></a></td>
-                <td>&nbsp;</td>
-                <td width="295" height="37" align="right"><a href="http://www.cancer.gov"><img
-                        alt="U.S. National Institutes of Health | www.cancer.gov" src="images/tagline.gif" width="295"
-                        height="37" border="0"></a></td>
-            </tr>
-        </table>
-    </td>
-</tr>
+<%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
+
+<h:panelGrid columns="3" width="100%" border="0" cellspacing="0" cellpadding="0" styleClass="hdrBG">
+
+    <h:column>
+        <h:outputLink target="http://www.cancer.gov">
+            <h:graphicImage url="images/logotype.gif" width="283" height="37"
+                            style="border: none"/>
+        </h:outputLink>
+    </h:column>
+
+    <h:column>&nbsp;</h:column>
+
+    <h:column>
+        <h:outputLink title="http://www.cancer.gov">
+            <h:graphicImage alt="U.S. National Institutes of Health | www.cancer.gov" url="images/tagline.gif" width="295"
+                            height="37" style="border: none"/>
+        </h:outputLink>
+    </h:column>
+
+</h:panelGrid>
+

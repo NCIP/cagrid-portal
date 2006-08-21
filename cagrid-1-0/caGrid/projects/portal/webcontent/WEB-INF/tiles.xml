@@ -43,11 +43,16 @@
 <tiles-definitions>
 
     <definition name="Base" page="/jsp/layout/PortalBaseLayout.jsp">
-        <put name="portalBanner" value="/jsp/content/PortalBanner.jsp"/>
+        <put name="nciHeader" value="/jsp/header/NCIHeader.jsp"/>
+        <put name="portalHeader" value="/jsp/header/PortalHeader.jsp"/>
+        <put name="mainMenu" value="/jsp/header/MainMenuHeader.jsp"/>
+        <put name="appFooter" value="/jsp/footer/PortalFooter.jsp"/>
+        <put name="nciFooter" value="/jsp/footer/NCIFooter.jsp"/>
+
     </definition>
 
     <definition name="/home.tiles" extends="Base">
-
+        <put name="mainContent" value="/jsp/content/PortalHomepage.jsp"/>
     </definition>
 
 </tiles-definitions>
