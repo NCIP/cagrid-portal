@@ -5,9 +5,11 @@ import gov.nih.nci.cagrid.gridgrouper.client.Membership;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -23,8 +25,6 @@ import javax.swing.JTextField;
 
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.PortalResourceManager;
-import java.awt.FlowLayout;
-import java.awt.event.KeyEvent;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>

@@ -288,18 +288,18 @@ public class GridGrouperClient extends ServiceSecurityClient implements
 		}
 	}
 
-    public java.lang.String[] getSubjectsWithGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilege[] getGroupPrivileges(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
       synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"getSubjectsWithGroupPrivilege");
-        gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequest();
-        gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequestGroup();
+        configureStubSecurity((Stub)portType,"getGroupPrivileges");
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupPrivilegesRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupPrivilegesRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupPrivilegesRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupPrivilegesRequestGroup();
         groupContainer.setGroupIdentifier(group);
         params.setGroup(groupContainer);
-        gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequestPrivilege privilegeContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequestPrivilege();
-        privilegeContainer.setGroupPrivilegeType(privilege);
-        params.setPrivilege(privilegeContainer);
-        gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeResponse boxedResult = portType.getSubjectsWithGroupPrivilege(params);
-        return boxedResult.getSubjectIdentifier();
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupPrivilegesRequestSubject subjectContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupPrivilegesRequestSubject();
+        subjectContainer.setSubjectIdentifier(subject);
+        params.setSubject(subjectContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupPrivilegesResponse boxedResult = portType.getGroupPrivileges(params);
+        return boxedResult.getGroupPrivilege();
       }
     }
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
@@ -648,6 +648,20 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         privilegeContainer.setGroupPrivilegeType(privilege);
         params.setPrivilege(privilegeContainer);
         gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeResponse boxedResult = portType.revokeGroupPrivilege(params);
+      }
+    }
+    public java.lang.String[] getSubjectsWithGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"getSubjectsWithGroupPrivilege");
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequestGroup();
+        groupContainer.setGroupIdentifier(group);
+        params.setGroup(groupContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequestPrivilege privilegeContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequestPrivilege();
+        privilegeContainer.setGroupPrivilegeType(privilege);
+        params.setPrivilege(privilegeContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeResponse boxedResult = portType.getSubjectsWithGroupPrivilege(params);
+        return boxedResult.getSubjectIdentifier();
       }
     }
 

@@ -38,6 +38,7 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
@@ -1504,6 +1505,13 @@ public class GridGrouper {
 	public String[] getSubjectsWithGroupPrivilege(String callerIdentity,
 			GroupIdentifier group, GroupPrivilegeType privilege)
 			throws RemoteException, GridGrouperRuntimeFault, GroupNotFoundFault {
+		// TODO: Implement This
+		return null;
+	}
+
+	public GroupPrivilege[] getGroupPrivileges(String callerIdentity,
+			GroupIdentifier group, String subject)
+			throws GridGrouperRuntimeFault, GroupNotFoundFault {
 		// TODO: Implement This
 		return null;
 	}

@@ -334,4 +334,13 @@ public class GridGrouperImpl {
 				group, privilege);
 	}
 
+	public gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilege[] getGroupPrivileges(
+			gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,
+			java.lang.String subject) throws RemoteException,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+		return gridGrouper.getGroupPrivileges(getCallerIdentity(), group,
+				subject);
+	}
+
 }

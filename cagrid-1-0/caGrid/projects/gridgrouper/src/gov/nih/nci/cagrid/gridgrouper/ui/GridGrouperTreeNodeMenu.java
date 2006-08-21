@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
-import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.PortalResourceManager;

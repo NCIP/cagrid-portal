@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+
 import javax.swing.JMenuItem;
 
 import org.projectmobius.portal.PortalResourceManager;
