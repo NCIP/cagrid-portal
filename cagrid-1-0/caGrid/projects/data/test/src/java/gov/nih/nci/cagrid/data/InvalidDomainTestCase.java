@@ -123,14 +123,14 @@ public class InvalidDomainTestCase extends TestCase {
 	}
 	
 	
-	/*
-	 * Until the caDSR accuratly returns target and source association edges, 
-	 * this test is turned off.  Presently it returns the same class for both
-	 * edges, which obviously isn't right
-	public void testValidObjectWithAssociation() {
-		checkQuery("objectWithAssociation.xml");
+	public void testInvalidObjectWithAssociation() {
+		checkQuery("objectWithInvalidAssociationClass.xml");
 	}
-	*/
+	
+	
+	public void testInvalidObjectWithAssociationNoRoleName() {
+		checkQuery("objectWithInvalidAssociationRoleName.xml");
+	}
 	
 	
 	public static void main(String[] args) {

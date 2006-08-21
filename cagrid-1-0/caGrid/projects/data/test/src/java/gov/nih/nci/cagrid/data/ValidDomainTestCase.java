@@ -93,13 +93,20 @@ public class ValidDomainTestCase extends TestCase {
 	}
 	
 	
-	/*
-	 * Until the caDSR accuratly returns target and source association edges, 
-	 * this test is turned off.  Presently it returns the same class for both
-	 * edges, which obviously isn't right
-	 
 	public void testValidObjectWithAssociation() {
 		checkQuery("objectWithAssociation.xml");
+	}
+	
+	
+	/*
+	 * This test has been disabled because caDSR returns multiple associations with the
+	 * SAME source, target, role names, etc, but different ID values (a bug in caCORE, probably),
+	 * which causes them to appear as different associations in the domain model.  This makes
+	 * validation with no role name impossible because there will ALWAYS be more than one association
+	 * found, which is ambiguous.  
+	 
+	public void testValidObjectWithAssociationNoRoleName() {
+		checkQuery("objectWithAssociationNoRoleName.xml");
 	}
 	*/
 	
