@@ -29,6 +29,8 @@
 		<copy file="${build.name.template}" tofile="${test.logs.dir}/BuildNameNightly.xml" filtering="true" overwrite="true" />
 		<filter token="Dart.Track" value="Experimental" />
 		<copy file="${build.name.template}" tofile="${test.logs.dir}/BuildNameExperimental.xml" filtering="true" overwrite="true" />
+		<filter token="Dart.Track" value="System" />
+		<copy file="${build.name.template}" tofile="${test.logs.dir}/BuildNameSystem.xml" filtering="true" overwrite="true" />
 	</target>
 
 	<!-- =============================================================== -->
