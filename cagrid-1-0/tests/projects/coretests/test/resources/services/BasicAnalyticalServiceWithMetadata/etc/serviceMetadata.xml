@@ -1,32 +1,42 @@
-<ns1:ServiceMetadata xsi:type="ns1:ServiceMetadata" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
- <ns1:serviceDescription>
-  <ns2:Service description="The BasicAnalyticalServiceWithMetadata grid service, created with caGrid Introduce, version:.9999." name="BasicAnalyticalServiceWithMetadata" version=".9999" xsi:type="ns2:Service" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
-   <ns2:pointOfContactCollection/>
-   <ns2:serviceContextCollection>
-    <ns2:ServiceContext description="" name="BasicAnalyticalServiceWithMetadata" xsi:type="ns2:ServiceContext">
-     <ns2:operationCollection>
-      <ns2:Operation description="" name="getServiceSecurityMetadata" xsi:type="ns2:Operation">
-       <ns2:inputParameterCollection/>
-       <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false" xsi:type="ns2:Output" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
-       <ns2:faultCollection/>
-       <ns2:semanticMetadataCollection/>
-      </ns2:Operation>
-      <ns2:Operation description="" name="reverseTranslate" xsi:type="ns2:Operation">
-       <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="dna" xsi:type="ns2:InputParameter" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-       </ns2:inputParameterCollection>
-       <ns2:Output qName="xsd:string" dimensionality="1" isArray="false" xsi:type="ns2:Output" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-       <ns2:faultCollection/>
-       <ns2:semanticMetadataCollection/>
-      </ns2:Operation>
-     </ns2:operationCollection>
-     <ns2:contextPropertyCollection>
-      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata" xsi:type="ns2:ContextProperty"/>
-     </ns2:contextPropertyCollection>
-    </ns2:ServiceContext>
-   </ns2:serviceContextCollection>
-   <ns2:semanticMetadataCollection/>
-  </ns2:Service>
- </ns1:serviceDescription>
- <ns1:hostingResearchCenter/>
+<ns1:ServiceMetadata xsi:type="ns1:ServiceMetadata" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+<!--
+<ns1:ServiceMetadata xsi:type="ns1:ServiceMetadata" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns:serv="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata
+C:\caBIG\cagrid-1-0\tests\projects\coretests\test\resources\services\BasicAnalyticalServiceWithMetadata\schema\cagrid\types\caGridMetadata.xsd">
+-->
+	<ns1:serviceDescription>
+		<ns2:Service description="The BasicAnalyticalServiceWithMetadata grid service, created with caGrid Introduce, version:.9999." name="BasicAnalyticalServiceWithMetadata" version=".9999" xsi:type="ns2:Service" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+			<ns2:pointOfContactCollection/>
+			<ns2:serviceContextCollection>
+				<ns2:ServiceContext description="" name="BasicAnalyticalServiceWithMetadata" xsi:type="ns2:ServiceContext">
+					<ns2:operationCollection>
+						<ns2:Operation description="" name="getServiceSecurityMetadata" xsi:type="ns2:Operation">
+							<ns2:inputParameterCollection/>
+							<ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false" xsi:type="ns2:Output" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+							<ns2:faultCollection/>
+							<ns2:semanticMetadataCollection/>
+						</ns2:Operation>
+						<ns2:Operation description="" name="reverseTranslate" xsi:type="ns2:Operation">
+							<ns2:inputParameterCollection>
+								<ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="dna" xsi:type="ns2:InputParameter" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+							</ns2:inputParameterCollection>
+							<ns2:Output qName="xsd:string" dimensionality="1" isArray="false" xsi:type="ns2:Output" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+							<ns2:faultCollection/>
+							<ns2:semanticMetadataCollection/>
+						</ns2:Operation>
+					</ns2:operationCollection>
+					<ns2:contextPropertyCollection>
+						<ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata" xsi:type="ns2:ContextProperty"/>
+					</ns2:contextPropertyCollection>
+				</ns2:ServiceContext>
+			</ns2:serviceContextCollection>
+			<ns2:semanticMetadataCollection/>
+		</ns2:Service>
+	</ns1:serviceDescription>
+	<ns1:hostingResearchCenter>
+		 <ns2:ResearchCenter shortName="Duke" displayName="Duke Comprehensive Cancer Center">
+				<ns2:pointOfContactCollection>
+					<ns2:PointOfContact email="patrick.mcconnell@duke.edu" affiliation="Duke Comprehensive Cancer Center" firstName="Patrick" lastName="McConnell" role="developer"/>
+				</ns2:pointOfContactCollection>
+			</ns2:ResearchCenter>
+	 </ns1:hostingResearchCenter>
 </ns1:ServiceMetadata>
