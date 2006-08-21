@@ -439,7 +439,6 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 			editInstanceButton.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					System.out.println("PROCESSING EVENT!");
 					if (getResourcePropertiesTable().getSelectedRow() >= 0) {
 						try {
 							ResourcePropertyType type = getResourcePropertiesTable().getRowData(
