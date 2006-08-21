@@ -12,7 +12,6 @@ import gov.nih.nci.cagrid.data.QueryProcessingException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,21 +37,20 @@ public class CQL2HQL {
 	 * @throws QueryProcessingException
 	 */
 	public static String translate(CQLQuery query) throws QueryProcessingException {
-		Map aliases = new HashMap();
 		StringBuilder hql = new StringBuilder();
 		if (query.getTargetAttributes() != null) {
-			String objAlias = alias(aliases, query.getTarget().getName());
-			processTargetAttributes(hql, objAlias, query.getTargetAttributes());
+			// String objAlias = alias(aliases, query.getTarget().getName());
+			processTargetAttributes(hql, query.getTargetAttributes());
 		}
-		processObject(hql, aliases, query.getTarget());
+		processObject(hql, query.getTarget());
 		return hql.toString();
 	}
 	
 	
-	private static void processTargetAttributes(StringBuilder hql, String objectAlias, TargetAttributes attribs) throws QueryProcessingException {
+	private static void processTargetAttributes(StringBuilder hql, TargetAttributes attribs) throws QueryProcessingException {
 		hql.append("select ");
 		for (int i = 0; i < attribs.getAttributeName().length; i++) {
-			hql.append(objectAlias).append(".").append(attribs.getAttributeName(i));
+			hql.append(attribs.getAttributeName(i));
 			if (i + 1 < attribs.getAttributeName().length) {
 				hql.append(", ");
 			} else {
@@ -67,28 +65,24 @@ public class CQL2HQL {
 	 * 
 	 * @param hql
 	 * 		The existing HQL query fragment
-	 * @param aliases
-	 * 		The aliases used in the query
 	 * @param obj
 	 * 		The object to process into HQL
 	 * @throws QueryProcessingException
 	 */
-	private static void processObject(StringBuilder hql, Map aliases, Object obj) throws QueryProcessingException {
+	private static void processObject(StringBuilder hql, Object obj) throws QueryProcessingException {
 		String objName = obj.getName();
-		String objAlias = alias(aliases, objName);
-		hql.append("From ").append(objName).append(" as ").append(objAlias);
-		
+		hql.append("From ").append(objName);
 		if (obj.getAttribute() != null) {
 			hql.append(" where ");
-			processAttribute(hql, objAlias, obj.getAttribute());
+			processAttribute(hql, obj.getAttribute());
 		}
 		if (obj.getAssociation() != null) {
 			hql.append(" where ");
-			processAssociation(hql, aliases, objAlias, objName, obj.getAssociation());
+			processAssociation(hql, objName, obj.getAssociation());
 		}
 		if (obj.getGroup() != null) {
 			hql.append(" where ");
-			processGroup(hql, aliases, objName, obj.getGroup());
+			processGroup(hql, objName, obj.getGroup());
 		}
 	}
 	
@@ -104,8 +98,9 @@ public class CQL2HQL {
 	 * 		The attribute to process into HQL
 	 * @throws QueryProcessingException
 	 */
-	private static void processAttribute(StringBuilder hql, String objAlias, Attribute attrib) throws QueryProcessingException {
-		hql.append(objAlias).append('.').append(attrib.getName());
+	private static void processAttribute(StringBuilder hql, Attribute attrib) throws QueryProcessingException {
+		// hql.append(objAlias).append('.').append(attrib.getName());
+		hql.append(attrib.getName());
 		Predicate predicate = attrib.getPredicate();
 		// unary predicates
 		if (predicate.equals(Predicate.IS_NULL)) {
@@ -133,8 +128,7 @@ public class CQL2HQL {
 	 * 		The association to process into HQL
 	 * @throws QueryProcessingException
 	 */
-	private static void processAssociation(StringBuilder hql, Map aliases, String parentAlias, 
-		String parentName, Association assoc) throws QueryProcessingException {
+	private static void processAssociation(StringBuilder hql, String parentName, Association assoc) throws QueryProcessingException {
 		// get the role name of the association
 		String roleName = getRoleName(parentName, assoc);
 		if (roleName == null) {
@@ -143,8 +137,9 @@ public class CQL2HQL {
 				" to type " + assoc.getName() + " does not exist.  Use only direct associations");
 		}
 		// make an HQL subquery for the object
-		hql.append(" ").append(parentAlias).append('.').append(roleName).append(" in (");
-		processObject(hql, aliases, assoc);
+		// hql.append(parentAlias).append('.').append(roleName).append(" in (");
+		hql.append(roleName).append(" in (");
+		processObject(hql, assoc);
 		hql.append(")");
 	}
 	
@@ -154,18 +149,14 @@ public class CQL2HQL {
 	 * 
 	 * @param hql
 	 * 		The existing HQL query fragment
-	 * @param aliases
-	 * 		The map of aliases for objects
 	 * @param parentName
 	 * 		The type name of the parent object
 	 * @param group
 	 * 		The group to process into HQL
 	 * @throws QueryProcessingException
 	 */
-	private static void processGroup(StringBuilder hql, Map aliases, 
-		String parentName, Group group) throws QueryProcessingException {
+	private static void processGroup(StringBuilder hql, String parentName, Group group) throws QueryProcessingException {
 		String logic = convertLogicalOperator(group.getLogicRelation());
-		String parentAlias = alias(aliases, parentName);
 		
 		// flag indicating a logic clause is needed before adding further query parts
 		boolean logicClauseNeeded = false;
@@ -174,7 +165,7 @@ public class CQL2HQL {
 		if (group.getAttribute() != null) {
 			for (int i = 0; i < group.getAttribute().length; i++) {
 				logicClauseNeeded = true;
-				processAttribute(hql, parentAlias, group.getAttribute(i));
+				processAttribute(hql, group.getAttribute(i));
 				if (i + 1 < group.getAttribute().length) {
 					hql.append(" ").append(logic).append(" ");
 				}
@@ -188,7 +179,7 @@ public class CQL2HQL {
 			}
 			for (int i = 0; i < group.getAssociation().length; i++) {
 				logicClauseNeeded = true;
-				processAssociation(hql, aliases, parentAlias, parentName, group.getAssociation(i));
+				processAssociation(hql, parentName, group.getAssociation(i));
 				if (i + 1 < group.getAssociation().length) {
 					hql.append(" ").append(logic).append(" ");
 				}
@@ -202,7 +193,7 @@ public class CQL2HQL {
 			}
 			for (int i = 0; i < group.getGroup().length; i++) {
 				hql.append("( ");
-				processGroup(hql, aliases, parentName, group.getGroup(i));
+				processGroup(hql, parentName, group.getGroup(i));
 				hql.append(" )");
 				if (i + 1 < group.getGroup().length) {
 					hql.append(" ").append(logic).append(" ");
@@ -280,48 +271,6 @@ public class CQL2HQL {
 			}
 		}
 		return roleName;
-	}
-	
-	
-	/**
-	 * Gets or creates a globally (within the current CQL Query) unique alias for an object
-	 * 
-	 * @param aliases
-	 * @param fullName
-	 * @return
-	 */
-	private static String alias(Map aliases, String fullName) {
-		String alias = (String) aliases.get(fullName);
-		if (alias == null) {
-			// new alias
-			alias = createShortName(aliases.values(), fullName);
-			aliases.put(fullName, alias);
-		}
-		return alias;
-	}
-	
-	
-	/**
-	 * Creates a unique short name for the given full name, avoiding names
-	 * already present in the taken names collection.
-	 * 
-	 * @param takenNames
-	 * @param fullName
-	 * @return
-	 */
-	private static String createShortName(Collection takenNames, String fullName) {
-		int suffix = 0;
-		int dotIndex = fullName.lastIndexOf('.');
-		String alias = fullName.substring(dotIndex + 1);
-		if (alias.length() > 1) {
-			alias = alias.substring(0, 1).toLowerCase() + alias.substring(1);
-		} else {
-			alias = alias.toLowerCase();
-		}
-		while (takenNames.contains(alias + suffix)) {
-			suffix++;
-		}
-		return alias + suffix;
 	}
 	
 	
