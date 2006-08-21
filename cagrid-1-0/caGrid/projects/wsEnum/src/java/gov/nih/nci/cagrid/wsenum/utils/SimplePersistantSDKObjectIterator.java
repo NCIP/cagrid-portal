@@ -68,6 +68,11 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 	 * the local disk, then creates an EnumIterator which can return
 	 * those objects.
 	 * 
+	 * <b><i>NOTE:</b></i> The temp file is created in the current user's 
+	 * home directory /.cagrid/SDKEnumIterator directory.  For security
+	 * reasons, access to this location must be controlled in a production
+	 * data environment. 
+	 * 
 	 * @param objects
 	 * 		The list of caCORE SDK objects to be enumerated
 	 * @param objectQName
@@ -76,7 +81,13 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 	 * @throws Exception
 	 */
 	public static EnumIterator createIterator(List objects, QName objectQName) throws Exception {
-		return createIterator(objects, objectQName, File.createTempFile("EnumIteration", ".serialized").getAbsolutePath());
+		File tempSerializationDir = new File(Utils.getCaGridUserHome().getAbsolutePath() 
+			+ File.separator + "SDKEnumIterator");
+		if (!tempSerializationDir.exists()) {
+			tempSerializationDir.mkdirs();
+		}
+		return createIterator(objects, objectQName, 
+			File.createTempFile("EnumIteration", ".serialized", tempSerializationDir).getAbsolutePath());
 	}
 	
 	
@@ -90,7 +101,9 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 	 * @param objectQName
 	 * 		The QName of the objects
 	 * @param filename
-	 * 		The name of the file to serialize objects into
+	 * 		The name of the file to serialize objects into.
+	 * 		<b><i>NOTE:</b></i> For security reasons, access to this location 
+	 * 		must be controlled in a production data environment. 
 	 * @return
 	 * @throws Exception
 	 */

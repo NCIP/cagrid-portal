@@ -5,4 +5,10 @@ build/lib/caGrid-1.0-wsEnum.jar -- Utilities and constants for WS-Enumeration pr
 
 Tasks:
 1 [D]: Utilities to simplify creating an enumeration resource context and response from a List of objects.
-2 [I]: EnumIterator implementaion which can create / read an indexed file for persisting caCORE sdk objects.
+2 [D]: Simple EnumIterator implementaion which can create / read an indexed file for persisting caCORE sdk and Globus generated objects.
+	-- This implementation will respect the maxElements iteration constraint, but not necessairly maxCharacters or maxTime.
+3 [I]: More complicated EnumIterator implementaion which can create / read an indexed file for presisting caCORE sdk and Globus generated objects.
+	-- This implementation will respect all of the IterationConstraints supplied.
+
+Points:
+	-- The [Simple]PersistantSDKObjectIterator classes write the list of objects given as serialized XML on the file system.  By default, the XML is written to <user's home dir>/.cagrid/SDKEnumIterator/.  For security reasons, access to this directory should be strictly controlled.  If the serialization file is specified, please take security of the file system into concideration.
