@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cagrid.nci.nih.gov/BulkDataHandler" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://schemas.xmlsoap.org/ws/2004/09/enumeration" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" name="BulkDataHandler" targetNamespace="http://cagrid.nci.nih.gov/BulkDataHandler">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cagrid.nci.nih.gov/BulkDataHandler" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://schemas.xmlsoap.org/ws/2004/09/enumeration" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:wns2="http://www.globus.org/transfer" name="BulkDataHandler" targetNamespace="http://cagrid.nci.nih.gov/BulkDataHandler">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <import namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" location="./enumeration.wsdl" />
   <import namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" location="./ServiceSecurity.wsdl" />
+  <import namespace="http://www.globus.org/transfer" location="././transfer_port_type.wsdl" />
   <!--============================================================
 
                       T Y P E S
                       
   ============================================================-->
   <types>
-    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns0="http://cagrid.nci.nih.gov/BulkDataHandlerReference" xmlns:ns2="http://schemas.xmlsoap.org/ws/2004/09/enumeration" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/BulkDataHandler" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://cagrid.nci.nih.gov/BulkDataHandlerReference" xmlns:ns3="http://schemas.xmlsoap.org/ws/2004/09/enumeration" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns0="http://www.globus.org/transfer" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/BulkDataHandler" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/BulkDataHandlerReference" schemaLocation="./BulkDataHandlerReference.xsd" />
       <import namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" schemaLocation=".\enumeration.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd\security.xsd" />
+      <import namespace="http://www.globus.org/transfer" schemaLocation="./transfer.xsd" />
       <element name="CreateEnumerationRequest">
         <complexType>
           <sequence />
@@ -23,7 +25,7 @@
       <element name="CreateEnumerationResponse">
         <complexType>
           <sequence>
-            <element ref="ns2:EnumerateResponse" minOccurs="1" maxOccurs="1" />
+            <element ref="ns3:EnumerateResponse" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -91,6 +93,10 @@
     <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="ReleaseOp">
       <wsdl:input xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" message="wns1:ReleaseMessage" wsa:Action="http://schemas.xmlsoap.org/ws/2004/09/enumeration/Release" />
       <wsdl:output xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" message="wns1:ReleaseResponseMessage" wsa:Action="http://schemas.xmlsoap.org/ws/2004/09/enumeration/ReleaseResponse" />
+    </wsdl:operation>
+    <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="Get">
+      <wsdl:input xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" message="wns2:EmptyMessage" wsa:Action="http://schemas.xmlsoap.org/ws/2004/09/transfer/Get" />
+      <wsdl:output xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" message="wns2:AnyXmlMessage" wsa:Action="http://schemas.xmlsoap.org/ws/2004/09/transfer/GetResponse" />
     </wsdl:operation>
   </portType>
 </definitions>

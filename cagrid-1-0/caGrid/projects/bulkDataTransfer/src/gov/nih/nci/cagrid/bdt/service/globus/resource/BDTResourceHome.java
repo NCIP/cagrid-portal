@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.bdt.service.globus.resource;
 
+import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceKey;
 import org.globus.wsrf.impl.ResourceHomeImpl;
 import org.globus.wsrf.impl.SimpleResourceKey;
@@ -13,7 +14,6 @@ public class BDTResourceHome extends ResourceHomeImpl {
 		// TODO Auto-generated method stub
 
 	}
-
 	
 	public ResourceKey createBDTResource() throws Exception {
 		
@@ -28,4 +28,5 @@ public class BDTResourceHome extends ResourceHomeImpl {
 		add(key, bdtr);
 		return key;
 	}
+
 }

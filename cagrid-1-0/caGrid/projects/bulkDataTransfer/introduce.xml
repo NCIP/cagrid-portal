@@ -1,5 +1,9 @@
 <ns1:ServiceSkeleton introduceVersion=".9999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace location="./transfer.xsd" namespace="http://www.globus.org/transfer" packageName="transfer" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="Empty" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="AnyXml" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
@@ -120,11 +124,19 @@
      <ns4:Output qName="ns18:EnumerateResponse" isArray="false" xmlns:ns18="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
      <ns4:Exceptions/>
     </ns4:Method>
+    <ns4:Method isImported="true" isProvided="false" name="Get" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns19:Empty" isArray="false" name="empty" xmlns:ns19="http://www.globus.org/transfer"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns20:AnyXml" isArray="false" xmlns:ns20="http://www.globus.org/transfer"/>
+     <ns4:Exceptions/>
+     <ns4:ImportInformation inputMessage="ns21:EmptyMessage" namespace="http://www.globus.org/transfer" outputMessage="ns21:AnyXmlMessage" packageName="org.globus.transfer" portTypeName="Resource" wsdlFile="./transfer_port_type.wsdl" xmlns:ns21="http://www.globus.org/transfer"/>
+    </ns4:Method>
    </ns4:Methods>
-   <ns19:ResourcePropertiesList xsi:type="ns19:ResourcePropertiesListType" xmlns:ns19="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns22:ResourcePropertiesList xsi:type="ns22:ResourcePropertiesListType" xmlns:ns22="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
   </ns3:Service>
  </ns3:Services>
- <ns20:Extensions xsi:type="ns20:ExtensionsType" xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns20:Extension name="cagrid_wsEnum" xsi:type="ns20:ExtensionType"/>
- </ns20:Extensions>
+ <ns23:Extensions xsi:type="ns23:ExtensionsType" xmlns:ns23="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns23:Extension name="cagrid_wsEnum" xsi:type="ns23:ExtensionType"/>
+ </ns23:Extensions>
 </ns1:ServiceSkeleton>
