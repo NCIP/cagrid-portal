@@ -9,9 +9,10 @@
                       
   ============================================================-->
   <types>
-    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns0="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://tests.cagrid.nci.nih.gov/BasicAnalyticalServiceWithMetadata" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns0="http://tests.cagrid.nci.nih.gov/BasicAnalyticalServiceWithMetadataReference" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://tests.cagrid.nci.nih.gov/BasicAnalyticalServiceWithMetadata" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
-      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation=".\metadata\cagrid\types\caGridMetadata.xsd" />
+      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation=".\cagrid\types\caGridMetadata.xsd" />
+      <import namespace="http://tests.cagrid.nci.nih.gov/BasicAnalyticalServiceWithMetadataReference" schemaLocation="./BasicAnalyticalServiceWithMetadataReference.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd\security.xsd" />
       <element name="ReverseTranslateRequest">
         <complexType>
@@ -30,7 +31,7 @@
       <element name="BasicAnalyticalServiceWithMetadataResourceProperties">
         <complexType>
           <sequence>
-            <element ref="ns1:ServiceMetadata" />
+            <element ref="ns2:ServiceMetadata" />
           </sequence>
         </complexType>
       </element>
