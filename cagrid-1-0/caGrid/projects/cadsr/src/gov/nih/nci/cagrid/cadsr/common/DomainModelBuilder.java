@@ -447,8 +447,7 @@ public class DomainModelBuilder {
 
 		// umlproject.UMLAssociationMetadata is broken so need to issue
 		// my own hibernate query to get associated UMLClasses (could have just
-		// called
-		// getters otherwise)
+		// called getters otherwise)
 		setUMLClassReferences(coreAssociation, converted);
 
 		return converted;
@@ -533,10 +532,13 @@ public class DomainModelBuilder {
 			long attstart = System.currentTimeMillis();
 			UMLAttributeMetadata attMD = (UMLAttributeMetadata) resultsIterator.next();
 			UMLAttribute converted = new UMLAttribute();
-			converted.setDescription(attMD.getDescription());
+			String description = attMD.getDescription();
+			if (description == null) {
+				description = "";
+			}
+			converted.setDescription(description);			
 			converted.setName(attMD.getName());
-			// TODO: this makes 2 calls for every attribute... how can we speed
-			// this up!?
+			// TODO: this makes 2 calls for every attribute... how can we speed this up!?
 			if (attMD.getDataElement() != null && attMD.getDataElement().getValueDomain() != null) {
 				converted.setValueDomain(attMD.getDataElement().getValueDomain());
 			}
