@@ -1,9 +1,7 @@
 package gov.nih.nci.cagrid.data.codegen;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
-import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
-import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -27,7 +25,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -50,6 +47,7 @@ import org.jdom.Element;
  */
 public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProcessor {
 
+	private static final String DEFAULT_DOMAIN_MODEL_XML_FILE = "domainModel.xml";
 	private static Logger LOG = Logger.getLogger(DataServiceCodegenPreProcessor.class);
 
 
@@ -66,10 +64,15 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 
 	private void modifyMetadata(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
+		String filename = getFilename(info);
+		if (filename == null) {
+			filename = DEFAULT_DOMAIN_MODEL_XML_FILE;
+		}
+
 		// find the service's etc directory, where the domain model goes
 		String domainModelFile = info.getIntroduceServiceProperties().getProperty(
 			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
-			+ File.separator + "etc" + File.separator + "domainModel.xml";
+			+ File.separator + "etc" + File.separator + filename;
 
 		LOG.debug("Looking for user-supplied domain model xml file");
 		String suppliedDomainModel = getSuppliedDomainModelFilename(desc, info);
@@ -89,7 +92,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		// if the domain model was actually placed in the service's etc
 		// directory, then add the resource property for the domain model
 		if (!domainModelResourcePropertyExists(info)) {
-			addDomainModelResourceProperty(info);
+			addDomainModelResourceProperty(info, filename);
 		}
 
 		// if the domainModel.xml doesn't exist, don't try to populate the
@@ -99,6 +102,26 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		if (property != null) {
 			property.setPopulateFromFile(dmFile.exists());
 		}
+	}
+
+
+	private String getFilename(ServiceInformation info) {
+		ServiceType mainServ = info.getServiceDescriptor().getServices().getService()[0];
+		ResourcePropertyType[] resourceProperty = mainServ.getResourcePropertiesList().getResourceProperty();
+		for (int i = 0; i < resourceProperty.length; i++) {
+			ResourcePropertyType rp = resourceProperty[i];
+			if (rp.getQName().equals(DataServiceConstants.DOMAIN_MODEL_QNAME)) {
+				String fileLocation = rp.getFileLocation();
+				if (fileLocation == null || fileLocation.trim().equals("")) {
+					rp.setFileLocation(DEFAULT_DOMAIN_MODEL_XML_FILE);
+				}
+
+				return rp.getFileLocation();
+
+			}
+		}
+
+		return null;
 	}
 
 
@@ -144,7 +167,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				Iterator selectedClassIter = selectedClassList.iterator();
 				while (selectedClassIter.hasNext()) {
 					Element selectedClassElement = (Element) selectedClassIter.next();
-					packageClassNames[index] = packName+"."+selectedClassElement.getText();
+					packageClassNames[index] = packName + "." + selectedClassElement.getText();
 					index++;
 				}
 				// add them to the globally selected sets
@@ -299,9 +322,10 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 	}
 
 
-	private void addDomainModelResourceProperty(ServiceInformation info) {
+	private void addDomainModelResourceProperty(ServiceInformation info, String fileLocation) {
 		ResourcePropertyType domainMetadata = new ResourcePropertyType();
 		domainMetadata.setPopulateFromFile(true);
+		domainMetadata.setFileLocation(fileLocation);
 		domainMetadata.setRegister(true);
 		domainMetadata.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
 		ResourcePropertiesListType propsList = info.getServices().getService(0).getResourcePropertiesList();
@@ -353,41 +377,5 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			}
 		}
 		return false;
-	}
-
-
-	private UMLClassMetadata[] getUmlClassMetadata(CaDSRServiceClient client, Project proj, String packName,
-		String[] classNames) throws RemoteException {
-		Set metadata = new HashSet();
-		UMLClassMetadata[] allClasses = client.findClassesInPackage(proj, packName);
-		if (allClasses != null) {
-			for (int i = 0; i < allClasses.length; i++) {
-				UMLClassMetadata currentClass = allClasses[i];
-				for (int j = 0; j < classNames.length; j++) {
-					if (classNames[j].equals(currentClass.getName())) {
-						metadata.add(currentClass);
-						break;
-					}
-				}
-			}
-		}
-		UMLClassMetadata[] mdArray = new UMLClassMetadata[metadata.size()];
-		metadata.toArray(mdArray);
-		return mdArray;
-	}
-
-
-	private UMLAssociation[] getUmlClassAssociations(CaDSRServiceClient client, Project proj, UMLClassMetadata[] classes)
-		throws RemoteException {
-		Set associations = new HashSet();
-		for (int i = 0; i < classes.length; i++) {
-			UMLAssociation[] classAssociations = client.findAssociationsForClass(proj, classes[i]);
-			if (classAssociations != null) {
-				Collections.addAll(associations, classAssociations);
-			}
-		}
-		UMLAssociation[] assocArray = new UMLAssociation[associations.size()];
-		associations.toArray(assocArray);
-		return assocArray;
 	}
 }

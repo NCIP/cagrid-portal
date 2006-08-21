@@ -15,17 +15,12 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
-import gov.nih.nci.cagrid.metadata.ServiceMetadata;
-import gov.nih.nci.cagrid.metadata.ServiceMetadataServiceDescription;
-import gov.nih.nci.cagrid.metadata.service.Service;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -173,56 +168,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		methods.setMethod(dsMethods);
 		dataService.setMethods(methods);
 
-		// add the service metadata if need be
-		if (!serviceMetadataExists(description)) {
-			// addServiceMetadata(description);
-		}
-	}
-
-
-	private void addServiceMetadata(ServiceDescription desc) {
-		ResourcePropertyType serviceMetadata = new ResourcePropertyType();
-		serviceMetadata.setPopulateFromFile(false); // no metadata file yet...
-		serviceMetadata.setRegister(true);
-		serviceMetadata.setQName(DataServiceConstants.SERVICE_METADATA_QNAME);
-		ServiceMetadata smd = new ServiceMetadata();
-		ServiceMetadataServiceDescription des = new ServiceMetadataServiceDescription();
-		Service service = new Service();
-		des.setService(service);
-		smd.setServiceDescription(des);
-		ResourcePropertiesListType propsList = desc.getServices().getService()[0].getResourcePropertiesList();
-		if (propsList == null) {
-			propsList = new ResourcePropertiesListType();
-			desc.getServices().getService()[0].setResourcePropertiesList(propsList);
-		}
-		ResourcePropertyType[] metadataArray = propsList.getResourceProperty();
-		if (metadataArray == null || metadataArray.length == 0) {
-			metadataArray = new ResourcePropertyType[]{serviceMetadata};
-		} else {
-			ResourcePropertyType[] tmpArray = new ResourcePropertyType[metadataArray.length + 1];
-			System.arraycopy(metadataArray, 0, tmpArray, 0, metadataArray.length);
-			tmpArray[metadataArray.length] = serviceMetadata;
-			metadataArray = tmpArray;
-		}
-		propsList.setResourceProperty(metadataArray);
-	}
-	
-	
-	private boolean serviceMetadataExists(ServiceDescription desc) {
-		ResourcePropertiesListType propsList = desc.getServices().getService()[0].getResourcePropertiesList();
-		if (propsList == null) {
-			return false;
-		}
-		ResourcePropertyType[] props = propsList.getResourceProperty();
-		if (props == null || props.length == 0) {
-			return false;
-		}
-		for (int i = 0; i < props.length; i++) {
-			if (props[i].getQName().equals(DataServiceConstants.SERVICE_METADATA_QNAME)) {
-				return true;
-			}
-		}
-		return false;
+		
 	}
 
 
