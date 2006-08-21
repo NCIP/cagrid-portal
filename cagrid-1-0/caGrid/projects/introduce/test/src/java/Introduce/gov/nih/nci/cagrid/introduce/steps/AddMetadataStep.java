@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.steps;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
@@ -86,7 +87,7 @@ public class AddMetadataStep extends BaseStep {
 		introService.getServices().getService(0).setResourcePropertiesList(rplist);
 
 		Utils.serializeDocument(getBaseDir() + File.separator + tci.getDir() + File.separator + "introduce.xml",
-			introService, new QName("gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
+			introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
 		try {
 			SyncTools sync = new SyncTools(new File(getBaseDir() + File.separator + tci.getDir()));

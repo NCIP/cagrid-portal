@@ -45,7 +45,7 @@ public class IntroduceConstants {
 	public static final String INTRODUCE_NS_EXCLUDES = "introduce.ns.excludes";
 
 	public static final QName INTRODUCE_SKELETON_QNAME = new QName(
-			"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton");
+			"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceDescription");
 
 	// resource types
 	public static final String INTRODUCE_SINGLETON_RESOURCE = "singleton";
