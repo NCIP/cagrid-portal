@@ -99,6 +99,9 @@ public class TestGroups extends TestCase {
 			update.setDescription(description);
 			grouper.updateGroup(SUPER_USER, gid, update);
 			grouper.addMember(SUPER_USER, gid, USER_B);
+			memberExpected.clear();
+			memberExpected.put(USER_B, getGridMember(USER_B));
+			verifyMembers(grp, MemberFilter.All, memberExpected);
 
 			// Reading Description
 
