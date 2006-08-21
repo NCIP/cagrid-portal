@@ -14,6 +14,8 @@ import junit.framework.Assert;
 
 public class BeanComparator
 {
+	public static final boolean DEBUG = true;
+	
 	private Assert test;
 	
 	public BeanComparator(Assert test)
@@ -122,6 +124,7 @@ public class BeanComparator
 			// assert gotten values equal
 			Object result1 = m1[i].invoke(o1, new Object[0]);
 			Object result2 = m2[i].invoke(o2, new Object[0]);
+			System.out.println("BeanComparator comparing " + m1[i].getName() + " and " + m2[i].getName());
 			assertEquals(result1, result2);
 		}
 	}
