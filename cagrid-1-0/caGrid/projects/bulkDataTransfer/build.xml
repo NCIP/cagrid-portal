@@ -26,7 +26,7 @@
 	<property name="common.jar.name" value="caGrid-1.0-${service.name}-common.jar" />
 	<property name="client.jar.name" value="caGrid-1.0-${service.name}-client.jar" />
 	<property name="service.jar.name" value="caGrid-1.0-${service.name}-service.jar" />
-	<property name="stubs.jar.name" value="$caGrid-1.0-{service.name}-stubs.jar" />
+	<property name="stubs.jar.name" value="caGrid-1.0-${service.name}-stubs.jar" />
 	<property name="test.jar.name" value="caGrid-1.0-${service.name}-tests.jar" />
 
 	<!-- Important test directories and files -->

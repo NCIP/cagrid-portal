@@ -10,6 +10,16 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 
 	public void postCreate(ServiceDescription descriptor, Properties properties) throws CreationExtensionException {
 		
+		//Add the jars
+		
+		
+		//Add the metadata
+		
+		
+		//Add the metadata
+		
+		
+		//Add the methods
 
 	}
 
