@@ -4,6 +4,9 @@ import edu.internet2.middleware.grouper.RegistryReset;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilege;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberType;
@@ -16,6 +19,7 @@ import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
 import gov.nih.nci.cagrid.gridgrouper.testutils.Utils;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import junit.framework.TestCase;
@@ -40,6 +44,114 @@ public class TestGroups extends TestCase {
 	private String USER_C = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user c";
 
 	private String USER_D = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user d";
+
+	public void testViewReadPrivilege() {
+		try {
+			HashSet userExpected = new HashSet();
+			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
+
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
+							.getRootStemIdentifier(), SUPER_USER,
+					StemPrivilegeType.stem));
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
+							.getRootStemIdentifier(), SUPER_USER,
+					StemPrivilegeType.create));
+
+			StemDescriptor root = grouper.getStem(SUPER_USER, Utils
+					.getRootStemIdentifier());
+			assertNotNull(root);
+			assertEquals(root.getName(), Utils.getRootStemIdentifier()
+					.getStemName());
+
+			String testStem = "TestStem";
+			StemDescriptor test = grouper.addChildStem(SUPER_USER, Utils
+					.getRootStemIdentifier(), testStem, testStem);
+			final String groupExtension = "mygroup";
+			final String groupDisplayExtension = "My Group";
+
+			GroupDescriptor grp = createAndCheckGroup(test, groupExtension,
+					groupDisplayExtension, 1);
+			GroupIdentifier gid = Utils.getGroupIdentifier(grp);
+
+			userExpected.clear();
+			userExpected.add(GroupPrivilegeType.admin);
+			userExpected.add(GroupPrivilegeType.view);
+			userExpected.add(GroupPrivilegeType.read);
+			verifyPrivileges(grp, SUPER_USER, userExpected);
+
+			// Test Default Privileges
+			userExpected.clear();
+			userExpected.add(GroupPrivilegeType.view);
+			userExpected.add(GroupPrivilegeType.read);
+			verifyPrivileges(grp, USER_A, userExpected);
+
+			// TODO: Should this pass Should we be able to remove a default
+			// privilege?
+			// printPrivilegesForUser(grp, USER_A);
+			// grouper.grantGroupPrivilege(SUPER_USER, gid, USER_A,
+			// GroupPrivilegeType.view);
+			// printPrivilegesForUser(grp, USER_A);
+			// expected.clear();
+			// expected.add(GroupPrivilegeType.view);
+			// expected.add(GroupPrivilegeType.read);
+			// verifyPrivileges(grp, USER_A, expected);
+			// printPrivilegesForUser(grp, USER_A);
+			// grouper.revokeGroupPrivilege(SUPER_USER, gid, USER_A,
+			// GroupPrivilegeType.view);
+			// printPrivilegesForUser(grp, USER_A);
+			// expected.clear();
+			// expected.add(GroupPrivilegeType.view);
+			// expected.add(GroupPrivilegeType.read);
+			// verifyPrivileges(grp, USER_A, expected);
+
+			// We want to test doing everything
+			//First we will set the description, such that we make sure we can view it
+			String desription = "This is a test group";
+			
+			
+            // Reading Description
+			// Reading Members
+			// Reading Privileges
+
+			// Adding members
+			// Updating
+			// Adding privileges
+			
+			// printUsersWithPrivilege(grp, GroupPrivilegeType.view);
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
+
+	private void printUsersWithPrivilege(GroupDescriptor des,
+			GroupPrivilegeType priv) throws Exception {
+		String[] subs = grouper.getSubjectsWithGroupPrivilege(SUPER_USER, Utils
+				.getGroupIdentifier(des), priv);
+		System.out.println("Users with the Privilege, " + priv.getValue()
+				+ " on the group " + des.getName() + ":");
+		System.out.println("");
+		for (int i = 0; i < subs.length; i++) {
+			System.out.println(subs[i]);
+		}
+		System.out.println("");
+	}
+
+	private void printPrivilegesForUser(GroupDescriptor des, String user)
+			throws Exception {
+		GroupPrivilege[] privs = grouper.getGroupPrivileges(SUPER_USER, Utils
+				.getGroupIdentifier(des), user);
+		System.out.println("Privileges for " + user + ", on the group "
+				+ des.getName() + ":");
+		System.out.println("");
+		for (int i = 0; i < privs.length; i++) {
+			System.out.println(privs[i].getPrivilegeType().getValue());
+		}
+		System.out.println("");
+	}
 
 	public void testMembers() {
 		try {
@@ -469,7 +581,7 @@ public class TestGroups extends TestCase {
 		}
 
 	}
-	
+
 	public void testComplementComposite() {
 		try {
 			Map expected = new HashMap();
@@ -532,7 +644,7 @@ public class TestGroups extends TestCase {
 			grpy = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpy));
 			assertTrue(grpx.isIsComposite());
 			assertTrue(grpy.isIsComposite());
-			//Utils.printMemberships(composite);
+			// Utils.printMemberships(composite);
 
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
@@ -935,6 +1047,30 @@ public class TestGroups extends TestCase {
 				} else {
 					fail("Membership " + members[i].getMember().getSubjectId()
 							+ " not expected!!!");
+				}
+			}
+			assertEquals(0, expected.size());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Error verifying members");
+		}
+
+	}
+
+	private void verifyPrivileges(GroupDescriptor grp, String user,
+			HashSet expected) {
+		try {
+			GroupPrivilege[] privs = grouper.getGroupPrivileges(SUPER_USER,
+					Utils.getGroupIdentifier(grp), user);
+			assertEquals(expected.size(), privs.length);
+			for (int i = 0; i < privs.length; i++) {
+				if (expected.contains(privs[i].getPrivilegeType())) {
+					assertEquals(user, privs[i].getSubject());
+					expected.remove(privs[i].getPrivilegeType());
+				} else {
+					fail("The privilege "
+							+ privs[i].getPrivilegeType().getValue()
+							+ " was not expected!!!");
 				}
 			}
 			assertEquals(0, expected.size());
