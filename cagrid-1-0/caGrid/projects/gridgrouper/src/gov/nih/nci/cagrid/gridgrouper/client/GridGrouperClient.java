@@ -288,20 +288,18 @@ public class GridGrouperClient extends ServiceSecurityClient implements
 		}
 	}
 
-    public void revokeGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.RevokePrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault {
+    public java.lang.String[] getSubjectsWithGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
       synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"revokeGroupPrivilege");
-        gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequest();
-        gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequestGroup();
+        configureStubSecurity((Stub)portType,"getSubjectsWithGroupPrivilege");
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequestGroup();
         groupContainer.setGroupIdentifier(group);
         params.setGroup(groupContainer);
-        gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequestSubject subjectContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequestSubject();
-        subjectContainer.setSubjectIdentifier(subject);
-        params.setSubject(subjectContainer);
-        gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequestPrivilege privilegeContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequestPrivilege();
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequestPrivilege privilegeContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequestPrivilege();
         privilegeContainer.setGroupPrivilegeType(privilege);
         params.setPrivilege(privilegeContainer);
-        gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeResponse boxedResult = portType.revokeGroupPrivilege(params);
+        gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeResponse boxedResult = portType.getSubjectsWithGroupPrivilege(params);
+        return boxedResult.getSubjectIdentifier();
       }
     }
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
@@ -634,6 +632,22 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         privilegeContainer.setGroupPrivilegeType(privilege);
         params.setPrivilege(privilegeContainer);
         gov.nih.nci.cagrid.gridgrouper.stubs.GrantGroupPrivilegeResponse boxedResult = portType.grantGroupPrivilege(params);
+      }
+    }
+    public void revokeGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.RevokePrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"revokeGroupPrivilege");
+        gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequestGroup();
+        groupContainer.setGroupIdentifier(group);
+        params.setGroup(groupContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequestSubject subjectContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequestSubject();
+        subjectContainer.setSubjectIdentifier(subject);
+        params.setSubject(subjectContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequestPrivilege privilegeContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequestPrivilege();
+        privilegeContainer.setGroupPrivilegeType(privilege);
+        params.setPrivilege(privilegeContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeResponse boxedResult = portType.revokeGroupPrivilege(params);
       }
     }
 

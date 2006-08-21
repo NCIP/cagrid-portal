@@ -662,6 +662,33 @@
           <sequence />
         </complexType>
       </element>
+      <element name="GetSubjectsWithGroupPrivilegeRequest">
+        <complexType>
+          <sequence>
+            <element name="group">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:GroupIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="privilege">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:GroupPrivilegeType" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetSubjectsWithGroupPrivilegeResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:SubjectIdentifier" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="GridGrouperRuntimeFault">
         <complexType>
           <complexContent>
@@ -925,6 +952,12 @@
   <message name="RevokeGroupPrivilegeResponse">
     <part name="parameters" element="tns:RevokeGroupPrivilegeResponse" />
   </message>
+  <message name="GetSubjectsWithGroupPrivilegeRequest">
+    <part name="parameters" element="tns:GetSubjectsWithGroupPrivilegeRequest" />
+  </message>
+  <message name="GetSubjectsWithGroupPrivilegeResponse">
+    <part name="parameters" element="tns:GetSubjectsWithGroupPrivilegeResponse" />
+  </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="tns:GridGrouperRuntimeFault" />
   </message>
@@ -1154,6 +1187,12 @@
       <fault name="RevokePrivilegeFault" message="tns:RevokePrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/RevokePrivilegeFaultFaultMessage" />
       <fault name="InsufficientPrivilegeFault" message="tns:InsufficientPrivilegeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/InsufficientPrivilegeFaultFaultMessage" />
       <fault name="SchemaFault" message="tns:SchemaFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/SchemaFaultFaultMessage" />
+    </operation>
+    <operation name="getSubjectsWithGroupPrivilege">
+      <input message="tns:GetSubjectsWithGroupPrivilegeRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetSubjectsWithGroupPrivilegeRequest" />
+      <output message="tns:GetSubjectsWithGroupPrivilegeResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetSubjectsWithGroupPrivilegeResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

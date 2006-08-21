@@ -1501,4 +1501,11 @@ public class GridGrouper {
 		// TODO: Implement This
 	}
 
+	public String[] getSubjectsWithGroupPrivilege(String callerIdentity,
+			GroupIdentifier group, GroupPrivilegeType privilege)
+			throws RemoteException, GridGrouperRuntimeFault, GroupNotFoundFault {
+		// TODO: Implement This
+		return null;
+	}
+
 }
