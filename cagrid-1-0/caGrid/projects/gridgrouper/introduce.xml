@@ -8,10 +8,12 @@
    <ns2:SchemaElement type="StemDescriptor" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SubjectIdentifier" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StemIdentifier" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GroupPrivilege" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StemPrivilege" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StemUpdate" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GroupUpdate" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StemPrivilegeType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GroupPrivilegeType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="MemberFilter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GroupCompositeType" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>

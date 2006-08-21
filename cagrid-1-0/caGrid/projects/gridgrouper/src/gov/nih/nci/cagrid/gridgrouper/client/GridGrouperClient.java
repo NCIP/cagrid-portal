@@ -288,17 +288,6 @@ public class GridGrouperClient extends ServiceSecurityClient implements
 		}
 	}
 
-    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor deleteCompositeMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.MemberDeleteFault {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"deleteCompositeMember");
-        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberRequest();
-        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberRequestGroup();
-        groupContainer.setGroupIdentifier(group);
-        params.setGroup(groupContainer);
-        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberResponse boxedResult = portType.deleteCompositeMember(params);
-        return boxedResult.getGroupDescriptor();
-      }
-    }
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
@@ -601,6 +590,17 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         rightContainer.setGroupIdentifier(right);
         params.setRight(rightContainer);
         gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberResponse boxedResult = portType.addCompositeMember(params);
+        return boxedResult.getGroupDescriptor();
+      }
+    }
+    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor deleteCompositeMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.MemberDeleteFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"deleteCompositeMember");
+        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberRequest();
+        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberRequestGroup groupContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberRequestGroup();
+        groupContainer.setGroupIdentifier(group);
+        params.setGroup(groupContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberResponse boxedResult = portType.deleteCompositeMember(params);
         return boxedResult.getGroupDescriptor();
       }
     }

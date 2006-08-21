@@ -79,6 +79,18 @@
 		</xsd:sequence>
 	</xsd:complexType>
 	
+	<xsd:element name="GroupPrivilege" type="grouper:GroupPrivilege"/>
+	<xsd:complexType name="GroupPrivilege">
+		<xsd:sequence>
+			<xsd:element name="GroupName" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="PrivilegeType" minOccurs="1" maxOccurs="1" type="grouper:GroupPrivilegeType" />
+			<xsd:element name="Subject" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="ImplementationClass" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="IsRevokable" minOccurs="1" maxOccurs="1" type="xsd:boolean" />
+			<xsd:element name="Owner" minOccurs="1" maxOccurs="1" type="xsd:string" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
 	<xsd:element name="StemPrivilege" type="grouper:StemPrivilege"/>
 	<xsd:complexType name="StemPrivilege">
 		<xsd:sequence>
@@ -113,6 +125,18 @@
   			<xsd:restriction base="xsd:string">
    				<xsd:enumeration value="create"/>
    				<xsd:enumeration value="stem"/>	
+  			</xsd:restriction>
+ 	  </xsd:simpleType>
+ 	  
+ 	  <xsd:element name="GroupPrivilegeType" type="grouper:GroupPrivilegeType"/>
+	  <xsd:simpleType name="GroupPrivilegeType">
+  			<xsd:restriction base="xsd:string">
+   				<xsd:enumeration value="admin"/>
+   				<xsd:enumeration value="optin"/>
+   				<xsd:enumeration value="optout"/>
+   				<xsd:enumeration value="read"/>	
+   				<xsd:enumeration value="update"/>	
+   				<xsd:enumeration value="view"/>	
   			</xsd:restriction>
  	  </xsd:simpleType>
  	  

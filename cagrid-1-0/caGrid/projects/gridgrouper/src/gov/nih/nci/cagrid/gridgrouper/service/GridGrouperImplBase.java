@@ -10,14 +10,12 @@ import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
 import org.globus.wsrf.ResourceHome;
 
-/**
- * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
- * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
- * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
- * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
+/** 
+ *  gov.nih.nci.cagrid.gridgrouper
+ *  TODO:DOCUMENT ME
  * 
- * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
- *          Exp $
+ * @created by Introduce Toolkit version 1.0
+ * 
  */
 public abstract class GridGrouperImplBase {
     private ServiceConfiguration configuration;
