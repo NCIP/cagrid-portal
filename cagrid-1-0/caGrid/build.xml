@@ -416,6 +416,7 @@
 			<artifact refid="introduce.resources" />
 			<artifact refid="ws.enum.jars"/>
 			<artifact refid="ws.enum.schemas"/>
+			<artifact refid="core.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/bulkDataTransfer" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
