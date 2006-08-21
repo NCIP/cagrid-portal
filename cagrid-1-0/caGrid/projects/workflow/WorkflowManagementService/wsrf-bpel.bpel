@@ -3,17 +3,33 @@
 BPEL Process Definition
 Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.com)
 -->
-<process name="wsrf-bpel" suppressJoinFailure="yes" targetNamespace="http://wsrf-bpel" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://counter.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<process name="wsrf-bpel" suppressJoinFailure="yes" targetNamespace="http://wsrf-bpel" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://counter.com" xmlns:ns2="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:ns3="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
    <partnerLinks>
       <partnerLink myRole="counterRole" name="counterPLT" partnerLinkType="ns1:counterPLT" partnerRole="counterRole"/>
+      <partnerLink  name="wsrfCounterPLT" partnerLinkType="ns1:counterPLT" partnerRole="counterRole"/>
    </partnerLinks>
    <variables>
       <variable messageType="ns1:CreateCounterRequest" name="CreateCounterRequest"/>
       <variable messageType="ns1:CreateCounterResponse" name="CreateCounterResponse"/>
+      <variable messageType="ns1:AddInputMessage" name="AddInputMessage"/>
+      <variable messageType="ns1:AddOutputMessage" name="AddOutputMessage"/>
    </variables>
    <sequence>
-   <receive createInstance="yes" operation="createCounter" partnerLink="counterPLT" portType="ns1:CounterPortType" variable="CreateCounterRequest"/>
+      <receive createInstance="yes" operation="createCounter" partnerLink="counterPLT" portType="ns1:CounterPortType" variable="CreateCounterRequest"/>
       <invoke inputVariable="CreateCounterRequest" operation="createCounter" outputVariable="CreateCounterResponse" partnerLink="counterPLT" portType="ns1:CounterPortType"/>
+      <assign>
+         <copy>
+            <from part="response" query="/ns1:createCounterResponse/ns2:EndpointReference" variable="CreateCounterResponse"/>
+            <to partnerLink="wsrfCounterPLT"/>
+         </copy>
+      </assign>
+      <assign>
+         <copy>
+            <from expression="&quot;5&quot;"/>
+            <to part="parameters" query="/ns1:add" variable="AddInputMessage"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="AddInputMessage" operation="add" outputVariable="AddOutputMessage" partnerLink="wsrfCounterPLT" portType="ns1:CounterPortType"/>
       <reply operation="createCounter" partnerLink="counterPLT" portType="ns1:CounterPortType" variable="CreateCounterResponse"/>
    </sequence>
 </process>
