@@ -38,7 +38,7 @@
 	</target>
 	
 	<target name="deployGlobus" depends="checkGlobus" description="Deploys to GLOBUS_LOCATION">
-		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
+		<echo message="Deploying service under Globus at ${ext.globus.dir}" />
 	<java classname="org.globus.bootstrap.AntBootstrap" fork="yes" failonerror="true">
 		<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
 		<jvmarg value="-Djava.endorsed.dirs=${ext.globus.dir}/endorsed" />
