@@ -62,7 +62,11 @@ public class GMEServiceTest
 			globus.cleanupTempGlobus();
 		}
 		
-		new GMECleanupStep().runStep();
+		try {
+			new GMECleanupStep().runStep();
+		} catch (Exception e) {
+			// do nothing
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
