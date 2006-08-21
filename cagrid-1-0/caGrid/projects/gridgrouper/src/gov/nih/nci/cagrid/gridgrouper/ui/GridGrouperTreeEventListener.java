@@ -106,13 +106,20 @@ public class GridGrouperTreeEventListener extends MouseAdapter {
 						.getClass());
 			}
 			if (popup != null) {
-				if (currentNode.getChildCount() > 0) {
-					popup.toggleRemove(false);
-				} else if ((currentNode instanceof StemTreeNode)
+				if ((currentNode instanceof StemTreeNode)
 						&& (((StemTreeNode) currentNode).isRootStem())) {
 					popup.toggleRemove(false);
+					((StemNodeMenu) popup).toggleAddGroup(false);
+				} else if (currentNode.getChildCount() > 0) {
+					popup.toggleRemove(false);
+					if (popup instanceof StemNodeMenu) {
+						((StemNodeMenu) popup).toggleAddGroup(true);
+					}
 				} else {
 					popup.toggleRemove(true);
+					if (popup instanceof StemNodeMenu) {
+						((StemNodeMenu) popup).toggleAddGroup(true);
+					}
 				}
 				popup.show(e.getComponent(), e.getX(), e.getY());
 			}

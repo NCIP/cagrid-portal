@@ -112,7 +112,7 @@ public class ContentManager extends JTabbedPane {
 		stems.put(stemId, browser);
 		this.addTab(node.getStem().getDisplayExtension(), new CombinedIcon(
 				new ContentManagerTabCloseIcon(), GridGrouperLookAndFeel
-						.getStemIcon()), browser, null);
+						.getStemIcon16x16()), browser, null);
 		this.remove(getWelcomePanel());
 		this.setSelectedComponent(browser);
 

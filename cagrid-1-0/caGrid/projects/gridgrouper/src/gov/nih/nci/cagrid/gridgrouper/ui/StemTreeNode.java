@@ -139,7 +139,7 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 		if (this.rootStem) {
 			return GridGrouperLookAndFeel.getGrouperIcon16x16();
 		} else {
-			return GridGrouperLookAndFeel.getStemIcon();
+			return GridGrouperLookAndFeel.getStemIcon16x16();
 		}
 	}
 

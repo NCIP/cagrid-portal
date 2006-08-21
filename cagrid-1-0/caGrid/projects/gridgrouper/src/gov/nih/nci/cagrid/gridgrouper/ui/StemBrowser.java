@@ -394,7 +394,7 @@ public class StemBrowser extends JPanel {
 			stemDetails.addTab("Privileges", GridGrouperLookAndFeel
 					.getPrivilegesIcon(), getPrivileges(), null);
 			stemDetails.addTab("Child Stems", GridGrouperLookAndFeel
-					.getStemIcon(), getChildStems(), null);
+					.getStemIcon16x16(), getChildStems(), null);
 			stemDetails.addTab("Groups", GridGrouperLookAndFeel
 					.getGroupIcon22x22(), getGroups(), null);
 		}
@@ -812,7 +812,7 @@ public class StemBrowser extends JPanel {
 			updateStem = new JButton();
 			updateStem.setText("Update Stem");
 			updateStem.setEnabled(false);
-			updateStem.setIcon(GridGrouperLookAndFeel.getStemIcon());
+			updateStem.setIcon(GridGrouperLookAndFeel.getStemIcon16x16());
 			updateStem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
