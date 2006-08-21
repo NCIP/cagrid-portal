@@ -38,6 +38,7 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
@@ -1483,6 +1484,13 @@ public class GridGrouper {
 				}
 			}
 		}
+	}
+
+	public void grantGroupPrivilege(String gridIdentity, GroupIdentifier group,
+			String subject, GroupPrivilegeType privilege)
+			throws GridGrouperRuntimeFault, GroupNotFoundFault,
+			GrantPrivilegeFault, InsufficientPrivilegeFault {
+		//TODO: Implement This
 	}
 
 }
