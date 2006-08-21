@@ -73,11 +73,7 @@ public class DorianTest
 			globus.cleanupTempGlobus();
 		}
 		new DorianDestroyDefaultProxyStep().runStep();
-		try {
-			new DorianCleanupStep().runStep();
-		} catch (Exception e) {
-			// do nothing
-		}
+		new DorianCleanupStep().runStep();
 	}
 	
 	@SuppressWarnings("unchecked")
