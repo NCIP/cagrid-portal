@@ -306,7 +306,22 @@ public class GridGrouperImpl {
 			gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault,
 			gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault,
 			gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
-		gridGrouper.grantGroupPrivilege(getCallerIdentity(),group, subject, privilege);
+		gridGrouper.grantGroupPrivilege(getCallerIdentity(), group, subject,
+				privilege);
+	}
+
+	public void revokeGroupPrivilege(
+			gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,
+			java.lang.String subject,
+			gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege)
+			throws RemoteException,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.RevokePrivilegeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault,
+			gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault {
+		gridGrouper.revokeGroupPrivilege(getCallerIdentity(), group, subject,
+				privilege);
 	}
 
 }

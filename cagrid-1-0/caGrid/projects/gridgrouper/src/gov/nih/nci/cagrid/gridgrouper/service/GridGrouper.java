@@ -1490,7 +1490,15 @@ public class GridGrouper {
 			String subject, GroupPrivilegeType privilege)
 			throws GridGrouperRuntimeFault, GroupNotFoundFault,
 			GrantPrivilegeFault, InsufficientPrivilegeFault {
-		//TODO: Implement This
+		// TODO: Implement This
+	}
+
+	public void revokeGroupPrivilege(String gridIdentity,
+			GroupIdentifier group, String subject, GroupPrivilegeType privilege)
+			throws RemoteException, GridGrouperRuntimeFault,
+			GroupNotFoundFault, RevokePrivilegeFault,
+			InsufficientPrivilegeFault, SchemaFault {
+		// TODO: Implement This
 	}
 
 }
