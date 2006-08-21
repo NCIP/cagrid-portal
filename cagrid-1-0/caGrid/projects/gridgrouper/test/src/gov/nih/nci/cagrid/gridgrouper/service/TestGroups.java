@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberType;
@@ -47,6 +48,7 @@ public class TestGroups extends TestCase {
 
 	public void testViewReadPrivilege() {
 		try {
+			Map memberExpected = new HashMap();
 			HashSet userExpected = new HashSet();
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
 
@@ -89,36 +91,32 @@ public class TestGroups extends TestCase {
 
 			// TODO: Should this pass Should we be able to remove a default
 			// privilege?
-			// printPrivilegesForUser(grp, USER_A);
-			// grouper.grantGroupPrivilege(SUPER_USER, gid, USER_A,
-			// GroupPrivilegeType.view);
-			// printPrivilegesForUser(grp, USER_A);
-			// expected.clear();
-			// expected.add(GroupPrivilegeType.view);
-			// expected.add(GroupPrivilegeType.read);
-			// verifyPrivileges(grp, USER_A, expected);
-			// printPrivilegesForUser(grp, USER_A);
-			// grouper.revokeGroupPrivilege(SUPER_USER, gid, USER_A,
-			// GroupPrivilegeType.view);
-			// printPrivilegesForUser(grp, USER_A);
-			// expected.clear();
-			// expected.add(GroupPrivilegeType.view);
-			// expected.add(GroupPrivilegeType.read);
-			// verifyPrivileges(grp, USER_A, expected);
 
 			// We want to test doing everything
-			//First we will set the description, such that we make sure we can view it
-			String desription = "This is a test group";
-			
-			
-            // Reading Description
+
+			String description = "This is a test group";
+			GroupUpdate update = new GroupUpdate();
+			update.setDescription(description);
+			grouper.updateGroup(SUPER_USER, gid, update);
+			grouper.addMember(SUPER_USER, gid, USER_B);
+
+			// Reading Description
+
+			GroupDescriptor g = grouper.getGroup(USER_A, gid);
+			assertEquals(grp.getName(), g.getName());
+			assertEquals(description, g.getDescription());
+
 			// Reading Members
+			memberExpected.clear();
+			memberExpected.put(USER_B, getGridMember(USER_B));
+			verifyMembers(USER_A, grp, MemberFilter.All, memberExpected);
+			
 			// Reading Privileges
 
 			// Adding members
 			// Updating
 			// Adding privileges
-			
+
 			// printUsersWithPrivilege(grp, GroupPrivilegeType.view);
 
 		} catch (Exception e) {
@@ -194,28 +192,28 @@ public class TestGroups extends TestCase {
 
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
-			verifyMembers(grp, MemberFilter.All, 1, expected);
+			verifyMembers(grp, MemberFilter.All, expected);
 
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
-			verifyMembers(grp, MemberFilter.ImmediateMembers, 1, expected);
+			verifyMembers(grp, MemberFilter.ImmediateMembers, expected);
 
 			expected.clear();
-			verifyMembers(grp, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(grp, MemberFilter.EffectiveMembers, expected);
 
 			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(subgrp),
 					USER_B);
 
 			expected.clear();
 			expected.put(USER_B, getGridMember(USER_B));
-			verifyMembers(subgrp, MemberFilter.All, 1, expected);
+			verifyMembers(subgrp, MemberFilter.All, expected);
 
 			expected.clear();
 			expected.put(USER_B, getGridMember(USER_B));
-			verifyMembers(subgrp, MemberFilter.ImmediateMembers, 1, expected);
+			verifyMembers(subgrp, MemberFilter.ImmediateMembers, expected);
 
 			expected.clear();
-			verifyMembers(subgrp, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(subgrp, MemberFilter.EffectiveMembers, expected);
 
 			grouper.addMember(SUPER_USER, Utils.getGroupIdentifier(grp), subgrp
 					.getUUID());
@@ -224,16 +222,16 @@ public class TestGroups extends TestCase {
 			expected.put(USER_A, getGridMember(USER_A));
 			expected.put(USER_B, getGridMember(USER_B));
 			expected.put(subgrp.getUUID(), getGroupMember(subgrp.getUUID()));
-			verifyMembers(grp, MemberFilter.All, 3, expected);
+			verifyMembers(grp, MemberFilter.All, expected);
 
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
 			expected.put(subgrp.getUUID(), getGroupMember(subgrp.getUUID()));
-			verifyMembers(grp, MemberFilter.ImmediateMembers, 2, expected);
+			verifyMembers(grp, MemberFilter.ImmediateMembers, expected);
 
 			expected.clear();
 			expected.put(USER_B, getGridMember(USER_B));
-			verifyMembers(grp, MemberFilter.EffectiveMembers, 1, expected);
+			verifyMembers(grp, MemberFilter.EffectiveMembers, expected);
 
 			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(subgrp),
 					USER_B);
@@ -241,48 +239,48 @@ public class TestGroups extends TestCase {
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
 			expected.put(subgrp.getUUID(), getGroupMember(subgrp.getUUID()));
-			verifyMembers(grp, MemberFilter.All, 2, expected);
+			verifyMembers(grp, MemberFilter.All, expected);
 
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
 			expected.put(subgrp.getUUID(), getGroupMember(subgrp.getUUID()));
-			verifyMembers(grp, MemberFilter.ImmediateMembers, 2, expected);
+			verifyMembers(grp, MemberFilter.ImmediateMembers, expected);
 
 			expected.clear();
-			verifyMembers(grp, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(grp, MemberFilter.EffectiveMembers, expected);
 
 			expected.clear();
-			verifyMembers(subgrp, MemberFilter.All, 0, expected);
+			verifyMembers(subgrp, MemberFilter.All, expected);
 			expected.clear();
-			verifyMembers(subgrp, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(subgrp, MemberFilter.EffectiveMembers, expected);
 			expected.clear();
-			verifyMembers(subgrp, MemberFilter.ImmediateMembers, 0, expected);
+			verifyMembers(subgrp, MemberFilter.ImmediateMembers, expected);
 
 			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grp),
 					USER_A);
 
 			expected.clear();
 			expected.put(subgrp.getUUID(), getGroupMember(subgrp.getUUID()));
-			verifyMembers(grp, MemberFilter.All, 1, expected);
+			verifyMembers(grp, MemberFilter.All, expected);
 
 			expected.clear();
 			expected.put(subgrp.getUUID(), getGroupMember(subgrp.getUUID()));
-			verifyMembers(grp, MemberFilter.ImmediateMembers, 1, expected);
+			verifyMembers(grp, MemberFilter.ImmediateMembers, expected);
 
 			expected.clear();
-			verifyMembers(grp, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(grp, MemberFilter.EffectiveMembers, expected);
 
 			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grp),
 					subgrp.getUUID());
 
 			expected.clear();
-			verifyMembers(grp, MemberFilter.All, 0, expected);
+			verifyMembers(grp, MemberFilter.All, expected);
 
 			expected.clear();
-			verifyMembers(grp, MemberFilter.ImmediateMembers, 0, expected);
+			verifyMembers(grp, MemberFilter.ImmediateMembers, expected);
 
 			expected.clear();
-			verifyMembers(grp, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(grp, MemberFilter.EffectiveMembers, expected);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -359,16 +357,16 @@ public class TestGroups extends TestCase {
 			expected.put(USER_A, getGridMember(USER_A));
 			expected.put(USER_B, getGridMember(USER_B));
 			expected.put(USER_C, getGridMember(USER_C));
-			verifyMembers(composite, MemberFilter.All, 3, expected);
+			verifyMembers(composite, MemberFilter.All, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.EffectiveMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.ImmediateMembers, expected);
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
 			expected.put(USER_B, getGridMember(USER_B));
 			expected.put(USER_C, getGridMember(USER_C));
-			verifyMembers(composite, MemberFilter.CompositeMembers, 3, expected);
+			verifyMembers(composite, MemberFilter.CompositeMembers, expected);
 
 			// TODO: Possible Grouper BUG: Make sure that the Membership is
 			// working as intended.
@@ -403,16 +401,16 @@ public class TestGroups extends TestCase {
 			expected.put(USER_A, getGridMember(USER_A));
 			expected.put(USER_B, getGridMember(USER_B));
 			expected.put(USER_C, getGridMember(USER_C));
-			verifyMembers(composite, MemberFilter.All, 3, expected);
+			verifyMembers(composite, MemberFilter.All, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.EffectiveMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.ImmediateMembers, expected);
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
 			expected.put(USER_B, getGridMember(USER_B));
 			expected.put(USER_C, getGridMember(USER_C));
-			verifyMembers(composite, MemberFilter.CompositeMembers, 3, expected);
+			verifyMembers(composite, MemberFilter.CompositeMembers, expected);
 
 			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grpy),
 					USER_B);
@@ -420,27 +418,27 @@ public class TestGroups extends TestCase {
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
 			expected.put(USER_C, getGridMember(USER_C));
-			verifyMembers(composite, MemberFilter.All, 2, expected);
+			verifyMembers(composite, MemberFilter.All, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.EffectiveMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.ImmediateMembers, expected);
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
 			expected.put(USER_C, getGridMember(USER_C));
-			verifyMembers(composite, MemberFilter.CompositeMembers, 2, expected);
+			verifyMembers(composite, MemberFilter.CompositeMembers, expected);
 
 			grouper.deleteCompositeMember(SUPER_USER, Utils
 					.getGroupIdentifier(composite));
 
 			expected.clear();
-			verifyMembers(composite, MemberFilter.All, 0, expected);
+			verifyMembers(composite, MemberFilter.All, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.EffectiveMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.ImmediateMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.CompositeMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.CompositeMembers, expected);
 
 			grpx = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpx));
 			grpy = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpy));
@@ -519,14 +517,14 @@ public class TestGroups extends TestCase {
 
 			expected.clear();
 			expected.put(USER_B, getGridMember(USER_B));
-			verifyMembers(composite, MemberFilter.All, 1, expected);
+			verifyMembers(composite, MemberFilter.All, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.EffectiveMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.ImmediateMembers, expected);
 			expected.clear();
 			expected.put(USER_B, getGridMember(USER_B));
-			verifyMembers(composite, MemberFilter.CompositeMembers, 1, expected);
+			verifyMembers(composite, MemberFilter.CompositeMembers, expected);
 
 			// TODO: Possible Grouper BUG: Make sure that the Membership is
 			// working as intended.
@@ -550,25 +548,25 @@ public class TestGroups extends TestCase {
 			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grpx),
 					USER_B);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.All, 0, expected);
+			verifyMembers(composite, MemberFilter.All, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.EffectiveMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.ImmediateMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.CompositeMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.CompositeMembers, expected);
 
 			grouper.deleteCompositeMember(SUPER_USER, Utils
 					.getGroupIdentifier(composite));
 
 			expected.clear();
-			verifyMembers(composite, MemberFilter.All, 0, expected);
+			verifyMembers(composite, MemberFilter.All, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.EffectiveMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.ImmediateMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.CompositeMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.CompositeMembers, expected);
 
 			grpx = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpx));
 			grpy = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpy));
@@ -648,14 +646,14 @@ public class TestGroups extends TestCase {
 
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
-			verifyMembers(composite, MemberFilter.All, 1, expected);
+			verifyMembers(composite, MemberFilter.All, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.EffectiveMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.ImmediateMembers, expected);
 			expected.clear();
 			expected.put(USER_A, getGridMember(USER_A));
-			verifyMembers(composite, MemberFilter.CompositeMembers, 1, expected);
+			verifyMembers(composite, MemberFilter.CompositeMembers, expected);
 
 			// TODO: Possible Grouper BUG: Make sure that the Membership is
 			// working as intended.
@@ -679,25 +677,25 @@ public class TestGroups extends TestCase {
 			grouper.deleteMember(SUPER_USER, Utils.getGroupIdentifier(grpx),
 					USER_A);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.All, 0, expected);
+			verifyMembers(composite, MemberFilter.All, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.EffectiveMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.ImmediateMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.CompositeMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.CompositeMembers, expected);
 
 			grouper.deleteCompositeMember(SUPER_USER, Utils
 					.getGroupIdentifier(composite));
 
 			expected.clear();
-			verifyMembers(composite, MemberFilter.All, 0, expected);
+			verifyMembers(composite, MemberFilter.All, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.EffectiveMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.EffectiveMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.ImmediateMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.ImmediateMembers, expected);
 			expected.clear();
-			verifyMembers(composite, MemberFilter.CompositeMembers, 0, expected);
+			verifyMembers(composite, MemberFilter.CompositeMembers, expected);
 
 			grpx = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpx));
 			grpy = grouper.getGroup(SUPER_USER, Utils.getGroupIdentifier(grpy));
@@ -805,13 +803,13 @@ public class TestGroups extends TestCase {
 		assertFalse(grp.isHasComposite());
 		Map expected = new HashMap();
 		expected.clear();
-		verifyMembers(grp, MemberFilter.All, 0, expected);
+		verifyMembers(grp, MemberFilter.All, expected);
 		expected.clear();
-		verifyMembers(grp, MemberFilter.EffectiveMembers, 0, expected);
+		verifyMembers(grp, MemberFilter.EffectiveMembers, expected);
 		expected.clear();
-		verifyMembers(grp, MemberFilter.ImmediateMembers, 0, expected);
+		verifyMembers(grp, MemberFilter.ImmediateMembers, expected);
 		expected.clear();
-		verifyMembers(grp, MemberFilter.CompositeMembers, 0, expected);
+		verifyMembers(grp, MemberFilter.CompositeMembers, expected);
 
 		expected.clear();
 		verifyMemberships(grp, MemberFilter.All, 0, expected);
@@ -976,12 +974,18 @@ public class TestGroups extends TestCase {
 	}
 
 	private void verifyMembers(GroupDescriptor grp, MemberFilter filter,
-			int expectedCount, Map expected) {
+			Map expected) {
+		verifyMembers(AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, grp,
+				filter, expected);
+	}
+
+	private void verifyMembers(String caller, GroupDescriptor grp,
+			MemberFilter filter, Map expected) {
 		try {
+			int expectedCount = expected.size();
 			assertEquals(expectedCount, expected.size());
-			MemberDescriptor[] members = grouper.getMembers(
-					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
-							.getGroupIdentifier(grp), filter);
+			MemberDescriptor[] members = grouper.getMembers(caller, Utils
+					.getGroupIdentifier(grp), filter);
 			assertEquals(expectedCount, members.length);
 
 			for (int i = 0; i < expectedCount; i++) {
