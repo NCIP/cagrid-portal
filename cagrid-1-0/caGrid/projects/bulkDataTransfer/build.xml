@@ -40,6 +40,7 @@
 
 
 	<!-- Basic Build directories -->
+	<property name="extension.description.file" value="{basedir}/extension/extension.xml" />
 
 	<!-- Auxiliary directory where all the intermediate files will be placed -->
 	<property name="build.dir" location="build" />
@@ -314,6 +315,40 @@
 		<echo message="|    Type 'ant -h' for general help with Ant                                   |" />
 		<echo message="|    Type 'ant -p' for a description of this service's build targets.          |" />
 		<echo message="================================================================================" />
+	</target>
+	
+	<target name="installIntroduceExtensions" depends="all">
+		<delete dir="${introduce.extensions.dir}/bdt" />
+		<mkdir dir="${introduce.extensions.dir}/bdt" />
+		<mkdir dir="${introduce.extensions.dir}/bdt/schema" />
+		<mkdir dir="${introduce.extensions.dir}/bdt/schema/metadata" />
+		<!-- extension description file -->
+		<copy todir="${introduce.extensions.dir}/bdt" file="${extension.description.file}" />
+		<!-- libraries -->
+		<copy todir="${introduce.extensions.dir}/lib">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${build.jars.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+		<!-- data service schemas -->
+		<copy todir="${introduce.extensions.dir}/bdt/schema">
+			<fileset dir="${basedir}/schema/BulkDataHandler/">
+				<include name="**/*.xsd" />
+				<include name="**/*.wsdl" />
+			</fileset>
+		</copy>
+		<!-- metadata schemas -->
+		<copy todir="${introduce.extensions.dir}/bdt/metadata">
+			<fileset dir="${ext.schema.dir}">
+				<include name="**/*.xsd" />
+			</fileset>
+		</copy>
 	</target>
 
 </project>
