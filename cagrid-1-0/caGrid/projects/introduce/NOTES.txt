@@ -1,5 +1,8 @@
 To Do:
 
+
+make sure that when introduce calls into the services build in CommonTools that you fork.
+
 refresh button in gme to view uploaded schemas without closing and opening
 
 if a namespace is imported by another schema but is also added to the NT list, which package name will be used?
