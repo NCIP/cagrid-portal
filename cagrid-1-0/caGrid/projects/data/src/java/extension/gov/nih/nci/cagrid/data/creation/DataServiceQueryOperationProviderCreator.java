@@ -307,10 +307,14 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 	
 	private void processFeatures(ServiceDescription desc, ServiceType service, Properties serviceProps) throws CreationExtensionException {
 		ExtensionTypeExtensionData extensionData = getExtensionData(desc);
-		// ws-enumeration
-		if (ExtensionDataUtils.getWsEnumFeature(extensionData)) {
-			installWsEnum(desc, service, serviceProps);
-		}		
+		if (extensionData != null) {
+			// ws-enumeration
+			if (ExtensionDataUtils.getWsEnumFeature(extensionData)) {
+				installWsEnum(desc, service, serviceProps);
+			}		
+		} else {
+			log.warn("No Extension Data found!");
+		}
 	}
 	
 	
