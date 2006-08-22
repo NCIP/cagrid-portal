@@ -4,12 +4,16 @@ import java.util.Date;
 import java.util.Set;
 
 import edu.internet2.middleware.grouper.CompositeType;
+import edu.internet2.middleware.grouper.GrantPrivilegeException;
 import edu.internet2.middleware.grouper.GroupDeleteException;
 import edu.internet2.middleware.grouper.GroupModifyException;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.grouper.MemberAddException;
 import edu.internet2.middleware.grouper.MemberDeleteException;
+import edu.internet2.middleware.grouper.Privilege;
+import edu.internet2.middleware.grouper.RevokePrivilegeException;
+import edu.internet2.middleware.grouper.SchemaException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 
@@ -154,7 +158,35 @@ public interface GroupI {
 	public Set getUpdaters();
 
 	public Set getViewers();
+
+	public boolean hasAdmin(Subject subj);
+
+	public boolean hasOptin(Subject subj);
+
+	public boolean hasOptout(Subject subj);
+
+	public boolean hasRead(Subject subj);
+
+	public boolean hasUpdate(Subject subj);
+
+	public boolean hasView(Subject subj);
+
+	public void grantPriv(Subject subj, Privilege priv)
+			throws GrantPrivilegeException, InsufficientPrivilegeException,
+			SchemaException;
+
+	public void revokePriv(Subject subj, Privilege priv)
+			throws InsufficientPrivilegeException, RevokePrivilegeException,
+			SchemaException;
+
 	//
+	// // Not sure if we will support
+	//
+	//
+	// public void revokePriv(Privilege priv)
+	// throws InsufficientPrivilegeException, RevokePrivilegeException,
+	// SchemaException;
+
 	// public boolean canReadField(Field f) throws IllegalArgumentException,
 	// SchemaException;
 	//
@@ -167,35 +199,6 @@ public interface GroupI {
 	// public boolean canWriteField(Subject subj, Field f)
 	// throws IllegalArgumentException, SchemaException;
 	//
-
-	//
-	// public void grantPriv(Subject subj, Privilege priv)
-	// throws GrantPrivilegeException, InsufficientPrivilegeException,
-	// SchemaException;
-	//
-	// public boolean hasAdmin(Subject subj);
-	//
-	//
-	// public boolean hasOptin(Subject subj);
-	//
-	// public boolean hasOptout(Subject subj);
-	//
-	// public boolean hasRead(Subject subj);
-	//
-	// public boolean hasUpdate(Subject subj);
-	//
-	// public boolean hasView(Subject subj);
-	//
-	//
-	// public void revokePriv(Privilege priv)
-	// throws InsufficientPrivilegeException, RevokePrivilegeException,
-	// SchemaException;
-	//
-	// public void revokePriv(Subject subj, Privilege priv)
-	// throws InsufficientPrivilegeException, RevokePrivilegeException,
-	// SchemaException;
-	//
-	// // Not sure if we will support
 	// public void addType(GroupType type) throws GroupModifyException,
 	// InsufficientPrivilegeException, SchemaException;
 	//
