@@ -19,7 +19,7 @@ public class BulkDataHandlerProviderImpl{
 	}
 	
 
-	public transfer.AnyXmlType get(transfer.EmptyType params) throws RemoteException {
+	public org.globus.transfer.AnyXmlType get(org.globus.transfer.EmptyType params) throws RemoteException {
 		return impl.get(params);
 	}
 

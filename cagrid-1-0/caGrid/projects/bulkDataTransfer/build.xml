@@ -26,6 +26,7 @@
 	<property name="common.jar.name" value="caGrid-1.0-${service.name}-common.jar" />
 	<property name="client.jar.name" value="caGrid-1.0-${service.name}-client.jar" />
 	<property name="service.jar.name" value="caGrid-1.0-${service.name}-service.jar" />
+	<property name="extension.jar.name" value="caGrid-1.0-${service.name}-extension.jar" />
 	<property name="stubs.jar.name" value="caGrid-1.0-${service.name}-stubs.jar" />
 	<property name="test.jar.name" value="caGrid-1.0-${service.name}-tests.jar" />
 
@@ -40,7 +41,7 @@
 
 
 	<!-- Basic Build directories -->
-	<property name="extension.description.file" value="{basedir}/extension/extension.xml" />
+	<property name="extension.description.file" value="${basedir}/extension/extension.xml" />
 
 	<!-- Auxiliary directory where all the intermediate files will be placed -->
 	<property name="build.dir" location="build" />
@@ -261,6 +262,9 @@
 			<exclude name="**/client/**" />
 			<exclude name="**/service/**" />
 		</jar>
+		<jar jarfile="${build.lib.dir}/${extension.jar.name}" basedir="${build.dest}">
+			<include name="**/extension/**" />
+		</jar>
 	</target>
 
 
@@ -304,7 +308,7 @@
 	</target>
 
 	<!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
-	<target name="all" depends="jars" description="Builds the entire service." />
+	<target name="all" depends="clean, jars" description="Builds the entire service." />
 
 	<target name="help" description="Prints usage information.">
 		<echo message="================================================================================" />
@@ -321,7 +325,6 @@
 		<delete dir="${introduce.extensions.dir}/bdt" />
 		<mkdir dir="${introduce.extensions.dir}/bdt" />
 		<mkdir dir="${introduce.extensions.dir}/bdt/schema" />
-		<mkdir dir="${introduce.extensions.dir}/bdt/schema/metadata" />
 		<!-- extension description file -->
 		<copy todir="${introduce.extensions.dir}/bdt" file="${extension.description.file}" />
 		<!-- libraries -->
@@ -332,7 +335,7 @@
 			<fileset dir="${ext.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
-			<fileset dir="${build.jars.dir}">
+			<fileset dir="${build.lib.dir}">
 				<include name="**/*.jar" />
 			</fileset>
 		</copy>
@@ -343,10 +346,11 @@
 				<include name="**/*.wsdl" />
 			</fileset>
 		</copy>
-		<!-- metadata schemas -->
-		<copy todir="${introduce.extensions.dir}/bdt/metadata">
-			<fileset dir="${ext.schema.dir}">
-				<include name="**/*.xsd" />
+		
+		<!-- introduce xml file -->
+		<copy todir="${introduce.extensions.dir}/bdt">
+			<fileset dir="./">
+				<include name="introduce.xml" />
 			</fileset>
 		</copy>
 	</target>

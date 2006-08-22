@@ -18,6 +18,7 @@ import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -53,6 +54,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		System.out.println("Copying schemas to " + schemaDir);
 		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "bdt"
 			+ File.separator + "schema");
+		File extensionDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "bdt");
 		List schemaFiles = Utils.recursiveListFiles(extensionSchemaDir, new FileFilters.XSDFileFilter());
 		for (int i = 0; i < schemaFiles.size(); i++) {
 			File schemaFile = (File) schemaFiles.get(i);
@@ -60,6 +62,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 				extensionSchemaDir.getCanonicalPath().length() + File.separator.length());
 			copySchema(subname, schemaDir);
 		}
+		
 		// copy libraries for data services into the new bdt lib directory
 		copyLibraries(props);
 		// namespaces
@@ -70,7 +73,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		}
 
 		// add some namespaces to the service
-		List bdtNamespaces = Arrays.asList(namespaces.getNamespace());
+		List bdtNamespaces = new ArrayList(Arrays.asList(namespaces.getNamespace()));
 		// metadata
 		NamespaceType metadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.METADATA_SCHEMA);
@@ -91,9 +94,9 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		description.setNamespaces(namespaces);
 
 		// add the bdt subservice
-		ServiceDescription desc = (ServiceDescription) Utils.deserializeDocument("introduce.xml", ServiceDescription.class);
+		ServiceDescription desc = (ServiceDescription) Utils.deserializeDocument(extensionDir + File.separator + "introduce.xml", ServiceDescription.class);
 		ServiceType bdtService = desc.getServices().getService(0);
-		List services = Arrays.asList(description.getServices().getService());
+		List services = new ArrayList(Arrays.asList(description.getServices().getService()));
 		services.add(bdtService);
 		ServiceType[] servicesArr = new ServiceType[services.size()];
 		services.toArray(servicesArr);
@@ -155,7 +158,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 
 
 	private void copySchema(String schemaName, String outputDir) throws Exception {
-		File schemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "dataFS" + File.separator
+		File schemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "bdt" + File.separator
 			+ "schema" + File.separator + schemaName);
 		System.out.println("Copying schema from " + schemaFile.getAbsolutePath());
 		File outputFile = new File(outputDir + File.separator + schemaName);

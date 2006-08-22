@@ -1,6 +1,6 @@
 <ns1:ServiceSkeleton introduceVersion=".9999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns2:Namespace location="./transfer.xsd" namespace="http://www.globus.org/transfer" packageName="transfer" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./transfer.xsd" namespace="http://www.globus.org/transfer" packageName="org.globus.transfer" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Empty" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="AnyXml" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>

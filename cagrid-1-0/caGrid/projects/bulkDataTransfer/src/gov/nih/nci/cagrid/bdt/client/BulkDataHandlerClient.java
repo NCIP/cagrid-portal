@@ -125,7 +125,7 @@ public class BulkDataHandlerClient extends ServiceSecurityClient implements Bulk
         portType.releaseOp(release);
       }
     }
-    public transfer.AnyXmlType get(transfer.EmptyType empty) throws RemoteException {
+    public org.globus.transfer.AnyXmlType get(org.globus.transfer.EmptyType empty) throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"get");
         return portType.get(empty);
