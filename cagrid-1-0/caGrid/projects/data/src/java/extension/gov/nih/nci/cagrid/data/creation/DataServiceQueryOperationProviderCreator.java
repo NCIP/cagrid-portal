@@ -1,10 +1,17 @@
 package gov.nih.nci.cagrid.data.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.service.globus.DataServiceProviderImpl;
+import gov.nih.nci.cagrid.data.service.globus.EnumerationQueryProviderImpl;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
@@ -24,6 +31,7 @@ import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
+import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -48,6 +56,9 @@ import org.projectmobius.common.MobiusException;
  * @version $Id$ 
  */
 public class DataServiceQueryOperationProviderCreator implements CreationExtensionPostProcessor {
+
+	public static final String ENUMERATION_DATA_SERVICE_NAMESPACE = "http://gov.nih.nci.cagrid.data.enumeration/EnumerationDataService";
+	public static final String WS_ENUM_EXTENSION_NAME = "cagrid_wsEnum";
 	
 	private static Logger log = Logger.getLogger(DataServiceQueryOperationProviderCreator.class);
 
@@ -63,6 +74,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		addDataServiceNamespaces(serviceDescription, serviceProperties);
 		modifyServiceProperties(serviceDescription);
 		addQueryMethod(serviceDescription, mainService);
+		processFeatures(serviceDescription, mainService, serviceProperties);
 	}
 	
 	
@@ -71,7 +83,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		String schemaDir = getServiceSchemaDir(props);
 		System.out.println("Copying schemas to " + schemaDir);
 		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
-			+ File.separator + "schema");
+			+ File.separator + "schema" + File.separator + "Data");
 		List schemaFiles = Utils.recursiveListFiles(extensionSchemaDir, new FileFilters.XSDFileFilter());
 		// also copy the WSDL for data services
 		// schemaFiles.add(new File(getWsdlFileName(props)));
@@ -81,7 +93,13 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 				File schemaFile = (File) schemaFiles.get(i);
 				String subname = schemaFile.getAbsolutePath().substring(
 					extensionSchemaDir.getAbsolutePath().length() + File.separator.length());
+				File schemaOut = new File(schemaDir + File.separator + subname);
+				Utils.copyFile(schemaFile, schemaOut);
+				/*
+				String subname = schemaFile.getAbsolutePath().substring(
+					extensionSchemaDir.getAbsolutePath().length() + File.separator.length());
 				copySchema(subname, schemaDir);
+				*/
 			}
 		} catch (Exception ex) {
 			throw new CreationExtensionException("Error copying data service schemas: " + ex.getMessage(), ex);
@@ -162,8 +180,8 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		// exceptions on query method
 		MethodTypeExceptions queryExceptions = new MethodTypeExceptions();
 		MethodTypeExceptionsException[] exceptions = {
-				new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[0]),
-				new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[1])};
+			new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[0]),
+			new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[1])};
 		queryExceptions.setException(exceptions);
 		queryMethod.setExceptions(queryExceptions);
 		// query method is imported
@@ -172,8 +190,8 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		importInfo.setPackageName(DataServiceConstants.DATA_SERVICE_PACKAGE);
 		importInfo.setPortTypeName(DataServiceConstants.DATA_SERVICE_PORT_TYPE_NAME);
 		importInfo.setWsdlFile("DataService.wsdl");
-		importInfo.setInputMessage(new QName("http://gov.nih.nci.cagrid.data/DataService", "QueryRequest"));
-		importInfo.setOutputMessage(new QName("http://gov.nih.nci.cagrid.data/DataService", "QueryResponse"));
+		importInfo.setInputMessage(new QName(DataServiceConstants.DATA_SERVICE_NAMESPACE, "QueryRequest"));
+		importInfo.setOutputMessage(new QName(DataServiceConstants.DATA_SERVICE_NAMESPACE, "QueryResponse"));
 		queryMethod.setIsImported(true);
 		queryMethod.setImportInformation(importInfo);
 		// query method is provided
@@ -195,16 +213,6 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 	}
 	
 	
-	private void copySchema(String schemaName, String outputDir) throws Exception {
-		File schemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data" + File.separator
-			+ "schema" + File.separator + schemaName);
-		System.out.println("Copying schema from " + schemaFile.getAbsolutePath());
-		File outputFile = new File(outputDir + File.separator + schemaName);
-		System.out.println("Saving schema to " + outputFile.getAbsolutePath());
-		Utils.copyFile(schemaFile, outputFile);
-	}
-	
-	
 	private void copyDataServiceLibraries(Properties props) throws CreationExtensionException {
 		String toDir = getServiceLibDir(props);
 		File directory = new File(toDir);
@@ -217,8 +225,8 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 			public boolean accept(File pathname) {
 				String name = pathname.getName();
 				return (name.endsWith(".jar") && (name.startsWith("caGrid-1.0-data") 
-					|| name.startsWith("caGrid-core") || name.startsWith("caGrid-caDSR") 
-					|| name.startsWith("caGrid-metadata") || name.startsWith("castor") 
+					|| name.startsWith("caGrid-1.0-core") || name.startsWith("caGrid-1.0-caDSR") 
+					|| name.startsWith("caGrid-1.0-metadata") || name.startsWith("castor") 
 					|| name.startsWith("client") || name.startsWith("hibernate") 
 					|| name.startsWith("spring") || name.startsWith("cglib")));
 			}
@@ -294,5 +302,116 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 			}
 		}
 		return null;
+	}
+	
+	
+	private void processFeatures(ServiceDescription desc, ServiceType service, Properties serviceProps) throws CreationExtensionException {
+		ExtensionTypeExtensionData extensionData = getExtensionData(desc);
+		// ws-enumeration
+		if (ExtensionDataUtils.getWsEnumFeature(extensionData)) {
+			installWsEnum(desc, service, serviceProps);
+		}		
+	}
+	
+	
+	private void installWsEnum(ServiceDescription desc, ServiceType service, Properties serviceProps) throws CreationExtensionException {
+		// verify the ws-enum extension is installed
+		if (!wsEnumExtensionInstalled()) {
+			throw new CreationExtensionException("The required extension " + WS_ENUM_EXTENSION_NAME 
+				+ " was not found to be installed.  Please install it and try creating your service again");
+		}
+		if (!wsEnumExtensionUsed(desc)) {
+			// add the ws Enumeration extension
+			ExtensionDescription ext = 
+				ExtensionsLoader.getInstance().getExtension(WS_ENUM_EXTENSION_NAME);
+			ExtensionType extType = new ExtensionType();
+			extType.setName(ext.getServiceExtensionDescription().getName());
+			extType.setExtensionType(ext.getExtensionType());
+			ExtensionType[] serviceExtensions = desc.getExtensions().getExtension();
+			ExtensionType[] allExtensions = new ExtensionType[serviceExtensions.length + 1];
+			System.arraycopy(serviceExtensions, 0, allExtensions, 0, serviceExtensions.length);
+			allExtensions[allExtensions.length - 1] = extType;
+			desc.getExtensions().setExtension(allExtensions);
+			// wsEnum extension copies libraries into the service on its own
+		}
+		// add the enumerationQuery method to the data service
+		MethodType enumerateMethod = new MethodType();
+		enumerateMethod.setName("enumerationQuery");
+		enumerateMethod.setIsImported(true);
+		enumerateMethod.setIsProvided(true);
+		MethodTypeInputs enumInputs = new MethodTypeInputs();
+		MethodTypeInputsInput queryParam = new MethodTypeInputsInput();
+		queryParam.setName(DataServiceConstants.QUERY_METHOD_PARAMETER_NAME);
+		queryParam.setIsArray(false);
+		QName queryQname = new QName(DataServiceConstants.CQL_QUERY_URI, CQLQuery.class.getSimpleName());
+		queryParam.setQName(queryQname);
+		enumInputs.setInput(new MethodTypeInputsInput[]{queryParam});
+		enumerateMethod.setInputs(enumInputs);
+		MethodTypeOutput enumOutput = new MethodTypeOutput();
+		enumOutput.setIsArray(false);
+		enumOutput.setQName(new QName(WsEnumConstants.WS_ENUMERATION_URI, WsEnumConstants.ENUMERATE_RESPONSE_TYPE));
+		enumerateMethod.setOutput(enumOutput);
+		// import info
+		MethodTypeImportInformation enumImport = new MethodTypeImportInformation();
+		enumImport.setPortTypeName("EnumerationQueryPortType");
+		enumImport.setWsdlFile("EnumerationQuery.wsdl");
+		enumImport.setInputMessage(new QName(ENUMERATION_DATA_SERVICE_NAMESPACE, "EnumerationQueryRequest"));
+		enumImport.setOutputMessage(new QName(ENUMERATION_DATA_SERVICE_NAMESPACE, "EnumerationQueryResponse"));
+		enumImport.setNamespace(ENUMERATION_DATA_SERVICE_NAMESPACE);
+		enumImport.setPackageName(DataServiceConstants.DATA_SERVICE_PACKAGE);
+		enumerateMethod.setImportInformation(enumImport);
+		// provider info
+		MethodTypeProviderInformation enumProvider = new MethodTypeProviderInformation();
+		enumProvider.setProviderClass(EnumerationQueryProviderImpl.class.getName());
+		enumerateMethod.setProviderInformation(enumProvider);
+		// add the method to the service
+		CommonTools.addMethod(service, enumerateMethod);
+		// copy over the EnumerationQuery.wsdl file
+		String schemaDir = getServiceSchemaDir(serviceProps);
+		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
+			+ File.separator + "schema");
+		File wsdlFile = new File(extensionSchemaDir.getAbsolutePath() 
+			+ File.separator + "Data" + File.separator + "EnumerationQuery.wsdl");
+		File wsdlOutFile = new File(schemaDir + File.separator + wsdlFile.getName());
+		try {
+			Utils.copyFile(wsdlFile, wsdlOutFile);
+		} catch (Exception ex) {
+			throw new CreationExtensionException("Error copying data service schemas: " + ex.getMessage(), ex);
+		}
+	}
+	
+	
+	private ExtensionTypeExtensionData getExtensionData(ServiceDescription desc) {
+		for (int i = 0; i < desc.getExtensions().getExtension().length; i++) {
+			ExtensionType ext = desc.getExtensions().getExtension(i);
+			if (ext.getName().equals("data")) {
+				return ext.getExtensionData();
+			}
+		}
+		return null;
+	}
+	
+	
+	private boolean wsEnumExtensionInstalled() {
+		List extensionDescriptors = ExtensionsLoader.getInstance().getServiceExtensions();
+		for (int i = 0; i < extensionDescriptors.size(); i++) {
+			ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) extensionDescriptors.get(i);
+			if (ex.getName().equals(WS_ENUM_EXTENSION_NAME)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	private boolean wsEnumExtensionUsed(ServiceDescription desc) {
+		if (desc.getExtensions() != null && desc.getExtensions().getExtension() != null) {
+			for (int i = 0; i < desc.getExtensions().getExtension().length; i++) {
+				if (desc.getExtensions().getExtension(i).getName().equals(WS_ENUM_EXTENSION_NAME)) {
+					return true;
+				}
+			}
+		}		
+		return false;
 	}
 }

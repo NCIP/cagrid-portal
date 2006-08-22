@@ -68,7 +68,6 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 	private void initialize() {
         this.setTitle("Data Service Configuration");
         this.setContentPane(getMainPanel());
-        // this.setSize(new java.awt.Dimension(389,171));
         getDataButtonGroup();
 		pack();
 	}
@@ -128,7 +127,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 								extType.setName(ext.getServiceExtensionDescription().getName());
 								extType.setExtensionType(ext.getExtensionType());
 								ExtensionType[] serviceExtensions = getServiceInfo().getExtensions().getExtension();
-								ExtensionType[] allExtensions = new ExtensionType[serviceExtensions.length];
+								ExtensionType[] allExtensions = new ExtensionType[serviceExtensions.length + 1];
 								System.arraycopy(serviceExtensions, 0, allExtensions, 0, serviceExtensions.length);
 								allExtensions[allExtensions.length - 1] = extType;
 								getServiceInfo().getExtensions().setExtension(allExtensions);
@@ -197,7 +196,9 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 			featuresPanel = new JPanel();
 			featuresPanel.setLayout(new GridBagLayout());
-			featuresPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Optional Features", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+			featuresPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Optional Features", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 			featuresPanel.add(getWsEnumCheckBox(), gridBagConstraints);
 			featuresPanel.add(getGridIdentCheckBox(), gridBagConstraints11);
 		}
@@ -291,7 +292,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 	
 	private void setFeatureStatus() {
 		ExtensionTypeExtensionData data = 
-			ExtensionTools.getExtensionData(getExtensionDescription(), getServiceInfo());
+			getExtensionTypeExtensionData();		
 		Element featuresElement = new Element(DataServiceConstants.DS_FEATURES);
 		try {
 			featuresElement.setAttribute(DataServiceConstants.USE_CUSTOM_DATA_SORUCE,
