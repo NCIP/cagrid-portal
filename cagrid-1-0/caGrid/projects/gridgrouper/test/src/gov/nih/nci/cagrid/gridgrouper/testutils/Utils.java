@@ -9,15 +9,21 @@ import edu.internet2.middleware.grouper.OwnerNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilege;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
+import gov.nih.nci.cagrid.gridgrouper.service.GridGrouper;
 import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
+import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperBaseTreeNode;
 
 import java.util.Iterator;
 import java.util.Set;
 
 public class Utils {
+
+	private static final String SUPER_USER = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=super admin";
 
 	public static StemIdentifier getStemIdentifier(StemDescriptor des) {
 		StemIdentifier id = new StemIdentifier();
@@ -69,8 +75,9 @@ public class Utils {
 			System.out.println();
 		}
 	}
-	
-	public static void printCompositeMemberships(GroupDescriptor grp) throws Exception {
+
+	public static void printCompositeMemberships(GroupDescriptor grp)
+			throws Exception {
 		Subject subject = SubjectUtils
 				.getSubject(AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID);
 		GrouperSession session = GrouperSession.start(subject);
@@ -100,6 +107,34 @@ public class Utils {
 			}
 			System.out.println();
 		}
+	}
+
+	public static void printUsersWithPrivilege(GroupDescriptor des,
+			GroupPrivilegeType priv) throws Exception {
+		GridGrouper grouper = new GridGrouper();
+		String[] subs = grouper.getSubjectsWithGroupPrivilege(SUPER_USER, Utils
+				.getGroupIdentifier(des), priv);
+		System.out.println("Users with the Privilege, " + priv.getValue()
+				+ " on the group " + des.getName() + ":");
+		System.out.println("");
+		for (int i = 0; i < subs.length; i++) {
+			System.out.println(subs[i]);
+		}
+		System.out.println("");
+	}
+
+	public static void printPrivilegesForUser(GroupDescriptor des, String user)
+			throws Exception {
+		GridGrouper grouper = new GridGrouper();
+		GroupPrivilege[] privs = grouper.getGroupPrivileges(SUPER_USER, Utils
+				.getGroupIdentifier(des), user);
+		System.out.println("Privileges for " + user + ", on the group "
+				+ des.getName() + ":");
+		System.out.println("");
+		for (int i = 0; i < privs.length; i++) {
+			System.out.println(privs[i].getPrivilegeType().getValue());
+		}
+		System.out.println("");
 	}
 
 }

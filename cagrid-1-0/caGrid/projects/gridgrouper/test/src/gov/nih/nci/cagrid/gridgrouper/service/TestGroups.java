@@ -79,6 +79,8 @@ public class TestGroups extends TestCase {
 			GroupDescriptor grp = createAndCheckGroup(test, groupExtension,
 					groupDisplayExtension, 1);
 			GroupIdentifier gid = Utils.getGroupIdentifier(grp);
+			
+			
 
 			userExpected.clear();
 			userExpected.add(GroupPrivilegeType.admin);
@@ -153,7 +155,7 @@ public class TestGroups extends TestCase {
 			}
 
 			// Updating
-			//TODO: This should throw Insufficient Privilege Fault
+			// TODO: This should throw Insufficient Privilege Fault
 			try {
 				GroupUpdate u = new GroupUpdate();
 				u.setDescription("New Description");
@@ -178,31 +180,7 @@ public class TestGroups extends TestCase {
 		}
 	}
 
-	private void printUsersWithPrivilege(GroupDescriptor des,
-			GroupPrivilegeType priv) throws Exception {
-		String[] subs = grouper.getSubjectsWithGroupPrivilege(SUPER_USER, Utils
-				.getGroupIdentifier(des), priv);
-		System.out.println("Users with the Privilege, " + priv.getValue()
-				+ " on the group " + des.getName() + ":");
-		System.out.println("");
-		for (int i = 0; i < subs.length; i++) {
-			System.out.println(subs[i]);
-		}
-		System.out.println("");
-	}
-
-	private void printPrivilegesForUser(GroupDescriptor des, String user)
-			throws Exception {
-		GroupPrivilege[] privs = grouper.getGroupPrivileges(SUPER_USER, Utils
-				.getGroupIdentifier(des), user);
-		System.out.println("Privileges for " + user + ", on the group "
-				+ des.getName() + ":");
-		System.out.println("");
-		for (int i = 0; i < privs.length; i++) {
-			System.out.println(privs[i].getPrivilegeType().getValue());
-		}
-		System.out.println("");
-	}
+	
 
 	public void testMembers() {
 		try {
