@@ -918,18 +918,7 @@ public class StemBrowser extends JPanel {
 			getPrivileges
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							MobiusRunnable runner = new MobiusRunnable() {
-								public void execute() {
-									loadPrivileges();
-								}
-							};
-							try {
-								PortalResourceManager.getInstance()
-										.getThreadManager()
-										.executeInBackground(runner);
-							} catch (Exception t) {
-								t.getMessage();
-							}
+							loadPrivileges();
 						}
 
 					});
@@ -938,6 +927,9 @@ public class StemBrowser extends JPanel {
 	}
 
 	protected void loadPrivileges() {
+		MobiusRunnable runner = new MobiusRunnable() {
+			public void execute() {
+			
 		synchronized (getPrivs()) {
 			int eid = node.getBrowser().getProgress().startEvent(
 					"Loading the privileges for " + stem.getDisplayExtension()
@@ -985,6 +977,15 @@ public class StemBrowser extends JPanel {
 								+ stem.getDisplayExtension() + "!!!");
 				PortalUtils.showErrorMessage(e);
 			}
+		}
+			}
+		};
+		try {
+			PortalResourceManager.getInstance()
+					.getThreadManager()
+					.executeInBackground(runner);
+		} catch (Exception t) {
+			t.getMessage();
 		}
 	}
 

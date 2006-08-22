@@ -322,10 +322,11 @@ public class StemPrivilegeWindow extends GridPortalComponent {
 			}
 
 			dispose();
-			PortalUtils.showMessage(sb.toString());
+			
 			if (reload) {
 				browser.loadPrivileges();
 			}
+			PortalUtils.showMessage(sb.toString());
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
