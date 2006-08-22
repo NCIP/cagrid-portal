@@ -39,14 +39,13 @@ public class SkeletonPostCreator extends Task {
 		ServiceDescription introService = null;
 		try {
 			introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
-				+ "introduce.xml", ServiceDescription.class);
+				+ IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
 		} catch (Exception e1) {
 			BuildException be = new BuildException(e1.getMessage());
 			be.setStackTrace(e1.getStackTrace());
 			be.printStackTrace();
 			throw be;
 		}
-
 
 		// run any extensions that need to be ran
 		if (introService.getExtensions() != null && introService.getExtensions().getExtension() != null) {
@@ -75,8 +74,8 @@ public class SkeletonPostCreator extends Task {
 		}
 
 		try {
-			Utils.serializeDocument(baseDirectory + File.separator + "introduce.xml", introService,
-				IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+			Utils.serializeDocument(baseDirectory + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
+				introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 		} catch (Exception e) {
 			BuildException be = new BuildException(e.getMessage());
 			be.setStackTrace(e.getStackTrace());

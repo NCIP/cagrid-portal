@@ -15,8 +15,6 @@ import java.io.FileFilter;
 
 import javax.xml.namespace.QName;
 
-import org.apache.tools.ant.BuildException;
-
 
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>

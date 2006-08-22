@@ -111,7 +111,7 @@
 			<xs:element name="ExtensionData" minOccurs="0" maxOccurs="1">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:any ></xs:any>
+						<xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>

@@ -7,20 +7,16 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.io.File;
-
-import javax.xml.namespace.QName;
-
-import com.atomicobject.haste.framework.Step;
 
 
 public class AddServicePropertiesStep extends BaseStep {
 	private TestCaseInfo tci;
 
+
 	public AddServicePropertiesStep(TestCaseInfo tci, boolean build) throws Exception {
-		super(tci.getDir(),build);
+		super(tci.getDir(), build);
 		this.tci = tci;
 	}
 
@@ -31,17 +27,18 @@ public class AddServicePropertiesStep extends BaseStep {
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getBaseDir() + File.separator
 			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
 		ServiceProperties props = introService.getServiceProperties();
-		if(props == null){
+		if (props == null) {
 			props = new ServiceProperties();
 			introService.setServiceProperties(props);
 		}
-		
+
 		ServicePropertiesProperty newProperty1 = new ServicePropertiesProperty();
 		newProperty1.setKey("foo");
-		
+		newProperty1.setValue("bar");
+
 		ServicePropertiesProperty newProperty2 = new ServicePropertiesProperty();
 		newProperty2.setKey("bar");
-		newProperty2.setKey("barValue");
+		newProperty2.setValue("barValue");
 
 		// add new method to array in bean
 		// this seems to be a wierd way be adding things....

@@ -28,7 +28,7 @@ imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codege
     <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
       <agg:GetMultipleResourcePropertiesPollType
       <%
-      	if(metadataList!=null && metadataList!=null){
+      	if(metadataList!=null){
       		Map prefixmap=TemplateUtils.buildMasterNamespaceInformationMap(info.getServiceDescriptor());
       		Iterator iterator = prefixmap.keySet().iterator();
 			while(iterator.hasNext()){

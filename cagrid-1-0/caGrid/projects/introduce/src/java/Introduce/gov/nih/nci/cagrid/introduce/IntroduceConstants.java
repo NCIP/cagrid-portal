@@ -61,6 +61,7 @@ public class IntroduceConstants {
 	public static final String INTRODUCE_VERSION = ".9999";
 
 	public static final String INTRODUCE_XML_FILE = "introduce.xml";
+	public static final String INTRODUCE_XML_XSD_FILE = "ServiceDescription.xsd";
 
 	// w3c namespaces
 	public static final String W3CNAMESPACE = "http://www.w3.org/2001/XMLSchema";

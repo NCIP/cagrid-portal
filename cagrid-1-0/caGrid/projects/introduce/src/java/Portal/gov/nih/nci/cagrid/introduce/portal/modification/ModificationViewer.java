@@ -1706,6 +1706,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (rpHolderPanel == null) {
 			if (info.getServices().getService(0).getResourcePropertiesList() == null) {
 				ResourcePropertiesListType properties = new ResourcePropertiesListType();
+				properties.setResourceProperty(null);
 				info.getServices().getService(0).setResourcePropertiesList(properties);
 			}
 			rpHolderPanel = new ModifyResourcePropertiesPanel(info.getServices().getService(0), info.getNamespaces(),

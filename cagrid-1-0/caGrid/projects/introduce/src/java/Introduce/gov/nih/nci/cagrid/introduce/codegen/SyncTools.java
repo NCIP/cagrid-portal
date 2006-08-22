@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.codegen;
 
+import gov.nih.nci.cagrid.common.SchemaValidationException;
+import gov.nih.nci.cagrid.common.SchemaValidator;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
@@ -40,9 +42,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.URL;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -226,9 +225,23 @@ public class SyncTools {
 
 
 	public void sync() throws Exception {
+		String introduceXML = baseDirectory + File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
+		File introduceXMLFile = new File(introduceXML);
+		if (!introduceXMLFile.exists() || !introduceXMLFile.canRead()) {
+			throw new Exception("Unable to read the Introduce document:" + introduceXML);
+		}
+
+		// STEP 0: validate the instance document
+		try {
+			SchemaValidator.validate(getIntroduceXSD(), introduceXMLFile);
+		} catch (SchemaValidationException e) {
+			throw new SchemaValidationException("The Introduce XML document does not adhere to the schema:\n"
+				+ e.getMessage(), e);
+		}
+
 		// STEP 1: populate the object model representation of the service
-		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
-			+ "introduce.xml", ServiceDescription.class);
+		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(introduceXML,
+			ServiceDescription.class);
 		if (introService.getIntroduceVersion() == null
 			|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
 			throw new Exception("Introduce version in project does not match version provided by Introduce Toolkit ( "
@@ -296,8 +309,8 @@ public class SyncTools {
 
 		// serialize the possibly modified model back to disk
 		System.out.println("Serializing service model to disk");
-		Utils.serializeDocument(baseDirectory.getAbsolutePath() + File.separator + "introduce.xml", introService,
-			IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+		Utils.serializeDocument(baseDirectory.getAbsolutePath() + File.separator
+			+ IntroduceConstants.INTRODUCE_XML_FILE, introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
 		// STEP 4: write out namespace mappings and flatten the wsdl file then
 		// merge namespace
@@ -347,10 +360,21 @@ public class SyncTools {
 	}
 
 
+	/**
+	 * TODO: requires running directory to be introduce's directory... need a
+	 * better way
+	 * 
+	 * @return
+	 */
+	private String getIntroduceXSD() {
+		return new File("schema" + File.separator + IntroduceConstants.INTRODUCE_XML_XSD_FILE).getAbsolutePath();
+	}
+
+
 	private void populateClassnames(ServiceInformation info, MultiServiceSymbolTable table)
 		throws MalformedNamespaceException, SynchronizationException {
 
-		//table.dump(System.out);
+		// table.dump(System.out);
 		// get the classnames from the axis symbol table
 		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {

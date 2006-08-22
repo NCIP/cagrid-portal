@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
@@ -12,8 +13,6 @@ import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import java.io.File;
 import java.util.Properties;
 import java.util.StringTokenizer;
-
-import javax.xml.namespace.QName;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -43,7 +42,7 @@ public class SkeletonCreator extends Task {
 		ServiceDescription introService = null;
 		try {
 			introService = (ServiceDescription) Utils.deserializeDocument(baseDirectory + File.separator
-				+ "introduce.xml", ServiceDescription.class);
+				+ IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
 		} catch (Exception e1) {
 			BuildException be = new BuildException(e1.getMessage());
 			be.setStackTrace(e1.getStackTrace());
@@ -77,8 +76,8 @@ public class SkeletonCreator extends Task {
 
 		// write the modified document back out....
 		try {
-			Utils.serializeDocument(baseDirectory + File.separator + "introduce.xml", introService, new QName(
-				"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceDescription"));
+			Utils.serializeDocument(baseDirectory + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
+				introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 		} catch (Exception e1) {
 			BuildException be = new BuildException(e1.getMessage());
 			be.setStackTrace(e1.getStackTrace());
@@ -143,8 +142,8 @@ public class SkeletonCreator extends Task {
 		}
 
 		try {
-			Utils.serializeDocument(baseDirectory + File.separator + "introduce.xml", introService,
-				IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+			Utils.serializeDocument(baseDirectory + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
+				introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 		} catch (Exception e) {
 			BuildException be = new BuildException(e.getMessage());
 			be.setStackTrace(e.getStackTrace());
