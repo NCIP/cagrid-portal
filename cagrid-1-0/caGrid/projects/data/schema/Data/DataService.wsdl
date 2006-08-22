@@ -11,9 +11,9 @@
     <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns2="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:ns0="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" xmlns:tns="http://gov.nih.nci.cagrid.data/DataService" targetNamespace="http://gov.nih.nci.cagrid.data/DataService" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
       <import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" schemaLocation=".\1_gov.nih.nci.cagrid.CQLQuery.xsd" />
-      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation=".\metadata\cagrid\types\caGridMetadata.xsd" />
+      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation=".\xsd\cagrid\types\caGridMetadata.xsd" />
       <import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" schemaLocation=".\1_gov.nih.nci.cagrid.CQLResultSet.xsd" />
-      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" schemaLocation=".\metadata\cagrid\types\data\data.xsd" />
+      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" schemaLocation=".\xsd\cagrid\types\data\data.xsd" />
       <element name="QueryRequest">
         <complexType>
           <sequence>

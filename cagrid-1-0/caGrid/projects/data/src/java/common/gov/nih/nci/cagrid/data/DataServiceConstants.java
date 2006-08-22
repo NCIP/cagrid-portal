@@ -19,7 +19,7 @@ import javax.xml.namespace.QName;
  */
 public class DataServiceConstants {
 	// metadata schema constants
-	public static final String METADATA_SCHEMA_LOCATION = "metadata" + File.separator + "cagrid" + File.separator + "types";
+	public static final String METADATA_SCHEMA_LOCATION = "xsd" + File.separator + "cagrid" + File.separator + "types";
 	public static final String CADSR_METADATA_SCHEMA_LOCATION = METADATA_SCHEMA_LOCATION + File.separator + "cadsr";
 	public static final String CADSR_DOMAIN_SCHEMA = CADSR_METADATA_SCHEMA_LOCATION + File.separator + "3.0_gov.nih.nci.cadsr.domain.xsd";
 	public static final String CADSR_UMLPROJECT_SCHEMA = CADSR_METADATA_SCHEMA_LOCATION + File.separator + "3.0_gov.nih.nci.cadsr.umlproject.domain.xsd";
@@ -93,13 +93,13 @@ public class DataServiceConstants {
 	public static final String USE_GRID_IDENTIFIERS = "useGridIdentifiers";
 	public static final String USE_SDK_DATA_SOURCE = "useSdkDataSource";
 	public static final String USE_CUSTOM_DATA_SORUCE = "useCustomDataSource";
-		
+	
 	// DomainModel QName
 	public static final QName DOMAIN_MODEL_QNAME = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice", "DomainModel");
 	
 	// service metadata QName
 	public static final QName SERVICE_METADATA_QNAME = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata", "ServiceMetadata");
-
+	
 	private DataServiceConstants() {
 		
 	}
