@@ -138,7 +138,7 @@ public class TestGroups extends TestCase {
 			userExpected.add(GroupPrivilegeType.read);
 			verifyUserPrivileges(USER_A, grp, USER_C, userExpected);
 
-			// //TODO: READ/VIEW users should be able to do this
+			// TODO: READ/VIEW users should be able to do this
 			// privsExpected.clear();
 			// privsExpected.add(USER_C);
 			// verifyPrivileges(USER_A,grp, GroupPrivilegeType.update,
