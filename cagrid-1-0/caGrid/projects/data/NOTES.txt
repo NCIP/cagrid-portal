@@ -27,6 +27,8 @@ TODO:
 22[ ]: Feature / usability request: On service sync, if NO CQL Query Processor impl is specified, create a stub impl in the service's dir.
 23[ ]: Remove package button on DS extension GUI
 24[ ]: Add Project (all packages in said project) button on DS extension GUI
+25[ ]: Don't assume in codegen pre processor that user has configured their CQL Query Processor impl, and the element for this data exists in the extension data.
+	-- Could probably be checked in the GUI
 
 BUGS:
 
