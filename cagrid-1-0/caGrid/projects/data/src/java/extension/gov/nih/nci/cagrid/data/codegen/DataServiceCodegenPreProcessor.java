@@ -107,17 +107,20 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 
 	private String getFilename(ServiceInformation info) {
 		ServiceType mainServ = info.getServiceDescriptor().getServices().getService()[0];
-		ResourcePropertyType[] resourceProperty = mainServ.getResourcePropertiesList().getResourceProperty();
-		for (int i = 0; i < resourceProperty.length; i++) {
-			ResourcePropertyType rp = resourceProperty[i];
-			if (rp.getQName().equals(DataServiceConstants.DOMAIN_MODEL_QNAME)) {
-				String fileLocation = rp.getFileLocation();
-				if (fileLocation == null || fileLocation.trim().equals("")) {
-					rp.setFileLocation(DEFAULT_DOMAIN_MODEL_XML_FILE);
+		if (mainServ.getResourcePropertiesList() != null
+			&& mainServ.getResourcePropertiesList().getResourceProperty() != null) {
+			ResourcePropertyType[] resourceProperty = mainServ.getResourcePropertiesList().getResourceProperty();
+			for (int i = 0; i < resourceProperty.length; i++) {
+				ResourcePropertyType rp = resourceProperty[i];
+				if (rp.getQName().equals(DataServiceConstants.DOMAIN_MODEL_QNAME)) {
+					String fileLocation = rp.getFileLocation();
+					if (fileLocation == null || fileLocation.trim().equals("")) {
+						rp.setFileLocation(DEFAULT_DOMAIN_MODEL_XML_FILE);
+					}
+
+					return rp.getFileLocation();
+
 				}
-
-				return rp.getFileLocation();
-
 			}
 		}
 
