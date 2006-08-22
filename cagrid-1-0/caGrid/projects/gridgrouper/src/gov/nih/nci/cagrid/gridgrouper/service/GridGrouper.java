@@ -1497,7 +1497,7 @@ public class GridGrouper {
 			Subject subj = SubjectUtils.getSubject(gridIdentity);
 			session = GrouperSession.start(subj);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
-			grp.grantPriv(SubjectUtils.getSubject(subject), Privilege
+			grp.grantPriv(SubjectUtils.getSubject(subject,true), Privilege
 					.getInstance(privilege.getValue()));
 		} catch (GroupNotFoundException e) {
 			GroupNotFoundFault fault = new GroupNotFoundFault();
@@ -1557,7 +1557,7 @@ public class GridGrouper {
 			Subject subj = SubjectUtils.getSubject(gridIdentity);
 			session = GrouperSession.start(subj);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
-			grp.revokePriv(SubjectUtils.getSubject(subject), Privilege
+			grp.revokePriv(SubjectUtils.getSubject(subject,true), Privilege
 					.getInstance(privilege.getValue()));
 		} catch (GroupNotFoundException e) {
 			GroupNotFoundFault fault = new GroupNotFoundFault();

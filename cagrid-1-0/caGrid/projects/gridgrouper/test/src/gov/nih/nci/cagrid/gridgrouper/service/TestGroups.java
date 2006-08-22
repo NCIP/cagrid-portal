@@ -47,6 +47,8 @@ public class TestGroups extends TestCase {
 	private String USER_C = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user c";
 
 	private String USER_D = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user d";
+	
+	private String GROUPER_ALL = "GrouperAll";
 
 	public void testViewReadPrivilege() {
 		try {
@@ -79,7 +81,6 @@ public class TestGroups extends TestCase {
 			GroupDescriptor grp = createAndCheckGroup(test, groupExtension,
 					groupDisplayExtension, 1);
 			GroupIdentifier gid = Utils.getGroupIdentifier(grp);
-			
 			
 
 			userExpected.clear();
