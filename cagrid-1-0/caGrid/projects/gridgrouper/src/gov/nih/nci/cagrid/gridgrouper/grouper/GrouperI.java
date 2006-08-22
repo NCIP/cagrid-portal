@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.grouper;
 
 import edu.internet2.middleware.grouper.GroupNotFoundException;
-import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 
