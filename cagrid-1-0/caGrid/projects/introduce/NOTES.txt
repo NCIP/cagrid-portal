@@ -1,5 +1,7 @@
 To Do:
 
+gme browser doesn't seem to use preferences->gme location
+
 introduce shouldn't require itself to be launched from the introduce directory (some code does... such as extension loader)
 
 make sure that when introduce calls into the services build in CommonTools that you fork.
