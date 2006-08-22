@@ -50,7 +50,7 @@
                       
   ============================================================-->
   <portType name="BulkDataHandlerPortType" wsrp:ResourceProperties="tns:BulkDataHandlerResourceProperties">
-    <operation name="createEnumeration">
+    <operation name="CreateEnumeration">
       <input message="tns:CreateEnumerationRequest" wsa:Action="http://cagrid.nci.nih.gov/BulkDataHandler/CreateEnumerationRequest" />
       <output message="tns:CreateEnumerationResponse" wsa:Action="http://cagrid.nci.nih.gov/BulkDataHandler/CreateEnumerationResponse" />
     </operation>

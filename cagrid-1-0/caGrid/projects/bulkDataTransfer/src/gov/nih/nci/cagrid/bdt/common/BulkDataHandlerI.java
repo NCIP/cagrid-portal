@@ -18,9 +18,10 @@ public interface BulkDataHandlerI {
 
 	public void releaseOp(org.xmlsoap.schemas.ws._2004._09.enumeration.Release release) throws RemoteException ;
 
+	public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse createEnumeration() throws RemoteException ;
+
 	public org.globus.transfer.AnyXmlType get(org.globus.transfer.EmptyType empty) throws RemoteException ;
 public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
-public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse createEnumeration() throws RemoteException ;
 
 }
 

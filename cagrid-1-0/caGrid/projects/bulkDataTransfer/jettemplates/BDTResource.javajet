@@ -1,0 +1,28 @@
+<%@ jet package="gov.nih.nci.cagrid.bdt.templates" class="BDTResourceTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*"%>
+<%  gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
+  	Properties properties = arguments.getIntroduceServiceProperties();
+	ResourcePropertiesListType metadataList = arguments.getService().getResourcePropertiesList();
+	String serviceName = properties.getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+	String modifiedServiceName = serviceName;
+	if(serviceName.endsWith("Service")){
+		modifiedServiceName = serviceName.substring(0,serviceName.length()-"Service".length());
+	}
+%>
+package <%=arguments.getService().getPackageName()%>.service;
+
+import org.globus.wsrf.Resource;
+import gov.nih.nci.cagrid.bdt.service.globus.resource.BDTResourceI;
+import org.globus.transfer.AnyXmlType;
+import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerationContextType;
+
+public class BDTResource implements BDTResourceI {
+
+	public EnumerationContextType createEnumeration() {
+	  return null;
+	}
+	
+	public AnyXmlType get(){
+	 return null;
+	}
+
+}

@@ -19,14 +19,14 @@ public class BulkDataHandlerProviderImpl{
 	}
 	
 
-	public org.globus.transfer.AnyXmlType get(org.globus.transfer.EmptyType params) throws RemoteException {
-		return impl.get(params);
-	}
-
 	public gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationResponse createEnumeration(gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationRequest params) throws RemoteException {
 		gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationResponse boxedResult = new gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationResponse();
 		boxedResult.setEnumerateResponse(impl.createEnumeration());
 		return boxedResult;
+	}
+
+	public org.globus.transfer.AnyXmlType get(org.globus.transfer.EmptyType params) throws RemoteException {
+		return impl.get(params);
 	}
 
 }

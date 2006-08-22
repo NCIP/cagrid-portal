@@ -125,6 +125,14 @@ public class BulkDataHandlerClient extends ServiceSecurityClient implements Bulk
         portType.releaseOp(release);
       }
     }
+    public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse createEnumeration() throws RemoteException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"createEnumeration");
+        gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationRequest params = new gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationRequest();
+        gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationResponse boxedResult = portType.createEnumeration(params);
+        return boxedResult.getEnumerateResponse();
+      }
+    }
     public org.globus.transfer.AnyXmlType get(org.globus.transfer.EmptyType empty) throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"get");
@@ -137,14 +145,6 @@ public class BulkDataHandlerClient extends ServiceSecurityClient implements Bulk
         gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataRequest();
         gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
         return boxedResult.getServiceSecurityMetadata();
-      }
-    }
-    public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse createEnumeration() throws RemoteException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"createEnumeration");
-        gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationRequest params = new gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationRequest();
-        gov.nih.nci.cagrid.bdt.stubs.CreateEnumerationResponse boxedResult = portType.createEnumeration(params);
-        return boxedResult.getEnumerateResponse();
       }
     }
 

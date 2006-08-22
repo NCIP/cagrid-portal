@@ -1,9 +1,12 @@
 package gov.nih.nci.cagrid.bdt.extension;
 
 import gov.nih.nci.cagrid.bdt.service.BDTServiceConstants;
+import gov.nih.nci.cagrid.bdt.templates.BDTResourceTemplate;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
@@ -15,9 +18,12 @@ import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +38,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		try {
 			System.out.println("Adding data service components to template");
 			makeBDTService(serviceDescription, serviceProperties);
+			addResourceImplStub(serviceDescription, serviceProperties);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new CreationExtensionException(
@@ -62,7 +69,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 				extensionSchemaDir.getCanonicalPath().length() + File.separator.length());
 			copySchema(subname, schemaDir);
 		}
-		
+
 		List wsdlFiles = Utils.recursiveListFiles(extensionSchemaDir, new FileFilters.WSDLFileFilter());
 		for (int i = 0; i < wsdlFiles.size(); i++) {
 			File wsdlFile = (File) wsdlFiles.get(i);
@@ -70,7 +77,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 				extensionSchemaDir.getCanonicalPath().length() + File.separator.length());
 			copySchema(subname, schemaDir);
 		}
-		
+
 		// copy libraries for data services into the new bdt lib directory
 		copyLibraries(props);
 		// namespaces
@@ -85,31 +92,76 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		// metadata
 		NamespaceType metadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.METADATA_SCHEMA);
+		metadataNamespace.setPackageName("org.xmlsoap.schemas.ws._2004._09.enumeration");
 		// transfer
 		NamespaceType transferNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.TRANSFER_SCHEMA);
 		// enumeration
 		NamespaceType enumerationNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.ENUMERATION_SCHEMA);
+		enumerationNamespace.setPackageName("org.xmlsoap.schemas.ws._2004._09.enumeration");
+		// new addressing
+		NamespaceType addressingNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
+			+ BDTServiceConstants.ADDRESSING_SCHEMA);
+		addressingNamespace.setPackageName("org.globus.addressing");
 
 		bdtNamespaces.add(metadataNamespace);
 		bdtNamespaces.add(transferNamespace);
 		bdtNamespaces.add(enumerationNamespace);
+		bdtNamespaces.add(addressingNamespace);
 
 		NamespaceType[] nsArray = new NamespaceType[bdtNamespaces.size()];
 		bdtNamespaces.toArray(nsArray);
 		namespaces.setNamespace(nsArray);
 		description.setNamespaces(namespaces);
 
+		ServiceType mainService = description.getServices().getService(0);
+
 		// add the bdt subservice
-		ServiceDescription desc = (ServiceDescription) Utils.deserializeDocument(extensionDir + File.separator + "introduce.xml", ServiceDescription.class);
+		ServiceDescription desc = (ServiceDescription) Utils.deserializeDocument(extensionDir + File.separator
+			+ "introduce.xml", ServiceDescription.class);
 		ServiceType bdtService = desc.getServices().getService(0);
+		bdtService.setName(mainService.getName() + bdtService.getName());
+		bdtService.setNamespace(mainService.getNamespace() + "BDT");
+		bdtService.setPackageName(mainService.getPackageName() + ".bdt");
+		bdtService.setResourceFrameworkType(IntroduceConstants.INTRODUCE_BASE_RESOURCE);
+		MethodType[] methods = bdtService.getMethods().getMethod();
+		for (int i = 0; i < methods.length; i++) {
+			MethodType method = methods[i];
+			if (method.getName().equals("Get")) {
+				method.setIsProvided(true);
+				MethodTypeProviderInformation mpi = new MethodTypeProviderInformation();
+				mpi.setProviderClass("gov.nih.nci.cagrid.bdt.service.globus.BulkDataHandlerProviderImpl");
+				method.setProviderInformation(mpi);
+			} else if (method.getName().equals("CreateEnumeration")) {
+				method.setIsProvided(true);
+				MethodTypeProviderInformation mpi = new MethodTypeProviderInformation();
+				mpi.setProviderClass("gov.nih.nci.cagrid.bdt.service.globus.BulkDataHandlerProviderImpl");
+				method.setProviderInformation(mpi);
+			}
+
+		}
+
 		List services = new ArrayList(Arrays.asList(description.getServices().getService()));
 		services.add(bdtService);
 		ServiceType[] servicesArr = new ServiceType[services.size()];
 		services.toArray(servicesArr);
 		description.getServices().setService(servicesArr);
 
+	}
+
+
+	private void addResourceImplStub(ServiceDescription desc, Properties serviceProperties) throws Exception {
+		BDTResourceTemplate resourceT = new BDTResourceTemplate();
+		ServiceInformation info = new ServiceInformation(desc, serviceProperties, new File(serviceProperties
+			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)));
+		String resourceS = resourceT.generate(new SpecificServiceInformation(info, info.getServices().getService(0)));
+		File resourceF = new File(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+			+ File.separator + "src" + File.separator + CommonTools.getPackageDir(desc.getServices().getService(0))
+			+ File.separator + "service" + File.separator + "BDTResource.java");
+		FileWriter resourceFW = new FileWriter(resourceF);
+		resourceFW.write(resourceS);
+		resourceFW.close();
 	}
 
 
@@ -186,7 +238,8 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		File[] libs = libDir.listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
 				String name = pathname.getName();
-				return (name.endsWith(".jar") && (name.startsWith("caGrid-1.0-bdt")));
+				return (name.endsWith(".jar") && (name.startsWith("caGrid-1.0-BulkDataHandler")
+					|| name.startsWith("wsrf_core_enum") || name.startsWith("wsrf_core_stubs_enum")));
 			}
 		});
 		File[] copiedLibs = new File[libs.length];
@@ -209,7 +262,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 
 
 	private void modifyServiceProperties(ServiceDescription desc) throws Exception {
-		if(!serviceMetadataExists(desc)){
+		if (!serviceMetadataExists(desc)) {
 			addServiceMetadata(desc);
 		}
 	}

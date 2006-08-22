@@ -174,6 +174,27 @@
 			<path refid="service.build.classpath" />
 		</path>
 	</target>
+	
+	<!-- =================================================================== -->
+	<!--  Generate JET template classes                                      -->
+	<!-- =================================================================== -->
+	<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
+		<classpath>
+			<pathelement location="${lib.dir}/jet/jetc-task.jar"/>
+			<fileset dir="${lib.dir}/jet">
+				<include name="boot.jar"/>
+				<include name="osgi.jar"/>
+				<include name="resources.jar"/>
+				<include name="runtime.jar"/>
+				<include name="codegen.jar"/>
+				<include name="jdtcore.jar"/>
+				<include name="*.jar"/>
+			</fileset>
+		</classpath>
+	</taskdef>
+	<target name="generateJETClasses">
+		<jetc destdir="${src.dir}" template="jettemplates/BDTResource.javajet"/>
+	</target>
 
 	<!-- Generate bindings for our WSDL file -->
 	<!-- This is done with a GT4 tool -->
@@ -231,7 +252,7 @@
 
 
 	<!-- Compile the implementation classes (service, resource, etc.) -->
-	<target name="compile" depends="compileStubs" description="Compiles the service.">
+	<target name="compile" depends="generateJETClasses, compileStubs" description="Compiles the service.">
 		<javac srcdir="${src.dir}" classpathref="service.build.classpath" includes="**" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
 
 		<!-- Copy the source code, wsdd, properties, etc to the build dir for include in the jar -->

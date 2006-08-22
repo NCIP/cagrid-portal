@@ -130,7 +130,7 @@
      <ns4:ImportInformation inputMessage="ns17:ReleaseMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns17:RepeaseResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns17="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
      <ns4:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
     </ns4:Method>
-    <ns4:Method isImported="false" isProvided="false" name="createEnumeration" xsi:type="ns4:MethodType">
+    <ns4:Method isImported="false" isProvided="false" name="CreateEnumeration" xsi:type="ns4:MethodType">
      <ns4:Inputs/>
      <ns4:Output qName="ns18:EnumerateResponse" isArray="false" xmlns:ns18="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
      <ns4:Exceptions/>
