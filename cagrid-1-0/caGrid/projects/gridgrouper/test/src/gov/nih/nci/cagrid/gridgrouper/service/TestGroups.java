@@ -48,7 +48,7 @@ public class TestGroups extends TestCase {
 
 	private String USER_D = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user d";
 
-    private String GROUPER_ALL = "GrouperAll";
+    //private String GROUPER_ALL = "GrouperAll";
 
 	public void testViewReadPrivilege() {
 		try {
@@ -311,7 +311,6 @@ public class TestGroups extends TestCase {
 		try {
 			Map memberExpected = new HashMap();
 			HashSet userExpected = new HashSet();
-			HashSet privsExpected = new HashSet();
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
 
 			assertTrue(grouper.hasStemPrivilege(
