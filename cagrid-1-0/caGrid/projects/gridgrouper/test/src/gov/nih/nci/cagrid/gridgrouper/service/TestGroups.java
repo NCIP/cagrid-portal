@@ -306,6 +306,102 @@ public class TestGroups extends TestCase {
 			fail(e.getMessage());
 		}
 	}
+	
+	public void testOptinOptoutPrivilege() {
+		try {
+			Map memberExpected = new HashMap();
+			HashSet userExpected = new HashSet();
+			HashSet privsExpected = new HashSet();
+			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
+
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
+							.getRootStemIdentifier(), SUPER_USER,
+					StemPrivilegeType.stem));
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
+							.getRootStemIdentifier(), SUPER_USER,
+					StemPrivilegeType.create));
+
+			StemDescriptor root = grouper.getStem(SUPER_USER, Utils
+					.getRootStemIdentifier());
+			assertNotNull(root);
+			assertEquals(root.getName(), Utils.getRootStemIdentifier()
+					.getStemName());
+
+			String testStem = "TestStem";
+			StemDescriptor test = grouper.addChildStem(SUPER_USER, Utils
+					.getRootStemIdentifier(), testStem, testStem);
+			final String groupExtension = "mygroup";
+			final String groupDisplayExtension = "My Group";
+
+			GroupDescriptor grp = createAndCheckGroup(test, groupExtension,
+					groupDisplayExtension, 1);
+			GroupIdentifier gid = Utils.getGroupIdentifier(grp);
+
+			userExpected.clear();
+			userExpected.add(GroupPrivilegeType.admin);
+			userExpected.add(GroupPrivilegeType.view);
+			userExpected.add(GroupPrivilegeType.read);
+			verifyUserPrivileges(grp, SUPER_USER, userExpected);
+
+			// Test Default Privileges
+			userExpected.clear();
+			userExpected.add(GroupPrivilegeType.view);
+			userExpected.add(GroupPrivilegeType.read);
+			verifyUserPrivileges(grp, USER_A, userExpected);
+
+			// Test to make sure the user can not opt into a group
+			try{
+				grouper.addMember(USER_A, gid, USER_A);
+				fail("User should not be able to OPTIN into group");
+			}catch(InsufficientPrivilegeFault f){
+				
+			}
+			grouper.grantGroupPrivilege(SUPER_USER, gid, USER_A, GroupPrivilegeType.optin);
+			userExpected.clear();
+			userExpected.add(GroupPrivilegeType.view);
+			userExpected.add(GroupPrivilegeType.read);
+			userExpected.add(GroupPrivilegeType.optin);
+			verifyUserPrivileges(grp, USER_A, userExpected);
+			
+			grouper.addMember(USER_A, gid, USER_A);
+			
+			memberExpected.clear();
+			memberExpected.put(USER_A, getGridMember(USER_A));
+			verifyMembers(SUPER_USER, grp, MemberFilter.All, memberExpected);
+
+			try{
+				grouper.deleteMember(USER_A, gid, USER_A);
+				fail("User should not be able to OPTOUT into group");
+			}catch(InsufficientPrivilegeFault f){
+				
+			}
+			
+			memberExpected.clear();
+			memberExpected.put(USER_A, getGridMember(USER_A));
+			verifyMembers(SUPER_USER, grp, MemberFilter.All, memberExpected);
+			
+			
+			grouper.grantGroupPrivilege(SUPER_USER, gid, USER_A, GroupPrivilegeType.optout);
+			userExpected.clear();
+			userExpected.add(GroupPrivilegeType.view);
+			userExpected.add(GroupPrivilegeType.read);
+			userExpected.add(GroupPrivilegeType.optin);
+			userExpected.add(GroupPrivilegeType.optout);
+			verifyUserPrivileges(grp, USER_A, userExpected);
+			
+			grouper.deleteMember(USER_A, gid, USER_A);
+			
+			memberExpected.clear();
+			verifyMembers(SUPER_USER, grp, MemberFilter.All, memberExpected);
+		
+			
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
 
 	public void testAdminPrivilege() {
 		try {
@@ -379,7 +475,6 @@ public class TestGroups extends TestCase {
 			verifyMembers(grp, MemberFilter.All, memberExpected);
 
 			// Reading Description
-
 			GroupDescriptor g = grouper.getGroup(USER_A, gid);
 			assertEquals(grp.getName(), g.getName());
 			assertEquals(description, g.getDescription());
