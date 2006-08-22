@@ -250,7 +250,7 @@
     <!-- Compile up generated stuff                                      -->
     <!-- ============================================================== -->
     <target name="compile" depends="init">
-        <javac source="1.4" destdir="${build.classes.dir}" classpathref="portal.classpath">
+        <javac source="1.4" destdir="${build.classes.dir}" classpathref="portal.classpath" debug="on">
             <src>
                 <pathelement path="${generated.src.dir}"/>
                 <pathelement path="${java.src.dir}"/>

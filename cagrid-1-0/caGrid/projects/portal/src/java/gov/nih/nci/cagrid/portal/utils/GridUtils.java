@@ -94,4 +94,16 @@ public final class GridUtils {
                 serviceEPR.toString());
         }
     }
+
+    public static gov.nih.nci.cagrid.metadata.dataservice.DomainModel
+            getDomainModel(EndpointReferenceType serviceEPR) throws MetadataRetreivalException{
+       try {
+            return MetadataUtils.getDomainModel(serviceEPR);
+        } catch (Exception e) {
+            // wrap the generic exception into something more specific
+            throw new MetadataRetreivalException(
+                "Error retreiving service metadata for " +
+                serviceEPR.toString());
+        }
+    }
 }

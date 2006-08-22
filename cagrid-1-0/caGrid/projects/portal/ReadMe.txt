@@ -2,15 +2,16 @@
 
 
 ===========================================================================
-Pre-requistie software
+1. Pre-requistie software
 ===========================================================================
 1. JDK 1.4.x + version (or caGrid recommended JDK version)
 2. Install Globus and set $GLOBUS_LOCATION set
 3. Install Tomcat and set $CATALINA_LOCATION set
+4. mySQL database. Set the db connection details in the build properties
 
 
 ===========================================================================
-Configuration Information
+2. Configuration Information
 ===========================================================================
 
 Portal needs a Database configured in the following way
@@ -40,7 +41,7 @@ Replace the current entries in the indexList to your own
 
 
 ===========================================================================
-Build Instructions
+3. Build Instructions
 ===========================================================================
 -Use the portal-build.properties file to configure the build
 for your environment.
@@ -60,7 +61,7 @@ to build the portal project as a web project
 
 
 ===========================================================================
-Testing Instructions
+4. Testing Instructions
 ===========================================================================
 
 To execute the tests just run 'ant testLocal' after setting your
@@ -76,3 +77,20 @@ You will need a database to run some of the tests (Nothing will be committed
 to the DB). The tests are in the "test" directory. The test cases that need
 a DB to execute are named *LocalTestCase
 Other test cases can be executed without any backend
+
+
+===========================================================================
+5. Logging Instructions
+===========================================================================
+Logging is done through log4j
+
+Portal has built in logging (at info, debug and error) levels. This can be
+configured with the portal-build.properties file (described in Section 3)
+
+Other components like Spring, JSF can also be logged by setting the various
+log level settings in the build properties file
+
+The logging output can be configured in the resources/log4j.xml.template
+file. The default messages are logged to a $CATALINA_HOME/logs/portal.log
+that is rotated periodically. But this be can configured to log to the console
+(say for debugging)

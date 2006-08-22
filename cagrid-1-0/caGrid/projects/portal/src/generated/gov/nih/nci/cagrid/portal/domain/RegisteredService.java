@@ -143,6 +143,13 @@ public class RegisteredService implements GridService {
         this.operations = operations;
     }
 
+    /**
+     * @hibernate.one-to-one
+     * class="gov.nih.nci.cagrid.portal.domain.DomainModel"
+     * outer-join="false"
+     * cascade="all"
+     *
+     */
     public DomainModel getDomainModel() {
         return domainModel;
     }

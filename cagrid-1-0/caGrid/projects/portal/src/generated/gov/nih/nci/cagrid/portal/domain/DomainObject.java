@@ -15,4 +15,6 @@ public interface DomainObject {
      *         ToDo Should be Implemented by concrete classes
      */
     Integer getPk();
+
+    void setPk(Integer pk);
 }

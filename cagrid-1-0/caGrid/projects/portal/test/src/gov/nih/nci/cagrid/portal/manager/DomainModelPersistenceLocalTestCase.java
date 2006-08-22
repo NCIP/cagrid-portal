@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import gov.nih.nci.cagrid.portal.domain.PointOfContact;
+import gov.nih.nci.cagrid.portal.domain.IndexService;
 import org.apache.axis.types.URI;
 
 /**
@@ -21,7 +22,7 @@ public class DomainModelPersistenceLocalTestCase extends BaseSpringDataAccessAbs
     public void testRegisteredServicePeristence(){
         try {
             RegisteredService service = new RegisteredService("http://cagrid04.bmi.ohio-state.edu:7080/wsrf/services/cagrid/CaDSRService");
-
+            service.setIndex(new IndexService("test-index"));
             //Create rc
             ResearchCenter rc = new ResearchCenter();
             rc.setDisplayName("Test Center");

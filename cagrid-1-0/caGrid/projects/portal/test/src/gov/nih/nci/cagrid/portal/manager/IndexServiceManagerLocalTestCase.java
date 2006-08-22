@@ -36,7 +36,7 @@ public class IndexServiceManagerLocalTestCase
             try {
                 EndpointReferenceType idxService = GridUtils.getEPR((String) iter.next());
 
-                IndexService idx = new IndexService(idxService, true);
+                IndexService idx = new IndexService(idxService);
                 logger.debug("Storing index service using manager");
                 gridServiceManager.save(idx);
             } catch (Exception e) {
@@ -108,7 +108,7 @@ public class IndexServiceManagerLocalTestCase
                         //assertNotNull(rc.getResearchCenterDescription().getDescription());
                     }
                 } catch (MetadataRetreivalException e) {
-                    continue;
+                    //do nothing
                 }
         }
         }

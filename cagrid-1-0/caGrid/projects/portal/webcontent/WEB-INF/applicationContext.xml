@@ -10,7 +10,11 @@
     <bean name="myBeanNameProxyCreator"
           class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
         <property name="beanNames">
-            <value>metadataAggregator,initBean,syncGTSInitBean</value>
+            <list>
+                <value>
+                    indexAggregator*,metadataAggregator*
+                </value>
+            </list>
         </property>
         <property name="interceptorNames">
             <list>

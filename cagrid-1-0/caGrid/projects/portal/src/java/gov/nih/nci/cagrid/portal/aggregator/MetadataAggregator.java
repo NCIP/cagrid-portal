@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.portal.domain.PointOfContact;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
+import gov.nih.nci.cagrid.portal.domain.DomainModel;
 import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
 import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
 import gov.nih.nci.cagrid.portal.utils.GridUtils;
@@ -43,6 +44,7 @@ public class MetadataAggregator extends AbstractAggregator {
                 loadDescription(domainRC,rc);
                 loadAddress(domainRC,rc);
                 loadPOC(domainRC,rc);
+
             } catch (MetadataRetreivalException e) {
                 _logger.error("Error loading metadata for " + rService.getEPR());
                 _logger.error(e);
@@ -51,6 +53,10 @@ public class MetadataAggregator extends AbstractAggregator {
              _logger.debug("Adding RC with " + domainRC.getPocCollection().size() + " POC's");
 
             rService.setResearchCenter(domainRC);
+
+            //Load Domain Model
+            loadDomainModel(rService);
+
             _logger.debug("Saving RegisteredService with ResearchCenter Info");
 
             // Save the RC object first
@@ -59,7 +65,7 @@ public class MetadataAggregator extends AbstractAggregator {
         }
     }
 
-    public void loadDescription(ResearchCenter domainRC, gov.nih.nci.cagrid.metadata.common.ResearchCenter rc){
+    private void loadDescription(ResearchCenter domainRC, gov.nih.nci.cagrid.metadata.common.ResearchCenter rc){
         gov.nih.nci.cagrid.metadata.common.ResearchCenterDescription rcDesc = rc.getResearchCenterDescription();
 
         if (rcDesc != null) {
@@ -70,7 +76,7 @@ public class MetadataAggregator extends AbstractAggregator {
         }
 
     }
-    public void loadAddress(ResearchCenter domainRC, gov.nih.nci.cagrid.metadata.common.ResearchCenter rc){
+    private void loadAddress(ResearchCenter domainRC, gov.nih.nci.cagrid.metadata.common.ResearchCenter rc){
 
         gov.nih.nci.cagrid.metadata.common.Address rcAddress = rc.getAddress();
 
@@ -84,7 +90,7 @@ public class MetadataAggregator extends AbstractAggregator {
         }
     }
 
-    public void loadPOC(ResearchCenter domainRC, gov.nih.nci.cagrid.metadata.common.ResearchCenter rc){
+    private void loadPOC(ResearchCenter domainRC, gov.nih.nci.cagrid.metadata.common.ResearchCenter rc){
 
         //Domain Object
         PointOfContact pocDomain = new PointOfContact();
@@ -98,11 +104,23 @@ public class MetadataAggregator extends AbstractAggregator {
             pocDomain.setLastName(poc.getLastName());
             pocDomain.setPhoneNumber(poc.getPhoneNumber());
             pocDomain.setEmail(poc.getEmail());
-
-
-
-
         }
     }
+
+   private void loadDomainModel(RegisteredService service) {
+       try {
+           gov.nih.nci.cagrid.metadata.dataservice.DomainModel dModel = GridUtils.getDomainModel(service.getHandle());
+
+           DomainModel modelDomain = new DomainModel();
+           modelDomain.setLongName(dModel.getProjectLongName());
+           modelDomain.setProjectShortName(dModel.getProjectShortName());
+           modelDomain.setProjectDescription(dModel.getProjectDescription());
+           modelDomain.setProjectVersion(dModel.getProjectVersion());
+           modelDomain.setRegisteredService(service);
+       } catch (MetadataRetreivalException e) {
+           //Most services will not have a domain model
+           _logger.info("Error Retreiving Domain model for service " + service.getEPR());
+       }
+   }
 
 }

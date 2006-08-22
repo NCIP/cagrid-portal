@@ -53,15 +53,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/mysql-connector-java-3.1.13-bin.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/ehcache.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -581,6 +572,105 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/test/lib/cobertura.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/test/lib/jdepend-2.7-patched.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/test/lib/junit-addons-1.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/test/lib/jakarta-oro-2.0.8.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/test/lib/log4j-1.2.9.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/test/lib/caGrid-1.0-core-tests.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/test/lib/asm-2.2.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/test/lib/junit.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/test/lib/xmlunit1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/test/lib/spring-mock.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/mysql-connector-java-5.0.3-bin.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
@@ -760,6 +850,51 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/asm-2.2.1.jar" />
+      <url>jar://$MODULE_DIR$/ext/test/lib/asm-2.2.1.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-core-tests.jar" />
+      <url>jar://$MODULE_DIR$/ext/test/lib/caGrid-1.0-core-tests.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/cobertura.jar" />
+      <url>jar://$MODULE_DIR$/ext/test/lib/cobertura.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/jakarta-oro-2.0.8.jar" />
+      <url>jar://$MODULE_DIR$/ext/test/lib/jakarta-oro-2.0.8.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/jdepend-2.7-patched.jar" />
+      <url>jar://$MODULE_DIR$/ext/test/lib/jdepend-2.7-patched.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/junit-addons-1.4.jar" />
+      <url>jar://$MODULE_DIR$/ext/test/lib/junit-addons-1.4.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/junit.jar" />
+      <url>jar://$MODULE_DIR$/ext/test/lib/junit.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/log4j-1.2.9.jar" />
+      <url>jar://$MODULE_DIR$/ext/test/lib/log4j-1.2.9.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/xmlunit1.0.jar" />
+      <url>jar://$MODULE_DIR$/ext/test/lib/xmlunit1.0.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/antlr-2.7.5H3.jar" />
       <url>jar://$MODULE_DIR$/lib/antlr-2.7.5H3.jar!/</url>
     </containerElement>
@@ -855,8 +990,8 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/mysql-connector-java-3.1.13-bin.jar" />
-      <url>jar://$MODULE_DIR$/lib/mysql-connector-java-3.1.13-bin.jar!/</url>
+      <attribute name="URI" value="/WEB-INF/lib/mysql-connector-java-5.0.3-bin.jar" />
+      <url>jar://$MODULE_DIR$/lib/mysql-connector-java-5.0.3-bin.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -907,6 +1042,11 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/xjavadoc-1.1.jar" />
       <url>jar://$MODULE_DIR$/lib/xdoclet/xjavadoc-1.1.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/spring-mock.jar" />
+      <url>jar://$MODULE_DIR$/test/lib/spring-mock.jar!/</url>
     </containerElement>
     <containerElement type="library" level="application" name="Globus-4.0">
       <attribute name="method" value="1" />

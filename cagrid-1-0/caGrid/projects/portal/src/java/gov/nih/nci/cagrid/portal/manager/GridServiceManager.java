@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.manager;
 
 import gov.nih.nci.cagrid.portal.domain.GridService;
+import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 
 
 /**
@@ -11,6 +12,8 @@ import gov.nih.nci.cagrid.portal.domain.GridService;
  * To change this template use File | Settings | File Templates.
  */
 public interface GridServiceManager extends BaseManager {
-    
+
     public void save(GridService obj);
+
+    public void save(ResearchCenter rc);
 }

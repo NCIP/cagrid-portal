@@ -15,6 +15,7 @@ public class DomainTestSuite {
     public static Test suite() {
         TestSuite domain = new TestSuite();
         domain.addTestSuite(IndexServiceTestCase.class);
+        domain.addTestSuite(ResearchCenterLocalTestCase.class);
 
         return domain;
     }
