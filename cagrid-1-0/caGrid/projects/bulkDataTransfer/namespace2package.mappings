@@ -8,8 +8,9 @@ http\://schemas.xmlsoap.org/ws/2004/09/enumeration=org.globus.ws.enumeration
 http\://schemas.xmlsoap.org/ws/2004/09/enumeration=org.globus.ws.enumeration
 http\://www.globus.org/transfer=org.globus.transfer
 
+http\://schemas.xmlsoap.org/ws/2004/08/addressing=org.globus.addressing
 http\://cagrid.nci.nih.gov/BulkDataHandlerReference=bulkdatahandlerreference
 http\://schemas.xmlsoap.org/ws/2004/09/enumeration=org.xmlsoap.schemas.ws._2004._09.enumeration
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.metadata.security
 http\://www.globus.org/transfer=org.globus.transfer
-http\://schemas.xmlsoap.org/ws/2004/08/addressing=addressing
+

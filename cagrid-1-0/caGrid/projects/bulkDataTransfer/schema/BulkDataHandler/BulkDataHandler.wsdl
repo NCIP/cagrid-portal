@@ -11,8 +11,9 @@
                       
   ============================================================-->
   <types>
-    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://cagrid.nci.nih.gov/BulkDataHandlerReference" xmlns:ns3="http://schemas.xmlsoap.org/ws/2004/09/enumeration" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns0="http://www.globus.org/transfer" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/BulkDataHandler" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns0="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:ns2="http://cagrid.nci.nih.gov/BulkDataHandlerReference" xmlns:ns4="http://schemas.xmlsoap.org/ws/2004/09/enumeration" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns1="http://www.globus.org/transfer" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/BulkDataHandler" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
+      <import namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing" schemaLocation="./addressing.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/BulkDataHandlerReference" schemaLocation="./BulkDataHandlerReference.xsd" />
       <import namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" schemaLocation=".\enumeration.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd\security.xsd" />
@@ -25,7 +26,7 @@
       <element name="CreateEnumerationResponse">
         <complexType>
           <sequence>
-            <element ref="ns3:EnumerateResponse" minOccurs="1" maxOccurs="1" />
+            <element ref="ns4:EnumerateResponse" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
