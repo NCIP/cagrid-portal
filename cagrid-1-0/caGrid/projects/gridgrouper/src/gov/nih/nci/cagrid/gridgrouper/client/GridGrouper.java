@@ -110,77 +110,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		}
 	}
 
-	public Set getStemPrivileges(String stemName, Subject subject)
-			throws StemNotFoundException {
-		try {
-			StemPrivilege[] privs = getClient().getStemPrivileges(
-					getStemIdentifier(stemName), subject.getId());
-			Set set = new HashSet();
-			if (privs != null) {
-				for (int i = 0; i < privs.length; i++) {
-					NamingPrivilegeI priv = new NamingPrivilege(privs[i]
-							.getStemName(), SubjectUtils.getSubject(privs[i]
-							.getSubject()), SubjectUtils.getSubject(privs[i]
-							.getOwner()), Privilege.getInstance(privs[i]
-							.getPrivilegeType().getValue()), privs[i]
-							.getImplementationClass(), privs[i].isIsRevokable());
-					set.add(priv);
-				}
-			}
-			return set;
-		} catch (StemNotFoundFault f) {
-			throw new StemNotFoundException(f.getFaultString());
-		} catch (GridGrouperRuntimeFault e) {
-			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getFaultString());
-		} catch (Exception e) {
-			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
-		}
-	}
-
-	public Set getSubjectsWithStemPrivilege(String stemName, Privilege privilege)
-			throws StemNotFoundException {
-		try {
-			String[] subs = getClient().getSubjectsWithStemPrivilege(
-					getStemIdentifier(stemName),
-					StemPrivilegeType.fromValue(privilege.getName()));
-			Set set = new HashSet();
-			if (subs != null) {
-				for (int i = 0; i < subs.length; i++) {
-					set.add(SubjectUtils.getSubject(subs[i], true));
-				}
-			}
-			return set;
-		} catch (StemNotFoundFault f) {
-			throw new StemNotFoundException(f.getFaultString());
-		} catch (GridGrouperRuntimeFault e) {
-			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getFaultString());
-		} catch (Exception e) {
-			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
-		}
-	}
-
-	public boolean hasStemPrivilege(String stemName, Subject subject,
-			Privilege privilege) throws StemNotFoundException {
-		try {
-			StemPrivilegeType type = StemPrivilegeType.fromValue(privilege
-					.getName());
-			return getClient().hasStemPrivilege(getStemIdentifier(stemName),
-					subject.getId(), type);
-		} catch (StemNotFoundFault f) {
-			throw new StemNotFoundException(f.getFaultString());
-		} catch (GridGrouperRuntimeFault e) {
-			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getFaultString());
-		} catch (Exception e) {
-			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
-		}
-	}
-
+	
 	public GroupI findGroup(String name) throws GroupNotFoundException {
 		try {
 			GroupDescriptor des = getClient()

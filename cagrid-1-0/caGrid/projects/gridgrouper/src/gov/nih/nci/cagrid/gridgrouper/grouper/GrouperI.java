@@ -26,15 +26,6 @@ public interface GrouperI {
 	public StemI getParentStem(String childStemName)
 			throws StemNotFoundException;
 
-	public Set getStemPrivileges(String stemName, Subject subject)
-			throws StemNotFoundException;
-
-	public Set getSubjectsWithStemPrivilege(String stemName, Privilege privilege)
-			throws StemNotFoundException;
-
-	public boolean hasStemPrivilege(String stemName, Subject subject,
-			Privilege privilege) throws StemNotFoundException;
-
 	public String getName();
 
 	public GroupI findGroup(String name) throws GroupNotFoundException;

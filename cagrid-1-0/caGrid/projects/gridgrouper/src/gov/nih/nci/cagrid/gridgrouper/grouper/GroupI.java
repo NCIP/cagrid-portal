@@ -136,6 +136,8 @@ public interface GroupI {
 	public Set getMemberships() throws GrouperRuntimeException;
 
 	// public Set getMemberships(Field f) throws SchemaException;
+	
+	//public Set getPrivs(Subject subj);
 
 	// TODO: Support Below
 

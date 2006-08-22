@@ -15,7 +15,12 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class NamingPrivilege implements NamingPrivilegeI {
+public class NamingPrivilege extends GridGrouperObject implements
+		NamingPrivilegeI {
+
+	public static final Privilege CREATE = Privilege.getInstance("create");
+
+	public static final Privilege STEM = Privilege.getInstance("stem");
 
 	// Private Instance Variables
 	private boolean isRevokable;
@@ -31,8 +36,8 @@ public class NamingPrivilege implements NamingPrivilegeI {
 	private Subject subj;
 
 	// Constructors
-	public NamingPrivilege(String stemName, Subject subj,
-			Subject owner, Privilege priv, String klass, boolean isRevokable) {
+	public NamingPrivilege(String stemName, Subject subj, Subject owner,
+			Privilege priv, String klass, boolean isRevokable) {
 		this.isRevokable = isRevokable;
 		this.className = klass;
 		this.name = priv.toString();
