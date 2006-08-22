@@ -7,6 +7,8 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import org.projectmobius.portal.PortalResourceManager;
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
@@ -25,19 +27,22 @@ public class StemPrivilegesTable extends PortalBaseTable {
 
 	public final static String STEMMER = "Stem";
 
-	public StemPrivilegesTable() {
+	private StemBrowser browser;
+
+	public StemPrivilegesTable(StemBrowser browser) {
 		super(createTableModel());
+		this.browser = browser;
 		TableColumn c = this.getColumn(CADDY);
 		c.setMaxWidth(0);
 		c.setMinWidth(0);
 		c.setPreferredWidth(0);
 		c.setResizable(false);
-		
+
 		c = this.getColumn(CREATOR);
 		c.setMinWidth(60);
 		c.setMaxWidth(60);
 		c.setPreferredWidth(0);
-		
+
 		c = this.getColumn(STEMMER);
 		c.setMinWidth(60);
 		c.setMaxWidth(60);
@@ -86,7 +91,12 @@ public class StemPrivilegesTable extends PortalBaseTable {
 	}
 
 	public void doubleClick() throws Exception {
-
+		StemPrivilegeCaddy caddy = getSelectedPrivilege();
+		PortalResourceManager
+				.getInstance()
+				.getGridPortal()
+				.addGridPortalComponent(
+						new StemPrivilegeWindow(browser, caddy), 500, 200);
 	}
 
 	public void singleClick() throws Exception {

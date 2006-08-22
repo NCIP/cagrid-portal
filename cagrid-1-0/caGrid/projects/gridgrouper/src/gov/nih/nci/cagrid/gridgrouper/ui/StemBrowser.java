@@ -1,14 +1,12 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
-import edu.internet2.middleware.grouper.NamingPrivilege;
-import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -19,7 +17,6 @@ import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -111,19 +108,7 @@ public class StemBrowser extends JPanel {
 
 	private JButton getPrivileges = null;
 
-	private JButton removePrivilege = null;
-
-	private JPanel addPrivPanel = null;
-
-	private JLabel jLabel8 = null;
-
-	private JTextField identity = null;
-
-	private JLabel jLabel9 = null;
-
-	private JComboBox stemPrivilege = null;
-
-	private JButton addPriv = null;
+	private JButton updatePrivilege = null;
 
 	private JPanel stemsPanel = null;
 
@@ -188,6 +173,8 @@ public class StemBrowser extends JPanel {
 	private JTextField lastModified = null;
 
 	private JTextField lastModifiedBy = null;
+
+	private JButton addPrivileges = null;
 
 	/**
 	 * This is the default constructor
@@ -262,7 +249,7 @@ public class StemBrowser extends JPanel {
 		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.gridy = 0;
-		this.setSize(400, 400);
+		this.setSize(600, 400);
 		this.setLayout(new GridBagLayout());
 		this.add(getStemProperties(), gridBagConstraints);
 		this.add(getStemDetails(), gridBagConstraints11);
@@ -422,12 +409,6 @@ public class StemBrowser extends JPanel {
 	 */
 	private JPanel getPrivileges() {
 		if (privileges == null) {
-			GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
-			gridBagConstraints26.gridx = 0;
-			gridBagConstraints26.insets = new Insets(5, 5, 5, 5);
-			gridBagConstraints26.fill = GridBagConstraints.BOTH;
-			gridBagConstraints26.weightx = 1.0D;
-			gridBagConstraints26.gridy = 1;
 			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
 			gridBagConstraints22.gridx = 0;
 			gridBagConstraints22.fill = GridBagConstraints.BOTH;
@@ -437,7 +418,6 @@ public class StemBrowser extends JPanel {
 			privileges = new JPanel();
 			privileges.setLayout(new GridBagLayout());
 			privileges.add(getPrivsList(), gridBagConstraints22);
-			privileges.add(getAddPrivPanel(), gridBagConstraints26);
 		}
 		return privileges;
 	}
@@ -838,9 +818,8 @@ public class StemBrowser extends JPanel {
 			if (!getDisplayExtension().getText().equals(
 					stem.getDisplayExtension())) {
 				stem.setDisplayExtension(getDisplayExtension().getText());
-			} 
-			if (!getDescription().getText()
-					.equals(stem.getDescription())) {
+			}
+			if (!getDescription().getText().equals(stem.getDescription())) {
 				stem.setDescription(getDescription().getText());
 			}
 			node.refresh();
@@ -905,7 +884,7 @@ public class StemBrowser extends JPanel {
 	 */
 	private StemPrivilegesTable getPrivs() {
 		if (privs == null) {
-			privs = new StemPrivilegesTable();
+			privs = new StemPrivilegesTable(this);
 		}
 		return privs;
 	}
@@ -917,18 +896,11 @@ public class StemBrowser extends JPanel {
 	 */
 	private JPanel getPrivButtons() {
 		if (privButtons == null) {
-			GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
-			gridBagConstraints25.gridx = 0;
-			gridBagConstraints25.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints25.gridy = 0;
-			GridBagConstraints gridBagConstraints24 = new GridBagConstraints();
-			gridBagConstraints24.gridx = 1;
-			gridBagConstraints24.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints24.gridy = 0;
 			privButtons = new JPanel();
-			privButtons.setLayout(new GridBagLayout());
-			privButtons.add(getGetPrivileges(), gridBagConstraints25);
-			privButtons.add(getRemovePrivilege(), gridBagConstraints24);
+			privButtons.setLayout(new FlowLayout());
+			privButtons.add(getGetPrivileges(), null);
+			privButtons.add(getAddPrivileges(), null);
+			privButtons.add(getUpdatePrivilege(), null);
 		}
 		return privButtons;
 	}
@@ -942,7 +914,7 @@ public class StemBrowser extends JPanel {
 		if (getPrivileges == null) {
 			getPrivileges = new JButton();
 			getPrivileges.setText("Get Privileges");
-			getPrivileges.setIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
+			getPrivileges.setIcon(GridGrouperLookAndFeel.getQueryIcon());
 			getPrivileges
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1017,32 +989,22 @@ public class StemBrowser extends JPanel {
 	}
 
 	/**
-	 * This method initializes removePrivilege
+	 * This method initializes updatePrivilege
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getRemovePrivilege() {
-		if (removePrivilege == null) {
-			removePrivilege = new JButton();
-			removePrivilege.setText("Remove Privilege");
-			removePrivilege.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
-			final StemBrowser sb = this;
-			removePrivilege
+	private JButton getUpdatePrivilege() {
+		if (updatePrivilege == null) {
+			updatePrivilege = new JButton();
+			updatePrivilege.setText("Update Privilege(s)");
+			updatePrivilege.setIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
+			updatePrivilege
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
 							MobiusRunnable runner = new MobiusRunnable() {
 								public void execute() {
 									try {
-										StemPrivilegeCaddy caddy = getPrivs()
-												.getSelectedPrivilege();
-										PortalResourceManager
-												.getInstance()
-												.getGridPortal()
-												.addGridPortalComponent(
-														new RemoveStemPrivilegeWindow(
-																sb, caddy),
-														500, 200);
-
+										getPrivs().doubleClick();
 									} catch (Exception e) {
 										PortalUtils.showErrorMessage(e);
 									}
@@ -1059,144 +1021,7 @@ public class StemBrowser extends JPanel {
 
 					});
 		}
-		return removePrivilege;
-	}
-
-	/**
-	 * This method initializes addPrivPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getAddPrivPanel() {
-		if (addPrivPanel == null) {
-			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-			gridBagConstraints31.gridx = 0;
-			gridBagConstraints31.gridwidth = 2;
-			gridBagConstraints31.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints31.gridy = 2;
-			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
-			gridBagConstraints30.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints30.gridy = 1;
-			gridBagConstraints30.weightx = 1.0;
-			gridBagConstraints30.anchor = GridBagConstraints.WEST;
-			gridBagConstraints30.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints30.gridx = 1;
-			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
-			gridBagConstraints29.anchor = GridBagConstraints.WEST;
-			gridBagConstraints29.gridy = 1;
-			gridBagConstraints29.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints29.gridx = 0;
-			jLabel9 = new JLabel();
-			jLabel9.setText("Privilege");
-			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
-			gridBagConstraints28.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints28.anchor = GridBagConstraints.WEST;
-			gridBagConstraints28.gridx = 1;
-			gridBagConstraints28.gridy = 0;
-			gridBagConstraints28.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints28.weightx = 1.0;
-			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
-			gridBagConstraints27.gridx = 0;
-			gridBagConstraints27.anchor = GridBagConstraints.WEST;
-			gridBagConstraints27.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints27.gridy = 0;
-			jLabel8 = new JLabel();
-			jLabel8.setText("Identity");
-			addPrivPanel = new JPanel();
-			addPrivPanel.setLayout(new GridBagLayout());
-			addPrivPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Add Privilege",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, GridGrouperLookAndFeel
-											.getPanelLabelColor()));
-			addPrivPanel.add(jLabel8, gridBagConstraints27);
-			addPrivPanel.add(getIdentity(), gridBagConstraints28);
-			addPrivPanel.add(jLabel9, gridBagConstraints29);
-			addPrivPanel.add(getStemPrivilege(), gridBagConstraints30);
-			addPrivPanel.add(getAddPriv(), gridBagConstraints31);
-		}
-		return addPrivPanel;
-	}
-
-	/**
-	 * This method initializes identity
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getIdentity() {
-		if (identity == null) {
-			identity = new JTextField();
-		}
-		return identity;
-	}
-
-	/**
-	 * This method initializes stemPrivilege
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getStemPrivilege() {
-		if (stemPrivilege == null) {
-			stemPrivilege = new JComboBox();
-			stemPrivilege.addItem(NamingPrivilege.CREATE);
-			stemPrivilege.addItem(NamingPrivilege.STEM);
-		}
-		return stemPrivilege;
-	}
-
-	/**
-	 * This method initializes addPriv
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getAddPriv() {
-		if (addPriv == null) {
-			addPriv = new JButton();
-			addPriv.setText("Add Privilege");
-			addPriv.setIcon(GridGrouperLookAndFeel.getAddIcon());
-			addPriv.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					MobiusRunnable runner = new MobiusRunnable() {
-						public void execute() {
-							int eid = node.getBrowser().getProgress()
-									.startEvent("Adding privilege....");
-							try {
-
-								String id = Utils
-										.clean(getIdentity().getText());
-
-								Subject sub = SubjectUtils.getSubject(id);
-								if (id == null) {
-									getIdentity().setText(sub.getId());
-								}
-								stem.grantPriv(sub,
-										(Privilege) getStemPrivilege()
-												.getSelectedItem());
-								node.getBrowser().getProgress().stopEvent(eid,
-										"Successfully added privilege!!!");
-								loadPrivileges();
-							} catch (Exception e) {
-								node.getBrowser().getProgress().stopEvent(eid,
-										"Error adding privilege!!!");
-								PortalUtils.showErrorMessage(e);
-							}
-						}
-					};
-					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
-					} catch (Exception t) {
-						t.getMessage();
-					}
-				}
-
-			});
-		}
-		return addPriv;
+		return updatePrivilege;
 	}
 
 	public StemI getStem() {
@@ -1844,5 +1669,49 @@ public class StemBrowser extends JPanel {
 			lastModifiedBy.setEditable(false);
 		}
 		return lastModifiedBy;
+	}
+
+	/**
+	 * This method initializes addPrivileges
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getAddPrivileges() {
+		if (addPrivileges == null) {
+			addPrivileges = new JButton();
+			addPrivileges.setText("Add Privilege(s)");
+			addPrivileges.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			final StemBrowser sb = this;
+			addPrivileges
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							MobiusRunnable runner = new MobiusRunnable() {
+								public void execute() {
+									try {
+										PortalResourceManager
+												.getInstance()
+												.getGridPortal()
+												.addGridPortalComponent(
+														new StemPrivilegeWindow(
+																sb), 500, 200);
+
+									} catch (Exception e) {
+										e.printStackTrace();
+										PortalUtils.showErrorMessage(e);
+									}
+								}
+							};
+							try {
+								PortalResourceManager.getInstance()
+										.getThreadManager()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
+							}
+						}
+
+					});
+		}
+		return addPrivileges;
 	}
 }
