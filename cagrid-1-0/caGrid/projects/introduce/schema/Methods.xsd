@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Methods"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:security="gme://gov.nih.nci.cagrid.introduce/1/Security"
 	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Methods" elementFormDefault="qualified"
 	attributeFormDefault="unqualified">
-	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Security"
-		schemaLocation="./Security.xsd"/>
+	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Security" schemaLocation="./Security.xsd"/>
 	<xs:element name="Methods" type="MethodsType">
 		<xs:annotation>
 			<xs:documentation>List of methods for this services interface.</xs:documentation>
@@ -26,8 +24,7 @@
 								<xs:attribute name="qName" type="xs:QName" use="required"/>
 								<xs:attribute name="isArray" type="xs:boolean" use="required"/>
 								<xs:attribute name="name" type="xs:string" use="required"/>
-								<xs:attribute name="containerClass" type="xs:string" use="optional"
-								/>
+								<xs:attribute name="containerClass" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>

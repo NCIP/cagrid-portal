@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Resources"
-	xmlns="gme://gov.nih.nci.cagrid.introduce/1/Resources"
-	xmlns:tns="gme://gov.nih.nci.cagrid.introduce/1/Resources"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-	attributeFormDefault="unqualified">
+	xmlns="gme://gov.nih.nci.cagrid.introduce/1/Resources" xmlns:tns="gme://gov.nih.nci.cagrid.introduce/1/Resources"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:element name="ResourcePropertiesList" type="tns:ResourcePropertiesListType"/>
 	<xs:complexType name="ResourcePropertiesListType">
 		<xs:sequence>
@@ -11,13 +9,11 @@
 		</xs:sequence>
 		<xs:attribute name="synchronizeResourceFramework" use="optional" type="xs:boolean">
 			<xs:annotation>
-				<xs:documentation>If this attribute exists and the value is false, the resource
-					framework will not be created, nor will any of the configuration files. NOTE: it
-					is not expected most developers should use this value (only those wishing to
-					hand-edit the resource code), and it MUST NOT be set to false initially as
-					required files will not be initially created. You should also not add new
-					ResourceType elements after this attribute has been set to
-				true.</xs:documentation>
+				<xs:documentation>If this attribute exists and the value is false, the resource framework will not be
+					created, nor will any of the configuration files. NOTE: it is not expected most developers should
+					use this value (only those wishing to hand-edit the resource code), and it MUST NOT be set to false
+					initially as required files will not be initially created. You should also not add new ResourceType
+					elements after this attribute has been set to true.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -25,22 +21,22 @@
 		<xs:attribute name="qName" type="xs:QName" use="required"/>
 		<xs:attribute name="populateFromFile" type="xs:boolean" use="required">
 			<xs:annotation>
-				<xs:documentation>Indicates whether the value of the metadata should be loaded from
-					a file or will be populated by the implementation.</xs:documentation>
+				<xs:documentation>Indicates whether the value of the metadata should be loaded from a file or will be
+					populated by the implementation.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="fileLocation" type="xs:string" use="optional">
 			<xs:annotation>
-				<xs:documentation>If populateFromFile is true this will be the relative path to the file
-					name of the file containing the instance data for this particular resource property.  NOTE: this
-					path is relative path from the etc directory of the service and should be located somewhere inside that 
-					etc directory.</xs:documentation>
+				<xs:documentation>If populateFromFile is true this will be the relative path to the file name of the
+					file containing the instance data for this particular resource property. NOTE: this path is relative
+					path from the etc directory of the service and should be located somewhere inside that etc
+					directory.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="register" type="xs:boolean" use="required">
 			<xs:annotation>
-				<xs:documentation>Indicates whether this metadata should be registered if the
-					service performs registration.</xs:documentation>
+				<xs:documentation>Indicates whether this metadata should be registered if the service performs
+					registration.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>

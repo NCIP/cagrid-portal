@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Services"
-	xmlns:tns="gme://gov.nih.nci.cagrid.introduce/1/Services"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:methods="gme://gov.nih.nci.cagrid.introduce/1/Methods"
 	xmlns:security="gme://gov.nih.nci.cagrid.introduce/1/Security"
 	xmlns:resources="gme://gov.nih.nci.cagrid.introduce/1/Resources"
 	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Services" elementFormDefault="qualified"
 	attributeFormDefault="unqualified">
-	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Methods"
-		schemaLocation="./Methods.xsd"/>
-	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Resources"
-		schemaLocation="./Resources.xsd"/>
-	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Security"
-		schemaLocation="./Security.xsd"/>
+	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Methods" schemaLocation="./Methods.xsd"/>
+	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Resources" schemaLocation="./Resources.xsd"/>
+	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Security" schemaLocation="./Security.xsd"/>
 	<xs:element name="Services" type="tns:ServicesType">
 		<xs:annotation>
-			<xs:documentation>List of Services for this Grid Service.  The first service in the list is the primary service for this grid service.  Others represent resource types which can be created by this service.</xs:documentation>
+			<xs:documentation>List of Services for this Grid Service. The first service in the list is the primary
+				service for this grid service. Others represent resource types which can be created by this
+			service.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="ServicesType">
