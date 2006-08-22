@@ -55,12 +55,12 @@ public abstract class AbstractDbCleanupStep
 				}
 			}
 			
-			// make sure no gme databases left
-			ResultSet rs = stmt.executeQuery("show databases");
-			while (rs.next()) {
-				String dbName = rs.getString(1);
-				assertTrue(dbName.indexOf("gme") == -1);
-			}
+//			 make sure no gme databases left
+//			ResultSet rs = stmt.executeQuery("show databases");
+//			while (rs.next()) {
+//				String dbName = rs.getString(1);
+//				assertTrue(dbName.indexOf("gme") == -1);
+//			}
 		} finally {
 			try { con.close(); } catch (Exception e) { }
 		}
