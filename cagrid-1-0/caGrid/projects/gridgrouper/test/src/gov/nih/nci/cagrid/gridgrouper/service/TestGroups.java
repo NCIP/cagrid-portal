@@ -47,7 +47,7 @@ public class TestGroups extends TestCase {
 	private String USER_C = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user c";
 
 	private String USER_D = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user d";
-	
+
 	private String GROUPER_ALL = "GrouperAll";
 
 	public void testViewReadPrivilege() {
@@ -81,7 +81,6 @@ public class TestGroups extends TestCase {
 			GroupDescriptor grp = createAndCheckGroup(test, groupExtension,
 					groupDisplayExtension, 1);
 			GroupIdentifier gid = Utils.getGroupIdentifier(grp);
-			
 
 			userExpected.clear();
 			userExpected.add(GroupPrivilegeType.admin);
@@ -181,7 +180,132 @@ public class TestGroups extends TestCase {
 		}
 	}
 
-	
+	public void testUpdatePrivilege() {
+		try {
+			Map memberExpected = new HashMap();
+			HashSet userExpected = new HashSet();
+			HashSet privsExpected = new HashSet();
+			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
+
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
+							.getRootStemIdentifier(), SUPER_USER,
+					StemPrivilegeType.stem));
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
+							.getRootStemIdentifier(), SUPER_USER,
+					StemPrivilegeType.create));
+
+			StemDescriptor root = grouper.getStem(SUPER_USER, Utils
+					.getRootStemIdentifier());
+			assertNotNull(root);
+			assertEquals(root.getName(), Utils.getRootStemIdentifier()
+					.getStemName());
+
+			String testStem = "TestStem";
+			StemDescriptor test = grouper.addChildStem(SUPER_USER, Utils
+					.getRootStemIdentifier(), testStem, testStem);
+			final String groupExtension = "mygroup";
+			final String groupDisplayExtension = "My Group";
+
+			GroupDescriptor grp = createAndCheckGroup(test, groupExtension,
+					groupDisplayExtension, 1);
+			GroupIdentifier gid = Utils.getGroupIdentifier(grp);
+
+			userExpected.clear();
+			userExpected.add(GroupPrivilegeType.admin);
+			userExpected.add(GroupPrivilegeType.view);
+			userExpected.add(GroupPrivilegeType.read);
+			verifyUserPrivileges(grp, SUPER_USER, userExpected);
+
+			// Test Default Privileges
+			userExpected.clear();
+			userExpected.add(GroupPrivilegeType.view);
+			userExpected.add(GroupPrivilegeType.read);
+			verifyUserPrivileges(grp, USER_A, userExpected);
+
+			// Grant user update
+
+			grouper.grantGroupPrivilege(SUPER_USER, gid, USER_A,
+					GroupPrivilegeType.update);
+
+			userExpected.clear();
+			userExpected.add(GroupPrivilegeType.view);
+			userExpected.add(GroupPrivilegeType.read);
+			userExpected.add(GroupPrivilegeType.update);
+			verifyUserPrivileges(grp, USER_A, userExpected);
+
+			privsExpected.clear();
+			privsExpected.add(USER_A);
+			verifyPrivileges(SUPER_USER, grp, GroupPrivilegeType.update,
+					privsExpected);
+
+			// We want to test doing everything
+			String description = "This is a test group";
+			GroupUpdate update = new GroupUpdate();
+			update.setDescription(description);
+			grouper.updateGroup(SUPER_USER, gid, update);
+			grouper.addMember(SUPER_USER, gid, USER_B);
+			memberExpected.clear();
+			memberExpected.put(USER_B, getGridMember(USER_B));
+			verifyMembers(grp, MemberFilter.All, memberExpected);
+
+			// Reading Description
+
+			GroupDescriptor g = grouper.getGroup(USER_A, gid);
+			assertEquals(grp.getName(), g.getName());
+			assertEquals(description, g.getDescription());
+
+			// Reading Members
+			memberExpected.clear();
+			memberExpected.put(USER_B, getGridMember(USER_B));
+			verifyMembers(USER_A, grp, MemberFilter.All, memberExpected);
+
+			// Reading Privileges
+			grouper.grantGroupPrivilege(SUPER_USER, gid, USER_C,
+					GroupPrivilegeType.update);
+			userExpected.clear();
+			userExpected.add(GroupPrivilegeType.update);
+			userExpected.add(GroupPrivilegeType.view);
+			userExpected.add(GroupPrivilegeType.read);
+			verifyUserPrivileges(USER_A, grp, USER_C, userExpected);
+
+			// Adding members
+
+			grouper.addMember(USER_A, gid, USER_D);
+			memberExpected.clear();
+			memberExpected.put(USER_B, getGridMember(USER_B));
+			memberExpected.put(USER_D, getGridMember(USER_D));
+			verifyMembers(USER_A, grp, MemberFilter.All, memberExpected);
+
+			// Updating
+
+			try {
+				String des = "New Description";
+				GroupUpdate u = new GroupUpdate();
+				u.setDescription(des);
+				grouper.updateGroup(USER_A, gid, u);
+				assertEquals(des, grouper.getGroup(SUPER_USER, gid)
+						.getDescription());
+				fail("Should not be able to update the group!!!");
+			} catch (GroupModifyFault e) {
+
+			}
+
+			// Adding privileges
+			try {
+				grouper.grantGroupPrivilege(USER_A, gid, USER_D,
+						GroupPrivilegeType.admin);
+				fail("Should not be able to add privilege!!!");
+			} catch (InsufficientPrivilegeFault f) {
+
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+	}
 
 	public void testMembers() {
 		try {
