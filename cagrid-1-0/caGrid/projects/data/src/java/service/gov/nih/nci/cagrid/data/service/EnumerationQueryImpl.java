@@ -63,23 +63,7 @@ public class EnumerationQueryImpl {
 		} catch (IOException ex) {
 			throw (QueryProcessingException) getTypedException(ex, new QueryProcessingException());
 		}
-
-		/*
-		try {
-			// create a resource for the new iteration
-			EnumResourceHome resourceHome = EnumResourceHome.getEnumResourceHome();
-			// create a transient resource
-			EnumResource resource = resourceHome.createEnumeration(enumIter, false);
-			ResourceKey key = resourceHome.getKey(resource);
-			EnumerationContextType enumContext = 
-				EnumProvider.createEnumerationContextType(key);
-			
-			EnumerateResponse response = new EnumerateResponse(new MessageElement[] {}, enumContext, new ExpirationType());
-			return response;
-		} catch (Exception ex) {
-			throw (QueryProcessingException) getTypedException(ex, new QueryProcessingException());
-		}
-		*/
+		
 		try {
 			return EnumerateResponseFactory.createCustomResponse(enumIter, false);
 		} catch (EnumerationCreationException ex) {
