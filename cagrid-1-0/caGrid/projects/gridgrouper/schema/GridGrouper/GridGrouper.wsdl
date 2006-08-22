@@ -716,6 +716,40 @@
           </sequence>
         </complexType>
       </element>
+      <element name="HasGroupPrivilegeRequest">
+        <complexType>
+          <sequence>
+            <element name="group">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:GroupIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="subject">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:SubjectIdentifier" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="privilege">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:GroupPrivilegeType" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="HasGroupPrivilegeResponse">
+        <complexType>
+          <sequence>
+            <element name="response" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="GridGrouperRuntimeFault">
         <complexType>
           <complexContent>
@@ -991,6 +1025,12 @@
   <message name="GetGroupPrivilegesResponse">
     <part name="parameters" element="tns:GetGroupPrivilegesResponse" />
   </message>
+  <message name="HasGroupPrivilegeRequest">
+    <part name="parameters" element="tns:HasGroupPrivilegeRequest" />
+  </message>
+  <message name="HasGroupPrivilegeResponse">
+    <part name="parameters" element="tns:HasGroupPrivilegeResponse" />
+  </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="tns:GridGrouperRuntimeFault" />
   </message>
@@ -1230,6 +1270,12 @@
     <operation name="getGroupPrivileges">
       <input message="tns:GetGroupPrivilegesRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetGroupPrivilegesRequest" />
       <output message="tns:GetGroupPrivilegesResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GetGroupPrivilegesResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
+      <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
+    </operation>
+    <operation name="hasGroupPrivilege">
+      <input message="tns:HasGroupPrivilegeRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/HasGroupPrivilegeRequest" />
+      <output message="tns:HasGroupPrivilegeResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/HasGroupPrivilegeResponse" />
       <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
       <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
     </operation>

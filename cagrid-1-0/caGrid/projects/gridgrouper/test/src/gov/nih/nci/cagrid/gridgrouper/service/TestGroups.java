@@ -48,7 +48,7 @@ public class TestGroups extends TestCase {
 
 	private String USER_D = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user d";
 
-    //private String GROUPER_ALL = "GrouperAll";
+	// private String GROUPER_ALL = "GrouperAll";
 
 	public void testViewReadPrivilege() {
 		try {
@@ -87,12 +87,26 @@ public class TestGroups extends TestCase {
 			userExpected.add(GroupPrivilegeType.view);
 			userExpected.add(GroupPrivilegeType.read);
 			verifyUserPrivileges(grp, SUPER_USER, userExpected);
+			assertTrue(grouper.hasGroupPrivilege(SUPER_USER, gid, SUPER_USER,
+					GroupPrivilegeType.read));
 
 			// Test Default Privileges
 			userExpected.clear();
 			userExpected.add(GroupPrivilegeType.view);
 			userExpected.add(GroupPrivilegeType.read);
 			verifyUserPrivileges(grp, USER_A, userExpected);
+			assertTrue(grouper.hasGroupPrivilege(SUPER_USER, gid, USER_A,
+					GroupPrivilegeType.read));
+			assertTrue(grouper.hasGroupPrivilege(SUPER_USER, gid, USER_A,
+					GroupPrivilegeType.view));
+			assertFalse(grouper.hasGroupPrivilege(SUPER_USER, gid, USER_A,
+					GroupPrivilegeType.optin));
+			assertFalse(grouper.hasGroupPrivilege(SUPER_USER, gid, USER_A,
+					GroupPrivilegeType.optout));
+			assertFalse(grouper.hasGroupPrivilege(SUPER_USER, gid, USER_A,
+					GroupPrivilegeType.update));
+			assertFalse(grouper.hasGroupPrivilege(SUPER_USER, gid, USER_A,
+					GroupPrivilegeType.admin));
 
 			// TODO: Should this pass Should we be able to remove a default
 			// privilege?
@@ -306,7 +320,7 @@ public class TestGroups extends TestCase {
 			fail(e.getMessage());
 		}
 	}
-	
+
 	public void testOptinOptoutPrivilege() {
 		try {
 			Map memberExpected = new HashMap();
@@ -351,49 +365,50 @@ public class TestGroups extends TestCase {
 			verifyUserPrivileges(grp, USER_A, userExpected);
 
 			// Test to make sure the user can not opt into a group
-			try{
+			try {
 				grouper.addMember(USER_A, gid, USER_A);
 				fail("User should not be able to OPTIN into group");
-			}catch(InsufficientPrivilegeFault f){
-				
+			} catch (InsufficientPrivilegeFault f) {
+
 			}
-			grouper.grantGroupPrivilege(SUPER_USER, gid, USER_A, GroupPrivilegeType.optin);
+			grouper.grantGroupPrivilege(SUPER_USER, gid, USER_A,
+					GroupPrivilegeType.optin);
 			userExpected.clear();
 			userExpected.add(GroupPrivilegeType.view);
 			userExpected.add(GroupPrivilegeType.read);
 			userExpected.add(GroupPrivilegeType.optin);
 			verifyUserPrivileges(grp, USER_A, userExpected);
-			
+
 			grouper.addMember(USER_A, gid, USER_A);
-			
+
 			memberExpected.clear();
 			memberExpected.put(USER_A, getGridMember(USER_A));
 			verifyMembers(SUPER_USER, grp, MemberFilter.All, memberExpected);
 
-			try{
+			try {
 				grouper.deleteMember(USER_A, gid, USER_A);
 				fail("User should not be able to OPTOUT into group");
-			}catch(InsufficientPrivilegeFault f){
-				
+			} catch (InsufficientPrivilegeFault f) {
+
 			}
-			
+
 			memberExpected.clear();
 			memberExpected.put(USER_A, getGridMember(USER_A));
 			verifyMembers(SUPER_USER, grp, MemberFilter.All, memberExpected);
-			
-			
-			grouper.grantGroupPrivilege(SUPER_USER, gid, USER_A, GroupPrivilegeType.optout);
+
+			grouper.grantGroupPrivilege(SUPER_USER, gid, USER_A,
+					GroupPrivilegeType.optout);
 			userExpected.clear();
 			userExpected.add(GroupPrivilegeType.view);
 			userExpected.add(GroupPrivilegeType.read);
 			userExpected.add(GroupPrivilegeType.optin);
 			userExpected.add(GroupPrivilegeType.optout);
 			verifyUserPrivileges(grp, USER_A, userExpected);
-			
+
 			grouper.deleteMember(USER_A, gid, USER_A);
-			
+
 			memberExpected.clear();
-			verifyMembers(SUPER_USER, grp, MemberFilter.All, memberExpected);	
+			verifyMembers(SUPER_USER, grp, MemberFilter.All, memberExpected);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
@@ -511,7 +526,7 @@ public class TestGroups extends TestCase {
 
 			grouper.grantGroupPrivilege(USER_A, gid, USER_D,
 					GroupPrivilegeType.admin);
-			
+
 			userExpected.clear();
 			userExpected.add(GroupPrivilegeType.view);
 			userExpected.add(GroupPrivilegeType.read);

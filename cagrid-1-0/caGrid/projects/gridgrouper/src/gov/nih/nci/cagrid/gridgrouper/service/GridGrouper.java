@@ -1497,7 +1497,7 @@ public class GridGrouper {
 			Subject subj = SubjectUtils.getSubject(gridIdentity);
 			session = GrouperSession.start(subj);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
-			grp.grantPriv(SubjectUtils.getSubject(subject,true), Privilege
+			grp.grantPriv(SubjectUtils.getSubject(subject, true), Privilege
 					.getInstance(privilege.getValue()));
 		} catch (GroupNotFoundException e) {
 			GroupNotFoundFault fault = new GroupNotFoundFault();
@@ -1557,7 +1557,7 @@ public class GridGrouper {
 			Subject subj = SubjectUtils.getSubject(gridIdentity);
 			session = GrouperSession.start(subj);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
-			grp.revokePriv(SubjectUtils.getSubject(subject,true), Privilege
+			grp.revokePriv(SubjectUtils.getSubject(subject, true), Privilege
 					.getInstance(privilege.getValue()));
 		} catch (GroupNotFoundException e) {
 			GroupNotFoundFault fault = new GroupNotFoundFault();
@@ -1728,6 +1728,63 @@ public class GridGrouper {
 							+ " on the group "
 							+ group.getGroupName()
 							+ ": " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		} finally {
+			if (session == null) {
+				try {
+					session.stop();
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
+	}
+
+	public boolean hasGroupPrivilege(String gridIdentity,
+			GroupIdentifier group, String subject, GroupPrivilegeType privilege)
+			throws GridGrouperRuntimeFault, GroupNotFoundFault {
+		GrouperSession session = null;
+		try {
+			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			session = GrouperSession.start(subj);
+			Group target = GroupFinder
+					.findByName(session, group.getGroupName());
+			if (privilege == null) {
+				return false;
+			} else if (privilege.equals(GroupPrivilegeType.admin)) {
+				return target.hasAdmin(SubjectUtils.getSubject(subject, true));
+			} else if (privilege.equals(GroupPrivilegeType.optin)) {
+				return target.hasOptin(SubjectUtils.getSubject(subject, true));
+			} else if (privilege.equals(GroupPrivilegeType.optout)) {
+				return target.hasOptout(SubjectUtils.getSubject(subject, true));
+			} else if (privilege.equals(GroupPrivilegeType.read)) {
+				return target.hasRead(SubjectUtils.getSubject(subject, true));
+			} else if (privilege.equals(GroupPrivilegeType.update)) {
+				return target.hasUpdate(SubjectUtils.getSubject(subject, true));
+			} else if (privilege.equals(GroupPrivilegeType.view)) {
+				return target.hasView(SubjectUtils.getSubject(subject, true));
+			} else {
+				return false;
+			}
+
+		} catch (GroupNotFoundException e) {
+			GroupNotFoundFault fault = new GroupNotFoundFault();
+			fault.setFaultString("The group, " + group.getGroupName()
+					+ "was not found.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GroupNotFoundFault) helper.getFault();
+			throw fault;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault.setFaultString("Error determing if the subject " + subject
+					+ " has the privilege " + privilege.getValue()
+					+ " on the group " + group.getGroupName() + ": "
+					+ e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (GridGrouperRuntimeFault) helper.getFault();

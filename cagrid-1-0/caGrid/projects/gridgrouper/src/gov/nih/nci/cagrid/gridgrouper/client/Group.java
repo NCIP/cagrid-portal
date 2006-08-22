@@ -3,29 +3,36 @@ package gov.nih.nci.cagrid.gridgrouper.client;
 import edu.internet2.middleware.grouper.CompositeType;
 import edu.internet2.middleware.grouper.GroupDeleteException;
 import edu.internet2.middleware.grouper.GroupModifyException;
+import edu.internet2.middleware.grouper.GroupNotFoundException;
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
 import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.grouper.MemberAddException;
 import edu.internet2.middleware.grouper.MemberDeleteException;
+import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilege;
+import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
+import gov.nih.nci.cagrid.gridgrouper.grouper.AccessPrivilegeI;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupModifyFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.MemberAddFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.MemberDeleteFault;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -327,7 +334,8 @@ public class Group extends GridGrouperObject implements GroupI {
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (MemberDeleteFault f) {
-			throw new MemberDeleteException("Cannot remove member "+f.getFaultString());
+			throw new MemberDeleteException("Cannot remove member "
+					+ f.getFaultString());
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
@@ -381,7 +389,8 @@ public class Group extends GridGrouperObject implements GroupI {
 	public void deleteCompositeMember() throws InsufficientPrivilegeException,
 			MemberDeleteException {
 		try {
-			this.des = gridGrouper.getClient().deleteCompositeMember(getGroupIdentifier());
+			this.des = gridGrouper.getClient().deleteCompositeMember(
+					getGroupIdentifier());
 		} catch (InsufficientPrivilegeFault f) {
 			throw new InsufficientPrivilegeException(f.getFaultString());
 		} catch (MemberDeleteFault f) {
@@ -404,7 +413,70 @@ public class Group extends GridGrouperObject implements GroupI {
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
-	
-	
+
+	private Set getPrivileges(Subject subject) throws GroupNotFoundException {
+		try {
+			GroupPrivilege[] privs = gridGrouper.getClient()
+					.getGroupPrivileges(getGroupIdentifier(), subject.getId());
+			Set set = new HashSet();
+			if (privs != null) {
+				for (int i = 0; i < privs.length; i++) {
+					AccessPrivilegeI priv = new AccessPrivilege(gridGrouper,
+							privs[i]);
+					set.add(priv);
+				}
+			}
+			return set;
+		} catch (GroupNotFoundFault f) {
+			throw new GroupNotFoundException(f.getFaultString());
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	private Set getSubjectsWithPrivilege(Privilege privilege)
+			throws GroupNotFoundException {
+		try {
+			String[] subs = gridGrouper.getClient()
+					.getSubjectsWithGroupPrivilege(getGroupIdentifier(),
+							GroupPrivilegeType.fromValue(privilege.getName()));
+			Set set = new HashSet();
+			if (subs != null) {
+				for (int i = 0; i < subs.length; i++) {
+					set.add(SubjectUtils.getSubject(subs[i], true));
+				}
+			}
+			return set;
+		} catch (GroupNotFoundFault f) {
+			throw new GroupNotFoundException(f.getFaultString());
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	private boolean hasPrivilege(Subject subject, Privilege privilege)
+			throws GroupNotFoundException {
+		try {
+			return gridGrouper.getClient().hasGroupPrivilege(
+					getGroupIdentifier(), subject.getId(),
+					GroupPrivilegeType.fromValue(privilege.getName()));
+		} catch (GroupNotFoundFault f) {
+			throw new GroupNotFoundException(f.getFaultString());
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
 
 }
