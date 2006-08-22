@@ -19,7 +19,7 @@
 			<xs:element name="Inputs" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="Input" maxOccurs="unbounded">
+						<xs:element name="Input" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:attribute name="qName" type="xs:QName" use="required"/>
 								<xs:attribute name="isArray" type="xs:boolean" use="required"/>
@@ -41,7 +41,7 @@
 			<xs:element name="Exceptions" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="Exception" maxOccurs="unbounded">
+						<xs:element name="Exception" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:attribute name="name" type="xs:string" use="required"/>
 							</xs:complexType>
