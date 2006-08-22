@@ -63,6 +63,14 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 			copySchema(subname, schemaDir);
 		}
 		
+		List wsdlFiles = Utils.recursiveListFiles(extensionSchemaDir, new FileFilters.WSDLFileFilter());
+		for (int i = 0; i < wsdlFiles.size(); i++) {
+			File wsdlFile = (File) wsdlFiles.get(i);
+			String subname = wsdlFile.getCanonicalPath().substring(
+				extensionSchemaDir.getCanonicalPath().length() + File.separator.length());
+			copySchema(subname, schemaDir);
+		}
+		
 		// copy libraries for data services into the new bdt lib directory
 		copyLibraries(props);
 		// namespaces
