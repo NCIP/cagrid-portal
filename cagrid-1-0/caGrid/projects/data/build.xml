@@ -27,7 +27,7 @@
     <property name="build.validation.dest" location="${build.dir}/validation/classes" />
     <property name="build.common.dest" location="${build.dir}/common/classes" />
     <property name="build.cql.dest" location="${build.dir}/cql/classes" />
-    <property name="build.jars.dir" location="build/lib" />
+	<property name="build.jars.dir" location="build/lib" />
 
     <!-- jar names -->
     <property name="utils.jar.name" value="${project.name}-utils.jar" />
@@ -57,8 +57,6 @@
     <property name="stubs.jar.name" value="${project.name}-stubs.jar" />
     <property name="stubs.jar.file" value="${build.jars.dir}/${stubs.jar.name}" />
     <property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
-    <property name="interface.name" value="DataService" />
-
 
     <!-- schemas and namespace mappings -->
     <property name="schema.src" location="${globus.dir}/share/schema" />
@@ -122,7 +120,8 @@
         <property name="schema.src" location="${ext.globus.dir}/share/schema" />
         <property name="build.packages" location="${ext.globus.dir}/share/globus_wsrf_common/build-packages.xml" />
         <!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
-        <property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" />
+        <property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd -x http://schemas.xmlsoap.org/ws/2004/09/enumeration" />
+    	<property name="data.service.namespace" value="http://gov.nih.nci.cagrid.data/DataService"/>
     </target>
 
 
@@ -140,7 +139,7 @@
         <mkdir dir="${stubs.dir}" />
         <mkdir dir="${stubs.src}" />
         <mkdir dir="${stubs.dest}" />
-        <mkdir dir="${schema.dest}" />
+    	<mkdir dir="${schema.dest}" />
         <!-- copy schemas to the output directory -->
         <copy toDir="${schema.dest}">
             <fileset dir="schema" casesensitive="yes">
@@ -148,12 +147,34 @@
                 <include name="Data/**/*.wsdl" />
             </fileset>
         </copy>
+        <copy todir="${schema.dest}/Data">
+        	<fileset dir="ext">
+        		<include name="xsd/**/*.xsd"/>
+        	</fileset>
+        </copy>
+    	<!--
+    	<copy toDir="${schema.dest}/Enum">
+    		<fileset dir="schema/Data" casesensitive="yes">
+    			<include name="DataService.wsdl" />
+    			<include name="EnumerationQuery.wsdl" />
+    			<include name="ServiceSecurity.wsdl" />
+    			<include name="1_gov.nih.nci.cagrid.CQLQuery.xsd"/>
+    		</fileset>
+    		<fileset dir="ext">
+    			<include name="xsd/security.xsd"/>
+    		</fileset>
+    		<fileset dir="ext/xsd">
+    			<include name="enumeration.xsd"/>
+    			<include name="addressing.xsd"/>
+    		</fileset>
+    	</copy>
         <mkdir dir="${schema.dest}/Data/metadata" />
         <copy todir="${schema.dest}/Data/metadata">
             <fileset dir="${ext.schema.dir}">
                 <include name="cagrid/**/*.xsd" />
             </fileset>
         </copy>
+        -->
         <available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
     </target>
 
@@ -194,21 +215,36 @@
             <property name="wsdl.file" value="Response.wsdl" />
             <property name="target.stubs.dir" location="${stubs.src}" />
         </ant>
-        <!-- generate bindings for globus -->
+        <!-- generate data service bindings for globus -->
         <ant antfile="${ant.build.stubs}" target="generateBinding">
             <property name="source.binding.dir" value="${schema.dest}/Data" />
             <property name="target.binding.dir" value="${schema.dest}/Data" />
-            <property name="porttype.wsdl" value="${interface.name}.wsdl" />
-            <property name="binding.root" value="${interface.name}" />
+            <property name="porttype.wsdl" value="DataService.wsdl" />
+            <property name="binding.root" value="DataService" />
         </ant>
         <!-- Invoke the stub generator -->
         <ant antfile="${ant.build.stubs}" target="generateStubs">
             <property name="mapping.file" location="${build.dir}/NStoPkg.properties" />
             <property name="source.stubs.dir" location="${schema.dest}/Data" />
             <property name="target.stubs.dir" location="${stubs.src}" />
-            <property name="wsdl.file" value="${interface.name}_service.wsdl" />
+            <property name="wsdl.file" value="DataService_service.wsdl" />
             <property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
         </ant>
+    	<!-- generate enumeration query bindings for globus -->
+    	<ant antfile="${ant.build.stubs}" target="generateBinding">
+    		<property name="source.binding.dir" value="${schema.dest}/Data" />
+    		<property name="target.binding.dir" value="${schema.dest}/Data" />
+    		<property name="porttype.wsdl" value="EnumerationQuery.wsdl" />
+    		<property name="binding.root" value="EnumerationQuery" />
+    	</ant>
+    	<!-- stub generator -->
+		<ant antfile="${ant.build.stubs}" target="generateStubs">
+    		<property name="mapping.file" location="${build.dir}/NStoPkg.properties" />
+			<property name="source.stubs.dir" location="${schema.dest}/Data" />
+			<property name="target.stubs.dir" location="${stubs.src}" />
+			<property name="wsdl.file" value="EnumerationQuery_service.wsdl" />
+			<property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes} -x ${data.service.namespace}" />
+		</ant>
     </target>
 
 
@@ -458,7 +494,6 @@
         </jar>
     </target>
 
-
     <!-- removes all build output -->
     <target name="clean">
         <delete dir="tmp" />
@@ -513,10 +548,9 @@
     <!-- this target installs the default introduce extension, which adds an operation provider to a service
 	which MAKES it a data service -->
     <target name="installIntroduceExtensions" depends="all" description="Builds and installs the Data Services extensions into Introduce.">
-        <delete dir="${introduce.extensions.dir}/data" />
+        <delete dir="${introduce.extensions.dir}/data" failonerror="false"/>
         <mkdir dir="${introduce.extensions.dir}/data" />
         <mkdir dir="${introduce.extensions.dir}/data/schema" />
-        <mkdir dir="${introduce.extensions.dir}/data/schema/metadata" />
         <!-- extension description file -->
         <copy todir="${introduce.extensions.dir}/data" file="${extension.description.file}" />
         <!-- libraries -->
@@ -533,15 +567,9 @@
         </copy>
         <!-- data service schemas -->
         <copy todir="${introduce.extensions.dir}/data/schema">
-            <fileset dir="${basedir}/schema/Data/">
+            <fileset dir="${schema.dest}">
                 <include name="**/*.xsd" />
-                <include name="DataService.wsdl" />
-            </fileset>
-        </copy>
-        <!-- metadata schemas -->
-        <copy todir="${introduce.extensions.dir}/data/schema/metadata">
-            <fileset dir="${ext.schema.dir}">
-                <include name="**/*.xsd" />
+                <include name="**/*.wsdl" />
             </fileset>
         </copy>
         <!-- DomainModel client-config.wsdd -->
