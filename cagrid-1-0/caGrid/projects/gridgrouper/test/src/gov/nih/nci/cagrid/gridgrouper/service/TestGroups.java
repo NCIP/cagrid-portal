@@ -15,6 +15,8 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MembershipDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.service.tools.GridGrouperBootstrapper;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GroupModifyFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.MemberAddFault;
 import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
 import gov.nih.nci.cagrid.gridgrouper.testutils.Utils;
@@ -50,6 +52,7 @@ public class TestGroups extends TestCase {
 		try {
 			Map memberExpected = new HashMap();
 			HashSet userExpected = new HashSet();
+			HashSet privsExpected = new HashSet();
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
 
 			assertTrue(grouper.hasStemPrivilege(
@@ -81,13 +84,13 @@ public class TestGroups extends TestCase {
 			userExpected.add(GroupPrivilegeType.admin);
 			userExpected.add(GroupPrivilegeType.view);
 			userExpected.add(GroupPrivilegeType.read);
-			verifyPrivileges(grp, SUPER_USER, userExpected);
+			verifyUserPrivileges(grp, SUPER_USER, userExpected);
 
 			// Test Default Privileges
 			userExpected.clear();
 			userExpected.add(GroupPrivilegeType.view);
 			userExpected.add(GroupPrivilegeType.read);
-			verifyPrivileges(grp, USER_A, userExpected);
+			verifyUserPrivileges(grp, USER_A, userExpected);
 
 			// TODO: Should this pass Should we be able to remove a default
 			// privilege?
@@ -103,6 +106,19 @@ public class TestGroups extends TestCase {
 			memberExpected.put(USER_B, getGridMember(USER_B));
 			verifyMembers(grp, MemberFilter.All, memberExpected);
 
+			grouper.grantGroupPrivilege(SUPER_USER, gid, USER_C,
+					GroupPrivilegeType.update);
+
+			userExpected.clear();
+			userExpected.add(GroupPrivilegeType.update);
+			userExpected.add(GroupPrivilegeType.view);
+			userExpected.add(GroupPrivilegeType.read);
+			verifyUserPrivileges(grp, USER_C, userExpected);
+
+			privsExpected.clear();
+			privsExpected.add(USER_C);
+			verifyPrivileges(grp, GroupPrivilegeType.update, privsExpected);
+
 			// Reading Description
 
 			GroupDescriptor g = grouper.getGroup(USER_A, gid);
@@ -113,14 +129,48 @@ public class TestGroups extends TestCase {
 			memberExpected.clear();
 			memberExpected.put(USER_B, getGridMember(USER_B));
 			verifyMembers(USER_A, grp, MemberFilter.All, memberExpected);
-			
+
 			// Reading Privileges
 
-			// Adding members
-			// Updating
-			// Adding privileges
+			userExpected.clear();
+			userExpected.add(GroupPrivilegeType.update);
+			userExpected.add(GroupPrivilegeType.view);
+			userExpected.add(GroupPrivilegeType.read);
+			verifyUserPrivileges(USER_A, grp, USER_C, userExpected);
 
-			// printUsersWithPrivilege(grp, GroupPrivilegeType.view);
+			// //TODO: READ/VIEW users should be able to do this
+			// privsExpected.clear();
+			// privsExpected.add(USER_C);
+			// verifyPrivileges(USER_A,grp, GroupPrivilegeType.update,
+			// privsExpected);
+
+			// Adding members
+			try {
+				grouper.addMember(USER_A, gid, USER_D);
+				fail("Should not be able to add member!!!");
+			} catch (InsufficientPrivilegeFault f) {
+
+			}
+
+			// Updating
+			//TODO: This should throw Insufficient Privilege Fault
+			try {
+				GroupUpdate u = new GroupUpdate();
+				u.setDescription("New Description");
+				grouper.updateGroup(USER_A, gid, u);
+				fail("Should not be able to update!!!");
+			} catch (GroupModifyFault f) {
+
+			}
+
+			// Adding privileges
+			try {
+				grouper.grantGroupPrivilege(USER_A, gid, USER_D,
+						GroupPrivilegeType.admin);
+				fail("Should not be able to add privilege!!!");
+			} catch (InsufficientPrivilegeFault f) {
+
+			}
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -1064,11 +1114,16 @@ public class TestGroups extends TestCase {
 
 	}
 
-	private void verifyPrivileges(GroupDescriptor grp, String user,
+	private void verifyUserPrivileges(GroupDescriptor grp, String user,
 			HashSet expected) {
+		verifyUserPrivileges(SUPER_USER, grp, user, expected);
+	}
+
+	private void verifyUserPrivileges(String caller, GroupDescriptor grp,
+			String user, HashSet expected) {
 		try {
-			GroupPrivilege[] privs = grouper.getGroupPrivileges(SUPER_USER,
-					Utils.getGroupIdentifier(grp), user);
+			GroupPrivilege[] privs = grouper.getGroupPrivileges(caller, Utils
+					.getGroupIdentifier(grp), user);
 			assertEquals(expected.size(), privs.length);
 			for (int i = 0; i < privs.length; i++) {
 				if (expected.contains(privs[i].getPrivilegeType())) {
@@ -1078,6 +1133,34 @@ public class TestGroups extends TestCase {
 					fail("The privilege "
 							+ privs[i].getPrivilegeType().getValue()
 							+ " was not expected!!!");
+				}
+			}
+			assertEquals(0, expected.size());
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail("Error verifying members");
+		}
+
+	}
+
+	private void verifyPrivileges(GroupDescriptor grp, GroupPrivilegeType priv,
+			HashSet expected) {
+		verifyPrivileges(SUPER_USER, grp, priv, expected);
+	}
+
+	private void verifyPrivileges(String caller, GroupDescriptor grp,
+			GroupPrivilegeType priv, HashSet expected) {
+		try {
+			String[] users = grouper.getSubjectsWithGroupPrivilege(caller,
+					Utils.getGroupIdentifier(grp), priv);
+			assertEquals(expected.size(), users.length);
+			for (int i = 0; i < users.length; i++) {
+				if (expected.contains(users[i])) {
+					expected.remove(users[i]);
+				} else {
+					fail("The privilege " + priv.getValue()
+							+ " was not expected for the user " + users[i]
+							+ "!!!");
 				}
 			}
 			assertEquals(0, expected.size());
