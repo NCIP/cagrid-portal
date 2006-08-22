@@ -29,6 +29,9 @@ TODO:
 24[ ]: Add Project (all packages in said project) button on DS extension GUI
 
 BUGS:
+
+When the GUI removes a type it does not remove its schema from the project.  If the schema has the same type as a newly added one (e.g. a user picked the wrong version of his schema) it will give axis bean generation all kinds of problems.
+
 I added a package and it said that it could not find a schema, so I hit cancel.  No model was added to the models list (correctly).  Next I selected a different package, and it popped up the Package incompatibility dialog.  This should not pop up because there are no models added yet.
 	-- Fixed 2006-08-01
 Eclipse classpath is incorrect (duplicate entries for cagrid core)
