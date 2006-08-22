@@ -123,7 +123,7 @@ public class RandomObject
 			return c;
 		} else if (type.equals(String.class)) {
 			StringBuffer sb = new StringBuffer();
-			for (int i = rand.nextInt(10) + 10; i >= 0; i--) {
+			for (int i = rand.nextInt(10) + 10; i > 0; i--) {
 				sb.append(nextPrimitive(char.class));
 			}
 			return sb.toString();
