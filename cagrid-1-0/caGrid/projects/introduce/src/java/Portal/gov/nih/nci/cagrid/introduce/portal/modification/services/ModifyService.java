@@ -83,7 +83,7 @@ public class ModifyService extends JDialog {
 			getNamespaceTextField().setText(
 				service.getIntroduceServiceProperties().getProperty(
 					IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN)
-					+ "Context");
+					+ "/Context");
 		}
 		if (service.getService().getPackageName() != null && service.getService().getPackageName().length() > 0) {
 			getServicePackageNameTextField().setText(service.getService().getPackageName());

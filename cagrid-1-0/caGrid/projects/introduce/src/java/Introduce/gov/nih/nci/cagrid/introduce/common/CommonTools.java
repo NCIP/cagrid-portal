@@ -532,7 +532,8 @@ public class CommonTools {
 		newmethodsType.setMethod(newMethods);
 		CommonTools.getService(introService.getServices(), toService).setMethods(newmethodsType);
 
-		Utils.serializeDocument(toDir.getAbsolutePath() + File.separator + "introduce.xml", introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+		Utils.serializeDocument(toDir.getAbsolutePath() + File.separator + "introduce.xml", introService, new QName(
+			"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceSkeleton"));
 
 	}
 

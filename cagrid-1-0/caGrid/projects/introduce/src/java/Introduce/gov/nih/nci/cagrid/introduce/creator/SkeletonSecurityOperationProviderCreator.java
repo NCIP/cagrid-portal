@@ -39,67 +39,83 @@ public class SkeletonSecurityOperationProviderCreator {
 
 
 	public void createSkeleton(SpecificServiceInformation info) throws Exception {
-
-		// add in the method
-		MethodType method = new MethodType();
-		method.setName("getServiceSecurityMetadata");
-
-		MethodTypeOutput output = new MethodTypeOutput();
-		output.setQName(new QName(SECURITY_NS, "ServiceSecurityMetadata"));
-		output.setIsArray(false);
-		output.setIsClientHandle(new Boolean(false));
-		method.setOutput(output);
-
-		MethodTypeImportInformation ii = new MethodTypeImportInformation();
-		ii.setNamespace(SECURITY_SERVICE_NS);
-		ii.setPackageName("gov.nih.nci.cagrid.introduce.security");
-		ii.setPortTypeName("ServiceSecurityPortType");
-		ii.setWsdlFile(SERVICE_SECURITY_WSDL);
-		ii.setInputMessage(new QName(SECURITY_SERVICE_NS, "GetServiceSecurityMetadataRequest"));
-		ii.setOutputMessage(new QName(SECURITY_SERVICE_NS, "GetServiceSecurityMetadataResponse"));
-		method.setIsImported(true);
-		method.setImportInformation(ii);
-
-		MethodTypeProviderInformation pi = new MethodTypeProviderInformation();
-		pi.setProviderClass("gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl");
-		method.setIsProvided(true);
-		method.setProviderInformation(pi);
-
-		CommonTools.addMethod(info.getService(), method);
-
-		if (CommonTools.getNamespaceType(info.getNamespaces(), SECURITY_NS) == null) {
-
-			String pathToServSchema = info.getBaseDirectory().getAbsolutePath() + File.separator + "schema"
-				+ File.separator
-				+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
-				+ File.separator;
-			String pathToSerLib = info.getBaseDirectory().getAbsolutePath() + File.separator + "lib" + File.separator;
-
-			// add in the namespace type
-			NamespaceType nsType = CommonTools.createNamespaceType(PATH_TO_SCHEMA + "xsd" + File.separator
-				+ SERVICE_SECURITY_XSD);
-			nsType.setGenerateStubs(new Boolean(false));
-			nsType.setLocation("./" + "xsd" + File.separator + SERVICE_SECURITY_XSD);
-			CommonTools.addNamespace(info.getServiceDescriptor(), nsType);
-
-			// copy over the wsdl file and the required schema
-			Utils.copyFile(new File(PATH_TO_SCHEMA + SERVICE_SECURITY_WSDL), new File(pathToServSchema
-				+ SERVICE_SECURITY_WSDL));
-			Utils.copyFile(new File(PATH_TO_SCHEMA + "xsd" + File.separator + SERVICE_SECURITY_XSD), new File(
-				pathToServSchema + "xsd" + File.separator + SERVICE_SECURITY_XSD));
-
-			// copy over the jars which contain the stubs and the service impl
-			File libDir = new File(PATH_TO_BUILD_LIB);
-			File[] libs = libDir.listFiles(new FileFilter() {
-				public boolean accept(File pathname) {
-					String name = pathname.getName();
-					return (name.endsWith(".jar") && (name.startsWith(JAR_PREFIX)));
+		boolean needToAdd = true;
+		if (info.getService().getMethods() != null && info.getService().getMethods().getMethod() != null) {
+			MethodType[] methods = info.getService().getMethods().getMethod();
+			for (int i = 0; i < methods.length; i++) {
+				MethodType method = methods[i];
+				if (method.getName().equals("getServiceSecurityMetadata")) {
+					needToAdd = false;
 				}
-			});
-			if (libs != null) {
-				for (int i = 0; i < libs.length; i++) {
-					File outFile = new File(pathToSerLib + libs[i].getName());
-					Utils.copyFile(libs[i], outFile);
+			}
+		}
+
+		if (needToAdd) {
+			// add in the method
+			MethodType method = new MethodType();
+			method.setName("getServiceSecurityMetadata");
+
+			MethodTypeOutput output = new MethodTypeOutput();
+			output.setQName(new QName(SECURITY_NS, "ServiceSecurityMetadata"));
+			output.setIsArray(false);
+			output.setIsClientHandle(new Boolean(false));
+			method.setOutput(output);
+
+			MethodTypeImportInformation ii = new MethodTypeImportInformation();
+			ii.setNamespace(SECURITY_SERVICE_NS);
+			ii.setPackageName("gov.nih.nci.cagrid.introduce.security");
+			ii.setPortTypeName("ServiceSecurityPortType");
+			ii.setWsdlFile(SERVICE_SECURITY_WSDL);
+			ii.setInputMessage(new QName(SECURITY_SERVICE_NS, "GetServiceSecurityMetadataRequest"));
+			ii.setOutputMessage(new QName(SECURITY_SERVICE_NS, "GetServiceSecurityMetadataResponse"));
+			method.setIsImported(true);
+			method.setImportInformation(ii);
+
+			MethodTypeProviderInformation pi = new MethodTypeProviderInformation();
+			pi.setProviderClass("gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl");
+			method.setIsProvided(true);
+			method.setProviderInformation(pi);
+
+			CommonTools.addMethod(info.getService(), method);
+
+			if (CommonTools.getNamespaceType(info.getNamespaces(), SECURITY_NS) == null) {
+
+				String pathToServSchema = info.getBaseDirectory().getAbsolutePath()
+					+ File.separator
+					+ "schema"
+					+ File.separator
+					+ info.getIntroduceServiceProperties().getProperty(
+						IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator;
+				String pathToSerLib = info.getBaseDirectory().getAbsolutePath() + File.separator + "lib"
+					+ File.separator;
+
+				// add in the namespace type
+				NamespaceType nsType = CommonTools.createNamespaceType(PATH_TO_SCHEMA + "xsd" + File.separator
+					+ SERVICE_SECURITY_XSD);
+				nsType.setGenerateStubs(new Boolean(false));
+				nsType.setLocation("./" + "xsd" + File.separator + SERVICE_SECURITY_XSD);
+				CommonTools.addNamespace(info.getServiceDescriptor(), nsType);
+
+				// copy over the wsdl file and the required schema
+				Utils.copyFile(new File(PATH_TO_SCHEMA + SERVICE_SECURITY_WSDL), new File(pathToServSchema
+					+ SERVICE_SECURITY_WSDL));
+				Utils.copyFile(new File(PATH_TO_SCHEMA + "xsd" + File.separator + SERVICE_SECURITY_XSD), new File(
+					pathToServSchema + "xsd" + File.separator + SERVICE_SECURITY_XSD));
+
+				// copy over the jars which contain the stubs and the service
+				// impl
+				File libDir = new File(PATH_TO_BUILD_LIB);
+				File[] libs = libDir.listFiles(new FileFilter() {
+					public boolean accept(File pathname) {
+						String name = pathname.getName();
+						return (name.endsWith(".jar") && (name.startsWith(JAR_PREFIX)));
+					}
+				});
+				if (libs != null) {
+					for (int i = 0; i < libs.length; i++) {
+						File outFile = new File(pathToSerLib + libs[i].getName());
+						Utils.copyFile(libs[i], outFile);
+					}
 				}
 			}
 		}
