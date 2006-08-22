@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
 import edu.internet2.middleware.grouper.GrouperRuntimeException;
+import edu.internet2.middleware.grouper.Privilege;
 import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
@@ -18,6 +19,18 @@ import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
  */
 public class AccessPrivilege extends GridGrouperObject implements
 		AccessPrivilegeI {
+
+	public static final Privilege ADMIN = Privilege.getInstance("admin");
+
+	public static final Privilege OPTIN = Privilege.getInstance("optin");
+
+	public static final Privilege OPTOUT = Privilege.getInstance("optout");
+
+	public static final Privilege READ = Privilege.getInstance("read");
+
+	public static final Privilege UPDATE = Privilege.getInstance("update");
+
+	public static final Privilege VIEW = Privilege.getInstance("view");
 
 	private GroupPrivilege priv;
 

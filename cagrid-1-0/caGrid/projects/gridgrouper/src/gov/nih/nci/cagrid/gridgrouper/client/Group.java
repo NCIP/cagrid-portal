@@ -23,6 +23,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MembershipDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.AccessPrivilegeI;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
+import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupModifyFault;
@@ -52,6 +53,8 @@ public class Group extends GridGrouperObject implements GroupI {
 	private GroupDescriptor des;
 
 	private GridGrouper gridGrouper;
+
+	private StemI stem;
 
 	protected Group(GridGrouper gridGrouper, GroupDescriptor des) {
 		this.gridGrouper = gridGrouper;
@@ -100,6 +103,18 @@ public class Group extends GridGrouperObject implements GroupI {
 		} else {
 			return new Date(des.getModifyTime());
 		}
+	}
+
+	public StemI getParentStem() {
+		if (stem == null) {
+			try {
+				stem = gridGrouper.findStem(des.getParentStem());
+			} catch (Exception e) {
+				getLog().error(e.getMessage(), e);
+				throw new GrouperRuntimeException(e.getMessage());
+			}
+		}
+		return stem;
 	}
 
 	public GroupIdentifier getGroupIdentifier() {
@@ -473,6 +488,83 @@ public class Group extends GridGrouperObject implements GroupI {
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public Set getPrivs(Subject subj) {
+		try {
+			return getPrivileges(subj);
+		} catch (GrouperRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public Set getAdmins() {
+		try {
+			return getSubjectsWithPrivilege(AccessPrivilege.ADMIN);
+		} catch (GrouperRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public Set getOptins() {
+		try {
+			return getSubjectsWithPrivilege(AccessPrivilege.OPTIN);
+		} catch (GrouperRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public Set getOptouts() {
+		try {
+			return getSubjectsWithPrivilege(AccessPrivilege.OPTOUT);
+		} catch (GrouperRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public Set getReaders() {
+		try {
+			return getSubjectsWithPrivilege(AccessPrivilege.READ);
+		} catch (GrouperRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public Set getUpdaters() {
+		try {
+			return getSubjectsWithPrivilege(AccessPrivilege.UPDATE);
+		} catch (GrouperRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public Set getViewers() {
+		try {
+			return getSubjectsWithPrivilege(AccessPrivilege.VIEW);
+		} catch (GrouperRuntimeException e) {
+			throw e;
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());

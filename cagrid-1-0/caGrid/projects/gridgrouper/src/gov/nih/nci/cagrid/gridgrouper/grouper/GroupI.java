@@ -49,8 +49,10 @@ public interface GroupI {
 	public Subject getModifySubject() throws SubjectNotFoundException;
 
 	public Date getModifyTime();
-	
+
 	public Subject toSubject() throws GrouperRuntimeException;
+
+	public StemI getParentStem();
 
 	// Action Methods
 
@@ -136,20 +138,22 @@ public interface GroupI {
 	public Set getMemberships() throws GrouperRuntimeException;
 
 	// public Set getMemberships(Field f) throws SchemaException;
-	
-	//public Set getPrivs(Subject subj);
+
+	public Set getPrivs(Subject subj);
 
 	// TODO: Support Below
 
-	// public Set getOptins() throws GrouperRuntimeException;
-	//
-	// public Set getOptouts() throws GrouperRuntimeException;
-	//
-	// public Stem getParentStem();
-	//
-	// public Set getPrivs(Subject subj);
-	//
-	// public Set getReaders() throws GrouperRuntimeException;
+	public Set getOptins();
+
+	public Set getOptouts();
+
+	public Set getReaders();
+
+	public Set getAdmins();
+
+	public Set getUpdaters();
+
+	public Set getViewers();
 	//
 	// public boolean canReadField(Field f) throws IllegalArgumentException,
 	// SchemaException;
@@ -163,12 +167,7 @@ public interface GroupI {
 	// public boolean canWriteField(Subject subj, Field f)
 	// throws IllegalArgumentException, SchemaException;
 	//
-	// public Set getAdmins() throws GrouperRuntimeException;
-	//
-	//
-	// public Set getUpdaters() throws GrouperRuntimeException;
-	//
-	// public Set getViewers() throws GrouperRuntimeException;
+
 	//
 	// public void grantPriv(Subject subj, Privilege priv)
 	// throws GrantPrivilegeException, InsufficientPrivilegeException,
@@ -222,6 +221,5 @@ public interface GroupI {
 	// throws AttributeNotFoundException, GroupModifyException,
 	// InsufficientPrivilegeException;
 	//
-	
 
 }

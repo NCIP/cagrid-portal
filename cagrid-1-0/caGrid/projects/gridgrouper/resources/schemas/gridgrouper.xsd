@@ -41,6 +41,7 @@
 			<xsd:element name="Extension" minOccurs="1" maxOccurs="1" type="xsd:string" />
 			<xsd:element name="DisplayExtension" minOccurs="1" maxOccurs="1" type="xsd:string" />
 			<xsd:element name="Description" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="ParentStem" minOccurs="1" maxOccurs="1" type="xsd:string" />
 			<xsd:element name="CreateSource" minOccurs="1" maxOccurs="1" type="xsd:string" />
 			<xsd:element name="CreateSubject" minOccurs="1" maxOccurs="1" type="xsd:string" />
 			<xsd:element name="CreateTime" minOccurs="1" maxOccurs="1" type="xsd:long" />

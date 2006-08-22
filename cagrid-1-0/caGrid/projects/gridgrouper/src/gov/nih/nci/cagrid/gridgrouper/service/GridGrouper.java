@@ -1264,6 +1264,7 @@ public class GridGrouper {
 			throws Exception {
 		GroupDescriptor des = new GroupDescriptor();
 		des.setCreateSource(group.getCreateSource());
+		des.setParentStem(group.getParentStem().getName());
 		des.setCreateSubject(group.getCreateSubject().getId());
 		des.setCreateTime(group.getCreateTime().getTime());
 		des.setDescription(group.getDescription());

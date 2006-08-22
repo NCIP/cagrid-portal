@@ -19,12 +19,6 @@ public class GridGrouperProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.gridgrouper.stubs.HasGroupPrivilegeResponse hasGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.stubs.HasGroupPrivilegeRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
-		gov.nih.nci.cagrid.gridgrouper.stubs.HasGroupPrivilegeResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.HasGroupPrivilegeResponse();
-		boxedResult.setResponse(impl.hasGroupPrivilege(params.getGroup().getGroupIdentifier(),params.getSubject().getSubjectIdentifier(),params.getPrivilege().getGroupPrivilegeType()));
-		return boxedResult;
-	}
-
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse getStem(gov.nih.nci.cagrid.gridgrouper.stubs.GetStemRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetStemResponse();
 		boxedResult.setStemDescriptor(impl.getStem(params.getStem().getStemIdentifier()));
@@ -184,6 +178,12 @@ public class GridGrouperProviderImpl{
 	public gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupPrivilegesResponse getGroupPrivileges(gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupPrivilegesRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
 		gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupPrivilegesResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupPrivilegesResponse();
 		boxedResult.setGroupPrivilege(impl.getGroupPrivileges(params.getGroup().getGroupIdentifier(),params.getSubject().getSubjectIdentifier()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.gridgrouper.stubs.HasGroupPrivilegeResponse hasGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.stubs.HasGroupPrivilegeRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.HasGroupPrivilegeResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.HasGroupPrivilegeResponse();
+		boxedResult.setResponse(impl.hasGroupPrivilege(params.getGroup().getGroupIdentifier(),params.getSubject().getSubjectIdentifier(),params.getPrivilege().getGroupPrivilegeType()));
 		return boxedResult;
 	}
 
