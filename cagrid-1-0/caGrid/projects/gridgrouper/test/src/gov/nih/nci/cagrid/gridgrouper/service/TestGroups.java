@@ -48,7 +48,7 @@ public class TestGroups extends TestCase {
 
 	private String USER_D = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user d";
 
-	//private String GROUPER_ALL = "GrouperAll";
+    private String GROUPER_ALL = "GrouperAll";
 
 	public void testViewReadPrivilege() {
 		try {
@@ -394,9 +394,7 @@ public class TestGroups extends TestCase {
 			grouper.deleteMember(USER_A, gid, USER_A);
 			
 			memberExpected.clear();
-			verifyMembers(SUPER_USER, grp, MemberFilter.All, memberExpected);
-		
-			
+			verifyMembers(SUPER_USER, grp, MemberFilter.All, memberExpected);	
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
