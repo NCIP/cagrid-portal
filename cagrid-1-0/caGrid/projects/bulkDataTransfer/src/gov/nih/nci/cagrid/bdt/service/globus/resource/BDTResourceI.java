@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.bdt.service.globus.resource;
 
 import org.globus.transfer.AnyXmlType;
-import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerationContextType;
+import org.globus.ws.enumeration.EnumIterator;
 
 public interface BDTResourceI {
 	
-	public EnumerationContextType createEnumeration();
+	public  EnumIterator createEnumeration();
 	
 	public AnyXmlType get();
 }
