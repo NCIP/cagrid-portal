@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.client;
 
 import edu.internet2.middleware.grouper.CompositeType;
+import edu.internet2.middleware.grouper.GrantPrivilegeException;
 import edu.internet2.middleware.grouper.GroupDeleteException;
 import edu.internet2.middleware.grouper.GroupModifyException;
 import edu.internet2.middleware.grouper.GroupNotFoundException;
@@ -9,6 +10,8 @@ import edu.internet2.middleware.grouper.InsufficientPrivilegeException;
 import edu.internet2.middleware.grouper.MemberAddException;
 import edu.internet2.middleware.grouper.MemberDeleteException;
 import edu.internet2.middleware.grouper.Privilege;
+import edu.internet2.middleware.grouper.RevokePrivilegeException;
+import edu.internet2.middleware.grouper.SchemaException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType;
@@ -24,6 +27,7 @@ import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.AccessPrivilegeI;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
+import gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupModifyFault;
@@ -31,6 +35,8 @@ import gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.MemberAddFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.MemberDeleteFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.RevokePrivilegeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -569,6 +575,122 @@ public class Group extends GridGrouperObject implements GroupI {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
+	}
+
+	public boolean hasAdmin(Subject subj) {
+		try {
+			return hasPrivilege(subj, AccessPrivilege.ADMIN);
+		} catch (GrouperRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public boolean hasOptin(Subject subj) {
+		try {
+			return hasPrivilege(subj, AccessPrivilege.OPTIN);
+		} catch (GrouperRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public boolean hasOptout(Subject subj) {
+		try {
+			return hasPrivilege(subj, AccessPrivilege.OPTOUT);
+		} catch (GrouperRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public boolean hasRead(Subject subj) {
+		try {
+			return hasPrivilege(subj, AccessPrivilege.READ);
+		} catch (GrouperRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public boolean hasUpdate(Subject subj) {
+		try {
+			return hasPrivilege(subj, AccessPrivilege.UPDATE);
+		} catch (GrouperRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public boolean hasView(Subject subj) {
+		try {
+			return hasPrivilege(subj, AccessPrivilege.VIEW);
+		} catch (GrouperRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	public void grantPriv(Subject subj, Privilege priv)
+			throws GrantPrivilegeException, InsufficientPrivilegeException,
+			SchemaException {
+		try {
+			GroupPrivilegeType type = GroupPrivilegeType.fromValue(priv
+					.getName());
+			gridGrouper.getClient().grantGroupPrivilege(getGroupIdentifier(),
+					subj.getId(), type);
+
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (GrantPrivilegeFault f) {
+			throw new GrantPrivilegeException(f.getFaultString());
+		} catch (SchemaFault f) {
+			throw new SchemaException(f.getFaultString());
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+
+	}
+
+	public void revokePriv(Subject subj, Privilege priv)
+			throws InsufficientPrivilegeException, RevokePrivilegeException,
+			SchemaException {
+		try {
+			GroupPrivilegeType type = GroupPrivilegeType.fromValue(priv
+					.getName());
+			gridGrouper.getClient().revokeGroupPrivilege(getGroupIdentifier(),
+					subj.getId(), type);
+
+		} catch (InsufficientPrivilegeFault f) {
+			throw new InsufficientPrivilegeException(f.getFaultString());
+		} catch (RevokePrivilegeFault f) {
+			throw new RevokePrivilegeException(f.getFaultString());
+		} catch (SchemaFault f) {
+			throw new SchemaException(f.getFaultString());
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+
 	}
 
 }
