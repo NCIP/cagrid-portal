@@ -24,7 +24,7 @@ import org.apache.axis.message.MessageElement;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Apr 4, 2006 
- * @version $Id: CQLQueryResultsUtil.java,v 1.1 2006-08-02 17:22:11 mccon012 Exp $ 
+ * @version $Id: CQLQueryResultsUtil.java,v 1.2 2006-08-23 19:59:10 mccon012 Exp $ 
  */
 public class CQLQueryResultsUtil {
 	
@@ -59,7 +59,7 @@ public class CQLQueryResultsUtil {
 	
 	private static CQLObjectResult createObjectResult(Object obj, MessageContext context) {
 		CQLObjectResult objectResult = new CQLObjectResult();
-		objectResult.setType(obj.getClass().getName());
+		objectResult.setClassname(obj.getClass().getName());
 		QName objectQname = context.getTypeMapping().getTypeQName(obj.getClass());
 		if (objectQname == null) {
 			try {

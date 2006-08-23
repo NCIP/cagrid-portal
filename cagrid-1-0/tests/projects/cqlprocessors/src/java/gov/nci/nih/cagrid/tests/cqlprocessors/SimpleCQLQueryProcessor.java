@@ -56,7 +56,7 @@ public class SimpleCQLQueryProcessor
 	
 	private static CQLObjectResult createObjectResult(Object obj, MessageContext context) {
 		CQLObjectResult objectResult = new CQLObjectResult();
-		objectResult.setType(obj.getClass().getName());
+		objectResult.setClassname(obj.getClass().getName());
 		QName objectQname = context.getTypeMapping().getTypeQName(obj.getClass());
 		if (objectQname == null) {
 			throw new NullPointerException("No qname found for class " + obj.getClass().getName() 
