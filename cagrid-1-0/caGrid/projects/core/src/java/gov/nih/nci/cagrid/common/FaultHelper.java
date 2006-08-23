@@ -193,16 +193,16 @@ public class FaultHelper {
         addFaultCause( toBaseFault(exception) );
     }
 
-    private void addFaultCause(BaseFaultType fault) {
-        BaseFaultType [] cause = this.fault.getFaultCause();
-        BaseFaultType [] newCause = null;
+    private void addFaultCause(BaseFaultType faultCause) {
+        BaseFaultType[] cause = this.fault.getFaultCause();
+        BaseFaultType[] newCause = null;
         if (cause == null) {
-            newCause = new BaseFaultType [1];
+            newCause = new BaseFaultType[1];
         } else {
-            newCause = new BaseFaultType [cause.length+1];
+            newCause = new BaseFaultType [cause.length + 1];
             System.arraycopy(cause, 0, newCause, 0, cause.length);
         }
-        newCause[newCause.length - 1] = fault;
+        newCause[newCause.length - 1] = faultCause;
         this.fault.setFaultCause(newCause);
     }
 
