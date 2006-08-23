@@ -212,16 +212,6 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	private StringBuffer appendWhereOrAnd(boolean firstAppended,
-			StringBuffer sql) {
-		if (firstAppended) {
-			sql.append(" AND ");
-		} else {
-			sql.append(" WHERE");
-		}
-		return sql;
-	}
-
 	public synchronized IFSUser getUser(long idpId, String uid)
 			throws DorianInternalFault, InvalidUserFault {
 		this.buildDatabase();
@@ -361,64 +351,67 @@ public class UserManager extends LoggingObject {
 		List users = new ArrayList();
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-			StringBuffer sql = new StringBuffer();
-			sql.append("select * from " + USERS_TABLE);
+			PreparedStatement s = null;
 			if (filter != null) {
-				boolean firstAppended = false;
+				s = c
+						.prepareStatement("select * from  "
+								+ USERS_TABLE
+								+ " WHERE IDP_ID>= ? AND IDP_ID<= ? AND UID LIKE ? AND GID LIKE ? AND STATUS LIKE ? AND ROLE LIKE ? AND FIRST_NAME LIKE ? AND LAST_NAME LIKE ? AND EMAIL LIKE ?");
 
 				if (filter.getIdPId() > 0) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" IDP_ID =" + filter.getIdPId());
+					s.setLong(1, filter.getIdPId());
+					s.setLong(2, filter.getIdPId());
+				} else {
+					s.setLong(1, 0);
+					s.setLong(2, Long.MAX_VALUE);
 				}
 
 				if (filter.getUID() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" UID LIKE '%" + filter.getUID() + "%'");
+					s.setString(3, "%" + filter.getUID() + "%");
+				} else {
+					s.setString(3, "%");
 				}
 
 				if (filter.getGridId() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" GID LIKE '%" + filter.getGridId() + "%'");
-				}
-
-				if (filter.getFirstName() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" FIRST_NAME LIKE '%" + filter.getFirstName()
-							+ "%'");
-				}
-
-				if (filter.getLastName() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" LAST_NAME LIKE '%" + filter.getLastName()
-							+ "%'");
-				}
-
-				if (filter.getEmail() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" EMAIL LIKE '%" + filter.getEmail() + "%'");
+					s.setString(4, "%" + filter.getGridId() + "%");
+				} else {
+					s.setString(4, "%");
 				}
 
 				if (filter.getUserStatus() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" STATUS='" + filter.getUserStatus() + "'");
+					s.setString(5, filter.getUserStatus().getValue());
+				} else {
+					s.setString(5, "%");
 				}
 
 				if (filter.getUserRole() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" ROLE='" + filter.getUserRole() + "'");
+					s.setString(6, filter.getUserRole().getValue());
+				} else {
+					s.setString(6, "%");
 				}
+
+				if (filter.getFirstName() != null) {
+					s.setString(7, "%" + filter.getFirstName() + "%");
+				} else {
+					s.setString(7, "%");
+				}
+
+				if (filter.getLastName() != null) {
+					s.setString(8, "%" + filter.getLastName() + "%");
+				} else {
+					s.setString(8, "%");
+				}
+
+				if (filter.getEmail() != null) {
+					s.setString(9, "%" + filter.getEmail() + "%");
+				} else {
+					s.setString(9, "%");
+				}
+			} else {
+				s = c.prepareStatement("select * from  " + USERS_TABLE);
 			}
 
-			ResultSet rs = s.executeQuery(sql.toString());
+			ResultSet rs = s.executeQuery();
 			while (rs.next()) {
 				IFSUser user = new IFSUser();
 				user.setIdPId(rs.getLong("IDP_ID"));
@@ -653,8 +646,8 @@ public class UserManager extends LoggingObject {
 				DorianInternalFault fault = new DorianInternalFault();
 				fault
 						.setFaultString("Error updating the user "
-								+ getCredentialsManagerUID(u.getIdPId(),
-										u.getUID())
+								+ getCredentialsManagerUID(u.getIdPId(), u
+										.getUID())
 								+ " to the IFS, an unexpected database error occurred.");
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
@@ -696,8 +689,26 @@ public class UserManager extends LoggingObject {
 	public synchronized void removeUser(long idpId, String uid)
 			throws DorianInternalFault {
 		this.buildDatabase();
-		db.update("delete from " + USERS_TABLE + " WHERE IDP_ID=" + idpId
-				+ " AND UID='" + uid + "'");
+		Connection c = null;
+		try {
+			c = db.getConnection();
+			PreparedStatement s = c.prepareStatement("delete from "
+					+ USERS_TABLE + " WHERE IDP_ID= ? AND UID= ?");
+			s.setLong(1, idpId);
+			s.setString(2, uid);
+			s.execute();
+			s.close();
+		} catch (Exception e) {
+			DorianInternalFault fault = new DorianInternalFault();
+			fault
+					.setFaultString("Unexpected Database Error - Could not remove user!!!");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
 	}
 
 	private void validateSpecifiedField(String type, String name)
