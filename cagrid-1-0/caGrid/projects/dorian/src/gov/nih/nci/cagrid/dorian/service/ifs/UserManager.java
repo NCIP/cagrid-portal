@@ -27,6 +27,7 @@ import java.security.PrivateKey;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -84,9 +85,12 @@ public class UserManager extends LoggingObject {
 		boolean exists = false;
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select count(*) from " + USERS_TABLE
-					+ " WHERE IDP_ID=" + idpId + " AND UID='" + uid + "'");
+			PreparedStatement s = c.prepareStatement("select count(*) from "
+					+ USERS_TABLE + " WHERE IDP_ID= ? AND UID= ?");
+			s.setLong(1, idpId);
+			s.setString(2, uid);
+
+			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				if (count > 0) {
@@ -95,7 +99,6 @@ public class UserManager extends LoggingObject {
 			}
 			rs.close();
 			s.close();
-
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Database Error");
@@ -226,12 +229,11 @@ public class UserManager extends LoggingObject {
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-
-			StringBuffer sql = new StringBuffer();
-			sql.append("select * from " + USERS_TABLE + " WHERE IDP_ID="
-					+ idpId + " AND UID='" + uid + "'");
-			ResultSet rs = s.executeQuery(sql.toString());
+			PreparedStatement s = c.prepareStatement("select * from "
+					+ USERS_TABLE + " WHERE IDP_ID= ? AND UID= ?");
+			s.setLong(1, idpId);
+			s.setString(2, uid);
+			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				user.setIdPId(rs.getLong("IDP_ID"));
 				user.setUID(rs.getString("UID"));
@@ -294,12 +296,10 @@ public class UserManager extends LoggingObject {
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-
-			StringBuffer sql = new StringBuffer();
-			sql.append("select * from " + USERS_TABLE + " WHERE GID='" + gridId
-					+ "'");
-			ResultSet rs = s.executeQuery(sql.toString());
+			PreparedStatement s = c.prepareStatement("select * from "
+					+ USERS_TABLE + " WHERE GID= ?");
+			s.setString(1, gridId);
+			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				user.setIdPId(rs.getLong("IDP_ID"));
 				user.setUID(rs.getString("UID"));
@@ -362,7 +362,6 @@ public class UserManager extends LoggingObject {
 		try {
 			c = db.getConnection();
 			Statement s = c.createStatement();
-
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from " + USERS_TABLE);
 			if (filter != null) {
@@ -480,7 +479,9 @@ public class UserManager extends LoggingObject {
 		if (!determineIfUserExists(user.getIdPId(), user.getUID())) {
 			X509Certificate cert = createUserCredentials(user.getIdPId(), user
 					.getUID());
+			Connection c = null;
 			try {
+
 				// Write method for creating and setting a users credentials
 				user
 						.setCertificate(new gov.nih.nci.cagrid.dorian.bean.X509Certificate(
@@ -501,16 +502,21 @@ public class UserManager extends LoggingObject {
 				validateSpecifiedField("Grid Id", user.getGridId());
 				validateSpecifiedField("First Name", user.getFirstName());
 				validateSpecifiedField("Last Name", user.getLastName());
+				c = db.getConnection();
+				PreparedStatement s = c
+						.prepareStatement("INSERT INTO "
+								+ USERS_TABLE
+								+ " SET IDP_ID= ?,UID= ?,GID= ?, STATUS=?,ROLE= ? , FIRST_NAME=?, LAST_NAME= ?, EMAIL=?");
+				s.setLong(1, user.getIdPId());
+				s.setString(2, user.getUID());
+				s.setString(3, user.getGridId());
 
-				db.update("INSERT INTO " + USERS_TABLE + " SET IDP_ID='"
-						+ user.getIdPId() + "',UID='" + user.getUID()
-						+ "', GID='" + user.getGridId() + "',STATUS='"
-						+ user.getUserStatus().toString() + "',ROLE='"
-						+ user.getUserRole().toString() + "', FIRST_NAME='"
-						+ user.getFirstName() + "', LAST_NAME='"
-						+ user.getLastName() + "',EMAIL='" + user.getEmail()
-						+ "'");
-
+				s.setString(4, user.getUserStatus().toString());
+				s.setString(5, user.getUserRole().toString());
+				s.setString(6, user.getFirstName());
+				s.setString(7, user.getLastName());
+				s.setString(8, user.getEmail());
+				s.execute();
 				if (!user.getUserStatus().equals(IFSUserStatus.Active)) {
 					publishCRL();
 				}
@@ -541,6 +547,8 @@ public class UserManager extends LoggingObject {
 				helper.addFaultCause(e);
 				fault = (DorianInternalFault) helper.getFault();
 				throw fault;
+			} finally {
+				db.releaseConnection(c);
 			}
 
 		} else {
@@ -561,99 +569,99 @@ public class UserManager extends LoggingObject {
 		String credId = getCredentialsManagerUID(u.getIdPId(), u.getUID());
 		boolean publishCRL = false;
 		if (determineIfUserExists(u.getIdPId(), u.getUID())) {
-			StringBuffer sb = new StringBuffer();
-			sb.append("update " + USERS_TABLE + " SET ");
-			int changes = 0;
-			IFSUser curr = this.getUser(u.getIdPId(), u.getUID());
 
-			if ((u.getFirstName() != null)
-					&& (!u.getFirstName().equals(curr.getFirstName()))) {
-				validateSpecifiedField("First Name", u.getFirstName());
+			Connection c = null;
+			try {
 
-				if (changes > 0) {
-					sb.append(",");
-				}
-				sb.append("FIRST_NAME='" + u.getFirstName() + "'");
-				changes = changes + 1;
-			}
+				IFSUser curr = this.getUser(u.getIdPId(), u.getUID());
 
-			if ((u.getLastName() != null)
-					&& (!u.getLastName().equals(curr.getLastName()))) {
-				validateSpecifiedField("Last Name", u.getLastName());
-				if (changes > 0) {
-					sb.append(",");
-				}
-				sb.append("LAST_NAME='" + u.getLastName() + "'");
-				changes = changes + 1;
-			}
-
-			if ((u.getEmail() != null)
-					&& (!u.getEmail().equals(curr.getEmail()))) {
-				try {
-					AddressValidator.validateEmail(u.getEmail());
-				} catch (IllegalArgumentException e) {
-					InvalidUserFault fault = new InvalidUserFault();
-					fault.setFaultString(e.getMessage());
-					throw fault;
-				}
-				if (changes > 0) {
-					sb.append(",");
-				}
-				sb.append("EMAIL='" + u.getEmail() + "'");
-				changes = changes + 1;
-			}
-
-			if ((u.getGridId() != null)
-					&& (!u.getGridId().equals(curr.getGridId()))) {
-				if (changes > 0) {
-					sb.append(",");
-				}
-				validateSpecifiedField("Grid Id", u.getGridId());
-				sb.append("GID='" + u.getGridId() + "'");
-				changes = changes + 1;
-			}
-
-			if ((u.getUserStatus() != null)
-					&& (!u.getUserStatus().equals(curr.getUserStatus()))) {
-				if (changes > 0) {
-					sb.append(",");
+				if ((u.getFirstName() != null)
+						&& (!u.getFirstName().equals(curr.getFirstName()))) {
+					validateSpecifiedField("First Name", u.getFirstName());
+					curr.setFirstName(u.getFirstName());
 				}
 
-				if (accountCreated(curr.getUserStatus())
-						&& !accountCreated(u.getUserStatus())) {
-					InvalidUserFault fault = new InvalidUserFault();
-					fault.setFaultString("Error, cannot change " + credId
-							+ "'s status from a post-created account status ("
-							+ curr.getUserStatus()
-							+ ") to a pre-created account status ("
-							+ u.getUserStatus() + ").");
-					throw fault;
-				}
-				if (curr.getUserStatus().equals(IFSUserStatus.Active)) {
-					publishCRL = true;
-				} else if (u.getUserStatus().equals(IFSUserStatus.Active)) {
-					publishCRL = true;
+				if ((u.getLastName() != null)
+						&& (!u.getLastName().equals(curr.getLastName()))) {
+					validateSpecifiedField("Last Name", u.getLastName());
+					curr.setLastName(u.getLastName());
 				}
 
-				sb.append("STATUS='" + u.getUserStatus().getValue() + "'");
-				changes = changes + 1;
-			}
-
-			if ((u.getUserRole() != null)
-					&& (!u.getUserRole().equals(curr.getUserRole()))) {
-				if (changes > 0) {
-					sb.append(",");
+				if ((u.getEmail() != null)
+						&& (!u.getEmail().equals(curr.getEmail()))) {
+					try {
+						AddressValidator.validateEmail(u.getEmail());
+					} catch (IllegalArgumentException e) {
+						InvalidUserFault fault = new InvalidUserFault();
+						fault.setFaultString(e.getMessage());
+						throw fault;
+					}
+					curr.setEmail(u.getEmail());
 				}
-				sb.append("ROLE='" + u.getUserRole().getValue() + "'");
-				changes = changes + 1;
-			}
-			sb.append(" where IDP_ID=" + u.getIdPId() + " AND UID='"
-					+ u.getUID() + "'");
-			if (changes > 0) {
-				db.update(sb.toString());
-			}
-			if (publishCRL) {
-				publishCRL();
+
+				if ((u.getGridId() != null)
+						&& (!u.getGridId().equals(curr.getGridId()))) {
+					validateSpecifiedField("Grid Id", u.getGridId());
+					curr.setGridId(u.getGridId());
+				}
+
+				if ((u.getUserStatus() != null)
+						&& (!u.getUserStatus().equals(curr.getUserStatus()))) {
+					if (accountCreated(curr.getUserStatus())
+							&& !accountCreated(u.getUserStatus())) {
+						InvalidUserFault fault = new InvalidUserFault();
+						fault
+								.setFaultString("Error, cannot change "
+										+ credId
+										+ "'s status from a post-created account status ("
+										+ curr.getUserStatus()
+										+ ") to a pre-created account status ("
+										+ u.getUserStatus() + ").");
+						throw fault;
+					}
+					if (curr.getUserStatus().equals(IFSUserStatus.Active)) {
+						publishCRL = true;
+					} else if (u.getUserStatus().equals(IFSUserStatus.Active)) {
+						publishCRL = true;
+					}
+					curr.setUserStatus(u.getUserStatus());
+				}
+
+				if ((u.getUserRole() != null)
+						&& (!u.getUserRole().equals(curr.getUserRole()))) {
+					curr.setUserRole(u.getUserRole());
+				}
+				c = db.getConnection();
+				PreparedStatement s = c
+						.prepareStatement("UPDATE "
+								+ USERS_TABLE
+								+ " SET GID= ?, STATUS=?,ROLE= ? , FIRST_NAME=?, LAST_NAME= ?, EMAIL=? where IDP_ID= ? AND UID= ?");
+				s.setString(1, curr.getGridId());
+				s.setString(2, curr.getUserStatus().getValue());
+				s.setString(3, curr.getUserRole().getValue());
+				s.setString(4, curr.getFirstName());
+				s.setString(5, curr.getLastName());
+				s.setString(6, curr.getEmail());
+				s.setLong(7, curr.getIdPId());
+				s.setString(8, curr.getUID());
+				s.execute();
+				if (publishCRL) {
+					publishCRL();
+				}
+			} catch (Exception e) {
+				logError(e.getMessage(), e);
+				DorianInternalFault fault = new DorianInternalFault();
+				fault
+						.setFaultString("Error updating the user "
+								+ getCredentialsManagerUID(u.getIdPId(),
+										u.getUID())
+								+ " to the IFS, an unexpected database error occurred.");
+				FaultHelper helper = new FaultHelper(fault);
+				helper.addFaultCause(e);
+				fault = (DorianInternalFault) helper.getFault();
+				throw fault;
+			} finally {
+				db.releaseConnection(c);
 			}
 
 		} else {

@@ -18,7 +18,6 @@ import gov.nih.nci.cagrid.dorian.stubs.NoSuchUserFault;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -175,16 +174,6 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	private StringBuffer appendWhereOrAnd(boolean firstAppended,
-			StringBuffer sql) {
-		if (firstAppended) {
-			sql.append(" AND ");
-		} else {
-			sql.append(" WHERE");
-		}
-		return sql;
-	}
-
 	public IdPUser[] getUsers(IdPUserFilter filter) throws DorianInternalFault {
 		return getUsers(filter, true);
 	}
@@ -197,107 +186,101 @@ public class UserManager extends LoggingObject {
 		List users = new ArrayList();
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-			StringBuffer sql = new StringBuffer();
-			sql.append("select * from " + IDP_USERS_TABLE);
+			PreparedStatement ps = null;
 			if (filter != null) {
-				boolean firstAppended = false;
+				ps = c
+						.prepareStatement("select * from "
+								+ IDP_USERS_TABLE
+								+ " WHERE UID LIKE ? AND EMAIL LIKE ? AND FIRST_NAME LIKE ? AND LAST_NAME LIKE ? AND ORGANIZATION LIKE ? AND ADDRESS LIKE ? AND ADDRESS2 LIKE ? AND CITY LIKE ? AND STATE LIKE ? AND ZIP_CODE LIKE ? AND COUNTRY LIKE ? AND PHONE_NUMBER LIKE ? AND STATUS LIKE ? AND ROLE LIKE ?");
 
 				if (filter.getUserId() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" UID LIKE '%" + filter.getUserId() + "%'");
-				}
-
-				if (filter.getFirstName() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" FIRST_NAME LIKE '%" + filter.getFirstName()
-							+ "%'");
-				}
-
-				if (filter.getLastName() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" LAST_NAME LIKE '%" + filter.getLastName()
-							+ "%'");
-				}
-
-				if (filter.getOrganization() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" ORGANIZATION LIKE '%"
-							+ filter.getOrganization() + "%'");
-				}
-
-				if (filter.getAddress() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" ADDRESS LIKE '%" + filter.getAddress() + "%'");
-				}
-
-				if (filter.getAddress2() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" ADDRESS2 LIKE '%" + filter.getAddress2()
-							+ "%'");
-				}
-
-				if (filter.getCity() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" CITY LIKE '%" + filter.getCity() + "%'");
-				}
-
-				if (filter.getState() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" STATE LIKE '%" + filter.getState().getValue()
-							+ "%'");
-				}
-
-				if (filter.getCountry() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" COUNTRY LIKE '%"
-							+ filter.getCountry().getValue() + "%'");
-				}
-
-				if (filter.getZipcode() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql
-							.append(" ZIP_CODE LIKE '%" + filter.getZipcode()
-									+ "%'");
+					ps.setString(1, "%" + filter.getUserId() + "%");
+				} else {
+					ps.setString(1, "%");
 				}
 
 				if (filter.getEmail() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" EMAIL LIKE '%" + filter.getEmail() + "%'");
+					ps.setString(2, "%" + filter.getEmail() + "%");
+				} else {
+					ps.setString(2, "%");
+				}
+
+				if (filter.getFirstName() != null) {
+					ps.setString(3, "%" + filter.getFirstName() + "%");
+				} else {
+					ps.setString(3, "%");
+				}
+
+				if (filter.getLastName() != null) {
+					ps.setString(4, "%" + filter.getLastName() + "%");
+				} else {
+					ps.setString(4, "%");
+				}
+
+				if (filter.getOrganization() != null) {
+					ps.setString(5, "%" + filter.getOrganization() + "%");
+				} else {
+					ps.setString(5, "%");
+				}
+
+				if (filter.getAddress() != null) {
+					ps.setString(6, "%" + filter.getAddress() + "%");
+				} else {
+					ps.setString(6, "%");
+				}
+
+				if (filter.getAddress2() != null) {
+					ps.setString(7, "%" + filter.getAddress2() + "%");
+				} else {
+					ps.setString(7, "%");
+				}
+
+				if (filter.getCity() != null) {
+					ps.setString(8, "%" + filter.getCity() + "%");
+				} else {
+					ps.setString(8, "%");
+				}
+
+				if (filter.getState() != null) {
+					ps.setString(9, "%" + filter.getState() + "%");
+				} else {
+					ps.setString(9, "%");
+				}
+
+				if (filter.getZipcode() != null) {
+					ps.setString(10, "%" + filter.getZipcode() + "%");
+				} else {
+					ps.setString(10, "%");
+				}
+
+				if (filter.getCountry() != null) {
+					ps.setString(11, "%" + filter.getCountry() + "%");
+				} else {
+					ps.setString(11, "%");
 				}
 
 				if (filter.getPhoneNumber() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" PHONE_NUMBER LIKE '%"
-							+ filter.getPhoneNumber() + "%'");
+					ps.setString(12, "%" + filter.getPhoneNumber() + "%");
+				} else {
+					ps.setString(12, "%");
 				}
 
 				if (filter.getStatus() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" STATUS='" + filter.getStatus() + "'");
+					ps.setString(13, filter.getStatus().getValue());
+				} else {
+					ps.setString(13, "%");
 				}
 
 				if (filter.getRole() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" ROLE='" + filter.getRole() + "'");
+					ps.setString(14, filter.getRole().getValue());
+				} else {
+					ps.setString(14, "%");
 				}
+			} else {
+				ps = c.prepareStatement("select * from " + IDP_USERS_TABLE);
 			}
-
-			ResultSet rs = s.executeQuery(sql.toString());
+			//System.out.println(ps.toString());
+			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				IdPUser user = new IdPUser();
 				user.setUserId(rs.getString("UID"));
@@ -320,7 +303,7 @@ public class UserManager extends LoggingObject {
 				users.add(user);
 			}
 			rs.close();
-			s.close();
+			ps.close();
 
 			IdPUser[] list = new IdPUser[users.size()];
 			for (int i = 0; i < list.length; i++) {
@@ -352,12 +335,12 @@ public class UserManager extends LoggingObject {
 		this.buildDatabase();
 		IdPUser user = new IdPUser();
 		Connection c = null;
-
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from " + IDP_USERS_TABLE
-					+ " where UID='" + uid + "'");
+			PreparedStatement s = c.prepareStatement("select * from "
+					+ IDP_USERS_TABLE + " where UID= ?");
+			s.setString(1, uid);
+			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				user.setUserId(uid);
 				user.setEmail(rs.getString("EMAIL"));
@@ -605,9 +588,10 @@ public class UserManager extends LoggingObject {
 		boolean exists = false;
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select count(*) from "
-					+ IDP_USERS_TABLE + " where UID='" + uid + "'");
+			PreparedStatement s = c.prepareStatement("select count(*) from "
+					+ IDP_USERS_TABLE + " where UID= ?");
+			s.setString(1, uid);
+			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				if (count > 0) {

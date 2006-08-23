@@ -5,9 +5,9 @@ import gov.nih.nci.cagrid.dorian.bean.Metadata;
 import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -34,9 +34,10 @@ public class MetadataManager extends LoggingObject {
 		boolean exists = false;
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select count(*) from " + table
-					+ " where name='" + name + "'");
+			PreparedStatement s = c.prepareStatement("select count(*) from "
+					+ table + " where name= ?");
+			s.setString(1, name);
+			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				if (count > 0) {
@@ -62,32 +63,92 @@ public class MetadataManager extends LoggingObject {
 		return exists;
 	}
 
-	public synchronized void insert(Metadata metadata) throws DorianInternalFault {
+	public synchronized void insert(Metadata metadata)
+			throws DorianInternalFault {
 		this.buildDatabase();
-		if (!exists(metadata.getName())) {
-			db.update("INSERT INTO " + table + " VALUES('" + metadata.getName()
-					+ "','"+metadata.getDescription()+ "','" + metadata.getValue() + "')");
-		} else {
+		Connection c = null;
+		try {
+			if (!exists(metadata.getName())) {
+				c = db.getConnection();
+				PreparedStatement s = c.prepareStatement("INSERT INTO " + table
+						+ " SET NAME= ?, DESCRIPTION= ?, VALUE= ?");
+				s.setString(1, metadata.getName());
+				s.setString(2, metadata.getDescription());
+				s.setString(3, metadata.getValue());
+				s.execute();
+			} else {
+				DorianInternalFault fault = new DorianInternalFault();
+				fault.setFaultString("Could not insert the metadata "
+						+ metadata.getName() + " because it already exists.");
+				throw fault;
+			}
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("Could not insert the metadata "
-					+ metadata.getName() + " because it already exists.");
+			fault
+					.setFaultString("Unexpected Database Error, could insert  metadata!!!");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
+		} finally {
+			db.releaseConnection(c);
 		}
 	}
 
-	public synchronized void update(Metadata metadata) throws DorianInternalFault {
+	public synchronized void update(Metadata metadata)
+			throws DorianInternalFault {
 		this.buildDatabase();
-		if (exists(metadata.getName())) {
-			db.update("update " + table + " SET DESCRIPTION='"+metadata.getDescription()+"',VALUE='" + metadata.getValue()
-					+ "' WHERE NAME='" + metadata.getName() + "'");
-		} else {
-			insert(metadata);
+		Connection c = null;
+		try {
+			if (exists(metadata.getName())) {
+				c = db.getConnection();
+				PreparedStatement s = c.prepareStatement("UPDATE " + table
+						+ " SET DESCRIPTION= ?, VALUE= ? WHERE NAME= ?");
+
+				s.setString(1, metadata.getDescription());
+				s.setString(2, metadata.getValue());
+				s.setString(3, metadata.getName());
+				s.execute();
+			} else {
+				insert(metadata);
+			}
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault
+					.setFaultString("Unexpected Database Error, could update metadata!!!");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
 		}
 	}
 
 	public synchronized void remove(String name) throws DorianInternalFault {
 		this.buildDatabase();
-		db.update("DELETE FROM " + table + " WHERE NAME='" + name + "'");
+		Connection c = null;
+		try {
+			c = db.getConnection();
+			PreparedStatement s = c.prepareStatement("DELETE FROM " + table
+					+ " WHERE NAME= ?");
+			s.setString(1, name);
+			s.execute();
+
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault
+					.setFaultString("Unexpected Database Error, could remove metadata!!!");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
 	}
 
 	public Metadata get(String name) throws DorianInternalFault {
@@ -98,9 +159,11 @@ public class MetadataManager extends LoggingObject {
 		String description = null;
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select DESCRIPTION,VALUE from " + table
-					+ " where name='" + name + "'");
+			PreparedStatement s = c
+					.prepareStatement("select DESCRIPTION,VALUE from " + table
+							+ " where name= ?");
+			s.setString(1, name);
+			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				value = rs.getString("VALUE");
 				description = rs.getString("DESCRIPTION");
@@ -143,8 +206,7 @@ public class MetadataManager extends LoggingObject {
 			if (!this.db.tableExists(table)) {
 				String applications = "CREATE TABLE " + table + " ("
 						+ "NAME VARCHAR(255) NOT NULL PRIMARY KEY,"
-						+ "DESCRIPTION TEXT,"
-						+ "VALUE TEXT NOT NULL,"
+						+ "DESCRIPTION TEXT," + "VALUE TEXT NOT NULL,"
 						+ "INDEX document_index (NAME));";
 				db.update(applications);
 			}
