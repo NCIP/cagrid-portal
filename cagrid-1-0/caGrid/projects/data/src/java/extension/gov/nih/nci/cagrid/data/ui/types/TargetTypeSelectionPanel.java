@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.ui.types;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
+import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
@@ -31,6 +32,7 @@ import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,6 +82,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private JButton selectDomainModelButton = null;
 	private JTextField domainModelNameTextField = null;
 	private JPanel domainModelSelectionPanel = null;
+	private JButton addFullProjectButton = null;
+	private JPanel addToModelButtonsPanel = null;
 	
 	private transient Project mostRecentProject = null;
 	private transient Map packageToNamespace = null;
@@ -281,10 +285,9 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			gridBagCosntraints32.gridx = 0;
 			gridBagCosntraints32.gridy = 3;
 			gridBagCosntraints32.fill = GridBagConstraints.HORIZONTAL;
-			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-			gridBagConstraints31.gridx = 0;
-			gridBagConstraints31.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints31.gridy = 1;
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.gridx = 0;
+			gridBagConstraints2.gridy = 1; 
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = GridBagConstraints.BOTH;
 			gridBagConstraints1.gridy = 2;
@@ -300,7 +303,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			typeSelectionPanel.setLayout(new GridBagLayout());
 			typeSelectionPanel.add(getDomainBrowserPanel(), gridBagConstraints);
 			typeSelectionPanel.add(getTypesTreeScrollPane(), gridBagConstraints1);
-			typeSelectionPanel.add(getAddPackageButton(), gridBagConstraints31);
+			typeSelectionPanel.add(getAddToModelButtonsPanel(), gridBagConstraints2);
 			typeSelectionPanel.add(getDomainModelSelectionPanel(), gridBagCosntraints32);
 		}
 		return typeSelectionPanel;
@@ -353,31 +356,10 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 					if (shouldAddPackage) {
 						UMLPackageMetadata pack = getDomainBrowserPanel().getSelectedPackage();
 						if (pack != null) {
-							// determine if the namespace type already exists in the service
-							String namespaceUri = NamespaceUtils.createNamespaceString(selectedProject, pack);
-							NamespaceType nsType = NamespaceUtils.getServiceNamespaceType(getServiceInfo(), namespaceUri);
-							if (nsType == null) {
-								// create a new namespace from the package
-								try {
-									nsType = NamespaceUtils.createNamespaceFromUmlPackage(
-										selectedProject, pack, getGME(), getSchemaDir());
-								} catch (Exception ex) {
-									ex.printStackTrace();
-									PortalUtils.showErrorMessage("Error creating namespace type", ex);
-								}
-								// add the new namespace to the service
-								if (nsType != null) {
-									CommonTools.addNamespace(getServiceInfo().getServiceDescriptor(), nsType);
-								}
-							}
-							if (nsType != null) {
-								// map the package to the new namespace and add it to the types tree
-								packageToNamespace.put(pack.getName(), nsType.getNamespace());
-								getTypesTree().addNamespaceType(nsType);
-								// change the most recently added project
-								mostRecentProject = selectedProject;
-								storeCaDSRInfo();
-							}
+							addPackageToModel(selectedProject, pack);
+							// change the most recently added project
+							mostRecentProject = selectedProject;
+							storeCaDSRInfo();
 						}
 					}
 				}
@@ -674,6 +656,120 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
     		}
     	}
     }
+	
+	
+	/**
+	 * This method initializes jButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getAddFullProjectButton() {
+		if (addFullProjectButton == null) {
+			addFullProjectButton = new JButton();
+			addFullProjectButton.setText("Add Full Project");
+			addFullProjectButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// verify we're in the same project as the other packages
+					final Project selectedProject = getDomainBrowserPanel().getSelectedProject();
+					boolean shouldAddPackages = true;
+					if (mostRecentProject != null &&
+						(!mostRecentProject.getLongName().equals(selectedProject.getLongName()) ||
+						!mostRecentProject.getVersion().equals(selectedProject.getVersion()))) {
+						// not the same project, can't allow packages from more than one project!
+						String[] choices = {"Remove all other packages and insert", "Cancel"};
+						String[] message = {
+							"Domain models may only be derived from one project.",
+							"To add the package you've selected, all other packages",
+							"currently in the domain model will have to be removed.",
+							"Should this operation procede?"
+						};
+						String choice = PromptButtonDialog.prompt(
+							PortalResourceManager.getInstance().getGridPortal(),
+							"Package incompatability...", message, choices, choices[1]);
+						if (choice == choices[0]) {
+							// ok, clear out the existing packages and classes
+							// TODO:  Could remove the namespaces added by deriving from caDSR
+							// packages, but those types might be in use elsewhere
+							packageToNamespace.clear();
+							// clear out the types table
+							while (getTypesTable().getRowCount() != 0) {
+								getTypesTable().removeSchemaElementType(0);
+							}
+							// clear out the types tree
+							getTypesTree().clearTree();
+						} else {
+							shouldAddPackages = false;
+						}
+					}
+					if (shouldAddPackages) {
+						try {
+							CaDSRServiceClient cadsrClient = new CaDSRServiceClient(getDomainBrowserPanel().getCadsr().getText());
+							UMLPackageMetadata[] packages = cadsrClient.findPackagesInProject(selectedProject);
+							for (int i = 0; i < packages.length; i++) {
+								addPackageToModel(selectedProject, packages[i]);
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
+							PortalUtils.showErrorMessage(ex.getMessage(), ex);
+						}
+						mostRecentProject = selectedProject;
+						storeCaDSRInfo();
+					}
+				}
+			});
+		}
+		return addFullProjectButton;
+	}
+
+
+	/**
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getAddToModelButtonsPanel() {
+		if (addToModelButtonsPanel == null) {
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints9.gridy = 0;
+			gridBagConstraints9.gridx = 1;
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints8.gridy = 0;
+			addToModelButtonsPanel = new JPanel();
+			addToModelButtonsPanel.setLayout(new GridBagLayout());
+			addToModelButtonsPanel.add(getAddFullProjectButton(), gridBagConstraints8);
+			addToModelButtonsPanel.add(getAddPackageButton(), gridBagConstraints9);
+		}
+		return addToModelButtonsPanel;
+	}
+	
+	
+	private void addPackageToModel(Project project, UMLPackageMetadata pack) {
+		// determine if the namespace type already exists in the service
+		String namespaceUri = NamespaceUtils.createNamespaceString(project, pack);
+		NamespaceType nsType = NamespaceUtils.getServiceNamespaceType(getServiceInfo(), namespaceUri);
+		if (nsType == null) {
+			// create a new namespace from the package
+			try {
+				nsType = NamespaceUtils.createNamespaceFromUmlPackage(
+					project, pack, getGME(), getSchemaDir());
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				PortalUtils.showErrorMessage("Error creating namespace type", ex);
+			}
+			// add the new namespace to the service
+			if (nsType != null) {
+				CommonTools.addNamespace(getServiceInfo().getServiceDescriptor(), nsType);
+			}
+		}
+		if (nsType != null) {
+			// map the package to the new namespace and add it to the types tree
+			packageToNamespace.put(pack.getName(), nsType.getNamespace());
+			getTypesTree().addNamespaceType(nsType);
+		}
+	}
 	
 	
 	/**
