@@ -100,7 +100,7 @@ public class CQLQueryResultsUtil {
 		while (objIter.hasNext()) {
 			Object o = objIter.next();
 			CQLObjectResult object = new CQLObjectResult();
-			object.setType(o.getClass().getName());
+			object.setClassname(o.getClass().getName());
 			MessageElement elem = new MessageElement(qname, o);
 			object.set_any(new MessageElement[] {elem});
 			objResults[index] = object;
@@ -133,7 +133,7 @@ public class CQLQueryResultsUtil {
 		while (rawAttribIter.hasNext()) {
 			Object[] attribs = (Object[]) rawAttribIter.next();
 			CQLAttributeResult attribResult = new CQLAttributeResult();
-			attribResult.setType(targetName);
+			attribResult.setClassname(targetName);
 			TargetAttribute[] typeAttribs = new TargetAttribute[attribs.length];
 			for (int i = 0; i < attribs.length; i++) {
 				TargetAttribute typeAttrib = new TargetAttribute(
@@ -159,7 +159,7 @@ public class CQLQueryResultsUtil {
 	
 	private static CQLObjectResult createObjectResult(Object obj, MessageContext context) {
 		CQLObjectResult objectResult = new CQLObjectResult();
-		objectResult.setType(obj.getClass().getName());
+		objectResult.setClassname(obj.getClass().getName());
 		QName objectQname = getQName(obj, context);
 		if (objectQname == null) {
 			throw new NullPointerException("No qname found for class " + obj.getClass().getName() 

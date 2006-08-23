@@ -21,9 +21,7 @@
 		<xsd:annotation>
 			<xsd:documentation>Single result from a CQL query</xsd:documentation>
 		</xsd:annotation>
-		<xsd:sequence>
-			<xsd:element name="Type" type="xsd:string"/>
-		</xsd:sequence>
+		<xsd:attribute name="classname" type="xsd:string" use="required"/>
 	</xsd:complexType>
 	<xsd:complexType name="CQLObjectResult">
 		<xsd:annotation>

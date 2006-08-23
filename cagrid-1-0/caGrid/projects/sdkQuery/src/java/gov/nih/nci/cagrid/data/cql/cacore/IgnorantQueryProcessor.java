@@ -70,7 +70,7 @@ public class IgnorantQueryProcessor extends CQLQueryProcessor {
 				returnedGene.getTaxon().getScientificName() +
 				"\tName " + returnedGene.getFullName());
 			CQLObjectResult result = new CQLObjectResult();
-			result.setType(Gene.class.getName());
+			result.setClassname(Gene.class.getName());
 			QName geneQname = Utils.getRegisteredQName(Gene.class);
 			MessageElement anyElement = new MessageElement(geneQname, gene);
 			result.set_any(new MessageElement[] {anyElement});

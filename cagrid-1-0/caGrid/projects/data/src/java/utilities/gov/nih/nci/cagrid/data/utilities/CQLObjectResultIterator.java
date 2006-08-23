@@ -82,7 +82,7 @@ public class CQLObjectResultIterator implements Iterator {
 	private Class getObjectClass(CQLObjectResult result) {
 		Class c = null;
 		try {
-			c = Class.forName(result.getType());
+			c = Class.forName(result.getClassname());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
