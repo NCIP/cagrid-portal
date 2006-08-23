@@ -154,9 +154,25 @@ public class UserManager extends LoggingObject {
 
 	public synchronized void removeUser(String uid) throws DorianInternalFault {
 		this.buildDatabase();
-		db
-				.update("DELETE FROM " + IDP_USERS_TABLE + " WHERE UID='" + uid
-						+ "'");
+		Connection c = null;
+		try {
+			c = db.getConnection();
+			PreparedStatement ps = c.prepareStatement("DELETE FROM "
+					+ IDP_USERS_TABLE + " WHERE UID= ?");
+			ps.setString(1, uid);
+			ps.executeUpdate();
+			ps.close();
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("Unexpected Error, Could not delete user!!!");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
 	}
 
 	private StringBuffer appendWhereOrAnd(boolean firstAppended,
@@ -182,7 +198,6 @@ public class UserManager extends LoggingObject {
 		try {
 			c = db.getConnection();
 			Statement s = c.createStatement();
-
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from " + IDP_USERS_TABLE);
 			if (filter != null) {
