@@ -530,18 +530,23 @@ public class SyncTools {
 						type = table.getMessageEntry(messageQName);
 
 						if (type != null) {
-							PartImpl messagePart = (PartImpl) type.getMessage().getParts().values().iterator().next();
-							if (messagePart.getElementName() != null) {
-								Element element = table.getElement(messagePart.getElementName());
-								mtype.setOutputMessageClass(element.getName());
-								mtype.setBoxedOutputParameter(TemplateUtils.lowerCaseFirstCharacter(messagePart
-									.getName()));
+							if (type.getMessage().getParts().size() > 0) {
+								PartImpl messagePart = (PartImpl) type.getMessage().getParts().values().iterator()
+									.next();
+								if (messagePart.getElementName() != null) {
+									Element element = table.getElement(messagePart.getElementName());
+									mtype.setOutputMessageClass(element.getName());
+									mtype.setBoxedOutputParameter(TemplateUtils.lowerCaseFirstCharacter(messagePart
+										.getName()));
 
-							} else if (messagePart.getTypeName() != null) {
-								Type messType = table.getType(messagePart.getTypeName());
-								mtype.setOutputMessageClass(messType.getName());
-								mtype.setBoxedOutputParameter(TemplateUtils.lowerCaseFirstCharacter(messagePart
-									.getName()));
+								} else if (messagePart.getTypeName() != null) {
+									Type messType = table.getType(messagePart.getTypeName());
+									mtype.setOutputMessageClass(messType.getName());
+									mtype.setBoxedOutputParameter(TemplateUtils.lowerCaseFirstCharacter(messagePart
+										.getName()));
+								}
+							} else {
+								System.out.println("WARNING: Cannot find output message entry: " + messageQName);
 							}
 						} else {
 							System.out.println("WARNING: Cannot find output message entry: " + messageQName);
