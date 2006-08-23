@@ -10,6 +10,8 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
@@ -106,6 +108,15 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 		MethodTypeProviderInformation enumProvider = new MethodTypeProviderInformation();
 		enumProvider.setProviderClass(EnumerationQueryProviderImpl.class.getName());
 		enumerateMethod.setProviderInformation(enumProvider);
+		// exceptions
+		MethodTypeExceptions methodExceptions = new MethodTypeExceptions();
+		MethodTypeExceptionsException[] exceptions = 
+			new MethodTypeExceptionsException[DataServiceConstants.QUERY_METHOD_EXCEPTIONS.length];
+		for (int i = 0; i < DataServiceConstants.QUERY_METHOD_EXCEPTIONS.length; i++) {
+			exceptions[i] = new MethodTypeExceptionsException("Enumeration" + DataServiceConstants.QUERY_METHOD_EXCEPTIONS[i]);
+		}
+		methodExceptions.setException(exceptions);
+		enumerateMethod.setExceptions(methodExceptions);
 		// add the method to the service
 		CommonTools.addMethod(getMainService(), enumerateMethod);
 	}
