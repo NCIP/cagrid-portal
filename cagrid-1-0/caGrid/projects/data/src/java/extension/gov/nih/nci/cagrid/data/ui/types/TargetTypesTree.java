@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -59,6 +60,34 @@ public class TargetTypesTree extends JTree {
 			TreePath path = new TreePath(model.getPathToRoot(child));
 			makeVisible(path);
 		}
+	}
+	
+	
+	public void removeNamespaceType(String namespace) {
+		Enumeration nsNodeEnumeration = rootNode.children();
+		DomainTreeNode removeMe = null;
+		while (nsNodeEnumeration.hasMoreElements()) {
+			DomainTreeNode nsNode = (DomainTreeNode) nsNodeEnumeration.nextElement();
+			if (nsNode.getNamespace().getNamespace().equals(namespace)) {
+				removeMe = nsNode;
+				break;
+			}
+		}
+		if (removeMe != null) {
+			setSelectionRow(0);
+			final DomainTreeNode node = removeMe;
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					// remove all checked namespaces from the node
+					Enumeration typeNodes = node.children();
+					while (typeNodes.hasMoreElements()) {
+						((TypeTreeNode) typeNodes.nextElement()).getCheckBox().setSelected(false);
+					}
+					model.removeNodeFromParent(node);			
+				}
+			});
+		}
+		model.reload(rootNode);
 	}
 	
 	

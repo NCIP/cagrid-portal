@@ -84,6 +84,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private JPanel domainModelSelectionPanel = null;
 	private JButton addFullProjectButton = null;
 	private JPanel addToModelButtonsPanel = null;
+	private JButton removePackageButton = null;
 	
 	private transient Project mostRecentProject = null;
 	private transient Map packageToNamespace = null;
@@ -729,6 +730,10 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	 */
 	private JPanel getAddToModelButtonsPanel() {
 		if (addToModelButtonsPanel == null) {
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.gridx = 2;
+			gridBagConstraints10.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints10.gridy = 0;
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints9.gridy = 0;
@@ -741,6 +746,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			addToModelButtonsPanel.setLayout(new GridBagLayout());
 			addToModelButtonsPanel.add(getAddFullProjectButton(), gridBagConstraints8);
 			addToModelButtonsPanel.add(getAddPackageButton(), gridBagConstraints9);
+			addToModelButtonsPanel.add(getRemovePackageButton(), gridBagConstraints10);
 		}
 		return addToModelButtonsPanel;
 	}
@@ -779,5 +785,33 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	 */
 	public void resetGUI() {
 		// TODO: implement me
+	}
+
+
+	/**
+	 * This method initializes jButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getRemovePackageButton() {
+		if (removePackageButton == null) {
+			removePackageButton = new JButton();
+			removePackageButton.setText("Remove Package");
+			removePackageButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Project selectedProject = getDomainBrowserPanel().getSelectedProject();
+					if (selectedProject != null && selectedProject.equals(mostRecentProject)) {
+						UMLPackageMetadata selectedPackage = getDomainBrowserPanel().getSelectedPackage();
+						if (selectedPackage != null && packageToNamespace.containsKey(selectedPackage.getName())) {
+							getTypesTree().removeNamespaceType(
+								(String) packageToNamespace.get(selectedPackage.getName()));
+						}
+					} else {
+						PortalUtils.showMessage("Please select a package involved in the current domain model.");
+					}
+				}
+			});
+		}
+		return removePackageButton;
 	}
 }

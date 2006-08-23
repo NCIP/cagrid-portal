@@ -22,10 +22,10 @@ TODO:
 17[ ]: Identifier Resolution Support (Possibly through an operation provider)
 18[D]: Pull GME url from introduce properties
 19[D]: Block caDSR refresh on modification viewer open should only happen when a data model has already been selected. (e.g. when creating a new data service, the call to cadsr should be threaded and not prevent the modification viewer from opening) 
-20[I]: Addition to CQL of queries to return attributes and addition to CQLResult to handle them
-21[ ]: Change associations in domain model creation to be EXCLUDED associations
+20[D]: Addition to CQL of queries to return attributes and addition to CQLResult to handle them
+21[I]: Change associations in domain model creation to be EXCLUDED associations
 22[ ]: Feature / usability request: On service sync, if NO CQL Query Processor impl is specified, create a stub impl in the service's dir.
-23[I]: Remove package button on DS extension GUI
+23[D]: Remove package button on DS extension GUI
 24[D]: Add Project (all packages in said project) button on DS extension GUI
 25[ ]: Don't assume in codegen pre processor that user has configured their CQL Query Processor impl, and the element for this data exists in the extension data.
 	-- Could probably be checked in the GUI
@@ -33,7 +33,7 @@ TODO:
 BUGS:
 
 When the GUI removes a type it does not remove its schema from the project.  If the schema has the same type as a newly added one (e.g. a user picked the wrong version of his schema) it will give axis bean generation all kinds of problems.
-
+	-- Not a bug; Namespaces can be removed from the service in the Types panel.  There's no simple way to know if the schema added by the domain model building process is in use elsewhere (metadata, methods, etc).
 I added a package and it said that it could not find a schema, so I hit cancel.  No model was added to the models list (correctly).  Next I selected a different package, and it popped up the Package incompatibility dialog.  This should not pop up because there are no models added yet.
 	-- Fixed 2006-08-01
 Eclipse classpath is incorrect (duplicate entries for cagrid core)
