@@ -6,6 +6,7 @@
  <ns1:lastName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">User1</ns1:lastName>
  <ns1:organization xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Some Institution</ns1:organization>
  <ns1:address xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Box 1234</ns1:address>
+ <ns1:address2 xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"></ns1:address2>
  <ns1:city xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Some City</ns1:city>
  <ns1:state xsi:type="ns1:stateCode">GA</ns1:state>
  <ns1:zipcode xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">98765</ns1:zipcode>
