@@ -9,7 +9,7 @@
 	<property name="cobertura.report.dir" value="${build.dir}/coverage" />
 	<property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser" />
 
-	<target name="instrument">
+	<target name="instrument" unless="${dont.instrument}">
 		<taskdef classpathref="test.classpath" resource="tasks.properties" />
 		<mkdir dir="${instrumented.classes.dir}" />
 		<cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
