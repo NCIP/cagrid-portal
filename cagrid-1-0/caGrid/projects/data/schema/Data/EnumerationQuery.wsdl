@@ -35,14 +35,14 @@
           </sequence>
         </complexType>
       </element>
-      <element name="QueryProcessingException">
+      <element name="EnumerationQueryProcessingException">
         <complexType>
           <complexContent>
             <extension base="wsrbf:BaseFaultType" />
           </complexContent>
         </complexType>
       </element>
-      <element name="MalformedQueryException">
+      <element name="EnumerationMalformedQueryException">
         <complexType>
           <complexContent>
             <extension base="wsrbf:BaseFaultType" />
