@@ -18,11 +18,11 @@ public class BDTResourceHome extends ResourceHomeImpl {
 	public ResourceKey createBDTResource() throws Exception {
 		
 		// Create a resource and initialize it
-		BDTResource bdtr = (BDTResource) createNewInstance();
+		BDTResourceBase bdtr = (BDTResourceBase) createNewInstance();
 		bdtr.initialize();
 
 		// Get key
-		ResourceKey key = new SimpleResourceKey(keyTypeName, bdtr.getID());
+		ResourceKey key = new SimpleResourceKey(getKeyTypeName(), bdtr.getID());
 		
 		// Add the resource to the list of resources in this home
 		add(key, bdtr);

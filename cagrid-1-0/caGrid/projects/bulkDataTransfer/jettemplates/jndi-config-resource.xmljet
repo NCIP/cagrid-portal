@@ -10,11 +10,11 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
    	if(serviceName.endsWith("Service")){
    		modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    	} 
-%><resource name="home" type="gov.nih.nci.cagrid.bdt.resource.BDTResourceHome">
+%><resource name="home" type="gov.nih.nci.cagrid.bdt.resource.BaseResourceHome">
       <resourceParams>
         <parameter>
           <name>resourceClass</name>
-          <value>gov.nih.nci.cagrid.bdt.resource.BDTResource</value>
+          <value><%=arguments.getService().getPackageName()%>.service.BDTResource</value>
         </parameter>
         <parameter>
           <name>resourceKeyType</name>
@@ -22,7 +22,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
         </parameter>
         <parameter>
           <name>resourceKeyName</name>
-          <value>{http://cagrid.nci.nih.gov/BDTHandlerService}BDTResourceKey</value>
+          <value>{http://cagrid.nci.nih.gov/BDTHandler}BDTResourceKey</value>
         </parameter>
         <parameter>
           <name>factory</name>

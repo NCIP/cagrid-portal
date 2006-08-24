@@ -27,7 +27,7 @@ No other rights are granted by implication, estoppel or otherwise.
     <xs:schema>
       <xs:import
         namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration"
-        schemaLocation="http://schemas.xmlsoap.org/ws/2004/09/enumeration/enumeration.xsd" />
+        schemaLocation="./enumeration.xsd" />
     </xs:schema>
   </wsdl:types>
 

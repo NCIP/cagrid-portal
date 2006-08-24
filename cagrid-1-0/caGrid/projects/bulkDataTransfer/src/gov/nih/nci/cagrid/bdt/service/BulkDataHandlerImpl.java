@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.bdt.service;
 
-import gov.nih.nci.cagrid.bdt.service.globus.resource.BDTResource;
+import gov.nih.nci.cagrid.bdt.service.globus.resource.BDTResourceI;
 
 import java.rmi.RemoteException;
 
@@ -32,7 +32,7 @@ public class BulkDataHandlerImpl extends BulkDataHandlerImplBase {
 
 
 	public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse createEnumeration() throws RemoteException {
-		BDTResource bdtResource = (BDTResource) ResourceContext.getResourceContext().getResource();
+		BDTResourceI bdtResource = (BDTResourceI) ResourceContext.getResourceContext().getResource();
 		EnumIterator iter = bdtResource.createEnumeration();
 		EnumResourceHome resourceHome = null;
 		try {
@@ -58,7 +58,7 @@ public class BulkDataHandlerImpl extends BulkDataHandlerImplBase {
 
 
 	public org.globus.transfer.AnyXmlType get(org.globus.transfer.EmptyType empty) throws RemoteException {
-		BDTResource bdtResource = (BDTResource) ResourceContext.getResourceContext().getResource();
+		BDTResourceI bdtResource = (BDTResourceI) ResourceContext.getResourceContext().getResource();
 		return bdtResource.get();
 	}
 

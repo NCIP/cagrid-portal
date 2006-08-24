@@ -5,7 +5,7 @@ import org.globus.ws.enumeration.EnumIterator;
 
 public interface BDTResourceI {
 	
-	public  EnumIterator createEnumeration();
+	public EnumIterator createEnumeration();
 	
 	public AnyXmlType get();
 }

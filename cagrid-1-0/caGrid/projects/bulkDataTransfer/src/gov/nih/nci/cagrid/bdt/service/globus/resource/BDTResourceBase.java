@@ -14,7 +14,7 @@ import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.jndi.Initializable;
 
 
-public abstract class BDTResource implements BDTResourceI, Resource, ResourceIdentifier, ResourceLifetime, ResourceProperties, Initializable {
+public abstract class BDTResourceBase implements Resource, ResourceIdentifier, ResourceLifetime, ResourceProperties, Initializable {
 
 	/** the identifier of this resource... should be unique in the service */
 	private Object id;

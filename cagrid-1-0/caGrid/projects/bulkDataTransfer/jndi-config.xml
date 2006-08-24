@@ -27,7 +27,7 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="bdthome" type="gov.nih.nci.cagrid.bdt.resource.BDTResourceHome">
+    <resource name="home" type="gov.nih.nci.cagrid.bdt.resource.BDTResourceHome">
       <resourceParams>
         <parameter>
           <name>resourceClass</name>
@@ -35,20 +35,12 @@
         </parameter>
         <parameter>
           <name>resourceKeyType</name>
-          <value>java.lang.String</value>
+          <value>java.lang.Integer</value>
         </parameter>
         <parameter>
           <name>resourceKeyName</name>
           <value>{http://cagrid.nci.nih.gov/BDTHandlerService}BDTResourceKey</value>
         </parameter>
-        <parameter>
-          <name>factory</name>
-          <value>org.globus.wsrf.jndi.BeanFactory</value>
-        </parameter>
-      </resourceParams>
-    </resource>
-    <resource name="home" type="gov.nih.nci.cagrid.bdt.service.globus.resource.BaseResourceHome">
-      <resourceParams>
         <parameter>
           <name>factory</name>
           <value>org.globus.wsrf.jndi.BeanFactory</value>
