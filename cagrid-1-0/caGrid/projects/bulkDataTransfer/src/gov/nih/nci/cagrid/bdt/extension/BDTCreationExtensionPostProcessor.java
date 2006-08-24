@@ -147,8 +147,8 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		ServiceType[] servicesArr = new ServiceType[services.size()];
 		services.toArray(servicesArr);
 		description.getServices().setService(servicesArr);
-
 	}
+	
 
 
 	private void addResourceImplStub(ServiceDescription desc, Properties serviceProperties) throws Exception {

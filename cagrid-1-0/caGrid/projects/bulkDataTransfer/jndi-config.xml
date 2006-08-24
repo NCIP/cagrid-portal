@@ -27,7 +27,7 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="gov.nih.nci.cagrid.bdt.resource.BDTResourceHome">
+    <resource name="home" type="gov.nih.nci.cagrid.bdt.resource.BaseResourceHome">
       <resourceParams>
         <parameter>
           <name>resourceClass</name>
@@ -39,7 +39,7 @@
         </parameter>
         <parameter>
           <name>resourceKeyName</name>
-          <value>{http://cagrid.nci.nih.gov/BDTHandlerService}BDTResourceKey</value>
+          <value>{http://cagrid.nci.nih.gov/BDTHandler}BDTResourceKey</value>
         </parameter>
         <parameter>
           <name>factory</name>

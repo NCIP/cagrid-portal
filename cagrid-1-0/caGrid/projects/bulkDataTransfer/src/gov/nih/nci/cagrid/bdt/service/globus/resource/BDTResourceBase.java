@@ -40,7 +40,7 @@ public abstract class BDTResourceBase implements Resource, ResourceIdentifier, R
 		// db id)
 		this.id = new Integer(hashCode());
 
-		this.propSet = new SimpleResourcePropertySet(BDTResourceConstants.RESOURCE_PROPERY_SET);
+		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);
 
 		// these are the RPs necessary for resource lifetime management
 		ResourceProperty prop = new ReflectionResourceProperty(SimpleResourcePropertyMetaData.TERMINATION_TIME, this);

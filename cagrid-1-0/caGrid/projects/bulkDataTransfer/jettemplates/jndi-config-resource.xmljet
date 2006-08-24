@@ -14,7 +14,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
       <resourceParams>
         <parameter>
           <name>resourceClass</name>
-          <value><%=arguments.getService().getPackageName()%>.service.BDTResource</value>
+          <value><%=info.getService().getPackageName()%>.service.BDTResource</value>
         </parameter>
         <parameter>
           <name>resourceKeyType</name>

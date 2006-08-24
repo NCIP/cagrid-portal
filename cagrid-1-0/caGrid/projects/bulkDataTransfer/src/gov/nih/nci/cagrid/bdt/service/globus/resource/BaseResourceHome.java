@@ -5,7 +5,7 @@ import org.globus.wsrf.ResourceKey;
 import org.globus.wsrf.impl.ResourceHomeImpl;
 import org.globus.wsrf.impl.SimpleResourceKey;
 
-public class BDTResourceHome extends ResourceHomeImpl {
+public class BaseResourceHome extends ResourceHomeImpl {
 
 	/**
 	 * @param args
