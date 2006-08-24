@@ -906,8 +906,31 @@ public class TrustedIdPManager extends LoggingObject {
 
 	private synchronized void addAuthenticationMethod(long id,
 			SAMLAuthenticationMethod method) throws DorianInternalFault {
-		db.update("INSERT INTO " + AUTH_METHODS_TABLE + " SET IDP_ID=" + id
-				+ ",METHOD='" + method.getValue() + "'");
+		Connection c = null;
+		try {
+			c = db.getConnection();
+			PreparedStatement s = c.prepareStatement("INSERT INTO "
+					+ AUTH_METHODS_TABLE + " SET IDP_ID= ?,METHOD= ?");
+
+			s.setLong(1, id);
+			s.setString(2, method.getValue());
+			s.execute();
+			s.close();
+		} catch (Exception e) {
+			logError(e.getMessage(), e);
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString("Error adding the authentication method "
+					+ method.getValue() + " for the  Trusted IdP " + id
+					+ ", an unexpected database error occurred.");
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} finally {
+			if (c != null) {
+				db.releaseConnection(c);
+			}
+		}
 	}
 
 	public synchronized boolean determineTrustedIdPExistsByDN(String subject)
@@ -917,10 +940,10 @@ public class TrustedIdPManager extends LoggingObject {
 		boolean exists = false;
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select count(*) from "
-					+ TRUST_MANAGER_TABLE + " where IDP_SUBJECT='" + subject
-					+ "'");
+			PreparedStatement s = c.prepareStatement("select count(*) from "
+					+ TRUST_MANAGER_TABLE + " where IDP_SUBJECT= ?");
+			s.setString(1, subject);
+			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				if (count > 0) {
@@ -950,9 +973,10 @@ public class TrustedIdPManager extends LoggingObject {
 		boolean exists = false;
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select count(*) from "
-					+ TRUST_MANAGER_TABLE + " where NAME='" + name + "'");
+			PreparedStatement s = c.prepareStatement("select count(*) from "
+					+ TRUST_MANAGER_TABLE + " where NAME= ?");
+			s.setString(1, name);
+			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				int count = rs.getInt(1);
 				if (count > 0) {
