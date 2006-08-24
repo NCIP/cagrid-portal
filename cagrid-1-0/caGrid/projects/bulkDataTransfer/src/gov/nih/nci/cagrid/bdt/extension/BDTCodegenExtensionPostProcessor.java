@@ -32,9 +32,9 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
 	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
 
-		ServiceType mainService = info.getServices().getService(0);
+		
 
-		// change the resource in the jndi file
+		//1.   change the resource in the jndi file
 		File jndiConfigF = new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "jndi-config.xml");
 
 		Document serverConfigJNDIDoc = null;
@@ -45,6 +45,8 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
 			e1.printStackTrace();
 		}
 
+		ServiceType mainService = info.getServices().getService(0);
+		
 		List serviceEls = serverConfigJNDIDoc.getRootElement().getChildren();
 		for (int i = 0; i < serviceEls.size(); i++) {
 			Element serviceEl = (Element) serviceEls.get(i);
@@ -82,7 +84,7 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
 			}
 
 		}
-
+        //2.  remove the unused resource code in the 
 	}
 
 }

@@ -109,6 +109,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		// transfer
 		NamespaceType transferNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.TRANSFER_SCHEMA);
+		transferNamespace.setPackageName("org.globus.transfer");
 		// enumeration
 		NamespaceType enumerationNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.ENUMERATION_SCHEMA);
@@ -137,7 +138,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		bdtService.setName(mainService.getName() + bdtService.getName());
 		bdtService.setNamespace(mainService.getNamespace() + "BDT");
 		bdtService.setPackageName(mainService.getPackageName() + ".bdt");
-		bdtService.setResourceFrameworkType(IntroduceConstants.INTRODUCE_BASE_RESOURCE);
+		bdtService.setResourceFrameworkType(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE);
 		MethodType[] methods = bdtService.getMethods().getMethod();
 		for (int i = 0; i < methods.length; i++) {
 			MethodType method = methods[i];
