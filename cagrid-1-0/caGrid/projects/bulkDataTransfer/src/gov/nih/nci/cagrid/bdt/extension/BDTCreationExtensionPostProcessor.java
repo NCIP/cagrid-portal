@@ -161,42 +161,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		services.toArray(servicesArr);
 		description.getServices().setService(servicesArr);
 
-		// change the resource in the jndi file
-		File jndiConfigF = new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "jndi-config.xml");
-
-		Document serverConfigJNDIDoc = null;
-		try {
-			serverConfigJNDIDoc = XMLUtilities.fileNameToDocument(jndiConfigF.getAbsolutePath());
-		} catch (MobiusException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		List serviceEls = serverConfigJNDIDoc.getRootElement().getChildren();
-		for (int i = 0; i < serviceEls.size(); i++) {
-			Element serviceEl = (Element) serviceEls.get(i);
-			if (serviceEl.getName().equals("service") && serviceEl.getAttributeValue("name").equals(
-				"SERVICE-INSTANCE-PREFIX/" + mainService.getName() + bdtService.getName())) {
-				List resourceEls = serviceEl.getChildren();
-				for (int j = 0; j < resourceEls.size(); j++) {
-					Element resourceEl = (Element) resourceEls.get(j);
-					if (resourceEl.getName().equals("resource") && resourceEl.getAttributeValue("name").equals("home")) {
-						serviceEl.removeContent(resourceEl);
-						JNDIConfigResourceTemplate resourceT = new JNDIConfigResourceTemplate();
-						String resourceS = resourceT.generate(new SpecificServiceInformation(info, info.getServices()
-							.getService(0)));
-						Element newResourceEl = XMLUtilities.stringToDocument(resourceS).getRootElement();
-						serviceEl.addContent(newResourceEl);
-						FileWriter resourceFW = new FileWriter(jndiConfigF);
-						resourceFW.write(resourceS);
-						resourceFW.close();
-						break;
-					}
-				}
-				break;
-			}
-
-		}
+		
 	}
 
 
