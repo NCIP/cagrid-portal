@@ -214,6 +214,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 	private JCheckBox getGridIdentCheckBox() {
 		if (gridIdentCheckBox == null) {
 			gridIdentCheckBox = new JCheckBox();
+			gridIdentCheckBox.setEnabled(false);
 			gridIdentCheckBox.setText("Use Grid Identifier");
 		}
 		return gridIdentCheckBox;
@@ -242,6 +243,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 	private JRadioButton getSdkDataRadioButton() {
 		if (sdkDataRadioButton == null) {
 			sdkDataRadioButton = new JRadioButton();
+			sdkDataRadioButton.setEnabled(false);
 			sdkDataRadioButton.setText("caCORE SDK Data Source");
 		}
 		return sdkDataRadioButton;
