@@ -1738,7 +1738,7 @@ public class ModificationViewer extends GridPortalComponent {
 			typesSplitPane.setOneTouchExpandable(true);
 			typesSplitPane.setLeftComponent(getNamespaceTableScrollPane());
 			typesSplitPane.setRightComponent(getNamespaceConfPanel());
-			typesSplitPane.setDividerLocation(0.5d);
+			typesSplitPane.setResizeWeight(0.4d);
 		}
 		return typesSplitPane;
 	}
