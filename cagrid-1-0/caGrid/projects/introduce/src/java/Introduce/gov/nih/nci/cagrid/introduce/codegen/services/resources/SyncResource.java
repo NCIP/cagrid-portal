@@ -46,11 +46,7 @@ public class SyncResource extends SyncTool {
 	public void sync() throws SynchronizationException {
 		try {
 
-			if (service.getResourcePropertiesList() != null
-				&& service.getResourcePropertiesList().getSynchronizeResourceFramework() != null
-				&& !service.getResourcePropertiesList().getSynchronizeResourceFramework().booleanValue()) {
-				// the preference is set and set to skip, so do nothing
-			} else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)) {
+		    if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)) {
 				// not the base service do nothing....
 				ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
 				String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
@@ -140,6 +136,8 @@ public class SyncResource extends SyncTool {
 				FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
 				resourceContanstsFW.write(resourceContanstsS);
 				resourceContanstsFW.close();
+			}else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)) {
+				
 			}
 		} catch (IOException e) {
 			throw new SynchronizationException("Error writing file:" + e.getMessage(), e);

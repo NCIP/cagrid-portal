@@ -7,15 +7,6 @@
 		<xs:sequence>
 			<xs:element name="ResourceProperty" type="tns:ResourcePropertyType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="synchronizeResourceFramework" use="optional" type="xs:boolean">
-			<xs:annotation>
-				<xs:documentation>If this attribute exists and the value is false, the resource framework will not be
-					created, nor will any of the configuration files. NOTE: it is not expected most developers should
-					use this value (only those wishing to hand-edit the resource code), and it MUST NOT be set to false
-					initially as required files will not be initially created. You should also not add new ResourceType
-					elements after this attribute has been set to true.</xs:documentation>
-			</xs:annotation>
-		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ResourcePropertyType">
 		<xs:attribute name="qName" type="xs:QName" use="required"/>

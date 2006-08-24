@@ -217,6 +217,7 @@ public class SkeletonSourceCreator {
 			metadataConfigurationFW.write(metadataConfigurationS);
 			metadataConfigurationFW.close();
 
+		} else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
 		}
 
 	}

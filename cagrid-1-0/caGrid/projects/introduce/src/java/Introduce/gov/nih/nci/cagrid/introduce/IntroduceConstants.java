@@ -53,6 +53,8 @@ public class IntroduceConstants {
 	public static final String INTRODUCE_MAIN_RESOURCE = "main";
 
 	public static final String INTRODUCE_BASE_RESOURCE = "base";
+	
+	public static final String INTRODUCE_CUSTOM_RESOURCE = "custom";
 
 	// deployment properties
 	public static final String DEPLOY_PROPERTIES_FILE = "deploy.properties";

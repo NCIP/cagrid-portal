@@ -12,4 +12,7 @@ For example:
   <ns6:ResourcePropertiesList xsi:type="ns6:ResourcePropertiesListType" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Resources">
     <ns6:ResourceProperty qName="ns7:ServiceMetadata" fileLocation="HelloWorld_serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns6:ResourcePropertyType" xmlns:ns7="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
    </ns6:ResourcePropertiesList>
+   
+   
+Removed synconizedResourceFramework from the ResourcePropertiesType bean.
  

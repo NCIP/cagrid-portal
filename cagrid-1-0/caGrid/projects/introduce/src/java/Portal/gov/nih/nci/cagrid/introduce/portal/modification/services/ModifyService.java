@@ -328,6 +328,7 @@ public class ModifyService extends JDialog {
 			resourceFrameworkTypeComboBox = new JComboBox();
 			resourceFrameworkTypeComboBox.addItem(IntroduceConstants.INTRODUCE_BASE_RESOURCE);
 			resourceFrameworkTypeComboBox.addItem(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE);
+			resourceFrameworkTypeComboBox.addItem(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE);
 		}
 		return resourceFrameworkTypeComboBox;
 	}

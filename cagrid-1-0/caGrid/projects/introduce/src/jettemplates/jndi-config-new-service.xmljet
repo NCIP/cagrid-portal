@@ -11,6 +11,15 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
    		modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    	} 
 %><service xmlns="http://wsrf.globus.org/jndi/config" name="SERVICE-INSTANCE-PREFIX/<%=serviceName%>">
+		<%
+		if(service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)){
+		%>
+		<!-- THIS SERVICE HAS BEEN SET TO HAVE A CUSTOM RESOURCE
+		     PLEASE BE SURE TO ADD IN THE RESOURCE FOR THE SERVICE
+		     HOME  -->
+		<%
+		}  else {
+		%>
 		<resource name="home" type="<%=service.getPackageName()%>.service.globus.resource.BaseResourceHome">
 			<resourceParams>
 				<parameter>
@@ -19,6 +28,9 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 				</parameter>
 			</resourceParams>
 		</resource>
+		<%
+		}
+		%>
 		<resourceLink name="serviceconfiguration" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/<%=baseService.getName()%>/serviceconfiguration" />
 		<%
 		for(int i = 0; i < info.getServices().getService().length; i++){
@@ -30,4 +42,4 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 			}
 		}
 		%>
-	</service>
+  </service>
