@@ -44,12 +44,14 @@ public class TestDorianCertificateAuthority extends TestCase {
 			} catch (NoCACredentialsFault f) {
 
 			}
+			assertEquals(0, db.getUsedConnectionCount());
 			try {
 				GregorianCalendar cal = new GregorianCalendar();
 				Date start = cal.getTime();
 				cal.add(Calendar.DAY_OF_MONTH, 5);
 				Date end = cal.getTime();
 				submitCertificateRequest(ca, SUBJECT_PREFIX, start, end);
+				assertEquals(0, db.getUsedConnectionCount());
 				assertTrue(false);
 			} catch (NoCACredentialsFault f) {
 
@@ -346,6 +348,7 @@ public class TestDorianCertificateAuthority extends TestCase {
 				subject, KeyUtil.generateRSAKeyPair1024());
 		assertNotNull(req);
 		X509Certificate cert = ca.requestCertificate(req, start, end);
+		assertEquals(0, db.getUsedConnectionCount());
 		assertNotNull(cert);
 		assertEquals(cert.getSubjectDN().getName(), subject);
 	}
