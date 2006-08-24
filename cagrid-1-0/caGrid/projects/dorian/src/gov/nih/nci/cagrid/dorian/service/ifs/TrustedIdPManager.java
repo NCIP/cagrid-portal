@@ -25,6 +25,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.projectmobius.db.Query;
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -503,9 +505,10 @@ public class TrustedIdPManager extends LoggingObject {
 
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from "
-					+ TRUST_MANAGER_TABLE + " WHERE ID=" + id);
+			PreparedStatement s = c.prepareStatement("select * from "
+					+ TRUST_MANAGER_TABLE + " WHERE ID= ?");
+			s.setLong(1, id);
+			ResultSet rs = s.executeQuery();
 			TrustedIdP idp = null;
 			if (rs.next()) {
 				idp = new TrustedIdP();
@@ -566,9 +569,10 @@ public class TrustedIdPManager extends LoggingObject {
 
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from "
-					+ TRUST_MANAGER_TABLE + " WHERE NAME='" + name + "'");
+			PreparedStatement s = c.prepareStatement("select * from "
+					+ TRUST_MANAGER_TABLE + " WHERE NAME= ?");
+			s.setString(1, name);
+			ResultSet rs = s.executeQuery();
 			TrustedIdP idp = null;
 			if (rs.next()) {
 				idp = new TrustedIdP();
@@ -629,9 +633,10 @@ public class TrustedIdPManager extends LoggingObject {
 
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-			ResultSet rs = s.executeQuery("select * from "
-					+ TRUST_MANAGER_TABLE + " WHERE IDP_SUBJECT='" + dn + "'");
+			PreparedStatement s = c.prepareStatement("select * from "
+					+ TRUST_MANAGER_TABLE + " WHERE IDP_SUBJECT= ?");
+			s.setString(1, dn);
+			ResultSet rs = s.executeQuery();
 			TrustedIdP idp = null;
 			if (rs.next()) {
 				idp = new TrustedIdP();
@@ -837,38 +842,34 @@ public class TrustedIdPManager extends LoggingObject {
 						+ ", it does not contain a unique certificate.");
 				throw fault;
 			}
-
+			Connection c = null;
 			try {
-				long id = db.insertGetId("INSERT INTO "
-						+ TRUST_MANAGER_TABLE
-						+ " SET NAME='"
-						+ name
-						+ "',IDP_SUBJECT='"
-						+ cert.getSubjectDN().toString()
-						+ "', STATUS='"
-						+ idp.getStatus().getValue()
-						+ "', POLICY_CLASS='"
-						+ policyClass
-						+ "',IDP_CERTIFICATE='"
-						+ idp.getIdPCertificate()
-						+ "', USER_ID_ATT_NS='"
-						+ idp.getUserIdAttributeDescriptor().getNamespaceURI()
-						+ "',USER_ID_ATT_NAME='"
-						+ idp.getUserIdAttributeDescriptor().getName()
-						+ "', FIRST_NAME_ATT_NS='"
-						+ idp.getFirstNameAttributeDescriptor()
-								.getNamespaceURI()
-						+ "',FIRST_NAME_ATT_NAME='"
-						+ idp.getFirstNameAttributeDescriptor().getName()
-						+ "', LAST_NAME_ATT_NS='"
-						+ idp.getLastNameAttributeDescriptor()
-								.getNamespaceURI() + "',LAST_NAME_ATT_NAME='"
-						+ idp.getLastNameAttributeDescriptor().getName()
-						+ "', EMAIL_ATT_NS='"
-						+ idp.getEmailAttributeDescriptor().getNamespaceURI()
-						+ "',EMAIL_ATT_NAME='"
-						+ idp.getEmailAttributeDescriptor().getName() + "'");
-				idp.setId(id);
+				c = db.getConnection();
+				PreparedStatement s = c
+						.prepareStatement("INSERT INTO "
+								+ TRUST_MANAGER_TABLE
+								+ " SET NAME= ?, IDP_SUBJECT= ?, STATUS= ?, POLICY_CLASS= ?, IDP_CERTIFICATE= ?, USER_ID_ATT_NS = ?, USER_ID_ATT_NAME = ?, FIRST_NAME_ATT_NS = ?, FIRST_NAME_ATT_NAME = ?, LAST_NAME_ATT_NS = ?, LAST_NAME_ATT_NAME = ?, EMAIL_ATT_NS = ?, EMAIL_ATT_NAME = ?");
+
+				s.setString(1, name);
+				s.setString(2, cert.getSubjectDN().toString());
+				s.setString(3, idp.getStatus().getValue());
+				s.setString(4, policyClass);
+				s.setString(5, idp.getIdPCertificate());
+				s.setString(6, idp.getUserIdAttributeDescriptor()
+						.getNamespaceURI());
+				s.setString(7, idp.getUserIdAttributeDescriptor().getName());
+				s.setString(8, idp.getFirstNameAttributeDescriptor()
+						.getNamespaceURI());
+				s.setString(9, idp.getFirstNameAttributeDescriptor().getName());
+				s.setString(10, idp.getLastNameAttributeDescriptor()
+						.getNamespaceURI());
+				s.setString(11, idp.getLastNameAttributeDescriptor().getName());
+				s.setString(12, idp.getEmailAttributeDescriptor()
+						.getNamespaceURI());
+				s.setString(13, idp.getEmailAttributeDescriptor().getName());
+				s.execute();
+				idp.setId(Query.getLastAutoId(c));
+				s.close();
 				for (int i = 0; i < idp.getAuthenticationMethod().length; i++) {
 					this.addAuthenticationMethod(idp.getId(), idp
 							.getAuthenticationMethod(i));
@@ -887,6 +888,10 @@ public class TrustedIdPManager extends LoggingObject {
 				helper.addFaultCause(e);
 				fault = (DorianInternalFault) helper.getFault();
 				throw fault;
+			} finally {
+				if (c != null) {
+					db.releaseConnection(c);
+				}
 			}
 
 		} else {
