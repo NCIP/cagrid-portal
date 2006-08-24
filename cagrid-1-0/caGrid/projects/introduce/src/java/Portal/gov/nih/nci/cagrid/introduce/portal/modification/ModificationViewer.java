@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -246,7 +247,8 @@ public class ModificationViewer extends GridPortalComponent {
 						initialize();
 					} catch (Exception e) {
 						e.printStackTrace();
-						JOptionPane.showMessageDialog(ModificationViewer.this, e.getMessage());
+						// JOptionPane.showMessageDialog(ModificationViewer.this, e.getMessage());
+						ErrorDialog.showErrorDialog(e.getMessage());
 						ModificationViewer.this.dispose();
 					}
 				} else {
@@ -705,7 +707,8 @@ public class ModificationViewer extends GridPortalComponent {
 			this.resetMethodSecurityIfServiceSecurityChanged();
 		} catch (Exception e) {
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			// PortalUtils.showErrorMessage(e);
+			ErrorDialog.showErrorDialog(e);
 			return;
 		}
 		MethodType method = getMethodsTable().getSelectedMethodType();
@@ -829,8 +832,9 @@ public class ModificationViewer extends GridPortalComponent {
 										new ModificationViewer(methodsDirectory));
 								} catch (Exception e1) {
 									// e1.printStackTrace();
-									JOptionPane.showMessageDialog(ModificationViewer.this,
-										"Unable to roll back, there may be no older versions available");
+									// JOptionPane.showMessageDialog(ModificationViewer.this,
+									// 	"Unable to roll back, there may be no older versions available");
+									ErrorDialog.showErrorDialog("Unable to roll back, there may be no older versions available");
 									return;
 								}
 							}
@@ -893,7 +897,9 @@ public class ModificationViewer extends GridPortalComponent {
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
-						JOptionPane.showMessageDialog(ModificationViewer.this, "Cannot load extension: "
+						// JOptionPane.showMessageDialog(ModificationViewer.this, "Cannot load extension: "
+						// 	+ extDtype.getDisplayName());
+						ErrorDialog.showErrorDialog("Cannot load extension: "
 							+ extDtype.getDisplayName());
 					}
 				}
@@ -914,7 +920,8 @@ public class ModificationViewer extends GridPortalComponent {
 				securityPanel = new ServiceSecurityPanel(info.getServices().getService(0).getServiceSecurity());
 			} catch (Exception e) {
 				e.printStackTrace();
-				PortalUtils.showErrorMessage(e);
+				// PortalUtils.showErrorMessage(e);
+				ErrorDialog.showErrorDialog(e);
 			}
 		}
 		return securityPanel;
@@ -1252,7 +1259,9 @@ public class ModificationViewer extends GridPortalComponent {
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
-						JOptionPane.showMessageDialog(ModificationViewer.this, "Error loading discovery type: "
+						// JOptionPane.showMessageDialog(ModificationViewer.this, "Error loading discovery type: "
+						// 	+ dd.getDisplayName());
+						ErrorDialog.showErrorDialog("Error loading discovery type: "
 							+ dd.getDisplayName());
 					}
 				}

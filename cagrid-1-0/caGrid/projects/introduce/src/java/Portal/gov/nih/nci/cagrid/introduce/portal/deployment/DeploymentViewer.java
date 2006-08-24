@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.deployment;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.BusyDialogRunnable;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
@@ -96,13 +97,17 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 					try {
 						initialize();
 					} catch (Exception e) {
-						JOptionPane.showMessageDialog(DeploymentViewer.this, "Error initializing the deployment: "
+						ErrorDialog.showErrorDialog("Error initializing the deployment: "
 							+ e.getMessage());
+						// JOptionPane.showMessageDialog(DeploymentViewer.this, "Error initializing the deployment: "
+						// 	+ e.getMessage());
 						DeploymentViewer.this.dispose();
 					}
 				} else {
-					JOptionPane.showMessageDialog(DeploymentViewer.this, "Directory "
+					ErrorDialog.showErrorDialog("Directory "
 						+ serviceDirectory.getAbsolutePath() + " does not seem to be an introduce service");
+					// JOptionPane.showMessageDialog(DeploymentViewer.this, "Directory "
+					// 	+ serviceDirectory.getAbsolutePath() + " does not seem to be an introduce service");
 					DeploymentViewer.this.dispose();
 				}
 			}

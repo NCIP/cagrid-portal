@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -209,7 +210,8 @@ public class GridMapPanel extends JPanel {
 		} catch (Exception e) {
 			this.gridmapLocation.setText("");
 			((GridMapTable) this.gridmapTable).clearTable();
-			PortalUtils.showErrorMessage(e);
+			// PortalUtils.showErrorMessage(e);
+			ErrorDialog.showErrorDialog(e);
 		}
 	}
 
@@ -406,9 +408,9 @@ public class GridMapPanel extends JPanel {
 		try {
 			((GridMapTable) this.gridmapTable).removeSelectedUser();
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+			// PortalUtils.showErrorMessage(e);
+			ErrorDialog.showErrorDialog(e);
 		}
-
 	}
 
 

@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.files;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
@@ -107,8 +108,10 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 						currentNamespace = new Namespace(doc.getRootElement().getAttributeValue("targetNamespace"));
 						getNamespaceText().setText(currentNamespace.getRaw());
 					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(FileTypesSelectionComponent.this,
-							"Please make sure the file is a valid XML Schema: \"" + ex.getMessage() + "\"");
+						// JOptionPane.showMessageDialog(FileTypesSelectionComponent.this,
+						// 	"Please make sure the file is a valid XML Schema: \"" + ex.getMessage() + "\"");
+						ErrorDialog.showErrorDialog("Please make sure the file is a valid XML Schema: \""
+							+ ex.getMessage() + "\"");
 					}
 				}
 			});

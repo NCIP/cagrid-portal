@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.beans.extension.ResourcePropertyEditorExtensionDescriptionType;

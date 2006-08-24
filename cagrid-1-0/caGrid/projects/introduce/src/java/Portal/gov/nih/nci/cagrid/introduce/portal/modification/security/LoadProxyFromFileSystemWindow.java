@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
@@ -220,7 +221,8 @@ public class LoadProxyFromFileSystemWindow extends GridPortalComponent {
 			ProxyCredential cred = new ProxyCredential(proxyStr);
 			this.serviceSecurity.setProxy(cred);
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+			// PortalUtils.showErrorMessage(e);
+			ErrorDialog.showErrorDialog(e);
 			return;
 		}
 		dispose();

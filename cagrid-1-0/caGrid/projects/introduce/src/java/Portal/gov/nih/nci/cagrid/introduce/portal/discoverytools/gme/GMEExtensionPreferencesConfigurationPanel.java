@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
@@ -63,7 +64,8 @@ public class GMEExtensionPreferencesConfigurationPanel extends ExtensionsPrefere
 			Utils.serializeDocument(ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath() + File.separator + GMESchemaLocatorPanel.TYPE + File.separator + "extension.xml",getExtensionDescription(),new QName("gme://gov.nih.nci.cagrid.introduce/1/Extension","ExtensionDescription"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(GMEExtensionPreferencesConfigurationPanel.this,"Error: could not apply changes");
+			// JOptionPane.showMessageDialog(GMEExtensionPreferencesConfigurationPanel.this,"Error: could not apply changes");
+			ErrorDialog.showErrorDialog("Error: could not apply changes: " + e.getMessage());
 		}
 	}
 

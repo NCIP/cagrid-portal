@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
@@ -310,8 +311,9 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 							e1.printStackTrace();
 						}
 					} else {
-						JOptionPane.showMessageDialog(GMEViewer.this,
-							"Cannot read selected file or file does not exist!");
+						// JOptionPane.showMessageDialog(GMEViewer.this,
+						//	"Cannot read selected file or file does not exist!");
+						ErrorDialog.showErrorDialog("Cannot read selected file or file does not exist!");
 						uploadLocationText.setText("");
 					}
 				}

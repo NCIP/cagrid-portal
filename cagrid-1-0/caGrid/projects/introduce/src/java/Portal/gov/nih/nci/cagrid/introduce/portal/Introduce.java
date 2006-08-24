@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.SplashScreen;
 
 import java.awt.Dimension;
@@ -78,7 +79,8 @@ public final class Introduce {
 						ex.getMessage(),
 						"Please set GLOBUS_LOCATION in preferences!"
 					};
-					JOptionPane.showMessageDialog(null, error, "Configuration Error", JOptionPane.ERROR_MESSAGE);
+					// JOptionPane.showMessageDialog(null, error, "Configuration Error", JOptionPane.ERROR_MESSAGE);
+					ErrorDialog.showErrorDialog(error);
 				}
 			}
 			// write the configuration back out to disk

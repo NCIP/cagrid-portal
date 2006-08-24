@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.discoverytools.core;
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -9,7 +10,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.List;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -80,8 +80,10 @@ public class TypesToolsComponent extends GridPortalComponent {
 						contentTabbedPane.addTab(desc.getDisplayName(), comp);
 					}
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(TypesToolsComponent.this, "Could not load types tool: "
+					ErrorDialog.showErrorDialog("Could not load types tool: "
 						+ desc.getDisplayName());
+					// JOptionPane.showMessageDialog(TypesToolsComponent.this, "Could not load types tool: "
+					//	+ desc.getDisplayName());
 				}
 			}
 		}

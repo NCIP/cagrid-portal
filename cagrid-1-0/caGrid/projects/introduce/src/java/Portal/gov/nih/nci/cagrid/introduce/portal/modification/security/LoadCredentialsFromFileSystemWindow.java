@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
@@ -303,7 +304,8 @@ public class LoadCredentialsFromFileSystemWindow extends GridPortalComponent {
 		try {
 			this.serviceSecurity.setCredentials(cred);
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+			// PortalUtils.showErrorMessage(e);
+			ErrorDialog.showErrorDialog(e);
 			return;
 		}
 		dispose();

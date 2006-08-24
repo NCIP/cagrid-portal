@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
@@ -175,7 +176,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		try {
 			setServiceSecurity(sec);
 		} catch (Exception e) {
-			PortalUtils.showErrorMessage(e);
+			// PortalUtils.showErrorMessage(e);
+			ErrorDialog.showErrorDialog(e);
 		}
 	}
 
@@ -949,7 +951,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			try {
 				this.certificatePanel.setCertificate(CertUtil.loadCertificate(new File(cred.getCertificateLocation())));
 			} catch (Exception e) {
-				PortalUtils.showErrorMessage("Invalid certificate specified!!!");
+				// PortalUtils.showErrorMessage("Invalid certificate specified!!!");
+				ErrorDialog.showErrorDialog("Invalid certificate specified!!!");
 			}
 			syncServiceCredentials();
 			synchRunAsMode();

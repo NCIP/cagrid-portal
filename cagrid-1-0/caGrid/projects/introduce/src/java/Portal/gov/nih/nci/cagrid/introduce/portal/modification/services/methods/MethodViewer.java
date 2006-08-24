@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -425,7 +426,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 						}
 
 					} catch (Exception ex) {
-						PortalUtils.showErrorMessage(ex);
+						// PortalUtils.showErrorMessage(ex);
+						ErrorDialog.showErrorDialog(ex);
 					}
 					if (!valid) {
 						JOptionPane.showMessageDialog(MethodViewer.this, message);
