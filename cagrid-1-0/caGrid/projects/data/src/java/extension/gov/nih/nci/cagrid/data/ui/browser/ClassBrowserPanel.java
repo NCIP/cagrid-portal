@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.browser;
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
@@ -433,7 +434,7 @@ public class ClassBrowserPanel extends JPanel {
 			jarFiles = ResourceManager.promptMultiFiles(this, null, new FileFilters.JarFileFilter());
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			PortalUtils.showErrorMessage("Error selecting files: " + ex.getMessage(), ex);
+			ErrorDialog.showErrorDialog("Error selecting files: " + ex.getMessage(), ex);
 		}
 		if (jarFiles != null) {
 			addJars(jarFiles);
@@ -459,7 +460,7 @@ public class ClassBrowserPanel extends JPanel {
 			output.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			PortalUtils.showErrorMessage("Error copying the jar " + jarFile, ex);
+			ErrorDialog.showErrorDialog("Error copying the jar " + jarFile, ex);
 		}
 	}
 
@@ -511,7 +512,7 @@ public class ClassBrowserPanel extends JPanel {
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			PortalUtils.showErrorMessage("Error populating class names " + ex.getMessage(), ex);
+			ErrorDialog.showErrorDialog("Error populating class names: " + ex.getMessage(), ex);
 		}
 	}
 

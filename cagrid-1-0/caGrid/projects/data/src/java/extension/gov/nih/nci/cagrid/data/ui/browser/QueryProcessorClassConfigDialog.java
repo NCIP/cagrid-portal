@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.browser;
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
@@ -236,7 +237,7 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 			qpClass = getQueryProcessorClass();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			PortalUtils.showErrorMessage("Error obtaining query processor class: " + ex.getMessage(), ex);
+			ErrorDialog.showErrorDialog("Error obtaining query processor class: " + ex.getMessage(), ex);
 			return;
 		}
 		CQLQueryProcessor processor = null;
@@ -244,7 +245,7 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 			processor = (CQLQueryProcessor) qpClass.newInstance();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			PortalUtils.showErrorMessage("Error getting an instance of query processor class: " + ex.getMessage(), ex);
+			ErrorDialog.showErrorDialog("Error getting an instance of query processor class: " + ex.getMessage(), ex);
 			return;
 		}
 		// get parameters required by the query processor

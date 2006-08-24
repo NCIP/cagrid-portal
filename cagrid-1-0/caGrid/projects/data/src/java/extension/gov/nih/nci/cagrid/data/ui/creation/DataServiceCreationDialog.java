@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.creation;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
@@ -309,7 +309,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 			ExtensionTools.updateExtensionDataElement(data, featuresMessageElement);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			PortalUtils.showErrorMessage("Error storing configuration", ex);
+			ErrorDialog.showErrorDialog("Error storing configuration", ex);
 		}
 	}
 	

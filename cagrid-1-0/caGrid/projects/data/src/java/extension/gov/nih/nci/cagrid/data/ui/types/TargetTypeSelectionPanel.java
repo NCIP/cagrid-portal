@@ -4,6 +4,7 @@ import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.PromptButtonDialog;
@@ -173,7 +174,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 						storeCaDSRInfo();
 					} catch (Exception ex) {
 						ex.printStackTrace();
-						PortalUtils.showErrorMessage("Error storing selected classes", ex);
+						ErrorDialog.showErrorDialog("Error storing selected classes: " + ex.getMessage());
 					}
 				}
 			});
@@ -433,7 +434,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 							getExtensionTypeExtensionData(), qpJarsElement);
 					} catch (JDOMException ex) {
 						ex.printStackTrace();
-						PortalUtils.showErrorMessage("Error storing query processor jars", ex);
+						ErrorDialog.showErrorDialog("Error storing query processor jars: " + ex.getMessage());
 					}
 				}
 			});
@@ -496,7 +497,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			ExtensionTools.updateExtensionDataElement(extensionData, cadsrElement);
 		} catch (JDOMException ex) {
 			ex.printStackTrace();
-			PortalUtils.showErrorMessage("Error storing caDSR information!", ex);
+			ErrorDialog.showErrorDialog("Error storing caDSR information: " + ex.getMessage());
 		}
 	}
 
@@ -572,7 +573,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 						getDomainModelNameTextField().setText(filename);
 					} catch (Exception ex) {
 						ex.printStackTrace();
-						PortalUtils.showErrorMessage("Error selecting file", ex);
+						ErrorDialog.showErrorDialog("Error selecting file: " + ex.getMessage());
 					}
 				}
 			});
@@ -653,7 +654,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
     			ExtensionTools.updateExtensionDataElement(data, messageElem);
     		} catch (Exception ex) {
     			ex.printStackTrace();
-    			PortalUtils.showErrorMessage("Error storing domain model filename", ex);
+    			ErrorDialog.showErrorDialog("Error storing domain model filename: " + ex.getMessage());
     		}
     	}
     }
@@ -711,7 +712,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 							}
 						} catch (Exception ex) {
 							ex.printStackTrace();
-							PortalUtils.showErrorMessage(ex.getMessage(), ex);
+							ErrorDialog.showErrorDialog("Error adding project: " + ex.getMessage());
 						}
 						mostRecentProject = selectedProject;
 						storeCaDSRInfo();
@@ -763,7 +764,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 					project, pack, getGME(), getSchemaDir());
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				PortalUtils.showErrorMessage("Error creating namespace type", ex);
+				ErrorDialog.showErrorDialog("Error creating namespace type: " + ex.getMessage());
 			}
 			// add the new namespace to the service
 			if (nsType != null) {
