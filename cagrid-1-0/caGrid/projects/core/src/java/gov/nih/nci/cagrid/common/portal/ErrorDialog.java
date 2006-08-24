@@ -57,6 +57,15 @@ public class ErrorDialog extends JDialog {
 		showErrorDialog(builder.toString());
 	}
 	
+	
+	public static void showErrorDialog(final String message, Exception ex) {
+		StringWriter writer = new StringWriter();
+		writer.write(message);
+		writer.write("\n");
+		ex.printStackTrace(new PrintWriter(writer));
+		showErrorDialog(writer.getBuffer().toString());
+	}
+	
 
 	public static void showErrorDialog(final String message) {
 		if (dialog == null) {
