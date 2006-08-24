@@ -10,12 +10,10 @@
 %>
 package <%=arguments.getService().getPackageName()%>.service;
 
-import org.globus.wsrf.Resource;
-import gov.nih.nci.cagrid.bdt.service.globus.resource.BDTResourceI;
-import org.globus.transfer.AnyXmlType;
-import org.globus.ws.enumeration.EnumIterator;
+import gov.nih.nci.bdt.service.globus.resource.BDTResourceBase;
+import gov.nih.nci.bdt.service.globus.resource.BDTResourceI;
 
-public class BDTResource implements BDTResourceI {
+public class BDTResource extends BDTResourceBase implements BDTResourceI {
 
 	public EnumIterator createEnumeration() {
 	  return null;
