@@ -119,8 +119,15 @@ public abstract class AbstractServiceTest
 	public void addInvokeSteps(Vector steps) 
 		throws Exception
 	{
-		// get directories
 		File methodsDir = new File(testDir, "test" + File.separator + "resources");
+		addInvokeSteps(steps, serviceDir, testDir, methodsDir, endpoint);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static void addInvokeSteps(Vector steps, File serviceDir, File testDir, File methodsDir, EndpointReferenceType endpoint) 
+		throws Exception
+	{
+		// get directories
 		File[] dirs = methodsDir.listFiles(new FileFilter() {
 			public boolean accept(File file) {
 				return file.isDirectory() & file.getName().matches("\\d+_\\w+");
