@@ -21,6 +21,7 @@ import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -117,13 +118,10 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 					if (fileLocation == null || fileLocation.trim().equals("")) {
 						rp.setFileLocation(DEFAULT_DOMAIN_MODEL_XML_FILE);
 					}
-
 					return rp.getFileLocation();
-
 				}
 			}
 		}
-
 		return null;
 	}
 
@@ -305,6 +303,17 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 					break;
 				}
 			}
+		} else {
+			// no query processor class defined??
+			// add the stub!
+			String className = addQueryProcessorStub(info);
+			// edit the query processor service property
+			for (int i = 0; i < keptProperties.size(); i++) {
+				ServicePropertiesProperty prop = (ServicePropertiesProperty) keptProperties.get(i);
+				if (prop.getKey().equals(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
+					prop.setValue(className);
+				}
+			}
 		}
 		// write the properties back to the service info
 		ServicePropertiesProperty[] allProperties = new ServicePropertiesProperty[keptProperties.size()];
@@ -380,5 +389,38 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			}
 		}
 		return false;
+	}
+	
+	
+	private String addQueryProcessorStub(ServiceInformation info) throws CodegenExtensionException {
+		try {
+			// decide on a package name
+			ServiceType mainService = CommonTools.getService(info.getServices(), 
+				info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+			String basePackage = mainService.getPackageName();
+			basePackage += ".stubs.cql";
+			// find / create the output directory
+			String outSrcDir = info.getIntroduceServiceProperties().getProperty(
+				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "src";
+			outSrcDir += File.separator + basePackage.replace('.', File.separatorChar);
+			File outSrcDirFile = new File(outSrcDir);
+			outSrcDirFile.mkdirs();
+			File outSourceFile = new File(outSrcDir + File.separator + "StubCQLQueryProcessor.java");
+			// read the code file
+			InputStream codeStream = getClass().getResourceAsStream("/resources/StubCQLQueryProcessor.java");
+			StringBuffer code = Utils.inputStreamToStringBuffer(codeStream);
+			// build the whole java file
+			StringBuffer processorStub = new StringBuffer();
+			processorStub.append("package ").append(basePackage).append(";").append("\n");
+			processorStub.append(code);
+			// output the file
+			BufferedWriter writer = new BufferedWriter(new FileWriter(outSourceFile));
+			writer.write(processorStub.toString());
+			writer.flush();
+			writer.close();
+			return basePackage + ".StubCQLQueryProcessor";			
+		} catch (Exception ex) {
+			throw new CodegenExtensionException("Error providing stub CQL implementation: " + ex.getMessage(), ex);
+		}
 	}
 }

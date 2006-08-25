@@ -452,6 +452,9 @@
             <fileset dir="${extension.src.dir}">
                 <include name="**/*.java" />
             </fileset>
+        	<fileset dir="src">
+        		<include name="resources/**"/>
+        	</fileset>
         </jar>
     </target>
 

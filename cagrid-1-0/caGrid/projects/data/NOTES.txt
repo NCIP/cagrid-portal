@@ -24,7 +24,7 @@ TODO:
 19[D]: Block caDSR refresh on modification viewer open should only happen when a data model has already been selected. (e.g. when creating a new data service, the call to cadsr should be threaded and not prevent the modification viewer from opening) 
 20[D]: Addition to CQL of queries to return attributes and addition to CQLResult to handle them
 21[I]: Change associations in domain model creation to be EXCLUDED associations
-22[ ]: Feature / usability request: On service sync, if NO CQL Query Processor impl is specified, create a stub impl in the service's dir.
+22[D]: Feature / usability request: On service sync, if NO CQL Query Processor impl is specified, create a stub impl in the service's dir.
 23[D]: Remove package button on DS extension GUI
 24[D]: Add Project (all packages in said project) button on DS extension GUI
 25[ ]: Don't assume in codegen pre processor that user has configured their CQL Query Processor impl, and the element for this data exists in the extension data.
