@@ -40,7 +40,7 @@ public class WorkflowConfigureStep
 			"etc" + File.separator + "WorkflowManagementService" + File.separator + "jndi-config.xml"
 		);
 		FileUtils.replace(jndiConfig, 
-			"http://spirulina.ci.uchicago.edu:8080/active-bpel/services",
+			"http://spirulina.ci.uchicago.edu:8080/active-bpel/services/",
 			activeBpelEndpoint
 		);
 	}
