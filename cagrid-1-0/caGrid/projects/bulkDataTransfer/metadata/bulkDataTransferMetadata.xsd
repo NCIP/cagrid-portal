@@ -28,21 +28,7 @@
 	</xs:complexType>
 	<xs:element name="TransferProvider" type="tns:TransferProviderType"/>
 	<xs:complexType name="TransferProviderType">
-		<xs:sequence>
-			<xs:element name="Operations" minOccurs="1" maxOccurs="1">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="Operation" minOccurs="0" maxOccurs="unbounded">
-							<xs:complexType>
-								<xs:attribute name="name" type="xs:string"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
 		<xs:attribute name="name" type="xs:string"/>
 		<xs:attribute name="namespace" type="xs:string"/>
-		<xs:attribute name="portType" type="xs:string"/>
 	</xs:complexType>
 </xs:schema>
