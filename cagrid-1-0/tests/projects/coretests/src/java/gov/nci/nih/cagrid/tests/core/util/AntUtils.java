@@ -78,8 +78,9 @@ public class AntUtils
 			stdout.indexOf("Build failed") != -1 || 
 			stderr.indexOf("Build failed") != -1
 		) {
+			System.err.println(stderr);
 			System.out.println(stdout);
-			throw new IOException("ant command failed");
+			throw new IOException("ant command '" + target + "' failed");
 		}
 	}
 }
