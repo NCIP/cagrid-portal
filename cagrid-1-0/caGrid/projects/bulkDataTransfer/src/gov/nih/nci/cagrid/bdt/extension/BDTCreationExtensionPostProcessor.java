@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.bdt.extension;
 
 import gov.nih.nci.cagrid.bdt.service.BDTServiceConstants;
 import gov.nih.nci.cagrid.bdt.templates.BDTResourceTemplate;
-import gov.nih.nci.cagrid.bdt.templates.JNDIConfigResourceTemplate;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -29,11 +28,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-
-import org.jdom.Document;
-import org.jdom.Element;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
 
 
 public class BDTCreationExtensionPostProcessor implements CreationExtensionPostProcessor {
@@ -107,8 +101,8 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		// metadata
 		NamespaceType metadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.METADATA_SCHEMA);
-		metadataNamespace.setGenerateStubs(new Boolean(false));
-		metadataNamespace.setPackageName("org.xmlsoap.schemas.ws._2004._09.enumeration");
+		//metadataNamespace.setGenerateStubs(new Boolean(false));
+		metadataNamespace.setPackageName(BDTServiceConstants.METADATA_QNAME.getLocalPart());
 		// transfer
 		NamespaceType transferNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.TRANSFER_SCHEMA);
