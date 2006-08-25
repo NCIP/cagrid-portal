@@ -30,7 +30,7 @@ public class IndexAggregator extends AbstractAggregator {
      * index service to aggregate from
      */
     public IndexAggregator(IndexService indexService,
-        GridServiceManager idxMgr, boolean metadataCompliance) {
+                           GridServiceManager idxMgr, boolean metadataCompliance) {
         this.indexService = indexService;
 
         // Inherit the manager
@@ -43,7 +43,7 @@ public class IndexAggregator extends AbstractAggregator {
 
     public void run() {
         _logger.debug("Index Aggregator started for" +
-            this.indexService.getEPR());
+                this.indexService.getEPR());
 
         EndpointReferenceType[] serviceEPR = new EndpointReferenceType[0];
 
@@ -61,7 +61,7 @@ public class IndexAggregator extends AbstractAggregator {
             RegisteredService rService = null;
 
             rService = new RegisteredService(serviceEPR[i]);
-            rService.setIndex(indexService);
+            // rService.setIndex(indexService);
 
             try {
                 rService.setDescription(GridUtils.getServiceDescription(
@@ -78,14 +78,14 @@ public class IndexAggregator extends AbstractAggregator {
                 ctx.publishEvent(new RegisteredServiceFoundEvent(this, rService));
             } catch (NullPointerException e) {
                 _logger.error(
-                    "IndexAggregator does not have a proper context to publish events");
+                        "IndexAggregator does not have a proper context to publish events");
             }
 
             _logger.debug("Event Published");
         }
 
         _logger.debug("Index Aggregator for " + this.indexService.getName() +
-            " exiting");
+                " exiting");
     }
 
     public void setIndexService(IndexService indexService) {

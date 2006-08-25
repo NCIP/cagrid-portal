@@ -1,18 +1,15 @@
 package gov.nih.nci.cagrid.portal;
 
-import gov.nih.nci.cagrid.portal.utils.DatabaseInitUtility;
-
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
 import java.util.HashSet;
 
 
 /**
- *
  * Sets up the spring container for subclasses
  * to use
- *
- *
+ * <p/>
+ * <p/>
  * Created by IntelliJ IDEA.
  * User: kherm
  * Date: Jul 24, 2006
@@ -20,7 +17,7 @@ import java.util.HashSet;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class BaseSpringAbstractTestCase
-    extends AbstractDependencyInjectionSpringContextTests {
+        extends AbstractDependencyInjectionSpringContextTests {
     //root index is a collection of indexes that portal aggregates from
     public HashSet rootIndexSet = new HashSet();
 
@@ -28,15 +25,15 @@ public abstract class BaseSpringAbstractTestCase
         super.onSetUp(); //To change body of overridden methods use File | Settings | File Templates.
 
         rootIndexSet.add(
-            "http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService");
+                "http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService");
 
         //rootIndexSet.add("http://cagrid04.bmi.ohio-state.edu:7080/wsrf/services/DefaultIndexService");
     }
 
     protected String[] getConfigLocations() {
-        return new String[] {
-            "classpath*:/**/applicationContext-data-access.xml",
-            "classpath*:/**/applicationContext-data-access-mock.xml",
+        return new String[]{
+                "classpath*:/**/applicationContext-data-access.xml",
+                "classpath*:/**/applicationContext-data-access-mock.xml",
         };
     }
 }

@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.portal.utils.GridUtils;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
 
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -15,18 +15,18 @@ import java.util.Set;
  * @hibernate.class table="REGISTERED_SERVICES"
  */
 public class RegisteredService implements GridService {
-    // Hibernate identifier
+    // Properties
     private Integer pk;
-    private ResearchCenter researchCenter;
-    private IndexService indexService;
-    public java.util.Set statisticsCollection;
-    public Operation operations;
-    private DomainModel domainModel;
     private String EPR;
-    private EndpointReferenceType handle;
     private String version;
     private String name;
     private String description;
+
+    //Associations
+    private ResearchCenter researchCenter;
+    private Set operationCollection = new HashSet();
+    private DomainModel domainModel;
+    private EndpointReferenceType handle;
 
 
     public RegisteredService() {
@@ -41,7 +41,7 @@ public class RegisteredService implements GridService {
     }
 
     public RegisteredService(EndpointReferenceType handle, boolean loadMetadata)
-        throws MetadataRetreivalException {
+            throws MetadataRetreivalException {
         this(handle);
 
         if (loadMetadata) {
@@ -83,9 +83,9 @@ public class RegisteredService implements GridService {
     }
 
     /**
+     * @return
      * @hibernate.property column="NAME"
      * type="string"
-     * @return
      */
     public String getName() {
         return name;
@@ -96,10 +96,9 @@ public class RegisteredService implements GridService {
     }
 
     /**
+     * @return
      * @hibernate.property column="DESCRIPTION"
      * type="string"
-     *
-     * @return
      */
     public String getDescription() {
         return description;
@@ -115,9 +114,9 @@ public class RegisteredService implements GridService {
     }
 
     /**
+     * @return
      * @hibernate.many-to-one column="RC_ID_KEY"
      * cascade="save-update"
-     * @return
      */
     public ResearchCenter getResearchCenter() {
         return researchCenter;
@@ -127,28 +126,23 @@ public class RegisteredService implements GridService {
         this.researchCenter = researchCenter;
     }
 
-    public Collection getStatisticsCollection() {
-        return statisticsCollection;
+    /**
+     * @hibernate.set name="operationsCollection"
+     * cascade="all-delete-orphan"
+     * @hibernate.collection-key column="SERVICE_ID_KEY"
+     * @hibernate.collection-one-to-many class="gov.nih.nci.cagrid.portal.domain.Operation"
+     */
+    public Set getOperationCollection() {
+        return operationCollection;
     }
 
-    public void setStatisticsCollection(Set statisticsCollection) {
-        this.statisticsCollection = statisticsCollection;
-    }
-
-    public Operation getOperations() {
-        return operations;
-    }
-
-    public void setOperations(Operation operations) {
-        this.operations = operations;
+    public void setOperationCollection(Set operationCollection) {
+        this.operationCollection = operationCollection;
     }
 
     /**
-     * @hibernate.one-to-one
-     * class="gov.nih.nci.cagrid.portal.domain.DomainModel"
-     * outer-join="false"
+     * @hibernate.one-to-one class="gov.nih.nci.cagrid.portal.domain.DomainModel"
      * cascade="all"
-     *
      */
     public DomainModel getDomainModel() {
         return domainModel;
@@ -174,23 +168,6 @@ public class RegisteredService implements GridService {
     public void setVersion(String version) {
         this.version = version;
     }
-
-    /**
-     * @hibernate.many-to-one name="indexService"
-     *                        column="INDEX_ID_KEY"
-     *                         class="gov.nih.nci.cagrid.portal.domain.IndexService"
-                                
-     *
-     *
-     */
-    public IndexService getIndex() {
-        return indexService;
-    }
-
-    public void setIndex(IndexService indexService) {
-        this.indexService = indexService;
-    }
-
 
 
     public boolean equals(Object o) {

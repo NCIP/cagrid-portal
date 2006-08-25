@@ -1,14 +1,13 @@
 package gov.nih.nci.cagrid.portal.manager;
 
 import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
-import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
-import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
-import gov.nih.nci.cagrid.portal.domain.IndexService;
-import gov.nih.nci.cagrid.portal.domain.RegisteredService;
-import gov.nih.nci.cagrid.portal.utils.GridUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.common.ResearchCenter;
-
+import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
+import gov.nih.nci.cagrid.portal.domain.IndexService;
+import gov.nih.nci.cagrid.portal.domain.RegisteredService;
+import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
+import gov.nih.nci.cagrid.portal.utils.GridUtils;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 
 import java.util.Iterator;
@@ -70,7 +69,6 @@ public class IndexServiceManagerLocalTestCase
                             GridUtils.getServiceName(rService.getHandle()));
                     logger.debug("desc:" + rService.getDescription());
 
-                    rService.setIndex(idx);
                     gridServiceManager.save(rService);
                 }
 
@@ -85,7 +83,7 @@ public class IndexServiceManagerLocalTestCase
 
     }
 
-    public void testMetadataRetreival(){
+    public void testMetadataRetreival() {
         for (Iterator iter = rootIndexSet.iterator(); iter.hasNext();) {
             EndpointReferenceType[] services = new EndpointReferenceType[0];
             try {
@@ -98,7 +96,7 @@ public class IndexServiceManagerLocalTestCase
 
             for (int i = 0; i < services.length; i++) {
                 try {
-                    if(GridUtils.getServiceName(services[i]) != null){
+                    if (GridUtils.getServiceName(services[i]) != null) {
 
                         ServiceMetadata mData = GridUtils.getServiceMetadata(services[i]);
 
@@ -110,11 +108,11 @@ public class IndexServiceManagerLocalTestCase
                 } catch (MetadataRetreivalException e) {
                     //do nothing
                 }
-        }
+            }
         }
     }
 
-            public void setIndexManager(GridServiceManager gridServiceManager) {
-            this.gridServiceManager = gridServiceManager;
-        }
-        }
+    public void setIndexManager(GridServiceManager gridServiceManager) {
+        this.gridServiceManager = gridServiceManager;
+    }
+}

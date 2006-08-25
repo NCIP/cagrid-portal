@@ -2,9 +2,7 @@ package gov.nih.nci.cagrid.portal.utils;
 
 import gov.nih.nci.cagrid.portal.BaseSpringAbstractTestCase;
 import gov.nih.nci.cagrid.portal.exception.PortalInitializationException;
-
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
 
 
 /**

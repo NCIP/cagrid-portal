@@ -40,7 +40,6 @@ public class IndexService implements GridService {
      * by providing it a valid EPR
      *
      * @param handle
-
      */
     public IndexService(EndpointReferenceType handle) {
         // Use setters to keep all properties in sync
@@ -49,12 +48,12 @@ public class IndexService implements GridService {
 
     /**
      * Constructor that will self load metadata
+     *
      * @param handle
      * @param loadMetadata
-
      */
     public IndexService(EndpointReferenceType handle, boolean loadMetadata)
-        throws MetadataRetreivalException {
+            throws MetadataRetreivalException {
         this(handle);
 
         if (loadMetadata) {
@@ -87,7 +86,7 @@ public class IndexService implements GridService {
     }
 
     public void setRegisteredServicesCollection(
-        Set registeredServicesCollection) {
+            Set registeredServicesCollection) {
         this.registeredServicesCollection = registeredServicesCollection;
     }
 

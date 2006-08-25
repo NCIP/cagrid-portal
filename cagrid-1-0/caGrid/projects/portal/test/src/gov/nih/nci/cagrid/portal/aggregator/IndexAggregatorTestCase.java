@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.portal.aggregator;
 import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
-
 import org.springframework.scheduling.timer.ScheduledTimerTask;
 import org.springframework.scheduling.timer.TimerFactoryBean;
 
@@ -19,7 +18,7 @@ import java.util.TimerTask;
  * To change this template use File | Settings | File Templates.
  */
 public class IndexAggregatorTestCase
-    extends BaseSpringDataAccessAbstractTestCase {
+        extends BaseSpringDataAccessAbstractTestCase {
     GridServiceManager idxManager;
 
     /**

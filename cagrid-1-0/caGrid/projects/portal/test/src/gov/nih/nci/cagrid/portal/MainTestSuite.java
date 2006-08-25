@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.portal;
 import gov.nih.nci.cagrid.portal.domain.DomainTestSuite;
 import gov.nih.nci.cagrid.portal.manager.ManagerTestSuite;
 import gov.nih.nci.cagrid.portal.utils.UtilsTestSuite;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 

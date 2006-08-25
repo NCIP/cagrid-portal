@@ -665,7 +665,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/mysql-connector-java-5.0.3-bin.jar!/" />
+          <root url="file://$MODULE_DIR$/test/resources" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -990,11 +990,6 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/mysql-connector-java-5.0.3-bin.jar" />
-      <url>jar://$MODULE_DIR$/lib/mysql-connector-java-5.0.3-bin.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/bsf.jar" />
       <url>jar://$MODULE_DIR$/lib/xdoclet/bsf.jar!/</url>
     </containerElement>
@@ -1047,6 +1042,11 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/spring-mock.jar" />
       <url>jar://$MODULE_DIR$/test/lib/spring-mock.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/classes" />
+      <url>file://$MODULE_DIR$/test/resources</url>
     </containerElement>
     <containerElement type="library" level="application" name="Globus-4.0">
       <attribute name="method" value="1" />

@@ -8,9 +8,6 @@ import us.geocoder.rpc.Geo.Coder.US.GeoCode_Service;
 import us.geocoder.rpc.Geo.Coder.US.GeoCode_ServiceLocator;
 import us.geocoder.rpc.Geo.Coder.US.GeocoderResult;
 
-import javax.xml.rpc.ServiceException;
-import java.rmi.RemoteException;
-
 /**
  * Created by IntelliJ IDEA.
  * User: kherm
@@ -20,7 +17,7 @@ import java.rmi.RemoteException;
  */
 public class GeoCoderTestCase extends TestCase {
 
-    public void testGetGeoCode4RC(){
+    public void testGetGeoCode4RC() {
         ResearchCenter rc = new ResearchCenter();
         rc.setPostalCode("20852");
 
@@ -35,8 +32,8 @@ public class GeoCoderTestCase extends TestCase {
 
     }
 
-    public void testGeoCoderWS(){
-           GeoCode_Service gService = new GeoCode_ServiceLocator();
+    public void testGeoCoderWS() {
+        GeoCode_Service gService = new GeoCode_ServiceLocator();
         try {
             GeoCode_PortType gPort = gService.getGeoCode_Port();
             GeocoderResult[] result = gPort.geocode("20852");

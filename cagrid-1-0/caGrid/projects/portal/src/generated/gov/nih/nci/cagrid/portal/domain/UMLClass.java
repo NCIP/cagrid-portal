@@ -6,56 +6,74 @@ import java.util.Collection;
 /**
  * @version 1.0
  * @created 19-Jun-2006 4:08:51 PM
+ * @hibernate.class table="UML_CLASS"
  */
-public class UMLClass {
+public class UMLClass implements DomainObject {
+    private java.lang.Integer pk;
     private java.lang.String className;
-    private java.lang.String description;
-    private int id;
     private java.lang.String packageName;
+    private java.lang.String description;
     private java.lang.String projectName;
     private java.lang.String projectVersion;
-    private java.lang.String serviceEPR;
-    private DomainModel domainModel;
     private java.util.Collection umlAttributeCollection;
     private java.util.Collection semanticMetadataCollection;
 
     public UMLClass() {
     }
 
-    public void finalize() throws Throwable {
+    /**
+     * @hibernate.id generator-class="increment"
+     * column="UML_CLASS_ID_KEY"
+     */
+    public Integer getPk() {
+        return pk;
     }
 
+    public void setPk(Integer pk) {
+        this.pk = pk;
+    }
+
+    /**
+     * @return
+     * @hibernate.property column="CLASS_NAME"
+     */
     public java.lang.String getClassName() {
         return className;
     }
 
+    /**
+     * @return
+     * @hibernate.property column="DESCRIPTION"
+     */
     public java.lang.String getDescription() {
         return description;
     }
 
-    public int getId() {
-        return id;
-    }
-
+    /**
+     * @return
+     * @hibernate.property column="PACKAGE_NAME"
+     */
     public java.lang.String getPackageName() {
         return packageName;
     }
 
+    /**
+     * @return
+     * @hibernate.property column="PROJECT_NAME"
+     */
     public java.lang.String getProjectName() {
         return projectName;
     }
 
+    /**
+     * @return
+     * @hibernate.property column="PROJECT_VERSION"
+     */
     public java.lang.String getProjectVersion() {
         return projectVersion;
     }
 
-    public java.lang.String getServiceEPR() {
-        return serviceEPR;
-    }
 
-    /**
-     * @param newVal
-     */
     public void setClassName(java.lang.String newVal) {
         className = newVal;
     }
@@ -65,13 +83,6 @@ public class UMLClass {
      */
     public void setDescription(java.lang.String newVal) {
         description = newVal;
-    }
-
-    /**
-     * @param newVal
-     */
-    public void setId(int newVal) {
-        id = newVal;
     }
 
     /**
@@ -95,21 +106,6 @@ public class UMLClass {
         projectVersion = newVal;
     }
 
-    /**
-     * @param newVal
-     */
-    public void setServiceEPR(java.lang.String newVal) {
-        serviceEPR = newVal;
-    }
-
-    public DomainModel getDomainModel() {
-        return domainModel;
-    }
-
-    public void setDomainModel(DomainModel domainModel) {
-        this.domainModel = domainModel;
-    }
-
     public Collection getUmlAttributeCollection() {
         return umlAttributeCollection;
     }
@@ -123,7 +119,27 @@ public class UMLClass {
     }
 
     public void setSemanticMetadataCollection(
-        Collection semanticMetadataCollection) {
+            Collection semanticMetadataCollection) {
         this.semanticMetadataCollection = semanticMetadataCollection;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final UMLClass umlClass = (UMLClass) o;
+
+        if (className != null ? !className.equals(umlClass.className) : umlClass.className != null) return false;
+        if (packageName != null ? !packageName.equals(umlClass.packageName) : umlClass.packageName != null)
+            return false;
+
+        return true;
+    }
+
+    public int hashCode() {
+        int result;
+        result = (className != null ? className.hashCode() : 0);
+        result = 29 * result + (packageName != null ? packageName.hashCode() : 0);
+        return result;
     }
 }

@@ -5,8 +5,8 @@ import java.util.List;
 
 
 /**
- * @hibernate.class table="RESEARCH_CENTER"
  * @version 1.0
+ * @hibernate.class table="RESEARCH_CENTER"
  * @created 19-Jun-2006 4:08:50 PM
  */
 public class ResearchCenter implements DomainObject {
@@ -30,17 +30,17 @@ public class ResearchCenter implements DomainObject {
     }
 
     /**
+     * @return
      * @hibernate.id column="ID_KEY"
      * generator-class="increment"
-     * @return
      */
     public Integer getPk() {
         return pk;
     }
 
     /**
-     * @hibernate.property column="COUNTRY"
      * @return
+     * @hibernate.property column="COUNTRY"
      */
     public String getCountry() {
         return country;
@@ -50,6 +50,10 @@ public class ResearchCenter implements DomainObject {
         this.country = country;
     }
 
+    /**
+     * @return
+     * @hibernate.property column="GEO_CORDINATES"
+     */
     public String getGeoCoords() {
         return geoCoords;
     }
@@ -59,8 +63,8 @@ public class ResearchCenter implements DomainObject {
     }
 
     /**
-     * @hibernate.property column="LOCALITY"
      * @return
+     * @hibernate.property column="LOCALITY"
      */
     public String getLocality() {
         return locality;
@@ -71,8 +75,8 @@ public class ResearchCenter implements DomainObject {
     }
 
     /**
-     * @hibernate.property column="POSTAL_CODE"
      * @return
+     * @hibernate.property column="POSTAL_CODE"
      */
     public String getPostalCode() {
         return postalCode;
@@ -83,8 +87,8 @@ public class ResearchCenter implements DomainObject {
     }
 
     /**
-     * @hibernate.property column="STREET1"
      * @return
+     * @hibernate.property column="STREET1"
      */
     public String getStreet1() {
         return street1;
@@ -121,48 +125,48 @@ public class ResearchCenter implements DomainObject {
     }
 
     /**
-     * @hibernate.property column="DESCRIPTION"
      * @return
+     * @hibernate.property column="DESCRIPTION"
      */
     public java.lang.String getDescription() {
         return description;
     }
 
     /**
-     * @hibernate.property column="DISPLAY_NAME"
      * @return
+     * @hibernate.property column="DISPLAY_NAME"
      */
     public java.lang.String getDisplayName() {
         return displayName;
     }
 
     /**
-     * @hibernate.property column="HOMEPAGE_URL"
      * @return
+     * @hibernate.property column="HOMEPAGE_URL"
      */
     public java.lang.String getHomepageURL() {
         return homepageURL;
     }
 
     /**
-     * @hibernate.property column="IMAGE_URL"
      * @return
+     * @hibernate.property column="IMAGE_URL"
      */
     public java.lang.String getImageURL() {
         return imageURL;
     }
 
     /**
-     * @hibernate.property column="SHORT_NAME"
      * @return
+     * @hibernate.property column="SHORT_NAME"
      */
     public java.lang.String getShortName() {
         return shortName;
     }
 
     /**
-     * @hibernate.property column="RSS_NEWS_URL"
      * @return
+     * @hibernate.property column="RSS_NEWS_URL"
      */
     public String getRssNewsURL() {
         return rssNewsURL;
@@ -209,12 +213,11 @@ public class ResearchCenter implements DomainObject {
     }
 
 
-      /**
-     * @hibernate.collection-one-to-many
-     * column="RC_ID_KEY"
+    /**
+     * @hibernate.collection-one-to-many column="RC_ID_KEY"
      * class="PointOfContact"
      * cascade="save-update"
-      * inverse="true"
+     * inverse="true"
      */
     public List getPocCollection() {
         return pocCollection;

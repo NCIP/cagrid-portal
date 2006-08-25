@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.manager;
 
-import gov.nih.nci.cagrid.portal.domain.GridService;
+import gov.nih.nci.cagrid.portal.domain.IndexService;
+import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 
 
@@ -13,7 +14,9 @@ import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
  */
 public interface GridServiceManager extends BaseManager {
 
-    public void save(GridService obj);
+    public void save(IndexService idx);
+
+    public void save(RegisteredService rService);
 
     public void save(ResearchCenter rc);
 }

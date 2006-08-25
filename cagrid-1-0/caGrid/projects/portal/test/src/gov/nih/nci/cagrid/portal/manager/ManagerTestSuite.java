@@ -16,7 +16,7 @@ public class ManagerTestSuite {
         TestSuite manager = new TestSuite();
 
         manager.addTestSuite(IndexServiceManagerLocalTestCase.class);
-        manager.addTestSuite(DomainModelPersistenceLocalTestCase.class);
+        manager.addTestSuite(RegisteredServiceLocalTestCase.class);
 
 
         return manager;
