@@ -369,6 +369,13 @@
 			</fileset>
 		</copy>
 		
+		<!-- etc/metadata file -->
+		<copy todir="${introduce.extensions.dir}/bdt/etc">
+			<fileset dir="./etc">
+				<include name="BulkDataHandler-metadata.xml" />
+			</fileset>
+		</copy>
+		
 		<!-- introduce xml file -->
 		<copy todir="${introduce.extensions.dir}/bdt">
 			<fileset dir="./">

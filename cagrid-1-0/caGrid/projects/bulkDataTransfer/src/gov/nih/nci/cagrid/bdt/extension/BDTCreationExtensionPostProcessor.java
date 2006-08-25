@@ -39,6 +39,7 @@ import org.projectmobius.common.XMLUtilities;
 public class BDTCreationExtensionPostProcessor implements CreationExtensionPostProcessor {
 
 	private ServiceInformation info;
+	private Properties serviceProperties;
 
 
 	public void postCreate(ServiceDescription serviceDescription, Properties serviceProperties)
@@ -46,6 +47,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 
 		info = new ServiceInformation(serviceDescription, serviceProperties, new File(serviceProperties
 			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)));
+		this.serviceProperties = serviceProperties;
 
 		// apply data service requirements to it
 		try {
@@ -105,18 +107,22 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		// metadata
 		NamespaceType metadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.METADATA_SCHEMA);
+		metadataNamespace.setGenerateStubs(new Boolean(false));
 		metadataNamespace.setPackageName("org.xmlsoap.schemas.ws._2004._09.enumeration");
 		// transfer
 		NamespaceType transferNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.TRANSFER_SCHEMA);
+		transferNamespace.setGenerateStubs(new Boolean(false));
 		transferNamespace.setPackageName("org.globus.transfer");
 		// enumeration
 		NamespaceType enumerationNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.ENUMERATION_SCHEMA);
+		enumerationNamespace.setGenerateStubs(new Boolean(false));
 		enumerationNamespace.setPackageName("org.xmlsoap.schemas.ws._2004._09.enumeration");
 		// new addressing
 		NamespaceType addressingNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.ADDRESSING_SCHEMA);
+		addressingNamespace.setGenerateStubs(new Boolean(false));
 		addressingNamespace.setPackageName("org.globus.addressing");
 
 		bdtNamespaces.add(metadataNamespace);
@@ -162,7 +168,6 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		services.toArray(servicesArr);
 		description.getServices().setService(servicesArr);
 
-		
 	}
 
 
@@ -182,6 +187,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		ResourcePropertyType serviceMetadata = new ResourcePropertyType();
 		serviceMetadata.setPopulateFromFile(true); // no metadata file yet...
 		serviceMetadata.setRegister(true);
+		serviceMetadata.setFileLocation("./BulkDataHandler-metadata.xml");
 		serviceMetadata.setQName(BDTServiceConstants.METADATA_QNAME);
 		ResourcePropertiesListType propsList = desc.getServices().getService()[0].getResourcePropertiesList();
 		if (propsList == null) {
@@ -198,6 +204,16 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 			metadataArray = tmpArray;
 		}
 		propsList.setResourceProperty(metadataArray);
+
+		try {
+			Utils.copyFile(new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "bdt" + File.separator
+				+ "etc" + File.separator + "BulkDataHandler-metadata.xml"), new File(serviceProperties
+				.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+				+ File.separator + "etc" + File.separator + "BulkDataHandler-metadata.xml"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 
