@@ -1,9 +1,10 @@
 
-- add concept discovery for operations and service
 
 
 
 
+
+-(DONE) add concept discovery for operations and service
 -(DONE) add xpath tests against xml with actual results
 -(DONE) clean up exception handling
 -(DONE) add Data service discovery

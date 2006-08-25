@@ -41,14 +41,16 @@ public class DiscoveryClientTestCase extends TestCase {
 	// DEFINE THE DISCOVERY METHODS
 	private static final int ALL_SERVICES = 0;
 	private static final int BY_NAME = 1;
+	private static final int BY_CODE = 16;
 	private static final int BY_OP_NAME = 2;
 	private static final int BY_OP_INPUT = 3;
 	private static final int BY_OP_OUTPUT = 4;
 	private static final int BY_OP_CLASS = 5;
+	private static final int BY_OP_CODE = 15;
 	private static final int BY_POC = 6;
 	private static final int BY_CENTER = 7;
 	private static final int BY_STRING = 8;
-	private static final int BY_CODE = 9;
+	private static final int BY_DATA_CODE = 9;
 	private static final int BY_DS_MODEL = 10;
 	private static final int BY_DS_CODE = 11;
 	private static final int BY_DS_CLASS = 12;
@@ -137,6 +139,25 @@ public class DiscoveryClientTestCase extends TestCase {
 	}
 
 
+	public void testDiscoverServicesByConceptCode() {
+		final int operation = BY_CODE;
+		EndpointReferenceType[] services = null;
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "foo");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C28421");
+		assertResultsEqual(new EndpointReferenceType[]{service3EPR}, services);
+
+	}
+
+
 	public void testDiscoverServicesByOperationClass() {
 		final int operation = BY_OP_CLASS;
 		EndpointReferenceType[] services = null;
@@ -211,6 +232,24 @@ public class DiscoveryClientTestCase extends TestCase {
 		assertResultsEqual(new EndpointReferenceType[]{service3EPR}, services);
 
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "query");
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
+	}
+
+
+	public void testDiscoverServicesByOperationConceptCode() {
+		final int operation = BY_OP_CODE;
+		EndpointReferenceType[] services = null;
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "foo");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C28421");
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
 	}
 
@@ -296,8 +335,8 @@ public class DiscoveryClientTestCase extends TestCase {
 	}
 
 
-	public void testDiscoverServicesByConceptCode() {
-		final int operation = BY_CODE;
+	public void testDiscoverServicesByDataConceptCode() {
+		final int operation = BY_DATA_CODE;
 		EndpointReferenceType[] services = null;
 
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
@@ -477,14 +516,17 @@ public class DiscoveryClientTestCase extends TestCase {
 				case BY_OP_OUTPUT :
 					eprs = client.discoverServicesByOperationOutput((UMLClass) criteria);
 					break;
+				case BY_OP_CODE :
+					eprs = client.discoverServicesByOperationConceptCode((String) criteria);
+					break;
 				case BY_POC :
 					eprs = client.discoverServicesByPointOfContact((PointOfContact) criteria);
 					break;
 				case BY_STRING :
 					eprs = client.discoverServicesBySearchString((String) criteria);
 					break;
-				case BY_CODE :
-					eprs = client.discoverServicesByConceptCode((String) criteria);
+				case BY_DATA_CODE :
+					eprs = client.discoverServicesByDataConceptCode((String) criteria);
 					break;
 				case BY_DS_MODEL :
 					eprs = client.discoverDataServicesByDomainModel((String) criteria);
@@ -500,6 +542,9 @@ public class DiscoveryClientTestCase extends TestCase {
 					break;
 				case ALL_DS :
 					eprs = client.getAllDataServices();
+					break;
+				case BY_CODE :
+					eprs = client.discoverServicesByConceptCode((String) criteria);
 					break;
 				default :
 					fail("Invalid discovery method");

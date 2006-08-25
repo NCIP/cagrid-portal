@@ -212,6 +212,23 @@ public class DiscoveryClient {
 
 
 	/**
+	 * Searches to find services based on the given concept code.
+	 * 
+	 * @param conceptCode
+	 *            A concept code the service is based upon.
+	 * @return EndpointReferenceType[] matching the criteria
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
+	 */
+	public EndpointReferenceType[] discoverServicesByConceptCode(String conceptCode)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
+		return discoverByFilter(SERV_PATH + "[" + serv + ":semanticMetadataCollection/" + uml
+			+ ":SemanticMetadata/@conceptCode='" + conceptCode + "']");
+	}
+
+
+	/**
 	 * 
 	 * Searches to find services that have a given operation.
 	 * 
@@ -308,6 +325,25 @@ public class DiscoveryClient {
 
 
 	/**
+	 * Searches to find services that have an operation based on the given
+	 * concept code
+	 * 
+	 * @param conceptCode
+	 *            The concept to look for
+	 * @return EndpointReferenceType[] matching the criteria
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
+	 */
+	public EndpointReferenceType[] discoverServicesByOperationConceptCode(String conceptCode)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
+
+		return discoverByFilter(OPER_PATH + "[" + serv + ":semanticMetadataCollection/" + uml
+			+ ":SemanticMetadata/@conceptCode='" + conceptCode + "']");
+	}
+
+
+	/**
 	 * Searches to find services that have an operation defined that produces
 	 * the or takes as input, a Class based on the given concept code or one
 	 * with attributes based on that concept code.
@@ -319,7 +355,7 @@ public class DiscoveryClient {
 	 * @throws QueryInvalidException
 	 * @throws RemoteResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] discoverServicesByConceptCode(String conceptCode)
+	public EndpointReferenceType[] discoverServicesByDataConceptCode(String conceptCode)
 		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		String conceptPredicatedUMLClass = createConceptPredicatedUMLClass(conceptCode);
 

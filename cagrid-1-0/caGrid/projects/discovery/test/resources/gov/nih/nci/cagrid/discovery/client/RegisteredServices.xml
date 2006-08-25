@@ -699,7 +699,13 @@
 									</ns2:contextPropertyCollection>
 								</ns2:ServiceContext>
 							</ns2:serviceContextCollection>
-							<ns2:semanticMetadataCollection/>
+							<ns2:semanticMetadataCollection>
+								<ns3:SemanticMetadata id="173832FC-DB7B-6E57-E044-0003BA3F9857" conceptCode="C28421"
+									conceptName="Sex"
+									conceptDefinition="The assemblage of physical properties or qualities by which male is distinguished from female; the physical difference between male and female; the distinguishing peculiarity of male or female. (from On-line Medical Dictionary)"
+									isPrimaryConcept="true" order="0" xsi:type="ns3:SemanticMetadata"
+									xmlns:ns3="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+							</ns2:semanticMetadataCollection>
 						</ns2:Service>
 					</ns1:serviceDescription>
 					<ns1:hostingResearchCenter>
@@ -790,7 +796,14 @@
 												<ns2:Fault description="" name="MalformedQueryException"
 													xsi:type="ns2:Fault"/>
 											</ns2:faultCollection>
-											<ns2:semanticMetadataCollection/>
+											<ns2:semanticMetadataCollection>
+												<ns3:SemanticMetadata id="173832FC-DB7B-6E57-E044-0003BA3F9857"
+													conceptCode="C28421" conceptName="Sex"
+													conceptDefinition="The assemblage of physical properties or qualities by which male is distinguished from female; the physical difference between male and female; the distinguishing peculiarity of male or female. (from On-line Medical Dictionary)"
+													isPrimaryConcept="true" order="0" xsi:type="ns3:SemanticMetadata"
+													xmlns:ns3="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
+												/>
+											</ns2:semanticMetadataCollection>
 										</ns2:Operation>
 									</ns2:operationCollection>
 									<ns2:contextPropertyCollection>
