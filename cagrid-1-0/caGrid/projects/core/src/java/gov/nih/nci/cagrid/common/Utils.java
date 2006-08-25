@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -165,6 +166,19 @@ public class Utils {
 		br.close();
 
 		return sb;
+	}
+	
+	
+	public static StringBuffer inputStreamToStringBuffer(InputStream stream) throws Exception {
+		InputStreamReader reader = new InputStreamReader(stream);
+		StringBuffer str = new StringBuffer();
+		char[] buff = new char[8192];
+		int len = 0;
+		while ((len = reader.read(buff)) != -1) {
+			str.append(buff, 0, len);
+		}
+		reader.close();
+		return str;
 	}
 
 
