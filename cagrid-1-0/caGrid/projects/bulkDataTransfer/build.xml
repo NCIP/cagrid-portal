@@ -194,6 +194,7 @@
 	</taskdef>
 	<target name="generateJETClasses">
 		<jetc destdir="${src.dir}" template="jettemplates/BDTResource.javajet"/>
+		<jetc destdir="${src.dir}" template="jettemplates/BDTResourceCreator.javajet"/>
 		<jetc destdir="${src.dir}" template="jettemplates/jndi-config-resource.xmljet"/>
 	</target>
 
