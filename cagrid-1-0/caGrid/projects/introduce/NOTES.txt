@@ -1,7 +1,5 @@
 To Do:
 
-gme browser doesn't seem to use preferences->gme location
-
 refresh button in gme to view uploaded schemas without closing and opening
 
 if a namespace is imported by another schema but is also added to the NT list, which package name will be used?
@@ -13,11 +11,7 @@ Add ETC_PATH as a service property
 
 (A NEW GUI FOR IMPORTING WILL HANDLE THIS) When importing a method.  if methods names dont match bad stuff happens.
 
-When modification view starts up it is not layed out right.
-
 GUI needs a way to group common preferences that extensions can use (such as GME URL), intead of each having to define/use their own
-
-Need to add support importing methods from other wsdl which does not use our common message names....
 
 I was adding faults to a method, and when I hit done, an error dialog poped up with method "java.util.Vector" and removed my faults
 
@@ -60,6 +54,12 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+gme browser doesn't seem to use preferences->gme location
+
+Need to add support importing methods from other wsdl which does not use our common message names....
+
+(HACK had to set prefered sixe on scroll panel container )When modification view starts up it is not layed out right.
+
 make sure that when introduce calls into the services build in CommonTools that you fork.
 
 Need to add "resourceLink" for each sub service to each other service so that they can look them up and create instances....

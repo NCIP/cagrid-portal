@@ -169,11 +169,11 @@ public class GMESchemaLocatorPanel extends JPanel {
 						getNamespaceComboBox().addItem(namespaces.get(i));
 					}
 					makeCombosEnabled(true);
-				} catch (MobiusException e1) {
+				} catch (Throwable e1) {
 					e1.printStackTrace();
-					// JOptionPane.showMessageDialog(GMESchemaLocatorPanel.this,
-					// 	"Please check the GME URL and make sure that you have the appropriate credentials!");
-					ErrorDialog.showErrorDialog("Please check the GME URL and make sure that you have the appropriate credentials!");
+					 JOptionPane.showMessageDialog(GMESchemaLocatorPanel.this,
+					 	"Please check the GME URL and make sure that you have the appropriate credentials!");
+					//ErrorDialog.showErrorDialog("Please check the GME URL and make sure that you have the appropriate credentials!");
 				}
 
 			}
