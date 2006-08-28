@@ -7,8 +7,6 @@ if a namespace is imported by another schema but is also added to the NT list, w
 namespace to package map for an imported service MUST be the same package map as the namespace as imported
 if it is in the types list....
 
-Add ETC_PATH as a service property
-
 (A NEW GUI FOR IMPORTING WILL HANDLE THIS) When importing a method.  if methods names dont match bad stuff happens.
 
 GUI needs a way to group common preferences that extensions can use (such as GME URL), intead of each having to define/use their own
@@ -16,8 +14,6 @@ GUI needs a way to group common preferences that extensions can use (such as GME
 I was adding faults to a method, and when I hit done, an error dialog poped up with method "java.util.Vector" and removed my faults
 
 on save etc i have seen unable to delete namespace2package.mappings.
-
-metadata code doesn't compile if you select an element that is xsd:type an XML schema type (e.g. string)
 
 Introduce Portal (or something it uses) is leaving file handles open
   - when i create a service, then close the mod viewer, and try to create it again, it can't delete the creation dir
@@ -54,6 +50,10 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+Add ETC_PATH as a service property
+
+(GUI DOES NOT ALLOW THIS) metadata code doesn't compile if you select an element that is xsd:type an XML schema type (e.g. string)
+
 gme browser doesn't seem to use preferences->gme location
 
 Need to add support importing methods from other wsdl which does not use our common message names....

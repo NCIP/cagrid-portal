@@ -77,6 +77,7 @@ import javax.xml.namespace.QName;
 
 import org.projectmobius.portal.GridPortalComponent;
 import org.projectmobius.portal.PortalResourceManager;
+import javax.swing.JCheckBox;
 
 
 /**
@@ -200,6 +201,8 @@ public class ModificationViewer extends GridPortalComponent {
 	private JButton namespaceReloadButton = null;
 
 	private List extensionPanels = null;
+
+	private JCheckBox propertyIsFromETCCheckBox = null;
 
 
 	/**
@@ -889,10 +892,10 @@ public class ModificationViewer extends GridPortalComponent {
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
-						// JOptionPane.showMessageDialog(ModificationViewer.this, "Cannot load extension: "
-						// 	+ extDtype.getDisplayName());
-						ErrorDialog.showErrorDialog("Cannot load extension: "
-							+ extDtype.getDisplayName());
+						// JOptionPane.showMessageDialog(ModificationViewer.this,
+						// "Cannot load extension: "
+						// + extDtype.getDisplayName());
+						ErrorDialog.showErrorDialog("Cannot load extension: " + extDtype.getDisplayName());
 					}
 				}
 			}
@@ -1134,7 +1137,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private JScrollPane getNamespaceTableScrollPane() {
 		if (namespaceTableScrollPane == null) {
 			namespaceTableScrollPane = new JScrollPane();
-			namespaceTableScrollPane.setPreferredSize(new java.awt.Dimension(300,100));
+			namespaceTableScrollPane.setPreferredSize(new java.awt.Dimension(300, 100));
 			namespaceTableScrollPane.setViewportView(getNamespaceJTree());
 		}
 		return namespaceTableScrollPane;
@@ -1500,6 +1503,12 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints38.weightx = 1.0;
 			gridBagConstraints38.insets = new java.awt.Insets(2, 2, 10, 10);
 			gridBagConstraints38.gridx = 0;
+			GridBagConstraints gridBagConstraints43 = new GridBagConstraints();
+			gridBagConstraints43.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints43.gridy = 0;
+			gridBagConstraints43.weightx = 1.0;
+			gridBagConstraints43.insets = new java.awt.Insets(2, 2, 10, 10);
+			gridBagConstraints43.gridx = 1;
 			servicePropertiesControlPanel = new JPanel();
 			servicePropertiesControlPanel.setLayout(new GridBagLayout());
 			servicePropertiesControlPanel.add(getServicePropertyKeyTextField(), gridBagConstraints38);
@@ -1507,6 +1516,7 @@ public class ModificationViewer extends GridPortalComponent {
 			servicePropertiesControlPanel.add(servicePropertiesKeyLabel, gridBagConstraints40);
 			servicePropertiesControlPanel.add(servicePropertiesValueLabel, gridBagConstraints41);
 			servicePropertiesControlPanel.add(getServicePropertiesButtonPanel(), gridBagConstraints42);
+			servicePropertiesControlPanel.add(getServicePropertiesIsFromETCCheckBox(), gridBagConstraints43);
 		}
 		return servicePropertiesControlPanel;
 	}
@@ -1528,7 +1538,9 @@ public class ModificationViewer extends GridPortalComponent {
 						&& CommonTools.isValidJavaField(getServicePropertyKeyTextField().getText())) {
 						String key = getServicePropertyKeyTextField().getText();
 						String value = getServicePropertyValueTextField().getText();
-						getServicePropertiesTable().addRow(key, value);
+						boolean isFromETC = getServicePropertiesIsFromETCCheckBox().isSelected();
+						getServicePropertiesTable().addRow(key, value, isFromETC);
+						getServicePropertiesIsFromETCCheckBox().setSelected(false);
 					} else {
 						JOptionPane
 							.showMessageDialog(ModificationViewer.this,
@@ -1781,5 +1793,19 @@ public class ModificationViewer extends GridPortalComponent {
 			});
 		}
 		return namespaceReloadButton;
+	}
+
+
+	/**
+	 * This method initializes propertyIsFromETCCheckBox
+	 * 
+	 * @return javax.swing.JCheckBox
+	 */
+	private JCheckBox getServicePropertiesIsFromETCCheckBox() {
+		if (propertyIsFromETCCheckBox == null) {
+			propertyIsFromETCCheckBox = new JCheckBox();
+			propertyIsFromETCCheckBox.setText("Is Path From ETC");
+		}
+		return propertyIsFromETCCheckBox;
 	}
 }

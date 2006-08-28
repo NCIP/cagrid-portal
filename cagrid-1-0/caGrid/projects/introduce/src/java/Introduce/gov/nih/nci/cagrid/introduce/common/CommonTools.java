@@ -681,7 +681,7 @@ public class CommonTools {
 	 * @param value
 	 *            The value to associate with the property key
 	 */
-	public static void setServiceProperty(ServiceInformation info, String key, String value) {
+	public static void setServiceProperty(ServiceInformation info, String key, String value, boolean isFromETC) {
 		ServiceProperties props = info.getServiceProperties();
 		if (props == null) {
 			props = new ServiceProperties();
@@ -689,12 +689,13 @@ public class CommonTools {
 		}
 		ServicePropertiesProperty[] allProperties = props.getProperty();
 		if (allProperties == null) {
-			allProperties = new ServicePropertiesProperty[]{new ServicePropertiesProperty(key, value)};
+			allProperties = new ServicePropertiesProperty[]{new ServicePropertiesProperty(new Boolean(isFromETC), key, value)};
 		} else {
 			boolean found = false;
 			for (int i = 0; i < allProperties.length; i++) {
 				if (allProperties[i].getKey().equals(key)) {
 					allProperties[i].setValue(value);
+					allProperties[i].setIsFromETC(new Boolean(isFromETC));
 					found = true;
 					break;
 				}
@@ -702,7 +703,7 @@ public class CommonTools {
 			if (!found) {
 				ServicePropertiesProperty[] tmpProperties = new ServicePropertiesProperty[allProperties.length + 1];
 				System.arraycopy(allProperties, 0, tmpProperties, 0, allProperties.length);
-				tmpProperties[tmpProperties.length - 1] = new ServicePropertiesProperty(key, value);
+				tmpProperties[tmpProperties.length - 1] = new ServicePropertiesProperty(new Boolean(isFromETC), key, value);
 				allProperties = tmpProperties;
 			}
 		}

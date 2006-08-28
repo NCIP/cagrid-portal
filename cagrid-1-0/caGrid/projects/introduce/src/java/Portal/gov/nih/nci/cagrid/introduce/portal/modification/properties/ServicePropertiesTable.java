@@ -27,6 +27,7 @@ public class ServicePropertiesTable extends PortalBaseTable {
 
 	public static String NAME = "Name";
 	public static String VALUE = "Default Value";
+	public static String ETC = "Path From Etc";
 	public static String DATA1 = "DATA1";
 
 	private ServiceInformation info;
@@ -40,7 +41,7 @@ public class ServicePropertiesTable extends PortalBaseTable {
 
 
 	public boolean isCellEditable(int row, int column) {
-		return true;
+		return false;
 	}
 
 
@@ -54,9 +55,14 @@ public class ServicePropertiesTable extends PortalBaseTable {
 			ServicePropertiesProperty[] allProperties = info.getServiceProperties().getProperty();
 			if (allProperties != null && allProperties.length != 0) {
 				for (int i = 0; i < allProperties.length; i++) {
-					Vector v = new Vector(3);
+					Vector v = new Vector(4);
 					v.add(allProperties[i].getKey());
 					v.add(allProperties[i].getValue());
+					if (allProperties[i].getIsFromETC() != null) {
+						v.add(allProperties[i].getIsFromETC());
+					} else {
+						v.add(new Boolean(false));
+					}
 					v.add(v);
 					((DefaultTableModel) this.getModel()).addRow(v);
 				}
@@ -74,9 +80,9 @@ public class ServicePropertiesTable extends PortalBaseTable {
 	}
 
 
-	public void addRow(String key, String value) {
+	public void addRow(String key, String value, boolean isFromETC) {
 		// add the property to the service model
-		CommonTools.setServiceProperty(info, key, value);
+		CommonTools.setServiceProperty(info, key, value, isFromETC);
 
 		// add the row to the GUI
 		refreshView();
@@ -207,6 +213,7 @@ public class ServicePropertiesTable extends PortalBaseTable {
 			super();
 			addColumn(NAME);
 			addColumn(VALUE);
+			addColumn(ETC);
 			addColumn(DATA1);
 		}
 

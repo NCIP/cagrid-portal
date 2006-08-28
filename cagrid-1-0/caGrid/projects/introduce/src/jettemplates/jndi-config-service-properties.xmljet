@@ -21,9 +21,15 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 			for (int i = 0; i < properties.getProperty().length; i++) {
 				ServicePropertiesProperty prop = properties.getProperty(i);%>
 					<parameter>
-				<name><%=prop.getKey()%></name>
+					<% if(prop.getIsFromETC()!=null && prop.getIsFromETC().booleanValue()){
+				%><name><%=prop.getKey()%></name>
+					<value>ETC-PATH/@<%=prop.getKey()%>@</value>
+				</parameter>
+				<%     } else { 
+				%><name><%=prop.getKey()%></name>
 					<value>@<%=prop.getKey()%>@</value>
 				</parameter><%
+				}
 			}
 	}%>		
 	</resourceParams>
