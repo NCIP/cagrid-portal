@@ -27,7 +27,7 @@ TODO:
 22[D]: Feature / usability request: On service sync, if NO CQL Query Processor impl is specified, create a stub impl in the service's dir.
 23[D]: Remove package button on DS extension GUI
 24[D]: Add Project (all packages in said project) button on DS extension GUI
-25[ ]: Don't assume in codegen pre processor that user has configured their CQL Query Processor impl, and the element for this data exists in the extension data.
+25[D]: Don't assume in codegen pre processor that user has configured their CQL Query Processor impl, and the element for this data exists in the extension data.
 	-- Could probably be checked in the GUI
 26[D]:Some comments on the base CQLQueryProcessor:
     * processQuery should be the only abstract method; in this base class you should default initialize to do nothing and getRequiredParameters to return an empty map.
