@@ -266,7 +266,7 @@ public class TrustedAuthorityManager {
 			}
 
 			if (ta.getExpires() != curr.getExpires()) {
-				update.addField(TrustedAuthorityTable.EXPIRES, ta.getExpires());
+				update.addField(TrustedAuthorityTable.EXPIRES, Long.valueOf(ta.getExpires()));
 				needsUpdate = true;
 			}
 
@@ -317,8 +317,8 @@ public class TrustedAuthorityManager {
 				if (needsUpdate) {
 					Calendar cal = new GregorianCalendar();
 					ta.setLastUpdated(cal.getTimeInMillis());
-					update.addField(TrustedAuthorityTable.LAST_UPDATED, ta
-							.getLastUpdated());
+					update.addField(TrustedAuthorityTable.LAST_UPDATED, Long.valueOf(ta
+							.getLastUpdated()));
 					update.addWhereField(TrustedAuthorityTable.NAME,"=", ta
 							.getName());
 					c = db.getConnection();
