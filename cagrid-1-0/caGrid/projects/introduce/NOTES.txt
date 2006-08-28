@@ -2,8 +2,6 @@ To Do:
 
 gme browser doesn't seem to use preferences->gme location
 
-make sure that when introduce calls into the services build in CommonTools that you fork.
-
 refresh button in gme to view uploaded schemas without closing and opening
 
 if a namespace is imported by another schema but is also added to the NT list, which package name will be used?
@@ -62,6 +60,8 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+make sure that when introduce calls into the services build in CommonTools that you fork.
+
 Need to add "resourceLink" for each sub service to each other service so that they can look them up and create instances....
 
 look into whether we should have services return EPR-wrappers instead of EPRs themselves

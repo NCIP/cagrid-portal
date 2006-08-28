@@ -269,15 +269,13 @@ public class CommonTools {
 		String cmd = "";
 		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
 			cmd = "-classpath \"" + CommonTools.getAntLauncherJarLocation(System.getProperty("java.class.path"), true)
-				+ "\" org.apache.tools.ant.launch.Launcher -lib \"" + System.getProperty("java.class.path")
-				+ "\" -buildfile " + "\"" + buildFileDir + File.separator + "build.xml\"" + cmd;
+				+ "\" org.apache.tools.ant.launch.Launcher -buildfile " + "\"" + buildFileDir + File.separator + "build.xml\"" + cmd;
 			cmd = "java.exe " + cmd;
 		} else {
 			// escape out the spaces.....
 			buildFileDir = buildFileDir.replaceAll("\\s", "\\ ");
 			cmd = "-classpath " + CommonTools.getAntLauncherJarLocation(System.getProperty("java.class.path"), false)
-				+ " org.apache.tools.ant.launch.Launcher -lib " + System.getProperty("java.class.path")
-				+ " -buildfile " + buildFileDir + File.separator + "build.xml" + cmd;
+				+ " org.apache.tools.ant.launch.Launcher -buildfile " + buildFileDir + File.separator + "build.xml" + cmd;
 			cmd = "java " + cmd;
 		}
 		return cmd;
