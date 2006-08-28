@@ -446,7 +446,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private void setProcessorClass(String className) {
 		if (className != null) {
 			CommonTools.setServiceProperty(
-				getServiceInfo(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className);
+				getServiceInfo(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false); // TODO: is false correct here?
 			// blow away the query processor class properties from the extension data
 			ExtensionTools.removeExtensionDataElement(getExtensionTypeExtensionData(), DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
 		}

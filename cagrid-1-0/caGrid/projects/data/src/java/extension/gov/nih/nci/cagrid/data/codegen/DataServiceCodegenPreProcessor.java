@@ -293,7 +293,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				}
 				String value = paramElem.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_VALUE);
 				// add a new property to the service props list
-				keptProperties.add(new ServicePropertiesProperty(name, value));
+				keptProperties.add(new ServicePropertiesProperty(new Boolean(false), name, value)); // TODO: is false correct here?
 			}
 			// add the query processor class name to the properties
 			for (int i = 0; i < keptProperties.size(); i++) {
