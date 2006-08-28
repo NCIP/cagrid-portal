@@ -6,7 +6,11 @@ import gov.nih.nci.cagrid.data.InitializationException;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 
-import java.util.Map;
+import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Set;
 
 /** 
  *  CQLQueryProcessor
@@ -18,8 +22,9 @@ import java.util.Map;
  * @created Apr 25, 2006 
  * @version $Id$ 
  */
-public abstract class CQLQueryProcessor {
-	public static final String AXIS_WSDD_CONFIG_STREAM = "axis.configuration.stream";
+public abstract class CQLQueryProcessor {	
+	private Properties params;
+	private InputStream wsddStream;
 	
 	public CQLQueryProcessor() {
 	
@@ -32,10 +37,63 @@ public abstract class CQLQueryProcessor {
 	 * <code>AXIS_WSDD_CONFIG_STREAM</code> will be defined and mapped to
 	 * an <code>InputStream</code> object containing the configuration of the
 	 * current axis engine.
-	 * @param configuration
+	 * @param parameters
+	 * 		The parameters as configured by the user.  The set of keys must contain all
+	 * 		of the keys contained in the Properties object returned 
+	 * 		by <code>getRequiredParamters()</code>.  The values in the parameters will
+	 *		be either the user defined value or the default value from 
+	 *		<code>getRequiredParameters()</code>.
+	 * @param wsddStream
+	 * 		The input stream which contains the wsdd configuration for the data service.
+	 * 		This stream may be important to locating type mappings for serializing and
+	 * 		deserializing beans.
 	 * @throws InitializationException
 	 */
-	public abstract void initialize(Map configuration) throws InitializationException;
+	public void initialize(Properties parameters, InputStream wsdd) throws InitializationException {
+		// validate the parameters
+		Set required = new HashSet(getRequiredParameters().keySet());
+		required.removeAll(parameters.keySet());
+		if (required.size() != 0) {
+			// some required parameters NOT specified!
+			StringBuffer error = new StringBuffer();
+			error.append("Required parameters for query processor ");
+			error.append(getClass().getName()).append(" not specified: ");
+			Iterator requiredKeyIter = required.iterator();
+			while (requiredKeyIter.hasNext()) {
+				error.append(requiredKeyIter.next());
+				if (requiredKeyIter.hasNext()) {
+					error.append(", ");
+				}
+			}
+			throw new InitializationException(error.toString());
+		}
+		this.params = parameters;
+		this.wsddStream = wsdd;
+	}
+	
+	
+	/**
+	 * @return
+	 * 		The parameters as configured by the user.  The set of keys must contain all
+	 * 		of the keys contained in the Properties object returned 
+	 * 		by <code>getRequiredParamters()</code>.  The values in the parameters will
+	 *		be either the user defined value or the default value from 
+	 *		<code>getRequiredParameters()</code>.
+	 */
+	protected Properties getConfiguredParameters() {
+		return this.params;
+	}
+	
+	
+	/**
+	 * @return
+	 * 		The input stream which contains the wsdd configuration for the data service.
+	 * 		This stream may be important to locating type mappings for serializing and
+	 * 		deserializing beans.
+	 */
+	protected InputStream getConfiguredWsddStream() {
+		return this.wsddStream;
+	}
 	
 	
 	/**
@@ -55,12 +113,21 @@ public abstract class CQLQueryProcessor {
 	
 	
 	/**
-	 * Get a Map of parameters the query processor will require on startup.
-	 * The keys are the parameters required, the values are defaults, or NULL
-	 * if the parameter is not required but optional.  The keys MUST be valid
-	 * java variable names, start with a lower case character, 
-	 * and must NOT contain spaces or punctuation
+	 * Get a Properties object of parameters the query processor will require 
+	 * on initialization.  
+	 * 
+	 * Subclasses can override this method to return a map describing paramters
+	 * their implementation needs.
+	 * 
+	 * The keys are the names of parameters the query processor 
+	 * requires, the values are the defaults for those properties.  The default value
+	 * of a property may be <code>NULL</code> if it is an optional paramter.
+	 * The keys MUST be valid java variable names.  They MUST start with a <i>lowercase</i>
+	 * character, and must NOT contain spaces or punctuation.
+	 * 
 	 * @return
 	 */
-	public abstract Map getRequiredParameters();
+	public Properties getRequiredParameters() {
+		return new Properties();
+	}
 }

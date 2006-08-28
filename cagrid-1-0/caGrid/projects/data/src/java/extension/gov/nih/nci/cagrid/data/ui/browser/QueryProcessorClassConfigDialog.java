@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.data.ui.browser;
 
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -19,10 +18,9 @@ import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -249,22 +247,22 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 			return;
 		}
 		// get parameters required by the query processor
-		Map requiredParams = processor.getRequiredParameters();
+		Properties requiredParams = processor.getRequiredParameters();
 		
 		// get any properties currently defined for the query processor
-		Map currentProperties = getCurrentQueryProcessorParams();
+		Properties currentProperties = getCurrentQueryProcessorParams();
 		
-		// merge the two maps
-		Map configuredParams = new HashMap();
+		// merge the two sets of properties
+		Properties configuredParams = new Properties();
 		Iterator keyIter = requiredParams.keySet().iterator();
 		while (keyIter.hasNext()) {
 			String key = (String) keyIter.next();
-			String value = (String) currentProperties.get(key);
+			String value = currentProperties.getProperty(key);
 			if (value == null) {
 				// no configured value, get default
-				value = (String) requiredParams.get(key);
+				value = requiredParams.getProperty(key);
 			}
-			configuredParams.put(key, value);
+			configuredParams.setProperty(key, value);
 		}
 		
 		// put the map into the GUI
@@ -272,7 +270,7 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 		int paramIndex = 0;
 		while (configKeyIter.hasNext()) {
 			String key = (String) configKeyIter.next();
-			String value = (String) configuredParams.get(key);
+			String value = configuredParams.getProperty(key);
 			PropertyRow row = new PropertyRow(key, value);
 			GridBagConstraints rowConstraints = new GridBagConstraints();
 			rowConstraints.gridx = 0;
@@ -286,8 +284,8 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 	}
 	
 	
-	private Map getCurrentQueryProcessorParams() {
-		Map props = new HashMap();
+	private Properties getCurrentQueryProcessorParams() {
+		Properties props = new Properties();
 		MessageElement propsMe = ExtensionTools.getExtensionDataElement(extensionData, DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
 		if (propsMe != null) {
 			Element propsElement = AxisJdomUtils.fromMessageElement(propsMe);
@@ -296,7 +294,7 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 				Element propElement = (Element) propIter.next();
 				String name = propElement.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_NAME);
 				String value = propElement.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_VALUE);
-				props.put(name, value);
+				props.setProperty(name, value);
 			}
 		}
 		return props;

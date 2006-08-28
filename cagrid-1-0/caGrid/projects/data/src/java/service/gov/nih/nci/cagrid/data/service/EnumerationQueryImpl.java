@@ -15,13 +15,15 @@ import gov.nih.nci.cagrid.wsenum.utils.EnumerationCreationException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.Properties;
 
 import javax.xml.namespace.QName;
 
 import org.apache.axis.components.uuid.UUIDGenFactory;
+import org.apache.axis.utils.ClassUtils;
 import org.globus.ws.enumeration.EnumIterator;
 import org.globus.ws.enumeration.IndexedObjectFileEnumIterator;
 import org.globus.wsrf.utils.io.IndexedObjectFileWriter;
@@ -82,11 +84,13 @@ public class EnumerationQueryImpl {
 	
 	private CQLQueryProcessor getQueryProcessor() throws QueryProcessingException {
 		try {
-			Map configMap = ServiceConfigUtil.getConfigurationMap();
-			Class qpClass = Class.forName((String) configMap.get(
+			Properties configParams = ServiceConfigUtil.getConfigurationParameters();
+			Class qpClass = Class.forName(configParams.getProperty(
 				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY));
 			CQLQueryProcessor processor = (CQLQueryProcessor) qpClass.newInstance();
-			processor.initialize(configMap);
+			InputStream configStream = ClassUtils.getResourceAsStream(
+				getClass(), "server-config.wsdd");
+			processor.initialize(configParams, configStream);
 			return processor;
 		} catch (Exception ex) {
 			throw (QueryProcessingException) getTypedException(ex, new QueryProcessingException());
@@ -100,6 +104,8 @@ public class EnumerationQueryImpl {
 		FileNotFoundException, IOException {
 		// perform the query
 		CQLQueryResults results = processor.processQuery(query);
+		
+		// TODO: Fix this to use ws-enum utilities for SDK object iterators
 		
 		// write the results to disk
 		// first, need a unique ID to use for a file name

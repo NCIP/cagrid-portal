@@ -4,8 +4,7 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Properties;
 
 import javax.naming.InitialContext;
 
@@ -24,12 +23,12 @@ import org.globus.wsrf.Constants;
  */
 public class ServiceConfigUtil {
 
-	public static Map getConfigurationMap() throws Exception {
+	public static Properties getConfigurationParameters() throws Exception {
 		String getterPrefix = "get" 
 			+ Character.toUpperCase(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.charAt(0)) 
 			+ DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.substring(1);
 		
-		Map configMap = new HashMap();
+		Properties configParams = new Properties();
 		
 		MessageContext context = MessageContext.getCurrentContext();
 		String servicePath = context.getTargetService();
@@ -48,12 +47,12 @@ public class ServiceConfigUtil {
 					String key = current.getName().substring(getterPrefix.length());
 					// lowercase first character
 					key = String.valueOf(Character.toLowerCase(key.charAt(0))) + key.substring(1); 
-					configMap.put(key, value);
+					configParams.setProperty(key, value);
 				}
 			}
 		} catch (Exception e) {
 			throw new Exception("Unable to convert service config to map: " + e.getMessage(), e);
 		}
-		return configMap;
+		return configParams;
 	}
 }

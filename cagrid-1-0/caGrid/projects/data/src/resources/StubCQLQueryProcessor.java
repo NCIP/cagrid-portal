@@ -6,8 +6,7 @@ import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Properties;
 
 /** 
  *  StubCQLQueryProcessor
@@ -20,20 +19,14 @@ import java.util.Map;
  */
 public class StubCQLQueryProcessor extends CQLQueryProcessor {
 
-	public void initialize(Map configuration) throws InitializationException {
-		// TODO Auto-generated method stub
-
-	}
-
-
 	public CQLQueryResults processQuery(CQLQuery cqlQuery) throws MalformedQueryException, QueryProcessingException {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("processQuery() is not yet implemented");
 	}
 
 
-	public Map getRequiredParameters() {
+	public Properties getRequiredParameters() {
 		// TODO Auto-generated method stub
-		return new HashMap();
+		return new Properties();
 	}
 }

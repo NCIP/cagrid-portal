@@ -1,19 +1,19 @@
 package gov.nih.nci.cagrid.data.cql.cacore;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
-import gov.nih.nci.cagrid.data.InitializationException;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.LazyCQLQueryProcessor;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsUtil;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Properties;
 
 import org.hibernate.criterion.DetachedCriteria;
 
@@ -30,27 +30,34 @@ public class CoreQueryProcessor extends LazyCQLQueryProcessor {
 	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
 	
 	private ApplicationService coreService;
-	private InputStream configStream;
+	private StringBuffer wsddContents; 
 	
 	public CoreQueryProcessor() {
 		super();
 	}
 	
 	
-	public void initialize(Map properties) throws InitializationException {
-		String url = (String) properties.get(APPLICATION_SERVICE_URL);
-		if (url == null || url.length() == 0) {
-			throw new InitializationException(
-				"Required parameter " + APPLICATION_SERVICE_URL + " was not defined!");
+	private InputStream getWsdd() throws Exception {
+		if (getConfiguredWsddStream() != null) {
+			if (wsddContents == null) {
+				wsddContents = Utils.inputStreamToStringBuffer(getConfiguredWsddStream());
+			}
+			return new ByteArrayInputStream(wsddContents.toString().getBytes());
+		} else {
+			return null;
 		}
-		configStream = (InputStream) properties.get(AXIS_WSDD_CONFIG_STREAM);
-		coreService = ApplicationService.getRemoteInstance(url);
 	}
 	
 
 	public CQLQueryResults processQuery(CQLQuery cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException {
-		List coreResultsList = queryCoreService(cqlQuery);		
+		InputStream configStream = null;
+		try {
+			configStream = getWsdd();
+		} catch (Exception ex) {
+			throw new QueryProcessingException(ex);
+		}
+		List coreResultsList = queryCoreService(cqlQuery);
 		CQLQueryResults results = CQLQueryResultsUtil.createQueryResults(coreResultsList, configStream);
 		return results;
 	}
@@ -65,6 +72,14 @@ public class CoreQueryProcessor extends LazyCQLQueryProcessor {
 	
 	private List queryCoreService(CQLQuery query) 
 		throws MalformedQueryException, QueryProcessingException {
+		if (coreService == null) {
+			String url = getConfiguredParameters().getProperty(APPLICATION_SERVICE_URL);
+			if (url == null || url.length() == 0) {
+				throw new QueryProcessingException(
+					"Required parameter " + APPLICATION_SERVICE_URL + " was not defined!");
+			}
+			coreService = ApplicationService.getRemoteInstance(url);
+		}
 		DetachedCriteria objectCriteria = CQL2DetachedCriteria.translate(query);
 		List targetObjects = null;
 		try {
@@ -76,9 +91,9 @@ public class CoreQueryProcessor extends LazyCQLQueryProcessor {
 	}
 	
 	
-	public Map getRequiredParameters() {
-		Map params = new HashMap();
-		params.put(APPLICATION_SERVICE_URL, "http://localhost:8080/cacore31/server/HTTPServer");
+	public Properties getRequiredParameters() {
+		Properties params = new Properties();
+		params.setProperty(APPLICATION_SERVICE_URL, "http://localhost:8080/cacore31/server/HTTPServer");
 		return params;
 	}
 }

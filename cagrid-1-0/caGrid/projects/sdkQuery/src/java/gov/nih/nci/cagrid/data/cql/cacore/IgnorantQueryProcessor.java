@@ -5,16 +5,14 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
-import gov.nih.nci.cagrid.data.InitializationException;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Properties;
 
 import javax.xml.namespace.QName;
 
@@ -38,21 +36,17 @@ public class IgnorantQueryProcessor extends CQLQueryProcessor {
 	public IgnorantQueryProcessor() {
 		super();
 	}
-	
-	
-	public void initialize(Map properties) throws InitializationException {
-		String serviceUrl = (String) properties.get(APPLICATION_SERVICE_URL);
 		
+	
+	public CQLQueryResults processQuery(CQLQuery query) throws MalformedQueryException, QueryProcessingException {
+		String serviceUrl = (String) getConfiguredParameters().get(APPLICATION_SERVICE_URL);
 		if (serviceUrl == null || serviceUrl.length() == 0) {
 			serviceUrl = "http://kramer.bmi.ohio-state.edu:8080/cacore31/server/HTTPServer";
 		}
 		System.out.println("Data Service connecting out to core service:");
 		System.out.println("\t" + serviceUrl);
 		coreService = ApplicationService.getRemoteInstance(serviceUrl);
-	}
-
-
-	public CQLQueryResults processQuery(CQLQuery query) throws MalformedQueryException, QueryProcessingException {
+		
 		Gene gene = new Gene();
 		gene.setSymbol("brca*"); // searching for all genes whose symbol start with brca
 		List resultList = null;
@@ -80,9 +74,9 @@ public class IgnorantQueryProcessor extends CQLQueryProcessor {
 	}
 	
 	
-	public Map getRequiredParameters() {
-		Map params = new HashMap();
-		params.put(APPLICATION_SERVICE_URL, "http://kramer.bmi.ohio-state.edu:8080/cacore31/server/HTTPServer");
+	public Properties getRequiredParameters() {
+		Properties params = new Properties();
+		params.setProperty(APPLICATION_SERVICE_URL, "http://kramer.bmi.ohio-state.edu:8080/cacore31/server/HTTPServer");
 		return params;
 	}
 }
