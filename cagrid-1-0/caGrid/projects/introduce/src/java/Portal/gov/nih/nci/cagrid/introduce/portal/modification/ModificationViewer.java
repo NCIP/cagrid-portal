@@ -1134,6 +1134,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private JScrollPane getNamespaceTableScrollPane() {
 		if (namespaceTableScrollPane == null) {
 			namespaceTableScrollPane = new JScrollPane();
+			namespaceTableScrollPane.setPreferredSize(new java.awt.Dimension(300,100));
 			namespaceTableScrollPane.setViewportView(getNamespaceJTree());
 		}
 		return namespaceTableScrollPane;
@@ -1727,7 +1728,7 @@ public class ModificationViewer extends GridPortalComponent {
 			typesSplitPane.setOneTouchExpandable(true);
 			typesSplitPane.setLeftComponent(getNamespaceTableScrollPane());
 			typesSplitPane.setRightComponent(getNamespaceConfPanel());
-			typesSplitPane.setDividerLocation(0.5d);
+			typesSplitPane.setDividerLocation(0.5);
 		}
 		return typesSplitPane;
 	}
