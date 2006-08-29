@@ -1,3 +1,2 @@
 (DONE) need to add jndi resoiurce ref for bdtHome
-need to verify RP are working because the NS might not be right
-need to auto generate the main service imple for creating the resource generating the EPR
+need to look into exposing lifetime management on the resource
