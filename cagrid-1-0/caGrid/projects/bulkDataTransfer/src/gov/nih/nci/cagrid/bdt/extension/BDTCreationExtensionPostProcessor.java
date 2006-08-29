@@ -102,7 +102,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		NamespaceType metadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.METADATA_SCHEMA);
 		//metadataNamespace.setGenerateStubs(new Boolean(false));
-		metadataNamespace.setPackageName(BDTServiceConstants.METADATA_QNAME.getLocalPart());
+		metadataNamespace.setPackageName("gov.nih.nci.cagrid.bdt.beans.metadata");
 		// transfer
 		NamespaceType transferNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.TRANSFER_SCHEMA);

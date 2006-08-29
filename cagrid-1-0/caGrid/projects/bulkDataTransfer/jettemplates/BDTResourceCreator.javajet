@@ -9,15 +9,15 @@
 	}
 %>
 		org.apache.axis.message.addressing.EndpointReferenceType epr = new org.apache.axis.message.addressing.EndpointReferenceType();
-		gov.nih.nci.cagrid.bdt.service.globus.resource.BDTResourceHome bdtHome = null;
+		gov.nih.nci.cagrid.bdt.service.globus.resource.BaseResourceHome bdtHome = null;
 		org.globus.wsrf.ResourceKey bdtResourceKey = null;
 		org.apache.axis.MessageContext ctx = org.apache.axis.MessageContext.getCurrentContext();
 		String servicePath = ctx.getTargetService();
-		String bdtHomeName = org.globus.wsrf.Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/" + TemplateUtils.lowerCaseFirstCharacter(<%=serviceName %> + "BulkDataHandler") + "Home";
+		String bdtHomeName = org.globus.wsrf.Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/" + "<%=TemplateUtils.lowerCaseFirstCharacter(serviceName) %>BulkDataHandlerHome";
 
 		try {
 			javax.naming.Context initialContext = new javax.naming.InitialContext();
-			bdtHome = (gov.nih.nci.cagrid.bdt.service.globus.resource.BDTResourceHome) initialContext.lookup(bdtHomeName);
+			bdtHome = (gov.nih.nci.cagrid.bdt.service.globus.resource.BaseResourceHome) initialContext.lookup(bdtHomeName);
 			bdtResourceKey = bdtHome.createBDTResource();
 			
 			//  Grab my newly created resource and set whatever needs to be set on it now
@@ -34,7 +34,7 @@
 
 			String transportURL = (String) ctx.getProperty(org.apache.axis.MessageContext.TRANS_URL);
 			transportURL = transportURL.substring(0,transportURL.lastIndexOf('/') +1 );
-			transportURL += serviceName + "BulkDataHandler";
+			transportURL += "<%=serviceName %>BulkDataHandler";
 			epr = org.globus.wsrf.utils.AddressingUtils.createEndpointReference(transportURL,bdtResourceKey);
 		} catch (Exception e) {
 			throw new RemoteException("Error looking up BDT home:" + e.getMessage(), e);
