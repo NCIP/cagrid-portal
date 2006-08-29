@@ -83,7 +83,6 @@ public class DataServiceTypesTableCellEditor implements TableCellEditor {
 				Component potentialButton = SwingUtilities.getDeepestComponentAt((Component) anEvent.getSource(),
 					mouseEvent.getX(), mouseEvent.getY());
 				if (potentialButton != null && potentialButton instanceof JButton) {
-					JButton button = (JButton) potentialButton;
 					DataServiceTypesTable table = (DataServiceTypesTable) anEvent.getSource();
 					dialog = new TypeSerializationConfigDialog(table, (SerializationMapping) table
 						.getSerializationMappings().get(table.getSelectedRow()));
