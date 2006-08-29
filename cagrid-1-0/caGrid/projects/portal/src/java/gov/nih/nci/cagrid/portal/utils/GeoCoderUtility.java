@@ -21,7 +21,8 @@ import java.rmi.RemoteException;
 public class GeoCoderUtility {
     protected Category _logger = Category.getInstance(getClass().getName());
 
-    public String getGeoCode4RC(ResearchCenter rc) throws GeoCoderRetreivalException {
+
+    public final GeocodeResult getGeoCode4RC(ResearchCenter rc) throws GeoCoderRetreivalException {
         GeoCode_Service gService = new GeoCode_ServiceLocator();
 
         GeocoderResult[] result = new GeocoderResult[0];
@@ -35,10 +36,32 @@ public class GeoCoderUtility {
             _logger.error(e);
             throw new GeoCoderRetreivalException(e);
         }
+        GeocodeResult geoCode = new GeocodeResult();
+        geoCode.setLatitude(new Float(result[0].getLat()));
+        geoCode.setLongitude(new Float(result[0].get_long()));
 
-        String geoCode = "" + result[0].get_long() + "," + result[0].getLat();
         return geoCode;
     }
 
+    public class GeocodeResult {
+        private Float latitude;
+        private Float longitude;
+
+        public Float getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(Float latitude) {
+            this.latitude = latitude;
+        }
+
+        public Float getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(Float longitude) {
+            this.longitude = longitude;
+        }
+    }
 
 }

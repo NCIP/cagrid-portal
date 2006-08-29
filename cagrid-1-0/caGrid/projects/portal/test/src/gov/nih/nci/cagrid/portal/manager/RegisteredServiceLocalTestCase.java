@@ -4,10 +4,12 @@ import gov.nih.nci.cagrid.discovery.MetadataUtils;
 import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
 import gov.nih.nci.cagrid.portal.domain.DomainModel;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
+import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import gov.nih.nci.cagrid.portal.domain.UMLClass;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.FileReader;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -52,7 +54,17 @@ public class RegisteredServiceLocalTestCase extends BaseSpringDataAccessAbstract
 
             rService.setDomainModel(modelDomain);
             modelDomain.setRegisteredService(rService);
+
+            //Add RC
+            ResearchCenter rc = new ResearchCenter();
+            rc.setDisplayName("Test");
+            rService.setResearchCenter(rc);
+
             gridServiceManager.save(rService);
+
+            List services = gridServiceManager.loadAll(RegisteredService.class);
+            assertNotNull(services);
+
 
         } catch (Exception e) {
 

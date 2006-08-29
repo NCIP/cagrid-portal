@@ -115,7 +115,8 @@ public class RegisteredService implements GridService {
 
     /**
      * @return
-     * @hibernate.many-to-one column="RC_ID_KEY"
+     * @hibernate.many-to-one class="gov.nih.nci.cagrid.portal.domain.ResearchCenter"
+     * column="RC_ID_KEY"
      * cascade="save-update"
      */
     public ResearchCenter getResearchCenter() {

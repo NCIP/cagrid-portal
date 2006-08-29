@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.portal.manager;
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
+import org.springframework.dao.DataAccessException;
 
 
 /**
@@ -14,9 +15,9 @@ import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
  */
 public interface GridServiceManager extends BaseManager {
 
-    public void save(IndexService idx);
+    public void save(IndexService idx) throws DataAccessException;
 
-    public void save(RegisteredService rService);
+    public void save(RegisteredService rService) throws DataAccessException;
 
-    public void save(ResearchCenter rc);
+    public void save(ResearchCenter rc) throws DataAccessException;
 }

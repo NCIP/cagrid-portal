@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.portal.manager;
 
-import java.util.Collection;
+import org.springframework.dao.DataAccessException;
 
 
 /**
@@ -15,9 +15,8 @@ import java.util.Collection;
  */
 public interface BaseManager {
 
-    public void saveAll(Collection objects);
+    public void save(Object obj) throws DataAccessException;
 
-    public void save(Object obj);
+    public java.util.List loadAll(Class cls) throws DataAccessException;
 
-    public java.util.List loadAll(Class cls);
 }

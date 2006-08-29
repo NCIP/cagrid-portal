@@ -1,12 +1,15 @@
 package gov.nih.nci.cagrid.portal.manager;
 
-import gov.nih.nci.cagrid.portal.domain.*;
+import gov.nih.nci.cagrid.portal.domain.DomainModel;
+import gov.nih.nci.cagrid.portal.domain.IndexService;
+import gov.nih.nci.cagrid.portal.domain.RegisteredService;
+import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import gov.nih.nci.cagrid.portal.exception.GeoCoderRetreivalException;
 import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
 import gov.nih.nci.cagrid.portal.utils.GeoCoderUtility;
+import org.springframework.dao.DataAccessException;
 
-import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 
 /**
@@ -26,7 +29,7 @@ public class GridServiceManagerImpl extends BaseManagerImpl
     /**
      * Override base implementation
      */
-    public void save(IndexService idx) {
+    public void save(IndexService idx) throws DataAccessException {
         try {
             Integer objectID = gridServiceBaseDAO.getBusinessKey(idx);
             _logger.debug("Setting id for index:" + objectID);
@@ -42,7 +45,7 @@ public class GridServiceManagerImpl extends BaseManagerImpl
     }
 
 
-    public void save(RegisteredService rService) {
+    public void save(RegisteredService rService) throws DataAccessException {
 
         try {
             Integer objectID = gridServiceBaseDAO.getBusinessKey(rService);
@@ -51,28 +54,19 @@ public class GridServiceManagerImpl extends BaseManagerImpl
             //do nothing
         }
 
+        //save the research center
+        if (rService.getResearchCenter() != null)
+            save(rService.getResearchCenter());
+
+        //save service to assign ID
+        super.save(rService);
+
+        //save domain model
         DomainModel dModel = rService.getDomainModel();
         if (dModel != null) {
-            //check if model exists in db and reassign id
-            try {
-                dModel.setPk(rService.getPk());
-                dModel.setPk(gridServiceBaseDAO.getBusinessKey(dModel));
-            } catch (RecordNotFoundException e) {
-                //do nothing
-            }
-
-            Set classes = dModel.getUmlClassCollection();
-            for (Iterator iter = classes.iterator(); iter.hasNext();) {
-                UMLClass umlClass = (UMLClass) iter.next();
-                try {
-                    umlClass.setPk(gridServiceBaseDAO.getBusinessKey(umlClass));
-                } catch (RecordNotFoundException e) {
-                    //do nothing as this is not unexpected
-                }
-            }
-
+            dModel.setPk(rService.getPk());
+            super.save(dModel);
         }
-        super.save(rService);
     }
 
 
@@ -81,17 +75,27 @@ public class GridServiceManagerImpl extends BaseManagerImpl
      *
      * @param rc
      */
-    public void save(ResearchCenter rc) {
+    public void save(ResearchCenter rc) throws DataAccessException {
         //check if geo Co-ords have been set
-        if (rc.getGeoCoords() == null) {
+        if (rc.getLatitude() == null) {
             try {
                 GeoCoderUtility coder = new GeoCoderUtility();
-                coder.getGeoCode4RC(rc);
+                GeoCoderUtility.GeocodeResult result = coder.getGeoCode4RC(rc);
+                rc.setLatitude(result.getLatitude());
+                rc.setLongitude(result.getLongitude());
             } catch (GeoCoderRetreivalException e) {
-                //already logged just bypass the exception
-                rc.setGeoCoords("N/A");
+                _logger.info("Could not reach Geocoding web service. Doing local lookup");
+
+                String latLongSQL = "Select LATITUDE, LONGITUDE from ZIPCODES_GEOCODES where ZIP = '" + rc.getPostalCode() + "'";
+                List geoCodes = jdbcDAO.sqlQueryForList(latLongSQL, java.lang.Float.class);
+
+                if (!geoCodes.isEmpty()) {
+                    rc.setLatitude((java.lang.Float) geoCodes.get(0));
+                    rc.setLongitude((java.lang.Float) geoCodes.get(1));
+                }
             }
         }
+
         try {
             Integer objectID = gridServiceBaseDAO.getBusinessKey(rc);
             rc.setPk(objectID);

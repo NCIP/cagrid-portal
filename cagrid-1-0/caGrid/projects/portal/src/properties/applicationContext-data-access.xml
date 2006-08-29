@@ -3,13 +3,14 @@
 
 <beans>
 
-
-    <bean id="transactionManager"
-          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-        <property name="sessionFactory">
-            <ref bean="sessionFactory"/>
-        </property>
+    <!-- datasource bean for jdbc connection. Seperate from Hibernate DataSource -->
+    <bean id="jdbcDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="@jdbc.driverClassName@"/>
+        <property name="url" value="@jdbc.url@"/>
+        <property name="username" value="@jdbc.username@"/>
+        <property name="password" value="@jdbc.password@"/>
     </bean>
+
 
     <!-- #############   Generic Bean intialization section #############                -->
     <bean id="sessionFactory"
@@ -22,6 +23,12 @@
         </property>
     </bean>
 
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
 
     <!-- #############   DAO #############                -->
 
@@ -42,6 +49,11 @@
           parent="baseDAO">
     </bean>
 
+    <bean id="jdbcDAO"
+          class="gov.nih.nci.cagrid.portal.dao.jdbc.JdbcDAOImpl">
+        <property name="dataSource" ref="jdbcDataSource"/>
+    </bean>
+
 
     <!-- #############   Managers #############                -->
 
@@ -57,6 +69,11 @@
         <property name="gridServiceBaseDAO">
             <ref bean="gridServiceBaseDAO"/>
         </property>
+        <property name="jdbcDAO">
+            <ref bean="jdbcDAO"/>
+        </property>
+
+
     </bean>
 
     <bean name="gridServiceManager"

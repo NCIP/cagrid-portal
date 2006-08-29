@@ -13,7 +13,7 @@ public class Operation implements DomainObject {
     private java.util.Collection faults;
     private java.util.Collection inputParamters;
     private java.lang.String name;
-    private OperationOutput output;
+    private UMLClass outputClass;
 
     public Operation() {
     }
@@ -49,12 +49,18 @@ public class Operation implements DomainObject {
         return faults;
     }
 
+
     public java.util.Collection getInputParamters() {
         return inputParamters;
     }
 
-    public OperationOutput getOutput() {
-        return output;
+    /**
+     * @hibernate.many-to-one class="gov.nih.nci.cagrid.portal.domain.UMLClass"
+     * column="OUTPUT_ID_KEY"
+     * cascade="all"
+     */
+    public UMLClass getOutput() {
+        return outputClass;
     }
 
     /**
@@ -85,11 +91,9 @@ public class Operation implements DomainObject {
         name = newVal;
     }
 
-    /**
-     * @param output
-     */
-    public void setOutput(OperationOutput output) {
-        this.output = output;
+
+    public void setOutput(UMLClass outputClass) {
+        this.outputClass = outputClass;
     }
 
     public boolean equals(Object o) {

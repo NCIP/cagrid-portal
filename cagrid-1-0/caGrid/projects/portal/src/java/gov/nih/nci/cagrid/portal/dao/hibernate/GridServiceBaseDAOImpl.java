@@ -31,14 +31,21 @@ public class GridServiceBaseDAOImpl extends BaseDAOImpl
         if (obj instanceof IndexService) {
             IndexService idx = (IndexService) obj;
             resultSet = getHibernateTemplate().find("Select index.pk from IndexService index where index.EPR = ?", idx.getEPR());
+
         } else if (obj instanceof RegisteredService) {
             RegisteredService service = (RegisteredService) obj;
             resultSet = getHibernateTemplate().find("Select service.pk from RegisteredService service where service.EPR = ?",
                     service.getEPR());
+
         } else if (obj instanceof ResearchCenter) {
             ResearchCenter rc = (ResearchCenter) obj;
-            resultSet = getHibernateTemplate().find("Select rc.pk from ResearchCenter rc where rc.geoCoords = ?",
-                    rc.getGeoCoords());
+            resultSet = getHibernateTemplate().find("Select rc.pk from ResearchCenter rc where rc.displayName = ? and rc.latitude = ? and rc.longitude = ?",
+                    new Object[]{rc.getDisplayName(), rc.getLatitude(), rc.getLongitude()});
+            // If coordinates don't return a RC check with name and postal code
+            if (resultSet.size() < 1) {
+                resultSet = getHibernateTemplate().find("Select rc.pk from ResearchCenter rc where rc.displayName = ? and rc.postalCode = ?", new Object[]{rc.getDisplayName(), rc.getPostalCode()});
+            }
+
         } else if (obj instanceof UMLClass) {
             UMLClass umlClass = (UMLClass) obj;
             resultSet = getHibernateTemplate().find("Select uc.pk from UMLClass uc where uc.className = ? and uc.packageName = ?", new Object[]{umlClass.getClassName(), umlClass.getPackageName()});

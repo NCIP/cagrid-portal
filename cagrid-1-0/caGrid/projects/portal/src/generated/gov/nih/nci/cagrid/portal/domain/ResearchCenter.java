@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.portal.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -13,7 +13,8 @@ public class ResearchCenter implements DomainObject {
     private java.lang.String country;
     private java.lang.String description;
     private java.lang.String displayName;
-    private java.lang.String geoCoords;
+    private java.lang.Float latitude;
+    private java.lang.Float longitude;
     private java.lang.String homepageURL;
     private java.lang.String imageURL;
     private java.lang.String locality;
@@ -23,7 +24,7 @@ public class ResearchCenter implements DomainObject {
     private java.lang.String street2;
     private java.lang.String state;
     private java.lang.String shortName;
-    private java.util.List pocCollection = new ArrayList();
+    private java.util.Set pocCollection = new HashSet();
     private java.lang.String rssNewsURL;
 
     public ResearchCenter() {
@@ -52,14 +53,25 @@ public class ResearchCenter implements DomainObject {
 
     /**
      * @return
-     * @hibernate.property column="GEO_CORDINATES"
+     * @hibernate.property column="LATITUDE"
      */
-    public String getGeoCoords() {
-        return geoCoords;
+    public Float getLatitude() {
+        return latitude;
     }
 
-    public void setGeoCoords(String geoCoords) {
-        this.geoCoords = geoCoords;
+    public void setLatitude(Float latitude) {
+        this.latitude = latitude;
+    }
+
+    /**
+     * @hibernate.property column="LONGITUDE"
+     */
+    public Float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Float longitude) {
+        this.longitude = longitude;
     }
 
     /**
@@ -212,18 +224,16 @@ public class ResearchCenter implements DomainObject {
         this.rssNewsURL = rssNewsURL;
     }
 
-
     /**
-     * @hibernate.collection-one-to-many column="RC_ID_KEY"
-     * class="PointOfContact"
-     * cascade="save-update"
-     * inverse="true"
+     * @hibernate.set cascade="save-update"
+     * @hibernate.collection-key column="RC_ID_KEY"
+     * @hibernate.collection-one-to-many class="gov.nih.nci.cagrid.portal.domain.PointOfContact"
      */
-    public List getPocCollection() {
+    public Set getPocCollection() {
         return pocCollection;
     }
 
-    public void setPocCollection(List pocCollection) {
+    public void setPocCollection(Set pocCollection) {
         this.pocCollection = pocCollection;
     }
 
@@ -238,7 +248,7 @@ public class ResearchCenter implements DomainObject {
 
         final ResearchCenter that = (ResearchCenter) o;
 
-        if (!geoCoords.equals(that.geoCoords)) {
+        if (!latitude.equals(that.latitude)) {
             return false;
         }
 
@@ -246,6 +256,6 @@ public class ResearchCenter implements DomainObject {
     }
 
     public int hashCode() {
-        return geoCoords.hashCode();
+        return latitude.hashCode();
     }
 }

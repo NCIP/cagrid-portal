@@ -15,64 +15,53 @@ import gov.nih.nci.cagrid.portal.utils.GridUtils;
  * @created 22-Jun-2006 6:56:33 PM
  */
 public class MetadataAggregator extends AbstractAggregator {
-    private RegisteredService rService;
+    private RegisteredService service;
     private GridServiceManager gridServiceMgr;
 
-    public MetadataAggregator(RegisteredService rService,
+    public MetadataAggregator(RegisteredService service,
                               GridServiceManager gridServiceMgr) {
-        this.rService = rService;
+        this.service = service;
         this.gridServiceMgr = gridServiceMgr;
     }
 
     public void run() {
         // Only try this if metadata retreival looks possible
-        if (rService.getName() != null) {
-            _logger.debug("Starting metadata aggregator for" +
-                    rService.getName());
 
-            //Map the metadata ResearchCenter into a
-            //domain object
+        try {
             ResearchCenter domainRC = new ResearchCenter();
-            try {
-                ServiceMetadata service = GridUtils.getServiceMetadata(rService.getHandle());
 
-                gov.nih.nci.cagrid.metadata.common.ResearchCenter rc = service.getHostingResearchCenter()
-                        .getResearchCenter();
-                domainRC.setDisplayName(rc.getDisplayName());
-                domainRC.setShortName(rc.getShortName());
+            ServiceMetadata mData = GridUtils.getServiceMetadata(service.getHandle());
+            gov.nih.nci.cagrid.metadata.common.ResearchCenter rc = mData.getHostingResearchCenter().getResearchCenter();
+            domainRC.setDisplayName(rc.getDisplayName());
+            domainRC.setShortName(rc.getShortName());
 
-                loadDescription(domainRC, rc);
-                loadAddress(domainRC, rc);
-                loadPOC(domainRC, rc);
-
-            } catch (MetadataRetreivalException e) {
-                _logger.error("Error loading metadata for " + rService.getEPR());
-                _logger.error(e);
-            }
-
+            loadDescription(domainRC, rc);
+            loadAddress(domainRC, rc);
+            loadPOC(domainRC, rc);
             _logger.debug("Adding RC with " + domainRC.getPocCollection().size() + " POC's");
-
-            rService.setResearchCenter(domainRC);
-
-            //Load Domain Model
-            try {
-                loadDomainModel(rService);
-            } catch (MetadataRetreivalException e) {
-                //means is not a data service
-                try {
-                    loadOperations(rService);
-                } catch (ResourcePropertyRetrievalException e1) {
-                    _logger.info(e1);
-                }
-            }
-
-            _logger.debug("Saving RegisteredService with ResearchCenter Info");
-
-            // Save the RC object first
-            //` gridServiceMgr.save(domainRC);
-            gridServiceMgr.save(rService);
+            service.setResearchCenter(domainRC);
+        } catch (MetadataRetreivalException e) {
+            _logger.warn("Error loading research center for " + service.getEPR());
         }
+
+        //Load Domain Model
+        try {
+            loadDomainModel(service);
+        } catch (MetadataRetreivalException e) {
+            //means is not a data service
+            try {
+                loadOperations(service);
+            } catch (ResourcePropertyRetrievalException e1) {
+                _logger.warn("Service " + service.getEPR() + " has no domain model or operations.");
+            }
+        }
+
+        _logger.debug("Saving RegisteredService");
+
+        gridServiceMgr.save(service);
+
     }
+
 
     private void loadDescription(ResearchCenter domainRC, gov.nih.nci.cagrid.metadata.common.ResearchCenter rc) {
         gov.nih.nci.cagrid.metadata.common.ResearchCenterDescription rcDesc = rc.getResearchCenterDescription();
@@ -83,11 +72,9 @@ public class MetadataAggregator extends AbstractAggregator {
             domainRC.setImageURL(rcDesc.getImageURL());
             domainRC.setRssNewsURL(rcDesc.getRssNewsURL());
         }
-
     }
 
     private void loadAddress(ResearchCenter domainRC, gov.nih.nci.cagrid.metadata.common.ResearchCenter rc) {
-
         gov.nih.nci.cagrid.metadata.common.Address rcAddress = rc.getAddress();
 
         if (rcAddress != null) {
@@ -101,7 +88,6 @@ public class MetadataAggregator extends AbstractAggregator {
     }
 
     private void loadPOC(ResearchCenter domainRC, gov.nih.nci.cagrid.metadata.common.ResearchCenter rc) {
-
         //Domain Object
         PointOfContact pocDomain = new PointOfContact();
         gov.nih.nci.cagrid.metadata.common.PointOfContact[] pocCollection = rc.getPointOfContactCollection().getPointOfContact();
@@ -114,6 +100,7 @@ public class MetadataAggregator extends AbstractAggregator {
             pocDomain.setLastName(poc.getLastName());
             pocDomain.setPhoneNumber(poc.getPhoneNumber());
             pocDomain.setEmail(poc.getEmail());
+            domainRC.getPocCollection().add(pocDomain);
         }
     }
 
@@ -128,15 +115,13 @@ public class MetadataAggregator extends AbstractAggregator {
         gov.nih.nci.cagrid.metadata.common.UMLClass classes[] = dModel.getExposedUMLClassCollection().getUMLClass();
 
         for (int i = 0; i < classes.length; i++) {
-            UMLClass dClass = new UMLClass();
-            dClass.setClassName(classes[i].getClassName());
+            UMLClass dClass = translateUMLClass(classes[i]);
             modelDomain.getUmlClassCollection().add(dClass);
         }
-
         rService.setDomainModel(modelDomain);
     }
 
-    public void loadOperations(RegisteredService rervice) throws ResourcePropertyRetrievalException {
+    private void loadOperations(RegisteredService rService) throws ResourcePropertyRetrievalException {
         ServiceContext[] contexts = MetadataUtils.getServiceMetadata(rService.getHandle()).getServiceDescription().getService().getServiceContextCollection().getServiceContext();
         for (int i = 0; i < contexts.length; i++) {
             gov.nih.nci.cagrid.metadata.service.Operation opers[] = contexts[i].getOperationCollection().getOperation();
@@ -145,12 +130,35 @@ public class MetadataAggregator extends AbstractAggregator {
                 Operation operDomain = new Operation();
                 operDomain.setName(operation.getName());
                 operDomain.setDescription(operation.getDescription());
+
+
+                if (opers[i].getOutput().getUMLClass() != null) {
+                    UMLClass outputClass = translateUMLClass(opers[i].getOutput().getUMLClass());
+                    operDomain.setOutput(outputClass);
+                }
+
                 rService.getOperationCollection().add(operDomain);
             }
 
         }
 
-
     }
 
+    /**
+     * Transforms metadata UMLClass object into
+     * a UMLClass domain class
+     *
+     * @param umlClass
+     * @return
+     */
+    private UMLClass translateUMLClass(gov.nih.nci.cagrid.metadata.common.UMLClass umlClass) {
+        UMLClass domainClass = new UMLClass();
+        domainClass.setClassName(umlClass.getClassName());
+        domainClass.setDescription(umlClass.getDescription());
+        domainClass.setPackageName(umlClass.getPackageName());
+        domainClass.setProjectName(umlClass.getProjectName());
+        domainClass.setProjectVersion(umlClass.getProjectVersion());
+        return domainClass;
+
+    }
 }

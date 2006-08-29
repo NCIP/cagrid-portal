@@ -23,7 +23,7 @@ public class GeoCoderTestCase extends TestCase {
 
         GeoCoderUtility coder = new GeoCoderUtility();
         try {
-            String geoString = coder.getGeoCode4RC(rc);
+            GeoCoderUtility.GeocodeResult geoString = coder.getGeoCode4RC(rc);
             assertNotNull(geoString);
         } catch (GeoCoderRetreivalException e) {
             fail(e.getMessage());

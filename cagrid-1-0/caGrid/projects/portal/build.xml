@@ -111,7 +111,7 @@
     <!-- Target for continous build. Use war target to build            -->
     <!-- actual app                                                     -->
     <!-- ============================================================== -->
-    <target name="all" depends="clean,compile, compileTests, hibernate.xdoclet,copyResources"
+    <target name="all" depends="clean,compile, compileTests, hibernate.xdoclet,copyLibsLocal,copyResourcesLocal"
             description="Builds the entire application"/>
 
     <!-- ============================================================== -->
@@ -142,7 +142,8 @@
     <!-- ============================================================== -->
     <!-- Deploy Target                                               -->
     <!-- ============================================================== -->
-    <target name="deployExploded" depends="clean,cleanDeployment,compile,hibernate.xdoclet,copyResources,deployPreBuilt"
+    <target name="deployExploded"
+            depends="clean,cleanDeployment,compile,hibernate.xdoclet,copyLibsLocal,copyResourcesLocal,deployPreBuilt"
             description="Deploy Application into tomcat"/>
 
     <target name="deployPreBuilt" description="Deploys pre-built webapp">
@@ -159,7 +160,7 @@
     <!-- ============================================================== -->
     <!-- Create war for deployment                                      -->
     <!-- ============================================================== -->
-    <target name="war" depends="clean,compile,hibernate,copyResources">
+    <target name="war" depends="clean,compile,hibernate,copyLibsLocal,copyResourcesLocal">
         <war basedir="${webcontent.dir}"
              destfile="${build.dir}/${project.name}.war"
              webxml="${webinf.dir}/web.xml"
@@ -174,8 +175,7 @@
         <delete file="${tomcat.webapps.dir}/${project.name}.war"/>
     </target>
 
-
-    <target name="copyResources">
+    <target name="copyLibsLocal">
         <!--Copy libraries-->
         <copy todir="${webinf.lib.dir}">
             <fileset dir="${lib.dir}">
@@ -193,6 +193,10 @@
             </fileset>
         </copy>
 
+    </target>
+
+
+    <target name="copyResourcesLocal">
 
         <!-- copy syncgts description file -->
         <copy file="${ext.resources.dir}/sync-description.xml" todir="${webinf.classes.dir}"/>
@@ -204,10 +208,10 @@
                 filtering='true'
                 overwrite='true'>
             <filterset>
-                <filter token='hibernate.connection.driver_class' value='${hibernate.connection.driver_class}'/>
-                <filter token='hibernate.connection.url' value='${hibernate.connection.url}'/>
-                <filter token='hibernate.connection.username' value='${hibernate.connection.username}'/>
-                <filter token='hibernate.connection.password' value='${hibernate.connection.password}'/>
+                <filter token='hibernate.connection.driver_class' value='${db.connection.driver_class}'/>
+                <filter token='hibernate.connection.url' value='${db.connection.url}'/>
+                <filter token='hibernate.connection.username' value='${db.connection.username}'/>
+                <filter token='hibernate.connection.password' value='${db.connection.password}'/>
                 <filter token='hibernate.c3p0.min_size' value='${hibernate.c3p0.min_size}'/>
                 <filter token='hibernate.c3p0.max_size' value='${hibernate.c3p0.max_size}'/>
                 <filter token='hibernate.c3p0.timeout' value='${hibernate.c3p0.timeout}'/>
@@ -239,15 +243,25 @@
             </filterset>
         </copy>
 
+        <copy file="${props.src.dir}/applicationContext-data-access.xml"
+              tofile="${webinf.classes.dir}/applicationContext-data-access.xml"
+              filtering="true" overwrite="true">
+            <filterset>
+                <filter token="jdbc.driverClassName" value="${db.connection.driver_class}"/>
+                <filter token="jdbc.url" value="${db.connection.url}"/>
+                <filter token="jdbc.username" value="${db.connection.username}"/>
+                <filter token="jdbc.password" value="${db.connection.password}"/>
+            </filterset>
+        </copy>
+
         <copy todir="${webinf.classes.dir}">
             <fileset dir="${props.src.dir}">
-                <include name="*.xml"/>
+                <include name="applicationContext-aggregators.xml"/>
                 <include name="*.properties"/>
                 <include name="*.wsdd"/>
             </fileset>
         </copy>
 
-        <!--ToDo copy GLOBUS libs -->
     </target>
 
     <!-- ============================================================== -->
@@ -331,4 +345,23 @@
         <property name="hibernate.list.file" location="${build.classes.dir}/hibernate.cfg.xml"/>
         <scriptdef language="beanshell" src="${scripts.src.dir}/create_hbnfile.sh"/>
     </target>
+
+    <target name="createDatabase" depends="setClasspath,compileTests" description="Will drop the Portal Database">
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed"
+               showoutput="true">
+            <classpath refid="test.classpath"/>
+            <classpath>
+                <pathelement path="${test.classes.dir}"/>
+                <pathelement path="${resources.dir}"/>
+            </classpath>
+            <sysproperty key="build.dir" value="${test.classes.dir}"/>
+            <jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
+            <batchtest fork="yes" todir="${junit.results.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/DBCreationUtility.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
 </project>

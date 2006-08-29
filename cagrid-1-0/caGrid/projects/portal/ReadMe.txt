@@ -16,9 +16,18 @@
 
 Portal needs a Database configured in the following way
 
-- Create DB with the portal/resources/Portal_Data_Model.SQL script
-- Configure the jdbc connection in ${username}-portal-build.properties
+- Configure the jdbc connection in portal-build.properties
+    or in ${user.home}/.portal-build.properties/
    file.
+
+- Create DB with the portal/resources/Portal_Data_Model.SQL script
+    OR
+    -Create a database called portal in mysql
+    - Configure connection details in the portal-build.properties file
+    - run "ant createDatabase" This script will automatically create
+       the tables etc. needed by portal and populate it with seed
+       data.
+
 
 
 When deploying Portal, the only information needed to connect the Portal
@@ -54,10 +63,15 @@ the caGrid Installer.
 - Use the build.xml file to build the project.
 (During development and source releases the Portal project is to be built
 from main (Master) build
+    - Build with "ant all"
+    - Optionally run "ant createDatabase"
+    - Optionally run "ant deployExploded" OR "ant deployAsWar" to deploy
+    into tomcat
 
 - The project can be setup as a web project in an IDE, where webcontent
 directory is the web resources root directory. This way you can use the IDE
 to build the portal project as a web project
+
 
 
 ===========================================================================

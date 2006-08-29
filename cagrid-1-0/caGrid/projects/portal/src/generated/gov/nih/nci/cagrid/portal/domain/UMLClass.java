@@ -23,7 +23,7 @@ public class UMLClass implements DomainObject {
 
     /**
      * @hibernate.id generator-class="increment"
-     * column="UML_CLASS_ID_KEY"
+     * column="ID_KEY"
      */
     public Integer getPk() {
         return pk;

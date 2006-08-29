@@ -36,5 +36,4 @@ public class BaseDAOImpl extends HibernateDaoSupport implements BaseDAO {
         return getHibernateTemplate().loadAll(cls);
     }
 
-
 }
