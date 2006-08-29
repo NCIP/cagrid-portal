@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.bdt.service;
 
+import gov.nih.nci.cagrid.bdt.service.globus.resource.BDTException;
 import gov.nih.nci.cagrid.bdt.service.globus.resource.BDTResourceI;
 
 import java.rmi.RemoteException;
@@ -32,34 +33,42 @@ public class BulkDataHandlerImpl extends BulkDataHandlerImplBase {
 
 
 	public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse createEnumeration() throws RemoteException {
-		BDTResourceI bdtResource = (BDTResourceI) ResourceContext.getResourceContext().getResource();
-		EnumIterator iter = bdtResource.createEnumeration();
-		EnumResourceHome resourceHome = null;
 		try {
-			resourceHome = EnumResourceHome.getEnumResourceHome();
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
+			BDTResourceI bdtResource = (BDTResourceI) ResourceContext.getResourceContext().getResource();
+			EnumIterator iter = bdtResource.createEnumeration();
+			EnumResourceHome resourceHome = null;
+			try {
+				resourceHome = EnumResourceHome.getEnumResourceHome();
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			EnumResource resource = resourceHome.createEnumeration(iter, false);
+			ResourceKey key = resourceHome.getKey(resource);
+			try {
+				EnumerationContextType enumContext = EnumProvider.createEnumerationContextType(key);
+				EnumerateResponse response = new EnumerateResponse(new MessageElement[]{}, enumContext,
+					new ExpirationType());
+				return response;
+			} catch (SerializationException e) {
+				e.printStackTrace();
+				throw new RemoteException(e.getMessage(), e.getCause());
+			}
+		} catch (BDTException e) {
 			e.printStackTrace();
+			throw new RemoteException(e.getMessage(), e.getCause());
 		}
-		EnumResource resource = resourceHome.createEnumeration(iter, false);
-		ResourceKey key = resourceHome.getKey(resource);
-		try {
-			EnumerationContextType enumContext = EnumProvider.createEnumerationContextType(key);
-			EnumerateResponse response = new EnumerateResponse(new MessageElement[]{}, enumContext,
-				new ExpirationType());
-			return response;
-		} catch (SerializationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return null;
 	}
 
 
 	public org.globus.transfer.AnyXmlType get(org.globus.transfer.EmptyType empty) throws RemoteException {
-		BDTResourceI bdtResource = (BDTResourceI) ResourceContext.getResourceContext().getResource();
-		return bdtResource.get();
+		try {
+			BDTResourceI bdtResource = (BDTResourceI) ResourceContext.getResourceContext().getResource();
+			return bdtResource.get();
+		} catch (BDTException e) {
+			e.printStackTrace();
+			throw new RemoteException(e.getMessage(), e.getCause());
+		}
 	}
 
 }
