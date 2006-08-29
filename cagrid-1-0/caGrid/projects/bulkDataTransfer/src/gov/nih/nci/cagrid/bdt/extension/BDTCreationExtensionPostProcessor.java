@@ -152,6 +152,11 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 				MethodTypeProviderInformation mpi = new MethodTypeProviderInformation();
 				mpi.setProviderClass("gov.nih.nci.cagrid.bdt.service.globus.BulkDataHandlerProviderImpl");
 				method.setProviderInformation(mpi);
+			} else if (method.getName().equals("GetGridFTPURLs")) {
+				method.setIsProvided(true);
+				MethodTypeProviderInformation mpi = new MethodTypeProviderInformation();
+				mpi.setProviderClass("gov.nih.nci.cagrid.bdt.service.globus.BulkDataHandlerProviderImpl");
+				method.setProviderInformation(mpi);
 			}
 
 		}

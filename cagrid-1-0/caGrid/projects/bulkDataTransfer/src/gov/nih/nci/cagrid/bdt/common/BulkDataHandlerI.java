@@ -21,6 +21,8 @@ public interface BulkDataHandlerI {
 	public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse createEnumeration() throws RemoteException ;
 
 	public org.globus.transfer.AnyXmlType get(org.globus.transfer.EmptyType empty) throws RemoteException ;
+
+	public org.apache.axis.types.URI[] getGridFTPURLs() throws RemoteException ;
 public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 
 }

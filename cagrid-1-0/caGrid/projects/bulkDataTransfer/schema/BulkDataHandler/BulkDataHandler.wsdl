@@ -30,6 +30,18 @@
           </sequence>
         </complexType>
       </element>
+      <element name="GetGridFTPURLsRequest">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
+      <element name="GetGridFTPURLsResponse">
+        <complexType>
+          <sequence>
+            <element name="response" type="xs:anyURI" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="BulkDataHandlerResourceProperties">
         <complexType>
           <sequence />
@@ -44,6 +56,12 @@
   <message name="CreateEnumerationResponse">
     <part name="parameters" element="tns:CreateEnumerationResponse" />
   </message>
+  <message name="GetGridFTPURLsRequest">
+    <part name="parameters" element="tns:GetGridFTPURLsRequest" />
+  </message>
+  <message name="GetGridFTPURLsResponse">
+    <part name="parameters" element="tns:GetGridFTPURLsResponse" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -53,6 +71,10 @@
     <operation name="CreateEnumeration">
       <input message="tns:CreateEnumerationRequest" wsa:Action="http://cagrid.nci.nih.gov/BulkDataHandler/CreateEnumerationRequest" />
       <output message="tns:CreateEnumerationResponse" wsa:Action="http://cagrid.nci.nih.gov/BulkDataHandler/CreateEnumerationResponse" />
+    </operation>
+    <operation name="GetGridFTPURLs">
+      <input message="tns:GetGridFTPURLsRequest" wsa:Action="http://cagrid.nci.nih.gov/BulkDataHandler/GetGridFTPURLsRequest" />
+      <output message="tns:GetGridFTPURLsResponse" wsa:Action="http://cagrid.nci.nih.gov/BulkDataHandler/GetGridFTPURLsResponse" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

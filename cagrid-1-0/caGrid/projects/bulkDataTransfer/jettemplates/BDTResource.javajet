@@ -34,5 +34,10 @@ public class BDTResource extends BDTResourceBase implements BDTResourceI {
 	  //TODO: Implement me
 	  throw new BDTException("\"get()\" not yet implemented");
 	}
-
+	
+	public org.apache.axis.types.URI[] getGridFTPURLs() throws BDTException {
+	  //TODO: Implement me
+	  throw new BDTException("\"get()\" not yet implemented");
+    }
+    
 }

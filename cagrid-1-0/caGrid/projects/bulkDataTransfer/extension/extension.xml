@@ -3,6 +3,8 @@
     <ns1:ServiceExtensionDescription displayName="Bulk Data Transfer" name="bdt">
         <ns1:CreationPostProcessor>gov.nih.nci.cagrid.bdt.extension.BDTCreationExtensionPostProcessor</ns1:CreationPostProcessor>
         <ns1:CodegenPostProcessor>gov.nih.nci.cagrid.bdt.extension.BDTCodegenExtensionPostProcessor</ns1:CodegenPostProcessor>
-        <ns1:Properties> </ns1:Properties>
+        <ns1:Properties> 
+            <ns1:Property key="enableGridFTP" value="false" />
+        </ns1:Properties>
     </ns1:ServiceExtensionDescription>
 </ns1:ExtensionDescription>

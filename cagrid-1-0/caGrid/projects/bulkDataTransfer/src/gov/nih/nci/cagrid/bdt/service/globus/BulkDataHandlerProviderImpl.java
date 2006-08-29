@@ -29,4 +29,10 @@ public class BulkDataHandlerProviderImpl{
 		return impl.get(params);
 	}
 
+	public gov.nih.nci.cagrid.bdt.stubs.GetGridFTPURLsResponse getGridFTPURLs(gov.nih.nci.cagrid.bdt.stubs.GetGridFTPURLsRequest params) throws RemoteException {
+		gov.nih.nci.cagrid.bdt.stubs.GetGridFTPURLsResponse boxedResult = new gov.nih.nci.cagrid.bdt.stubs.GetGridFTPURLsResponse();
+		boxedResult.setResponse(impl.getGridFTPURLs());
+		return boxedResult;
+	}
+
 }

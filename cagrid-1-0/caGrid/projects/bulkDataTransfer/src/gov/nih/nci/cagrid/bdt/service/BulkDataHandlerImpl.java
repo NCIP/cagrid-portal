@@ -70,5 +70,15 @@ public class BulkDataHandlerImpl extends BulkDataHandlerImplBase {
 			throw new RemoteException(e.getMessage(), e.getCause());
 		}
 	}
+	
+	public org.apache.axis.types.URI[] getGridFTPURLs() throws RemoteException {
+		try {
+			BDTResourceI bdtResource = (BDTResourceI) ResourceContext.getResourceContext().getResource();
+			return bdtResource.getGridFTPURLs();
+		} catch (BDTException e) {
+			e.printStackTrace();
+			throw new RemoteException(e.getMessage(), e.getCause());
+		}
+	}
 
 }

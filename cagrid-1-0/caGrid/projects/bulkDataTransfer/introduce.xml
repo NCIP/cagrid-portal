@@ -1,4 +1,4 @@
-<ns1:ServiceSkeleton introduceVersion=".9999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+<ns1:ServiceDescription introduceVersion=".9999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace location="./addressing.xsd" namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing" packageName="org.globus.addressing" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="EndpointReference" xsi:type="ns2:SchemaElementType"/>
@@ -143,6 +143,11 @@
      <ns4:Exceptions/>
      <ns4:ImportInformation inputMessage="ns21:EmptyMessage" namespace="http://www.globus.org/transfer" outputMessage="ns21:AnyXmlMessage" packageName="org.globus.transfer" portTypeName="Resource" wsdlFile="./transfer_port_type.wsdl" xmlns:ns21="http://www.globus.org/transfer"/>
     </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="GetGridFTPURLs" xsi:type="ns4:MethodType">
+     <ns4:Inputs/>
+     <ns4:Output qName="xsd:anyURI" isArray="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
    </ns4:Methods>
    <ns22:ResourcePropertiesList xsi:type="ns22:ResourcePropertiesListType" xmlns:ns22="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
   </ns3:Service>
@@ -150,4 +155,4 @@
  <ns23:Extensions xsi:type="ns23:ExtensionsType" xmlns:ns23="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns23:Extension name="cagrid_wsEnum" xsi:type="ns23:ExtensionType"/>
  </ns23:Extensions>
-</ns1:ServiceSkeleton>
+</ns1:ServiceDescription>

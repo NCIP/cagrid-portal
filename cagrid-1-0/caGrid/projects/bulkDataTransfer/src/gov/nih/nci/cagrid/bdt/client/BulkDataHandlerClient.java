@@ -139,6 +139,14 @@ public class BulkDataHandlerClient extends ServiceSecurityClient implements Bulk
         return portType.get(empty);
       }
     }
+    public org.apache.axis.types.URI[] getGridFTPURLs() throws RemoteException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"getGridFTPURLs");
+        gov.nih.nci.cagrid.bdt.stubs.GetGridFTPURLsRequest params = new gov.nih.nci.cagrid.bdt.stubs.GetGridFTPURLsRequest();
+        gov.nih.nci.cagrid.bdt.stubs.GetGridFTPURLsResponse boxedResult = portType.getGridFTPURLs(params);
+        return boxedResult.getResponse();
+      }
+    }
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
