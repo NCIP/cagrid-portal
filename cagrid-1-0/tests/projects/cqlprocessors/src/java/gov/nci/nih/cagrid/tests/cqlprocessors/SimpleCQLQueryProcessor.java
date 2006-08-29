@@ -15,8 +15,8 @@ import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsUtil;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 
 import javax.xml.namespace.QName;
@@ -31,6 +31,7 @@ public class SimpleCQLQueryProcessor
 	
 	public CQLQueryResults processQuery(CQLQuery cqlQuery) throws MalformedQueryException, QueryProcessingException
 	{
+		
 		try {
 			ArrayList<Object> resultList = new ArrayList<Object>();
 			for (int i = new Random().nextInt(10); i >= 0; i--) {
@@ -84,9 +85,9 @@ public class SimpleCQLQueryProcessor
 //		}
 	}
 
-	public Map getRequiredParameters()
+	public Properties getRequiredParameters()
 	{
-		return new HashMap(0);
+		return new Properties();
 	}
 
 }
