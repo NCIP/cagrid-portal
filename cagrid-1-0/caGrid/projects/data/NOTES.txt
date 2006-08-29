@@ -34,6 +34,7 @@ TODO:
     * Are the javadocs still accurate for getRequiredParamters now that you have changed the way the properties are stored? ( e.g. does it still have to start with lower case)
     * Need to describe what, if any, constraints there are on the Map’s key value (is it required to contain String->String?)
     * Need to describe the relationship between the Map returned by getRequiredParameters, and that passed in to initialize
+27[ ]:Have DS extension add type mappings for SemanticMetadata / DomainModel stuff to the server-config.wsdd and client-config.wsdd of created services
 
 BUGS:
 

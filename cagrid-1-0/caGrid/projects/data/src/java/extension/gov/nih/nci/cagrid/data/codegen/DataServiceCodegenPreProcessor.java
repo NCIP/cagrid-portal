@@ -173,8 +173,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				}
 				// add them to the globally selected sets
 				Collections.addAll(allClasses, packageClassNames);
-
 			}
+			
 			// get the data service's description
 			ServiceType dataService = null;
 			String serviceName = info.getIntroduceServiceProperties().getProperty(
@@ -198,7 +198,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				if (allClasses.size() != 0) {
 					// TODO; change this to use EXCLUDED associations
 					String classNames[] = new String[allClasses.size()];
-					classNames = (String[]) allClasses.toArray(classNames);
+					allClasses.toArray(classNames);
 					model = cadsrClient.generateDomainModelForClasses(proj, classNames);
 					if (model == null) {
 						throw new CodegenExtensionException("caDSR returned a null domain model.");
@@ -280,28 +280,32 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
 			MessageElement paramMe = ExtensionTools.getExtensionDataElement(data,
 				DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
-			Element paramElement = AxisJdomUtils.fromMessageElement(paramMe);
-			Iterator paramElemIter = paramElement.getChildren(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_ELEMENT)
-				.iterator();
-			while (paramElemIter.hasNext()) {
-				Element paramElem = (Element) paramElemIter.next();
-				String name = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX
-					+ paramElem.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_NAME);
-				if (!CommonTools.isValidJavaField(name)) {
-					throw new CodegenExtensionException("The query processor's required parameter " + name
-						+ " is not a valid Java field name.");
+			if (paramMe != null) {
+				Element paramElement = AxisJdomUtils.fromMessageElement(paramMe);
+				Iterator paramElemIter = paramElement.getChildren(
+					DataServiceConstants.QUERY_PROCESSOR_PROPERTY_ELEMENT).iterator();
+				while (paramElemIter.hasNext()) {
+					Element paramElem = (Element) paramElemIter.next();
+					String name = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX
+						+ paramElem.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_NAME);
+					if (!CommonTools.isValidJavaField(name)) {
+						throw new CodegenExtensionException("The query processor's required parameter " + name
+							+ " is not a valid Java field name.");
+					}
+					String value = paramElem.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_VALUE);
+					// add a new property to the service props list
+					keptProperties.add(new ServicePropertiesProperty(new Boolean(false), name, value));
 				}
-				String value = paramElem.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_VALUE);
-				// add a new property to the service props list
-				keptProperties.add(new ServicePropertiesProperty(new Boolean(false), name, value)); // TODO: is false correct here?
-			}
-			// add the query processor class name to the properties
-			for (int i = 0; i < keptProperties.size(); i++) {
-				ServicePropertiesProperty prop = (ServicePropertiesProperty) keptProperties.get(i);
-				if (prop.getKey().equals(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
-					prop.setValue(qpClassname);
-					break;
+				// add the query processor class name to the properties
+				for (int i = 0; i < keptProperties.size(); i++) {
+					ServicePropertiesProperty prop = (ServicePropertiesProperty) keptProperties.get(i);
+					if (prop.getKey().equals(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
+						prop.setValue(qpClassname);
+						break;
+					}
 				}
+			} else {
+				LOG.warn("CQL Query Processor class " + qpClassname + " has not been configured.  Only default config parameters will be used");
 			}
 		} else {
 			// no query processor class defined??
