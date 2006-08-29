@@ -71,30 +71,27 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
 					Element resourceEl = (Element) resourceEls.get(j);
 					if (resourceEl.getName().equals("resource") && resourceEl.getAttributeValue("name").equals("home")) {
 						serviceEl.removeContent(resourceEl);
-						JNDIConfigResourceTemplate resourceT = new JNDIConfigResourceTemplate();
-						String resourceS = resourceT.generate(new SpecificServiceInformation(info, info.getServices()
-							.getService(0)));
-						Element newResourceEl;
-						try {
-							newResourceEl = XMLUtilities.stringToDocument(resourceS).getRootElement();
-						} catch (MobiusException e) {
-							throw new CodegenExtensionException(e.getMessage());
-						}
-						serviceEl.addContent(newResourceEl.detach());
-						FileWriter resourceFW;
-						try {
-							resourceFW = new FileWriter(jndiConfigF);
-							resourceFW
-								.write(XMLUtilities.formatXML(XMLUtilities.documentToString(serverConfigJNDIDoc)));
-							resourceFW.close();
-						} catch (Exception e) {
-							throw new CodegenExtensionException(e.getMessage());
-						}
-
 						break;
 					}
 				}
-				break;
+				JNDIConfigResourceTemplate resourceT = new JNDIConfigResourceTemplate();
+				String resourceS = resourceT.generate(new SpecificServiceInformation(info, info.getServices()
+					.getService(0)));
+				Element newResourceEl;
+				try {
+					newResourceEl = XMLUtilities.stringToDocument(resourceS).getRootElement();
+				} catch (MobiusException e) {
+					throw new CodegenExtensionException(e.getMessage());
+				}
+				serviceEl.addContent(newResourceEl.detach());
+				FileWriter resourceFW;
+				try {
+					resourceFW = new FileWriter(jndiConfigF);
+					resourceFW.write(XMLUtilities.formatXML(XMLUtilities.documentToString(serverConfigJNDIDoc)));
+					resourceFW.close();
+				} catch (Exception e) {
+					throw new CodegenExtensionException(e.getMessage());
+				}
 			}
 
 		}
