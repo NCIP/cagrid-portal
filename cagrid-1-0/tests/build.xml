@@ -105,6 +105,7 @@
 	<target name="build-coretests" depends="prepare" description="Builds coretests">
 		<resolveDependencies extdir="${tests.projects.dir}/coretests/ext">
 			<artifact refid="echo.jars" />
+			<artifact refid="cqlprocessors.jars" />
 			<artifact refid="dorian.jars" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="opensaml.jars" />
