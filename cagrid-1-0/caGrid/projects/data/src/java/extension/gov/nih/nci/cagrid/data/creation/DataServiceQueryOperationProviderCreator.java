@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.data.creation;
 
+import gov.nih.nci.cadsr.domain.ValueDomain;
+import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
@@ -18,6 +20,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
@@ -111,6 +114,8 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		NamespaceType resultNamespace = null;
 		NamespaceType dsMetadataNamespace = null;
 		NamespaceType cagridMdNamespace = null;
+		NamespaceType caDsrUmlNamespace = null;
+		NamespaceType caDsrDomainNamespace = null;
 		try {
 			// query namespace
 			queryNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
@@ -127,21 +132,56 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 			// caGrid metadata namespace
 			cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.CAGRID_METADATA_SCHEMA);
+			cagridMdNamespace.setLocation("." + File.separator + DataServiceConstants.CAGRID_METADATA_SCHEMA);
+			// caDSR umlproject namespace
+			caDsrUmlNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
+				+ DataServiceConstants.CADSR_UMLPROJECT_SCHEMA);
+			caDsrUmlNamespace.setLocation("." + File.separator + DataServiceConstants.CADSR_UMLPROJECT_SCHEMA);
+			// caDSR domain namespace
+			caDsrDomainNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
+				+ DataServiceConstants.CADSR_DOMAIN_SCHEMA);
+			caDsrDomainNamespace.setLocation("." + File.separator + DataServiceConstants.CADSR_DOMAIN_SCHEMA);
 		} catch (MobiusException ex) {
 			throw new CreationExtensionException("Error creating namespace for data service: " + ex.getMessage(), ex);
 		}
-		cagridMdNamespace.setLocation("." + File.separator + DataServiceConstants.CAGRID_METADATA_SCHEMA);
 		// prevent the metadata beans from being generated
 		cagridMdNamespace.setGenerateStubs(Boolean.FALSE);
+		caDsrUmlNamespace.setGenerateStubs(Boolean.FALSE);
+		caDsrDomainNamespace.setGenerateStubs(Boolean.FALSE);
+		// set type mappings for domain model components that come from the caCORE SDK
+		// SemanticMetadata from umlproject
+		for (int i = 0; i < caDsrUmlNamespace.getSchemaElement().length; i++) {
+			SchemaElementType schemaType = caDsrUmlNamespace.getSchemaElement(i);
+			if (schemaType.getType().equals("SemanticMetadata")) {
+				schemaType.setClassName(schemaType.getType());
+				schemaType.setSerializer(DataServiceConstants.SDK_SERIALIZER);
+				schemaType.setDeserializer(DataServiceConstants.SDK_DESERIALIZER);
+				schemaType.setPackageName(SemanticMetadata.class.getPackage().getName());
+				break;
+			}
+		}
+		// ValueDomain from caDSR domain
+		for (int i = 0; i < caDsrDomainNamespace.getSchemaElement().length; i++) {
+			SchemaElementType schemaType = caDsrDomainNamespace.getSchemaElement(i);
+			if (schemaType.getType().equals("ValueDomain")) {
+				schemaType.setClassName(schemaType.getType());
+				schemaType.setSerializer(DataServiceConstants.SDK_SERIALIZER);
+				schemaType.setDeserializer(DataServiceConstants.SDK_DESERIALIZER);
+				schemaType.setPackageName(ValueDomain.class.getPackage().getName());
+				break;
+			}
+		}
 		// add those new namespaces to the list of namespace types
 		dsNamespaces.add(queryNamespace);
 		dsNamespaces.add(resultNamespace);
 		dsNamespaces.add(dsMetadataNamespace);
 		dsNamespaces.add(cagridMdNamespace);
+		dsNamespaces.add(caDsrUmlNamespace);
+		dsNamespaces.add(caDsrDomainNamespace);
+		// add the namespaces back to the service description
 		NamespaceType[] nsArray = new NamespaceType[dsNamespaces.size()];
 		dsNamespaces.toArray(nsArray);
 		namespaces.setNamespace(nsArray);
-		// add the namespaces back to the service description
 		description.setNamespaces(namespaces);
 	}
 	
