@@ -33,7 +33,8 @@
 	<property name="introduce.classes.dir" location="${classes.dir}/Introduce" />
 	<property name="portal.classes.dir" location="${classes.dir}/Portal" />
 	<property name="jars.dir" location="${build.dir}/jars" />
-	<property name="jars.prefix" value="${jars.dir}/caGrid-1.0-${project.name}-" />
+	<property name="jars.prefixname" value="caGrid-1.0-${project.name}-" />
+	<property name="jars.prefix" value="${jars.dir}/${jars.prefixname}" />
 	<property name="jars.sufix" value=".jar" />
 	<property name="junit.results.dir" value="${build.dir}/junit" />
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />

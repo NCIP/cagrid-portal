@@ -51,6 +51,7 @@
 			</fileset>
 			<fileset dir ="${basedir}/extensions/lib">
 				<include name="*.jar"/>
+				<exclude name="${jars.prefixname}*.jar"/>
 			</fileset>
 			<pathelement location="${basedir}/resources/portal/introduce"/>
 			<pathelement location="${ext.resources.dir}/portal/common"/>
@@ -76,6 +77,7 @@
 			</fileset>
 			<fileset dir="${extensions.lib.dir}">
 				<include name="*.jar"/>
+				<exclude name="${jars.prefixname}*.jar"/>
 			</fileset>
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="*.jar"/>

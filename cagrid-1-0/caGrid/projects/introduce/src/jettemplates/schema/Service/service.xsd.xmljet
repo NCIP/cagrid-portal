@@ -7,8 +7,8 @@
     }
     List faults = new ArrayList();
 %><?xml version="1.0" encoding="UTF-8"?>
-<schema targetNamespace="<%=service.getNamespace()%>Reference"
-            xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:tns="<%=service.getNamespace()%>Reference" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<schema targetNamespace="<%=service.getNamespace()%>/types"
+            xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:tns="<%=service.getNamespace()%>/types" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
   <element name="<%=service.getName()%>Reference">
     <complexType>
       <sequence >

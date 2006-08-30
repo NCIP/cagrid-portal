@@ -15,11 +15,11 @@ import java.io.FileWriter;
 
 import sun.security.action.GetBooleanAction;
 
+
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * 
  */
 public class SkeletonSchemaCreator {
 
@@ -32,31 +32,34 @@ public class SkeletonSchemaCreator {
 		schemaDir.mkdir();
 
 		new File(schemaDir.getAbsolutePath() + File.separator
-			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)).mkdirs();
+			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME))
+			.mkdirs();
 
 		ServiceWSDLTemplate serviceWSDLT = new ServiceWSDLTemplate();
-		String serviceWSDLS = serviceWSDLT.generate(new SpecificServiceInformation(info,service));
+		String serviceWSDLS = serviceWSDLT.generate(new SpecificServiceInformation(info, service));
 		File serviceWSDLF = new File(schemaDir.getAbsolutePath() + File.separator
-			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
-			+ service.getName() + ".wsdl");
+			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+			+ File.separator + service.getName() + ".wsdl");
 		FileWriter serviceWSDLFW = new FileWriter(serviceWSDLF);
 		serviceWSDLFW.write(serviceWSDLS);
 		serviceWSDLFW.close();
-		
+
 		ServiceXSDTemplate serviceXSDT = new ServiceXSDTemplate();
-		String serviceXSDS = serviceXSDT.generate(new SpecificServiceInformation(info,service));
+		String serviceXSDS = serviceXSDT.generate(new SpecificServiceInformation(info, service));
 		File serviceXSDF = new File(schemaDir.getAbsolutePath() + File.separator
-			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
-			+ service.getName() + "Reference.xsd");
+			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)
+			+ File.separator + service.getName() + "Types.xsd");
 		FileWriter serviceXSDFW = new FileWriter(serviceXSDF);
 		serviceXSDFW.write(serviceXSDS);
 		serviceXSDFW.close();
-		
-		//add the new service xsd to the namespace list.
-		NamespaceType newServiceReferenceSchema = CommonTools.createNamespaceType(info.getBaseDirectory() + File.separator + "schema" + File.separator + info.getServices().getService(0).getName() + File.separator + service.getName() + "Reference.xsd");
-		CommonTools.addNamespace(info.getServiceDescriptor(),newServiceReferenceSchema);
-		
-		
+
+		// add the new service xsd to the namespace list.
+		NamespaceType newServiceReferenceSchema = CommonTools.createNamespaceType(info.getBaseDirectory()
+			+ File.separator + "schema" + File.separator + info.getServices().getService(0).getName() + File.separator
+			+ service.getName() + "Types.xsd");
+		newServiceReferenceSchema.setPackageName(service.getPackageName() + ".stubs.types");
+		CommonTools.addNamespace(info.getServiceDescriptor(), newServiceReferenceSchema);
+
 	}
 
 }

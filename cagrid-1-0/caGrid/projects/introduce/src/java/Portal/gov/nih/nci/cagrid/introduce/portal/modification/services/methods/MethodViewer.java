@@ -1504,7 +1504,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 						MethodTypeOutput output = new MethodTypeOutput();
 						try {
 							output.setQName(new QName(getServicesTypeTable().getSelectedRowData().getNamespace()
-								+ "Reference", getServicesTypeTable().getSelectedRowData().getName() + "Reference"));
+								+ "/types", getServicesTypeTable().getSelectedRowData().getName() + "Reference"));
 							output.setIsArray(false);
 							output.setIsClientHandle(new Boolean(true));
 							output.setClientHandleClass(getServicesTypeTable().getSelectedRowData().getPackageName()
