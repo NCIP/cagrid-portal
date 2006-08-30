@@ -85,9 +85,9 @@ public class SelectStatement {
 			if (o instanceof String) {
 				s.setString((index), (String) o);
 			} else if (o instanceof Long) {
-				s.setLong((index), (Long) o);
+				s.setLong((index), ((Long) o).longValue());
 			} else if (o instanceof Integer) {
-				s.setInt((index), (Integer) o);
+				s.setInt((index), ((Integer) o).intValue());
 			} else {
 				throw new Exception("Unsupported type "
 						+ o.getClass().getName());

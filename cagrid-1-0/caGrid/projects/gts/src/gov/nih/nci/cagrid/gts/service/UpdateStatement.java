@@ -70,9 +70,9 @@ public class UpdateStatement {
 			if (o instanceof String) {
 				s.setString((i + 1), (String) o);
 			} else if (o instanceof Long) {
-				s.setLong((i + 1), (Long) o);
+				s.setLong((i + 1), ((Long) o).longValue());
 			} else if (o instanceof Integer) {
-				s.setInt((i + 1), (Integer) o);
+				s.setInt((i + 1), ((Integer) o).intValue());
 			} else {
 				throw new Exception("Unsupported type "
 						+ o.getClass().getName());
@@ -85,9 +85,9 @@ public class UpdateStatement {
 			if (o instanceof String) {
 				s.setString((index), (String) o);
 			} else if (o instanceof Long) {
-				s.setLong((index), (Long) o);
+				s.setLong((index), ((Long) o).longValue());
 			} else if (o instanceof Integer) {
-				s.setInt((index), (Integer) o);
+				s.setInt((index), ((Integer) o).intValue());
 			} else {
 				throw new Exception("Unsupported type "
 						+ o.getClass().getName());
