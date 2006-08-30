@@ -44,7 +44,7 @@ public class SimpleCQLQueryProcessor
 			
 //			return CQLQueryResultsUtil.createQueryResults(resultList, new ByteArrayInputStream(axisConfig));
 //			return CQLQueryResultsUtil.createQueryResults(resultList, ClassLoader.getSystemResourceAsStream("gov/nih/nci/cagrid/tests/client/client-config.wsdd"));
-			return CQLQueryResultsUtil.createQueryResults(resultList, (InputStream) null);
+			return CQLQueryResultsUtil.createQueryResults(resultList, cqlQuery.getTarget().getName(), (InputStream) null);
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //			throw new QueryProcessingException(e);
@@ -57,7 +57,7 @@ public class SimpleCQLQueryProcessor
 	
 	private static CQLObjectResult createObjectResult(Object obj, MessageContext context) {
 		CQLObjectResult objectResult = new CQLObjectResult();
-		objectResult.setClassname(obj.getClass().getName());
+		//objectResult.setClassname(obj.getClass().getName());
 		QName objectQname = context.getTypeMapping().getTypeQName(obj.getClass());
 		if (objectQname == null) {
 			throw new NullPointerException("No qname found for class " + obj.getClass().getName() 
