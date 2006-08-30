@@ -1,5 +1,8 @@
 Need to make sure to prompt for the deployment URL to write in the gme service conf file
 
+when extracting schemas that have different domains but hte same version and name the gme will rewrite over them when doing a 
+client side schema cache.
+
 Need to add the metadata required.
 
 need to have deployer configuration 
