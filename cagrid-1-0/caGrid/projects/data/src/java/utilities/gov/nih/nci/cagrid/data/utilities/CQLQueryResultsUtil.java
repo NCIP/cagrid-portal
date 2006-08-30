@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,10 +44,13 @@ public class CQLQueryResultsUtil {
 	 * a null pointer exception is thrown
 	 * 
 	 * @param rawObjects
+	 * 		The list of objects to place into CQLQueryResults
+	 * @param targetClassname
+	 * 		The classname of the objects in the list
 	 * @return
 	 */
-	public static CQLQueryResults createQueryResults(List rawObjects) {
-		return createQueryResults(rawObjects, (InputStream) null);
+	public static CQLQueryResults createQueryResults(List rawObjects, String targetClassname) {
+		return createQueryResults(rawObjects, targetClassname, (InputStream) null);
 	}
 	
 	
@@ -58,10 +60,14 @@ public class CQLQueryResultsUtil {
 	 * serializers, and deserializers for the objects.
 	 * 
 	 * @param rawObjects
+	 * 		The list of objects to place into CQLQueryResults
+	 * @param targetClassname
+	 * 		The classname of the objects in the list
 	 * @param configStream
+	 * 		The client or server-config.wsdd to use
 	 * @return
 	 */
-	public static CQLQueryResults createQueryResults(List rawObjects, InputStream configStream) {
+	public static CQLQueryResults createQueryResults(List rawObjects, String targetClassname, InputStream configStream) {
 		typeQNames.clear();
 		MessageContext context = null;
 		if (configStream != null) {
@@ -70,14 +76,15 @@ public class CQLQueryResultsUtil {
 			context = MessageContext.getCurrentContext();
 		}
 		CQLQueryResults results = new CQLQueryResults();
-		LinkedList resultObjects = new LinkedList();
+		results.setTargetClassname(targetClassname);
+		CQLObjectResult[] objectResultArray = new CQLObjectResult[rawObjects.size()];
+		int index = 0;
 		Iterator objectIter = rawObjects.iterator();
 		while (objectIter.hasNext()) {
 			Object obj = objectIter.next();
-			resultObjects.add(createObjectResult(obj, context));
+			objectResultArray[index] = createObjectResult(obj, context);
+			index++;
 		}
-		CQLObjectResult[] objectResultArray = new CQLObjectResult[rawObjects.size()];
-		resultObjects.toArray(objectResultArray);
 		results.setObjectResult(objectResultArray);
 		return results;
 	}
@@ -89,18 +96,22 @@ public class CQLQueryResultsUtil {
 	 * same type.
 	 * 
 	 * @param rawObjects
+	 * 		The list of objects to be added to a CQLQueryResults object
+	 * @param targetClassname
+	 * 		The name of the target class
 	 * @param qname
+	 * 		The QName of the target data type
 	 * @return
 	 */
-	public static CQLQueryResults createQueryResults(List rawObjects, QName qname) {
+	public static CQLQueryResults createQueryResults(List rawObjects, String targetClassname, QName qname) {
 		CQLQueryResults results = new CQLQueryResults();
+		results.setTargetClassname(targetClassname);
 		CQLObjectResult[] objResults = new CQLObjectResult[rawObjects.size()];
 		Iterator objIter = rawObjects.iterator();
 		int index = 0;
 		while (objIter.hasNext()) {
 			Object o = objIter.next();
 			CQLObjectResult object = new CQLObjectResult();
-			object.setClassname(o.getClass().getName());
 			MessageElement elem = new MessageElement(qname, o);
 			object.set_any(new MessageElement[] {elem});
 			objResults[index] = object;
@@ -127,13 +138,13 @@ public class CQLQueryResultsUtil {
 	public static CQLQueryResults createAttributeQueryResults(
 		List rawAttribs, String targetName, TargetAttributes queryAttribs) {
 		CQLQueryResults results = new CQLQueryResults();
+		results.setTargetClassname(targetName);
 		CQLAttributeResult[] attribResults = new CQLAttributeResult[rawAttribs.size()];
 		Iterator rawAttribIter = rawAttribs.iterator();
 		int index = 0;
 		while (rawAttribIter.hasNext()) {
 			Object[] attribs = (Object[]) rawAttribIter.next();
 			CQLAttributeResult attribResult = new CQLAttributeResult();
-			attribResult.setClassname(targetName);
 			TargetAttribute[] typeAttribs = new TargetAttribute[attribs.length];
 			for (int i = 0; i < attribs.length; i++) {
 				TargetAttribute typeAttrib = new TargetAttribute(
@@ -159,7 +170,6 @@ public class CQLQueryResultsUtil {
 	
 	private static CQLObjectResult createObjectResult(Object obj, MessageContext context) {
 		CQLObjectResult objectResult = new CQLObjectResult();
-		objectResult.setClassname(obj.getClass().getName());
 		QName objectQname = getQName(obj, context);
 		if (objectQname == null) {
 			throw new NullPointerException("No qname found for class " + obj.getClass().getName() 

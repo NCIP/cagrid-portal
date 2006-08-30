@@ -16,12 +16,12 @@
 				<xsd:element name="AttributeResult" type="res:CQLAttributeResult" minOccurs="0" maxOccurs="unbounded"/>
 			</xsd:sequence>
 		</xsd:choice>
+		<xsd:attribute name="targetClassname" type="xsd:string" use="required"/>
 	</xsd:complexType>
 	<xsd:complexType name="CQLResult">
 		<xsd:annotation>
 			<xsd:documentation>Single result from a CQL query</xsd:documentation>
 		</xsd:annotation>
-		<xsd:attribute name="classname" type="xsd:string" use="required"/>
 	</xsd:complexType>
 	<xsd:complexType name="CQLObjectResult">
 		<xsd:annotation>

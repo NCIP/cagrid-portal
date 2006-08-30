@@ -56,6 +56,7 @@ public class IgnorantQueryProcessor extends CQLQueryProcessor {
 			throw new QueryProcessingException("Error in SDK application service: " + ex.getMessage(), ex);
 		}
 		CQLQueryResults results = new CQLQueryResults();
+		results.setTargetClassname(Gene.class.getName());
 		CQLObjectResult[] objectResults = new CQLObjectResult[resultList.size()];
 		for (int i = 0; i < resultList.size(); i++) {
 			Gene returnedGene = (Gene) resultList.get(i);
@@ -64,7 +65,6 @@ public class IgnorantQueryProcessor extends CQLQueryProcessor {
 				returnedGene.getTaxon().getScientificName() +
 				"\tName " + returnedGene.getFullName());
 			CQLObjectResult result = new CQLObjectResult();
-			result.setClassname(Gene.class.getName());
 			QName geneQname = Utils.getRegisteredQName(Gene.class);
 			MessageElement anyElement = new MessageElement(geneQname, gene);
 			result.set_any(new MessageElement[] {anyElement});

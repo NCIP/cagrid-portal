@@ -58,7 +58,8 @@ public class CoreQueryProcessor extends LazyCQLQueryProcessor {
 			throw new QueryProcessingException(ex);
 		}
 		List coreResultsList = queryCoreService(cqlQuery);
-		CQLQueryResults results = CQLQueryResultsUtil.createQueryResults(coreResultsList, configStream);
+		CQLQueryResults results = CQLQueryResultsUtil.createQueryResults(
+			coreResultsList, cqlQuery.getTarget().getName(), configStream);
 		return results;
 	}
 	

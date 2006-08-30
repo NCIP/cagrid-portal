@@ -65,7 +65,8 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 		CQLQueryResults results = null;
 		// decide on object or attribute results
 		if (cqlQuery.getTargetAttributes() == null) {
-			results = CQLQueryResultsUtil.createQueryResults(coreResultsList, configStream);
+			results = CQLQueryResultsUtil.createQueryResults(
+				coreResultsList, cqlQuery.getTarget().getName(), configStream);
 		} else {
 			results = CQLQueryResultsUtil.createAttributeQueryResults(
 				coreResultsList, cqlQuery.getTarget().getName(), cqlQuery.getTargetAttributes());

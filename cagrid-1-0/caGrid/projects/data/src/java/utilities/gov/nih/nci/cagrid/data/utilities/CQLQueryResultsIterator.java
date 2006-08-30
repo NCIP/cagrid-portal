@@ -95,14 +95,20 @@ public class CQLQueryResultsIterator implements Iterator {
 	private Iterator getIterator() {
 		if (resultIterator == null) {
 			if (results.getObjectResult() != null && results.getObjectResult().length != 0) {
-				resultIterator = new CQLObjectResultIterator(
-					results.getObjectResult(), xmlOnly, findConfigWsdd());
+				try {
+					resultIterator = new CQLObjectResultIterator(
+						results.getObjectResult(), results.getTargetClassname(), 
+						xmlOnly, findConfigWsdd());
+				} catch (ClassNotFoundException ex) {
+					resultIterator = new NullIterator(ex.getMessage());
+					ex.printStackTrace();
+				}
 			} else if (results.getAttributeResult() != null && results.getAttributeResult().length != 0) {
 				resultIterator = new CQLAttributeResultIterator(results.getAttributeResult());
 			} else if (results.getIdentifierResult() != null && results.getIdentifierResult().length != 0) {
 				resultIterator = new CQLIdentifierResultIterator(results.getIdentifierResult());
 			} else {
-				resultIterator = new NullIterator();
+				resultIterator = new NullIterator("No results");
 			}
 		}
 		return resultIterator;
@@ -119,6 +125,13 @@ public class CQLQueryResultsIterator implements Iterator {
 	
 	
 	private static class NullIterator implements Iterator {
+		private String errorMessage;
+		
+		public NullIterator(String err) {
+			this.errorMessage = err;
+		}
+		
+		
 		public void remove() {
 			throw new UnsupportedOperationException("remove() is not supported by " + getClass().getName());
 		}
@@ -130,7 +143,7 @@ public class CQLQueryResultsIterator implements Iterator {
 		
 		
 		public Object next() {
-			throw new NoSuchElementException();
+			throw new NoSuchElementException(errorMessage);
 		}
 	}
 }

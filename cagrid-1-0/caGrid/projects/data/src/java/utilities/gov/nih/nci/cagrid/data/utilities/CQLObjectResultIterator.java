@@ -32,10 +32,9 @@ public class CQLObjectResultIterator implements Iterator {
 	private InputStream wsddInputStream;
 	private byte[] wsddContent;
 	
-	CQLObjectResultIterator(CQLObjectResult[] results, boolean xmlOnly, InputStream wsdd) {
-		if (results.length != 0) {
-			objectClass = getObjectClass(results[0]);
-		}
+	CQLObjectResultIterator(CQLObjectResult[] results, String targetName, 
+		boolean xmlOnly, InputStream wsdd) throws ClassNotFoundException {
+		this.objectClass = Class.forName(targetName);
 		this.results = results;
 		this.currentIndex = -1;
 		this.xmlOnly = xmlOnly;
@@ -76,17 +75,6 @@ public class CQLObjectResultIterator implements Iterator {
 			ex.printStackTrace();
 		}
 		return null;
-	}
-	
-	
-	private Class getObjectClass(CQLObjectResult result) {
-		Class c = null;
-		try {
-			c = Class.forName(result.getClassname());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return c;
 	}
 	
 	
