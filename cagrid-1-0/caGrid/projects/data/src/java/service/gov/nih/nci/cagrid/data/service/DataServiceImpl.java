@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.service;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.stubs.MalformedQueryException;
 import gov.nih.nci.cagrid.data.stubs.QueryProcessingException;
 
@@ -29,9 +28,9 @@ public class DataServiceImpl {
 		throws RemoteException, gov.nih.nci.cagrid.data.stubs.QueryProcessingException, gov.nih.nci.cagrid.data.stubs.MalformedQueryException {
 		gov.nih.nci.cagrid.data.cql.CQLQueryProcessor processor = null;
 		try {
-			Properties configParameters = ServiceConfigUtil.getConfigurationParameters();
-			Class qpClass = Class.forName(configParameters.getProperty(
-				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY));
+			Properties configParameters = ServiceConfigUtil.getQueryProcessorConfigurationParameters();
+			String qpClassName = ServiceConfigUtil.getCqlQueryProcessorClassName();
+			Class qpClass = Class.forName(qpClassName);
 			processor = (gov.nih.nci.cagrid.data.cql.CQLQueryProcessor) qpClass.newInstance();
 			InputStream configStream = ClassUtils.getResourceAsStream(
 				getClass(), "server-config.wsdd");

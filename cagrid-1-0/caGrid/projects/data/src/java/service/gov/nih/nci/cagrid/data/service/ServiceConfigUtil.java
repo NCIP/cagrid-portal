@@ -23,7 +23,7 @@ import org.globus.wsrf.Constants;
  */
 public class ServiceConfigUtil {
 
-	public static Properties getConfigurationParameters() throws Exception {
+	public static Properties getQueryProcessorConfigurationParameters() throws Exception {
 		String getterPrefix = "get" 
 			+ Character.toUpperCase(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.charAt(0)) 
 			+ DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.substring(1);
@@ -54,5 +54,33 @@ public class ServiceConfigUtil {
 			throw new Exception("Unable to convert service config to map: " + e.getMessage(), e);
 		}
 		return configParams;
+	}
+	
+	
+	public static String getCqlQueryProcessorClassName() throws Exception {
+		String getterName = "get" + Character.toUpperCase(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY.charAt(0)) 
+			+ DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY.substring(1);
+		
+		MessageContext context = MessageContext.getCurrentContext();
+		String servicePath = context.getTargetService();
+		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
+		try {
+			javax.naming.Context initialContext = new InitialContext();
+			Object serviceConfig = initialContext.lookup(jndiName);
+			Class configClass = serviceConfig.getClass();
+			Method[] configMethods = configClass.getMethods();
+			for (int i = 0; i < configMethods.length; i++) {
+				Method current = configMethods[i];
+				if (current.getName().equals(getterName) 
+					&& current.getReturnType().equals(String.class)
+					&& Modifier.isPublic(current.getModifiers())) {
+					String value = (String) current.invoke(serviceConfig, new Object[] {});
+					return value;
+				}
+			}
+		} catch (Exception e) {
+			throw new Exception("Unable to convert service config to map: " + e.getMessage(), e);
+		}
+		return null;
 	}
 }

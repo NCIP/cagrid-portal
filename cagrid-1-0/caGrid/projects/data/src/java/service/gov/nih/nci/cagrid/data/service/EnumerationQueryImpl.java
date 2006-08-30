@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
-import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.cql.LazyCQLQueryProcessor;
 import gov.nih.nci.cagrid.data.stubs.MalformedQueryException;
@@ -84,9 +83,9 @@ public class EnumerationQueryImpl {
 	
 	private CQLQueryProcessor getQueryProcessor() throws QueryProcessingException {
 		try {
-			Properties configParams = ServiceConfigUtil.getConfigurationParameters();
-			Class qpClass = Class.forName(configParams.getProperty(
-				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY));
+			Properties configParams = ServiceConfigUtil.getQueryProcessorConfigurationParameters();
+			String qpClassName = ServiceConfigUtil.getCqlQueryProcessorClassName();
+			Class qpClass = Class.forName(qpClassName);
 			CQLQueryProcessor processor = (CQLQueryProcessor) qpClass.newInstance();
 			InputStream configStream = ClassUtils.getResourceAsStream(
 				getClass(), "server-config.wsdd");
@@ -106,7 +105,6 @@ public class EnumerationQueryImpl {
 		CQLQueryResults results = processor.processQuery(query);
 		
 		// TODO: Fix this to use ws-enum utilities for SDK object iterators
-		
 		// write the results to disk
 		// first, need a unique ID to use for a file name
 		String uuid = UUIDGenFactory.getUUIDGen().nextUUID();
