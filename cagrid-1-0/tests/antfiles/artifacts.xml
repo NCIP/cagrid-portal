@@ -17,6 +17,13 @@
 				<include name="*.jar" />
 			</fileset>
 		</artifact>
+
+		<artifact track="main" type="jars" id="cqlprocessors.jars">
+			<fileset dir="${tests.projects.dir}/cqlprocessors/build/lib">
+				<include name="*.jar" />
+				<exclude name="*-test.jar" />
+			</fileset>
+		</artifact>
 	</target>
 
 </project>
