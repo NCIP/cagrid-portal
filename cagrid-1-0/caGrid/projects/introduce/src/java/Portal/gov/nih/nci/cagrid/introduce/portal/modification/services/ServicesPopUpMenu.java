@@ -67,9 +67,8 @@ public class ServicesPopUpMenu extends JPopupMenu {
 					service.setMethods(new MethodsType());
 					service.setResourcePropertiesList(new ResourcePropertiesListType());
 					service.setResourceFrameworkType(IntroduceConstants.INTRODUCE_BASE_RESOURCE);
-					
-						service.setServiceSecurity(new ServiceSecurity());
-					
+					//service.setServiceSecurity(new ServiceSecurity());
+					service.setMethods(new MethodsType());
 					ServiceTypeTreeNode newNode = node.addService(service);
 					ModifyService comp = new ModifyService(newNode, new SpecificServiceInformation(node.getInfo(),
 						service));
@@ -79,7 +78,7 @@ public class ServicesPopUpMenu extends JPopupMenu {
 					comp.pack();
 					PortalUtils.centerWindow(comp);
 					comp.setVisible(true);
-					
+
 				}
 
 			});

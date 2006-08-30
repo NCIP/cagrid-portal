@@ -11,7 +11,7 @@
 	</xs:element>
 	<xs:complexType name="MethodsType">
 		<xs:sequence>
-			<xs:element name="Method" maxOccurs="unbounded" type="MethodType"/>
+			<xs:element name="Method" minOccurs="0" maxOccurs="unbounded" type="MethodType"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="MethodType">
