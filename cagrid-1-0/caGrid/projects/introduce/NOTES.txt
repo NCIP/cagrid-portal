@@ -1,5 +1,7 @@
 To Do:
 
+the implbase constructor throws RemoteException.  this means that the impl constructor MUST throw RemoteException, which means that you can't have a default constructor.  Can you remove the throw from the implbase?
+
 i am not sure that service/method security on service contexts is right on priority and overides.
 
 when adding a serviceContext and then adding a method that returns its referece
