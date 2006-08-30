@@ -91,8 +91,10 @@ public class ErrorDialog extends JDialog {
 			}
 		};
 		SwingUtilities.invokeLater(messageRecorder);
+		dialog.setSize(450, 350);
 		dialog.setVisible(true);
 		dialog.setModal(true);
+		dialog.setAlwaysOnTop(true);
 		centerDialog();
 	}
 	
@@ -117,7 +119,6 @@ public class ErrorDialog extends JDialog {
 	private void initialize() {
 		setTitle(ERROR_TITLE);
         this.setContentPane(getMainPanel());
-        setSize(300, 400);
 	}
 
 

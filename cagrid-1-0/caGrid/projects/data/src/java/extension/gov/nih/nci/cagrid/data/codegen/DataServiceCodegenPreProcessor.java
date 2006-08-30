@@ -193,6 +193,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 
 			// build the domain model
 			LOG.info("Contacting caDSR to build domain model.  This might take a while...");
+			System.out.println("Contacting caDSR to build domain model.  This might take a while...");
 			DomainModel model = null;
 			try {
 				if (allClasses.size() != 0) {
@@ -226,8 +227,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				configInput.close();
 				LOG.debug("Serialized domain model");
 			} catch (Exception ex) {
-				throw new CodegenExtensionException("Error serializing the domain model to disk: " + ex.getMessage(),
-					ex);
+				throw new CodegenExtensionException("Error serializing the domain model to disk: " 
+					+ ex.getMessage(), ex);
 			}
 
 			// add the metadata to the service information as a resource
