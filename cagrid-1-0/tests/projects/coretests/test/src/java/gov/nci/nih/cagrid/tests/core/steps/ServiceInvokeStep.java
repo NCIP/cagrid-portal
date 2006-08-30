@@ -144,14 +144,7 @@ public class ServiceInvokeStep
 	private Class loadClass() 
 		throws MalformedURLException, ClassNotFoundException
 	{
-		// create class loader and load class
-		File[] jars = getServiceJars();
-		URL[] urls = new URL[jars.length];
-		for (int i = 0; i < jars.length; i++) {
-			urls[i] = jars[i].toURL();
-		}
-		ClassLoader cloader = new URLClassLoader(urls);
-		return cloader.loadClass(className);
+		return IntroduceServiceInfo.loadClass(serviceDir, className);
 	}
 	
 	private Object[] parseParams(File dir) 
@@ -237,27 +230,6 @@ public class ServiceInvokeStep
 		});
 		if (fileNames.length == 0) throw new IllegalArgumentException("missing out file in " + methodDir);
 		return new File(methodDir, fileNames[0]);
-	}
-
-	private File[] getServiceJars()
-	{
-		ArrayList<File> jars = new ArrayList<File>();
-		
-		addJars(new File(serviceDir, "lib"), jars);
-		addJars(new File(serviceDir, "ext"), jars);
-		addJars(new File(serviceDir, "build"), jars);
-		
-		return jars.toArray(new File[0]);
-	}
-	
-	private void addJars(File file, ArrayList<File> jars)
-	{
-		if (file.getName().endsWith(".jar")) {
-			jars.add(file);
-		} else if (file.isDirectory()) {
-			File[] files = file.listFiles();
-			for (File nextFile : files) addJars(nextFile, jars);
-		}
 	}
 	
 	public static void main(String[] args)
