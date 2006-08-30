@@ -41,7 +41,7 @@ public class BasicDataServiceTest
 
 		steps.add(new GlobusStartStep(globus, port));
 		try {
-			//addInvokeSteps(steps);
+			addInvokeSteps(steps);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("could not add invoke steps", e);
 		}
