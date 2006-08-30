@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2005 U (http://www.xmlspy.com) by Patrick Alan McConnell (Duke University) -->
 <!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Patrick Alan McConnell (Duke University) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://RProteomics.caBIG/1.0/edu.duke.cabig.rproteomics.model.statml" elementFormDefault="qualified" attributeFormDefault="unqualified" targetNamespace="gme://RProteomics.caBIG/1.0/edu.duke.cabig.rproteomics.model.statml">
-  <xs:element name="statml" type="dataType">
-    <xs:annotation>
-      <xs:documentation>The root element contains any number of lists, arrays, and values</xs:documentation>
-    </xs:annotation>
-  </xs:element>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://RProteomics.caBIG/2.0/edu.duke.cabig.rproteomics.model.statml" targetNamespace="gme://RProteomics.caBIG/2.0/edu.duke.cabig.rproteomics.model.statml" elementFormDefault="qualified" attributeFormDefault="unqualified">
   <xs:complexType name="dataType">
     <xs:annotation>
       <xs:documentation>The root element contains any number of lists, arrays, and values</xs:documentation>
@@ -27,7 +22,7 @@
           <xs:documentation>A single value</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="null" type="null">
+      <xs:element name="null" type="nullType">
         <xs:annotation>
           <xs:documentation>The lack of a value</xs:documentation>
         </xs:annotation>
@@ -61,7 +56,7 @@
             <xs:documentation>A single value</xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:element name="null" type="null">
+        <xs:element name="null" type="nullType">
           <xs:annotation>
             <xs:documentation>The lack of a value</xs:documentation>
           </xs:annotation>
@@ -165,7 +160,7 @@
           <xs:documentation>A single value, encoded in the XML</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="null" type="null">
+      <xs:element name="null" type="nullType">
         <xs:annotation>
           <xs:documentation>A null value</xs:documentation>
         </xs:annotation>
@@ -187,7 +182,7 @@
       </xs:annotation>
     </xs:attribute>
   </xs:complexType>
-  <xs:simpleType name="null">
+  <xs:simpleType name="nullType">
     <xs:annotation>
       <xs:documentation>A null value</xs:documentation>
     </xs:annotation>
@@ -246,5 +241,10 @@
     </xs:annotation>
     <xs:restriction base="xs:string" />
   </xs:simpleType>
+  <xs:element name="Data" type="dataType" />
+  <xs:element name="Scalar" type="scalarType" />
+  <xs:element name="Array" type="arrayType" />
+  <xs:element name="List" type="listType" />
+  <xs:element name="Null" type="nullType" />
 </xs:schema>
 
