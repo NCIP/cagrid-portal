@@ -51,7 +51,7 @@
    <ns2:SchemaElement type="ENTITIES" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="unsignedByte" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./ComplexAnalyticalServiceReference.xsd" namespace="http://tests.cagrid.nci.nih.gov/ComplexAnalyticalServiceReference" packageName="complexanalyticalservicereference" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./ComplexAnalyticalServiceTypes.xsd" namespace="http://tests.cagrid.nci.nih.gov/ComplexAnalyticalService/types" packageName="gov.nih.nci.cagrid.tests.stubs.types" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ComplexAnalyticalServiceReference" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd\security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
