@@ -1,5 +1,9 @@
 To Do:
 
+when adding a serviceContext and then adding a method that returns its referece
+before you hit save, then when you hit save the reference type is not yet in the
+namespaceType list and therefore cant be refered to yet
+
 add tools for autocreating resource and wrapping epr into client handle type for implementation on server side (ResourceCreator.javajet)
 
 refresh button in gme to view uploaded schemas without closing and opening
