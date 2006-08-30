@@ -41,6 +41,7 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -862,18 +863,6 @@ public class ModificationViewer extends GridPortalComponent {
 			contentTabbedPane.addTab("Metadata", null, getRpHolderPanel(), null);
 			contentTabbedPane.addTab("Service Properties", null, getServicePropertiesPanel(), null);
 			contentTabbedPane.addTab("Service Contexts", null, getResourceesTabbedPanel(), null);
-			contentTabbedPane.addChangeListener(new ChangeListener() {
-				public void stateChanged(ChangeEvent e) {
-					try {
-						reInitializeGUI();
-					} catch (Exception ex) {
-						ex.printStackTrace();
-					}
-				}
-			});
-			// diable the metadata tab if they've specified not to sync metadata
-			ResourcePropertiesListType metadataList = this.info.getServices().getService(0).getResourcePropertiesList();
-
 			contentTabbedPane.addTab("Security", null, getSecurityPanel(), null);
 			// add a tab for each extension...
 			ExtensionsType exts = info.getExtensions();
@@ -892,13 +881,20 @@ public class ModificationViewer extends GridPortalComponent {
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
-						// JOptionPane.showMessageDialog(ModificationViewer.this,
-						// "Cannot load extension: "
-						// + extDtype.getDisplayName());
 						ErrorDialog.showErrorDialog("Cannot load extension: " + extDtype.getDisplayName());
 					}
 				}
 			}
+
+			contentTabbedPane.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent e) {
+					try {
+						reInitializeGUI();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+			});
 		}
 		return contentTabbedPane;
 	}
@@ -1137,7 +1133,6 @@ public class ModificationViewer extends GridPortalComponent {
 	private JScrollPane getNamespaceTableScrollPane() {
 		if (namespaceTableScrollPane == null) {
 			namespaceTableScrollPane = new JScrollPane();
-			namespaceTableScrollPane.setPreferredSize(new java.awt.Dimension(300, 100));
 			namespaceTableScrollPane.setViewportView(getNamespaceJTree());
 		}
 		return namespaceTableScrollPane;
@@ -1152,6 +1147,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private NamespacesJTree getNamespaceJTree() {
 		if (namespaceJTree == null) {
 			namespaceJTree = new NamespacesJTree(info.getNamespaces(), true);
+			namespaceJTree.setVisibleRowCount(10);
 			namespaceJTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
 				public void valueChanged(javax.swing.event.TreeSelectionEvent e) {
 					DefaultMutableTreeNode node = getNamespaceJTree().getCurrentNode();
@@ -1680,7 +1676,6 @@ public class ModificationViewer extends GridPortalComponent {
 	private JScrollPane getResourcesScrollPane() {
 		if (resourcesScrollPane == null) {
 			resourcesScrollPane = new JScrollPane();
-			resourcesScrollPane.setPreferredSize(new java.awt.Dimension(252, 84));
 			resourcesScrollPane.setViewportView(getResourcesJTree());
 		}
 		return resourcesScrollPane;
@@ -1695,6 +1690,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private ServicesJTree getResourcesJTree() {
 		if (resourcesJTree == null) {
 			resourcesJTree = new ServicesJTree(info.getServices(), info);
+			resourcesJTree.setVisibleRowCount(10);
 			resourcesJTree.addFocusListener(new FocusAdapter() {
 
 				public void focusGained(FocusEvent e) {
@@ -1740,7 +1736,8 @@ public class ModificationViewer extends GridPortalComponent {
 			typesSplitPane.setOneTouchExpandable(true);
 			typesSplitPane.setLeftComponent(getNamespaceTableScrollPane());
 			typesSplitPane.setRightComponent(getNamespaceConfPanel());
-			typesSplitPane.setDividerLocation(0.5);
+			typesSplitPane.setDividerLocation(0.4);
+			typesSplitPane.setResizeWeight(0.4);
 		}
 		return typesSplitPane;
 	}
@@ -1756,7 +1753,6 @@ public class ModificationViewer extends GridPortalComponent {
 			namespaceReloadButton = new JButton();
 			namespaceReloadButton.setText("Reload");
 			namespaceReloadButton.setIcon(IntroduceLookAndFeel.getResyncIcon());
-			namespaceReloadButton.setPreferredSize(new java.awt.Dimension(100, 32));
 			namespaceReloadButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
