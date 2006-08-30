@@ -1,5 +1,7 @@
 To Do:
 
+i am not sure that service/method security on service contexts is right on priority and overides.
+
 when adding a serviceContext and then adding a method that returns its referece
 before you hit save, then when you hit save the reference type is not yet in the
 namespaceType list and therefore cant be refered to yet
