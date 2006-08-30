@@ -124,7 +124,9 @@ public class ServiceInvokeStep
 		throws Exception
 	{
 		// simple results
-		if (resultsFile.getName().endsWith(".txt")) {
+		if (resultsFile == null) {
+			return; // do nothing
+		} else if (resultsFile.getName().endsWith(".txt")) {
 			assertEquals(FileUtils.readText(resultsFile), String.valueOf(result));
 		}
 		// complex results
@@ -228,7 +230,7 @@ public class ServiceInvokeStep
 				return fileName.startsWith("out.") && (fileName.endsWith(".txt") || fileName.endsWith(".xml"));
 			}
 		});
-		if (fileNames.length == 0) throw new IllegalArgumentException("missing out file in " + methodDir);
+		if (fileNames.length == 0) return null; // throw new IllegalArgumentException("missing out file in " + methodDir);
 		return new File(methodDir, fileNames[0]);
 	}
 	
