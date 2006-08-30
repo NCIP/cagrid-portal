@@ -5,6 +5,7 @@ import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
+import gov.nih.nci.cagrid.cadsr.domain.UMLAssociationExclude;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLAttributeSemanticMetadataCollection;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
@@ -60,6 +61,8 @@ import commonj.work.WorkManager;
  * @version $Id$
  */
 public class DomainModelBuilder {
+	private static final String EXCLUDE_WILDCARD = "*";
+
 	private static final int DEFAULT_POOL_SIZE = 5;
 
 	protected static Log LOG = LogFactory.getLog(DomainModelBuilder.class.getName());
@@ -99,7 +102,7 @@ public class DomainModelBuilder {
 
 		UMLAssociationMetadata[] assocArr;
 		try {
-			assocArr = getProjectAssociationClosure(proj, classArr);
+			assocArr = getProjectAssociationClosure(proj, classArr, null);
 		} catch (ApplicationException e) {
 			throw new DomainModelGenerationException("Problem getting project's associations.", e);
 		}
@@ -132,7 +135,8 @@ public class DomainModelBuilder {
 				disjunction.add(Restrictions.eq("pack.name", packageNames[i]));
 			}
 
-			// get all classes in project (where package name =packageNames[0] or
+			// get all classes in project (where package name =packageNames[0]
+			// or
 			// packageNames[1] ...), preloading attributes, semantic metadata
 			DetachedCriteria criteria = DetachedCriteria.forClass(UMLClassMetadata.class).createAlias(
 				"UMLAttributeMetadataCollection", "atts").createAlias("UMLPackageMetadata", "pack").setFetchMode(
@@ -148,7 +152,7 @@ public class DomainModelBuilder {
 			}
 
 			try {
-				assocArr = getProjectAssociationClosure(proj, classArr);
+				assocArr = getProjectAssociationClosure(proj, classArr, null);
 			} catch (ApplicationException e) {
 				throw new DomainModelGenerationException("Problem getting project's associations.", e);
 			}
@@ -158,17 +162,52 @@ public class DomainModelBuilder {
 	}
 
 
+	/**
+	 * 
+	 * Gets a DomainModel that represents the project and listed classes;
+	 * associations will all those between listed classes.
+	 * 
+	 * 
+	 * @param project
+	 *            The project to build a domain model for
+	 * @param exposedClasses
+	 *            fully qualified name of classes to include
+	 * @return
+	 * @throws DomainModelGenerationException
+	 */
 	public DomainModel createDomainModelForClasses(Project project, String[] exposedClasses)
 		throws DomainModelGenerationException {
+		return createDomainModelForClassesWithExcludes(project, exposedClasses, null);
+	}
+
+
+	/**
+	 * 
+	 * Gets a DomainModel that represents the project and listed classes;
+	 * associations will all those between listed classes that are not in the
+	 * excludes list.
+	 * 
+	 * 
+	 * @param project
+	 *            The project to build a domain model for
+	 * @param exposedClasses
+	 *            fully qualified name of classes to include
+	 * @param excludedAssociations
+	 *            associations to not include
+	 * @return
+	 * @throws DomainModelGenerationException
+	 */
+	public DomainModel createDomainModelForClassesWithExcludes(Project project, String[] fullClassNames,
+		UMLAssociationExclude[] excludedAssociations) throws DomainModelGenerationException {
 		Project proj = findCompleteProject(project);
 		UMLClassMetadata classArr[] = null;
 		UMLAssociationMetadata[] assocArr = null;
 
-		if (exposedClasses != null && exposedClasses.length > 0) {
+		if (fullClassNames != null && fullClassNames.length > 0) {
 			// build up the OR for all the class names
 			Disjunction disjunction = Restrictions.disjunction();
-			for (int i = 0; i < exposedClasses.length; i++) {
-				disjunction.add(Restrictions.eq("fullyQualifiedName", exposedClasses[i]));
+			for (int i = 0; i < fullClassNames.length; i++) {
+				disjunction.add(Restrictions.eq("fullyQualifiedName", fullClassNames[i]));
 			}
 
 			// get all classes in project (where fqn in classname[]), preloading
@@ -187,7 +226,7 @@ public class DomainModelBuilder {
 			}
 
 			try {
-				assocArr = getProjectAssociationClosure(proj, classArr);
+				assocArr = getProjectAssociationClosure(proj, classArr, excludedAssociations);
 			} catch (ApplicationException e) {
 				throw new DomainModelGenerationException("Problem getting project's associations.", e);
 			}
@@ -230,29 +269,39 @@ public class DomainModelBuilder {
 
 	/**
 	 * Gets all of the associations of this project that are closed over the
-	 * classes specified in the classArr.
+	 * classes specified in the classArr, and not present in the excludes list.
 	 * 
 	 * @param proj
 	 * @param classArr
+	 * @param excludedAssociations
 	 * @return
 	 * @throws ApplicationException
 	 */
-	private UMLAssociationMetadata[] getProjectAssociationClosure(Project proj, UMLClassMetadata[] classArr)
-		throws ApplicationException {
-		if(classArr ==null || classArr.length<=0){
+	private UMLAssociationMetadata[] getProjectAssociationClosure(Project proj, UMLClassMetadata[] classArr,
+		UMLAssociationExclude[] excludedAssociations) throws ApplicationException {
+		if (classArr == null || classArr.length <= 0) {
 			return null;
 		}
 
 		// get all associations between classes we are exposing
 		String classIDFilter = createClassIDFilter(classArr);
 
+		String associationAlias = "assoc";
+		String excludesFilter = createAssociationExcludeFilter(excludedAssociations, associationAlias);
+
 		// get all associations in project
-		HQLCriteria hql = new HQLCriteria("FROM UMLAssociationMetadata AS assoc WHERE assoc.project.id='"
-			+ proj.getId() + "' AND assoc.sourceUMLClassMetadata.id " + classIDFilter
-			+ " AND assoc.targetUMLClassMetadata.id " + classIDFilter);
+		HQLCriteria hql = new HQLCriteria(("FROM UMLAssociationMetadata AS " + associationAlias + " WHERE "
+			+ associationAlias + ".project.id='" + proj.getId() + "' AND " + associationAlias
+			+ ".sourceUMLClassMetadata.id " + classIDFilter + " AND " + associationAlias
+			+ ".targetUMLClassMetadata.id " + classIDFilter + " " + excludesFilter).trim());
+
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Issuing Association query:" + hql.getHqlString());
+		}
 
 		long start = System.currentTimeMillis();
 		List rList = this.cadsr.query(hql, UMLAssociationMetadata.class.getName());
+
 		UMLAssociationMetadata assocArr[] = new UMLAssociationMetadata[rList.size()];
 		// caCORE's toArray(arr) is broken (cacore bug #1382), so need to do
 		// this way
@@ -263,6 +312,114 @@ public class DomainModelBuilder {
 			+ assocArr.length + " associations.");
 
 		return assocArr;
+	}
+
+
+	// /**
+	// * @param processed
+	// * @param excluded
+	// * @return
+	// */
+	// private boolean associationsEqual(UMLAssociationMetadata processed,
+	// gov.nih.nci.cagrid.cadsr.domain.UMLAssociation excluded) {
+	// // we dont care about directionality
+	//
+	// // handle the null source case
+	// UMLAssociationEdge source = null;
+	// if (excluded.getSourceUMLAssociationEdge() == null
+	// || excluded.getSourceUMLAssociationEdge().getUMLAssociationEdge() ==
+	// null) {
+	// return processed.getSourceLowCardinality() == null &&
+	// processed.getSourceHighCardinality() == null
+	// && (processed.getSourceRoleName() == null ||
+	// processed.getSourceRoleName().trim().equals(""));
+	// } else {
+	// source = excluded.getSourceUMLAssociationEdge().getUMLAssociationEdge();
+	// }
+	//
+	// // handle the null target case
+	// UMLAssociationEdge target = null;
+	// if (excluded.getTargetUMLAssociationEdge() == null
+	// || excluded.getTargetUMLAssociationEdge().getUMLAssociationEdge() ==
+	// null) {
+	// return processed.getTargetLowCardinality() == null &&
+	// processed.getTargetHighCardinality() == null
+	// && (processed.getTargetRoleName() == null ||
+	// processed.getTargetRoleName().trim().equals(""));
+	// } else {
+	// target = excluded.getTargetUMLAssociationEdge().getUMLAssociationEdge();
+	// }
+	//
+	// return processed.getTargetLowCardinality().intValue() ==
+	// target.getMinCardinality()
+	// && processed.getTargetHighCardinality().intValue() ==
+	// target.getMaxCardinality()
+	// && processed.getTargetRoleName().equals(target.getRoleName())
+	// && processed.getSourceLowCardinality().intValue() ==
+	// source.getMinCardinality()
+	// && processed.getSourceHighCardinality().intValue() ==
+	// source.getMaxCardinality()
+	// && processed.getSourceRoleName().equals(source.getRoleName())
+	//
+	// ;
+	// }
+
+	/**
+	 * @param excludedAssociations
+	 * @return
+	 */
+	private String createAssociationExcludeFilter(UMLAssociationExclude[] excludedAssociations, String alias) {
+		if (excludedAssociations == null || excludedAssociations.length == 0) {
+			return "";
+		}
+
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < excludedAssociations.length; i++) {
+			UMLAssociationExclude exclude = excludedAssociations[i];
+
+			int filterCount = 0;
+			sb.append(" AND NOT(");
+
+			// now only process non wildcards (because this criteria is "not"ed
+			// so not filtering on the wildcards makes them be excluded)
+			if (!exclude.getSourceClassName().equals(EXCLUDE_WILDCARD)) {
+				if (filterCount++ > 0) {
+					sb.append(" AND ");
+				}
+				sb.append(alias + ".sourceUMLClassMetadata.fullyQualifiedName='" + exclude.getSourceClassName() + "'");
+
+			}
+			if (!exclude.getTargetClassName().equals(EXCLUDE_WILDCARD)) {
+				if (filterCount++ > 0) {
+					sb.append(" AND ");
+				}
+				sb.append(alias + ".targetUMLClassMetadata.fullyQualifiedName='" + exclude.getTargetClassName() + "'");
+			}
+			if (!exclude.getSourceRoleName().equals(EXCLUDE_WILDCARD)) {
+				if (filterCount++ > 0) {
+					sb.append(" AND ");
+				}
+				sb.append(alias + ".sourceRoleName='" + exclude.getSourceRoleName() + "'");
+			}
+			if (!exclude.getTargetRoleName().equals(EXCLUDE_WILDCARD)) {
+				if (filterCount++ > 0) {
+					sb.append(" AND ");
+				}
+				sb.append(alias + ".targetRoleName='" + exclude.getTargetRoleName() + "'");
+			}
+
+			// check for all wildcards
+			if (filterCount == 0) {
+				// just stop processing and create a predicate thats never true,
+				// because excluding
+				// everything will obviously yeild no results
+				return "AND 1=2";
+			}
+
+			sb.append(")");
+		}
+
+		return sb.toString();
 	}
 
 
@@ -536,9 +693,10 @@ public class DomainModelBuilder {
 			if (description == null) {
 				description = "";
 			}
-			converted.setDescription(description);			
+			converted.setDescription(description);
 			converted.setName(attMD.getName());
-			// TODO: this makes 2 calls for every attribute... how can we speed this up!?
+			// TODO: this makes 2 calls for every attribute... how can we speed
+			// this up!?
 			if (attMD.getDataElement() != null && attMD.getDataElement().getValueDomain() != null) {
 				converted.setValueDomain(attMD.getDataElement().getValueDomain());
 			}
@@ -577,6 +735,30 @@ public class DomainModelBuilder {
 			+ ((assoc.getIsBidirectional() != null && assoc.getIsBidirectional().booleanValue()) ? "<" : "") + " -->"
 			+ assoc.getTargetRoleName() + "(" + assoc.getTargetLowCardinality() + "..."
 			+ assoc.getTargetHighCardinality() + ")";
+
+	}
+
+
+	private static String associationToString(UMLAssociation assoc) {
+		UMLAssociationEdge source = null;
+		if (assoc.getSourceUMLAssociationEdge() == null
+			|| assoc.getSourceUMLAssociationEdge().getUMLAssociationEdge() == null) {
+			source = new UMLAssociationEdge();
+		} else {
+			source = assoc.getSourceUMLAssociationEdge().getUMLAssociationEdge();
+		}
+
+		UMLAssociationEdge target = null;
+		if (assoc.getTargetUMLAssociationEdge() == null
+			|| assoc.getTargetUMLAssociationEdge().getUMLAssociationEdge() == null) {
+			target = new UMLAssociationEdge();
+		} else {
+			target = assoc.getTargetUMLAssociationEdge().getUMLAssociationEdge();
+		}
+
+		return source.getRoleName() + "(" + source.getMinCardinality() + "..." + source.getMaxCardinality() + ")"
+			+ ((assoc.isBidirectional()) ? "<" : "") + " -->" + target.getRoleName() + "(" + target.getMinCardinality()
+			+ "..." + target.getMaxCardinality() + ")";
 
 	}
 
@@ -626,6 +808,7 @@ public class DomainModelBuilder {
 	public void setWorkManager(WorkManager workManager) {
 		this.workManager = workManager;
 	}
+
 }
 
 abstract class ClassConversionWork implements Work {

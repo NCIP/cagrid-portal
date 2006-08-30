@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -129,7 +130,11 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
 		DomainModelViewer viewer = new DomainModelViewer(null, null, null);
 
 		try {
-			DomainModel model = MetadataUtils.deserializeDomainModel(new FileReader("domainModel.xml"));
+			JFileChooser fc = new JFileChooser(".");
+			fc.showOpenDialog(f);
+			
+
+			DomainModel model = MetadataUtils.deserializeDomainModel(new FileReader(fc.getSelectedFile()));
 			viewer.setDomainModel(model);
 
 			f.getContentPane().add(viewer);

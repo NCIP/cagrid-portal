@@ -265,7 +265,7 @@ public class CaDSRServiceClient extends ServiceSecurityClient implements CaDSRSe
         return boxedResult.getDomainModel();
       }
     }
-    public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] fullClassNames,gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[] excludedAssociations) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
+    public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] fullClassNames,gov.nih.nci.cagrid.cadsr.domain.UMLAssociationExclude[] associationExcludes) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"generateDomainModelForClassesWithExcludes");
         gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequest params = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequest();
@@ -273,9 +273,9 @@ public class CaDSRServiceClient extends ServiceSecurityClient implements CaDSRSe
         projectContainer.setProject(project);
         params.setProject(projectContainer);
         params.setFullClassNames(fullClassNames);
-        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestExcludedAssociations excludedAssociationsContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestExcludedAssociations();
-        excludedAssociationsContainer.setUMLAssociation(excludedAssociations);
-        params.setExcludedAssociations(excludedAssociationsContainer);
+        gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestAssociationExcludes associationExcludesContainer = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequestAssociationExcludes();
+        associationExcludesContainer.setUMLAssociationExclude(associationExcludes);
+        params.setAssociationExcludes(associationExcludesContainer);
         gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesResponse boxedResult = portType.generateDomainModelForClassesWithExcludes(params);
         return boxedResult.getDomainModel();
       }

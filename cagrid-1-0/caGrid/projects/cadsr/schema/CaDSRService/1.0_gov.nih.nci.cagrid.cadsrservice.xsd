@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Scott Oster (BMI) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"
     targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"
-    xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
-    elementFormDefault="qualified">
+    xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" elementFormDefault="qualified">
     <xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
         schemaLocation="./xsd/cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
     <xs:element name="UMLAssociation" type="UMLAssociation"/>
@@ -33,5 +31,12 @@
         <xs:attribute name="sourceRoleName" type="xs:string"/>
         <xs:attribute name="targetRoleName" type="xs:string"/>
         <xs:attribute name="isBidirectional" type="xs:boolean"/>
+    </xs:complexType>
+    <xs:element name="UMLAssociationExclude" type="UMLAssociationExclude"/>
+    <xs:complexType name="UMLAssociationExclude">
+        <xs:attribute name="sourceRoleName" type="xs:string" default="*"/>
+        <xs:attribute name="sourceClassName" type="xs:string" default="*"/>
+        <xs:attribute name="targetRoleName" type="xs:string" default="*"/>
+        <xs:attribute name="targetClassName" type="xs:string" default="*"/>
     </xs:complexType>
 </xs:schema>

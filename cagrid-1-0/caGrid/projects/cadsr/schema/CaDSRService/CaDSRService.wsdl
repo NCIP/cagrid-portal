@@ -156,10 +156,10 @@
               </complexType>
             </element>
             <element name="fullClassNames" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
-            <element name="excludedAssociations">
+            <element name="associationExcludes">
               <complexType>
                 <sequence>
-                  <element ref="ns4:UMLAssociation" minOccurs="1" maxOccurs="unbounded" />
+                  <element ref="ns5:UMLAssociationExclude" minOccurs="1" maxOccurs="unbounded" />
                 </sequence>
               </complexType>
             </element>

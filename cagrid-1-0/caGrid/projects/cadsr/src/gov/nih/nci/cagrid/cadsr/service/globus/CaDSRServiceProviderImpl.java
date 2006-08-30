@@ -63,7 +63,7 @@ public class CaDSRServiceProviderImpl{
 
 	public gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesResponse generateDomainModelForClassesWithExcludes(gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesRequest params) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.InvalidProjectException {
 		gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.GenerateDomainModelForClassesWithExcludesResponse();
-		boxedResult.setDomainModel(impl.generateDomainModelForClassesWithExcludes(params.getProject().getProject(),params.getFullClassNames(),params.getExcludedAssociations().getUMLAssociation()));
+		boxedResult.setDomainModel(impl.generateDomainModelForClassesWithExcludes(params.getProject().getProject(),params.getFullClassNames(),params.getAssociationExcludes().getUMLAssociationExclude()));
 		return boxedResult;
 	}
 
