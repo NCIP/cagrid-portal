@@ -14,7 +14,6 @@ import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,7 +131,8 @@ public class PermissionManager {
 		}
 
 		String sql = "delete from " + PermissionsTable.TABLE_NAME + " where "
-				+ PermissionsTable.GRID_IDENTITY + "= ? AND " + PermissionsTable.ROLE + "= ? AND "
+				+ PermissionsTable.GRID_IDENTITY + "= ? AND "
+				+ PermissionsTable.ROLE + "= ? AND "
 				+ PermissionsTable.TRUSTED_AUTHORITY + "= ?";
 		Connection c = null;
 		try {
@@ -154,7 +154,7 @@ public class PermissionManager {
 			fault.setFaultString("Unexpected error in removing the permission "
 					+ perm + " exists.");
 			throw fault;
-		}finally {
+		} finally {
 			db.releaseConnection(c);
 		}
 
@@ -163,7 +163,8 @@ public class PermissionManager {
 	public synchronized boolean doesPermissionExist(Permission p)
 			throws GTSInternalFault {
 		String sql = "select count(*) from " + PermissionsTable.TABLE_NAME
-				+ " where " + PermissionsTable.GRID_IDENTITY + "= ? AND " + PermissionsTable.ROLE + "= ?  AND "
+				+ " where " + PermissionsTable.GRID_IDENTITY + "= ? AND "
+				+ PermissionsTable.ROLE + "= ?  AND "
 				+ PermissionsTable.TRUSTED_AUTHORITY + "= ?";
 		Connection c = null;
 		boolean exists = false;
@@ -255,8 +256,8 @@ public class PermissionManager {
 		sql.append("select count(*) from " + PermissionsTable.TABLE_NAME);
 		sql.append(" WHERE " + PermissionsTable.GRID_IDENTITY + " = ?"
 				+ " AND ");
-		sql.append(PermissionsTable.ROLE + "='"
-				+ Role.TrustAuthorityManager + "' AND ");
+		sql.append(PermissionsTable.ROLE + "='" + Role.TrustAuthorityManager
+				+ "' AND ");
 		sql.append(PermissionsTable.TRUSTED_AUTHORITY + " = '" + authority
 				+ "'");
 		try {
@@ -299,39 +300,42 @@ public class PermissionManager {
 		Connection c = null;
 		List permissions = new ArrayList();
 		StringBuffer sql = new StringBuffer();
+
 		try {
 			c = db.getConnection();
-			Statement s = c.createStatement();
-
-			sql.append("select * from " + PermissionsTable.TABLE_NAME);
+			PreparedStatement s = null;
 			if (filter != null) {
-				boolean firstAppended = false;
+				s = c.prepareStatement("select * from "
+						+ PermissionsTable.TABLE_NAME + " WHERE "
+						+ PermissionsTable.GRID_IDENTITY + " LIKE ? AND "
+						+ PermissionsTable.ROLE + " LIKE ? AND "
+						+ PermissionsTable.TRUSTED_AUTHORITY + " LIKE ?");
 
 				if (filter.getGridIdentity() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" " + PermissionsTable.GRID_IDENTITY
-							+ " LIKE '%" + filter.getGridIdentity() + "%'");
+					s.setString(1, "%" + filter.getGridIdentity() + "%");
+				} else {
+					s.setString(1, "%");
 				}
 
 				if (filter.getRole() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" " + PermissionsTable.ROLE + "='"
-							+ filter.getRole() + "'");
+					s.setString(2, "%" + filter.getRole().getValue() + "%");
+				} else {
+					s.setString(2, "%");
 				}
 
 				if (filter.getTrustedAuthorityName() != null) {
-					sql = appendWhereOrAnd(firstAppended, sql);
-					firstAppended = true;
-					sql.append(" " + PermissionsTable.TRUSTED_AUTHORITY
-							+ " LIKE '%" + filter.getTrustedAuthorityName()
-							+ "%'");
+					s
+							.setString(3, "%"
+									+ filter.getTrustedAuthorityName() + "%");
+				} else {
+					s.setString(3, "%");
 				}
-
+			} else {
+				s = c.prepareStatement("select * from "
+						+ PermissionsTable.TABLE_NAME);
 			}
 
-			ResultSet rs = s.executeQuery(sql.toString());
+			ResultSet rs = s.executeQuery();
 			while (rs.next()) {
 				Permission p = new Permission();
 				p.setGridIdentity(rs.getString(PermissionsTable.GRID_IDENTITY));
@@ -369,16 +373,6 @@ public class PermissionManager {
 		} else {
 			return s;
 		}
-	}
-
-	private StringBuffer appendWhereOrAnd(boolean firstAppended,
-			StringBuffer sql) {
-		if (firstAppended) {
-			sql.append(" AND ");
-		} else {
-			sql.append(" WHERE");
-		}
-		return sql;
 	}
 
 	private String formatPermission(Permission p) {
