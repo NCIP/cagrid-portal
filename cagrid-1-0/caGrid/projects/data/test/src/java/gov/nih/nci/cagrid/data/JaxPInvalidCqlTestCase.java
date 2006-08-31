@@ -102,6 +102,20 @@ public class JaxPInvalidCqlTestCase extends TestCase {
 	}
 	
 	
+	/*
+	 * Can't run this since the QueryModifier object will always have a default
+	 * value for the count flag
+	public void testModifierMissingCount() {
+		checkQuery("modifierMissingCount.xml");
+	}
+	*/
+	
+	
+	public void testModifierWithBothAttributeTypes() {
+		checkQuery("modifierWithBothAttributeTypes.xml");
+	}
+	
+	
 	public static void main(String[] args) {
 		TestRunner runner = new TestRunner();
 		TestResult result = runner.doRun(new TestSuite(JaxPInvalidCqlTestCase.class));
