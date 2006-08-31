@@ -15,4 +15,21 @@ For example:
    
    
 Removed synconizedResourceFramework from the ResourcePropertiesType bean.
+
+<resourceLink> have been added for every sub resources home to al other sub resource homes
+
+a baseImpl has been added to the server to hide some of the provided methods from the users implemenation
+
+wsdl files where not importing xsd's correctly so changed the wsdl to define the namespaces of all types in the top of hte wsdl
+and import the xsd's in the schema part of the wsdl
+
+jar file names of all introduce jars has been changed to the new caGrid approved style "caGrid-1.0-Introduce-*"
+
+added a way to set your resource type to CUSTOM which tells the engine not to add any resource implementation for you service and tells you in the JNDI what to add.
+
+added support for importing methods from WSDL which use messages that use types and not elements
  
+added a schema for the service called "<ServiceName>Types.xsd" which gets a reference (typed EPR) added to it so that others can chose to use it as well
+this schema is used by the GUI to define new faults that can be used in your or others services.
+
+The client handle return functionality has been changed to use the strongly typed EPR's from above instead of the regular EPRs
