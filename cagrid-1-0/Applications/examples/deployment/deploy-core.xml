@@ -79,7 +79,7 @@
 
 		<sequential>
 			<mkdir dir="@{new.globus}/tmp"/>
-			<exec executable="@{new.globus}/bin/grid-proxy-init.bat" dir="@{new.glous}">
+			<exec executable="@{new.globus}/bin/grid-proxy-init.bat" dir="@{new.globus}">
 				<arg value="-hours"/>
 				<arg value="100000"/>
 				<arg value="-cert"/>
