@@ -3,7 +3,7 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:cql="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" targetNamespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xsd:complexType name="Object">
 		<xsd:annotation>
-			<xsd:documentation>Associated Object used as search criteria</xsd:documentation>
+			<xsd:documentation>Object used as search criteria or target definition</xsd:documentation>
 		</xsd:annotation>
 		<xsd:choice>
 			<xsd:element name="Attribute" type="cql:Attribute" minOccurs="0"/>
@@ -13,6 +13,9 @@
 		<xsd:attribute name="name" type="xsd:string" use="required"/>
 	</xsd:complexType>
 	<xsd:complexType name="Association">
+		<xsd:annotation>
+			<xsd:documentation>Association to another Object</xsd:documentation>
+		</xsd:annotation>
 		<xsd:complexContent>
 			<xsd:extension base="cql:Object">
 				<xsd:attribute name="roleName" type="xsd:string" use="optional"/>
@@ -69,12 +72,12 @@
 		</xsd:annotation>
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="Target" type="cql:Object" minOccurs="1" maxOccurs="1">
+				<xsd:element name="Target" type="cql:Object">
 					<xsd:annotation>
 						<xsd:documentation>Defines the target data type of a CQL query</xsd:documentation>
 					</xsd:annotation>
 				</xsd:element>
-				<xsd:element name="TargetAttributes" type="cql:TargetAttributes" minOccurs="0" maxOccurs="1">
+				<xsd:element name="QueryModifier" type="cql:QueryModifier" minOccurs="0">
 					<xsd:annotation>
 						<xsd:documentation>Optionally defines attributes of the target data type to be returned by the query</xsd:documentation>
 					</xsd:annotation>
@@ -82,12 +85,14 @@
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
-	<xsd:complexType name="TargetAttributes">
+	<xsd:complexType name="QueryModifier">
 		<xsd:annotation>
-			<xsd:documentation>Attributes of the target object to be returned</xsd:documentation>
+			<xsd:documentation>Modifies the returned data from the query</xsd:documentation>
 		</xsd:annotation>
-		<xsd:sequence>
-			<xsd:element name="AttributeName" type="xsd:string" maxOccurs="unbounded"/>
-		</xsd:sequence>
+		<xsd:choice minOccurs="0">
+			<xsd:element name="AttributeNames" type="xsd:string" maxOccurs="unbounded"/>
+			<xsd:element name="DistinctAttribute" type="xsd:string"/>
+		</xsd:choice>
+		<xsd:attribute name="countOnly" type="xsd:boolean" use="required"/>
 	</xsd:complexType>
 </xsd:schema>

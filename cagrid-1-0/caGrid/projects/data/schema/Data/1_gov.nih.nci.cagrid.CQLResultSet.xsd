@@ -15,6 +15,7 @@
 			<xsd:sequence>
 				<xsd:element name="AttributeResult" type="res:CQLAttributeResult" minOccurs="0" maxOccurs="unbounded"/>
 			</xsd:sequence>
+			<xsd:element name="CountResult" type="res:CQLCountResult"/>
 		</xsd:choice>
 		<xsd:attribute name="targetClassname" type="xsd:string" use="required"/>
 	</xsd:complexType>
@@ -72,4 +73,14 @@
 		<xsd:attribute name="value" type="xsd:anySimpleType" use="required"/>
 	</xsd:complexType>
 	<xsd:element name="CQLQueryResultCollection" type="res:CQLQueryResults"/>
+	<xsd:complexType name="CQLCountResult">
+		<xsd:annotation>
+			<xsd:documentation>Result of a count query</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="res:CQLResult">
+				<xsd:attribute name="count" type="xsd:long" use="required"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
 </xsd:schema>

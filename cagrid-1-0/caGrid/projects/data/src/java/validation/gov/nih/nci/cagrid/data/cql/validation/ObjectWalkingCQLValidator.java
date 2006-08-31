@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.cqlquery.Group;
 import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
 import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
+import gov.nih.nci.cagrid.cqlquery.QueryModifier;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
@@ -28,6 +29,9 @@ public class ObjectWalkingCQLValidator extends CQLValidator {
 	private static DomainModelValidator domainValidator = null;
 	
 	public void validateStructure(CQLQuery query) throws MalformedQueryException {
+		if (query.getQueryModifier() != null) {
+			validateQueryMods(query.getQueryModifier());
+		}
 		validateObjectStructure(query.getTarget());
 	}
 	
@@ -38,6 +42,14 @@ public class ObjectWalkingCQLValidator extends CQLValidator {
 		}
 		// validate the query against the data service's Domain Model
 		domainValidator.validateDomain(query, model);
+	}
+	
+	
+	private void validateQueryMods(QueryModifier mods) throws MalformedQueryException {
+		if (mods.getAttributeNames() != null && mods.getDistinctAttribute() != null) {
+			throw new MalformedQueryException(
+				"Query Modifier may have EITHER distinct attribute or list of attribute names, not both.");
+		}
 	}
 	
 	

@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.cql.cacore;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
+import gov.nih.nci.cagrid.cqlquery.QueryModifier;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
@@ -63,13 +64,33 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 		}
 		List coreResultsList = queryCoreService(cqlQuery);
 		CQLQueryResults results = null;
-		// decide on object or attribute results
-		if (cqlQuery.getTargetAttributes() == null) {
+		// decide on type of results
+		boolean objectResults = cqlQuery.getQueryModifier() == null ||
+			(!cqlQuery.getQueryModifier().isCountOnly() 
+				&& cqlQuery.getQueryModifier().getAttributeNames() == null 
+				&& cqlQuery.getQueryModifier().getDistinctAttribute() == null);
+		if (objectResults) {
 			results = CQLQueryResultsUtil.createQueryResults(
 				coreResultsList, cqlQuery.getTarget().getName(), configStream);
 		} else {
-			results = CQLQueryResultsUtil.createAttributeQueryResults(
-				coreResultsList, cqlQuery.getTarget().getName(), cqlQuery.getTargetAttributes());
+			QueryModifier mod = cqlQuery.getQueryModifier();
+			if (mod.isCountOnly()) {
+				// parse the value as a string to long.  This covers returning
+				// integers, shorts, and longs
+				Long val = Long.valueOf(coreResultsList.get(0).toString());
+				results = CQLQueryResultsUtil.createCountQueryResults(
+					val.longValue(), cqlQuery.getTarget().getName());
+			} else {
+				// attributes distinct or otherwise
+				String[] names = null;
+				if (mod.getDistinctAttribute() != null) {
+					names = new String[] {mod.getDistinctAttribute()};
+				} else {
+					names = mod.getAttributeNames();
+				}
+				results = CQLQueryResultsUtil.createAttributeQueryResults(
+					coreResultsList, cqlQuery.getTarget().getName(), names);
+			}
 		}
 		return results;
 	}
@@ -93,6 +114,7 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 			coreService = ApplicationService.getRemoteInstance(url);
 		}
 		HQLCriteria hqlCriteria = new HQLCriteria(CQL2HQL.translate(query));
+		System.out.println("Executing HQL: " + hqlCriteria.getHqlString());
 		LOG.debug("Executing HQL:" + hqlCriteria.getHqlString());
 		List targetObjects = null;
 		try {

@@ -3,7 +3,9 @@ package gov.nih.nci.cagrid.data.utilities;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.apache.axis.utils.ClassUtils;
@@ -107,6 +109,10 @@ public class CQLQueryResultsIterator implements Iterator {
 				resultIterator = new CQLAttributeResultIterator(results.getAttributeResult());
 			} else if (results.getIdentifierResult() != null && results.getIdentifierResult().length != 0) {
 				resultIterator = new CQLIdentifierResultIterator(results.getIdentifierResult());
+			} else if (results.getCountResult() != null) {
+				List tmp = new ArrayList(1);
+				tmp.add(new Long(results.getCountResult().getCount()));
+				resultIterator = tmp.iterator();
 			} else {
 				resultIterator = new NullIterator("No results");
 			}

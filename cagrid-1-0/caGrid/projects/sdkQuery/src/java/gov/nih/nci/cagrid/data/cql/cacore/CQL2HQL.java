@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.cqlquery.Group;
 import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
 import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
-import gov.nih.nci.cagrid.cqlquery.TargetAttributes;
+import gov.nih.nci.cagrid.cqlquery.QueryModifier;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 
 import java.lang.reflect.Field;
@@ -32,6 +32,8 @@ import java.util.Set;
  * @version $Id$ 
  */
 public class CQL2HQL {
+	public static final String TARGET_ALIAS = "xxTargetAliasxx"; 
+	
 	private static Map predicateValues;
 
 	/**
@@ -45,25 +47,88 @@ public class CQL2HQL {
 	 */
 	public static String translate(CQLQuery query) throws QueryProcessingException {
 		StringBuilder hql = new StringBuilder();
-		if (query.getTargetAttributes() != null) {
-			// String objAlias = alias(aliases, query.getTarget().getName());
-			processTargetAttributes(hql, query.getTargetAttributes());
+		if (query.getQueryModifier() != null) {
+			processModifiedQuery(hql, query.getQueryModifier(), query.getTarget());
+		} else {
+			processObject(hql, query.getTarget());
 		}
-		processObject(hql, query.getTarget());
 		return hql.toString();
 	}
 	
 	
-	private static void processTargetAttributes(StringBuilder hql, TargetAttributes attribs) throws QueryProcessingException {
-		hql.append("select ");
-		for (int i = 0; i < attribs.getAttributeName().length; i++) {
-			hql.append(attribs.getAttributeName(i));
-			if (i + 1 < attribs.getAttributeName().length) {
-				hql.append(", ");
+	private static void processModifiedQuery(StringBuilder hql, QueryModifier mods, Object target) throws QueryProcessingException {
+		if (mods.isCountOnly()) {
+			processCountingQuery(hql, mods, target);
+		} else {
+			processAttributeQuery(hql, mods, target);
+		}
+	}
+	
+	
+	private static void processCountingQuery(StringBuilder hql, QueryModifier mods, Object target) throws QueryProcessingException {
+		hql.append("select count(");
+		if (mods.getDistinctAttribute() != null) {
+			// counting distinct attributes
+			hql.append("distinct ").append(mods.getDistinctAttribute()).append(") ");
+			processObject(hql, target);
+		} else if (mods.getAttributeNames() != null) {
+			// counting objects where any one of the attribs is not null
+			hql.append("*) ");
+			// process the target object normally
+			processObject(hql, target);
+			// only add a where statement if the target has no child restrictions
+			boolean addWhereStatement = target.getAssociation() == null 
+				&& target.getAttribute() == null && target.getGroup()== null;
+			if (addWhereStatement) {
+				hql.append(" where ");
 			} else {
-				hql.append(" ");
+				hql.append(" and ");
+			}
+			// build the attribute not null clause
+			StringBuilder attribClause = new StringBuilder();
+			attribClause.append("(");
+			for (int i = 0; i < mods.getAttributeNames().length; i++) {
+				attribClause.append(mods.getAttributeNames(i));
+				attribClause.append(" is not null");
+				if (i + 1 < mods.getAttributeNames().length) {
+					attribClause.append(" or ");
+				}
+			}
+			attribClause.append(")");
+			// append the attribute not null clause to the target
+			hql.append(attribClause.toString());
+		} else {
+			// counting unique objects
+			// need to use an alias in the count clause
+			hql.append(TARGET_ALIAS).append(") ");
+			int currentIndex = hql.length();
+			processObject(hql, target);
+			// add the alias to the object
+			int targetClassIndex = hql.indexOf(target.getName(), currentIndex);
+			targetClassIndex += target.getName().length();
+			hql.insert(targetClassIndex, " " + TARGET_ALIAS + " ");
+		}
+	}
+	
+	
+	private static void processAttributeQuery(StringBuilder hql, QueryModifier mods, Object target) throws QueryProcessingException {
+		if (mods.getDistinctAttribute() != null) {
+			// counting distinct attributes
+			hql.append("select distinct ").append(mods.getDistinctAttribute());
+		} else {
+			String[] names = mods.getAttributeNames();
+			if (names != null) {
+				hql.append("select ");
+				for (int i = 0; i < names.length; i++) {
+					hql.append(names[i]);
+					if (i + 1 < names.length) {
+						hql.append(", ");
+					}
+				}
 			}
 		}
+		hql.append(" ");
+		processObject(hql, target);
 	}
 	
 	

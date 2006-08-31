@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.data.utilities;
 
-import gov.nih.nci.cagrid.cqlquery.TargetAttributes;
 import gov.nih.nci.cagrid.cqlresultset.CQLAttributeResult;
+import gov.nih.nci.cagrid.cqlresultset.CQLCountResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.cqlresultset.TargetAttribute;
@@ -127,28 +127,35 @@ public class CQLQueryResultsUtil {
 	 * 
 	 * @param rawAttribs
 	 * 		The raw attributes from the query.  The list is expected to contain
-	 * 		java.lang.Object[], with elements ordering following the
-	 * 		queryAttribs ordering 
+	 * 		a singluar java.lang.Object, or java.lang.Object[] as an array
+	 * 		with elements whose ordering follows the queryAttribs ordering 
 	 * @param targetName
 	 * 		The name of the target data type from which these attributes come
-	 * @param queryAttribs
-	 * 		The original query attributes
+	 * @param attribNames
+	 * 		The names of the query attributes
 	 * @return
 	 */
 	public static CQLQueryResults createAttributeQueryResults(
-		List rawAttribs, String targetName, TargetAttributes queryAttribs) {
+		List rawAttribs, String targetName, String[] attribNames) {
 		CQLQueryResults results = new CQLQueryResults();
 		results.setTargetClassname(targetName);
 		CQLAttributeResult[] attribResults = new CQLAttributeResult[rawAttribs.size()];
 		Iterator rawAttribIter = rawAttribs.iterator();
 		int index = 0;
 		while (rawAttribIter.hasNext()) {
-			Object[] attribs = (Object[]) rawAttribIter.next();
+			// get the object and verify it's an array
+			Object result = rawAttribIter.next();
+			Object[] attribs = null;
+			if (result.getClass().isArray()) {
+				attribs = (Object[]) result;
+			} else {
+				attribs = new Object[] {result};
+			}
 			CQLAttributeResult attribResult = new CQLAttributeResult();
 			TargetAttribute[] typeAttribs = new TargetAttribute[attribs.length];
 			for (int i = 0; i < attribs.length; i++) {
 				TargetAttribute typeAttrib = new TargetAttribute(
-					queryAttribs.getAttributeName(i), attribs[i].toString());
+					attribNames[i], attribs[i].toString());
 				typeAttribs[i] = typeAttrib;
 			}
 			attribResult.setAttribute(typeAttribs);
@@ -156,6 +163,24 @@ public class CQLQueryResultsUtil {
 			index++;
 		}
 		results.setAttributeResult(attribResults);
+		return results;
+	}
+	
+	
+	/**
+	 * Creates a CQLQueryResults object with a single count result in it.
+	 * 
+	 * @param count
+	 * 		The count of the objects returned by the query
+	 * @param targetName
+	 * 		The classname of the target object from the query
+	 * @return
+	 */
+	public static CQLQueryResults createCountQueryResults(long count, String targetName) {
+		CQLQueryResults results = new CQLQueryResults();
+		results.setTargetClassname(targetName);
+		CQLCountResult countResult = new CQLCountResult(count);
+		results.setCountResult(countResult);
 		return results;
 	}
 	
