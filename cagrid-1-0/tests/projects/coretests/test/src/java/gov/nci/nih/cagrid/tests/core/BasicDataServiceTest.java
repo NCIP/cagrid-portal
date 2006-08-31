@@ -26,7 +26,7 @@ public class BasicDataServiceTest
 	@SuppressWarnings("unchecked")
 	protected Vector steps() 
 	{
-		super.init("BasicDataServiceTest");
+		super.init("BasicDataService");
 
 		Vector steps = new Vector();
 		steps.add(createServiceStep);
