@@ -469,6 +469,7 @@ public class TrustedAuthorityManager {
 						+ TrustedAuthorityTable.NAME + "= ?");
 				s.setString(1, name);
 				s.execute();
+				s.close();
 			} catch (Exception e) {
 				this.log
 						.error(
@@ -503,6 +504,7 @@ public class TrustedAuthorityManager {
 					+ TrustedAuthorityTable.TRUST_LEVEL + "= ?");
 			s.setString(1, level);
 			s.execute();
+			s.close();
 		} catch (Exception e) {
 			this.log
 					.error(
@@ -562,6 +564,7 @@ public class TrustedAuthorityManager {
 				s.setString(11, ta.getCRL().getCrlEncodedString());
 			}
 			s.execute();
+			s.close();
 		} catch (Exception e) {
 			this.log
 					.error(

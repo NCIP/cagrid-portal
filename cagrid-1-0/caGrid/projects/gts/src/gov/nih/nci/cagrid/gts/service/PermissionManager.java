@@ -104,6 +104,7 @@ public class PermissionManager {
 			s.setString(2, p.getRole().getValue());
 			s.setString(3, p.getTrustedAuthorityName());
 			s.execute();
+			s.close();
 		} catch (Exception e) {
 			this.log
 					.error(
@@ -142,6 +143,7 @@ public class PermissionManager {
 			s.setString(2, p.getRole().getValue());
 			s.setString(3, p.getTrustedAuthorityName());
 			s.execute();
+			s.close();
 		} catch (Exception e) {
 			String perm = formatPermission(p);
 			this.log
