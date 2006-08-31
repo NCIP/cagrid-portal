@@ -132,9 +132,9 @@
 
 	<target name="update">
 		<echo>Updating caGrid</echo>
-		<cvs dest="${cagrid.dir}" command="update"/>
+		<cvs dest="${cagrid.dir}" command="update -Pd"/>
 		<echo>Updating caGrid tests</echo>
-		<cvs dest="${cagrid.tests.dir}" command="update"/>
+		<cvs dest="${cagrid.tests.dir}" command="update -Pd"/>
 	</target>
 
 	<target name="build">
