@@ -243,16 +243,12 @@
             </filterset>
         </copy>
 
-        <copy file="${props.src.dir}/applicationContext-data-access.xml"
-              tofile="${webinf.classes.dir}/applicationContext-data-access.xml"
-              filtering="true" overwrite="true">
-            <filterset>
-                <filter token="jdbc.driverClassName" value="${db.connection.driver_class}"/>
-                <filter token="jdbc.url" value="${db.connection.url}"/>
-                <filter token="jdbc.username" value="${db.connection.username}"/>
-                <filter token="jdbc.password" value="${db.connection.password}"/>
-            </filterset>
-        </copy>
+        <copyReplaceDBProperties src.filename="${props.src.dir}/applicationContext-data-access.xml"
+                                 dest.filename="${webinf.classes.dir}/applicationContext-data-access.xml"/>
+
+
+        <copyReplaceDBProperties src.filename="${props.src.dir}/applicationContext-data-access-mock.xml"
+                                 dest.filename="${webinf.classes.dir}/applicationContext-data-access-mock.xml"/>
 
         <copy todir="${webinf.classes.dir}">
             <fileset dir="${props.src.dir}">
@@ -264,6 +260,23 @@
 
     </target>
 
+    <!-- Copy and replace DB properties in the Spring config files -->
+    <macrodef name="copyReplaceDBProperties">
+        <attribute name="src.filename"/>
+        <attribute name="dest.filename"/>
+        <sequential>
+            <copy file="@{src.filename}"
+                  tofile="@{dest.filename}"
+                  filtering="true" overwrite="true">
+                <filterset>
+                    <filter token="jdbc.driverClassName" value="${db.connection.driver_class}"/>
+                    <filter token="jdbc.url" value="${db.connection.url}"/>
+                    <filter token="jdbc.username" value="${db.connection.username}"/>
+                    <filter token="jdbc.password" value="${db.connection.password}"/>
+                </filterset>
+            </copy>
+        </sequential>
+    </macrodef>
     <!-- ============================================================== -->
     <!-- Compile up generated stuff                                      -->
     <!-- ============================================================== -->
