@@ -97,6 +97,21 @@ public class ValidCqlTestCase extends TestCase {
 	public void testObjectWithNestedGroup() {
 		checkQuery("objectWithNestedGroup.xml");
 	}
+	
+	
+	public void testCountAllOfType() {
+		checkQuery("countAllOfType.xml");
+	}
+	
+	
+	public void testCountDistinctAttributes() {
+		checkQuery("countDistinctAttributes.xml");
+	}
+	
+	
+	public void testReturnNamedAttributes() {
+		checkQuery("returnNamedAttributes.xml");
+	}
 
 	
 	public static void main(String[] args) {
