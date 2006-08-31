@@ -145,5 +145,7 @@
 	<classpathentry kind="lib" path="test/lib/gnu-regexp-110.jar"/>
 	<classpathentry kind="lib" path="test/lib/shaste-1.0.jar"/>
 	<classpathentry kind="lib" path="test/lib/uispec4j-0.15.jar"/>
+	<classpathentry kind="lib" path="lib/commons-cli-1.0.jar"/>
+	<classpathentry sourcepath="/caGrid-1.0-tests-cqlprocessors/src/java" kind="lib" path="ext/lib/cagrid-1.0-tests-cqlprocessors-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
