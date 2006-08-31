@@ -48,6 +48,11 @@
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects above -->
 	<property name="testable.projects.list" value="cqlprocessors,coretests" />
+	<!-- ================================================================================ -->
+	<!--           DEFINE THE SUB PROJECTS THAT SUPPORT SPECIAL ARTIFACT CLEANING         -->
+	<!-- ================================================================================ -->
+	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
+	<property name="cleanable.projects.list" value="coretests" />
 
 	<!-- =============================================================== -->
 	<!-- Bootstrap the build by setting up the structure and building    -->
@@ -126,6 +131,9 @@
 			<artifact refid="graph.jars" />
 			<artifact refid="introduce.servicesecurity.jars" />
 		</resolveDependencies>
+		<resolveDependencies extdir="${tests.projects.dir}/coretests/test/resources/services/BasicDataService">
+			<artifact refid="cqlprocessors.jars" />
+		</resolveDependencies>
 		<ant dir="${tests.projects.dir}/coretests" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
@@ -182,9 +190,16 @@
 			</sequential>
 		</for>
 
+		<for list="${cleanable.projects.list}" parallel="true" param="project.name" trim="true">
+			<sequential>
+				<echo message="Cleaning artifacts from project @{project.name}." />
+				<ant dir="${tests.projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean-artifacts" />
+			</sequential>
+		</for>
+
 		<delete failonerror="false">
 			<fileset dir="${junit.results.dir}">
-				<include name="*" />
+				<include name="*"/>
 			</fileset>
 		</delete>
 	</target>
