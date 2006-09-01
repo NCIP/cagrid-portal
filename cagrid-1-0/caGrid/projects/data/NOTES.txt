@@ -29,12 +29,13 @@ TODO:
 24[D]: Add Project (all packages in said project) button on DS extension GUI
 25[D]: Don't assume in codegen pre processor that user has configured their CQL Query Processor impl, and the element for this data exists in the extension data.
 	-- Could probably be checked in the GUI
-26[D]:Some comments on the base CQLQueryProcessor:
+26[D]: Some comments on the base CQLQueryProcessor:
     * processQuery should be the only abstract method; in this base class you should default initialize to do nothing and getRequiredParameters to return an empty map.
     * Are the javadocs still accurate for getRequiredParamters now that you have changed the way the properties are stored? ( e.g. does it still have to start with lower case)
     * Need to describe what, if any, constraints there are on the Map’s key value (is it required to contain String->String?)
     * Need to describe the relationship between the Map returned by getRequiredParameters, and that passed in to initialize
-27[D]:Have DS extension add type mappings for SemanticMetadata / DomainModel stuff to the server-config.wsdd and client-config.wsdd of created services
+27[D]: Have DS extension add type mappings for SemanticMetadata / DomainModel stuff to the server-config.wsdd and client-config.wsdd of created services
+28[ ]: Provide configuration to turn on / off validation for both CQL syntax and domain model conformance.
 
 BUGS:
 
