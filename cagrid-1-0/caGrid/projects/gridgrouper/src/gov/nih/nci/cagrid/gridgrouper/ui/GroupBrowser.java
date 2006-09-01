@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
+import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.client.Membership;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
@@ -10,7 +11,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -144,8 +147,16 @@ public class GroupBrowser extends JPanel {
 	private JButton removeMemberButton = null;
 
 	private JButton removeCompositeButton = null;
-	
+
 	private boolean hasListedMembers = false;
+
+	private JScrollPane jScrollPane2 = null;
+
+	private GroupPrivilegesTable privilegesTable = null;
+
+	private JPanel privilegesButtonPanel = null;
+
+	private JButton findPrivileges = null;
 
 	/**
 	 * This is the default constructor
@@ -158,8 +169,8 @@ public class GroupBrowser extends JPanel {
 		this.setGroup();
 
 	}
-	
-	protected boolean getHasListedMembers(){
+
+	protected boolean getHasListedMembers() {
 		return hasListedMembers;
 	}
 
@@ -368,8 +379,27 @@ public class GroupBrowser extends JPanel {
 	 */
 	private JPanel getPrivileges() {
 		if (privileges == null) {
+			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+			gridBagConstraints31.gridx = 0;
+			gridBagConstraints31.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints31.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints31.weightx = 1.0D;
+			gridBagConstraints31.gridy = 1;
+			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
+			gridBagConstraints30.fill = GridBagConstraints.BOTH;
+			gridBagConstraints30.weighty = 1.0;
+			gridBagConstraints30.gridx = 0;
+			gridBagConstraints30.gridy = 0;
+			gridBagConstraints30.weightx = 1.0;
 			privileges = new JPanel();
 			privileges.setLayout(new GridBagLayout());
+			privileges.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Privileges",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					GridGrouperLookAndFeel.getPanelLabelColor()));
+			privileges.add(getJScrollPane2(), gridBagConstraints30);
+			privileges.add(getPrivilegesButtonPanel(), gridBagConstraints31);
 		}
 		return privileges;
 	}
@@ -1110,13 +1140,14 @@ public class GroupBrowser extends JPanel {
 												.getSelectedMember();
 										node.getGroup().deleteMember(
 												m.getMember().getSubject());
-										if(getHasListedMembers()){
+										if (getHasListedMembers()) {
 											listMembers();
 										}
 
 									} catch (Exception e) {
 										e.printStackTrace();
-										PortalUtils.showErrorMessage(e.getMessage());
+										PortalUtils.showErrorMessage(e
+												.getMessage());
 									}
 
 								}
@@ -1156,7 +1187,7 @@ public class GroupBrowser extends JPanel {
 										node.getGroup().deleteCompositeMember();
 										node.refresh();
 										setGroup();
-										if(getHasListedMembers()){
+										if (getHasListedMembers()) {
 											listMembers();
 										}
 									} catch (Exception e) {
@@ -1178,6 +1209,188 @@ public class GroupBrowser extends JPanel {
 					});
 		}
 		return removeCompositeButton;
+	}
+
+	/**
+	 * This method initializes jScrollPane2
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getJScrollPane2() {
+		if (jScrollPane2 == null) {
+			jScrollPane2 = new JScrollPane();
+			jScrollPane2.setViewportView(getPrivilegesTable());
+		}
+		return jScrollPane2;
+	}
+
+	/**
+	 * This method initializes privilegesTable
+	 * 
+	 * @return javax.swing.JTable
+	 */
+	private GroupPrivilegesTable getPrivilegesTable() {
+		if (privilegesTable == null) {
+			privilegesTable = new GroupPrivilegesTable(this);
+		}
+		return privilegesTable;
+	}
+
+	/**
+	 * This method initializes privilegesButtonPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getPrivilegesButtonPanel() {
+		if (privilegesButtonPanel == null) {
+			privilegesButtonPanel = new JPanel();
+			privilegesButtonPanel.setLayout(new FlowLayout());
+			privilegesButtonPanel.add(getFindPrivileges(), null);
+		}
+		return privilegesButtonPanel;
+	}
+
+	protected void loadPrivileges() {
+		MobiusRunnable runner = new MobiusRunnable() {
+			public void execute() {
+				synchronized (getPrivilegesTable()) {
+					int eid = node.getBrowser().getProgress().startEvent(
+							"Loading the privileges for "
+									+ group.getDisplayExtension() + "...");
+					try {
+
+						getPrivilegesTable().clearTable();
+						Map map = new HashMap();
+						Set s1 = group.getAdmins();
+						Iterator itr1 = s1.iterator();
+						while (itr1.hasNext()) {
+							Subject sub = (Subject) itr1.next();
+							GroupPrivilegeCaddy caddy = new GroupPrivilegeCaddy(
+									sub.getId());
+							caddy.setAdmin(true);
+							map.put(caddy.getIdentity(), caddy);
+						}
+
+						Set s2 = group.getUpdaters();
+						Iterator itr2 = s2.iterator();
+						while (itr2.hasNext()) {
+							Subject sub = (Subject) itr2.next();
+							GroupPrivilegeCaddy caddy = null;
+							if (map.containsKey(sub.getId())) {
+								caddy = (GroupPrivilegeCaddy) map.get(sub
+										.getId());
+							} else {
+								caddy = new GroupPrivilegeCaddy(sub.getId());
+								map.put(caddy.getIdentity(), caddy);
+							}
+							caddy.setUpdate(true);
+						}
+
+						Set s3 = group.getViewers();
+						Iterator itr3 = s3.iterator();
+						while (itr3.hasNext()) {
+							Subject sub = (Subject) itr3.next();
+							GroupPrivilegeCaddy caddy = null;
+							if (map.containsKey(sub.getId())) {
+								caddy = (GroupPrivilegeCaddy) map.get(sub
+										.getId());
+							} else {
+								caddy = new GroupPrivilegeCaddy(sub.getId());
+								map.put(caddy.getIdentity(), caddy);
+							}
+							caddy.setView(true);
+						}
+
+						Set s4 = group.getReaders();
+						Iterator itr4 = s4.iterator();
+						while (itr4.hasNext()) {
+							Subject sub = (Subject) itr4.next();
+							GroupPrivilegeCaddy caddy = null;
+							if (map.containsKey(sub.getId())) {
+								caddy = (GroupPrivilegeCaddy) map.get(sub
+										.getId());
+							} else {
+								caddy = new GroupPrivilegeCaddy(sub.getId());
+								map.put(caddy.getIdentity(), caddy);
+							}
+							caddy.setRead(true);
+						}
+
+						Set s5 = group.getOptins();
+						Iterator itr5 = s5.iterator();
+						while (itr5.hasNext()) {
+							Subject sub = (Subject) itr5.next();
+							GroupPrivilegeCaddy caddy = null;
+							if (map.containsKey(sub.getId())) {
+								caddy = (GroupPrivilegeCaddy) map.get(sub
+										.getId());
+							} else {
+								caddy = new GroupPrivilegeCaddy(sub.getId());
+								map.put(caddy.getIdentity(), caddy);
+							}
+							caddy.setOptin(true);
+						}
+
+						Set s6 = group.getOptouts();
+						Iterator itr6 = s6.iterator();
+						while (itr6.hasNext()) {
+							Subject sub = (Subject) itr6.next();
+							GroupPrivilegeCaddy caddy = null;
+							if (map.containsKey(sub.getId())) {
+								caddy = (GroupPrivilegeCaddy) map.get(sub
+										.getId());
+							} else {
+								caddy = new GroupPrivilegeCaddy(sub.getId());
+								map.put(caddy.getIdentity(), caddy);
+							}
+							caddy.setOptout(true);
+						}
+
+						Iterator itr7 = map.values().iterator();
+						while (itr7.hasNext()) {
+							getPrivilegesTable().addPrivilege(
+									(GroupPrivilegeCaddy) itr7.next());
+						}
+						node.getBrowser().getProgress().stopEvent(
+								eid,
+								"Loaded the privileges for "
+										+ group.getDisplayExtension() + "!!!");
+					} catch (Exception e) {
+						node.getBrowser().getProgress().stopEvent(
+								eid,
+								"Error loading the privileges for "
+										+ group.getDisplayExtension() + "!!!");
+						PortalUtils.showErrorMessage(e);
+					}
+				}
+			}
+		};
+		try {
+			PortalResourceManager.getInstance().getThreadManager()
+					.executeInBackground(runner);
+		} catch (Exception t) {
+			t.getMessage();
+		}
+	}
+
+	/**
+	 * This method initializes findPrivileges
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getFindPrivileges() {
+		if (findPrivileges == null) {
+			findPrivileges = new JButton();
+			findPrivileges.setText("Get Privileges");
+			findPrivileges.setIcon(GridGrouperLookAndFeel.getQueryIcon());
+			findPrivileges
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							loadPrivileges();
+						}
+					});
+		}
+		return findPrivileges;
 	}
 
 }

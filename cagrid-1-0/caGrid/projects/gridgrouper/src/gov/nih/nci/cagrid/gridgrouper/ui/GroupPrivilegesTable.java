@@ -7,8 +7,6 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import org.projectmobius.portal.PortalResourceManager;
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
@@ -18,18 +16,26 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class StemPrivilegesTable extends PortalBaseTable {
+public class GroupPrivilegesTable extends PortalBaseTable {
 	public final static String CADDY = "Caddy";
 
 	public final static String IDENTITY = "Identity";
 
-	public final static String CREATOR = "Create";
+	public final static String ADMIN = "Admin";
 
-	public final static String STEMMER = "Stem";
+	public final static String UPDATE = "Update";
 
-	private StemBrowser browser;
+	public final static String READ = "Read";
 
-	public StemPrivilegesTable(StemBrowser browser) {
+	public final static String VIEW = "View";
+
+	public final static String OPTIN = "Optin";
+
+	public final static String OPTOUT = "Optout";
+
+	private GroupBrowser browser;
+
+	public GroupPrivilegesTable(GroupBrowser browser) {
 		super(createTableModel());
 		this.browser = browser;
 		TableColumn c = this.getColumn(CADDY);
@@ -38,16 +44,20 @@ public class StemPrivilegesTable extends PortalBaseTable {
 		c.setPreferredWidth(0);
 		c.setResizable(false);
 
-		c = this.getColumn(CREATOR);
-		c.setMinWidth(60);
-		c.setMaxWidth(60);
-		c.setPreferredWidth(0);
-
-		c = this.getColumn(STEMMER);
-		c.setMinWidth(60);
-		c.setMaxWidth(60);
-		c.setPreferredWidth(0);
-
+		c = this.getColumn(IDENTITY);
+		c.setPreferredWidth(300);
+		c = this.getColumn(ADMIN);
+		c.setPreferredWidth(25);
+		c = this.getColumn(UPDATE);
+		c.setPreferredWidth(25);
+		c = this.getColumn(READ);
+		c.setPreferredWidth(25);
+		c = this.getColumn(VIEW);
+		c.setPreferredWidth(25);
+		c = this.getColumn(OPTIN);
+		c.setPreferredWidth(25);
+		c = this.getColumn(OPTOUT);
+		c.setPreferredWidth(25);
 		this.clearTable();
 
 	}
@@ -56,26 +66,42 @@ public class StemPrivilegesTable extends PortalBaseTable {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(CADDY);
 		model.addColumn(IDENTITY);
-		model.addColumn(STEMMER);
-		model.addColumn(CREATOR);
+		model.addColumn(ADMIN);
+		model.addColumn(UPDATE);
+		model.addColumn(READ);
+		model.addColumn(VIEW);
+		model.addColumn(OPTIN);
+		model.addColumn(OPTOUT);
 		return model;
 
 	}
 
-	public void addPrivilege(final StemPrivilegeCaddy priv) {
+	public void addPrivilege(final GroupPrivilegeCaddy priv) {
 		Vector v = new Vector();
 		v.add(priv);
 		v.add(priv.getIdentity());
-		v.add(Boolean.valueOf(priv.hasStem()));
-		v.add(Boolean.valueOf(priv.hasCreate()));
+		v.add(getDisplayText(priv.hasAdmin()));
+		v.add(getDisplayText(priv.hasUpdate()));
+		v.add(getDisplayText(priv.hasRead()));
+		v.add(getDisplayText(priv.hasView()));
+		v.add(getDisplayText(priv.hasOptin()));
+		v.add(getDisplayText(priv.hasOptout()));
 		addRow(v);
 	}
 
-	public synchronized StemPrivilegeCaddy getSelectedPrivilege()
+	private String getDisplayText(boolean has) {
+		if (has) {
+			return "Y";
+		} else {
+			return "N";
+		}
+	}
+
+	public synchronized GroupPrivilegeCaddy getSelectedPrivilege()
 			throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
-			return (StemPrivilegeCaddy) getValueAt(row, 0);
+			return (GroupPrivilegeCaddy) getValueAt(row, 0);
 		} else {
 			throw new Exception("Please select a privilege!!!");
 		}
@@ -91,12 +117,12 @@ public class StemPrivilegesTable extends PortalBaseTable {
 	}
 
 	public void doubleClick() throws Exception {
-		StemPrivilegeCaddy caddy = getSelectedPrivilege();
-		PortalResourceManager
-				.getInstance()
-				.getGridPortal()
-				.addGridPortalComponent(
-						new StemPrivilegeWindow(browser, caddy), 500, 200);
+		/*
+		 * StemPrivilegeCaddy caddy = getSelectedPrivilege();
+		 * PortalResourceManager.getInstance().getGridPortal()
+		 * .addGridPortalComponent( new StemPrivilegeWindow(browser, caddy),
+		 * 500, 200);
+		 */
 	}
 
 	public void singleClick() throws Exception {

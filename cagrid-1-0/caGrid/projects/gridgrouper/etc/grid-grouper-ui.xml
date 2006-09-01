@@ -21,7 +21,7 @@
 	  		<class>gov.nih.nci.cagrid.gridgrouper.ui.GroupManagementBrowser</class>
 	  		<icon>/grouper_logo_no_background_22x22.png</icon>
 	  		<dimensions>
-	  			<width>900</width>
+	  			<width>1000</width>
 	  			<height>600</height>
 	  		</dimensions>
 	  	</component>
