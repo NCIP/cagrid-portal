@@ -134,7 +134,7 @@ public class AddGridGrouperWindow extends GridPortalComponent {
 			gridBagConstraints4.gridy = 1;
 			jLabel1 = new JLabel();
 			jLabel1.setText("Credentials");
-			jLabel1.setFont(new Font("Dialog", Font.BOLD, 14));
+			jLabel1.setFont(new Font("Dialog", Font.BOLD, 12));
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints2.gridx = 1;
@@ -149,7 +149,7 @@ public class AddGridGrouperWindow extends GridPortalComponent {
 			gridBagConstraints1.gridy = 0;
 			jLabel = new JLabel();
 			jLabel.setText("Grid Grouper");
-			jLabel.setFont(new Font("Dialog", Font.BOLD, 14));
+			jLabel.setFont(new Font("Dialog", Font.BOLD, 12));
 			treePanel = new JPanel();
 			treePanel.setLayout(new GridBagLayout());
 			treePanel.add(jLabel, gridBagConstraints1);
