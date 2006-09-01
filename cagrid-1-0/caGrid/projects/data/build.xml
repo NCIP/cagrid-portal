@@ -309,7 +309,7 @@
 
 
     <!-- compiles the extension source code -->
-    <target name="compileExtension" depends="compileStubs, compileCommon, compileService, compileCql">
+    <target name="compileExtension" depends="compileStubs, compileCommon, compileService, compileCql, compileValidation">
         <javac srcdir="${extension.src.dir}" destdir="${build.extension.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
                 <fileset dir="${lib.dir}">
@@ -322,6 +322,7 @@
                 <pathelement location="${build.service.dest}" />
                 <pathelement location="${build.common.dest}" />
                 <pathelement location="${build.cql.dest}" />
+            	<pathelement location="${build.validation.dest}"/>
                 <fileset dir="${globus.dir}/lib">
                     <include name="*.jar" />
                 </fileset>

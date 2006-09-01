@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.cql.validation;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlquery.Group;
@@ -9,7 +8,6 @@ import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.cqlquery.QueryModifier;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,25 +21,15 @@ import java.util.Set;
  * @created May 18, 2006 
  * @version $Id$ 
  */
-public class ObjectWalkingCQLValidator extends CQLValidator {
+public class ObjectWalkingCQLValidator implements CqlStructureValidator {
 	
 	private static Set predicateValues = null;
-	private static DomainModelValidator domainValidator = null;
 	
-	public void validateStructure(CQLQuery query) throws MalformedQueryException {
+	public void validateCqlStructure(CQLQuery query) throws MalformedQueryException {
 		if (query.getQueryModifier() != null) {
 			validateQueryMods(query.getQueryModifier());
 		}
 		validateObjectStructure(query.getTarget());
-	}
-	
-	
-	public void validateDomain(CQLQuery query, DomainModel model) throws MalformedQueryException {
-		if (domainValidator == null) {
-			domainValidator = new DomainModelValidator();
-		}
-		// validate the query against the data service's Domain Model
-		domainValidator.validateDomain(query, model);
 	}
 	
 	
@@ -165,26 +153,6 @@ public class ObjectWalkingCQLValidator extends CQLValidator {
 			for (int i = 0; i < group.getGroup().length; i++) {
 				validateGroupStructure(group.getGroup(i));
 			}
-		}
-	}
-
-
-	// main method for testing only
-	public static void main(String[] args) {
-		if (args.length != 2) {
-			System.err.println("usage: " + ObjectWalkingCQLValidator.class.getName() + " <cqlDocumentFilename> <domainModelFilename>");
-			System.exit(1);
-		}
-		ObjectWalkingCQLValidator validator = new ObjectWalkingCQLValidator();
-		String cqlFilename = args[0];
-		String domainModelFilename = args[1];
-		try {
-			CQLQuery query = (CQLQuery) Utils.deserializeDocument(cqlFilename, CQLQuery.class);
-			DomainModel model = (DomainModel) Utils.deserializeDocument(domainModelFilename, DomainModel.class);
-			validator.validateCql(query, model);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			System.exit(1);
 		}
 	}
 }

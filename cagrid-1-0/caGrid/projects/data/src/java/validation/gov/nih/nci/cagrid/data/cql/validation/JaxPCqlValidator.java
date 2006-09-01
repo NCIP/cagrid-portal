@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,19 +23,18 @@ import javax.xml.namespace.QName;
  * @created May 16, 2006 
  * @version $Id$ 
  */
-public class JaxPValidator extends CQLValidator {
-	private static DomainModelValidator domainValidator = null;
+public class JaxPCqlValidator implements CqlStructureValidator {
 	
 	private SchemaValidator validator;
 	private QName queryQname;
 	
-	public JaxPValidator(String xsdFilename) throws SchemaValidationException {
+	public JaxPCqlValidator(String xsdFilename) throws SchemaValidationException {
 		validator = new SchemaValidator(xsdFilename);
 		queryQname = new QName(DataServiceConstants.CQL_QUERY_URI, "CQLQuery");
 	}
 	
 	
-	public void validateStructure(CQLQuery query) throws MalformedQueryException {
+	public void validateCqlStructure(CQLQuery query) throws MalformedQueryException {
 		// have to convert the query back to XML to be handed off to the schema validator
 		StringWriter objectWriter = new StringWriter();
 		try {
@@ -51,13 +49,5 @@ public class JaxPValidator extends CQLValidator {
 		} catch (SchemaValidationException ex) {
 			throw new MalformedQueryException(ex.getMessage(), ex);
 		}
-	}
-	
-	
-	public void validateDomain(CQLQuery query, DomainModel model) throws MalformedQueryException {
-		if (domainValidator == null) {
-			domainValidator = new DomainModelValidator();
-		}
-		domainValidator.validateDomain(query, model);
 	}
 }

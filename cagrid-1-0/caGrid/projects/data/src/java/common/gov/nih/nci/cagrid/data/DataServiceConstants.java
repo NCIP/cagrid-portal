@@ -94,6 +94,13 @@ public class DataServiceConstants {
 	public static final String USE_SDK_DATA_SOURCE = "useSdkDataSource";
 	public static final String USE_CUSTOM_DATA_SORUCE = "useCustomDataSource";
 	
+	// validation constants
+	public static final String DATA_SERVICE_PARAMS_PREFIX = "dataService";
+	public static final String CQL_VALIDATOR_CLASS = DATA_SERVICE_PARAMS_PREFIX + "_cqlValidatorClass";
+	public static final String DOMAIN_MODEL_VALIDATOR_CLASS = DATA_SERVICE_PARAMS_PREFIX + "_domainModelValidatorClass";
+	public static final String VALIDATE_CQL_FLAG = DATA_SERVICE_PARAMS_PREFIX + "_validateCqlFlag";
+	public static final String VALIDATE_DOMAIN_MODEL_FLAG = DATA_SERVICE_PARAMS_PREFIX + "_validateDomainModelFlag";
+	
 	// DomainModel QName
 	public static final QName DOMAIN_MODEL_QNAME = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice", "DomainModel");
 	

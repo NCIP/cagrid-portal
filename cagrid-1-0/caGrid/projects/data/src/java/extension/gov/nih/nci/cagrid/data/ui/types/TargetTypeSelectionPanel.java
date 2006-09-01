@@ -44,9 +44,12 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -86,6 +89,9 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private JButton addFullProjectButton = null;
 	private JPanel addToModelButtonsPanel = null;
 	private JButton removePackageButton = null;
+	private JPanel validationConfigPanel = null;
+	private JCheckBox cqlSyntaxValidationCheckBox = null;
+	private JCheckBox domainModelValidationCheckBox = null;
 	
 	private transient Project mostRecentProject = null;
 	private transient Map packageToNamespace = null;
@@ -509,6 +515,11 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	 */
 	private JPanel getConfigurationPanel() {
 		if (configurationPanel == null) {
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints13.weightx = 1.0D;
+			gridBagConstraints13.gridy = 3;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints4.gridy = 2;
@@ -529,6 +540,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			configurationPanel.add(getConfigureButton(), gridBagConstraints4);
 			configurationPanel.add(getTypesTableScrollPane(), gridBagConstraints3);
 			configurationPanel.add(getClassBrowserPanel(), gridBagConstraints2);
+			configurationPanel.add(getValidationConfigPanel(), gridBagConstraints13);
 		}
 		return configurationPanel;
 	}
@@ -777,16 +789,6 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			getTypesTree().addNamespaceType(nsType);
 		}
 	}
-	
-	
-	/**
-	 * Temporary stub to get the build going again.
-	 * 
-	 * This method should reload all GUI components that rely on the service model
-	 */
-	public void resetGUI() {
-		// TODO: implement me
-	}
 
 
 	/**
@@ -814,5 +816,82 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			});
 		}
 		return removePackageButton;
+	}
+
+
+	/**
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getValidationConfigPanel() {
+		if (validationConfigPanel == null) {
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 1;
+			gridBagConstraints12.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints12.gridy = 0;
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 0;
+			gridBagConstraints11.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints11.gridy = 0;
+			validationConfigPanel = new JPanel();
+			validationConfigPanel.setLayout(new GridBagLayout());
+			validationConfigPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Query Validation", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			validationConfigPanel.add(getCqlSyntaxValidationCheckBox(), gridBagConstraints11);
+			validationConfigPanel.add(getDomainModelValidationCheckBox(), gridBagConstraints12);
+		}
+		return validationConfigPanel;
+	}
+
+
+	/**
+	 * This method initializes jCheckBox	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getCqlSyntaxValidationCheckBox() {
+		if (cqlSyntaxValidationCheckBox == null) {
+			cqlSyntaxValidationCheckBox = new JCheckBox();
+			cqlSyntaxValidationCheckBox.setText("CQL Syntax");
+			cqlSyntaxValidationCheckBox.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent e) {
+					CommonTools.setServiceProperty(getServiceInfo(), DataServiceConstants.VALIDATE_CQL_FLAG, 
+						String.valueOf(getCqlSyntaxValidationCheckBox().isSelected()), false);
+				}
+			});
+		}
+		return cqlSyntaxValidationCheckBox;
+	}
+
+
+	/**
+	 * This method initializes jCheckBox	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getDomainModelValidationCheckBox() {
+		if (domainModelValidationCheckBox == null) {
+			domainModelValidationCheckBox = new JCheckBox();
+			domainModelValidationCheckBox.setText("Domain Model");
+			domainModelValidationCheckBox.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent e) {
+					CommonTools.setServiceProperty(getServiceInfo(), DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, 
+						String.valueOf(getDomainModelValidationCheckBox().isSelected()), false);
+				}
+			});
+		}
+		return domainModelValidationCheckBox;
+	}
+	
+	
+	/**
+	 * Temporary stub to get the build going again.
+	 * 
+	 * This method should reload all GUI components that rely on the service model
+	 */
+	public void resetGUI() {
+		// TODO: implement me
 	}
 }

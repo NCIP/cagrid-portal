@@ -11,21 +11,21 @@ import gov.nih.nci.cagrid.data.stubs.QueryProcessingException;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.wsenum.utils.EnumerateResponseFactory;
 import gov.nih.nci.cagrid.wsenum.utils.EnumerationCreationException;
+import gov.nih.nci.cagrid.wsenum.utils.SimplePersistantSDKObjectIterator;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.xml.namespace.QName;
 
-import org.apache.axis.components.uuid.UUIDGenFactory;
 import org.apache.axis.utils.ClassUtils;
 import org.globus.ws.enumeration.EnumIterator;
-import org.globus.ws.enumeration.IndexedObjectFileEnumIterator;
-import org.globus.wsrf.utils.io.IndexedObjectFileWriter;
 import org.oasis.wsrf.faults.BaseFaultType;
 
 /** 
@@ -103,7 +103,25 @@ public class EnumerationQueryImpl {
 		FileNotFoundException, IOException {
 		// perform the query
 		CQLQueryResults results = processor.processQuery(query);
+		// pump the results into a list
+		List resultList = new LinkedList();
+		Iterator resIter = new CQLQueryResultsIterator(results);
+		while (resIter.hasNext()) {
+			resultList.add(resIter);
+		}
 		
+		try {
+			// set the config stream on the SDK Object Iterator
+			SimplePersistantSDKObjectIterator.loadWsddStream(ClassUtils.getResourceAsStream(
+				getClass(), "server-config.wsdd"));
+			// create the EnumIterator from the objects
+			QName name = Utils.getRegisteredQName(resultList.get(0).getClass());
+			EnumIterator enumIter = SimplePersistantSDKObjectIterator.createIterator(resultList, name);
+			return enumIter;
+		} catch (Exception ex) {
+			throw new gov.nih.nci.cagrid.data.QueryProcessingException(ex);
+		}
+		/*
 		// TODO: Fix this to use ws-enum utilities for SDK object iterators
 		// write the results to disk
 		// first, need a unique ID to use for a file name
@@ -126,6 +144,7 @@ public class EnumerationQueryImpl {
 		// create the persistent iterator
 		EnumIterator iterator = new IndexedObjectFileEnumIterator(filename, objectQname);
 		return iterator;
+		*/
 	}
 	
 	

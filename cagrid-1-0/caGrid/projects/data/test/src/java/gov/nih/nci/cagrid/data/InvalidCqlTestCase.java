@@ -1,20 +1,20 @@
 package gov.nih.nci.cagrid.data;
 
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
-import gov.nih.nci.cagrid.data.cql.validation.CQLValidator;
+import gov.nih.nci.cagrid.data.cql.validation.CqlStructureValidator;
 import gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-import org.globus.wsrf.encoding.ObjectDeserializer;
-import org.xml.sax.InputSource;
-
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+
+import org.globus.wsrf.encoding.ObjectDeserializer;
+import org.xml.sax.InputSource;
 
 /** 
  *  InvalidCqlTestCase
@@ -27,7 +27,7 @@ import junit.textui.TestRunner;
  * @version $Id$ 
  */
 public class InvalidCqlTestCase extends TestCase {
-	private CQLValidator validator;
+	private CqlStructureValidator validator;
 	private String cqlDocsDir;
 	
 	public InvalidCqlTestCase(String name) {
@@ -56,7 +56,7 @@ public class InvalidCqlTestCase extends TestCase {
 	private void checkQuery(String filename) {
 		CQLQuery query = getQuery(cqlDocsDir + File.separator + filename);
 		try {
-			validator.validateStructure(query);
+			validator.validateCqlStructure(query);
 			fail("Query should have been invalid, was not");
 		} catch (MalformedQueryException ex) {
 			System.out.println("Query verified invalid: " + ex.getMessage());

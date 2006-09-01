@@ -2,8 +2,8 @@ package gov.nih.nci.cagrid.data;
 
 import gov.nih.nci.cagrid.common.SchemaValidator;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
-import gov.nih.nci.cagrid.data.cql.validation.CQLValidator;
-import gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator;
+import gov.nih.nci.cagrid.data.cql.validation.CqlDomainValidator;
+import gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.File;
@@ -30,13 +30,13 @@ public class ValidDomainTestCase extends TestCase {
 	public static final String DOMAIN_MODEL_FILE = "test/resources/domainModel.xml";
 	public static final String DOMAIN_MODEL_XSD = "ext/xsd/cagrid/types/data/data.xsd";
 	
-	private CQLValidator validator = null;
+	private CqlDomainValidator validator = null;
 	private DomainModel domainModel = null;
 	private String cqlDocsDir = null;
 	
 	public ValidDomainTestCase(String name) {
 		super(name);
-		validator = new ObjectWalkingCQLValidator();
+		validator = new DomainModelValidator();
 		cqlDocsDir = System.getProperty("cql.docs.dir");
 	}
 	
@@ -72,7 +72,7 @@ public class ValidDomainTestCase extends TestCase {
 	private void checkQuery(String filename) {
 		CQLQuery query = getQuery(cqlDocsDir + File.separator + "domain" + File.separator + filename);
 		try {
-			validator.validateDomain(query, getDomainModel());
+			validator.validateDomainModel(query, getDomainModel());
 			System.out.println("The query appears valid");
 			assertTrue("The query appears valid", true);
 		} catch (Exception ex) {

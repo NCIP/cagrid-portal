@@ -2,8 +2,8 @@ package gov.nih.nci.cagrid.data;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
-import gov.nih.nci.cagrid.data.cql.validation.CQLValidator;
-import gov.nih.nci.cagrid.data.cql.validation.JaxPValidator;
+import gov.nih.nci.cagrid.data.cql.validation.CqlStructureValidator;
+import gov.nih.nci.cagrid.data.cql.validation.JaxPCqlValidator;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,13 +24,13 @@ import junit.textui.TestRunner;
  * @version $Id$ 
  */
 public class JaxPValidCqlTestCase extends TestCase {
-	private CQLValidator validator;
+	private CqlStructureValidator validator;
 	private String cqlDocsDir;
 	
 	public JaxPValidCqlTestCase(String name) {
 		super(name);
 		try {
-			validator = new JaxPValidator("schema/Data/1_gov.nih.nci.cagrid.CQLQuery.xsd");
+			validator = new JaxPCqlValidator("schema/Data/1_gov.nih.nci.cagrid.CQLQuery.xsd");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -45,7 +45,7 @@ public class JaxPValidCqlTestCase extends TestCase {
 			FileInputStream configStream = new FileInputStream(new File("client-config.wsdd"));
 			CQLQuery query = (CQLQuery) Utils.deserializeObject(
 				new FileReader(queryFile), CQLQuery.class, configStream);
-			validator.validateStructure(query);
+			validator.validateCqlStructure(query);
 			assertTrue("Query is valid CQL", true);
 		} catch (Exception ex) {
 			ex.printStackTrace();

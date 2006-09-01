@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.Properties;
 
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
@@ -28,14 +29,9 @@ public class ServiceConfigUtil {
 			+ Character.toUpperCase(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.charAt(0)) 
 			+ DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.substring(1);
 		
-		Properties configParams = new Properties();
-		
-		MessageContext context = MessageContext.getCurrentContext();
-		String servicePath = context.getTargetService();
-		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
+		Properties configParams = new Properties();		
 		try {
-			javax.naming.Context initialContext = new InitialContext();
-			Object serviceConfig = initialContext.lookup(jndiName);
+			Object serviceConfig = getServiceConfigObject();
 			Class configClass = serviceConfig.getClass();
 			Method[] configMethods = configClass.getMethods();
 			for (int i = 0; i < configMethods.length; i++) {
@@ -61,12 +57,8 @@ public class ServiceConfigUtil {
 		String getterName = "get" + Character.toUpperCase(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY.charAt(0)) 
 			+ DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY.substring(1);
 		
-		MessageContext context = MessageContext.getCurrentContext();
-		String servicePath = context.getTargetService();
-		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
 		try {
-			javax.naming.Context initialContext = new InitialContext();
-			Object serviceConfig = initialContext.lookup(jndiName);
+			Object serviceConfig = getServiceConfigObject();
 			Class configClass = serviceConfig.getClass();
 			Method[] configMethods = configClass.getMethods();
 			for (int i = 0; i < configMethods.length; i++) {
@@ -79,8 +71,44 @@ public class ServiceConfigUtil {
 				}
 			}
 		} catch (Exception e) {
-			throw new Exception("Unable to convert service config to map: " + e.getMessage(), e);
+			throw new Exception("Unable to extract query processor class name from config: " + e.getMessage(), e);
 		}
 		return null;
+	}
+	
+	
+	public static Properties getDataServiceParams() throws Exception {
+		String getterName = "get" + Character.toUpperCase(DataServiceConstants.DATA_SERVICE_PARAMS_PREFIX.charAt(0)) 
+			+ DataServiceConstants.DATA_SERVICE_PARAMS_PREFIX.substring(1);
+		Properties props = new Properties();
+		try {
+			Object serviceConfig = getServiceConfigObject();
+			Class configClass = serviceConfig.getClass();
+			Method[] configMethods = configClass.getMethods();
+			for (int i = 0; i < configMethods.length; i++) {
+				Method current = configMethods[i];
+				if (current.getName().startsWith(getterName)
+					&& current.getReturnType().equals(String.class)
+					&& Modifier.isPublic(current.getModifiers())) {
+					String name = current.getName().substring(3);
+					name = String.valueOf(Character.toLowerCase(name.charAt(0))) + name.substring(1);
+					String value = (String) current.invoke(serviceConfig, new Object[] {});
+					props.setProperty(name, value);
+				}
+			}
+		} catch (Exception ex) {
+			throw new Exception("Unable to extract data service config parameters: " + ex.getMessage(), ex);
+		}
+		return props;
+	}
+	
+	
+	private static Object getServiceConfigObject() throws NamingException {
+		MessageContext context = MessageContext.getCurrentContext();
+		String servicePath = context.getTargetService();
+		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
+		javax.naming.Context initialContext = new InitialContext();
+		Object serviceConfig = initialContext.lookup(jndiName);
+		return serviceConfig;
 	}
 }

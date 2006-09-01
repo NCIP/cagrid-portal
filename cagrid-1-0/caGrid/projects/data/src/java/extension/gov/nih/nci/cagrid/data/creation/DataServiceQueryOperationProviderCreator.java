@@ -5,6 +5,8 @@ import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
+import gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator;
+import gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator;
 import gov.nih.nci.cagrid.data.service.globus.DataServiceProviderImpl;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -35,6 +37,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -54,6 +57,8 @@ import org.projectmobius.common.MobiusException;
  * @version $Id$ 
  */
 public class DataServiceQueryOperationProviderCreator implements CreationExtensionPostProcessor {
+	public static final String DEFAULT_CQL_VALIDATOR_CLASS = ObjectWalkingCQLValidator.class.getName();
+	public static final String DEFAULT_DOMAIN_MODEL_VALIDATOR = DomainModelValidator.class.getName();
 	
 	private static Logger log = Logger.getLogger(DataServiceQueryOperationProviderCreator.class);
 
@@ -306,22 +311,39 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 	
 	
 	private void modifyServiceProperties(ServiceDescription desc) throws CreationExtensionException {
-		ServicePropertiesProperty prop = new ServicePropertiesProperty();
-		prop.setKey(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-		prop.setValue(""); // empty value to be populated later
+		ServicePropertiesProperty qpClassProp = new ServicePropertiesProperty();
+		qpClassProp.setKey(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+		qpClassProp.setValue(""); // empty value to be populated later
+		ServicePropertiesProperty cqlValidatorProp = new ServicePropertiesProperty();
+		cqlValidatorProp.setKey(DataServiceConstants.CQL_VALIDATOR_CLASS);
+		cqlValidatorProp.setValue(DEFAULT_CQL_VALIDATOR_CLASS);
+		ServicePropertiesProperty dmValidatorProp = new ServicePropertiesProperty();
+		dmValidatorProp.setKey(DataServiceConstants.DOMAIN_MODEL_VALIDATOR_CLASS);
+		dmValidatorProp.setValue(DEFAULT_DOMAIN_MODEL_VALIDATOR);
+		ServicePropertiesProperty useCqlValidation = new ServicePropertiesProperty();
+		useCqlValidation.setKey(DataServiceConstants.VALIDATE_CQL_FLAG);
+		useCqlValidation.setValue(String.valueOf(false));
+		ServicePropertiesProperty useDomainValidation = new ServicePropertiesProperty();
+		useDomainValidation.setKey(DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG);
+		useDomainValidation.setValue(String.valueOf(false));
+		
 		ServiceProperties serviceProperties = desc.getServiceProperties();
 		if (serviceProperties == null) {
 			serviceProperties = new ServiceProperties();
 		}
-		ServicePropertiesProperty[] allProps = serviceProperties.getProperty();
-		if (allProps != null) {
-			ServicePropertiesProperty[] tmpProps = new ServicePropertiesProperty[allProps.length + 1];
-			System.arraycopy(allProps, 0, tmpProps, 0, allProps.length);
-			tmpProps[tmpProps.length - 1] = prop;
-		} else {
-			allProps = new ServicePropertiesProperty[] {prop};
+		List allProps = new ArrayList();
+		ServicePropertiesProperty[] currentProps = serviceProperties.getProperty();
+		if (currentProps != null) {			
+			Collections.addAll(allProps, currentProps);
 		}
-		serviceProperties.setProperty(allProps);
+		allProps.add(qpClassProp);
+		allProps.add(cqlValidatorProp);
+		allProps.add(dmValidatorProp);
+		allProps.add(useCqlValidation);
+		allProps.add(useDomainValidation);
+		currentProps = new ServicePropertiesProperty[allProps.size()];
+		allProps.toArray(currentProps);
+		serviceProperties.setProperty(currentProps);
 		desc.setServiceProperties(serviceProperties);
 	}
 	

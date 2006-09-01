@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.data;
 
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
-import gov.nih.nci.cagrid.data.cql.validation.CQLValidator;
+import gov.nih.nci.cagrid.data.cql.validation.CqlStructureValidator;
 import gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator;
 
 import java.io.File;
@@ -26,7 +26,7 @@ import org.xml.sax.InputSource;
  * @version $Id$ 
  */
 public class ValidCqlTestCase extends TestCase {
-	private CQLValidator validator;
+	private CqlStructureValidator validator;
 	private String cqlDocsDir;
 	
 	public ValidCqlTestCase(String name) {
@@ -55,7 +55,7 @@ public class ValidCqlTestCase extends TestCase {
 	private void checkQuery(String filename) {
 		CQLQuery query = getQuery(cqlDocsDir + File.separator + filename);
 		try {
-			validator.validateStructure(query);
+			validator.validateCqlStructure(query);
 			assertTrue("Query is valid CQL", true);
 		} catch (Exception ex) {
 			System.out.println("Query is invalid: " + ex.getMessage());

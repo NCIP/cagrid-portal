@@ -27,14 +27,14 @@ import java.util.List;
  * @created May 26, 2006
  * @version $Id$
  */
-public class DomainModelValidator {
+public class DomainModelValidator implements CqlDomainValidator {
 
-	DomainModelValidator() {
+	public DomainModelValidator() {
 
 	}
 
 
-	public void validateDomain(CQLQuery query, DomainModel model) throws MalformedQueryException {
+	public void validateDomainModel(CQLQuery query, DomainModel model) throws MalformedQueryException {
 		validateQueryTarget(query, model);
 		validateObjectModel(query.getTarget(), model);
 	}
