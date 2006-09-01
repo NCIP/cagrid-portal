@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -60,6 +61,11 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 	 */
 	public static void loadWsddConfig(String filename) throws Exception {
 		configFileContents = Utils.fileToStringBuffer(new File(filename));
+	}
+	
+	
+	public static void loadWsddStream(InputStream stream) throws Exception {
+		configFileContents = Utils.inputStreamToStringBuffer(stream);
 	}
 	
 	
