@@ -13,7 +13,6 @@ import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import java.rmi.RemoteException;
 
 import org.apache.axis.types.URI.MalformedURIException;
-import org.projectmobius.common.XMLUtilities;
 
 
 /**
@@ -40,7 +39,7 @@ public class IdPAuthenticationClient{
 	public SAMLAssertion authenticate() throws DorianFault, DorianInternalFault, PermissionDeniedFault {
 		try {
 			String xml = client.authenticateWithIdP(cred).getXml();
-			System.out.println(XMLUtilities.formatXML(xml));
+			//System.out.println(XMLUtilities.formatXML(xml));
 			return SAMLUtils.stringToSAMLAssertion(xml);
 		} catch (DorianInternalFault gie) {
 			throw gie;

@@ -70,7 +70,7 @@ public class DorianImpl {
 
 	private String getCallerIdentity() throws PermissionDeniedFault {
 		String caller = SecurityManager.getManager().getCaller();
-		System.out.println("Caller: " + caller);
+		//System.out.println("Caller: " + caller);
 		if ((caller == null) || (caller.equals("<anonymous>"))) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("No Grid Credentials Provided.");
