@@ -7,6 +7,8 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import org.projectmobius.portal.PortalResourceManager;
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
@@ -117,12 +119,10 @@ public class GroupPrivilegesTable extends PortalBaseTable {
 	}
 
 	public void doubleClick() throws Exception {
-		/*
-		 * StemPrivilegeCaddy caddy = getSelectedPrivilege();
-		 * PortalResourceManager.getInstance().getGridPortal()
-		 * .addGridPortalComponent( new StemPrivilegeWindow(browser, caddy),
-		 * 500, 200);
-		 */
+		GroupPrivilegeCaddy caddy = getSelectedPrivilege();
+		PortalResourceManager.getInstance().getGridPortal()
+				.addGridPortalComponent(
+						new GroupPrivilegeWindow(browser, caddy), 500, 200);
 	}
 
 	public void singleClick() throws Exception {

@@ -16,7 +16,6 @@ import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.service.GridGrouper;
 import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
-import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperBaseTreeNode;
 
 import java.util.Iterator;
 import java.util.Set;

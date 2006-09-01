@@ -158,6 +158,10 @@ public class GroupBrowser extends JPanel {
 
 	private JButton findPrivileges = null;
 
+	private JButton addPrivilege = null;
+
+	private JButton updatePrivileges = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -1246,6 +1250,8 @@ public class GroupBrowser extends JPanel {
 			privilegesButtonPanel = new JPanel();
 			privilegesButtonPanel.setLayout(new FlowLayout());
 			privilegesButtonPanel.add(getFindPrivileges(), null);
+			privilegesButtonPanel.add(getAddPrivilege(), null);
+			privilegesButtonPanel.add(getUpdatePrivileges(), null);
 		}
 		return privilegesButtonPanel;
 	}
@@ -1391,6 +1397,84 @@ public class GroupBrowser extends JPanel {
 					});
 		}
 		return findPrivileges;
+	}
+
+	/**
+	 * This method initializes addPrivilege
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getAddPrivilege() {
+		if (addPrivilege == null) {
+			addPrivilege = new JButton();
+			addPrivilege.setText("Add Privilege");
+			addPrivilege.setIcon(GridGrouperLookAndFeel.getAddIcon());
+			final GroupBrowser gb = this;
+			addPrivilege.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							try {
+								PortalResourceManager.getInstance()
+										.getGridPortal()
+										.addGridPortalComponent(
+												new GroupPrivilegeWindow(gb),
+												500, 225);
+							} catch (Exception e) {
+								e.printStackTrace();
+								PortalUtils.showErrorMessage(e);
+							}
+						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+
+			});
+		}
+		return addPrivilege;
+	}
+
+	/**
+	 * This method initializes updatePrivileges
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getUpdatePrivileges() {
+		if (updatePrivileges == null) {
+			updatePrivileges = new JButton();
+			updatePrivileges.setText("Update Privilege(s)");
+			updatePrivileges
+					.setIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
+			updatePrivileges
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							MobiusRunnable runner = new MobiusRunnable() {
+								public void execute() {
+									try {
+										getPrivilegesTable().doubleClick();
+									} catch (Exception e) {
+										e.printStackTrace();
+										PortalUtils.showErrorMessage(e);
+									}
+								}
+							};
+							try {
+								PortalResourceManager.getInstance()
+										.getThreadManager()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
+							}
+						}
+
+					});
+		}
+		return updatePrivileges;
 	}
 
 }
