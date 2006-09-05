@@ -12,6 +12,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -343,5 +346,92 @@ public class Utils {
 			}
 		}
 		return files;
+	}
+	
+	
+	/**
+	 * Gets a relative path from the source file to the destination
+	 * @param source
+	 * 		The source file or location
+	 * @param destination
+	 * 		The file to target with the relative path
+	 * @return
+	 * 		The relative path from the source file's directory to the destination file
+	 */
+	public static String getRelativePath(File source, File destination) throws Exception {
+		String sourceDir = null;
+		String destDir = null;
+		if (source.isDirectory()) {
+			sourceDir = source.getCanonicalPath();
+		} else {
+			sourceDir = source.getParentFile().getCanonicalPath();
+		}
+		if (destination.isDirectory()) {
+			destDir = destination.getCanonicalPath();
+		} else {
+			destDir = destination.getParentFile().getCanonicalPath();
+		}
+		
+		// find the overlap in the source and dest paths
+		String overlap = findOverlap(sourceDir, destDir);
+		if (overlap.endsWith(File.separator)) {
+			overlap = overlap.substring(0, overlap.length() - File.separator.length() - 1);
+		}
+		int overlapDirs = countChars(overlap, File.separatorChar);
+		if (overlapDirs == 0) {
+			// no overlap at all, return full path of destination file
+			return destination.getCanonicalPath();
+		}
+		// difference is the number of path elements to back up before moving down the tree
+		int parentDirsNeeded = countChars(sourceDir, File.separatorChar) - overlapDirs;
+		// difference is the number of path elements above the file to keep
+		int parentDirsKept = countChars(destDir, File.separatorChar) - overlapDirs;
+		
+		// build the path
+		StringBuffer relPath = new StringBuffer();
+		for (int i = 0; i < parentDirsNeeded; i++) {
+			relPath.append("..").append(File.separatorChar);
+		}
+		List parentPaths = new LinkedList();
+		File parentDir = new File(destDir);
+		for (int i = 0; i < parentDirsKept; i++) {
+			parentPaths.add(parentDir.getName());
+			parentDir = parentDir.getParentFile();
+		}
+		Collections.reverse(parentPaths);
+		for (Iterator i = parentPaths.iterator(); i.hasNext();) {
+			relPath.append(i.next()).append(File.separatorChar);
+		}
+		if (!destination.isDirectory()) {
+			relPath.append(destination.getName());
+		}
+		return relPath.toString();
+	}
+	
+	
+	private static String findOverlap(String s1, String s2) {
+		// TODO: More efficient would be some kind of binary search, divide and conquer
+		StringBuffer overlap = new StringBuffer();
+		int count = Math.min(s1.length(), s2.length());
+		for (int i = 0; i < count; i++) {
+			char c1 = s1.charAt(i);
+			char c2 = s2.charAt(i);
+			if (c1 == c2) {
+				overlap.append(c1);
+			} else {
+				break;
+			}
+		}
+		return overlap.toString();
+	}
+	
+	
+	private static int countChars(String s, char c) {
+		int count = 0;
+		int index = -1;
+		while ((index = s.indexOf(c, index + 1)) != -1) {
+			count++;
+		}
+		return count;
 	}
 }

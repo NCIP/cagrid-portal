@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.extension.utils;
 
+import gov.nih.nci.cagrid.common.Utils;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Collections;
@@ -23,7 +25,7 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 7, 2006 
- * @version $Id: ExtensionUtilities.java,v 1.3 2006-06-15 16:21:10 dervin Exp $ 
+ * @version $Id: ExtensionUtilities.java,v 1.4 2006-09-05 17:44:48 dervin Exp $ 
  */
 public class ExtensionUtilities {
 	public static final String CLASSPATHENTRY_ELEMENT = "classpathentry";
@@ -45,7 +47,7 @@ public class ExtensionUtilities {
 		// get the list of additional libraries for the query processor
 		Set libNames = new HashSet();
 		for (int i = 0; i < additionalLibs.length; i++) {
-			String relativeLibName = getRelativePath(classpathFile, additionalLibs[i]);
+			String relativeLibName = Utils.getRelativePath(classpathFile, additionalLibs[i]);
 			relativeLibName = convertToUnixStylePath(relativeLibName);
 			libNames.add(relativeLibName);
 		}
@@ -79,93 +81,6 @@ public class ExtensionUtilities {
 	}
 	
 	
-	/**
-	 * Gets a relative path from the source file to the destination
-	 * @param source
-	 * 		The source file or location
-	 * @param destination
-	 * 		The file to target with the relative path
-	 * @return
-	 * 		The relative path from the source file's directory to the destination file
-	 */
-	public static String getRelativePath(File source, File destination) throws Exception {
-		String sourceDir = null;
-		String destDir = null;
-		if (source.isDirectory()) {
-			sourceDir = source.getCanonicalPath();
-		} else {
-			sourceDir = source.getParentFile().getCanonicalPath();
-		}
-		if (destination.isDirectory()) {
-			destDir = destination.getCanonicalPath();
-		} else {
-			destDir = destination.getParentFile().getCanonicalPath();
-		}
-		
-		// find the overlap in the source and dest paths
-		String overlap = findOverlap(sourceDir, destDir);
-		if (overlap.endsWith(File.separator)) {
-			overlap = overlap.substring(0, overlap.length() - File.separator.length() - 1);
-		}
-		int overlapDirs = countChars(overlap, File.separatorChar);
-		if (overlapDirs == 0) {
-			// no overlap at all, return full path of destination file
-			return destination.getCanonicalPath();
-		}
-		// difference is the number of path elements to back up before moving down the tree
-		int parentDirsNeeded = countChars(sourceDir, File.separatorChar) - overlapDirs;
-		// difference is the number of path elements above the file to keep
-		int parentDirsKept = countChars(destDir, File.separatorChar) - overlapDirs;
-		
-		// build the path
-		StringBuffer relPath = new StringBuffer();
-		for (int i = 0; i < parentDirsNeeded; i++) {
-			relPath.append("..").append(File.separatorChar);
-		}
-		List parentPaths = new LinkedList();
-		File parentDir = new File(destDir);
-		for (int i = 0; i < parentDirsKept; i++) {
-			parentPaths.add(parentDir.getName());
-			parentDir = parentDir.getParentFile();
-		}
-		Collections.reverse(parentPaths);
-		for (Iterator i = parentPaths.iterator(); i.hasNext();) {
-			relPath.append(i.next()).append(File.separatorChar);
-		}
-		if (!destination.isDirectory()) {
-			relPath.append(destination.getName());
-		}
-		return relPath.toString();
-	}
-	
-	
-	private static String findOverlap(String s1, String s2) {
-		// TODO: More efficient would be some kind of binary search, divide and conquer
-		StringBuffer overlap = new StringBuffer();
-		int count = Math.min(s1.length(), s2.length());
-		for (int i = 0; i < count; i++) {
-			char c1 = s1.charAt(i);
-			char c2 = s2.charAt(i);
-			if (c1 == c2) {
-				overlap.append(c1);
-			} else {
-				break;
-			}
-		}
-		return overlap.toString();
-	}
-	
-	
-	private static int countChars(String s, char c) {
-		int count = 0;
-		int index = -1;
-		while ((index = s.indexOf(c, index + 1)) != -1) {
-			count++;
-		}
-		return count;
-	}
-	
-	
 	private static String convertToUnixStylePath(String pathname) {
 		return pathname.replace('\\', '/');
 	}
@@ -181,7 +96,7 @@ public class ExtensionUtilities {
 		System.out.println("\tFrom: " + source.getAbsolutePath());
 		System.out.println("\tTo:   " + destination.getAbsolutePath());
 		try {
-			String relative = getRelativePath(source, destination);
+			String relative = Utils.getRelativePath(source, destination);
 			System.out.println("\n\tRel: " + relative);
 		} catch (Exception ex) {
 			ex.printStackTrace();
