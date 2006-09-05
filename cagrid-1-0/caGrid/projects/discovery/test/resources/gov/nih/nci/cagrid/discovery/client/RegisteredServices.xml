@@ -6448,6 +6448,7 @@
 							</ns390:semanticMetadataCollection>
 						</ns390:UMLClass>
 					</ns1:exposedUMLClassCollection>
+					<ns1:umlGeneralizationCollection/>
 				</ns1:DomainModel>
 				<!-- DOMAIN MODEL ENDS -->
 			</ns11:AggregatorData>

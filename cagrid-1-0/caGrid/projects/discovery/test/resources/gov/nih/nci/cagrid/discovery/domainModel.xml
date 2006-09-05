@@ -6490,4 +6490,5 @@
    </ns1827:semanticMetadataCollection>
   </ns1827:UMLClass>
  </ns1:exposedUMLClassCollection>
+ <ns1:umlGeneralizationCollection/>
 </ns1:DomainModel>
