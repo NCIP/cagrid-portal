@@ -65,16 +65,11 @@ public class DataServiceConstants {
 	public static final String QUERY_PROCESSOR_PROPERTY_NAME = "name";
 	public static final String QUERY_PROCESSOR_PROPERTY_VALUE = "value";
 	
-	/*
-	public static final String[] QUERY_METHOD_EXCEPTIONS = new String[] {
-		QueryProcessingException.class.getName(), MalformedQueryException.class.getName()
-	};
-	*/
-	// FIXME: this goes away when introduce supports using typed exceptions from packages
-	// outside of the generated source tree
-	public static final String[] QUERY_METHOD_EXCEPTIONS = new String[] {
-		"QueryProcessingException", "MalformedQueryException"
-	};
+	// exceptions	
+	public static final String QUERY_PROCESSING_EXCEPTION_NAME = "QueryProcessingException";
+	public static final String MALFORMED_QUERY_EXCEPTION_NAME = "MalformedQueryException";
+	public static final QName QUERY_PROCESSING_EXCEPTION_QNAME = new QName(DATA_SERVICE_NAMESPACE, QUERY_PROCESSING_EXCEPTION_NAME);
+	public static final QName MALFORMED_QUERY_EXCEPTION_QNAME = new QName(DATA_SERVICE_NAMESPACE, MALFORMED_QUERY_EXCEPTION_NAME);
 	
 	// cadsr info constants
 	public static final String CADSR_ELEMENT_NAME = "caDSRInformation";

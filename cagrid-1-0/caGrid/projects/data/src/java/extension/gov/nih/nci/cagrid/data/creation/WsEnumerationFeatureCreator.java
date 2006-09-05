@@ -110,12 +110,11 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 		enumerateMethod.setProviderInformation(enumProvider);
 		// exceptions
 		MethodTypeExceptions methodExceptions = new MethodTypeExceptions();
-		MethodTypeExceptionsException[] exceptions = 
-			new MethodTypeExceptionsException[DataServiceConstants.QUERY_METHOD_EXCEPTIONS.length];
-		for (int i = 0; i < DataServiceConstants.QUERY_METHOD_EXCEPTIONS.length; i++) {
-			exceptions[i] = new MethodTypeExceptionsException("Enumeration" + DataServiceConstants.QUERY_METHOD_EXCEPTIONS[i]);
-		}
-		methodExceptions.setException(exceptions);
+		MethodTypeExceptionsException qpException = new MethodTypeExceptionsException(
+			DataServiceConstants.QUERY_PROCESSING_EXCEPTION_NAME, DataServiceConstants.QUERY_PROCESSING_EXCEPTION_QNAME);
+		MethodTypeExceptionsException mqException = new MethodTypeExceptionsException(
+			DataServiceConstants.MALFORMED_QUERY_EXCEPTION_NAME, DataServiceConstants.MALFORMED_QUERY_EXCEPTION_QNAME);
+		methodExceptions.setException(new MethodTypeExceptionsException[] {qpException, mqException});
 		enumerateMethod.setExceptions(methodExceptions);
 		// add the method to the service
 		CommonTools.addMethod(getMainService(), enumerateMethod);

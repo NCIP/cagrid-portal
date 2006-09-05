@@ -216,10 +216,11 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		queryMethod.setOutput(output);
 		// exceptions on query method
 		MethodTypeExceptions queryExceptions = new MethodTypeExceptions();
-		MethodTypeExceptionsException[] exceptions = {
-			new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[0]),
-			new MethodTypeExceptionsException(DataServiceConstants.QUERY_METHOD_EXCEPTIONS[1])};
-		queryExceptions.setException(exceptions);
+		MethodTypeExceptionsException qpException = new MethodTypeExceptionsException(
+			DataServiceConstants.QUERY_PROCESSING_EXCEPTION_NAME, DataServiceConstants.QUERY_PROCESSING_EXCEPTION_QNAME);
+		MethodTypeExceptionsException mqException = new MethodTypeExceptionsException(
+			DataServiceConstants.MALFORMED_QUERY_EXCEPTION_NAME, DataServiceConstants.MALFORMED_QUERY_EXCEPTION_QNAME);
+		queryExceptions.setException(new MethodTypeExceptionsException[] {qpException, mqException});
 		queryMethod.setExceptions(queryExceptions);
 		// query method is imported
 		MethodTypeImportInformation importInfo = new MethodTypeImportInformation();
