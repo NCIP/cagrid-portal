@@ -450,7 +450,7 @@
 	          classname="edu.internet2.middleware.grouper.RegistryInstall"/>
 	  </target>
 	  
-	   <target name="ui" description="Run the GTS portal" depends="checkGlobus">
+	   <target name="ui" description="Run the Grid Grouper Admin UI" depends="checkGlobus">
         <java classname="gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperUI" fork="yes">
             <classpath>
                 <pathelement location="${stubs.dest}" />
@@ -488,5 +488,32 @@
 		<echo message="|    Type 'ant -p' for a description of this service's build targets.          |"/>
         <echo message="================================================================================"/>
     </target>
+    
+    <target name="addAdmin" description="Add administrator to grid grouper" depends="checkGlobus">
+		<input message="Please enter the grid identity:"
+		               addproperty="gridId.input"/>
+		<java classname="gov.nih.nci.cagrid.gridgrouper.service.tools.GridGrouperBootstrapper" fork="yes" newenvironment="true">
+			<arg value="-addAdmin" />
+			<arg value="-userId" />
+			<arg value="${gridId.input}"/>
+			<classpath>
+				<fileset dir="${build.lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.globus.dir}/lib">
+					<include name="*.jar" />
+					<exclude name="${jar.name}" />
+					<exclude name="xml-apis.jar" />
+					<exclude name="xercesImpl.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
 	
 </project>
