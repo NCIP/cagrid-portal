@@ -79,7 +79,7 @@
 				</xsd:element>
 				<xsd:element name="QueryModifier" type="cql:QueryModifier" minOccurs="0">
 					<xsd:annotation>
-						<xsd:documentation>Optionally defines attributes of the target data type to be returned by the query</xsd:documentation>
+						<xsd:documentation>Optionally modifies the returned results of the query</xsd:documentation>
 					</xsd:annotation>
 				</xsd:element>
 			</xsd:sequence>
