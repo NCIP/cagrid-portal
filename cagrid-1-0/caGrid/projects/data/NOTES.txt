@@ -2,7 +2,7 @@ TODO:
 1 [D]: On create, data services need to have the data jars placed in their lib directory.
 2 [D]: On create, data services need the castor jars in their lib directory
 3 [D]: Automagical [client|server]-config.wsdd type mappings
-4 [I]: CQL implemetation that works against caCORE generated data sources (sdkQuery project)
+4 [E]: CQL implemetation that works against caCORE generated data sources (sdkQuery project)
 5 [D]: Need a way to make sure only the full caGrid-1.0-data.jar gets deployed with data services.  Deploying the more granular jars (service, stubs, etc) causes invocation target errors because classes overlap.
 6 [D]: Drop-in user's chosen implementation of CQL Query processing in service query method
 	-- Choose query processor jar and it's dependencies at modification
@@ -19,7 +19,7 @@ TODO:
 14[D]: Type serialization table need to enable multi-select for setting serialization option
 15[D]: Data GUI needs a way to select a whole project, multiple packages, and classes from them
 16[I]: Query Results Iterator / WS-Enumeration support (wsEnum project)
-17[ ]: Identifier Resolution Support (Possibly through an operation provider)
+17[E]: Identifier Resolution Support (Possibly through an operation provider)
 18[D]: Pull GME url from introduce properties
 19[D]: Block caDSR refresh on modification viewer open should only happen when a data model has already been selected. (e.g. when creating a new data service, the call to cadsr should be threaded and not prevent the modification viewer from opening) 
 20[D]: Addition to CQL of queries to return attributes and addition to CQLResult to handle them
@@ -35,8 +35,13 @@ TODO:
     * Need to describe what, if any, constraints there are on the Map’s key value (is it required to contain String->String?)
     * Need to describe the relationship between the Map returned by getRequiredParameters, and that passed in to initialize
 27[D]: Have DS extension add type mappings for SemanticMetadata / DomainModel stuff to the server-config.wsdd and client-config.wsdd of created services
-28[I]: Provide configuration to turn on / off validation for both CQL syntax and domain model conformance.
+28[D]: Provide configuration to turn on / off validation for both CQL syntax and domain model conformance.
 	-- make loading the validators more efficient for multiple calls to query
+
+I = In Progress
+D = Done
+W = Won't implement
+E = External to data core
 
 BUGS:
 
