@@ -19,14 +19,14 @@ import junit.framework.TestCase;
 /**
  * @author oster
  */
-public class MetadataUtilsTest extends TestCase {
+public class MetadataUtilsTestCase extends TestCase {
 
 	private static final String DOMAIN_XML = "domainModel.xml";
 	private static final String SERVICE_XML = "serviceMetadata.xml";
 
 
 	public static void main(String[] args) {
-		junit.textui.TestRunner.run(MetadataUtilsTest.class);
+		junit.textui.TestRunner.run(MetadataUtilsTestCase.class);
 	}
 
 

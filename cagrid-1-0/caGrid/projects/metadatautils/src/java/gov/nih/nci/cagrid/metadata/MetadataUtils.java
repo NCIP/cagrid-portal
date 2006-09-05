@@ -140,5 +140,4 @@ public class MetadataUtils {
 		return (DomainModel) Utils.deserializeObject(xmlReader, DomainModel.class, ClassUtils.getResourceAsStream(
 			DomainModel.class, METADATA_WSDD));
 	}
-
 }
