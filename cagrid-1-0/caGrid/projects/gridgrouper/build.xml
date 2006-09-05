@@ -449,6 +449,34 @@
 	          classpathref="service.run.classpath"
 	          classname="edu.internet2.middleware.grouper.RegistryInstall"/>
 	  </target>
+	  
+	   <target name="ui" description="Run the GTS portal" depends="checkGlobus">
+        <java classname="gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperUI" fork="yes">
+            <classpath>
+                <pathelement location="${stubs.dest}" />
+                <fileset dir="${build.lib.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
+                <fileset dir="${ext.lib.dir}">
+                    <include name="*.jar" />
+                </fileset>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar" />
+                </fileset>
+                <fileset dir="${ext.globus.dir}/lib">
+                    <include name="*.jar" />
+                    <exclude name="${stubs.jar.name}" />
+                    <exclude name="${jar.name}" />
+                    <exclude name="xml-apis.jar" />
+                    <exclude name="xercesImpl.jar" />
+                </fileset>
+                <pathelement location="resources/ui/gridgrouper" />
+                <pathelement location="ext/resources/portal/common" />
+                <pathelement location="ext/resources/portal/gridca" />
+            </classpath>
+        </java>
+    </target>
+	
 
     <target name="help" description="Prints usage information.">
         <echo message="================================================================================"/>

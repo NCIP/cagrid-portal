@@ -71,18 +71,38 @@ public class Stem extends GridGrouperObject implements StemI {
 		return new Date(des.getCreateTime());
 	}
 
+	/**
+	 * Gets the description of the stem.
+	 * 
+	 * @return The description of the stem.
+	 */
 	public String getDescription() {
 		return des.getDescription();
 	}
 
+	/**
+	 * Gets the local display name of the stem.
+	 * 
+	 * @return The local display name of the stem.
+	 */
 	public String getDisplayExtension() {
 		return des.getDisplayExtension();
 	}
 
+	/**
+	 * Gets the full display name of the stem.
+	 * 
+	 * @return The full display name of the stem.
+	 */
 	public String getDisplayName() {
 		return des.getDisplayName();
 	}
 
+	/**
+	 * Gets the local name of the stem.
+	 * 
+	 * @return The local name of the stem.
+	 */
 	public String getExtension() {
 		return des.getExtension();
 	}
@@ -107,10 +127,20 @@ public class Stem extends GridGrouperObject implements StemI {
 		return gridGrouper.getStemIdentifier(getName());
 	}
 
+	/**
+	 * Gets the full name of the stem.
+	 * 
+	 * @return The full name of the stem.
+	 */
 	public String getName() {
 		return des.getName();
 	}
 
+	/**
+	 * Gets the UUID for the stem.
+	 * 
+	 * @return The UUID for the stem.
+	 */
 	public String getUuid() {
 		return des.getUUID();
 	}

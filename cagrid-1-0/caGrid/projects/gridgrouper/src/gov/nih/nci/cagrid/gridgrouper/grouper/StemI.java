@@ -36,12 +36,30 @@ public interface StemI {
 
 	public Date getCreateTime();
 
+	/**
+	 * Gets the description of the stem.
+	 * @return The description of the stem.
+	 */
 	public String getDescription();
 
+	/**
+	 * Gets the local display name of the stem.
+	 * @return The local display name of the stem.
+	 */
 	public String getDisplayExtension();
 
+	/**
+	 * Gets the full display name of the stem.
+	 * 
+	 * @return The full display name of the stem.
+	 */
 	public String getDisplayName();
 
+	/**
+	 * Gets the local name of the stem.
+	 * 
+	 * @return The local name of the stem.
+	 */
 	public String getExtension();
 
 	public String getModifySource();
@@ -50,8 +68,18 @@ public interface StemI {
 
 	public Date getModifyTime();
 
+	/**
+	 * Gets the full name of the stem.
+	 * 
+	 * @return The full name of the stem.
+	 */
 	public String getName();
 
+	/**
+	 * Gets the UUID for the stem.
+	 * 
+	 * @return The UUID for the stem.
+	 */
 	public String getUuid();
 
 	public StemIdentifier getStemIdentifier();
