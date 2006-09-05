@@ -173,7 +173,7 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
 						// insert the new client method
 						int endOfClass = fileContent.lastIndexOf("}");
 						clientMethod = "\n\t" + SyncSource.createUnBoxedSignatureStringFromMethod(method, info) + " "
-							+ SyncSource.createExceptions(method, mainService);
+							+ SyncSource.createExceptions(method, info, mainService);
 
 						clientMethod += "{\n";
 						BDTResourceCreatorTemplate rt = new BDTResourceCreatorTemplate();
