@@ -108,7 +108,7 @@ public class DataServiceClient implements DataServiceI {
 	}
 	
 	
-	public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults query(gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) throws RemoteException, gov.nih.nci.cagrid.data.stubs.QueryProcessingException, gov.nih.nci.cagrid.data.stubs.MalformedQueryException {
+	public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults query(gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType, gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType {
 		gov.nih.nci.cagrid.data.stubs.QueryRequest params = new gov.nih.nci.cagrid.data.stubs.QueryRequest();
 		gov.nih.nci.cagrid.data.stubs.QueryRequestCqlQuery cqlQueryContainer = new gov.nih.nci.cagrid.data.stubs.QueryRequestCqlQuery();
 		cqlQueryContainer.setCQLQuery(cqlQuery);

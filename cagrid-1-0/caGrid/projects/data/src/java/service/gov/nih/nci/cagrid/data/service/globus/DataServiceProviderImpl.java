@@ -19,7 +19,7 @@ public class DataServiceProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.data.stubs.QueryResponse query(gov.nih.nci.cagrid.data.stubs.QueryRequest params) throws RemoteException, gov.nih.nci.cagrid.data.stubs.QueryProcessingException, gov.nih.nci.cagrid.data.stubs.MalformedQueryException {
+	public gov.nih.nci.cagrid.data.stubs.QueryResponse query(gov.nih.nci.cagrid.data.stubs.QueryRequest params) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType, gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType {
 		gov.nih.nci.cagrid.data.stubs.QueryResponse boxedResult = new gov.nih.nci.cagrid.data.stubs.QueryResponse();
 		boxedResult.setCQLQueryResultCollection(impl.query(params.getCqlQuery().getCQLQuery()));
 		return boxedResult;

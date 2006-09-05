@@ -4,8 +4,8 @@ package gov.nih.nci.cagrid.data.utilities;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.common.DataServiceI;
-import gov.nih.nci.cagrid.data.stubs.MalformedQueryException;
-import gov.nih.nci.cagrid.data.stubs.QueryProcessingException;
+import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
+import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -46,7 +46,7 @@ public class DataServiceHandle {
 	
 	
 	public Iterator query(CQLQuery cqlQuery) 
-		throws MalformedQueryException, QueryProcessingException, RemoteException {
+		throws MalformedQueryExceptionType, QueryProcessingExceptionType, RemoteException {
 		CQLQueryResults results = service.query(cqlQuery);
 		if (wsddStream == null) {
 			return new CQLQueryResultsIterator(results);

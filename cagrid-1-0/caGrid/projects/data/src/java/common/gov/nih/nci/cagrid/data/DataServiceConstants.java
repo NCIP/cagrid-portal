@@ -65,11 +65,13 @@ public class DataServiceConstants {
 	public static final String QUERY_PROCESSOR_PROPERTY_NAME = "name";
 	public static final String QUERY_PROCESSOR_PROPERTY_VALUE = "value";
 	
-	// exceptions	
+	// exceptions
+	public static final String DATA_SERVICE_EXCEPTIONS_NAMESPACE = "http://gov.nih.nci.cagrid.data/DataServiceExceptions";
+	public static final String DATA_SERVICE_EXCEPTIONS_SCHEMA = "DataServiceExceptions.xsd";
 	public static final String QUERY_PROCESSING_EXCEPTION_NAME = "QueryProcessingException";
 	public static final String MALFORMED_QUERY_EXCEPTION_NAME = "MalformedQueryException";
-	public static final QName QUERY_PROCESSING_EXCEPTION_QNAME = new QName(DATA_SERVICE_NAMESPACE, QUERY_PROCESSING_EXCEPTION_NAME);
-	public static final QName MALFORMED_QUERY_EXCEPTION_QNAME = new QName(DATA_SERVICE_NAMESPACE, MALFORMED_QUERY_EXCEPTION_NAME);
+	public static final QName QUERY_PROCESSING_EXCEPTION_QNAME = new QName(DATA_SERVICE_EXCEPTIONS_NAMESPACE, QUERY_PROCESSING_EXCEPTION_NAME);
+	public static final QName MALFORMED_QUERY_EXCEPTION_QNAME = new QName(DATA_SERVICE_EXCEPTIONS_NAMESPACE, MALFORMED_QUERY_EXCEPTION_NAME);
 	
 	// cadsr info constants
 	public static final String CADSR_ELEMENT_NAME = "caDSRInformation";

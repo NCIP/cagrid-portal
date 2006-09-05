@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gov.nih.nci.cagrid.data/DataService" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" name="DataService" targetNamespace="http://gov.nih.nci.cagrid.data/DataService">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gov.nih.nci.cagrid.data/DataService" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:dse="http://gov.nih.nci.cagrid.data/DataServiceExceptions" name="DataService" targetNamespace="http://gov.nih.nci.cagrid.data/DataService">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <!--============================================================
@@ -8,8 +8,9 @@
                       
   ============================================================-->
   <types>
-    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns2="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:ns0="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" xmlns:tns="http://gov.nih.nci.cagrid.data/DataService" targetNamespace="http://gov.nih.nci.cagrid.data/DataService" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns2="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:ns0="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" xmlns:tns="http://gov.nih.nci.cagrid.data/DataService" xmlns:dse="http://gov.nih.nci.cagrid.data/DataServiceExceptions" targetNamespace="http://gov.nih.nci.cagrid.data/DataService" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
+      <import namespace="http://gov.nih.nci.cagrid.data/DataServiceExceptions" schemaLocation=".\DataServiceExceptions.xsd"/>
       <import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" schemaLocation=".\1_gov.nih.nci.cagrid.CQLQuery.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation=".\xsd\cagrid\types\caGridMetadata.xsd" />
       <import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" schemaLocation=".\1_gov.nih.nci.cagrid.CQLResultSet.xsd" />
@@ -34,20 +35,6 @@
           </sequence>
         </complexType>
       </element>
-      <element name="QueryProcessingException">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="MalformedQueryException">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
       <element name="DataServiceResourceProperties">
         <complexType>
           <sequence>
@@ -65,10 +52,10 @@
     <part name="parameters" element="tns:QueryResponse" />
   </message>
   <message name="QueryProcessingExceptionFaultMessage">
-    <part name="fault" element="tns:QueryProcessingException" />
+    <part name="fault" element="dse:QueryProcessingException" />
   </message>
   <message name="MalformedQueryExceptionFaultMessage">
-    <part name="fault" element="tns:MalformedQueryException" />
+    <part name="fault" element="dse:MalformedQueryException" />
   </message>
   <!--============================================================
 

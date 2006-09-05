@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gov.nih.nci.cagrid.data.enumeration/EnumerationDataService" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:wns1="http://gov.nih.nci.cagrid.data/DataService" name="EnumerationQuery" targetNamespace="http://gov.nih.nci.cagrid.data.enumeration/EnumerationDataService">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://gov.nih.nci.cagrid.data.enumeration/EnumerationDataService" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:wns1="http://gov.nih.nci.cagrid.data/DataService" xmlns:dse="http://gov.nih.nci.cagrid.data/DataServiceExceptions" name="EnumerationQuery" targetNamespace="http://gov.nih.nci.cagrid.data.enumeration/EnumerationDataService">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <import namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" location="./ServiceSecurity.wsdl" />
@@ -35,20 +35,6 @@
           </sequence>
         </complexType>
       </element>
-      <element name="EnumerationQueryProcessingException">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="EnumerationMalformedQueryException">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
       <element name="EnumerationQueryResourceProperties">
         <complexType>
           <sequence />
@@ -64,10 +50,10 @@
     <part name="parameters" element="tns:EnumerationQueryResponse" />
   </message>
   <message name="QueryProcessingExceptionFaultMessage">
-    <part name="fault" element="wns1:QueryProcessingException" />
+    <part name="fault" element="dse:QueryProcessingException" />
   </message>
   <message name="MalformedQueryExceptionFaultMessage">
-    <part name="fault" element="wns1:MalformedQueryException" />
+    <part name="fault" element="dse:MalformedQueryException" />
   </message>
   <!--============================================================
 

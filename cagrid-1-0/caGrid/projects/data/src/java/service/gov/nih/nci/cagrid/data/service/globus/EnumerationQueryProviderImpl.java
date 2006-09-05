@@ -19,7 +19,7 @@ public class EnumerationQueryProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryResponse enumerationQuery(gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryRequest params) throws RemoteException, gov.nih.nci.cagrid.data.stubs.QueryProcessingException, gov.nih.nci.cagrid.data.stubs.MalformedQueryException {
+	public gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryResponse enumerationQuery(gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryRequest params) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType, gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType {
 		gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryResponse boxedResult = new gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationQueryResponse();
 		boxedResult.setEnumerateResponse(impl.enumerationQuery(params.getCqlQuery().getCQLQuery()));
 		return boxedResult;

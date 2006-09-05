@@ -5,8 +5,8 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.cql.validation.CqlDomainValidator;
 import gov.nih.nci.cagrid.data.cql.validation.CqlStructureValidator;
-import gov.nih.nci.cagrid.data.stubs.MalformedQueryException;
-import gov.nih.nci.cagrid.data.stubs.QueryProcessingException;
+import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
+import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.InputStream;
@@ -31,7 +31,7 @@ public class DataServiceImpl {
 	
 	
 	public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults query(gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) 
-		throws RemoteException, gov.nih.nci.cagrid.data.stubs.QueryProcessingException, gov.nih.nci.cagrid.data.stubs.MalformedQueryException {
+		throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType, gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType {
 		// see if we have any validation to do
 		Properties dsConfig = null;
 		Properties resourceProperties = null;
@@ -39,7 +39,7 @@ public class DataServiceImpl {
 			resourceProperties = ResourcePropertiesUtil.getResourceProperties();
 			dsConfig = ServiceConfigUtil.getDataServiceParams();
 		} catch (Exception ex) {
-			throw (QueryProcessingException) getTypedException(ex, new QueryProcessingException());
+			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		}
 		boolean validateCql = dsConfig.getProperty(DataServiceConstants.VALIDATE_CQL_FLAG) != null 
 			&& Boolean.valueOf(dsConfig.getProperty(DataServiceConstants.VALIDATE_CQL_FLAG)).booleanValue(); 
@@ -50,12 +50,12 @@ public class DataServiceImpl {
 				Class validatorClass = Class.forName(validatorClassName);
 				structureValidator = (CqlStructureValidator) validatorClass.newInstance();
 			} catch (Exception ex) {
-				throw (QueryProcessingException) getTypedException(ex, new QueryProcessingException());
+				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 			}
 			try {
 				structureValidator.validateCqlStructure(cqlQuery);
 			} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
-				throw (MalformedQueryException) getTypedException(ex, new MalformedQueryException());
+				throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());
 			}
 		}
 		boolean validateDomain = dsConfig.getProperty(DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG) != null
@@ -67,7 +67,7 @@ public class DataServiceImpl {
 				Class validatorClass = Class.forName(validatorClassName);
 				domainValidator = (CqlDomainValidator) validatorClass.newInstance();
 			} catch (Exception ex) {
-				throw (QueryProcessingException) getTypedException(ex, new QueryProcessingException());
+				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 			}
 			try {
 				// get the domain model from resource properties
@@ -75,9 +75,9 @@ public class DataServiceImpl {
 				DomainModel model = (DomainModel) Utils.deserializeDocument(domainModelFileName, DomainModel.class);
 				domainValidator.validateDomainModel(cqlQuery, model);
 			} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
-				throw (MalformedQueryException) getTypedException(ex, new MalformedQueryException());
+				throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());
 			} catch (Exception ex) {
-				throw (QueryProcessingException) getTypedException(ex, new QueryProcessingException());
+				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 			}
 		}
 		
@@ -91,14 +91,14 @@ public class DataServiceImpl {
 				getClass(), "server-config.wsdd");
 			processor.initialize(configParameters, configStream);
 		} catch (Exception ex) {
-			throw (QueryProcessingException) getTypedException(ex, new QueryProcessingException());
+			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		}
 		try {
 			return processor.processQuery(cqlQuery);
 		} catch (gov.nih.nci.cagrid.data.QueryProcessingException ex) {
-			throw (QueryProcessingException) getTypedException(ex, new QueryProcessingException());
+			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
-			throw (MalformedQueryException) getTypedException(ex, new MalformedQueryException());
+			throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());
 		}
 	}
 	

@@ -6,8 +6,8 @@ import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.cql.LazyCQLQueryProcessor;
-import gov.nih.nci.cagrid.data.stubs.MalformedQueryException;
-import gov.nih.nci.cagrid.data.stubs.QueryProcessingException;
+import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
+import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.wsenum.utils.EnumerateResponseFactory;
 import gov.nih.nci.cagrid.wsenum.utils.EnumerationCreationException;
@@ -45,8 +45,8 @@ public class EnumerationQueryImpl {
 	
 	public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse enumerationQuery(
 		gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) throws RemoteException, 
-		gov.nih.nci.cagrid.data.stubs.QueryProcessingException, 
-		gov.nih.nci.cagrid.data.stubs.MalformedQueryException {
+		gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType, 
+		gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType {
 		CQLQueryProcessor processor = getQueryProcessor();
 		EnumIterator enumIter = null;
 		try {
@@ -56,19 +56,19 @@ public class EnumerationQueryImpl {
 				enumIter = processQuery(processor, cqlQuery);
 			}
 		} catch (gov.nih.nci.cagrid.data.QueryProcessingException ex) {
-			throw (QueryProcessingException) getTypedException(ex, new QueryProcessingException());
+			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
-			throw (MalformedQueryException) getTypedException(ex, new MalformedQueryException());
+			throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());
 		} catch (FileNotFoundException ex) {
-			throw (QueryProcessingException) getTypedException(ex, new QueryProcessingException());
+			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		} catch (IOException ex) {
-			throw (QueryProcessingException) getTypedException(ex, new QueryProcessingException());
+			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		}
 		
 		try {
 			return EnumerateResponseFactory.createCustomResponse(enumIter, false);
 		} catch (EnumerationCreationException ex) {
-			throw (QueryProcessingException) getTypedException(ex, new QueryProcessingException());
+			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		}
 	}
 	
@@ -81,7 +81,7 @@ public class EnumerationQueryImpl {
 	}
 	
 	
-	private CQLQueryProcessor getQueryProcessor() throws QueryProcessingException {
+	private CQLQueryProcessor getQueryProcessor() throws QueryProcessingExceptionType {
 		try {
 			Properties configParams = ServiceConfigUtil.getQueryProcessorConfigurationParameters();
 			String qpClassName = ServiceConfigUtil.getCqlQueryProcessorClassName();
@@ -92,7 +92,7 @@ public class EnumerationQueryImpl {
 			processor.initialize(configParams, configStream);
 			return processor;
 		} catch (Exception ex) {
-			throw (QueryProcessingException) getTypedException(ex, new QueryProcessingException());
+			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		}
 	}
 	

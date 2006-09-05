@@ -118,6 +118,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		NamespaceType queryNamespace = null;
 		NamespaceType resultNamespace = null;
 		NamespaceType dsMetadataNamespace = null;
+		NamespaceType dsExceptionsNamespace = null;
 		NamespaceType cagridMdNamespace = null;
 		NamespaceType caDsrUmlNamespace = null;
 		NamespaceType caDsrDomainNamespace = null;
@@ -134,6 +135,10 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 			dsMetadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.DATA_METADATA_SCHEMA);
 			dsMetadataNamespace.setLocation("." + File.separator + DataServiceConstants.DATA_METADATA_SCHEMA);
+			// ds exceptions namespace
+			dsExceptionsNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
+				+ DataServiceConstants.DATA_SERVICE_EXCEPTIONS_SCHEMA);
+			dsExceptionsNamespace.setLocation("." + File.separator + DataServiceConstants.DATA_SERVICE_EXCEPTIONS_SCHEMA);
 			// caGrid metadata namespace
 			cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.CAGRID_METADATA_SCHEMA);
@@ -153,6 +158,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		cagridMdNamespace.setGenerateStubs(Boolean.FALSE);
 		caDsrUmlNamespace.setGenerateStubs(Boolean.FALSE);
 		caDsrDomainNamespace.setGenerateStubs(Boolean.FALSE);
+		dsExceptionsNamespace.setGenerateStubs(Boolean.FALSE);
 		// set type mappings for domain model components that come from the caCORE SDK
 		// SemanticMetadata from umlproject
 		for (int i = 0; i < caDsrUmlNamespace.getSchemaElement().length; i++) {
@@ -176,10 +182,13 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 				break;
 			}
 		}
+		// set package mappings for exceptions
+		dsExceptionsNamespace.setPackageName(DataServiceConstants.DATA_SERVICE_PACKAGE + ".faults");	
 		// add those new namespaces to the list of namespace types
 		dsNamespaces.add(queryNamespace);
 		dsNamespaces.add(resultNamespace);
 		dsNamespaces.add(dsMetadataNamespace);
+		dsNamespaces.add(dsExceptionsNamespace);
 		dsNamespaces.add(cagridMdNamespace);
 		dsNamespaces.add(caDsrUmlNamespace);
 		dsNamespaces.add(caDsrDomainNamespace);
