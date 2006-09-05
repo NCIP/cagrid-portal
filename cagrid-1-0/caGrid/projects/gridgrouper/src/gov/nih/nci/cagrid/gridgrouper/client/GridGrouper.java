@@ -36,10 +36,27 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 
 	private GridGrouperClient client;
 
+	/**
+	 * Used to Construct a Grid Grouper object corresponding to a Grid Grouper
+	 * Service.
+	 * 
+	 * @param serviceURI
+	 *            The service URI of the Grid Grouper service.
+	 */
 	public GridGrouper(String serviceURI) {
 		this(serviceURI, null);
 	}
 
+	/**
+	 * Used to Construct a Grid Grouper object corresponding to a Grid Grouper
+	 * Service.
+	 * 
+	 * @param serviceURI
+	 *            The service URI of the Grid Grouper service.
+	 * @param cred
+	 *            The grid credential to use to authenticate to the Grid Grouper
+	 *            Service.
+	 */
 	public GridGrouper(String serviceURI, GlobusCredential cred) {
 		try {
 			this.setClient(new GridGrouperClient(serviceURI, cred));
@@ -49,10 +66,26 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		}
 	}
 
+	/**
+	 * Returns a Stem object corresponding to the Grid Grouper root stem.
+	 * 
+	 * @return Stem object corresponding to the Grid Grouper root stem.
+	 * @throws StemNotFoundException
+	 *             Thrown if the root stem could not be found.
+	 */
 	public StemI getRootStem() throws StemNotFoundException {
 		return findStem(ROOT_STEM);
 	}
 
+	/**
+	 * Obtains the Stem object for a specified Stem.
+	 * 
+	 * @param name
+	 *            The name of the stem
+	 * @return The Stem Object or the requested stem.
+	 * @throws StemNotFoundException
+	 *             Thrown if the request stem could not be found.
+	 */
 	public StemI findStem(String name) throws StemNotFoundException {
 		try {
 			StemDescriptor des = getClient().getStem(getStemIdentifier(name));
@@ -68,7 +101,32 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		}
 	}
 
-	public Set getChildStems(String stemName) {
+	/**
+	 * Obtains the Group object for a specified Group.
+	 * 
+	 * @param name
+	 *            The name of the group.
+	 * @return The Group Object or the requested stem.
+	 * @throws GroupNotFoundException
+	 *             Thrown if the request group could not be found.
+	 */
+	public GroupI findGroup(String name) throws GroupNotFoundException {
+		try {
+			GroupDescriptor des = getClient()
+					.getGroup(getGroupIdentifier(name));
+			return new Group(this, des);
+		} catch (GroupNotFoundFault f) {
+			throw new GroupNotFoundException(f.getFaultString());
+		} catch (GridGrouperRuntimeFault e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
+
+	protected Set getChildStems(String stemName) {
 		try {
 			StemDescriptor[] children = getClient().getChildStems(
 					getStemIdentifier(stemName));
@@ -88,7 +146,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		}
 	}
 
-	public StemI getParentStem(String childStemName)
+	protected StemI getParentStem(String childStemName)
 			throws StemNotFoundException {
 		try {
 			StemDescriptor des = getClient().getParentStem(
@@ -96,23 +154,6 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			return new Stem(this, des);
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
-		} catch (GridGrouperRuntimeFault e) {
-			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getFaultString());
-		} catch (Exception e) {
-			getLog().error(e.getMessage(), e);
-			throw new GrouperRuntimeException(e.getMessage());
-		}
-	}
-
-	
-	public GroupI findGroup(String name) throws GroupNotFoundException {
-		try {
-			GroupDescriptor des = getClient()
-					.getGroup(getGroupIdentifier(name));
-			return new Group(this, des);
-		} catch (GroupNotFoundFault f) {
-			throw new GroupNotFoundException(f.getFaultString());
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
@@ -144,6 +185,12 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		return id;
 	}
 
+	/**
+	 * Obtains the name of the Grid Grouper, generally the Grid Grouper service
+	 * URI.
+	 * 
+	 * @return The name of the Grid Grouper service.
+	 */
 	public String getName() {
 		return getClient().getEndpointReference().getAddress().toString();
 	}
@@ -152,26 +199,57 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		return getClient().getProxyIdentity();
 	}
 
-	public boolean isMemberOf(String subjectId, String groupName) {
+	/**
+	 * Determines whether or not a subject is a member of a group.
+	 * 
+	 * @param subjectId
+	 *            The id of the subject.
+	 * @param groupName
+	 *            The name of the group.
+	 * @return
+	 * @throws GroupNotFoundException
+	 *             Thrown if the request group could not be found.
+	 */
+
+	public boolean isMemberOf(String subjectId, String groupName)
+			throws GroupNotFoundException {
 		try {
 			return getClient().isMemberOf(getGroupIdentifier(groupName),
 					subjectId, MemberFilter.All);
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (GroupNotFoundFault f) {
+			throw new GroupNotFoundException(f.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());
 		}
 	}
 
-	public boolean isMemberOf(Subject subject, String groupName) {
+	/**
+	 * Determines whether or not a subject is a member of a group.
+	 * 
+	 * @param subject
+	 *            The subject.
+	 * @param groupName
+	 *            The name of the group.
+	 * @return Returns true if the subject is a member of the group, or false if
+	 *         the user is not a member of the group.
+	 * @throws GroupNotFoundException
+	 *             Thrown if the request group could not be found.
+	 */
+
+	public boolean isMemberOf(Subject subject, String groupName)
+			throws GroupNotFoundException {
 		try {
 			return getClient().isMemberOf(getGroupIdentifier(groupName),
 					subject.getId(), MemberFilter.All);
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
+		} catch (GroupNotFoundFault f) {
+			throw new GroupNotFoundException(f.getFaultString());
 		} catch (Exception e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getMessage());

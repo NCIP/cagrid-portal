@@ -4,8 +4,6 @@ import edu.internet2.middleware.grouper.GroupNotFoundException;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.subject.Subject;
 
-import java.util.Set;
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
@@ -16,21 +14,72 @@ import java.util.Set;
  *          Exp $
  */
 public interface GrouperI {
+	/**
+	 * Returns a Stem object corresponding to the Grid Grouper root stem.
+	 * 
+	 * @return Stem object corresponding to the Grid Grouper root stem.
+	 * @throws StemNotFoundException
+	 *             Thrown if the root stem could not be found.
+	 */
 	public StemI getRootStem() throws StemNotFoundException;
 
+	/**
+	 * Obtains the Stem object for a specified Stem.
+	 * 
+	 * @param name
+	 *            The name of the stem
+	 * @return The Stem Object or the requested stem.
+	 * @throws StemNotFoundException
+	 *             Thrown if the request stem could not be found.
+	 */
 	public StemI findStem(String name) throws StemNotFoundException;
 
-	public Set getChildStems(String parentStemName);
-
-	public StemI getParentStem(String childStemName)
-			throws StemNotFoundException;
-
+	/**
+	 * Obtains the name of the Grid Grouper, generally the Grid Grouper service
+	 * URI.
+	 * 
+	 * @return The name of the Grid Grouper service.
+	 */
 	public String getName();
 
+	/**
+	 * Obtains the Group object for a specified Group.
+	 * 
+	 * @param name
+	 *            The name of the group.
+	 * @return The Group Object or the requested stem.
+	 * @throws GroupNotFoundException
+	 *             Thrown if the request group could not be found.
+	 */
 	public GroupI findGroup(String name) throws GroupNotFoundException;
-	
-	public boolean isMemberOf(String subjectId, String groupName);
-	
-	public boolean isMemberOf(Subject subject, String groupName);
+
+	/**
+	 * Determines whether or not a subject is a member of a group.
+	 * 
+	 * @param subjectId
+	 *            The id of the subject.
+	 * @param groupName
+	 *            The name of the group.
+	 * @return
+	 * @throws GroupNotFoundException
+	 *             Thrown if the request group could not be found.
+	 */
+	public boolean isMemberOf(String subjectId, String groupName)
+			throws GroupNotFoundException;
+
+	/**
+	 * Determines whether or not a subject is a member of a group.
+	 * 
+	 * @param subject
+	 *            The subject.
+	 * @param groupName
+	 *            The name of the group.
+	 * @return Returns true if the subject is a member of the group, or false if
+	 *         the user is not a member of the group.
+	 * @throws GroupNotFoundException
+	 *             Thrown if the request group could not be found.
+	 */
+	public boolean isMemberOf(Subject subject, String groupName)
+			throws GroupNotFoundException;
 
 }
