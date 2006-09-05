@@ -855,11 +855,23 @@ public class SyncTools {
 		}
 	}
 	
-	public static void addFault(String exceptionName, SpecificServiceInformation info) throws Exception {
+	
+	/**
+	 * Adds a fault to a service's schema.
+	 * 
+	 * @param exceptionName
+	 * 		The name of the exception to add
+	 * @param info
+	 * 		The service information for the service
+	 * @return
+	 * 		true indicates the fault was new to the service,
+	 * 		false means it was already in the service's schema
+	 * @throws Exception
+	 */
+	public static boolean addFault(String exceptionName, SpecificServiceInformation info) throws Exception {
 		// just for backwars compatibility with some earlier non releases
-		// i will check for the existance of the xsd for service before i attemp
-		// to
-		// add faults to it.
+		// i will check for the existance of the xsd for service before i attempt
+		// to add faults to it.
 		File schemaFile = new File(info.getBaseDirectory() + File.separator + "schema" + File.separator
 			+ info.getServices().getService(0).getName() + File.separator + info.getService().getName() + "Types.xsd");
 
@@ -873,8 +885,7 @@ public class SyncTools {
 		}
 
 		// add the new fault to the schema for them automatically
-		// <element name="<%=exception.getQname().getLocalPart() %>"
-		// >
+		// <element name="<%=exception.getQname().getLocalPart() %>">
 		// <complexType>
 		// <complexContent>
 		// <extension base="wsrbf:BaseFaultType"/>
@@ -900,6 +911,7 @@ public class SyncTools {
 			org.jdom.Element el = (org.jdom.Element) children.get(i);
 			if (el.getAttributeValue("name").equals(exceptionName)) {
 				exceptionExists = true;
+				break;
 			}
 		}
 		if (!exceptionExists) {
@@ -907,13 +919,8 @@ public class SyncTools {
 			FileWriter fw = new FileWriter(schemaFile);
 			fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
 			fw.close();
-		}
-
-		if (!exceptionExists) {
-
-			NamespaceType newType = null;
-
-			newType = CommonTools.createNamespaceType(schemaFile.getAbsolutePath());
+			
+			NamespaceType newType = CommonTools.createNamespaceType(schemaFile.getAbsolutePath());
 
 			// now add the new SchemaElement to the NamespaceType
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
@@ -924,6 +931,6 @@ public class SyncTools {
 				}
 			}
 		}
+		return !exceptionExists;
 	}
-
 }

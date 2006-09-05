@@ -714,24 +714,28 @@ public class MethodViewer extends GridPortalBaseFrame {
 			addExceptionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					QName exceptionQName = null;
-					exceptionQName = (QName) getExceptionJComboBox().getSelectedItem();
-
-					for (int i = 0; i < getExceptionsTable().getRowCount(); i++) {
-						MethodTypeExceptionsException exception = null;
-						try {
-							exception = getExceptionsTable().getRowData(i);
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-						if (exception != null && exception.getQname().equals(exceptionQName)) {
-							JOptionPane.showMessageDialog(MethodViewer.this, "Exception (" + exceptionQName
-								+ ") already thrown by method.");
-							return;
-						}
+					if (getExceptionJComboBox().getSelectedItem() != null 
+						&& getExceptionJComboBox().getSelectedItem() instanceof QName) {
+						exceptionQName = (QName) getExceptionJComboBox().getSelectedItem();
+					}					
+					if (exceptionQName != null) {
+						for (int i = 0; i < getExceptionsTable().getRowCount(); i++) {
+							MethodTypeExceptionsException exception = null;
+							try {
+								exception = getExceptionsTable().getRowData(i);
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+							if (exception != null && exception.getQname().equals(exceptionQName)) {
+								JOptionPane.showMessageDialog(MethodViewer.this, "Exception (" + exceptionQName
+									+ ") already thrown by method.");
+								return;
+							}
+						}						
+						getExceptionsTable().addRow(exceptionQName);
+					} else {
+						JOptionPane.showMessageDialog(MethodViewer.this, "Please select an exception first!");
 					}
-
-					getExceptionsTable().addRow(exceptionQName);
-
 				}
 			});
 		}
@@ -1887,8 +1891,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 					}
 
 					try {
-						SyncTools.addFault(exceptionQName.getLocalPart(), info);
-						getExceptionJComboBox().addItem(exceptionQName);
+						boolean newFault = SyncTools.addFault(exceptionQName.getLocalPart(), info);
+						if (newFault) {
+							getExceptionJComboBox().addItem(exceptionQName);
+						}
 					} catch (Exception ex) {
 						JOptionPane.showMessageDialog(MethodViewer.this, "Unable to create the exception:\n"
 							+ ex.getMessage());
