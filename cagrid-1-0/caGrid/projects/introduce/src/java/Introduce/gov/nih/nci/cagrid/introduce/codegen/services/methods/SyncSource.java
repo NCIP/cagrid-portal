@@ -121,7 +121,7 @@ public class SyncSource {
 				SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), fault.getQname());
 				String ex = info.getType().getPackageName() + "." + TemplateUtils.upperCaseFirstCharacter(
 					info.getType().getClassName() != null ? info.getType().getClassName() : info.getType().getType());
-				exceptions += info.getType().getPackageName() + "." + TemplateUtils.upperCaseFirstCharacter(fault.getQname().getLocalPart());
+				exceptions += ex;
 				if (i < exceptionsEl.getException().length - 1) {
 					exceptions += ", ";
 				}
