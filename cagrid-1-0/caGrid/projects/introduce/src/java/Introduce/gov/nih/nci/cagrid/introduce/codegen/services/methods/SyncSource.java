@@ -120,7 +120,9 @@ public class SyncSource {
 			for (int i = 0; i < exceptionsEl.getException().length; i++) {
 				MethodTypeExceptionsException fault = exceptionsEl.getException(i);
 				SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), fault.getQname());
-				exceptions += info.getType().getPackageName() + "." + TemplateUtils.upperCaseFirstCharacter(fault.getQname().getLocalPart());
+				String ex = info.getType().getPackageName() + "." + TemplateUtils.upperCaseFirstCharacter(
+					info.getType().getClassName() != null ? info.getType().getClassName() : info.getType().getType());
+				System.out.println("Adding exception: " + ex + " to method " + method.getName());
 				if (i < exceptionsEl.getException().length - 1) {
 					exceptions += ", ";
 				}
