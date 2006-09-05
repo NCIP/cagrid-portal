@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.service;
 
-import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
@@ -15,18 +14,15 @@ import gov.nih.nci.cagrid.wsenum.utils.SimplePersistantSDKObjectIterator;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 
 import javax.xml.namespace.QName;
 
 import org.apache.axis.utils.ClassUtils;
 import org.globus.ws.enumeration.EnumIterator;
-import org.oasis.wsrf.faults.BaseFaultType;
 
 /** 
  *  EnumerationQueryImpl
@@ -35,11 +31,11 @@ import org.oasis.wsrf.faults.BaseFaultType;
  * @created by Introduce Toolkit version 1.0
  * 
  */
-public class EnumerationQueryImpl {
+public class EnumerationQueryImpl extends BaseServiceImpl {
 
 	
 	public EnumerationQueryImpl() throws RemoteException {
-		
+		super();
 	}
 	
 	
@@ -47,7 +43,9 @@ public class EnumerationQueryImpl {
 		gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) throws RemoteException, 
 		gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType, 
 		gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType {
-		CQLQueryProcessor processor = getQueryProcessor();
+		preProcess(cqlQuery);
+		
+		CQLQueryProcessor processor = getCqlQueryProcessorInstance();
 		EnumIterator enumIter = null;
 		try {
 			if (processor instanceof LazyCQLQueryProcessor) {
@@ -70,31 +68,7 @@ public class EnumerationQueryImpl {
 		} catch (EnumerationCreationException ex) {
 			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		}
-	}
-	
-	
-	private Exception getTypedException(Exception cause, BaseFaultType fault) {
-		FaultHelper helper = new FaultHelper(fault);
-		helper.addFaultCause(cause);
-		helper.setDescription(cause.getClass().getSimpleName() + " -- " + cause.getMessage());
-		return helper.getFault();
-	}
-	
-	
-	private CQLQueryProcessor getQueryProcessor() throws QueryProcessingExceptionType {
-		try {
-			Properties configParams = ServiceConfigUtil.getQueryProcessorConfigurationParameters();
-			String qpClassName = ServiceConfigUtil.getCqlQueryProcessorClassName();
-			Class qpClass = Class.forName(qpClassName);
-			CQLQueryProcessor processor = (CQLQueryProcessor) qpClass.newInstance();
-			InputStream configStream = ClassUtils.getResourceAsStream(
-				getClass(), "server-config.wsdd");
-			processor.initialize(configParams, configStream);
-			return processor;
-		} catch (Exception ex) {
-			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
-		}
-	}
+	}	
 	
 	
 	private EnumIterator processQuery(CQLQueryProcessor processor, CQLQuery query)
@@ -121,30 +95,6 @@ public class EnumerationQueryImpl {
 		} catch (Exception ex) {
 			throw new gov.nih.nci.cagrid.data.QueryProcessingException(ex);
 		}
-		/*
-		// TODO: Fix this to use ws-enum utilities for SDK object iterators
-		// write the results to disk
-		// first, need a unique ID to use for a file name
-		String uuid = UUIDGenFactory.getUUIDGen().nextUUID();
-		String filename = uuid + "_EnumerationResults";
-		IndexedObjectFileWriter writer = new IndexedObjectFileWriter(filename);
-		// now walk through the query results and hand off to writer
-		Iterator objIter = new CQLQueryResultsIterator(results);
-		QName objectQname = null;
-		while (objIter.hasNext()) {
-			Object o = objIter.next();
-			if (objectQname == null) {
-				objectQname = Utils.getRegisteredQName(o.getClass());
-			}
-			writer.writeObject(o);
-		}
-		// close the file handle
-		writer.close();
-		
-		// create the persistent iterator
-		EnumIterator iterator = new IndexedObjectFileEnumIterator(filename, objectQname);
-		return iterator;
-		*/
 	}
 	
 	
