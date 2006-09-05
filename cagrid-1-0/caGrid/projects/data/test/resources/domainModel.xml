@@ -2429,4 +2429,5 @@
    </ns382:semanticMetadataCollection>
   </ns382:UMLClass>
  </ns1:exposedUMLClassCollection>
+ <ns1:umlGeneralizationCollection/>
 </ns1:DomainModel>
