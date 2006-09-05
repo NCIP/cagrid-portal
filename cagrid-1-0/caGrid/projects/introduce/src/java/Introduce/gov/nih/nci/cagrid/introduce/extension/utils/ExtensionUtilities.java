@@ -4,14 +4,9 @@ import gov.nih.nci.cagrid.common.Utils;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
-
-import javax.swing.JFileChooser;
 
 import org.jdom.Element;
 import org.jdom.output.Format;
@@ -25,7 +20,7 @@ import org.projectmobius.common.XMLUtilities;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 7, 2006 
- * @version $Id: ExtensionUtilities.java,v 1.4 2006-09-05 17:44:48 dervin Exp $ 
+ * @version $Id: ExtensionUtilities.java,v 1.5 2006-09-05 20:26:27 dervin Exp $ 
  */
 public class ExtensionUtilities {
 	public static final String CLASSPATHENTRY_ELEMENT = "classpathentry";
@@ -83,23 +78,5 @@ public class ExtensionUtilities {
 	
 	private static String convertToUnixStylePath(String pathname) {
 		return pathname.replace('\\', '/');
-	}
-	
-	
-	public static void main(String[] args) {
-		JFileChooser chooser = new JFileChooser();
-		chooser.showOpenDialog(null);
-		File source = chooser.getSelectedFile();
-		chooser.showOpenDialog(null);
-		File destination = chooser.getSelectedFile();
-		System.out.println("Path");
-		System.out.println("\tFrom: " + source.getAbsolutePath());
-		System.out.println("\tTo:   " + destination.getAbsolutePath());
-		try {
-			String relative = Utils.getRelativePath(source, destination);
-			System.out.println("\n\tRel: " + relative);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
 	}
 }
