@@ -128,7 +128,6 @@ public class GridGrouperBootstrapper {
 								.getName(), options);
 					}
 				}
-
 			}
 
 		} catch (ParseException exp) {
