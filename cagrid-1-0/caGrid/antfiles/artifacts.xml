@@ -302,6 +302,19 @@
 				<include name="*.jar" />
 				<exclude name="*tests*.jar" />
 			</fileset>
+			<fileset dir="${projects.dir}/discovery/ext/lib">
+				<include name="*.jar" />
+				<exclude name="*tests*.jar" />
+			</fileset>
+		</artifact>
+		
+		
+		<artifact track="main" type="jars" id="metadatautils.jars">
+			<antcall target="build-metadatautils" />
+			<fileset dir="${projects.dir}/metadatautils/build/jars">
+				<include name="*.jar" />
+				<exclude name="*tests*.jar" />
+			</fileset>
 		</artifact>
 
 

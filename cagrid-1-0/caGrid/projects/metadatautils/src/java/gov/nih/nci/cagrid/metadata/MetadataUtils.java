@@ -1,11 +1,11 @@
-package gov.nih.nci.cagrid.discovery;
+package gov.nih.nci.cagrid.metadata;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.discovery.exceptions.InvalidResourcePropertyException;
-import gov.nih.nci.cagrid.discovery.exceptions.RemoteResourcePropertyRetrievalException;
-import gov.nih.nci.cagrid.discovery.exceptions.ResourcePropertyRetrievalException;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.metadata.exceptions.InvalidResourcePropertyException;
+import gov.nih.nci.cagrid.metadata.exceptions.RemoteResourcePropertyRetrievalException;
+import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
 
 import java.io.Reader;
 import java.io.Writer;
@@ -19,7 +19,7 @@ import org.w3c.dom.Element;
 
 public class MetadataUtils {
 
-	private static final String METADATA_WSDD = "/gov/nih/nci/cagrid/discovery/Metadata-client-config.wsdd";
+	private static final String METADATA_WSDD = "/gov/nih/nci/cagrid/metadata/Metadata-client-config.wsdd";
 
 
 	/**

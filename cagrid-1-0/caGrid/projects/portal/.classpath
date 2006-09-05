@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/generated"/>
+	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/client.jar"/>
@@ -76,5 +77,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-data.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring-mock.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.discovery;
+package gov.nih.nci.cagrid.metadata;
 
 import javax.xml.namespace.QName;
 

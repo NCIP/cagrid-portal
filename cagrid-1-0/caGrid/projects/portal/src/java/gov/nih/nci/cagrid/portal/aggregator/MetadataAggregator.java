@@ -1,10 +1,15 @@
 package gov.nih.nci.cagrid.portal.aggregator;
 
-import gov.nih.nci.cagrid.discovery.MetadataUtils;
-import gov.nih.nci.cagrid.discovery.exceptions.ResourcePropertyRetrievalException;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
+import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
 import gov.nih.nci.cagrid.metadata.service.ServiceContext;
-import gov.nih.nci.cagrid.portal.domain.*;
+import gov.nih.nci.cagrid.portal.domain.DomainModel;
+import gov.nih.nci.cagrid.portal.domain.Operation;
+import gov.nih.nci.cagrid.portal.domain.PointOfContact;
+import gov.nih.nci.cagrid.portal.domain.RegisteredService;
+import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
+import gov.nih.nci.cagrid.portal.domain.UMLClass;
 import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
 import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
 import gov.nih.nci.cagrid.portal.utils.GridUtils;

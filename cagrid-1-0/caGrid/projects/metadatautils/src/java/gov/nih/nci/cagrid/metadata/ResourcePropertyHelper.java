@@ -8,13 +8,13 @@
  * file.
  */
 
-package gov.nih.nci.cagrid.discovery;
+package gov.nih.nci.cagrid.metadata;
 
-import gov.nih.nci.cagrid.discovery.exceptions.InternalRuntimeException;
-import gov.nih.nci.cagrid.discovery.exceptions.InvalidResourcePropertyException;
-import gov.nih.nci.cagrid.discovery.exceptions.QueryInvalidException;
-import gov.nih.nci.cagrid.discovery.exceptions.RemoteResourcePropertyRetrievalException;
-import gov.nih.nci.cagrid.discovery.exceptions.ResourcePropertyRetrievalException;
+import gov.nih.nci.cagrid.metadata.exceptions.InternalRuntimeException;
+import gov.nih.nci.cagrid.metadata.exceptions.InvalidResourcePropertyException;
+import gov.nih.nci.cagrid.metadata.exceptions.QueryInvalidException;
+import gov.nih.nci.cagrid.metadata.exceptions.RemoteResourcePropertyRetrievalException;
+import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
 
 import java.rmi.RemoteException;
 

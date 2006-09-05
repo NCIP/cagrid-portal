@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.cadsr.common;
 
+import gov.nih.nci.cadsr.domain.ValueDomain;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
@@ -14,11 +15,13 @@ import gov.nih.nci.cagrid.metadata.common.UMLClassUmlAttributeCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLAssociationCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLClassCollection;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModelUmlGeneralizationCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationSourceUMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationTargetUMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLClassReference;
+import gov.nih.nci.cagrid.metadata.dataservice.UMLGeneralization;
 import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
@@ -89,10 +92,9 @@ public class DomainModelBuilder {
 		// than 1 preload, but this should work when we move forward)
 		DetachedCriteria criteria = DetachedCriteria.forClass(UMLClassMetadata.class).createAlias(
 			"UMLAttributeMetadataCollection", "atts").setFetchMode("atts", FetchMode.JOIN).setFetchMode(
-			"atts.semanticMetadataCollection", FetchMode.JOIN).setFetchMode("atts.semanticMetadataCollection",
-			FetchMode.JOIN).setFetchMode("semanticMetadataCollection", FetchMode.JOIN).setResultTransformer(
-			CriteriaSpecification.DISTINCT_ROOT_ENTITY).createCriteria("project").add(
-			Restrictions.eq("id", proj.getId()));
+			"atts.semanticMetadataCollection", FetchMode.JOIN).setFetchMode("semanticMetadataCollection",
+			FetchMode.JOIN).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).createCriteria("project")
+			.add(Restrictions.eq("id", proj.getId()));
 		UMLClassMetadata classArr[];
 		try {
 			classArr = getProjectClasses(proj, criteria);
@@ -141,9 +143,9 @@ public class DomainModelBuilder {
 			DetachedCriteria criteria = DetachedCriteria.forClass(UMLClassMetadata.class).createAlias(
 				"UMLAttributeMetadataCollection", "atts").createAlias("UMLPackageMetadata", "pack").setFetchMode(
 				"atts", FetchMode.JOIN).setFetchMode("atts.semanticMetadataCollection", FetchMode.JOIN).setFetchMode(
-				"atts.semanticMetadataCollection", FetchMode.JOIN).setFetchMode("semanticMetadataCollection",
-				FetchMode.JOIN).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).add(disjunction)
-				.createCriteria("project").add(Restrictions.eq("id", proj.getId()));
+				"semanticMetadataCollection", FetchMode.JOIN).setResultTransformer(
+				CriteriaSpecification.DISTINCT_ROOT_ENTITY).add(disjunction).createCriteria("project").add(
+				Restrictions.eq("id", proj.getId()));
 
 			try {
 				classArr = getProjectClasses(proj, criteria);
@@ -237,7 +239,7 @@ public class DomainModelBuilder {
 
 
 	private String createClassIDFilter(UMLClassMetadata[] classArr) {
-		// create a list of class IDs for building association closure
+		// create a list of class IDs for building closures
 		Set idSet = new HashSet();
 		if (classArr != null) {
 			for (int i = 0; i < classArr.length; i++) {
@@ -314,55 +316,6 @@ public class DomainModelBuilder {
 		return assocArr;
 	}
 
-
-	// /**
-	// * @param processed
-	// * @param excluded
-	// * @return
-	// */
-	// private boolean associationsEqual(UMLAssociationMetadata processed,
-	// gov.nih.nci.cagrid.cadsr.domain.UMLAssociation excluded) {
-	// // we dont care about directionality
-	//
-	// // handle the null source case
-	// UMLAssociationEdge source = null;
-	// if (excluded.getSourceUMLAssociationEdge() == null
-	// || excluded.getSourceUMLAssociationEdge().getUMLAssociationEdge() ==
-	// null) {
-	// return processed.getSourceLowCardinality() == null &&
-	// processed.getSourceHighCardinality() == null
-	// && (processed.getSourceRoleName() == null ||
-	// processed.getSourceRoleName().trim().equals(""));
-	// } else {
-	// source = excluded.getSourceUMLAssociationEdge().getUMLAssociationEdge();
-	// }
-	//
-	// // handle the null target case
-	// UMLAssociationEdge target = null;
-	// if (excluded.getTargetUMLAssociationEdge() == null
-	// || excluded.getTargetUMLAssociationEdge().getUMLAssociationEdge() ==
-	// null) {
-	// return processed.getTargetLowCardinality() == null &&
-	// processed.getTargetHighCardinality() == null
-	// && (processed.getTargetRoleName() == null ||
-	// processed.getTargetRoleName().trim().equals(""));
-	// } else {
-	// target = excluded.getTargetUMLAssociationEdge().getUMLAssociationEdge();
-	// }
-	//
-	// return processed.getTargetLowCardinality().intValue() ==
-	// target.getMinCardinality()
-	// && processed.getTargetHighCardinality().intValue() ==
-	// target.getMaxCardinality()
-	// && processed.getTargetRoleName().equals(target.getRoleName())
-	// && processed.getSourceLowCardinality().intValue() ==
-	// source.getMinCardinality()
-	// && processed.getSourceHighCardinality().intValue() ==
-	// source.getMaxCardinality()
-	// && processed.getSourceRoleName().equals(source.getRoleName())
-	//
-	// ;
-	// }
 
 	/**
 	 * @param excludedAssociations
@@ -492,7 +445,7 @@ public class DomainModelBuilder {
 				try {
 					workList.add(getWorkManager().schedule(work));
 				} catch (Exception e) {
-					LOG.error("Error sheduling class conversion work", e);
+					LOG.error("Error scheduling class conversion work", e);
 					throw new DomainModelGenerationException("Error sheduling class conversion work", e);
 				}
 			}
@@ -540,7 +493,7 @@ public class DomainModelBuilder {
 				try {
 					workList.add(getWorkManager().schedule(work));
 				} catch (Exception e) {
-					LOG.error("Error sheduling class conversion work", e);
+					LOG.error("Error scheduling class conversion work", e);
 					throw new DomainModelGenerationException("Error sheduling class conversion work", e);
 				}
 			}
@@ -560,12 +513,55 @@ public class DomainModelBuilder {
 			LOG.debug("Association array was null.");
 		}
 		model.setExposedUMLAssociationCollection(exposedAssociations);
-
 		duration = (System.currentTimeMillis() - start) / 1000.0;
 		LOG.info("Finished association conversion for project: " + proj.getShortName() + " in " + duration
 			+ " seconds.");
 
+		LOG.info("Beginning processing of generalizations for project: " + proj.getShortName());
+		start = System.currentTimeMillis();
+		if (classes != null && classes.length > 0) {
+			// build generalizations
+			UMLGeneralization[] genArr = buildGeneralizations(classes);
+			LOG.info("Found " + genArr.length + " generalizations for project: " + proj.getShortName());
+			DomainModelUmlGeneralizationCollection genCollection = new DomainModelUmlGeneralizationCollection();
+			genCollection.setUMLGeneralization(genArr);
+			model.setUmlGeneralizationCollection(genCollection);
+		}
+		duration = (System.currentTimeMillis() - start) / 1000.0;
+		LOG.info("Finished generalization processing for project: " + proj.getShortName() + " in " + duration
+			+ " seconds.");
+
 		return model;
+	}
+
+
+	private UMLGeneralization[] buildGeneralizations(UMLClassMetadata[] classes) throws DomainModelGenerationException {
+		// get all generalizations between classes we are exposing
+		String classIDFilter = createClassIDFilter(classes);
+
+		HQLCriteria hql = new HQLCriteria(
+			"SELECT c.id, c.UMLGeneralizationMetadata.superUMLClassMetadata.id FROM UMLClassMetadata AS c WHERE c.id "
+				+ classIDFilter);
+		LOG.debug("Issuing generialization query with HQL:" + hql.getHqlString());
+		
+		try {
+			List rList = this.cadsr.query(hql, "UMLClassMetadata");
+			UMLGeneralization genArr[] = new UMLGeneralization[rList.size()];
+			int ind = 0;
+			for (Iterator resultsIterator = rList.iterator(); resultsIterator.hasNext();) {
+				Object[] result = (Object[]) resultsIterator.next();
+				String subID = (String) result[0];
+				String superID = (String) result[1];
+				UMLGeneralization gen = new UMLGeneralization(new UMLClassReference(subID), new UMLClassReference(
+					superID));
+				genArr[ind++] = gen;
+			}
+
+			return genArr;
+		} catch (Exception e) {
+			LOG.error("Error creating Generalizations.", e);
+			throw new DomainModelGenerationException("Error creating Generalizations.", e);
+		}
 	}
 
 
@@ -676,10 +672,11 @@ public class DomainModelBuilder {
 	private UMLAttribute[] createClassAttributes(UMLClassMetadata classMetadata) throws ApplicationException {
 
 		long start = System.currentTimeMillis();
-		DetachedCriteria criteria = DetachedCriteria.forClass(UMLAttributeMetadata.class).setFetchMode(
-			"semanticMetadataCollection", FetchMode.JOIN).setResultTransformer(
-			CriteriaSpecification.DISTINCT_ROOT_ENTITY).createCriteria("UMLClassMetadata").add(
-			Restrictions.eq("id", classMetadata.getId()));
+
+		HQLCriteria criteria = new HQLCriteria(
+			"SELECT DISTINCT att, att.dataElement.valueDomain FROM UMLAttributeMetadata att "
+				+ "LEFT JOIN FETCH att.semanticMetadataCollection " + "WHERE att.UMLClassMetadata.id='"
+				+ classMetadata.getId() + "'  ORDER BY att.name");
 
 		List rList = cadsr.query(criteria, UMLAttributeMetadata.class.getName());
 
@@ -687,7 +684,10 @@ public class DomainModelBuilder {
 		int ind = 0;
 		for (Iterator resultsIterator = rList.iterator(); resultsIterator.hasNext(); ind++) {
 			long attstart = System.currentTimeMillis();
-			UMLAttributeMetadata attMD = (UMLAttributeMetadata) resultsIterator.next();
+			Object[] result = (Object[]) resultsIterator.next();
+			UMLAttributeMetadata attMD = (UMLAttributeMetadata) result[0];
+			ValueDomain vd = (ValueDomain) result[1];
+
 			UMLAttribute converted = new UMLAttribute();
 			String description = attMD.getDescription();
 			if (description == null) {
@@ -695,11 +695,7 @@ public class DomainModelBuilder {
 			}
 			converted.setDescription(description);
 			converted.setName(attMD.getName());
-			// TODO: this makes 2 calls for every attribute... how can we speed
-			// this up!?
-			if (attMD.getDataElement() != null && attMD.getDataElement().getValueDomain() != null) {
-				converted.setValueDomain(attMD.getDataElement().getValueDomain());
-			}
+			converted.setValueDomain(vd);
 
 			SemanticMetadata[] metadatas = semanticMetadataCollectionToArray(attMD.getSemanticMetadataCollection());
 			UMLAttributeSemanticMetadataCollection semCol = new UMLAttributeSemanticMetadataCollection();

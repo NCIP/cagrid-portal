@@ -1,15 +1,16 @@
 package gov.nih.nci.cagrid.portal.manager;
 
-import gov.nih.nci.cagrid.discovery.MetadataUtils;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
 import gov.nih.nci.cagrid.portal.domain.DomainModel;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import gov.nih.nci.cagrid.portal.domain.UMLClass;
-import org.springframework.core.io.ClassPathResource;
 
 import java.io.FileReader;
 import java.util.List;
+
+import org.springframework.core.io.ClassPathResource;
 
 /**
  * Created by IntelliJ IDEA.

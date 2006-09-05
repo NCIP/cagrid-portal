@@ -1,16 +1,16 @@
 package gov.nih.nci.cagrid.discovery.client;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.discovery.MetadataConstants;
-import gov.nih.nci.cagrid.discovery.MetadataUtils;
-import gov.nih.nci.cagrid.discovery.ResourcePropertyHelper;
 import gov.nih.nci.cagrid.discovery.XPathUtils;
-import gov.nih.nci.cagrid.discovery.exceptions.QueryInvalidException;
-import gov.nih.nci.cagrid.discovery.exceptions.RemoteResourcePropertyRetrievalException;
-import gov.nih.nci.cagrid.discovery.exceptions.ResourcePropertyRetrievalException;
+import gov.nih.nci.cagrid.metadata.MetadataConstants;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
+import gov.nih.nci.cagrid.metadata.ResourcePropertyHelper;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
+import gov.nih.nci.cagrid.metadata.exceptions.QueryInvalidException;
+import gov.nih.nci.cagrid.metadata.exceptions.RemoteResourcePropertyRetrievalException;
+import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
 
 import java.util.HashMap;
 import java.util.Map;

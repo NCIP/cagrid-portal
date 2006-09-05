@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.discovery.client;
 
-import javax.xml.transform.TransformerException;
+import gov.nih.nci.cagrid.metadata.exceptions.QueryInvalidException;
+import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
 
-import gov.nih.nci.cagrid.discovery.exceptions.QueryInvalidException;
-import gov.nih.nci.cagrid.discovery.exceptions.ResourcePropertyRetrievalException;
+import javax.xml.transform.TransformerException;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;

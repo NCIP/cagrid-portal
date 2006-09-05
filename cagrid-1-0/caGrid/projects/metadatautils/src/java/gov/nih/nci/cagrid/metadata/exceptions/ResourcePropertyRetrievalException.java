@@ -1,15 +1,15 @@
-package gov.nih.nci.cagrid.discovery.exceptions;
+package gov.nih.nci.cagrid.metadata.exceptions;
 
 /**
  * @author oster
  * 
  */
-public class InvalidResourcePropertyException extends RemoteResourcePropertyRetrievalException {
+public class ResourcePropertyRetrievalException extends Exception {
 
 	/**
 	 * 
 	 */
-	public InvalidResourcePropertyException() {
+	public ResourcePropertyRetrievalException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -19,7 +19,7 @@ public class InvalidResourcePropertyException extends RemoteResourcePropertyRetr
 	 * @param message
 	 * @param cause
 	 */
-	public InvalidResourcePropertyException(String message, Throwable cause) {
+	public ResourcePropertyRetrievalException(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
@@ -28,7 +28,7 @@ public class InvalidResourcePropertyException extends RemoteResourcePropertyRetr
 	/**
 	 * @param message
 	 */
-	public InvalidResourcePropertyException(String message) {
+	public ResourcePropertyRetrievalException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
@@ -37,7 +37,7 @@ public class InvalidResourcePropertyException extends RemoteResourcePropertyRetr
 	/**
 	 * @param cause
 	 */
-	public InvalidResourcePropertyException(Throwable cause) {
+	public ResourcePropertyRetrievalException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}

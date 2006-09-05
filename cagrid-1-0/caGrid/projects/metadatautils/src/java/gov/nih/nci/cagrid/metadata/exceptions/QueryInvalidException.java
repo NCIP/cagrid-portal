@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.discovery.exceptions;
+package gov.nih.nci.cagrid.metadata.exceptions;
 
 /**
  * @author oster

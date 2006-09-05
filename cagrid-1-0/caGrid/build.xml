@@ -39,12 +39,12 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, bulkDataTransfer" />
+	<property name="projects.list" value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, bulkDataTransfer" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects above -->
-	<property name="testable.projects.list" value="dorian, introduce, cabigextensions, core, discovery, cadsr, gridca, gts, syncgts, data, sdkQuery, gridgrouper, wsEnum" />
+	<property name="testable.projects.list" value="dorian, introduce, cabigextensions, core, discovery, cadsr, gridca, gts, syncgts, data, sdkQuery, gridgrouper, wsEnum, metadatautils" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT PROVIDE INTRODUCE EXTENSIONS       -->
 	<!-- ================================================================================ -->
@@ -130,10 +130,26 @@
 			<artifact refid="core.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="metadata.schemas" />
+			<artifact refid="metadatautils.jars" />
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="data.metadata.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/discovery" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+	
+	<!-- =============================================================== -->
+	<!-- METADATA UTILS:                                                      -->
+	<!-- =============================================================== -->
+	<target name="build-metadatautils" if="isJDK1.5" depends="prepare" description="Builds the metadata utils">
+		<resolveDependencies extdir="${projects.dir}/metadatautils/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="data.metadata.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/metadatautils" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
@@ -170,6 +186,7 @@
 			<artifact refid="common.metadata.jars" />
             <artifact refid="data.metadata.jars" />      
 			<artifact refid="metadata.schemas" />
+			<artifact refid="metadatautils.jars" />
             <artifact refid="graph.jars" />
             <artifact refid="discovery.jars" />      
 			<artifact refid="introduce.jars" />
@@ -201,6 +218,7 @@
 			<artifact refid="core.test.jars" />
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="data.metadata.jars" />
+			<artifact refid="metadatautils.jars" />
 			<artifact refid="caCORE.jars" />
 			<artifact refid="introduce.jars" />
 			<artifact refid="graph.jars" />

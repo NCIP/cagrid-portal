@@ -3,9 +3,9 @@
  */
 package gov.nih.nci.cagrid.introduce.extensions.metadata.editors.domainmodel;
 
-import gov.nih.nci.cagrid.discovery.MetadataUtils;
 import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
 import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
