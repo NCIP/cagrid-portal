@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce;
+package gov.nih.nci.cagrid.introduce.test;
 
 public class IntroduceTestConstants {
 	public static final int TEST_PORT = 44444;  

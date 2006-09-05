@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -201,6 +202,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField inputMessageNameTextField = null;
 
 	private JTextField outputMessageNameTextField = null;
+
+	private JPanel createFaultPanel = null;
+
+	private JTextField newFaultNameTextField = null;
+
+	private JButton createFaultButton = null;
+
+	private JLabel faultTypeNameLabel = null;
 
 
 	public MethodViewer(MethodType method, SpecificServiceInformation info) {
@@ -597,6 +606,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getExceptionsPanel() {
 		if (exceptionsPanel == null) {
+			GridBagConstraints gridBagConstraints46 = new GridBagConstraints();
+			gridBagConstraints46.gridx = 0;
+			gridBagConstraints46.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints46.gridy = 2;
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.gridx = 0;
 			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -619,6 +632,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			exceptionsPanel.add(getExceptionScrollPane(), gridBagConstraints11);
 			exceptionsPanel.add(getExceptionInputPanel(), gridBagConstraints12);
+			exceptionsPanel.add(getCreateFaultPanel(), gridBagConstraints46);
 		}
 		return exceptionsPanel;
 	}
@@ -699,28 +713,25 @@ public class MethodViewer extends GridPortalBaseFrame {
 			addExceptionButton.setText("Add");
 			addExceptionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					String exceptionName = (String) getExceptionJComboBox().getSelectedItem();
-					if (CommonTools.isValidServiceName(exceptionName)) {
-						for (int i = 0; i < getExceptionsTable().getRowCount(); i++) {
-							MethodTypeExceptionsException exception = null;
-							try {
-								exception = getExceptionsTable().getRowData(i);
-							} catch (Exception e1) {
-								e1.printStackTrace();
-							}
-							if (exception != null && exception.getName().equals(exceptionName)) {
-								JOptionPane.showMessageDialog(MethodViewer.this, "Exception (" + exceptionName
-									+ ") already thrown by method.");
-								return;
-							}
-						}
+					QName exceptionQName = null;
+					exceptionQName = (QName) getExceptionJComboBox().getSelectedItem();
 
-						getExceptionsTable().addRow(exceptionName);
-					} else {
-						JOptionPane.showMessageDialog(MethodViewer.this, "Invalid Exception Name(" + exceptionName
-							+ "):  Exception must be a valid java indentifier.");
-						return;
+					for (int i = 0; i < getExceptionsTable().getRowCount(); i++) {
+						MethodTypeExceptionsException exception = null;
+						try {
+							exception = getExceptionsTable().getRowData(i);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+						if (exception != null && exception.getQname().equals(exceptionQName)) {
+							JOptionPane.showMessageDialog(MethodViewer.this, "Exception (" + exceptionQName
+								+ ") already thrown by method.");
+							return;
+						}
 					}
+
+					getExceptionsTable().addRow(exceptionQName);
+
 				}
 			});
 		}
@@ -847,7 +858,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 									MethodTypeExceptionsException[] exceptions = exceptionsType.getException();
 									if (exceptions != null) {
 										for (int e = 0; e < exceptions.length; e++) {
-											exceptionNameSet.add(exceptions[e].getName());
+											exceptionNameSet.add(exceptions[e].getQname());
 										}
 									}
 								}
@@ -857,7 +868,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 				}
 			}
 			for (Iterator iter = exceptionNameSet.iterator(); iter.hasNext();) {
-				String usedExceptionName = (String) iter.next();
+				QName usedExceptionName = (QName) iter.next();
 				exceptionJComboBox.addItem(usedExceptionName);
 			}
 
@@ -1801,6 +1812,92 @@ public class MethodViewer extends GridPortalBaseFrame {
 			}
 		}
 		return outputMessageNameTextField;
+	}
+
+
+	/**
+	 * This method initializes createFaultPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getCreateFaultPanel() {
+		if (createFaultPanel == null) {
+			GridBagConstraints gridBagConstraints48 = new GridBagConstraints();
+			gridBagConstraints48.gridx = 0;
+			gridBagConstraints48.gridy = 0;
+			faultTypeNameLabel = new JLabel();
+			faultTypeNameLabel.setText("Fault Type Name:");
+			GridBagConstraints gridBagConstraints47 = new GridBagConstraints();
+			gridBagConstraints47.gridx = 2;
+			gridBagConstraints47.gridy = 0;
+			GridBagConstraints gridBagConstraints45 = new GridBagConstraints();
+			gridBagConstraints45.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints45.gridx = 1;
+			gridBagConstraints45.gridy = 0;
+			gridBagConstraints45.weightx = 1.0;
+			gridBagConstraints45.insets = new java.awt.Insets(5, 5, 5, 5);
+			createFaultPanel = new JPanel();
+			createFaultPanel.setLayout(new GridBagLayout());
+			createFaultPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create New Service Faults",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+			createFaultPanel.add(getNewFaultNameTextField(), gridBagConstraints45);
+			createFaultPanel.add(getCreateFaultButton(), gridBagConstraints47);
+			createFaultPanel.add(faultTypeNameLabel, gridBagConstraints48);
+		}
+		return createFaultPanel;
+	}
+
+
+	/**
+	 * This method initializes newFaultNameTextField
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getNewFaultNameTextField() {
+		if (newFaultNameTextField == null) {
+			newFaultNameTextField = new JTextField();
+		}
+		return newFaultNameTextField;
+	}
+
+
+	/**
+	 * This method initializes createFaultButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getCreateFaultButton() {
+		if (createFaultButton == null) {
+			createFaultButton = new JButton();
+			createFaultButton.setText("Create Fault");
+			createFaultButton
+				.setToolTipText("Creates a new fault under this services types namespace and adds it to the list of available faults.");
+
+			createFaultButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					QName exceptionQName = null;
+					if (CommonTools.isValidServiceName(getNewFaultNameTextField().getText())) {
+						exceptionQName = new QName(info.getService().getNamespace() + "/types",
+							getNewFaultNameTextField().getText());
+					} else {
+						JOptionPane.showMessageDialog(MethodViewer.this, "Invalid Exception Name("
+							+ getNewFaultNameTextField() + "):  Exception must be a valid java indentifier.");
+						return;
+					}
+
+					try {
+						SyncTools.addFault(exceptionQName.getLocalPart(), info);
+						getExceptionJComboBox().addItem(exceptionQName);
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(MethodViewer.this, "Unable to create the exception:\n"
+							+ ex.getMessage());
+						return;
+					}
+				}
+			});
+		}
+		return createFaultButton;
 	}
 } // @jve:decl-index=0:visual-constraint="4,12"
 

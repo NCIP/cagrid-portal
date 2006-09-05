@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce;
+package gov.nih.nci.cagrid.introduce.test;
 
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import junit.framework.TestCase;

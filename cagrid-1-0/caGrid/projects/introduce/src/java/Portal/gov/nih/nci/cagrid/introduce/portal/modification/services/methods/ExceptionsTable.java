@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.namespace.QName;
 
 
 /**
@@ -18,6 +19,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ExceptionsTable extends PortalBaseTable {
 
+	public static String NAMESPACE = "Namespace";
+	
 	public static String NAME = "Name";
 
 	public static String DATA1 = "DATA1";
@@ -38,22 +41,24 @@ public class ExceptionsTable extends PortalBaseTable {
 	}
 
 
-	public void addRow(final String exception) {
+	public void addRow(final QName exception) {
 		final Vector v = new Vector();
-		v.add(exception);
+		v.add(exception.getNamespaceURI());
+		v.add(exception.getLocalPart());
 		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
 	}
 
 
-	public void modifySelectedRow(final String exception) throws Exception {
+	public void modifySelectedRow(final QName exception) throws Exception {
 		int row = getSelectedRow();
 		if ((row < 0) || (row >= getRowCount())) {
 			throw new Exception("invalid row");
 		}
 		Vector v = (Vector) getValueAt(getSelectedRow(), 1);
-		v.set(0, exception);
+		v.set(0, exception.getNamespaceURI());
+		v.set(1, exception.getLocalPart());
 	}
 
 
@@ -64,7 +69,8 @@ public class ExceptionsTable extends PortalBaseTable {
 
 	public MethodTypeExceptionsException getRowData(int row) throws Exception {
 		MethodTypeExceptionsException exception = new MethodTypeExceptionsException();
-		exception.setName((String) getValueAt(row, 0));
+		exception.setQname(new QName((String) getValueAt(row, 0),(String) getValueAt(row, 1)));
+		exception.setName((String) getValueAt(row, 1));
 		return exception;
 	}
 
@@ -97,7 +103,7 @@ public class ExceptionsTable extends PortalBaseTable {
 		if (method.getExceptions() != null) {
 			if (method.getExceptions().getException() != null) {
 				for (int i = 0; i < method.getExceptions().getException().length; i++) {
-					addRow(method.getExceptions().getException(i).getName());
+					addRow(method.getExceptions().getException(i).getQname());
 				}
 			}
 		}
@@ -106,6 +112,7 @@ public class ExceptionsTable extends PortalBaseTable {
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
+		model.addColumn(NAMESPACE);
 		model.addColumn(NAME);
 		model.addColumn(DATA1);
 

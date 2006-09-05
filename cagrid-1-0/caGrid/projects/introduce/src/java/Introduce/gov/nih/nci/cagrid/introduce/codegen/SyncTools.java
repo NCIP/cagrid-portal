@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
@@ -35,6 +36,7 @@ import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NewServerConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NewServiceJNDIConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
+import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceXSDTemplate;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,6 +44,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -266,6 +269,38 @@ public class SyncTools {
 
 		createNewServices(info);
 
+		// add in the new exceptions types to the service and to it's
+		// naemspacetypes list
+		if (info.getServices().getService() != null) {
+			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+				ServiceType service = info.getServices().getService(serviceI);
+				if (service.getMethods() != null && service.getMethods().getMethod() != null) {
+					for (int methodI = 0; methodI < service.getMethods().getMethod().length; methodI++) {
+						MethodType method = service.getMethods().getMethod(methodI);
+						if (method.getExceptions() != null && method.getExceptions().getException() != null) {
+							for (int exceptionI = 0; exceptionI < method.getExceptions().getException().length; exceptionI++) {
+								MethodTypeExceptionsException exception = method.getExceptions().getException(
+									exceptionI);
+								if (exception.getQname() == null) {
+									// need to create this exception because it
+									// is not yet represented in the services
+									// list.
+									try {
+										addFault(exception.getName(), new SpecificServiceInformation(info,
+											service));
+										exception.setQname(new QName(service.getNamespace() + "/types", exception
+											.getName()));
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
 		// STEP 3: generate a set of namespaces to not make classes/stubs for as
 		// the user specified them explicitly, then save them to the build
 		// properties
@@ -376,6 +411,14 @@ public class SyncTools {
 
 		// table.dump(System.out);
 		// get the classnames from the axis symbol table
+		try {
+			System.out.println("\n\nSTART OF NAMESPACES\n");
+			Utils.serializeObject(info.getServiceDescriptor().getNamespaces(),new QName("gme://gov.nih.nci.cagrid.introduce/1/Namespace","NamespacesType"),new PrintWriter(System.out));
+			System.out.println("\n\nEND OF NAMESPACES\n");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
 				NamespaceType ntype = info.getNamespaces().getNamespace(i);
@@ -406,7 +449,7 @@ public class SyncTools {
 						} else {
 							if (type.getSerializer() == null || type.getDeserializer() == null) {
 								throw new SynchronizationException(
-									"When specifying a custom classname, you must also specify both a serializer and deserializer.");
+									"When specifying a custom classname, you must also specify both a serializer and deserializer: " + type.getClassName());
 							}
 							// it the classname is already set then set the
 							// package name to the predefined
@@ -809,6 +852,77 @@ public class SyncTools {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
+		}
+	}
+	
+	public static void addFault(String exceptionName, SpecificServiceInformation info) throws Exception {
+		// just for backwars compatibility with some earlier non releases
+		// i will check for the existance of the xsd for service before i attemp
+		// to
+		// add faults to it.
+		File schemaFile = new File(info.getBaseDirectory() + File.separator + "schema" + File.separator
+			+ info.getServices().getService(0).getName() + File.separator + info.getService().getName() + "Types.xsd");
+
+		if (!schemaFile.exists()) {
+			ServiceXSDTemplate serviceXSDT = new ServiceXSDTemplate();
+			String serviceXSDS = serviceXSDT.generate(info);
+			File serviceXSDF = new File(schemaFile.getAbsolutePath());
+			FileWriter serviceXSDFW = new FileWriter(serviceXSDF);
+			serviceXSDFW.write(serviceXSDS);
+			serviceXSDFW.close();
+		}
+
+		// add the new fault to the schema for them automatically
+		// <element name="<%=exception.getQname().getLocalPart() %>"
+		// >
+		// <complexType>
+		// <complexContent>
+		// <extension base="wsrbf:BaseFaultType"/>
+		// </complexContent>
+		// </complexType>
+		// </element>
+
+		org.jdom.Element faultEl = new org.jdom.Element("element", org.jdom.Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
+		faultEl.setAttribute("name", exceptionName);
+		org.jdom.Element ctEl = new org.jdom.Element("complexType", org.jdom.Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
+		org.jdom.Element ccEl = new org.jdom.Element("complexContent", org.jdom.Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
+		org.jdom.Element extEl = new org.jdom.Element("extension", org.jdom.Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
+		extEl.setAttribute("base", "wsrbf:BaseFaultType");
+		faultEl.addContent(ctEl);
+		ctEl.addContent(ccEl);
+		ccEl.addContent(extEl);
+
+		boolean exceptionExists = false;
+		Document doc = XMLUtilities.fileNameToDocument(schemaFile.getAbsolutePath());
+
+		List children = doc.getRootElement().getChildren();
+		for (int i = 0; i < children.size(); i++) {
+			org.jdom.Element el = (org.jdom.Element) children.get(i);
+			if (el.getAttributeValue("name").equals(exceptionName)) {
+				exceptionExists = true;
+			}
+		}
+		if (!exceptionExists) {
+			doc.getRootElement().addContent(faultEl.detach());
+			FileWriter fw = new FileWriter(schemaFile);
+			fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
+			fw.close();
+		}
+
+		if (!exceptionExists) {
+
+			NamespaceType newType = null;
+
+			newType = CommonTools.createNamespaceType(schemaFile.getAbsolutePath());
+
+			// now add the new SchemaElement to the NamespaceType
+			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
+				NamespaceType nst = info.getNamespaces().getNamespace(i);
+				if (nst.getNamespace().equals(info.getService().getNamespace() + "/types")) {
+					newType.setPackageName(info.getNamespaces().getNamespace(i).getPackageName());
+					info.getNamespaces().getNamespace()[i] = newType;
+				}
+			}
 		}
 	}
 

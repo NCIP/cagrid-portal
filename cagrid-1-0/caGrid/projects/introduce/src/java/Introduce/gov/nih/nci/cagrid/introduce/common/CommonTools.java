@@ -269,13 +269,15 @@ public class CommonTools {
 		String cmd = "";
 		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
 			cmd = "-classpath \"" + CommonTools.getAntLauncherJarLocation(System.getProperty("java.class.path"), true)
-				+ "\" org.apache.tools.ant.launch.Launcher -buildfile " + "\"" + buildFileDir + File.separator + "build.xml\"" + cmd;
+				+ "\" org.apache.tools.ant.launch.Launcher -buildfile " + "\"" + buildFileDir + File.separator
+				+ "build.xml\"" + cmd;
 			cmd = "java.exe " + cmd;
 		} else {
 			// escape out the spaces.....
 			buildFileDir = buildFileDir.replaceAll("\\s", "\\ ");
 			cmd = "-classpath " + CommonTools.getAntLauncherJarLocation(System.getProperty("java.class.path"), false)
-				+ " org.apache.tools.ant.launch.Launcher -buildfile " + buildFileDir + File.separator + "build.xml" + cmd;
+				+ " org.apache.tools.ant.launch.Launcher -buildfile " + buildFileDir + File.separator + "build.xml"
+				+ cmd;
 			cmd = "java " + cmd;
 		}
 		return cmd;
@@ -466,6 +468,7 @@ public class CommonTools {
 		}
 
 		// copy over the namespaces from the imported service
+		// make sure to warn on duplicates and remome them
 		NamespacesType fromNamespaces = fromintroService.getNamespaces();
 		int fromNamespacesLength = 0;
 		if (fromNamespaces != null && fromNamespaces.getNamespace() != null) {
@@ -476,15 +479,27 @@ public class CommonTools {
 		if (toNamespaces != null && toNamespaces.getNamespace() != null) {
 			toNamespacesLength = toNamespaces.getNamespace().length;
 		}
-		NamespacesType newNamespaces = new NamespacesType();
-		NamespaceType[] newNamespacesArr = new NamespaceType[fromNamespacesLength + toNamespacesLength];
-		int location = 0;
-		for (int i = 0; i < fromNamespacesLength; i++) {
-			newNamespacesArr[location++] = fromNamespaces.getNamespace(i);
-		}
+
+		List namespaces = new ArrayList();
+		List usedNamespaces = new ArrayList();
 		for (int i = 0; i < toNamespacesLength; i++) {
-			newNamespacesArr[location++] = toNamespaces.getNamespace(i);
+			if (!usedNamespaces.contains(toNamespaces.getNamespace(i).getNamespace())) {
+				usedNamespaces.add(toNamespaces.getNamespace(i).getNamespace());
+				namespaces.add(toNamespaces.getNamespace(i));
+			}
 		}
+		for (int i = 0; i < fromNamespacesLength; i++) {
+			if (!usedNamespaces.contains(fromNamespaces.getNamespace(i).getNamespace())) {
+				usedNamespaces.add(fromNamespaces.getNamespace(i).getNamespace());
+				namespaces.add(fromNamespaces.getNamespace(i));
+			} else {
+				System.err.println("WARNING: During Import: Namespace was already being used in the original service: "
+					+ fromNamespaces.getNamespace(i).getNamespace());
+			}
+		}
+		NamespaceType[] newNamespacesArr = new NamespaceType[namespaces.size()];
+		namespaces.toArray(newNamespacesArr);
+		NamespacesType newNamespaces = new NamespacesType();
 		newNamespaces.setNamespace(newNamespacesArr);
 		introService.setNamespaces(newNamespaces);
 
@@ -530,7 +545,8 @@ public class CommonTools {
 		newmethodsType.setMethod(newMethods);
 		CommonTools.getService(introService.getServices(), toService).setMethods(newmethodsType);
 
-		Utils.serializeDocument(toDir.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE, introService,IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+		Utils.serializeDocument(toDir.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
+			introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
 	}
 
@@ -689,7 +705,8 @@ public class CommonTools {
 		}
 		ServicePropertiesProperty[] allProperties = props.getProperty();
 		if (allProperties == null) {
-			allProperties = new ServicePropertiesProperty[]{new ServicePropertiesProperty(new Boolean(isFromETC), key, value)};
+			allProperties = new ServicePropertiesProperty[]{new ServicePropertiesProperty(new Boolean(isFromETC), key,
+				value)};
 		} else {
 			boolean found = false;
 			for (int i = 0; i < allProperties.length; i++) {
@@ -703,7 +720,8 @@ public class CommonTools {
 			if (!found) {
 				ServicePropertiesProperty[] tmpProperties = new ServicePropertiesProperty[allProperties.length + 1];
 				System.arraycopy(allProperties, 0, tmpProperties, 0, allProperties.length);
-				tmpProperties[tmpProperties.length - 1] = new ServicePropertiesProperty(new Boolean(isFromETC), key, value);
+				tmpProperties[tmpProperties.length - 1] = new ServicePropertiesProperty(new Boolean(isFromETC), key,
+					value);
 				allProperties = tmpProperties;
 			}
 		}
@@ -922,4 +940,5 @@ public class CommonTools {
 		}
 		return usedTypes;
 	}
+
 }

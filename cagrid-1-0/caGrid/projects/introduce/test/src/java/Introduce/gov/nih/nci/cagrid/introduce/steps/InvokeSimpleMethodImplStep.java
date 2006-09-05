@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.introduce.steps;
 
-import gov.nih.nci.cagrid.introduce.IntroduceTestConstants;
-import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 
 
 public class InvokeSimpleMethodImplStep extends BaseStep {

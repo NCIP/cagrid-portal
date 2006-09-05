@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce;
+package gov.nih.nci.cagrid.introduce.test;
 
 import gov.nih.nci.cagrid.introduce.steps.AddImportedMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodStep;

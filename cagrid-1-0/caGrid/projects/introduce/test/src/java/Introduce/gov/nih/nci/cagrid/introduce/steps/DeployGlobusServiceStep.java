@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.introduce.steps;
 
-import gov.nih.nci.cagrid.introduce.TestCaseInfo;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.util.GlobusHelper;
 
 import java.io.File;

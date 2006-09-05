@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.portal.steps.AddMultipleOperationsStep;
 import gov.nih.nci.cagrid.introduce.portal.steps.CreateServiceStep;
 import gov.nih.nci.cagrid.introduce.portal.steps.AddSchemaStep;
@@ -12,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.portal.steps.ModifyOperationStep;
 import gov.nih.nci.cagrid.introduce.portal.steps.RemoveMultipleOperationsStep;
 import gov.nih.nci.cagrid.introduce.portal.steps.RemoveOperationStep;
 import gov.nih.nci.cagrid.introduce.portal.steps.SecurityTestStep;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 
 import java.io.File;
 import java.io.FileInputStream;

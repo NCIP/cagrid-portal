@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.introduce.steps;
 
-import gov.nih.nci.cagrid.introduce.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.example.ExampleCodegenPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.example.ExampleCodegenPreProcessor;
 import gov.nih.nci.cagrid.introduce.extension.example.ExampleCreationPostProcessor;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 
 import java.io.File;
 

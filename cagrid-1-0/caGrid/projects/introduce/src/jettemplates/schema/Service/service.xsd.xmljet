@@ -1,11 +1,10 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceXSDTemplate"  imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.namespace.* gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.*" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.schema.service" class="ServiceXSDTemplate"  imports="javax.xml.namespace.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.namespace.* gov.nih.nci.cagrid.introduce.codegen.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.*" %>
 <%  SpecificServiceInformation info = (SpecificServiceInformation) argument; 
     ServiceType service = info.getService();
     String modifiedServiceName = service.getName();
     if(service.getName().endsWith("Service")){
     	modifiedServiceName = service.getName().substring(0,service.getName().length()-7);
     }
-    List faults = new ArrayList();
 %><?xml version="1.0" encoding="UTF-8"?>
 <schema targetNamespace="<%=service.getNamespace()%>/types"
             xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:tns="<%=service.getNamespace()%>/types" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
@@ -16,4 +15,33 @@
       </sequence>
     </complexType>
   </element>
+  
+<%
+  List faults = new ArrayList();
+  MethodsType methods = service.getMethods();
+  		if(methods!=null && methods.getMethod()!=null){
+      		for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
+      			MethodType method = methods.getMethod(methodsI);
+      			if(!method.isIsImported()){
+      			  if(method.getExceptions()!=null && method.getExceptions().getException()!=null){
+      				for(int exceptionI = 0; exceptionI < method.getExceptions().getException().length; exceptionI++){
+      					MethodTypeExceptionsException exception = method.getExceptions().getException(exceptionI);
+      					if(exception.getQname().getNamespaceURI().equals(service.getNamespace() + "/types") && !faults.contains(exception.getQname())){
+      					  faults.add(exception.getQname());
+    %>
+	<element name="<%=exception.getQname().getLocalPart() %>" >
+		<complexType>
+			<complexContent>
+				<extension base="wsrbf:BaseFaultType"/>
+			</complexContent>
+		</complexType>
+	</element>
+    <%
+      					}
+      				}
+      			  }
+				}
+    		}
+  		}
+%>
 </schema>
