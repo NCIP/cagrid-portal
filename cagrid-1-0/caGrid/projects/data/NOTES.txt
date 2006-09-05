@@ -36,6 +36,7 @@ TODO:
     * Need to describe the relationship between the Map returned by getRequiredParameters, and that passed in to initialize
 27[D]: Have DS extension add type mappings for SemanticMetadata / DomainModel stuff to the server-config.wsdd and client-config.wsdd of created services
 28[I]: Provide configuration to turn on / off validation for both CQL syntax and domain model conformance.
+	-- make loading the validators more efficient for multiple calls to query
 
 BUGS:
 
