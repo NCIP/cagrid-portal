@@ -11,6 +11,7 @@ Tasks:
 	-- This implementation will respect all of the IterationConstraints supplied.
 4 [ ]: On Deploy of a WS-Enumeration service, the wsrf_core (and wsrf_core_stubs???) jars must be removed / overwritten with the wsrf_core[_stubs]_enum jars.
 5 [ ]: [Simple]PersistantSDKObjectIterator needs to have a unique wsdd config for each instance.
+6 [ ]: WS-Enumeration installer.  Apply patch to globus, rebuild, deploy to tomcat.
 
 Points:
 	-- The [Simple]PersistantSDKObjectIterator classes write the list of objects given as serialized XML on the file system.  By default, the XML is written to <user's home dir>/.cagrid/SDKEnumIterator/.  For security reasons, access to this directory should be strictly controlled.  If the serialization file is specified, please take security of the file system into concideration.
