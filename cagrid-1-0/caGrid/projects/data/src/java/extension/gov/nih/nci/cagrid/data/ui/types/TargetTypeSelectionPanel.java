@@ -861,6 +861,17 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 						String.valueOf(getCqlSyntaxValidationCheckBox().isSelected()), false);
 				}
 			});
+			// set the check box selection
+			if (CommonTools.servicePropertyExists(getServiceInfo(), DataServiceConstants.VALIDATE_CQL_FLAG)) {
+				try {
+					cqlSyntaxValidationCheckBox.setSelected(Boolean.valueOf(
+						CommonTools.getServicePropertyValue(
+							getServiceInfo(), DataServiceConstants.VALIDATE_CQL_FLAG)).booleanValue());
+				} catch (Exception ex) {
+					System.err.println("Error getting service property value for " + DataServiceConstants.VALIDATE_CQL_FLAG);
+					ex.printStackTrace();
+				}
+			}
 		}
 		return cqlSyntaxValidationCheckBox;
 	}
@@ -881,6 +892,17 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 						String.valueOf(getDomainModelValidationCheckBox().isSelected()), false);
 				}
 			});
+			// set the check box selection
+			if (CommonTools.servicePropertyExists(getServiceInfo(), DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)) {
+				try {
+					domainModelValidationCheckBox.setSelected(Boolean.valueOf(
+						CommonTools.getServicePropertyValue(
+							getServiceInfo(), DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)).booleanValue());
+				} catch (Exception ex) {
+					System.err.println("Error getting service property value for " + DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG);
+					ex.printStackTrace();
+				}
+			}
 		}
 		return domainModelValidationCheckBox;
 	}
