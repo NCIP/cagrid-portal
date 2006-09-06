@@ -6,7 +6,12 @@ import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 
+import javax.naming.InitialContext;
+
+import org.apache.axis.MessageContext;
 import org.apache.axis.utils.ClassUtils;
+import org.globus.wsrf.Constants;
+import org.globus.wsrf.ResourceHome;
 
 /** 
  *  gov.nih.nci.cagrid.dataI
@@ -43,6 +48,25 @@ public class DataServiceImpl extends BaseServiceImpl {
 		} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
 			throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());
 		}
-	}	
+	}
+	
+	
+	public ResourceHome getResourceHome(String resourceKey) throws Exception {
+		MessageContext ctx = MessageContext.getCurrentContext();
+
+		ResourceHome resourceHome = null;
+		
+		String servicePath = ctx.getTargetService();
+
+		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/" + resourceKey;
+		try {
+			javax.naming.Context initialContext = new InitialContext();
+			resourceHome = (ResourceHome) initialContext.lookup(jndiName);
+		} catch (Exception e) {
+			throw new Exception("Unable to instantiate resource home. : " + resourceKey, e);
+		}
+
+		return resourceHome;
+	}
 }
 
