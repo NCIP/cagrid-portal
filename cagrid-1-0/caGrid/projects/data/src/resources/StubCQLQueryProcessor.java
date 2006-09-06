@@ -9,12 +9,16 @@ import java.util.Properties;
 
 /** 
  *  StubCQLQueryProcessor
- *  TODO:DOCUMENT ME
+ *  This CQL Query Processor is provided as a stub to begin implementing CQL against your
+ *  backend data source.  If another CQL query processor implementation is used, 
+ *  this file may be safely deleted
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 24, 2006 
  * @version $Id$ 
+ * @deprecated The stub CQL query processor is a placeholder to provide a starting point for
+ * implementation of CQL against a backend data source.
  */
 public class StubCQLQueryProcessor extends CQLQueryProcessor {
 
