@@ -927,9 +927,9 @@ public class SyncTools {
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
 				NamespaceType nst = info.getNamespaces().getNamespace(i);
 				if (nst.getNamespace().equals(info.getService().getNamespace() + "/types")) {
+					found = true;
 					newType.setPackageName(info.getNamespaces().getNamespace(i).getPackageName());
 					info.getNamespaces().getNamespace()[i] = newType;
-					found = true;
 				}
 			}
 			if(!found){

@@ -1344,7 +1344,6 @@ public class ModificationViewer extends GridPortalComponent {
 
 						if (p.exitValue() != 0) {
 							setErrorMessage("Error: Unable to rebuild the skeleton");
-							return;
 						}
 						dirty = false;
 						setProgressText("loading service properties");
@@ -1352,12 +1351,17 @@ public class ModificationViewer extends GridPortalComponent {
 						setLastSaved(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
 						this.setProgressText("");
 
-						// reinitialize the GUI with changes from saved model
-						reInitialize(methodsDirectory);
 					} catch (Exception e1) {
 						e1.printStackTrace();
 						setErrorMessage("Error: " + e1.getMessage());
 						return;
+					}
+					// reinitialize the GUI with changes from saved model
+					try {
+						reInitialize(methodsDirectory);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 			};

@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 
 import java.util.Vector;
 
@@ -22,14 +23,18 @@ public class ExceptionsTable extends PortalBaseTable {
 
 	public static String NAME = "Name";
 
+	public static String IS_CREATED = "Created";
+
 	public static String DATA1 = "DATA1";
 
 	private MethodType method;
+	private ServiceType service;
 
 
-	public ExceptionsTable(MethodType method) {
+	public ExceptionsTable(MethodType method, ServiceType service) {
 		super(createTableModel());
 		this.method = method;
+		this.service = service;
 
 		initialize();
 	}
@@ -40,20 +45,11 @@ public class ExceptionsTable extends PortalBaseTable {
 	}
 
 
-	public void addRow(final QName exception) {
+	public void addRow(final QName exception, boolean isCreated) {
 		final Vector v = new Vector();
 		v.add(exception.getNamespaceURI());
 		v.add(exception.getLocalPart());
-		v.add(v);
-
-		((DefaultTableModel) this.getModel()).addRow(v);
-	}
-
-
-	public void addRow(final String exceptionName) {
-		final Vector v = new Vector();
-		v.add("");
-		v.add(exceptionName);
+		v.add(new Boolean(isCreated));
 		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
@@ -78,7 +74,7 @@ public class ExceptionsTable extends PortalBaseTable {
 
 	public MethodTypeExceptionsException getRowData(int row) throws Exception {
 		MethodTypeExceptionsException exception = new MethodTypeExceptionsException();
-		if (((String) getValueAt(row, 0)).length() > 0) {
+		if (((Boolean) getValueAt(row, 2)).booleanValue()) {
 			exception.setQname(new QName((String) getValueAt(row, 0), (String) getValueAt(row, 1)));
 		}
 		exception.setName((String) getValueAt(row, 1));
@@ -107,6 +103,9 @@ public class ExceptionsTable extends PortalBaseTable {
 		this.setRowSelectionAllowed(true);
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.getTableHeader().setReorderingAllowed(false);
+		this.getColumn(IS_CREATED).setMaxWidth(0);
+		this.getColumn(IS_CREATED).setMinWidth(0);
+		this.getColumn(IS_CREATED).setPreferredWidth(0);
 		this.getColumn(DATA1).setMaxWidth(0);
 		this.getColumn(DATA1).setMinWidth(0);
 		this.getColumn(DATA1).setPreferredWidth(0);
@@ -114,7 +113,12 @@ public class ExceptionsTable extends PortalBaseTable {
 		if (method.getExceptions() != null) {
 			if (method.getExceptions().getException() != null) {
 				for (int i = 0; i < method.getExceptions().getException().length; i++) {
-					addRow(method.getExceptions().getException(i).getQname());
+					if (method.getExceptions().getException(i).getQname() != null) {
+						addRow(method.getExceptions().getException(i).getQname(), true);
+					} else {
+						addRow(new QName(service.getNamespace() + "/types", method.getExceptions().getException(i)
+							.getName()), false);
+					}
 				}
 			}
 		}
@@ -125,6 +129,7 @@ public class ExceptionsTable extends PortalBaseTable {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(NAMESPACE);
 		model.addColumn(NAME);
+		model.addColumn(IS_CREATED);
 		model.addColumn(DATA1);
 
 		return model;

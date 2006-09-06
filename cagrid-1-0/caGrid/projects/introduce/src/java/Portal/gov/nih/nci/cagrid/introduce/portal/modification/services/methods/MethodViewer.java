@@ -715,7 +715,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private ExceptionsTable getExceptionsTable() {
 		if (exceptionsTable == null) {
-			exceptionsTable = new ExceptionsTable(this.method);
+			exceptionsTable = new ExceptionsTable(this.method, this.info.getService());
 		}
 		return exceptionsTable;
 	}
@@ -754,7 +754,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 								return;
 							}
 						}
-						getExceptionsTable().addRow(exceptionQName);
+						getExceptionsTable().addRow(exceptionQName, true);
 					} else {
 						JOptionPane.showMessageDialog(MethodViewer.this, "Please select an exception first!");
 					}
@@ -1918,7 +1918,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 						return;
 					}
 
-					getNewExceptionsComboBox().addItem(exceptionQName.getLocalPart());
+					getNewExceptionsComboBox().addItem(exceptionQName.toString());
 
 				}
 			});
@@ -1951,7 +1951,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 									if (exceptions != null) {
 										for (int e = 0; e < exceptions.length; e++) {
 											if (exceptions[e].getQname() == null) {
-												exceptionNameSet.add(exceptions[e].getName());
+												exceptionNameSet.add(new QName(this.info.getService().getNamespace(),exceptions[e].getName()).toString());
 											}
 										}
 									}
@@ -1995,13 +1995,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 							} catch (Exception e1) {
 								e1.printStackTrace();
 							}
-							if (exception != null && exception.getQname().equals(exceptionName)) {
+							if (exception != null && exception.getQname().toString().equals(exceptionName)) {
 								JOptionPane.showMessageDialog(MethodViewer.this, "Exception (" + exceptionName
 									+ ") already thrown by method.");
 								return;
 							}
 						}
-						getExceptionsTable().addRow(exceptionName);
+						getExceptionsTable().addRow(QName.valueOf(exceptionName),false);
 					} else {
 						JOptionPane.showMessageDialog(MethodViewer.this, "Please select an exception first!");
 					}
