@@ -1,3 +1,6 @@
+NOTES:
+Exceptions will now be in the <serviceNamespace>.stubs.types package and no the <serviceNamespace>.stubs packages
+
 To Do:
 Generalized way to get resource properties from inside your service.
 
