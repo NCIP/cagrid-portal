@@ -14,6 +14,7 @@
   <Content xsi:type="agg:AggregatorContent" xmlns:agg="http://mds.globus.org/aggregator/types">
     <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
       <agg:GetMultipleResourcePropertiesPollType
+			xmlns:ns6="http://cadsr.cagrid.nci.nih.gov/types"
 			xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
 			xmlns:ns1="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
 			xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"
