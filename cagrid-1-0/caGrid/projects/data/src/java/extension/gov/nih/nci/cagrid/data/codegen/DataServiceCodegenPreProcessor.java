@@ -19,11 +19,11 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -219,12 +219,9 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			LOG.debug("Using config filename " + configFilename);
 			try {
 				FileWriter domainModelFileWriter = new FileWriter(domainModelFile);
-				InputStream configInput = new FileInputStream(configFilename);
-				Utils.serializeObject(model, DataServiceConstants.DOMAIN_MODEL_QNAME, domainModelFileWriter,
-					configInput);
+				MetadataUtils.serializeDomainModel(model, domainModelFileWriter);
 				domainModelFileWriter.flush();
 				domainModelFileWriter.close();
-				configInput.close();
 				LOG.debug("Serialized domain model");
 			} catch (Exception ex) {
 				throw new CodegenExtensionException("Error serializing the domain model to disk: " 

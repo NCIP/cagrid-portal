@@ -96,7 +96,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-caDSR-portal.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-caDSR-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-caDSR-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GlobalModelExchange_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-graph.jar"/>
@@ -115,5 +114,7 @@
 	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="lib" path="test/lib/shaste-1.0.jar"/>
 	<classpathentry kind="lib" path="test/lib/ao-util.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

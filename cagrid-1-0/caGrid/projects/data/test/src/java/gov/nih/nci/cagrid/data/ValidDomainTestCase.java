@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.SchemaValidator;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.cql.validation.CqlDomainValidator;
 import gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.File;
@@ -58,8 +59,9 @@ public class ValidDomainTestCase extends TestCase {
 	private DomainModel getDomainModel() {
 		if (domainModel == null) {
 			try {
-				InputSource domainModelInput = new InputSource(new FileReader(DOMAIN_MODEL_FILE));
-				domainModel = (DomainModel) ObjectDeserializer.deserialize(domainModelInput, DomainModel.class);
+				FileReader domainModelReader = new FileReader(DOMAIN_MODEL_FILE);
+				domainModel = MetadataUtils.deserializeDomainModel(domainModelReader);
+				domainModelReader.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				fail("Could not load domain model");

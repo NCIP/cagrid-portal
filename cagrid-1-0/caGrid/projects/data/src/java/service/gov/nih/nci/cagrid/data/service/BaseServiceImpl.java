@@ -9,9 +9,11 @@ import gov.nih.nci.cagrid.data.cql.validation.CqlDomainValidator;
 import gov.nih.nci.cagrid.data.cql.validation.CqlStructureValidator;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.Properties;
 
 import org.oasis.wsrf.faults.BaseFaultType;
@@ -61,7 +63,9 @@ public abstract class BaseServiceImpl {
 					FileNotFoundException ex = new FileNotFoundException("Serialized domain model file " + domainModelFileName + " not found for validation!");
 					throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 				}
-				DomainModel model = (DomainModel) Utils.deserializeDocument(domainModelFileName, DomainModel.class);
+				FileReader domainModelReader = new FileReader(domainModelFileName);
+				DomainModel model = MetadataUtils.deserializeDomainModel(domainModelReader);
+				domainModelReader.close();
 				validator.validateDomainModel(cqlQuery, model);
 			} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
 				throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());

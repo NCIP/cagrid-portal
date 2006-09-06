@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.cql.validation.CqlDomainValidator;
 import gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.File;
@@ -60,9 +61,9 @@ public class InvalidDomainTestCase extends TestCase {
 	private DomainModel getDomainModel() {
 		if (domainModel == null) {
 			try {
-				FileInputStream configStream = new FileInputStream(new File("client-config.wsdd"));
-				domainModel = (DomainModel) Utils.deserializeObject(new FileReader(DOMAIN_MODEL_FILE), 
-					DomainModel.class, configStream);
+				FileReader domainModelReader = new FileReader(DOMAIN_MODEL_FILE);
+				domainModel = MetadataUtils.deserializeDomainModel(domainModelReader);
+				domainModelReader.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				fail("Could not load domain model");
