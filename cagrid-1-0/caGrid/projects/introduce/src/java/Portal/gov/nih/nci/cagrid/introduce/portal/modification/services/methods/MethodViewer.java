@@ -15,7 +15,6 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -147,8 +146,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JButton clearOutputTypeButton = null;
 
-	private JLabel faultNameLabel = null;
-
 	private JPanel exceptionsInputButtonPanel = null;
 
 	private JPanel importInformationPanel = null;
@@ -210,6 +207,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JButton createFaultButton = null;
 
 	private JLabel faultTypeNameLabel = null;
+
+	private JComboBox newExceptionsComboBox = null;
+
+	private JButton addNewExceptionButton = null;
+
+	private JLabel newExceptionLabel = null;
+
+	private JLabel existingExceptionLabel = null;
 
 
 	public MethodViewer(MethodType method, SpecificServiceInformation info) {
@@ -660,30 +665,44 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getExceptionInputPanel() {
 		if (exceptionInputPanel == null) {
+			GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
+			gridBagConstraints51.gridx = 0;
+			gridBagConstraints51.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints51.gridy = 1;
+			existingExceptionLabel = new JLabel();
+			existingExceptionLabel.setText("Existing Faults");
+			GridBagConstraints gridBagConstraints50 = new GridBagConstraints();
+			gridBagConstraints50.gridx = 0;
+			gridBagConstraints50.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints50.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints50.gridy = 0;
+			newExceptionLabel = new JLabel();
+			newExceptionLabel.setText("New Faults");
+			GridBagConstraints gridBagConstraints49 = new GridBagConstraints();
+			gridBagConstraints49.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints49.gridy = 0;
+			gridBagConstraints49.weightx = 1.0;
+			gridBagConstraints49.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints49.gridx = 1;
 			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
-			gridBagConstraints27.gridx = 1;
+			gridBagConstraints27.gridx = 2;
 			gridBagConstraints27.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints27.gridheight = 2;
 			gridBagConstraints27.gridy = 0;
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 0;
-			gridBagConstraints3.anchor = java.awt.GridBagConstraints.SOUTHWEST;
-			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints3.gridy = 0;
-			faultNameLabel = new JLabel();
-			faultNameLabel.setText("Fault Name:");
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints15.gridx = 0;
+			gridBagConstraints15.gridx = 1;
 			gridBagConstraints15.gridy = 1;
 			gridBagConstraints15.weightx = 1.0;
-			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 10);
+			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints15.gridheight = 1;
 			exceptionInputPanel = new JPanel();
 			exceptionInputPanel.setLayout(new GridBagLayout());
 			exceptionInputPanel.add(getExceptionJComboBox(), gridBagConstraints15);
-			exceptionInputPanel.add(faultNameLabel, gridBagConstraints3);
 			exceptionInputPanel.add(getExceptionsInputButtonPanel(), gridBagConstraints27);
+			exceptionInputPanel.add(getNewExceptionsComboBox(), gridBagConstraints49);
+			exceptionInputPanel.add(newExceptionLabel, gridBagConstraints50);
+			exceptionInputPanel.add(existingExceptionLabel, gridBagConstraints51);
 		}
 		return exceptionInputPanel;
 	}
@@ -713,12 +732,15 @@ public class MethodViewer extends GridPortalBaseFrame {
 			addExceptionButton.setText("Add");
 			addExceptionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					QName exceptionQName = null;
-					if (getExceptionJComboBox().getSelectedItem() != null 
-						&& getExceptionJComboBox().getSelectedItem() instanceof QName) {
-						exceptionQName = (QName) getExceptionJComboBox().getSelectedItem();
-					}					
-					if (exceptionQName != null) {
+					String exceptionQNameString = null;
+					if (getExceptionJComboBox().getSelectedItem() != null
+						&& getExceptionJComboBox().getSelectedItem() instanceof String) {
+						exceptionQNameString = (String) getExceptionJComboBox().getSelectedItem();
+					}
+					if (exceptionQNameString != null) {
+						//parse qname string into qname
+						QName exceptionQName = QName.valueOf(exceptionQNameString);
+						
 						for (int i = 0; i < getExceptionsTable().getRowCount(); i++) {
 							MethodTypeExceptionsException exception = null;
 							try {
@@ -726,12 +748,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 							} catch (Exception e1) {
 								e1.printStackTrace();
 							}
-							if (exception != null && exception.getQname().equals(exceptionQName)) {
+							if (exception != null && exception.getQname()!=null && exception.getQname().equals(exceptionQName)) {
 								JOptionPane.showMessageDialog(MethodViewer.this, "Exception (" + exceptionQName
 									+ ") already thrown by method.");
 								return;
 							}
-						}						
+						}
 						getExceptionsTable().addRow(exceptionQName);
 					} else {
 						JOptionPane.showMessageDialog(MethodViewer.this, "Please select an exception first!");
@@ -846,7 +868,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JComboBox getExceptionJComboBox() {
 		if (exceptionJComboBox == null) {
 			exceptionJComboBox = new JComboBox();
-			exceptionJComboBox.setEditable(true);
 			// populate with currently used exception names
 			ServiceType[] service = this.info.getServices().getService();
 			SortedSet exceptionNameSet = new TreeSet();
@@ -862,7 +883,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 									MethodTypeExceptionsException[] exceptions = exceptionsType.getException();
 									if (exceptions != null) {
 										for (int e = 0; e < exceptions.length; e++) {
-											exceptionNameSet.add(exceptions[e].getQname());
+											if (exceptions[e].getQname() != null) {
+												exceptionNameSet.add(exceptions[e].getQname().toString());
+											}
 										}
 									}
 								}
@@ -872,7 +895,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 				}
 			}
 			for (Iterator iter = exceptionNameSet.iterator(); iter.hasNext();) {
-				QName usedExceptionName = (QName) iter.next();
+				String usedExceptionName = (String) iter.next();
 				exceptionJComboBox.addItem(usedExceptionName);
 			}
 
@@ -1250,18 +1273,23 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getExceptionsInputButtonPanel() {
 		if (exceptionsInputButtonPanel == null) {
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.gridy = 0;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.gridy = 0;
+			gridBagConstraints5.gridheight = 2;
 			gridBagConstraints5.gridx = 1;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints4.gridy = 0;
+			gridBagConstraints4.gridy = 1;
 			gridBagConstraints4.gridx = 0;
 			exceptionsInputButtonPanel = new JPanel();
 			exceptionsInputButtonPanel.setLayout(new GridBagLayout());
 			exceptionsInputButtonPanel.add(getAddExceptionButton(), gridBagConstraints4);
 			exceptionsInputButtonPanel.add(getRemoveExceptionButton(), gridBagConstraints5);
+			exceptionsInputButtonPanel.add(getAddNewExceptionButton(), gridBagConstraints3);
 		}
 		return exceptionsInputButtonPanel;
 	}
@@ -1890,20 +1918,97 @@ public class MethodViewer extends GridPortalBaseFrame {
 						return;
 					}
 
-					try {
-						boolean newFault = SyncTools.addFault(exceptionQName.getLocalPart(), info);
-						if (newFault) {
-							getExceptionJComboBox().addItem(exceptionQName);
-						}
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(MethodViewer.this, "Unable to create the exception:\n"
-							+ ex.getMessage());
-						return;
-					}
+					getNewExceptionsComboBox().addItem(exceptionQName.getLocalPart());
+
 				}
 			});
 		}
 		return createFaultButton;
+	}
+
+
+	/**
+	 * This method initializes newExceptionsComboBox
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getNewExceptionsComboBox() {
+		if (newExceptionsComboBox == null) {
+			newExceptionsComboBox = new JComboBox();
+			// populate with currently used exception names
+			ServiceType[] service = this.info.getServices().getService();
+			SortedSet exceptionNameSet = new TreeSet();
+			if (service != null) {
+				for (int i = 0; i < service.length; i++) {
+					MethodsType methodsType = service[i].getMethods();
+					if (methodsType != null) {
+						MethodType methods[] = methodsType.getMethod();
+						if (methods != null) {
+							for (int j = 0; j < methods.length; j++) {
+								MethodTypeExceptions exceptionsType = methods[j].getExceptions();
+								if (exceptionsType != null) {
+									MethodTypeExceptionsException[] exceptions = exceptionsType.getException();
+									if (exceptions != null) {
+										for (int e = 0; e < exceptions.length; e++) {
+											if (exceptions[e].getQname() == null) {
+												exceptionNameSet.add(exceptions[e].getName());
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			for (Iterator iter = exceptionNameSet.iterator(); iter.hasNext();) {
+				String usedExceptionName = (String) iter.next();
+				newExceptionsComboBox.addItem(usedExceptionName);
+			}
+
+		}
+		return newExceptionsComboBox;
+	}
+
+
+	/**
+	 * This method initializes addNewExceptionButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getAddNewExceptionButton() {
+		if (addNewExceptionButton == null) {
+			addNewExceptionButton = new JButton(PortalLookAndFeel.getAddIcon());
+			addNewExceptionButton.setText("Add");
+			addNewExceptionButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					String exceptionName = null;
+					if (getNewExceptionsComboBox().getSelectedItem() != null
+						&& getNewExceptionsComboBox().getSelectedItem() instanceof String) {
+						exceptionName = (String) getNewExceptionsComboBox().getSelectedItem();
+					}
+					if (exceptionName != null) {
+						for (int i = 0; i < getExceptionsTable().getRowCount(); i++) {
+							MethodTypeExceptionsException exception = null;
+							try {
+								exception = getExceptionsTable().getRowData(i);
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+							if (exception != null && exception.getQname().equals(exceptionName)) {
+								JOptionPane.showMessageDialog(MethodViewer.this, "Exception (" + exceptionName
+									+ ") already thrown by method.");
+								return;
+							}
+						}
+						getExceptionsTable().addRow(exceptionName);
+					} else {
+						JOptionPane.showMessageDialog(MethodViewer.this, "Please select an exception first!");
+					}
+				}
+			});
+		}
+		return addNewExceptionButton;
 	}
 } // @jve:decl-index=0:visual-constraint="4,12"
 

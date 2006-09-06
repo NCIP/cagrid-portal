@@ -15,12 +15,11 @@ import javax.xml.namespace.QName;
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * 
  */
 public class ExceptionsTable extends PortalBaseTable {
 
 	public static String NAMESPACE = "Namespace";
-	
+
 	public static String NAME = "Name";
 
 	public static String DATA1 = "DATA1";
@@ -51,6 +50,16 @@ public class ExceptionsTable extends PortalBaseTable {
 	}
 
 
+	public void addRow(final String exceptionName) {
+		final Vector v = new Vector();
+		v.add("");
+		v.add(exceptionName);
+		v.add(v);
+
+		((DefaultTableModel) this.getModel()).addRow(v);
+	}
+
+
 	public void modifySelectedRow(final QName exception) throws Exception {
 		int row = getSelectedRow();
 		if ((row < 0) || (row >= getRowCount())) {
@@ -69,7 +78,9 @@ public class ExceptionsTable extends PortalBaseTable {
 
 	public MethodTypeExceptionsException getRowData(int row) throws Exception {
 		MethodTypeExceptionsException exception = new MethodTypeExceptionsException();
-		exception.setQname(new QName((String) getValueAt(row, 0),(String) getValueAt(row, 1)));
+		if (((String) getValueAt(row, 0)).length() > 0) {
+			exception.setQname(new QName((String) getValueAt(row, 0), (String) getValueAt(row, 1)));
+		}
 		exception.setName((String) getValueAt(row, 1));
 		return exception;
 	}
