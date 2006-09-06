@@ -479,7 +479,7 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 	private String addUpdatePrivilege(boolean wasSelected, boolean selectedNow,
 			Privilege priv) throws Exception {
 		String id = Utils.clean(getIdentity().getText());
-		Subject subj = SubjectUtils.getSubject(id);
+		Subject subj = SubjectUtils.getSubject(id,true);
 		if (isUpdate) {
 			if (!wasSelected && selectedNow) {
 				try {
