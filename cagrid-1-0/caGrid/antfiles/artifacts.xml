@@ -266,15 +266,6 @@
 			</fileset>
 		</artifact>
 
-
-		<artifact track="main" type="jars" id="cql2xpath.jars">
-			<antcall target="build-cql2xpath" />
-			<fileset dir="${projects.dir}/cql2xpath/build/lib">
-				<include name="*.jar" />
-			</fileset>
-		</artifact>
-
-
 		<artifact track="main" type="jars" id="introduce.jars">
 			<antcall target="build-introduce" />
 			<fileset dir="${projects.dir}/introduce/build/jars">

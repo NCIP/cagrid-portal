@@ -417,6 +417,7 @@
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="data.metadata.jars" />
 			<artifact refid="metadata.schemas" />
+			<artifact refid="metadatautils.jars"/>
 			<artifact refid="graph.jars" />
 			<artifact refid="ws.enum.jars"/>
 			<artifact refid="ws.enum.schemas"/>
