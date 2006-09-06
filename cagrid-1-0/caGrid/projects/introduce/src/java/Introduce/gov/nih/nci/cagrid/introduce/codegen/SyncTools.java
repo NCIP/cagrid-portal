@@ -921,7 +921,7 @@ public class SyncTools {
 			fw.close();
 			
 			NamespaceType newType = CommonTools.createNamespaceType(schemaFile.getAbsolutePath());
-			newType.setPackageName(info.getService().getNamespace()+ ".stubs.types");
+			newType.setPackageName(info.getService().getPackageName()+ ".stubs.types");
 			// now add the new SchemaElement to the NamespaceType
 			boolean found = false;
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
