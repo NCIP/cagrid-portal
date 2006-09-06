@@ -923,12 +923,17 @@ public class SyncTools {
 			NamespaceType newType = CommonTools.createNamespaceType(schemaFile.getAbsolutePath());
 
 			// now add the new SchemaElement to the NamespaceType
+			boolean found = false;
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
 				NamespaceType nst = info.getNamespaces().getNamespace(i);
 				if (nst.getNamespace().equals(info.getService().getNamespace() + "/types")) {
 					newType.setPackageName(info.getNamespaces().getNamespace(i).getPackageName());
 					info.getNamespaces().getNamespace()[i] = newType;
+					found = true;
 				}
+			}
+			if(!found){
+				CommonTools.addNamespace(info.getServiceDescriptor(),newType);
 			}
 		}
 		return !exceptionExists;
