@@ -15,33 +15,5 @@
       </sequence>
     </complexType>
   </element>
-  
-<%
-  List faults = new ArrayList();
-  MethodsType methods = service.getMethods();
-  		if(methods!=null && methods.getMethod()!=null){
-      		for (int methodsI = 0; methodsI < methods.getMethod().length ; methodsI++) {
-      			MethodType method = methods.getMethod(methodsI);
-      			if(!method.isIsImported()){
-      			  if(method.getExceptions()!=null && method.getExceptions().getException()!=null){
-      				for(int exceptionI = 0; exceptionI < method.getExceptions().getException().length; exceptionI++){
-      					MethodTypeExceptionsException exception = method.getExceptions().getException(exceptionI);
-      					if(exception.getQname().getNamespaceURI().equals(service.getNamespace() + "/types") && !faults.contains(exception.getQname())){
-      					  faults.add(exception.getQname());
-    %>
-	<element name="<%=exception.getQname().getLocalPart() %>" >
-		<complexType>
-			<complexContent>
-				<extension base="wsrbf:BaseFaultType"/>
-			</complexContent>
-		</complexType>
-	</element>
-    <%
-      					}
-      				}
-      			  }
-				}
-    		}
-  		}
-%>
+
 </schema>
