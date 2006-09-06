@@ -276,6 +276,24 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		// verify we've got a query processor class configured
 		String qpClassname = CommonTools.getServicePropertyValue(info,
 			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+		if (qpClassname != null && !qpClassname.equals(getQueryProcessorStubClassName(info))) {
+			// edit the stub to include a note RE: the stub can be removed
+			String outSrcDir = info.getIntroduceServiceProperties().getProperty(
+				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "src";
+			outSrcDir += File.separator + getQueryProcessorStubClassName(info).replace('.', File.separatorChar);
+			File outSrcFile = new File(outSrcDir + ".java");
+			if (outSrcFile.exists()) {
+				StringBuffer stubSource = Utils.fileToStringBuffer(outSrcFile);
+				if (!stubSource.toString().startsWith(DataServiceConstants.QUERY_PROCESSOR_STUB_DEPRICATED_MESSAGE)) {
+					stubSource.insert(0, DataServiceConstants.QUERY_PROCESSOR_STUB_DEPRICATED_MESSAGE);
+					FileWriter outFileWriter = new FileWriter(outSrcFile);
+					outFileWriter.write(stubSource.toString());
+					outFileWriter.flush();
+					outFileWriter.close();
+				}
+			}
+		}
+		
 		if (qpClassname != null && qpClassname.length() != 0) {
 			// get the query processor parameters
 			ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
@@ -311,12 +329,12 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		} else {
 			// no query processor class defined??
 			// add the stub!
-			String className = addQueryProcessorStub(info);
+			addQueryProcessorStub(info, getQueryProcessorStubClassName(info));
 			// edit the query processor service property
 			for (int i = 0; i < keptProperties.size(); i++) {
 				ServicePropertiesProperty prop = (ServicePropertiesProperty) keptProperties.get(i);
 				if (prop.getKey().equals(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
-					prop.setValue(className);
+					prop.setValue(getQueryProcessorStubClassName(info));
 				}
 			}
 		}
@@ -397,20 +415,17 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 	}
 	
 	
-	private String addQueryProcessorStub(ServiceInformation info) throws CodegenExtensionException {
+	private void addQueryProcessorStub(ServiceInformation info, String className) throws CodegenExtensionException {
 		try {
-			// decide on a package name
-			ServiceType mainService = CommonTools.getService(info.getServices(), 
-				info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
-			String basePackage = mainService.getPackageName();
-			basePackage += ".stubs.cql";
 			// find / create the output directory
+			int index = className.lastIndexOf('.');
+			String basePackage = className.substring(0, index);
 			String outSrcDir = info.getIntroduceServiceProperties().getProperty(
 				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "src";
 			outSrcDir += File.separator + basePackage.replace('.', File.separatorChar);
 			File outSrcDirFile = new File(outSrcDir);
 			outSrcDirFile.mkdirs();
-			File outSourceFile = new File(outSrcDir + File.separator + "StubCQLQueryProcessor.java");
+			File outSourceFile = new File(outSrcDir + File.separator + DataServiceConstants.QUERY_PROCESSOR_STUB_NAME + ".java");
 			// read the code file
 			InputStream codeStream = getClass().getResourceAsStream("/resources/StubCQLQueryProcessor.java");
 			StringBuffer code = Utils.inputStreamToStringBuffer(codeStream);
@@ -422,10 +437,18 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			BufferedWriter writer = new BufferedWriter(new FileWriter(outSourceFile));
 			writer.write(processorStub.toString());
 			writer.flush();
-			writer.close();
-			return basePackage + ".StubCQLQueryProcessor";			
+			writer.close();		
 		} catch (Exception ex) {
 			throw new CodegenExtensionException("Error providing stub CQL implementation: " + ex.getMessage(), ex);
 		}
+	}
+	
+	
+	private String getQueryProcessorStubClassName(ServiceInformation info) {
+		ServiceType mainService = CommonTools.getService(info.getServices(), 
+			info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+		String basePackage = mainService.getPackageName();
+		basePackage += ".stubs.cql";
+		return basePackage + "." + DataServiceConstants.QUERY_PROCESSOR_STUB_NAME;		
 	}
 }
