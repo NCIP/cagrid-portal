@@ -28,8 +28,6 @@ import org.globus.wsrf.utils.AddressingUtils;
 
 import commonj.timers.Timer;
 
-import gov.nih.nci.cagrid.common.Utils;
-
 public class BaseResource implements Resource, ResourceProperties {
 
 	static final Log logger = LogFactory.getLog(BaseResource.class);
