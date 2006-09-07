@@ -29,7 +29,9 @@ import org.globus.wsrf.encoding.SerializationException;
 
 /** 
  *  PersistantSDKObjectIterator
- *  Enumeration iterator which provides for persisting caCORE SDK objects to disk
+ *  Enumeration iterator which provides for persisting caCORE SDK objects to disk.
+ *  This iterator makes no attempt to respect any IterationConstraints except
+ *  for maxElements.
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 

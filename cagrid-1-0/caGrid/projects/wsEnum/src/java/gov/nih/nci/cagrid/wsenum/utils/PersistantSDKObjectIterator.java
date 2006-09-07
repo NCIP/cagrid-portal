@@ -157,7 +157,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 
 	/**
      * Retrieves the next set of items of the enumeration.
-     * <b>Note:</b> This implementation ignores any iteration constraints except for max elements
+     * <b>Note:</b> This implementation ignores the maxCharacters iteration constraint
      *
      * @param constraints the constrains for this iteration. Can be null.
      *        If null, default constraints must be assumed.
