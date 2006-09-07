@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.utils;
 
+import gov.nih.nci.cagrid.portal.domain.GeoCodeValues;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import gov.nih.nci.cagrid.portal.exception.GeoCoderRetreivalException;
 import junit.framework.TestCase;
@@ -23,7 +24,7 @@ public class GeoCoderTestCase extends TestCase {
 
         GeoCoderUtility coder = new GeoCoderUtility();
         try {
-            GeoCoderUtility.GeocodeResult geoString = coder.getGeoCode4RC(rc);
+            GeoCodeValues geoString = coder.getGeoCode4RC(rc);
             assertNotNull(geoString);
         } catch (GeoCoderRetreivalException e) {
             fail(e.getMessage());

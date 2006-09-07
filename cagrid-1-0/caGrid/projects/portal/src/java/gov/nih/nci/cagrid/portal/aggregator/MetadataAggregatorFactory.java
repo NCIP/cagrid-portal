@@ -30,15 +30,15 @@ public class MetadataAggregatorFactory extends AbstractAggregator {
     }
 
     public void onApplicationEvent(ApplicationEvent applicationEvent) {
-        _logger.debug("Event received .....................");
 
         if (applicationEvent instanceof RegisteredServiceFoundEvent) {
+            _logger.debug("Event received .....................");
             RegisteredServiceFoundEvent eventIndexRegistered = (RegisteredServiceFoundEvent) applicationEvent;
             RegisteredService rService = eventIndexRegistered.getrService();
 
             //schedule a Metadata Aggregator
             _logger.debug("Scheduling metadata aggregator for service" +
-                rService.getName());
+                    rService.getName());
 
             TimerTask serviceMDAggr = new MetadataAggregator(rService,
                     gridServiceMgr);
@@ -47,7 +47,7 @@ public class MetadataAggregatorFactory extends AbstractAggregator {
         } else if (applicationEvent instanceof ContextRefreshedEvent) {
             reloaded++;
             _logger.info("MetadataAggregator:Context was reloaded or loaded for the first time. " +
-                reloaded);
+                    reloaded);
         } else if (applicationEvent instanceof ContextClosedEvent) {
             _logger.info("MetadataAggregator:Context was closed.");
         } else {

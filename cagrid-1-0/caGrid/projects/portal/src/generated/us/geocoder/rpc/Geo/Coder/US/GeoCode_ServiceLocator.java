@@ -9,9 +9,9 @@ package us.geocoder.rpc.Geo.Coder.US;
 
 public class GeoCode_ServiceLocator extends org.apache.axis.client.Service implements us.geocoder.rpc.Geo.Coder.US.GeoCode_Service {
 
-/**
- * WSDL File for Geo Coder - Written by Scott Gunn (scott_gunn*AT*email.com)
- */
+    /**
+     * WSDL File for Geo Coder - Written by Scott Gunn (scott_gunn*AT*email.com)
+     */
 
     public GeoCode_ServiceLocator() {
     }
@@ -26,7 +26,7 @@ public class GeoCode_ServiceLocator extends org.apache.axis.client.Service imple
     }
 
     // Use to get a proxy class for GeoCode_Port
-    private java.lang.String GeoCode_Port_address = "http://rpc.geocoder.us/service/soap/";
+    private java.lang.String GeoCode_Port_address = "http://geocoder.us/service/soap";
 
     public java.lang.String getGeoCode_PortAddress() {
         return GeoCode_Port_address;
@@ -44,7 +44,7 @@ public class GeoCode_ServiceLocator extends org.apache.axis.client.Service imple
     }
 
     public us.geocoder.rpc.Geo.Coder.US.GeoCode_PortType getGeoCode_Port() throws javax.xml.rpc.ServiceException {
-       java.net.URL endpoint;
+        java.net.URL endpoint;
         try {
             endpoint = new java.net.URL(GeoCode_Port_address);
         }
@@ -100,8 +100,7 @@ public class GeoCode_ServiceLocator extends org.apache.axis.client.Service imple
         java.lang.String inputPortName = portName.getLocalPart();
         if ("GeoCode_Port".equals(inputPortName)) {
             return getGeoCode_Port();
-        }
-        else  {
+        } else {
             java.rmi.Remote _stub = getPort(serviceEndpointInterface);
             ((org.apache.axis.client.Stub) _stub).setPortName(portName);
             return _stub;
@@ -123,20 +122,19 @@ public class GeoCode_ServiceLocator extends org.apache.axis.client.Service imple
     }
 
     /**
-    * Set the endpoint address for the specified port name.
-    */
+     * Set the endpoint address for the specified port name.
+     */
     public void setEndpointAddress(java.lang.String portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
         if ("GeoCode_Port".equals(portName)) {
             setGeoCode_PortEndpointAddress(address);
-        }
-        else { // Unknown Port Name
+        } else { // Unknown Port Name
             throw new javax.xml.rpc.ServiceException(" Cannot set Endpoint Address for Unknown Port" + portName);
         }
     }
 
     /**
-    * Set the endpoint address for the specified port name.
-    */
+     * Set the endpoint address for the specified port name.
+     */
     public void setEndpointAddress(javax.xml.namespace.QName portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
         setEndpointAddress(portName.getLocalPart(), address);
     }

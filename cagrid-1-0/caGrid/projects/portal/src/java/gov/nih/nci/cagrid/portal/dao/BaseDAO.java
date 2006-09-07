@@ -14,6 +14,8 @@ import java.util.Collection;
  */
 public interface BaseDAO {
 
+    public Object getObjectByPrimaryKey(Class cls, Integer id) throws DataAccessException;
+
     public void saveOrUpdate(Collection objects) throws DataAccessException;
 
     public void saveOrUpdate(Object obj) throws DataAccessException;

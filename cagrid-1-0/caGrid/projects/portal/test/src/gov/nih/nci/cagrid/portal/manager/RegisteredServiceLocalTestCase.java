@@ -5,12 +5,10 @@ import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
 import gov.nih.nci.cagrid.portal.domain.DomainModel;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
-import gov.nih.nci.cagrid.portal.domain.UMLClass;
+import gov.nih.nci.cagrid.portal.utils.MetadataAggregatorUtils;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.FileReader;
-import java.util.List;
-
-import org.springframework.core.io.ClassPathResource;
 
 /**
  * Created by IntelliJ IDEA.
@@ -34,44 +32,41 @@ public class RegisteredServiceLocalTestCase extends BaseSpringDataAccessAbstract
 
 
     public void testRegisteredServiceWithModel() {
+
+        MetadataAggregatorUtils mUtils = new MetadataAggregatorUtils();
+
         try {
             org.springframework.core.io.Resource resource = new ClassPathResource(DOMAIN_XML);
 
-            gov.nih.nci.cagrid.metadata.dataservice.DomainModel dModel = MetadataUtils.deserializeDomainModel(new FileReader(resource.getFile()));
-
-
-            DomainModel modelDomain = new DomainModel();
-            modelDomain.setLongName(dModel.getProjectLongName());
-            modelDomain.setProjectShortName(dModel.getProjectShortName());
-            modelDomain.setProjectDescription(dModel.getProjectDescription());
-            modelDomain.setProjectVersion(dModel.getProjectVersion());
-            gov.nih.nci.cagrid.metadata.common.UMLClass classes[] = dModel.getExposedUMLClassCollection().getUMLClass();
-
-            for (int i = 0; i < classes.length; i++) {
-                UMLClass dClass = new UMLClass();
-                dClass.setClassName(classes[i].getClassName());
-                modelDomain.getUmlClassCollection().add(dClass);
+            try {
+                DomainModel domainModel = mUtils.loadDomainModel(MetadataUtils.deserializeDomainModel(new FileReader(resource.getFile())));
+                rService.setDomainModel(domainModel);
+            } catch (Exception e) {
+                fail(e.getMessage());
             }
 
-            rService.setDomainModel(modelDomain);
-            modelDomain.setRegisteredService(rService);
-
             //Add RC
-            ResearchCenter rc = new ResearchCenter();
-            rc.setDisplayName("Test");
-            rService.setResearchCenter(rc);
+            try {
+                org.springframework.core.io.Resource sMetaDataResource = new ClassPathResource(SERVICE_XML);
+                ResearchCenter rc = mUtils.loadRC(MetadataUtils.deserializeServiceMetadata(new FileReader(sMetaDataResource.getFile())));
+                gridServiceManager.save(rc);
+                rService.setResearchCenter(rc);
+
+            } catch (Exception e) {
+                fail(e.getMessage());
+            }
 
             gridServiceManager.save(rService);
 
-            List services = gridServiceManager.loadAll(RegisteredService.class);
-            assertNotNull(services);
+            RegisteredService newService = (RegisteredService) gridServiceManager.getObjectByPrimaryKey(RegisteredService.class, rService.getPk());
+
+            assertEquals(rService.getEPR(), newService.getEPR());
 
 
         } catch (Exception e) {
 
             fail(e.getMessage());
         }
-        setComplete();
     }
 
 

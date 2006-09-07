@@ -40,7 +40,10 @@ public class DBCreationUtility extends BaseSpringAbstractTestCase {
     }
 
 
-    public void testExcecuteDDL() {
+    /**
+     * Executes Portal DDL Script
+     */
+    public void testExcecutePortalDDL() {
 
         try {
             //Tokenize ddl script
@@ -57,14 +60,16 @@ public class DBCreationUtility extends BaseSpringAbstractTestCase {
         System.out.println("Database created sucessfully");
     }
 
-
+    /**
+     * Populates Geocodes for ZIP codes
+     */
     public void testPopulateZipCodes() {
         try {
             String createZipTable = "Create table ZIPCODES_GEOCODES(ZIP TEXT, LATITUDE FLOAT, LONGITUDE FLOAT, CITY TEXT, STATE TEXT, COUNTY TEXT, ZIP_CLASS TEXT)";
             jdbcDAO.executeUpdate(createZipTable);
         } catch (DataAccessException e) {
             //don't fail
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         try {
@@ -82,11 +87,14 @@ public class DBCreationUtility extends BaseSpringAbstractTestCase {
                     + "FIELDS"
                     + " TERMINATED BY ','"
                     + " ENCLOSED BY '\"'"
+                    + " LINES TERMINATED BY '\\r\\n' STARTING BY ''"
                     + " (ZIP, LATITUDE, LONGITUDE, CITY, STATE, COUNTY, ZIP_CLASS);";
 
             jdbcDAO.executeUpdate(query);
         } catch (IOException e) {
             System.out.println("Could not create zip codes");
+            e.printStackTrace();
+
         }
         System.out.println("Create Zipcodes in DB.");
     }

@@ -49,7 +49,12 @@ public class GridServiceBaseDAOImpl extends BaseDAOImpl
         } else if (obj instanceof UMLClass) {
             UMLClass umlClass = (UMLClass) obj;
             resultSet = getHibernateTemplate().find("Select uc.pk from UMLClass uc where uc.className = ? and uc.packageName = ?", new Object[]{umlClass.getClassName(), umlClass.getPackageName()});
+
+        } else if (obj instanceof PointOfContact) {
+            PointOfContact poc = (PointOfContact) obj;
+            resultSet = getHibernateTemplate().find("Select poc.pk from PointOfContact poc where poc.email = ? and poc.role = ?", new Object[]{poc.getEmail(), poc.getRole()});
         }
+
 
         Integer id;
         try {

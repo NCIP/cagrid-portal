@@ -24,6 +24,10 @@ public class BaseDAOImpl extends HibernateDaoSupport implements BaseDAO {
         _logger = Category.getInstance(getClass());
     }
 
+    public Object getObjectByPrimaryKey(Class cls, Integer id) throws DataAccessException {
+        return getHibernateTemplate().load(cls, id);
+    }
+
     public void saveOrUpdate(Collection objects) throws DataAccessException {
         getHibernateTemplate().saveOrUpdateAll(objects);
     }

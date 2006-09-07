@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.portal.dao;
 
 import org.springframework.dao.DataAccessException;
 
+import java.util.Map;
+
 /**
  * Created by IntelliJ IDEA.
  * User: kherm
@@ -20,5 +22,16 @@ public interface JdbcDAO {
      */
     void executeUpdate(String sql) throws DataAccessException;
 
-    java.util.List sqlQueryForList(String sql, Class cls) throws DataAccessException;
+    /**
+     * Will run SQL and return a row back from DB.
+     * Each column in the row is mapped to a key-value
+     * pair in the map. Column name is the key
+     *
+     * @param sql
+     * @return
+     * @throws DataAccessException
+     */
+    Map getRowForSQL(String sql) throws DataAccessException;
+
+
 }

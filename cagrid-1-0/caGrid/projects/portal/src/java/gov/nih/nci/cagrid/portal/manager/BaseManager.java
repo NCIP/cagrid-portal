@@ -15,6 +15,8 @@ import org.springframework.dao.DataAccessException;
  */
 public interface BaseManager {
 
+    public Object getObjectByPrimaryKey(Class cls, Integer id) throws DataAccessException;
+
     public void save(Object obj) throws DataAccessException;
 
     public java.util.List loadAll(Class cls) throws DataAccessException;

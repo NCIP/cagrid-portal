@@ -4,6 +4,8 @@ import gov.nih.nci.cagrid.portal.dao.JdbcDAO;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
+import java.util.Map;
+
 /**
  * Created by IntelliJ IDEA.
  * User: kherm
@@ -17,8 +19,8 @@ public class JdbcDAOImpl extends JdbcDaoSupport implements JdbcDAO {
         getJdbcTemplate().update(sql);
     }
 
-    public java.util.List sqlQueryForList(String sql, Class cls) throws DataAccessException {
-        return getJdbcTemplate().queryForList(sql, cls);
+    public Map getRowForSQL(String sql) throws DataAccessException {
+        return getJdbcTemplate().queryForMap(sql);
     }
 
 }

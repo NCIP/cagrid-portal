@@ -55,5 +55,9 @@
         <put name="mainContent" value="/jsp/content/PortalHomepage.jsp"/>
     </definition>
 
+    <definition name="/directory.tiles" extends="Base">
+        <put name="mainContent" value="/jsp/content/Directory.jsp"/>
+    </definition>
+
 </tiles-definitions>
 

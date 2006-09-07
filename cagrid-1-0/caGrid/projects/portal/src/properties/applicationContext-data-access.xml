@@ -12,7 +12,7 @@
     </bean>
 
 
-    <!-- #############   Generic Bean intialization section #############                -->
+    <!-- #############   Transaction Manager configuration #############                -->
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
         <!--include all hibernate mapping files for domain objects-->
@@ -30,6 +30,19 @@
         </property>
     </bean>
 
+    <bean id="baseTxProxy" abstract="true"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="target" ref="gridServiceManager"/>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="insert*">PROPAGATION_REQUIRED</prop>
+                <prop key="update*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+            </props>
+        </property>
+    </bean>
+
     <!-- #############   DAO #############                -->
 
     <bean id="baseDAO"
@@ -39,14 +52,18 @@
         </property>
     </bean>
 
+
     <bean id="gridServiceBaseDAO"
           class="gov.nih.nci.cagrid.portal.dao.hibernate.GridServiceBaseDAOImpl"
           parent="baseDAO">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
     </bean>
 
-    <bean id="indexDAO"
-          class="gov.nih.nci.cagrid.portal.dao.hibernate.IndexDAOImpl"
-          parent="baseDAO">
+    <bean id="rcDAO"
+          class="gov.nih.nci.cagrid.portal.dao.jdbc.ResearchCenterDAOImpl">
+        <property name="dataSource" ref="jdbcDataSource"/>
     </bean>
 
     <bean id="jdbcDAO"
@@ -63,22 +80,19 @@
         <property name="baseDAO">
             <ref bean="baseDAO"/>
         </property>
-        <property name="indexDAO">
-            <ref bean="indexDAO"/>
-        </property>
         <property name="gridServiceBaseDAO">
             <ref bean="gridServiceBaseDAO"/>
+        </property>
+        <property name="rcDAO">
+            <ref bean="rcDAO"/>
         </property>
         <property name="jdbcDAO">
             <ref bean="jdbcDAO"/>
         </property>
-
-
     </bean>
 
     <bean name="gridServiceManager"
           class="gov.nih.nci.cagrid.portal.manager.GridServiceManagerImpl"
           parent="baseManager"/>
-
 
 </beans>

@@ -1,15 +1,12 @@
 package gov.nih.nci.cagrid.portal.manager;
 
-import gov.nih.nci.cagrid.portal.domain.DomainModel;
-import gov.nih.nci.cagrid.portal.domain.IndexService;
-import gov.nih.nci.cagrid.portal.domain.RegisteredService;
-import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
+import gov.nih.nci.cagrid.portal.domain.*;
 import gov.nih.nci.cagrid.portal.exception.GeoCoderRetreivalException;
 import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
 import gov.nih.nci.cagrid.portal.utils.GeoCoderUtility;
 import org.springframework.dao.DataAccessException;
 
-import java.util.List;
+import java.util.Iterator;
 
 
 /**
@@ -26,49 +23,43 @@ public class GridServiceManagerImpl extends BaseManagerImpl
         //for spring
     }
 
-    /**
-     * Override base implementation
-     */
-    public void save(IndexService idx) throws DataAccessException {
-        try {
-            Integer objectID = gridServiceBaseDAO.getBusinessKey(idx);
-            _logger.debug("Setting id for index:" + objectID);
-            idx.setPk(objectID);
 
-            //if id is found then we need to attach it to session
-            //indexDAO.merge(idx);
+    /**
+     * All other domain objects are saved this way
+     */
+    public void save(DomainObject obj) throws DataAccessException {
+        try {
+            Integer objectID = gridServiceBaseDAO.getBusinessKey(obj);
+            obj.setPk(objectID);
         } catch (RecordNotFoundException e) {
             // New object since id does not exist
             // Do nothing as this is not unexpected
+            _logger.info("Record not found for domain object. Creating new one");
         }
-        super.save(idx);
+        super.save(obj);
     }
 
 
     public void save(RegisteredService rService) throws DataAccessException {
-
+        // save service
+        _logger.debug("Saving registered service " + rService.getEPR());
         try {
             Integer objectID = gridServiceBaseDAO.getBusinessKey(rService);
             rService.setPk(objectID);
         } catch (RecordNotFoundException e) {
-            //do nothing
+            // New object since id does not exist
+            // Do nothing as this is not unexpected
+            _logger.info("Record not found for domain object. Creating new one");
         }
 
-        //save the research center
-        if (rService.getResearchCenter() != null)
-            save(rService.getResearchCenter());
-
-        //save service to assign ID
-        super.save(rService);
-
-        //save domain model
+        //save domain model which is a child association
         DomainModel dModel = rService.getDomainModel();
         if (dModel != null) {
             dModel.setPk(rService.getPk());
+            _logger.debug("Saving Domain Model");
             super.save(dModel);
         }
     }
-
 
     /**
      * Manages storing of a Research Center
@@ -80,30 +71,28 @@ public class GridServiceManagerImpl extends BaseManagerImpl
         if (rc.getLatitude() == null) {
             try {
                 GeoCoderUtility coder = new GeoCoderUtility();
-                GeoCoderUtility.GeocodeResult result = coder.getGeoCode4RC(rc);
+                GeoCodeValues result = coder.getGeoCode4RC(rc);
                 rc.setLatitude(result.getLatitude());
                 rc.setLongitude(result.getLongitude());
             } catch (GeoCoderRetreivalException e) {
                 _logger.info("Could not reach Geocoding web service. Doing local lookup");
-
-                String latLongSQL = "Select LATITUDE, LONGITUDE from ZIPCODES_GEOCODES where ZIP = '" + rc.getPostalCode() + "'";
-                List geoCodes = jdbcDAO.sqlQueryForList(latLongSQL, java.lang.Float.class);
-
-                if (!geoCodes.isEmpty()) {
-                    rc.setLatitude((java.lang.Float) geoCodes.get(0));
-                    rc.setLongitude((java.lang.Float) geoCodes.get(1));
-                }
+                GeoCodeValues result = rcDAO.getGeoCodes(rc.getPostalCode());
+                rc.setLatitude(result.getLatitude());
+                rc.setLongitude(result.getLongitude());
             }
         }
 
-        try {
-            Integer objectID = gridServiceBaseDAO.getBusinessKey(rc);
-            rc.setPk(objectID);
-        } catch (RecordNotFoundException e) {
-            _logger.debug("Record not found for Research  Center. Hibernate will assign new id");
+        /** save POC's **/
+        if (!rc.getPocCollection().isEmpty()) {
+            for (Iterator pocIter = rc.getPocCollection().iterator(); pocIter.hasNext();) {
+                PointOfContact poc = (PointOfContact) pocIter.next();
+                _logger.debug("Saving POC");
+                save(poc);
+            }
         }
-        super.save(rc);
-    }
 
+        _logger.debug("Saving RC with " + rc.getPocCollection().size() + " POC's");
+        save((DomainObject) rc);
+    }
 
 }
