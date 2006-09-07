@@ -806,8 +806,13 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 					if (selectedProject != null && selectedProject.equals(mostRecentProject)) {
 						UMLPackageMetadata selectedPackage = getDomainBrowserPanel().getSelectedPackage();
 						if (selectedPackage != null && packageToNamespace.containsKey(selectedPackage.getName())) {
+							// remove the package from the namespace types tree
 							getTypesTree().removeNamespaceType(
 								(String) packageToNamespace.get(selectedPackage.getName()));
+							// remove namespace from the packageMapping
+							packageToNamespace.remove(selectedPackage.getName());
+							// store the new information in the extension data
+							storeCaDSRInfo();
 						}
 					} else {
 						PortalUtils.showMessage("Please select a package involved in the current domain model.");
