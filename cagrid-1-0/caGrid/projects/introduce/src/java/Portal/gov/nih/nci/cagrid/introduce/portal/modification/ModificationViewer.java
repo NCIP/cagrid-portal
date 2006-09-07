@@ -56,6 +56,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -595,6 +596,17 @@ public class ModificationViewer extends GridPortalComponent {
 					dirty = true;
 					MethodType method = new MethodType();
 					method.setName("newMethod");
+					Set methodSet = new HashSet();
+					for(int i=0; i<getMethodsTable().getRowCount(); i++){
+						methodSet.add(getMethodsTable().getMethodType(i).getName());
+					}
+					if(methodSet.contains(method.getName())){
+						int index = 2;
+						while(methodSet.contains(method.getName()+index)){
+							index++;
+						}
+						method.setName(method.getName()+index);
+					}
 					MethodTypeOutput output = new MethodTypeOutput();
 					output.setQName(new QName("", "void"));
 					method.setOutput(output);
