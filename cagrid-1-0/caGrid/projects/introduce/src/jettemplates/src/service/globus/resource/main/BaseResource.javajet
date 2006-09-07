@@ -249,6 +249,25 @@ public class BaseResource implements Resource, ResourceProperties {
 		}
 		}%>	
 
+
+	//Getters/Setters for ResourceProperties
+	<%if(metadataList!=null && metadataList.getResourceProperty()!=null){
+		for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
+			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
+			SchemaInformation schemaInformation = CommonTools.getSchemaInformation(arguments.getNamespaces(),metadata.getQName());
+			String name=CommonTools.getResourcePropertyVariableName(metadataList, i);		
+	%>
+	
+	public ResourceProperty get<%=TemplateUtils.upperCaseFirstCharacter(name)%>RP(){
+		return this.<%=name%>RP;
+	}
+	
+	public <%=schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName()%> get<%=TemplateUtils.upperCaseFirstCharacter(name)%>MD(){
+		return this.<%=name%>MD;
+	}
+	<%	}
+	}%>	
+
 	public ResourceConfiguration getConfiguration() {
 		if (this.configuration != null) {
 			return this.configuration;
