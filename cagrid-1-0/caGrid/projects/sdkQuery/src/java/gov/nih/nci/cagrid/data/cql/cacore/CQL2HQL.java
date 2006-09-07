@@ -56,6 +56,17 @@ public class CQL2HQL {
 	}
 	
 	
+	/**
+	 * Processes a query with Query Modifications applied to it
+	 * 
+	 * @param hql
+	 * 		The HQL built thus far
+	 * @param mods
+	 * 		The modifications to the query
+	 * @param target
+	 * 		The target object
+	 * @throws QueryProcessingException
+	 */
 	private static void processModifiedQuery(StringBuilder hql, QueryModifier mods, Object target) throws QueryProcessingException {
 		if (mods.isCountOnly()) {
 			processCountingQuery(hql, mods, target);
@@ -65,6 +76,17 @@ public class CQL2HQL {
 	}
 	
 	
+	/**
+	 * Processes a query which returns a count
+	 * 
+	 * @param hql
+	 * 		The HQL query fragment
+	 * @param mods
+	 * 		The modifications to apply to the query
+	 * @param target
+	 * 		The query's target object
+	 * @throws QueryProcessingException
+	 */
 	private static void processCountingQuery(StringBuilder hql, QueryModifier mods, Object target) throws QueryProcessingException {
 		hql.append("select count(");
 		if (mods.getDistinctAttribute() != null) {
@@ -111,6 +133,17 @@ public class CQL2HQL {
 	}
 	
 	
+	/**
+	 * Processes a query which returns attributes (distinct or otherwise)
+	 * 
+	 * @param hql
+	 * 		The existing HQL fragment
+	 * @param mods
+	 * 		The modifications to apply to the query
+	 * @param target
+	 * 		The target object of the query
+	 * @throws QueryProcessingException
+	 */
 	private static void processAttributeQuery(StringBuilder hql, QueryModifier mods, Object target) throws QueryProcessingException {
 		if (mods.getDistinctAttribute() != null) {
 			// counting distinct attributes
