@@ -1967,7 +1967,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getCreateFaultButton() {
 		if (createFaultButton == null) {
-			createFaultButton = new JButton();
+			createFaultButton = new JButton(IntroduceLookAndFeel.getAddIcon());
 			createFaultButton.setText("Add New Fault");
 			createFaultButton
 				.setToolTipText("Creates a new fault under this services types namespace and adds it to the list of available faults.");
@@ -2062,7 +2062,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getAddFaultFromTypeButton() {
 		if (addFaultFromTypeButton == null) {
-			addFaultFromTypeButton = new JButton();
+			addFaultFromTypeButton = new JButton(IntroduceLookAndFeel.getAddIcon());
 			addFaultFromTypeButton.setText("Add From Type");
 			addFaultFromTypeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -2072,7 +2072,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 						SchemaElementType st = ((SchemaElementType) ((SchemaElementTypeTreeNode) getNamespacesJTree()
 							.getCurrentNode()).getUserObject());
 						QName qname = new QName(nt.getNamespace(), st.getType());
-						getExceptionsTable().addRow(qname, true);
+						ExceptionHolder holder = new ExceptionHolder(qname, true);
+						getExceptionJComboBox().addItem(holder);
+						getExceptionsTable().addRow(holder.qname, holder.isCreated);
 					} else {
 						JOptionPane.showMessageDialog(MethodViewer.this, "Please select a type to add");
 					}
