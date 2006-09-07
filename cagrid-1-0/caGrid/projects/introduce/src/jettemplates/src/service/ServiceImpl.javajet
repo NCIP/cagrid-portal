@@ -13,7 +13,6 @@ package <%=info.getService().getPackageName()%>.service;
 import java.rmi.RemoteException;
 
 /** 
- *  <%=info.getService().getPackageName()%>I
  *  TODO:DOCUMENT ME
  * 
  * @created by Introduce Toolkit version 1.0

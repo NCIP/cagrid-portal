@@ -21,7 +21,6 @@ import org.globus.wsrf.Constants;
 import org.globus.wsrf.ResourceHome;
 
 /** 
- *  <%=info.getService().getPackageName()%>
  *  TODO:DOCUMENT ME
  * 
  * @created by Introduce Toolkit version 1.0
