@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.cql.cacore;
+package gov.nih.nci.cagrid.data.cql.cacore.experimental;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
@@ -19,7 +19,12 @@ import org.hibernate.criterion.DetachedCriteria;
 
 /** 
  *  CoreQueryProcessor
- *  CQL Query processor implementation for SDK generated data sources
+ *  CQL Query processor implementation for SDK generated data sources.
+ *  <b><i>This class shoule be concidered an experimental implementation.
+ *  It makes use of Hibernate's DetachedCriteria API for queries, which
+ *  does not provide the same level of expressivity that HQL does, and
+ *  thus this query processor does not implement all the features of
+ *  CQL against a caCORE data source</i></b>
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 

@@ -4,7 +4,7 @@ import org.hibernate.criterion.DetachedCriteria;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
-import gov.nih.nci.cagrid.data.cql.cacore.CQL2DetachedCriteria;
+import gov.nih.nci.cagrid.data.cql.cacore.experimental.CQL2DetachedCriteria;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
