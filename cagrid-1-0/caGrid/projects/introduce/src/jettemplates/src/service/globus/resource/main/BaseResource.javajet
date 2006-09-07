@@ -258,12 +258,17 @@ public class BaseResource implements Resource, ResourceProperties {
 			String name=CommonTools.getResourcePropertyVariableName(metadataList, i);		
 	%>
 	
-	public ResourceProperty get<%=TemplateUtils.upperCaseFirstCharacter(name)%>RP(){
+	protected ResourceProperty get<%=TemplateUtils.upperCaseFirstCharacter(name)%>RP(){
 		return this.<%=name%>RP;
 	}
 	
 	public <%=schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName()%> get<%=TemplateUtils.upperCaseFirstCharacter(name)%>MD(){
 		return this.<%=name%>MD;
+	}
+	
+	public void set<%=TemplateUtils.upperCaseFirstCharacter(name)%>MD(<%=schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName()+" "+name%> ){
+		this.<%=name%>MD=<%=name%>;
+		get<%=TemplateUtils.upperCaseFirstCharacter(name)%>RP().set(0,<%=name%>);
 	}
 	<%	}
 	}%>	
