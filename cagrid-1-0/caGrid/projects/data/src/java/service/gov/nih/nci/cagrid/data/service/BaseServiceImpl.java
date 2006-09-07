@@ -8,13 +8,13 @@ import gov.nih.nci.cagrid.data.cql.validation.CqlDomainValidator;
 import gov.nih.nci.cagrid.data.cql.validation.CqlStructureValidator;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
-import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.lang.reflect.Method;
 import java.util.Properties;
 
+import org.globus.wsrf.Resource;
+import org.globus.wsrf.ResourceContext;
 import org.oasis.wsrf.faults.BaseFaultType;
 
 /** 
@@ -57,6 +57,7 @@ public abstract class BaseServiceImpl {
 			CqlDomainValidator validator = getCqlDomainValidator();			
 			try {
 				// get the domain model from resource properties
+				/*
 				String domainModelFileName = getResourceProperties().getProperty("DomainModelFile");
 				if (domainModelFileName == null) {
 					FileNotFoundException ex = new FileNotFoundException("Serialized domain model file " + domainModelFileName + " not found for validation!");
@@ -65,6 +66,8 @@ public abstract class BaseServiceImpl {
 				FileReader domainModelReader = new FileReader(domainModelFileName);
 				DomainModel model = MetadataUtils.deserializeDomainModel(domainModelReader);
 				domainModelReader.close();
+				*/
+				DomainModel model = getDomainModel();
 				validator.validateDomainModel(cqlQuery, model);
 			} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
 				throw (MalformedQueryExceptionType) getTypedException(ex, new MalformedQueryExceptionType());
@@ -169,6 +172,20 @@ public abstract class BaseServiceImpl {
 		} catch (Exception ex) {
 			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		}
+	}
+	
+	
+	protected DomainModel getDomainModel() throws Exception {
+		Resource serviceBaseResource = ResourceContext.getResourceContext().getResource();
+		Method[] resourceMethods = serviceBaseResource.getClass().getMethods();
+		for (int i = 0; i < resourceMethods.length; i++) {
+			if (resourceMethods[i].getReturnType() != null 
+				&& resourceMethods[i].getReturnType().equals(DomainModel.class)) {
+				DomainModel model = (DomainModel) resourceMethods[i].invoke(serviceBaseResource, new Object[] {});
+				return model;
+			}
+		}
+		return null;
 	}
 	
 	
