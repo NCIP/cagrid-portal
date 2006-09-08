@@ -34,10 +34,13 @@ public abstract class BaseServiceImpl {
 	private CqlStructureValidator cqlStructureValidator = null;
 	private CqlDomainValidator cqlDomainValidator = null;
 	
+	private DomainModel domainModel = null;
+	private boolean domainModelSearchedFor;
+	
 	private Class cqlQueryProcessorClass = null;
 
 	public BaseServiceImpl() {
-		
+		domainModelSearchedFor = false;
 	}
 	
 	
@@ -176,16 +179,19 @@ public abstract class BaseServiceImpl {
 	
 	
 	protected DomainModel getDomainModel() throws Exception {
-		Resource serviceBaseResource = ResourceContext.getResourceContext().getResource();
-		Method[] resourceMethods = serviceBaseResource.getClass().getMethods();
-		for (int i = 0; i < resourceMethods.length; i++) {
-			if (resourceMethods[i].getReturnType() != null 
-				&& resourceMethods[i].getReturnType().equals(DomainModel.class)) {
-				DomainModel model = (DomainModel) resourceMethods[i].invoke(serviceBaseResource, new Object[] {});
-				return model;
+		if (domainModel == null && !domainModelSearchedFor) {
+			Resource serviceBaseResource = ResourceContext.getResourceContext().getResource();
+			Method[] resourceMethods = serviceBaseResource.getClass().getMethods();
+			for (int i = 0; i < resourceMethods.length; i++) {
+				if (resourceMethods[i].getReturnType() != null 
+					&& resourceMethods[i].getReturnType().equals(DomainModel.class)) {
+					domainModel = (DomainModel) resourceMethods[i].invoke(serviceBaseResource, new Object[] {});
+					break;
+				}
 			}
+			domainModelSearchedFor = true;
 		}
-		return null;
+		return domainModel;
 	}
 	
 	
