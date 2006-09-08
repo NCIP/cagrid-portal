@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gridca.portal;
+package gov.nih.nci.cagrid.gridca.ui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,7 +14,7 @@ import javax.swing.JTextField;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id$
+ * @version $Id: CRLPanel.java,v 1.1 2006-09-08 17:31:39 langella Exp $
  */
 public class CRLPanel extends JPanel {
 	private JPanel infoPanel = null;

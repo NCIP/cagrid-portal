@@ -11,9 +11,9 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.portal.CertificatePanel;
-import gov.nih.nci.cagrid.gridca.portal.ProxyCaddy;
-import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.gridca.ui.CertificatePanel;
+import gov.nih.nci.cagrid.gridca.ui.ProxyCaddy;
+import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -42,7 +42,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.15 2006-07-20 18:44:26 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.16 2006-09-08 17:31:47 langella Exp $
  */
 public class TrustedIdPWindow extends GridPortalBaseFrame {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();

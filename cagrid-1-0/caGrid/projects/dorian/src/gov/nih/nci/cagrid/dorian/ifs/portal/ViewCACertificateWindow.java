@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.DorianCertifcateAuthorityClient;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
-import gov.nih.nci.cagrid.gridca.portal.CertificateInformationComponent;
+import gov.nih.nci.cagrid.gridca.ui.CertificateInformationComponent;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;

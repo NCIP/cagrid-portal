@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.dorian.ifs.portal;
 
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
-import gov.nih.nci.cagrid.gridca.portal.ProxyManagerComponent;
+import gov.nih.nci.cagrid.gridca.ui.ProxyManagerComponent;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -19,7 +19,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IFSMenu.java,v 1.16 2006-06-23 13:10:06 langella Exp $
+ * @version $Id: IFSMenu.java,v 1.17 2006-09-08 17:31:47 langella Exp $
  */
 public class IFSMenu extends GridPortalComponent {
 

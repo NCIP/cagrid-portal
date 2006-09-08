@@ -15,7 +15,7 @@
     </target>
     
     <target name="dorian" description="Run the Dorian Administrative GUI" >
-        <ant dir="${basedir}/projects/dorian" antfile="build.xml" target="portal" inheritall="false" />
+        <ant dir="${basedir}/projects/dorian" antfile="build.xml" target="ui" inheritall="false" />
     </target>
 	
 	 <target name="gts" description="Run the GTS Administrative GUI" >

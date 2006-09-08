@@ -145,7 +145,7 @@
 		<artifact track="main" type="jars" id="gridca.jars">
 			<antcall target="build-gridca" />
 			<fileset dir="${projects.dir}/gridca/build/lib">
-				<include name="gridca.jar" />
+				<include name="*gridca*.jar" />
 			</fileset>
 		</artifact>
 

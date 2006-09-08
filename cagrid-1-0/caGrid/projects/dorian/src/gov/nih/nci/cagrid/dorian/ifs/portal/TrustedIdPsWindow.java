@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.portal.DorianLookAndFeel;
 import gov.nih.nci.cagrid.dorian.portal.DorianServiceListComboBox;
 import gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -33,7 +33,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.14 2006-06-06 04:29:18 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.15 2006-09-08 17:31:47 langella Exp $
  */
 public class TrustedIdPsWindow extends GridPortalBaseFrame {
 

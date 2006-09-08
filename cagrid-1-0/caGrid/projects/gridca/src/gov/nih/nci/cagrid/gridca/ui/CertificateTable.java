@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gridca.portal;
+package gov.nih.nci.cagrid.gridca.ui;
 
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 
@@ -15,7 +15,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateTable.java,v 1.2 2006-04-07 03:52:41 oster Exp $
+ * @version $Id: CertificateTable.java,v 1.1 2006-09-08 17:31:38 langella Exp $
  */
 public class CertificateTable extends PortalBaseTable {
 	public final static String CERTIFICATE = "certificate";

@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gridca.portal;
+package gov.nih.nci.cagrid.gridca.ui;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;

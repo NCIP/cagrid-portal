@@ -15,7 +15,9 @@ GSBT - Globus Service Build Tools
     -->
 	<property file="build.properties" />
 	<property file="${user.home}/build.properties" />
-
+    <property name="cagrid.jar.prefix" value="caGrid-1.0" />
+    <property name="service.name" value="gridca" />
+     <property name="service.version" value="1.0" />
 
     <property name="project.name" value="caGrid-gridca"/>
 	<!-- Directory where GT4 is installed -->
@@ -44,7 +46,7 @@ GSBT - Globus Service Build Tools
 
 
 	<!-- Name of the JAR files to be generated -->
-	<property name="jar.name" value="${gar.filename}.jar" />
+	<property name="jar.name" value="${cagrid.jar.prefix}-${service.name}-${service.version}.jar" />
 
 
 

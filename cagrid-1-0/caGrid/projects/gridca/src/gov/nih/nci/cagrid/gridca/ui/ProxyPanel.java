@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.gridca.portal;
+package gov.nih.nci.cagrid.gridca.ui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

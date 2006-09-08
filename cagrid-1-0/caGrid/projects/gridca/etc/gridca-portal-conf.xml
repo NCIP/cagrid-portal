@@ -17,13 +17,13 @@
 	  <component>
 	  		<title>CertificateBrowser</title>
 	  		<description>Certificate Browser</description>
-	  		<class>gov.nih.nci.cagrid.gridca.portal.CertificateInformationComponent</class>
+	  		<class>gov.nih.nci.cagrid.gridca.ui.CertificateInformationComponent</class>
 	  		<icon>/contact-new.png</icon>
 	  	</component>
 	    	<component>
 	  		<title>ProxyManager</title>
 	  		<description>Proxy Manager</description>
-	  		<class>gov.nih.nci.cagrid.gridca.portal.ProxyManagerComponent</class>
+	  		<class>gov.nih.nci.cagrid.gridca.ui.ProxyManagerComponent</class>
 	  		<icon>/contact-new.png</icon>
 	  	</component>
 	  </components>
