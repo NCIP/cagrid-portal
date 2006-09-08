@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data;
 
 import gov.nih.nci.cagrid.common.SchemaValidator;
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.cql.validation.CqlDomainValidator;
 import gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator;
@@ -9,7 +8,6 @@ import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 
 import junit.framework.TestCase;

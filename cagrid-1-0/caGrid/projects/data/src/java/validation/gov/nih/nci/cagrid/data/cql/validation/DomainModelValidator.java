@@ -15,7 +15,10 @@ import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -112,7 +115,8 @@ public class DomainModelValidator implements CqlDomainValidator {
 		// determine if an association exists between the current
 		// and association object
 		String roleName = assoc.getRoleName();
-		UMLAssociation[] associations = getUmlAssociations(current.getName(), model);
+		// UMLAssociation[] associations = getUmlAssociations(current.getName(), model);
+		UMLAssociation[] associations = getAllAssociationsFromSource(current.getName(), model);
 		boolean associationFound = false;
 		for (int i = 0; i < associations.length; i++) {
 			UMLAssociation assocMd = associations[i];
@@ -132,7 +136,7 @@ public class DomainModelValidator implements CqlDomainValidator {
 						// association found with specidied role name
 						associationFound = true;
 						break;
-					} else {
+					} else if (roleName == null) {
 						// an association of the right type found, but no role name to compare
 						// so association is found, but must check for ambiguity
 						associationFound = true;
@@ -198,6 +202,29 @@ public class DomainModelValidator implements CqlDomainValidator {
 			}
 		}
 		return null;
+	}
+	
+	
+	private UMLAssociation[] getAllAssociationsFromSource(String sourceClass, DomainModel model) {
+		String[] classNames = getClassHierarchy(sourceClass, model);
+		Set associations = new HashSet();
+		for (int i = 0; i < classNames.length; i++) {
+			Collections.addAll(associations, getUmlAssociations(classNames[i], model));
+		}
+		UMLAssociation[] assocArray = new UMLAssociation[associations.size()];
+		associations.toArray(assocArray);
+		return assocArray;
+	}
+	
+	
+	private String[] getClassHierarchy(String className, DomainModel model) {
+		UMLClass[] superclasses = DomainModelUtils.getAllSuperclasses(model, className);
+		String[] names = new String[superclasses.length + 1];
+		for (int i = 0; i < superclasses.length; i++) {
+			names[i] = superclasses[i].getPackageName() + "." + superclasses[i].getClassName();
+		}
+		names[names.length - 1] = className;
+		return names;
 	}
 
 
