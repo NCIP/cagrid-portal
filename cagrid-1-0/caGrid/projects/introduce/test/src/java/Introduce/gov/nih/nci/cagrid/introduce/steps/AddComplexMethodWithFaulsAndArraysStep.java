@@ -21,8 +21,6 @@ import java.io.File;
 
 import javax.xml.namespace.QName;
 
-import com.atomicobject.haste.framework.Step;
-
 
 public class AddComplexMethodWithFaulsAndArraysStep extends BaseStep {
 	private TestCaseInfo tci;

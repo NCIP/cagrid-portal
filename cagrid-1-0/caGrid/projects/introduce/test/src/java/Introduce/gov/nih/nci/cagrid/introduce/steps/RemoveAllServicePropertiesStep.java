@@ -5,14 +5,9 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 
 import java.io.File;
-
-import javax.xml.namespace.QName;
-
-import com.atomicobject.haste.framework.Step;
 
 public class RemoveAllServicePropertiesStep extends BaseStep {
 	private TestCaseInfo tci;

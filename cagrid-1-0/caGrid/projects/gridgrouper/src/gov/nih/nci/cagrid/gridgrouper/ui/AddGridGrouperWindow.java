@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.ui;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gridca.portal.ProxyComboBox;
+import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 
 import java.awt.BorderLayout;

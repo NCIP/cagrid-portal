@@ -1,27 +1,18 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
-import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
-import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
-import javax.swing.JPopupMenu;
-import javax.swing.JMenuItem;
-import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import org.globus.wsrf.encoding.DeserializationException;
-import org.globus.wsrf.encoding.ObjectSerializer;
-import org.globus.wsrf.encoding.SerializationException;
-import org.projectmobius.portal.PortalResourceManager;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 
 public class ServicesPopUpMenu extends JPopupMenu {

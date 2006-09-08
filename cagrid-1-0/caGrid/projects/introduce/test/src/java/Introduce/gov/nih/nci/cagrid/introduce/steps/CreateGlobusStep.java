@@ -2,8 +2,6 @@ package gov.nih.nci.cagrid.introduce.steps;
 
 import gov.nih.nci.cagrid.introduce.util.GlobusHelper;
 
-import java.io.File;
-
 import com.atomicobject.haste.framework.Step;
 
 

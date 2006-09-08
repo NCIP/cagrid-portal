@@ -3,8 +3,6 @@ package gov.nih.nci.cagrid.introduce.steps;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 
-import com.atomicobject.haste.framework.Step;
-
 
 public class RollBackStep extends BaseStep {
 	private TestCaseInfo tci;

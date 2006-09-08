@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery;
 
+import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+
 import java.io.File;
 
 import javax.swing.JPanel;
-
-import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 
 
 public abstract class NamespaceTypeDiscoveryComponent extends JPanel {

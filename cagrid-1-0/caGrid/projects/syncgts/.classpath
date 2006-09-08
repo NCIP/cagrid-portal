@@ -52,7 +52,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="lib/ant-contrib.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="ext/lib/gridca.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
@@ -80,5 +79,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

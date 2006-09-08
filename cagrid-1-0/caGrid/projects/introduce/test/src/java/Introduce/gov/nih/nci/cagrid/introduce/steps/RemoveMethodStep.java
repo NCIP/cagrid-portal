@@ -11,10 +11,6 @@ import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 
 import java.io.File;
 
-import javax.xml.namespace.QName;
-
-import com.atomicobject.haste.framework.Step;
-
 
 public class RemoveMethodStep extends BaseStep {
 	private TestCaseInfo tci;

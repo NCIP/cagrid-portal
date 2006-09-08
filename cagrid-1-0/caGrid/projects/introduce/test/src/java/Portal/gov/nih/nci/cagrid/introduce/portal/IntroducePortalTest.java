@@ -2,9 +2,9 @@ package gov.nih.nci.cagrid.introduce.portal;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.portal.steps.AddMultipleOperationsStep;
-import gov.nih.nci.cagrid.introduce.portal.steps.CreateServiceStep;
-import gov.nih.nci.cagrid.introduce.portal.steps.AddSchemaStep;
 import gov.nih.nci.cagrid.introduce.portal.steps.AddOperationStep;
+import gov.nih.nci.cagrid.introduce.portal.steps.AddSchemaStep;
+import gov.nih.nci.cagrid.introduce.portal.steps.CreateServiceStep;
 import gov.nih.nci.cagrid.introduce.portal.steps.GeneralModifyServiceStep;
 import gov.nih.nci.cagrid.introduce.portal.steps.ModifyMultipleOperationsStep;
 import gov.nih.nci.cagrid.introduce.portal.steps.ModifyOperationStep;

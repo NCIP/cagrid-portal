@@ -23,13 +23,12 @@ import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
-import javax.swing.JScrollPane;
 
 
 /**

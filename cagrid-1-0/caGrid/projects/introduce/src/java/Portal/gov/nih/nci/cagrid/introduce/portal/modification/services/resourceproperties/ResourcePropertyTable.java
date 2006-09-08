@@ -3,8 +3,6 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
-import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.util.Vector;
 

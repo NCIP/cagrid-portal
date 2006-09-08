@@ -20,7 +20,6 @@ import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.jdom.Document;

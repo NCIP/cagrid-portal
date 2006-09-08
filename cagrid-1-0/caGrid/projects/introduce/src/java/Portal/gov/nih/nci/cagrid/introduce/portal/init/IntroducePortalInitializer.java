@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.init;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;

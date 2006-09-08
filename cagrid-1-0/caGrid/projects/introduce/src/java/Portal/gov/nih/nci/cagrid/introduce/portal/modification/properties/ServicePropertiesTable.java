@@ -4,14 +4,11 @@ import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTable.ColumnSorter;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 

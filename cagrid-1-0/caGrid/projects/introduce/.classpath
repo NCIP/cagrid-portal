@@ -81,7 +81,6 @@
 	<classpathentry sourcepath="/mobius" kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry sourcepath="/mobius" kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/gridca.jar"/>
 	<classpathentry kind="lib" path="ext/lib/GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius-castor-0.9.4.3-xml.jar"/>
@@ -108,5 +107,6 @@
 	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_samples_counter_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_samples_counter.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

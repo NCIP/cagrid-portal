@@ -15,8 +15,6 @@ import java.io.File;
 
 import javax.xml.namespace.QName;
 
-import com.atomicobject.haste.framework.Step;
-
 
 public class ModifySimpleMethodStep extends BaseStep {
 	private TestCaseInfo tci;

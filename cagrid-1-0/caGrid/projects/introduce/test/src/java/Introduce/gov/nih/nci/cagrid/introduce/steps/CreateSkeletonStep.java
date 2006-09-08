@@ -8,8 +8,6 @@ import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 
 import java.io.File;
 
-import com.atomicobject.haste.framework.Step;
-
 public class CreateSkeletonStep extends BaseStep {
 	private TestCaseInfo tci;
 

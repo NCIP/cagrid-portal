@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;

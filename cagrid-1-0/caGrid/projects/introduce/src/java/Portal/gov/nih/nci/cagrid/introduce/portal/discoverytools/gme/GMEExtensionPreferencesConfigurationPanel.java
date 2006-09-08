@@ -12,7 +12,6 @@ import java.awt.GridBagLayout;
 import java.io.File;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.xml.namespace.QName;
 

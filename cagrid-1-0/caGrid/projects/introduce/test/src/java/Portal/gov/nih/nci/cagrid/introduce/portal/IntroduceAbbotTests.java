@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import junit.extensions.abbot.ScriptFixture;
 import junit.framework.TestCase;
-import junit.framework.TestResult;
 
 public class IntroduceAbbotTests extends TestCase {
 	

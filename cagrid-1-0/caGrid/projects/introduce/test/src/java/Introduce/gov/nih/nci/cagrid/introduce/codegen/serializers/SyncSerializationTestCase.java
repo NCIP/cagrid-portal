@@ -5,9 +5,9 @@ import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import java.io.File;
 import java.io.FileWriter;
 
-import org.projectmobius.common.XMLUtilities;
-
 import junit.framework.TestCase;
+
+import org.projectmobius.common.XMLUtilities;
 
 
 public class SyncSerializationTestCase extends TestCase {

@@ -4,14 +4,11 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 
-import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-
-import org.projectmobius.portal.PortalResourceManager;
 
 
 public class ServicePopUpMenu extends JPopupMenu {
