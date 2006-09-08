@@ -944,6 +944,31 @@ public class CommonTools {
 
 	public static boolean validateIsFaultType(NamespaceType namespace, SchemaElementType type, File baseSchemaDir) {
 		boolean isValid = false;
+		Document doc = null;
+		try {
+			doc = XMLUtilities.fileNameToDocument(baseSchemaDir.getAbsolutePath() + File.separator
+				+ namespace.getLocation());
+			List elements = doc.getRootElement().getChildren("element",
+				org.jdom.Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
+			for (int i = 0; i < elements.size(); i++) {
+				Element el = (Element) elements.get(i);
+				if (el.getAttributeValue("name").equals(type.getType())) {
+					String elementType = el.getAttributeValue("type");
+					if (elementType.indexOf(":") >= 0) {
+						String prefix = elementType.substring(0, elementType.indexOf(":"));
+						String name = elementType.substring(elementType.indexOf(":") + 1, elementType.length());
+						System.out.println("prefix: " + doc.getRootElement().getNamespace(prefix).getURI() + " name: "
+							+ name);
+						if(doc.getRootElement().getNamespace(prefix).getURI().equals(IntroduceConstants.BASEFAULTS_NAMESPACE)){
+							return true;
+						}
+					}
+					break;
+				}
+			}
+		} catch (MobiusException e) {
+			e.printStackTrace();
+		}
 		return isValid;
 	}
 

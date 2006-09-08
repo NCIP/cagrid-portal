@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
@@ -2079,7 +2080,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 							getExceptionJComboBox().addItem(holder);
 							getExceptionsTable().addRow(holder.qname, holder.isCreated);
 						} else {
-							JOptionPane.showMessageDialog(MethodViewer.this, "Type does not appear to extend from {http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd}BaseFaultType");
+							JOptionPane.showMessageDialog(MethodViewer.this, "Type does not appear to extend from {"
+								+ IntroduceConstants.BASEFAULTS_NAMESPACE + "}BaseFaultType");
 						}
 					} else {
 						JOptionPane.showMessageDialog(MethodViewer.this, "Please select a type to add");
