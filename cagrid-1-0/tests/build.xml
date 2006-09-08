@@ -127,6 +127,7 @@
 			<artifact refid="core.test.jars" />
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="data.metadata.jars" />
+			<artifact refid="metadatautils.jars" />
 			<artifact refid="caCORE.jars" />
 			<artifact refid="graph.jars" />
 			<artifact refid="introduce.servicesecurity.jars" />
@@ -158,6 +159,9 @@
 	</target>
 	<target name="build-metadata">
 		<echo>metadata must be built in the main caGrid build</echo>
+	</target>
+	<target name="build-metadatautils">
+		<echo>metadatautils must be built in the main caGrid build</echo>
 	</target>
 	<target name="build-graph">
 		<echo>graph must be built in the main caGrid build</echo>
