@@ -7,7 +7,7 @@ import java.io.File;
 
 import gov.nci.nih.cagrid.tests.core.compare.BeanComparator;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.discovery.MetadataUtils;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 
 import org.apache.axis.message.addressing.Address;
