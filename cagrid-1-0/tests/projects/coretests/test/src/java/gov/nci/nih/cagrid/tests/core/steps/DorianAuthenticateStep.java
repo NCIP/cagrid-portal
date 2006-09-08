@@ -8,7 +8,8 @@ import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
 import gov.nih.nci.cagrid.dorian.client.IdPAuthenticationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
-import gov.nih.nci.cagrid.gridca.portal.ProxyManager;
+import gov.nih.nci.cagrid.gridca.ui.ProxyManager;
+//import gov.nih.nci.cagrid.gridca.portal.ProxyManager;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import org.globus.gsi.GlobusCredential;
