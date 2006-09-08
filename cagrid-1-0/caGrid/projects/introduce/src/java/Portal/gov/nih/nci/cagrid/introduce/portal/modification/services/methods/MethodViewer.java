@@ -32,6 +32,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -2071,10 +2072,15 @@ public class MethodViewer extends GridPortalBaseFrame {
 							.getCurrentNode().getParent()).getUserObject());
 						SchemaElementType st = ((SchemaElementType) ((SchemaElementTypeTreeNode) getNamespacesJTree()
 							.getCurrentNode()).getUserObject());
-						QName qname = new QName(nt.getNamespace(), st.getType());
-						ExceptionHolder holder = new ExceptionHolder(qname, true);
-						getExceptionJComboBox().addItem(holder);
-						getExceptionsTable().addRow(holder.qname, holder.isCreated);
+						if (CommonTools.validateIsFaultType(nt, st, new File(info.getBaseDirectory().getAbsolutePath()
+							+ File.separator + "schema" + File.separator + info.getServices().getService(0).getName()))) {
+							QName qname = new QName(nt.getNamespace(), st.getType());
+							ExceptionHolder holder = new ExceptionHolder(qname, true);
+							getExceptionJComboBox().addItem(holder);
+							getExceptionsTable().addRow(holder.qname, holder.isCreated);
+						} else {
+							JOptionPane.showMessageDialog(MethodViewer.this, "Type does not appear to extend from {http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd}BaseFaultType");
+						}
 					} else {
 						JOptionPane.showMessageDialog(MethodViewer.this, "Please select a type to add");
 					}

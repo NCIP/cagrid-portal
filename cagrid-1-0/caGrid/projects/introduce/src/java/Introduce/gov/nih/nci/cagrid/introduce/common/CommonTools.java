@@ -942,9 +942,8 @@ public class CommonTools {
 	}
 
 
-	public boolean validateIsFaultType(NamespaceType namespace, File baseSchemaDir) {
-		boolean isValid = true;
-		NamespaceType type = namespace;
+	public static boolean validateIsFaultType(NamespaceType namespace, SchemaElementType type, File baseSchemaDir) {
+		boolean isValid = false;
 		return isValid;
 	}
 
