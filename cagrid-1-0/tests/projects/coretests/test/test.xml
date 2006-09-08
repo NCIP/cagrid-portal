@@ -47,6 +47,7 @@
 				<fileset dir="${test.src.dir}">
 					<exclude name="**/*Abstract*.java" />
 					<exclude name="**/WorkflowTest.java" />
+					<exclude name="**/GridGrouperTest.java" />
 					<include name="**/*Test.java" />
 					<include name="**/*TestCase.java" />
 				</fileset>
