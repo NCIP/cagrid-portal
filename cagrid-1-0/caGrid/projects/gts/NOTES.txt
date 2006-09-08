@@ -12,7 +12,7 @@ Fix Metadata Access Problem (DONE)
 Support Multiple Trust Levels for a Given CA
 Support Querying of Multiple Trust Levels.
 Add Ant Utility for Admin Bootstrapping
-Add Ant Utility for Portal
+Add Ant Utility for Portal (DONE)
 Add check for Transaction database.
 
 
