@@ -953,14 +953,20 @@ public class CommonTools {
 			for (int i = 0; i < elements.size(); i++) {
 				Element el = (Element) elements.get(i);
 				if (el.getAttributeValue("name").equals(type.getType())) {
-					String elementType = el.getAttributeValue("type");
-					if (elementType.indexOf(":") >= 0) {
-						String prefix = elementType.substring(0, elementType.indexOf(":"));
-						String name = elementType.substring(elementType.indexOf(":") + 1, elementType.length());
-						System.out.println("prefix: " + doc.getRootElement().getNamespace(prefix).getURI() + " name: "
-							+ name);
-						if(doc.getRootElement().getNamespace(prefix).getURI().equals(IntroduceConstants.BASEFAULTS_NAMESPACE)){
-							return true;
+					Element extensionEl = el.getChild("complexType",
+						org.jdom.Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE)).getChild("complexContent",
+						org.jdom.Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE)).getChild("extension",org.jdom.Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
+					if (extensionEl != null) {
+						String elementType = extensionEl.getAttributeValue("base");
+						if (elementType.indexOf(":") >= 0) {
+							String prefix = elementType.substring(0, elementType.indexOf(":"));
+							String name = elementType.substring(elementType.indexOf(":") + 1, elementType.length());
+							System.out.println("prefix: " + doc.getRootElement().getNamespace(prefix).getURI()
+								+ " name: " + name);
+							if (doc.getRootElement().getNamespace(prefix).getURI().equals(
+								IntroduceConstants.BASEFAULTS_NAMESPACE) && name.equals("BaseFaultType")) {
+								return true;
+							}
 						}
 					}
 					break;

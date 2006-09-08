@@ -34,9 +34,8 @@ public class ServicesJTree extends JTree {
 
 
 	public ServicesJTree(ServicesType services, ServiceInformation info) {
-		this.info = info;
 		setCellRenderer(new ServicesTreeRenderer());
-		setServices(services);
+		setServices(services, info);
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
@@ -88,12 +87,14 @@ public class ServicesJTree extends JTree {
 	}
 
 
-	public void setServices(ServicesType ns) {
+	public void setServices(ServicesType ns, ServiceInformation info) {
+		this.services = ns;
+		this.info = info;
+		
 		removeAllNodes(root);
 		((DefaultTreeModel) this.getModel()).setRoot(null);
 		this.root = new ServicesTypeTreeNode(info);
 		((DefaultTreeModel) this.getModel()).setRoot(this.root);
-		this.services = ns;
 		this.root.setServices(this.services, (DefaultTreeModel) this.getModel());
 		expandAll(true);
 	}

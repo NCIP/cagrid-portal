@@ -297,7 +297,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 	private void reInitializeGUI() throws Exception {
 		getNamespaceJTree().setNamespaces(info.getNamespaces());
-		getResourcesJTree().setServices(info.getServices());
+		getResourcesJTree().setServices(info.getServices(), info);
 		getMethodsTable().clearTable();
 		getMethodsTable().setMethods(info.getServices().getService(0));
 		getRpHolderPanel().reInitialize(info.getServices().getService(0).getResourcePropertiesList(),
@@ -1710,7 +1710,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 				public void focusGained(FocusEvent e) {
 					super.focusGained(e);
-					getResourcesJTree().setServices(info.getServices());
+					getResourcesJTree().setServices(info.getServices(), info);
 				}
 
 			});
