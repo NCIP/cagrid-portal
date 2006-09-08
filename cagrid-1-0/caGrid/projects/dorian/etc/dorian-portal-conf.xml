@@ -15,9 +15,9 @@
 	  </application>
 	  <components>
 	    	<component>
-	  		<title>Identity Federation</title>
+	  		<title>Grid Account Management</title>
 	  		<description>Identity Provider (IdP) Menu</description>
-	  		<class>gov.nih.nci.cagrid.dorian.ifs.portal.IFSMenu</class>
+	  		<class>gov.nih.nci.cagrid.dorian.ui.ifs.IFSMenu</class>
 	  		<icon>/applications-internet.png</icon>
 	  		<dimensions>
 	  			<width>300</width>
@@ -25,9 +25,9 @@
 	  		</dimensions>
 	  	</component>
 	  	<component>
-	  		<title>Identity Provider</title>
+	  		<title>Local Account Management</title>
 	  		<description>Identity Provider (IdP) Menu</description>
-	  		<class>gov.nih.nci.cagrid.dorian.idp.portal.IdPMenu</class>
+	  		<class>gov.nih.nci.cagrid.dorian.ui.idp.IdPMenu</class>
 	  		<icon>/system-users.png</icon>
 	  		<dimensions>
 	  			<width>250</width>
@@ -38,20 +38,20 @@
 	  </components>
 	  </grid-portal-config>
 	</resource>	
-	<resource name="DorianPortalConf" class="gov.nih.nci.cagrid.dorian.portal.DorianPortalConf">
+	<resource name="DorianPortalConf" class="gov.nih.nci.cagrid.dorian.ui.DorianPortalConf">
 		<dorian-portal-config>
 		<dorian-services>
 			<dorian-service>https://cagrid05.bmi.ohio-state.edu:8443/wsrf/services/cagrid/Dorian</dorian-service>
 			<dorian-service>https://localhost:8443/wsrf/services/cagrid/Dorian</dorian-service>
 		</dorian-services>
 		<idps>
-			<idp name="Dorian [cagrid05.bmi.ohio-state.edu]  IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ifs.portal.DorianIdPAuthenticationPanel">
+			<idp name="Dorian [cagrid05.bmi.ohio-state.edu]  IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ui.ifs.DorianIdPAuthenticationPanel">
 				<parameters>
 					<parameter name="serviceId" value="https://cagrid05.bmi.ohio-state.edu:8443/wsrf/services/cagrid/Dorian"/>
 				</parameters>
 			</idp>
-			<idp name="Ohio State University" authPanelClass="edu.osu.idp.portal.OSUIdPAuthenticationPanel"/>
-			<idp name="Dorian [localhost] IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ifs.portal.DorianIdPAuthenticationPanel">
+			<idp name="Ohio State University" authPanelClass="edu.osu.idp.ui.OSUIdPAuthenticationPanel"/>
+			<idp name="Dorian [localhost] IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ui.ifs.DorianIdPAuthenticationPanel">
 				<parameters>
 					<parameter name="serviceId" value="https://localhost:8443/wsrf/services/cagrid/Dorian"/>
 				</parameters>

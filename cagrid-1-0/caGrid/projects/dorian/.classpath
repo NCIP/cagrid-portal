@@ -2,10 +2,9 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="ext/resources/ui/gridca"/>
+	<classpathentry kind="src" path="resources/ui/dorian"/>
 	<classpathentry kind="src" path="test/resources"/>
 	<classpathentry kind="src" path="ext/resources/portal/common"/>
-	<classpathentry kind="src" path="resources/portal/dorian"/>
 	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="build/stubs-Dorian/src"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
@@ -62,9 +61,6 @@
 	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cagrid-opensaml-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
-	<classpathentry sourcepath="/caGrid-1.0-gts" kind="lib" path="ext/lib/GTS_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/GTS-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/GTS-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
@@ -98,5 +94,8 @@
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-stubs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -10,7 +10,9 @@
     -->
 	<property file="introduce.properties" />
 	<property name="introduce.ns.excludes" value="" />
+	<property name="jar.prefix" value="caGrid-1.0" />
 	<property name="service.name" value="${introduce.skeleton.service.name}" />
+	<property name="service.version" value="1.0" />
 	<property name="schema.path" value="${introduce.skeleton.service.name}" />
 	
 	<!-- Important directories and files -->
@@ -24,18 +26,18 @@
 	<property name="schema.dir" value="schema" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 	<!-- Post Introduce Edit-->
-	<property name="portal.jar.name" value="${service.name}-portal.jar" />
-	<property name="common.jar.name" value="${service.name}-common.jar" />
-	<property name="client.jar.name" value="${service.name}-client.jar" />
-	<property name="service.jar.name" value="${service.name}-service.jar" />
-	<property name="stubs.jar.name" value="${service.name}_stubs.jar" />
+	<property name="ui.jar.name" value="${jar.prefix}-${service.name}-${service.version}-ui.jar" />
+	<property name="common.jar.name" value="${jar.prefix}-${service.name}-${service.version}-common.jar" />
+	<property name="client.jar.name" value="${jar.prefix}-${service.name}-${service.version}-client.jar" />
+	<property name="service.jar.name" value="${jar.prefix}-${service.name}-${service.version}-service.jar" />
+	<property name="stubs.jar.name" value="${jar.prefix}-${service.name}-${service.version}-stubs.jar" />
 
 	<!-- Important test directories and files -->
 	<property name="test.dir" value="test" />
 	<property name="test.src.dir" value="${test.dir}/src" />
 	<property name="test.lib.dir" value="${test.dir}/lib" />
 	<property name="test.log.dir" value="test/logs" />
-	<property name="test.jar.name" value="${service.name}-tests.jar" />
+	<property name="test.jar.name" value="${jar.prefix}-${service.name}-${service.version}-tests.jar" />
 	<property name="ext.test.lib.dir" value="ext/test/lib" />
 	<property name="junit.results.dir" value="${test.log.dir}/junit" />
 	<property name="force.config.replace" value="false" />
@@ -276,11 +278,10 @@
 			<include name="**/client/**" />
 		</jar>
 		<!-- Post Introduce Edit-->
-		<jar jarfile="${build.lib.dir}/${portal.jar.name}" basedir="${build.dest}">
-			    <fileset dir="${build.dest}" includes="**/portal/**"/>
-			    <fileset dir="resources/portal/dorian"/>
+		<jar jarfile="${build.lib.dir}/${ui.jar.name}" basedir="${build.dest}">
+			    <fileset dir="${build.dest}" includes="**/ui/**"/>
+			    <fileset dir="resources/ui/dorian"/>
 			    <fileset dir="ext/resources/portal/common"/>
-			    <fileset dir="ext/resources/ui/gridca"/>
 		</jar>
 		
 		<jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
@@ -351,8 +352,8 @@
 		<import file="test/test.xml" />
 	
 	<!-- Post Introduce Edit-->
-	<target name="ui" description="Run the dorian portal" depends="checkGlobus">
-		<java classname="gov.nih.nci.cagrid.dorian.portal.DorianPortal" fork="yes">
+	<target name="ui" description="Run the dorian ui" depends="checkGlobus">
+		<java classname="gov.nih.nci.cagrid.dorian.ui.DorianPortal" fork="yes">
 			<jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
 			<classpath>
 				<pathelement location="${stubs.dest}" />
@@ -375,9 +376,6 @@
 					<exclude name="xml-apis.jar" />
 					<exclude name="xercesImpl.jar" />
 				</fileset>
-				<pathelement location="resources/portal/dorian" />
-				<pathelement location="ext/resources/portal/common" />
-				<pathelement location="ext/resources/ui/gridca" />
 			</classpath>
 		</java>
 	</target>

@@ -262,7 +262,6 @@
             <artifact refid="core.test.jars"/>
             <artifact refid="core.resources"/>
             <artifact refid="gridca.jars"/>
-            <artifact refid="gridca.resources"/>
             <artifact refid="mobius.jars"/>
             <artifact refid="opensaml.jars"/>
             <artifact refid="opensaml.endorsed"/>
@@ -287,7 +286,6 @@
             <artifact refid="core.test.jars"/>
             <artifact refid="core.resources"/>
             <artifact refid="gridca.jars"/>
-            <artifact refid="gridca.resources"/>
             <artifact refid="introduce.servicesecurity.jars"/>
             <artifact refid="security.metadata.jars"/>
         </resolveDependencies>
@@ -310,7 +308,6 @@
             <artifact refid="core.resources"/>
             <artifact refid="common.metadata.jars"/>
             <artifact refid="gridca.jars"/>
-            <artifact refid="gridca.resources"/>
             <artifact refid="mobius.jars"/>
             <artifact refid="introduce.servicesecurity.jars"/>
             <artifact refid="security.metadata.jars"/>
@@ -359,7 +356,6 @@
             <artifact refid="gme.globus.client.jars"/>
             <artifact refid="metadata.schemas"/>
             <artifact refid="gridca.jars"/>
-            <artifact refid="gridca.resources"/>
             <artifact refid="security.metadata.jars"/>
         </resolveDependencies>
         <resolveDependencies extdir="${projects.dir}/introduce/skeleton">

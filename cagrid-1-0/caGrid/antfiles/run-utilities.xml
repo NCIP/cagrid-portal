@@ -19,7 +19,7 @@
     </target>
 	
 	 <target name="gts" description="Run the GTS Administrative GUI" >
-	        <ant dir="${basedir}/projects/gts" antfile="build.xml" target="portal" inheritall="false" />
+	        <ant dir="${basedir}/projects/gts" antfile="build.xml" target="ui" inheritall="false" />
 	  </target>
 	
 	 <target name="syncWithTrustFabric" description="Syncs With Trust Fabric" >

@@ -17,7 +17,7 @@
 	    	<component>
 	  		<title>Grid Trust Management</title>
 	  		<description>Grid Trust Management Menu</description>
-	  		<class>gov.nih.nci.cagrid.gts.portal.GTSMenu</class>
+	  		<class>gov.nih.nci.cagrid.gts.ui.GTSMenu</class>
 	  		<icon>/system-software-update.png</icon>
 	  		<dimensions>
 	  			<width>250</width>
@@ -27,7 +27,7 @@
 	  </components>
 	  </grid-portal-config>
 	</resource>	
-	<resource name="GTSPortalConf" class="gov.nih.nci.cagrid.gts.portal.GTSPortalConf">
+	<resource name="GTSPortalConf" class="gov.nih.nci.cagrid.gts.ui.GTSUIConf">
 		<gts-portal-config>
 		<gts-services>
 			<gts-service>https://cagrid01.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GTS</gts-service>

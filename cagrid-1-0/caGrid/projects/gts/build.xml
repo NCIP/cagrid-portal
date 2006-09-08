@@ -10,7 +10,9 @@
     -->
     <property file="introduce.properties" />
     <property name="introduce.ns.excludes" value="" />
-    <property name="service.name" value="${introduce.skeleton.service.name}" />
+	<property name="jar.prefix" value="caGrid-1.0" />
+	<property name="service.name" value="${introduce.skeleton.service.name}" />
+	<property name="service.version" value="1.0" />
     <property name="schema.path" value="${introduce.skeleton.service.name}" />
 
     <!-- Important directories and files -->
@@ -20,18 +22,19 @@
     <property name="etc.dir" value="etc" />
     <property name="schema.dir" value="schema" />
     <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
-    <property name="common.jar.name" value="${service.name}-common.jar" />
-    <property name="client.jar.name" value="${service.name}-client.jar" />
-    <property name="portal.jar.name" value="${service.name}-portal.jar" />
-    <property name="service.jar.name" value="${service.name}-service.jar" />
-    <property name="stubs.jar.name" value="${service.name}_stubs.jar" />
+	
+    <property name="common.jar.name" value="${jar.prefix}-${service.name}-${service.version}-common.jar" />
+    <property name="client.jar.name" value="${jar.prefix}-${service.name}-${service.version}-client.jar" />
+    <property name="ui.jar.name" value="${jar.prefix}-${service.name}-${service.version}-ui.jar" />
+    <property name="service.jar.name" value="${jar.prefix}-${service.name}-${service.version}-service.jar" />
+    <property name="stubs.jar.name" value="${jar.prefix}-${service.name}-${service.version}-stubs.jar" />
 
     <!-- Important test directories and files -->
     <property name="test.dir" value="test" />
     <property name="test.src.dir" value="${test.dir}/src" />
     <property name="test.lib.dir" value="${test.dir}/lib" />
     <property name="test.log.dir" value="test/logs" />
-    <property name="test.jar.name" value="${service.name}-tests.jar" />
+    <property name="test.jar.name" value="${jar.prefix}-${service.name}-${service.version}-tests.jar" />
     <property name="ext.test.lib.dir" value="ext/test/lib" />
     <property name="junit.results.dir" value="${test.log.dir}/junit" />
     <property name="force.config.replace" value="false" />
@@ -266,8 +269,10 @@
         <jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
             <include name="**/service/**" />
         </jar>
-        <jar jarfile="${build.lib.dir}/${portal.jar.name}" basedir="${build.dest}">
-            <include name="**/portal/**" />
+        <jar jarfile="${build.lib.dir}/${ui.jar.name}" basedir="${build.dest}">
+            <include name="**/ui/**" />
+        	<fileset dir="resources/ui/gts" />
+        	<fileset dir="ext/resources/portal/common" />
         </jar>
         <jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
             <include name="**/*.xml" />
@@ -352,7 +357,7 @@
     </target>
 
     <!-- Post Introduce Edit-->
-    <target name="portal" description="Run the GTS portal" depends="checkGlobus">
+    <target name="ui" description="Run the GTS UI" depends="checkGlobus">
         <java classname="org.projectmobius.portal.GridPortal" fork="yes">
             <arg value="etc/gts-portal-conf.xml" />
             <classpath>
@@ -373,9 +378,6 @@
                     <exclude name="xml-apis.jar" />
                     <exclude name="xercesImpl.jar" />
                 </fileset>
-                <pathelement location="resources/portal/gts" />
-                <pathelement location="ext/resources/portal/common" />
-                <pathelement location="ext/resources/ui/gridca" />
             </classpath>
         </java>
     </target>

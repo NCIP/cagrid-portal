@@ -159,9 +159,9 @@
 		<artifact track="main" type="jars" id="gts.client.jars">
 			<antcall target="build-gts" />
 			<fileset dir="${projects.dir}/gts/build/lib">
-				<include name="GTS_stubs.jar" />
-				<include name="GTS-common.jar" />
-				<include name="GTS-client.jar" />
+				<include name="caGrid-*-GTS-*stubs.jar" />
+				<include name="caGrid-*-GTS-*common.jar" />
+				<include name="caGrid-*-GTS-*client.jar" />
 			</fileset>
 			<fileset dir="${projects.dir}/gts/lib">
 				<include name="*.jar" />
@@ -176,9 +176,9 @@
 		<artifact track="main" type="jars" id="syncgts.client.jars">
 			<antcall target="build-syncgts" />
 			<fileset dir="${projects.dir}/syncgts/build/lib">
-				<include name="SyncGTS_stubs.jar" />
-				<include name="SyncGTS-common.jar" />
-				<include name="SyncGTS-client.jar" />
+				<include name="caGrid-*-SyncGTS-*stubs.jar" />
+				<include name="caGrid-*-SyncGTS-*common.jar" />
+				<include name="caGrid-*-SyncGTS-*client.jar" />
 			</fileset>
 			<fileset dir="${projects.dir}/syncgts/lib">
 				<include name="*.jar" />
@@ -259,13 +259,13 @@
 			</fileset>
 		</artifact>
 
-
+<!--
 		<artifact track="main" type="resources" id="gridca.resources">
 			<fileset dir="${projects.dir}/gridca/resources">
 				<include name="**" />
 			</fileset>
 		</artifact>
-
+-->
 		<artifact track="main" type="jars" id="introduce.jars">
 			<antcall target="build-introduce" />
 			<fileset dir="${projects.dir}/introduce/build/jars">

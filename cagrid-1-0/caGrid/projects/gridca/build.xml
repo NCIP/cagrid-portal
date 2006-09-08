@@ -15,7 +15,7 @@ GSBT - Globus Service Build Tools
     -->
 	<property file="build.properties" />
 	<property file="${user.home}/build.properties" />
-    <property name="cagrid.jar.prefix" value="caGrid-1.0" />
+    <property name="jar.prefix" value="caGrid-1.0" />
     <property name="service.name" value="gridca" />
      <property name="service.version" value="1.0" />
 
@@ -46,7 +46,7 @@ GSBT - Globus Service Build Tools
 
 
 	<!-- Name of the JAR files to be generated -->
-	<property name="jar.name" value="${cagrid.jar.prefix}-${service.name}-${service.version}.jar" />
+	<property name="jar.name" value="${jar.prefix}-${service.name}-${service.version}.jar" />
 
 
 
@@ -145,7 +145,11 @@ GSBT - Globus Service Build Tools
 
 	<!-- Create a JAR file with the implementation classes -->
 	<target name="jar" depends="compile, compileTests">
-		<jar jarfile="${build.lib.dir}/${jar.name}" basedir="${build.dest}" />
+		 <jar jarfile="${build.lib.dir}/${jar.name}" basedir="${build.dest}">
+            <include name="**/gridca/**" />
+        	<fileset dir="resources/ui/gridca" />
+        	<fileset dir="ext/resources/portal/common" />
+        </jar>
 	</target>
 
 
