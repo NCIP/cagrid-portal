@@ -51,7 +51,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemUpdate;
-import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
+//import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.GroupAddFault;
@@ -97,7 +97,6 @@ public class GridGrouper {
 	private Group adminGroup;
 
 	private Log log;
-
 	public GridGrouper() throws GridGrouperRuntimeFault {
 		try {
 			log = LogFactory.getLog(this.getClass().getName());
@@ -136,7 +135,8 @@ public class GridGrouper {
 			throws GridGrouperRuntimeFault, StemNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject subject = SubjectUtils.getSubject(gridIdentity);
+			Subject subject = SubjectFinder
+			.findById(gridIdentity);
 			session = GrouperSession.start(subject);
 			StemDescriptor des = null;
 			Stem stem = StemFinder.findByName(session, stemId.getStemName());
@@ -176,7 +176,7 @@ public class GridGrouper {
 			GridGrouperRuntimeFault, StemNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject subject = SubjectUtils.getSubject(gridIdentity, true);
+			Subject subject = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subject);
 			StemDescriptor[] children = null;
 			Stem parent = StemFinder.findByName(session, parentStemId
@@ -227,7 +227,7 @@ public class GridGrouper {
 			GridGrouperRuntimeFault, StemNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject subject = SubjectUtils.getSubject(gridIdentity);
+			Subject subject = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subject);
 			StemDescriptor parent = null;
 			Stem child = StemFinder.findByName(session, childStemId
@@ -270,7 +270,7 @@ public class GridGrouper {
 			InsufficientPrivilegeFault, StemModifyFault {
 		GrouperSession session = null;
 		try {
-			Subject subject = SubjectUtils.getSubject(gridIdentity);
+			Subject subject = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subject);
 			StemDescriptor des = null;
 			Stem target = StemFinder.findByName(session, stem.getStemName());
@@ -328,7 +328,7 @@ public class GridGrouper {
 			throws RemoteException, GridGrouperRuntimeFault, StemNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject subject = SubjectUtils.getSubject(gridIdentity);
+			Subject subject = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subject);
 			Stem target = StemFinder.findByName(session, stem.getStemName());
 			Set subs = null;
@@ -392,10 +392,10 @@ public class GridGrouper {
 		GrouperSession session = null;
 		try {
 
-			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			Subject subj = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subj);
 			Stem target = StemFinder.findByName(session, stem.getStemName());
-			Set privs = target.getPrivs(SubjectUtils.getSubject(subject, true));
+			Set privs = target.getPrivs(SubjectFinder.findById(subject));
 			int size = 0;
 			if (privs != null) {
 				size = privs.size();
@@ -456,15 +456,15 @@ public class GridGrouper {
 			throws GridGrouperRuntimeFault, StemNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			Subject subj = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subj);
 			Stem target = StemFinder.findByName(session, stem.getStemName());
 			if (privilege == null) {
 				return false;
 			} else if (privilege.equals(StemPrivilegeType.create)) {
-				return target.hasCreate(SubjectUtils.getSubject(subject, true));
+				return target.hasCreate(SubjectFinder.findById(subject));
 			} else if (privilege.equals(StemPrivilegeType.stem)) {
-				return target.hasStem(SubjectUtils.getSubject(subject, true));
+				return target.hasStem(SubjectFinder.findById(subject));
 			} else {
 				return false;
 			}
@@ -505,10 +505,10 @@ public class GridGrouper {
 			GrantPrivilegeFault, InsufficientPrivilegeFault, SchemaFault {
 		GrouperSession session = null;
 		try {
-			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			Subject subj = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subj);
 			Stem target = StemFinder.findByName(session, stem.getStemName());
-			target.grantPriv(SubjectUtils.getSubject(subject), Privilege
+			target.grantPriv(SubjectFinder.findById(subject), Privilege
 					.getInstance(privilege.getValue()));
 		} catch (GrantPrivilegeException e) {
 			GrantPrivilegeFault fault = new GrantPrivilegeFault();
@@ -571,10 +571,10 @@ public class GridGrouper {
 			InsufficientPrivilegeFault, RevokePrivilegeFault, SchemaFault {
 		GrouperSession session = null;
 		try {
-			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			Subject subj = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subj);
 			Stem target = StemFinder.findByName(session, stem.getStemName());
-			target.revokePriv(SubjectUtils.getSubject(subject), Privilege
+			target.revokePriv(SubjectFinder.findById(subject), Privilege
 					.getInstance(privilege.getValue()));
 		} catch (RevokePrivilegeException e) {
 			RevokePrivilegeFault fault = new RevokePrivilegeFault();
@@ -637,7 +637,7 @@ public class GridGrouper {
 			StemAddFault, StemNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			Subject subj = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subj);
 			Stem target = StemFinder.findByName(session, stem.getStemName());
 			Stem child = target.addChildStem(extension, displayExtension);
@@ -692,7 +692,7 @@ public class GridGrouper {
 			StemDeleteFault, StemNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			Subject subj = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subj);
 			Stem target = StemFinder.findByName(session, stem.getStemName());
 			target.delete();
@@ -746,7 +746,7 @@ public class GridGrouper {
 			StemNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			Subject subj = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subj);
 			Stem target = StemFinder.findByName(session, stem.getStemName());
 
@@ -796,7 +796,7 @@ public class GridGrouper {
 			GridGrouperRuntimeFault, GroupAddFault, InsufficientPrivilegeFault {
 		GrouperSession session = null;
 		try {
-			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			Subject subj = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subj);
 			Stem target = StemFinder.findByName(session, stem.getStemName());
 			Group child = target.addChildGroup(extension, displayExtension);
@@ -850,7 +850,7 @@ public class GridGrouper {
 			throws GridGrouperRuntimeFault, GroupNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject subject = SubjectUtils.getSubject(gridIdentity);
+			Subject subject = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subject);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
 			return grouptoGroupDescriptor(grp);
@@ -887,7 +887,7 @@ public class GridGrouper {
 			GroupDeleteFault, InsufficientPrivilegeFault {
 		GrouperSession session = null;
 		try {
-			Subject subject = SubjectUtils.getSubject(gridIdentity);
+			Subject subject = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subject);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
 			grp.delete();
@@ -940,7 +940,7 @@ public class GridGrouper {
 			GroupModifyFault, InsufficientPrivilegeFault {
 		GrouperSession session = null;
 		try {
-			Subject subject = SubjectUtils.getSubject(gridIdentity);
+			Subject subject = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subject);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
 			if ((update.getDescription() != null)
@@ -1006,7 +1006,7 @@ public class GridGrouper {
 			InsufficientPrivilegeFault, MemberAddFault {
 		GrouperSession session = null;
 		try {
-			Subject caller = SubjectUtils.getSubject(gridIdentity);
+			Subject caller = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(caller);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
 			grp.addMember(SubjectFinder.findById(subject));
@@ -1057,7 +1057,7 @@ public class GridGrouper {
 			GridGrouperRuntimeFault, GroupNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject caller = SubjectUtils.getSubject(gridIdentity);
+			Subject caller = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(caller);
 			Group target = GroupFinder
 					.findByName(session, group.getGroupName());
@@ -1117,7 +1117,7 @@ public class GridGrouper {
 			GroupNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject caller = SubjectUtils.getSubject(gridIdentity);
+			Subject caller = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(caller);
 			Group target = GroupFinder
 					.findByName(session, group.getGroupName());
@@ -1168,7 +1168,7 @@ public class GridGrouper {
 			GridGrouperRuntimeFault, GroupNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject caller = SubjectUtils.getSubject(gridIdentity);
+			Subject caller = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(caller);
 			Group target = GroupFinder
 					.findByName(session, group.getGroupName());
@@ -1319,7 +1319,7 @@ public class GridGrouper {
 			InsufficientPrivilegeFault, GroupNotFoundFault, MemberDeleteFault {
 		GrouperSession session = null;
 		try {
-			Subject caller = SubjectUtils.getSubject(gridIdentity);
+			Subject caller = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(caller);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
 			grp.deleteMember(SubjectFinder.findById(member));
@@ -1373,7 +1373,7 @@ public class GridGrouper {
 			InsufficientPrivilegeFault {
 		GrouperSession session = null;
 		try {
-			Subject caller = SubjectUtils.getSubject(gridIdentity);
+			Subject caller = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(caller);
 			Group grp = GroupFinder.findByName(session, composite
 					.getGroupName());
@@ -1441,7 +1441,7 @@ public class GridGrouper {
 			GroupNotFoundFault, InsufficientPrivilegeFault, MemberDeleteFault {
 		GrouperSession session = null;
 		try {
-			Subject caller = SubjectUtils.getSubject(gridIdentity);
+			Subject caller = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(caller);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
 			grp.deleteCompositeMember();
@@ -1495,10 +1495,10 @@ public class GridGrouper {
 			GrantPrivilegeFault, InsufficientPrivilegeFault {
 		GrouperSession session = null;
 		try {
-			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			Subject subj = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subj);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
-			grp.grantPriv(SubjectUtils.getSubject(subject, true), Privilege
+			grp.grantPriv(SubjectFinder.findById(subject), Privilege
 					.getInstance(privilege.getValue()));
 		} catch (GroupNotFoundException e) {
 			GroupNotFoundFault fault = new GroupNotFoundFault();
@@ -1555,10 +1555,10 @@ public class GridGrouper {
 			InsufficientPrivilegeFault, SchemaFault {
 		GrouperSession session = null;
 		try {
-			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			Subject subj = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subj);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
-			grp.revokePriv(SubjectUtils.getSubject(subject, true), Privilege
+			grp.revokePriv(SubjectFinder.findById(subject), Privilege
 					.getInstance(privilege.getValue()));
 		} catch (GroupNotFoundException e) {
 			GroupNotFoundFault fault = new GroupNotFoundFault();
@@ -1613,7 +1613,7 @@ public class GridGrouper {
 			throws RemoteException, GridGrouperRuntimeFault, GroupNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject subject = SubjectUtils.getSubject(gridIdentity);
+			Subject subject = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subject);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
 			Set subs = null;
@@ -1685,10 +1685,10 @@ public class GridGrouper {
 		GrouperSession session = null;
 		try {
 
-			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			Subject subj = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subj);
 			Group grp = GroupFinder.findByName(session, group.getGroupName());
-			Set privs = grp.getPrivs(SubjectUtils.getSubject(subject, true));
+			Set privs = grp.getPrivs(SubjectFinder.findById(subject));
 			int size = 0;
 			if (privs != null) {
 				size = privs.size();
@@ -1749,24 +1749,24 @@ public class GridGrouper {
 			throws GridGrouperRuntimeFault, GroupNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject subj = SubjectUtils.getSubject(gridIdentity);
+			Subject subj = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subj);
 			Group target = GroupFinder
 					.findByName(session, group.getGroupName());
 			if (privilege == null) {
 				return false;
 			} else if (privilege.equals(GroupPrivilegeType.admin)) {
-				return target.hasAdmin(SubjectUtils.getSubject(subject, true));
+				return target.hasAdmin(SubjectFinder.findById(subject));
 			} else if (privilege.equals(GroupPrivilegeType.optin)) {
-				return target.hasOptin(SubjectUtils.getSubject(subject, true));
+				return target.hasOptin(SubjectFinder.findById(subject));
 			} else if (privilege.equals(GroupPrivilegeType.optout)) {
-				return target.hasOptout(SubjectUtils.getSubject(subject, true));
+				return target.hasOptout(SubjectFinder.findById(subject));
 			} else if (privilege.equals(GroupPrivilegeType.read)) {
-				return target.hasRead(SubjectUtils.getSubject(subject, true));
+				return target.hasRead(SubjectFinder.findById(subject));
 			} else if (privilege.equals(GroupPrivilegeType.update)) {
-				return target.hasUpdate(SubjectUtils.getSubject(subject, true));
+				return target.hasUpdate(SubjectFinder.findById(subject));
 			} else if (privilege.equals(GroupPrivilegeType.view)) {
-				return target.hasView(SubjectUtils.getSubject(subject, true));
+				return target.hasView(SubjectFinder.findById(subject));
 			} else {
 				return false;
 			}
