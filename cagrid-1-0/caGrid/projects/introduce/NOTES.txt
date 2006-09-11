@@ -2,6 +2,8 @@ NOTES:
 Exceptions will now be in the <serviceNamespace>.stubs.types package and no the <serviceNamespace>.stubs packages
 
 To Do:
+There is a bug when making method "newMethod" and then making another method named "newMethod"
+
 Generalized way to get resource properties from inside your service.
 
 the implbase constructor throws RemoteException.  this means that the impl constructor MUST throw RemoteException, which means that you can't have a default constructor.  Can you remove the throw from the implbase?
