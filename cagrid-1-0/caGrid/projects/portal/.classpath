@@ -69,9 +69,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
-	<classpathentry kind="lib" path="ext/lib/SyncGTS_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/SyncGTS-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/SyncGTS-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-discovery.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
@@ -79,5 +76,16 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="lib" path="test/lib/spring-mock.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-SyncGTS-1.0-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-SyncGTS-1.0-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-SyncGTS-1.0-stubs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
