@@ -27,11 +27,11 @@ import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
+import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -84,7 +84,16 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		System.out.println("Copying schemas to " + schemaDir);
 		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
 			+ File.separator + "schema" + File.separator + "Data");
-		List schemaFiles = Utils.recursiveListFiles(extensionSchemaDir, new FileFilters.XSDFileFilter());
+		List schemaFiles = Utils.recursiveListFiles(extensionSchemaDir, new FileFilter() {
+			public boolean accept(File pathname) {
+				if (pathname.isDirectory() || pathname.getName().endsWith(".xsd")) {
+					return !pathname.getName().equals(WsEnumConstants.ENUMERATION_WSDL_NAME) && 
+					!pathname.getName().equals(WsEnumConstants.ENUMERATION_XSD_NAME) &&
+					!pathname.getName().equals(WsEnumConstants.ADDRESSING_XSD_NAME);
+				}
+				return false;
+			}
+		});
 		// also copy the WSDL for data services
 		// schemaFiles.add(new File(getWsdlFileName(props)));
 		schemaFiles.add(new File(extensionSchemaDir + File.separator + "DataService.wsdl"));
@@ -95,11 +104,6 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 					extensionSchemaDir.getAbsolutePath().length() + File.separator.length());
 				File schemaOut = new File(schemaDir + File.separator + subname);
 				Utils.copyFile(schemaFile, schemaOut);
-				/*
-				String subname = schemaFile.getAbsolutePath().substring(
-					extensionSchemaDir.getAbsolutePath().length() + File.separator.length());
-				copySchema(subname, schemaDir);
-				*/
 			}
 		} catch (Exception ex) {
 			throw new CreationExtensionException("Error copying data service schemas: " + ex.getMessage(), ex);

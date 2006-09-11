@@ -18,6 +18,11 @@ public class WsEnumConstants {
 	// package name for generated beans of WS-Enumeration
 	public static final String ENUMERATION_PACKAGE_NAME = "org.xmlsoap.schemas.ws._2004._09.enumeration";
 	
+	// schema names
+	public static final String ENUMERATION_WSDL_NAME = "enumeration.wsdl";
+	public static final String ENUMERATION_XSD_NAME = "enumeration.xsd";
+	public static final String ADDRESSING_XSD_NAME = "addressing.xsd";
+	
 	// WSDL port type
 	public static final String PORT_TYPE_NAME = "DataSource";
 	

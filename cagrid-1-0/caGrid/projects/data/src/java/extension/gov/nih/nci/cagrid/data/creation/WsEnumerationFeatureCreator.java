@@ -128,9 +128,17 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 			+ File.separator + "schema");
 		File wsdlFile = new File(extensionSchemaDir.getAbsolutePath() 
 			+ File.separator + "Data" + File.separator + "EnumerationQuery.wsdl");
+		File enumXsdFile = new File(extensionSchemaDir.getAbsolutePath()
+			+ File.separator + "Data" + File.separator + WsEnumConstants.ENUMERATION_XSD_NAME);
+		File addressingXsdFile = new File(extensionSchemaDir.getAbsolutePath()
+			+ File.separator + "Data" + File.separator + WsEnumConstants.ADDRESSING_XSD_NAME);
 		File wsdlOutFile = new File(schemaDir + File.separator + wsdlFile.getName());
+		File enumXsdOutFile = new File(schemaDir + File.separator + enumXsdFile.getName());
+		File addressingXsdOutFile = new File(schemaDir + File.separator + addressingXsdFile.getName());
 		try {
 			Utils.copyFile(wsdlFile, wsdlOutFile);
+			Utils.copyFile(enumXsdFile, enumXsdOutFile);
+			Utils.copyFile(addressingXsdFile, addressingXsdOutFile);
 		} catch (Exception ex) {
 			throw new CreationExtensionException("Error copying data service schemas: " + ex.getMessage(), ex);
 		}
