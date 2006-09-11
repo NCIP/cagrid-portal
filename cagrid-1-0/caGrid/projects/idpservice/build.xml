@@ -117,10 +117,17 @@
                 <include name="wsrf/**/*" />
                 <include name="ws/**/*" />
             </fileset>
+        	
             <fileset dir="${schema.dir}" casesensitive="yes">
                 <include name="**" />
             </fileset>
+        	
         </copy>
+    	<copy todir="${schema.dest}/${service.name}">
+    		<fileset dir="ext/lib">
+               <include name="*.xsd" />
+            </fileset>
+    	</copy>
 
         <!-- Creates etc.dir in case it doesn't exist. Has no effect if dir already exists -->
         <mkdir dir="${etc.dir}" />

@@ -4,12 +4,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="lib" path="lib/ant-contrib.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-core-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-introduce-security-client-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-introduce-security-common-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-introduce-security-service-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-introduce-security-stubs-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-introduce-security-tests-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
@@ -81,10 +75,26 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
 	<classpathentry sourcepath="/AXIS_HOME" kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/gridca.jar"/>
-	<classpathentry kind="lib" path="ext/lib/cagrid-opensaml-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-3.1.11-bin.jar"/>
 	<classpathentry kind="lib" path="lib/csm_ext.jar"/>
-	<classpathentry kind="lib" path="ext/lib/Dorian-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="ext/lib/cagrid-opensaml-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-ui.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-tests.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
