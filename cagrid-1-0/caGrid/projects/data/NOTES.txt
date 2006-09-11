@@ -37,6 +37,7 @@ TODO:
 27[D]: Have DS extension add type mappings for SemanticMetadata / DomainModel stuff to the server-config.wsdd and client-config.wsdd of created services
 28[D]: Provide configuration to turn on / off validation for both CQL syntax and domain model conformance.
 29[ ]: Add available types to wsdl under some well defined name as an xsd:choice of available types
+30[I]: Determine if data services should expose additional metadata describing (for example) CQL version, support for ws-enum / bdt / identifier resolution, backend data source info, etc.
 
 I = In Progress
 D = Done
