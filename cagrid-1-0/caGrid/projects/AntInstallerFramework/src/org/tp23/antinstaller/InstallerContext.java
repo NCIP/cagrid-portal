@@ -40,7 +40,7 @@ import org.tp23.antinstaller.runtime.exe.AntLauncherFilter;
  * exist for the duration of the Install screens and the runing of
  * the Ant Script. </p>
  * @author Paul Hinds
- * @version $Id: InstallerContext.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: InstallerContext.java,v 1.2 2006-09-11 02:17:21 kumarvi Exp $
  */
 public class InstallerContext {
 
@@ -65,7 +65,14 @@ public class InstallerContext {
 	 */
 	public static final String CUSTOM_PREFIX = "custom.";
 	
+	public static final String GRID_ENV_PREFIX ="gridenv.";
+	
 	public static final String DOES_NOT_EXIST = "doesnotexist";
+	
+	public static final String GRID_ENV_PROPERTIES_FILE_NAME=".gridenv.properties";
+	
+	
+	
 	
 	/**
 	 * End of addition by kumarvi
@@ -155,6 +162,7 @@ public class InstallerContext {
 		return new Properties();
 	}
 	
+	
 	public  static Properties getCustomProperties(){
 		System.out.println("Inside the method now !!");
 		Properties prosTobeReturned = new Properties();
@@ -163,12 +171,16 @@ public class InstallerContext {
 		File file = getLatestInstallDir();
 		File resourcesFolder = new File(file,"resources");
 		
+		
 		System.out.println("File Path"+resourcesFolder.getAbsolutePath());
+		if(!resourcesFolder.exists()){
+			return prosTobeReturned;
+		}
 		FileFilter ff = new PropertyFileFilter();
 		File[] files = resourcesFolder.listFiles(ff);
 		System.out.println("Size of property files:"+files.length);
 		if((files.length<1)){
-			System.out.println("Returning without loading the property !");
+			//System.out.println("Returning without loading the property !");
 			return prosTobeReturned;
 		}
 		File propertyFile = files[0];
@@ -185,7 +197,7 @@ public class InstallerContext {
 		File fileInUserHome = new File(userHome,propertyFileName);
 		boolean fileInUserHomeExist = fileInUserHome.exists();
 		
-		System.out.println("Property file exist ?"+fileInUserHomeExist);
+		//System.out.println("Property file exist ?"+fileInUserHomeExist);
 		/**
 		 * Now let us see which file should we use to load the properties
 		 */
@@ -196,24 +208,24 @@ public class InstallerContext {
 			Properties p1 = new Properties();
 			Properties p2 = new Properties();
 			p1.load(fis_UserHomePropFile);
-			System.out.println("p1 Size:"+p1.keySet().size());
-			System.out.println("Frpm p1:");
+			//System.out.println("p1 Size:"+p1.keySet().size());
+			//System.out.println("Frpm p1:");
 			p1.list(System.out);
 			p2.load(fis_resourcePropFile);
-			System.out.println("p2 Size:"+p2.keySet().size());
-			System.out.println("Frpm p2:");
+			//System.out.println("p2 Size:"+p2.keySet().size());
+			//System.out.println("Frpm p2:");
 			p2.list(System.out);
 			
 			if(p1.keySet().equals(p2.keySet())){
 				//Nothing changed so get the prop from user dir
-				System.out.println("loading from user home");
+				//System.out.println("loading from user home");
 				fis_UserHomePropFile = new FileInputStream(fileInUserHome);
 				props.load(fis_UserHomePropFile);
 			}else{
-				System.out.println("loading from resource home");
+				//System.out.println("loading from resource home");
 				fis_resourcePropFile = new FileInputStream(propertyFile);
 				props.load(fis_resourcePropFile);
-				System.out.println("Right after lolad Size of key set:"+props.keySet().size());
+				//System.out.println("Right after lolad Size of key set:"+props.keySet().size());
 			}
 			
 			}catch(Exception ex){
@@ -222,7 +234,7 @@ public class InstallerContext {
 			
 		}else{
 			try{
-				System.out.println("Should be called when file does not exist in user  home");
+				//System.out.println("Should be called when file does not exist in user  home");
 				FileInputStream fis_resourcePropFile = new FileInputStream(propertyFile);
 				props.load(fis_resourcePropFile);
 			}catch(Exception ex){
@@ -231,12 +243,12 @@ public class InstallerContext {
 		}
 		
 		Iterator iter = props.keySet().iterator();
-		System.out.println("Size of key set:"+props.keySet().size());
+		//System.out.println("Size of key set:"+props.keySet().size());
 		while (iter.hasNext()) {
 			Object key = (Object)iter.next();
 			
 			prosTobeReturned.put(CUSTOM_PREFIX+key.toString(),props.get(key));
-			System.out.println("Let us see:"+props.get(key));
+			//System.out.println("Let us see:"+props.get(key));
 		}
 		
 		
@@ -280,6 +292,85 @@ public class InstallerContext {
 		}
 		
 		return fileName;
+	}
+	
+	public static Properties getGridEnviornementProperties(){
+		Properties props = new Properties();
+		/**
+		 * First check if the file exist in user home
+		 * If the file exist in user home then load the property file
+		 * from this file and return.
+		 * 
+		 * If this file does not exist in user home then load
+		 * the properties from resource folder. (gridenv.hiddenproperties)
+		 */
+		
+			String userHome = System.getProperty("user.home");
+		
+			File fileInUserHome = new File(userHome,GRID_ENV_PROPERTIES_FILE_NAME);
+			boolean fileInUserHomeExist = fileInUserHome.exists();
+			if(fileInUserHomeExist){
+				props= loadGridEnvProperties(fileInUserHome);
+			}else{
+				props = initGridEnvProperties();
+			}
+			
+		return props;
+	}
+	
+	private static Properties loadGridEnvProperties(File propFile){
+		Properties props = new Properties();
+		Properties propsToBeReturned = new Properties();
+		try{
+			FileInputStream fis = new FileInputStream(propFile);
+			props.load(fis);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
+		Iterator iter = props.keySet().iterator();
+		//System.out.println("Size of key set:"+props.keySet().size());
+		while (iter.hasNext()) {
+			Object key = (Object)iter.next();
+			
+			propsToBeReturned.put(GRID_ENV_PREFIX+key.toString(),props.get(key));
+			//System.out.println("Let us see:"+props.get(key));
+		}
+		return propsToBeReturned;
+	}
+	
+	private static Properties initGridEnvProperties(){
+		/**
+		 * Init the properties from this class only.
+		 */
+		Properties props = new Properties();
+		
+		String catalina_home = System.getenv("CATALINA_HOME");
+		String globus_location = System.getenv("GLOBUS_LOCATION");
+		
+		if(catalina_home==null){
+			props.put(GRID_ENV_PREFIX+"tomcat.exist", "false");
+		}else{
+			props.put(GRID_ENV_PREFIX+"tomcat.exist","true");
+			props.put(GRID_ENV_PREFIX+"CATALINA_HOME", catalina_home);
+		}
+		
+		if(globus_location==null){
+			props.put(GRID_ENV_PREFIX+"globus.exist", "false");
+		}else{
+			props.put(GRID_ENV_PREFIX+"globus.exist","true");
+			props.put(GRID_ENV_PREFIX+"GLOBUS_LOCATION",globus_location);
+		}
+		
+		props.put(GRID_ENV_PREFIX+"mysql.exist", "");
+		props.put(GRID_ENV_PREFIX+"mysql.user.name", "root");
+		props.put(GRID_ENV_PREFIX+"mysql.user.password","");
+		props.put(GRID_ENV_PREFIX+"mysql.host", "localhost");
+		props.put(GRID_ENV_PREFIX+"mysql.home","");
+		
+		
+		
+		return props;
 	}
 	
 
