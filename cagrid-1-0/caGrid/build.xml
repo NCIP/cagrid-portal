@@ -39,7 +39,7 @@
     <!-- ================================================================================ -->
     <!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
     <property name="projects.list"
-              value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, bulkDataTransfer"/>
+              value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, idpservice, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, bulkDataTransfer"/>
     <!-- ================================================================================ -->
     <!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
     <!-- ================================================================================ -->
@@ -248,6 +248,8 @@
         </resolveDependencies>
         <ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="all"/>
     </target>
+	
+
 
 
     <!-- =============================================================== -->
@@ -341,6 +343,17 @@
         <ant dir="${projects.dir}/syncgts" inheritAll="false" antfile="build.xml" target="all"/>
     </target>
 
+	<!-- =============================================================== -->
+	<!-- IdP Service:                                                        -->
+	<!-- =============================================================== -->
+	<target name="build-idpservice" depends="prepare" description="Builds the ipdservice project">
+	    <resolveDependencies extdir="${projects.dir}/idpservice/ext">
+	    	<artifact refid="dorian.jars"/>
+	    	<artifact refid="gridca.jars"/>
+	    	<artifact refid="opensaml.jars"/>
+	    </resolveDependencies>
+	    <ant dir="${projects.dir}/idpservice" inheritAll="false" antfile="build.xml" target="all"/>
+	</target>	
 
     <!-- =============================================================== -->
     <!-- INTRODUCE:                                                      -->
