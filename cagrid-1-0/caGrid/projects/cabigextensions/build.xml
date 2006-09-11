@@ -45,6 +45,8 @@
 
 	<fileset dir="${ext.schema.dir}" id="cagrid_metadata.schema.fileset">
 		<include name="**/*.xsd" />
+		<exclude name="*.xsd" />
+		<exclude name="*.wsdl" />
 	</fileset>
 
 	<fileset dir="${ext.schema.dir}" id="cagrid_wsEnum.schema.fileset">
