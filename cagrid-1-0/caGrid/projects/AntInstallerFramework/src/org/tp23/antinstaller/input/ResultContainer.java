@@ -30,7 +30,7 @@ import org.tp23.antinstaller.InstallerContext;
  * obtaining default values containing ${prop.name}/blah syntax </p>
  * @todo   Ensure in the validator (and Docs) that developers only add ${refs} for properties set on earlier pages
  * @author Paul Hinds
- * @version $Id: ResultContainer.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: ResultContainer.java,v 1.2 2006-09-11 02:17:46 kumarvi Exp $
  */
 public class ResultContainer {
 
@@ -40,10 +40,15 @@ public class ResultContainer {
 	 * Added by kumarvi
 	 */
 	private Properties customEnviornment;
+	private Properties gridEnviornment;
 	private File installRoot;
 
 	public ResultContainer() {
 		customEnviornment = InstallerContext.getCustomProperties();
+		gridEnviornment = InstallerContext.getGridEnviornementProperties();
+		
+		System.out.println("Grid Properties:$$$$$$$$$$$$$$$$");
+		gridEnviornment.list(System.out);
 	}
 
 	/**
@@ -80,6 +85,7 @@ public class ResultContainer {
 	 * @return String
 	 */
 	public String getDefaultValue(String defaultString) {
+		
 		if(defaultString==null)return null;
 		
 		char[] characters = defaultString.toCharArray();
@@ -124,6 +130,7 @@ public class ResultContainer {
 			else propertyNameBuffer.append(c);
 		}
 		if(propertyNameBuffer.length()!=0)result.append(propertyNameBuffer.toString());
+		System.out.println("Value check key:"+defaultString+"="+result.toString());
 		return result.toString();
 	}
 	
@@ -172,6 +179,10 @@ public class ResultContainer {
 		if(value == null && key.startsWith(InstallerContext.CUSTOM_PREFIX))
 		{
 			value = customEnviornment.getProperty(key);
+		}
+		if(value == null && key.startsWith(InstallerContext.GRID_ENV_PREFIX))
+		{
+			value = gridEnviornment.getProperty(key);
 		}
 		if (value != null) {
 			result.append(value);
