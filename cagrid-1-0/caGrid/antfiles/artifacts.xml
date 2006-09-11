@@ -155,6 +155,12 @@
 				<include name="*.jar" />
 			</fileset>
 		</artifact>
+		<artifact track="main" type="jars" id="dorian.schemas">
+			<antcall target="build-dorian" />
+			<fileset dir="${projects.dir}/dorian/build/schema/Dorian">
+				<include name="*.xsd" />
+			</fileset>
+		</artifact>
 
 		<artifact track="main" type="jars" id="gts.client.jars">
 			<antcall target="build-gts" />
