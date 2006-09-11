@@ -348,8 +348,11 @@
 	<!-- =============================================================== -->
 	<target name="build-idpservice" depends="prepare" description="Builds the ipdservice project">
 	    <resolveDependencies extdir="${projects.dir}/idpservice/ext">
+	    	<artifact refid="core.jars"/>
 	    	<artifact refid="dorian.jars"/>
+	    	<artifact refid="dorian.schemas"/>
 	    	<artifact refid="gridca.jars"/>
+	    	<artifact refid="introduce.servicesecurity.jars"/>
 	    	<artifact refid="opensaml.jars"/>
 	    </resolveDependencies>
 	    <ant dir="${projects.dir}/idpservice" inheritAll="false" antfile="build.xml" target="all"/>
