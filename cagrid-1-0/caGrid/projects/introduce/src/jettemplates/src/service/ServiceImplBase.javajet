@@ -13,6 +13,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 package <%=info.getService().getPackageName()%>.service;
 
 import <%=info.getService().getPackageName()%>.service.globus.resource.BaseResource;
+import <%=info.getService().getPackageName()%>.service.ServiceConfiguration;
 
 import java.rmi.RemoteException;
 
