@@ -140,16 +140,16 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 							ServiceExtensionDescriptionType edt = ExtensionsLoader.getInstance()
 								.getServiceExtensionByDisplayName((String) extensions.get(i));
 							JDialog extDialog = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
-								.getCreationUIDialog(edt.getName(), info);
+								.getCreationUIDialog(PortalResourceManager.getInstance().getGridPortal(),
+									edt.getName(), info);
 							if (extDialog != null) {
 								PortalUtils.centerWindow(extDialog);
 								extDialog.setVisible(true);
 							}
 						}
 
-						Utils.serializeDocument(dir
-						+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE, introService,
-							IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+						Utils.serializeDocument(dir + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
+							introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
 						setProgressText("Invoking post creation processes...");
 						cmd = CommonTools.getAntSkeletonPostCreationCommand(".", serviceName, dirName, packageName,

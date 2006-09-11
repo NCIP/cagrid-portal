@@ -5,16 +5,18 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
+import java.awt.Frame;
+
 import javax.swing.JDialog;
 
 public abstract class CreationExtensionUIDialog extends JDialog {
 	private ServiceExtensionDescriptionType description;
 	private ServiceInformation serviceInfo;
 	
-	public CreationExtensionUIDialog(ServiceExtensionDescriptionType desc, ServiceInformation info) {
+	public CreationExtensionUIDialog(Frame frame, ServiceExtensionDescriptionType desc, ServiceInformation info) {
+		super(frame,true);
 		this.description = desc;
 		this.serviceInfo = info;
-		this.setModal(true);
 	}
 	
 	

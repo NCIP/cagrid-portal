@@ -1,6 +1,8 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service" class="ServiceImplBaseTemplate" imports="gov.nih.nci.cagrid.introduce.beans.service.*" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service" class="ServiceImplBaseTemplate" 
+imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.*" %>
 <% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
    String serviceName = info.getService().getName();
+   ResourcePropertiesListType metadataList = info.getService().getResourcePropertiesList();
    ServiceType baseService = info.getServices().getService(0);
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
    String modifiedServiceName = serviceName;
@@ -10,16 +12,21 @@
 %>
 package <%=info.getService().getPackageName()%>.service;
 
+import <%=info.getService().getPackageName()%>.service.globus.resource.BaseResource;
+
 import java.rmi.RemoteException;
 
-import <%=baseService.getPackageName()%>.service.ServiceConfiguration;
-
 import javax.naming.InitialContext;
+import javax.xml.namespace.QName;
 
 import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
+import org.globus.wsrf.ResourceContext;
+import org.globus.wsrf.ResourceContextException;
+import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceHome;
-
+import org.globus.wsrf.ResourceProperty;
+import org.globus.wsrf.ResourcePropertySet;
 /** 
  *  TODO:DOCUMENT ME
  * 
@@ -69,6 +76,51 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 
 		return resourceHome;
 	}
+	
+	<%if(info.getService().getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE) && metadataList!=null && metadataList.getResourceProperty()!=null){
+		for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
+			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
+			SchemaInformation schemaInformation = CommonTools.getSchemaInformation(info.getNamespaces(),metadata.getQName());
+			String name=CommonTools.getResourcePropertyVariableName(metadataList, i);		
+	%>
+	
+	
+	protected <%=schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName()%> get<%=TemplateUtils.upperCaseFirstCharacter(name)%>MD(){
+		BaseResource serviceBaseResource;
+		try {
+			serviceBaseResource = (BaseResource)ResourceContext.getResourceContext().getResource();
+		} catch (ResourceContextException e) {
+			return null;
+		} catch (ResourceException e) {
+			return null;
+		}
+		return serviceBaseResource.get<%=TemplateUtils.upperCaseFirstCharacter(name)%>MD();
+	}
+
+	<%	}
+	}%>	
+	
+	<%if(info.getService().getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_MAIN_RESOURCE)){%>
+	protected Object getMetadata(QName metadataQName) {
+		BaseResource serviceBaseResource = null;
+		try {
+			serviceBaseResource = (BaseResource) ResourceContext.getResourceContext().getResource();
+		} catch (ResourceContextException e) {
+			return null;
+		} catch (ResourceException e) {
+			return null;
+		}
+		ResourcePropertySet resourcePropertySet = serviceBaseResource.getResourcePropertySet();
+		if (resourcePropertySet != null) {
+			ResourceProperty property = resourcePropertySet.get(metadataQName);
+			if (property != null) {
+				return property.get(0);
+			}
+
+		}
+		return null;
+	}
+	<%}%>
 
 
 }

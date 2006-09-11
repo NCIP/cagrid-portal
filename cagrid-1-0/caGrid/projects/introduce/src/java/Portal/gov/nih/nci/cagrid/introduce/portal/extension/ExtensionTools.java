@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
+import java.awt.Frame;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -21,16 +22,16 @@ import org.jdom.Element;
 
 
 public class ExtensionTools {
-	public static CreationExtensionUIDialog getCreationUIDialog(String extensionName,
+	public static CreationExtensionUIDialog getCreationUIDialog(Frame owner, String extensionName,
 		gov.nih.nci.cagrid.introduce.info.ServiceInformation info) throws Exception {
 		ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance().getServiceExtension(
 			extensionName);
 		if (extensionDesc != null && extensionDesc.getCreationUIDialog() != null
 			&& !extensionDesc.getCreationUIDialog().equals("")) {
 			Class c = Class.forName(extensionDesc.getCreationUIDialog());
-			Constructor con = c.getConstructor(new Class[]{ServiceExtensionDescriptionType.class,
+			Constructor con = c.getConstructor(new Class[]{Frame.class, ServiceExtensionDescriptionType.class,
 					ServiceInformation.class});
-			Object obj = con.newInstance(new Object[]{extensionDesc, info});
+			Object obj = con.newInstance(new Object[]{owner, extensionDesc, info});
 			return (CreationExtensionUIDialog) obj;
 		}
 		return null;
