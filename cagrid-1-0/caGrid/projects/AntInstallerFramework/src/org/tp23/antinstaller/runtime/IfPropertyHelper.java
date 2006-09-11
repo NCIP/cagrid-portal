@@ -31,7 +31,7 @@ import org.tp23.antinstaller.page.SimpleInputPage;
  * of the configuration files would be impared.
  * REF: 1145496
  * @author Paul Hinds
- * @version $Id: IfPropertyHelper.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: IfPropertyHelper.java,v 1.2 2006-09-11 02:18:07 kumarvi Exp $
  */
 public class IfPropertyHelper {
 	
@@ -46,10 +46,12 @@ public class IfPropertyHelper {
 	 * @return boolean true to SHOW the page
 	 */
 	public boolean ifProperty(Page next){
+		System.out.println("IFProperty1:"+"called!!!!!!!");
 		// show page if ifProperty is specified and property is correct
 		if(next instanceof SimpleInputPage){
 			SimpleInputPage conditionalPage = (SimpleInputPage) next;
 			String ifProperty = conditionalPage.getIfProperty();
+			System.out.println("IFProperty2:"+ifProperty);
 			if (ifProperty != null) {
 				String propExpectedValue = null;
 				
@@ -98,6 +100,7 @@ public class IfPropertyHelper {
 	}
 	
 	private boolean ifProperty(String ifProperty, int operatorIndex, String operator){
+		System.out.println("IFProperty:"+ifProperty);
 		int operatorLen = operator.length();
 		String propKey = ifProperty.substring(0, operatorIndex);
 		String propExpectedValue = ifProperty.substring(operatorIndex + operatorLen);
