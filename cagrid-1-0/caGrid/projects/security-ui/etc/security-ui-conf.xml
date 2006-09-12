@@ -1,0 +1,111 @@
+<grid-portal>
+	<resource name="GridPortalConfig" class="org.projectmobius.portal.GridPortalConfig">
+	 <grid-portal-config>
+	  <application>
+	  	<name>caGrid Security</name>
+	  	<icon>/applications-internet.png</icon>
+	  	<logo-bar-image>/caBIGLogo.jpg</logo-bar-image>
+	  	<about>
+	  	     <![CDATA[<html><h2>Dorian</h2><h3>Authors:</h3><a href="mailto:hastings@bmi.osu.edu">Shannon Hastings</a> and <a href="mailto:langella@bmi.osu.edu">Stephen Langella</a> and <a href="mailto:oster@bmi.osu.edu">Scott Oster</a>]]>	
+	  	</about>
+	  	<dimensions>
+	  		<width>1024</width>
+	  		<height>768</height>
+	  	</dimensions>
+	  </application>
+	  <components>
+	    <component>
+	  		<title>Login</title>
+	  		<description>Authenticate with Credential Provider or Identity Provider</description>
+	  		<class>gov.nih.nci.cagrid.dorian.ui.ifs.CreateProxyComponent</class>
+	  		<icon>/Door.gif</icon>
+	  		<dimensions>
+	  			<width>550</width>
+	  			<height>300</height>
+	  		</dimensions>
+	  	</component>
+	    <component>
+	  		<title>Grid Account Management</title>
+	  		<description>Identity Provider (IdP) Menu</description>
+	  		<class>gov.nih.nci.cagrid.dorian.ui.ifs.IFSMenu</class>
+	  		<icon>/applications-internet.png</icon>
+	  		<dimensions>
+	  			<width>300</width>
+	  			<height>300</height>
+	  		</dimensions>
+	  	</component>
+	  	<component>
+	  		<title>Group Management</title>
+	  		<description>Group Management Browser</description>
+	  		<class>gov.nih.nci.cagrid.gridgrouper.ui.GroupManagementBrowser</class>
+	  		<icon>/grouper_logo_no_background_22x22.png</icon>
+	  		<dimensions>
+	  			<width>1000</width>
+	  			<height>600</height>
+	  		</dimensions>
+	  	</component>
+	  	<component>
+	  		<title>Trust Fabric Management</title>
+	  		<description>Grid Trust Management Menu</description>
+	  		<class>gov.nih.nci.cagrid.gts.ui.GTSMenu</class>
+	  		<icon>/system-software-update.png</icon>
+	  		<dimensions>
+	  			<width>250</width>
+	  			<height>250</height>
+	  		</dimensions>
+	  	</component>
+	  	<component>
+	  		<title>Local Account Management</title>
+	  		<description>Identity Provider (IdP) Menu</description>
+	  		<class>gov.nih.nci.cagrid.dorian.ui.idp.IdPMenu</class>
+	  		<icon>/system-users.png</icon>
+	  		<dimensions>
+	  			<width>250</width>
+	  			<height>200</height>
+	  		</dimensions>
+	  	</component>
+	  
+	  </components>
+	  </grid-portal-config>
+	</resource>	
+	<resource name="DorianPortalConf" class="gov.nih.nci.cagrid.dorian.ui.DorianPortalConf">
+		<dorian-portal-config>
+		<dorian-services>
+			<dorian-service>https://cagrid05.bmi.ohio-state.edu:8443/wsrf/services/cagrid/Dorian</dorian-service>
+			<dorian-service>https://localhost:8443/wsrf/services/cagrid/Dorian</dorian-service>
+		</dorian-services>
+		<idps>
+			<idp name="Dorian [cagrid05.bmi.ohio-state.edu]  IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ui.ifs.DorianIdPAuthenticationPanel">
+				<parameters>
+					<parameter name="serviceId" value="https://cagrid05.bmi.ohio-state.edu:8443/wsrf/services/cagrid/Dorian"/>
+				</parameters>
+			</idp>
+			<idp name="Ohio State University" authPanelClass="edu.osu.idp.ui.OSUIdPAuthenticationPanel"/>
+			<idp name="Dorian [localhost] IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ui.ifs.DorianIdPAuthenticationPanel">
+				<parameters>
+					<parameter name="serviceId" value="https://localhost:8443/wsrf/services/cagrid/Dorian"/>
+				</parameters>
+			</idp>
+			
+		</idps>
+        </dorian-portal-config>
+	</resource>
+	<resource name="GridGrouperUI" class="gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperUIConf">
+		<grid-grouper-ui>
+		<grid-groupers>
+			<grid-grouper>https://localhost:8443/wsrf/services/cagrid/GridGrouper</grid-grouper>
+			<grid-grouper>https://127.0.0.1:8443/wsrf/services/cagrid/GridGrouper</grid-grouper>
+		</grid-groupers>
+        </grid-grouper-ui>
+	</resource>
+	<resource name="GTSPortalConf" class="gov.nih.nci.cagrid.gts.ui.GTSUIConf">
+		<gts-portal-config>
+		<gts-services>
+			<gts-service>https://cagrid01.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GTS</gts-service>
+			<gts-service>https://cagrid02.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GTS</gts-service>
+			<gts-service>https://cagrid03.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GTS</gts-service>
+		    <gts-service>https://localhost:8443/wsrf/services/cagrid/GTS</gts-service>
+		</gts-services>
+        </gts-portal-config>
+	</resource>
+</grid-portal>
