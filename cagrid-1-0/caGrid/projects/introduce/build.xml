@@ -77,7 +77,7 @@
 	<!-- =================================================================== -->
 	<target name="generateStubs" depends="prepare" description="Deletes the generated Java Beans and
 		recreates them.">
-		<ant antfile="${build.stubs}" target="generateStubs">
+		<ant antfile="${build.stubs}" target="generateStubs" inheritall="false">
 			<property name="mapping.file" location="${basedir}/schema/namespace2package.mappings"/>
 			<property name="source.stubs.dir" location="${basedir}/schema"/>
 			<property name="target.stubs.dir" location="${src.dir}/Introduce"/>

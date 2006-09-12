@@ -201,7 +201,7 @@
 	<!-- Generate bindings for our WSDL file -->
 	<!-- This is done with a GT4 tool -->
 	<target name="serviceGenerateBindings" depends="init">
-		<ant antfile="${build.stubs}" target="generateBinding">
+		<ant antfile="${build.stubs}" target="generateBinding" inheritall="false">
 			<property name="source.binding.dir" value="${schema.dest}/${schema.path}" />
 			<property name="target.binding.dir" value="${schema.dest}/${schema.path}" />
 			<property name="porttype.wsdl" value="${interface.name}.wsdl" />
@@ -211,7 +211,7 @@
 
 	<target name="merge" depends="init">
 		<!-- Merge our namespace mappings file with the GT4 mappins file -->
-		<ant antfile="${build.stubs}" target="mergePackageMapping">
+		<ant antfile="${build.stubs}" target="mergePackageMapping" inheritall="false">
 			<property name="mapping.src" location="${mappings.file}" />
 			<property name="mapping.dst" location="${build.dir}/namespace2package.mappings" />
 		</ant>
@@ -221,7 +221,7 @@
 	<!-- This is done with a GT4 tool -->
 	<target name="serviceStubs" depends="serviceGenerateBindings,merge">
 		<!-- Invoke the stub generator -->
-		<ant antfile="${build.stubs}" target="generateStubs">
+		<ant antfile="${build.stubs}" target="generateStubs" inheritall="false">
 			<property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
 			<property name="source.stubs.dir" location="${schema.dest}/${schema.path}" />
 			<property name="target.stubs.dir" location="${stubs.src}" />
@@ -237,7 +237,7 @@
 		<for list="${introduce.skeleton.services.list}" parallel="false" param="service.name" trim="true">
 			<sequential>
 				<echo message="Generating stubs for @{service.name}." />
-				<antcall target="serviceStubs">
+				<antcall target="serviceStubs" inheritall="false">
 					<param name="interface.name" value="@{service.name}" />
 				</antcall>
 			</sequential>
