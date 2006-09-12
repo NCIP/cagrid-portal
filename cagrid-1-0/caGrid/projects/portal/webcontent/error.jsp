@@ -68,6 +68,7 @@
 
 <%
 
+
 if (exception != null)
 {
     List exceptions = ExceptionUtils.getExceptions(exception);
@@ -75,10 +76,13 @@ if (exception != null)
     String exceptionMessage = ExceptionUtils.getExceptionMessage(exceptions);
 
 
+
 %>Message: <span class="errorMessage"><%=exceptionMessage%></span><%
 
 
+
     PrintWriter pw = new PrintWriter(out);
+
 
 
 %><br/><%
@@ -98,13 +102,17 @@ if (exception != null)
 %></div><%
 %></span><%
 
+
 }
 else
 {
 
+
 %>Unknown error<%
 
+
 }
+
 
 %>
 <div class="errorFooter">Portal Error</div>

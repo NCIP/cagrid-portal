@@ -1,4 +1,4 @@
-<%@ page session="false"%>
+<%@ page session="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
@@ -8,6 +8,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="css/styleSheet.css"/>
     <script src="js/script.js" type="text/javascript"></script>
+    <title>caGrid Portal</title>
 </head>
 
 <f:view>
@@ -20,7 +21,7 @@
     <td>
         <!-- nci hdr begins -->
         <f:subview id="nciHdr">
-            <tiles:insert attribute="nciHeader" flush="false" />
+            <tiles:insert attribute="nciHeader" flush="false"/>
         </f:subview>
         <!-- nci hdr ends -->
     </td>
@@ -35,7 +36,7 @@
                 <td height="50">
                     <!-- application hdr begins -->
                     <f:subview id="portalHdr">
-                        <tiles:insert attribute="portalHeader" flush="false" />
+                        <tiles:insert attribute="portalHeader" flush="false"/>
                     </f:subview>
                 </td>
             </tr>
@@ -49,7 +50,7 @@
 
                                 <!-- main menu begins -->
                                 <f:subview id="mainMenuHdr">
-                                    <tiles:insert attribute="mainMenu" flush="false" />
+                                    <tiles:insert attribute="mainMenu" flush="false"/>
                                 </f:subview>
 
 
@@ -62,7 +63,8 @@
                         <tr>
                             <td valign="top">
                                 <!-- target of anchor to skip menus --><a name="content"/>
-                                <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%" height="100%">
+                                <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage"
+                                       width="100%" height="100%">
 
                                     <!-- banner begins -->
                                     <tr>
@@ -75,7 +77,7 @@
 
                                             <!-- target of anchor to skip menus --><a name="content"/>
                                             <f:subview id="mainContent">
-                                                <tiles:insert attribute="mainContent" flush="false" />
+                                                <tiles:insert attribute="mainContent" flush="false"/>
                                             </f:subview>
 
 
@@ -94,7 +96,7 @@
 
                     <!-- application ftr begins -->
                     <f:subview id="appFtr">
-                        <tiles:insert attribute="appFooter" flush="false" />
+                        <tiles:insert attribute="appFooter" flush="false"/>
                     </f:subview>
 
                     <!-- application ftr ends -->
@@ -106,13 +108,12 @@
 </tr>
 
 
-
 <tr>
     <td>
 
         <!-- footer begins -->
         <f:subview id="nciFtr">
-            <tiles:insert attribute="nciFooter" flush="false" />
+            <tiles:insert attribute="nciFooter" flush="false"/>
         </f:subview>
         <!-- footer ends -->
 
