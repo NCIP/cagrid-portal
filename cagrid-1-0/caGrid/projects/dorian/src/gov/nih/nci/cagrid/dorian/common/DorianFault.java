@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.dorian.common;
 
-import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 
 
 /**

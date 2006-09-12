@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.ifs.bean.InvalidPasswordFault;
-import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 

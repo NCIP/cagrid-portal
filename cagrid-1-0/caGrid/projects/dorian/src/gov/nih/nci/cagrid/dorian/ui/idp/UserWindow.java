@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.dorian.ui.idp;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
 
 import java.awt.BorderLayout;
@@ -31,7 +31,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.1 2006-09-08 19:22:18 langella Exp $
+ * @version $Id: UserWindow.java,v 1.2 2006-09-12 23:37:29 langella Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 

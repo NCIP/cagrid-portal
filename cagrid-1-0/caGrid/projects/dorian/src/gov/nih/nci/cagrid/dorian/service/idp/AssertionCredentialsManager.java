@@ -7,7 +7,7 @@ import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.MetadataManager;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
-import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;

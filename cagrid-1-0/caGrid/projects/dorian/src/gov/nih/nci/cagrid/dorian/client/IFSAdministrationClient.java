@@ -8,10 +8,10 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
-import gov.nih.nci.cagrid.dorian.stubs.InvalidTrustedIdPFault;
-import gov.nih.nci.cagrid.dorian.stubs.InvalidUserFault;
-import gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.InvalidTrustedIdPFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 
 import java.rmi.RemoteException;
 

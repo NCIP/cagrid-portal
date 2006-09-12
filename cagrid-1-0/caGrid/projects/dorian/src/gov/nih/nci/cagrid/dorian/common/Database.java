@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.dorian.common;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -17,7 +17,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.16 2006-08-02 17:32:56 langella Exp $
+ * @version $Id: Database.java,v 1.17 2006-09-12 23:37:29 langella Exp $
  */
 public class Database extends LoggingObject {
 

@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
-import gov.nih.nci.cagrid.dorian.stubs.NoSuchUserFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.NoSuchUserFault;
 import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 

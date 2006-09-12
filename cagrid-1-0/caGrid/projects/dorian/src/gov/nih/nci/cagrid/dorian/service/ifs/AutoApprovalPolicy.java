@@ -3,8 +3,8 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
-import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
-import gov.nih.nci.cagrid.dorian.stubs.UserPolicyFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
 
 
 /**

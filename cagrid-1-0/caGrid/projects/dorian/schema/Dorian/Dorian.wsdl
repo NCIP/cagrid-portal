@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cagrid.nci.nih.gov/Dorian" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" name="Dorian" targetNamespace="http://cagrid.nci.nih.gov/Dorian">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cagrid.nci.nih.gov/Dorian" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns5="http://cagrid.nci.nih.gov/Dorian/types" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns2="http://cagrid.nci.nih.gov/1/dorian-ifs" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-common" xmlns:ns1="http://cagrid.nci.nih.gov/1/dorian-idp" name="Dorian" targetNamespace="http://cagrid.nci.nih.gov/Dorian">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <import namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" location="./ServiceSecurity.wsdl" />
@@ -9,8 +9,9 @@
                       
   ============================================================-->
   <types>
-    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns2="http://cagrid.nci.nih.gov/1/dorian-ifs" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-common" xmlns:ns1="http://cagrid.nci.nih.gov/1/dorian-idp" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/Dorian" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/Dorian" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
+      <import namespace="http://cagrid.nci.nih.gov/Dorian/types" schemaLocation="./DorianTypes.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./xsd/cagrid/types/caGridMetadata.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/1/dorian-ifs" schemaLocation="./dorian-ifs.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/cagrid/types/security/security.xsd" />
@@ -308,69 +309,6 @@
           </sequence>
         </complexType>
       </element>
-      <element name="DorianInternalFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="InvalidUserPropertyFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="PermissionDeniedFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="NoSuchUserFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="InvalidAssertionFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="InvalidProxyFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="UserPolicyFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="InvalidTrustedIdPFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="InvalidUserFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
       <element name="DorianResourceProperties">
         <complexType>
           <sequence>
@@ -478,31 +416,31 @@
     <part name="parameters" element="tns:GetIFSUserPoliciesResponse" />
   </message>
   <message name="DorianInternalFaultFaultMessage">
-    <part name="fault" element="tns:DorianInternalFault" />
+    <part name="fault" element="ns5:DorianInternalFault" />
   </message>
   <message name="InvalidUserPropertyFaultFaultMessage">
-    <part name="fault" element="tns:InvalidUserPropertyFault" />
+    <part name="fault" element="ns5:InvalidUserPropertyFault" />
   </message>
   <message name="PermissionDeniedFaultFaultMessage">
-    <part name="fault" element="tns:PermissionDeniedFault" />
+    <part name="fault" element="ns5:PermissionDeniedFault" />
   </message>
   <message name="NoSuchUserFaultFaultMessage">
-    <part name="fault" element="tns:NoSuchUserFault" />
+    <part name="fault" element="ns5:NoSuchUserFault" />
   </message>
   <message name="InvalidAssertionFaultFaultMessage">
-    <part name="fault" element="tns:InvalidAssertionFault" />
+    <part name="fault" element="ns5:InvalidAssertionFault" />
   </message>
   <message name="InvalidProxyFaultFaultMessage">
-    <part name="fault" element="tns:InvalidProxyFault" />
+    <part name="fault" element="ns5:InvalidProxyFault" />
   </message>
   <message name="UserPolicyFaultFaultMessage">
-    <part name="fault" element="tns:UserPolicyFault" />
+    <part name="fault" element="ns5:UserPolicyFault" />
   </message>
   <message name="InvalidTrustedIdPFaultFaultMessage">
-    <part name="fault" element="tns:InvalidTrustedIdPFault" />
+    <part name="fault" element="ns5:InvalidTrustedIdPFault" />
   </message>
   <message name="InvalidUserFaultFaultMessage">
-    <part name="fault" element="tns:InvalidUserFault" />
+    <part name="fault" element="ns5:InvalidUserFault" />
   </message>
   <!--============================================================
 

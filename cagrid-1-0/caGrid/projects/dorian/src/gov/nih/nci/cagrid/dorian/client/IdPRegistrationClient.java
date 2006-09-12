@@ -5,8 +5,8 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
-import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
-import gov.nih.nci.cagrid.dorian.stubs.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault;
 
 import java.rmi.RemoteException;
 

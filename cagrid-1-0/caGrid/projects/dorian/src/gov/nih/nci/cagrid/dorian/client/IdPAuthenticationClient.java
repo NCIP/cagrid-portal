@@ -6,8 +6,8 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
 import gov.nih.nci.cagrid.dorian.common.SAMLUtils;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
-import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
-import gov.nih.nci.cagrid.dorian.stubs.PermissionDeniedFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.rmi.RemoteException;

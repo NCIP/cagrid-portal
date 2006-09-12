@@ -4,8 +4,8 @@ import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.ApplicationReview;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
-import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
-import gov.nih.nci.cagrid.dorian.stubs.InvalidUserPropertyFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault;
 
 
 /**

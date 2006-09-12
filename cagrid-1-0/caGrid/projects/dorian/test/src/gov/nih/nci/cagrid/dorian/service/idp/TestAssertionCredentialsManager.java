@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.dorian.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.common.Database;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.common.SAMLUtils;
-import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;

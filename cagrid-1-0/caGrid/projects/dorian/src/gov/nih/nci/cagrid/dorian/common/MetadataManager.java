@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.dorian.common;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.bean.Metadata;
-import gov.nih.nci.cagrid.dorian.stubs.DorianInternalFault;
+import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
