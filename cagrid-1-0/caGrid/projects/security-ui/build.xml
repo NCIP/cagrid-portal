@@ -66,13 +66,11 @@ GSBT - Globus Service Build Tools
 			</fileset>
 		</copy>
 	</target>
-
-
-	<!-- Compile the implementation classes (service, resource, etc.) -->
-	<target name="compile" depends="init">
-		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
-			<classpath>
-				<fileset dir="${lib.dir}">
+	
+	
+	<target name="defineClasspaths">
+		<path id="base.classpath">
+			<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${ext.lib.dir}">
@@ -85,10 +83,29 @@ GSBT - Globus Service Build Tools
 					<exclude name="caGrid-*-Dorian-*common.jar" />
 					<exclude name="caGrid-*-Dorian-*client.jar" />
 					<exclude name="caGrid-*-Dorian-*ui.jar" />
+					<exclude name="caGrid-*-GridGrouper-*stubs.jar" />
+					<exclude name="caGrid-*-GridGrouper-*common.jar" />
+					<exclude name="caGrid-*-GridGrouper-*client.jar" />
+					<exclude name="caGrid-*-GridGrouper-*ui.jar" />
+					<exclude name="caGrid-*-GTS-*stubs.jar" />
+					<exclude name="caGrid-*-GTS-*common.jar" />
+					<exclude name="caGrid-*-GTS-*client.jar" />
+					<exclude name="caGrid-*-GTS-*ui.jar" />
 					<exclude name="xml-apis.jar" />
 					<exclude name="xercesImpl.jar" />
 				</fileset>
-			</classpath>
+		</path>
+			<path id="run.classpath">
+			<pathelement location="${build.dest}" />
+			<path refid="base.classpath" />			
+		</path>
+	</target>
+	
+
+	<!-- Compile the implementation classes (service, resource, etc.) -->
+	<target name="compile" depends="init,defineClasspaths">
+		<javac srcdir="${src.dir}" classpathref="base.classpath" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
+		
 		</javac>
 	</target>
 
@@ -103,6 +120,13 @@ GSBT - Globus Service Build Tools
 
 	<!-- Default target "all" generates the GAR file -->
 	<target name="all" depends="compile" />
+	
+		<!-- Post Introduce Edit-->
+	<target name="ui" description="Run the Security UI" depends="defineClasspaths">
+		<java classname="gov.nih.nci.cagrid.security.ui.SecurityUI" classpathref="run.classpath" fork="yes">
+			<jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
+		</java>
+	</target>
 	
 
 </project>

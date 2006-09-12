@@ -13,6 +13,10 @@
     <target name="introduce" description="Run the Introduce Grid Service Authoring Toolkit" >
         <ant dir="${basedir}/projects/introduce" antfile="build.xml" target="introduce" inheritall="false" />
     </target>
+	
+	 <target name="security" description="Run the Security Administrative GUI" >
+	        <ant dir="${basedir}/projects/security-ui" antfile="build.xml" target="ui" inheritall="false" />
+	    </target>
     
     <target name="dorian" description="Run the Dorian Administrative GUI" >
         <ant dir="${basedir}/projects/dorian" antfile="build.xml" target="ui" inheritall="false" />
