@@ -15,7 +15,7 @@
         <!-- Configures the actual build loop, how often and which
             build file/target -->
         <schedule interval="60">
-            <ant antscript="ant" buildfile="build-caGrid-1.0-continuous.xml" target="test" uselogger="true"
+            <ant buildfile="build-caGrid-1.0-continuous.xml" target="test" uselogger="true"
                 usedebug="false" timeout="2000">
                 <jvmarg arg="-Xmx512m"/>
             </ant>
@@ -60,7 +60,7 @@
         <!-- Configures the actual build loop, how often and which
             build file/target -->
         <schedule interval="300">
-            <ant antscript="ant" buildfile="build-caGrid-1.0-nightly.xml" target="test" uselogger="true"
+            <ant buildfile="build-caGrid-1.0-nightly.xml" target="test" uselogger="true"
                 usedebug="false" time="0400" timeout="2000">
                 <jvmarg arg="-Xmx512m"/>
             </ant>
