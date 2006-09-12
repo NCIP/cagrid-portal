@@ -35,6 +35,16 @@
 	  		</dimensions>
 	  	</component>
 	  	<component>
+	  		<title>Trust Management</title>
+	  		<description>Grid Trust Management Menu</description>
+	  		<class>gov.nih.nci.cagrid.gts.ui.GTSMenu</class>
+	  		<icon>/system-software-update.png</icon>
+	  		<dimensions>
+	  			<width>250</width>
+	  			<height>250</height>
+	  		</dimensions>
+	  	</component>
+	  	<component>
 	  		<title>Group Management</title>
 	  		<description>Group Management Browser</description>
 	  		<class>gov.nih.nci.cagrid.gridgrouper.ui.GroupManagementBrowser</class>
@@ -42,16 +52,6 @@
 	  		<dimensions>
 	  			<width>1000</width>
 	  			<height>600</height>
-	  		</dimensions>
-	  	</component>
-	  	<component>
-	  		<title>Trust Fabric Management</title>
-	  		<description>Grid Trust Management Menu</description>
-	  		<class>gov.nih.nci.cagrid.gts.ui.GTSMenu</class>
-	  		<icon>/system-software-update.png</icon>
-	  		<dimensions>
-	  			<width>250</width>
-	  			<height>250</height>
 	  		</dimensions>
 	  	</component>
 	  	<component>
