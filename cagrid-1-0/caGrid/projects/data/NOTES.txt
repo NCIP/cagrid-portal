@@ -59,3 +59,6 @@ Need a "None" option for query processor... theres no way to not select an impl 
 	
 CAVEATS:
 CQL cannot query for nor return 'attributes' of a type that are complexTypes in XML.
+
+Multiple DataServices using the SDK query processor cannot be run in the same container due to a bug in the caCORE API
+	-- See http://gforge.nci.nih.gov/tracker/index.php?func=detail&aid=2784&group_id=38&atid=279 for more information.

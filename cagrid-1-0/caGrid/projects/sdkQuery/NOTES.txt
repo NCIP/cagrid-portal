@@ -16,3 +16,5 @@ CoreQueryProcessor / CQL2DetachedCriteria:
 	-- http://forum.hibernate.org/viewtopic.php?t=931249
 	-- http://opensource.atlassian.com/projects/hibernate/browse/HHH-879
 	-- Try the HQLCoreQueryProcessor, which uses the CQL2HQL helper to make HQL queries
+	
+Running multiple instances of a DataService using the SDK query processor in the same container is impossible due to a bug in the caCORE.  Please see http://gforge.nci.nih.gov/tracker/index.php?func=detail&aid=2784&group_id=38&atid=279 for more information.
