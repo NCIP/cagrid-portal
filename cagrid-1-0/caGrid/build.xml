@@ -39,7 +39,7 @@
     <!-- ================================================================================ -->
     <!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
     <property name="projects.list"
-              value="bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, idpservice, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui"/>
+              value="bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, idpservice, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui,authentication-service"/>
     <!-- ================================================================================ -->
     <!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
     <!-- ================================================================================ -->
@@ -250,6 +250,28 @@
     </target>
 	
 
+	   <!-- =============================================================== -->
+	    <!-- Authentication Service:                                         -->
+	    <!-- =============================================================== -->
+	    <target name="build-authentication-service" depends="prepare" description="Builds the Authentication Service project">
+	        <resolveDependencies extdir="${projects.dir}/authentication-service/ext">
+	            <artifact refid="core.jars"/>
+	            <artifact refid="common.test.jars"/>
+	            <artifact refid="test.coverage.jars"/>
+	            <artifact refid="core.test.jars"/>
+	            <artifact refid="core.resources"/>
+	            <artifact refid="gridca.jars"/>
+	            <artifact refid="mobius.jars"/>
+	            <artifact refid="opensaml.jars"/>
+	            <artifact refid="opensaml.endorsed"/>
+	            <artifact refid="introduce.servicesecurity.jars"/>
+	            <artifact refid="security.metadata.jars"/>
+	        </resolveDependencies>
+	        <resolveDependencies extdir="${projects.dir}/dorian/schema/AuthenticationService">
+	            <artifact refid="metadata.schemas"/>
+	        </resolveDependencies>
+	        <ant dir="${projects.dir}/authentication-service" inheritAll="false" antfile="build.xml" target="all"/>
+	    </target>
 
 
     <!-- =============================================================== -->

@@ -277,9 +277,12 @@
         <jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
             <include name="**/service/**" />
         </jar>
+    
         <jar jarfile="${build.lib.dir}/${ui.jar.name}" basedir="${build.dest}">
-            <include name="**/ui/**" />
-        </jar>
+			    <fileset dir="${build.dest}" includes="**/ui/**"/>
+			    <fileset dir="resources/ui/gridgrouper"/>
+			    <fileset dir="ext/resources/portal/common"/>
+		</jar>
         <jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
             <include name="**/*" />
             <exclude name="**/client/**" />
