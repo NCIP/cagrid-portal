@@ -39,7 +39,7 @@
     <!-- ================================================================================ -->
     <!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
     <property name="projects.list"
-              value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, idpservice, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, bulkDataTransfer,security-ui"/>
+              value="bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, idpservice, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui"/>
     <!-- ================================================================================ -->
     <!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
     <!-- ================================================================================ -->
