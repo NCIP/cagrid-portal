@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.idp.client;
 
 import gov.nih.nci.cagrid.idp.beans.CredentialType;
+import gov.nih.nci.cagrid.idp.stubs.InsufficientAttributeException;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -35,9 +36,8 @@ public class IDPServiceClientTestCase extends TestCase {
 		cred2.setPassword(pwd2);
 		client.login(cred2);
 		fail("Login for user2 should have failed with InsufficentAttributeException");
-	    }catch(Exception ex){
-		//this is supposed to happen
-		System.out.println("Got " + ex.getClass().getName());
+	    }catch(InsufficientAttributeException ex){
+
 	    }
 
 	}catch(Exception ex){
