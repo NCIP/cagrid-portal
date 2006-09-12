@@ -69,6 +69,7 @@
 <%
 
 
+
 if (exception != null)
 {
     List exceptions = ExceptionUtils.getExceptions(exception);
@@ -77,11 +78,14 @@ if (exception != null)
 
 
 
+
 %>Message: <span class="errorMessage"><%=exceptionMessage%></span><%
 
 
 
+
     PrintWriter pw = new PrintWriter(out);
+
 
 
 
@@ -103,15 +107,19 @@ if (exception != null)
 %></span><%
 
 
+
 }
 else
 {
 
 
+
 %>Unknown error<%
 
 
+
 }
+
 
 
 %>
