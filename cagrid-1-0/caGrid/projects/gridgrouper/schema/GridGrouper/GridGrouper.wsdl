@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cagrid.nci.nih.gov/GridGrouper" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" name="GridGrouper" targetNamespace="http://cagrid.nci.nih.gov/GridGrouper">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cagrid.nci.nih.gov/GridGrouper" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns0="http://cagrid.nci.nih.gov/1/GridGrouper" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns2="http://cagrid.nci.nih.gov/GridGrouper/types" name="GridGrouper" targetNamespace="http://cagrid.nci.nih.gov/GridGrouper">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <import namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" location="./ServiceSecurity.wsdl" />
@@ -9,10 +9,11 @@
                       
   ============================================================-->
   <types>
-    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns0="http://cagrid.nci.nih.gov/1/GridGrouper" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/GridGrouper" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/GridGrouper" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/1/GridGrouper" schemaLocation="./gridgrouper.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd\security.xsd" />
+      <import namespace="http://cagrid.nci.nih.gov/GridGrouper/types" schemaLocation="./GridGrouperTypes.xsd" />
       <element name="GetStemRequest">
         <complexType>
           <sequence>
@@ -750,111 +751,6 @@
           </sequence>
         </complexType>
       </element>
-      <element name="GridGrouperRuntimeFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="StemNotFoundFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="InsufficientPrivilegeFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="StemModifyFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="GrantPrivilegeFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="SchemaFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="RevokePrivilegeFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="StemAddFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="StemDeleteFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="GroupNotFoundFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="GroupAddFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="GroupDeleteFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="GroupModifyFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="MemberAddFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="MemberDeleteFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
       <element name="GridGrouperResourceProperties">
         <complexType>
           <sequence />
@@ -1032,49 +928,49 @@
     <part name="parameters" element="tns:HasGroupPrivilegeResponse" />
   </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
-    <part name="fault" element="tns:GridGrouperRuntimeFault" />
+    <part name="fault" element="ns2:GridGrouperRuntimeFault" />
   </message>
   <message name="StemNotFoundFaultFaultMessage">
-    <part name="fault" element="tns:StemNotFoundFault" />
+    <part name="fault" element="ns2:StemNotFoundFault" />
   </message>
   <message name="InsufficientPrivilegeFaultFaultMessage">
-    <part name="fault" element="tns:InsufficientPrivilegeFault" />
+    <part name="fault" element="ns2:InsufficientPrivilegeFault" />
   </message>
   <message name="StemModifyFaultFaultMessage">
-    <part name="fault" element="tns:StemModifyFault" />
+    <part name="fault" element="ns2:StemModifyFault" />
   </message>
   <message name="GrantPrivilegeFaultFaultMessage">
-    <part name="fault" element="tns:GrantPrivilegeFault" />
+    <part name="fault" element="ns2:GrantPrivilegeFault" />
   </message>
   <message name="SchemaFaultFaultMessage">
-    <part name="fault" element="tns:SchemaFault" />
+    <part name="fault" element="ns2:SchemaFault" />
   </message>
   <message name="RevokePrivilegeFaultFaultMessage">
-    <part name="fault" element="tns:RevokePrivilegeFault" />
+    <part name="fault" element="ns2:RevokePrivilegeFault" />
   </message>
   <message name="StemAddFaultFaultMessage">
-    <part name="fault" element="tns:StemAddFault" />
+    <part name="fault" element="ns2:StemAddFault" />
   </message>
   <message name="StemDeleteFaultFaultMessage">
-    <part name="fault" element="tns:StemDeleteFault" />
+    <part name="fault" element="ns2:StemDeleteFault" />
   </message>
   <message name="GroupNotFoundFaultFaultMessage">
-    <part name="fault" element="tns:GroupNotFoundFault" />
+    <part name="fault" element="ns2:GroupNotFoundFault" />
   </message>
   <message name="GroupAddFaultFaultMessage">
-    <part name="fault" element="tns:GroupAddFault" />
+    <part name="fault" element="ns2:GroupAddFault" />
   </message>
   <message name="GroupDeleteFaultFaultMessage">
-    <part name="fault" element="tns:GroupDeleteFault" />
+    <part name="fault" element="ns2:GroupDeleteFault" />
   </message>
   <message name="GroupModifyFaultFaultMessage">
-    <part name="fault" element="tns:GroupModifyFault" />
+    <part name="fault" element="ns2:GroupModifyFault" />
   </message>
   <message name="MemberAddFaultFaultMessage">
-    <part name="fault" element="tns:MemberAddFault" />
+    <part name="fault" element="ns2:MemberAddFault" />
   </message>
   <message name="MemberDeleteFaultFaultMessage">
-    <part name="fault" element="tns:MemberDeleteFault" />
+    <part name="fault" element="ns2:MemberDeleteFault" />
   </message>
   <!--============================================================
 

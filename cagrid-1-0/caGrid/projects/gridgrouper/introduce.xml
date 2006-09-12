@@ -1,4 +1,4 @@
-<ns1:ServiceSkeleton introduceVersion=".9999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+<ns1:ServiceDescription introduceVersion=".99999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace location="./gridgrouper.xsd" namespace="http://cagrid.nci.nih.gov/1/GridGrouper" packageName="gov.nih.nci.cagrid.gridgrouper.bean" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="MembershipDescriptor" xsi:type="ns2:SchemaElementType"/>
@@ -75,6 +75,24 @@
    <ns2:SchemaElement type="GSITransport" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="None" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
+  <ns2:Namespace location="./GridGrouperTypes.xsd" namespace="http://cagrid.nci.nih.gov/GridGrouper/types" packageName="gov.nih.nci.cagrid.gridgrouper.stubs.types" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="GridGrouperReference" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GridGrouperRuntimeFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="StemNotFoundFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="InsufficientPrivilegeFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="StemModifyFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GrantPrivilegeFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SchemaFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="RevokePrivilegeFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="StemAddFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="StemDeleteFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GroupNotFoundFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GroupAddFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GroupDeleteFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GroupModifyFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="MemberAddFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="MemberDeleteFault" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
  </ns2:Namespaces>
  <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns3:Service name="GridGrouper" namespace="http://cagrid.nci.nih.gov/GridGrouper" packageName="gov.nih.nci.cagrid.gridgrouper" resourceFrameworkType="main" xsi:type="ns3:ServiceType">
@@ -90,354 +108,354 @@
      </ns4:Inputs>
      <ns4:Output qName="ns7:StemDescriptor" isArray="false" xmlns:ns7="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="StemNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns8:GridGrouperRuntimeFault" xmlns:ns8="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="StemNotFoundFault" qname="ns9:StemNotFoundFault" xmlns:ns9="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="getChildStems" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns8:StemIdentifier" isArray="false" name="parentStem" xmlns:ns8="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns10:StemIdentifier" isArray="false" name="parentStem" xmlns:ns10="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns9:StemDescriptor" isArray="true" xmlns:ns9="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns11:StemDescriptor" isArray="true" xmlns:ns11="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="StemNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns12:GridGrouperRuntimeFault" xmlns:ns12="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="StemNotFoundFault" qname="ns13:StemNotFoundFault" xmlns:ns13="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="getParentStem" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns10:StemIdentifier" isArray="false" name="childStem" xmlns:ns10="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns14:StemIdentifier" isArray="false" name="childStem" xmlns:ns14="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns11:StemDescriptor" isArray="false" xmlns:ns11="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns15:StemDescriptor" isArray="false" xmlns:ns15="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="StemNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns16:GridGrouperRuntimeFault" xmlns:ns16="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="StemNotFoundFault" qname="ns17:StemNotFoundFault" xmlns:ns17="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="updateStem" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns12:StemIdentifier" isArray="false" name="stem" xmlns:ns12="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns13:StemUpdate" isArray="false" name="update" xmlns:ns13="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns18:StemIdentifier" isArray="false" name="stem" xmlns:ns18="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns19:StemUpdate" isArray="false" name="update" xmlns:ns19="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns14:StemDescriptor" isArray="false" xmlns:ns14="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns20:StemDescriptor" isArray="false" xmlns:ns20="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="InsufficientPrivilegeFault"/>
-      <ns4:Exception name="StemModifyFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns21:GridGrouperRuntimeFault" xmlns:ns21="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="InsufficientPrivilegeFault" qname="ns22:InsufficientPrivilegeFault" xmlns:ns22="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="StemModifyFault" qname="ns23:StemModifyFault" xmlns:ns23="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="getSubjectsWithStemPrivilege" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns15:StemIdentifier" isArray="false" name="stem" xmlns:ns15="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns16:StemPrivilegeType" isArray="false" name="privilege" xmlns:ns16="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns24:StemIdentifier" isArray="false" name="stem" xmlns:ns24="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns25:StemPrivilegeType" isArray="false" name="privilege" xmlns:ns25="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns17:SubjectIdentifier" isArray="true" xmlns:ns17="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns26:SubjectIdentifier" isArray="true" xmlns:ns26="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="StemNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns27:GridGrouperRuntimeFault" xmlns:ns27="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="StemNotFoundFault" qname="ns28:StemNotFoundFault" xmlns:ns28="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="getStemPrivileges" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns18:StemIdentifier" isArray="false" name="stem" xmlns:ns18="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns19:SubjectIdentifier" isArray="false" name="subject" xmlns:ns19="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns29:StemIdentifier" isArray="false" name="stem" xmlns:ns29="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns30:SubjectIdentifier" isArray="false" name="subject" xmlns:ns30="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns20:StemPrivilege" isArray="true" xmlns:ns20="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns31:StemPrivilege" isArray="true" xmlns:ns31="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="StemNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns32:GridGrouperRuntimeFault" xmlns:ns32="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="StemNotFoundFault" qname="ns33:StemNotFoundFault" xmlns:ns33="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="hasStemPrivilege" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns21:StemIdentifier" isArray="false" name="stem" xmlns:ns21="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns22:SubjectIdentifier" isArray="false" name="subject" xmlns:ns22="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns23:StemPrivilegeType" isArray="false" name="privilege" xmlns:ns23="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns34:StemIdentifier" isArray="false" name="stem" xmlns:ns34="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns35:SubjectIdentifier" isArray="false" name="subject" xmlns:ns35="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns36:StemPrivilegeType" isArray="false" name="privilege" xmlns:ns36="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
      <ns4:Output qName="xsd:boolean" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="StemNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns37:GridGrouperRuntimeFault" xmlns:ns37="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="StemNotFoundFault" qname="ns38:StemNotFoundFault" xmlns:ns38="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="grantStemPrivilege" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns24:StemIdentifier" isArray="false" name="stem" xmlns:ns24="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns25:SubjectIdentifier" isArray="false" name="subject" xmlns:ns25="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns26:StemPrivilegeType" isArray="false" name="privilege" xmlns:ns26="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns39:StemIdentifier" isArray="false" name="stem" xmlns:ns39="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns40:SubjectIdentifier" isArray="false" name="subject" xmlns:ns40="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns41:StemPrivilegeType" isArray="false" name="privilege" xmlns:ns41="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="StemNotFoundFault"/>
-      <ns4:Exception name="GrantPrivilegeFault"/>
-      <ns4:Exception name="InsufficientPrivilegeFault"/>
-      <ns4:Exception name="SchemaFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns42:GridGrouperRuntimeFault" xmlns:ns42="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="StemNotFoundFault" qname="ns43:StemNotFoundFault" xmlns:ns43="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GrantPrivilegeFault" qname="ns44:GrantPrivilegeFault" xmlns:ns44="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="InsufficientPrivilegeFault" qname="ns45:InsufficientPrivilegeFault" xmlns:ns45="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="SchemaFault" qname="ns46:SchemaFault" xmlns:ns46="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="revokeStemPrivilege" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns27:StemIdentifier" isArray="false" name="stem" xmlns:ns27="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns28:SubjectIdentifier" isArray="false" name="subject" xmlns:ns28="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns29:StemPrivilegeType" isArray="false" name="privilege" xmlns:ns29="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns47:StemIdentifier" isArray="false" name="stem" xmlns:ns47="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns48:SubjectIdentifier" isArray="false" name="subject" xmlns:ns48="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns49:StemPrivilegeType" isArray="false" name="privilege" xmlns:ns49="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception name="StemNotFoundFault"/>
-      <ns4:Exception name="InsufficientPrivilegeFault"/>
-      <ns4:Exception name="RevokePrivilegeFault"/>
-      <ns4:Exception name="SchemaFault"/>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
+      <ns4:Exception name="StemNotFoundFault" qname="ns50:StemNotFoundFault" xmlns:ns50="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="InsufficientPrivilegeFault" qname="ns51:InsufficientPrivilegeFault" xmlns:ns51="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="RevokePrivilegeFault" qname="ns52:RevokePrivilegeFault" xmlns:ns52="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="SchemaFault" qname="ns53:SchemaFault" xmlns:ns53="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns54:GridGrouperRuntimeFault" xmlns:ns54="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="addChildStem" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns30:StemIdentifier" isArray="false" name="stem" xmlns:ns30="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns55:StemIdentifier" isArray="false" name="stem" xmlns:ns55="http://cagrid.nci.nih.gov/1/GridGrouper"/>
       <ns4:Input qName="xsd:string" isArray="false" name="extension" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
       <ns4:Input qName="xsd:string" isArray="false" name="displayExtension" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns31:StemDescriptor" isArray="false" xmlns:ns31="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns56:StemDescriptor" isArray="false" xmlns:ns56="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="InsufficientPrivilegeFault"/>
-      <ns4:Exception name="StemAddFault"/>
-      <ns4:Exception name="StemNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns57:GridGrouperRuntimeFault" xmlns:ns57="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="InsufficientPrivilegeFault" qname="ns58:InsufficientPrivilegeFault" xmlns:ns58="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="StemAddFault" qname="ns59:StemAddFault" xmlns:ns59="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="StemNotFoundFault" qname="ns60:StemNotFoundFault" xmlns:ns60="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="deleteStem" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns32:StemIdentifier" isArray="false" name="stem" xmlns:ns32="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns61:StemIdentifier" isArray="false" name="stem" xmlns:ns61="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="InsufficientPrivilegeFault"/>
-      <ns4:Exception name="StemDeleteFault"/>
-      <ns4:Exception name="StemNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns62:GridGrouperRuntimeFault" xmlns:ns62="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="InsufficientPrivilegeFault" qname="ns63:InsufficientPrivilegeFault" xmlns:ns63="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="StemDeleteFault" qname="ns64:StemDeleteFault" xmlns:ns64="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="StemNotFoundFault" qname="ns65:StemNotFoundFault" xmlns:ns65="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="getGroup" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns33:GroupIdentifier" isArray="false" name="group" xmlns:ns33="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns66:GroupIdentifier" isArray="false" name="group" xmlns:ns66="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns34:GroupDescriptor" isArray="false" xmlns:ns34="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns67:GroupDescriptor" isArray="false" xmlns:ns67="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns68:GridGrouperRuntimeFault" xmlns:ns68="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns69:GroupNotFoundFault" xmlns:ns69="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="getChildGroups" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns35:StemIdentifier" isArray="false" name="stem" xmlns:ns35="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns70:StemIdentifier" isArray="false" name="stem" xmlns:ns70="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns36:GroupDescriptor" isArray="true" xmlns:ns36="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns71:GroupDescriptor" isArray="true" xmlns:ns71="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="StemNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns72:GridGrouperRuntimeFault" xmlns:ns72="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="StemNotFoundFault" qname="ns73:StemNotFoundFault" xmlns:ns73="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="addChildGroup" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns37:StemIdentifier" isArray="false" name="stem" xmlns:ns37="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns74:StemIdentifier" isArray="false" name="stem" xmlns:ns74="http://cagrid.nci.nih.gov/1/GridGrouper"/>
       <ns4:Input qName="xsd:string" isArray="false" name="extension" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
       <ns4:Input qName="xsd:string" isArray="false" name="displayExtension" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns38:GroupDescriptor" isArray="false" xmlns:ns38="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns75:GroupDescriptor" isArray="false" xmlns:ns75="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupAddFault"/>
-      <ns4:Exception name="InsufficientPrivilegeFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns76:GridGrouperRuntimeFault" xmlns:ns76="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupAddFault" qname="ns77:GroupAddFault" xmlns:ns77="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="InsufficientPrivilegeFault" qname="ns78:InsufficientPrivilegeFault" xmlns:ns78="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="deleteGroup" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns39:GroupIdentifier" isArray="false" name="group" xmlns:ns39="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns79:GroupIdentifier" isArray="false" name="group" xmlns:ns79="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
-      <ns4:Exception name="GroupDeleteFault"/>
-      <ns4:Exception name="InsufficientPrivilegeFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns80:GridGrouperRuntimeFault" xmlns:ns80="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns81:GroupNotFoundFault" xmlns:ns81="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupDeleteFault" qname="ns82:GroupDeleteFault" xmlns:ns82="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="InsufficientPrivilegeFault" qname="ns83:InsufficientPrivilegeFault" xmlns:ns83="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="updateGroup" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns40:GroupIdentifier" isArray="false" name="group" xmlns:ns40="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns41:GroupUpdate" isArray="false" name="update" xmlns:ns41="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns84:GroupIdentifier" isArray="false" name="group" xmlns:ns84="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns85:GroupUpdate" isArray="false" name="update" xmlns:ns85="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns42:GroupDescriptor" isArray="false" xmlns:ns42="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns86:GroupDescriptor" isArray="false" xmlns:ns86="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
-      <ns4:Exception name="GroupModifyFault"/>
-      <ns4:Exception name="InsufficientPrivilegeFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns87:GridGrouperRuntimeFault" xmlns:ns87="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns88:GroupNotFoundFault" xmlns:ns88="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupModifyFault" qname="ns89:GroupModifyFault" xmlns:ns89="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="InsufficientPrivilegeFault" qname="ns90:InsufficientPrivilegeFault" xmlns:ns90="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="addMember" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns43:GroupIdentifier" isArray="false" name="group" xmlns:ns43="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns44:SubjectIdentifier" isArray="false" name="subject" xmlns:ns44="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns91:GroupIdentifier" isArray="false" name="group" xmlns:ns91="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns92:SubjectIdentifier" isArray="false" name="subject" xmlns:ns92="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
-      <ns4:Exception name="InsufficientPrivilegeFault"/>
-      <ns4:Exception name="MemberAddFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns93:GridGrouperRuntimeFault" xmlns:ns93="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns94:GroupNotFoundFault" xmlns:ns94="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="InsufficientPrivilegeFault" qname="ns95:InsufficientPrivilegeFault" xmlns:ns95="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="MemberAddFault" qname="ns96:MemberAddFault" xmlns:ns96="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="getMembers" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns45:GroupIdentifier" isArray="false" name="group" xmlns:ns45="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns46:MemberFilter" isArray="false" name="filter" xmlns:ns46="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns97:GroupIdentifier" isArray="false" name="group" xmlns:ns97="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns98:MemberFilter" isArray="false" name="filter" xmlns:ns98="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns47:MemberDescriptor" isArray="true" xmlns:ns47="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns99:MemberDescriptor" isArray="true" xmlns:ns99="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns100:GridGrouperRuntimeFault" xmlns:ns100="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns101:GroupNotFoundFault" xmlns:ns101="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="isMemberOf" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns48:GroupIdentifier" isArray="false" name="group" xmlns:ns48="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns49:SubjectIdentifier" isArray="false" name="member" xmlns:ns49="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns50:MemberFilter" isArray="false" name="filter" xmlns:ns50="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns102:GroupIdentifier" isArray="false" name="group" xmlns:ns102="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns103:SubjectIdentifier" isArray="false" name="member" xmlns:ns103="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns104:MemberFilter" isArray="false" name="filter" xmlns:ns104="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
      <ns4:Output qName="xsd:boolean" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns105:GridGrouperRuntimeFault" xmlns:ns105="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns106:GroupNotFoundFault" xmlns:ns106="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="getMemberships" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns51:GroupIdentifier" isArray="false" name="group" xmlns:ns51="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns52:MemberFilter" isArray="false" name="filter" xmlns:ns52="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns107:GroupIdentifier" isArray="false" name="group" xmlns:ns107="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns108:MemberFilter" isArray="false" name="filter" xmlns:ns108="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns53:MembershipDescriptor" isArray="true" xmlns:ns53="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns109:MembershipDescriptor" isArray="true" xmlns:ns109="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns110:GridGrouperRuntimeFault" xmlns:ns110="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns111:GroupNotFoundFault" xmlns:ns111="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="deleteMember" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns54:GroupIdentifier" isArray="false" name="group" xmlns:ns54="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns55:SubjectIdentifier" isArray="false" name="member" xmlns:ns55="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns112:GroupIdentifier" isArray="false" name="group" xmlns:ns112="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns113:SubjectIdentifier" isArray="false" name="member" xmlns:ns113="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="InsufficientPrivilegeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
-      <ns4:Exception name="MemberDeleteFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns114:GridGrouperRuntimeFault" xmlns:ns114="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="InsufficientPrivilegeFault" qname="ns115:InsufficientPrivilegeFault" xmlns:ns115="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns116:GroupNotFoundFault" xmlns:ns116="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="MemberDeleteFault" qname="ns117:MemberDeleteFault" xmlns:ns117="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="addCompositeMember" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns56:GroupCompositeType" isArray="false" name="type" xmlns:ns56="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns57:GroupIdentifier" isArray="false" name="composite" xmlns:ns57="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns58:GroupIdentifier" isArray="false" name="left" xmlns:ns58="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns59:GroupIdentifier" isArray="false" name="right" xmlns:ns59="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns118:GroupCompositeType" isArray="false" name="type" xmlns:ns118="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns119:GroupIdentifier" isArray="false" name="composite" xmlns:ns119="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns120:GroupIdentifier" isArray="false" name="left" xmlns:ns120="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns121:GroupIdentifier" isArray="false" name="right" xmlns:ns121="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns60:GroupDescriptor" isArray="false" xmlns:ns60="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns122:GroupDescriptor" isArray="false" xmlns:ns122="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
-      <ns4:Exception name="MemberAddFault"/>
-      <ns4:Exception name="InsufficientPrivilegeFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns123:GridGrouperRuntimeFault" xmlns:ns123="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns124:GroupNotFoundFault" xmlns:ns124="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="MemberAddFault" qname="ns125:MemberAddFault" xmlns:ns125="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="InsufficientPrivilegeFault" qname="ns126:InsufficientPrivilegeFault" xmlns:ns126="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="deleteCompositeMember" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns61:GroupIdentifier" isArray="false" name="group" xmlns:ns61="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns127:GroupIdentifier" isArray="false" name="group" xmlns:ns127="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns62:GroupDescriptor" isArray="false" xmlns:ns62="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns128:GroupDescriptor" isArray="false" xmlns:ns128="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
-      <ns4:Exception name="InsufficientPrivilegeFault"/>
-      <ns4:Exception name="MemberDeleteFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns129:GridGrouperRuntimeFault" xmlns:ns129="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns130:GroupNotFoundFault" xmlns:ns130="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="InsufficientPrivilegeFault" qname="ns131:InsufficientPrivilegeFault" xmlns:ns131="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="MemberDeleteFault" qname="ns132:MemberDeleteFault" xmlns:ns132="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="grantGroupPrivilege" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns63:GroupIdentifier" isArray="false" name="group" xmlns:ns63="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns64:SubjectIdentifier" isArray="false" name="subject" xmlns:ns64="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns65:GroupPrivilegeType" isArray="false" name="privilege" xmlns:ns65="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns133:GroupIdentifier" isArray="false" name="group" xmlns:ns133="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns134:SubjectIdentifier" isArray="false" name="subject" xmlns:ns134="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns135:GroupPrivilegeType" isArray="false" name="privilege" xmlns:ns135="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
-      <ns4:Exception name="GrantPrivilegeFault"/>
-      <ns4:Exception name="InsufficientPrivilegeFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns136:GridGrouperRuntimeFault" xmlns:ns136="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns137:GroupNotFoundFault" xmlns:ns137="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GrantPrivilegeFault" qname="ns138:GrantPrivilegeFault" xmlns:ns138="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="InsufficientPrivilegeFault" qname="ns139:InsufficientPrivilegeFault" xmlns:ns139="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="revokeGroupPrivilege" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns66:GroupIdentifier" isArray="false" name="group" xmlns:ns66="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns67:SubjectIdentifier" isArray="false" name="subject" xmlns:ns67="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns68:GroupPrivilegeType" isArray="false" name="privilege" xmlns:ns68="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns140:GroupIdentifier" isArray="false" name="group" xmlns:ns140="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns141:SubjectIdentifier" isArray="false" name="subject" xmlns:ns141="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns142:GroupPrivilegeType" isArray="false" name="privilege" xmlns:ns142="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
-      <ns4:Exception name="RevokePrivilegeFault"/>
-      <ns4:Exception name="InsufficientPrivilegeFault"/>
-      <ns4:Exception name="SchemaFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns143:GridGrouperRuntimeFault" xmlns:ns143="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns144:GroupNotFoundFault" xmlns:ns144="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="RevokePrivilegeFault" qname="ns145:RevokePrivilegeFault" xmlns:ns145="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="InsufficientPrivilegeFault" qname="ns146:InsufficientPrivilegeFault" xmlns:ns146="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="SchemaFault" qname="ns147:SchemaFault" xmlns:ns147="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="getSubjectsWithGroupPrivilege" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns69:GroupIdentifier" isArray="false" name="group" xmlns:ns69="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns70:GroupPrivilegeType" isArray="false" name="privilege" xmlns:ns70="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns148:GroupIdentifier" isArray="false" name="group" xmlns:ns148="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns149:GroupPrivilegeType" isArray="false" name="privilege" xmlns:ns149="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns71:SubjectIdentifier" isArray="true" xmlns:ns71="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns150:SubjectIdentifier" isArray="true" xmlns:ns150="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns151:GridGrouperRuntimeFault" xmlns:ns151="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns152:GroupNotFoundFault" xmlns:ns152="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="getGroupPrivileges" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns72:GroupIdentifier" isArray="false" name="group" xmlns:ns72="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns73:SubjectIdentifier" isArray="false" name="subject" xmlns:ns73="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns153:GroupIdentifier" isArray="false" name="group" xmlns:ns153="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns154:SubjectIdentifier" isArray="false" name="subject" xmlns:ns154="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns74:GroupPrivilege" isArray="true" xmlns:ns74="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     <ns4:Output qName="ns155:GroupPrivilege" isArray="true" xmlns:ns155="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns156:GridGrouperRuntimeFault" xmlns:ns156="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns157:GroupNotFoundFault" xmlns:ns157="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="hasGroupPrivilege" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns75:GroupIdentifier" isArray="false" name="group" xmlns:ns75="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns76:SubjectIdentifier" isArray="false" name="subject" xmlns:ns76="http://cagrid.nci.nih.gov/1/GridGrouper"/>
-      <ns4:Input qName="ns77:GroupPrivilegeType" isArray="false" name="privilege" xmlns:ns77="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns158:GroupIdentifier" isArray="false" name="group" xmlns:ns158="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns159:SubjectIdentifier" isArray="false" name="subject" xmlns:ns159="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+      <ns4:Input qName="ns160:GroupPrivilegeType" isArray="false" name="privilege" xmlns:ns160="http://cagrid.nci.nih.gov/1/GridGrouper"/>
      </ns4:Inputs>
      <ns4:Output qName="xsd:boolean" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      <ns4:Exceptions>
-      <ns4:Exception name="GridGrouperRuntimeFault"/>
-      <ns4:Exception name="GroupNotFoundFault"/>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns161:GridGrouperRuntimeFault" xmlns:ns161="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+      <ns4:Exception name="GroupNotFoundFault" qname="ns162:GroupNotFoundFault" xmlns:ns162="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
    </ns4:Methods>
-   <ns78:ResourcePropertiesList xsi:type="ns78:ResourcePropertiesListType" xmlns:ns78="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
-   <ns79:ServiceSecurity xsi:type="ns79:ServiceSecurity" xmlns:ns79="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns79:SecuritySetting xsi:type="ns79:SecuritySetting">Custom</ns79:SecuritySetting>
-    <ns79:TransportLevelSecurity xsi:type="ns79:TransportLevelSecurity">
-     <ns79:CommunicationMethod xsi:type="ns79:CommunicationMethod">Privacy</ns79:CommunicationMethod>
-    </ns79:TransportLevelSecurity>
-    <ns79:RunAsMode xsi:type="ns79:RunAsMode">System</ns79:RunAsMode>
-    <ns79:AnonymousClients xsi:type="ns79:AnonymousCommunication">No</ns79:AnonymousClients>
-    <ns79:ServiceAuthorization xsi:type="ns79:ServiceAuthorization">
-     <ns79:NoAuthorization xsi:type="ns79:NoAuthorization"/>
-    </ns79:ServiceAuthorization>
-   </ns79:ServiceSecurity>
+   <ns163:ResourcePropertiesList xsi:type="ns163:ResourcePropertiesListType" xmlns:ns163="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns164:ServiceSecurity xsi:type="ns164:ServiceSecurity" xmlns:ns164="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns164:SecuritySetting xsi:type="ns164:SecuritySetting">Custom</ns164:SecuritySetting>
+    <ns164:TransportLevelSecurity xsi:type="ns164:TransportLevelSecurity">
+     <ns164:CommunicationMethod xsi:type="ns164:CommunicationMethod">Privacy</ns164:CommunicationMethod>
+    </ns164:TransportLevelSecurity>
+    <ns164:RunAsMode xsi:type="ns164:RunAsMode">System</ns164:RunAsMode>
+    <ns164:AnonymousClients xsi:type="ns164:AnonymousCommunication">No</ns164:AnonymousClients>
+    <ns164:ServiceAuthorization xsi:type="ns164:ServiceAuthorization">
+     <ns164:NoAuthorization xsi:type="ns164:NoAuthorization"/>
+    </ns164:ServiceAuthorization>
+   </ns164:ServiceSecurity>
   </ns3:Service>
  </ns3:Services>
- <ns80:Extensions xsi:type="ns80:ExtensionsType" xmlns:ns80="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-</ns1:ServiceSkeleton>
+ <ns165:Extensions xsi:type="ns165:ExtensionsType" xmlns:ns165="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+</ns1:ServiceDescription>

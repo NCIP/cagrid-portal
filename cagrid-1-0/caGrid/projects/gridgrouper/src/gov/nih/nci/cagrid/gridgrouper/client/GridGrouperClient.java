@@ -296,7 +296,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getServiceSecurityMetadata();
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor getStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor getStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getStem");
         gov.nih.nci.cagrid.gridgrouper.stubs.GetStemRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetStemRequest();
@@ -307,7 +307,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getStemDescriptor();
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor[] getChildStems(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier parentStem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor[] getChildStems(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier parentStem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getChildStems");
         gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetChildStemsRequest();
@@ -318,7 +318,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getStemDescriptor();
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor getParentStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier childStem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor getParentStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier childStem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getParentStem");
         gov.nih.nci.cagrid.gridgrouper.stubs.GetParentStemRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetParentStemRequest();
@@ -329,7 +329,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getStemDescriptor();
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor updateStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,gov.nih.nci.cagrid.gridgrouper.bean.StemUpdate update) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemModifyFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor updateStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,gov.nih.nci.cagrid.gridgrouper.bean.StemUpdate update) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.StemModifyFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"updateStem");
         gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateStemRequest();
@@ -343,7 +343,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getStemDescriptor();
       }
     }
-    public java.lang.String[] getSubjectsWithStemPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+    public java.lang.String[] getSubjectsWithStemPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getSubjectsWithStemPrivilege");
         gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithStemPrivilegeRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithStemPrivilegeRequest();
@@ -357,7 +357,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getSubjectIdentifier();
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege[] getStemPrivileges(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,java.lang.String subject) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege[] getStemPrivileges(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,java.lang.String subject) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getStemPrivileges");
         gov.nih.nci.cagrid.gridgrouper.stubs.GetStemPrivilegesRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetStemPrivilegesRequest();
@@ -371,7 +371,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getStemPrivilege();
       }
     }
-    public boolean hasStemPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+    public boolean hasStemPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"hasStemPrivilege");
         gov.nih.nci.cagrid.gridgrouper.stubs.HasStemPrivilegeRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.HasStemPrivilegeRequest();
@@ -388,7 +388,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.isResponse();
       }
     }
-    public void grantStemPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault {
+    public void grantStemPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GrantPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.SchemaFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"grantStemPrivilege");
         gov.nih.nci.cagrid.gridgrouper.stubs.GrantStemPrivilegeRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GrantStemPrivilegeRequest();
@@ -404,7 +404,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         gov.nih.nci.cagrid.gridgrouper.stubs.GrantStemPrivilegeResponse boxedResult = portType.grantStemPrivilege(params);
       }
     }
-    public void revokeStemPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.RevokePrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault {
+    public void revokeStemPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.RevokePrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.SchemaFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"revokeStemPrivilege");
         gov.nih.nci.cagrid.gridgrouper.stubs.RevokeStemPrivilegeRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.RevokeStemPrivilegeRequest();
@@ -420,7 +420,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         gov.nih.nci.cagrid.gridgrouper.stubs.RevokeStemPrivilegeResponse boxedResult = portType.revokeStemPrivilege(params);
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor addChildStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,java.lang.String extension,java.lang.String displayExtension) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemAddFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor addChildStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,java.lang.String extension,java.lang.String displayExtension) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.StemAddFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"addChildStem");
         gov.nih.nci.cagrid.gridgrouper.stubs.AddChildStemRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.AddChildStemRequest();
@@ -433,7 +433,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getStemDescriptor();
       }
     }
-    public void deleteStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemDeleteFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+    public void deleteStem(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.StemDeleteFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"deleteStem");
         gov.nih.nci.cagrid.gridgrouper.stubs.DeleteStemRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteStemRequest();
@@ -443,7 +443,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         gov.nih.nci.cagrid.gridgrouper.stubs.DeleteStemResponse boxedResult = portType.deleteStem(params);
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor getGroup(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor getGroup(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getGroup");
         gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupRequest();
@@ -454,7 +454,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getGroupDescriptor();
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor[] getChildGroups(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor[] getChildGroups(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getChildGroups");
         gov.nih.nci.cagrid.gridgrouper.stubs.GetChildGroupsRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetChildGroupsRequest();
@@ -465,7 +465,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getGroupDescriptor();
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor addChildGroup(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,java.lang.String extension,java.lang.String displayExtension) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupAddFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor addChildGroup(gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier stem,java.lang.String extension,java.lang.String displayExtension) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupAddFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"addChildGroup");
         gov.nih.nci.cagrid.gridgrouper.stubs.AddChildGroupRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.AddChildGroupRequest();
@@ -478,7 +478,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getGroupDescriptor();
       }
     }
-    public void deleteGroup(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupDeleteFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
+    public void deleteGroup(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupDeleteFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"deleteGroup");
         gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupRequest();
@@ -488,7 +488,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         gov.nih.nci.cagrid.gridgrouper.stubs.DeleteGroupResponse boxedResult = portType.deleteGroup(params);
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor updateGroup(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate update) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupModifyFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor updateGroup(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate update) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupModifyFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"updateGroup");
         gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.UpdateGroupRequest();
@@ -502,7 +502,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getGroupDescriptor();
       }
     }
-    public void addMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.MemberAddFault {
+    public void addMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.MemberAddFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"addMember");
         gov.nih.nci.cagrid.gridgrouper.stubs.AddMemberRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.AddMemberRequest();
@@ -515,7 +515,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         gov.nih.nci.cagrid.gridgrouper.stubs.AddMemberResponse boxedResult = portType.addMember(params);
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor[] getMembers(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter filter) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor[] getMembers(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter filter) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getMembers");
         gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetMembersRequest();
@@ -529,7 +529,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getMemberDescriptor();
       }
     }
-    public boolean isMemberOf(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String member,gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter filter) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+    public boolean isMemberOf(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String member,gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter filter) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"isMemberOf");
         gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberOfRequest();
@@ -546,7 +546,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.isResponse();
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.MembershipDescriptor[] getMemberships(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter filter) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.MembershipDescriptor[] getMemberships(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter filter) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getMemberships");
         gov.nih.nci.cagrid.gridgrouper.stubs.GetMembershipsRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetMembershipsRequest();
@@ -560,7 +560,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getMembershipDescriptor();
       }
     }
-    public void deleteMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String member) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.MemberDeleteFault {
+    public void deleteMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String member) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.MemberDeleteFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"deleteMember");
         gov.nih.nci.cagrid.gridgrouper.stubs.DeleteMemberRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteMemberRequest();
@@ -573,7 +573,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         gov.nih.nci.cagrid.gridgrouper.stubs.DeleteMemberResponse boxedResult = portType.deleteMember(params);
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor addCompositeMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType type,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier composite,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier left,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier right) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.MemberAddFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor addCompositeMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupCompositeType type,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier composite,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier left,gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier right) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.MemberAddFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"addCompositeMember");
         gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.AddCompositeMemberRequest();
@@ -593,7 +593,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getGroupDescriptor();
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor deleteCompositeMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.MemberDeleteFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor deleteCompositeMember(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.MemberDeleteFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"deleteCompositeMember");
         gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.DeleteCompositeMemberRequest();
@@ -604,7 +604,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getGroupDescriptor();
       }
     }
-    public void grantGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.GrantPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault {
+    public void grantGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GrantPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"grantGroupPrivilege");
         gov.nih.nci.cagrid.gridgrouper.stubs.GrantGroupPrivilegeRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GrantGroupPrivilegeRequest();
@@ -620,7 +620,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         gov.nih.nci.cagrid.gridgrouper.stubs.GrantGroupPrivilegeResponse boxedResult = portType.grantGroupPrivilege(params);
       }
     }
-    public void revokeGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.RevokePrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.SchemaFault {
+    public void revokeGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.RevokePrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.SchemaFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"revokeGroupPrivilege");
         gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeRequest();
@@ -636,7 +636,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         gov.nih.nci.cagrid.gridgrouper.stubs.RevokeGroupPrivilegeResponse boxedResult = portType.revokeGroupPrivilege(params);
       }
     }
-    public java.lang.String[] getSubjectsWithGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+    public java.lang.String[] getSubjectsWithGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getSubjectsWithGroupPrivilege");
         gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetSubjectsWithGroupPrivilegeRequest();
@@ -650,7 +650,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getSubjectIdentifier();
       }
     }
-    public gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilege[] getGroupPrivileges(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+    public gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilege[] getGroupPrivileges(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getGroupPrivileges");
         gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupPrivilegesRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.GetGroupPrivilegesRequest();
@@ -664,7 +664,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.getGroupPrivilege();
       }
     }
-    public boolean hasGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault {
+    public boolean hasGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"hasGroupPrivilege");
         gov.nih.nci.cagrid.gridgrouper.stubs.HasGroupPrivilegeRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.HasGroupPrivilegeRequest();

@@ -12,9 +12,9 @@ import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GrouperI;
 import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
-import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
-import gov.nih.nci.cagrid.gridgrouper.stubs.GroupNotFoundFault;
-import gov.nih.nci.cagrid.gridgrouper.stubs.StemNotFoundFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault;
 
 import java.util.HashSet;
 import java.util.Set;

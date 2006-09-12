@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.testutils;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.gridgrouper.stubs.GridGrouperRuntimeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault;
 
 import java.io.InputStream;
 import java.sql.Connection;
@@ -20,7 +20,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: MysqlDBUtil.java,v 1.2 2006-08-18 17:28:26 langella Exp $
+ * @version $Id: MysqlDBUtil.java,v 1.3 2006-09-12 20:33:30 langella Exp $
  */
 public class MysqlDBUtil {
 

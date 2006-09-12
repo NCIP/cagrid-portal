@@ -16,7 +16,8 @@
       <agg:GetMultipleResourcePropertiesPollType
 			xmlns:ns0="http://cagrid.nci.nih.gov/1/GridGrouper"
 			xmlns:xs="http://www.w3.org/2001/XMLSchema"
-			xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security">
+			xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"
+			xmlns:ns2="http://cagrid.nci.nih.gov/GridGrouper/types">
         <!-- Specifies that the index should refresh information
             every 300000 milliseconds (once every 5 minutes) -->
         <agg:PollIntervalMillis>300000</agg:PollIntervalMillis>

@@ -15,9 +15,9 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MembershipDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.service.tools.GridGrouperBootstrapper;
-import gov.nih.nci.cagrid.gridgrouper.stubs.GroupModifyFault;
-import gov.nih.nci.cagrid.gridgrouper.stubs.InsufficientPrivilegeFault;
-import gov.nih.nci.cagrid.gridgrouper.stubs.MemberAddFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupModifyFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.MemberAddFault;
 import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
 import gov.nih.nci.cagrid.gridgrouper.testutils.Utils;
 
