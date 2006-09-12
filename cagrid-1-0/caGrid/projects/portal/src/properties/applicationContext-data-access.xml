@@ -30,15 +30,15 @@
         </property>
     </bean>
 
-    <bean id="baseTxProxy" abstract="true"
+    <!-- main DAO that participates in transactions-->
+    <bean id="gridServiceBaseDAO"
           class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager" ref="transactionManager"/>
-        <property name="target" ref="gridServiceManager"/>
+        <property name="target" ref="gridServiceBaseDAOTarget"/>
         <property name="transactionAttributes">
             <props>
-                <prop key="insert*">PROPAGATION_REQUIRED</prop>
-                <prop key="update*">PROPAGATION_REQUIRED</prop>
-                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="*">PROPAGATION_REQUIRED</prop>
+
             </props>
         </property>
     </bean>
@@ -53,7 +53,7 @@
     </bean>
 
 
-    <bean id="gridServiceBaseDAO"
+    <bean id="gridServiceBaseDAOTarget"
           class="gov.nih.nci.cagrid.portal.dao.hibernate.GridServiceBaseDAOImpl"
           parent="baseDAO">
         <property name="sessionFactory">

@@ -26,7 +26,7 @@ public class GeoCode_ServiceLocator extends org.apache.axis.client.Service imple
     }
 
     // Use to get a proxy class for GeoCode_Port
-    private java.lang.String GeoCode_Port_address = "http://geocoder.us/service/soap";
+    private java.lang.String GeoCode_Port_address = "http://rpc.geocoder.us/service/soap/";
 
     public java.lang.String getGeoCode_PortAddress() {
         return GeoCode_Port_address;

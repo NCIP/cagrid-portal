@@ -1,17 +1,42 @@
 <?xml version="1.0"?>
 
 <!DOCTYPE faces-config PUBLIC
-        "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
-        "http://java.sun.com/dtd/web-facesconfig_1_0.dtd" [
-        <!ENTITY managed-beans_gen          SYSTEM "managed-beans_gen.xml">
-        <!ENTITY sample-navigation-rules    SYSTEM "sample-navigation-rules.xml">
-        <!ENTITY converters_gen    SYSTEM "converters_gen.xml">
-        ]>
+        "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+        "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
 
 <faces-config>
-
     <application>
         <view-handler>org.apache.myfaces.application.jsp.JspTilesViewHandlerImpl</view-handler>
     </application>
+
+    <!-- Spring Integration -->
+    <application>
+        <variable-resolver>org.springframework.web.jsf.DelegatingVariableResolver</variable-resolver>
+        <locale-config>
+            <default-locale>en</default-locale>
+            <supported-locale>en</supported-locale>
+        </locale-config>
+        <message-bundle>messages</message-bundle>
+    </application>
+
+    <managed-bean>
+        <managed-bean-name>directoryTabbedPaneBean</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.portal.web.DirectoryTabbedPaneBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+
+    <managed-bean>
+        <description>JSF managed bean referencing a spring bean</description>
+        <managed-bean-name>portal</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.portal.web.PortalApplication</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <property-name>gridServiceManager</property-name>
+            <value>#{gridServiceManager}</value>
+        </managed-property>
+    </managed-bean>
+
 
 </faces-config>

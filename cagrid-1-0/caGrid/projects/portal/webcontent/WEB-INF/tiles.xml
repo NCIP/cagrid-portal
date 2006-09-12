@@ -59,5 +59,10 @@
         <put name="mainContent" value="/jsp/content/Directory.jsp"/>
     </definition>
 
+    <definition name="/error.tiles" extends="Base">
+        <put name="mainContent" value="/jsp/content/Error.jsp"/>
+    </definition>
+
+
 </tiles-definitions>
 

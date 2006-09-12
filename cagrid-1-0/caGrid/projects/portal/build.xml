@@ -70,7 +70,7 @@
     <target name="setClasspath">
         <path id="portal.classpath">
             <fileset dir="${lib.dir}">
-                <include name="*.jar"/>
+                <include name="**/*.jar"/>
             </fileset>
             <fileset dir="${ext.lib.dir}">
                 <include name="*.jar"/>
@@ -146,7 +146,8 @@
             depends="clean,cleanDeployment,compile,hibernate.xdoclet,copyLibsLocal,copyResourcesLocal,deployPreBuilt"
             description="Deploy Application into tomcat"/>
 
-    <target name="deployPreBuilt" description="Deploys pre-built webapp">
+    <target name="deployPreBuilt" depends="cleanDeployment,copyLibsLocal,copyResourcesLocal"
+            description="Deploys pre-built webapp">
         <copy todir="${tomcat.webapps.dir}/${project.name}" overwrite="true">
             <fileset dir="${webcontent.dir}"/>
         </copy>
@@ -303,7 +304,7 @@
     <target name="testLocal" depends="prepareTest,compileTests" description="Runs the service's tests.">
         <echo message="Test results dir: ${junit.results.dir}"/>
         <mkdir dir="${junit.results.dir}"/>
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed"
+        <junit dir="${junit.results.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed"
                showoutput="true">
             <classpath refid="test.classpath"/>
             <classpath>

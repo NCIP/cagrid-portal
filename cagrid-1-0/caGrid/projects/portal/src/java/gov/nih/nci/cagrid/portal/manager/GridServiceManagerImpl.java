@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.portal.utils.GeoCoderUtility;
 import org.springframework.dao.DataAccessException;
 
 import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -23,6 +24,10 @@ public class GridServiceManagerImpl extends BaseManagerImpl
         //for spring
     }
 
+
+    public List getAllServices() throws DataAccessException {
+        return super.loadAll(RegisteredService.class);
+    }
 
     /**
      * All other domain objects are saved this way

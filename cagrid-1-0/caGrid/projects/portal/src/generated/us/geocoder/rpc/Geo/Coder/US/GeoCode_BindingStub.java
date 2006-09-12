@@ -20,7 +20,7 @@ public class GeoCode_BindingStub extends org.apache.axis.client.Stub implements 
         _initOperationDesc1();
     }
 
-    private static void _initOperationDesc1(){
+    private static void _initOperationDesc1() {
         org.apache.axis.description.OperationDesc oper;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("geocode");
@@ -55,12 +55,12 @@ public class GeoCode_BindingStub extends org.apache.axis.client.Stub implements 
     }
 
     public GeoCode_BindingStub() throws org.apache.axis.AxisFault {
-         this(null);
+        this(null);
     }
 
     public GeoCode_BindingStub(java.net.URL endpointURL, javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
-         this(service);
-         super.cachedEndpoint = endpointURL;
+        this(service);
+        super.cachedEndpoint = endpointURL;
     }
 
     public GeoCode_BindingStub(javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
@@ -69,62 +69,62 @@ public class GeoCode_BindingStub extends org.apache.axis.client.Stub implements 
         } else {
             super.service = service;
         }
-            java.lang.Class cls;
-            javax.xml.namespace.QName qName;
-            java.lang.Class beansf = org.apache.axis.encoding.ser.BeanSerializerFactory.class;
-            java.lang.Class beandf = org.apache.axis.encoding.ser.BeanDeserializerFactory.class;
-            java.lang.Class enumsf = org.apache.axis.encoding.ser.EnumSerializerFactory.class;
-            java.lang.Class enumdf = org.apache.axis.encoding.ser.EnumDeserializerFactory.class;
-            java.lang.Class arraysf = org.apache.axis.encoding.ser.ArraySerializerFactory.class;
-            java.lang.Class arraydf = org.apache.axis.encoding.ser.ArrayDeserializerFactory.class;
-            java.lang.Class simplesf = org.apache.axis.encoding.ser.SimpleSerializerFactory.class;
-            java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
-            java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
-            java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
-            qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "GeocoderAddressResult");
-            cachedSerQNames.add(qName);
-            cls = us.geocoder.rpc.Geo.Coder.US.GeocoderAddressResult.class;
-            cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
+        java.lang.Class cls;
+        javax.xml.namespace.QName qName;
+        java.lang.Class beansf = org.apache.axis.encoding.ser.BeanSerializerFactory.class;
+        java.lang.Class beandf = org.apache.axis.encoding.ser.BeanDeserializerFactory.class;
+        java.lang.Class enumsf = org.apache.axis.encoding.ser.EnumSerializerFactory.class;
+        java.lang.Class enumdf = org.apache.axis.encoding.ser.EnumDeserializerFactory.class;
+        java.lang.Class arraysf = org.apache.axis.encoding.ser.ArraySerializerFactory.class;
+        java.lang.Class arraydf = org.apache.axis.encoding.ser.ArrayDeserializerFactory.class;
+        java.lang.Class simplesf = org.apache.axis.encoding.ser.SimpleSerializerFactory.class;
+        java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
+        java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
+        java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
+        qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "GeocoderIntersectionResult");
+        cachedSerQNames.add(qName);
+        cls = us.geocoder.rpc.Geo.Coder.US.GeocoderIntersectionResult.class;
+        cachedSerClasses.add(cls);
+        cachedSerFactories.add(beansf);
+        cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "GeocoderResult");
-            cachedSerQNames.add(qName);
-            cls = us.geocoder.rpc.Geo.Coder.US.GeocoderResult.class;
-            cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
+        qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "GeocoderAddressResult");
+        cachedSerQNames.add(qName);
+        cls = us.geocoder.rpc.Geo.Coder.US.GeocoderAddressResult.class;
+        cachedSerClasses.add(cls);
+        cachedSerFactories.add(beansf);
+        cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "ArrayOfGeocoderAddressResult");
-            cachedSerQNames.add(qName);
-            cls = us.geocoder.rpc.Geo.Coder.US.GeocoderAddressResult[].class;
-            cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "GeocoderAddressResult");
-            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName));
-            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+        qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "ArrayOfGeocoderResult");
+        cachedSerQNames.add(qName);
+        cls = us.geocoder.rpc.Geo.Coder.US.GeocoderResult[].class;
+        cachedSerClasses.add(cls);
+        qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "GeocoderResult");
+        cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName));
+        cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "ArrayOfGeocoderIntersectionResult");
-            cachedSerQNames.add(qName);
-            cls = us.geocoder.rpc.Geo.Coder.US.GeocoderIntersectionResult[].class;
-            cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "GeocoderIntersectionResult");
-            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName));
-            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+        qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "ArrayOfGeocoderAddressResult");
+        cachedSerQNames.add(qName);
+        cls = us.geocoder.rpc.Geo.Coder.US.GeocoderAddressResult[].class;
+        cachedSerClasses.add(cls);
+        qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "GeocoderAddressResult");
+        cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName));
+        cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "GeocoderIntersectionResult");
-            cachedSerQNames.add(qName);
-            cls = us.geocoder.rpc.Geo.Coder.US.GeocoderIntersectionResult.class;
-            cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
+        qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "ArrayOfGeocoderIntersectionResult");
+        cachedSerQNames.add(qName);
+        cls = us.geocoder.rpc.Geo.Coder.US.GeocoderIntersectionResult[].class;
+        cachedSerClasses.add(cls);
+        qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "GeocoderIntersectionResult");
+        cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName));
+        cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "ArrayOfGeocoderResult");
-            cachedSerQNames.add(qName);
-            cls = us.geocoder.rpc.Geo.Coder.US.GeocoderResult[].class;
-            cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "GeocoderResult");
-            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName));
-            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+        qName = new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "GeocoderResult");
+        cachedSerQNames.add(qName);
+        cls = us.geocoder.rpc.Geo.Coder.US.GeocoderResult.class;
+        cachedSerClasses.add(cls);
+        cachedSerFactories.add(beansf);
+        cachedDeserFactories.add(beandf);
 
     }
 
@@ -172,16 +172,15 @@ public class GeoCode_BindingStub extends org.apache.axis.client.Stub implements 
                         Object x = cachedSerFactories.get(i);
                         if (x instanceof Class) {
                             java.lang.Class sf = (java.lang.Class)
-                                 cachedSerFactories.get(i);
+                                    cachedSerFactories.get(i);
                             java.lang.Class df = (java.lang.Class)
-                                 cachedDeserFactories.get(i);
+                                    cachedDeserFactories.get(i);
                             _call.registerTypeMapping(cls, qName, sf, df, false);
-                        }
-                        else if (x instanceof javax.xml.rpc.encoding.SerializerFactory) {
+                        } else if (x instanceof javax.xml.rpc.encoding.SerializerFactory) {
                             org.apache.axis.encoding.SerializerFactory sf = (org.apache.axis.encoding.SerializerFactory)
-                                 cachedSerFactories.get(i);
+                                    cachedSerFactories.get(i);
                             org.apache.axis.encoding.DeserializerFactory df = (org.apache.axis.encoding.DeserializerFactory)
-                                 cachedDeserFactories.get(i);
+                                    cachedDeserFactories.get(i);
                             _call.registerTypeMapping(cls, qName, sf, df, false);
                         }
                     }
@@ -207,12 +206,11 @@ public class GeoCode_BindingStub extends org.apache.axis.client.Stub implements 
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {location});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[]{location});
 
         if (_resp instanceof java.rmi.RemoteException) {
-            throw (java.rmi.RemoteException)_resp;
-        }
-        else {
+            throw (java.rmi.RemoteException) _resp;
+        } else {
             extractAttachments(_call);
             try {
                 return (us.geocoder.rpc.Geo.Coder.US.GeocoderResult[]) _resp;
@@ -235,12 +233,11 @@ public class GeoCode_BindingStub extends org.apache.axis.client.Stub implements 
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {address});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[]{address});
 
         if (_resp instanceof java.rmi.RemoteException) {
-            throw (java.rmi.RemoteException)_resp;
-        }
-        else {
+            throw (java.rmi.RemoteException) _resp;
+        } else {
             extractAttachments(_call);
             try {
                 return (us.geocoder.rpc.Geo.Coder.US.GeocoderAddressResult[]) _resp;
@@ -263,12 +260,11 @@ public class GeoCode_BindingStub extends org.apache.axis.client.Stub implements 
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {intersection});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[]{intersection});
 
         if (_resp instanceof java.rmi.RemoteException) {
-            throw (java.rmi.RemoteException)_resp;
-        }
-        else {
+            throw (java.rmi.RemoteException) _resp;
+        } else {
             extractAttachments(_call);
             try {
                 return (us.geocoder.rpc.Geo.Coder.US.GeocoderIntersectionResult[]) _resp;

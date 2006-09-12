@@ -7,7 +7,7 @@
 
 package us.geocoder.rpc.Geo.Coder.US;
 
-public class GeocoderAddressResult  implements java.io.Serializable {
+public class GeocoderAddressResult implements java.io.Serializable {
     private int number;
     private int zip;
     private java.lang.String suffix;
@@ -23,32 +23,32 @@ public class GeocoderAddressResult  implements java.io.Serializable {
     }
 
     public GeocoderAddressResult(
-           float _long,
-           java.lang.String city,
-           float lat,
-           int number,
-           java.lang.String prefix,
-           java.lang.String state,
-           java.lang.String street,
-           java.lang.String suffix,
-           java.lang.String type,
-           int zip) {
-           this.number = number;
-           this.zip = zip;
-           this.suffix = suffix;
-           this.prefix = prefix;
-           this.type = type;
-           this.street = street;
-           this.state = state;
-           this.city = city;
-           this.lat = lat;
-           this._long = _long;
+            float _long,
+            java.lang.String city,
+            float lat,
+            int number,
+            java.lang.String prefix,
+            java.lang.String state,
+            java.lang.String street,
+            java.lang.String suffix,
+            java.lang.String type,
+            int zip) {
+        this.number = number;
+        this.zip = zip;
+        this.suffix = suffix;
+        this.prefix = prefix;
+        this.type = type;
+        this.street = street;
+        this.state = state;
+        this.city = city;
+        this.lat = lat;
+        this._long = _long;
     }
 
 
     /**
      * Gets the number value for this GeocoderAddressResult.
-     * 
+     *
      * @return number
      */
     public int getNumber() {
@@ -58,7 +58,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Sets the number value for this GeocoderAddressResult.
-     * 
+     *
      * @param number
      */
     public void setNumber(int number) {
@@ -68,7 +68,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Gets the zip value for this GeocoderAddressResult.
-     * 
+     *
      * @return zip
      */
     public int getZip() {
@@ -78,7 +78,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Sets the zip value for this GeocoderAddressResult.
-     * 
+     *
      * @param zip
      */
     public void setZip(int zip) {
@@ -88,7 +88,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Gets the suffix value for this GeocoderAddressResult.
-     * 
+     *
      * @return suffix
      */
     public java.lang.String getSuffix() {
@@ -98,7 +98,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Sets the suffix value for this GeocoderAddressResult.
-     * 
+     *
      * @param suffix
      */
     public void setSuffix(java.lang.String suffix) {
@@ -108,7 +108,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Gets the prefix value for this GeocoderAddressResult.
-     * 
+     *
      * @return prefix
      */
     public java.lang.String getPrefix() {
@@ -118,7 +118,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Sets the prefix value for this GeocoderAddressResult.
-     * 
+     *
      * @param prefix
      */
     public void setPrefix(java.lang.String prefix) {
@@ -128,7 +128,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Gets the type value for this GeocoderAddressResult.
-     * 
+     *
      * @return type
      */
     public java.lang.String getType() {
@@ -138,7 +138,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Sets the type value for this GeocoderAddressResult.
-     * 
+     *
      * @param type
      */
     public void setType(java.lang.String type) {
@@ -148,7 +148,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Gets the street value for this GeocoderAddressResult.
-     * 
+     *
      * @return street
      */
     public java.lang.String getStreet() {
@@ -158,7 +158,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Sets the street value for this GeocoderAddressResult.
-     * 
+     *
      * @param street
      */
     public void setStreet(java.lang.String street) {
@@ -168,7 +168,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Gets the state value for this GeocoderAddressResult.
-     * 
+     *
      * @return state
      */
     public java.lang.String getState() {
@@ -178,7 +178,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Sets the state value for this GeocoderAddressResult.
-     * 
+     *
      * @param state
      */
     public void setState(java.lang.String state) {
@@ -188,7 +188,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Gets the city value for this GeocoderAddressResult.
-     * 
+     *
      * @return city
      */
     public java.lang.String getCity() {
@@ -198,7 +198,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Sets the city value for this GeocoderAddressResult.
-     * 
+     *
      * @param city
      */
     public void setCity(java.lang.String city) {
@@ -208,7 +208,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Gets the lat value for this GeocoderAddressResult.
-     * 
+     *
      * @return lat
      */
     public float getLat() {
@@ -218,7 +218,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Sets the lat value for this GeocoderAddressResult.
-     * 
+     *
      * @param lat
      */
     public void setLat(float lat) {
@@ -228,7 +228,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Gets the _long value for this GeocoderAddressResult.
-     * 
+     *
      * @return _long
      */
     public float get_long() {
@@ -238,7 +238,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     /**
      * Sets the _long value for this GeocoderAddressResult.
-     * 
+     *
      * @param _long
      */
     public void set_long(float _long) {
@@ -246,6 +246,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
     }
 
     private java.lang.Object __equalsCalc = null;
+
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof GeocoderAddressResult)) return false;
         GeocoderAddressResult other = (GeocoderAddressResult) obj;
@@ -256,34 +257,35 @@ public class GeocoderAddressResult  implements java.io.Serializable {
         }
         __equalsCalc = obj;
         boolean _equals;
-        _equals = true && 
-            this.number == other.getNumber() &&
-            this.zip == other.getZip() &&
-            ((this.suffix==null && other.getSuffix()==null) || 
-             (this.suffix!=null &&
-              this.suffix.equals(other.getSuffix()))) &&
-            ((this.prefix==null && other.getPrefix()==null) || 
-             (this.prefix!=null &&
-              this.prefix.equals(other.getPrefix()))) &&
-            ((this.type==null && other.getType()==null) || 
-             (this.type!=null &&
-              this.type.equals(other.getType()))) &&
-            ((this.street==null && other.getStreet()==null) || 
-             (this.street!=null &&
-              this.street.equals(other.getStreet()))) &&
-            ((this.state==null && other.getState()==null) || 
-             (this.state!=null &&
-              this.state.equals(other.getState()))) &&
-            ((this.city==null && other.getCity()==null) || 
-             (this.city!=null &&
-              this.city.equals(other.getCity()))) &&
-            this.lat == other.getLat() &&
-            this._long == other.get_long();
+        _equals = true &&
+                this.number == other.getNumber() &&
+                this.zip == other.getZip() &&
+                ((this.suffix == null && other.getSuffix() == null) ||
+                        (this.suffix != null &&
+                                this.suffix.equals(other.getSuffix()))) &&
+                ((this.prefix == null && other.getPrefix() == null) ||
+                        (this.prefix != null &&
+                                this.prefix.equals(other.getPrefix()))) &&
+                ((this.type == null && other.getType() == null) ||
+                        (this.type != null &&
+                                this.type.equals(other.getType()))) &&
+                ((this.street == null && other.getStreet() == null) ||
+                        (this.street != null &&
+                                this.street.equals(other.getStreet()))) &&
+                ((this.state == null && other.getState() == null) ||
+                        (this.state != null &&
+                                this.state.equals(other.getState()))) &&
+                ((this.city == null && other.getCity() == null) ||
+                        (this.city != null &&
+                                this.city.equals(other.getCity()))) &&
+                this.lat == other.getLat() &&
+                this._long == other.get_long();
         __equalsCalc = null;
         return _equals;
     }
 
     private boolean __hashCodeCalc = false;
+
     public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
@@ -318,7 +320,7 @@ public class GeocoderAddressResult  implements java.io.Serializable {
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(GeocoderAddressResult.class, true);
+            new org.apache.axis.description.TypeDesc(GeocoderAddressResult.class, true);
 
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "GeocoderAddressResult"));
@@ -385,24 +387,24 @@ public class GeocoderAddressResult  implements java.io.Serializable {
      * Get Custom Serializer
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
-           javax.xml.namespace.QName _xmlType) {
-        return 
-          new  org.apache.axis.encoding.ser.BeanSerializer(
-            _javaType, _xmlType, typeDesc);
+            java.lang.String mechType,
+            java.lang.Class _javaType,
+            javax.xml.namespace.QName _xmlType) {
+        return
+                new org.apache.axis.encoding.ser.BeanSerializer(
+                        _javaType, _xmlType, typeDesc);
     }
 
     /**
      * Get Custom Deserializer
      */
     public static org.apache.axis.encoding.Deserializer getDeserializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
-           javax.xml.namespace.QName _xmlType) {
-        return 
-          new  org.apache.axis.encoding.ser.BeanDeserializer(
-            _javaType, _xmlType, typeDesc);
+            java.lang.String mechType,
+            java.lang.Class _javaType,
+            javax.xml.namespace.QName _xmlType) {
+        return
+                new org.apache.axis.encoding.ser.BeanDeserializer(
+                        _javaType, _xmlType, typeDesc);
     }
 
 }

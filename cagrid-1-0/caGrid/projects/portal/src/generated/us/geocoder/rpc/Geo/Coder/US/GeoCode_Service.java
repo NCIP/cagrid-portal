@@ -9,9 +9,9 @@ package us.geocoder.rpc.Geo.Coder.US;
 
 public interface GeoCode_Service extends javax.xml.rpc.Service {
 
-/**
- * WSDL File for Geo Coder - Written by Scott Gunn (scott_gunn*AT*email.com)
- */
+    /**
+     * WSDL File for Geo Coder - Written by Scott Gunn (scott_gunn*AT*email.com)
+     */
     public java.lang.String getGeoCode_PortAddress();
 
     public us.geocoder.rpc.Geo.Coder.US.GeoCode_PortType getGeoCode_Port() throws javax.xml.rpc.ServiceException;

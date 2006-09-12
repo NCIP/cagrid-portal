@@ -8,7 +8,7 @@
         <constructor-arg index="0">
             <ref bean="gridServiceManager"/>
         </constructor-arg>
-        </bean>
+    </bean>
 
 
     <bean id="indexAggregatorFactory"
@@ -32,7 +32,7 @@
         </property>
         <property name="delay">
             <!--Put a delay so doesn't start before DB initialized-->
-            <value>10000</value>
+            <value>1000000</value>
         </property>
     </bean>
 

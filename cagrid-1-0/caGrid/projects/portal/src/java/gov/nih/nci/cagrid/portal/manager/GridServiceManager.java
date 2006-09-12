@@ -5,6 +5,8 @@ import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import org.springframework.dao.DataAccessException;
 
+import java.util.List;
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,6 +17,12 @@ import org.springframework.dao.DataAccessException;
  */
 public interface GridServiceManager extends BaseManager {
 
+    /**
+     * Will return all Registered Services
+     *
+     * @throws DataAccessException
+     */
+    public List getAllServices() throws DataAccessException;
 
     public void save(ResearchCenter rc) throws DataAccessException;
 

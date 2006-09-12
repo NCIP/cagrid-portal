@@ -7,7 +7,7 @@
 
 package us.geocoder.rpc.Geo.Coder.US;
 
-public class GeocoderResult  implements java.io.Serializable {
+public class GeocoderResult implements java.io.Serializable {
     private int zip;
     private java.lang.String state;
     private java.lang.String city;
@@ -31,48 +31,48 @@ public class GeocoderResult  implements java.io.Serializable {
     }
 
     public GeocoderResult(
-           float _long,
-           java.lang.String city,
-           float lat,
-           int number,
-           java.lang.String prefix,
-           java.lang.String prefix1,
-           java.lang.String prefix2,
-           java.lang.String state,
-           java.lang.String street,
-           java.lang.String street1,
-           java.lang.String street2,
-           java.lang.String suffix,
-           java.lang.String suffix1,
-           java.lang.String suffix2,
-           java.lang.String type,
-           java.lang.String type1,
-           java.lang.String type2,
-           int zip) {
-           this.zip = zip;
-           this.state = state;
-           this.city = city;
-           this.lat = lat;
-           this._long = _long;
-           this.number = number;
-           this.suffix = suffix;
-           this.prefix = prefix;
-           this.type = type;
-           this.street = street;
-           this.suffix1 = suffix1;
-           this.prefix1 = prefix1;
-           this.type1 = type1;
-           this.street1 = street1;
-           this.suffix2 = suffix2;
-           this.prefix2 = prefix2;
-           this.type2 = type2;
-           this.street2 = street2;
+            float _long,
+            java.lang.String city,
+            float lat,
+            int number,
+            java.lang.String prefix,
+            java.lang.String prefix1,
+            java.lang.String prefix2,
+            java.lang.String state,
+            java.lang.String street,
+            java.lang.String street1,
+            java.lang.String street2,
+            java.lang.String suffix,
+            java.lang.String suffix1,
+            java.lang.String suffix2,
+            java.lang.String type,
+            java.lang.String type1,
+            java.lang.String type2,
+            int zip) {
+        this.zip = zip;
+        this.state = state;
+        this.city = city;
+        this.lat = lat;
+        this._long = _long;
+        this.number = number;
+        this.suffix = suffix;
+        this.prefix = prefix;
+        this.type = type;
+        this.street = street;
+        this.suffix1 = suffix1;
+        this.prefix1 = prefix1;
+        this.type1 = type1;
+        this.street1 = street1;
+        this.suffix2 = suffix2;
+        this.prefix2 = prefix2;
+        this.type2 = type2;
+        this.street2 = street2;
     }
 
 
     /**
      * Gets the zip value for this GeocoderResult.
-     * 
+     *
      * @return zip
      */
     public int getZip() {
@@ -82,7 +82,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the zip value for this GeocoderResult.
-     * 
+     *
      * @param zip
      */
     public void setZip(int zip) {
@@ -92,7 +92,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the state value for this GeocoderResult.
-     * 
+     *
      * @return state
      */
     public java.lang.String getState() {
@@ -102,7 +102,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the state value for this GeocoderResult.
-     * 
+     *
      * @param state
      */
     public void setState(java.lang.String state) {
@@ -112,7 +112,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the city value for this GeocoderResult.
-     * 
+     *
      * @return city
      */
     public java.lang.String getCity() {
@@ -122,7 +122,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the city value for this GeocoderResult.
-     * 
+     *
      * @param city
      */
     public void setCity(java.lang.String city) {
@@ -132,7 +132,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the lat value for this GeocoderResult.
-     * 
+     *
      * @return lat
      */
     public float getLat() {
@@ -142,7 +142,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the lat value for this GeocoderResult.
-     * 
+     *
      * @param lat
      */
     public void setLat(float lat) {
@@ -152,7 +152,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the _long value for this GeocoderResult.
-     * 
+     *
      * @return _long
      */
     public float get_long() {
@@ -162,7 +162,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the _long value for this GeocoderResult.
-     * 
+     *
      * @param _long
      */
     public void set_long(float _long) {
@@ -172,7 +172,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the number value for this GeocoderResult.
-     * 
+     *
      * @return number
      */
     public int getNumber() {
@@ -182,7 +182,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the number value for this GeocoderResult.
-     * 
+     *
      * @param number
      */
     public void setNumber(int number) {
@@ -192,7 +192,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the suffix value for this GeocoderResult.
-     * 
+     *
      * @return suffix
      */
     public java.lang.String getSuffix() {
@@ -202,7 +202,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the suffix value for this GeocoderResult.
-     * 
+     *
      * @param suffix
      */
     public void setSuffix(java.lang.String suffix) {
@@ -212,7 +212,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the prefix value for this GeocoderResult.
-     * 
+     *
      * @return prefix
      */
     public java.lang.String getPrefix() {
@@ -222,7 +222,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the prefix value for this GeocoderResult.
-     * 
+     *
      * @param prefix
      */
     public void setPrefix(java.lang.String prefix) {
@@ -232,7 +232,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the type value for this GeocoderResult.
-     * 
+     *
      * @return type
      */
     public java.lang.String getType() {
@@ -242,7 +242,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the type value for this GeocoderResult.
-     * 
+     *
      * @param type
      */
     public void setType(java.lang.String type) {
@@ -252,7 +252,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the street value for this GeocoderResult.
-     * 
+     *
      * @return street
      */
     public java.lang.String getStreet() {
@@ -262,7 +262,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the street value for this GeocoderResult.
-     * 
+     *
      * @param street
      */
     public void setStreet(java.lang.String street) {
@@ -272,7 +272,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the suffix1 value for this GeocoderResult.
-     * 
+     *
      * @return suffix1
      */
     public java.lang.String getSuffix1() {
@@ -282,7 +282,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the suffix1 value for this GeocoderResult.
-     * 
+     *
      * @param suffix1
      */
     public void setSuffix1(java.lang.String suffix1) {
@@ -292,7 +292,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the prefix1 value for this GeocoderResult.
-     * 
+     *
      * @return prefix1
      */
     public java.lang.String getPrefix1() {
@@ -302,7 +302,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the prefix1 value for this GeocoderResult.
-     * 
+     *
      * @param prefix1
      */
     public void setPrefix1(java.lang.String prefix1) {
@@ -312,7 +312,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the type1 value for this GeocoderResult.
-     * 
+     *
      * @return type1
      */
     public java.lang.String getType1() {
@@ -322,7 +322,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the type1 value for this GeocoderResult.
-     * 
+     *
      * @param type1
      */
     public void setType1(java.lang.String type1) {
@@ -332,7 +332,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the street1 value for this GeocoderResult.
-     * 
+     *
      * @return street1
      */
     public java.lang.String getStreet1() {
@@ -342,7 +342,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the street1 value for this GeocoderResult.
-     * 
+     *
      * @param street1
      */
     public void setStreet1(java.lang.String street1) {
@@ -352,7 +352,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the suffix2 value for this GeocoderResult.
-     * 
+     *
      * @return suffix2
      */
     public java.lang.String getSuffix2() {
@@ -362,7 +362,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the suffix2 value for this GeocoderResult.
-     * 
+     *
      * @param suffix2
      */
     public void setSuffix2(java.lang.String suffix2) {
@@ -372,7 +372,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the prefix2 value for this GeocoderResult.
-     * 
+     *
      * @return prefix2
      */
     public java.lang.String getPrefix2() {
@@ -382,7 +382,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the prefix2 value for this GeocoderResult.
-     * 
+     *
      * @param prefix2
      */
     public void setPrefix2(java.lang.String prefix2) {
@@ -392,7 +392,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the type2 value for this GeocoderResult.
-     * 
+     *
      * @return type2
      */
     public java.lang.String getType2() {
@@ -402,7 +402,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the type2 value for this GeocoderResult.
-     * 
+     *
      * @param type2
      */
     public void setType2(java.lang.String type2) {
@@ -412,7 +412,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Gets the street2 value for this GeocoderResult.
-     * 
+     *
      * @return street2
      */
     public java.lang.String getStreet2() {
@@ -422,7 +422,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     /**
      * Sets the street2 value for this GeocoderResult.
-     * 
+     *
      * @param street2
      */
     public void setStreet2(java.lang.String street2) {
@@ -430,6 +430,7 @@ public class GeocoderResult  implements java.io.Serializable {
     }
 
     private java.lang.Object __equalsCalc = null;
+
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof GeocoderResult)) return false;
         GeocoderResult other = (GeocoderResult) obj;
@@ -440,58 +441,59 @@ public class GeocoderResult  implements java.io.Serializable {
         }
         __equalsCalc = obj;
         boolean _equals;
-        _equals = true && 
-            this.zip == other.getZip() &&
-            ((this.state==null && other.getState()==null) || 
-             (this.state!=null &&
-              this.state.equals(other.getState()))) &&
-            ((this.city==null && other.getCity()==null) || 
-             (this.city!=null &&
-              this.city.equals(other.getCity()))) &&
-            this.lat == other.getLat() &&
-            this._long == other.get_long() &&
-            this.number == other.getNumber() &&
-            ((this.suffix==null && other.getSuffix()==null) || 
-             (this.suffix!=null &&
-              this.suffix.equals(other.getSuffix()))) &&
-            ((this.prefix==null && other.getPrefix()==null) || 
-             (this.prefix!=null &&
-              this.prefix.equals(other.getPrefix()))) &&
-            ((this.type==null && other.getType()==null) || 
-             (this.type!=null &&
-              this.type.equals(other.getType()))) &&
-            ((this.street==null && other.getStreet()==null) || 
-             (this.street!=null &&
-              this.street.equals(other.getStreet()))) &&
-            ((this.suffix1==null && other.getSuffix1()==null) || 
-             (this.suffix1!=null &&
-              this.suffix1.equals(other.getSuffix1()))) &&
-            ((this.prefix1==null && other.getPrefix1()==null) || 
-             (this.prefix1!=null &&
-              this.prefix1.equals(other.getPrefix1()))) &&
-            ((this.type1==null && other.getType1()==null) || 
-             (this.type1!=null &&
-              this.type1.equals(other.getType1()))) &&
-            ((this.street1==null && other.getStreet1()==null) || 
-             (this.street1!=null &&
-              this.street1.equals(other.getStreet1()))) &&
-            ((this.suffix2==null && other.getSuffix2()==null) || 
-             (this.suffix2!=null &&
-              this.suffix2.equals(other.getSuffix2()))) &&
-            ((this.prefix2==null && other.getPrefix2()==null) || 
-             (this.prefix2!=null &&
-              this.prefix2.equals(other.getPrefix2()))) &&
-            ((this.type2==null && other.getType2()==null) || 
-             (this.type2!=null &&
-              this.type2.equals(other.getType2()))) &&
-            ((this.street2==null && other.getStreet2()==null) || 
-             (this.street2!=null &&
-              this.street2.equals(other.getStreet2())));
+        _equals = true &&
+                this.zip == other.getZip() &&
+                ((this.state == null && other.getState() == null) ||
+                        (this.state != null &&
+                                this.state.equals(other.getState()))) &&
+                ((this.city == null && other.getCity() == null) ||
+                        (this.city != null &&
+                                this.city.equals(other.getCity()))) &&
+                this.lat == other.getLat() &&
+                this._long == other.get_long() &&
+                this.number == other.getNumber() &&
+                ((this.suffix == null && other.getSuffix() == null) ||
+                        (this.suffix != null &&
+                                this.suffix.equals(other.getSuffix()))) &&
+                ((this.prefix == null && other.getPrefix() == null) ||
+                        (this.prefix != null &&
+                                this.prefix.equals(other.getPrefix()))) &&
+                ((this.type == null && other.getType() == null) ||
+                        (this.type != null &&
+                                this.type.equals(other.getType()))) &&
+                ((this.street == null && other.getStreet() == null) ||
+                        (this.street != null &&
+                                this.street.equals(other.getStreet()))) &&
+                ((this.suffix1 == null && other.getSuffix1() == null) ||
+                        (this.suffix1 != null &&
+                                this.suffix1.equals(other.getSuffix1()))) &&
+                ((this.prefix1 == null && other.getPrefix1() == null) ||
+                        (this.prefix1 != null &&
+                                this.prefix1.equals(other.getPrefix1()))) &&
+                ((this.type1 == null && other.getType1() == null) ||
+                        (this.type1 != null &&
+                                this.type1.equals(other.getType1()))) &&
+                ((this.street1 == null && other.getStreet1() == null) ||
+                        (this.street1 != null &&
+                                this.street1.equals(other.getStreet1()))) &&
+                ((this.suffix2 == null && other.getSuffix2() == null) ||
+                        (this.suffix2 != null &&
+                                this.suffix2.equals(other.getSuffix2()))) &&
+                ((this.prefix2 == null && other.getPrefix2() == null) ||
+                        (this.prefix2 != null &&
+                                this.prefix2.equals(other.getPrefix2()))) &&
+                ((this.type2 == null && other.getType2() == null) ||
+                        (this.type2 != null &&
+                                this.type2.equals(other.getType2()))) &&
+                ((this.street2 == null && other.getStreet2() == null) ||
+                        (this.street2 != null &&
+                                this.street2.equals(other.getStreet2())));
         __equalsCalc = null;
         return _equals;
     }
 
     private boolean __hashCodeCalc = false;
+
     public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
@@ -550,7 +552,7 @@ public class GeocoderResult  implements java.io.Serializable {
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(GeocoderResult.class, true);
+            new org.apache.axis.description.TypeDesc(GeocoderResult.class, true);
 
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("http://rpc.geocoder.us/Geo/Coder/US/", "GeocoderResult"));
@@ -657,24 +659,24 @@ public class GeocoderResult  implements java.io.Serializable {
      * Get Custom Serializer
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
-           javax.xml.namespace.QName _xmlType) {
-        return 
-          new  org.apache.axis.encoding.ser.BeanSerializer(
-            _javaType, _xmlType, typeDesc);
+            java.lang.String mechType,
+            java.lang.Class _javaType,
+            javax.xml.namespace.QName _xmlType) {
+        return
+                new org.apache.axis.encoding.ser.BeanSerializer(
+                        _javaType, _xmlType, typeDesc);
     }
 
     /**
      * Get Custom Deserializer
      */
     public static org.apache.axis.encoding.Deserializer getDeserializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
-           javax.xml.namespace.QName _xmlType) {
-        return 
-          new  org.apache.axis.encoding.ser.BeanDeserializer(
-            _javaType, _xmlType, typeDesc);
+            java.lang.String mechType,
+            java.lang.Class _javaType,
+            javax.xml.namespace.QName _xmlType) {
+        return
+                new org.apache.axis.encoding.ser.BeanDeserializer(
+                        _javaType, _xmlType, typeDesc);
     }
 
 }
