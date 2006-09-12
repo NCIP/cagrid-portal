@@ -2,6 +2,9 @@ package gov.nih.nci.cagrid.idp.service;
 
 import gov.nih.nci.cagrid.dorian.SAMLAssertion;
 import gov.nih.nci.cagrid.idp.plugin.IdentityProvider;
+import gov.nih.nci.cagrid.idp.plugin.exception.IdpInternalException;
+import gov.nih.nci.cagrid.idp.plugin.exception.InValidCredentialException;
+import gov.nih.nci.cagrid.idp.plugin.exception.InsufficientAttributesException;
 import gov.nih.nci.cagrid.idp.plugin.ri.IdentityProviderImpl;
 import gov.nih.nci.security.AuthenticationManager;
 import gov.nih.nci.security.SecurityServiceProvider;
@@ -63,9 +66,12 @@ public class IDPServiceImpl {
 		    .login(new gov.nih.nci.cagrid.idp.plugin.domain.Credential(
 			    credential.getUserID(), credential.getPassword()));
 	    sa = new gov.nih.nci.cagrid.dorian.SAMLAssertion(openSa.toString());	    
-	} catch (Exception ex) {
-	    throw new RemoteException("Error getting assertion: "
-		    + ex.getMessage(), ex);
+	} catch (InsufficientAttributesException ex) {
+	    throw new gov.nih.nci.cagrid.idp.stubs.InsufficientAttributeException();
+	} catch(InValidCredentialException ex){
+	    throw new gov.nih.nci.cagrid.idp.stubs.InValidCredentialException();
+	} catch(IdpInternalException ex){
+	    throw new gov.nih.nci.cagrid.idp.stubs.IdpInternalException();
 	}
 
 	
