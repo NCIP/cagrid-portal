@@ -4,6 +4,7 @@
 <project name="caGrid-extensions_tests_harness" basedir=".">
 	<property name="test.logs.dir" value="${test.dir}/logs" />
 	<property name="junit.results.dir" value="${test.logs.dir}/junit" />
+	<property name="dont.instrument" value="true" />
 	
 	<!-- =============================================================== -->
 	<!-- Call test for each project and aggregates the log resutls       -->
@@ -25,6 +26,7 @@
 					<try>
 						<ant inheritall="false" dir="projects/@{project.name}" antfile="build.xml" target="test">
 							<property name="junit.results.dir" value="${junit.results.dir}" />
+							<property name="dont.instrument" value="${dont.instrument}"/>
 						</ant>
 					</try>
 					<catch>
