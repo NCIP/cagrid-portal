@@ -32,7 +32,7 @@ import org.apache.xml.security.signature.XMLSignature;
  * This class is a simple implementation that should be replaced with something
  * more sophisticated.
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @author Joshua Phillips
  * 
  */
@@ -109,7 +109,7 @@ public class SAMLAsserterImpl implements SAMLAsserter {
 
 	    QName quid = new QName(SAMLConstants.UID_ATTRIBUTE_NAMESPACE,
 		    SAMLConstants.UID_ATTRIBUTE);
-	    List<String> vals1 = new ArrayList<String>();
+	    List vals1 = new ArrayList();
 	    vals1.add(uid);
 	    SAMLAttribute uidAtt = new SAMLAttribute(quid.getLocalPart(), quid
 		    .getNamespaceURI(), null, 0, vals1);
@@ -117,7 +117,7 @@ public class SAMLAsserterImpl implements SAMLAsserter {
 	    QName qfirst = new QName(
 		    SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE,
 		    SAMLConstants.FIRST_NAME_ATTRIBUTE);
-	    List<String> vals2 = new ArrayList<String>();
+	    List vals2 = new ArrayList();
 	    vals2.add(firstName);
 	    SAMLAttribute firstNameAtt = new SAMLAttribute(qfirst
 		    .getLocalPart(), qfirst.getNamespaceURI(), null, 0, vals2);
@@ -125,19 +125,19 @@ public class SAMLAsserterImpl implements SAMLAsserter {
 	    QName qLast = new QName(
 		    SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE,
 		    SAMLConstants.LAST_NAME_ATTRIBUTE);
-	    List<String> vals3 = new ArrayList<String>();
+	    List vals3 = new ArrayList();
 	    vals3.add(lastName);
 	    SAMLAttribute lastNameAtt = new SAMLAttribute(qLast.getLocalPart(),
 		    qLast.getNamespaceURI(), null, 0, vals3);
 
 	    QName qemail = new QName(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE,
 		    SAMLConstants.EMAIL_ATTRIBUTE);
-	    List<String> vals4 = new ArrayList<String>();
+	    List vals4 = new ArrayList();
 	    vals4.add(email);
 	    SAMLAttribute emailAtt = new SAMLAttribute(qemail.getLocalPart(),
 		    qemail.getNamespaceURI(), null, 0, vals4);
 
-	    List<SAMLAttribute> atts = new ArrayList<SAMLAttribute>();
+	    List atts = new ArrayList();
 	    atts.add(uidAtt);
 	    atts.add(firstNameAtt);
 	    atts.add(lastNameAtt);
@@ -152,7 +152,7 @@ public class SAMLAsserterImpl implements SAMLAsserter {
 
 	    SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null,
 		    null, l);
-	    List<X509Certificate> a = new ArrayList<X509Certificate>();
+	    List a = new ArrayList();
 	    a.add(this.idpCertificate);
 	    saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1,
 		    this.idpPrivateKey, a);
