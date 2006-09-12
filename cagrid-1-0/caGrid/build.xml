@@ -39,7 +39,7 @@
     <!-- ================================================================================ -->
     <!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
     <property name="projects.list"
-              value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, idpservice, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, bulkDataTransfer"/>
+              value="cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, idpservice, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, bulkDataTransfer,security-ui"/>
     <!-- ================================================================================ -->
     <!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
     <!-- ================================================================================ -->
@@ -276,6 +276,16 @@
         </resolveDependencies>
         <ant dir="${projects.dir}/dorian" inheritAll="false" antfile="build.xml" target="all"/>
     </target>
+	
+	 <target name="build-security-ui" depends="prepare" description="Builds the Security UI project">
+	        <resolveDependencies extdir="${projects.dir}/security-ui/ext">
+	            <artifact refid="dorian.ui.jars"/>
+	        	<artifact refid="dorian.endorsed"/>
+	        	<artifact refid="gts.ui.jars"/>
+	        	<artifact refid="gridgrouper.ui.jars"/>
+	        </resolveDependencies>
+	        <ant dir="${projects.dir}/security-ui" inheritAll="false" antfile="build.xml" target="all"/>
+	    </target>
 
     <!-- =============================================================== -->
     <!-- Build Grid Grouper:                                             -->
