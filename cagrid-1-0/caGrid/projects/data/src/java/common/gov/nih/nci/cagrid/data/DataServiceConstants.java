@@ -39,6 +39,8 @@ public class DataServiceConstants {
 	public static final String CQL_RESULT_SET_URI = "http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet";
 	public static final String CQL_QUERY_TYPE = gov.nih.nci.cagrid.cqlquery.CQLQuery.class.getName();
 	public static final String CQL_RESULT_SET_TYPE = gov.nih.nci.cagrid.cqlresultset.CQLQueryResults.class.getName();
+	public static final QName CQL_QUERY_QNAME = new QName(CQL_QUERY_URI, CQL_QUERY_TYPE);
+	public static final QName CQL_RESULT_SET_QNAME = new QName(CQL_RESULT_SET_URI, CQL_RESULT_SET_TYPE);
 	
 	// query method constants
 	public static final String QUERY_METHOD_NAME = "query";
