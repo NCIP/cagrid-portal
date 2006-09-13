@@ -116,5 +116,6 @@
 	<classpathentry kind="lib" path="test/lib/ao-util.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
+	<classpathentry kind="src" path="src/java/tools"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

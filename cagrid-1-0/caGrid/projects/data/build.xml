@@ -27,6 +27,7 @@
     <property name="build.validation.dest" location="${build.dir}/validation/classes" />
     <property name="build.common.dest" location="${build.dir}/common/classes" />
     <property name="build.cql.dest" location="${build.dir}/cql/classes" />
+	<property name="build.tools.dest" location="${build.dir}/tools/classes" />
 	<property name="build.jars.dir" location="build/lib" />
 
     <!-- jar names -->
@@ -36,6 +37,7 @@
     <property name="validation.jar.name" value="${project.name}-validation.jar" />
     <property name="common.jar.name" value="${project.name}-common.jar" />
     <property name="cql.jar.name" value="${project.name}-cql.jar" />
+	<property name="tools.jar.name" value="${project.name}-tools.jar" />
 
     <!-- jar files -->
     <property name="extension.jar.file" value="${build.jars.dir}/${extension.jar.name}" />
@@ -44,6 +46,7 @@
     <property name="validation.jar.file" value="${build.jars.dir}/${validation.jar.name}" />
     <property name="common.jar.file" value="${build.jars.dir}/${common.jar.name}" />
     <property name="cql.jar.file" value="${build.jars.dir}/${cql.jar.name}" />
+	<property name="tools.jar.file" value="${build.jars.dir}/${tools.jar.name}" />
 
     <!-- extension -->
     <property name="extension.description.file" value="${basedir}/extension/extension.xml" />
@@ -72,6 +75,7 @@
     <property name="validation.src.dir" location="${src.dir}/validation" />
     <property name="common.src.dir" location="${src.dir}/common" />
     <property name="cql.src.dir" location="${src.dir}/cql" />
+	<property name="tools.src.dir" location="${src.dir}/tools" />
 
     <!-- libraries -->
     <property name="lib.dir" location="${basedir}/lib" />
@@ -87,20 +91,28 @@
     <property name="test.project.jar" location="${build.jars.dir}/${project.name}-tests.jar" />
     <import file="test/test.xml" />
 
+	
     <!-- =============================================================== -->
-    <!-- The Test Classpath                                                   -->
+    <!-- Classpaths                                                      -->
     <!-- =============================================================== -->
+	<path id="base.classpath">
+		<fileset dir="${lib.dir}">
+	    	<include name="*.jar" />
+	    </fileset>
+	    <fileset dir="${ext.lib.dir}">
+	    	<include name="*.jar" />
+		</fileset>
+	    <fileset dir="${globus.dir}/lib">
+	    	<include name="*.jar" />
+		</fileset>
+	</path>
+	
     <path id="test.classpath">
+    	<path refid="base.classpath"/>
         <fileset dir="${test.lib.dir}">
             <include name="**/*.jar" />
         </fileset>
         <fileset dir="${ext.test.lib.dir}">
-            <include name="**/*.jar" />
-        </fileset>
-        <fileset dir="${lib.dir}">
-            <include name="**/*.jar" />
-        </fileset>
-        <fileset dir="${ext.lib.dir}">
             <include name="**/*.jar" />
         </fileset>
         <fileset dir="${build.jars.dir}">
@@ -110,7 +122,7 @@
             <include name="**/*.jar" />
         </fileset>
     </path>
-
+	
 
     <!-- sets up GT4 related variables -->
     <target name="setGlobus" if="env.GLOBUS_LOCATION">
@@ -134,6 +146,7 @@
         <mkdir dir="${build.service.dest}" />
         <mkdir dir="${build.validation.dest}" />
         <mkdir dir="${build.cql.dest}" />
+    	<mkdir dir="${build.tools.dest}" />
         <mkdir dir="${build.jars.dir}" />
         <mkdir dir="${test.classes.dir}" />
         <mkdir dir="${stubs.dir}" />
@@ -152,29 +165,6 @@
         		<include name="xsd/**/*.xsd"/>
         	</fileset>
         </copy>
-    	<!--
-    	<copy toDir="${schema.dest}/Enum">
-    		<fileset dir="schema/Data" casesensitive="yes">
-    			<include name="DataService.wsdl" />
-    			<include name="EnumerationQuery.wsdl" />
-    			<include name="ServiceSecurity.wsdl" />
-    			<include name="1_gov.nih.nci.cagrid.CQLQuery.xsd"/>
-    		</fileset>
-    		<fileset dir="ext">
-    			<include name="xsd/security.xsd"/>
-    		</fileset>
-    		<fileset dir="ext/xsd">
-    			<include name="enumeration.xsd"/>
-    			<include name="addressing.xsd"/>
-    		</fileset>
-    	</copy>
-        <mkdir dir="${schema.dest}/Data/metadata" />
-        <copy todir="${schema.dest}/Data/metadata">
-            <fileset dir="${ext.schema.dir}">
-                <include name="cagrid/**/*.xsd" />
-            </fileset>
-        </copy>
-        -->
         <available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
     </target>
 
@@ -254,12 +244,7 @@
         <javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}" source="${java.source}">
             <include name="**/*.java" />
             <classpath>
-                <fileset dir="${lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
-                <fileset dir="${ext.lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
+            	<path refid="base.classpath"/>
                 <fileset dir="${globus.dir}/lib">
                     <include name="*.jar" />
                 </fileset>
@@ -272,12 +257,7 @@
     <target name="compileCommon" depends="compileStubs">
         <javac srcdir="${common.src.dir}" destdir="${build.common.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
-                <fileset dir="${lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
-                <fileset dir="${ext.lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
+                <path refid="base.classpath"/>
                 <pathelement location="${stubs.dest}" />
                 <fileset dir="${globus.dir}/lib">
                     <include name="*.jar" />
@@ -291,12 +271,7 @@
     <target name="compileUtils" depends="compileStubs, compileCommon">
         <javac srcdir="${utils.src.dir}" destdir="${build.utils.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
-                <fileset dir="${lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
-                <fileset dir="${ext.lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
+            	<path refid="base.classpath"/>
                 <pathelement location="${stubs.dest}" />
                 <pathelement location="${build.common.dest}" />
                 <fileset dir="${globus.dir}/lib">
@@ -312,12 +287,7 @@
     <target name="compileExtension" depends="compileStubs, compileCommon, compileService, compileCql, compileValidation">
         <javac srcdir="${extension.src.dir}" destdir="${build.extension.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
-                <fileset dir="${lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
-                <fileset dir="${ext.lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
+            	<path refid="base.classpath"/>
                 <pathelement location="${stubs.dest}" />
                 <pathelement location="${build.service.dest}" />
                 <pathelement location="${build.common.dest}" />
@@ -335,12 +305,7 @@
     <target name="compileService" depends="compileStubs, compileUtils, compileValidation, compileCommon, compileCql">
         <javac srcdir="${service.src.dir}" destdir="${build.service.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
-                <fileset dir="${lib.dir}">
-                    <include name="**/*.jar" />
-                </fileset>
-                <fileset dir="${ext.lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
+                <path refid="base.classpath"/>
                 <pathelement location="${stubs.dest}" />
                 <pathelement location="${build.utils.dest}" />
                 <pathelement location="${build.common.dest}" />
@@ -358,12 +323,7 @@
     <target name="compileValidation" depends="compileStubs, compileCommon, compileUtils">
         <javac srcdir="${validation.src.dir}" destdir="${build.validation.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
-                <fileset dir="${lib.dir}">
-                    <include name="**/*.jar" />
-                </fileset>
-                <fileset dir="${ext.lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
+                <path refid="base.classpath"/>
                 <pathelement location="${stubs.dest}" />
                 <pathelement location="${build.common.dest}" />
             	<pathelement location="${build.utils.dest}" />
@@ -379,12 +339,7 @@
     <target name="compileCql" depends="compileStubs, compileCommon">
         <javac srcdir="${cql.src.dir}" destdir="${build.cql.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
-                <fileset dir="${lib.dir}">
-                    <include name="**/*.jar" />
-                </fileset>
-                <fileset dir="${ext.lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
+                <path refid="base.classpath"/>
                 <pathelement location="${stubs.dest}" />
                 <pathelement location="${build.common.dest}" />
                 <fileset dir="${globus.dir}/lib">
@@ -393,8 +348,26 @@
             </classpath>
         </javac>
     </target>
+	
+	
+	<!-- compiles tools code -->
+	<target name="compileTools" depends="compileStubs, compileCommon, compileUtils, compileCql, compileValidation">
+		<javac srcdir="${tools.src.dir}" destdir="${build.tools.dest}" debug="${java.debug}" source="${java.source}">
+			<classpath>
+				<path refid="base.classpath"/>
+				<pathelement location="${stubs.dest}"/>
+				<pathelement location="${build.common.dest}"/>
+				<pathelement location="${build.utils.dest}"/>
+				<pathelement location="${build.cql.dest}"/>
+				<pathelement location="${build.validation.dest}"/>
+				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
 
-
+	
     <!-- compiles the test code -->
     <target name="compileTests" depends="compileStubs, compileUtils, compileExtension, compileService">
         <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="${java.debug}" source="${java.source}">
@@ -497,6 +470,20 @@
             </fileset>
         </jar>
     </target>
+	
+	
+	<!-- jars the tools -->
+	<target name="jarTools" depends="compileTools" description="Jars the tools">
+		<jar destfile="${tools.jar.file}">
+			<fileset dir="${build.tools.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${tools.src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
+		</jar>
+	</target>
+	
 
     <!-- removes all build output -->
     <target name="clean">
@@ -621,5 +608,5 @@
 
 
     <!-- build and jar everything -->
-    <target name="all" depends="jarStubs, jarCommon, jarUtils, jarExtension, jarService, jarValidation, jarCql, compileTests" description="Builds and jars all the classes in the project" />
+    <target name="all" depends="jarStubs, jarCommon, jarUtils, jarExtension, jarService, jarValidation, jarCql, jarTools, compileTests" description="Builds and jars all the classes in the project" />
 </project>
