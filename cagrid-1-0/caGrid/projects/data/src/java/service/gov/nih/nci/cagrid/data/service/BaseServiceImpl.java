@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.lang.reflect.Method;
+import java.util.Iterator;
 import java.util.Properties;
 
 import org.globus.wsrf.Resource;
@@ -138,7 +139,15 @@ public abstract class BaseServiceImpl {
 	protected Properties getCqlQueryProcessorConfig() throws QueryProcessingExceptionType {
 		if (cqlQueryProcessorConfig == null) {
 			try {
-				cqlQueryProcessorConfig = ServiceConfigUtil.getQueryProcessorConfigurationParameters();
+				Properties configuredProps = ServiceConfigUtil.getQueryProcessorConfigurationParameters();
+				Properties requiredProps = getCqlQueryProcessorInstance().getRequiredParameters();
+				Iterator configKeysIter = configuredProps.keySet().iterator();
+				while (configKeysIter.hasNext()) {
+					String key = (String) configKeysIter.next();
+					String value = configuredProps.getProperty(key);
+					requiredProps.setProperty(key, value);
+				}
+				cqlQueryProcessorConfig = requiredProps;
 			} catch (Exception ex) {
 				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 			}
