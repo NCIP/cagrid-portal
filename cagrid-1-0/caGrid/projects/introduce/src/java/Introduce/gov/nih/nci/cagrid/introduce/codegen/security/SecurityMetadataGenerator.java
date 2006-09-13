@@ -70,16 +70,23 @@ public class SecurityMetadataGenerator {
 						operations.add(o);
 					}
 				}
+
+				Operation[] ops = null;
 				if (operations.size() > 0) {
-					Operation[] ops = new Operation[operations.size()];
-					for (int i = 0; i < operations.size(); i++) {
-						ops[i] = (Operation) operations.get(i);
-					}
-					ServiceSecurityMetadataOperations ssmo = new ServiceSecurityMetadataOperations();
-					ssmo.setOperation(ops);
-					metadata.setOperations(ssmo);
+					ops = new Operation[operations.size()];
+					ops = (Operation[]) operations.toArray(ops);
+
 				}
+				
+				ServiceSecurityMetadataOperations ssmo = new ServiceSecurityMetadataOperations();
+				ssmo.setOperation(ops);
+				metadata.setOperations(ssmo);
+
 			}
+		} else {
+			ServiceSecurityMetadataOperations ssmo = new ServiceSecurityMetadataOperations();
+			ssmo.setOperation(null);
+			metadata.setOperations(ssmo);
 		}
 		return metadata;
 	}
