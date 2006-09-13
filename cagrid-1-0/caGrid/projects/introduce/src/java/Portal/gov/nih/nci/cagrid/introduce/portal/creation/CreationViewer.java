@@ -39,9 +39,9 @@ public class CreationViewer extends CreationViewerBaseComponent {
 
 	private static String DEFAULT_NAME = "HelloWorld";
 
-	private static String DEFAULT_JAVA_PACKAGE = "gov.nih.nci.cagrid";
+	private static String DEFAULT_JAVA_PACKAGE = "gov.nih.nci.cagrid.helloworld";
 
-	private static String DEFAULT_NAMESPACE = "http://cagrid.nci.nih.gov/HelloWorld";
+	private static String DEFAULT_NAMESPACE = "http://helloworld.cagrid.nci.nih.gov/HelloWorld";
 
 	private JPanel inputPanel = null;
 
