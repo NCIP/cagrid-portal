@@ -9,8 +9,8 @@ import gov.nih.nci.cagrid.gts.common.MySQLDatabase;
 import gov.nih.nci.cagrid.gts.service.GTSConfiguration;
 import gov.nih.nci.cagrid.gts.service.PermissionManager;
 import gov.nih.nci.cagrid.gts.service.db.mysql.MySQLManager;
-import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
-import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.types.IllegalPermissionFault;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>

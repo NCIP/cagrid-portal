@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
   <service name="SERVICE-INSTANCE-PREFIX/SyncGTS">
-    <resource name="home" type="gov.nih.nci.cagrid.syncgts.service.globus.resource.BaseResourceHome">
-      <resourceParams>
-        <parameter>
-          <name>factory</name>
-          <value>org.globus.wsrf.jndi.BeanFactory</value>
-        </parameter>
-      </resourceParams>
-    </resource>
     <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.syncgts.service.ServiceConfiguration">
       <resourceParams>
         <parameter>
@@ -30,7 +22,7 @@
         <parameter>
           <name>performRegistration</name>
           <!-- Set this to false to skip ServiceGroup registration -->
-          <value>false</value>
+          <value>true</value>
         </parameter>
         <parameter>
           <name>registrationTemplateFile</name>
@@ -40,7 +32,15 @@
         <parameter>
           <name>serviceMetadataFile</name>
           <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the serviceMetadata extract -->
-          <value>ETC-PATH/serviceMetadata.xml</value>
+          <value>ETC-PATH/null</value>
+        </parameter>
+      </resourceParams>
+    </resource>
+    <resource name="home" type="gov.nih.nci.cagrid.syncgts.service.globus.resource.BaseResourceHome">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
         </parameter>
       </resourceParams>
     </resource>

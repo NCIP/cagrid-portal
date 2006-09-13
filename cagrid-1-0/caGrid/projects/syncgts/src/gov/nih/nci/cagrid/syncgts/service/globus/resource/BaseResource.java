@@ -203,6 +203,24 @@ public class BaseResource implements Resource, ResourceProperties {
 	
 		
 
+
+	//Getters/Setters for ResourceProperties
+	
+	
+	protected ResourceProperty getServiceMetadataRP(){
+		return this.serviceMetadataRP;
+	}
+	
+	public gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadataMD(){
+		return this.serviceMetadataMD;
+	}
+	
+	public void setServiceMetadataMD(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata ){
+		this.serviceMetadataMD=serviceMetadata;
+		getServiceMetadataRP().set(0,serviceMetadata);
+	}
+		
+
 	public ResourceConfiguration getConfiguration() {
 		if (this.configuration != null) {
 			return this.configuration;

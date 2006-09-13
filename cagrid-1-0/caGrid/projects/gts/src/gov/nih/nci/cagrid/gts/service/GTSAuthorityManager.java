@@ -8,9 +8,9 @@ import gov.nih.nci.cagrid.gts.bean.TimeToLive;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.service.db.AuthorityTable;
 import gov.nih.nci.cagrid.gts.service.db.DBManager;
-import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
-import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
-import gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.types.IllegalAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.types.InvalidAuthorityFault;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

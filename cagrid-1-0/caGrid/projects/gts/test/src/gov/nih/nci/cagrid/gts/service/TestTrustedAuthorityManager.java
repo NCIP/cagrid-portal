@@ -11,9 +11,9 @@ import gov.nih.nci.cagrid.gts.bean.X509CRL;
 import gov.nih.nci.cagrid.gts.bean.X509Certificate;
 import gov.nih.nci.cagrid.gts.service.db.DBManager;
 import gov.nih.nci.cagrid.gts.service.db.TrustedAuthorityTable;
-import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
-import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
-import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.types.IllegalTrustedAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.types.InvalidTrustedAuthorityFault;
 import gov.nih.nci.cagrid.gts.test.CA;
 import gov.nih.nci.cagrid.gts.test.Utils;
 

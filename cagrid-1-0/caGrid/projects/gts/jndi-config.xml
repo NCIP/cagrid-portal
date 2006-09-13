@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
   <service name="SERVICE-INSTANCE-PREFIX/GTS">
-    <resource name="home" type="gov.nih.nci.cagrid.gts.service.globus.resource.BaseResourceHome">
-      <resourceParams>
-        <parameter>
-          <name>factory</name>
-          <value>org.globus.wsrf.jndi.BeanFactory</value>
-        </parameter>
-      </resourceParams>
-    </resource>
     <resource name="configuration" type="gov.nih.nci.cagrid.gts.service.globus.resource.ResourceConfiguration">
       <resourceParams>
         <parameter>
@@ -33,6 +25,14 @@
       </resourceParams>
     </resource>
     <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.gts.service.ServiceConfiguration">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+      </resourceParams>
+    </resource>
+    <resource name="home" type="gov.nih.nci.cagrid.gts.service.globus.resource.BaseResourceHome">
       <resourceParams>
         <parameter>
           <name>factory</name>

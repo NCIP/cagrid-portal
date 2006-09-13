@@ -5,9 +5,9 @@ import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.service.db.DBManager;
 import gov.nih.nci.cagrid.gts.service.db.TrustLevelTable;
-import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
-import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
-import gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault;
+import gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.types.IllegalTrustLevelFault;
+import gov.nih.nci.cagrid.gts.stubs.types.InvalidTrustLevelFault;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

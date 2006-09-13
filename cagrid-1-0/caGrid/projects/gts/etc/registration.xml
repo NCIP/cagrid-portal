@@ -15,6 +15,7 @@
     <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
       <agg:GetMultipleResourcePropertiesPollType
 			xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
+			xmlns:ns3="http://cagrid.nci.nih.gov/GTS/types"
 			xmlns:xs="http://www.w3.org/2001/XMLSchema"
 			xmlns:ns0="http://cagrid.nci.nih.gov/8/gts"
 			xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security">

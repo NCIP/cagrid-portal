@@ -6,8 +6,8 @@ import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.Role;
 import gov.nih.nci.cagrid.gts.service.db.DBManager;
 import gov.nih.nci.cagrid.gts.service.db.PermissionsTable;
-import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
-import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.types.IllegalPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.types.InvalidPermissionFault;
 import gov.nih.nci.cagrid.gts.test.Utils;
 import junit.framework.TestCase;
 

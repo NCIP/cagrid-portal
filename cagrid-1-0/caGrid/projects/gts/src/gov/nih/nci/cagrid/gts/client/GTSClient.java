@@ -103,7 +103,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         return boxedResult.getServiceSecurityMetadata();
       }
     }
-    public gov.nih.nci.cagrid.gts.bean.TrustedAuthority addTrustedAuthority(gov.nih.nci.cagrid.gts.bean.TrustedAuthority ta) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+    public gov.nih.nci.cagrid.gts.bean.TrustedAuthority addTrustedAuthority(gov.nih.nci.cagrid.gts.bean.TrustedAuthority ta) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"addTrustedAuthority");
         gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityRequest params = new gov.nih.nci.cagrid.gts.stubs.AddTrustedAuthorityRequest();
@@ -125,7 +125,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         return boxedResult.getTrustedAuthority();
       }
     }
-    public void removeTrustedAuthority(java.lang.String trustedAuthorityName) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+    public void removeTrustedAuthority(java.lang.String trustedAuthorityName) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"removeTrustedAuthority");
         gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityRequest params = new gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityRequest();
@@ -133,7 +133,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         gov.nih.nci.cagrid.gts.stubs.RemoveTrustedAuthorityResponse boxedResult = portType.removeTrustedAuthority(params);
       }
     }
-    public void addPermission(gov.nih.nci.cagrid.gts.bean.Permission permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+    public void addPermission(gov.nih.nci.cagrid.gts.bean.Permission permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.IllegalPermissionFault, gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"addPermission");
         gov.nih.nci.cagrid.gts.stubs.AddPermissionRequest params = new gov.nih.nci.cagrid.gts.stubs.AddPermissionRequest();
@@ -143,7 +143,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         gov.nih.nci.cagrid.gts.stubs.AddPermissionResponse boxedResult = portType.addPermission(params);
       }
     }
-    public gov.nih.nci.cagrid.gts.bean.Permission[] findPermissions(gov.nih.nci.cagrid.gts.bean.PermissionFilter filter) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+    public gov.nih.nci.cagrid.gts.bean.Permission[] findPermissions(gov.nih.nci.cagrid.gts.bean.PermissionFilter filter) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"findPermissions");
         gov.nih.nci.cagrid.gts.stubs.FindPermissionsRequest params = new gov.nih.nci.cagrid.gts.stubs.FindPermissionsRequest();
@@ -154,7 +154,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         return boxedResult.getPermission();
       }
     }
-    public void revokePermission(gov.nih.nci.cagrid.gts.bean.Permission permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+    public void revokePermission(gov.nih.nci.cagrid.gts.bean.Permission permission) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.InvalidPermissionFault, gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"revokePermission");
         gov.nih.nci.cagrid.gts.stubs.RevokePermissionRequest params = new gov.nih.nci.cagrid.gts.stubs.RevokePermissionRequest();
@@ -164,7 +164,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         gov.nih.nci.cagrid.gts.stubs.RevokePermissionResponse boxedResult = portType.revokePermission(params);
       }
     }
-    public void updateTrustedAuthority(gov.nih.nci.cagrid.gts.bean.TrustedAuthority ta) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+    public void updateTrustedAuthority(gov.nih.nci.cagrid.gts.bean.TrustedAuthority ta) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.types.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"updateTrustedAuthority");
         gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityRequest params = new gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityRequest();
@@ -174,7 +174,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         gov.nih.nci.cagrid.gts.stubs.UpdateTrustedAuthorityResponse boxedResult = portType.updateTrustedAuthority(params);
       }
     }
-    public void addTrustLevel(gov.nih.nci.cagrid.gts.bean.TrustLevel trustLevel) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+    public void addTrustLevel(gov.nih.nci.cagrid.gts.bean.TrustLevel trustLevel) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.IllegalTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"addTrustLevel");
         gov.nih.nci.cagrid.gts.stubs.AddTrustLevelRequest params = new gov.nih.nci.cagrid.gts.stubs.AddTrustLevelRequest();
@@ -184,7 +184,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         gov.nih.nci.cagrid.gts.stubs.AddTrustLevelResponse boxedResult = portType.addTrustLevel(params);
       }
     }
-    public void updateTrustLevel(gov.nih.nci.cagrid.gts.bean.TrustLevel trustLevel) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+    public void updateTrustLevel(gov.nih.nci.cagrid.gts.bean.TrustLevel trustLevel) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.InvalidTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.types.IllegalTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"updateTrustLevel");
         gov.nih.nci.cagrid.gts.stubs.UpdateTrustLevelRequest params = new gov.nih.nci.cagrid.gts.stubs.UpdateTrustLevelRequest();
@@ -194,7 +194,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         gov.nih.nci.cagrid.gts.stubs.UpdateTrustLevelResponse boxedResult = portType.updateTrustLevel(params);
       }
     }
-    public gov.nih.nci.cagrid.gts.bean.TrustLevel[] getTrustLevels() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
+    public gov.nih.nci.cagrid.gts.bean.TrustLevel[] getTrustLevels() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getTrustLevels");
         gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsRequest params = new gov.nih.nci.cagrid.gts.stubs.GetTrustLevelsRequest();
@@ -202,7 +202,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         return boxedResult.getTrustLevel();
       }
     }
-    public void removeTrustLevel(java.lang.String trustLevelName) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+    public void removeTrustLevel(java.lang.String trustLevelName) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.InvalidTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.types.IllegalTrustLevelFault, gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"removeTrustLevel");
         gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevelRequest params = new gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevelRequest();
@@ -210,7 +210,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         gov.nih.nci.cagrid.gts.stubs.RemoveTrustLevelResponse boxedResult = portType.removeTrustLevel(params);
       }
     }
-    public void addAuthority(gov.nih.nci.cagrid.gts.bean.AuthorityGTS authorityGTS) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+    public void addAuthority(gov.nih.nci.cagrid.gts.bean.AuthorityGTS authorityGTS) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.IllegalAuthorityFault, gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"addAuthority");
         gov.nih.nci.cagrid.gts.stubs.AddAuthorityRequest params = new gov.nih.nci.cagrid.gts.stubs.AddAuthorityRequest();
@@ -220,7 +220,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         gov.nih.nci.cagrid.gts.stubs.AddAuthorityResponse boxedResult = portType.addAuthority(params);
       }
     }
-    public void updateAuthority(gov.nih.nci.cagrid.gts.bean.AuthorityGTS authorityGTS) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault, gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+    public void updateAuthority(gov.nih.nci.cagrid.gts.bean.AuthorityGTS authorityGTS) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.IllegalAuthorityFault, gov.nih.nci.cagrid.gts.stubs.types.InvalidAuthorityFault, gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"updateAuthority");
         gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityRequest params = new gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityRequest();
@@ -230,7 +230,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityResponse boxedResult = portType.updateAuthority(params);
       }
     }
-    public void updateAuthorityPriorities(gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate authorityPriorityUpdate) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+    public void updateAuthorityPriorities(gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate authorityPriorityUpdate) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.IllegalAuthorityFault, gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"updateAuthorityPriorities");
         gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityPrioritiesRequest params = new gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityPrioritiesRequest();
@@ -240,7 +240,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         gov.nih.nci.cagrid.gts.stubs.UpdateAuthorityPrioritiesResponse boxedResult = portType.updateAuthorityPriorities(params);
       }
     }
-    public gov.nih.nci.cagrid.gts.bean.AuthorityGTS[] getAuthorities() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault {
+    public gov.nih.nci.cagrid.gts.bean.AuthorityGTS[] getAuthorities() throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getAuthorities");
         gov.nih.nci.cagrid.gts.stubs.GetAuthoritiesRequest params = new gov.nih.nci.cagrid.gts.stubs.GetAuthoritiesRequest();
@@ -248,7 +248,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         return boxedResult.getAuthorityGTS();
       }
     }
-    public void removeAuthority(java.lang.String serviceURI) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+    public void removeAuthority(java.lang.String serviceURI) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.InvalidAuthorityFault, gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"removeAuthority");
         gov.nih.nci.cagrid.gts.stubs.RemoveAuthorityRequest params = new gov.nih.nci.cagrid.gts.stubs.RemoveAuthorityRequest();
@@ -256,7 +256,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         gov.nih.nci.cagrid.gts.stubs.RemoveAuthorityResponse boxedResult = portType.removeAuthority(params);
       }
     }
-    public void updateCRL(java.lang.String trustedAuthorityName,gov.nih.nci.cagrid.gts.bean.X509CRL crl) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault {
+    public void updateCRL(java.lang.String trustedAuthorityName,gov.nih.nci.cagrid.gts.bean.X509CRL crl) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.IllegalTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.types.InvalidTrustedAuthorityFault, gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"updateCRL");
         gov.nih.nci.cagrid.gts.stubs.UpdateCRLRequest params = new gov.nih.nci.cagrid.gts.stubs.UpdateCRLRequest();
@@ -267,7 +267,7 @@ public class GTSClient extends ServiceSecurityClient implements GTSI {
         gov.nih.nci.cagrid.gts.stubs.UpdateCRLResponse boxedResult = portType.updateCRL(params);
       }
     }
-    public boolean validate(gov.nih.nci.cagrid.gts.bean.X509Certificate[] chain,gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter filter) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.CertificateValidationFault {
+    public boolean validate(gov.nih.nci.cagrid.gts.bean.X509Certificate[] chain,gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter filter) throws RemoteException, gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault, gov.nih.nci.cagrid.gts.stubs.types.CertificateValidationFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"validate");
         gov.nih.nci.cagrid.gts.stubs.ValidateRequest params = new gov.nih.nci.cagrid.gts.stubs.ValidateRequest();

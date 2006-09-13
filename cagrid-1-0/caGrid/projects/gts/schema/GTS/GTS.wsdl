@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cagrid.nci.nih.gov/GTS" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" name="GTS" targetNamespace="http://cagrid.nci.nih.gov/GTS">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cagrid.nci.nih.gov/GTS" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns3="http://cagrid.nci.nih.gov/GTS/types" xmlns:ns0="http://cagrid.nci.nih.gov/8/gts" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" name="GTS" targetNamespace="http://cagrid.nci.nih.gov/GTS">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <import namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" location="./ServiceSecurity.wsdl" />
@@ -9,9 +9,10 @@
                       
   ============================================================-->
   <types>
-    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns0="http://cagrid.nci.nih.gov/8/gts" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/GTS" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/GTS" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./xsd/cagrid/types/caGridMetadata.xsd" />
+      <import namespace="http://cagrid.nci.nih.gov/GTS/types" schemaLocation="./GTSTypes.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/8/gts" schemaLocation="./gts.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/cagrid/types/security/security.xsd" />
       <element name="AddTrustedAuthorityRequest">
@@ -324,83 +325,6 @@
           </sequence>
         </complexType>
       </element>
-      <element name="GTSInternalFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="IllegalTrustedAuthorityFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="PermissionDeniedFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="InvalidTrustedAuthorityFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="IllegalPermissionFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="InvalidPermissionFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="IllegalTrustLevelFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="InvalidTrustLevelFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="IllegalAuthorityFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="InvalidAuthorityFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
-      <element name="CertificateValidationFault">
-        <complexType>
-          <complexContent>
-            <extension base="wsrbf:BaseFaultType" />
-          </complexContent>
-        </complexType>
-      </element>
       <element name="GTSResourceProperties">
         <complexType>
           <sequence>
@@ -520,37 +444,37 @@
     <part name="parameters" element="tns:ValidateResponse" />
   </message>
   <message name="GTSInternalFaultFaultMessage">
-    <part name="fault" element="tns:GTSInternalFault" />
+    <part name="fault" element="ns3:GTSInternalFault" />
   </message>
   <message name="IllegalTrustedAuthorityFaultFaultMessage">
-    <part name="fault" element="tns:IllegalTrustedAuthorityFault" />
+    <part name="fault" element="ns3:IllegalTrustedAuthorityFault" />
   </message>
   <message name="PermissionDeniedFaultFaultMessage">
-    <part name="fault" element="tns:PermissionDeniedFault" />
+    <part name="fault" element="ns3:PermissionDeniedFault" />
   </message>
   <message name="InvalidTrustedAuthorityFaultFaultMessage">
-    <part name="fault" element="tns:InvalidTrustedAuthorityFault" />
+    <part name="fault" element="ns3:InvalidTrustedAuthorityFault" />
   </message>
   <message name="IllegalPermissionFaultFaultMessage">
-    <part name="fault" element="tns:IllegalPermissionFault" />
+    <part name="fault" element="ns3:IllegalPermissionFault" />
   </message>
   <message name="InvalidPermissionFaultFaultMessage">
-    <part name="fault" element="tns:InvalidPermissionFault" />
+    <part name="fault" element="ns3:InvalidPermissionFault" />
   </message>
   <message name="IllegalTrustLevelFaultFaultMessage">
-    <part name="fault" element="tns:IllegalTrustLevelFault" />
+    <part name="fault" element="ns3:IllegalTrustLevelFault" />
   </message>
   <message name="InvalidTrustLevelFaultFaultMessage">
-    <part name="fault" element="tns:InvalidTrustLevelFault" />
+    <part name="fault" element="ns3:InvalidTrustLevelFault" />
   </message>
   <message name="IllegalAuthorityFaultFaultMessage">
-    <part name="fault" element="tns:IllegalAuthorityFault" />
+    <part name="fault" element="ns3:IllegalAuthorityFault" />
   </message>
   <message name="InvalidAuthorityFaultFaultMessage">
-    <part name="fault" element="tns:InvalidAuthorityFault" />
+    <part name="fault" element="ns3:InvalidAuthorityFault" />
   </message>
   <message name="CertificateValidationFaultFaultMessage">
-    <part name="fault" element="tns:CertificateValidationFault" />
+    <part name="fault" element="ns3:CertificateValidationFault" />
   </message>
   <!--============================================================
 

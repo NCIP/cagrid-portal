@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.gts.service;
 
-import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

@@ -7,16 +7,16 @@ import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.X509CRL;
-import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
-import gov.nih.nci.cagrid.gts.stubs.IllegalAuthorityFault;
-import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
-import gov.nih.nci.cagrid.gts.stubs.IllegalTrustLevelFault;
-import gov.nih.nci.cagrid.gts.stubs.IllegalTrustedAuthorityFault;
-import gov.nih.nci.cagrid.gts.stubs.InvalidAuthorityFault;
-import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
-import gov.nih.nci.cagrid.gts.stubs.InvalidTrustLevelFault;
-import gov.nih.nci.cagrid.gts.stubs.InvalidTrustedAuthorityFault;
-import gov.nih.nci.cagrid.gts.stubs.PermissionDeniedFault;
+import gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.types.IllegalAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.types.IllegalPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.types.IllegalTrustLevelFault;
+import gov.nih.nci.cagrid.gts.stubs.types.IllegalTrustedAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.types.InvalidAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.types.InvalidPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.types.InvalidTrustLevelFault;
+import gov.nih.nci.cagrid.gts.stubs.types.InvalidTrustedAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault;
 
 import java.rmi.RemoteException;
 

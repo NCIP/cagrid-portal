@@ -5,8 +5,8 @@ import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
-import gov.nih.nci.cagrid.gts.stubs.CertificateValidationFault;
-import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.types.CertificateValidationFault;
+import gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault;
 
 import java.io.IOException;
 import java.rmi.RemoteException;

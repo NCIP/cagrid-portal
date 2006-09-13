@@ -7,9 +7,9 @@ import gov.nih.nci.cagrid.gts.common.Constants;
 import gov.nih.nci.cagrid.gts.common.Database;
 import gov.nih.nci.cagrid.gts.service.db.DBManager;
 import gov.nih.nci.cagrid.gts.service.db.PermissionsTable;
-import gov.nih.nci.cagrid.gts.stubs.GTSInternalFault;
-import gov.nih.nci.cagrid.gts.stubs.IllegalPermissionFault;
-import gov.nih.nci.cagrid.gts.stubs.InvalidPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.types.IllegalPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.types.InvalidPermissionFault;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
