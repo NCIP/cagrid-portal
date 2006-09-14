@@ -1,0 +1,238 @@
+<ns1:ServiceDescription introduceVersion=".99999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+ <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace location="./gov.nih.nci.cabio.domain.xsd" namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" packageName="gov.nih.nci.cabio.domain" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="DatabaseCrossReference" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="PhysicalLocation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DiseaseOntology" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GeneRelativeLocation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="PopulationFrequency" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="HomologousAssociation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Location" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Cytoband" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GeneOntology" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Histopathology" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NucleicAcidSequence" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Protein" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ProteinAlias" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Target" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GeneAlias" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GenericArray" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Vocabulary" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="OrganOntologyRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="OrganOntology" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Protocol" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Anomaly" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Agent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Library" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Clone" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Chromosome" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ProtocolAssociation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Gene" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Tissue" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GeneOntologyRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GenericReporter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Pathway" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ProteinSequence" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="CloneRelativeLocation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ClinicalTrialProtocol" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DiseaseOntologyRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SNP" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="CytogeneticLocation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Taxon" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="boolean" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="int" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="integer" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="decimal" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="float" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="double" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="short" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="long" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="byte" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="base64Binary" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="dateTime" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="date" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="QName" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="anySimpleType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="duration" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="time" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gYearMonth" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gYear" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gMonthDay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gDay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gMonth" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="hexBinary" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NOTATION" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="anyURI" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="normalizedString" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="token" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="nonPositiveInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="nonNegativeInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="language" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Name" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NMTOKEN" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="negativeInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedLong" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="positiveInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NCName" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NMTOKENS" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedInt" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ID" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="IDREF" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ENTITY" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedShort" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="IDREFS" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ENTITIES" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedByte" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./CaBIOTypes.xsd" namespace="http://cagrid.nci.nih.gov/cabio/types" packageName="gov.nih.nci.cagrid.cabio.stubs.types" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="CaBIOReference" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./xsd/security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="CommunicationMechanism" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Operation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="CommunicationStyle" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GSISecureMessage" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GSISecureConversation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GSITransport" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="None" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./1_gov.nih.nci.cagrid.CQLQuery.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" packageName="gov.nih.nci.cagrid.cqlquery" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="CQLQuery" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./1_gov.nih.nci.cagrid.CQLResultSet.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" packageName="gov.nih.nci.cagrid.cqlresultset" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="CQLQueryResultCollection" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./xsd/cagrid/types/data/data.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" packageName="gov.nih.nci.cagrid.metadata.dataservice" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="UMLGeneralization" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DomainModel" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLAssociationEdge" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLAssociation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLClassReference" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./DataServiceExceptions.xsd" namespace="http://gov.nih.nci.cagrid.data/DataServiceExceptions" packageName="gov.nih.nci.cagrid.data.faults" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="MalformedQueryException" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="QueryProcessingException" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="ServiceMetadata" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="Project" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SubProject" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLPackageMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLClassMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLAttributeMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SemanticMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" packageName="gov.nih.nci.cadsr.umlproject.domain" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="SemanticMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLAssociationMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLGeneralizationMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="AttributeTypeMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="TypeEnumerationMetadata" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.domain.xsd" namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" packageName="gov.nih.nci.cadsr.domain" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="AdministeredComponent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ConceptualDomain" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DataElementConcept" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DataElement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ClassificationScheme" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ValueDomain" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" packageName="gov.nih.nci.cadsr.domain" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="ValueDomain" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ClassificationSchemeItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="PermissibleValue" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Context" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ReferenceDocument" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ObjectClass" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Property" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Form" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Module" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Protocol" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Question" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Representation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ValidValue" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Designation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NonenumeratedValueDomain" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DataElementConceptRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ValueMeaning" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ValueDomainPermissibleValue" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ClassSchemeClassSchemeItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DataElementDerivation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DerivedDataElement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DerivationType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="AdministeredComponentClassSchemeItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Instruction" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DataElementRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ValueDomainRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ClassificationSchemeRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ClassificationSchemeItemRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ObjectClassRelationship" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Concept" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ComponentConcept" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ConceptDerivationRule" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Definition" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DesignationClassSchemeItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="EnumeratedValueDomain" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DefinitionClassSchemeItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="AdministeredComponentContact" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Person" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Organization" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Address" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="FormElement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="TriggerAction" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="QuestionRepetition" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Function" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ComponentLevel" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+ </ns2:Namespaces>
+ <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns3:Service name="CaBIO" namespace="http://cagrid.nci.nih.gov/cabio" packageName="gov.nih.nci.cagrid.cabio" resourceFrameworkType="main" xsi:type="ns3:ServiceType">
+   <ns4:Methods xsi:type="ns4:MethodsType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Methods">
+    <ns4:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns4:MethodType">
+     <ns4:Output qName="ns5:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+     <ns4:ImportInformation inputMessage="ns6:GetServiceSecurityMetadataRequest" namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" outputMessage="ns6:GetServiceSecurityMetadataResponse" packageName="gov.nih.nci.cagrid.introduce.security" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl" xmlns:ns6="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity"/>
+     <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="query" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns7:CQLQuery" isArray="false" name="cqlQuery" xmlns:ns7="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns8:CQLQueryResultCollection" isArray="false" xmlns:ns8="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="QueryProcessingException" qname="ns9:QueryProcessingException" xmlns:ns9="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
+      <ns4:Exception name="MalformedQueryException" qname="ns10:MalformedQueryException" xmlns:ns10="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
+     </ns4:Exceptions>
+     <ns4:ImportInformation inputMessage="ns11:QueryRequest" namespace="http://gov.nih.nci.cagrid.data/DataService" outputMessage="ns11:QueryResponse" packageName="gov.nih.nci.cagrid.data" portTypeName="DataServicePortType" wsdlFile="DataService.wsdl" xmlns:ns11="http://gov.nih.nci.cagrid.data/DataService"/>
+     <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.data.service.globus.DataServiceProviderImpl"/>
+    </ns4:Method>
+   </ns4:Methods>
+   <ns12:ResourcePropertiesList xsi:type="ns12:ResourcePropertiesListType" xmlns:ns12="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns12:ResourceProperty qName="ns13:DomainModel" fileLocation="domainModel.xml" populateFromFile="false" register="true" xsi:type="ns12:ResourcePropertyType" xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+   </ns12:ResourcePropertiesList>
+  </ns3:Service>
+ </ns3:Services>
+ <ns14:Extensions xsi:type="ns14:ExtensionsType" xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns14:Extension name="data" xsi:type="ns14:ExtensionType">
+   <ns14:ExtensionData>
+    <serviceFeatures useCustomDataSource="true" useGridIdentifiers="false" useSdkDataSource="false" useWsEnum="false"/>
+    <QueryProcessorJars>
+         <Jar>caGrid-1.0-sdkQuery.jar</Jar>
+
+    </QueryProcessorJars>
+    <queryProcessorConfig>
+         <property name="appserviceUrl" value="http://cabio.nci.nih.gov/cacore31/server/HTTPServer"/>
+
+    </queryProcessorConfig>
+   </ns14:ExtensionData>
+  </ns14:Extension>
+ </ns14:Extensions>
+ <ns15:ServiceProperties xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns15:Property isFromETC="false" key="queryProcessorClass" value="gov.nih.nci.cagrid.data.cql.cacore.HQLCoreQueryProcessor"/>
+  <ns15:Property key="dataService_cqlValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator"/>
+  <ns15:Property key="dataService_domainModelValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator"/>
+  <ns15:Property key="dataService_validateCqlFlag" value="false"/>
+  <ns15:Property key="dataService_validateDomainModelFlag" value="false"/>
+  <ns15:Property isFromETC="false" key="cqlQueryProcessorConfig_appserviceUrl" value="http://cabio.nci.nih.gov/cacore31/server/HTTPServer"/>
+ </ns15:ServiceProperties>
+</ns1:ServiceDescription>
