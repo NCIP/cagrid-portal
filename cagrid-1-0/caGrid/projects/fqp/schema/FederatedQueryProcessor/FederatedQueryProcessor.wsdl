@@ -16,7 +16,7 @@
       <import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" schemaLocation="./xsd/Data/1_gov.nih.nci.cagrid.CQLResultSet.xsd" />
       <import namespace="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types" schemaLocation="./FederatedQueryProcessorTypes.xsd" />
       <import namespace="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql" schemaLocation="./Distributed_CQL_schema_2.0.xsd" />
-      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/security.xsd" />
+      <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/cagrid/types/security/security.xsd"/>
       <element name="QueryRequest">
         <complexType>
           <sequence>
