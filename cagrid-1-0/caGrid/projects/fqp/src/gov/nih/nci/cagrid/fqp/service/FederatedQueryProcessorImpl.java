@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingExcep
 
 import java.rmi.RemoteException;
 
-
 /**
  * Federated Query Service
  * 
@@ -19,9 +18,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		super();
 	}
 
-
-	public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults query(gov.nih.nci.cagrid.dcql.DCQLQuery DCQLQuery)
-		throws RemoteException {
+	public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults query(gov.nih.nci.cagrid.dcql.DCQLQuery DCQLQuery) throws RemoteException {
 		FederatedQueryEngine engine = new FederatedQueryEngine();
 		CQLQueryResults results = null;
 		try {
