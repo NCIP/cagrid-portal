@@ -9,7 +9,7 @@ import gov.nih.nci.cagrid.fqp.processor.FederatedQueryEngine;
  * @author oster
  * 
  */
-public class TestQueryEngine {
+public class RunQueryEngine {
 
 	public static void main(String[] args) {
 		try {
