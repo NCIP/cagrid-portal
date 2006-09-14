@@ -1,0 +1,34 @@
+
+CAVEATS:
+==============================
+DCQL Foriegn Predicate values must be a subset of CQL Predicate values, as the former is used to contruct the later in the engine.
+
+
+ISSUES:
+==============================
+change build to create client-usable engine (outside of service)
+
+build service to support synchronous query execution (with status RPs, etc)
+
+should we add query return modifiers to DCQL? (not trivial, as they have to work "in code" against aggregate results... can't be pushed to backend)
+
+need to use thread pool for sending out CQL queries
+
+(DONE) change inner CQL queries to use return modifiers to only return distinct join att values
+
+(FIXED) impl only works with EQUAL_TO as the join condition
+
+(FIXED) need to aggregate results when targeting multiple services... currently only return uses last result
+  - probably want to make a new DCQL result that contains a CQL results collection for each target service 
+
+impl doesn't properly handle empty foriegn association results
+  - replaces with an IS_NULL predicate
+  - needs to make an impossible predicate (att=1  AND att=2)
+  
+impl doesn't handle foreign associations with only 1 result
+  - makes a group with one element (groups require 2 or more)
+  - return either single attribute (preferred) or make redundant copy (simple but ugly/inefficient)
+  
+add unit and system tests    
+
+add DCQL XSD validation?

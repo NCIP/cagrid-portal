@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 rel. 3 sp1 (http://www.altova.com) by Srinivasa Akkala (Agile) -->
+<xsd:schema targetNamespace="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:dcql="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql" xmlns:cql="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" schemaLocation="./xsd/Data/1_gov.nih.nci.cagrid.CQLQuery.xsd"/>
+	<xsd:element name="DCQLQuery">
+		<xsd:annotation>
+			<xsd:documentation>caGrid Distributed CQL Query</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="TargetObject" type="dcql:Object"/>
+				<xsd:element name="targetServiceURL" type="xsd:string" minOccurs="1" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:complexType name="Object">
+		<xsd:annotation>
+			<xsd:documentation>Associated Object used as search criteria</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="Attribute" type="cql:Attribute" minOccurs="0"/>
+			<xsd:element name="Association" type="dcql:Association" minOccurs="0"/>
+			<xsd:element name="ForeignAssociation" type="dcql:ForeignAssociation" minOccurs="0"/>
+			<xsd:element name="Group" type="dcql:Group" minOccurs="0"/>
+		</xsd:choice>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="Association">
+		<xsd:complexContent>
+			<xsd:extension base="dcql:Object">
+				<xsd:attribute name="roleName" type="xsd:string" use="optional"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Group">
+		<xsd:choice minOccurs="2" maxOccurs="unbounded">
+			<xsd:element name="Association" type="dcql:Association" maxOccurs="unbounded"/>
+			<xsd:element name="Attribute" type="cql:Attribute" maxOccurs="unbounded"/>
+			<xsd:element name="ForeignAssociation" type="dcql:ForeignAssociation" maxOccurs="unbounded"/>
+			<xsd:element name="Group" type="dcql:Group" maxOccurs="unbounded"/>
+		</xsd:choice>
+		<xsd:attribute name="logicRelation" type="cql:LogicalOperator" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="ForeignAssociation">
+		<xsd:annotation>
+			<xsd:documentation>Foreign Association in an external service</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="JoinCondition" type="dcql:JoinCondition"/>
+			<xsd:element name="ForeignObject" type="dcql:Object"/>
+		</xsd:sequence>
+		<xsd:attribute name="targetServiceURL" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="JoinCondition">
+		<xsd:annotation>
+			<xsd:documentation>>Join condition specifies join to foreign association. foreignAttributeName denotes the Foreign Object CDE and localAttributeName is the local object CDE</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="predicate" type="dcql:ForeignPredicate" use="optional" default="EQUAL_TO"/>
+		<xsd:attribute name="localAttributeName" type="xsd:string" use="required"/>
+		<xsd:attribute name="foreignAttributeName" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:simpleType name="ForeignPredicate">
+		<xsd:annotation>
+			<xsd:documentation>Extensible predicate type for object properties</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="EQUAL_TO" id="equal_to"/>
+			<xsd:enumeration value="NOT_EQUAL_TO" id="not_equal_to"/>
+			<xsd:enumeration value="LESS_THAN" id="less_than"/>
+			<xsd:enumeration value="LESS_THAN_EQUAL_TO" id="less_than_equal_to"/>
+			<xsd:enumeration value="GREATER_THAN" id="greater_than"/>
+			<xsd:enumeration value="GREATER_THAN_EQUAL_TO" id="greater_than_equal_to"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>
