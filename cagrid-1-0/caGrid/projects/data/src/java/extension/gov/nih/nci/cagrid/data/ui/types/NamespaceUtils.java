@@ -58,6 +58,8 @@ public class NamespaceUtils {
 			namespaceString = createNamespaceString(project, pack);
 			NamespaceType nsType = new NamespaceType();
 			Namespace namespace = null;
+			// get the namespace, either from the generated string, 
+			// or let the user clean it up if it won't parse
 			do {
 				try {
 					namespace = new Namespace(namespaceString);
@@ -80,8 +82,11 @@ public class NamespaceUtils {
 					}
 				}
 			} while (namespace == null);
+			
+			// get administered namespace domains of the GME
 			List namespaceDomainList = gmeHandle.getNamespaceDomainList();
-			if (namespace == null || !namespaceDomainList.contains(namespace.getDomain())) {
+			// verify the namespace domain is in the gme's list
+			if (!namespaceDomainList.contains(namespace.getDomain())) {
 				// prompt for alternate
 				String alternativeDomain = (String) JOptionPane.showInputDialog(
 					PortalResourceManager.getInstance().getGridPortal(),
@@ -97,6 +102,8 @@ public class NamespaceUtils {
 					return null;
 				}
 			}
+			
+			// get the schema contents for the namespace
 			String schemaContents = null;
 			try {
 				schemaContents = getSchema(gmeHandle, namespace);
@@ -122,7 +129,10 @@ public class NamespaceUtils {
 			String packageName = CommonTools.getPackageName(namespace);
 			nsType.setPackageName(packageName);
 			
+			// set the raw namespace
 			nsType.setNamespace(namespace.getRaw());
+			
+			// get the file system name for the namespace
 			ImportInfo ii = new ImportInfo(namespace);
 			nsType.setLocation("./" + ii.getFileName());
 			
@@ -131,6 +141,8 @@ public class NamespaceUtils {
 				nsType, XMLUtilities.stringToDocument(schemaContents));
 			// write the schema and its imports to the filesystem
 			gmeHandle.cacheSchema(namespace, schemaDir);
+			// TODO: cacheSchema returns a List of the files it stored.
+			// Those should be cateloged somewhere so they can be cleaned up if need be
 			return nsType;
 		}
 		return null;

@@ -794,8 +794,9 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				ex.printStackTrace();
 				ErrorDialog.showErrorDialog("Error creating namespace type: " + ex.getMessage());
 			}
-			// add the new namespace to the service
+			
 			if (nsType != null) {
+				// add the new namespace to the service
 				CommonTools.addNamespace(getServiceInfo().getServiceDescriptor(), nsType);
 			}
 		}
