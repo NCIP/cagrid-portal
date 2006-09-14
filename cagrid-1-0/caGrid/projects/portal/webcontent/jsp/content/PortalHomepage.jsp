@@ -4,7 +4,7 @@
 <h:panelGrid columns="2" style="height:100%;" cellpadding="0" cellspacing="0" border="0">
     <h:column>
 
-        <!-- welcome begins -->
+        <%-- welcome begins --%>
         <h:panelGrid style="height:100%" cellpadding="0" cellspacing="0" border="0"
                      headerClass="welcomeTitle" columnClasses="welcomeContent">
             <f:facet name="header">
@@ -14,19 +14,22 @@
             </f:facet>
 
             <h:column>
-                <h:outputText value="caGrid Monitoring and Discovery Portal provides an overview of caGrid. Site is under development" />
+                <h:outputText value="caGrid Monitoring and Discovery Portal (MD Portal)
+                 provides an overview of caGrid. Site is under development"/>
             </h:column>
         </h:panelGrid>
-        <!-- welcome ends -->
+        <%-- welcome ends --%>
 
     </h:column>
 
     <h:column>
-        <!-- sidebar begins -->
-        <h:panelGrid style="height:100%;"  cellpadding="0" cellspacing="0" border="0">
-            <!-- what's new begins -->
+        <%-- sidebar begins --%>
+        <h:panelGrid style="height:100%;" cellpadding="0" cellspacing="0" border="0">
+            <%-- what's new begins --%>
             <h:column>
-                    <h:panelGrid columnClasses="sidebarContent" headerClass="sidebarTitle" style="height:100%" styleClass="sidebarSection" summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <h:panelGrid columnClasses="sidebarContent" headerClass="sidebarTitle" style="height:100%"
+                             styleClass="sidebarSection" summary="" cellpadding="0" cellspacing="0" border="0"
+                             width="100%">
                     <f:facet name="header">
                         <h:column>
                             <h:outputText value="WHAT'S NEW"/>
@@ -38,9 +41,9 @@
                     </h:column>
                 </h:panelGrid>
             </h:column>
-            <!-- what's new ends -->
+            <%-- what's new ends --%>
 
-            <!-- did you know? begins -->
+            <%-- did you know? begins --%>
             <h:column>
                 <h:panelGrid style="width:100%;height:100%;" styleClass="sidebarSection"
                              headerClass="sidebarTitle" columnClasses="sidebarContent"
@@ -56,10 +59,10 @@
                     </h:column>
                 </h:panelGrid>
             </h:column>
-            <!-- did you know? ends -->
+            <%-- did you know? ends --%>
 
 
         </h:panelGrid>
-        <!-- sidebar ends -->
+        <%-- sidebar ends --%>
     </h:column>
 </h:panelGrid>

@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.manager;
 
+
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
 import gov.nih.nci.cagrid.portal.domain.DomainModel;
@@ -67,6 +68,7 @@ public class RegisteredServiceLocalTestCase extends BaseSpringDataAccessAbstract
 
             fail(e.getMessage());
         }
+        setComplete();
     }
 
 

@@ -57,13 +57,15 @@ public class GridServiceManagerImpl extends BaseManagerImpl
             _logger.info("Record not found for domain object. Creating new one");
         }
 
-        //save domain model which is a child association
+        //save domain model which is a child 1:1 association
         DomainModel dModel = rService.getDomainModel();
         if (dModel != null) {
+            dModel.setRegisteredService(rService);
             dModel.setPk(rService.getPk());
-            _logger.debug("Saving Domain Model");
-            super.save(dModel);
         }
+
+        _logger.info("Saving Registered Service:" + rService.getEPR());
+        super.save(rService);
     }
 
     /**

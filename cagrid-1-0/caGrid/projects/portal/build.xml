@@ -70,7 +70,13 @@
     <target name="setClasspath">
         <path id="portal.classpath">
             <fileset dir="${lib.dir}">
-                <include name="**/*.jar"/>
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${lib.dir}/nocopy">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${lib.dir}/myfaces">
+                <include name="*.jar"/>
             </fileset>
             <fileset dir="${ext.lib.dir}">
                 <include name="*.jar"/>
@@ -146,8 +152,7 @@
             depends="clean,cleanDeployment,compile,hibernate.xdoclet,copyLibsLocal,copyResourcesLocal,deployPreBuilt"
             description="Deploy Application into tomcat"/>
 
-    <target name="deployPreBuilt" depends="cleanDeployment,copyLibsLocal,copyResourcesLocal"
-            description="Deploys pre-built webapp">
+    <target name="deployPreBuilt" description="Deploys pre-built webapp">
         <copy todir="${tomcat.webapps.dir}/${project.name}" overwrite="true">
             <fileset dir="${webcontent.dir}"/>
         </copy>
@@ -240,7 +245,9 @@
                 <filter token="log.level.root" value="${log.level.root}"/>
                 <filter token="log.level.portal" value="${log.level.portal}"/>
                 <filter token="log.level.portal.tests" value="${log.level.portal.tests}"/>
-                <filter token="log.level.spring" value="${log.level.spring}"/>
+                <filter token="log.level.springframework" value="${log.level.spring}"/>
+                <filter token="log.level.org.springframework.orm" value="${log.level.orm}"/>
+                <filter token="log.level.javax.faces" value="${log.level.javax.faces}"/>
             </filterset>
         </copy>
 

@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.web;
 
 import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
+import org.apache.log4j.Category;
 import org.springframework.dao.DataAccessException;
 
 import javax.faces.FacesException;
@@ -20,12 +21,16 @@ public class PortalApplication {
     private List services = new ArrayList();
     private GridServiceManager gridServiceManager;
 
+    private Category _logger = Category.getInstance(getClass().getName());
+
 
     public List getServices() throws FacesException {
         try {
             services = gridServiceManager.getAllServices();
         } catch (DataAccessException e) {
-            throw new FacesException("Error retreiving services from Database", e);
+            String msg = "Error retreiving services from Database";
+            _logger.error("msg" + e.getMessage());
+            throw new FacesException(msg, e);
         }
         return services;
     }

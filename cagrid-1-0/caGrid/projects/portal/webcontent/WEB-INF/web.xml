@@ -122,14 +122,22 @@
         </init-param>-->
     </filter>
 
+    <!--OpenSessionInView Pattern -->
+    <filter>
+        <filter-name>OpenSessionInView</filter-name>
+        <filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+    </filter>
+
+
     <filter-mapping>
-        <filter-name>extensionsFilter</filter-name>
+        <filter-name>OpenSessionInView</filter-name>
         <url-pattern>*.jsf</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>extensionsFilter</filter-name>
-        <url-pattern>/faces/*</url-pattern>
+        <url-pattern>*.jsf</url-pattern>
     </filter-mapping>
+
 
     <!-- Spring Integration -->
     <listener>
@@ -157,11 +165,11 @@
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
+    <!--ToDo redirect thru servlet-->
     <error-page>
         <error-code>500</error-code>
-        <location>/error.jsp</location>
+        <location>/error.jsf</location>
     </error-page>
-
 
 </web-app>
 

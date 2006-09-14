@@ -24,6 +24,7 @@ public abstract class BaseSpringAbstractTestCase
     protected void onSetUp() throws Exception {
         super.onSetUp(); //To change body of overridden methods use File | Settings | File Templates.
 
+        setAutowireMode(AUTOWIRE_BY_NAME);
         rootIndexSet.add(
                 "http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService");
 

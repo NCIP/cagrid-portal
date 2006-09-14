@@ -30,14 +30,19 @@
         </property>
     </bean>
 
-    <!-- main DAO that participates in transactions-->
-    <bean id="gridServiceBaseDAO"
+    <!-- main Service that participates in transactions-->
+    <bean id="gridServiceManager"
           class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager" ref="transactionManager"/>
-        <property name="target" ref="gridServiceBaseDAOTarget"/>
+        <property name="target">
+            <bean name="gridServiceManagerTarget"
+                  class="gov.nih.nci.cagrid.portal.manager.GridServiceManagerImpl"
+                  parent="baseManager"/>
+        </property>
         <property name="transactionAttributes">
             <props>
-                <prop key="*">PROPAGATION_REQUIRED</prop>
+                <prop key="save*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
 
             </props>
         </property>
@@ -53,9 +58,9 @@
     </bean>
 
 
-    <bean id="gridServiceBaseDAOTarget"
+    <bean id="gridServiceBaseDAO"
           class="gov.nih.nci.cagrid.portal.dao.hibernate.GridServiceBaseDAOImpl"
-          parent="baseDAO">
+            >
         <property name="sessionFactory">
             <ref bean="sessionFactory"/>
         </property>
@@ -90,9 +95,5 @@
             <ref bean="jdbcDAO"/>
         </property>
     </bean>
-
-    <bean name="gridServiceManager"
-          class="gov.nih.nci.cagrid.portal.manager.GridServiceManagerImpl"
-          parent="baseManager"/>
 
 </beans>

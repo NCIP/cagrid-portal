@@ -39,4 +39,11 @@
     </managed-bean>
 
 
+    <managed-bean>
+        <managed-bean-name>errorDisplay</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.portal.web.ErrorDisplayServlet</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+
 </faces-config>

@@ -1,65 +1,53 @@
-<!DOCTYPE tiles-definitions
-        [
-                <!ELEMENT component-definitions (definition+)>
-                <!ELEMENT tiles-definitions (definition+)>
-                <!ELEMENT definition (put*, putList*)>
-                <!ATTLIST definition
-                        name CDATA #REQUIRED
-                        page CDATA #IMPLIED
-                        path CDATA #IMPLIED
-                        extends CDATA #IMPLIED
-                        role CDATA #IMPLIED
-                        template CDATA #IMPLIED
-                        controllerClass CDATA #IMPLIED
-                        controllerUrl CDATA #IMPLIED>
-                <!ELEMENT put (#PCDATA)>
-                <!ATTLIST put
-                        name CDATA #REQUIRED
-                        value CDATA #IMPLIED
-                        type (string | page | template | definition) #IMPLIED
-                        content CDATA #IMPLIED
-                        direct (true | false) #IMPLIED>
-                <!ELEMENT putList ( (add* | item* | bean* | putList*)+) >
-                <!ATTLIST putList
-                        name CDATA #REQUIRED>
-                <!ELEMENT putListElements (add | item | bean)>
-                <!ELEMENT add (#PCDATA)>
-                <!ATTLIST add
-                        value CDATA #IMPLIED
-                        type (string | page | template | definition) #IMPLIED
-                        content CDATA #IMPLIED
-                        direct (true | false) #IMPLIED>
-                <!ELEMENT bean (#PCDATA)>
-                <!ATTLIST bean
-                        classtype CDATA #REQUIRED>
-                <!ELEMENT item (#PCDATA)>
-                <!ATTLIST item
-                        value CDATA #REQUIRED
-                        link CDATA #REQUIRED
-                        classtype CDATA #IMPLIED
-                        icon CDATA #IMPLIED
-                        tooltip CDATA #IMPLIED>
-                ]>
+<?xml version="1.0"?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles
+       Configuration 1.1//EN"
+        "http://struts.apache.org/dtds/tiles-config_1_1.dtd">
+
 <tiles-definitions>
 
     <definition name="Base" page="/jsp/layout/PortalBaseLayout.jsp">
         <put name="nciHeader" value="/jsp/header/NCIHeader.jsp"/>
         <put name="portalHeader" value="/jsp/header/PortalHeader.jsp"/>
-        <put name="mainMenu" value="/jsp/header/MainMenuHeader.jsp"/>
         <put name="appFooter" value="/jsp/footer/PortalFooter.jsp"/>
         <put name="nciFooter" value="/jsp/footer/NCIFooter.jsp"/>
 
     </definition>
 
     <definition name="/home.tiles" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuHome.jsp"/>
+        <put name="subMenu" value="/jsp/menu/SubMenuBlank.jsp"/>
         <put name="mainContent" value="/jsp/content/PortalHomepage.jsp"/>
     </definition>
 
     <definition name="/directory.tiles" extends="Base">
-        <put name="mainContent" value="/jsp/content/Directory.jsp"/>
+        <put name="mainMenu" value="/jsp/menu/MainMenuDirectory.jsp"/>
+        <put name="subMenu" value="/jsp/menu/SubMenuDirectory.jsp"/>
+        <put name="mainContent" value="/jsp/content/DirectoryHome.jsp"/>
+    </definition>
+
+    <definition name="/servicesDirectory.tiles" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuDirectory.jsp"/>
+        <put name="subMenu" value="/jsp/menu/SubMenuDirectory.jsp"/>
+        <put name="mainContent" value="/jsp/content/DirectoryServices.jsp"/>
+    </definition>
+
+
+    <definition name="/map.tiles" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuMap.jsp"/>
+        <put name="subMenu" value="/jsp/menu/SubMenuMap.jsp"/>
+        <put name="mainContent" value="/jsp/menu/SubMenuBlank.jsp"/>
+    </definition>
+
+    <definition name="/help.tiles" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuHelp.jsp"/>
+        <put name="subMenu" value="/jsp/menu/SubMenuBlank.jsp"/>
+        <put name="mainContent" value="/jsp/menu/SubMenuBlank.jsp"/>
     </definition>
 
     <definition name="/error.tiles" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuHome.jsp"/>
+        <put name="subMenu" value="/jsp/menu/SubMenuHome.jsp"/>
         <put name="mainContent" value="/jsp/content/Error.jsp"/>
     </definition>
 

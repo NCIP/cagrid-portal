@@ -11,20 +11,20 @@ For example using the blue color sheme, darker means use the darker blue and lig
 /*########## GREEN COLOR SCHEME ##########
  #6A8989 = darker green
  #98B7B7 = lighter green
- 
+
 /*########## PURPLE COLOR SCHEME ##########
  #797C9C = darker purple
  #9FA2BA = lighter purple
- 
+
 /*########## TAN COLOR SCHEME ##########
  #706C60 = darker tan
  #B3AE9C = lighter tan
- 
+
 /*########## GRAY COLOR SCHEME ##########
  #838386 = darker gray
  #AAAAAB = lighter gray
 
-/*########## COMMON AMONG ALL COLOR SCHEMES ########## 
+/*########## COMMON AMONG ALL COLOR SCHEMES ##########
  #A90101 = red
  #5C5C5C = dark gray
  #CCCCCC = medium gray
@@ -39,14 +39,7 @@ body {
 }
 
 /*###############
-Layout Styles
-###############*/
-.MaxHeightTable {
-    height: 100%;
-}
-
-/*###############
-HDR AND FTR BEGINS 
+HDR AND FTR BEGINS
 ###############*/
 .hdrBG {
 /* for the cell that contains the required cancer.gov header */
@@ -55,8 +48,7 @@ HDR AND FTR BEGINS
 
 .subhdrBG {
 /* for the cell that contains the application header */
-/*background-color: #9FA2BA; /* lighter */
-    background-color: #A5AEC4;
+    background-color: #9FA2BA; /* lighter */
     border-left: 1px solid #CCCCCC; /* constant: medium gray */
     border-right: 1px solid #CCCCCC; /* constant: medium gray */
     border-top: 1px solid #CCCCCC; /* constant: medium gray */
@@ -67,12 +59,8 @@ HDR AND FTR BEGINS
     padding-top: 0.4em;
 }
 
-td.footerColumns {
-    vertical-align: top;
-}
-
 /*###############
-MENU BEGINS 
+MENU BEGINS
 ###############*/
 td.mainMenu {
     background-color: #5C5C5C; /* constant: dark gray */
@@ -81,22 +69,67 @@ td.mainMenu {
     border: 1px solid #CCCCCC; /* constant: medium gray */
 }
 
-td.mainMenuItem {
-/* for the off state of the main menu (top) cells */
-    font-size: 0.6em;
-    font-weight: bold;
-    background-color: #5C5C5C; /* constant: dark gray */
-    padding-left: 1em;
-    padding-right: 1em;
+td.mainMenuSub {
+    background-color: #797C9C; /* darker */
 }
 
-td.mainMenuItemOver {
-/* for the over state of the main menu (top) cells */
+td.mainMenuItem {
+/* for the normal state of the tabs in the main menu */
+    font-size: 0.6em;
+    font-weight: bold;
+    background-color: #9FA2BA; /* lighter */
+    padding-left: 1em;
+    padding-right: 1em;
+    border: 1px solid #CCCCCC; /* constant: medium gray */
+    text-align: center;
+}
+
+td.mainMenuItemOn {
+/* for the selected tab in the main menu */
     font-size: 0.6em;
     font-weight: bold;
     background-color: #797C9C; /* darker */
     padding-left: 1em;
     padding-right: 1em;
+    color: #FFFFFF; /* constant: white */
+    text-align: center;
+    border: 1px solid #CCCCCC; /* constant: medium gray */
+    border-bottom: 0px;
+}
+
+td.mainMenuItemOver {
+/* for the rollover state of a tab in the main menu */
+    font-size: 0.6em;
+    font-weight: bold;
+    background-color: #797C9C; /* darker */
+    padding-left: 1em;
+    padding-right: 1em;
+    color: #FFFFFF; /* constant: white */
+    text-align: center;
+    border: 1px solid #CCCCCC; /* constant: medium gray */
+}
+
+td.mainMenuSubItems {
+/* for the cells that contain the sub-items in the main menu */
+    color: #FFFFFF; /* constant: white */
+    font-size: 0.6em;
+    font-weight: bold;
+    white-space: nowrap;
+    text-align: center;
+}
+
+td.mainMenuSpacer {
+/* for the spacer cells in the main menu */
+    border-bottom: 1px solid #CCCCCC; /* constant: medium gray */
+    font-size: 0.6em;
+}
+
+td.mainMenuSubItemsSpacer {
+/* for the spacer cells in the sub-section of the main menu */
+    background-color: #797C9C; /* darker */
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    text-align: center;
 }
 
 td.footerMenu {
@@ -114,7 +147,6 @@ td.footerMenuItem {
     background-color: #5C5C5C; /* constant: dark gray */
     padding-left: 1em;
     padding-right: 1em;
-    height: 20;
 }
 
 td.footerMenuItemOver {
@@ -194,8 +226,8 @@ td.subMenuFooter {
     border-right: 1px solid #CCCCCC; /* constant: medium gray */
 }
 
-/*############### 
-LINKS BEGIN 
+/*###############
+LINKS BEGIN
 ###############*/
 a:link, a:visited, a:active {
 /* default links */
@@ -241,6 +273,28 @@ a:hover.mainMenuLink {
     color: #FFFFFF; /* constant: white */
 }
 
+a:link.mainMenuLinkOver, a:visited.mainMenuLinkOver, a:active.mainMenuLinkOver {
+/* for over state of the text links in the main menu */
+    color: #FFFFFF; /* constant: white */
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+a:hover.mainMenuLinkOver {
+    color: #FFFFFF; /* constant: white */
+}
+
+a:link.mainMenuSubLink, a:visited.mainMenuSubLink, a:active.mainMenuSubLink {
+/* for the sub-menu links in the main menu */
+    color: #FFFFFF; /* constant: white */
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+a:hover.mainMenuSubLink {
+    text-decoration: underline;
+}
+
 a:link.footerMenuLink, a:visited.footerMenuLink, a:active.footerMenuLink {
 /* for the text links at the top of the footer */
     color: #FFFFFF; /* constant: white */
@@ -264,8 +318,8 @@ a:hover.dataPagingLink {
     text-decoration: underline;
 }
 
-/*############### 
-FORM BEGINS 
+/*###############
+FORM BEGINS
 ###############*/
 .formRequiredNotice {
 /* for the asterisk cell */
@@ -365,14 +419,15 @@ input.actionButton {
     border: 1px solid #5C5C5C; /* constant: dark gray */
 }
 
-/*############### 
-SIDEBAR BEGINS 
+/*###############
+SIDEBAR BEGINS
 ###############*/
 .sidebarSection {
 /* for the individual sidebar sections */
     background-color: #F4F4F5; /* constant: light gray */
     font-family: verdana, arial, helvetica, sans-serif;
     font-size: 0.7em;
+    vertical-align: top;
 }
 
 .sidebarTitle {
@@ -400,7 +455,7 @@ SIDEBAR BEGINS
 }
 
 /*###############
-DATA TABLE BEGINS 
+DATA TABLE BEGINS
 ###############*/
 .dataTablePrimaryLabel {
 /* for the first row */
@@ -499,7 +554,7 @@ DATA TABLE BEGINS
 }
 
 /*###############
-STANDARD CONTENT BEGINS 
+STANDARD CONTENT BEGINS
 ###############*/
 table.contentPage {
 /* for overall top style for a content page */
@@ -508,7 +563,6 @@ table.contentPage {
     color: #000000; /* constant: black */
     border-left: 1px solid #CCCCCC; /* constant: light gray */
     border-right: 1px solid #CCCCCC; /* constant: light gray */
-    height: 100%;
 }
 
 table.contentBegins {
@@ -517,6 +571,11 @@ table.contentBegins {
     font-size: 1em;
     color: #000000; /* constant: black */
     padding: 1em;
+}
+
+table.welcomeHeader {
+    height: 30%;
+    padding: 0px;
 }
 
 h2, .h2 {
@@ -545,10 +604,7 @@ p, .p {
     color: #000000; /* constant: black */
 }
 
-/*###############
-MISCELLANEOUS BEGINS
-###############*/
-td.bannerHome {
+.bannerHome {
 /* for the banner area of the home page */
     background-color: #797C9C; /* darker*/
 }
@@ -572,61 +628,36 @@ td.bannerHome {
 .welcomeContent {
 /* for the area below the title content of the home page */
     font-family: arial, helvetica, verdana, sans-serif;
-    font-size: 0.6em;
+    font-size: 0.8em;
     padding: 1em;
     line-height: 1.5em;
     vertical-align: top;
+
 }
 
 img.img {
-/* for images that need a border */
+/* for images that need a style applied */
     border: 1px solid #5C5C5C; /* constant: dark gray */
 }
 
-.errorHeader {
-    font-size: 1.6em;
-    background-color: #6392C6;
-    color: white;
+/*###############
+Homepage BEGINS (Each section has a homepage)
+###############*/
+.homepageTitle {
+/* for the titles of the individual sidebar sections */
+    font-size: 1em;
     font-weight: bold;
-    padding: 3px;
-    margin-bottom: 10px;
+    padding-left: 0.8em;
+    background-color: #5C5C5C; /* constant: dark gray */
+    color: #FFFFFF; /* constant: white */
+    height: 20;
 }
 
-.errorFooter {
+.homepageContent {
+* for the area below the title content of the home page * / font-family : arial, helvetica, verdana, sans-serif;
     font-size: 0.8em;
-    background-color: #6392C6;
-    color: white;
-    font-style: italic;
-    padding: 3px;
-    margin-top: 5px;
-}
+    padding: 1em;
+    line-height: 1.5em;
+    vertical-align: top;
 
-.errorMessage {
-    color: red;
-    font-weight: bold;
-}
-
-.errorExceptions {
-}
-
-.errorExceptionStack {
-    margin-top: 5px;
-    padding: 3px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #9F9F9F;
-    background-color: #E0E0E0;
-}
-
-.errorExceptionCause {
-    font-size: 1.1em;
-    padding: 3px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #9F9F9F;
-    background-color: #E0E0E0;
-}
-
-.errorException {
-    font-size: 1.0em;
 }

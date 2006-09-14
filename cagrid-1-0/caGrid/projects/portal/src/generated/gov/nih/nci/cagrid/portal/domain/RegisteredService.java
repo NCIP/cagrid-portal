@@ -130,6 +130,7 @@ public class RegisteredService implements GridService {
     /**
      * @hibernate.set name="operationsCollection"
      * cascade="all-delete-orphan"
+     * lazy="true"
      * @hibernate.collection-key column="SERVICE_ID_KEY"
      * @hibernate.collection-one-to-many class="gov.nih.nci.cagrid.portal.domain.Operation"
      */
@@ -144,6 +145,7 @@ public class RegisteredService implements GridService {
     /**
      * @hibernate.one-to-one class="gov.nih.nci.cagrid.portal.domain.DomainModel"
      * cascade="all"
+     * lazy="true"
      */
     public DomainModel getDomainModel() {
         return domainModel;

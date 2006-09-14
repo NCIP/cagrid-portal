@@ -25,9 +25,20 @@
 	</category>
 
 	<category name="org.springframework" additivity="false">
-		<priority value="@log.level.spring@"/>
+		<priority value="@log.level.springframework@"/>
 		<appender-ref ref="fileAppender"/>
 	</category>
+
+     <category name="org.springframework.orm" additivity="false">
+		<priority value="@log.level.org.springframework.orm@"/>
+		<appender-ref ref="consoleAppender"/>
+	</category>
+
+    <category name="javax.faces" additivity="false">
+		<priority value="@log.level.javax.faces@"/>
+		<appender-ref ref="fileAppender"/>
+	</category>
+
 
 	<category name="gov.nih.nci.cagrid.portal.tests" additivity="false">
 		<priority value="@log.level.portal.tests@"/>

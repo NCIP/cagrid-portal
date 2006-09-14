@@ -20,9 +20,10 @@ public abstract class BaseSpringDataAccessAbstractTestCase
         extends AbstractTransactionalDataSourceSpringContextTests {
     protected HashSet rootIndexSet = new HashSet();
 
+
     protected void onSetUpBeforeTransaction() throws Exception {
         super.onSetUpBeforeTransaction(); //To change body of overridden methods use File | Settings | File Templates.
-
+        setAutowireMode(AUTOWIRE_BY_NAME);
         //rootIndexSet.add("http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService");
         rootIndexSet.add(
                 "http://cagrid04.bmi.ohio-state.edu:7080/wsrf/services/DefaultIndexService");

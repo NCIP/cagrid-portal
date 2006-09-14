@@ -33,6 +33,7 @@ public class BaseDAOImpl extends HibernateDaoSupport implements BaseDAO {
     }
 
     public void saveOrUpdate(Object obj) throws DataAccessException {
+        _logger.debug("Saving " + obj.getClass() + " Object");
         getHibernateTemplate().saveOrUpdate(obj);
     }
 
