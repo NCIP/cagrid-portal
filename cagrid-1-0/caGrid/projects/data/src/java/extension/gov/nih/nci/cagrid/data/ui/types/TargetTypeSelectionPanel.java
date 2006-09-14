@@ -99,6 +99,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	public TargetTypeSelectionPanel(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo) {
 		super(desc, serviceInfo);
 		packageToNamespace = new HashMap();
+		loadMostRecentProjectInfo();
 		initialize();
 	}
 	
@@ -459,6 +460,21 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	}
 	
 	
+	private void loadMostRecentProjectInfo() {
+		ExtensionTypeExtensionData extensionData = getExtensionTypeExtensionData();
+		MessageElement cadsrMessageElement = ExtensionTools.getExtensionDataElement(extensionData, DataServiceConstants.CADSR_ELEMENT_NAME);
+		if (cadsrMessageElement != null) {
+			Element cadsrElement = AxisJdomUtils.fromMessageElement(cadsrMessageElement);
+			String longName = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_NAME_ATTRIB);
+			String version = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_VERSION_ATTRIB);
+			Project tempProject = new Project();
+			tempProject.setLongName(longName);
+			tempProject.setVersion(version);
+			mostRecentProject = tempProject;
+		}
+	}
+	
+	
 	private void storeCaDSRInfo() {
 		ExtensionTypeExtensionData extensionData = getExtensionTypeExtensionData();
 		Element cadsr = new Element(DataServiceConstants.CADSR_ELEMENT_NAME);
@@ -803,7 +819,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			removePackageButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Project selectedProject = getDomainBrowserPanel().getSelectedProject();
-					if (selectedProject != null && selectedProject.equals(mostRecentProject)) {
+					if (selectedProject != null && projectEquals(selectedProject, mostRecentProject)) {
 						UMLPackageMetadata selectedPackage = getDomainBrowserPanel().getSelectedPackage();
 						if (selectedPackage != null && packageToNamespace.containsKey(selectedPackage.getName())) {
 							// remove the package from the namespace types tree
@@ -910,6 +926,21 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			}
 		}
 		return domainModelValidationCheckBox;
+	}
+	
+	
+	/**
+	 * p1 must be non-null!!
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
+	private boolean projectEquals(Project p1, Project p2) {
+		if (p2 != null) {
+			return p1.getLongName().equals(p2.getLongName()) 
+				&& p1.getVersion().equals(p2.getVersion());
+		}
+		return false;
 	}
 	
 	
