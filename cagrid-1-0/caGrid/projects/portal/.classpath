@@ -101,5 +101,6 @@
 	<classpathentry kind="lib" path="lib/myfaces/portlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/struts.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/tomahawk.jar"/>
+	<classpathentry kind="lib" path="lib/nocopy/servlet-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
