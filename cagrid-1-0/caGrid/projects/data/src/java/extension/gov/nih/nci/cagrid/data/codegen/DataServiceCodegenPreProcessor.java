@@ -196,14 +196,12 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			System.out.println("Contacting caDSR to build domain model.  This might take a while...");
 			DomainModel model = null;
 			try {
-				if (allClasses.size() != 0) {
-					// TODO; change this to use EXCLUDED associations
-					String classNames[] = new String[allClasses.size()];
-					allClasses.toArray(classNames);
-					model = cadsrClient.generateDomainModelForClasses(proj, classNames);
-					if (model == null) {
-						throw new CodegenExtensionException("caDSR returned a null domain model.");
-					}
+				// TODO; change this to use EXCLUDED associations
+				String classNames[] = new String[allClasses.size()];
+				allClasses.toArray(classNames);
+				model = cadsrClient.generateDomainModelForClasses(proj, classNames);
+				if (model == null) {
+					throw new CodegenExtensionException("caDSR returned a null domain model.");
 				}
 				System.out.println("Created data service Domain Model!");
 				LOG.info("Created data service Domain Model!");
