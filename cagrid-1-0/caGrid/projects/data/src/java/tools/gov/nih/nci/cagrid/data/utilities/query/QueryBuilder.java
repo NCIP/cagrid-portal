@@ -25,6 +25,8 @@ import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -41,6 +43,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.event.TreeSelectionEvent;
@@ -68,28 +71,31 @@ public class QueryBuilder extends JFrame {
 	private JScrollPane queryTreeScrollPane = null;
 	private JPanel contextButtonPanel = null;
 	private JButton setTargetButton = null;
-	private JButton addAssociationButton = null;  //  @jve:decl-index=0:visual-constraint="112,161"
-	private JButton addAttributeButton = null;  //  @jve:decl-index=0:visual-constraint="148,184"
-	private JButton addGroupButton = null;  //  @jve:decl-index=0:visual-constraint="169,209"
-	private JMenuBar mainMenuBar = null;  //  @jve:decl-index=0:visual-constraint="143,10"
+	private JButton addAssociationButton = null;
+	private JButton addAttributeButton = null;
+	private JButton addGroupButton = null;
+	private JMenuBar mainMenuBar = null;
 	private JMenu fileMenu = null;
+	private JMenuItem newQueryMenuItem = null;
 	private JMenuItem loadQueryMenuItem = null;
 	private JMenuItem saveQueryMenuItem = null;
-	private JMenuItem exitMenuItem = null;  //  @jve:decl-index=0:visual-constraint="156,166"
+	private JMenuItem exitMenuItem = null;
 	private JButton removeItemButton = null;
 	private JMenu domainModelMenu = null;
 	private JMenuItem loadModelMenuItem = null;
 	private JMenuItem retrieveDomainModelMenuItem = null;
-	private JMenuItem saveDomainModelMenuItem = null;  //  @jve:decl-index=0:visual-constraint="180,187"
+	private JMenuItem saveDomainModelMenuItem = null;
 	private JButton changePredicateButton = null;
 	private JButton changeLogicButton = null;
 	private JButton changeValueButton = null;
-	private JPanel mainPanel = null;
+	private JPanel queryPanel = null;
+	private JSplitPane mainSplitPane = null;
+	private TypeDisplayPanel typeDisplayPanel = null;
 	
 	private String lastDirectory = null;
 	private CqlDomainValidator domainValidator = null;
 	
-	private transient DomainModel domainModel = null;
+	private transient DomainModel domainModel = null;	
 	
 	public QueryBuilder() {
 		super();
@@ -105,9 +111,11 @@ public class QueryBuilder extends JFrame {
 				handleExit();
 			}
 		});
-        this.setSize(new java.awt.Dimension(696,546));
-        this.setContentPane(getMainPanel());
+        this.setSize(new java.awt.Dimension(834,546));
+        this.setContentPane(getMainSplitPane());
         this.setJMenuBar(getMainMenuBar());
+        this.pack();
+        this.setVisible(true);
 	}
 	
 	
@@ -161,7 +169,7 @@ public class QueryBuilder extends JFrame {
 							// set up editor based on type of node
 							if (node instanceof QueryTreeNode) {
 								// can only set the target at this point
-								
+								getSetTargetButton().setEnabled(true);
 							} else if (node instanceof TargetTreeNode) {
 								
 							} else if (node instanceof AssociationTreeNode) {
@@ -219,7 +227,11 @@ public class QueryBuilder extends JFrame {
 			contextButtonPanel.add(getChangePredicateButton());
 			contextButtonPanel.add(getChangeLogicButton());
 			contextButtonPanel.add(getRemoveItemButton());
-			// disable all buttons for now...
+			// disable all buttons until a domain model has been loaded...
+			for (int i = 0; i < contextButtonPanel.getComponentCount(); i++) {
+				JButton button = (JButton) contextButtonPanel.getComponent(i);
+				button.setEnabled(false);
+			}
 		}
 		return contextButtonPanel;
 	}
@@ -313,7 +325,6 @@ public class QueryBuilder extends JFrame {
 	private JMenuBar getMainMenuBar() {
 		if (mainMenuBar == null) {
 			mainMenuBar = new JMenuBar();
-			mainMenuBar.setSize(new java.awt.Dimension(139,58));
 			mainMenuBar.add(getFileMenu());
 			mainMenuBar.add(getDomainModelMenu());
 		}
@@ -330,12 +341,27 @@ public class QueryBuilder extends JFrame {
 		if (fileMenu == null) {
 			fileMenu = new JMenu();
 			fileMenu.setText("File");
+			fileMenu.add(getNewQueryMenuItem());
 			fileMenu.add(getLoadQueryMenuItem());
 			fileMenu.add(getSaveQueryMenuItem());
 			fileMenu.addSeparator();
 			fileMenu.add(getExitMenuItem());
 		}
 		return fileMenu;
+	}
+	
+	
+	private JMenuItem getNewQueryMenuItem() {
+		if (newQueryMenuItem == null) {
+			newQueryMenuItem = new JMenuItem();
+			newQueryMenuItem.setText("New Query");
+			newQueryMenuItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					newQuery();
+				}
+			});
+		}
+		return newQueryMenuItem;
 	}
 
 
@@ -385,7 +411,6 @@ public class QueryBuilder extends JFrame {
 	private JMenuItem getExitMenuItem() {
 		if (exitMenuItem == null) {
 			exitMenuItem = new JMenuItem();
-			exitMenuItem.setSize(new java.awt.Dimension(106,46));
 			exitMenuItem.setText("Exit");
 			exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -481,7 +506,6 @@ public class QueryBuilder extends JFrame {
 	private JMenuItem getSaveDomainModelMenuItem() {
 		if (saveDomainModelMenuItem == null) {
 			saveDomainModelMenuItem = new JMenuItem();
-			saveDomainModelMenuItem.setSize(new java.awt.Dimension(116,44));
 			saveDomainModelMenuItem.setText("Save To Disk");
 			saveDomainModelMenuItem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -555,8 +579,8 @@ public class QueryBuilder extends JFrame {
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
-	private JPanel getMainPanel() {
-		if (mainPanel == null) {
+	private JPanel getQueryPanel() {
+		if (queryPanel == null) {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.gridwidth = 2;
@@ -574,13 +598,37 @@ public class QueryBuilder extends JFrame {
 			gridBagConstraints.weighty = 1.0D;
 			gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints.gridx = 0;
-			mainPanel = new JPanel();
-			mainPanel.setLayout(new GridBagLayout());
-			mainPanel.add(getQueryTreeScrollPane(), gridBagConstraints);
-			mainPanel.add(getRestrictionTypePanel(), gridBagConstraints1);
-			mainPanel.add(getContextButtonPanel(), gridBagConstraints2);
+			queryPanel = new JPanel();
+			queryPanel.setLayout(new GridBagLayout());
+			queryPanel.add(getQueryTreeScrollPane(), gridBagConstraints);
+			queryPanel.add(getRestrictionTypePanel(), gridBagConstraints1);
+			queryPanel.add(getContextButtonPanel(), gridBagConstraints2);
 		}
-		return mainPanel;
+		return queryPanel;
+	}
+	
+	
+	private TypeDisplayPanel getTypeDisplayPanel() {
+		if (typeDisplayPanel == null) {
+			typeDisplayPanel = new TypeDisplayPanel();
+		}
+		return typeDisplayPanel;
+	}
+
+
+	/**
+	 * This method initializes jSplitPane	
+	 * 	
+	 * @return javax.swing.JSplitPane	
+	 */
+	private JSplitPane getMainSplitPane() {
+		if (mainSplitPane == null) {
+			mainSplitPane = new JSplitPane();
+			mainSplitPane.setOneTouchExpandable(true);
+			mainSplitPane.setLeftComponent(getQueryPanel());
+			mainSplitPane.setRightComponent(getTypeDisplayPanel());
+		}
+		return mainSplitPane;
 	}
 	
 	
@@ -591,6 +639,20 @@ public class QueryBuilder extends JFrame {
 			dispose();
 			System.exit(0);
 		}
+	}
+	
+	
+	private void newQuery() {
+		// see if there's already a query in the works
+		QueryTreeNode node = getQueryTree().getQueryTreeNode();
+		if (node != null) {
+			int choice = JOptionPane.showConfirmDialog(this, "Clear current query?", "Confirm", JOptionPane.YES_NO_OPTION);
+			if (choice != JOptionPane.YES_OPTION) {
+				return;
+			}
+		}
+		// ok, clear 'er out
+		getQueryTree().setQuery(new CQLQuery());
 	}
 	
 	
@@ -682,17 +744,19 @@ public class QueryBuilder extends JFrame {
 		if (choice == JFileChooser.APPROVE_OPTION) {
 			File dmFile = chooser.getSelectedFile();
 			lastDirectory = dmFile.getAbsolutePath();
-			
+			DomainModel tempModel = null;
 			try {
 				FileReader fileReader = new FileReader(dmFile);
-				domainModel = MetadataUtils.deserializeDomainModel(fileReader);
+				tempModel = MetadataUtils.deserializeDomainModel(fileReader);
 			} catch (Exception ex) {
 				String[] error = {
 					"Error loading the domain model:",
 					ex.getMessage()
 				};
 				JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
-			}
+				return;
+			}			
+			attemptInstallDomainModel(tempModel);
 		}
 	}
 	
@@ -701,17 +765,48 @@ public class QueryBuilder extends JFrame {
 		String url = JOptionPane.showInputDialog(this, "Enter Service URL");
 		if (url != null) {
 			// contact the data service for the domain model
+			DomainModel tempModel = null;
 			try {
 				DataServiceClient client = new DataServiceClient(url);
-				domainModel = MetadataUtils.getDomainModel(client.getEndpointReference());
+				tempModel = MetadataUtils.getDomainModel(client.getEndpointReference());
 			} catch (Exception ex) {
 				String[] error = {
 					"Error retrieving domain model from service:",
 					ex.getMessage()
 				};
 				JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			attemptInstallDomainModel(tempModel);
+		}
+	}
+	
+	
+	private void attemptInstallDomainModel(DomainModel tempModel) {
+		// we can now add the query node to the query tree
+		// see if there is currently a query in the query tree
+		QueryTreeNode node = getQueryTree().getQueryTreeNode();
+		if (node != null) {
+			// validate the existing query against the new dommain model
+			CQLQuery query = node.getQuery();
+			try {
+				domainValidator.validateDomainModel(query, tempModel);
+			} catch (MalformedQueryException ex) {
+				String[] error = {
+					"The current query is not compatible with the selected domain model:",
+					ex.getMessage(), "\n",
+					"Please select another, or save this query and start a new one."
+				};
+				JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+				return;
 			}
 		}
+		
+		// domain model checked out, add it as the currently loaded one
+		domainModel = tempModel;
+		JOptionPane.showMessageDialog(this, "Domain Model loaded");
+		getTypeDisplayPanel().setTypeTraverser(new DomainModelTypeTraverser(domainModel));
+		getQueryTree().setQuery(new CQLQuery());
 	}
 	
 	
