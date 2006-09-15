@@ -519,14 +519,14 @@ public class DomainModelBuilder {
 
 		LOG.info("Beginning processing of generalizations for project: " + proj.getShortName());
 		start = System.currentTimeMillis();
+		DomainModelUmlGeneralizationCollection genCollection = new DomainModelUmlGeneralizationCollection();
 		if (classes != null && classes.length > 0) {
 			// build generalizations
 			UMLGeneralization[] genArr = buildGeneralizations(classes);
 			LOG.info("Found " + genArr.length + " generalizations for project: " + proj.getShortName());
-			DomainModelUmlGeneralizationCollection genCollection = new DomainModelUmlGeneralizationCollection();
 			genCollection.setUMLGeneralization(genArr);
-			model.setUmlGeneralizationCollection(genCollection);
 		}
+		model.setUmlGeneralizationCollection(genCollection);
 		duration = (System.currentTimeMillis() - start) / 1000.0;
 		LOG.info("Finished generalization processing for project: " + proj.getShortName() + " in " + duration
 			+ " seconds.");
@@ -543,7 +543,7 @@ public class DomainModelBuilder {
 			"SELECT c.id, c.UMLGeneralizationMetadata.superUMLClassMetadata.id FROM UMLClassMetadata AS c WHERE c.id "
 				+ classIDFilter);
 		LOG.debug("Issuing generialization query with HQL:" + hql.getHqlString());
-		
+
 		try {
 			List rList = this.cadsr.query(hql, "UMLClassMetadata");
 			UMLGeneralization genArr[] = new UMLGeneralization[rList.size()];
