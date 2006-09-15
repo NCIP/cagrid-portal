@@ -72,7 +72,7 @@
 
     <taskdef resource="net/sf/antcontrib/antlib.xml">
         <classpath>
-            <pathelement location="${lib.dir}/ant-contrib.jar" />
+            <pathelement location="${ext.lib.dir}/ant-contrib.jar" />
         </classpath>
     </taskdef>
 
@@ -137,7 +137,7 @@
             </fileset>
         	<!-- Post Introduce Edit-->
         		<fileset dir="${ext.lib.dir}">
-        						<include name="*.jar" />
+        				<include name="*.jar" />
         		</fileset>
         	<!-- Post Introduce Edit-->
         	<fileset dir="${ext.endorsed.dir}">
@@ -257,8 +257,16 @@
         <jar jarfile="${build.lib.dir}/${client.jar.name}" basedir="${build.dest}">
             <include name="**/client/**" />
         </jar>
+        
+        
+        <copy toDir="${build.dest}">
+            <fileset dir="resources">
+                <include name="authentication-config.xml"/>
+            </fileset>
+        </copy>
         <jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
             <include name="**/service/**" />
+            <include name="authentication-config.xml"/>
         </jar>
         <jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
             <include name="**/*" />

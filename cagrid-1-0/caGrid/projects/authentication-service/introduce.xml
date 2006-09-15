@@ -96,7 +96,7 @@
      <ns13:CommunicationMethod xsi:type="ns13:CommunicationMethod">Privacy</ns13:CommunicationMethod>
     </ns13:TransportLevelSecurity>
     <ns13:RunAsMode xsi:type="ns13:RunAsMode">System</ns13:RunAsMode>
-    <ns13:AnonymousClients xsi:type="ns13:AnonymousCommunication">No</ns13:AnonymousClients>
+    <ns13:AnonymousClients xsi:type="ns13:AnonymousCommunication">Yes</ns13:AnonymousClients>
     <ns13:ServiceAuthorization xsi:type="ns13:ServiceAuthorization">
      <ns13:NoAuthorization xsi:type="ns13:NoAuthorization"/>
     </ns13:ServiceAuthorization>

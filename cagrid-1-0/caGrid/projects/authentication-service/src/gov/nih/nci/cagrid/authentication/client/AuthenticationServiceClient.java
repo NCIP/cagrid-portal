@@ -15,6 +15,9 @@ import org.globus.gsi.GlobusCredential;
 
 import gov.nih.nci.cagrid.authentication.stubs.AuthenticationServicePortType;
 import gov.nih.nci.cagrid.authentication.stubs.service.AuthenticationServiceAddressingLocator;
+import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
+import gov.nih.nci.cagrid.authentication.bean.Credential;
+import gov.nih.nci.cagrid.authentication.bean.SAMLAssertion;
 import gov.nih.nci.cagrid.authentication.common.AuthenticationServiceI;
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 
@@ -84,8 +87,13 @@ public class AuthenticationServiceClient extends ServiceSecurityClient implement
 		if(!(args.length < 2)){
 			if(args[0].equals("-url")){
 			  AuthenticationServiceClient client = new AuthenticationServiceClient(args[1]);
-			  // place client calls here if you want to use this main as a
-			  // test....
+			  BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
+			  bac.setUserId("user1");
+			  bac.setPassword("password1");
+			  Credential cred = new Credential();
+			  cred.setBasicAuthenticationCredential(bac);
+			  SAMLAssertion saml = client.authenticate(cred);
+			  System.out.println(saml);
 			} else {
 				usage();
 				System.exit(1);
