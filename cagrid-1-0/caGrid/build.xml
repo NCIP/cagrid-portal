@@ -263,7 +263,8 @@
         	<artifact refid="mobius.jars"/>
         	<artifact refid="mds.jars"/>
             <artifact refid="opensaml.jars"/>
-            <artifact refid="opensaml.endorsed"/>
+        	<artifact refid="opensaml.endorsed"/>
+        	<artifact refid="opensaml.codec"/>
             <artifact refid="introduce.servicesecurity.jars"/>
             <artifact refid="security.metadata.jars"/>
         </resolveDependencies>
