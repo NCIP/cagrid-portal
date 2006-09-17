@@ -101,14 +101,15 @@
 		</copy>
 		<!--copy over the jars to the lib -->
 		<copy overwrite="true" toDir="${tomcat.deploy.lib.dir}">
+			<echo message="Deploying jars to %{tomcat.deploy.lib.dir}"/>
 			<fileset dir="lib">
-				<include name="*" />
+				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${ext.lib.dir}">
-				<include name="*" />
+				<include name="*.jar" />
 			</fileset>
 			<fileset dir="build/lib">
-				<include name="*" />
+				<include name="*.jar" />
 			</fileset>
 		</copy>
 		<!--copy over the schema service files-->
