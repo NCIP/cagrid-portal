@@ -131,6 +131,12 @@
 				<include name="xml-apis.jar" />
 			</fileset>
 		</artifact>
+		<artifact track="main" type="jars" id="opensaml.codec">
+			<antcall target="build-opensaml" />
+			<fileset dir="${projects.dir}/opensaml/lib">
+				<include name="commons-codec-1.3.jar" />
+			</fileset>
+		</artifact>
 
 
 		<artifact track="main" type="jars" id="graph.jars">
