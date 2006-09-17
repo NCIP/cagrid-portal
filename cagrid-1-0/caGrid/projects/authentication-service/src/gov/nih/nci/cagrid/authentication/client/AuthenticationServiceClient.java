@@ -93,7 +93,7 @@ public class AuthenticationServiceClient extends ServiceSecurityClient implement
 			  Credential cred = new Credential();
 			  cred.setBasicAuthenticationCredential(bac);
 			  SAMLAssertion saml = client.authenticate(cred);
-			  System.out.println(saml);
+			  System.out.println(saml.getXml());
 			} else {
 				usage();
 				System.exit(1);

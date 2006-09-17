@@ -104,7 +104,16 @@
 			<fileset dir="lib">
 				<include name="*" />
 			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar"/>
+			</fileset>
 			<fileset dir="build/lib">
+				<include name="*" />
+			</fileset>
+		</copy>
+		<!-- Copy Endorsed Jars to $CATALINA_HOME/common/endorsed -->
+		<copy overwrite="true" toDir="${env.CATALINA_HOME}/common/endorsed">
+			<fileset dir="${ext.endorsed.dir}">
 				<include name="*" />
 			</fileset>
 		</copy>

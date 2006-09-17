@@ -1,8 +1,10 @@
 /**
- * $Id: DefaultSubjectProvider.java,v 1.1 2006-09-15 10:52:46 joshua Exp $
+ * $Id: DefaultSubjectProvider.java,v 1.2 2006-09-17 11:47:03 joshua Exp $
  *
  */
 package gov.nih.nci.cagrid.authentication.service;
+
+import java.security.Principal;
 
 import javax.security.auth.Subject;
 
@@ -11,11 +13,12 @@ import gov.nih.nci.cagrid.authentication.bean.Credential;
 import gov.nih.nci.cagrid.authentication.common.InvalidCredentialException;
 import gov.nih.nci.cagrid.authentication.common.SubjectProvider;
 import gov.nih.nci.security.AuthenticationManager;
+import gov.nih.nci.security.authentication.ext.pricipals.UserIdPrincipal;
 import gov.nih.nci.security.exceptions.CSException;
 
 /**
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @author Joshua Phillips
  * 
  */
@@ -36,8 +39,11 @@ public class DefaultSubjectProvider implements SubjectProvider {
 	try {
 	    BasicAuthenticationCredential bac = credential
 		    .getBasicAuthenticationCredential();
+	    System.out.println("Checking: userId=" + bac.getUserId() + ", password=" + bac.getPassword());
 	    mgr.login(bac.getUserId(), bac.getPassword());
 	    subject = mgr.getSubject();
+	    Principal userId = new UserIdPrincipal(bac.getUserId());
+	    subject.getPrincipals().add(userId);
 	} catch (CSException ex) {
 	    throw new InvalidCredentialException("Invalid userid or password!",
 		    ex);

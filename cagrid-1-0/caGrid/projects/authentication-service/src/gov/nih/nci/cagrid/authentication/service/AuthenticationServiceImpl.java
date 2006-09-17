@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault
 import gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault;
 import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.rmi.RemoteException;
 
@@ -44,7 +45,9 @@ public class AuthenticationServiceImpl extends AuthenticationServiceImplBase {
 
 	gov.nih.nci.cagrid.authentication.bean.SAMLAssertion saml = null;
 	try{
-	    this.auth.authenticate(credential);
+	    SAMLAssertion sa = this.auth.authenticate(credential);
+
+	    saml = new gov.nih.nci.cagrid.authentication.bean.SAMLAssertion(sa.toString());
 	}catch(InvalidCredentialException ex){
 	    InvalidCredentialFault fault = new InvalidCredentialFault();
 	    FaultHelper fh = new FaultHelper(fault);
