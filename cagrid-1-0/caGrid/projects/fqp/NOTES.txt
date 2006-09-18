@@ -6,20 +6,23 @@ DCQL Foriegn Predicate values must be a subset of CQL Predicate values, as the f
 
 ISSUES:
 ==============================
+
+(FIXED) processing of DCQL Group is broken... if it contains both nested groups and foreign assoications, the later will replace the former in the generated query
+
 change build to create client-usable engine (outside of service)
 
 build service to support synchronous query execution (with status RPs, etc)
 
 should we add query return modifiers to DCQL? (not trivial, as they have to work "in code" against aggregate results... can't be pushed to backend)
 
+(FIXED) need to aggregate results when targeting multiple services... currently only return uses last result
+  - probably want to make a new DCQL result that contains a CQL results collection for each target service 
+
 need to use thread pool for sending out CQL queries
 
 (DONE) change inner CQL queries to use return modifiers to only return distinct join att values
 
 (FIXED) impl only works with EQUAL_TO as the join condition
-
-(FIXED) need to aggregate results when targeting multiple services... currently only return uses last result
-  - probably want to make a new DCQL result that contains a CQL results collection for each target service 
 
 impl doesn't properly handle empty foriegn association results
   - replaces with an IS_NULL predicate

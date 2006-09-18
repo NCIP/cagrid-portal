@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.fqp.processor;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
@@ -48,7 +49,7 @@ public class FederatedQueryEngine {
 			}
 		}
 
-		CQLQuery cqlQuery = processor.processDCQLQueryPlan(dcqlQuery.getTargetObject());
+		CQLQuery cqlQuery = processor.processDCQLQuery(dcqlQuery.getTargetObject());
 		CQLQueryResults aggregateResults = null;
 		String[] targetServiceURLs = dcqlQuery.getTargetServiceURL();
 		for (int i = 0; i < targetServiceURLs.length; i++) {
@@ -65,22 +66,9 @@ public class FederatedQueryEngine {
 					// got something
 					aggregateResults = currResults;
 				} else {
-					int neededSize = 0;
-					if (aggregateResults.getObjectResult() != null) {
-						neededSize += aggregateResults.getObjectResult().length;
-					}
+					CQLObjectResult[] tmpArr = (CQLObjectResult[]) Utils.concatenateArrays(CQLObjectResult.class,
+						aggregateResults.getObjectResult(), currResults.getObjectResult());
 
-					// need room to store old + current
-					neededSize += currResults.getObjectResult().length;
-					CQLObjectResult[] tmpArr = new CQLObjectResult[neededSize];
-
-					// copy old to temp
-					System.arraycopy(aggregateResults.getObjectResult(), 0, tmpArr, 0, aggregateResults
-						.getObjectResult().length);
-					// copy new to temp, after old
-					System.arraycopy(currResults.getObjectResult(), 0, tmpArr,
-						aggregateResults.getObjectResult().length, currResults.getObjectResult().length);
-					// set the new results on the return object
 					aggregateResults.setObjectResult(tmpArr);
 				}
 			}
