@@ -67,7 +67,7 @@
 			try {
 				String thisnamespace = (String)it.next();
 				if(!writtenNamespaces.contains(thisnamespace)){
-					String thispackageName = CommonTools.getPackageName(new Namespace(thisnamespace));
+					String thispackageName = CommonTools.getPackageName(new Namespace(thisnamespace),info.getNamespaces());
 					newLine = thisnamespace + "=" + thispackageName;
 					// turns http: into http\:
 					newnewLine = newLine.replaceFirst(":", "\\\\:");
