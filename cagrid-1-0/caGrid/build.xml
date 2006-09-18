@@ -38,7 +38,7 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, idpservice, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service" />
+	<property name="projects.list" value="bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, idpservice, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service,gridgrouper-plugin" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
@@ -328,6 +328,19 @@
 			<artifact refid="metadata.schemas" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/gridgrouper" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+	
+	<!-- =============================================================== -->
+	<!-- Grid Grouper Plugin                                             -->
+	<!-- =============================================================== -->
+	<target name="build-gridgrouper-plugin" if="isJDK1.5" depends="prepare" description="Builds the GridGrouper plugin">
+		<resolveDependencies extdir="${projects.dir}/gridgrouper-plugin/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="discovery.jars" />
+			<artifact refid="introduce.jars" />
+			<artifact refid="gridgrouper.ui.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/gridgrouper-plugin" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 	<!-- =============================================================== -->

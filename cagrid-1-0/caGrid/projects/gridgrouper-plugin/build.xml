@@ -1,0 +1,114 @@
+<!-- ======================================================================= -->
+<!-- caGrid 1.0 Common Metadata build file                                   -->
+<!-- ======================================================================= -->
+<project name="metadata" default="jar" basedir=".">
+	<!-- Environment -->
+	<property environment="env" />
+	<property file="${basedir}/build.properties" />
+	<property file="${user.dir}/build.properties" />
+	<property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
+
+	<!-- Information -->
+	<property name="project.version" value="1.0" />
+	<property name="project.name" value="caGrid-${project.version}-gridgrouper-plugin" />
+	
+	
+	<property name="src.dir" value="src" />
+	<property name="ext.lib.dir" value="ext/lib" />
+
+	<property name="build.dir" location="build" />
+	<property name="build.dest" location="build/classes" />
+	<property name="build.jars.dir" location="build/lib" />
+
+	<property name="stubs.dir" location="build/stubs" />
+	<property name="stubs.src" location="build/stubs/src" />
+	<property name="stubs.dest" location="build/stubs/classes" />
+	<property name="jar.name" value="${project.name}.jar" />
+
+	<property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+
+	<property name="java.debug" value="on" />
+
+	<property name="schema.src" location="${globus.dir}/share/schema" />
+	<property name="schema.dest" location="${build.dir}/schema" />
+
+	<property name="mapping.src" value="${basedir}/NStoPkg.properties" />
+
+	<target name="init">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.dest}" />
+		<mkdir dir="${build.jars.dir}" />
+		<mkdir dir="${stubs.dir}" />
+		<mkdir dir="${stubs.src}" />
+		<mkdir dir="${stubs.dest}" />
+		<mkdir dir="${schema.dest}" />
+		<copy toDir="${schema.dest}">
+			<fileset dir="schema" casesensitive="yes">
+				<include name="*" />
+			</fileset>
+		</copy>
+		<available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
+	</target>
+
+
+	<target name="stubs" unless="stubs.present" depends="init">
+		<property name="mapping.dst" value="${build.dir}/NStoPkg.properties" />
+		<ant antfile="${ant.build.stubs}" target="mergePackageMapping" />
+		<property name="mapping.file" value="${mapping.dst}" />
+		<ant antfile="${ant.build.stubs}" target="generateStubs">
+			<property name="source.stubs.dir" location="${schema.dest}" />
+			<property name="wsdl.file" value="GridGrouperPlugin.wsdl" />
+			<property name="target.stubs.dir" location="${stubs.src}" />
+		</ant>
+	</target>
+
+
+	<target name="compileStubs" depends="stubs">
+		<delete dir="${stubs.src}/org/apache" />
+		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}">
+			<include name="**/*.java" />
+			<classpath>
+				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+	
+	
+	<target name="compile" depends="compileStubs">
+		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}">
+			<include name="**/*.java" />
+			<classpath>
+				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+
+	<target name="jar" depends="compile">
+		<jar destfile="${build.jars.dir}/${jar.name}">
+			<fileset dir="${stubs.dest}">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${build.dest}">
+							<include name="**/*" />
+						</fileset>
+		</jar>
+	</target>
+
+	<target name="clean">
+		<delete dir="tmp" />
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="all" depends="jar" />
+</project>

@@ -1,0 +1,9 @@
+<ns1:ExtensionDescription extensionType="AUTHORIZATION"
+    xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension">
+    <ns1:AuthorizationExtensionDescription displayName="Grid Grouper" name="gridgrouperui">
+        <ns1:AuthoriziationPanel>gov.nih.nci.cagrid.bdt.extension.BDTCreationExtensionPostProcessor</ns1:AuthoriziationPanel>
+        <ns1:Properties> 
+            <ns1:Property key="gridGrouperURL" value="" />
+        </ns1:Properties>
+    </ns1:AuthorizationExtensionDescription>
+</ns1:ExtensionDescription>

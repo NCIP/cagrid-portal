@@ -1,0 +1,13 @@
+<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/1/gridgrouper-plugin"
+	attributeFormDefault="qualified"
+	elementFormDefault="qualified"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:plugin="http://cagrid.nci.nih.gov/1/gridgrouper-plugin">
+		 <xsd:element name="Group" type="plugin:Group"/>
+ 		 <xsd:complexType name="Group">
+			<xsd:sequence>
+				<xsd:element name="gridgrouperURI" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="groupName" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+			</xsd:sequence>
+		</xsd:complexType>
+</xsd:schema>
