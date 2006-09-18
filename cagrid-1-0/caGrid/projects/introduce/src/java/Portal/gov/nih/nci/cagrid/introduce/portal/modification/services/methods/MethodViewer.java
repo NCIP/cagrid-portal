@@ -20,6 +20,7 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.MethodSecurityPanel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.ModifyService;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
@@ -469,6 +470,19 @@ public class MethodViewer extends GridPortalBaseFrame {
 						}
 
 						if (getIsImportedCheckBox().isSelected()) {
+							// validate the import
+							// make sure there are no collision problems with
+							// namespaces or packages.....
+							for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
+								NamespaceType nsType = info.getNamespaces().getNamespace(i);
+								if (nsType.getNamespace().equals(getNamespaceTextField().getText())
+									&& !nsType.getPackageName().equals(getPackageNameTextField().getText())) {
+									valid = false;
+									message = "Service Namespace is already being used and Package Name does not match : "
+										+ getPackageNameTextField().getText() + " != " + nsType.getPackageName();
+								}
+							}
+
 							// process the import information
 							method.setIsImported(true);
 							if (getIsImportedCheckBox().isSelected()) {
@@ -494,6 +508,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 						}
 
 					} catch (Exception ex) {
+						ex.printStackTrace();
 						// PortalUtils.showErrorMessage(ex);
 						ErrorDialog.showErrorDialog(ex);
 					}
@@ -1562,9 +1577,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 		if (isProvidedCheckBox == null) {
 			isProvidedCheckBox = new JCheckBox();
 			isProvidedCheckBox.setText("Provided");
-			isProvidedCheckBox.setSelected(method.isIsProvided());
+			getProviderClassnameTextField().setEnabled(false);
+			getProviderClassnameTextField().setEditable(false);
 			isProvidedCheckBox.addActionListener(new ActionListener() {
-
 				public void actionPerformed(ActionEvent e) {
 					if (isProvidedCheckBox.isSelected()) {
 						getProviderClassnameTextField().setEnabled(true);
@@ -1577,6 +1592,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 			});
 		}
+		isProvidedCheckBox.setSelected(method.isIsProvided());
 		return isProvidedCheckBox;
 	}
 
