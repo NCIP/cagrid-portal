@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
@@ -184,7 +185,17 @@ public class ModifyService extends JDialog {
 								+ CommonTools.ALLOWED_JAVA_CLASS_REGEX + ")");
 						return;
 					}
-					// make sure there are no collision problems
+					// make sure there are no collision problems with namespaces or packages.....
+					for (int i = 0; i < service.getNamespaces().getNamespace().length; i++) {
+						NamespaceType nsType = service.getNamespaces().getNamespace(i);
+						if (nsType.getNamespace().equals(namespaceTextField.getText())
+							&& !nsType.getPackageName().equals(servicePackageNameTextField.getText())) {
+							JOptionPane.showMessageDialog(ModifyService.this,
+								"Service Namespace is already being used and Package Name does not match : "
+									+ servicePackageNameTextField.getText() + " != " + nsType.getPackageName());
+							return;
+						}
+					}
 					for (int i = 0; i < service.getServiceDescriptor().getServices().getService().length; i++) {
 						ServiceType testService = service.getServiceDescriptor().getServices().getService(i);
 						if (!testService.equals(service.getService())) {
