@@ -2,9 +2,6 @@ NOTES:
 Exceptions will now be in the <serviceNamespace>.stubs.types package and no the <serviceNamespace>.stubs packages
 
 To Do:
-There is a bug when making method "newMethod" and then making another method named "newMethod"
-
-Generalized way to get resource properties from inside your service.
 
 the implbase constructor throws RemoteException.  this means that the impl constructor MUST throw RemoteException, which means that you can't have a default constructor.  Can you remove the throw from the implbase?
 
@@ -60,12 +57,15 @@ since you cant edit anything on any security tabs unless you have checked custom
 when you check custom, it should only enable the secure communication tab (as you cant edit any tabs until you check a form of secure com)
 when you check some for of secure comm, the other tabs should be enabled.
 
-
 secure message privacy does not work (STEVE)
 
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+There is a bug when making method "newMethod" and then making another method named "newMethod"
+
+Generalized way to get resource properties from inside your service.
+
 Add ETC_PATH as a service property
 
 (GUI DOES NOT ALLOW THIS) metadata code doesn't compile if you select an element that is xsd:type an XML schema type (e.g. string)
