@@ -461,12 +461,12 @@ DATA TABLE BEGINS
 /* for the first row */
     font-family: arial, helvetica, verdana, sans-serif;
     font-size: 0.8em;
-    font-weight: bold;
-    background-color: #5C5C5C; /* constant: dark gray */
-    color: #FFFFFF; /* constant: white */
-    border-top: 1px solid #5C5C5C; /* constant: dark gray */
-    border-left: 1px solid #5C5C5C; /* constant: dark gray */
-    border-right: 1px solid #5C5C5C; /* constant: dark gray */
+    font-weight: bold; /*background-color: #5C5C5C; /* constant: dark gray */
+* / background-color : #797C9C; /* constant: dark purple */
+* / color : #FFFFFF; /* constant: white */
+    border-top: 1px solid #CCCCCC; /* constant: dark gray */
+    border-left: 1px solid #CCCCCC; /* constant: dark gray */
+    border-right: 1px solid #CCCCCC; /* constant: light gray */
     padding-left: 0.4em;
 }
 
@@ -485,12 +485,13 @@ DATA TABLE BEGINS
 
 .dataTableHeader {
 /* for the horizontal column headers */
-    font-family: arial, helvetica, verdana, sans-serif;
-    background-color: #CCCCCC; /* constant: medium gray */
-    color: #000000; /* constant: black */
+    font-family: arial, helvetica, verdana, sans-serif; /*background-color: #CCCCCC; /* constant: medium gray */
+* / background-color : #797C9C; /* constant: light purple */
+* / color : #FFFFFF; /* constant: black */
     font-weight: bold;
-    border-right: 1px solid #5C5C5C; /* constant: dark gray */
-    border-bottom: 1px solid #5C5C5C; /* constant: dark gray */
+    border-right: 1px solid #CCCCCC; /* constant: dark gray */
+    border-bottom: 1px solid #CCCCCC; /* constant: dark gray */
+    text-align: left;
 }
 
 .dataTable {
@@ -498,27 +499,38 @@ DATA TABLE BEGINS
     font-family: arial, helvetica, verdana, sans-serif;
     font-size: 0.7em;
     color: #000000; /* constant: black */
-    border-top: 1px solid #5C5C5C; /* constant: dark gray */
-    border-left: 1px solid #5C5C5C; /* constant: dark gray */
+    border-top: 1px solid #CCCCCC; /* constant: dark gray */
+    border-left: 1px solid #CCCCCC; /* constant: dark gray */
 }
 
 .dataRowLight {
 /* for the light color of alternating rows */
-    background-color: #FFFFFF; /* constant: white */
+    background-color: #EEEEE0; /* constant: white */
     color: #000000; /* constant: black */
 }
 
 .dataRowDark {
 /* for the dark color of alternating rows */
-    background-color: #F4F4F5; /* constant: light gray */
-    color: #000000; /* constant: black */
+    background-color: #D3D3D3; /* constant: light gray */
+* / color : #000000; /* constant: black */
 }
 
 .dataCellText {
 /* for text output cells */
-    border-right: 1px solid #5C5C5C; /* constant: dark gray */
-    border-bottom: 1px solid #5C5C5C; /* constant: dark gray */
+    font-size: 0.9em;
+    border-right: 1px solid #CCCCCC; /* constant: dark gray */
+    border-bottom: 1px solid #CCCCCC; /* constant: dark gray */
     text-align: left;
+}
+
+.dataCellTextBold {
+/* for text output cells */
+    font-size: 0.9em;
+    border-right: 1px solid #CCCCCC; /* constant: dark gray */
+    border-bottom: 1px solid #CCCCCC; /* constant: dark gray */
+    text-align: left;
+    font-weight: bold;
+
 }
 
 .dataCellNumerical {
@@ -530,9 +542,9 @@ DATA TABLE BEGINS
 
 .dataPagingSection {
 /* for the cell that contains the paging table */
-    border-right: 1px solid #5C5C5C; /* constant: dark gray */
-    border-top: 1px solid #5C5C5C; /* constant: dark gray */
-    border-left: 1px solid #5C5C5C; /* constant: dark gray */
+    border-right: 1px solid #CCCCCC; /* constant: dark gray */
+    border-top: 1px solid #CCCCCC; /* constant: dark gray */
+    border-left: 1px solid #CCCCCC; /* constant: dark gray */
     background-color: #F4F4F5; /* constant: light gray */
 }
 
@@ -617,7 +629,7 @@ p, .p {
 .welcomeTitle {
 /* for titles of sections inside the content area */
     font-family: verdana, arial, helvetica, sans-serif;
-    font-size: 0.7em;
+    font-size: 0.8em;
     font-weight: bold;
     padding-left: 1em;
     background-color: #CCCCCC; /* constant: medium gray */
@@ -643,21 +655,44 @@ img.img {
 /*###############
 Homepage BEGINS (Each section has a homepage)
 ###############*/
+.directoryTable {
+    height: 50%;
+    width: 100%;
+    vertical-align: top;
+}
+
 .homepageTitle {
 /* for the titles of the individual sidebar sections */
-    font-size: 1em;
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 0.9em;
     font-weight: bold;
     padding-left: 0.8em;
     background-color: #5C5C5C; /* constant: dark gray */
     color: #FFFFFF; /* constant: white */
     height: 20;
+    text-align: left;
 }
 
 .homepageContent {
-* for the area below the title content of the home page * / font-family : arial, helvetica, verdana, sans-serif;
+/*for the area below the title content of the home page * / font-family : arial, helvetica, verdana, sans-serif;*/
     font-size: 0.8em;
     padding: 1em;
     line-height: 1.5em;
     vertical-align: top;
 
+}
+
+.scrollerStyle1 {
+    font-size: 0.9em;
+    padding: 0.1em;
+    line-height: 1.5em;
+    vertical-align: top;
+}
+
+.scrollerStyle2 {
+    font-size: 0.8em;
+    padding: 0em;
+    line-height: 1.5em;
+    vertical-align: top;
+    font-weight: bold;
 }

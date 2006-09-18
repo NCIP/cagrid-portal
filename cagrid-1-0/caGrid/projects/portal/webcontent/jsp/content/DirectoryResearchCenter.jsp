@@ -3,24 +3,23 @@
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t" %>
 
 
-<f:subview id="servicesDirectory">
+<f:subview id="rcDirectory">
 
-<h:panelGrid style="height:100%;width:100%;" cellpadding="0" cellspacing="0" border="0"
-             headerClass="homepageTitle"
-             columns="1">
+<h:panelGrid styleClass="directoryTable" headerClass="homepageTitle" columns="1">
+
 <f:facet name="header">
     <h:column>
-        <h:outputText value="Registered Service Directory"/>
+        <h:outputText value="Research Center Directory"/>
     </h:column>
 </f:facet>
 
-
 <f:verbatim><br/></f:verbatim>
+
 <!-- Scroller to scroll through results -->
 <h:column>
     <h:panelGrid columns="1">
         <t:dataScroller id="scroller1"
-                        for="serviceData"
+                        for="rcData"
                         fastStep="6"
                         pageCountVar="pageCount"
                         pageIndexVar="pageIndex"
@@ -54,7 +53,7 @@
 
 <h:column>
     <t:dataScroller id="scroller2"
-                    for="serviceData"
+                    for="rcData"
                     rowsCountVar="rowsCount"
                     displayedRowsCountVar="displayedRowsCountVar"
                     firstRowIndexVar="firstRowIndex"
@@ -64,28 +63,24 @@
                     pageIndexVar="pageIndex"
             >
         <h:outputText styleClass="scrollerStyle2"
-                      value="Found #{rowsCount} services. Displaying #{displayedRowsCountVar} from
+                      value="Found #{rowsCount} Research Centers. Displaying #{displayedRowsCountVar} from
                                     #{firstRowIndex} to #{lastRowIndex}"/>
     </t:dataScroller>
 </h:column>
+<f:verbatim><br/></f:verbatim>
 
 <h:column>
-    <f:verbatim><br/><br/></f:verbatim>
-</h:column>
-
-
-<h:column>
-    <t:dataTable id="serviceData" var="service" value="#{portal.services}"
+    <t:dataTable id="rcData" var="rc" value="#{portal.rc}"
                  rows="6" width="80%">
 
         <h:column>
-            <h:panelGrid width="100%" border="1" cellpadding="3" cellspacing="0"
+            <h:panelGrid styleClass="directoryTable" border="1" cellpadding="3" cellspacing="0"
                          rowClasses="dataRowLight,dataRowDark"
                          columnClasses="dataCellTextBold,dataCellText"
                          headerClass="dataTableHeader" columns="2">
                 <f:facet name="header">
                     <h:column>
-                        <h:outputText value="Service Details"/>
+                        <h:outputText value="Center Details"/>
                     </h:column>
 
                 </f:facet>
@@ -94,22 +89,23 @@
                     <h:outputText value="Name"/>
                 </h:column>
                 <h:column>
-                    <h:outputText value="#{service.name}"/>
-                </h:column>
-
-                <h:column>
-                    <h:outputText value="URL"/>
-                </h:column>
-                <h:column>
-                    <h:outputText value="#{service.EPR}"/>
+                    <h:outputText value="#{rc.displayName} (#{rc.shortName})"/>
                 </h:column>
 
                 <h:column>
                     <h:outputText value="Description"/>
                 </h:column>
                 <h:column>
-                    <h:outputText value="#{service.description}"/>
+                    <h:outputText value="#{rc.description}"/>
                 </h:column>
+
+                <h:column>
+                    <h:outputText value="Homepage URL"/>
+                </h:column>
+                <h:column>
+                    <h:outputLink target="new" value="#{rc.homepageURL}"/>
+                </h:column>
+
 
                 <h:column/>
                 <h:column>

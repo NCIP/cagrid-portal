@@ -3,14 +3,14 @@
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t" %>
 
 
-<f:subview id="servicesDirectory">
+<f:subview id="pocDirectory">
 
-<h:panelGrid style="height:100%;width:100%;" cellpadding="0" cellspacing="0" border="0"
+<h:panelGrid styleClass="directoryTable" cellpadding="0" cellspacing="0" border="0"
              headerClass="homepageTitle"
              columns="1">
 <f:facet name="header">
     <h:column>
-        <h:outputText value="Registered Service Directory"/>
+        <h:outputText value="Point Of Contacts Directory"/>
     </h:column>
 </f:facet>
 
@@ -20,7 +20,7 @@
 <h:column>
     <h:panelGrid columns="1">
         <t:dataScroller id="scroller1"
-                        for="serviceData"
+                        for="pocData"
                         fastStep="6"
                         pageCountVar="pageCount"
                         pageIndexVar="pageIndex"
@@ -54,7 +54,7 @@
 
 <h:column>
     <t:dataScroller id="scroller2"
-                    for="serviceData"
+                    for="pocData"
                     rowsCountVar="rowsCount"
                     displayedRowsCountVar="displayedRowsCountVar"
                     firstRowIndexVar="firstRowIndex"
@@ -64,28 +64,24 @@
                     pageIndexVar="pageIndex"
             >
         <h:outputText styleClass="scrollerStyle2"
-                      value="Found #{rowsCount} services. Displaying #{displayedRowsCountVar} from
+                      value="Found #{rowsCount} People. Displaying #{displayedRowsCountVar} from
                                     #{firstRowIndex} to #{lastRowIndex}"/>
     </t:dataScroller>
 </h:column>
+<f:verbatim><br/></f:verbatim>
 
 <h:column>
-    <f:verbatim><br/><br/></f:verbatim>
-</h:column>
-
-
-<h:column>
-    <t:dataTable id="serviceData" var="service" value="#{portal.services}"
+    <t:dataTable align="top" id="pocData" var="poc" value="#{portal.poc}"
                  rows="6" width="80%">
 
         <h:column>
-            <h:panelGrid width="100%" border="1" cellpadding="3" cellspacing="0"
+            <h:panelGrid styleClass="directoryTable" border="1" cellpadding="3" cellspacing="0"
                          rowClasses="dataRowLight,dataRowDark"
                          columnClasses="dataCellTextBold,dataCellText"
                          headerClass="dataTableHeader" columns="2">
                 <f:facet name="header">
                     <h:column>
-                        <h:outputText value="Service Details"/>
+                        <h:outputText value="Contact Details"/>
                     </h:column>
 
                 </f:facet>
@@ -94,22 +90,37 @@
                     <h:outputText value="Name"/>
                 </h:column>
                 <h:column>
-                    <h:outputText value="#{service.name}"/>
+                    <h:outputText value="#{poc.firstName} #{poc.lastName}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="URL"/>
+                    <h:outputText value="Phone Number"/>
                 </h:column>
                 <h:column>
-                    <h:outputText value="#{service.EPR}"/>
+                    <h:outputLink target="new" value="#{poc.phoneNumber}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="Description"/>
+                    <h:outputText value="Email"/>
                 </h:column>
                 <h:column>
-                    <h:outputText value="#{service.description}"/>
+                    <h:outputText value="#{poc.email}"/>
                 </h:column>
+
+                <h:column>
+                    <h:outputText value="Addiliation"/>
+                </h:column>
+                <h:column>
+                    <h:outputText value="#{poc.affiliation}"/>
+                </h:column>
+
+                <h:column>
+                    <h:outputText value="Role"/>
+                </h:column>
+                <h:column>
+                    <h:outputLink target="new" value="#{poc.role}"/>
+                </h:column>
+
 
                 <h:column/>
                 <h:column>

@@ -11,10 +11,17 @@
         <put name="portalHeader" value="/jsp/header/PortalHeader.jsp"/>
         <put name="appFooter" value="/jsp/footer/PortalFooter.jsp"/>
         <put name="nciFooter" value="/jsp/footer/NCIFooter.jsp"/>
-
     </definition>
 
-    <definition name="/home.tiles" extends="Base">
+    <definition name="Homepage" page="/jsp/layout/PortalHomepageLayout.jsp">
+        <put name="nciHeader" value="/jsp/header/NCIHeader.jsp"/>
+        <put name="portalHeader" value="/jsp/header/PortalHeader.jsp"/>
+        <put name="appFooter" value="/jsp/footer/PortalFooter.jsp"/>
+        <put name="nciFooter" value="/jsp/footer/NCIFooter.jsp"/>
+    </definition>
+
+
+    <definition name="/home.tiles" extends="Homepage">
         <put name="mainMenu" value="/jsp/menu/MainMenuHome.jsp"/>
         <put name="subMenu" value="/jsp/menu/SubMenuBlank.jsp"/>
         <put name="mainContent" value="/jsp/content/PortalHomepage.jsp"/>
@@ -30,6 +37,18 @@
         <put name="mainMenu" value="/jsp/menu/MainMenuDirectory.jsp"/>
         <put name="subMenu" value="/jsp/menu/SubMenuDirectory.jsp"/>
         <put name="mainContent" value="/jsp/content/DirectoryServices.jsp"/>
+    </definition>
+
+    <definition name="/rcDirectory.tiles" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuDirectory.jsp"/>
+        <put name="subMenu" value="/jsp/menu/SubMenuDirectory.jsp"/>
+        <put name="mainContent" value="/jsp/content/DirectoryResearchCenter.jsp"/>
+    </definition>
+
+    <definition name="/pocDirectory.tiles" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuDirectory.jsp"/>
+        <put name="subMenu" value="/jsp/menu/SubMenuDirectory.jsp"/>
+        <put name="mainContent" value="/jsp/content/DirectoryPointOfContact.jsp"/>
     </definition>
 
 

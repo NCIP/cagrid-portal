@@ -14,7 +14,7 @@ import java.util.Set;
  * @created 19-Jun-2006 4:08:50 PM
  * @hibernate.class table="REGISTERED_SERVICES"
  */
-public class RegisteredService implements GridService {
+public class RegisteredService implements GridService, Comparable {
     // Properties
     private Integer pk;
     private String EPR;
@@ -193,5 +193,22 @@ public class RegisteredService implements GridService {
 
     public int hashCode() {
         return EPR.hashCode();
+    }
+
+    public int compareTo(Object o) {
+        if ((o == null)) {
+            throw new NullPointerException("Object being compared to null");
+        }
+
+        final RegisteredService that = (RegisteredService) o;
+        //if any name attribute is null
+        //send it to the end of the list
+        if (this.getName() == null) {
+            return 1;
+        } else if (that.getName() == null) {
+            return -1;
+        } else {
+            return that.getName().compareToIgnoreCase(this.getEPR());
+        }
     }
 }

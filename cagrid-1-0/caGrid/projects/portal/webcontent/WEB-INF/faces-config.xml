@@ -30,7 +30,7 @@
     <managed-bean>
         <description>JSF managed bean referencing a spring bean</description>
         <managed-bean-name>portal</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.portal.web.PortalApplication</managed-bean-class>
+        <managed-bean-class>gov.nih.nci.cagrid.portal.web.PortalApplicationBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
         <managed-property>
             <property-name>gridServiceManager</property-name>
@@ -38,6 +38,11 @@
         </managed-property>
     </managed-bean>
 
+    <managed-bean>
+        <managed-bean-name>ServiceDetails</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.portal.web.ServiceDetailsBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 
     <managed-bean>
         <managed-bean-name>errorDisplay</managed-bean-name>

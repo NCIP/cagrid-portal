@@ -6,14 +6,14 @@
         </td>
 
         <td class="mainMenuSpacer">&nbsp;</td>
-        <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOn'),showCursor()"
-            onmouseout="changeMenuStyle(this,'mainMenuItemOn'),hideCursor()"
+        <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
+            onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()"
             onclick="document.location.href='home.jsf'">
             <a class="mainMenuLink" href="home.jsf">HOME</a>
         </td>
         <td class="mainMenuSpacer">&nbsp;</td>
-        <td height="20" class="mainMenuItemOn" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
-            onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()"
+        <td height="20" class="mainMenuItemOn" onmouseover="changeMenuStyle(this,'mainMenuItemOn'),showCursor()"
+            onmouseout="changeMenuStyle(this,'mainMenuItemOn'),hideCursor()"
             onclick="document.location.href='directory.jsf'">
             <a class="mainMenuLink" href="directory.jsf">DIRECTORY</a>
         </td>

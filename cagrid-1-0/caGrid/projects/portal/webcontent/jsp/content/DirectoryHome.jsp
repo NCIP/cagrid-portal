@@ -4,7 +4,7 @@
 <f:subview id="directoryHome">
 
     <%-- welcome begins --%>
-    <h:panelGrid style="height:100%;width:70%;" cellpadding="0" cellspacing="0" border="0"
+    <h:panelGrid style="height:100%;width:100%;" cellpadding="0" cellspacing="0" border="0"
                  headerClass="homepageTitle" columnClasses="homepageContent">
         <f:facet name="header">
             <h:column>
