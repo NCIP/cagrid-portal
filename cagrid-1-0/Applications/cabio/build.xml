@@ -5,6 +5,8 @@
     <!-- Define the environment variable -->
     <property environment="env" />
 
+    <property name="cabio.domain.ns.exclude" value="-x gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain"/>
+
     <!-- 
 		Properties in these files will override the properties defined in this file.
     -->
@@ -150,6 +152,7 @@
             <path refid="service.build.classpath" />
         </path>
         <path id="test.build.classpath">
+            <pathelement location="${ext.lib.dir}/client.jar"/>
             <fileset dir="${test.lib.dir}">
                 <include name="*.jar" />
             </fileset>
@@ -157,8 +160,8 @@
             <path refid="service.build.classpath" />
         </path>
         <path id="test.run.classpath">
-            <pathelement location="${test.build.dest}" />
             <path refid="test.build.classpath" />
+            <pathelement location="${test.build.dest}" />
         </path>
         <path id="run.classpath">
             <pathelement location="${build.dest}" />
@@ -188,13 +191,14 @@
     <!-- Generate the stub source files -->
     <!-- This is done with a GT4 tool -->
     <target name="serviceStubs" depends="serviceGenerateBindings,merge">
+        <echo message="Excludes: ${introduce.ns.excludes}"></echo>
         <!-- Invoke the stub generator -->
         <ant antfile="${build.stubs}" target="generateStubs" inheritall="false">
             <property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
             <property name="source.stubs.dir" location="${schema.dest}/${schema.path}" />
             <property name="target.stubs.dir" location="${stubs.src}" />
             <property name="wsdl.file" value="${interface.name}_service.wsdl" />
-            <property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
+            <property name="ns.excludes" value="${cabio.domain.ns.exclude} ${GT4.ns.excludes} ${introduce.ns.excludes}" />
         </ant>
     </target>
 

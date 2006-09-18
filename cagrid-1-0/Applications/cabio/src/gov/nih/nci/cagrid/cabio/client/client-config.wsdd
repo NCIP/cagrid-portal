@@ -7,6 +7,7 @@
   <parameter name="sendXsiTypes" value="true"/>
   <parameter name="sendMultiRefs" value="true"/>
   <parameter name="sendXMLDeclaration" value="true"/>
+  <parameter name="castorMapping" value="/gov/nih/nci/cagrid/cabio/common/cabio-xml-mapping.xml" />
   <requestFlow>
    <handler type="java:org.globus.wsrf.handlers.AddressingHandler"/>
    <handler type="java:org.globus.wsrf.impl.security.authorization.ClientPropertiesHandler"/>
@@ -70,4 +71,5 @@
 <ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cadsr.domain.ValueDomain" qname="ns2:ValueDomain" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
 
 <ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cabio.domain.Gene" qname="ns2:Gene" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
+<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.common.domain.DatabaseCrossReference" qname="ns2:DatabaseCrossReference" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
 <!-- END INTRODUCE TYPEMAPPINGS --></deployment>

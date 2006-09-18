@@ -10,6 +10,7 @@
     <parameter name="providers" value="GetRPProvider GetMRPProvider QueryRPProvider gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl gov.nih.nci.cagrid.data.service.globus.DataServiceProviderImpl" />
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/CaBIO-security-metadata.xml" />
+    <parameter name="castorMapping" value="/gov/nih/nci/cagrid/cabio/common/cabio-xml-mapping.xml" />
   </service>
   <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent" type="java:org.globus.mds.aggregator.types.AggregatorContent" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
   <!-- START INTRODUCE TYPEMAPPINGS -->
@@ -18,6 +19,7 @@
 <ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cadsr.domain.ValueDomain" qname="ns2:ValueDomain" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
 
 <ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.cabio.domain.Gene" qname="ns2:Gene" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
+<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.common.domain.DatabaseCrossReference" qname="ns2:DatabaseCrossReference" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
 <!-- END INTRODUCE TYPEMAPPINGS -->
 </deployment>
 
