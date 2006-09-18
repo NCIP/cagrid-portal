@@ -24,11 +24,11 @@ need to use thread pool for sending out CQL queries
 
 (FIXED) impl only works with EQUAL_TO as the join condition
 
-impl doesn't properly handle empty foriegn association results
+(DONE) impl doesn't properly handle empty foriegn association results
   - replaces with an IS_NULL predicate
-  - needs to make an impossible predicate (att=1  AND att=2)
+  - needs to make an impossible predicate (IS_NULL AND IS_NOT_NULL)
   
-impl doesn't handle foreign associations with only 1 result
+(DONE - second approach for now) impl doesn't handle foreign associations with only 1 result
   - makes a group with one element (groups require 2 or more)
   - return either single attribute (preferred) or make redundant copy (simple but ugly/inefficient)
   
