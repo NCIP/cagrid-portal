@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -153,6 +154,28 @@ public class Utils {
 	}
 
 
+	/**
+	 * Merges the two arrays (not necessarily creating a new array). If both are
+	 * null, null is returned. If one is null, the other is returned.
+	 * 
+	 * @throws ArrayStoreException
+	 *             uses System.arrarycopy and has same contract
+	 */
+	public static java.lang.Object concatenateArrays(Class resultClass, java.lang.Object arr1, java.lang.Object arr2)
+		throws ArrayStoreException {
+		if (arr1 == null) {
+			return arr2;
+		} else if (arr2 == null) {
+			return arr1;
+		}
+		java.lang.Object newArray = Array.newInstance(resultClass, Array.getLength(arr1) + Array.getLength(arr2));
+		System.arraycopy(arr1, 0, newArray, 0, Array.getLength(arr1));
+		System.arraycopy(arr2, 0, newArray, Array.getLength(arr1), Array.getLength(arr2));
+
+		return newArray;
+	}
+
+
 	public static StringBuffer fileToStringBuffer(File file) throws Exception {
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		StringBuffer sb = new StringBuffer();
@@ -170,8 +193,8 @@ public class Utils {
 
 		return sb;
 	}
-	
-	
+
+
 	public static StringBuffer inputStreamToStringBuffer(InputStream stream) throws Exception {
 		InputStreamReader reader = new InputStreamReader(stream);
 		StringBuffer str = new StringBuffer();
@@ -193,8 +216,8 @@ public class Utils {
 	 * @param qname
 	 *            The QName of the object
 	 * @param writer
-	 *            A writer to place XML into (eg: FileWriter, StringWriter).  If a file
-	 *            writer is used, be sure to close it!
+	 *            A writer to place XML into (eg: FileWriter, StringWriter). If
+	 *            a file writer is used, be sure to close it!
 	 * @param wsdd
 	 *            A stream containing the WSDD configuration
 	 * @throws Exception
@@ -223,8 +246,8 @@ public class Utils {
 		// writer.close();
 		writer.flush();
 	}
-	
-	
+
+
 	public static void serializeObject(Object obj, QName qname, Writer writer) throws Exception {
 		// derive a message element for the object
 		MessageElement element = (MessageElement) ObjectSerializer.toSOAPElement(obj, qname);
@@ -347,16 +370,17 @@ public class Utils {
 		}
 		return files;
 	}
-	
-	
+
+
 	/**
 	 * Gets a relative path from the source file to the destination
+	 * 
 	 * @param source
-	 * 		The source file or location
+	 *            The source file or location
 	 * @param destination
-	 * 		The file to target with the relative path
-	 * @return
-	 * 		The relative path from the source file's directory to the destination file
+	 *            The file to target with the relative path
+	 * @return The relative path from the source file's directory to the
+	 *         destination file
 	 */
 	public static String getRelativePath(File source, File destination) throws Exception {
 		String sourceDir = null;
@@ -371,7 +395,7 @@ public class Utils {
 		} else {
 			destDir = destination.getParentFile().getCanonicalPath();
 		}
-		
+
 		// find the overlap in the source and dest paths
 		String overlap = findOverlap(sourceDir, destDir);
 		if (overlap.endsWith(File.separator)) {
@@ -382,11 +406,12 @@ public class Utils {
 			// no overlap at all, return full path of destination file
 			return destination.getCanonicalPath();
 		}
-		// difference is the number of path elements to back up before moving down the tree
+		// difference is the number of path elements to back up before moving
+		// down the tree
 		int parentDirsNeeded = countChars(sourceDir, File.separatorChar) - overlapDirs;
 		// difference is the number of path elements above the file to keep
 		int parentDirsKept = countChars(destDir, File.separatorChar) - overlapDirs;
-		
+
 		// build the path
 		StringBuffer relPath = new StringBuffer();
 		for (int i = 0; i < parentDirsNeeded; i++) {
@@ -407,10 +432,11 @@ public class Utils {
 		}
 		return relPath.toString();
 	}
-	
-	
+
+
 	private static String findOverlap(String s1, String s2) {
-		// TODO: More efficient would be some kind of binary search, divide and conquer
+		// TODO: More efficient would be some kind of binary search, divide and
+		// conquer
 		StringBuffer overlap = new StringBuffer();
 		int count = Math.min(s1.length(), s2.length());
 		for (int i = 0; i < count; i++) {
@@ -424,8 +450,8 @@ public class Utils {
 		}
 		return overlap.toString();
 	}
-	
-	
+
+
 	private static int countChars(String s, char c) {
 		int count = 0;
 		int index = -1;
