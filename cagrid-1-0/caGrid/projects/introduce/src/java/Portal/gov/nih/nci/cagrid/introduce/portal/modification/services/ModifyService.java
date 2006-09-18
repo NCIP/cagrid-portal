@@ -101,7 +101,7 @@ public class ModifyService extends JDialog {
 	 */
 	private void initialize() {
 		this.setContentPane(getMainPanel());
-		this.setTitle("Modify Service");
+		this.setTitle("Modify Service Context");
 
 	}
 

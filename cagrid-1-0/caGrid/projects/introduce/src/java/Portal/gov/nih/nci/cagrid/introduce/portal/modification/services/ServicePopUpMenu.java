@@ -74,9 +74,6 @@ public class ServicePopUpMenu extends JPopupMenu {
 					
 					ModifyService comp = new ModifyService(node, new SpecificServiceInformation(node.getInfo(),
 						node.getServiceType()));
-					// PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-					// new ModifyService(newNode, new
-					// SpecificServiceInformation(node.getInfo(),service)));
 					comp.pack();
 					PortalUtils.centerWindow(comp);
 					comp.setVisible(true);

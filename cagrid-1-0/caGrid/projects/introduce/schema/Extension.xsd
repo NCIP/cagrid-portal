@@ -20,6 +20,7 @@
 				<xs:element ref="DiscoveryExtensionDescription"/>
 				<xs:element ref="ServiceExtensionDescription"/>
 				<xs:element ref="ResourcePropertyEditorExtensionDescription"/>
+				<xs:element ref="AuthorizationExtensionDescription"/>
 			</xs:choice>
 			<xs:attribute name="extensionType" type="xs:string"/>
 			<xs:attribute name="extensionPreferencesPanel" type="xs:string"/>
@@ -85,6 +86,16 @@
 					<xs:documentation>ModificationViewer GUI component that must extend a
 					ServiceModificatoinUIPanel</xs:documentation>
 				</xs:annotation>
+			</xs:element>
+			<xs:element ref="Properties"/>
+		</xs:sequence>
+		<xs:attribute name="displayName" type="xs:string" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:element name="AuthorizationExtensionDescription" type="AuthorizationExtensionDescriptionType"/>
+	<xs:complexType name="AuthorizationExtensionDescriptionType">
+		<xs:sequence>
+			<xs:element name="AuthorizationPanel" type="xs:string" minOccurs="0" maxOccurs="1">
 			</xs:element>
 			<xs:element ref="Properties"/>
 		</xs:sequence>

@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.extension;
 
+import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ResourcePropertyEditorExtensionDescriptionType;
@@ -49,6 +50,22 @@ public class ExtensionTools {
 					ServiceInformation.class});
 			Object obj = con.newInstance(new Object[]{extensionDesc, info});
 			return (ServiceModificationUIPanel) obj;
+		}
+		return null;
+	}
+
+
+	public static AbstractAuthorizationPanel getAuthorizationPanel(String extensionName, ServiceInformation info)
+		throws Exception {
+		AuthorizationExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance().getAuthorizationExtension(
+			extensionName);
+		if (extensionDesc != null && extensionDesc.getAuthorizationPanel() != null
+			&& !extensionDesc.getAuthorizationPanel().equals("")) {
+			Class c = Class.forName(extensionDesc.getAuthorizationPanel());
+			Constructor con = c.getConstructor(new Class[]{AuthorizationExtensionDescriptionType.class,
+					ServiceInformation.class});
+			Object obj = con.newInstance(new Object[]{extensionDesc, info});
+			return (AbstractAuthorizationPanel) obj;
 		}
 		return null;
 	}
