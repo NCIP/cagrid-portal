@@ -232,7 +232,7 @@
 		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
-
+	
 	<!-- =============================================================== -->
 	<!-- Grid CA:                                                        -->
 	<!-- =============================================================== -->
@@ -245,6 +245,7 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/gridca" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
+
 
 
     <!-- =============================================================== -->
@@ -268,9 +269,9 @@
             <artifact refid="introduce.servicesecurity.jars"/>
             <artifact refid="security.metadata.jars"/>
         </resolveDependencies>
-        <resolveDependencies extdir="${projects.dir}/dorian/schema/AuthenticationService">
-            <artifact refid="metadata.schemas"/>
-        </resolveDependencies>
+      <resolveDependencies extdir="${projects.dir}/authentication-service/schema/AuthenticationService">
+	            <artifact refid="metadata.schemas"/>
+	        </resolveDependencies>
         <ant dir="${projects.dir}/authentication-service" inheritAll="false" antfile="build.xml" target="all"/>
     </target>
 	
