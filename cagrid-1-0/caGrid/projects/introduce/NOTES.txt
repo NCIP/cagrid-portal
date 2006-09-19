@@ -17,8 +17,6 @@ refresh button in gme to view uploaded schemas without closing and opening
 
 GUI needs a way to group common preferences that extensions can use (such as GME URL), intead of each having to define/use their own
 
-I was adding faults to a method, and when I hit done, an error dialog poped up with method "java.util.Vector" and removed my faults
-
 on save etc i have seen unable to delete namespace2package.mappings.
 
 Introduce Portal (or something it uses) is leaving file handles open
@@ -55,6 +53,8 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+
+(RAFACTORED) I was adding faults to a method, and when I hit done, an error dialog poped up with method "java.util.Vector" and removed my faults
 
 (CANNOT BE DONE)the implbase constructor throws RemoteException.  this means that the impl constructor MUST throw RemoteException, which means that you can't have a default constructor.  Can you remove the throw from the implbase?
 
