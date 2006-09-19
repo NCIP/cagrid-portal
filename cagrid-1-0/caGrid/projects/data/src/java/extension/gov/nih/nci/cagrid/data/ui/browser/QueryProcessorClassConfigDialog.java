@@ -3,7 +3,9 @@ package gov.nih.nci.cagrid.data.ui.browser;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
+import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -86,19 +88,16 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 	}
 	
 	
-	private String[] getJarFilenames() {
+	private String[] getJarFilenames() throws Exception {
 		String libDir = serviceInfo.getIntroduceServiceProperties().getProperty(
 			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
-		MessageElement jarNamesMessageElement = ExtensionTools.getExtensionDataElement(
-			extensionData, DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
-		if (jarNamesMessageElement != null) {
-			Element jarNamesElement = AxisJdomUtils.fromMessageElement(jarNamesMessageElement);
+		AdditionalLibraries additionalLibs = 
+			ExtensionDataUtils.getExtensionData(extensionData).getAdditionalLibraries();
+		if (additionalLibs != null && additionalLibs.getJarName() != null) {
 			List namesList = new ArrayList();
-			Iterator nameElementIter = jarNamesElement.getChildren(
-				DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT).iterator();
-			while (nameElementIter.hasNext()) {
-				Element nameElement = (Element) nameElementIter.next();
-				namesList.add(libDir + File.separator + nameElement.getText());
+			for (int i = 0; i < additionalLibs.getJarName().length; i++) {
+				String name = additionalLibs.getJarName(i);
+				namesList.add(libDir + File.separator + name);
 			}
 			String[] names = new String[namesList.size()];
 			namesList.toArray(names);

@@ -9,6 +9,11 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.PromptButtonDialog;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.ExtensionDataUtils;
+import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
+import gov.nih.nci.cagrid.data.extension.CadsrInformation;
+import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.ui.browser.AdditionalJarsChangeListener;
 import gov.nih.nci.cagrid.data.ui.browser.AdditionalJarsChangedEvent;
 import gov.nih.nci.cagrid.data.ui.browser.ClassBrowserPanel;
@@ -18,7 +23,6 @@ import gov.nih.nci.cagrid.data.ui.browser.QueryProcessorClassConfigDialog;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -27,7 +31,6 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 
@@ -36,6 +39,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -53,9 +57,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.apache.axis.message.MessageElement;
-import org.jdom.Element;
-import org.jdom.JDOMException;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.gme.XMLDataModelService;
@@ -128,17 +129,21 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		if (domainBrowserPanel == null) {
 			domainBrowserPanel = new CaDSRBrowserPanel(true, false);
 			String url = null;
-			MessageElement cadsrMessageElement = ExtensionTools.getExtensionDataElement(
-				getExtensionTypeExtensionData(), DataServiceConstants.CADSR_ELEMENT_NAME);
+			CadsrInformation cadsrInfo = null;
+			try {
+				cadsrInfo = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData()).getCadsrInformation();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				ErrorDialog.showErrorDialog("Error loading caDSR information from extension data", ex);
+			}
 			// if there's existing caDSR info in the data service, set the browser panel to show it
-			if (cadsrMessageElement != null) {
-				Element cadsrElement = AxisJdomUtils.fromMessageElement(cadsrMessageElement);
+			if (cadsrInfo != null) {				
 				// url of the cadsr service
-				url = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_URL_ATTRIB);
+				url = cadsrInfo.getServiceUrl();
 				
 				// project name and version
-				String projectName = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_NAME_ATTRIB);
-				String projectVersion = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_VERSION_ATTRIB);
+				String projectName = cadsrInfo.getProjectLongName();
+				String projectVersion = cadsrInfo.getProjectVersion();
 				
 				// store the project info as the most recent project
 				mostRecentProject = new Project();
@@ -187,19 +192,18 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			});
 			
 			// if there's existing cadsr configuration, apply it
-			MessageElement cadsrMessageElement = ExtensionTools.getExtensionDataElement(
-				getExtensionTypeExtensionData(), DataServiceConstants.CADSR_ELEMENT_NAME);
-			if (cadsrMessageElement != null) {
+			CadsrInformation cadsrInfo = null;
+			try {
+				cadsrInfo = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData()).getCadsrInformation();
+			} catch (Exception ex) {
+				ErrorDialog.showErrorDialog("Error getting cadsrInformation from extension data: " + ex.getMessage(), ex);
+			}
+			if (cadsrInfo != null) {
 				// walk through packages
-				Element cadsrElement = AxisJdomUtils.fromMessageElement(cadsrMessageElement);
-				Iterator packageElemIter = cadsrElement.getChildren(
-					DataServiceConstants.CADSR_PACKAGE_MAPPING).iterator();
-				while (packageElemIter.hasNext()) {
-					Element packageElement = (Element) packageElemIter.next();
-					String packageName = packageElement.getAttributeValue(
-						DataServiceConstants.CADSR_PACKAGE_NAME);
-					String namespace = packageElement.getAttributeValue(
-						DataServiceConstants.CADSR_PACKAGE_NAMESAPCE);
+				for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {
+					CadsrPackage pack = cadsrInfo.getPackages(i);
+					String packageName = pack.getName();
+					String namespace = pack.getMappedNamespace();
 					packageToNamespace.put(packageName, namespace);
 					// find the namespace needed for this package in the service description
 					NamespaceType[] serviceNamespaces = getServiceInfo().getNamespaces().getNamespace();
@@ -217,15 +221,13 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 						// convert the set of type names selected in the cadsr info to an
 						// array of schema element types
 						Set typeNames = new HashSet();
-						Iterator selectedIter = packageElement.getChildren(DataServiceConstants.CADSR_PACKAGE_SELECTED_CLASS).iterator();
-						while (selectedIter.hasNext()) {
-							Element selectedClassElement = (Element) selectedIter.next();
-							typeNames.add(selectedClassElement.getText());
+						if (pack.getSelectedClass() != null) {
+							Collections.addAll(typeNames, pack.getSelectedClass());
 						}
 						List selectedTypes = new ArrayList();
-						for (int i = 0; i < nsType.getSchemaElement().length; i++) {
-							if (typeNames.contains(nsType.getSchemaElement(i).getType())) {
-								selectedTypes.add(nsType.getSchemaElement(i));
+						for (int j = 0; j < nsType.getSchemaElement().length; j++) {
+							if (typeNames.contains(nsType.getSchemaElement(j).getType())) {
+								selectedTypes.add(nsType.getSchemaElement(j));
 							}
 						}
 						SchemaElementType[] types = new SchemaElementType[selectedTypes.size()];
@@ -425,23 +427,16 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			classBrowserPanel.addAdditionalJarsChangeListener(new AdditionalJarsChangeListener() {
 				public void additionalJarsChanged(AdditionalJarsChangedEvent e) {
 					// remove any existing qp jars element from the service data
-					ExtensionTools.removeExtensionDataElement(
-						getExtensionTypeExtensionData(), DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
-					// create a new qp jars element
-					Element qpJars = new Element(DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
+					AdditionalLibraries additionalLibs = new AdditionalLibraries();
 					String[] additionalJars = classBrowserPanel.getAdditionalJars();
-					for (int i = 0; i < additionalJars.length; i++) {
-						Element jarElem = new Element(DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT);
-						jarElem.setText(additionalJars[i]);
-						qpJars.addContent(jarElem);
-					}
+					additionalLibs.setJarName(additionalJars);
 					try {
-						MessageElement qpJarsElement = AxisJdomUtils.fromElement(qpJars);
-						ExtensionTools.updateExtensionDataElement(
-							getExtensionTypeExtensionData(), qpJarsElement);
-					} catch (JDOMException ex) {
+						Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
+						data.setAdditionalLibraries(additionalLibs);
+						ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
+					} catch (Exception ex) {
 						ex.printStackTrace();
-						ErrorDialog.showErrorDialog("Error storing query processor jars: " + ex.getMessage());
+						ErrorDialog.showErrorDialog("Error storing additional libraries information: " + ex.getMessage(), ex);
 					}
 				}
 			});
@@ -461,12 +456,16 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	
 	private void loadMostRecentProjectInfo() {
-		ExtensionTypeExtensionData extensionData = getExtensionTypeExtensionData();
-		MessageElement cadsrMessageElement = ExtensionTools.getExtensionDataElement(extensionData, DataServiceConstants.CADSR_ELEMENT_NAME);
-		if (cadsrMessageElement != null) {
-			Element cadsrElement = AxisJdomUtils.fromMessageElement(cadsrMessageElement);
-			String longName = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_NAME_ATTRIB);
-			String version = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_VERSION_ATTRIB);
+		CadsrInformation cadsrInfo = null;
+		try {
+			cadsrInfo = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData()).getCadsrInformation();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			ErrorDialog.showErrorDialog("Error loading project information: " + ex.getMessage(), ex);
+		}
+		if (cadsrInfo != null) {
+			String longName = cadsrInfo.getProjectLongName();
+			String version = cadsrInfo.getProjectVersion();
 			Project tempProject = new Project();
 			tempProject.setLongName(longName);
 			tempProject.setVersion(version);
@@ -476,26 +475,25 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	
 	private void storeCaDSRInfo() {
-		ExtensionTypeExtensionData extensionData = getExtensionTypeExtensionData();
-		Element cadsr = new Element(DataServiceConstants.CADSR_ELEMENT_NAME);
+		CadsrInformation cadsrInfo = new CadsrInformation();
 		// cadsr url
-		cadsr.setAttribute(DataServiceConstants.CADSR_URL_ATTRIB,
-			getDomainBrowserPanel().getCadsr().getText());
+		cadsrInfo.setServiceUrl(getDomainBrowserPanel().getCadsr().getText());
 		// project name and version
-		cadsr.setAttribute(DataServiceConstants.CADSR_PROJECT_NAME_ATTRIB,
-			mostRecentProject.getLongName());
-		cadsr.setAttribute(DataServiceConstants.CADSR_PROJECT_VERSION_ATTRIB,
-			mostRecentProject.getVersion());
+		cadsrInfo.setProjectLongName(mostRecentProject.getLongName());
+		cadsrInfo.setProjectVersion(mostRecentProject.getVersion());
+		
+		List packages = new ArrayList();
 		
 		// selected packages
 		Iterator packageIter = packageToNamespace.keySet().iterator();
 		while (packageIter.hasNext()) {
 			String packName = (String) packageIter.next();
 			String nsTypeName = (String) packageToNamespace.get(packName);
-			Element packageElement = new Element(DataServiceConstants.CADSR_PACKAGE_MAPPING);
-			packageElement.setAttribute(DataServiceConstants.CADSR_PACKAGE_NAME, packName);
-			packageElement.setAttribute(DataServiceConstants.CADSR_PACKAGE_NAMESAPCE, nsTypeName);
+			CadsrPackage pack = new CadsrPackage();
+			pack.setName(packName);
+			pack.setMappedNamespace(nsTypeName);
 			
+			List selected = new ArrayList();
 			// find the namespace type
 			for (int i = 0; i < getServiceInfo().getNamespaces().getNamespace().length; i++) {
 				NamespaceType ns = getServiceInfo().getNamespaces().getNamespace(i);
@@ -503,21 +501,26 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 					// selected classes from the namespace
 					SchemaElementType[] types = getTypesTree().getCheckedTypes(ns);
 					for (int j = 0; j < types.length; j++) {
-						Element classElement = new Element(DataServiceConstants.CADSR_PACKAGE_SELECTED_CLASS);
-						classElement.setText(types[j].getType());
-						packageElement.addContent(classElement);
+						selected.add(types[j].getType());
 					}
 					break;
 				}
 			}
-			cadsr.addContent(packageElement);
+			String[] selectedClasses = new String[selected.size()];
+			selected.toArray(selectedClasses);
+			pack.setSelectedClass(selectedClasses);
+			packages.add(pack);
 		}
+		CadsrPackage[] selectedPackages = new CadsrPackage[packages.size()];
+		packages.toArray(selectedPackages);
+		cadsrInfo.setPackages(selectedPackages);
 		
 		// store the cadsr info in the extension data
 		try {
-			MessageElement cadsrElement = AxisJdomUtils.fromElement(cadsr);
-			ExtensionTools.updateExtensionDataElement(extensionData, cadsrElement);
-		} catch (JDOMException ex) {
+			Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
+			data.setCadsrInformation(cadsrInfo);
+			ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error storing caDSR information: " + ex.getMessage());
 		}
@@ -670,20 +673,30 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	
 	private void setDomainModelFile() {
-    	ExtensionTypeExtensionData data = getExtensionTypeExtensionData();
     	String filename = getDomainModelNameTextField().getText();
+    	Data data = null;
+    	try {
+    		data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
+    	} catch (Exception ex) {
+    		ex.printStackTrace();
+    		ErrorDialog.showErrorDialog("Error loading existing caDSR information: " + ex.getMessage(), ex);
+    	}
+    	CadsrInformation cadsrInfo = data.getCadsrInformation();
+    	if (cadsrInfo == null) {
+    		cadsrInfo = new CadsrInformation();
+    		data.setCadsrInformation(cadsrInfo);
+    	}
     	if (filename == null || filename.length() == 0) {
-    		ExtensionTools.removeExtensionDataElement(data, DataServiceConstants.SUPPLIED_DOMAIN_MODEL);
+    		cadsrInfo.setSuppliedDomainModel(null);
     	} else {
-    		Element elem = new Element(DataServiceConstants.SUPPLIED_DOMAIN_MODEL);
-    		elem.setText(filename);
-    		try {
-    			MessageElement messageElem = AxisJdomUtils.fromElement(elem);
-    			ExtensionTools.updateExtensionDataElement(data, messageElem);
-    		} catch (Exception ex) {
-    			ex.printStackTrace();
-    			ErrorDialog.showErrorDialog("Error storing domain model filename: " + ex.getMessage());
-    		}
+    		cadsrInfo.setSuppliedDomainModel(filename);
+    	}
+    	// store the changed information
+    	try {
+    		ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
+    	} catch (Exception ex) {
+    		ex.printStackTrace();
+    		ErrorDialog.showErrorDialog("Error storing domain model filename: " + ex.getMessage());
     	}
     }
 	

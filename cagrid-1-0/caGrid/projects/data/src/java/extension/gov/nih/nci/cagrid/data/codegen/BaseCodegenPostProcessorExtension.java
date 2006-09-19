@@ -1,24 +1,21 @@
 package gov.nih.nci.cagrid.data.codegen;
 
-import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.ExtensionDataUtils;
+import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
-import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.axis.message.MessageElement;
 import org.apache.log4j.Logger;
-import org.jdom.Element;
 
 /** 
  *  BaseCodegenPostProcessorExtension
@@ -41,14 +38,15 @@ public abstract class BaseCodegenPostProcessorExtension implements CodegenExtens
 			logger.info("Modifying eclipse .classpath file");
 			Set libs = new HashSet();
 			ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-			MessageElement qpLibsElement = ExtensionTools.getExtensionDataElement(data,
-				DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
-			if (qpLibsElement != null) {
-				Element qpLibs = AxisJdomUtils.fromMessageElement(qpLibsElement);
-				Iterator jarElemIter = qpLibs.getChildren(DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT,
-					qpLibs.getNamespace()).iterator();
-				while (jarElemIter.hasNext()) {
-					String jarFilename = ((Element) jarElemIter.next()).getText();
+			AdditionalLibraries additionalLibs = null;
+			try {
+				additionalLibs = ExtensionDataUtils.getExtensionData(data).getAdditionalLibraries();
+			} catch (Exception ex) {
+				throw new CodegenExtensionException("Error retrieving extension data");
+			}
+			if (additionalLibs != null && additionalLibs.getJarName() != null) {
+				for (int i = 0; i < additionalLibs.getJarName().length; i++) {
+					String jarFilename = additionalLibs.getJarName(i);
 					libs.add(new File(serviceDir + File.separator + "lib" + File.separator + jarFilename));
 				}
 			}

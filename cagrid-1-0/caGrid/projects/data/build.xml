@@ -205,6 +205,12 @@
             <property name="wsdl.file" value="Response.wsdl" />
             <property name="target.stubs.dir" location="${stubs.src}" />
         </ant>
+    	<!-- generate stubs for DataServiceExtensionData classes -->
+        <ant antfile="${ant.build.stubs}" target="generateStubs">
+    		<property name="source.stubs.dir" location="${schema.dest}/Data" />
+    	    <property name="wsdl.file" value="ExtensionData.wsdl" />
+    	    <property name="target.stubs.dir" location="${stubs.src}" />
+    	</ant>
         <!-- generate data service bindings for globus -->
         <ant antfile="${ant.build.stubs}" target="generateBinding">
             <property name="source.binding.dir" value="${schema.dest}/Data" />

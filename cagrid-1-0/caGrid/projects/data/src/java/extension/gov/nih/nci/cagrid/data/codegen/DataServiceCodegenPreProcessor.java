@@ -4,6 +4,9 @@ import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.ExtensionDataUtils;
+import gov.nih.nci.cagrid.data.extension.CadsrInformation;
+import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -27,7 +30,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -76,7 +78,12 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			+ File.separator + "etc" + File.separator + filename;
 
 		LOG.debug("Looking for user-supplied domain model xml file");
-		String suppliedDomainModel = getSuppliedDomainModelFilename(desc, info);
+		String suppliedDomainModel = null;
+		try {
+			suppliedDomainModel = getSuppliedDomainModelFilename(desc, info);
+		} catch (Exception ex) {
+			throw new CodegenExtensionException("Error getting cadsr information: " + ex.getMessage(), ex);
+		}
 		if (suppliedDomainModel != null) {
 			LOG.debug("User-supplied domain model is " + suppliedDomainModel);
 			LOG.info("Copying domain model from " + suppliedDomainModel + " to " + domainModelFile);
@@ -131,13 +138,16 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		LOG.debug("Looking for caDSR element in extension data");
 		// verify there's a caDSR element in the extension data bucket
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-		if (ExtensionTools.getExtensionDataElement(data, DataServiceConstants.CADSR_ELEMENT_NAME) != null) {
-			Element cadsrElement = AxisJdomUtils.fromMessageElement(ExtensionTools.getExtensionDataElement(data,
-				DataServiceConstants.CADSR_ELEMENT_NAME));
-			LOG.debug("Extracting caDSR information from element");
+		CadsrInformation cadsrInfo = null;
+		try {
+			cadsrInfo = ExtensionDataUtils.getExtensionData(data).getCadsrInformation();
+		} catch (Exception ex) {
+			throw new CodegenExtensionException("Error getting extension data: " + ex.getMessage());
+		}
+		if (cadsrInfo != null) {
 			// init the cadsr service client
-			String cadsrUrl = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_URL_ATTRIB);
-			LOG.info("Initializing caDSR client (URL=" + cadsrUrl + ")");
+			String cadsrUrl = cadsrInfo.getServiceUrl();
+			LOG.info("Initializing caDSR client (URL = " + cadsrUrl + ")");
 			CaDSRServiceClient cadsrClient = null;
 			try {
 				cadsrClient = new CaDSRServiceClient(cadsrUrl);
@@ -146,33 +156,24 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			}
 
 			// create the prototype project
-			String cadsrProjectName = cadsrElement.getAttributeValue(DataServiceConstants.CADSR_PROJECT_NAME_ATTRIB);
-			String cadsrProjectVersion = cadsrElement
-				.getAttributeValue(DataServiceConstants.CADSR_PROJECT_VERSION_ATTRIB);
 			Project proj = new Project();
-			proj.setShortName(cadsrProjectName);
-			proj.setVersion(cadsrProjectVersion);
+			proj.setLongName(cadsrInfo.getProjectLongName());
+			proj.setVersion(cadsrInfo.getProjectVersion());
 
 			// sets for holding all selected classes and associations
 			Set allClasses = new HashSet();
 
 			// walk through the selected packages
-			Iterator packElementIter = cadsrElement.getChildren(DataServiceConstants.CADSR_PACKAGE_MAPPING).iterator();
-			while (packElementIter.hasNext()) {
-				Element packageElement = (Element) packElementIter.next();
-				String packName = packageElement.getAttributeValue(DataServiceConstants.CADSR_PACKAGE_NAME);
+			for (int i = 0; i < cadsrInfo.getPackages().length; i++) {
+				CadsrPackage packageInfo = cadsrInfo.getPackages(i);
+				String packName = packageInfo.getName();
 				// get selected classes from the package
-				List selectedClassList = packageElement.getChildren(DataServiceConstants.CADSR_PACKAGE_SELECTED_CLASS);
-				String[] packageClassNames = new String[selectedClassList.size()];
-				int index = 0;
-				Iterator selectedClassIter = selectedClassList.iterator();
-				while (selectedClassIter.hasNext()) {
-					Element selectedClassElement = (Element) selectedClassIter.next();
-					packageClassNames[index] = packName + "." + selectedClassElement.getText();
-					index++;
+				String[] packageClassNames = packageInfo.getSelectedClass();
+				if (packageClassNames != null) {
+					for (int j = 0; j < packageClassNames.length; j++) {
+						allClasses.add(packName + "." + packageClassNames[j]);
+					}
 				}
-				// add them to the globally selected sets
-				Collections.addAll(allClasses, packageClassNames);
 			}
 			
 			// get the data service's description
@@ -341,12 +342,11 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 	}
 
 
-	private String getSuppliedDomainModelFilename(ServiceExtensionDescriptionType desc, ServiceInformation info) {
+	private String getSuppliedDomainModelFilename(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-		MessageElement element = ExtensionTools.getExtensionDataElement(data,
-			DataServiceConstants.SUPPLIED_DOMAIN_MODEL);
-		if (element != null) {
-			return element.getValue();
+		CadsrInformation cadsrInfo = ExtensionDataUtils.getExtensionData(data).getCadsrInformation();
+		if (cadsrInfo != null) {
+			return cadsrInfo.getSuppliedDomainModel();
 		}
 		return null;
 	}

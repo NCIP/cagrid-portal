@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator;
 import gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator;
+import gov.nih.nci.cagrid.data.extension.ServiceFeatures;
 import gov.nih.nci.cagrid.data.service.globus.DataServiceProviderImpl;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -29,6 +30,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
@@ -375,14 +377,21 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 	
 	private void processFeatures(ServiceDescription desc, ServiceType service, Properties serviceProps) throws CreationExtensionException {
 		ExtensionTypeExtensionData extensionData = getExtensionData(desc);
-		if (extensionData != null) {
+		ServiceFeatures features = null;
+		try {
+			features = ExtensionDataUtils.getExtensionData(extensionData).getServiceFeatures();
+		} catch (Exception ex) {
+			ex.printStackTrace(); // TODO: remove me
+			throw new CreationExtensionException("Error getting service features: " + ex.getMessage(), ex);
+		}
+		if (features != null) {
 			// ws-enumeration
-			if (ExtensionDataUtils.getWsEnumFeature(extensionData)) {
+			if (features.isUseWsEnumeration()) {
 				FeatureCreator wsEnumCreator = new WsEnumerationFeatureCreator(desc, service, serviceProps);
 				wsEnumCreator.addFeature();
 			}		
 		} else {
-			log.warn("No Extension Data found!");
+			log.warn("No data service features information could be found!");
 		}
 	}
 	
@@ -391,6 +400,9 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		for (int i = 0; i < desc.getExtensions().getExtension().length; i++) {
 			ExtensionType ext = desc.getExtensions().getExtension(i);
 			if (ext.getName().equals("data")) {
+				if (ext.getExtensionData() == null) {
+					ext.setExtensionData(new ExtensionTypeExtensionData());
+				}
 				return ext.getExtensionData();
 			}
 		}

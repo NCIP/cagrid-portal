@@ -3,14 +3,14 @@ package gov.nih.nci.cagrid.data.ui.browser;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
+import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
-import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.awt.Component;
@@ -31,7 +31,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.Vector;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -44,9 +43,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
-import org.apache.axis.message.MessageElement;
-import org.jdom.Element;
 
 
 /**
@@ -88,18 +84,14 @@ public class ClassBrowserPanel extends JPanel {
 	
 	private void populateFields() {
 		// get the additional jars
-		MessageElement el = ExtensionTools.getExtensionDataElement(
-			extensionData, DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
-		if (el != null) {
-			Element jarsElement = AxisJdomUtils.fromMessageElement(el);
-			List jarElementList = jarsElement.getChildren(
-				DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT);
-			String[] jarNames = new String[jarElementList.size()]; 
-			for (int i = 0; i < jarElementList.size(); i++) {
-				Element jarNameElement = (Element) jarElementList.get(i);
-				jarNames[i] = jarNameElement.getText();
-			}
-			addJars(jarNames);
+		AdditionalLibraries additionalLibs = null;
+		try {
+			additionalLibs = ExtensionDataUtils.getExtensionData(extensionData).getAdditionalLibraries();
+		} catch (Exception ex) {
+			// ?
+		}
+		if (additionalLibs != null && additionalLibs.getJarName() != null) {
+			addJars(additionalLibs.getJarName());
 		}
 		// populate available classes from the jars
 		populateClassDropdown();
@@ -194,18 +186,14 @@ public class ClassBrowserPanel extends JPanel {
 			additionalJarsList = new JList();
 			// load any previous additional jars information
 			if (extensionData != null) {
-				MessageElement jarsElement = ExtensionTools.getExtensionDataElement(extensionData,
-					DataServiceConstants.QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT);
-				if (jarsElement != null) {
-					Element qpLibs = AxisJdomUtils.fromMessageElement(jarsElement);
-					Vector jars = new Vector();
-					Iterator jarElemIter = qpLibs.getChildren(DataServiceConstants.QUERY_PROCESSOR_JAR_ELEMENT,
-						qpLibs.getNamespace()).iterator();
-					while (jarElemIter.hasNext()) {
-						String jarFilename = ((Element) jarElemIter.next()).getText();
-						jars.add(jarFilename);
-					}
-					additionalJarsList.setListData(jars);
+				AdditionalLibraries additionalLibs = null;
+				try {
+					additionalLibs = ExtensionDataUtils.getExtensionData(extensionData).getAdditionalLibraries();
+				} catch (Exception ex) {
+					// ?
+				}
+				if (additionalLibs != null && additionalLibs.getJarName() != null) {
+					additionalJarsList.setListData(additionalLibs.getJarName());
 				}
 			}
 		}

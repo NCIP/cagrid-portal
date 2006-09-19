@@ -1,14 +1,14 @@
 package gov.nih.nci.cagrid.data.ui.creation;
 
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
-import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.ExtensionDataUtils;
+import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.extension.ServiceFeatures;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.CreationExtensionUIDialog;
 
@@ -29,8 +29,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.apache.axis.message.MessageElement;
-import org.jdom.Element;
 import org.projectmobius.portal.PortalResourceManager;
 
 /** 
@@ -296,22 +294,18 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 	
 	private void setFeatureStatus() {
 		ExtensionTypeExtensionData data = 
-			getExtensionTypeExtensionData();		
-		Element featuresElement = new Element(DataServiceConstants.DS_FEATURES);
+			getExtensionTypeExtensionData();
+		ServiceFeatures features = new ServiceFeatures();
 		try {
-			featuresElement.setAttribute(DataServiceConstants.USE_CUSTOM_DATA_SORUCE,
-				String.valueOf(getCustomDataRadioButton().isSelected()));
-			featuresElement.setAttribute(DataServiceConstants.USE_GRID_IDENTIFIERS, 
-				String.valueOf(getGridIdentCheckBox().isSelected()));
-			featuresElement.setAttribute(DataServiceConstants.USE_SDK_DATA_SOURCE,
-				String.valueOf(getSdkDataRadioButton().isSelected()));
-			featuresElement.setAttribute(DataServiceConstants.USE_WS_ENUM,
-				String.valueOf(getWsEnumCheckBox().isSelected()));
-			MessageElement featuresMessageElement = AxisJdomUtils.fromElement(featuresElement);
-			ExtensionTools.updateExtensionDataElement(data, featuresMessageElement);
+			features.setUseSdkDataSource(getSdkDataRadioButton().isSelected());
+			features.setUseGridIdeitifiers(getGridIdentCheckBox().isSelected());
+			features.setUseWsEnumeration(getWsEnumCheckBox().isSelected());
+			Data extData = ExtensionDataUtils.getExtensionData(data);
+			extData.setServiceFeatures(features);
+			ExtensionDataUtils.storeExtensionData(data, extData);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error storing configuration", ex);
+			ErrorDialog.showErrorDialog("Error storing configuration: " + ex.getMessage(), ex);
 		}
 	}
 	

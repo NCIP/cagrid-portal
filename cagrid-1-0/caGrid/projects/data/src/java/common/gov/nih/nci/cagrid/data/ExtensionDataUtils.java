@@ -1,11 +1,16 @@
 package gov.nih.nci.cagrid.data;
 
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
-import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
+
+import java.io.StringReader;
+import java.io.StringWriter;
 
 import org.apache.axis.message.MessageElement;
-import org.jdom.Element;
+import org.globus.wsrf.encoding.ObjectDeserializer;
+import org.xml.sax.InputSource;
 
 /** 
  *  ExtensionDataUtils
@@ -18,48 +23,58 @@ import org.jdom.Element;
  */
 public class ExtensionDataUtils {
 	
-	private static Element getFeaturesElement(ExtensionTypeExtensionData data) {
-		MessageElement me = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.DS_FEATURES);
-		return AxisJdomUtils.fromMessageElement(me);
+	public static Data getExtensionData(ExtensionTypeExtensionData data) throws Exception {
+		System.out.println("Getting extension data");
+		System.out.println("Getting extension data");
+		System.out.println("Getting extension data");
+		System.out.println("Data has QName " + Data.getTypeDesc().getXmlType());
+		MessageElement[] anys = data.get_any();
+		if (anys != null) {
+			System.out.println("There are " + anys.length + " message elements");
+			for (int i = 0; i < anys.length; i++) {
+				System.out.println("Message Element " + i);
+				System.out.println("QName: " + anys[i].getQName().toString());
+				System.out.println(anys[i].getAsString());
+			}
+		} else {
+			System.out.println("Message Element array is NULL!!!!");
+		}
+		MessageElement dataElement = null;
+		for (int i = 0; anys != null && i < anys.length; i++) {
+			if (anys[i].getQName().equals(Data.getTypeDesc().getXmlType())) {
+				System.out.println("Found data message element");
+				dataElement = anys[i];
+				break;
+			}
+		}
+		if (dataElement == null) {
+			System.out.println("Creating new message element for Data");
+			dataElement = new MessageElement(Data.getTypeDesc().getXmlType(), new Data());
+			MessageElement[] newAnys = null;
+			if (anys == null) {
+				newAnys = new MessageElement[] {dataElement};
+			} else {
+				newAnys = new MessageElement[anys.length + 1];
+				System.arraycopy(anys, 0, newAnys, 0, anys.length);
+				newAnys[newAnys.length - 1] = dataElement;
+			}
+			System.out.println("Adding message element array to extension data");
+			data.set_any(newAnys);
+		}
+		StringWriter dataXml = new StringWriter();
+		Utils.serializeObject(dataElement, dataElement.getQName(), dataXml);
+		/*
+		Data value = (Data) Utils.deserializeObject(
+			new StringReader(dataXml.getBuffer().toString()), Data.class, null);
+		*/
+		Data value = (Data) ObjectDeserializer.deserialize(
+			new InputSource(new StringReader(dataXml.getBuffer().toString())), Data.class);
+		return value;
 	}
 	
-
-	public static boolean getWsEnumFeature(ExtensionTypeExtensionData data) {
-		Element features = getFeaturesElement(data);
-		if (features != null && features.getAttribute(DataServiceConstants.USE_WS_ENUM) != null) {
-			return Boolean.valueOf(features.getAttributeValue(
-				DataServiceConstants.USE_WS_ENUM)).booleanValue();
-		}
-		return false;
-	}
 	
-	
-	public static boolean getGridIdentifiersFeature(ExtensionTypeExtensionData data) {
-		Element features = getFeaturesElement(data);
-		if (features != null && features.getAttribute(DataServiceConstants.USE_GRID_IDENTIFIERS) != null) {
-			return Boolean.valueOf(features.getAttributeValue(
-				DataServiceConstants.USE_GRID_IDENTIFIERS)).booleanValue();
-		}
-		return false;
-	}
-	
-	
-	public static boolean getSdkDataSourceFeature(ExtensionTypeExtensionData data) {
-		Element features = getFeaturesElement(data);
-		if (features != null && features.getAttribute(DataServiceConstants.USE_SDK_DATA_SOURCE) != null) {
-			return Boolean.valueOf(features.getAttributeValue(
-				DataServiceConstants.USE_SDK_DATA_SOURCE)).booleanValue();
-		}
-		return false;
-	}
-	
-	
-	public static boolean getCustomDataSourceFeature(ExtensionTypeExtensionData data) {
-		Element features = getFeaturesElement(data);
-		if (features != null && features.getAttribute(DataServiceConstants.USE_CUSTOM_DATA_SORUCE) != null) {
-			return Boolean.valueOf(features.getAttributeValue(
-				DataServiceConstants.USE_CUSTOM_DATA_SORUCE)).booleanValue();
-		}
-		return false;
+	public static void storeExtensionData(ExtensionTypeExtensionData extData, Data data) throws Exception {
+		MessageElement element = new MessageElement(Data.getTypeDesc().getXmlType(), data);
+		ExtensionTools.updateExtensionDataElement(extData, element);
 	}
 }

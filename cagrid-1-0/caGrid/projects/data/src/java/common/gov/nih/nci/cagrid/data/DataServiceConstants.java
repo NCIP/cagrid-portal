@@ -57,8 +57,6 @@ public class DataServiceConstants {
 	
 	// query processor constants
 	public static final String QUERY_PROCESSOR_CLASS_PROPERTY = "queryProcessorClass";
-	public static final String QUERY_PROCESSOR_ADDITIONAL_JARS_ELEMENT = "QueryProcessorJars";
-	public static final String QUERY_PROCESSOR_JAR_ELEMENT = "Jar";
 	public static final String QUERY_PROCESSOR_STUB_NAME = "StubCQLQueryProcessor";
 	public static final String QUERY_PROCESSOR_STUB_DEPRICATED_MESSAGE = 
 		"/*\n" +
@@ -81,24 +79,6 @@ public class DataServiceConstants {
 	public static final String MALFORMED_QUERY_EXCEPTION_NAME = "MalformedQueryException";
 	public static final QName QUERY_PROCESSING_EXCEPTION_QNAME = new QName(DATA_SERVICE_EXCEPTIONS_NAMESPACE, QUERY_PROCESSING_EXCEPTION_NAME);
 	public static final QName MALFORMED_QUERY_EXCEPTION_QNAME = new QName(DATA_SERVICE_EXCEPTIONS_NAMESPACE, MALFORMED_QUERY_EXCEPTION_NAME);
-	
-	// cadsr info constants
-	public static final String CADSR_ELEMENT_NAME = "caDSRInformation";
-	public static final String CADSR_URL_ATTRIB = "url";
-	public static final String CADSR_PACKAGE_MAPPING = "package";
-	public static final String CADSR_PACKAGE_NAME = "name";
-	public static final String CADSR_PACKAGE_NAMESAPCE = "mappedNamespace";
-	public static final String CADSR_PACKAGE_SELECTED_CLASS = "selectedClass";
-	public static final String CADSR_PROJECT_NAME_ATTRIB = "projectName";
-	public static final String CADSR_PROJECT_VERSION_ATTRIB = "projectVersion";
-	public static final String SUPPLIED_DOMAIN_MODEL = "suppliedDomainModel";
-	
-	// feature selection constants
-	public static final String DS_FEATURES = "serviceFeatures";
-	public static final String USE_WS_ENUM = "useWsEnum";
-	public static final String USE_GRID_IDENTIFIERS = "useGridIdentifiers";
-	public static final String USE_SDK_DATA_SOURCE = "useSdkDataSource";
-	public static final String USE_CUSTOM_DATA_SORUCE = "useCustomDataSource";
 	
 	// validation constants
 	public static final String DATA_SERVICE_PARAMS_PREFIX = "dataService";
