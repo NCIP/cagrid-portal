@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.ProxyCredential;
@@ -13,10 +15,18 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
 
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -36,6 +46,8 @@ import javax.swing.JTabbedPane;
  *          Exp $
  */
 public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
+	
+	private final static String NO_AUTHORIZATION = "No Authorization";
 
 	private JPanel secureCommunicationPanel = null;
 	private ButtonGroup buttonGroup = new ButtonGroup();
@@ -64,17 +76,27 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private boolean isSyncingRunAs = false;
 	private boolean isInited = false;
 	private JLabel jLabel6 = null;
-
-
-	public MethodSecurityPanel(ServiceSecurity sec) {
+	private JPanel authorizationPanel = null;
+	private JPanel authorizationTypePanel = null;
+	private JPanel jPanel1 = null;
+	private JLabel authLabel = null;
+	private JComboBox authorizationMechanism = null;
+	private JPanel authPanel = null;
+	private JPanel noAuthorizationPanel = null;
+	private ServiceInformation info;
+	private CardLayout authLayout;
+	
+	public MethodSecurityPanel(ServiceInformation info,ServiceSecurity sec) {
 		super();
+		this.info = info;
 		this.serviceSecurity = sec;
 		initialize();
 	}
 
 
-	public MethodSecurityPanel(ServiceSecurity sec, MethodSecurity ms) {
+	public MethodSecurityPanel(ServiceInformation info,ServiceSecurity sec, MethodSecurity ms) {
 		super();
+		this.info = info;
 		this.serviceSecurity = sec;
 		initialize();
 		setMethodSecurity(ms);
@@ -309,9 +331,21 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			}
 
 			synchRunAsMode();
-
+			syncAuthorization();
 			syncAnonymousCommunication();
 
+		}
+	}
+	
+	private void syncAuthorization() {
+		if (isSecure()) {
+			authorizationMechanism.setEnabled(true);
+			String mech = (String) this.authorizationMechanism
+					.getSelectedItem();
+			authLayout.show(authPanel, mech);
+		} else {
+			authorizationMechanism.setEnabled(false);
+			authLayout.show(authPanel, NO_AUTHORIZATION);
 		}
 	}
 
@@ -424,6 +458,8 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		secureMessagePanel.disablePanel();
 		runAsMode.setEnabled(false);
 		anonymousCommunication.setEnabled(false);
+		authorizationMechanism.setEnabled(false);
+		authLayout.show(authPanel, NO_AUTHORIZATION);
 	}
 
 
@@ -616,6 +652,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		if (transportPanel == null) {
 			transportPanel = new JTabbedPane();
 			transportPanel.addTab("Secure Communication", null, getCommunicationPanel(), null);
+			transportPanel.addTab("Authorization", null, getAuthorizationPanel(), null);
 			transportPanel.addTab("Other", null, getGeneralSecurity(), null);
 		}
 		return transportPanel;
@@ -713,6 +750,137 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			generalSecurity.add(getAnonymousCommunication(), gridBagConstraints1);
 		}
 		return generalSecurity;
+	}
+
+
+	/**
+	 * This method initializes authorizationPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getAuthorizationPanel() {
+		if (authorizationPanel == null) {
+			authorizationPanel = new JPanel();
+			authorizationPanel.setLayout(new BorderLayout());
+			authorizationPanel.add(getAuthorizationTypePanel(), java.awt.BorderLayout.NORTH);
+			authorizationPanel.add(getAuthPanel(), java.awt.BorderLayout.CENTER);
+		}
+		return authorizationPanel;
+	}
+
+
+	/**
+	 * This method initializes authorizationTypePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getAuthorizationTypePanel() {
+		if (authorizationTypePanel == null) {
+			authorizationTypePanel = new JPanel();
+			authorizationTypePanel.setLayout(new FlowLayout());
+			authorizationTypePanel.add(getJPanel1(), null);
+		}
+		return authorizationTypePanel;
+	}
+
+
+	/**
+	 * This method initializes jPanel1	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel1() {
+		if (jPanel1 == null) {
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints5.gridx = 1;
+			gridBagConstraints5.gridy = 1;
+			gridBagConstraints5.weightx = 1.0;
+			gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints3.gridy = 1;
+			gridBagConstraints3.gridx = 0;
+			authLabel = new JLabel();
+			authLabel.setFont(new Font("Dialog", Font.BOLD, 14));
+			authLabel.setText("Authorization Mechanism");
+			authLabel.setForeground(PortalLookAndFeel.getPanelLabelColor());
+			jPanel1 = new JPanel();
+			jPanel1.setLayout(new GridBagLayout());
+			jPanel1.add(authLabel, gridBagConstraints3);
+			jPanel1.add(getAuthorizationMechanism(), gridBagConstraints5);
+		}
+		return jPanel1;
+	}
+
+
+	/**
+	 * This method initializes authorizationMechanism	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */
+	private JComboBox getAuthorizationMechanism() {
+		if (authorizationMechanism == null) {
+			authorizationMechanism = new JComboBox();
+			authorizationMechanism
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							if (isInited) {
+								synchronize();
+							}
+						}
+					});
+			authorizationMechanism.addItem(NO_AUTHORIZATION);
+			List l = ExtensionsLoader.getInstance()
+					.getAuthorizationExtensions();
+			for (int i = 0; i < l.size(); i++) {
+
+				AuthorizationExtensionDescriptionType des = (AuthorizationExtensionDescriptionType) l
+						.get(i);
+				authorizationMechanism.addItem(des.getDisplayName());
+				try {
+					getAuthPanel().add(ExtensionTools.getAuthorizationPanel(des
+							.getName(), info), des.getDisplayName());
+				} catch (Exception e) {
+					PortalUtils.showErrorMessage("Error loading the "
+							+ des.getDisplayName()
+							+ " authorization extension.");
+					e.printStackTrace();
+				}
+			}
+			// AuthorizationExtensionDescriptionType
+		}
+		return authorizationMechanism;
+	}
+
+
+	/**
+	 * This method initializes authPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getAuthPanel() {
+		if (authPanel == null) {
+			authPanel = new JPanel();
+			authLayout = new CardLayout();
+			authPanel.setLayout(authLayout);
+			authPanel.add(getNoAuthorizationPanel(), NO_AUTHORIZATION);
+		}
+		return authPanel;
+	}
+
+
+	/**
+	 * This method initializes noAuthorizationPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getNoAuthorizationPanel() {
+		if (noAuthorizationPanel == null) {
+			noAuthorizationPanel = new JPanel();
+			noAuthorizationPanel.setName("No Authorization");
+		}
+		return noAuthorizationPanel;
 	}
 
 }

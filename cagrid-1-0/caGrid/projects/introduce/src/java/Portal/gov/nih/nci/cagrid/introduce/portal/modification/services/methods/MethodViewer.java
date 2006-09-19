@@ -923,7 +923,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getSecurityContainerPanel() {
 		if (securityContainerPanel == null) {
-			securityContainerPanel = new MethodSecurityPanel(info.getService().getServiceSecurity(), this.method
+			securityContainerPanel = new MethodSecurityPanel(info,info.getService().getServiceSecurity(), this.method
 				.getMethodSecurity());
 			securityContainerPanel.setBorder(BorderFactory.createTitledBorder(null,
 				"Method Level Security Configuration", TitledBorder.DEFAULT_JUSTIFICATION,
@@ -2128,4 +2128,3 @@ public class MethodViewer extends GridPortalBaseFrame {
 	}
 
 } // @jve:decl-index=0:visual-constraint="4,12"
-
