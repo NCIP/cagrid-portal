@@ -20,7 +20,6 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.MethodSecurityPanel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.ModifyService;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
@@ -82,7 +81,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 
 		public int compareTo(Object arg0) {
-			return this.qname.toString().compareTo(((QName) arg0).toString());
+			return this.qname.toString().compareTo(((ExceptionHolder) arg0).toString());
 		}
 
 
