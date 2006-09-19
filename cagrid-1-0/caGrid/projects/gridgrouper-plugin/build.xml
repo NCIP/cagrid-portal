@@ -98,10 +98,6 @@
 	 <target name="installIntroduceExtensions" depends="all" description="Builds and installs the Grid Grouper Plugin into Introduce.">
 	        <delete dir="${introduce.extensions.dir}/gridgrouper" failonerror="false"/>
 	 		<delete dir="${introduce.extensions.dir}/gridgrouperui" failonerror="false"/>
-	 	<!--
-	        <mkdir dir="${introduce.extensions.dir}/gridgrouper" />
-	        <mkdir dir="${introduce.extensions.dir}/gridgrouperui" />
-	        -->
 	        <!-- extension description file -->
 	        <copydir dest="${introduce.extensions.dir}/gridgrouper" src="extensions/gridgrouper"/>
 	 		<copydir dest="${introduce.extensions.dir}/gridgrouperui" src="extensions/gridgrouperui"/>
