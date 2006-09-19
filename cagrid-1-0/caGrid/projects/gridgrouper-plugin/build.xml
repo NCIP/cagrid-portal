@@ -33,6 +33,8 @@
 	<property name="schema.dest" location="${build.dir}/schema" />
 
 	<property name="mapping.src" value="${basedir}/NStoPkg.properties" />
+	
+	<property name="introduce.extensions.dir" location="../introduce/extensions" />
 
 	<target name="init">
 		<mkdir dir="${build.dir}" />
@@ -92,6 +94,28 @@
 			</classpath>
 		</javac>
 	</target>
+	
+	 <target name="installIntroduceExtensions" depends="all" description="Builds and installs the Grid Grouper Plugin into Introduce.">
+	        <delete dir="${introduce.extensions.dir}/gridgrouper" failonerror="false"/>
+	 		<delete dir="${introduce.extensions.dir}/gridgrouperui" failonerror="false"/>
+	 	<!--
+	        <mkdir dir="${introduce.extensions.dir}/gridgrouper" />
+	        <mkdir dir="${introduce.extensions.dir}/gridgrouperui" />
+	        -->
+	        <!-- extension description file -->
+	        <copydir dest="${introduce.extensions.dir}/gridgrouper" src="extensions/gridgrouper"/>
+	 		<copydir dest="${introduce.extensions.dir}/gridgrouperui" src="extensions/gridgrouperui"/>
+	        <!-- libraries -->
+	        <copy todir="${introduce.extensions.dir}/lib">
+	            <fileset dir="${ext.lib.dir}">
+	                <include name="*.jar" />
+	            </fileset>
+	            <fileset dir="${build.jars.dir}">
+	                <include name="**/*.jar" />
+	            </fileset>
+	        </copy>
+	    </target>
+
 
 
 	<target name="jar" depends="compile">
