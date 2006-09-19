@@ -8,10 +8,14 @@ import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate;
+import gov.nih.nci.cagrid.gridgrouper.bean.LogicalOperator;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberType;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipDescriptor;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
+import gov.nih.nci.cagrid.gridgrouper.bean.Predicate;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.service.tools.GridGrouperBootstrapper;
@@ -537,6 +541,213 @@ public class TestGroups extends TestCase {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
 		}
+	}
+
+	public void testIsMember() {
+		try {
+			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
+
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
+							.getRootStemIdentifier(), SUPER_USER,
+					StemPrivilegeType.stem));
+			assertTrue(grouper.hasStemPrivilege(
+					AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
+							.getRootStemIdentifier(), SUPER_USER,
+					StemPrivilegeType.create));
+
+			StemDescriptor root = grouper.getStem(SUPER_USER, Utils
+					.getRootStemIdentifier());
+			assertNotNull(root);
+			assertEquals(root.getName(), Utils.getRootStemIdentifier()
+					.getStemName());
+
+			String testStem = "TestStem";
+			StemDescriptor test = grouper.addChildStem(SUPER_USER, Utils
+					.getRootStemIdentifier(), testStem, testStem);
+
+			final String grpExtension1 = "mygroup1";
+			final String grpDisplayExtension1 = "My Group 1";
+			GroupDescriptor grp1 = createAndCheckGroup(test, grpExtension1,
+					grpDisplayExtension1, 1);
+			GroupIdentifier group1 = Utils.getGroupIdentifier(grp1);
+			grouper.addMember(SUPER_USER, group1, USER_A);
+
+			assertTrue(grouper.isMemberOf(SUPER_USER, group1, USER_A,
+					MemberFilter.All));
+			assertTrue(grouper.isMember(SUPER_USER, USER_A,
+					getSimpleInExpression(group1)));
+			assertFalse(grouper.isMember(SUPER_USER, USER_A,
+					getSimpleOutExpression(group1)));
+
+			grouper.addMember(SUPER_USER, group1, USER_B);
+			assertTrue(grouper.isMemberOf(SUPER_USER, group1, USER_B,
+					MemberFilter.All));
+			assertTrue(grouper.isMember(SUPER_USER, USER_B,
+					getSimpleInExpression(group1)));
+			assertFalse(grouper.isMember(SUPER_USER, USER_B,
+					getSimpleOutExpression(group1)));
+
+			grouper.addMember(SUPER_USER, group1, USER_C);
+			assertTrue(grouper.isMemberOf(SUPER_USER, group1, USER_C,
+					MemberFilter.All));
+			assertTrue(grouper.isMember(SUPER_USER, USER_C,
+					getSimpleInExpression(group1)));
+			assertFalse(grouper.isMember(SUPER_USER, USER_C,
+					getSimpleOutExpression(group1)));
+
+			assertFalse(grouper.isMember(SUPER_USER, USER_D,
+					getSimpleInExpression(group1)));
+			assertTrue(grouper.isMember(SUPER_USER, USER_D,
+					getSimpleOutExpression(group1)));
+
+			final String grpExtension2 = "mygroup2";
+			final String grpDisplayExtension2 = "My Group 2";
+			GroupDescriptor grp2 = createAndCheckGroup(test, grpExtension2,
+					grpDisplayExtension2, 2);
+			GroupIdentifier group2 = Utils.getGroupIdentifier(grp2);
+
+			assertFalse(grouper.isMember(SUPER_USER, USER_A,
+					getSimpleInExpression(group2)));
+			assertTrue(grouper.isMember(SUPER_USER, USER_A,
+					getSimpleOutExpression(group2)));
+
+			grouper.addMember(SUPER_USER, group2, USER_B);
+			assertTrue(grouper.isMemberOf(SUPER_USER, group2, USER_B,
+					MemberFilter.All));
+			assertTrue(grouper.isMember(SUPER_USER, USER_B,
+					getSimpleInExpression(group2)));
+			assertFalse(grouper.isMember(SUPER_USER, USER_B,
+					getSimpleOutExpression(group2)));
+
+			grouper.addMember(SUPER_USER, group2, USER_C);
+			assertTrue(grouper.isMemberOf(SUPER_USER, group2, USER_C,
+					MemberFilter.All));
+			assertTrue(grouper.isMember(SUPER_USER, USER_C,
+					getSimpleInExpression(group2)));
+			assertFalse(grouper.isMember(SUPER_USER, USER_C,
+					getSimpleOutExpression(group2)));
+
+			grouper.addMember(SUPER_USER, group2, USER_D);
+			assertTrue(grouper.isMemberOf(SUPER_USER, group2, USER_D,
+					MemberFilter.All));
+			assertTrue(grouper.isMember(SUPER_USER, USER_D,
+					getSimpleInExpression(group2)));
+			assertFalse(grouper.isMember(SUPER_USER, USER_D,
+					getSimpleOutExpression(group2)));
+
+			// Test that a user is a member of both groups
+			MembershipExpression both = getExpression(true, group1, true,
+					group2, true);
+			assertFalse(grouper.isMember(SUPER_USER, USER_A, both));
+			assertTrue(grouper.isMember(SUPER_USER, USER_B, both));
+			assertTrue(grouper.isMember(SUPER_USER, USER_C, both));
+			assertFalse(grouper.isMember(SUPER_USER, USER_D, both));
+			
+			//Test that a user is a member of either groups
+			MembershipExpression either = getExpression(false, group1, true,
+					group2, true);
+			
+			assertTrue(grouper.isMember(SUPER_USER, USER_A, either));
+			assertTrue(grouper.isMember(SUPER_USER, USER_B, either));
+			assertTrue(grouper.isMember(SUPER_USER, USER_C, either));
+			assertTrue(grouper.isMember(SUPER_USER, USER_D, either));
+			
+			
+//			Test that a user is a member of 1 but not 2
+			MembershipExpression in1Not2 = getExpression(true, group1, true,
+					group2, false);
+			
+			assertTrue(grouper.isMember(SUPER_USER, USER_A, in1Not2));
+			assertFalse(grouper.isMember(SUPER_USER, USER_B, in1Not2));
+			assertFalse(grouper.isMember(SUPER_USER, USER_C, in1Not2));
+			assertFalse(grouper.isMember(SUPER_USER, USER_D, in1Not2));
+			
+//			Test that a user is a member of 2 but not 1
+			MembershipExpression in2Not1 = getExpression(true, group1, false,
+					group2, true);
+			
+			assertFalse(grouper.isMember(SUPER_USER, USER_A, in2Not1));
+			assertFalse(grouper.isMember(SUPER_USER, USER_B, in2Not1));
+			assertFalse(grouper.isMember(SUPER_USER, USER_C, in2Not1));
+			assertTrue(grouper.isMember(SUPER_USER, USER_D, in2Not1));
+			
+//			Test that a user is a member or 1 but not 2 OR in 2 but not 1
+			MembershipExpression complex = getExpression(false, in1Not2,in2Not1);
+			assertTrue(grouper.isMember(SUPER_USER, USER_A, complex));
+			assertFalse(grouper.isMember(SUPER_USER, USER_B, complex));
+			assertFalse(grouper.isMember(SUPER_USER, USER_C, complex));
+			assertTrue(grouper.isMember(SUPER_USER, USER_D, complex));
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		}
+
+	}
+	
+	public MembershipExpression getExpression(boolean and,MembershipExpression exp1, MembershipExpression exp2) {
+		MembershipExpression[] expression = new MembershipExpression[2];
+		expression[0] = exp1;
+		expression[1] = exp2;
+		MembershipExpression exp = new MembershipExpression();
+		exp.setMembershipExpression(expression);
+		if (and) {
+			exp.setLogicRelation(LogicalOperator.AND);
+		} else {
+			exp.setLogicRelation(LogicalOperator.OR);
+		}
+		return exp;
+	}
+
+	private MembershipExpression getExpression(boolean and,
+			GroupIdentifier grp1, boolean in1, GroupIdentifier grp2, boolean in2) {
+		MembershipQuery[] query = new MembershipQuery[2];
+		query[0] = new MembershipQuery();
+		query[0].setGroupIdentifier(grp1);
+		if (in1) {
+			query[0].setPredicate(Predicate.IN);
+		} else {
+			query[0].setPredicate(Predicate.NOT_IN);
+		}
+
+		query[1] = new MembershipQuery();
+		query[1].setGroupIdentifier(grp2);
+		if (in2) {
+			query[1].setPredicate(Predicate.IN);
+		} else {
+			query[1].setPredicate(Predicate.NOT_IN);
+		}
+
+		MembershipExpression exp = new MembershipExpression();
+		exp.setMembershipQuery(query);
+		if (and) {
+			exp.setLogicRelation(LogicalOperator.AND);
+		} else {
+			exp.setLogicRelation(LogicalOperator.OR);
+		}
+		return exp;
+	}
+
+	private MembershipExpression getSimpleInExpression(GroupIdentifier grp) {
+		MembershipQuery[] query = new MembershipQuery[1];
+		query[0] = new MembershipQuery();
+		query[0].setGroupIdentifier(grp);
+		query[0].setPredicate(Predicate.IN);
+		MembershipExpression exp = new MembershipExpression();
+		exp.setMembershipQuery(query);
+		exp.setLogicRelation(LogicalOperator.AND);
+		return exp;
+	}
+
+	private MembershipExpression getSimpleOutExpression(GroupIdentifier grp) {
+		MembershipQuery[] query = new MembershipQuery[1];
+		query[0] = new MembershipQuery();
+		query[0].setGroupIdentifier(grp);
+		query[0].setPredicate(Predicate.NOT_IN);
+		MembershipExpression exp = new MembershipExpression();
+		exp.setMembershipQuery(query);
+		exp.setLogicRelation(LogicalOperator.OR);
+		return exp;
 	}
 
 	public void testMembers() {

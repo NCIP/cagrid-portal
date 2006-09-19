@@ -3,6 +3,41 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:grouper="http://cagrid.nci.nih.gov/1/GridGrouper">
 	
+	<xsd:element name="MembershipQuery" type="grouper:MembershipQuery"/>
+	<xsd:element name="MembershipExpression" type="grouper:MembershipExpression"/>
+	<xsd:complexType name="MembershipQuery">
+	    <xsd:sequence>
+			<xsd:element name="GroupIdentifier" type="grouper:GroupIdentifier" />
+		</xsd:sequence>
+		<xsd:attribute name="predicate" type="grouper:Predicate" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="MembershipExpression">
+		<xsd:annotation>
+			<xsd:documentation>Binary joint</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice minOccurs="1" maxOccurs="unbounded">
+			<xsd:element ref="grouper:MembershipQuery" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element ref="grouper:MembershipExpression" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:choice>
+		<xsd:attribute name="logicRelation" type="grouper:LogicalOperator" use="required"/>
+	</xsd:complexType>
+	<xsd:simpleType name="Predicate">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="IN" id="in"/>
+			<xsd:enumeration value="NOT_IN" id="not_in"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="LogicalOperator">
+		<xsd:annotation>
+			<xsd:documentation>Logical operators</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="AND"/>
+			<xsd:enumeration value="OR"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	
 	<xsd:element name="MembershipDescriptor" type="grouper:MembershipDescriptor" />
 	<xsd:complexType name="MembershipDescriptor">
 		<xsd:sequence>
@@ -27,7 +62,7 @@
 	<xsd:element name="GroupIdentifier" type="grouper:GroupIdentifier" />
 	<xsd:complexType name="GroupIdentifier">
 		<xsd:sequence>
-			<xsd:element name="gridGrouperURL" minOccurs="1" maxOccurs="1" type="xsd:string" />
+			<xsd:element name="gridGrouperURL" minOccurs="1" maxOccurs="1" type="xsd:string" use="optional"/>
 			<xsd:element name="GroupName" minOccurs="1" maxOccurs="1" type="xsd:string" />
 		</xsd:sequence>
 	</xsd:complexType>

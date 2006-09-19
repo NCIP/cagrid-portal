@@ -39,5 +39,6 @@ public void revokeGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdenti
 public java.lang.String[] getSubjectsWithGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault ;
 public gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilege[] getGroupPrivileges(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault ;
 public boolean hasGroupPrivilege(gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier group,java.lang.String subject,gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType privilege) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault ;
+public boolean isMember(java.lang.String member,gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression expression) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault ;
 
 }

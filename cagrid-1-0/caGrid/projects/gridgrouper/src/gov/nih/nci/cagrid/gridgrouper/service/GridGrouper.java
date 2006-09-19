@@ -42,10 +42,14 @@ import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupUpdate;
+import gov.nih.nci.cagrid.gridgrouper.bean.LogicalOperator;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberType;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipDescriptor;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
+import gov.nih.nci.cagrid.gridgrouper.bean.Predicate;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege;
@@ -96,6 +100,7 @@ public class GridGrouper {
 	private Group adminGroup;
 
 	private Log log;
+
 	public GridGrouper() throws GridGrouperRuntimeFault {
 		try {
 			log = LogFactory.getLog(this.getClass().getName());
@@ -134,8 +139,7 @@ public class GridGrouper {
 			throws GridGrouperRuntimeFault, StemNotFoundFault {
 		GrouperSession session = null;
 		try {
-			Subject subject = SubjectFinder
-			.findById(gridIdentity);
+			Subject subject = SubjectFinder.findById(gridIdentity);
 			session = GrouperSession.start(subject);
 			StemDescriptor des = null;
 			Stem stem = StemFinder.findByName(session, stemId.getStemName());
@@ -1800,4 +1804,138 @@ public class GridGrouper {
 		}
 	}
 
+	public boolean isMember(String gridIdentity, String member,
+			MembershipExpression exp) throws GridGrouperRuntimeFault {
+		GrouperSession session = null;
+		try {
+			Subject subj = SubjectFinder.findById(gridIdentity);
+			session = GrouperSession.start(subj);
+			return isMember(session, member, exp);
+		} catch (GridGrouperRuntimeFault f) {
+			throw f;
+		} catch (Exception e) {
+
+			log.error(e.getMessage(), e);
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault.setFaultString("Error determing if the subject " + member
+					+ " is a member: " + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (GridGrouperRuntimeFault) helper.getFault();
+			throw fault;
+		} finally {
+			if (session == null) {
+				try {
+					session.stop();
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
+	}
+
+	private boolean isMember(GrouperSession session, String member,
+			MembershipExpression exp) throws GridGrouperRuntimeFault {
+		if (exp.getLogicRelation().equals(LogicalOperator.AND)) {
+			return evaluateAndExpression(session, member, exp);
+		} else {
+			return evaluateOrExpression(session, member, exp);
+		}
+	}
+
+	private boolean evaluateAndExpression(GrouperSession session,
+			String member, MembershipExpression exp)
+			throws GridGrouperRuntimeFault {
+		MembershipExpression[] exps = exp.getMembershipExpression();
+		MembershipQuery[] queries = exp.getMembershipQuery();
+
+		if ((exps == null) && (queries == null)) {
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault.setFaultString("Invalid Expression");
+			throw fault;
+		}
+
+		if (exps != null) {
+			for (int i = 0; i < exps.length; i++) {
+				if (!isMember(session, member, exps[i])) {
+					return false;
+				}
+			}
+		}
+
+		if (queries != null) {
+			for (int i = 0; i < queries.length; i++) {
+				String grpName = queries[i].getGroupIdentifier().getGroupName();
+				try {
+					Group grp = GroupFinder.findByName(session, grpName);
+					boolean isMember = grp.hasMember(SubjectFinder.findById(member));
+					if(queries[i].getPredicate().equals(Predicate.NOT_IN)){
+						if(isMember){
+							return false;
+						}
+					}else{
+						if(!isMember){
+							return false;
+						}
+					}
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+					GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+					fault.setFaultString("Error in determining if the subject "
+							+ member + " is a member of the group " + grpName
+							+ ": " + e.getMessage());
+					throw fault;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	private boolean evaluateOrExpression(GrouperSession session, String member,
+			MembershipExpression exp) throws GridGrouperRuntimeFault {
+		MembershipExpression[] exps = exp.getMembershipExpression();
+		MembershipQuery[] queries = exp.getMembershipQuery();
+
+		if ((exps == null) && (queries == null)) {
+			GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+			fault.setFaultString("Invalid Expression");
+			throw fault;
+		}
+
+		if (exps != null) {
+			for (int i = 0; i < exps.length; i++) {
+				if (isMember(session, member, exps[i])) {
+					return true;
+				}
+			}
+		}
+
+		if (queries != null) {
+			for (int i = 0; i < queries.length; i++) {
+				String grpName = queries[i].getGroupIdentifier().getGroupName();
+				try {
+					Group grp = GroupFinder.findByName(session, grpName);
+					boolean isMember = grp.hasMember(SubjectFinder.findById(member));
+					if(queries[i].getPredicate().equals(Predicate.NOT_IN)){
+						if(!isMember){
+							return true;
+						}
+					}else{
+						if(isMember){
+							return true;
+						}
+					}
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+					GridGrouperRuntimeFault fault = new GridGrouperRuntimeFault();
+					fault.setFaultString("Error in determining if the subject "
+							+ member + " is a member of the group " + grpName
+							+ ": " + e.getMessage());
+					throw fault;
+				}
+			}
+		}
+		return false;
+	}
 }

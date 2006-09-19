@@ -751,6 +751,27 @@
           </sequence>
         </complexType>
       </element>
+      <element name="IsMemberRequest">
+        <complexType>
+          <sequence>
+            <element name="member" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <element name="expression">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:MembershipExpression" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="IsMemberResponse">
+        <complexType>
+          <sequence>
+            <element name="response" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="GridGrouperResourceProperties">
         <complexType>
           <sequence />
@@ -926,6 +947,12 @@
   </message>
   <message name="HasGroupPrivilegeResponse">
     <part name="parameters" element="tns:HasGroupPrivilegeResponse" />
+  </message>
+  <message name="IsMemberRequest">
+    <part name="parameters" element="tns:IsMemberRequest" />
+  </message>
+  <message name="IsMemberResponse">
+    <part name="parameters" element="tns:IsMemberResponse" />
   </message>
   <message name="GridGrouperRuntimeFaultFaultMessage">
     <part name="fault" element="ns2:GridGrouperRuntimeFault" />
@@ -1174,6 +1201,11 @@
       <output message="tns:HasGroupPrivilegeResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/HasGroupPrivilegeResponse" />
       <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
       <fault name="GroupNotFoundFault" message="tns:GroupNotFoundFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GroupNotFoundFaultFaultMessage" />
+    </operation>
+    <operation name="isMember">
+      <input message="tns:IsMemberRequest" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/IsMemberRequest" />
+      <output message="tns:IsMemberResponse" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/IsMemberResponse" />
+      <fault name="GridGrouperRuntimeFault" message="tns:GridGrouperRuntimeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/GridGrouper/GridGrouperRuntimeFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

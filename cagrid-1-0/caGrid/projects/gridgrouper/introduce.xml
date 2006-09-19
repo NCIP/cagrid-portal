@@ -1,6 +1,8 @@
 <ns1:ServiceDescription introduceVersion=".99999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace location="./gridgrouper.xsd" namespace="http://cagrid.nci.nih.gov/1/GridGrouper" packageName="gov.nih.nci.cagrid.gridgrouper.bean" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="MembershipQuery" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="MembershipExpression" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="MembershipDescriptor" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="MemberDescriptor" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GroupIdentifier" xsi:type="ns2:SchemaElementType"/>
@@ -442,20 +444,30 @@
       <ns4:Exception name="GroupNotFoundFault" qname="ns162:GroupNotFoundFault" xmlns:ns162="http://cagrid.nci.nih.gov/GridGrouper/types"/>
      </ns4:Exceptions>
     </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="isMember" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="xsd:string" isArray="false" name="member" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+      <ns4:Input qName="ns163:MembershipExpression" isArray="false" name="expression" xmlns:ns163="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+     </ns4:Inputs>
+     <ns4:Output qName="xsd:boolean" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="GridGrouperRuntimeFault" qname="ns164:GridGrouperRuntimeFault" xmlns:ns164="http://cagrid.nci.nih.gov/GridGrouper/types"/>
+     </ns4:Exceptions>
+    </ns4:Method>
    </ns4:Methods>
-   <ns163:ResourcePropertiesList xsi:type="ns163:ResourcePropertiesListType" xmlns:ns163="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
-   <ns164:ServiceSecurity xsi:type="ns164:ServiceSecurity" xmlns:ns164="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns164:SecuritySetting xsi:type="ns164:SecuritySetting">Custom</ns164:SecuritySetting>
-    <ns164:TransportLevelSecurity xsi:type="ns164:TransportLevelSecurity">
-     <ns164:CommunicationMethod xsi:type="ns164:CommunicationMethod">Privacy</ns164:CommunicationMethod>
-    </ns164:TransportLevelSecurity>
-    <ns164:RunAsMode xsi:type="ns164:RunAsMode">System</ns164:RunAsMode>
-    <ns164:AnonymousClients xsi:type="ns164:AnonymousCommunication">No</ns164:AnonymousClients>
-    <ns164:ServiceAuthorization xsi:type="ns164:ServiceAuthorization">
-     <ns164:NoAuthorization xsi:type="ns164:NoAuthorization"/>
-    </ns164:ServiceAuthorization>
-   </ns164:ServiceSecurity>
+   <ns165:ResourcePropertiesList xsi:type="ns165:ResourcePropertiesListType" xmlns:ns165="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns166:ServiceSecurity xsi:type="ns166:ServiceSecurity" xmlns:ns166="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns166:SecuritySetting xsi:type="ns166:SecuritySetting">Custom</ns166:SecuritySetting>
+    <ns166:TransportLevelSecurity xsi:type="ns166:TransportLevelSecurity">
+     <ns166:CommunicationMethod xsi:type="ns166:CommunicationMethod">Privacy</ns166:CommunicationMethod>
+    </ns166:TransportLevelSecurity>
+    <ns166:RunAsMode xsi:type="ns166:RunAsMode">System</ns166:RunAsMode>
+    <ns166:AnonymousClients xsi:type="ns166:AnonymousCommunication">No</ns166:AnonymousClients>
+    <ns166:ServiceAuthorization xsi:type="ns166:ServiceAuthorization">
+     <ns166:NoAuthorization xsi:type="ns166:NoAuthorization"/>
+    </ns166:ServiceAuthorization>
+   </ns166:ServiceSecurity>
   </ns3:Service>
  </ns3:Services>
- <ns165:Extensions xsi:type="ns165:ExtensionsType" xmlns:ns165="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns167:Extensions xsi:type="ns167:ExtensionsType" xmlns:ns167="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
 </ns1:ServiceDescription>

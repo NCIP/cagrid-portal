@@ -187,4 +187,10 @@ public class GridGrouperProviderImpl{
 		return boxedResult;
 	}
 
+	public gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberResponse isMember(gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberRequest params) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault {
+		gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberResponse boxedResult = new gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberResponse();
+		boxedResult.setResponse(impl.isMember(params.getMember(),params.getExpression().getMembershipExpression()));
+		return boxedResult;
+	}
+
 }

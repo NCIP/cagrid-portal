@@ -7,6 +7,7 @@ import edu.internet2.middleware.subject.Subject;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberFilter;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
@@ -256,4 +257,12 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		}
 	}
 
+	public boolean isMember(String member, MembershipExpression exp) {
+		try {
+			return getClient().isMember(member, exp);
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(e.getMessage());
+		}
+	}
 }

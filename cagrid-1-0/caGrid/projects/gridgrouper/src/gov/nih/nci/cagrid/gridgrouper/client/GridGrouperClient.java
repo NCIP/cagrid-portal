@@ -681,5 +681,17 @@ public class GridGrouperClient extends ServiceSecurityClient implements
         return boxedResult.isResponse();
       }
     }
+    public boolean isMember(java.lang.String member,gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression expression) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"isMember");
+        gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberRequest params = new gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberRequest();
+        params.setMember(member);
+        gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberRequestExpression expressionContainer = new gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberRequestExpression();
+        expressionContainer.setMembershipExpression(expression);
+        params.setExpression(expressionContainer);
+        gov.nih.nci.cagrid.gridgrouper.stubs.IsMemberResponse boxedResult = portType.isMember(params);
+        return boxedResult.isResponse();
+      }
+    }
 
 }
