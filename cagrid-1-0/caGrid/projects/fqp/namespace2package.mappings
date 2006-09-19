@@ -9,7 +9,9 @@ http\://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet=gov.nih.nci.cagrid.cqlresult
 http\://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types=gov.nih.nci.cagrid.fqp.stubs.types
 http\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql=gov.nih.nci.cagrid.dcql
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.metadata.security
+http\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult=gov.nih.nci.cagrid.dcqlresult
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service
+
 
 gme\://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain=gov.nih.nci.cadsr.umlproject.domain
 gme\://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain=gov.nih.nci.cadsr.domain

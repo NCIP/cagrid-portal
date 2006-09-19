@@ -15,7 +15,7 @@ public class RunQueryEngine {
 		try {
 			FederatedQueryEngine fqp = new FederatedQueryEngine();
 			DCQLQuery dcql = (DCQLQuery) Utils.deserializeDocument(args[0], DCQLQuery.class);
-			CQLQueryResults results = fqp.execute(dcql);
+			CQLQueryResults results = fqp.executeAndAggregateResults(dcql);
 			CQLQueryResultsIterator iterator = new CQLQueryResultsIterator(results, true);
 			int resultCount = 0;
 			while (iterator.hasNext()) {

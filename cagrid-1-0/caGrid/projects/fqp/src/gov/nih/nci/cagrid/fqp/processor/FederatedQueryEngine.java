@@ -5,6 +5,8 @@ import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
+import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
+import gov.nih.nci.cagrid.dcqlresult.DCQLResult;
 import gov.nih.nci.cagrid.fqp.common.SerializationUtils;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.RemoteDataServiceException;
@@ -30,26 +32,54 @@ public class FederatedQueryEngine {
 
 	/**
 	 * Call Federated Query Processor, and send the generated CQLQuery to each
-	 * targeted service, aggregating the results.
+	 * targeted service, placing each results into a single DCQLQueryResults
+	 * object.
+	 * 
+	 * @param dcqlQuery
+	 * @return
+	 * @throws FederatedQueryProcessingException
+	 */
+	public DCQLQueryResultsCollection execute(DCQLQuery dcqlQuery) throws FederatedQueryProcessingException {
+		FederatedQueryProcessor processor = new FederatedQueryProcessor();
+		debugDCQLQuery("Beginning processing of DCQL", dcqlQuery);
+
+		CQLQuery cqlQuery = processor.processDCQLQuery(dcqlQuery.getTargetObject());
+
+		String[] targetServiceURLs = dcqlQuery.getTargetServiceURL();
+		DCQLQueryResultsCollection result = new DCQLQueryResultsCollection();
+		DCQLResult results[] = new DCQLResult[targetServiceURLs.length];
+		for (int i = 0; i < targetServiceURLs.length; i++) {
+			DCQLResult r = new DCQLResult();
+			r.setTargetServiceURL(targetServiceURLs[i]);
+			// aggregate results
+			CQLQueryResults currResults = DataServiceQueryExecutor.queryDataService(cqlQuery, targetServiceURLs[i]);
+			r.setCQLQueryResultCollection(currResults);
+			if (!currResults.getTargetClassname().equals(dcqlQuery.getTargetObject().getName())) {
+				throw new RemoteDataServiceException("Data service (" + targetServiceURLs[i]
+					+ ") returned results of type (" + currResults.getTargetClassname() + ") when type ("
+					+ dcqlQuery.getTargetObject().getName() + ") was requested!");
+			}
+		}
+		result.setDCQLResult(results);
+		return result;
+	}
+
+
+	/**
+	 * Call Federated Query Processor, and send the generated CQLQuery to each
+	 * targeted service, aggregating the results into a single CQLQueryResults
+	 * object.
 	 * 
 	 * @param dcqlQuery
 	 * @return
 	 * @throws FederatedQueryException
 	 */
-	public CQLQueryResults execute(DCQLQuery dcqlQuery) throws FederatedQueryProcessingException {
+	public CQLQueryResults executeAndAggregateResults(DCQLQuery dcqlQuery) throws FederatedQueryProcessingException {
 		FederatedQueryProcessor processor = new FederatedQueryProcessor();
-		if (LOG.isDebugEnabled()) {
-			try {
-				StringWriter s = new StringWriter();
-				SerializationUtils.serializeDCQLQuery(dcqlQuery, s);
-				LOG.debug("Beginning processing of query:" + s.toString());
-				s.close();
-			} catch (Exception e) {
-				LOG.error("Problem in debug printout of DCQL query:" + e.getMessage(), e);
-			}
-		}
+		debugDCQLQuery("Beginning processing of DCQL", dcqlQuery);
 
 		CQLQuery cqlQuery = processor.processDCQLQuery(dcqlQuery.getTargetObject());
+
 		CQLQueryResults aggregateResults = null;
 		String[] targetServiceURLs = dcqlQuery.getTargetServiceURL();
 		for (int i = 0; i < targetServiceURLs.length; i++) {
@@ -75,5 +105,19 @@ public class FederatedQueryEngine {
 		}
 
 		return aggregateResults;
+	}
+
+
+	private void debugDCQLQuery(String logMessage, DCQLQuery dcqlQuery) {
+		if (LOG.isDebugEnabled()) {
+			try {
+				StringWriter s = new StringWriter();
+				SerializationUtils.serializeDCQLQuery(dcqlQuery, s);
+				LOG.debug(logMessage + ":\n" + s.toString());
+				s.close();
+			} catch (Exception e) {
+				LOG.error("Problem in debug printout of DCQL query:" + e.getMessage(), e);
+			}
+		}
 	}
 }

@@ -16,7 +16,7 @@ build service to support synchronous query execution (with status RPs, etc)
 should we add query return modifiers to DCQL? (not trivial, as they have to work "in code" against aggregate results... can't be pushed to backend)
 
 (FIXED) need to aggregate results when targeting multiple services... currently only return uses last result
-  - probably want to make a new DCQL result that contains a CQL results collection for each target service 
+  - (DONE) probably want to make a new DCQL result that contains a CQL results collection for each target service 
 
 need to use thread pool for sending out CQL queries
 

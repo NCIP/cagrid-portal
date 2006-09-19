@@ -17,7 +17,8 @@ import org.globus.wsrf.ResourceHome;
 import org.globus.wsrf.ResourceProperty;
 import org.globus.wsrf.ResourcePropertySet;
 /** 
- *  * 
+ *  TODO:DOCUMENT ME
+ * 
  * @created by Introduce Toolkit version 1.0
  * 
  */
