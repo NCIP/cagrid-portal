@@ -68,6 +68,8 @@ public class IntroduceConstants {
 	// w3c namespaces
 	public static final String W3CNAMESPACE = "http://www.w3.org/2001/XMLSchema";
 	
+	public static final String WSDLAMESPACE = "http://schemas.xmlsoap.org/wsdl/";
+	
 	public static final String BASEFAULTS_NAMESPACE = "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd";
 
 	public static final String W3CNAMESPACE_PREFIX = "xs";
