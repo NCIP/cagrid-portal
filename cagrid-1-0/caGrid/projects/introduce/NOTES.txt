@@ -3,6 +3,8 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 To Do:
 
+duce generated faults should create both a gobal element and complexType (currently an inner complextype is created) so faults can be extended
+
 i am not sure that service/method security on service contexts is right on priority and overides.
 
 when adding a serviceContext and then adding a method that returns its referece
