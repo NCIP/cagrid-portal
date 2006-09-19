@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.fqp.common;
 
-import javax.xml.namespace.QName;
-
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+
+import javax.xml.namespace.QName;
 
 
 /**

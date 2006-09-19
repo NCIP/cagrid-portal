@@ -3,10 +3,10 @@
   <ns2:Namespace location="./ Distributed_CQL_Results_schema_2.0.xsd" namespace="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult" packageName="gov.nih.nci.cagrid.dcqlresult" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="DCQLQueryResultsCollection" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./xsd/Data/1_gov.nih.nci.cagrid.CQLResultSet.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" packageName="gov.nih.nci.cagrid.cqlresultset" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace generateStubs="false" location="./xsd/Data/1_gov.nih.nci.cagrid.CQLResultSet.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" packageName="gov.nih.nci.cagrid.cqlresultset" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="CQLQueryResultCollection" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./xsd/Data/1_gov.nih.nci.cagrid.CQLQuery.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" packageName="gov.nih.nci.cagrid.cqlquery" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace generateStubs="false" location="./xsd/Data/1_gov.nih.nci.cagrid.CQLQuery.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" packageName="gov.nih.nci.cagrid.cqlquery" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="CQLQuery" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="./Distributed_CQL_schema_2.0.xsd" namespace="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql" packageName="gov.nih.nci.cagrid.dcql" xsi:type="ns2:NamespaceType">
@@ -62,6 +62,7 @@
   </ns2:Namespace>
   <ns2:Namespace location="./FederatedQueryProcessorTypes.xsd" namespace="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types" packageName="gov.nih.nci.cagrid.fqp.stubs.types" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="FederatedQueryProcessorReference" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="FederatedQueryProcessingFault" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/security/security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
@@ -90,22 +91,26 @@
       <ns4:Input qName="ns7:DCQLQuery" isArray="false" name="query" xmlns:ns7="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
      </ns4:Inputs>
      <ns4:Output qName="ns8:CQLQueryResultCollection" isArray="false" xmlns:ns8="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception name="FederatedQueryProcessingFault" qname="ns9:FederatedQueryProcessingFault" xmlns:ns9="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="execute" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns9:DCQLQuery" isArray="false" name="query" xmlns:ns9="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
+      <ns4:Input qName="ns10:DCQLQuery" isArray="false" name="query" xmlns:ns10="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns10:DCQLQueryResultsCollection" isArray="false" xmlns:ns10="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult"/>
-     <ns4:Exceptions/>
+     <ns4:Output qName="ns11:DCQLQueryResultsCollection" isArray="false" xmlns:ns11="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="FederatedQueryProcessingFault" qname="ns12:FederatedQueryProcessingFault" xmlns:ns12="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
+     </ns4:Exceptions>
     </ns4:Method>
    </ns4:Methods>
-   <ns11:ResourcePropertiesList xsi:type="ns11:ResourcePropertiesListType" xmlns:ns11="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns11:ResourceProperty qName="ns12:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns11:ResourcePropertyType" xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns11:ResourcePropertiesList>
+   <ns13:ResourcePropertiesList xsi:type="ns13:ResourcePropertiesListType" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns13:ResourceProperty qName="ns14:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns13:ResourcePropertyType" xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns13:ResourcePropertiesList>
   </ns3:Service>
  </ns3:Services>
- <ns13:Extensions xsi:type="ns13:ExtensionsType" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns13:Extension name="cagrid_metadata" xsi:type="ns13:ExtensionType"/>
- </ns13:Extensions>
+ <ns15:Extensions xsi:type="ns15:ExtensionsType" xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns15:Extension name="cagrid_metadata" xsi:type="ns15:ExtensionType"/>
+ </ns15:Extensions>
 </ns1:ServiceDescription>

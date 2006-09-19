@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.fqp.service;
 
 import gov.nih.nci.cagrid.fqp.service.globus.resource.BaseResource;
-import gov.nih.nci.cagrid.fqp.service.ServiceConfiguration;
 
 import java.rmi.RemoteException;
 

@@ -16,7 +16,9 @@
         <ns2:InputParameter qName="ns4:DCQLQuery" dimensionality="1" index="0" isArray="false" isRequired="false" name="query" xsi:type="ns2:InputParameter" xmlns:ns4="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns5:CQLQueryResultCollection" dimensionality="1" isArray="false" xsi:type="ns2:Output" xmlns:ns5="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
-       <ns2:faultCollection/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="FederatedQueryProcessingFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
        <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="execute" xsi:type="ns2:Operation">
@@ -24,7 +26,9 @@
         <ns2:InputParameter qName="ns6:DCQLQuery" dimensionality="1" index="0" isArray="false" isRequired="false" name="query" xsi:type="ns2:InputParameter" xmlns:ns6="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns7:DCQLQueryResultsCollection" dimensionality="1" isArray="false" xsi:type="ns2:Output" xmlns:ns7="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult"/>
-       <ns2:faultCollection/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="FederatedQueryProcessingFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
        <ns2:semanticMetadataCollection/>
       </ns2:Operation>
      </ns2:operationCollection>

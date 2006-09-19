@@ -80,6 +80,9 @@
   <message name="ExecuteResponse">
     <part name="parameters" element="tns:ExecuteResponse" />
   </message>
+  <message name="FederatedQueryProcessingFaultFaultMessage">
+    <part name="fault" element="ns4:FederatedQueryProcessingFault" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -89,10 +92,12 @@
     <operation name="executeAndAggregateResults">
       <input message="tns:ExecuteAndAggregateResultsRequest" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/ExecuteAndAggregateResultsRequest" />
       <output message="tns:ExecuteAndAggregateResultsResponse" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/ExecuteAndAggregateResultsResponse" />
+      <fault name="FederatedQueryProcessingFault" message="tns:FederatedQueryProcessingFaultFaultMessage" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/FederatedQueryProcessingFaultFaultMessage" />
     </operation>
     <operation name="execute">
       <input message="tns:ExecuteRequest" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/ExecuteRequest" />
       <output message="tns:ExecuteResponse" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/ExecuteResponse" />
+      <fault name="FederatedQueryProcessingFault" message="tns:FederatedQueryProcessingFaultFaultMessage" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/FederatedQueryProcessingFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />
