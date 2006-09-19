@@ -99,9 +99,8 @@ public class ExtensionsLoader {
 												.getResourcePropertyEditorExtensionDescription());
 							} else if (extDesc.getExtensionType().equals(
 									AUTHORIZATION_EXTENSION)) {
-								resourcePropertyEditorExtensionDescriptors
-										.add(extDesc
-												.getResourcePropertyEditorExtensionDescription());
+								authorizationExtensionDescriptors
+										.add(extDesc.getAuthorizationExtensionDescription());
 							} else {
 								System.out
 										.println("Unsupported Extension Type: "

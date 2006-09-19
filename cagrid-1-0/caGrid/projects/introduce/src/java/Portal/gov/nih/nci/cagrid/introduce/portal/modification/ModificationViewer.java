@@ -919,7 +919,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private ServiceSecurityPanel getSecurityPanel() {
 		if (securityPanel == null) {
 			try {
-				securityPanel = new ServiceSecurityPanel(info.getServices().getService(0).getServiceSecurity());
+				securityPanel = new ServiceSecurityPanel(info,info.getServices().getService(0).getServiceSecurity());
 			} catch (Exception e) {
 				e.printStackTrace();
 				PortalUtils.showErrorMessage(e);

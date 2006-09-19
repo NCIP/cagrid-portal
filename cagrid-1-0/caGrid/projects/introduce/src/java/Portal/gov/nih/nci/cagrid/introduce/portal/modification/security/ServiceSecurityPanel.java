@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.ui.CertificatePanel;
 import gov.nih.nci.cagrid.gridca.ui.ProxyPanel;
+import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.GridMapAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.NoAuthorization;
@@ -20,7 +21,10 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -28,6 +32,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -39,7 +44,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 
 import org.projectmobius.portal.PortalResourceManager;
-
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -163,15 +167,18 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private JLabel authLabel = null;
 
+	private ServiceInformation info;
 
-	public ServiceSecurityPanel() {
+	public ServiceSecurityPanel(ServiceInformation info) {
 		super();
+		this.info = info;
 		initialize();
+
 	}
 
-
-	public ServiceSecurityPanel(ServiceSecurity sec) {
+	public ServiceSecurityPanel(ServiceInformation info, ServiceSecurity sec) {
 		super();
+		this.info = info;
 		initialize();
 		try {
 			setServiceSecurity(sec);
@@ -180,7 +187,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			ErrorDialog.showErrorDialog(e);
 		}
 	}
-
 
 	private void initialize() {
 		/*
@@ -202,14 +208,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		gridBagConstraints71.weightx = 1.0D;
 		this.setLayout(new GridBagLayout());
 		this.add(getSecureCommunicationPanel(), gridBagConstraints71);
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Security Configuration",
-			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
-			null, PortalLookAndFeel.getPanelLabelColor()));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				"Security Configuration",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+				PortalLookAndFeel.getPanelLabelColor()));
 		this.add(getTransportPanel(), gridBagConstraints17);
 		synchronize();
 		isInited = true;
 	}
-
 
 	/**
 	 * This method initializes secureCommunicationPanel
@@ -223,7 +230,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return secureCommunicationPanel;
 	}
-
 
 	/**
 	 * This method initializes noneButton
@@ -244,7 +250,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return noneButton;
 	}
 
-
 	/**
 	 * This method initializes customButton
 	 * 
@@ -263,16 +268,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return customButton;
 	}
 
-
 	private boolean isSecure() {
-		if (usesTransportSecurity() || usesSecureConversation() || usesSecureMessage()) {
+		if (usesTransportSecurity() || usesSecureConversation()
+				|| usesSecureMessage()) {
 			return true;
 		} else {
 			return false;
 		}
 
 	}
-
 
 	private boolean usesTransportSecurity() {
 		if (tlsButton.isSelected()) {
@@ -282,7 +286,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 	}
 
-
 	private boolean usesSecureConversation() {
 		if (secureConversationButton.isSelected()) {
 			return true;
@@ -290,7 +293,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			return false;
 		}
 	}
-
 
 	private boolean usesSecureMessage() {
 		if (secureMessageButton.isSelected()) {
@@ -300,22 +302,24 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 	}
 
-
 	public ServiceSecurity getServiceSecurity() throws Exception {
 
 		if (customButton.isSelected()) {
 			ServiceSecurity ss = new ServiceSecurity();
 			ss.setSecuritySetting(SecuritySetting.Custom);
 			if (!isSecure()) {
-				throw new Exception("You must select at least one transport mechanism!!!");
+				throw new Exception(
+						"You must select at least one transport mechanism!!!");
 			}
 
 			if (tlsButton.isSelected()) {
-				ss.setTransportLevelSecurity(this.tlsPanel.getTransportLevelSecurity());
+				ss.setTransportLevelSecurity(this.tlsPanel
+						.getTransportLevelSecurity());
 
 			}
 			if (secureConversationButton.isSelected()) {
-				ss.setSecureConversation(this.secureConversationPanel.getSecureConversation());
+				ss.setSecureConversation(this.secureConversationPanel
+						.getSecureConversation());
 
 			}
 			if (secureMessageButton.isSelected()) {
@@ -326,12 +330,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			}
 
 			if (anonymousCommunication.isEnabled()) {
-				ss.setAnonymousClients((AnonymousCommunication) anonymousCommunication.getSelectedItem());
+				ss
+						.setAnonymousClients((AnonymousCommunication) anonymousCommunication
+								.getSelectedItem());
 			} else {
 				ss.setAnonymousClients(AnonymousCommunication.No);
 			}
 
-			if ((this.certificateLocation != null) && (this.privateKeyLocation != null)) {
+			if ((this.certificateLocation != null)
+					&& (this.privateKeyLocation != null)) {
 				ServiceCredential cred = new ServiceCredential();
 				X509Credential x509 = new X509Credential();
 				x509.setCertificateLocation(this.certificateLocation);
@@ -346,11 +353,13 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				ss.setServiceCredentials(cred);
 			}
 
-			String authType = (String) this.authorizationMechanism.getSelectedItem();
+			String authType = (String) this.authorizationMechanism
+					.getSelectedItem();
 			ServiceAuthorization sa = new ServiceAuthorization();
 			if (authType.equals(GRID_MAP_AUTHORIZATION)) {
 				GridMapAuthorization gma = new GridMapAuthorization();
-				gma.setGridMapFileLocation(((GridMapPanel) gridmapPanel).saveGridMapAndGetLocation());
+				gma.setGridMapFileLocation(((GridMapPanel) gridmapPanel)
+						.saveGridMapAndGetLocation());
 				sa.setGridMapAuthorization(gma);
 			} else {
 				sa.setNoAuthorization(new NoAuthorization());
@@ -362,7 +371,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			return null;
 		}
 	}
-
 
 	public void setServiceSecurity(ServiceSecurity ss) throws Exception {
 		if (ss != null && ss.getSecuritySetting() != null) {
@@ -406,16 +414,22 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				ServiceAuthorization sa = ss.getServiceAuthorization();
 				if (sa != null) {
 					if (sa.getGridMapAuthorization() != null) {
-						String location = sa.getGridMapAuthorization().getGridMapFileLocation();
+						String location = sa.getGridMapAuthorization()
+								.getGridMapFileLocation();
 						if (location != null) {
-							((GridMapPanel) gridmapPanel).setGridMapFile(location);
-							this.authorizationMechanism.setSelectedItem(GRID_MAP_AUTHORIZATION);
+							((GridMapPanel) gridmapPanel)
+									.setGridMapFile(location);
+							this.authorizationMechanism
+									.setSelectedItem(GRID_MAP_AUTHORIZATION);
 						} else {
-							PortalUtils.showErrorMessage("No GridMap file specified!!!");
-							this.authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
+							PortalUtils
+									.showErrorMessage("No GridMap file specified!!!");
+							this.authorizationMechanism
+									.setSelectedItem(NO_AUTHORIZATION);
 						}
 					} else {
-						this.authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
+						this.authorizationMechanism
+								.setSelectedItem(NO_AUTHORIZATION);
 					}
 				}
 
@@ -424,7 +438,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 
 	}
-
 
 	public void synchronize() {
 		disableAll();
@@ -455,11 +468,11 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 	}
 
-
 	private void syncAnonymousCommunication() {
 
 		if (usesTransportSecurity() || usesSecureConversation()) {
-			if (getAuthorizationMechanism().getSelectedItem().equals(NO_AUTHORIZATION)) {
+			if (getAuthorizationMechanism().getSelectedItem().equals(
+					NO_AUTHORIZATION)) {
 				anonymousCommunication.setEnabled(true);
 			} else {
 				anonymousCommunication.setEnabled(false);
@@ -468,7 +481,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			anonymousCommunication.setEnabled(false);
 		}
 	}
-
 
 	public void disableAll() {
 		tlsPanel.disablePanel();
@@ -486,12 +498,13 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		authLayout.show(authPanel, NO_AUTHORIZATION);
 	}
 
-
 	private void syncServiceCredentials() {
-		if ((secureConversationButton.isSelected()) || (secureMessageButton.isSelected())) {
+		if ((secureConversationButton.isSelected())
+				|| (secureMessageButton.isSelected())) {
 			credentialLoadMethod.setEnabled(true);
 			loadCredentialsButton.setEnabled(true);
-			if ((this.certificateLocation != null) && (this.privateKeyLocation != null)) {
+			if ((this.certificateLocation != null)
+					&& (this.privateKeyLocation != null)) {
 				credentialPanelLayout.show(credentialsPanel, PKI_CRED_PANEL);
 			} else if (this.proxyLocation != null) {
 				credentialPanelLayout.show(credentialsPanel, PROXY_CRED_PANEL);
@@ -504,22 +517,19 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 	}
 
-
 	private void syncAuthorization() {
 		if (isSecure()) {
 			authorizationMechanism.setEnabled(true);
-			String mech = (String) this.authorizationMechanism.getSelectedItem();
-			if (mech.equals(GRID_MAP_AUTHORIZATION)) {
-				authLayout.show(authPanel, GRID_MAP_AUTHORIZATION);
-			} else {
-				authLayout.show(authPanel, NO_AUTHORIZATION);
-			}
+			String mech = (String) this.authorizationMechanism
+					.getSelectedItem();
+
+			authLayout.show(authPanel, mech);
+
 		} else {
 			authorizationMechanism.setEnabled(false);
 			authLayout.show(authPanel, NO_AUTHORIZATION);
 		}
 	}
-
 
 	private synchronized void synchRunAsMode() {
 		if (!isSyncingRunAs) {
@@ -534,7 +544,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 				if (!getAnonymousCommunication().isEnabled()) {
 					this.runAsMode.addItem(RunAsMode.Caller);
-				} else if (getAnonymousCommunication().getSelectedItem().equals(AnonymousCommunication.No)) {
+				} else if (getAnonymousCommunication().getSelectedItem()
+						.equals(AnonymousCommunication.No)) {
 					this.runAsMode.addItem(RunAsMode.Caller);
 				}
 
@@ -544,9 +555,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	}
 
-
 	private boolean hasServiceCredentials() {
-		if ((this.certificateLocation != null) && (this.privateKeyLocation != null)) {
+		if ((this.certificateLocation != null)
+				&& (this.privateKeyLocation != null)) {
 			return true;
 		} else if (this.proxyLocation != null) {
 			return true;
@@ -554,7 +565,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			return false;
 		}
 	}
-
 
 	/**
 	 * This method initializes tlsPanel
@@ -567,7 +577,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return tlsPanel;
 	}
-
 
 	/**
 	 * This method initializes tlsButton
@@ -586,7 +595,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return tlsButton;
 	}
 
-
 	/**
 	 * This method initializes secureConversationButton
 	 * 
@@ -595,16 +603,16 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JCheckBox getSecureConversationButton() {
 		if (secureConversationButton == null) {
 			secureConversationButton = new JCheckBox();
-			secureConversationButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					synchronize();
-				}
-			});
+			secureConversationButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							synchronize();
+						}
+					});
 
 		}
 		return secureConversationButton;
 	}
-
 
 	/**
 	 * This method initializes choicePanel
@@ -625,7 +633,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return choicePanel;
 	}
-
 
 	/**
 	 * This method initializes commPanel
@@ -651,7 +658,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return commPanel;
 	}
 
-
 	/**
 	 * This method initializes secureMessageButton
 	 * 
@@ -660,15 +666,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JCheckBox getSecureMessageButton() {
 		if (secureMessageButton == null) {
 			secureMessageButton = new JCheckBox();
-			secureMessageButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					synchronize();
-				}
-			});
+			secureMessageButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							synchronize();
+						}
+					});
 		}
 		return secureMessageButton;
 	}
-
 
 	/**
 	 * This method initializes secureConversationPanel
@@ -682,7 +688,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return secureConversationPanel;
 	}
 
-
 	/**
 	 * This method initializes secureMessagePanel
 	 * 
@@ -694,7 +699,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return secureMessagePanel;
 	}
-
 
 	/**
 	 * This method initializes runAsMode
@@ -708,7 +712,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return runAsMode;
 	}
 
-
 	/**
 	 * This method initializes anonymousCommunication
 	 * 
@@ -717,19 +720,19 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JComboBox getAnonymousCommunication() {
 		if (anonymousCommunication == null) {
 			anonymousCommunication = new JComboBox();
-			anonymousCommunication.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (isInited) {
-						synchronize();
-					}
-				}
-			});
+			anonymousCommunication
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							if (isInited) {
+								synchronize();
+							}
+						}
+					});
 			anonymousCommunication.addItem(AnonymousCommunication.No);
 			anonymousCommunication.addItem(AnonymousCommunication.Yes);
 		}
 		return anonymousCommunication;
 	}
-
 
 	/**
 	 * This method initializes transportPanel
@@ -739,13 +742,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JTabbedPane getTransportPanel() {
 		if (transportPanel == null) {
 			transportPanel = new JTabbedPane();
-			transportPanel.addTab("Secure Communication", null, getCommunicationPanel(), null);
-			transportPanel.addTab("Authorization", null, getAuthorizationPanel(), null);
-			transportPanel.addTab("Service Credentials", null, getServiceCredentials(), null);
+			transportPanel.addTab("Secure Communication", null,
+					getCommunicationPanel(), null);
+			transportPanel.addTab("Authorization", null,
+					getAuthorizationPanel(), null);
+			transportPanel.addTab("Service Credentials", null,
+					getServiceCredentials(), null);
 		}
 		return transportPanel;
 	}
-
 
 	/**
 	 * This method initializes communicationPanel
@@ -785,12 +790,13 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			communicationPanel.setLayout(new GridBagLayout());
 			communicationPanel.add(getCommPanel(), gridBagConstraints4);
 			communicationPanel.add(getTlsPanel(), gridBagConstraints6);
-			communicationPanel.add(getSecureConversationPanel(), gridBagConstraints7);
-			communicationPanel.add(getSecureMessagePanel(), gridBagConstraints11);
+			communicationPanel.add(getSecureConversationPanel(),
+					gridBagConstraints7);
+			communicationPanel.add(getSecureMessagePanel(),
+					gridBagConstraints11);
 		}
 		return communicationPanel;
 	}
-
 
 	/**
 	 * This method initializes generalSecurity
@@ -820,7 +826,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return generalSecurity;
 	}
 
-
 	/**
 	 * This method initializes serviceCredentials
 	 * 
@@ -830,12 +835,12 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		if (serviceCredentials == null) {
 			serviceCredentials = new JPanel();
 			serviceCredentials.setLayout(new BorderLayout());
-			serviceCredentials.add(getCredentialsPanel(), java.awt.BorderLayout.CENTER);
+			serviceCredentials.add(getCredentialsPanel(),
+					java.awt.BorderLayout.CENTER);
 			serviceCredentials.add(getJPanel(), java.awt.BorderLayout.NORTH);
 		}
 		return serviceCredentials;
 	}
-
 
 	/**
 	 * This method initializes selectPanel
@@ -863,7 +868,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			gridBagConstraints22.gridx = 0;
 			jLabel6 = new JLabel();
 			jLabel6.setText("Import Credentials");
-			jLabel6.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
+			jLabel6
+					.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
 			jLabel6.setForeground(PortalLookAndFeel.getPanelLabelColor());
 			selectPanel = new JPanel();
 
@@ -874,7 +880,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return selectPanel;
 	}
-
 
 	/**
 	 * This method initializes credentialLoadMethod
@@ -890,7 +895,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return credentialLoadMethod;
 	}
 
-
 	/**
 	 * This method initializes loadCredentialsButton
 	 * 
@@ -900,30 +904,33 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		if (loadCredentialsButton == null) {
 			loadCredentialsButton = new JButton();
 			loadCredentialsButton.setText("Import");
-			loadCredentialsButton.setIcon(IntroduceLookAndFeel.getLoadCredentialsIcon());
-			loadCredentialsButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					loadCredentials();
-				}
-			});
+			loadCredentialsButton.setIcon(IntroduceLookAndFeel
+					.getLoadCredentialsIcon());
+			loadCredentialsButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							loadCredentials();
+						}
+					});
 		}
 		return loadCredentialsButton;
 	}
 
-
 	private void loadCredentials() {
 		String method = (String) credentialLoadMethod.getSelectedItem();
 		if (method.equals(FILE_SYSTEM_CERT_KEY)) {
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new LoadCredentialsFromFileSystemWindow(this), 500, 200);
+			PortalResourceManager.getInstance().getGridPortal()
+					.addGridPortalComponent(
+							new LoadCredentialsFromFileSystemWindow(this), 500,
+							200);
 		}
 		if (method.equals(FILE_SYSTEM_PROXY)) {
-			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new LoadProxyFromFileSystemWindow(this), 500, 200);
+			PortalResourceManager.getInstance().getGridPortal()
+					.addGridPortalComponent(
+							new LoadProxyFromFileSystemWindow(this), 500, 200);
 		}
 
 	}
-
 
 	public void setProxy(ProxyCredential proxy) throws Exception {
 		if (proxy != null) {
@@ -932,7 +939,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			this.proxyLocation = proxy.getProxyLocation();
 			try {
 				this.proxyPanel.clearProxy();
-				this.proxyPanel.showProxy(ProxyUtil.loadProxy(this.proxyLocation));
+				this.proxyPanel.showProxy(ProxyUtil
+						.loadProxy(this.proxyLocation));
 			} catch (Exception e) {
 				PortalUtils.showErrorMessage("Invalid proxy specified!!!");
 			}
@@ -942,23 +950,24 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	}
 
-
 	public void setCredentials(X509Credential cred) throws Exception {
 		if (cred != null) {
 			this.certificateLocation = cred.getCertificateLocation();
 			this.privateKeyLocation = cred.getPrivateKeyLocation();
 			this.proxyLocation = null;
 			try {
-				this.certificatePanel.setCertificate(CertUtil.loadCertificate(new File(cred.getCertificateLocation())));
+				this.certificatePanel
+						.setCertificate(CertUtil.loadCertificate(new File(cred
+								.getCertificateLocation())));
 			} catch (Exception e) {
-				// PortalUtils.showErrorMessage("Invalid certificate specified!!!");
+				// PortalUtils.showErrorMessage("Invalid certificate
+				// specified!!!");
 				ErrorDialog.showErrorDialog("Invalid certificate specified!!!");
 			}
 			syncServiceCredentials();
 			synchRunAsMode();
 		}
 	}
-
 
 	/**
 	 * This method initializes credentialsPanel
@@ -977,7 +986,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return credentialsPanel;
 	}
 
-
 	/**
 	 * This method initializes nonePanel
 	 * 
@@ -991,7 +999,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return nonePanel;
 	}
-
 
 	/**
 	 * This method initializes certificatePanel
@@ -1009,7 +1016,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return certificatePanel;
 	}
 
-
 	/**
 	 * This method initializes proxyPanel
 	 * 
@@ -1022,7 +1028,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return proxyPanel;
 	}
 
-
 	/**
 	 * This method initializes authorizationPanel
 	 * 
@@ -1032,12 +1037,13 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		if (authorizationPanel == null) {
 			authorizationPanel = new JPanel();
 			authorizationPanel.setLayout(new BorderLayout());
-			authorizationPanel.add(getAuthorizationTypePanel(), java.awt.BorderLayout.NORTH);
-			authorizationPanel.add(getAuthPanel(), java.awt.BorderLayout.CENTER);
+			authorizationPanel.add(getAuthorizationTypePanel(),
+					java.awt.BorderLayout.NORTH);
+			authorizationPanel
+					.add(getAuthPanel(), java.awt.BorderLayout.CENTER);
 		}
 		return authorizationPanel;
 	}
-
 
 	/**
 	 * This method initializes authorizationTypePanel
@@ -1053,7 +1059,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return authorizationTypePanel;
 	}
 
-
 	/**
 	 * This method initializes authorizationMechanism
 	 * 
@@ -1062,19 +1067,37 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JComboBox getAuthorizationMechanism() {
 		if (authorizationMechanism == null) {
 			authorizationMechanism = new JComboBox();
-			authorizationMechanism.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (isInited) {
-						synchronize();
-					}
-				}
-			});
+			authorizationMechanism
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							if (isInited) {
+								synchronize();
+							}
+						}
+					});
 			authorizationMechanism.addItem(NO_AUTHORIZATION);
 			authorizationMechanism.addItem(GRID_MAP_AUTHORIZATION);
+			List l = ExtensionsLoader.getInstance()
+					.getAuthorizationExtensions();
+			for (int i = 0; i < l.size(); i++) {
+
+				AuthorizationExtensionDescriptionType des = (AuthorizationExtensionDescriptionType) l
+						.get(i);
+				authorizationMechanism.addItem(des.getDisplayName());
+				try {
+					getAuthPanel().add(ExtensionTools.getAuthorizationPanel(des
+							.getName(), info), des.getDisplayName());
+				} catch (Exception e) {
+					PortalUtils.showErrorMessage("Error loading the "
+							+ des.getDisplayName()
+							+ " authorization extension.");
+					e.printStackTrace();
+				}
+			}
+			// AuthorizationExtensionDescriptionType
 		}
 		return authorizationMechanism;
 	}
-
 
 	/**
 	 * This method initializes authPanel
@@ -1086,12 +1109,12 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			authPanel = new JPanel();
 			authLayout = new CardLayout();
 			authPanel.setLayout(authLayout);
-			authPanel.add(getNoAuthorizationPanel(), getNoAuthorizationPanel().getName());
+			authPanel.add(getNoAuthorizationPanel(), getNoAuthorizationPanel()
+					.getName());
 			authPanel.add(getGridmapPanel(), getGridmapPanel().getName());
 		}
 		return authPanel;
 	}
-
 
 	/**
 	 * This method initializes noAuthorizationPanel
@@ -1106,7 +1129,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return noAuthorizationPanel;
 	}
 
-
 	/**
 	 * This method initializes gridmapPanel
 	 * 
@@ -1119,7 +1141,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return gridmapPanel;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -1148,7 +1169,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		return jPanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel1
 	 * 
@@ -1158,12 +1178,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		if (jPanel1 == null) {
 			credentialsRequired = new JLabel();
 			credentialsRequired.setText("Anonymous Clients");
-			credentialsRequired.setForeground(PortalLookAndFeel.getPanelLabelColor());
-			credentialsRequired.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
+			credentialsRequired.setForeground(PortalLookAndFeel
+					.getPanelLabelColor());
+			credentialsRequired.setFont(new java.awt.Font("Dialog",
+					java.awt.Font.BOLD, 14));
 			authLabel = new JLabel();
 			authLabel.setText("Authorization Mechanism");
 			authLabel.setForeground(PortalLookAndFeel.getPanelLabelColor());
-			authLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
+			authLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD,
+					14));
 
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
