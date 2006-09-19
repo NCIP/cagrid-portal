@@ -36,8 +36,11 @@ public class QueryTreeNode extends IconTreeNode {
 	
 	
 	public void rebuild() throws IllegalStateException {
-		TargetTreeNode targetNode = new TargetTreeNode(query.getTarget());
-		add(targetNode);
+		removeAllChildren();
+		if (query.getTarget() != null) {
+			TargetTreeNode targetNode = new TargetTreeNode(query.getTarget());
+			add(targetNode);
+		}
 		if (query.getQueryModifier() != null) {
 			//
 		}
