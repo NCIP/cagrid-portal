@@ -31,7 +31,7 @@
 		<xsd:complexContent>
 			<xsd:extension base="res:CQLResult">
 				<xsd:sequence>
-					<xsd:any/>
+					<xsd:any processContents="lax"/>
 				</xsd:sequence>
 			</xsd:extension>
 		</xsd:complexContent>

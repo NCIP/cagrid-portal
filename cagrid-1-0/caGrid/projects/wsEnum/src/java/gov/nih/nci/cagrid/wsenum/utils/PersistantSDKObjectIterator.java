@@ -69,6 +69,12 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	}
 	
 	
+	/**
+	 * Loads a WSDD configuration stream
+	 * 
+	 * @param stream
+	 * @throws Exception
+	 */
 	public static void loadWsddStream(InputStream stream) throws Exception {
 		configFileContents = Utils.inputStreamToStringBuffer(stream);
 	}
@@ -191,6 +197,16 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 					while (soapElements.size() < constraints.getMaxElements() && (xml = getNextXmlChunk()) != null) {
 						try {
 							SOAPElement element = ObjectSerializer.toSOAPElement(xml, objectQName);
+							if (constraints.getMaxCharacters() != -1) {
+								// check the length of the newly created element can fit
+								// in the iteration result
+								int elemLength = element.getValue().length();
+								int currentLength = countSoapElementChars(soapElements);
+								if (elemLength + currentLength >= constraints.getMaxCharacters()) {
+									// store the too-big element for later and return
+									break;
+								}
+							}							
 							soapElements.add(element);
 						} catch (SerializationException ex) {
 							release();
@@ -276,26 +292,31 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	 * @return
 	 * 		Null if no more XML is found
 	 */
-	private String getNextXmlChunk() {
-		try {
-			String charCountStr = fileReader.readLine();
-			if (charCountStr != null) {
-				int toRead = Integer.parseInt(charCountStr);
-				char[] charBuff = new char[toRead];
-				int count = 0;
-				int len = 0;
-				while (count < toRead) {
-					len = fileReader.read(charBuff, count, charBuff.length - count);
-					count += len;
-				}
-				return new String(charBuff);
-			} else {
-				return null;
+	private String getNextXmlChunk() throws IOException {
+		String charCountStr = fileReader.readLine();
+		if (charCountStr != null) {
+			int toRead = Integer.parseInt(charCountStr);
+			char[] charBuff = new char[toRead];
+			int count = 0;
+			int len = 0;
+			while (count < toRead) {
+				len = fileReader.read(charBuff, count, charBuff.length - count);
+				count += len;
 			}
-		} catch (IOException ex) {
-			ex.printStackTrace();
+			return new String(charBuff);
+		} else {
 			return null;
 		}
+	}
+	
+	
+	private int countSoapElementChars(List soapElements) {
+		int count = 0;
+		for (int i = 0; i < soapElements.size(); i++) {
+			SOAPElement elem = (SOAPElement) soapElements.get(i);
+			count += elem.getValue().length();
+		}
+		return count;
 	}
 	
 	
