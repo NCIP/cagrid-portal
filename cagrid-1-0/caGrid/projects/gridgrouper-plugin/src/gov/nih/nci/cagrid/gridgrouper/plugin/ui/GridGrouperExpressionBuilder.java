@@ -1,22 +1,25 @@
 package gov.nih.nci.cagrid.gridgrouper.plugin.ui;
 
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
-import gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.LogicalOperator;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
-import gov.nih.nci.cagrid.gridgrouper.bean.Predicate;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipStatus;
 import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -25,7 +28,7 @@ import javax.swing.border.TitledBorder;
 public class GridGrouperExpressionBuilder extends JPanel {
 	
 	private static final String EXPRESSION_EDITOR = "ExpressionEditor";  //  @jve:decl-index=0:
-	private static final String QUERY_EDITOR = "ExpressionEditor";  //  @jve:decl-index=0:
+	private static final String QUERY_EDITOR = "QueryEditor";  //  @jve:decl-index=0:
 
 	private static final long serialVersionUID = 1L;
 
@@ -54,7 +57,18 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	private JPanel expressionEditor = null;
 
 	private JPanel queryEditor = null;
-
+	private JPanel expressionProperties = null;
+	private JLabel jLabel = null;
+	private JComboBox logicalRelation = null;
+	private JPanel expressionButtons = null;
+	private JButton addExpression = null;
+	private JButton addGroup = null;
+	private JButton removeExpression = null;
+	private JPanel queryProperties = null;
+	private JPanel queryButtons = null;
+	private JButton removeGroup = null;
+	private JLabel jLabel1 = null;
+	private JComboBox membership = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -104,17 +118,17 @@ public class GridGrouperExpressionBuilder extends JPanel {
 		query[0] = new MembershipQuery();
 		query[0].setGroupIdentifier(grp1);
 		if (in1) {
-			query[0].setPredicate(Predicate.IN);
+			query[0].setMembershipStatus(MembershipStatus.MEMBER_OF);
 		} else {
-			query[0].setPredicate(Predicate.NOT_IN);
+			query[0].setMembershipStatus(MembershipStatus.NOT_MEMBER_OF);
 		}
 
 		query[1] = new MembershipQuery();
 		query[1].setGroupIdentifier(grp2);
 		if (in2) {
-			query[1].setPredicate(Predicate.IN);
+			query[1].setMembershipStatus(MembershipStatus.MEMBER_OF);
 		} else {
-			query[1].setPredicate(Predicate.NOT_IN);
+			query[1].setMembershipStatus(MembershipStatus.NOT_MEMBER_OF);
 		}
 
 		MembershipExpression exp = new MembershipExpression();
@@ -142,9 +156,10 @@ public class GridGrouperExpressionBuilder extends JPanel {
 		gridBagConstraints2.weightx = 1.0;
 		gridBagConstraints2.weighty = 1.0;
 		gridBagConstraints2.gridx = 1;
-		this.setSize(300, 200);
+		this.setSize(500, 300);
 		this.setLayout(new GridBagLayout());
 		this.add(getJSplitPane(), gridBagConstraints2);
+		setExpressionEditor(expression);
 	}
 
 	/**
@@ -295,8 +310,8 @@ public class GridGrouperExpressionBuilder extends JPanel {
 			editorLayout = new CardLayout();
 			editorPanel.setLayout(editorLayout);
 			editorPanel.setName("editorPanel");
-			editorPanel.add(getExpressionEditor(), getExpressionEditor().getName());
-			editorPanel.add(getQueryEditor(), getQueryEditor().getName());
+			editorPanel.add(getExpressionEditor(), EXPRESSION_EDITOR);
+			editorPanel.add(getQueryEditor(), QUERY_EDITOR);
 		}
 		return editorPanel;
 	}
@@ -308,6 +323,18 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	 */
 	private JPanel getExpressionEditor() {
 		if (expressionEditor == null) {
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.weightx = 1.0D;
+			gridBagConstraints8.gridy = 1;
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.gridx = 0;
+			gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints5.weightx = 1.0D;
+			gridBagConstraints5.gridy = 0;
 			expressionEditor = new JPanel();
 			expressionEditor.setLayout(new GridBagLayout());
 			expressionEditor.setName(EXPRESSION_EDITOR);
@@ -316,6 +343,8 @@ public class GridGrouperExpressionBuilder extends JPanel {
 					TitledBorder.DEFAULT_JUSTIFICATION,
 					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 							Font.BOLD, 12), new Color(62, 109, 181)));
+			expressionEditor.add(getExpressionProperties(), gridBagConstraints5);
+			expressionEditor.add(getExpressionButtons(), gridBagConstraints8);
 		}
 		return expressionEditor;
 	}
@@ -327,6 +356,16 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	 */
 	private JPanel getQueryEditor() {
 		if (queryEditor == null) {
+			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+			gridBagConstraints10.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.gridx = 0;
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.gridx = 0;
+			gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints9.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints9.weightx = 1.0D;
+			gridBagConstraints9.gridy = 0;
 			queryEditor = new JPanel();
 			queryEditor.setLayout(new GridBagLayout());
 			queryEditor.setName(QUERY_EDITOR);
@@ -335,8 +374,211 @@ public class GridGrouperExpressionBuilder extends JPanel {
 					TitledBorder.DEFAULT_JUSTIFICATION,
 					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 							Font.BOLD, 12), new Color(62, 109, 181)));
+			queryEditor.add(getQueryProperties(), gridBagConstraints9);
+			queryEditor.add(getQueryButtons(), gridBagConstraints10);
 		}
 		return queryEditor;
+	}
+	
+	public void setExpressionEditor(MembershipExpression exp){
+		System.out.println("expression");
+		this.getLogicalRelation().setSelectedItem(exp.getLogicRelation());
+		this.editorLayout.show(getEditorPanel(), EXPRESSION_EDITOR);
+		repaint();
+	}
+	
+	public void setExpressionQuery(MembershipQuery query){
+		System.out.println("query");
+		this.getMembership().setSelectedItem(query.getMembershipStatus());
+		this.editorLayout.show(getEditorPanel(), QUERY_EDITOR);
+	}
+
+	/**
+	 * This method initializes expressionProperties	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getExpressionProperties() {
+		if (expressionProperties == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.anchor = GridBagConstraints.WEST;
+			gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints7.gridx = 1;
+			gridBagConstraints7.gridy = 0;
+			gridBagConstraints7.weightx = 1.0;
+			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.gridx = 0;
+			gridBagConstraints6.anchor = GridBagConstraints.WEST;
+			gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints6.gridy = 0;
+			jLabel = new JLabel();
+			jLabel.setText("Logical Operator");
+			expressionProperties = new JPanel();
+			expressionProperties.setLayout(new GridBagLayout());
+			expressionProperties.add(jLabel, gridBagConstraints6);
+			expressionProperties.add(getLogicalRelation(), gridBagConstraints7);
+		}
+		return expressionProperties;
+	}
+
+	/**
+	 * This method initializes logicalRelation	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */
+	private JComboBox getLogicalRelation() {
+		if (logicalRelation == null) {
+			logicalRelation = new JComboBox();
+			logicalRelation.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					BaseTreeNode node = getExpressionTree().getCurrentNode();
+					if(node instanceof ExpressionNode){
+						ExpressionNode en = (ExpressionNode)node;
+						en.getExpression().setLogicRelation((LogicalOperator)getLogicalRelation().getSelectedItem());
+						en.refresh();
+					}
+				}
+			});
+			logicalRelation.addItem(LogicalOperator.AND);
+			logicalRelation.addItem(LogicalOperator.OR);
+		}
+		return logicalRelation;
+	}
+
+	/**
+	 * This method initializes expressionButtons	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getExpressionButtons() {
+		if (expressionButtons == null) {
+			expressionButtons = new JPanel();
+			expressionButtons.setLayout(new FlowLayout());
+			expressionButtons.add(getAddExpression(), null);
+			expressionButtons.add(getAddGroup(), null);
+			expressionButtons.add(getRemoveExpression(), null);
+		}
+		return expressionButtons;
+	}
+
+	/**
+	 * This method initializes addExpression	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getAddExpression() {
+		if (addExpression == null) {
+			addExpression = new JButton();
+			addExpression.setText("Add Expression");
+		}
+		return addExpression;
+	}
+
+	/**
+	 * This method initializes addGroup	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getAddGroup() {
+		if (addGroup == null) {
+			addGroup = new JButton();
+			addGroup.setText("Add Group");
+		}
+		return addGroup;
+	}
+
+	/**
+	 * This method initializes removeExpression	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getRemoveExpression() {
+		if (removeExpression == null) {
+			removeExpression = new JButton();
+			removeExpression.setText("Remove");
+		}
+		return removeExpression;
+	}
+
+	/**
+	 * This method initializes queryProperties	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getQueryProperties() {
+		if (queryProperties == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.gridx = 1;
+			gridBagConstraints11.gridy = 0;
+			gridBagConstraints11.anchor = GridBagConstraints.WEST;
+			gridBagConstraints11.weightx = 1.0;
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 0;
+			gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints12.anchor = GridBagConstraints.WEST;
+			gridBagConstraints12.gridy = 0;
+			jLabel1 = new JLabel();
+			jLabel1.setText("Membership");
+			queryProperties = new JPanel();
+			queryProperties.setLayout(new GridBagLayout());
+			queryProperties.setName("jPanel");
+			queryProperties.add(jLabel1, gridBagConstraints12);
+			queryProperties.add(getMembership(), gridBagConstraints11);
+		}
+		return queryProperties;
+	}
+
+	/**
+	 * This method initializes queryButtons	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getQueryButtons() {
+		if (queryButtons == null) {
+			queryButtons = new JPanel();
+			queryButtons.setLayout(new FlowLayout());
+			queryButtons.add(getRemoveGroup(), null);
+		}
+		return queryButtons;
+	}
+
+	/**
+	 * This method initializes removeGroup	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getRemoveGroup() {
+		if (removeGroup == null) {
+			removeGroup = new JButton();
+			removeGroup.setText("Remove");
+		}
+		return removeGroup;
+	}
+
+	/**
+	 * This method initializes membership	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */
+	private JComboBox getMembership() {
+		if (membership == null) {
+			membership = new JComboBox();
+			membership.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					BaseTreeNode node = getExpressionTree().getCurrentNode();
+					if(node instanceof QueryNode){
+						QueryNode n = (QueryNode)node;
+						n.getQuery().setMembershipStatus((MembershipStatus)getMembership().getSelectedItem());
+						n.refresh();
+					}
+				}
+			});
+			membership.addItem(MembershipStatus.MEMBER_OF);
+			membership.addItem(MembershipStatus.NOT_MEMBER_OF);
+		}
+		return membership;
 	}
 
 }

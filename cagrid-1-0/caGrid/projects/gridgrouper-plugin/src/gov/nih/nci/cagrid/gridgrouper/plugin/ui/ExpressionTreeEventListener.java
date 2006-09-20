@@ -92,11 +92,11 @@ public class ExpressionTreeEventListener extends MouseAdapter {
 		if ((SwingUtilities.isLeftMouseButton(e))) {
 			DefaultMutableTreeNode currentNode = this.tree.getCurrentNode();
 			if(currentNode instanceof ExpressionNode){
-				System.out.println("Expression Node");
+				ExpressionNode exp = (ExpressionNode) currentNode;
+				editor.setExpressionEditor(exp.getExpression());
 			}else if(currentNode instanceof QueryNode){
-				System.out.println("Query Node");
-			}else{
-				System.out.println("Something Else");
+				QueryNode query = (QueryNode) currentNode;
+				editor.setExpressionQuery(query.getQuery());
 			}
 		}
 	}

@@ -44,7 +44,7 @@
 package gov.nih.nci.cagrid.gridgrouper.plugin.ui;
 
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
-import gov.nih.nci.cagrid.gridgrouper.bean.Predicate;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipStatus;
 import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 
 import javax.swing.ImageIcon;
@@ -80,8 +80,9 @@ public class QueryNode extends GridGrouperBaseTreeNode {
 	}
 
 	public String toString() {
-		if ((query.getPredicate() == null)
-				|| (query.getPredicate().equals(Predicate.IN))) {
+		if ((query.getMembershipStatus() == null)
+				|| (query.getMembershipStatus()
+						.equals(MembershipStatus.MEMBER_OF))) {
 			return "Member [" + query.getGroupIdentifier().getGroupName() + "]";
 		} else {
 			return "NOT Member [" + query.getGroupIdentifier().getGroupName()
