@@ -412,7 +412,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 								MethodType tmethod = methods[j];
 								if (!usedNames.contains(tmethod.getName())) {
 									usedNames.add(tmethod.getName());
-								} else {
+								} else if(!tmethod.getName().equals(method.getName())) {
 									valid = false;
 									message = "Method name is not unique: " + tmethod.getName();
 								}
