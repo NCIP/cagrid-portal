@@ -44,10 +44,10 @@
 package gov.nih.nci.cagrid.gridgrouper.plugin.ui;
 
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
-
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -63,23 +63,32 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
 	public TreeRenderer() {
 		super();
 	}
+
+	public void setPreferredSize(Dimension preferredSize) {
+		if (preferredSize.getWidth() == 0) {
+			super.setPreferredSize(null);
+		} else {
+			super.setPreferredSize(preferredSize);
+		}
+	}
 	
 	
-	public Component getTreeCellRendererComponent(
-		JTree tree, Object value, boolean sel, boolean expanded,
-		boolean leaf, int row, boolean localHasFocus) {
-		super.getTreeCellRendererComponent(
-			tree, value, sel, expanded,
-			leaf, row, localHasFocus);
+	public Component getTreeCellRendererComponent(JTree tree, Object value,
+			boolean sel, boolean expanded, boolean leaf, int row,
+			boolean localHasFocus) {
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
+				row, localHasFocus);
+		
 		if (isBaseTreeNode(value)) {
 			BaseTreeNode node = (BaseTreeNode) value;
 			this.setIcon(node.getIcon());
 			this.setText(node.toString());
-		} 
+		}
+		
+		
 		return this;
 	}
-	
-	
+
 	private boolean isBaseTreeNode(Object value) {
 		if (value instanceof BaseTreeNode) {
 			return true;

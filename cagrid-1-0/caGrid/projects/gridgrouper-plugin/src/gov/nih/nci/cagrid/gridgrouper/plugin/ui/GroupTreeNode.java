@@ -72,7 +72,6 @@ public class GroupTreeNode extends GridGrouperBaseTreeNode {
 		int id = getEditor().getProgress().startEvent(
 				"Refreshing " + toString() + ".... ");
 		try {
-
 			if (parent != null) {
 				getTree().reload(parent);
 			} else {

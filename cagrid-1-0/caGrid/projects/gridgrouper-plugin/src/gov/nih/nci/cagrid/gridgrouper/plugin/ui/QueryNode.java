@@ -68,11 +68,7 @@ public class QueryNode extends GridGrouperBaseTreeNode {
 	}
 
 	public void refresh() {
-		if (parent != null) {
-			getTree().reload(parent);
-		} else {
 			getTree().reload();
-		}
 	}
 
 	public ImageIcon getIcon() {
