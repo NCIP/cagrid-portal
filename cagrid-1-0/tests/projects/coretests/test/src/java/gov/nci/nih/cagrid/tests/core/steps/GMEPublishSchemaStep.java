@@ -41,6 +41,7 @@ import com.atomicobject.haste.framework.Step;
 public class GMEPublishSchemaStep
 	extends Step
 {
+	public static final int MAX_SCHEMA_HIERARCHY = 10;
 	private EndpointReferenceType endpoint;
 	private File schemaFile;
 	
@@ -69,6 +70,17 @@ public class GMEPublishSchemaStep
 	private void publishSchema(XMLDataModelService handle, File schemaFile) 
 		throws IOException, ParserConfigurationException, SAXException, NotSubNamespaceException, NotifyAuthorityException, MobiusException
 	{
+		publishSchema(handle, schemaFile, 0);
+	}
+	
+	private void publishSchema(XMLDataModelService handle, File schemaFile, int level) 
+		throws IOException, ParserConfigurationException, SAXException, NotSubNamespaceException, NotifyAuthorityException, MobiusException
+	{
+		System.out.println("Publishing (" + level + ") " + schemaFile);
+		if (level >= MAX_SCHEMA_HIERARCHY) {
+			throw new RuntimeException("reached max hierarchy (" + level + ")");
+		}
+		
 		// read schema
 		BufferedInputStream is = new BufferedInputStream(new FileInputStream(schemaFile));
 		SchemaReader sr = new SchemaReader(new InputSource(is));
@@ -103,7 +115,7 @@ public class GMEPublishSchemaStep
 		for (String namespace : importTable.keySet()) {
 			String location = importTable.get(namespace);
 			File importFile = new File(schemaFile.getParent(), location); 
-			publishSchema(handle, importFile);
+			publishSchema(handle, importFile, level+1);
 		}
 		
 		// add namespace
