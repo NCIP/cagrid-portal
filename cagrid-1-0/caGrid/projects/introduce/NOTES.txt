@@ -2,6 +2,11 @@ NOTES:
 Exceptions will now be in the <serviceNamespace>.stubs.types package and no the <serviceNamespace>.stubs packages
 
 To Do:
+refactor reload button in the types modifyier to not be stupid
+
+when adding a service context with a custom resource we have seen error in the service wsdl for the new service.
+
+getResourceHome helper methods need to be created in the serviceimpl for easier use and take advantage of the generic method i have
 
 duce generated faults should create both a gobal element and complexType (currently an inner complextype is created) so faults can be extended
 
@@ -14,8 +19,6 @@ namespaceType list and therefore cant be refered to yet
 add tools for autocreating resource and wrapping epr into client handle type for implementation on server side (ResourceCreator.javajet)
 
 refresh button in gme to view uploaded schemas without closing and opening
-
-(A NEW GUI FOR IMPORTING WILL HANDLE THIS) When importing a method.  if methods names dont match bad stuff happens.
 
 GUI needs a way to group common preferences that extensions can use (such as GME URL), intead of each having to define/use their own
 
@@ -55,6 +58,8 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+
+(A NEW GUI FOR IMPORTING WILL HANDLE THIS) When importing a method.  if methods names dont match bad stuff happens.
 
 (RAFACTORED) I was adding faults to a method, and when I hit done, an error dialog poped up with method "java.util.Vector" and removed my faults
 
