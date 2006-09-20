@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.utilities.query.cqltree;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 /** 
  *  AttributeTreeNode
@@ -14,6 +15,7 @@ import javax.swing.Icon;
  * @version $Id$ 
  */
 public class AttributeTreeNode extends IconTreeNode {
+	private static Icon icon = null;
 
 	private Attribute attribute;
 	
@@ -30,7 +32,9 @@ public class AttributeTreeNode extends IconTreeNode {
 	
 	
 	public Icon getIcon() {
-		// TODO: implement me
+		if (icon == null) {
+			icon = new ImageIcon(getClass().getResource("QueryAttribute.png"));
+		}
 		return null;
 	}
 	

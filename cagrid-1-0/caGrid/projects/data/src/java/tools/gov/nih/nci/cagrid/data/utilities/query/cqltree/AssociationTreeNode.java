@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.utilities.query.cqltree;
 import gov.nih.nci.cagrid.cqlquery.Association;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 /** 
  *  AssociationTreeNode
@@ -14,6 +15,7 @@ import javax.swing.Icon;
  * @version $Id$ 
  */
 public class AssociationTreeNode extends IconTreeNode {
+	private static Icon icon = null;
 	
 	private Association association;
 	
@@ -29,8 +31,10 @@ public class AssociationTreeNode extends IconTreeNode {
 	
 
 	public Icon getIcon() {
-		// TODO Auto-generated method stub
-		return null;
+		if (icon == null) {
+			icon = new ImageIcon(getClass().getResource("QueryAssociation.png")); 
+		}
+		return icon;
 	}
 	
 	

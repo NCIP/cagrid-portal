@@ -15,6 +15,7 @@ import javax.swing.Icon;
  * @version $Id$ 
  */
 public class QueryTreeNode extends IconTreeNode {
+	private static Icon icon = null;
 
 	private CQLQuery query;
 	
@@ -31,7 +32,10 @@ public class QueryTreeNode extends IconTreeNode {
 	
 	
 	public Icon getIcon() {
-		return PortalLookAndFeel.getQueryIcon();
+		if (icon == null) {
+			icon = PortalLookAndFeel.getQueryIcon();
+		}
+		return icon;
 	}
 	
 	

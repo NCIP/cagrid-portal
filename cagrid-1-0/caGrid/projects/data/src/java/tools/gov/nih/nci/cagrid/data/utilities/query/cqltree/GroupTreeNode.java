@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.Group;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 /** 
  *  GroupTreeNode
@@ -16,6 +17,7 @@ import javax.swing.Icon;
  * @version $Id$ 
  */
 public class GroupTreeNode extends IconTreeNode {
+	private static Icon icon = null;
 	
 	private Group group;
 	
@@ -31,8 +33,10 @@ public class GroupTreeNode extends IconTreeNode {
 	
 
 	public Icon getIcon() {
-		// TODO Auto-generated method stub
-		return null;
+		if (icon == null) {
+			icon = new ImageIcon(getClass().getResource("QueryGroup.png"));
+		}
+		return icon;
 	}
 	
 	
