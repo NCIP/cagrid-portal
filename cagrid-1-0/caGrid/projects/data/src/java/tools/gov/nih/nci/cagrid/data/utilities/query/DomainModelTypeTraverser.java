@@ -65,7 +65,7 @@ public class DomainModelTypeTraverser implements TypeTraverser {
 						.getUMLAssociationEdge().getUMLClassReference();
 					UMLClass targetClass = DomainModelUtils.getReferencedUMLClass(model, targetRef);
 					associatedTypes.add(new AssociatedType(targetClass.getClassName(), 
-						associations[i].getSourceUMLAssociationEdge().getUMLAssociationEdge().getRoleName()));
+						associations[i].getTargetUMLAssociationEdge().getUMLAssociationEdge().getRoleName()));
 				}
 			}
 		}
