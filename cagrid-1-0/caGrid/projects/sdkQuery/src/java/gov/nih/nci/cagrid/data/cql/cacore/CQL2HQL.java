@@ -32,7 +32,7 @@ import java.util.Set;
  * @version $Id$ 
  */
 public class CQL2HQL {
-	public static final String TARGET_ALIAS = "xxTargetAliasxx"; 
+	public static final String TARGET_ALIAS = "xxTargetAliasxx";
 	
 	private static Map predicateValues;
 
@@ -42,12 +42,19 @@ public class CQL2HQL {
 	 * with undefined results.
 	 * 
 	 * @param query
+	 * 		The CQL Query to translate into HQL
+	 * @param eliminateSubclasses
+	 * 		A flag indicating that the query should be formulated to avoid
+	 * 		returning subclass instances of the targeted class.
 	 * @return
 	 * @throws QueryProcessingException
 	 */
-	public static String translate(CQLQuery query) throws QueryProcessingException {
+	public static String translate(CQLQuery query, boolean eliminateSubclasses) throws QueryProcessingException {
 		StringBuilder hql = new StringBuilder();
 		if (query.getQueryModifier() != null) {
+			if (eliminateSubclasses) {
+				throw new QueryProcessingException("HQL cannot use the class property when processing projection queries.");
+			}
 			processModifiedQuery(hql, query.getQueryModifier(), query.getTarget());
 		} else {
 			processObject(hql, query.getTarget());

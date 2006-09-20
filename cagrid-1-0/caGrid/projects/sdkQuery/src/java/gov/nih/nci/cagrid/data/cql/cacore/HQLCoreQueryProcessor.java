@@ -13,9 +13,16 @@ import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -105,6 +112,7 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	
 	private List queryCoreService(CQLQuery query) 
 		throws MalformedQueryException, QueryProcessingException {
+		// get a handle to the caCORE application service
 		if (coreService == null) {
 			String url = getConfiguredParameters().getProperty(APPLICATION_SERVICE_URL);
 			if (url == null || url.length() == 0) {
@@ -113,16 +121,112 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 			}
 			coreService = ApplicationService.getRemoteInstance(url);
 		}
-		HQLCriteria hqlCriteria = new HQLCriteria(CQL2HQL.translate(query));
-		System.out.println("Executing HQL: " + hqlCriteria.getHqlString());
-		LOG.debug("Executing HQL:" + hqlCriteria.getHqlString());
+		// see if the query target has subclasses to dodge
+		boolean hasSubclasses = SubclassCheckCache.hasClassProperty(query.getTarget().getName(), coreService);
+		// build HQL based on that information
+		String hql = null;
+		if (!hasSubclasses) {
+			// can process normally
+			hql = CQL2HQL.translate(query, false);
+		} else {
+			// hibernate can't handle subclass qualification AND returning attributes / count
+			if (query.getQueryModifier() != null) {
+				// simplify the query by removing the query modifiers
+				CQLQuery simpleQuery = new CQLQuery();
+				simpleQuery.setTarget(query.getTarget());
+				// process the query normally, and we'll post-process to remove
+				// subclasses, extract attributes, return count, etc.
+				hql = CQL2HQL.translate(query, false);
+			} else {
+				// no modifications, only classes
+				hql = CQL2HQL.translate(query, true);
+			}
+		}
+		System.out.println("Executing HQL: " + hql);
+		LOG.debug("Executing HQL:" + hql);
+		HQLCriteria hqlCriteria = new HQLCriteria(hql);
 		List targetObjects = null;
 		try {
-			targetObjects = coreService.query(hqlCriteria, query.getTarget().getName());
+			if (query.getQueryModifier() != null && hasSubclasses) {
+				targetObjects = processModifiedQueryForSubclasses(hqlCriteria, query, coreService);
+			} else {
+				targetObjects = coreService.query(hqlCriteria, query.getTarget().getName());
+			}	
 		} catch (Exception ex) {
 			throw new QueryProcessingException("Error invoking core query method: " + ex.getMessage(), ex);
 		}
 		return targetObjects;
+	}
+	
+	
+	private List processModifiedQueryForSubclasses(HQLCriteria criteria, CQLQuery query, ApplicationService service) throws Exception {
+		List targetObjects = new LinkedList();
+		List rawObjects = service.query(criteria, query.getTarget().getName());
+		Iterator typedIter = new ClassRestrictedIterator(rawObjects, query.getTarget().getName());
+		
+		if (query.getQueryModifier().getDistinctAttribute() != null 
+			|| query.getQueryModifier().getAttributeNames() != null) {
+			if (query.getQueryModifier().getDistinctAttribute() != null) {
+				String name = query.getQueryModifier().getDistinctAttribute();
+				Set distincts = new HashSet();
+				while (typedIter.hasNext()) {
+					Object o = typedIter.next();
+					distincts.add(accessNamedProperty(o, name));
+				}
+				// convert single objects to object arrays
+				Iterator distinctIter = distincts.iterator();
+				while (distinctIter.hasNext()) {
+					targetObjects.add(new Object[] {distinctIter.next()});
+				}
+			} else if (query.getQueryModifier().getAttributeNames() != null) {
+				String[] names = query.getQueryModifier().getAttributeNames();
+				while (typedIter.hasNext()) {
+					Object o = typedIter.next();
+					Object[] values = new Object[names.length];
+					for (int i = 0; i < names.length; i++) {
+						values[i] = accessNamedProperty(o, names[i]);
+					}
+					targetObjects.add(values);
+				}
+			}
+		}
+	
+		if (query.getQueryModifier().isCountOnly()) {
+			List temp = new ArrayList(1);
+			temp.add(new Integer(targetObjects.size()));
+			targetObjects = temp;
+		}
+		return targetObjects;
+	}
+	
+	
+	private Object accessNamedProperty(Object o, String name) throws Exception {
+		Field[] fields = o.getClass().getFields();
+		for (int i = 0; i < fields.length; i++) {
+			if (fields[i].getName().equals(name)
+				&& Modifier.isPublic(fields[i].getModifiers())) {
+				return fields[i].get(o);
+			}
+		}
+		// no fields?  check methods for getters
+		Method[] methods = o.getClass().getMethods();
+		for (int i = 0; i < methods.length; i++) {
+			String methodName = methods[i].getName();
+			if (methodName.startsWith("get") && methods[i].getParameterTypes().length == 0) {
+				// strip off the 'get'
+				String fieldName = methodName.substring(3);
+				if (fieldName.length() == 1) {
+					fieldName = String.valueOf(Character.toLowerCase(fieldName.charAt(0)));
+				} else {
+					fieldName = String.valueOf(Character.toLowerCase(fieldName.charAt(0))) 
+						+ fieldName.substring(1);
+				}
+				if (fieldName.equals(name)) {
+					return methods[i].invoke(o, new Object[] {});
+				}
+			}			
+		}
+		throw new NoSuchFieldException("No field " + name + " found on " + o.getClass().getName());
 	}
 	
 	
