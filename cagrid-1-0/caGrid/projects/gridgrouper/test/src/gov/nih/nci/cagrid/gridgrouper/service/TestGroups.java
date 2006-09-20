@@ -15,7 +15,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MemberType;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
-import gov.nih.nci.cagrid.gridgrouper.bean.Predicate;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipStatus;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.service.tools.GridGrouperBootstrapper;
@@ -705,17 +705,17 @@ public class TestGroups extends TestCase {
 		query[0] = new MembershipQuery();
 		query[0].setGroupIdentifier(grp1);
 		if (in1) {
-			query[0].setPredicate(Predicate.IN);
+			query[0].setMembershipStatus(MembershipStatus.MEMBER_OF);
 		} else {
-			query[0].setPredicate(Predicate.NOT_IN);
+			query[0].setMembershipStatus(MembershipStatus.NOT_MEMBER_OF);
 		}
 
 		query[1] = new MembershipQuery();
 		query[1].setGroupIdentifier(grp2);
 		if (in2) {
-			query[1].setPredicate(Predicate.IN);
+			query[1].setMembershipStatus(MembershipStatus.MEMBER_OF);
 		} else {
-			query[1].setPredicate(Predicate.NOT_IN);
+			query[1].setMembershipStatus(MembershipStatus.NOT_MEMBER_OF);
 		}
 
 		MembershipExpression exp = new MembershipExpression();
@@ -732,7 +732,7 @@ public class TestGroups extends TestCase {
 		MembershipQuery[] query = new MembershipQuery[1];
 		query[0] = new MembershipQuery();
 		query[0].setGroupIdentifier(grp);
-		query[0].setPredicate(Predicate.IN);
+		query[0].setMembershipStatus(MembershipStatus.MEMBER_OF);
 		MembershipExpression exp = new MembershipExpression();
 		exp.setMembershipQuery(query);
 		exp.setLogicRelation(LogicalOperator.AND);
@@ -743,7 +743,7 @@ public class TestGroups extends TestCase {
 		MembershipQuery[] query = new MembershipQuery[1];
 		query[0] = new MembershipQuery();
 		query[0].setGroupIdentifier(grp);
-		query[0].setPredicate(Predicate.NOT_IN);
+		query[0].setMembershipStatus(MembershipStatus.NOT_MEMBER_OF);
 		MembershipExpression exp = new MembershipExpression();
 		exp.setMembershipQuery(query);
 		exp.setLogicRelation(LogicalOperator.OR);

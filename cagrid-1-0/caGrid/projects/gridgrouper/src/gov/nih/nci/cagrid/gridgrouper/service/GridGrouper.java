@@ -49,7 +49,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MemberType;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
-import gov.nih.nci.cagrid.gridgrouper.bean.Predicate;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipStatus;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilege;
@@ -1869,7 +1869,7 @@ public class GridGrouper {
 				try {
 					Group grp = GroupFinder.findByName(session, grpName);
 					boolean isMember = grp.hasMember(SubjectFinder.findById(member));
-					if(queries[i].getPredicate().equals(Predicate.NOT_IN)){
+					if(queries[i].getMembershipStatus().equals(MembershipStatus.NOT_MEMBER_OF)){
 						if(isMember){
 							return false;
 						}
@@ -1917,7 +1917,7 @@ public class GridGrouper {
 				try {
 					Group grp = GroupFinder.findByName(session, grpName);
 					boolean isMember = grp.hasMember(SubjectFinder.findById(member));
-					if(queries[i].getPredicate().equals(Predicate.NOT_IN)){
+					if(queries[i].getMembershipStatus().equals(MembershipStatus.NOT_MEMBER_OF)){
 						if(!isMember){
 							return true;
 						}

@@ -9,7 +9,7 @@
 	    <xsd:sequence>
 			<xsd:element name="GroupIdentifier" type="grouper:GroupIdentifier" />
 		</xsd:sequence>
-		<xsd:attribute name="predicate" type="grouper:Predicate" use="optional"/>
+		<xsd:attribute name="MembershipStatus" type="grouper:MembershipStatus" use="optional"/>
 	</xsd:complexType>
 	<xsd:complexType name="MembershipExpression">
 		<xsd:annotation>
@@ -21,10 +21,10 @@
 		</xsd:choice>
 		<xsd:attribute name="logicRelation" type="grouper:LogicalOperator" use="required"/>
 	</xsd:complexType>
-	<xsd:simpleType name="Predicate">
+	<xsd:simpleType name="MembershipStatus">
 		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="IN" id="in"/>
-			<xsd:enumeration value="NOT_IN" id="not_in"/>
+			<xsd:enumeration value="MEMBER_OF" id="member_of"/>
+			<xsd:enumeration value="NOT_MEMBER_OF" id="not_member_of"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:simpleType name="LogicalOperator">
