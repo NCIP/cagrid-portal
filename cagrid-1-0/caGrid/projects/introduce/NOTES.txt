@@ -2,6 +2,9 @@ NOTES:
 Exceptions will now be in the <serviceNamespace>.stubs.types package and no the <serviceNamespace>.stubs packages
 
 To Do:
+
+when i renamed a parameter name, the serviceImpl's signature didn't get updated (but the interface did) 
+
 refactor reload button in the types modifyier to not be stupid
 
 when adding a service context with a custom resource we have seen error in the service wsdl for the new service.
