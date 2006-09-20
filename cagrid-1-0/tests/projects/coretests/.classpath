@@ -90,12 +90,6 @@
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/Dorian_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/Dorian-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/Dorian-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/Dorian-portal.jar"/>
-	<classpathentry kind="lib" path="ext/lib/Dorian-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/Dorian-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/gef_modified.jar"/>
 	<classpathentry kind="lib" path="ext/lib/GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
@@ -148,5 +142,11 @@
 	<classpathentry sourcepath="/caGrid-1.0-tests-cqlprocessors/src/java" kind="lib" path="ext/lib/cagrid-1.0-tests-cqlprocessors-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-tests.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-ui.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
