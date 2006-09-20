@@ -79,10 +79,10 @@ public class QueryNode extends GridGrouperBaseTreeNode {
 		if ((query.getMembershipStatus() == null)
 				|| (query.getMembershipStatus()
 						.equals(MembershipStatus.MEMBER_OF))) {
-			return "Member [" + query.getGroupIdentifier().getGroupName() + "]";
+			return query.getGroupIdentifier().getGroupName() + " [Member]";
 		} else {
-			return "NOT Member [" + query.getGroupIdentifier().getGroupName()
-					+ "]";
+			return  query.getGroupIdentifier().getGroupName()
+					+ " [Not Member]";
 		}
 
 	}

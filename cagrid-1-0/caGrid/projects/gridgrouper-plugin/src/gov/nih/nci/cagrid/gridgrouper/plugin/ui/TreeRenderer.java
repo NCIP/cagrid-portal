@@ -44,7 +44,6 @@
 package gov.nih.nci.cagrid.gridgrouper.plugin.ui;
 
 import java.awt.Component;
-import java.awt.Dimension;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -64,15 +63,11 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
 		super();
 	}
 
-	public void setPreferredSize(Dimension preferredSize) {
-		if (preferredSize.getWidth() == 0) {
-			super.setPreferredSize(null);
-		} else {
-			super.setPreferredSize(preferredSize);
-		}
-	}
 	
-	
+
+
+
+
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
 			boolean sel, boolean expanded, boolean leaf, int row,
 			boolean localHasFocus) {
@@ -84,6 +79,7 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
 			this.setIcon(node.getIcon());
 			this.setText(node.toString());
 		}
+		
 		
 		
 		return this;
