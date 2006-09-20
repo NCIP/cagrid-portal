@@ -2,7 +2,13 @@ package gov.nih.nci.cagrid.data.utilities.query;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.cqlquery.Association;
+import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
+import gov.nih.nci.cagrid.cqlquery.Group;
+import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
+import gov.nih.nci.cagrid.cqlquery.Object;
+import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.client.DataServiceClient;
@@ -21,7 +27,6 @@ import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
-import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -32,6 +37,14 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -64,9 +77,6 @@ public class QueryBuilder extends JFrame {
 	public static final String LOGIC_PANEL = "logic";
 	public static final String PREDICATES_PANEL = "predicates";
 	
-	private PredicatesPanel predicatesPanel = null;
-	private LogicalOperatorPanel logicPanel = null;
-	private JPanel restrictionTypePanel = null;
 	private QueryTree queryTree = null;
 	private JScrollPane queryTreeScrollPane = null;
 	private JPanel contextButtonPanel = null;
@@ -93,12 +103,12 @@ public class QueryBuilder extends JFrame {
 	private TypeDisplayPanel typeDisplayPanel = null;
 	
 	private String lastDirectory = null;
-	private CqlDomainValidator domainValidator = null;
-	
+	private transient CqlDomainValidator domainValidator = null;	
 	private transient DomainModel domainModel = null;	
 	
 	public QueryBuilder() {
 		super();
+		lastDirectory = "c:/caGrid/cagrid-1-0/caGrid/projects/data";
 		setTitle("CQL Query Builder");
 		domainValidator = new DomainModelValidator();
 		initialize();
@@ -119,43 +129,6 @@ public class QueryBuilder extends JFrame {
 	}
 	
 	
-	private JPanel getRestrictionTypePanel() {
-		if (restrictionTypePanel == null) {
-			restrictionTypePanel = new JPanel();
-			restrictionTypePanel.setLayout(new CardLayout());
-			restrictionTypePanel.add(getPredicatesPanel(), PREDICATES_PANEL);
-			restrictionTypePanel.add(getLogicPanel(), LOGIC_PANEL);
-		}
-		return restrictionTypePanel;
-	}
-	
-	
-	private void showPredicatesPanel() {
-		((CardLayout) getRestrictionTypePanel().getLayout()).show(getRestrictionTypePanel(), PREDICATES_PANEL);
-	}
-	
-	
-	private void showLogicPanel() {
-		((CardLayout) getRestrictionTypePanel().getLayout()).show(getRestrictionTypePanel(), LOGIC_PANEL);
-	}
-	
-	
-	private PredicatesPanel getPredicatesPanel() {
-		if (predicatesPanel == null) {
-			predicatesPanel = new PredicatesPanel();
-		}
-		return predicatesPanel;
-	}
-	
-	
-	private LogicalOperatorPanel getLogicPanel() {
-		if (logicPanel == null) {
-			logicPanel = new LogicalOperatorPanel();
-		}
-		return logicPanel;
-	}
-	
-	
 	private QueryTree getQueryTree() {
 		if (queryTree == null) {
 			queryTree = new QueryTree();
@@ -169,21 +142,47 @@ public class QueryBuilder extends JFrame {
 							// set up editor based on type of node
 							if (node instanceof QueryTreeNode) {
 								// can only set the target at this point
-								getSetTargetButton().setEnabled(true);
-							} else if (node instanceof TargetTreeNode) {
+								enableQueryBuildingButtons(new JButton[] {getSetTargetButton()});
+							} else if (node instanceof TargetTreeNode ||
+								node instanceof AssociationTreeNode) {
+								// find the query object
+								Object queryObject = null;
+								if (node instanceof TargetTreeNode) {
+									queryObject = ((TargetTreeNode) node).getTarget();
+								} else {
+									queryObject = ((AssociationTreeNode) node).getAssociation();
+								}
 								
-							} else if (node instanceof AssociationTreeNode) {
+								BaseType type = new BaseType(queryObject.getName());
+								System.out.println("Changing type diaplay to: " + type.getTypeName());
+								// change the selection of type
+								getTypeDisplayPanel().setSelectedType(type);
 								
+								// count children of the target node
+								if (node.getChildCount() == 0) {
+									enableQueryBuildingButtons(new JButton[] {
+										getAddAssociationButton(), getAddAttributeButton(), getAddGroupButton(),
+										getRemoveItemButton()
+									});
+								} else {
+									// node already has children, turn off the add buttons
+									enableQueryBuildingButtons(new JButton[] {getRemoveItemButton()});
+								}
 							} else if (node instanceof AttributeTreeNode) {
-								
+								enableQueryBuildingButtons(new JButton[] {
+									getChangePredicateButton(), getChangeValueButton(), getRemoveItemButton()
+								});
 							} else if (node instanceof GroupTreeNode) {
-								
+								enableQueryBuildingButtons(new JButton[] {
+									getAddAssociationButton(), getAddAttributeButton(), getAddGroupButton(),
+									getRemoveItemButton(), getChangeLogicButton()
+								});
 							} else {
 								throw new IllegalArgumentException("What the heck is " + node.getClass().getName() + " doing in the tree??");
 							}
 						}						
 					} else {
-						// deselection
+						enableQueryBuildingButtons(new JButton[] {});
 					}
 				}
 			});
@@ -228,10 +227,7 @@ public class QueryBuilder extends JFrame {
 			contextButtonPanel.add(getChangeLogicButton());
 			contextButtonPanel.add(getRemoveItemButton());
 			// disable all buttons until a domain model has been loaded...
-			for (int i = 0; i < contextButtonPanel.getComponentCount(); i++) {
-				JButton button = (JButton) contextButtonPanel.getComponent(i);
-				button.setEnabled(false);
-			}
+			enableQueryBuildingButtons(new JButton[] {});
 		}
 		return contextButtonPanel;
 	}
@@ -249,7 +245,30 @@ public class QueryBuilder extends JFrame {
 			setTargetButton.setName("setTargetButton");
 			setTargetButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					// see if there is an existing target node
+					QueryTreeNode queryNode = getQueryTree().getQueryTreeNode();
+					if (queryNode.getQuery().getTarget() != null) {
+						String[] message = {
+							"The query already has a target.  Setting a new one",
+							"will remove all information from the query."
+						};
+						int choice = JOptionPane.showConfirmDialog(
+							QueryBuilder.this, message, "Confirm", JOptionPane.YES_NO_OPTION);
+						if (choice != JOptionPane.YES_OPTION) {
+							return;
+						}
+					}
+					// get the selected target out of the types panel
+					BaseType selectedType = getTypeDisplayPanel().getSelectedType();
+					if (selectedType != null) {
+						Object targetObject = new Object();
+						targetObject.setName(selectedType.getTypeName());
+						queryNode.getQuery().setTarget(targetObject);
+						queryNode.rebuild();
+						getQueryTree().refreshTree();
+					} else {
+						JOptionPane.showMessageDialog(QueryBuilder.this, "Please select a type to target");
+					}
 				}
 			});
 		}
@@ -269,7 +288,33 @@ public class QueryBuilder extends JFrame {
 			addAssociationButton.setName("addAssociationButton");
 			addAssociationButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					// see what association is selected
+					AssociatedType assocType = getTypeDisplayPanel().getSelectedAssociation();
+					if (assocType != null) {
+						Association association = new Association();
+						association.setRoleName(assocType.getRoleName());
+						association.setName(assocType.getTypeName());
+						IconTreeNode node = (IconTreeNode) getQueryTree().getSelectionPath().getLastPathComponent();
+						if (node instanceof AssociationTreeNode) {
+							Object parentQueryObject = ((AssociationTreeNode) node).getAssociation();
+							parentQueryObject.setAssociation(association);
+						} else if (node instanceof TargetTreeNode) {
+							Object parentQueryObject = ((TargetTreeNode) node).getTarget();
+							parentQueryObject.setAssociation(association);
+						} else { // group
+							Group group = ((GroupTreeNode) node).getGroup();
+							Association[] currentAssociations = group.getAssociation();
+							if (currentAssociations != null) {
+								group.setAssociation((Association[]) Utils.appendToArray(currentAssociations, association));
+							} else {
+								group.setAssociation(new Association[] {association});
+							}
+						}
+						node.rebuild();
+						getQueryTree().refreshTree();
+					} else {
+						JOptionPane.showMessageDialog(QueryBuilder.this, "Please select an association");
+					}
 				}
 			});
 		}
@@ -289,7 +334,35 @@ public class QueryBuilder extends JFrame {
 			addAttributeButton.setName("addAttributeButton");
 			addAttributeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					// see if an attribute is selected
+					AttributeType attribType = getTypeDisplayPanel().getSelectedAttribute();
+					if (attribType != null) {
+						Attribute attrib = AttributeModifyDialog.getAttribute(QueryBuilder.this, attribType);
+						if (attrib != null) {
+							// get the selected target / assocition / group node
+							IconTreeNode selectedNode = (IconTreeNode) getQueryTree().getSelectionPath().getLastPathComponent();
+							if (selectedNode instanceof TargetTreeNode) {
+								Object target = ((TargetTreeNode) selectedNode).getTarget();
+								target.setAttribute(attrib);
+							} else if (selectedNode instanceof AssociationTreeNode) {
+								Association assoc = ((AssociationTreeNode) selectedNode).getAssociation();
+								assoc.setAttribute(attrib);
+							} else if (selectedNode instanceof GroupTreeNode) {
+								Group group = ((GroupTreeNode) selectedNode).getGroup();
+								if (group.getAttribute() != null) {
+									Attribute[] addedAttribs = (Attribute[]) Utils.appendToArray(group.getAttribute(), attrib);
+									group.setAttribute(addedAttribs);
+								} else {
+									group.setAttribute(new Attribute[] {attrib});
+								}
+							}
+							// rebuild the tree for the new node
+							selectedNode.rebuild();
+							getQueryTree().refreshTree();
+						}
+					} else {
+						JOptionPane.showMessageDialog(QueryBuilder.this, "Please select an attribute first!");
+					}
 				}
 			});
 		}
@@ -309,7 +382,33 @@ public class QueryBuilder extends JFrame {
 			addGroupButton.setName("addGroupButton");
 			addGroupButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					// present user with a choice of logic for the group
+					LogicalOperator operator = (LogicalOperator) JOptionPane.showInputDialog(
+						QueryBuilder.this, "Select a logical operator", "Group Logic", JOptionPane.QUESTION_MESSAGE, null, 
+						new java.lang.Object[] {LogicalOperator.AND, LogicalOperator.OR}, LogicalOperator.AND);
+					if (operator != null) {
+						Group group = new Group();
+						group.setLogicRelation(operator);
+						// add the group to the selected node
+						IconTreeNode node = (IconTreeNode) getQueryTree().getSelectionPath().getLastPathComponent();
+						if (node instanceof TargetTreeNode) {
+							Object target = ((TargetTreeNode) node).getTarget();
+							target.setGroup(group);
+						} else if (node instanceof AssociationTreeNode) {
+							Association assoc = ((AssociationTreeNode) node).getAssociation();
+							assoc.setGroup(group);
+						} else if (node instanceof GroupTreeNode) {
+							Group g = ((GroupTreeNode) node).getGroup();
+							if (g.getGroup() != null) {
+								Group[] allGroups = (Group[]) Utils.appendToArray(g.getGroup(), group);
+								g.setGroup(allGroups);
+							} else {
+								g.setGroup(new Group[] {group});
+							}
+						}
+						node.rebuild();
+						getQueryTree().refreshTree();
+					}
 				}
 			});
 		}
@@ -434,7 +533,51 @@ public class QueryBuilder extends JFrame {
 			removeItemButton.setName("removeItemButton");
 			removeItemButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					// get the selected node (which will be removed) and its parent
+					IconTreeNode selected = (IconTreeNode) getQueryTree().getSelectionPath().getLastPathComponent();
+					IconTreeNode parent = (IconTreeNode) selected.getParent();
+					if (parent instanceof QueryTreeNode) {
+						if (selected instanceof TargetTreeNode) {
+							((QueryTreeNode) parent).getQuery().setTarget(null);
+						} else {
+							// TODO: hande query modifier removal
+						}
+					} else if (parent instanceof TargetTreeNode) {
+						Object target = ((TargetTreeNode) parent).getTarget();
+						if (selected instanceof AttributeTreeNode) {
+							target.setAttribute(null);
+						} else if (selected instanceof AssociationTreeNode) {
+							target.setAssociation(null);
+						} else { // group
+							target.setGroup(null);
+						}
+					} else if (parent instanceof AssociationTreeNode) {
+						Association assoc = ((AssociationTreeNode) parent).getAssociation();
+						if (selected instanceof AttributeTreeNode) {
+							assoc.setAttribute(null);
+						} else if (selected instanceof AssociationTreeNode) {
+							assoc.setAssociation(null);
+						} else { // group
+							assoc.setGroup(null);
+						}
+					} else if (parent instanceof GroupTreeNode) {
+						Group group = ((GroupTreeNode) parent).getGroup();
+						if (selected instanceof AttributeTreeNode) {
+							Attribute attrib = ((AttributeTreeNode) selected).getAttribute();
+							Attribute[] cleaned = (Attribute[]) Utils.removeFromArray(group.getAttribute(), attrib);
+							group.setAttribute(cleaned);
+						} else if (selected instanceof AssociationTreeNode) {
+							Association assoc = ((AssociationTreeNode) selected).getAssociation();
+							Association[] cleaned = (Association[]) Utils.removeFromArray(group.getAssociation(), assoc);
+							group.setAssociation(cleaned);
+						} else { // group
+							Group g = ((GroupTreeNode) selected).getGroup();
+							Group[] cleaned = (Group[]) Utils.removeFromArray(g.getGroup(), g);
+							group.setGroup(cleaned);
+						}
+					}
+					parent.rebuild();
+					getQueryTree().refreshTree();
 				}
 			});
 		}
@@ -528,7 +671,39 @@ public class QueryBuilder extends JFrame {
 			changePredicateButton.setText("Change Predicate");
 			changePredicateButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					// walk the static predicate fields
+					Field[] fields = Predicate.class.getFields();
+					List predicates = new ArrayList();
+					for (int i = 0; i < fields.length; i++) {
+						int mods = fields[i].getModifiers();
+						if (Modifier.isStatic(mods) && Modifier.isPublic(mods)
+							&& fields[i].getType().equals(Predicate.class)) {
+							try {
+								Predicate p = (Predicate) fields[i].get(null);
+								predicates.add(p);
+							} catch (IllegalAccessException ex) {
+								ex.printStackTrace();
+							}
+						}
+					}
+					// sort the predicates by value
+					Collections.sort(predicates, new Comparator() {
+						public int compare(java.lang.Object o1, java.lang.Object o2) {
+							return o1.toString().compareTo(o2.toString());
+						}
+					});
+					Predicate[] predArray = new Predicate[predicates.size()];
+					predicates.toArray(predArray);
+					// get the selected node
+					AttributeTreeNode node = (AttributeTreeNode) getQueryTree().getSelectionPath().getLastPathComponent();
+					Predicate choice = (Predicate) JOptionPane.showInputDialog(QueryBuilder.this, 
+						"Select a predicate", "Prediacate", JOptionPane.QUESTION_MESSAGE, 
+						null, predArray, node.getAttribute().getPredicate());
+					if (choice != null) {
+						node.getAttribute().setPredicate(choice);
+						node.rebuild();
+						getQueryTree().refreshTree();
+					}
 				}
 			});
 		}
@@ -547,7 +722,17 @@ public class QueryBuilder extends JFrame {
 			changeLogicButton.setText("Change Logic");
 			changeLogicButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					// get selected group to see current logic
+					GroupTreeNode node = (GroupTreeNode) getQueryTree().getSelectionPath().getLastPathComponent();
+					LogicalOperator[] ops = new LogicalOperator[] {LogicalOperator.OR, LogicalOperator.AND};
+					LogicalOperator choice = (LogicalOperator) JOptionPane.showInputDialog(QueryBuilder.this,
+						"Choose Logical Operator", "Logic", JOptionPane.QUESTION_MESSAGE, 
+						null, ops, node.getGroup().getLogicRelation());
+					if (choice != null) {
+						node.getGroup().setLogicRelation(choice);
+						node.rebuild();
+						getQueryTree().refreshTree();
+					}
 				}
 			});
 		}
@@ -566,7 +751,15 @@ public class QueryBuilder extends JFrame {
 			changeValueButton.setText("Change Value");
 			changeValueButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					// get the current node
+					AttributeTreeNode node = (AttributeTreeNode) getQueryTree().getSelectionPath().getLastPathComponent();
+					String choice = JOptionPane.showInputDialog(
+						QueryBuilder.this, "Enter new value", node.getAttribute().getValue());
+					if (choice != null) {
+						node.getAttribute().setValue(choice);
+						node.rebuild();
+						getQueryTree().refreshTree();
+					}
 				}
 			});
 		}
@@ -583,14 +776,8 @@ public class QueryBuilder extends JFrame {
 		if (queryPanel == null) {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridwidth = 2;
 			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints2.gridy = 1;
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridx = 1;
-			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints1.anchor = java.awt.GridBagConstraints.NORTH;
-			gridBagConstraints1.gridy = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints.gridy = 0;
@@ -601,7 +788,6 @@ public class QueryBuilder extends JFrame {
 			queryPanel = new JPanel();
 			queryPanel.setLayout(new GridBagLayout());
 			queryPanel.add(getQueryTreeScrollPane(), gridBagConstraints);
-			queryPanel.add(getRestrictionTypePanel(), gridBagConstraints1);
 			queryPanel.add(getContextButtonPanel(), gridBagConstraints2);
 		}
 		return queryPanel;
@@ -629,6 +815,16 @@ public class QueryBuilder extends JFrame {
 			mainSplitPane.setRightComponent(getTypeDisplayPanel());
 		}
 		return mainSplitPane;
+	}
+	
+	
+	private void enableQueryBuildingButtons(JButton[] buttons) {
+		Set enabledButtons = new HashSet();
+		Collections.addAll(enabledButtons, buttons);
+		for (int i = 0; i < getContextButtonPanel().getComponentCount(); i++) {
+			JButton button = (JButton) getContextButtonPanel().getComponent(i);
+			button.setEnabled(enabledButtons.contains(button));
+		}
 	}
 	
 	
