@@ -15,12 +15,10 @@
     <context-param>
         <param-name>javax.faces.CONFIG_FILES</param-name>
         <param-value>
-            /WEB-INF/faces-config.xml
+            /WEB-INF/portal-faces-config.xml
         </param-value>
         <description>
             Comma separated list of URIs of (additional) faces config files.
-            (e.g. /WEB-INF/my-config.xml)
-            See JSF 1.0 PRD2, 10.3.2
         </description>
     </context-param>
 
@@ -29,38 +27,12 @@
         <param-value>client</param-value>
         <description>
             State saving method: "client" or "server" (= default)
-            See JSF Specification 2.5.2
-        </description>
-    </context-param>
-
-    <context-param>
-        <param-name>org.apache.myfaces.ALLOW_JAVASCRIPT</param-name>
-        <param-value>true</param-value>
-        <description>
-            This parameter tells MyFaces if javascript code should be allowed in the
-            rendered HTML output.
-            If javascript is allowed, command_link anchors will have javascript code
-            that submits the corresponding form.
-            If javascript is not allowed, the state saving info and nested parameters
-            will be added as url parameters.
-            Default: "true"
         </description>
     </context-param>
 
     <context-param>
         <param-name>org.apache.myfaces.DETECT_JAVASCRIPT</param-name>
         <param-value>false</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>org.apache.myfaces.PRETTY_HTML</param-name>
-        <param-value>true</param-value>
-        <description>
-            If true, rendered HTML code will be formatted, so that it is "human readable".
-            i.e. additional line separators and whitespace will be written, that do not
-            influence the HTML code.
-            Default: "true"
-        </description>
     </context-param>
 
     <context-param>
@@ -75,17 +47,23 @@
         </description>
     </context-param>
 
+    <context-param>
+        <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+        <param-value>.portal</param-value>
+    </context-param>
+
     <!-- Tiles ViewHandler config file -->
 
     <context-param>
         <param-name>tiles-definitions</param-name>
-        <param-value>/WEB-INF/tiles.xml</param-value>
+        <param-value>/WEB-INF/portal-tiles-config.xml</param-value>
         <description>
             Tiles configuration
             definition files and a listener need to be defined.
             the listener will initialize JspTilesViewHandlerImpl with tiles definitions.
         </description>
     </context-param>
+
 
     <!-- Extensions Filter -->
     <filter>
@@ -131,11 +109,11 @@
 
     <filter-mapping>
         <filter-name>OpenSessionInView</filter-name>
-        <url-pattern>*.jsf</url-pattern>
+        <url-pattern>*.portal</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>extensionsFilter</filter-name>
-        <url-pattern>*.jsf</url-pattern>
+        <url-pattern>*.portal</url-pattern>
     </filter-mapping>
 
 
@@ -156,7 +134,7 @@
     <!-- extension mapping -->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>*.jsf</url-pattern>
+        <url-pattern>*.portal</url-pattern>
     </servlet-mapping>
 
     <!-- Welcome files -->
@@ -168,7 +146,7 @@
     <!--ToDo redirect thru servlet-->
     <error-page>
         <error-code>500</error-code>
-        <location>/error.jsf</location>
+        <location>/error.portal</location>
     </error-page>
 
 </web-app>

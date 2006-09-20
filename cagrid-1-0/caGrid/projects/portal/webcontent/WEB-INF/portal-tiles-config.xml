@@ -6,6 +6,7 @@
 
 <tiles-definitions>
 
+    <!--Base Layouts-->
     <definition name="Base" page="/jsp/layout/PortalBaseLayout.jsp">
         <put name="nciHeader" value="/jsp/header/NCIHeader.jsp"/>
         <put name="portalHeader" value="/jsp/header/PortalHeader.jsp"/>
@@ -27,29 +28,35 @@
         <put name="mainContent" value="/jsp/content/PortalHomepage.jsp"/>
     </definition>
 
-    <definition name="/directory.tiles" extends="Base">
+    <!--Directory Section-->
+    <definition name="Directory" extends="Base">
         <put name="mainMenu" value="/jsp/menu/MainMenuDirectory.jsp"/>
         <put name="subMenu" value="/jsp/menu/SubMenuDirectory.jsp"/>
+        <!--has no content. is a layout-->
+    </definition>
+
+    <definition name="/directory.tiles" extends="Directory">
         <put name="mainContent" value="/jsp/content/DirectoryHome.jsp"/>
     </definition>
 
-    <definition name="/servicesDirectory.tiles" extends="Base">
-        <put name="mainMenu" value="/jsp/menu/MainMenuDirectory.jsp"/>
-        <put name="subMenu" value="/jsp/menu/SubMenuDirectory.jsp"/>
+    <definition name="/servicesDirectory.tiles" extends="Directory">
         <put name="mainContent" value="/jsp/content/DirectoryServices.jsp"/>
     </definition>
 
-    <definition name="/rcDirectory.tiles" extends="Base">
-        <put name="mainMenu" value="/jsp/menu/MainMenuDirectory.jsp"/>
-        <put name="subMenu" value="/jsp/menu/SubMenuDirectory.jsp"/>
+    <definition name="/rcDirectory.tiles" extends="Directory">
         <put name="mainContent" value="/jsp/content/DirectoryResearchCenter.jsp"/>
     </definition>
 
-    <definition name="/pocDirectory.tiles" extends="Base">
-        <put name="mainMenu" value="/jsp/menu/MainMenuDirectory.jsp"/>
-        <put name="subMenu" value="/jsp/menu/SubMenuDirectory.jsp"/>
+    <definition name="/pocDirectory.tiles" extends="Directory">
         <put name="mainContent" value="/jsp/content/DirectoryPointOfContact.jsp"/>
     </definition>
+
+    <definition name="/serviceDetails.tiles" extends="Directory">
+        <put name="mainContent" value="/jsp/content/ServiceDetails.jsp"/>
+    </definition>
+
+
+    <!--End Directory Section-->
 
 
     <definition name="/map.tiles" extends="Base">

@@ -5,7 +5,7 @@
 
 <f:subview id="rcDirectory">
 
-<h:panelGrid styleClass="directoryTable" headerClass="homepageTitle" columns="1">
+<h:panelGrid styleClass="contentMainTable" headerClass="contentMainTitle" columns="1">
 
 <f:facet name="header">
     <h:column>
@@ -70,11 +70,11 @@
 <f:verbatim><br/></f:verbatim>
 
 <h:column>
-    <t:dataTable id="rcData" var="rc" value="#{portal.rc}"
-                 rows="6" width="80%">
+    <t:dataTable styleClass="contentInnerTable" id="rcData" var="rc" value="#{portal.rc}"
+                 rows="6">
 
         <h:column>
-            <h:panelGrid styleClass="directoryTable" border="1" cellpadding="3" cellspacing="0"
+            <h:panelGrid styleClass="contentMainTable" border="1" cellpadding="3" cellspacing="0"
                          rowClasses="dataRowLight,dataRowDark"
                          columnClasses="dataCellTextBold,dataCellText"
                          headerClass="dataTableHeader" columns="2">

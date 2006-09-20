@@ -4,10 +4,10 @@
 
 
 <f:subview id="servicesDirectory">
+<h:form>
 
-<h:panelGrid style="height:100%;width:100%;" cellpadding="0" cellspacing="0" border="0"
-             headerClass="homepageTitle"
-             columns="1">
+<h:panelGrid styleClass="contentMainTable" headerClass="contentMainTitle" columns="1">
+
 <f:facet name="header">
     <h:column>
         <h:outputText value="Registered Service Directory"/>
@@ -16,7 +16,7 @@
 
 
 <f:verbatim><br/></f:verbatim>
-<!-- Scroller to scroll through results -->
+<%/*-- Scroller to scroll through results */%>
 <h:column>
     <h:panelGrid columns="1">
         <t:dataScroller id="scroller1"
@@ -75,11 +75,11 @@
 
 
 <h:column>
-    <t:dataTable id="serviceData" var="service" value="#{portal.services}"
+    <t:dataTable styleClass="contentInnerTable" id="serviceData" var="service" value="#{portal.services}"
                  rows="6" width="80%">
 
         <h:column>
-            <h:panelGrid width="100%" border="1" cellpadding="3" cellspacing="0"
+            <h:panelGrid border="1" cellpadding="3" cellspacing="0"
                          rowClasses="dataRowLight,dataRowDark"
                          columnClasses="dataCellTextBold,dataCellText"
                          headerClass="dataTableHeader" columns="2">
@@ -105,7 +105,7 @@
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="Description"/>
+                    <h:outputText value="Descriptions"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{service.description}"/>
@@ -113,9 +113,12 @@
 
                 <h:column/>
                 <h:column>
-                    <h:outputLink>
+                    <h:commandLink action="#{serviceDetails.navigateTo}">
                         <h:outputText value="More Details>>"/>
-                    </h:outputLink>
+                        <f:param id="navigatedServicePk" name="navigatedServicePk" value="#{service.pk}"/>
+                    </h:commandLink>
+
+
                 </h:column>
 
             </h:panelGrid>
@@ -127,6 +130,6 @@
 
 </h:column>
 
-
 </h:panelGrid>
+</h:form>
 </f:subview>

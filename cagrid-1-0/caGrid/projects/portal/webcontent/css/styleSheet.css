@@ -655,13 +655,19 @@ img.img {
 /*###############
 Homepage BEGINS (Each section has a homepage)
 ###############*/
-.directoryTable {
+.contentMainTable {
     height: 50%;
     width: 100%;
     vertical-align: top;
 }
 
-.homepageTitle {
+.contentInnerTable {
+    width: 80%;
+    height: 100%;
+    vertical-align: top;
+}
+
+.contentMainTitle {
 /* for the titles of the individual sidebar sections */
     font-family: verdana, arial, helvetica, sans-serif;
     font-size: 0.9em;
@@ -673,7 +679,7 @@ Homepage BEGINS (Each section has a homepage)
     text-align: left;
 }
 
-.homepageContent {
+.mainContent {
 /*for the area below the title content of the home page * / font-family : arial, helvetica, verdana, sans-serif;*/
     font-size: 0.8em;
     padding: 1em;
@@ -695,4 +701,16 @@ Homepage BEGINS (Each section has a homepage)
     line-height: 1.5em;
     vertical-align: top;
     font-weight: bold;
+}
+
+.errorTitle {
+/* for the titles of the individual sidebar sections */
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 0.9em;
+    font-weight: bold;
+    padding-left: 0.8em;
+    background-color: #5C5C5C; /* constant: dark gray */
+    color: #FF0033; /* constant: white */
+    height: 20;
+    text-align: left;
 }

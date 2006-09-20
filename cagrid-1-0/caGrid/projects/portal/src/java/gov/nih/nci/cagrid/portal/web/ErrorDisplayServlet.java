@@ -10,10 +10,13 @@ import java.util.Map;
 public class ErrorDisplayServlet {
     private static final long serialVersionUID = 3123969847287207137L;
     private static final String BEAN_NAME = ErrorDisplayServlet.class.getName();
+    private boolean showError = true;
 
     public String getInfoMessage() {
-        return "An unexpected processing error has occurred. Please cut and paste the following information" + " into an email and send it to <b>";
+        return "An unexpected processing error has occurred." +
+                "Please cut and paste the following information" + " into an email and send it to the admin";
     }
+
 
     public String getStackTrace() {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -49,4 +52,9 @@ public class ErrorDisplayServlet {
             }
         }
     }
+
+    public boolean isShowError() {
+        return showError;
+    }
+
 }

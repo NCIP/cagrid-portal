@@ -5,9 +5,8 @@
 
 <f:subview id="pocDirectory">
 
-<h:panelGrid styleClass="directoryTable" cellpadding="0" cellspacing="0" border="0"
-             headerClass="homepageTitle"
-             columns="1">
+<h:panelGrid styleClass="contentMainTable" headerClass="contentMainTitle" columns="1">
+
 <f:facet name="header">
     <h:column>
         <h:outputText value="Point Of Contacts Directory"/>
@@ -71,11 +70,12 @@
 <f:verbatim><br/></f:verbatim>
 
 <h:column>
-    <t:dataTable align="top" id="pocData" var="poc" value="#{portal.poc}"
-                 rows="6" width="80%">
+    <t:dataTable styleClass="contentInnerTable" id="pocData" var="poc"
+                 value="#{portal.poc}"
+                 rows="6">
 
         <h:column>
-            <h:panelGrid styleClass="directoryTable" border="1" cellpadding="3" cellspacing="0"
+            <h:panelGrid styleClass="contentMainTable" border="1"
                          rowClasses="dataRowLight,dataRowDark"
                          columnClasses="dataCellTextBold,dataCellText"
                          headerClass="dataTableHeader" columns="2">

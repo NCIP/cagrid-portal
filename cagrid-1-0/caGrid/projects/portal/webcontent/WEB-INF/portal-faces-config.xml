@@ -20,6 +20,7 @@
         <message-bundle>messages</message-bundle>
     </application>
 
+
     <managed-bean>
         <managed-bean-name>directoryTabbedPaneBean</managed-bean-name>
         <managed-bean-class>gov.nih.nci.cagrid.portal.web.DirectoryTabbedPaneBean</managed-bean-class>
@@ -39,9 +40,13 @@
     </managed-bean>
 
     <managed-bean>
-        <managed-bean-name>ServiceDetails</managed-bean-name>
+        <managed-bean-name>serviceDetails</managed-bean-name>
         <managed-bean-class>gov.nih.nci.cagrid.portal.web.ServiceDetailsBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <property-name>gridServiceManager</property-name>
+            <value>#{gridServiceManager}</value>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
@@ -49,6 +54,15 @@
         <managed-bean-class>gov.nih.nci.cagrid.portal.web.ErrorDisplayServlet</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+
+    <!--Navigation Rules-->
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>success</from-outcome>
+            <to-view-id>serviceDetails.portal</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 
 
 </faces-config>

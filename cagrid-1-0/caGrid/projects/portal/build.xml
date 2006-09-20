@@ -114,7 +114,7 @@
     </target>
 
     <!-- ============================================================== -->
-    <!-- Target for continous build. Use war target to build            -->
+    <!-- Target for continous build. Use war/deploy target to build            -->
     <!-- actual app                                                     -->
     <!-- ============================================================== -->
     <target name="all" depends="clean,compile, compileTests, hibernate.xdoclet,copyLibsLocal,copyResourcesLocal"
@@ -125,7 +125,6 @@
     <!-- ============================================================== -->
     <target name="init" depends="setClasspath">
         <mkdir dir="${build.classes.dir}"/>
-
         <mkdir dir="${webinf.lib.dir}"/>
         <mkdir dir="${webinf.classes.dir}"/>
     </target>
@@ -151,6 +150,7 @@
     <target name="deployExploded"
             depends="clean,cleanDeployment,compile,hibernate.xdoclet,copyLibsLocal,copyResourcesLocal,deployPreBuilt"
             description="Deploy Application into tomcat"/>
+
 
     <target name="deployPreBuilt" description="Deploys pre-built webapp">
         <copy todir="${tomcat.webapps.dir}/${project.name}" overwrite="true">
