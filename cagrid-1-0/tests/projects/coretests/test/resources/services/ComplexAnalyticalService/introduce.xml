@@ -1,4 +1,4 @@
-<ns1:ServiceDescription introduceVersion=".9999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+<ns1:ServiceDescription introduceVersion=".99999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace location="./1.0_gov.nih.nci.cagrid.tests.gene.xsd" namespace="gme://caGrid.tests/1.0/gov.nih.nci.cagrid.tests.gene" packageName="gov.nih.nci.cagrid.tests.gene" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Gene" xsi:type="ns2:SchemaElementType"/>
