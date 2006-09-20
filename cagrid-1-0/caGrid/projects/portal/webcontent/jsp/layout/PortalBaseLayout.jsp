@@ -87,7 +87,7 @@
                                         <%-- banner begins --%>
 
                                     <tr>
-                                        <td height="100%">
+                                        <td align="top" height="100%">
 
                                                 <%-- target of anchor to skip menus --%><a name="content"/>
                                             <f:subview id="mainContent">
