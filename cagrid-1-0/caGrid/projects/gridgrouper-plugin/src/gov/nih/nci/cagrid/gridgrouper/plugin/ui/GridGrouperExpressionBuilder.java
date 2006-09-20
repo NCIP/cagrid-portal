@@ -1,7 +1,11 @@
 package gov.nih.nci.cagrid.gridgrouper.plugin.ui;
 
+import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
+import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,11 +24,13 @@ public class GridGrouperExpressionBuilder extends JPanel {
 
 	private JScrollPane jScrollPane = null;
 
-	private JTree grouperTree = null;
+	private GridGrouperTree grouperTree = null;
 
 	private JScrollPane jScrollPane1 = null;
 
 	private JTree expressionTree = null;
+
+	private MultiEventProgressBar progress = null;
 
 	/**
 	 * This is the default constructor
@@ -74,6 +80,12 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	 */
 	private JPanel getTreePanel() {
 		if (treePanel == null) {
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints3.insets = new Insets(2, 10, 2, 10);
+			gridBagConstraints3.weightx = 1.0D;
+			gridBagConstraints3.gridy = 1;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = GridBagConstraints.BOTH;
 			gridBagConstraints1.weighty = 1.0;
@@ -82,6 +94,7 @@ public class GridGrouperExpressionBuilder extends JPanel {
 			gridBagConstraints1.weightx = 1.0;
 			treePanel = new JPanel();
 			treePanel.setLayout(new GridBagLayout());
+			treePanel.add(getProgress(), gridBagConstraints3);
 			treePanel.add(getJScrollPane(), gridBagConstraints1);
 		}
 		return treePanel;
@@ -125,9 +138,9 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	 * 	
 	 * @return javax.swing.JTree	
 	 */
-	private JTree getGrouperTree() {
+	protected GridGrouperTree getGrouperTree() {
 		if (grouperTree == null) {
-			grouperTree = new JTree();
+			grouperTree = new GridGrouperTree(this);
 		}
 		return grouperTree;
 	}
@@ -155,6 +168,21 @@ public class GridGrouperExpressionBuilder extends JPanel {
 			expressionTree = new JTree();
 		}
 		return expressionTree;
+	}
+
+	/**
+	 * This method initializes progress	
+	 * 	
+	 * @return javax.swing.JProgressBar	
+	 */
+	protected MultiEventProgressBar getProgress() {
+		if (progress == null) {
+			progress = new MultiEventProgressBar(false);
+			progress.setForeground(GridGrouperLookAndFeel.getPanelLabelColor());
+			progress.setString("");
+			progress.setStringPainted(true);
+		}
+		return progress;
 	}
 
 }
