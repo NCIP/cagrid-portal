@@ -43,6 +43,9 @@
 
 package gov.nih.nci.cagrid.gridgrouper.plugin.ui;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,6 +55,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+
+import org.globus.gsi.GlobusCredential;
+import org.projectmobius.common.MobiusRunnable;
+import org.projectmobius.portal.PortalResourceManager;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -70,8 +77,28 @@ public class GridGrouperTree extends JTree {
 		super();
 		this.rootNode = new GridGroupersTreeNode(editor);
 		setModel(new DefaultTreeModel(this.rootNode));
-		//this.addMouseListener(new GridGrouperTreeEventListener(this,browser));
 		this.setCellRenderer(new TreeRenderer());
+		this.addGridGrouper("https://140.254.80.109:8443/wsrf/services/cagrid/GridGrouper", null);
+	}
+
+	public void addGridGrouper(final String uri, final GlobusCredential cred) {
+		MobiusRunnable runner = new MobiusRunnable() {
+			public void execute() {
+				try {
+					GridGrouper grouper = new GridGrouper(uri, cred);
+					rootNode.addGridGrouper(grouper);
+				} catch (Exception e) {
+					PortalUtils.showErrorMessage(e);
+				}
+			}
+		};
+		try {
+			PortalResourceManager.getInstance().getThreadManager()
+					.executeInBackground(runner);
+		} catch (Exception t) {
+			t.getMessage();
+		}
+
 	}
 
 	public GridGroupersTreeNode getRootNode() {
