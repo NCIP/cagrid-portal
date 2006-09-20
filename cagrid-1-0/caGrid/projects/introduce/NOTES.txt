@@ -3,6 +3,8 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 To Do:
 
+need to have the X button in the method viewer implement what the getDoneButton listener implements 
+
 when i renamed a parameter name, the serviceImpl's signature didn't get updated (but the interface did) 
 
 refactor reload button in the types modifyier to not be stupid
