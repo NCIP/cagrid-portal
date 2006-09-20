@@ -126,8 +126,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JPanel inputButtonPanel = null;
 
-	private JButton cancelButton = null;
-
 	private JPanel exceptionsPanel = null;
 
 	private JScrollPane exceptionScrollPane = null;
@@ -382,7 +380,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new FlowLayout());
 			buttonPanel.add(getDoneButton(), null);
-			buttonPanel.add(getCancelButton(), null);
 		}
 		return buttonPanel;
 	}
@@ -697,26 +694,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 			inputButtonPanel.add(getRemoveButton(), null);
 		}
 		return inputButtonPanel;
-	}
-
-
-	/**
-	 * This method initializes cancelButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getCancelButton() {
-		if (cancelButton == null) {
-			cancelButton = new JButton();
-			cancelButton.setText("Cancel");
-			cancelButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
-				}
-			});
-			cancelButton.setIcon(PortalLookAndFeel.getCloseIcon());
-		}
-		return cancelButton;
 	}
 
 
