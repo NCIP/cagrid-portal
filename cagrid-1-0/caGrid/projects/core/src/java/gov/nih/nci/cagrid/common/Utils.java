@@ -174,6 +174,47 @@ public class Utils {
 
 		return newArray;
 	}
+	
+	
+	/**
+	 * Appends to an array
+	 * 
+	 * @param array
+	 * 		The array to append to
+	 * @param appendix
+	 * 		The object to append to the array
+	 * @return
+	 */
+	public static java.lang.Object appendToArray(java.lang.Object array, java.lang.Object appendix) {
+		Class arrayType = array.getClass().getComponentType();
+		java.lang.Object newArray = Array.newInstance(arrayType, Array.getLength(array) + 1);
+		System.arraycopy(array, 0, newArray, 0, Array.getLength(array));
+		Array.set(newArray, Array.getLength(newArray) - 1, appendix);
+		return newArray;
+	}
+	
+	
+	/**
+	 * Removed an object from an array.
+	 * 
+	 * @param array
+	 * @param removal
+	 * @return
+	 */
+	public static java.lang.Object removeFromArray(java.lang.Object array, java.lang.Object removal) {
+		Class arrayType = array.getClass().getComponentType();
+		int length = Array.getLength(array);
+		List temp = new ArrayList(length - 1);
+		for (int i = 0; i < length; i++) {
+			java.lang.Object o = Array.get(array, i);
+			if (!o.equals(removal)) {
+				temp.add(o);
+			}
+		}
+		java.lang.Object newArray = Array.newInstance(arrayType, temp.size());
+		System.arraycopy(temp.toArray(), 0, newArray, 0, temp.size());
+		return newArray;
+	}
 
 
 	public static StringBuffer fileToStringBuffer(File file) throws Exception {
