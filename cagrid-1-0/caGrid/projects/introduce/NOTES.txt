@@ -3,6 +3,12 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 To Do:
 
+when i renamed a parameter name, the serviceImpl's signature didn't get updated (but the interface did)
+  -printout complained it couldn't find the method (executeAsynchronously)
+  -the method returns a "reference"... is the sync code looking for an EPR instead?
+
+(related to above)... when a method isn't found for modification, it should be re-added (in case they deleted it)
+
 need to have the X button in the method viewer implement what the getDoneButton listener implements 
 
 when i renamed a parameter name, the serviceImpl's signature didn't get updated (but the interface did) 
