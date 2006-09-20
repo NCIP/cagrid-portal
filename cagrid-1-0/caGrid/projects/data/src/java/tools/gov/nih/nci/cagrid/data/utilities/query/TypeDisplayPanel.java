@@ -4,6 +4,8 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -45,6 +47,11 @@ public class TypeDisplayPanel extends JPanel {
 		this.traverser = typeTraverser;
 		((DefaultListModel) getTypesList().getModel()).removeAllElements();
 		BaseType[] allTypes = traverser.getBaseTypes();
+		Arrays.sort(allTypes, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return o1.toString().compareTo(o2.toString());
+			}
+		});
 		getTypesList().setListData(allTypes);
 		DefaultTableModel attribModel = (DefaultTableModel) getAttributesTable().getModel();
 		while (attribModel.getRowCount() != 0) {
@@ -59,6 +66,35 @@ public class TypeDisplayPanel extends JPanel {
 	
 	public void setSelectedType(BaseType type) {
 		getTypesList().setSelectedValue(type, true);
+	}
+	
+	
+	public BaseType getSelectedType() {
+		return (BaseType) getTypesList().getSelectedValue();
+	}
+	
+	
+	public AttributeType getSelectedAttribute() {
+		int row = getAttributesTable().getSelectedRow();
+		if (row != -1) {
+			String name = (String) getAttributesTable().getValueAt(row, 0);
+			String value = (String) getAttributesTable().getValueAt(row, 1);
+			AttributeType att = new AttributeType(name, value);
+			return att;
+		}
+		return null;
+	}
+	
+	
+	public AssociatedType getSelectedAssociation() {
+		int row = getAssociationsTable().getSelectedRow();
+		if (row != -1) {
+			String role = (String) getAssociationsTable().getValueAt(row, 0);
+			String type = (String) getAssociationsTable().getValueAt(row, 1);
+			AssociatedType assoc = new AssociatedType(type, role);
+			return assoc;
+		}
+		return null;
 	}
 	
 	
@@ -106,9 +142,9 @@ public class TypeDisplayPanel extends JPanel {
 			typesList = new JList();
 			typesList.setModel(new DefaultListModel());
 			typesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			typesList.addListSelectionListener(new ListSelectionListener() {
+			typesList.addListSelectionListener(new ListSelectionListener() {				
 				public void valueChanged(ListSelectionEvent e) {
-					BaseType type = (BaseType) typesList.getModel().getElementAt(e.getFirstIndex());
+					BaseType type = (BaseType) typesList.getModel().getElementAt(typesList.getSelectedIndex());
 					loadTypeData(type);
 				}
 			});
