@@ -1,17 +1,19 @@
 package gov.nih.nci.cagrid.gridgrouper.plugin.introduce;
 
+import gov.nih.nci.cagrid.gridgrouper.plugin.ui.GridGrouperExpressionBuilder;
 import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.AbstractAuthorizationPanel;
 
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.JPanel;
 
 public class GridGrouperPanel extends AbstractAuthorizationPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JLabel gridGrouper = null;
+	private JPanel expressionBuilder = null;
 
 	public GridGrouperPanel(AuthorizationExtensionDescriptionType authDesc,
 			ServiceInformation serviceInfo) {
@@ -35,11 +37,27 @@ public class GridGrouperPanel extends AbstractAuthorizationPanel {
 	 * @return void
 	 */
 	private void initialize() {
-		gridGrouper = new JLabel();
-		gridGrouper.setText("Grid Grouper");
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
+		gridBagConstraints.weightx = 1.0D;
+		gridBagConstraints.weighty = 1.0D;
+		gridBagConstraints.gridy = 0;
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
-		this.add(gridGrouper, new GridBagConstraints());
+		this.add(getExpressionBuilder(), gridBagConstraints);
+	}
+
+	/**
+	 * This method initializes expressionBuilder	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getExpressionBuilder() {
+		if (expressionBuilder == null) {
+			expressionBuilder = new GridGrouperExpressionBuilder();
+		}
+		return expressionBuilder;
 	}
 
 }
