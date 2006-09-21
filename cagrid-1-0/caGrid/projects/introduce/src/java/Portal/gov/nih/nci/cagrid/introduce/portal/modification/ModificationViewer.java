@@ -199,8 +199,6 @@ public class ModificationViewer extends GridPortalComponent {
 
 	private JSplitPane typesSplitPane = null;
 
-	private JButton namespaceReloadButton = null;
-
 	private List extensionPanels = null;
 
 	private JCheckBox propertyIsFromETCCheckBox = null;
@@ -597,15 +595,15 @@ public class ModificationViewer extends GridPortalComponent {
 					MethodType method = new MethodType();
 					method.setName("newMethod");
 					Set methodSet = new HashSet();
-					for(int i=0; i<getMethodsTable().getRowCount(); i++){
+					for (int i = 0; i < getMethodsTable().getRowCount(); i++) {
 						methodSet.add(getMethodsTable().getMethodType(i).getName());
 					}
-					if(methodSet.contains(method.getName())){
+					if (methodSet.contains(method.getName())) {
 						int index = 2;
-						while(methodSet.contains(method.getName()+index)){
+						while (methodSet.contains(method.getName() + index)) {
 							index++;
 						}
-						method.setName(method.getName()+index);
+						method.setName(method.getName() + index);
 					}
 					MethodTypeOutput output = new MethodTypeOutput();
 					output.setQName(new QName("", "void"));
@@ -919,7 +917,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private ServiceSecurityPanel getSecurityPanel() {
 		if (securityPanel == null) {
 			try {
-				securityPanel = new ServiceSecurityPanel(info,info.getServices().getService(0).getServiceSecurity());
+				securityPanel = new ServiceSecurityPanel(info, info.getServices().getService(0).getServiceSecurity());
 			} catch (Exception e) {
 				e.printStackTrace();
 				PortalUtils.showErrorMessage(e);
@@ -1045,10 +1043,6 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private JPanel getDiscoveryButtonPanel() {
 		if (discoveryButtonPanel == null) {
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridx = 2;
-			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints1.gridy = 0;
 			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 			gridBagConstraints31.gridx = 1;
 			gridBagConstraints31.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -1061,7 +1055,6 @@ public class ModificationViewer extends GridPortalComponent {
 			discoveryButtonPanel.setLayout(new GridBagLayout());
 			discoveryButtonPanel.add(getNamespaceAddButton(), gridBagConstraints30);
 			discoveryButtonPanel.add(getNamespaceRemoveButton(), gridBagConstraints31);
-			discoveryButtonPanel.add(getNamespaceReloadButton(), gridBagConstraints1);
 		}
 		return discoveryButtonPanel;
 	}
@@ -1087,7 +1080,25 @@ public class ModificationViewer extends GridPortalComponent {
 						+ info.getIntroduceServiceProperties().getProperty(
 							IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)));
 					if (type != null) {
-						getNamespaceJTree().addNode(type);
+						if (CommonTools.getNamespaceType(info.getNamespaces(), type.getNamespace()) != null) {
+							JOptionPane.showMessageDialog(ModificationViewer.this,
+								"This namespace already exists, it was reloaded");
+
+							if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
+								for (int namespaceI = 0; namespaceI < info.getNamespaces().getNamespace().length; namespaceI++) {
+									NamespaceType tempType = info.getNamespaces().getNamespace()[namespaceI];
+									if (tempType.getNamespace().equals(type.getNamespace())) {
+										info.getNamespaces().getNamespace()[namespaceI] = type;
+										break;
+									}
+								}
+
+							}
+
+							getNamespaceJTree().setNamespaces(info.getNamespaces());
+						} else {
+							getNamespaceJTree().addNode(type);
+						}
 					} else {
 						JOptionPane.showMessageDialog(ModificationViewer.this, "Error retrieving schema.");
 					}
@@ -1755,55 +1766,6 @@ public class ModificationViewer extends GridPortalComponent {
 			typesSplitPane.setResizeWeight(0.4);
 		}
 		return typesSplitPane;
-	}
-
-
-	/**
-	 * This method initializes namespaceReloadButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getNamespaceReloadButton() {
-		if (namespaceReloadButton == null) {
-			namespaceReloadButton = new JButton();
-			namespaceReloadButton.setText("Reload");
-			namespaceReloadButton.setIcon(IntroduceLookAndFeel.getResyncIcon());
-			namespaceReloadButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					try {
-						// build up the new namespace and it's schema
-						// elements and replace the old one
-						NamespaceType newType = ((NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane()
-							.getSelectedComponent()).createNamespaceType(new File(methodsDirectory
-							+ File.separator
-							+ "schema"
-							+ File.separator
-							+ info.getIntroduceServiceProperties().getProperty(
-								IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)));
-
-						if (newType != null) {
-							// set the old namespaceType to this new one
-							if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
-								for (int namespaceI = 0; namespaceI < info.getNamespaces().getNamespace().length; namespaceI++) {
-									NamespaceType tempType = info.getNamespaces().getNamespace()[namespaceI];
-									if (tempType.getNamespace().equals(newType.getNamespace())) {
-										info.getNamespaces().getNamespace()[namespaceI] = newType;
-										break;
-									}
-								}
-							}
-							getNamespaceJTree().setNamespaces(info.getNamespaces());
-						} else {
-							JOptionPane.showMessageDialog(ModificationViewer.this, "Error retrieving schema.");
-						}
-
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(ModificationViewer.this, "Please select namespace to Remove");
-					}
-				}
-			});
-		}
-		return namespaceReloadButton;
 	}
 
 
