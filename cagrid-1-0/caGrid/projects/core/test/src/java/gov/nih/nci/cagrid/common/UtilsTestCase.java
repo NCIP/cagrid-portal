@@ -59,6 +59,6 @@ public class UtilsTestCase extends TestCase {
 	public void testArrayRemove() {
 		String[] arr1 = new String[]{"0", "1", "2"};
 		String[] gold = new String[]{"0", "2"};
-		assertTrue(Arrays.deepEquals(gold, (String[]) Utils.removeFromArray(arr1, "2")));
+		assertTrue(Arrays.deepEquals(gold, (String[]) Utils.removeFromArray(arr1, "1")));
 	}
 }
