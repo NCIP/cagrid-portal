@@ -1516,10 +1516,10 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints38.gridx = 0;
 			GridBagConstraints gridBagConstraints43 = new GridBagConstraints();
 			gridBagConstraints43.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints43.gridy = 0;
+			gridBagConstraints43.gridy = 4;
 			gridBagConstraints43.weightx = 1.0;
 			gridBagConstraints43.insets = new java.awt.Insets(2, 2, 10, 10);
-			gridBagConstraints43.gridx = 1;
+			gridBagConstraints43.gridx = 0;
 			servicePropertiesControlPanel = new JPanel();
 			servicePropertiesControlPanel.setLayout(new GridBagLayout());
 			servicePropertiesControlPanel.add(getServicePropertyKeyTextField(), gridBagConstraints38);
