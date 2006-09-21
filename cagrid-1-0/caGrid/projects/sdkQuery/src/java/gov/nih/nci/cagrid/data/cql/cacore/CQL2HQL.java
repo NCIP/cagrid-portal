@@ -178,7 +178,7 @@ public class CQL2HQL {
 		hql.append("From ").append(objName);
 		if (eliminateSubclasses) {
 			hql.append(" as ").append(TARGET_ALIAS);
-			hql.append(" and ").append(TARGET_ALIAS).append(".class = ").append(objName);
+			hql.append(" where ").append(TARGET_ALIAS).append(".class = ").append(objName);
 		}
 		if (target.getAttribute() != null) {
 			if (eliminateSubclasses) {
