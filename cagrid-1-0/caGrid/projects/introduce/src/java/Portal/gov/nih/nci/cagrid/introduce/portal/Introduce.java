@@ -22,8 +22,9 @@ import org.projectmobius.portal.PortalResourceManager;
 public final class Introduce {
 
 	public static final String DEFAULT_CONFIG_FILE = "conf/introduce/introduce-portal-conf.xml";
-	
+
 	private static SplashScreen introduceSplash;
+
 
 	public static void main(String[] args) {
 		showIntroduceSplash();
@@ -37,7 +38,11 @@ public final class Introduce {
 
 
 	private static void showIntroduceSplash() {
-		introduceSplash = new SplashScreen("/introduceSplash.png");
+		try {
+			introduceSplash = new SplashScreen("/introduceSplash.png");
+		} catch (Exception e) {
+
+		}
 	}
 
 
@@ -48,10 +53,10 @@ public final class Introduce {
 				confFile = DEFAULT_CONFIG_FILE;
 			}
 			checkGlobusLocation(confFile);
-			portal = new GridPortal(confFile);			
+			portal = new GridPortal(confFile);
 			Dimension dim = PortalResourceManager.getInstance().getGridPortalConfig().getApplicationDimensions();
 			portal.setSize(dim);
-//			portal.pack();
+			// portal.pack();
 			portal.setVisible(true);
 			portal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		} catch (MobiusException e) {
@@ -59,12 +64,12 @@ public final class Introduce {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 	private static void checkGlobusLocation(String configFilename) {
 		try {
 			Document doc = XMLUtilities.fileNameToDocument(new File(configFilename).getAbsolutePath());
-			Element resource = (Element)doc.getRootElement().getChildren("resource").get(1);
+			Element resource = (Element) doc.getRootElement().getChildren("resource").get(1);
 			Element globusConfig = resource.getChild("introduce-portal-config").getChild("globusLocation");
 			if (globusConfig.getText() == null || globusConfig.getText().length() == 0) {
 				try {
@@ -72,14 +77,13 @@ public final class Introduce {
 					globusConfig.setText(globusLocation);
 				} catch (Exception ex) {
 					ex.printStackTrace();
-					// not using PortalUtils.showErrorMessage because at this point,
+					// not using PortalUtils.showErrorMessage because at this
+					// point,
 					// there IS no grid portal instance yet
-					String[] error = {
-						"Error getting GLOBUS_LOCATION environment variable: ",
-						ex.getMessage(),
-						"Please set GLOBUS_LOCATION in preferences!"
-					};
-					// JOptionPane.showMessageDialog(null, error, "Configuration Error", JOptionPane.ERROR_MESSAGE);
+					String[] error = {"Error getting GLOBUS_LOCATION environment variable: ", ex.getMessage(),
+							"Please set GLOBUS_LOCATION in preferences!"};
+					// JOptionPane.showMessageDialog(null, error, "Configuration
+					// Error", JOptionPane.ERROR_MESSAGE);
 					ErrorDialog.showErrorDialog(error);
 				}
 			}

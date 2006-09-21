@@ -82,7 +82,7 @@ public class SplashScreen extends JWindow implements Runnable {
 				try {
 					bufImage = new Robot().createScreenCapture(rect);
 				} catch (AWTException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 				// obtain the graphics context from the BufferedImage
 				Graphics2D g2D = bufImage.createGraphics();
