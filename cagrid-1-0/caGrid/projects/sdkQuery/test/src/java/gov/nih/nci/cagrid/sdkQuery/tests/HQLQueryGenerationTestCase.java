@@ -40,7 +40,7 @@ public class HQLQueryGenerationTestCase extends TestCase {
 		CQLQuery query = deserializeQuery(filename);
 		String criteria = null;
 		try {
-			criteria = CQL2HQL.translate(query,true);
+			criteria = CQL2HQL.translate(query, false);
 			System.out.println(criteria);
 		} catch (Exception ex) {
 			ex.printStackTrace();

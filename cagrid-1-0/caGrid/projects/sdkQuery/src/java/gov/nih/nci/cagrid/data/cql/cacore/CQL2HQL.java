@@ -57,7 +57,7 @@ public class CQL2HQL {
 			}
 			processModifiedQuery(hql, query.getQueryModifier(), query.getTarget());
 		} else {
-			processObject(hql, query.getTarget());
+			processTarget(hql, query.getTarget(), eliminateSubclasses);
 		}
 		return hql.toString();
 	}
@@ -172,6 +172,41 @@ public class CQL2HQL {
 	}
 	
 	
+	private static void processTarget(StringBuilder hql, Object target, boolean eliminateSubclasses) 
+		throws QueryProcessingException {
+		String objName = target.getName();
+		hql.append("From ").append(objName);
+		if (eliminateSubclasses) {
+			hql.append(" as ").append(TARGET_ALIAS);
+			hql.append(" and ").append(TARGET_ALIAS).append(".class = ").append(objName);
+		}
+		if (target.getAttribute() != null) {
+			if (eliminateSubclasses) {
+				hql.append(" and ");
+			} else {
+				hql.append(" where ");
+			}
+			processAttribute(hql, target.getAttribute(), eliminateSubclasses);
+		}
+		if (target.getAssociation() != null) {
+			if (eliminateSubclasses) {
+				hql.append(" and ");
+			} else {
+				hql.append(" where ");
+			}
+			processAssociation(hql, objName, target.getAssociation(), eliminateSubclasses);
+		}
+		if (target.getGroup() != null) {
+			if (eliminateSubclasses) {
+				hql.append(" and ");
+			} else {
+				hql.append(" where ");
+			}
+			processGroup(hql, objName, target.getGroup(), eliminateSubclasses);
+		}
+	}
+	
+	
 	/**
 	 * Processes an Object of a CQL Query.
 	 * 
@@ -186,15 +221,15 @@ public class CQL2HQL {
 		hql.append("From ").append(objName);
 		if (obj.getAttribute() != null) {
 			hql.append(" where ");
-			processAttribute(hql, obj.getAttribute());
+			processAttribute(hql, obj.getAttribute(), false);
 		}
 		if (obj.getAssociation() != null) {
 			hql.append(" where ");
-			processAssociation(hql, objName, obj.getAssociation());
+			processAssociation(hql, objName, obj.getAssociation(), false);
 		}
 		if (obj.getGroup() != null) {
 			hql.append(" where ");
-			processGroup(hql, objName, obj.getGroup());
+			processGroup(hql, objName, obj.getGroup(), false);
 		}
 	}
 	
@@ -210,8 +245,10 @@ public class CQL2HQL {
 	 * 		The attribute to process into HQL
 	 * @throws QueryProcessingException
 	 */
-	private static void processAttribute(StringBuilder hql, Attribute attrib) throws QueryProcessingException {
-		// hql.append(objAlias).append('.').append(attrib.getName());
+	private static void processAttribute(StringBuilder hql, Attribute attrib, boolean useAlias) throws QueryProcessingException {
+		if (useAlias) {
+			hql.append(TARGET_ALIAS).append(".");
+		}
 		hql.append(attrib.getName());
 		Predicate predicate = attrib.getPredicate();
 		// unary predicates
@@ -240,7 +277,7 @@ public class CQL2HQL {
 	 * 		The association to process into HQL
 	 * @throws QueryProcessingException
 	 */
-	private static void processAssociation(StringBuilder hql, String parentName, Association assoc) throws QueryProcessingException {
+	private static void processAssociation(StringBuilder hql, String parentName, Association assoc, boolean useAlias) throws QueryProcessingException {
 		// get the role name of the association
 		String roleName = getRoleName(parentName, assoc);
 		if (roleName == null) {
@@ -249,6 +286,9 @@ public class CQL2HQL {
 				" to type " + assoc.getName() + " does not exist.  Use only direct associations");
 		}
 		// make an HQL subquery for the object
+		if (useAlias) {
+			hql.append(TARGET_ALIAS).append(".");
+		}
 		hql.append(roleName).append(" in (");
 		processObject(hql, assoc);
 		hql.append(")");
@@ -266,7 +306,7 @@ public class CQL2HQL {
 	 * 		The group to process into HQL
 	 * @throws QueryProcessingException
 	 */
-	private static void processGroup(StringBuilder hql, String parentName, Group group) throws QueryProcessingException {
+	private static void processGroup(StringBuilder hql, String parentName, Group group, boolean useAlias) throws QueryProcessingException {
 		String logic = convertLogicalOperator(group.getLogicRelation());
 		
 		// flag indicating a logic clause is needed before adding further query parts
@@ -276,7 +316,7 @@ public class CQL2HQL {
 		if (group.getAttribute() != null) {
 			for (int i = 0; i < group.getAttribute().length; i++) {
 				logicClauseNeeded = true;
-				processAttribute(hql, group.getAttribute(i));
+				processAttribute(hql, group.getAttribute(i), useAlias);
 				if (i + 1 < group.getAttribute().length) {
 					hql.append(" ").append(logic).append(" ");
 				}
@@ -290,7 +330,7 @@ public class CQL2HQL {
 			}
 			for (int i = 0; i < group.getAssociation().length; i++) {
 				logicClauseNeeded = true;
-				processAssociation(hql, parentName, group.getAssociation(i));
+				processAssociation(hql, parentName, group.getAssociation(i), useAlias);
 				if (i + 1 < group.getAssociation().length) {
 					hql.append(" ").append(logic).append(" ");
 				}
@@ -304,7 +344,7 @@ public class CQL2HQL {
 			}
 			for (int i = 0; i < group.getGroup().length; i++) {
 				hql.append("( ");
-				processGroup(hql, parentName, group.getGroup(i));
+				processGroup(hql, parentName, group.getGroup(i), useAlias);
 				hql.append(" )");
 				if (i + 1 < group.getGroup().length) {
 					hql.append(" ").append(logic).append(" ");
