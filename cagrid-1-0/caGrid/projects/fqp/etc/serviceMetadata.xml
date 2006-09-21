@@ -31,10 +31,44 @@
        </ns2:faultCollection>
        <ns2:semanticMetadataCollection/>
       </ns2:Operation>
+      <ns2:Operation description="" name="executeAsynchronously" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns8:DCQLQuery" dimensionality="1" index="0" isArray="false" isRequired="false" name="query" xsi:type="ns2:InputParameter" xmlns:ns8="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns9:FederatedQueryResultsReference" dimensionality="1" isArray="false" xsi:type="ns2:Output" xmlns:ns9="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
+       <ns2:faultCollection/>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
       <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata" xsi:type="ns2:ContextProperty"/>
      </ns2:contextPropertyCollection>
+    </ns2:ServiceContext>
+    <ns2:ServiceContext description="" name="FederatedQueryResults" xsi:type="ns2:ServiceContext">
+     <ns2:operationCollection>
+      <ns2:Operation description="" name="getResults" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection/>
+       <ns2:Output qName="ns10:DCQLQueryResultsCollection" dimensionality="1" isArray="false" xsi:type="ns2:Output" xmlns:ns10="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="ProcessingNotCompleteFault" xsi:type="ns2:Fault"/>
+        <ns2:Fault description="" name="FederatedQueryProcessingFault" xsi:type="ns2:Fault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getServiceSecurityMetadata" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection/>
+       <ns2:Output qName="ns11:ServiceSecurityMetadata" dimensionality="1" isArray="false" xsi:type="ns2:Output" xmlns:ns11="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+       <ns2:faultCollection/>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="isProcessingComplete" xsi:type="ns2:Operation">
+       <ns2:inputParameterCollection/>
+       <ns2:Output qName="xsd:boolean" dimensionality="1" isArray="false" xsi:type="ns2:Output" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       <ns2:faultCollection/>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+     </ns2:operationCollection>
+     <ns2:contextPropertyCollection/>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>
    <ns2:semanticMetadataCollection/>

@@ -8,6 +8,17 @@ package gov.nih.nci.cagrid.fqp.service;
  */
 public class ServiceConfiguration {
 	
+	private String threadPoolSize;
+	
+
+	
+	public String getThreadPoolSize() {
+		return threadPoolSize;
+	}
+	
+	public void setThreadPoolSize(String threadPoolSize) {
+		this.threadPoolSize = threadPoolSize;
+	}
 
 	
 }

@@ -9,11 +9,13 @@ ISSUES:
 
 change build to create client-usable engine (outside of service)
 
-build service to support synchronous query execution (with status RPs, etc)
+clean up result service code (errors, etc)
+
+unify service code that uses processor to reuse better
+
+add topic notification to query completion status
 
 should we add query return modifiers to DCQL? (not trivial, as they have to work "in code" against aggregate results... can't be pushed to backend)
-
-should use thread pool for sending out CQL queries?
 
 add unit and system tests    
 
@@ -21,6 +23,9 @@ add DCQL XSD validation?
 
 
 
+(DONE) build service to support synchronous query execution (with status RPs, etc)
+
+(DONE) should use thread pool for sending out CQL queries?
 
 (FIXED) processing of DCQL Group is broken... if it contains both nested groups and foreign assoications, the later will replace the former in the generated query
 

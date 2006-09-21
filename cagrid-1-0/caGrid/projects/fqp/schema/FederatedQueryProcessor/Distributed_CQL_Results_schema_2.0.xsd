@@ -20,6 +20,6 @@
 		<xsd:sequence>
 			<xsd:element ref="cqlr:CQLQueryResultCollection"/>
 		</xsd:sequence>
-		<xsd:attribute name="targetServiceURL" use="required"/>
+		<xsd:attribute name="targetServiceURL" use="required" type="xsd:string"/>
 	</xsd:complexType>
 </xsd:schema>

@@ -1,6 +1,5 @@
-package gov.nih.nci.cagrid.fqp.service;
+package gov.nih.nci.cagrid.fqp.results.service;
 
-import gov.nih.nci.cagrid.fqp.service.globus.resource.BaseResource;
 import gov.nih.nci.cagrid.fqp.service.ServiceConfiguration;
 
 import java.rmi.RemoteException;
@@ -22,10 +21,10 @@ import org.globus.wsrf.ResourcePropertySet;
  * @created by Introduce Toolkit version 1.0
  * 
  */
-public abstract class FederatedQueryProcessorImplBase {
+public abstract class FederatedQueryResultsImplBase {
     private ServiceConfiguration configuration;
 	
-	public FederatedQueryProcessorImplBase() throws RemoteException {
+	public FederatedQueryResultsImplBase() throws RemoteException {
 	
 	}
 	
@@ -66,43 +65,8 @@ public abstract class FederatedQueryProcessorImplBase {
 		return resourceHome;
 	}
 	
-	
-	
-	
-	protected gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadataMD(){
-		BaseResource serviceBaseResource;
-		try {
-			serviceBaseResource = (BaseResource)ResourceContext.getResourceContext().getResource();
-		} catch (ResourceContextException e) {
-			return null;
-		} catch (ResourceException e) {
-			return null;
-		}
-		return serviceBaseResource.getServiceMetadataMD();
-	}
-
 		
 	
-	
-	protected Object getMetadata(QName metadataQName) {
-		BaseResource serviceBaseResource = null;
-		try {
-			serviceBaseResource = (BaseResource) ResourceContext.getResourceContext().getResource();
-		} catch (ResourceContextException e) {
-			return null;
-		} catch (ResourceException e) {
-			return null;
-		}
-		ResourcePropertySet resourcePropertySet = serviceBaseResource.getResourcePropertySet();
-		if (resourcePropertySet != null) {
-			ResourceProperty property = resourcePropertySet.get(metadataQName);
-			if (property != null) {
-				return property.get(0);
-			}
-
-		}
-		return null;
-	}
 	
 
 

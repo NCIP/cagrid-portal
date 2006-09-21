@@ -4,7 +4,10 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
+import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
+import gov.nih.nci.cagrid.dcqlresult.DCQLResult;
 import gov.nih.nci.cagrid.fqp.common.FederatedQueryProcessorI;
+import gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient;
 import gov.nih.nci.cagrid.fqp.stubs.FederatedQueryProcessorPortType;
 import gov.nih.nci.cagrid.fqp.stubs.service.FederatedQueryProcessorServiceAddressingLocator;
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
@@ -99,13 +102,34 @@ public class FederatedQueryProcessorClient extends ServiceSecurityClient impleme
 					}
 
 					DCQLQuery dcql = (DCQLQuery) Utils.deserializeDocument(args[3], DCQLQuery.class);
-					CQLQueryResults results = client.executeAndAggregateResults(dcql);
-					CQLQueryResultsIterator iterator = new CQLQueryResultsIterator(results, true);
-					int resultCount = 0;
-					while (iterator.hasNext()) {
-						System.out.println("=====RESULT [" + resultCount++ + "] =====");
-						System.out.println(iterator.next());
-						System.out.println("=====END RESULT=====\n\n");
+					FederatedQueryResultsClient resultsClilent = client.executeAsynchronously(dcql);
+
+					//hackish... need to subscribe to isComplete RP
+					while (!resultsClilent.isProcessingComplete()) {
+						Thread.sleep(5000);
+						System.out.print(".");
+					}
+					System.out.println();
+
+					DCQLQueryResultsCollection dcqlResultsCol = resultsClilent.getResults();
+					DCQLResult[] dcqlResults = dcqlResultsCol.getDCQLResult();
+					if (dcqlResults != null) {
+						for (int i = 0; i < dcqlResults.length; i++) {
+							DCQLResult result = dcqlResults[i];
+							String targetServiceURL = result.getTargetServiceURL();
+							System.out.println("Got results from:" + targetServiceURL);
+							CQLQueryResults queryResultCollection = result.getCQLQueryResultCollection();
+							CQLQueryResultsIterator iterator = new CQLQueryResultsIterator(queryResultCollection, true);
+							int resultCount = 0;
+							while (iterator.hasNext()) {
+								System.out.println("=====RESULT [" + resultCount++ + "] =====");
+								System.out.println(iterator.next());
+								System.out.println("=====END RESULT=====\n\n");
+							}
+
+						}
+					} else {
+						System.out.println("Got no results.");
 					}
 
 				} else {
@@ -150,6 +174,18 @@ public class FederatedQueryProcessorClient extends ServiceSecurityClient impleme
         params.setQuery(queryContainer);
         gov.nih.nci.cagrid.fqp.stubs.ExecuteResponse boxedResult = portType.execute(params);
         return boxedResult.getDCQLQueryResultsCollection();
+      }
+    }
+    public gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient executeAsynchronously(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, org.apache.axis.types.URI.MalformedURIException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"executeAsynchronously");
+        gov.nih.nci.cagrid.fqp.stubs.ExecuteAsynchronouslyRequest params = new gov.nih.nci.cagrid.fqp.stubs.ExecuteAsynchronouslyRequest();
+        gov.nih.nci.cagrid.fqp.stubs.ExecuteAsynchronouslyRequestQuery queryContainer = new gov.nih.nci.cagrid.fqp.stubs.ExecuteAsynchronouslyRequestQuery();
+        queryContainer.setDCQLQuery(query);
+        params.setQuery(queryContainer);
+        gov.nih.nci.cagrid.fqp.stubs.ExecuteAsynchronouslyResponse boxedResult = portType.executeAsynchronously(params);
+        EndpointReferenceType ref = boxedResult.getFederatedQueryResultsReference().getEndpointReference();
+        return new gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient(ref);
       }
     }
 

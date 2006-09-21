@@ -31,4 +31,10 @@ public class FederatedQueryProcessorProviderImpl{
 		return boxedResult;
 	}
 
+	public gov.nih.nci.cagrid.fqp.stubs.ExecuteAsynchronouslyResponse executeAsynchronously(gov.nih.nci.cagrid.fqp.stubs.ExecuteAsynchronouslyRequest params) throws RemoteException {
+		gov.nih.nci.cagrid.fqp.stubs.ExecuteAsynchronouslyResponse boxedResult = new gov.nih.nci.cagrid.fqp.stubs.ExecuteAsynchronouslyResponse();
+		boxedResult.setFederatedQueryResultsReference(impl.executeAsynchronously(params.getQuery().getDCQLQuery()));
+		return boxedResult;
+	}
+
 }

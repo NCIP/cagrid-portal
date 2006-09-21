@@ -59,6 +59,7 @@ public class FederatedQueryEngine {
 					+ ") returned results of type (" + currResults.getTargetClassname() + ") when type ("
 					+ dcqlQuery.getTargetObject().getName() + ") was requested!");
 			}
+			results[i] = r;
 		}
 		result.setDCQLResult(results);
 		return result;

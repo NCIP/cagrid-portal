@@ -15,6 +15,7 @@
     <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
       <agg:GetMultipleResourcePropertiesPollType
 			xmlns:ns2="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"
+			xmlns:ns7="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"
 			xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
 			xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"
 			xmlns:ns4="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"
