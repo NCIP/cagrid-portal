@@ -55,16 +55,14 @@ public final class Introduce {
 			checkGlobusLocation(confFile);
 			portal = new GridPortal(confFile);
 			Dimension dim = PortalResourceManager.getInstance().getGridPortalConfig().getApplicationDimensions();
-			portal.setSize(dim);
 			try {
 				portal.pack();
 			} catch (Exception e) {
 				portal.setIconImage(null);
-				portal.setSize(dim);
 				portal.pack();
 			}
-			portal.setVisible(true);
 			portal.setSize(dim);
+			portal.setVisible(true);
 			portal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		} catch (MobiusException e) {
 			// TODO Auto-generated catch block
