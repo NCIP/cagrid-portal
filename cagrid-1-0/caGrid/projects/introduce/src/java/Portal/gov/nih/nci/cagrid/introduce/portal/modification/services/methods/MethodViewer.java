@@ -19,6 +19,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.MethodSecurityPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
@@ -35,6 +36,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -64,6 +66,13 @@ import org.jdom.Namespace;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.portal.GridPortalBaseFrame;
+import org.projectmobius.portal.PortalResourceManager;
+import org.xml.sax.SAXException;
+
+import com.sun.xml.xsom.XSComplexType;
+import com.sun.xml.xsom.XSElementDecl;
+import com.sun.xml.xsom.XSSchemaSet;
+import com.sun.xml.xsom.parser.XSOMParser;
 
 
 /**
@@ -2091,7 +2100,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 							.getCurrentNode().getParent()).getUserObject());
 						SchemaElementType st = ((SchemaElementType) ((SchemaElementTypeTreeNode) getNamespacesJTree()
 							.getCurrentNode()).getUserObject());
-						if (CommonTools.validateIsFaultType(nt, st, new File(info.getBaseDirectory().getAbsolutePath()
+						if (MethodViewer.validateIsFaultType(nt, st, new File(info.getBaseDirectory().getAbsolutePath()
 							+ File.separator + "schema" + File.separator + info.getServices().getService(0).getName()))) {
 							QName qname = new QName(nt.getNamespace(), st.getType());
 							ExceptionHolder holder = new ExceptionHolder(qname, true);
@@ -2225,6 +2234,37 @@ public class MethodViewer extends GridPortalBaseFrame {
 			namespaceTextField = new JTextField();
 		}
 		return namespaceTextField;
+	}
+
+
+	public static boolean validateIsFaultType(NamespaceType namespace, SchemaElementType type, File baseSchemaDir) {
+		XSOMParser parser = new XSOMParser();
+		try {
+			parser.parse(new File(baseSchemaDir.getAbsolutePath() + File.separator + namespace.getLocation()));
+			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
+				IntroducePortalConf.RESOURCE);
+			parser.parse(new File(
+					conf.getGlobusLocation() + File.separator + "share" + File.separator + "schema" + File.separator + "wsrf" + File.separator + "faults" + File.separator + "WS-BaseFaults.xsd"));
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			XSSchemaSet sset = parser.getResult();
+			XSComplexType bfct = sset.getComplexType(IntroduceConstants.BASEFAULTS_NAMESPACE, "BaseFaultType");
+			XSElementDecl ct = sset.getElementDecl(namespace.getNamespace(), type.getType());
+			if (ct.getType().isDerivedFrom(bfct)) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+	
+		return false;
+	
 	}
 
 } // @jve:decl-index=0:visual-constraint="4,12"

@@ -23,10 +23,8 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -40,14 +38,8 @@ import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
-import org.projectmobius.portal.PortalResourceManager;
-import org.xml.sax.SAXException;
 
-import com.sun.xml.xsom.XSComplexType;
-import com.sun.xml.xsom.XSElementDecl;
-import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSSimpleType;
-import com.sun.xml.xsom.parser.XSOMParser;
 
 
 /**
@@ -962,36 +954,6 @@ public class CommonTools {
 			}
 		}
 		return usedTypes;
-	}
-
-	public static boolean validateIsFaultType(NamespaceType namespace, SchemaElementType type, File baseSchemaDir) {
-		XSOMParser parser = new XSOMParser();
-		try {
-			parser.parse(new File(baseSchemaDir.getAbsolutePath() + File.separator + namespace.getLocation()));
-			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-				IntroducePortalConf.RESOURCE);
-			parser.parse(new File(
-					conf.getGlobusLocation() + File.separator + "share" + File.separator + "schema" + File.separator + "wsrf" + File.separator + "faults" + File.separator + "WS-BaseFaults.xsd"));
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			XSSchemaSet sset = parser.getResult();
-			XSComplexType bfct = sset.getComplexType(IntroduceConstants.BASEFAULTS_NAMESPACE, "BaseFaultType");
-			XSElementDecl ct = sset.getElementDecl(namespace.getNamespace(), type.getType());
-			if (ct.getType().isDerivedFrom(bfct)) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch (SAXException e) {
-			e.printStackTrace();
-		}
-
-		return false;
-
 	}
 
 }
