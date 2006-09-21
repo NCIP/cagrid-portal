@@ -33,7 +33,7 @@ public final class Introduce {
 		} else {
 			showGridPortal(null);
 		}
-		//EventQueue.invokeLater(new IntroduceSplashCloser());
+		EventQueue.invokeLater(new IntroduceSplashCloser());
 	}
 
 
@@ -55,7 +55,6 @@ public final class Introduce {
 			checkGlobusLocation(confFile);
 			portal = new GridPortal(confFile);
 			Dimension dim = PortalResourceManager.getInstance().getGridPortalConfig().getApplicationDimensions();
-			new IntroduceSplashCloser();
 			portal.setSize(dim);
 			portal.pack();
 			portal.setVisible(true);
