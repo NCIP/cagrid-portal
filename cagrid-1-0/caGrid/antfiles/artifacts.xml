@@ -172,6 +172,12 @@
 									<exclude name="*test*.jar" />
 							</fileset>
 		</artifact>
+		<artifact track="main" type="jars" id="gridgrouper.jars">
+			<antcall target="build-gridgrouper" />
+			<fileset dir="${projects.dir}/gridgrouper/build/lib">
+				<include name="*.jar" />
+			</fileset>
+		</artifact>
 		
 
 		
