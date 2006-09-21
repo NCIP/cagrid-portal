@@ -495,8 +495,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 								Namespace.getNamespace(IntroduceConstants.WSDLAMESPACE));
 							for (int i = 0; i < portTypeEls.size(); i++) {
 								Element el = (Element) portTypeEls.get(i);
-								if (el.getAttributeValue("name").equals(
-									((String) getPortTypesComboBox().getSelectedItem()))) {
+								if (el.getAttributeValue("name").equals(getPortTypesComboBox().getSelectedItem())) {
 									boolean found = false;
 									List opels = el.getChildren("operation", Namespace
 										.getNamespace(IntroduceConstants.WSDLAMESPACE));
@@ -823,7 +822,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			exceptionInputPanel.setLayout(new GridBagLayout());
 			exceptionInputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Choose Used Fault",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			exceptionInputPanel.add(getExceptionJComboBox(), gridBagConstraints15);
 			exceptionInputPanel.add(getExceptionsInputButtonPanel(), gridBagConstraints27);
 			exceptionInputPanel.add(existingExceptionLabel, gridBagConstraints51);
@@ -1423,6 +1422,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			GridBagConstraints gridBagConstraints38 = new GridBagConstraints();
 			gridBagConstraints38.gridx = 1;
 			gridBagConstraints38.gridy = 3;
+			gridBagConstraints38.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints38.fill = GridBagConstraints.HORIZONTAL;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.gridy = 0;
@@ -1543,7 +1543,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 				}
 			}
 			isImportedCheckBox.addActionListener(new ActionListener() {
-
 				public void actionPerformed(ActionEvent e) {
 					if (isImportedCheckBox.isSelected()) {
 						getTabbedPanel().setEnabledAt(3, true);
@@ -1588,6 +1587,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			isProvidedCheckBox
 				.setToolTipText("Check this if you want to have another class/library implement this method");
 			isProvidedCheckBox.setText("Provided");
+			isProvidedCheckBox.setSelected(method.isIsProvided());
 			if (isProvidedCheckBox.isSelected()) {
 				getTabbedPanel().setEnabledAt(2, true);
 			} else {
@@ -1610,7 +1610,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 			});
 		}
-		isProvidedCheckBox.setSelected(method.isIsProvided());
 		return isProvidedCheckBox;
 	}
 
@@ -1714,7 +1713,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			providerInformationPanel.setLayout(new GridBagLayout());
 			providerInformationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
 				"Provider Information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			providerInformationPanel.add(providerClassnameLabel, gridBagConstraints34);
 			providerInformationPanel.add(getProviderClassnameTextField(), gridBagConstraints37);
 		}
@@ -1814,7 +1813,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			messagePanel.setLayout(new GridBagLayout());
 			messagePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Messages",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			messagePanel.add(inputLabel, gridBagConstraints8);
 			messagePanel.add(outputLabel, gridBagConstraints16);
 			messagePanel.add(getInputMessageNamespaceTextField(), gridBagConstraints17);
@@ -1871,7 +1870,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			messagesCheckBox = new JCheckBox();
 			messagesCheckBox
 				.setToolTipText("This is only needed if you are importing from a non-Introduce generated service");
-			messagesCheckBox.setText("customize message imports");
+			messagesCheckBox.setText("Customize message imports");
 			messagesCheckBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					if (messagesCheckBox.isSelected()) {
@@ -1967,7 +1966,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			createFaultPanel.setLayout(new GridBagLayout());
 			createFaultPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create New Service Faults",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			createFaultPanel.add(getNewFaultNameTextField(), gridBagConstraints45);
 			createFaultPanel.add(getCreateFaultButton(), gridBagConstraints47);
 			createFaultPanel.add(faultTypeNameLabel, gridBagConstraints48);
@@ -1996,7 +1995,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getCreateFaultButton() {
 		if (createFaultButton == null) {
-			createFaultButton = new JButton(IntroduceLookAndFeel.getAddIcon());
+			createFaultButton = new JButton(PortalLookAndFeel.getAddIcon());
 			createFaultButton.setText("Add New Fault");
 			createFaultButton
 				.setToolTipText("Creates a new fault under this services types namespace and adds it to the list of available faults.");
@@ -2077,7 +2076,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			faultsFromTypesPanel.setLayout(new GridBagLayout());
 			faultsFromTypesPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Add Fault From Types",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			faultsFromTypesPanel.add(getAddFaultFromTypeButton(), new GridBagConstraints());
 		}
 		return faultsFromTypesPanel;
@@ -2091,7 +2090,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JButton getAddFaultFromTypeButton() {
 		if (addFaultFromTypeButton == null) {
-			addFaultFromTypeButton = new JButton(IntroduceLookAndFeel.getAddIcon());
+			addFaultFromTypeButton = new JButton(PortalLookAndFeel.getAddIcon());
 			addFaultFromTypeButton.setText("Add From Type");
 			addFaultFromTypeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -2267,5 +2266,5 @@ public class MethodViewer extends GridPortalBaseFrame {
 	
 	}
 
-} // @jve:decl-index=0:visual-constraint="4,12"
+}  //  @jve:decl-index=0:visual-constraint="112,37"
 
