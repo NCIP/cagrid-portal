@@ -182,6 +182,26 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 		}
 	}
 
+	public void removeGroup(MembershipQuery query) {
+		MembershipQuery[] qe = expression.getMembershipQuery();
+		MembershipQuery[] nqe = new MembershipQuery[qe.length - 1];
+		if (qe.length == 1) {
+			expression.setMembershipQuery(null);
+			refresh();
+			return;
+		} else {
+			int count = 0;
+			for (int i = 0; i < qe.length; i++) {
+				if (qe[i] != query) {
+					nqe[count] = qe[i];
+					count = count + 1;
+				}
+			}
+			expression.setMembershipQuery(nqe);
+			loadExpression();
+		}
+	}
+
 	public void refresh() {
 		loadExpression();
 		TreeNode parent = this.getParent();

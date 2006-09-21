@@ -537,14 +537,14 @@ public class GridGrouperExpressionBuilder extends JPanel {
 			addGroup.setText("Add Group");
 			addGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					DefaultMutableTreeNode currentNode = getExpressionTree()
+					DefaultMutableTreeNode currentNode = getGrouperTree()
 							.getCurrentNode();
-					if (currentNode instanceof ExpressionNode) {
-						ExpressionNode n = (ExpressionNode) currentNode;
-						n.addAndExpression();
+					if ((currentNode!=null)&&(currentNode instanceof GroupTreeNode)){
+						GroupTreeNode grp = (GroupTreeNode)currentNode;
+						addGroupToCurrentExpression(grp.getGroup());
 					} else {
 						PortalUtils
-								.showErrorMessage("Please select an expression to add a sub expression to!!!");
+								.showErrorMessage("Please select a group to add!!!");
 					}
 				}
 			});
@@ -579,7 +579,7 @@ public class GridGrouperExpressionBuilder extends JPanel {
 								}
 							} else {
 								PortalUtils
-										.showErrorMessage("Please select an expression to add a sub expression to!!!");
+										.showErrorMessage("Please select an expression to remove!!!");
 								return;
 							}
 						}
@@ -642,6 +642,23 @@ public class GridGrouperExpressionBuilder extends JPanel {
 		if (removeGroup == null) {
 			removeGroup = new JButton();
 			removeGroup.setText("Remove");
+			removeGroup.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					DefaultMutableTreeNode currentNode = getExpressionTree()
+							.getCurrentNode();
+					if (currentNode instanceof QueryNode) {
+						QueryNode n = (QueryNode) currentNode;
+						ExpressionNode parent = (ExpressionNode) n.getParent();
+						parent.removeGroup(n.getQuery());
+					} else {
+						PortalUtils
+								.showErrorMessage("Please select a group to remove!!!");
+						return;
+					}
+				}
+
+			});
+
 		}
 		return removeGroup;
 	}
