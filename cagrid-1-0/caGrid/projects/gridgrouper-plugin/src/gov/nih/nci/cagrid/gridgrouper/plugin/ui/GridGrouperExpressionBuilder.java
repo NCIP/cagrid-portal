@@ -1,11 +1,13 @@
 package gov.nih.nci.cagrid.gridgrouper.plugin.ui;
 
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.LogicalOperator;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipStatus;
+import gov.nih.nci.cagrid.gridgrouper.client.Group;
 import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 
 import java.awt.CardLayout;
@@ -24,11 +26,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 public class GridGrouperExpressionBuilder extends JPanel {
-	
-	private static final String EXPRESSION_EDITOR = "ExpressionEditor";  //  @jve:decl-index=0:
-	private static final String QUERY_EDITOR = "QueryEditor";  //  @jve:decl-index=0:
+
+	private static final String EXPRESSION_EDITOR = "ExpressionEditor"; // @jve:decl-index=0:
+
+	private static final String QUERY_EDITOR = "QueryEditor"; // @jve:decl-index=0:
 
 	private static final long serialVersionUID = 1L;
 
@@ -51,24 +55,37 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	private MembershipExpression expression;
 
 	private JPanel editorPanel = null;
-	
+
 	private CardLayout editorLayout = null;
 
 	private JPanel expressionEditor = null;
 
 	private JPanel queryEditor = null;
+
 	private JPanel expressionProperties = null;
+
 	private JLabel jLabel = null;
+
 	private JComboBox logicalRelation = null;
+
 	private JPanel expressionButtons = null;
+
 	private JButton addExpression = null;
+
 	private JButton addGroup = null;
+
 	private JButton removeExpression = null;
+
 	private JPanel queryProperties = null;
+
 	private JPanel queryButtons = null;
+
 	private JButton removeGroup = null;
+
 	private JLabel jLabel1 = null;
+
 	private JComboBox membership = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -80,9 +97,9 @@ public class GridGrouperExpressionBuilder extends JPanel {
 				group2, false);
 		MembershipExpression in2Not1 = getExpression(true, group1, false,
 				group2, true);
-		this.expression = getExpression(false, in1Not2,in2Not1);
-		//this.expression = new MembershipExpression();
-		//this.expression.setLogicRelation(LogicalOperator.AND);
+		this.expression = getExpression(false, in1Not2, in2Not1);
+		// this.expression = new MembershipExpression();
+		// this.expression.setLogicRelation(LogicalOperator.AND);
 		initialize();
 	}
 
@@ -91,14 +108,15 @@ public class GridGrouperExpressionBuilder extends JPanel {
 		this.expression = expression;
 		initialize();
 	}
-	
+
 	private static GroupIdentifier getGroupIdentifier(String groupName) {
 		GroupIdentifier id = new GroupIdentifier();
 		id.setGroupName(groupName);
 		return id;
 	}
-	
-	private MembershipExpression getExpression(boolean and,MembershipExpression exp1, MembershipExpression exp2) {
+
+	private MembershipExpression getExpression(boolean and,
+			MembershipExpression exp1, MembershipExpression exp2) {
 		MembershipExpression[] expression = new MembershipExpression[2];
 		expression[0] = exp1;
 		expression[1] = exp2;
@@ -140,7 +158,6 @@ public class GridGrouperExpressionBuilder extends JPanel {
 		}
 		return exp;
 	}
-
 
 	/**
 	 * This method initializes this
@@ -279,7 +296,7 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	 */
 	protected ExpressionTree getExpressionTree() {
 		if (expressionTree == null) {
-			expressionTree = new ExpressionTree(this,expression);
+			expressionTree = new ExpressionTree(this, expression);
 		}
 		return expressionTree;
 	}
@@ -300,9 +317,9 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	}
 
 	/**
-	 * This method initializes editorPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes editorPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getEditorPanel() {
 		if (editorPanel == null) {
@@ -317,9 +334,9 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	}
 
 	/**
-	 * This method initializes expressionEditor	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes expressionEditor
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getExpressionEditor() {
 		if (expressionEditor == null) {
@@ -343,16 +360,17 @@ public class GridGrouperExpressionBuilder extends JPanel {
 					TitledBorder.DEFAULT_JUSTIFICATION,
 					TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 							Font.BOLD, 12), new Color(62, 109, 181)));
-			expressionEditor.add(getExpressionProperties(), gridBagConstraints5);
+			expressionEditor
+					.add(getExpressionProperties(), gridBagConstraints5);
 			expressionEditor.add(getExpressionButtons(), gridBagConstraints8);
 		}
 		return expressionEditor;
 	}
 
 	/**
-	 * This method initializes queryEditor	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes queryEditor
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getQueryEditor() {
 		if (queryEditor == null) {
@@ -379,24 +397,22 @@ public class GridGrouperExpressionBuilder extends JPanel {
 		}
 		return queryEditor;
 	}
-	
-	public void setExpressionEditor(MembershipExpression exp){
-		System.out.println("expression");
+
+	public void setExpressionEditor(MembershipExpression exp) {
 		this.getLogicalRelation().setSelectedItem(exp.getLogicRelation());
 		this.editorLayout.show(getEditorPanel(), EXPRESSION_EDITOR);
 		repaint();
 	}
-	
-	public void setExpressionQuery(MembershipQuery query){
-		System.out.println("query");
+
+	public void setExpressionQuery(MembershipQuery query) {
 		this.getMembership().setSelectedItem(query.getMembershipStatus());
 		this.editorLayout.show(getEditorPanel(), QUERY_EDITOR);
 	}
 
 	/**
-	 * This method initializes expressionProperties	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes expressionProperties
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getExpressionProperties() {
 		if (expressionProperties == null) {
@@ -423,23 +439,27 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	}
 
 	/**
-	 * This method initializes logicalRelation	
-	 * 	
-	 * @return javax.swing.JComboBox	
+	 * This method initializes logicalRelation
+	 * 
+	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getLogicalRelation() {
 		if (logicalRelation == null) {
 			logicalRelation = new JComboBox();
-			logicalRelation.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					BaseTreeNode node = getExpressionTree().getCurrentNode();
-					if(node instanceof ExpressionNode){
-						ExpressionNode en = (ExpressionNode)node;
-						en.getExpression().setLogicRelation((LogicalOperator)getLogicalRelation().getSelectedItem());
-						en.refresh();
-					}
-				}
-			});
+			logicalRelation
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							BaseTreeNode node = getExpressionTree()
+									.getCurrentNode();
+							if (node instanceof ExpressionNode) {
+								ExpressionNode en = (ExpressionNode) node;
+								en.getExpression().setLogicRelation(
+										(LogicalOperator) getLogicalRelation()
+												.getSelectedItem());
+								en.refresh();
+							}
+						}
+					});
 			logicalRelation.addItem(LogicalOperator.AND);
 			logicalRelation.addItem(LogicalOperator.OR);
 		}
@@ -447,9 +467,9 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	}
 
 	/**
-	 * This method initializes expressionButtons	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes expressionButtons
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getExpressionButtons() {
 		if (expressionButtons == null) {
@@ -463,35 +483,54 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	}
 
 	/**
-	 * This method initializes addExpression	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes addExpression
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getAddExpression() {
 		if (addExpression == null) {
 			addExpression = new JButton();
 			addExpression.setText("Add Expression");
+			addExpression
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+
+						}
+					});
 		}
 		return addExpression;
 	}
 
 	/**
-	 * This method initializes addGroup	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes addGroup
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getAddGroup() {
 		if (addGroup == null) {
 			addGroup = new JButton();
 			addGroup.setText("Add Group");
+			addGroup.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					DefaultMutableTreeNode currentNode = getGrouperTree()
+							.getCurrentNode();
+					if (currentNode instanceof GroupTreeNode) {
+						GroupTreeNode grp = (GroupTreeNode) currentNode;
+						addGroupToCurrentExpression(grp.getGroup());
+					} else {
+						PortalUtils
+								.showErrorMessage("Please select a group to add!!!");
+					}
+				}
+			});
 		}
 		return addGroup;
 	}
 
 	/**
-	 * This method initializes removeExpression	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes removeExpression
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getRemoveExpression() {
 		if (removeExpression == null) {
@@ -502,9 +541,9 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	}
 
 	/**
-	 * This method initializes queryProperties	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes queryProperties
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getQueryProperties() {
 		if (queryProperties == null) {
@@ -531,9 +570,9 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	}
 
 	/**
-	 * This method initializes queryButtons	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes queryButtons
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getQueryButtons() {
 		if (queryButtons == null) {
@@ -545,9 +584,9 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	}
 
 	/**
-	 * This method initializes removeGroup	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes removeGroup
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getRemoveGroup() {
 		if (removeGroup == null) {
@@ -558,9 +597,9 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	}
 
 	/**
-	 * This method initializes membership	
-	 * 	
-	 * @return javax.swing.JComboBox	
+	 * This method initializes membership
+	 * 
+	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getMembership() {
 		if (membership == null) {
@@ -568,9 +607,11 @@ public class GridGrouperExpressionBuilder extends JPanel {
 			membership.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					BaseTreeNode node = getExpressionTree().getCurrentNode();
-					if(node instanceof QueryNode){
-						QueryNode n = (QueryNode)node;
-						n.getQuery().setMembershipStatus((MembershipStatus)getMembership().getSelectedItem());
+					if (node instanceof QueryNode) {
+						QueryNode n = (QueryNode) node;
+						n.getQuery().setMembershipStatus(
+								(MembershipStatus) getMembership()
+										.getSelectedItem());
 						n.refresh();
 					}
 				}
@@ -581,4 +622,15 @@ public class GridGrouperExpressionBuilder extends JPanel {
 		return membership;
 	}
 
+	protected void addGroupToCurrentExpression(Group grp) {
+		DefaultMutableTreeNode currentNode = this.expressionTree
+				.getCurrentNode();
+		if (currentNode instanceof ExpressionNode) {
+			ExpressionNode exp = (ExpressionNode) currentNode;
+			exp.addGroup(grp);
+		} else {
+			PortalUtils
+					.showErrorMessage("Please select an expression in which to add the group!!!");
+		}
+	}
 }

@@ -74,9 +74,11 @@ public class GridGrouperTree extends JTree {
 	private GridGroupersTreeNode rootNode;
 
 	public GridGrouperTree(GridGrouperExpressionBuilder editor) {
-		super();
+		super();	
+		setLargeModel(true);
 		this.rootNode = new GridGroupersTreeNode(editor);
 		setModel(new DefaultTreeModel(this.rootNode));
+		this.addMouseListener(new GridGrouperTreeEventListener(this,editor));
 		this.setCellRenderer(new TreeRenderer());
 		this.addGridGrouper("https://140.254.80.109:8443/wsrf/services/cagrid/GridGrouper", null);
 	}

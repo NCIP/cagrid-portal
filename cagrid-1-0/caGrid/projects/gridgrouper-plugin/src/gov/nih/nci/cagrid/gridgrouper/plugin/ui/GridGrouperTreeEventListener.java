@@ -43,14 +43,13 @@
 
 package gov.nih.nci.cagrid.gridgrouper.plugin.ui;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
-import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
-import gov.nih.nci.cagrid.gridgrouper.bean.MembershipStatus;
-import gov.nih.nci.cagrid.gridgrouper.client.Group;
-import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
 
-import javax.swing.ImageIcon;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -61,94 +60,61 @@ import javax.swing.ImageIcon;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class ExpressionNode extends GridGrouperBaseTreeNode {
+public class GridGrouperTreeEventListener extends MouseAdapter {
 
-	private MembershipExpression expression;
+	private GridGrouperTree tree;
 
-	private boolean rootStem;
+	private GridGrouperExpressionBuilder editor;
 
-	public ExpressionNode(GridGrouperExpressionBuilder editor,
-			MembershipExpression expression, boolean root) {
-		super(editor);
-		this.rootStem = root;
-		this.expression = expression;
-		loadExpression();
+	private HashMap popupMappings;
+
+	public GridGrouperTreeEventListener(GridGrouperTree owningTree,
+			GridGrouperExpressionBuilder editor) {
+		this.tree = owningTree;
+		this.popupMappings = new HashMap();
+		this.editor = editor;
+		this.associatePopup(StemTreeNode.class, new StemNodeMenu(editor,
+				this.tree));
+		this.associatePopup(GroupTreeNode.class, new GroupNodeMenu(editor,
+				this.tree));
 	}
 
-	public void loadExpression() {
-		this.removeAllChildren();
-		MembershipExpression[] exps = this.expression.getMembershipExpression();
-		if (exps != null) {
-			for (int i = 0; i < exps.length; i++) {
-				ExpressionNode node = new ExpressionNode(getEditor(), exps[i],
-						false);
-				synchronized (getTree()) {
-					this.add(node);
-					getTree().reload();
-				}
-				node.loadExpression();
+	/**
+	 * Associate a GridServiceTreeNode type with a popup menu
+	 * 
+	 * @param serviceType
+	 * @param popup
+	 */
+	public void associatePopup(Class nodeType, JPopupMenu popup) {
+		this.popupMappings.put(nodeType, popup);
+	}
+
+	public void mouseEntered(MouseEvent e) {
+		maybeShowPopup(e);
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		maybeShowPopup(e);
+	}
+
+	private void maybeShowPopup(MouseEvent e) {
+		if ((e.isPopupTrigger()) || (SwingUtilities.isRightMouseButton(e))) {
+			DefaultMutableTreeNode currentNode = this.tree.getCurrentNode();
+			GridGrouperTreeNodeMenu popup = null;
+			if (currentNode != null) {
+				popup = (GridGrouperTreeNodeMenu) popupMappings.get(currentNode
+						.getClass());
+			}
+			if (popup != null) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+
+		} else if (e.getClickCount() == 2) {
+			DefaultMutableTreeNode currentNode = this.tree.getCurrentNode();
+			if (currentNode instanceof GroupTreeNode) {
+				GroupTreeNode grp = (GroupTreeNode) currentNode;
+				this.editor.addGroupToCurrentExpression(grp.getGroup());
 			}
 		}
-		MembershipQuery[] queries = this.expression.getMembershipQuery();
-		if (queries != null) {
-			for (int i = 0; i < queries.length; i++) {
-				QueryNode node = new QueryNode(getEditor(), queries[i]);
-				synchronized (getTree()) {
-					this.add(node);
-					getTree().requestFocusInWindow();
-					getTree().reload();
-				}
-			}
-		}
 	}
-
-	public void addGroup(Group grp) {
-		MembershipQuery[] mq = expression.getMembershipQuery();
-		int size = 0;
-		if (mq != null) {
-			size = mq.length;
-		}
-		MembershipQuery[] nmq = new MembershipQuery[size + 1];
-		for (int i = 0; i < size; i++) {
-			if (mq[i].getGroupIdentifier().equals(grp
-					.getGroupIdentifier())){
-				PortalUtils.showErrorMessage("The group "
-						+ grp.getDisplayName()
-						+ " has already exists in the expression!!!");
-				return;
-			}
-			nmq[i] = mq[i];
-		}
-		nmq[size] = new MembershipQuery();
-		nmq[size].setGroupIdentifier(grp.getGroupIdentifier());
-		nmq[size].setMembershipStatus(MembershipStatus.MEMBER_OF);
-		expression.setMembershipQuery(nmq);
-		loadExpression();
-	}
-
-	public void refresh() {
-		if (parent != null) {
-			getTree().reload(parent);
-		} else {
-			getTree().reload();
-		}
-		loadExpression();
-	}
-
-	public ImageIcon getIcon() {
-		return GridGrouperLookAndFeel.getStemIcon16x16();
-	}
-
-	public String toString() {
-		return "Expression [" + expression.getLogicRelation().getValue() + "]";
-	}
-
-	public boolean isRootExpression() {
-		return rootStem;
-	}
-
-	public MembershipExpression getExpression() {
-		return expression;
-	}
-
 }
