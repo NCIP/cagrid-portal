@@ -90,13 +90,14 @@ public class GMEGetSchemaStep
 		handle.cacheSchema(schemaTargetNamespace, dir);
 		
 		// download imports
-		SchemaInfo info = new SchemaInfo(new File(dir, schemaFile.getName()));
-		Hashtable<String, String> importTable = info.getImports();
-		for (String namespace : importTable.keySet()) {
-			String location = importTable.get(namespace);
-			File importFile = new File(schemaFile.getParent(), location); 
-			downloadSchema(handle, dir, importFile);
-		}
+//		SchemaInfo info = new SchemaInfo(new File(dir, schemaFile.getName()));
+//		Hashtable<String, String> importTable = info.getImports();
+//		for (String namespace : importTable.keySet()) {
+//			String location = importTable.get(namespace);
+//			if (new File(dir, location).exists()) continue;
+//			File importFile = new File(schemaFile.getParent(), location); 
+//			downloadSchema(handle, dir, importFile);
+//		}
 	}
 	
 	public static void main(String[] args)
