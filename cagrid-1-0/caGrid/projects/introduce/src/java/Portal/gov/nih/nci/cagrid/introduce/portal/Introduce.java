@@ -60,6 +60,7 @@ public final class Introduce {
 				portal.pack();
 			} catch (Exception e) {
 				portal.setIconImage(null);
+				portal.setSize(dim);
 				portal.pack();
 			}
 			portal.setVisible(true);
