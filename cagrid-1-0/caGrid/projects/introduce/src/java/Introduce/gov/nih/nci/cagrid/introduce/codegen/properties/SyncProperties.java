@@ -83,14 +83,16 @@ public class SyncProperties extends SyncTool {
 				if (service == null) {
 					service = CommonTools.getService(getServiceInformation().getServices(), serviceName + "Service");
 					if (service == null) {
-						throw new SynchronizationException("Could not find service in JNDI: " + serviceName);
+						throw new SynchronizationException(
+							"Could not find service in the service information in SyncProperties: " + serviceName);
 					}
 				}
 
 				List resourceEls = serviceEl.getChildren("resource", serviceEl.getNamespace());
 				for (int resourceI = 0; resourceI < resourceEls.size(); resourceI++) {
 					Element resourceEl = (Element) resourceEls.get(resourceI);
-					if (serviceI == 0 && resourceEl.getAttributeValue("name").equals("serviceconfiguration")) {
+					if (serviceI == serviceEls.size() - 1
+						&& resourceEl.getAttributeValue("name").equals("serviceconfiguration")) {
 						// located a serviceconfiguration element, need to
 						// populate it's attributes now...
 
