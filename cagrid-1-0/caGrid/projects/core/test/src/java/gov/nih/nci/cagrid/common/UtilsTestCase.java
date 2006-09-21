@@ -24,7 +24,6 @@ public class UtilsTestCase extends TestCase {
 
 
 	public void testEqualsObjectObject() {
-
 		assertTrue(Utils.equals(null, null));
 		assertTrue(Utils.equals(a1, a1));
 		assertTrue(Utils.equals(a1, a2));
@@ -38,15 +37,28 @@ public class UtilsTestCase extends TestCase {
 
 
 	public void testConcatenateArrays() {
-		String a1[] = new String[]{"0", "1", "2"};
-		String a2[] = new String[]{"3", "4", "5"};
+		String arr1[] = new String[]{"0", "1", "2"};
+		String arr2[] = new String[]{"3", "4", "5"};
 		String gold[] = new String[]{"0", "1", "2", "3", "4", "5"};
 
 		assertNull(Utils.concatenateArrays(String.class, null, null));
-		assertEquals(a2, Utils.concatenateArrays(String.class, a2, null));
-		assertEquals(a2, Utils.concatenateArrays(String.class, null, a2));
-		assertTrue(Arrays.deepEquals(gold, (String[]) Utils.concatenateArrays(String.class, a1, a2)));
-		assertFalse(Arrays.deepEquals(gold, (String[]) Utils.concatenateArrays(String.class, a2, a1)));
+		assertEquals(arr2, Utils.concatenateArrays(String.class, arr2, null));
+		assertEquals(arr2, Utils.concatenateArrays(String.class, null, arr2));
+		assertTrue(Arrays.deepEquals(gold, (String[]) Utils.concatenateArrays(String.class, arr1, arr2)));
+		assertFalse(Arrays.deepEquals(gold, (String[]) Utils.concatenateArrays(String.class, arr2, arr1)));
 	}
-
+	
+	
+	public void testArrayAppend() {
+		String[] arr1 = new String[]{"0", "1", "2"};
+		String[] gold = new String[]{"0", "1", "2", "3"};
+		assertTrue(Arrays.deepEquals(gold, (String[]) Utils.appendToArray(arr1, "3")));
+	}
+	
+	
+	public void testArrayRemove() {
+		String[] arr1 = new String[]{"0", "1", "2"};
+		String[] gold = new String[]{"0", "2"};
+		assertTrue(Arrays.deepEquals(gold, (String[]) Utils.removeFromArray(arr1, "2")));
+	}
 }
