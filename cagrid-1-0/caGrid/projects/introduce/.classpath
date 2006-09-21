@@ -107,5 +107,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_samples_counter_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_samples_counter.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/relaxngDatatype.jar"/>
+	<classpathentry kind="lib" path="lib/xsom14.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

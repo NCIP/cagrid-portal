@@ -885,22 +885,22 @@ public class SyncTools {
 		}
 
 		// add the new fault to the schema for them automatically
-		// <element name="<%=exception.getQname().getLocalPart() %>">
-		// <complexType>
+		// <element name="<%=exception.getQname().getLocalPart() %>" type="<%=exception.getQname().getLocalPart() %>Type"/>
+		// <complexType name = name="<%=exception.getQname().getLocalPart() %>Type">
 		// <complexContent>
 		// <extension base="wsrbf:BaseFaultType"/>
 		// </complexContent>
 		// </complexType>
-		// </element>
 
 		org.jdom.Element faultEl = new org.jdom.Element("element", org.jdom.Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
 		faultEl.setAttribute("name", exceptionName);
-		org.jdom.Element ctEl = new org.jdom.Element("complexType", org.jdom.Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
+		faultEl.setAttribute("type", "tns:" + exceptionName + "Type");
+		org.jdom.Element faultType = new org.jdom.Element("complexType", org.jdom.Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
+		faultType.setAttribute("name", exceptionName+ "Type");
 		org.jdom.Element ccEl = new org.jdom.Element("complexContent", org.jdom.Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
 		org.jdom.Element extEl = new org.jdom.Element("extension", org.jdom.Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
 		extEl.setAttribute("base", "wsrbf:BaseFaultType");
-		faultEl.addContent(ctEl);
-		ctEl.addContent(ccEl);
+		faultType.addContent(ccEl);
 		ccEl.addContent(extEl);
 
 		boolean exceptionExists = false;
@@ -916,6 +916,7 @@ public class SyncTools {
 		}
 		if (!exceptionExists) {
 			doc.getRootElement().addContent(faultEl.detach());
+			doc.getRootElement().addContent(faultType.detach());
 			FileWriter fw = new FileWriter(schemaFile);
 			fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
 			fw.close();
