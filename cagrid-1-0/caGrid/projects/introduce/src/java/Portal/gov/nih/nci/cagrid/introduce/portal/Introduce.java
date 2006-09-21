@@ -56,7 +56,12 @@ public final class Introduce {
 			portal = new GridPortal(confFile);
 			Dimension dim = PortalResourceManager.getInstance().getGridPortalConfig().getApplicationDimensions();
 			portal.setSize(dim);
-			portal.pack();
+			try {
+				portal.pack();
+			} catch (Exception e) {
+				portal.setIconImage(null);
+				portal.pack();
+			}
 			portal.setVisible(true);
 			portal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		} catch (MobiusException e) {
