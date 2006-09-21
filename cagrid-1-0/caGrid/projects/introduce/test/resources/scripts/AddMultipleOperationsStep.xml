@@ -5,6 +5,9 @@
   <component class="javax.swing.JButton" icon="list-add.png" id="Add 2" index="0" parent="JPanel Instance 23" text="Add" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JButton" icon="list-add.png" id="Add 3" index="0" parent="JPanel Instance 24" text="Add" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JButton" icon="list-add.png" id="Add 4" index="0" parent="JPanel Instance 34" text="Add" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="list-add.png" id="Add 5" index="0" parent="JPanel Instance 38" text="Add" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="list-add.png" id="Add 6" index="0" parent="JPanel Instance 40" text="Add" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="list-add.png" id="Add 7" index="0" parent="JPanel Instance 42" text="Add" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JButton" id="Browse" index="1" parent="JPanel Instance 3" text="Browse" window="Introduce: Grid Service Authoring Toolkit 2" />
   <component class="javax.swing.JButton" id="Browse 2" index="1" parent="JPanel Instance 3" text="Browse" window="Introduce: Grid Service Authoring Toolkit 2" />
   <component class="javax.swing.JButton" id="Browse 3" index="1" parent="FileTypesSelectionComponent Instance" text="Browse" window="Introduce: Grid Service Authoring Toolkit 2" />
@@ -38,11 +41,19 @@
   <component class="javax.swing.JMenuItem" id="Create Service 2" index="0" parent="JPopupMenu Instance" text="Create Service" window="Introduce: Grid Service Authoring Toolkit 2" />
   <component class="gov.nih.nci.cagrid.introduce.portal.creation.CreationViewer" id="CreationViewer Instance" title="" />
   <component class="javax.swing.JButton" icon="media-playback-start.png" id="Done" index="0" parent="JPanel Instance 3" text="Done" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="media-playback-start.png" id="Done 10" index="0" parent="JPanel Instance 3" text="Done" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="media-playback-start.png" id="Done 11" index="0" parent="JPanel Instance 3" text="Done" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="media-playback-start.png" id="Done 12" index="0" parent="JPanel Instance 3" text="Done" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="media-playback-start.png" id="Done 13" index="0" parent="JPanel Instance 3" text="Done" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="media-playback-start.png" id="Done 14" index="0" parent="JPanel Instance 3" text="Done" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JButton" icon="media-playback-start.png" id="Done 2" index="0" parent="JPanel Instance 3" text="Done" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JButton" icon="media-playback-start.png" id="Done 3" index="0" parent="JPanel Instance 3" text="Done" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JButton" icon="media-playback-start.png" id="Done 4" index="0" parent="JPanel Instance 3" text="Done" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JButton" icon="media-playback-start.png" id="Done 5" index="0" parent="JPanel Instance 3" text="Done" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JButton" icon="media-playback-start.png" id="Done 6" index="0" parent="JPanel Instance 3" text="Done" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="media-playback-start.png" id="Done 7" index="0" parent="JPanel Instance 3" text="Done" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="media-playback-start.png" id="Done 8" index="0" parent="JPanel Instance 3" text="Done" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="media-playback-start.png" id="Done 9" index="0" parent="JPanel Instance 3" text="Done" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JTextField" id="File name:" index="1" label="File name:" parent="JPanel Instance 20" window="Confirm Overwrite" />
   <component class="gov.nih.nci.cagrid.introduce.portal.modification.discovery.files.FileTypesSelectionComponent" id="FileTypesSelectionComponent Instance" index="1" parent="JTabbedPane Instance" window="Introduce: Grid Service Authoring Toolkit 2" />
   <component class="org.projectmobius.portal.GridPortal" id="Introduce: Grid Service Authoring Toolkit" root="true" title="Introduce: Grid Service Authoring Toolkit" />
@@ -92,7 +103,15 @@
   <component class="javax.swing.JPanel" id="JPanel Instance 32" index="1" parent="JPanel Instance 31" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JPanel" id="JPanel Instance 33" index="1" parent="JTabbedPane Instance 2" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JPanel" id="JPanel Instance 34" index="1" parent="JPanel Instance 33" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 35" index="1" parent="JTabbedPane Instance 2" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 36" index="1" parent="JPanel Instance 35" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 37" index="1" parent="JTabbedPane Instance 2" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 38" index="1" parent="JPanel Instance 37" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 39" index="1" parent="JTabbedPane Instance 2" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JPanel" id="JPanel Instance 4" index="1" parent="JPanel Instance 2" window="Introduce: Grid Service Authoring Toolkit" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 40" index="1" parent="JPanel Instance 39" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 41" index="1" parent="JTabbedPane Instance 2" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JPanel" id="JPanel Instance 42" index="1" parent="JPanel Instance 41" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JPanel" id="JPanel Instance 5" index="0" parent="JLayeredPane Instance 3" window="Confirm Overwrite" />
   <component class="javax.swing.JPanel" id="JPanel Instance 6" index="0" parent="JLayeredPane Instance 4" window="Introduce: Grid Service Authoring Toolkit 2" />
   <component class="javax.swing.JPanel" id="JPanel Instance 7" index="1" parent="JPanel Instance 6" window="Introduce: Grid Service Authoring Toolkit 2" />
@@ -123,6 +142,9 @@
   <component class="javax.swing.JTextField" id="JTextField Instance 3" index="6" parent="JPanel Instance 3" window="Introduce: Grid Service Authoring Toolkit 2" />
   <component class="javax.swing.JTextField" id="JTextField Instance 4" index="5" parent="JPanel Instance 3" window="Introduce: Grid Service Authoring Toolkit 2" />
   <component class="javax.swing.JTextField" hOrder="1" id="JTextField Instance 5" index="0" parent="JPanel Instance 3" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JTextField" hOrder="1" id="JTextField Instance 6" index="0" parent="JPanel Instance 3" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JTextField" hOrder="1" id="JTextField Instance 7" index="0" parent="JPanel Instance 3" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JTextField" hOrder="1" id="JTextField Instance 8" index="0" parent="JPanel Instance 3" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JViewport" id="JViewport Instance" index="0" parent="JScrollPane Instance" window="Introduce: Grid Service Authoring Toolkit 2" />
   <component class="javax.swing.JViewport" id="JViewport Instance 2" index="0" parent="JScrollPane Instance 3" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="org.projectmobius.portal.MDIDesktopPane" id="MDIDesktopPane Instance" index="0" parent="JViewport Instance" window="Introduce: Grid Service Authoring Toolkit 4" />
@@ -140,6 +162,7 @@
   <component class="gov.nih.nci.cagrid.common.portal.BusyDialog" id="Progress (Creating)" parent="Introduce: Grid Service Authoring Toolkit" title="Progress (Creating)" />
   <component class="javax.swing.JButton" icon="list-remove.png" id="Remove" index="2" parent="JPanel Instance 32" text="Remove" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JButton" icon="list-remove.png" id="Remove 2" index="2" parent="JPanel Instance 34" text="Remove" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="list-remove.png" id="Remove 3" index="2" parent="JPanel Instance 36" text="Remove" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JButton" icon="save.png" id="Save" index="1" parent="JPanel Instance 3" text="Save" window="Introduce: Grid Service Authoring Toolkit 2" />
   <component class="javax.swing.JButton" icon="save.png" id="Save 2" index="1" parent="JPanel Instance 3" text="Save" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JButton" icon="save.png" id="Save 3" index="1" parent="JPanel Instance 3" text="Save" window="Introduce: Grid Service Authoring Toolkit 4" />
@@ -147,10 +170,17 @@
   <component class="javax.swing.JButton" icon="save.png" id="Save 5" index="1" parent="JPanel Instance 3" text="Save" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JButton" icon="save.png" id="Save 6" index="1" parent="JPanel Instance 3" text="Save" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JButton" icon="save.png" id="Save 7" index="1" parent="JPanel Instance 3" text="Save" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="save.png" id="Save 8" index="1" parent="JPanel Instance 3" text="Save" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="javax.swing.JButton" icon="save.png" id="Save 9" index="1" parent="JPanel Instance 3" text="Save" window="Introduce: Grid Service Authoring Toolkit 4" />
+  <component class="gov.nih.nci.cagrid.common.portal.SplashScreen" id="SplashScreen Instance" parent="shared frame" />
   <component class="javax.swing.JToolBar" id="Tools" index="1" name="Tools" parent="JPanel Instance" window="Introduce: Grid Service Authoring Toolkit 4" />
   <component class="javax.swing.JMenu" id="Tools 2" index="1" parent="JMenuBar Instance" text="Tools" window="Introduce: Grid Service Authoring Toolkit 2" />
+  <component class="javax.swing.SwingUtilities$SharedOwnerFrame" id="shared frame" root="true" title="" />
   <launch args="[conf/introduce/introduce-portal-conf.xml]" class="gov.nih.nci.cagrid.introduce.portal.Introduce" method="main" threaded="true" />
   <sequence>
+    <wait args="SplashScreen Instance" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" />
+    <wait args="Introduce: Grid Service Authoring Toolkit 4" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
+    <wait args="SplashScreen Instance" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" />
     <action args="Modify Service" method="actionSelectMenuItem" />
     <wait args="ModificationViewer Instance" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
     <action args="ModificationViewer Instance,0,0" class="javax.swing.JInternalFrame" method="actionResize" />
@@ -163,53 +193,38 @@
     <action args="ModificationViewer Instance,1003,673" class="javax.swing.JInternalFrame" method="actionResize" />
     <action args="ModificationViewer Instance,1003,673" class="javax.swing.JInternalFrame" method="actionResize" />
     <action args="JTabbedPane Instance 2,&quot;Operations&quot;" class="javax.swing.JTabbedPane" method="actionSelectTab" />
-    <action args="Add 4" class="javax.swing.AbstractButton" method="actionClick" />
+    <action args="Add 7" class="javax.swing.AbstractButton" method="actionClick" />
     <wait args="Build/Modify Operation" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
     <action args="Build/Modify Operation,878,655" class="javax.swing.JInternalFrame" method="actionResize" />
     <action args="Build/Modify Operation,878,655" class="javax.swing.JInternalFrame" method="actionResize" />
     <action args="Build/Modify Operation,20,20" class="javax.swing.JInternalFrame" method="actionMove" />
     <action args="Build/Modify Operation,878,655" class="javax.swing.JInternalFrame" method="actionResize" />
     <wait args="Build/Modify Operation" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
-    <action args="Done 3" class="javax.swing.AbstractButton" method="actionClick" />
-    <action args="Add 4" class="javax.swing.AbstractButton" method="actionClick" />
+    <action args="Done 12" class="javax.swing.AbstractButton" method="actionClick" />
+    <action args="Add 7" class="javax.swing.AbstractButton" method="actionClick" />
     <wait args="Build/Modify Operation" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
     <action args="Build/Modify Operation,878,655" class="javax.swing.JInternalFrame" method="actionResize" />
     <action args="Build/Modify Operation,878,655" class="javax.swing.JInternalFrame" method="actionResize" />
     <action args="Build/Modify Operation,20,20" class="javax.swing.JInternalFrame" method="actionMove" />
     <action args="Build/Modify Operation,878,655" class="javax.swing.JInternalFrame" method="actionResize" />
     <wait args="Build/Modify Operation" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
-    <action args="Done 4" class="javax.swing.AbstractButton" method="actionClick" />
-    <action args="Save 7" class="javax.swing.AbstractButton" method="actionClick" />
-    <wait args="Confirm Overwrite" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
-    <action args="OptionPane.button" class="javax.swing.AbstractButton" method="actionClick" />
-    <wait args="Confirm Save" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
-    <wait args="Progress (Creating)" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
+    <action args="JTextField Instance 8,delete-previous" class="javax.swing.JComponent" method="actionActionMap" />
+    <action args="Done 13" class="javax.swing.AbstractButton" method="actionClick" />
     <wait args="Confirm Overwrite" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
     <action args="OptionPane.button" class="javax.swing.AbstractButton" method="actionClick" />
     <wait args="Confirm Overwrite" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" />
-    <wait args="Progress (Creating)" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" />
-    <action args="MethodsTable Instance,&quot;void  newMethod()&quot;" class="javax.swing.JTable" method="actionSelectCell" />
-    <action args="Remove 2" class="javax.swing.AbstractButton" method="actionClick" />
-    <action args="Add 4" class="javax.swing.AbstractButton" method="actionClick" />
+    <action args="JTextField Instance 8,9" class="javax.swing.text.JTextComponent" method="actionClick" />
+    <action args="JTextField Instance 8,2" method="actionKeyString" />
+    <action args="Done 13" class="javax.swing.AbstractButton" method="actionClick" />
+    <action args="Add 7" class="javax.swing.AbstractButton" method="actionClick" />
     <wait args="Build/Modify Operation" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
     <action args="Build/Modify Operation,878,655" class="javax.swing.JInternalFrame" method="actionResize" />
     <action args="Build/Modify Operation,878,655" class="javax.swing.JInternalFrame" method="actionResize" />
     <action args="Build/Modify Operation,20,20" class="javax.swing.JInternalFrame" method="actionMove" />
     <action args="Build/Modify Operation,878,655" class="javax.swing.JInternalFrame" method="actionResize" />
     <wait args="Build/Modify Operation" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
-    <action args="JTextField Instance 5,9" class="javax.swing.text.JTextComponent" method="actionClick" />
-    <action args="JTextField Instance 5,2" method="actionKeyString" />
-    <action args="Done 5" class="javax.swing.AbstractButton" method="actionClick" />
-    <action args="Add 4" class="javax.swing.AbstractButton" method="actionClick" />
-    <wait args="Build/Modify Operation" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
-    <action args="Build/Modify Operation,878,655" class="javax.swing.JInternalFrame" method="actionResize" />
-    <action args="Build/Modify Operation,878,655" class="javax.swing.JInternalFrame" method="actionResize" />
-    <action args="Build/Modify Operation,20,20" class="javax.swing.JInternalFrame" method="actionMove" />
-    <action args="Build/Modify Operation,878,655" class="javax.swing.JInternalFrame" method="actionResize" />
-    <wait args="Build/Modify Operation" class="abbot.tester.ComponentTester" method="assertComponentShowing" />
-    <action args="JTextField Instance 5,3" method="actionKeyString" />
-    <action args="Done 6" class="javax.swing.AbstractButton" method="actionClick" />
-    <action args="Save 7" class="javax.swing.AbstractButton" method="actionClick" />
+    <action args="Done 14" class="javax.swing.AbstractButton" method="actionClick" />
+    <action args="Save 9" class="javax.swing.AbstractButton" method="actionClick" />
     <wait args="Confirm Save" class="abbot.tester.ComponentTester" method="assertComponentShowing" timeout="@Timeout@" />
     <action args="OptionPane.button" class="javax.swing.AbstractButton" method="actionClick" />
     <wait args="Confirm Save" class="abbot.tester.ComponentTester" invert="true" method="assertComponentShowing" timeout="@Timeout@" />
