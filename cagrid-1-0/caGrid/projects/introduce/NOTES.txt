@@ -19,8 +19,6 @@ when adding a service context with a custom resource we have seen error in the s
 
 getResourceHome helper methods need to be created in the serviceimpl for easier use and take advantage of the generic method i have
 
-duce generated faults should create both a gobal element and complexType (currently an inner complextype is created) so faults can be extended
-
 i am not sure that service/method security on service contexts is right on priority and overides.
 
 when adding a serviceContext and then adding a method that returns its referece
@@ -69,6 +67,8 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+
+duce generated faults should create both a gobal element and complexType (currently an inner complextype is created) so faults can be extended
 
 (A NEW GUI FOR IMPORTING WILL HANDLE THIS) When importing a method.  if methods names dont match bad stuff happens.
 
