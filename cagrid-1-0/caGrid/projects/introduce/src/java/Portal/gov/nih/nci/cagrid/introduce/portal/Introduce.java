@@ -102,7 +102,11 @@ public final class Introduce {
 
 	private static final class IntroduceSplashCloser implements Runnable {
 		public void run() {
-			introduceSplash.dispose();
+			try {
+				introduceSplash.dispose();
+			} catch (Exception e) {
+
+			}
 		}
 	}
 }

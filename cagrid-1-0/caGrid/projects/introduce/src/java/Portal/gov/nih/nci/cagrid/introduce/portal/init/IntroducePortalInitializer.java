@@ -44,7 +44,6 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
 				PortalUtils.centerWindow(preferences);
 				preferences.setVisible(true);
 			}
-
 		});
 		configMenu.insert(configMenuItem, 0);
 
