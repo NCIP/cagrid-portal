@@ -122,7 +122,10 @@ public class ExpressionTree extends JTree {
 	 *            The node from which to reload
 	 */
 	public synchronized void reload(TreeNode reloadPoint) {
-		((DefaultTreeModel) this.getModel()).reload(reloadPoint);
+		TreePath currentSelection = this.getSelectionPath();
+		DefaultTreeModel model = (DefaultTreeModel) this.getModel();
+		model.reload(reloadPoint);
+		this.setSelectionPath(currentSelection);
 	}
 
 	/**

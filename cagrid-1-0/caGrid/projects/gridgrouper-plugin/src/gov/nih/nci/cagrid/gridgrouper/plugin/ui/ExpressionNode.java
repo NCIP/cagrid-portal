@@ -44,6 +44,7 @@
 package gov.nih.nci.cagrid.gridgrouper.plugin.ui;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.gridgrouper.bean.LogicalOperator;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipStatus;
@@ -119,8 +120,7 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 		}
 		MembershipQuery[] nmq = new MembershipQuery[size + 1];
 		for (int i = 0; i < size; i++) {
-			if (mq[i].getGroupIdentifier().equals(grp
-					.getGroupIdentifier())){
+			if (mq[i].getGroupIdentifier().equals(grp.getGroupIdentifier())) {
 				PortalUtils.showErrorMessage("The group "
 						+ grp.getDisplayName()
 						+ " has already exists in the expression!!!");
@@ -135,8 +135,61 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 		loadExpression();
 	}
 
+	public void addAndExpression() {
+		MembershipExpression exp = new MembershipExpression();
+		exp.setLogicRelation(LogicalOperator.AND);
+		addExpression(exp);
+	}
+
+	public void addOrExpression() {
+		MembershipExpression exp = new MembershipExpression();
+		exp.setLogicRelation(LogicalOperator.OR);
+		addExpression(exp);
+	}
+
+	public void addExpression(MembershipExpression exp) {
+		MembershipExpression[] me = expression.getMembershipExpression();
+		int size = 0;
+		if (me != null) {
+			size = me.length;
+		}
+		MembershipExpression[] nme = new MembershipExpression[size + 1];
+		for (int i = 0; i < size; i++) {
+			nme[i] = me[i];
+		}
+		nme[size] = exp;
+		expression.setMembershipExpression(nme);
+		loadExpression();
+	}
+
+	public void removeExpression(MembershipExpression exp) {
+		MembershipExpression[] me = expression.getMembershipExpression();
+		MembershipExpression[] nme = new MembershipExpression[me.length - 1];
+		if (me.length == 1) {
+			expression.setMembershipExpression(null);
+			refresh();
+			return;
+		} else {
+			int count = 0;
+			for (int i = 0; i < me.length; i++) {
+				if (me[i] != exp) {
+					nme[count] = me[i];
+					count = count + 1;
+				}
+			}
+			expression.setMembershipExpression(nme);
+			loadExpression();
+		}
+	}
+
 	public void refresh() {
 		loadExpression();
+		TreeNode parent = this.getParent();
+		if (parent != null) {
+			getTree().reload(parent);
+		} else {
+			getTree().reload();
+		}
 	}
 
 	public ImageIcon getIcon() {

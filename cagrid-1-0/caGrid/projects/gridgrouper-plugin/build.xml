@@ -72,6 +72,8 @@
 			<classpath>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+					 <exclude name="${jar.name}" />
+					 <exclude name="*GridGrouper*" />
 				</fileset>
 				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar" />
@@ -87,6 +89,8 @@
 			<classpath>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+					 <exclude name="${jar.name}" />
+										 <exclude name="*GridGrouper*" />
 				</fileset>
 				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar" />

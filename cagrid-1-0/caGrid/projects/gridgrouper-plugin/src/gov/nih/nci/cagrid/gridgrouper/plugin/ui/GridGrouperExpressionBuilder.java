@@ -190,10 +190,11 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	private JSplitPane getJSplitPane() {
 		if (jSplitPane == null) {
 			jSplitPane = new JSplitPane();
-			jSplitPane.setLeftComponent(getTreePanel());
-			jSplitPane.setRightComponent(getExpressionPanel());
 			jSplitPane.setDividerLocation(0.5D);
 			jSplitPane.setResizeWeight(1.0D);
+			jSplitPane.setLeftComponent(getTreePanel());
+			jSplitPane.setRightComponent(getExpressionPanel());
+
 		}
 		return jSplitPane;
 	}
@@ -509,8 +510,17 @@ public class GridGrouperExpressionBuilder extends JPanel {
 			addExpression
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-
+							DefaultMutableTreeNode currentNode = getExpressionTree()
+									.getCurrentNode();
+							if (currentNode instanceof ExpressionNode) {
+								ExpressionNode n = (ExpressionNode) currentNode;
+								n.addAndExpression();
+							} else {
+								PortalUtils
+										.showErrorMessage("Please select an expression to add a sub expression to!!!");
+							}
 						}
+
 					});
 		}
 		return addExpression;
@@ -527,14 +537,14 @@ public class GridGrouperExpressionBuilder extends JPanel {
 			addGroup.setText("Add Group");
 			addGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					DefaultMutableTreeNode currentNode = getGrouperTree()
+					DefaultMutableTreeNode currentNode = getExpressionTree()
 							.getCurrentNode();
-					if (currentNode instanceof GroupTreeNode) {
-						GroupTreeNode grp = (GroupTreeNode) currentNode;
-						addGroupToCurrentExpression(grp.getGroup());
+					if (currentNode instanceof ExpressionNode) {
+						ExpressionNode n = (ExpressionNode) currentNode;
+						n.addAndExpression();
 					} else {
 						PortalUtils
-								.showErrorMessage("Please select a group to add!!!");
+								.showErrorMessage("Please select an expression to add a sub expression to!!!");
 					}
 				}
 			});
@@ -551,6 +561,31 @@ public class GridGrouperExpressionBuilder extends JPanel {
 		if (removeExpression == null) {
 			removeExpression = new JButton();
 			removeExpression.setText("Remove");
+			removeExpression
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							DefaultMutableTreeNode currentNode = getExpressionTree()
+									.getCurrentNode();
+							if (currentNode instanceof ExpressionNode) {
+								ExpressionNode n = (ExpressionNode) currentNode;
+								if (n.isRootExpression()) {
+									PortalUtils
+											.showErrorMessage("Cannot remove root expression!!!");
+									return;
+								} else {
+									ExpressionNode parent = (ExpressionNode) n
+											.getParent();
+									parent.removeExpression(n.getExpression());
+								}
+							} else {
+								PortalUtils
+										.showErrorMessage("Please select an expression to add a sub expression to!!!");
+								return;
+							}
+						}
+
+					});
+
 		}
 		return removeExpression;
 	}
