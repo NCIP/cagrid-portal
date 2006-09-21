@@ -302,7 +302,7 @@ public class ModificationViewer extends GridPortalComponent {
 		getMethodsTable().setMethods(info.getServices().getService(0));
 		getRpHolderPanel().reInitialize(info.getServices().getService(0).getResourcePropertiesList(),
 			info.getNamespaces());
-		getServicePropertiesTable().refreshView();
+		getServicePropertiesTable().setServiceInformation(info);
 		this.resetMethodSecurityIfServiceSecurityChanged();
 		for (int i = 0; i < this.extensionPanels.size(); i++) {
 			ServiceModificationUIPanel panel = (ServiceModificationUIPanel) extensionPanels.get(i);

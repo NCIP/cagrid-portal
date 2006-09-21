@@ -35,6 +35,11 @@ public class ServicePropertiesTable extends PortalBaseTable {
 		this.info = info;
 		initialize();
 	}
+	
+	public void setServiceInformation(ServiceInformation info){
+		this.info = info;
+		refreshView();
+	}
 
 
 	public boolean isCellEditable(int row, int column) {
