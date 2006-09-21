@@ -58,7 +58,7 @@ import javax.swing.ImageIcon;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class QueryNode extends GridGrouperBaseTreeNode {
+public class QueryNode extends ExpressionBaseTreeNode {
 
 	private MembershipQuery query;
 

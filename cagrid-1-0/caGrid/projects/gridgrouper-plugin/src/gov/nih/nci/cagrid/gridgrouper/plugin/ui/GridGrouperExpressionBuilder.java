@@ -28,6 +28,9 @@ import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.projectmobius.common.MobiusRunnable;
+import org.projectmobius.portal.PortalResourceManager;
+
 public class GridGrouperExpressionBuilder extends JPanel {
 
 	private static final String EXPRESSION_EDITOR = "ExpressionEditor"; // @jve:decl-index=0:
@@ -189,6 +192,8 @@ public class GridGrouperExpressionBuilder extends JPanel {
 			jSplitPane = new JSplitPane();
 			jSplitPane.setLeftComponent(getTreePanel());
 			jSplitPane.setRightComponent(getExpressionPanel());
+			jSplitPane.setDividerLocation(0.5D);
+			jSplitPane.setResizeWeight(1.0D);
 		}
 		return jSplitPane;
 	}
@@ -297,6 +302,7 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	protected ExpressionTree getExpressionTree() {
 		if (expressionTree == null) {
 			expressionTree = new ExpressionTree(this, expression);
+			expressionTree.getRootNode().loadExpression();
 		}
 		return expressionTree;
 	}
@@ -622,15 +628,26 @@ public class GridGrouperExpressionBuilder extends JPanel {
 		return membership;
 	}
 
-	protected void addGroupToCurrentExpression(Group grp) {
-		DefaultMutableTreeNode currentNode = this.expressionTree
-				.getCurrentNode();
-		if (currentNode instanceof ExpressionNode) {
-			ExpressionNode exp = (ExpressionNode) currentNode;
-			exp.addGroup(grp);
-		} else {
-			PortalUtils
-					.showErrorMessage("Please select an expression in which to add the group!!!");
+	protected void addGroupToCurrentExpression(final Group grp) {
+		MobiusRunnable runner = new MobiusRunnable() {
+			public void execute() {
+
+				DefaultMutableTreeNode currentNode = expressionTree
+						.getCurrentNode();
+				if (currentNode instanceof ExpressionNode) {
+					ExpressionNode exp = (ExpressionNode) currentNode;
+					exp.addGroup(grp);
+				} else {
+					PortalUtils
+							.showErrorMessage("Please select an expression in which to add the group!!!");
+				}
+			}
+		};
+		try {
+			PortalResourceManager.getInstance().getThreadManager()
+					.executeInBackground(runner);
+		} catch (Exception t) {
+			t.getMessage();
 		}
 	}
 }

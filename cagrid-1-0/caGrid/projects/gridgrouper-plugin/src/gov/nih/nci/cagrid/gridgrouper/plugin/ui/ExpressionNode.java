@@ -51,6 +51,7 @@ import gov.nih.nci.cagrid.gridgrouper.client.Group;
 import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 
 import javax.swing.ImageIcon;
+import javax.swing.tree.TreeNode;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -61,7 +62,7 @@ import javax.swing.ImageIcon;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class ExpressionNode extends GridGrouperBaseTreeNode {
+public class ExpressionNode extends ExpressionBaseTreeNode {
 
 	private MembershipExpression expression;
 
@@ -72,7 +73,6 @@ public class ExpressionNode extends GridGrouperBaseTreeNode {
 		super(editor);
 		this.rootStem = root;
 		this.expression = expression;
-		loadExpression();
 	}
 
 	public void loadExpression() {
@@ -84,7 +84,12 @@ public class ExpressionNode extends GridGrouperBaseTreeNode {
 						false);
 				synchronized (getTree()) {
 					this.add(node);
-					getTree().reload();
+					TreeNode parent = this.getParent();
+					if (parent != null) {
+						getTree().reload(parent);
+					} else {
+						getTree().reload();
+					}
 				}
 				node.loadExpression();
 			}
@@ -95,8 +100,12 @@ public class ExpressionNode extends GridGrouperBaseTreeNode {
 				QueryNode node = new QueryNode(getEditor(), queries[i]);
 				synchronized (getTree()) {
 					this.add(node);
-					getTree().requestFocusInWindow();
-					getTree().reload();
+					TreeNode parent = this.getParent();
+					if (parent != null) {
+						getTree().reload(parent);
+					} else {
+						getTree().reload();
+					}
 				}
 			}
 		}
@@ -127,6 +136,7 @@ public class ExpressionNode extends GridGrouperBaseTreeNode {
 	}
 
 	public void refresh() {
+		TreeNode parent = this.getParent();
 		if (parent != null) {
 			getTree().reload(parent);
 		} else {
