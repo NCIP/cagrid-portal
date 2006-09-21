@@ -64,6 +64,7 @@ public final class Introduce {
 				portal.pack();
 			}
 			portal.setVisible(true);
+			portal.setSize(dim);
 			portal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		} catch (MobiusException e) {
 			// TODO Auto-generated catch block
