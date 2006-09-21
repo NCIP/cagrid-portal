@@ -136,12 +136,6 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 	}
 
 	public void refresh() {
-		TreeNode parent = this.getParent();
-		if (parent != null) {
-			getTree().reload(parent);
-		} else {
-			getTree().reload();
-		}
 		loadExpression();
 	}
 

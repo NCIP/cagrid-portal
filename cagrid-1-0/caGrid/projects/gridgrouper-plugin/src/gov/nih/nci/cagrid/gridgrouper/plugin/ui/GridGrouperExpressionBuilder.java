@@ -459,10 +459,19 @@ public class GridGrouperExpressionBuilder extends JPanel {
 									.getCurrentNode();
 							if (node instanceof ExpressionNode) {
 								ExpressionNode en = (ExpressionNode) node;
-								en.getExpression().setLogicRelation(
-										(LogicalOperator) getLogicalRelation()
-												.getSelectedItem());
-								en.refresh();
+								if (!en
+										.getExpression()
+										.getLogicRelation()
+										.equals(
+												(LogicalOperator) getLogicalRelation()
+														.getSelectedItem())) {
+									en
+											.getExpression()
+											.setLogicRelation(
+													(LogicalOperator) getLogicalRelation()
+															.getSelectedItem());
+									en.refresh();
+								}
 							}
 						}
 					});
@@ -615,10 +624,14 @@ public class GridGrouperExpressionBuilder extends JPanel {
 					BaseTreeNode node = getExpressionTree().getCurrentNode();
 					if (node instanceof QueryNode) {
 						QueryNode n = (QueryNode) node;
-						n.getQuery().setMembershipStatus(
+						if (!n.getQuery().getMembershipStatus().equals(
 								(MembershipStatus) getMembership()
-										.getSelectedItem());
-						n.refresh();
+										.getSelectedItem())) {
+							n.getQuery().setMembershipStatus(
+									(MembershipStatus) getMembership()
+											.getSelectedItem());
+							n.refresh();
+						}
 					}
 				}
 			});
