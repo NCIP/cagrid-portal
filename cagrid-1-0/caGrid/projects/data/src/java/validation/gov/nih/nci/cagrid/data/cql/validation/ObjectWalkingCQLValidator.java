@@ -29,6 +29,9 @@ public class ObjectWalkingCQLValidator implements CqlStructureValidator {
 		if (query.getQueryModifier() != null) {
 			validateQueryMods(query.getQueryModifier());
 		}
+		if (query.getTarget() == null) {
+			throw new MalformedQueryException("Query target cannot be null");
+		}
 		validateObjectStructure(query.getTarget());
 	}
 	
