@@ -148,5 +148,35 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-ui.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GridGrouper-0.9-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GridGrouper-0.9-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GridGrouper-0.9-resources.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GridGrouper-0.9-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GridGrouper-0.9-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GridGrouper-0.9-tests.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GridGrouper-0.9-ui.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/cglib-full-2.0.2.jar"/>
+	<classpathentry kind="lib" path="ext/lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="ext/lib/commons-dbcp-1.2.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/commons-httpclient-3.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/commons-lang-2.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/commons-pool-1.2.jar"/>
+	<classpathentry kind="lib" path="ext/lib/dom4j-1.4.jar"/>
+	<classpathentry kind="lib" path="ext/lib/ehcache-0.9.jar"/>
+	<classpathentry kind="lib" path="ext/lib/GroboTestingJUnit-1.2.1-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/GroboUtilThread-1.0.0alpha2-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/grouper.jar"/>
+	<classpathentry kind="lib" path="ext/lib/hibernate2-2.1.8.jar"/>
+	<classpathentry kind="lib" path="ext/lib/hsqldb-1.7.2.11.jar"/>
+	<classpathentry kind="lib" path="ext/lib/jta-1.0.1B.jar"/>
+	<classpathentry kind="lib" path="ext/lib/jug-1.1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/junit-3.8.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_common_server-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
+	<classpathentry kind="lib" path="ext/lib/odmg-3.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/subject-0.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
