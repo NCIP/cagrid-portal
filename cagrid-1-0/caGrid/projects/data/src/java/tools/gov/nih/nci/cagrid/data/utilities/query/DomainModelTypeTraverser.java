@@ -31,7 +31,7 @@ public class DomainModelTypeTraverser implements TypeTraverser {
 		this.classesByName = new HashMap();
 		UMLClass[] classes = model.getExposedUMLClassCollection().getUMLClass();
 		for (int i = 0; i < classes.length; i++) {
-			classesByName.put(classes[i].getClassName(), classes[i]);
+			classesByName.put(classes[i].getPackageName() + "." + classes[i].getClassName(), classes[i]);
 		}
 	}
 	
@@ -64,7 +64,7 @@ public class DomainModelTypeTraverser implements TypeTraverser {
 					UMLClassReference targetRef = associations[i].getTargetUMLAssociationEdge()
 						.getUMLAssociationEdge().getUMLClassReference();
 					UMLClass targetClass = DomainModelUtils.getReferencedUMLClass(model, targetRef);
-					associatedTypes.add(new AssociatedType(targetClass.getClassName(), 
+					associatedTypes.add(new AssociatedType(targetClass.getPackageName() + "." + targetClass.getClassName(), 
 						associations[i].getTargetUMLAssociationEdge().getUMLAssociationEdge().getRoleName()));
 				}
 			}
