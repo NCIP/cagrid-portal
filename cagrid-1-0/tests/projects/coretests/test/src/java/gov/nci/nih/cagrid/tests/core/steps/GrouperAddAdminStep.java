@@ -30,6 +30,6 @@ public class GrouperAddAdminStep
 		Properties sysProps = new Properties();
 		sysProps.setProperty("gridId.input", userName);
 		
-		AntUtils.runAnt(grouperDir, null, "dropGrouperSchema", sysProps, null);
+		AntUtils.runAnt(grouperDir, null, "addAdmin", sysProps, null);
 	}
 }
