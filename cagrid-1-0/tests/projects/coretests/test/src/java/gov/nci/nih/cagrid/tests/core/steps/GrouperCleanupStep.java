@@ -7,10 +7,8 @@ import gov.nci.nih.cagrid.tests.core.util.AntUtils;
 
 import java.io.File;
 
-import com.atomicobject.haste.framework.Step;
-
 public class GrouperCleanupStep
-	extends Step
+	extends AbstractDbCleanupStep
 {
 	private File grouperDir;
 	
@@ -25,5 +23,8 @@ public class GrouperCleanupStep
 		throws Throwable
 	{
 		AntUtils.runAnt(grouperDir, null, "dropGrouperSchema", null, null);
+		super.dropDatabases(new String[] { 
+			"grouper", 
+		});
 	}
 }
