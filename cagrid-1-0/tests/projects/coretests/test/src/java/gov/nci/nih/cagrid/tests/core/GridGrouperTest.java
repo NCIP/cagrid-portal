@@ -3,22 +3,25 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
+import gov.nci.nih.cagrid.tests.core.steps.DorianAddTrustedCAStep;
+import gov.nci.nih.cagrid.tests.core.steps.DorianApproveRegistrationStep;
+import gov.nci.nih.cagrid.tests.core.steps.DorianAuthenticateStep;
+import gov.nci.nih.cagrid.tests.core.steps.DorianCleanupStep;
 import gov.nci.nih.cagrid.tests.core.steps.DorianConfigureStep;
+import gov.nci.nih.cagrid.tests.core.steps.DorianDestroyDefaultProxyStep;
+import gov.nci.nih.cagrid.tests.core.steps.DorianSubmitRegistrationStep;
+import gov.nci.nih.cagrid.tests.core.steps.GTSSyncOnceStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCleanupStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
-import gov.nci.nih.cagrid.tests.core.steps.DorianDestroyDefaultProxyStep;
-import gov.nci.nih.cagrid.tests.core.steps.DorianAddTrustedCAStep;
-import gov.nci.nih.cagrid.tests.core.steps.DorianApproveRegistrationStep;
-import gov.nci.nih.cagrid.tests.core.steps.DorianAuthenticateFailStep;
-import gov.nci.nih.cagrid.tests.core.steps.DorianAuthenticateStep;
-import gov.nci.nih.cagrid.tests.core.steps.DorianCleanupStep;
-import gov.nci.nih.cagrid.tests.core.steps.DorianSubmitRegistrationStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
-import gov.nci.nih.cagrid.tests.core.steps.GTSSyncOnceStep;
 import gov.nci.nih.cagrid.tests.core.steps.GrouperAddAdminStep;
+import gov.nci.nih.cagrid.tests.core.steps.GrouperAddMemberStep;
 import gov.nci.nih.cagrid.tests.core.steps.GrouperCleanupStep;
+import gov.nci.nih.cagrid.tests.core.steps.GrouperCreateDbStep;
+import gov.nci.nih.cagrid.tests.core.steps.GrouperCreateGroupStep;
+import gov.nci.nih.cagrid.tests.core.steps.GrouperCreateStemStep;
 import gov.nci.nih.cagrid.tests.core.steps.GrouperInitStep;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
@@ -57,6 +60,7 @@ public class GridGrouperTest
 	private int grouperPort;
 	private int dorianPort;
 	private File caFile;
+	private String grouperAdminName;
 	private String grouperAdmin;
 	
 	public GridGrouperTest()
@@ -110,7 +114,8 @@ public class GridGrouperTest
 			".." + File.separator + ".." + File.separator + ".." + File.separator + 
 			"caGrid" + File.separator + "projects" + File.separator + "gridgrouper"
 		));
-		grouperAdmin = System.getProperty("grouper.adminId", "grouper");
+		grouperAdminName = System.getProperty("grouper.adminId", "grouper");
+		grouperAdmin = System.getProperty("grouper.adminId", "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=" + grouperAdminName);
 
 		Vector steps = new Vector();
 		
@@ -123,23 +128,18 @@ public class GridGrouperTest
 		steps.add(new GlobusStartStep(dorianGlobus, dorianPort));
 		
 		// initialize grouper
+		steps.add(new GrouperCreateDbStep());
 		steps.add(new GrouperInitStep(grouperDir));
 		steps.add(new GrouperAddAdminStep(grouperDir, grouperAdmin));
 		steps.add(new GlobusCreateStep(grouperGlobus));
 		steps.add(new GTSSyncOnceStep(grouperGlobus));
 		steps.add(new GlobusDeployServiceStep(grouperGlobus, grouperDir));
-		steps.add(new DorianConfigureStep(grouperGlobus));
 		steps.add(new GlobusDeployServiceStep(grouperGlobus, new File("..", "echo")));
 		steps.add(new GlobusStartStep(grouperGlobus, grouperPort));
 		
-		// successful authenticate
+		// test successful authenticate
 		steps.add(new DorianAuthenticateStep("dorian", "password", dorianPort));
 		steps.add(new DorianDestroyDefaultProxyStep());
-		
-		// failed authenticate
-		steps.add(new DorianAuthenticateFailStep("junk", "junk", dorianPort));
-		steps.add(new DorianAuthenticateFailStep("dorian", "junk", dorianPort));
-		steps.add(new DorianAuthenticateFailStep("junk", "password", dorianPort));
 
 		// add trusted ca
 		steps.add(new DorianAuthenticateStep("dorian", "password", dorianPort));
@@ -171,7 +171,11 @@ public class GridGrouperTest
 		}
 		
 		// test grouper
-		
+		steps.add(new GrouperCreateStemStep("test:my:stem"));
+		steps.add(new GrouperCreateGroupStep("test:mygroup"));
+		steps.add(new GrouperCreateGroupStep("test:my:stem:anothergroup"));
+		steps.add(new GrouperAddMemberStep("test:mygroup", "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=subject1"));
+		steps.add(new GrouperAddMemberStep("test:my:stem:anothergroup", "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=subject2"));
 		
 		// cleanup dorian
 		steps.add(new GlobusStopStep(dorianGlobus, dorianPort));
@@ -189,7 +193,7 @@ public class GridGrouperTest
 	
 	public String getDescription()
 	{
-		return "GrouperTest";
+		return "GridGrouperTest";
 	}
 	
 	/**
