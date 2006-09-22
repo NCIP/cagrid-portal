@@ -4,7 +4,7 @@
     
     <import file="${basedir}/build.xml"/>
     
-    <property name="apps.list" value="cabio"/>
+    <property name="apps.list" value="cabio cagrid-browser"/>
     
     <target name="app-all" depends="app-clean" description="Builds the entire application">
         <for list="${apps.list}" parallel="false" param="app.name" trim="true">
@@ -59,6 +59,19 @@
         -->
         <ant dir="${apps.dir}/cabio" inheritAll="false" antfile="build.xml" target="all"/>
     </target>
-    
+
+    <!-- =============================================================== -->
+    <!-- cagrid-browser:                                                          -->
+    <!-- =============================================================== -->
+    <target name="build-cagrid-browser" depends="app-prepare" description="Builds the cagrid-browser application">
+        <resolveDependencies extdir="${apps.dir}/cagrid-browser/ext">
+        	<artifact refid="ant-contrib.jars"/>
+        	<artifact refid="common.test.jars"/>
+        	<artifact refid="common.metadata.jars"/>
+        	<artifact refid="discovery.jars"/>
+        	<artifact refid="metadatautils.jars"/>
+        </resolveDependencies>
+        <ant dir="${apps.dir}/cagrid-browser" inheritAll="false" antfile="build.xml" target="all"/>
+    </target>	
     
 </project>

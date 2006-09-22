@@ -1,0 +1,108 @@
+<project name="cagrid-browser" default="all">
+
+	<property environment="env"/>
+	<property name="war.name" value="cagrid-browser"/>
+	<property name="build.dir" value="build"/>
+	<property name="build.classes.dir" value="${build.dir}/classes"/>
+	<property name="build.war.dir" value="${build.dir}/${war.name}"/>
+	<property name="src.java.dir" value="src/java"/>
+	<property name="src.web.dir" value="src/web"/>
+	<property name="lib.dir" value="${src.web.dir}/WEB-INF/lib"/>
+	<property name="ext.lib.dir" value="ext/lib"/>
+	<property name="test.src.dir" value="test/src/java"/>
+	<property name="test.lib.dir" value="ext/test/lib"/>
+	<property name="test.build.dir" value="test/build"/>
+	<property name="test.build.classes.dir" value="${test.build.dir}/classes"/>
+	<property name="junit.results.dir" value="${test.build.dir}/junit"/>
+	<property name="deploy.dir" value="${env.CATALINA_HOME}/webapps"/>
+	
+	<target name="init">
+		<mkdir dir="${build.classes.dir}"/>
+		<mkdir dir="${build.war.dir}"/>	
+		<antcall target="defineClasspaths"/>
+	</target>
+
+	<target name="defineClasspaths">
+        <path id="base.classpath">
+        	<fileset dir="${ext.lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+        </path>
+        <path id="test.build.classpath">
+            <fileset dir="${test.lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+            <pathelement location="${build.classes.dir}" />
+        	<path refid="base.classpath"/>
+        </path>
+        <path id="test.run.classpath">
+            <pathelement location="${test.build.classes.dir}" />
+            <path refid="test.build.classpath" />
+        </path>
+    </target>
+	
+	<target name="compile" depends="init">
+		<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}">
+			<classpath refid="base.classpath"/>
+		</javac>
+	</target>
+	
+	<target name="compileTests" depends="init">
+		<mkdir dir="${test.build.classes.dir}"/>
+		<javac srcdir="${test.src.dir}" destdir="${test.build.classes.dir}">
+			<classpath refid="test.build.classpath"/>
+		</javac>
+	</target>
+	
+	<target name="war" depends="compile">
+		<copy todir="${build.war.dir}">
+			<fileset dir="${src.web.dir}">
+				<include name="**"/>
+			</fileset>
+		</copy>
+		<copy todir="${build.war.dir}/WEB-INF">
+			<fileset dir="${build.dir}">
+				<include name="classes/**"/>
+			</fileset>
+		</copy>
+		<jar destfile="${build.dir}/${war.name}.war">
+			<fileset dir="${build.dir}/${war.name}">
+				<include name="**"/>
+			</fileset>
+		</jar>
+	</target>
+	
+	<target name="deploy" depends="undeploy,compile,war">
+		<copy file="${build.dir}/${war.name}.war" todir="${deploy.dir}"/>
+	</target>
+	
+	<target name="undeploy">
+		<delete dir="${deploy.dir}/${war.name}"/>
+		<delete file="${deploy.dir}/${war.name}.war"/>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+	</target>
+	
+	<target name="all" depends="clean,deploy"/>
+	
+	<target name="test">
+        <echo message="Test results dir: ${junit.results.dir}" />
+        <mkdir dir="${junit.results.dir}" />
+        <junit dir="${basedir}" printsummary="yes" showoutput="true">
+            <classpath refid="test.run.classpath" />
+            <formatter type="xml" />
+            <batchtest fork="yes" todir="${junit.results.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/Test*.java" />
+                    <include name="**/*TestCase.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+	
+</project>
