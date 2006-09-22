@@ -19,7 +19,6 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPreProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
@@ -210,12 +209,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 				throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(), ex);
 			}
 
-			// find the client-configuration.wsdd needed to serialize
-			// the domain model
-			String configFilename = ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data" + File.separator
-				+ "DomainModel-client-config.wsdd";
 			LOG.debug("Serializing domain model to file " + domainModelFile);
-			LOG.debug("Using config filename " + configFilename);
 			try {
 				FileWriter domainModelFileWriter = new FileWriter(domainModelFile);
 				MetadataUtils.serializeDomainModel(model, domainModelFileWriter);
@@ -227,8 +221,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 					+ ex.getMessage(), ex);
 			}
 
-			// add the metadata to the service information as a resource
-			// property
+			// add the metadata to the service information as a resource property
 			ResourcePropertyType domainModelResourceProperty = new ResourcePropertyType();
 			domainModelResourceProperty.setPopulateFromFile(true);
 			domainModelResourceProperty.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
