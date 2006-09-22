@@ -15,11 +15,14 @@ unify service code that uses processor to reuse better
 
 add topic notification to query completion status
 
+security (useless without delegation)?
+
 should we add query return modifiers to DCQL? (not trivial, as they have to work "in code" against aggregate results... can't be pushed to backend)
 
 add unit and system tests    
 
 add DCQL XSD validation?
+
 
 
 
