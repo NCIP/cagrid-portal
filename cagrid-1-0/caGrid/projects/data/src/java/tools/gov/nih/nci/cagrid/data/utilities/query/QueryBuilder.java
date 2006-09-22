@@ -288,18 +288,23 @@ public class QueryBuilder extends JFrame {
 			addAssociationButton.setName("addAssociationButton");
 			addAssociationButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// verify the base type selected matches the one in the query tree
+					IconTreeNode node = (IconTreeNode) getQueryTree().getSelectionPath().getLastPathComponent();
+					Object parentQueryObject = getParentQueryObject(node);
+					BaseType selectedType = getTypeDisplayPanel().getSelectedType();
+					if (selectedType == null || !selectedType.getTypeName().equals(parentQueryObject.getName())) {
+						JOptionPane.showMessageDialog(
+							QueryBuilder.this, "Please select associations from the type " + parentQueryObject.getName());
+						return;
+					}
+					
 					// see what association is selected
 					AssociatedType assocType = getTypeDisplayPanel().getSelectedAssociation();
 					if (assocType != null) {
 						Association association = new Association();
 						association.setRoleName(assocType.getRoleName());
 						association.setName(assocType.getTypeName());
-						IconTreeNode node = (IconTreeNode) getQueryTree().getSelectionPath().getLastPathComponent();
-						if (node instanceof AssociationTreeNode) {
-							Object parentQueryObject = ((AssociationTreeNode) node).getAssociation();
-							parentQueryObject.setAssociation(association);
-						} else if (node instanceof TargetTreeNode) {
-							Object parentQueryObject = ((TargetTreeNode) node).getTarget();
+						if (node instanceof AssociationTreeNode || node instanceof TargetTreeNode) {
 							parentQueryObject.setAssociation(association);
 						} else { // group
 							Group group = ((GroupTreeNode) node).getGroup();
@@ -334,21 +339,26 @@ public class QueryBuilder extends JFrame {
 			addAttributeButton.setName("addAttributeButton");
 			addAttributeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// verify the base type selected matches the one in the query tree
+					IconTreeNode node = (IconTreeNode) getQueryTree().getSelectionPath().getLastPathComponent();
+					Object parentQueryObject = getParentQueryObject(node);
+					BaseType selectedType = getTypeDisplayPanel().getSelectedType();
+					if (selectedType == null || !selectedType.getTypeName().equals(parentQueryObject.getName())) {
+						JOptionPane.showMessageDialog(
+							QueryBuilder.this, "Please select attributes from the type " + parentQueryObject.getName());
+						return;
+					}
+					
 					// see if an attribute is selected
 					AttributeType attribType = getTypeDisplayPanel().getSelectedAttribute();
 					if (attribType != null) {
 						Attribute attrib = AttributeModifyDialog.getAttribute(QueryBuilder.this, attribType);
 						if (attrib != null) {
 							// get the selected target / assocition / group node
-							IconTreeNode selectedNode = (IconTreeNode) getQueryTree().getSelectionPath().getLastPathComponent();
-							if (selectedNode instanceof TargetTreeNode) {
-								Object target = ((TargetTreeNode) selectedNode).getTarget();
-								target.setAttribute(attrib);
-							} else if (selectedNode instanceof AssociationTreeNode) {
-								Association assoc = ((AssociationTreeNode) selectedNode).getAssociation();
-								assoc.setAttribute(attrib);
-							} else if (selectedNode instanceof GroupTreeNode) {
-								Group group = ((GroupTreeNode) selectedNode).getGroup();
+							if (node instanceof TargetTreeNode || node instanceof AssociationTreeNode) {
+								parentQueryObject.setAttribute(attrib);
+							} else if (node instanceof GroupTreeNode) {
+								Group group = ((GroupTreeNode) node).getGroup();
 								if (group.getAttribute() != null) {
 									Attribute[] addedAttribs = (Attribute[]) Utils.appendToArray(group.getAttribute(), attrib);
 									group.setAttribute(addedAttribs);
@@ -357,7 +367,7 @@ public class QueryBuilder extends JFrame {
 								}
 							}
 							// rebuild the tree for the new node
-							selectedNode.rebuild();
+							node.rebuild();
 							getQueryTree().refreshTree();
 						}
 					} else {
@@ -1030,6 +1040,28 @@ public class QueryBuilder extends JFrame {
 		} else {
 			JOptionPane.showMessageDialog(this, "Please load a domain model first.", "No domain model", JOptionPane.WARNING_MESSAGE);
 		}
+	}
+	
+	
+	private Object getParentQueryObject(IconTreeNode node) {
+		Object parentQueryObject = null;
+		if (node instanceof AssociationTreeNode) {
+			parentQueryObject = ((AssociationTreeNode) node).getAssociation();
+		} else if (node instanceof TargetTreeNode) {
+			parentQueryObject = ((TargetTreeNode) node).getTarget();
+		} else if (node instanceof GroupTreeNode) {
+			IconTreeNode testNode = node;
+			while (!(testNode instanceof AssociationTreeNode)
+				&& !(testNode instanceof TargetTreeNode)) {
+				testNode = (IconTreeNode) testNode.getParent();
+			}
+			if (testNode instanceof AssociationTreeNode) {
+				parentQueryObject = ((AssociationTreeNode) testNode).getAssociation();
+			} else {
+				parentQueryObject = ((TargetTreeNode) testNode).getTarget();
+			}
+		}
+		return parentQueryObject;
 	}
 
 

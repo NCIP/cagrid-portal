@@ -64,6 +64,11 @@ public class TypeDisplayPanel extends JPanel {
 	}
 	
 	
+	public TypeTraverser getTypeTraverser() {
+		return this.traverser;
+	}
+	
+	
 	public void setSelectedType(BaseType type) {
 		getTypesList().setSelectedValue(type, true);
 	}
