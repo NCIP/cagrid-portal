@@ -53,6 +53,7 @@ import gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperLookAndFeel;
 
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -178,6 +179,10 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 				}
 			}
 			expression.setMembershipExpression(nme);
+			TreePath currentSelection = getEditor().getExpressionTree()
+					.getSelectionPath();
+			getEditor().getExpressionTree().setSelectionPath(
+					currentSelection.getParentPath());
 			loadExpression();
 		}
 	}
@@ -198,6 +203,10 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 				}
 			}
 			expression.setMembershipQuery(nqe);
+			TreePath currentSelection = getEditor().getExpressionTree()
+					.getSelectionPath();
+			getEditor().getExpressionTree().setSelectionPath(
+					currentSelection.getParentPath());
 			loadExpression();
 		}
 	}

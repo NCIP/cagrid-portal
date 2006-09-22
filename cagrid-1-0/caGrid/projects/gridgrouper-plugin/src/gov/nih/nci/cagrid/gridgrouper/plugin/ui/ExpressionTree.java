@@ -53,6 +53,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -65,24 +66,23 @@ import javax.swing.tree.TreePath;
  */
 public class ExpressionTree extends JTree {
 
-	private  ExpressionNode rootNode;
+	private ExpressionNode rootNode;
 
-	public ExpressionTree(GridGrouperExpressionBuilder editor,MembershipExpression expression) {
+	public ExpressionTree(GridGrouperExpressionBuilder editor,
+			MembershipExpression expression) {
 		super();
 		setLargeModel(true);
-		this.rootNode = new ExpressionNode(editor,expression,true);
+		this.rootNode = new ExpressionNode(editor, expression, true);
 		setModel(new DefaultTreeModel(this.rootNode));
-		this.addMouseListener(new ExpressionTreeEventListener(this,editor));
+		getSelectionModel().setSelectionMode(
+				TreeSelectionModel.SINGLE_TREE_SELECTION);
+		this.addMouseListener(new ExpressionTreeEventListener(this, editor));
 		this.setCellRenderer(new TreeRenderer());
 	}
-	
-	
 
-	
-	public  ExpressionNode getRootNode() {
+	public ExpressionNode getRootNode() {
 		return this.rootNode;
 	}
-
 
 	public BaseTreeNode getCurrentNode() {
 		TreePath currentSelection = this.getSelectionPath();
