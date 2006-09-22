@@ -1,19 +1,20 @@
 package gov.nih.nci.cagrid.metadata;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.exceptions.InvalidResourcePropertyException;
 import gov.nih.nci.cagrid.metadata.exceptions.RemoteResourcePropertyRetrievalException;
 import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
 
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.Writer;
 
+import org.apache.axis.message.addressing.EndpointReference;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.axis.utils.ClassUtils;
-import org.globus.wsrf.encoding.DeserializationException;
-import org.globus.wsrf.encoding.ObjectDeserializer;
+import org.globus.wsrf.utils.XmlUtils;
 import org.w3c.dom.Element;
 
 
@@ -38,8 +39,8 @@ public class MetadataUtils {
 			MetadataConstants.CAGRID_MD_QNAME);
 		ServiceMetadata result;
 		try {
-			result = (ServiceMetadata) ObjectDeserializer.toObject(resourceProperty, ServiceMetadata.class);
-		} catch (DeserializationException e) {
+			result = result = deserializeServiceMetadata(new StringReader(XmlUtils.toString(resourceProperty)));
+		} catch (Exception e) {
 			throw new ResourcePropertyRetrievalException("Unable to deserailize ServiceMetadata: " + e.getMessage(), e);
 		}
 		return result;
@@ -62,8 +63,9 @@ public class MetadataUtils {
 
 		DomainModel result;
 		try {
-			result = (DomainModel) ObjectDeserializer.toObject(resourceProperty, DomainModel.class);
-		} catch (DeserializationException e) {
+			System.out.println(XmlUtils.toString(resourceProperty));
+			result = deserializeDomainModel(new StringReader(XmlUtils.toString(resourceProperty)));
+		} catch (Exception e) {
 			throw new ResourcePropertyRetrievalException("Unable to deserailize DomainModel: " + e.getMessage(), e);
 		}
 		return result;
