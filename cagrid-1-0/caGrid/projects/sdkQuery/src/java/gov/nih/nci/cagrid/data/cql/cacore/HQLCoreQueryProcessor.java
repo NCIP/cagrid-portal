@@ -112,91 +112,81 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	
 	private List queryCoreService(CQLQuery query) 
 		throws MalformedQueryException, QueryProcessingException {
-		// get a handle to the caCORE application service
-		if (coreService == null) {
-			String url = getConfiguredParameters().getProperty(APPLICATION_SERVICE_URL);
-			if (url == null || url.length() == 0) {
-				throw new QueryProcessingException(
-					"Required parameter " + APPLICATION_SERVICE_URL + " was not defined!");
-			}
-			coreService = ApplicationService.getRemoteInstance(url);
-		}
-		// see if the query target has subclasses to dodge
-		boolean hasSubclasses = SubclassCheckCache.hasClassProperty(query.getTarget().getName(), coreService);
-		// build HQL based on that information
+		// get the caCORE application service
+		ApplicationService service = getApplicationService();
+		
+		// see if the target has subclasses
+		boolean subclassesDetected = SubclassCheckCache.hasClassProperty(query.getTarget().getName(), service);
+		
+		// generate the HQL to perform the query
 		String hql = null;
-		if (!hasSubclasses) {
-			// can process normally
-			hql = CQL2HQL.translate(query, false);
+		if (subclassesDetected) {
+			// simplify the query by removing modifiers
+			CQLQuery simpleQuery = new CQLQuery();
+			simpleQuery.setTarget(query.getTarget());
+			hql = CQL2HQL.translate(simpleQuery,true);
 		} else {
-			// hibernate can't handle subclass qualification AND returning attributes / count
-			if (query.getQueryModifier() != null) {
-				// simplify the query by removing the query modifiers
-				CQLQuery simpleQuery = new CQLQuery();
-				simpleQuery.setTarget(query.getTarget());
-				// process the query normally, and we'll post-process to remove
-				// subclasses, extract attributes, return count, etc.
-				hql = CQL2HQL.translate(query, false);
-			} else {
-				// no modifications, only classes
-				hql = CQL2HQL.translate(query, true);
-			}
+			hql = CQL2HQL.translate(query, false);
 		}
 		System.out.println("Executing HQL: " + hql);
 		LOG.debug("Executing HQL:" + hql);
+		
+		// process the query
 		HQLCriteria hqlCriteria = new HQLCriteria(hql);
 		List targetObjects = null;
 		try {
-			if (query.getQueryModifier() != null && hasSubclasses) {
-				targetObjects = processModifiedQueryForSubclasses(hqlCriteria, query, coreService);
-			} else {
-				targetObjects = coreService.query(hqlCriteria, query.getTarget().getName());
-			}	
+			targetObjects = coreService.query(hqlCriteria, query.getTarget().getName());
 		} catch (Exception ex) {
 			throw new QueryProcessingException("Error invoking core query method: " + ex.getMessage(), ex);
+		}
+		
+		// possibly post-process the query
+		if (subclassesDetected && query.getQueryModifier() != null) {
+			try {
+				targetObjects = applyQueryModifiers(targetObjects, query.getQueryModifier());
+			} catch (Exception ex) {
+				throw new QueryProcessingException("Error applying query modifiers: " + ex.getMessage(), ex);
+			}
 		}
 		return targetObjects;
 	}
 	
 	
-	private List processModifiedQueryForSubclasses(HQLCriteria criteria, CQLQuery query, ApplicationService service) throws Exception {
-		List targetObjects = new LinkedList();
-		List rawObjects = service.query(criteria, query.getTarget().getName());
-		Iterator typedIter = new ClassRestrictedIterator(rawObjects, query.getTarget().getName());
-		
-		if (query.getQueryModifier().getDistinctAttribute() != null 
-			|| query.getQueryModifier().getAttributeNames() != null) {
-			if (query.getQueryModifier().getDistinctAttribute() != null) {
-				String name = query.getQueryModifier().getDistinctAttribute();
-				Set distincts = new HashSet();
-				while (typedIter.hasNext()) {
-					Object o = typedIter.next();
-					distincts.add(accessNamedProperty(o, name));
-				}
-				// convert single objects to object arrays
-				Iterator distinctIter = distincts.iterator();
-				while (distinctIter.hasNext()) {
-					targetObjects.add(new Object[] {distinctIter.next()});
-				}
-			} else if (query.getQueryModifier().getAttributeNames() != null) {
-				String[] names = query.getQueryModifier().getAttributeNames();
-				while (typedIter.hasNext()) {
-					Object o = typedIter.next();
-					Object[] values = new Object[names.length];
-					for (int i = 0; i < names.length; i++) {
-						values[i] = accessNamedProperty(o, names[i]);
-					}
-					targetObjects.add(values);
-				}
+	private List applyQueryModifiers(List rawObjects, QueryModifier mods) throws Exception {
+		List processed = new LinkedList();
+		Iterator rawIter = rawObjects.iterator();
+		if (mods.getDistinctAttribute() != null) {
+			Set distinctValues = new HashSet();
+			while (rawIter.hasNext()) {
+				Object o = rawIter.next();
+				Object value = accessNamedProperty(o, mods.getDistinctAttribute());
+				distinctValues.add(value);
 			}
+			// convert the single objects to object arrays
+			Iterator distinctIter = distinctValues.iterator();
+			while (distinctIter.hasNext()) {
+				processed.add(new Object[] {distinctIter.next()});
+			}
+		} else if (mods.getAttributeNames() != null) {
+			String[] names = mods.getAttributeNames();
+			while (rawIter.hasNext()) {
+				Object o = rawIter.next();
+				Object[] values = new Object[names.length];
+				for (int i = 0; i < names.length; i++) {
+					values[i] = accessNamedProperty(o, names[i]);
+				}
+				processed.add(values);
+			}
+		} else {
+			processed = rawObjects;
 		}
-	
-		if (query.getQueryModifier().isCountOnly()) {
-			List temp = new ArrayList(1);
-			temp.add(new Integer(targetObjects.size()));
-			targetObjects = temp;
+		
+		if (mods.isCountOnly()) {
+			List countList = new ArrayList(1);
+			countList.add(new Integer(processed.size()));
+			processed = countList;
 		}
-		return targetObjects;
+		return processed;
 	}
 	
 	
@@ -227,6 +217,19 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 			}			
 		}
 		throw new NoSuchFieldException("No field " + name + " found on " + o.getClass().getName());
+	}
+	
+	
+	private ApplicationService getApplicationService() throws QueryProcessingException {
+		if (coreService == null) {
+			String url = getConfiguredParameters().getProperty(APPLICATION_SERVICE_URL);
+			if (url == null || url.length() == 0) {
+				throw new QueryProcessingException(
+					"Required parameter " + APPLICATION_SERVICE_URL + " was not defined!");
+			}
+			coreService = ApplicationService.getRemoteInstance(url);
+		}
+		return coreService;
 	}
 	
 	
