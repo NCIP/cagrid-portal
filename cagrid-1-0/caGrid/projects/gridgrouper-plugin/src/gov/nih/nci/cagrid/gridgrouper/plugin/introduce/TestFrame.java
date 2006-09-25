@@ -69,7 +69,7 @@ public class TestFrame extends JFrame {
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			List groupers = new ArrayList();
-			groupers.add("https://140.254.80.109:8443/wsrf/services/cagrid/GridGrouper");
+			groupers.add("https://localhost:8443/wsrf/services/cagrid/GridGrouper");
 			jPanel = new GridGrouperExpressionBuilder(groupers,true);
 		}
 		return jPanel;

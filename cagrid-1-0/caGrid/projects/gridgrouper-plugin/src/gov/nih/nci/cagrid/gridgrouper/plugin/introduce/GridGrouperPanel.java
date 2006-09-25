@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gridgrouper.plugin.introduce;
 
 import gov.nih.nci.cagrid.gridgrouper.plugin.ui.GridGrouperExpressionBuilder;
 import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.AbstractAuthorizationPanel;
 
@@ -14,7 +15,12 @@ import javax.swing.JPanel;
 
 public class GridGrouperPanel extends AbstractAuthorizationPanel {
 
+	private static final String LOAD_ON_STARTUP = "loadOnStartup"; // @jve:decl-index=0:
+
+	private static final String GRID_GROUPER_URL = "gridGrouperURL"; // @jve:decl-index=0:
+
 	private static final long serialVersionUID = 1L;
+
 	private JPanel expressionBuilder = null;
 
 	public GridGrouperPanel(AuthorizationExtensionDescriptionType authDesc,
@@ -51,15 +57,29 @@ public class GridGrouperPanel extends AbstractAuthorizationPanel {
 	}
 
 	/**
-	 * This method initializes expressionBuilder	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes expressionBuilder
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getExpressionBuilder() {
 		if (expressionBuilder == null) {
+			boolean loadOnStartup = false;
 			List groupers = new ArrayList();
-			groupers.add("https://140.254.80.109:8443/wsrf/services/cagrid/GridGrouper");
-			expressionBuilder = new GridGrouperExpressionBuilder(groupers,false);
+			PropertiesProperty[] props = getAuthorizationExtensionDescriptionType()
+					.getProperties().getProperty();
+			if (props != null) {
+				for (int i = 0; i < props.length; i++) {
+					if (props[i].getKey().equals(LOAD_ON_STARTUP)) {
+						if (props[i].getValue().equalsIgnoreCase("true")) {
+							loadOnStartup = true;
+						}
+					} else if (props[i].getKey().equals(GRID_GROUPER_URL)) {
+						groupers.add(props[i].getValue());
+					}
+				}
+			}
+			expressionBuilder = new GridGrouperExpressionBuilder(groupers,
+					loadOnStartup);
 		}
 		return expressionBuilder;
 	}
