@@ -181,7 +181,7 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 
 	protected GroupIdentifier getGroupIdentifier(String groupName) {
 		GroupIdentifier id = new GroupIdentifier();
-		id.setGridGrouperURL(getClient().getEndpointReference().toString());
+		id.setGridGrouperURL(getName());
 		id.setGroupName(groupName);
 		return id;
 	}
