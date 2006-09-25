@@ -3,7 +3,7 @@
 
 <mapping>
   <class name="gov.nih.nci.common.provenance.domain.Provenance">
-    <map-to xml="Provenance" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.common.provenance.domain" />
+    <map-to xml="Provenance" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.common.provenance.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -30,7 +30,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.common.provenance.domain.Source">
-    <map-to xml="Source" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.common.provenance.domain" />
+    <map-to xml="Source" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.common.provenance.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -39,7 +39,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.common.provenance.domain.SourceReference">
-    <map-to xml="SourceReference" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.common.provenance.domain" />
+    <map-to xml="SourceReference" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.common.provenance.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -51,13 +51,13 @@
     </field>
   </class>
   <class name="gov.nih.nci.common.provenance.domain.URLSourceReference" extends="gov.nih.nci.common.provenance.domain.SourceReference">
-    <map-to xml="URLSourceReference" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.common.provenance.domain" />
+    <map-to xml="URLSourceReference" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.common.provenance.domain" />
     <field name="sourceURL" type="string">
       <bind-xml name="sourceURL" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.common.provenance.domain.PublicationSource" extends="gov.nih.nci.common.provenance.domain.Source">
-    <map-to xml="PublicationSource" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.common.provenance.domain" />
+    <map-to xml="PublicationSource" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.common.provenance.domain" />
     <field name="authors" type="string">
       <bind-xml name="authors" node="attribute" />
     </field>
@@ -78,7 +78,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.common.provenance.domain.ResearchInstitutionSource" extends="gov.nih.nci.common.provenance.domain.Source">
-    <map-to xml="ResearchInstitutionSource" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.common.provenance.domain" />
+    <map-to xml="ResearchInstitutionSource" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.common.provenance.domain" />
     <field name="institutionName" type="string">
       <bind-xml name="institutionName" node="attribute" />
     </field>
@@ -93,13 +93,13 @@
     </field>
   </class>
   <class name="gov.nih.nci.common.provenance.domain.WebServicesSourceReference" extends="gov.nih.nci.common.provenance.domain.SourceReference">
-    <map-to xml="WebServicesSourceReference" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.common.provenance.domain" />
+    <map-to xml="WebServicesSourceReference" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.common.provenance.domain" />
     <field name="request" type="string">
       <bind-xml name="request" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.common.provenance.domain.InternetSource" extends="gov.nih.nci.common.provenance.domain.Source">
-    <map-to xml="InternetSource" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.common.provenance.domain" />
+    <map-to xml="InternetSource" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.common.provenance.domain" />
     <field name="ownerInstitution" type="string">
       <bind-xml name="ownerInstitution" node="attribute" />
     </field>
@@ -111,7 +111,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.common.domain.DatabaseCrossReference">
-    <map-to xml="DatabaseCrossReference" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="DatabaseCrossReference" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -132,7 +132,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="AdministeredComponent" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="AdministeredComponent" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -195,19 +195,19 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ConceptualDomain" extends="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="ConceptualDomain" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ConceptualDomain" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="dimensionality" type="string">
       <bind-xml name="dimensionality" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.DataElementConcept" extends="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="DataElementConcept" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="DataElementConcept" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
   </class>
   <class name="gov.nih.nci.cadsr.domain.DataElement" extends="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="DataElement" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="DataElement" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
   </class>
   <class name="gov.nih.nci.cadsr.domain.ClassificationScheme" extends="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="ClassificationScheme" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ClassificationScheme" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="type" type="string">
       <bind-xml name="type" node="attribute" />
     </field>
@@ -216,7 +216,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ValueDomain" extends="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="ValueDomain" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ValueDomain" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="datatypeName" type="string">
       <bind-xml name="datatypeName" node="attribute" />
     </field>
@@ -246,7 +246,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ClassificationSchemeItem">
-    <map-to xml="ClassificationSchemeItem" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ClassificationSchemeItem" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -276,7 +276,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.PermissibleValue">
-    <map-to xml="PermissibleValue" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="PermissibleValue" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -303,7 +303,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Context">
-    <map-to xml="Context" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Context" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -333,7 +333,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ReferenceDocument">
-    <map-to xml="ReferenceDocument" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ReferenceDocument" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -375,19 +375,19 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ObjectClass" extends="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="ObjectClass" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ObjectClass" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="definitionSource" type="string">
       <bind-xml name="definitionSource" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Property" extends="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="Property" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Property" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="definitionSource" type="string">
       <bind-xml name="definitionSource" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Form" extends="gov.nih.nci.cadsr.domain.FormElement">
-    <map-to xml="Form" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Form" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="displayName" type="string">
       <bind-xml name="displayName" node="attribute" />
     </field>
@@ -396,7 +396,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Module" extends="gov.nih.nci.cadsr.domain.FormElement">
-    <map-to xml="Module" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Module" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="displayOrder" type="integer">
       <bind-xml name="displayOrder" node="attribute" />
     </field>
@@ -405,7 +405,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Protocol" extends="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="Protocol" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Protocol" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="protocolID" type="string">
       <bind-xml name="protocolID" node="attribute" />
     </field>
@@ -438,7 +438,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Question" extends="gov.nih.nci.cadsr.domain.FormElement">
-    <map-to xml="Question" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Question" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="displayOrder" type="integer">
       <bind-xml name="displayOrder" node="attribute" />
     </field>
@@ -453,19 +453,19 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Representation" extends="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="Representation" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Representation" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="definitionSource" type="string">
       <bind-xml name="definitionSource" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ValidValue" extends="gov.nih.nci.cadsr.domain.FormElement">
-    <map-to xml="ValidValue" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ValidValue" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="displayOrder" type="integer">
       <bind-xml name="displayOrder" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Designation">
-    <map-to xml="Designation" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Designation" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -492,10 +492,10 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.NonenumeratedValueDomain" extends="gov.nih.nci.cadsr.domain.ValueDomain">
-    <map-to xml="NonenumeratedValueDomain" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="NonenumeratedValueDomain" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
   </class>
   <class name="gov.nih.nci.cadsr.domain.DataElementConceptRelationship">
-    <map-to xml="DataElementConceptRelationship" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="DataElementConceptRelationship" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -519,7 +519,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ValueMeaning">
-    <map-to xml="ValueMeaning" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ValueMeaning" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -552,7 +552,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ValueDomainPermissibleValue">
-    <map-to xml="ValueDomainPermissibleValue" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ValueDomainPermissibleValue" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -579,7 +579,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ClassSchemeClassSchemeItem">
-    <map-to xml="ClassSchemeClassSchemeItem" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ClassSchemeClassSchemeItem" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -600,7 +600,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.DataElementDerivation">
-    <map-to xml="DataElementDerivation" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="DataElementDerivation" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -627,7 +627,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.DerivedDataElement">
-    <map-to xml="DerivedDataElement" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="DerivedDataElement" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -654,7 +654,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.DerivationType">
-    <map-to xml="DerivationType" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="DerivationType" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -678,7 +678,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.AdministeredComponentClassSchemeItem">
-    <map-to xml="AdministeredComponentClassSchemeItem" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="AdministeredComponentClassSchemeItem" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -696,13 +696,13 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Instruction" extends="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="Instruction" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Instruction" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="type" type="string">
       <bind-xml name="type" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.DataElementRelationship">
-    <map-to xml="DataElementRelationship" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="DataElementRelationship" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -723,7 +723,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ValueDomainRelationship">
-    <map-to xml="ValueDomainRelationship" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ValueDomainRelationship" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -744,7 +744,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ClassificationSchemeRelationship">
-    <map-to xml="ClassificationSchemeRelationship" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ClassificationSchemeRelationship" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -768,7 +768,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ClassificationSchemeItemRelationship">
-    <map-to xml="ClassificationSchemeItemRelationship" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ClassificationSchemeItemRelationship" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -789,7 +789,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ObjectClassRelationship" extends="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="ObjectClassRelationship" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ObjectClassRelationship" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
     </field>
@@ -816,7 +816,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Concept" extends="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="Concept" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Concept" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="evsSource" type="string">
       <bind-xml name="evsSource" node="attribute" />
     </field>
@@ -825,7 +825,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ComponentConcept">
-    <map-to xml="ComponentConcept" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ComponentConcept" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -837,7 +837,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ConceptDerivationRule">
-    <map-to xml="ConceptDerivationRule" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ConceptDerivationRule" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -858,7 +858,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Definition">
-    <map-to xml="Definition" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Definition" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -885,7 +885,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.DesignationClassSchemeItem">
-    <map-to xml="DesignationClassSchemeItem" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="DesignationClassSchemeItem" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -903,10 +903,10 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.EnumeratedValueDomain" extends="gov.nih.nci.cadsr.domain.ValueDomain">
-    <map-to xml="EnumeratedValueDomain" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="EnumeratedValueDomain" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
   </class>
   <class name="gov.nih.nci.cadsr.domain.DefinitionClassSchemeItem">
-    <map-to xml="DefinitionClassSchemeItem" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="DefinitionClassSchemeItem" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -924,7 +924,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.AdministeredComponentContact">
-    <map-to xml="AdministeredComponentContact" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="AdministeredComponentContact" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -948,7 +948,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Person">
-    <map-to xml="Person" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Person" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -981,7 +981,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Organization">
-    <map-to xml="Organization" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Organization" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1002,7 +1002,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Address">
-    <map-to xml="Address" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Address" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1044,10 +1044,10 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.FormElement" extends="gov.nih.nci.cadsr.domain.AdministeredComponent">
-    <map-to xml="FormElement" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="FormElement" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
   </class>
   <class name="gov.nih.nci.cadsr.domain.TriggerAction">
-    <map-to xml="TriggerAction" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="TriggerAction" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="action" type="string">
       <bind-xml name="action" node="attribute" />
     </field>
@@ -1080,7 +1080,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.QuestionRepetition" extends="gov.nih.nci.cadsr.domain.FormElement">
-    <map-to xml="QuestionRepetition" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="QuestionRepetition" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="repeatSequenceNumber" type="integer">
       <bind-xml name="repeatSequenceNumber" node="attribute" />
     </field>
@@ -1092,7 +1092,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.Function">
-    <map-to xml="Function" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="Function" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="symbol" type="string">
       <bind-xml name="symbol" node="attribute" />
     </field>
@@ -1116,7 +1116,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.domain.ComponentLevel">
-    <map-to xml="ComponentLevel" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" />
+    <map-to xml="ComponentLevel" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" />
     <field name="level" type="integer">
       <bind-xml name="level" node="attribute" />
     </field>
@@ -1128,7 +1128,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.Project">
-    <map-to xml="Project" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" />
+    <map-to xml="Project" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1146,7 +1146,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.SubProject">
-    <map-to xml="SubProject" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" />
+    <map-to xml="SubProject" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1158,7 +1158,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata">
-    <map-to xml="UMLPackageMetadata" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" />
+    <map-to xml="UMLPackageMetadata" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1170,7 +1170,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata">
-    <map-to xml="UMLClassMetadata" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" />
+    <map-to xml="UMLClassMetadata" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1185,7 +1185,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata">
-    <map-to xml="UMLAttributeMetadata" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" />
+    <map-to xml="UMLAttributeMetadata" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1200,7 +1200,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata">
-    <map-to xml="SemanticMetadata" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" />
+    <map-to xml="SemanticMetadata" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1224,7 +1224,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata">
-    <map-to xml="UMLAssociationMetadata" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" />
+    <map-to xml="UMLAssociationMetadata" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1251,13 +1251,13 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.UMLGeneralizationMetadata">
-    <map-to xml="UMLGeneralizationMetadata" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" />
+    <map-to xml="UMLGeneralizationMetadata" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" />
     <field name="id" type="string">
       <bind-xml name="id" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.AttributeTypeMetadata">
-    <map-to xml="AttributeTypeMetadata" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" />
+    <map-to xml="AttributeTypeMetadata" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" />
     <field name="valueDomainDataType" type="string">
       <bind-xml name="valueDomainDataType" node="attribute" />
     </field>
@@ -1269,7 +1269,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cadsr.umlproject.domain.TypeEnumerationMetadata">
-    <map-to xml="TypeEnumerationMetadata" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" />
+    <map-to xml="TypeEnumerationMetadata" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" />
     <field name="valueMeaning" type="string">
       <bind-xml name="valueMeaning" node="attribute" />
     </field>
@@ -1281,7 +1281,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.Xenograft" extends="gov.nih.nci.camod.domain.AbstractCancerModel">
-    <map-to xml="Xenograft" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="Xenograft" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="administrativeSite" type="string">
       <bind-xml name="administrativeSite" node="attribute" />
     </field>
@@ -1302,7 +1302,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.TreatmentSchedule">
-    <map-to xml="TreatmentSchedule" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="TreatmentSchedule" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1314,7 +1314,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.Transgene" extends="gov.nih.nci.camod.domain.EngineeredGene">
-    <map-to xml="Transgene" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="Transgene" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="engineeredGeneId" type="long">
       <bind-xml name="engineeredGeneId" node="attribute" />
     </field>
@@ -1323,7 +1323,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.Therapy">
-    <map-to xml="Therapy" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="Therapy" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1338,7 +1338,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.TargetedModification">
-    <map-to xml="TargetedModification" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="TargetedModification" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1350,7 +1350,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.SexDistribution">
-    <map-to xml="SexDistribution" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="SexDistribution" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1359,7 +1359,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.SegmentType">
-    <map-to xml="SegmentType" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="SegmentType" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1368,7 +1368,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.Role">
-    <map-to xml="Role" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="Role" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1377,7 +1377,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.RepositoryInfo">
-    <map-to xml="RepositoryInfo" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="RepositoryInfo" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1392,7 +1392,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.RegulatoryElementType">
-    <map-to xml="RegulatoryElementType" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="RegulatoryElementType" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1401,7 +1401,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.RegulatoryElement">
-    <map-to xml="RegulatoryElement" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="RegulatoryElement" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1410,7 +1410,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.PublicationStatus">
-    <map-to xml="PublicationStatus" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="PublicationStatus" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1419,7 +1419,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.Publication">
-    <map-to xml="Publication" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="Publication" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1449,13 +1449,13 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.Promoter">
-    <map-to xml="Promoter" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="Promoter" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.Phenotype">
-    <map-to xml="Phenotype" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="Phenotype" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1467,7 +1467,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.Person" extends="gov.nih.nci.camod.domain.Party">
-    <map-to xml="Person" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="Person" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="partyId" type="long">
       <bind-xml name="partyId" node="attribute" />
     </field>
@@ -1479,19 +1479,19 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.PartyRole">
-    <map-to xml="PartyRole" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="PartyRole" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.Party">
-    <map-to xml="Party" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="Party" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.Organization">
-    <map-to xml="Organization" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="Organization" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1503,7 +1503,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.Nomenclature">
-    <map-to xml="Nomenclature" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="Nomenclature" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1512,7 +1512,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.MicroArrayData">
-    <map-to xml="MicroArrayData" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="MicroArrayData" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1524,7 +1524,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.JaxInfo">
-    <map-to xml="JaxInfo" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="JaxInfo" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1533,7 +1533,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.IntegrationType">
-    <map-to xml="IntegrationType" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="IntegrationType" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1542,13 +1542,13 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.InducedMutation">
-    <map-to xml="InducedMutation" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="InducedMutation" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.Image">
-    <map-to xml="Image" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="Image" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1563,7 +1563,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.GenotypeSummary">
-    <map-to xml="GenotypeSummary" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="GenotypeSummary" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1575,7 +1575,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.GenomicSegment">
-    <map-to xml="GenomicSegment" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="GenomicSegment" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1590,7 +1590,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.GeneticAlteration">
-    <map-to xml="GeneticAlteration" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="GeneticAlteration" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1602,7 +1602,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.GeneFunction">
-    <map-to xml="GeneFunction" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="GeneFunction" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1611,7 +1611,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.GeneDelivery">
-    <map-to xml="GeneDelivery" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="GeneDelivery" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1620,7 +1620,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.EnvironmentalFactor">
-    <map-to xml="EnvironmentalFactor" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="EnvironmentalFactor" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1632,7 +1632,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.EngineeredGene">
-    <map-to xml="EngineeredGene" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="EngineeredGene" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1644,7 +1644,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.ContactInfo">
-    <map-to xml="ContactInfo" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="ContactInfo" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1677,7 +1677,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.Conditionality">
-    <map-to xml="Conditionality" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="Conditionality" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1689,7 +1689,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.CellLine">
-    <map-to xml="CellLine" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="CellLine" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1707,13 +1707,13 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.CarcinogenicIntervention">
-    <map-to xml="CarcinogenicIntervention" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="CarcinogenicIntervention" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.Availability">
-    <map-to xml="Availability" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="Availability" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1731,13 +1731,13 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.AnimalModel" extends="gov.nih.nci.camod.domain.AbstractCancerModel">
-    <map-to xml="AnimalModel" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="AnimalModel" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="url" type="string">
       <bind-xml name="url" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.EndpointCode">
-    <map-to xml="EndpointCode" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="EndpointCode" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1749,7 +1749,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.AbstractCancerModel">
-    <map-to xml="AbstractCancerModel" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="AbstractCancerModel" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="experimentDesign" type="string">
       <bind-xml name="experimentDesign" node="attribute" />
     </field>
@@ -1761,10 +1761,10 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.YeastModel" extends="gov.nih.nci.camod.domain.AbstractCancerModel">
-    <map-to xml="YeastModel" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="YeastModel" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
   </class>
   <class name="gov.nih.nci.camod.domain.ScreeningResult">
-    <map-to xml="ScreeningResult" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="ScreeningResult" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1782,7 +1782,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.TumorCode">
-    <map-to xml="TumorCode" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="TumorCode" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1794,7 +1794,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.InvivoResult">
-    <map-to xml="InvivoResult" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="InvivoResult" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1809,7 +1809,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.ApprovalStatus">
-    <map-to xml="ApprovalStatus" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="ApprovalStatus" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1818,7 +1818,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.ModificationType">
-    <map-to xml="ModificationType" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="ModificationType" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1827,19 +1827,19 @@
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.ExpressionFeature">
-    <map-to xml="ExpressionFeature" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="ExpressionFeature" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.camod.domain.CancerModel">
-    <map-to xml="CancerModel" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.camod.domain" />
+    <map-to xml="CancerModel" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.camod.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Vocabulary">
-    <map-to xml="Vocabulary" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Vocabulary" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1851,7 +1851,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Tissue">
-    <map-to xml="Tissue" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Tissue" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1887,7 +1887,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.SNP">
-    <map-to xml="SNP" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="SNP" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1905,7 +1905,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.GeneAlias">
-    <map-to xml="GeneAlias" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="GeneAlias" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1917,7 +1917,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Chromosome">
-    <map-to xml="Chromosome" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Chromosome" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1926,7 +1926,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Clone">
-    <map-to xml="Clone" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Clone" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1941,7 +1941,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Taxon">
-    <map-to xml="Taxon" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Taxon" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1959,7 +1959,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Target">
-    <map-to xml="Target" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Target" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1971,7 +1971,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.NucleicAcidSequence">
-    <map-to xml="NucleicAcidSequence" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="NucleicAcidSequence" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -1992,7 +1992,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.ProtocolAssociation">
-    <map-to xml="ProtocolAssociation" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="ProtocolAssociation" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2010,7 +2010,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Protocol">
-    <map-to xml="Protocol" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Protocol" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2025,7 +2025,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Pathway">
-    <map-to xml="Pathway" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Pathway" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2043,7 +2043,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.OrganOntologyRelationship">
-    <map-to xml="OrganOntologyRelationship" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="OrganOntologyRelationship" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2052,7 +2052,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.OrganOntology">
-    <map-to xml="OrganOntology" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="OrganOntology" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2061,7 +2061,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Library">
-    <map-to xml="Library" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Library" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2109,7 +2109,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Histopathology">
-    <map-to xml="Histopathology" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Histopathology" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2136,7 +2136,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Gene">
-    <map-to xml="Gene" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Gene" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2151,7 +2151,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.GeneOntologyRelationship">
-    <map-to xml="GeneOntologyRelationship" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="GeneOntologyRelationship" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2160,7 +2160,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.GeneOntology">
-    <map-to xml="GeneOntology" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="GeneOntology" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2169,7 +2169,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.DiseaseOntologyRelationship">
-    <map-to xml="DiseaseOntologyRelationship" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="DiseaseOntologyRelationship" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2178,7 +2178,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.DiseaseOntology">
-    <map-to xml="DiseaseOntology" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="DiseaseOntology" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2187,7 +2187,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.ClinicalTrialProtocol">
-    <map-to xml="ClinicalTrialProtocol" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="ClinicalTrialProtocol" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2229,7 +2229,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Anomaly">
-    <map-to xml="Anomaly" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Anomaly" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2238,7 +2238,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Agent">
-    <map-to xml="Agent" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Agent" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2262,7 +2262,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.PopulationFrequency">
-    <map-to xml="PopulationFrequency" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="PopulationFrequency" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2286,7 +2286,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Protein">
-    <map-to xml="Protein" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Protein" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2310,7 +2310,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.ProteinSequence">
-    <map-to xml="ProteinSequence" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="ProteinSequence" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2328,7 +2328,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.ProteinAlias">
-    <map-to xml="ProteinAlias" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="ProteinAlias" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2337,7 +2337,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.HomologousAssociation">
-    <map-to xml="HomologousAssociation" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="HomologousAssociation" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2349,7 +2349,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Cytoband">
-    <map-to xml="Cytoband" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Cytoband" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2358,13 +2358,13 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.Location">
-    <map-to xml="Location" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="Location" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.PhysicalLocation" extends="gov.nih.nci.cabio.domain.Location">
-    <map-to xml="PhysicalLocation" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="PhysicalLocation" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="chromosomalStartPosition" type="long">
       <bind-xml name="chromosomalStartPosition" node="attribute" />
     </field>
@@ -2373,7 +2373,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.CytogeneticLocation" extends="gov.nih.nci.cabio.domain.Location">
-    <map-to xml="CytogeneticLocation" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="CytogeneticLocation" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="startCytobandLocId" type="long">
       <bind-xml name="startCytobandLocId" node="attribute" />
     </field>
@@ -2382,7 +2382,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.CloneRelativeLocation">
-    <map-to xml="CloneRelativeLocation" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="CloneRelativeLocation" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2391,7 +2391,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.GeneRelativeLocation">
-    <map-to xml="GeneRelativeLocation" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="GeneRelativeLocation" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2400,7 +2400,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.GenericReporter">
-    <map-to xml="GenericReporter" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="GenericReporter" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
@@ -2412,7 +2412,7 @@
     </field>
   </class>
   <class name="gov.nih.nci.cabio.domain.GenericArray">
-    <map-to xml="GenericArray" ns-uri="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" />
+    <map-to xml="GenericArray" ns-uri="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>

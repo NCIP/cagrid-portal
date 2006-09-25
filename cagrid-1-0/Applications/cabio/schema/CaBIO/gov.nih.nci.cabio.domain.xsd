@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-xmlns="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" 
-xmlns:gov.nih.nci.cadsr.domain="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" 
-xmlns:gov.nih.nci.cadsr.umlproject.domain="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" 
-xmlns:gov.nih.nci.common.domain="gme://caCORE.cabig/3.0/gov.nih.nci.common.domain" 
-xmlns:gov.nih.nci.common.provenance.domain="gme://caCORE.cabig/3.0/gov.nih.nci.common.provenance.domain" 
-targetNamespace="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" elementFormDefault="qualified">
+xmlns="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" 
+xmlns:gov.nih.nci.cadsr.domain="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" 
+xmlns:gov.nih.nci.cadsr.umlproject.domain="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" 
+xmlns:gov.nih.nci.common.domain="gme://caCORE.caBIG/3.0/gov.nih.nci.common.domain" 
+xmlns:gov.nih.nci.common.provenance.domain="gme://caCORE.caBIG/3.0/gov.nih.nci.common.provenance.domain" 
+targetNamespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" elementFormDefault="qualified">
 -->
   <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-    xmlns="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" 
-    targetNamespace="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain" elementFormDefault="qualified">
+    xmlns="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" 
+    targetNamespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain" elementFormDefault="qualified">
     
   <!--
-  <xs:import namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.domain" schemaLocation="gov.nih.nci.cadsr.domain.xsd" />
-  <xs:import namespace="gme://caCORE.cabig/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="gov.nih.nci.cadsr.umlproject.domain.xsd" />
-  <xs:import namespace="gme://caCORE.cabig/3.0/gov.nih.nci.common.provenance.domain" schemaLocation="gov.nih.nci.common.provenance.domain.xsd" />
+  <xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" schemaLocation="gov.nih.nci.cadsr.domain.xsd" />
+  <xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="gov.nih.nci.cadsr.umlproject.domain.xsd" />
+  <xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.common.provenance.domain" schemaLocation="gov.nih.nci.common.provenance.domain.xsd" />
   -->
   <!--
-  <xs:import namespace="gme://caCORE.cabig/3.0/gov.nih.nci.common.domain" schemaLocation="gov.nih.nci.common.domain.xsd" />
+  <xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.common.domain" schemaLocation="gov.nih.nci.common.domain.xsd" />
   -->
   
   <!-- Imported from common schema -->

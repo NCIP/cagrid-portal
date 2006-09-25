@@ -22,7 +22,7 @@
 			xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"
 			xmlns:ns1="http://cagrid.nci.nih.gov/cabio/types"
 			xmlns:xs="http://www.w3.org/2001/XMLSchema"
-			xmlns:ns0="gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain"
+			xmlns:ns0="gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain"
 			xmlns:ns9="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"
 			xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security">
         <!-- Specifies that the index should refresh information

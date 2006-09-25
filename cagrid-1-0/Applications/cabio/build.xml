@@ -5,7 +5,8 @@
     <!-- Define the environment variable -->
     <property environment="env" />
 
-    <property name="cabio.domain.ns.exclude" value="-x gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain"/>
+
+    <property name="cabio.domain.ns.exclude" value="-x gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain"/>
 
     <!-- 
 		Properties in these files will override the properties defined in this file.
@@ -200,6 +201,13 @@
             <property name="wsdl.file" value="${interface.name}_service.wsdl" />
             <property name="ns.excludes" value="${cabio.domain.ns.exclude} ${GT4.ns.excludes} ${introduce.ns.excludes}" />
         </ant>
+        <!--
+        <delete>
+            <fileset dir="${stubs.src}">
+                <include name="gov/nih/nci/cabio/domain/*.java"/>
+            </fileset>
+        </delete>
+        -->
     </target>
 
     <!-- Generate the stub source files -->

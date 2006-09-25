@@ -1,5 +1,5 @@
 /**
- * $Id: CaBIOClientTestCase.java,v 1.1 2006-09-18 18:51:20 joshua Exp $
+ * $Id: CaBIOClientTestCase.java,v 1.2 2006-09-25 17:39:15 joshua Exp $
  *
  */
 package gov.nih.nci.cagrid.cabio.test;
@@ -43,7 +43,7 @@ import junit.framework.TestSuite;
 
 /**
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @author Joshua Phillips
  * 
  */
@@ -204,7 +204,7 @@ public class CaBIOClientTestCase extends TestCase {
 	    while (iterator.hasNext()) {
 		DatabaseCrossReference ref = (DatabaseCrossReference)iterator.next();
 		StringWriter w2 = new StringWriter();
-		Utils.serializeObject(ref, new QName("gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain", "DatabaseCrossReference"), w2, new FileInputStream(
+		Utils.serializeObject(ref, new QName("gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain", "DatabaseCrossReference"), w2, new FileInputStream(
 		    "src/gov/nih/nci/cagrid/cabio/client/client-config.wsdd"));
 		DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document document = parser.parse(new ByteArrayInputStream(w2.getBuffer().toString().getBytes()));

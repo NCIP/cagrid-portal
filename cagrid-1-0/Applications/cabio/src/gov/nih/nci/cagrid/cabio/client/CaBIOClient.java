@@ -132,7 +132,7 @@ public class CaBIOClient extends ServiceSecurityClient implements CaBIOI {
 //			System.out.println(gene.getId());
 			DatabaseCrossReference ref = (DatabaseCrossReference)iterator.next();
 //			FileWriter w2 = new FileWriter("out.xml");
-//			Utils.serializeObject(ref, new QName("gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain", "DatabaseCrossReference"), w2, new FileInputStream(
+//			Utils.serializeObject(ref, new QName("gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain", "DatabaseCrossReference"), w2, new FileInputStream(
 //			    "src/gov/nih/nci/cagrid/cabio/client/client-config.wsdd"));
 			DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document document = parser.parse("out.xml");
