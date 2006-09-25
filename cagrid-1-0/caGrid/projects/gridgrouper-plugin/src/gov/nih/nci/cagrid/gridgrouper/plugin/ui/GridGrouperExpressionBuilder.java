@@ -30,6 +30,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.PortalResourceManager;
+import javax.swing.JTextField;
 
 public class GridGrouperExpressionBuilder extends JPanel {
 
@@ -88,6 +89,14 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	private JLabel jLabel1 = null;
 
 	private JComboBox membership = null;
+
+	private JLabel jLabel2 = null;
+
+	private JTextField gridGrouper = null;
+
+	private JTextField group = null;
+
+	private JLabel jLabel3 = null;
 
 	/**
 	 * This is the default constructor
@@ -347,12 +356,14 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	 */
 	private JPanel getExpressionEditor() {
 		if (expressionEditor == null) {
+			jLabel2 = new JLabel();
+			jLabel2.setText("Grid Grouper");
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints8.weightx = 1.0D;
-			gridBagConstraints8.gridy = 1;
+			gridBagConstraints8.gridy = 2;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 0;
 			gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
@@ -383,7 +394,7 @@ public class GridGrouperExpressionBuilder extends JPanel {
 		if (queryEditor == null) {
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.gridy = 2;
 			gridBagConstraints10.gridx = 0;
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.gridx = 0;
@@ -413,6 +424,8 @@ public class GridGrouperExpressionBuilder extends JPanel {
 
 	public void setExpressionQuery(MembershipQuery query) {
 		this.getMembership().setSelectedItem(query.getMembershipStatus());
+		this.getGridGrouper().setText(query.getGroupIdentifier().getGridGrouperURL());
+		this.getGroup().setText(query.getGroupIdentifier().getGroupName());
 		this.editorLayout.show(getEditorPanel(), QUERY_EDITOR);
 	}
 
@@ -597,6 +610,33 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	 */
 	private JPanel getQueryProperties() {
 		if (queryProperties == null) {
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.gridx = 0;
+			gridBagConstraints16.anchor = GridBagConstraints.WEST;
+			gridBagConstraints16.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints16.gridy = 2;
+			jLabel3 = new JLabel();
+			jLabel3.setText("Group Name");
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints15.gridy = 2;
+			gridBagConstraints15.weightx = 1.0;
+			gridBagConstraints15.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints15.anchor = GridBagConstraints.WEST;
+			gridBagConstraints15.gridx = 1;
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints14.gridy = 1;
+			gridBagConstraints14.weightx = 1.0;
+			gridBagConstraints14.anchor = GridBagConstraints.WEST;
+			gridBagConstraints14.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints14.gridx = 1;
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints13.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints13.anchor = GridBagConstraints.WEST;
+			gridBagConstraints13.gridy = 1;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints11.gridx = 1;
@@ -615,6 +655,10 @@ public class GridGrouperExpressionBuilder extends JPanel {
 			queryProperties.setName("jPanel");
 			queryProperties.add(jLabel1, gridBagConstraints12);
 			queryProperties.add(getMembership(), gridBagConstraints11);
+			queryProperties.add(jLabel2, gridBagConstraints13);
+			queryProperties.add(getGridGrouper(), gridBagConstraints14);
+			queryProperties.add(getGroup(), gridBagConstraints15);
+			queryProperties.add(jLabel3, gridBagConstraints16);
 		}
 		return queryProperties;
 	}
@@ -714,5 +758,31 @@ public class GridGrouperExpressionBuilder extends JPanel {
 		} catch (Exception t) {
 			t.getMessage();
 		}
+	}
+
+	/**
+	 * This method initializes gridGrouper	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getGridGrouper() {
+		if (gridGrouper == null) {
+			gridGrouper = new JTextField();
+			gridGrouper.setEditable(false);
+		}
+		return gridGrouper;
+	}
+
+	/**
+	 * This method initializes group	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getGroup() {
+		if (group == null) {
+			group = new JTextField();
+			group.setEditable(false);
+		}
+		return group;
 	}
 }

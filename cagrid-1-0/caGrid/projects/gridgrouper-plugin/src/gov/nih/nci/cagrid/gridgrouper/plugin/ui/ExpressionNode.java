@@ -226,7 +226,7 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 	}
 
 	public String toString() {
-		return "Expression [" + expression.getLogicRelation().getValue() + "]";
+		return expression.getLogicRelation().getValue();
 	}
 
 	public boolean isRootExpression() {
