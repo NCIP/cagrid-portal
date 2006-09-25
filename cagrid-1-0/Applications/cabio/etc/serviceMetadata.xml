@@ -1,33 +1,35 @@
-<ns1:ServiceMetadata xsi:type="ns1:ServiceMetadata" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
- <ns1:serviceDescription>
-  <ns2:Service description="The CaBIO grid service, created with caGrid Introduce, version:1.0b." name="CaBIO" version="1.0b" xsi:type="ns2:Service" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
-   <ns2:pointOfContactCollection/>
-   <ns2:serviceContextCollection>
-    <ns2:ServiceContext description="" name="CaBIO" xsi:type="ns2:ServiceContext">
-     <ns2:operationCollection>
-      <ns2:Operation description="" name="getServiceSecurityMetadata" xsi:type="ns2:Operation">
-       <ns2:inputParameterCollection/>
-       <ns2:Output qName="ns3:ServiceSecurityMetadata" dimentionality="1" isArray="false" xsi:type="ns2:Output" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
-       <ns2:faultCollection/>
-      </ns2:Operation>
-      <ns2:Operation description="" name="query" xsi:type="ns2:Operation">
-       <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns4:CQLQuery" dimentionality="1" index="0" isArray="false" isRequired="false" name="cqlQuery" xsi:type="ns2:InputParameter" xmlns:ns4="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"/>
-       </ns2:inputParameterCollection>
-       <ns2:Output qName="ns5:CQLQueryResultCollection" dimentionality="1" isArray="false" xsi:type="ns2:Output" xmlns:ns5="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
-       <ns2:faultCollection>
-        <ns2:Fault description="" name="QueryProcessingException" xsi:type="ns2:Fault"/>
-        <ns2:Fault description="" name="MalformedQueryException" xsi:type="ns2:Fault"/>
-       </ns2:faultCollection>
-      </ns2:Operation>
-     </ns2:operationCollection>
-     <ns2:contextPropertyCollection>
-      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata" xsi:type="ns2:ContextProperty"/>
-      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice}DomainModel" xsi:type="ns2:ContextProperty"/>
-     </ns2:contextPropertyCollection>
-    </ns2:ServiceContext>
-   </ns2:serviceContextCollection>
-  </ns2:Service>
- </ns1:serviceDescription>
- <ns1:hostingResearchCenter/>
+<?xml version="1.0" encoding="UTF-8"?>
+<ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns1:ServiceMetadata">
+  <ns1:serviceDescription>
+    <ns2:Service xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" description="The CaBIO grid service, created with caGrid Introduce, version:1.0b." name="CaBIO" version="1.0b" xsi:type="ns2:Service">
+      <ns2:pointOfContactCollection />
+      <ns2:serviceContextCollection>
+        <ns2:ServiceContext description="" name="CaBIO" xsi:type="ns2:ServiceContext">
+          <ns2:operationCollection>
+            <ns2:Operation description="" name="getServiceSecurityMetadata" xsi:type="ns2:Operation">
+              <ns2:inputParameterCollection />
+              <ns2:Output xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" qName="ns3:ServiceSecurityMetadata" dimentionality="1" isArray="false" xsi:type="ns2:Output" />
+              <ns2:faultCollection />
+            </ns2:Operation>
+            <ns2:Operation description="" name="query" xsi:type="ns2:Operation">
+              <ns2:inputParameterCollection>
+                <ns2:InputParameter xmlns:ns4="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" qName="ns4:CQLQuery" dimentionality="1" index="0" isArray="false" isRequired="false" name="cqlQuery" xsi:type="ns2:InputParameter" />
+              </ns2:inputParameterCollection>
+              <ns2:Output xmlns:ns5="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" qName="ns5:CQLQueryResultCollection" dimentionality="1" isArray="false" xsi:type="ns2:Output" />
+              <ns2:faultCollection>
+                <ns2:Fault description="" name="QueryProcessingException" xsi:type="ns2:Fault" />
+                <ns2:Fault description="" name="MalformedQueryException" xsi:type="ns2:Fault" />
+              </ns2:faultCollection>
+            </ns2:Operation>
+          </ns2:operationCollection>
+          <ns2:contextPropertyCollection>
+            <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata" xsi:type="ns2:ContextProperty" />
+            <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice}DomainModel" xsi:type="ns2:ContextProperty" />
+          </ns2:contextPropertyCollection>
+        </ns2:ServiceContext>
+      </ns2:serviceContextCollection>
+    </ns2:Service>
+  </ns1:serviceDescription>
+  <ns1:hostingResearchCenter />
 </ns1:ServiceMetadata>
+

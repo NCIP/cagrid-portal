@@ -208,31 +208,63 @@
     </ns4:Method>
    </ns4:Methods>
    <ns12:ResourcePropertiesList xsi:type="ns12:ResourcePropertiesListType" xmlns:ns12="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns12:ResourceProperty qName="ns13:DomainModel" fileLocation="domainModel.xml" populateFromFile="false" register="true" xsi:type="ns12:ResourcePropertyType" xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+    <ns12:ResourceProperty qName="ns13:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns12:ResourcePropertyType" xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+    <ns12:ResourceProperty qName="ns14:DomainModel" fileLocation="domainModel.xml" populateFromFile="true" register="true" xsi:type="ns12:ResourcePropertyType" xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
    </ns12:ResourcePropertiesList>
   </ns3:Service>
  </ns3:Services>
- <ns14:Extensions xsi:type="ns14:ExtensionsType" xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns14:Extension name="data" xsi:type="ns14:ExtensionType">
-   <ns14:ExtensionData>
+ <ns15:Extensions xsi:type="ns15:ExtensionsType" xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns15:Extension name="data" xsi:type="ns15:ExtensionType">
+   <ns15:ExtensionData>
     <serviceFeatures useCustomDataSource="true" useGridIdentifiers="false" useSdkDataSource="false" useWsEnum="false"/>
     <QueryProcessorJars>
-         <Jar>caGrid-1.0-sdkQuery.jar</Jar>
+                                 <Jar>caGrid-1.0-sdkQuery.jar</Jar>
+
+
+
+
+
+
 
     </QueryProcessorJars>
+    <ns15:Data xsi:type="ns15:Data" xmlns:ns15="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension">
+                         <ns15:AdditionalLibraries xsi:type="ns15:AdditionalLibraries">
+                          <ns15:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caGrid-1.0-sdkQuery.jar</ns15:JarName>
+
+
+
+
+
+     </ns15:AdditionalLibraries>
+
+
+
+
+
+                         <ns15:CadsrInformation suppliedDomainModel="C:\joshua\dev\ew\cagrid-1-0\Applications\cabio\etc\domainModel.xml" xsi:type="ns15:CadsrInformation"/>
+
+
+
+
+
+    </ns15:Data>
     <queryProcessorConfig>
-         <property name="appserviceUrl" value="http://cabio.nci.nih.gov/cacore31/server/HTTPServer"/>
+                         <property name="appserviceUrl" value="http\://cabio.nci.nih.gov/cacore31/http/remoteService"/>
+
+
+
+
 
     </queryProcessorConfig>
-   </ns14:ExtensionData>
-  </ns14:Extension>
- </ns14:Extensions>
- <ns15:ServiceProperties xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns15:Property isFromETC="false" key="queryProcessorClass" value="gov.nih.nci.cagrid.data.cql.cacore.HQLCoreQueryProcessor"/>
-  <ns15:Property key="dataService_cqlValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator"/>
-  <ns15:Property key="dataService_domainModelValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator"/>
-  <ns15:Property key="dataService_validateCqlFlag" value="false"/>
-  <ns15:Property key="dataService_validateDomainModelFlag" value="false"/>
-  <ns15:Property isFromETC="false" key="cqlQueryProcessorConfig_appserviceUrl" value="http://cabio.nci.nih.gov/cacore31/server/HTTPServer"/>
- </ns15:ServiceProperties>
+   </ns15:ExtensionData>
+  </ns15:Extension>
+ </ns15:Extensions>
+ <ns16:ServiceProperties xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns16:Property isFromETC="false" key="queryProcessorClass" value="gov.nih.nci.cagrid.data.cql.cacore.HQLCoreQueryProcessor"/>
+  <ns16:Property key="dataService_cqlValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator"/>
+  <ns16:Property key="dataService_domainModelValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator"/>
+  <ns16:Property key="dataService_validateCqlFlag" value="false"/>
+  <ns16:Property key="dataService_validateDomainModelFlag" value="false"/>
+  <ns16:Property isFromETC="false" key="cqlQueryProcessorConfig_appserviceUrl" value="http\://cabio.nci.nih.gov/cacore31/http/remoteService"/>
+ </ns16:ServiceProperties>
 </ns1:ServiceDescription>

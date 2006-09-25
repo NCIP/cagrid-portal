@@ -45,7 +45,9 @@ public class BaseResource implements Resource, ResourceProperties {
 	private URL baseURL;
 
 	//Define the metadata resource properties
-	private ResourceProperty domainModelRP;
+	private ResourceProperty serviceMetadataRP;
+	private gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadataMD;
+private ResourceProperty domainModelRP;
 	private gov.nih.nci.cagrid.metadata.dataservice.DomainModel domainModelMD;
 	
 
@@ -60,6 +62,12 @@ public class BaseResource implements Resource, ResourceProperties {
 		populateResourceProperty();
 		
 		// now add the metadata as resource properties		//init the rp
+		this.serviceMetadataRP = new SimpleResourceProperty(ResourceConstants.SERVICEMETADATA_MD_RP);
+		//add the value to the rp
+		this.serviceMetadataRP.add(this.serviceMetadataMD);
+		//add the rp to the prop set
+		this.propSet.add(this.serviceMetadataRP);
+		//init the rp
 		this.domainModelRP = new SimpleResourceProperty(ResourceConstants.DOMAINMODEL_MD_RP);
 		//add the value to the rp
 		this.domainModelRP.add(this.domainModelMD);
@@ -184,13 +192,55 @@ public class BaseResource implements Resource, ResourceProperties {
 
 	private void populateResourceProperty() {
 	
+		loadServiceMetadataFromFile();
+	
+		loadDomainModelFromFile();
+	
 	}
 
 
-			
+		
+	private void loadServiceMetadataFromFile() {
+		try {
+			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
+					+ getConfiguration().getServiceMetadataFile());
+			this.serviceMetadataMD = (gov.nih.nci.cagrid.metadata.ServiceMetadata) Utils.deserializeDocument(dataFile.getAbsolutePath(),
+				gov.nih.nci.cagrid.metadata.ServiceMetadata.class);
+		} catch (Exception e) {
+			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
+		}
+	}		
+	
+	
+	private void loadDomainModelFromFile() {
+		try {
+			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
+					+ getConfiguration().getDomainModelFile());
+			this.domainModelMD = (gov.nih.nci.cagrid.metadata.dataservice.DomainModel) Utils.deserializeDocument(dataFile.getAbsolutePath(),
+				gov.nih.nci.cagrid.metadata.dataservice.DomainModel.class);
+		} catch (Exception e) {
+			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
+		}
+	}		
+	
+		
 
 
 	//Getters/Setters for ResourceProperties
+	
+	
+	protected ResourceProperty getServiceMetadataRP(){
+		return this.serviceMetadataRP;
+	}
+	
+	public gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadataMD(){
+		return this.serviceMetadataMD;
+	}
+	
+	public void setServiceMetadataMD(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata ){
+		this.serviceMetadataMD=serviceMetadata;
+		getServiceMetadataRP().set(0,serviceMetadata);
+	}
 	
 	
 	protected ResourceProperty getDomainModelRP(){

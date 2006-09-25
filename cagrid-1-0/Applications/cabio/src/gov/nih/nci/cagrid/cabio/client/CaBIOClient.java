@@ -169,32 +169,24 @@ public class CaBIOClient extends ServiceSecurityClient implements CaBIOI {
 	return query;
     }
 
-    public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata()
-	    throws RemoteException {
-	synchronized (portTypeMutex) {
-	    configureStubSecurity((Stub) portType, "getServiceSecurityMetadata");
-	    gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataRequest();
-	    gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataResponse boxedResult = portType
-		    .getServiceSecurityMetadata(params);
-	    return boxedResult.getServiceSecurityMetadata();
-	}
+    public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
+        gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataRequest();
+        gov.nih.nci.cagrid.introduce.security.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
+        return boxedResult.getServiceSecurityMetadata();
+      }
     }
-
-    public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults query(
-	    gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery)
-	    throws RemoteException,
-	    gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType,
-	    gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType {
-	synchronized (portTypeMutex) {
-	    configureStubSecurity((Stub) portType, "query");
-	    gov.nih.nci.cagrid.data.QueryRequest params = new gov.nih.nci.cagrid.data.QueryRequest();
-	    gov.nih.nci.cagrid.data.QueryRequestCqlQuery cqlQueryContainer = new gov.nih.nci.cagrid.data.QueryRequestCqlQuery();
-	    cqlQueryContainer.setCQLQuery(cqlQuery);
-	    params.setCqlQuery(cqlQueryContainer);
-	    gov.nih.nci.cagrid.data.QueryResponse boxedResult = portType
-		    .query(params);
-	    return boxedResult.getCQLQueryResultCollection();
-	}
+    public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults query(gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType, gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"query");
+        gov.nih.nci.cagrid.data.QueryRequest params = new gov.nih.nci.cagrid.data.QueryRequest();
+        gov.nih.nci.cagrid.data.QueryRequestCqlQuery cqlQueryContainer = new gov.nih.nci.cagrid.data.QueryRequestCqlQuery();
+        cqlQueryContainer.setCQLQuery(cqlQuery);
+        params.setCqlQuery(cqlQueryContainer);
+        gov.nih.nci.cagrid.data.QueryResponse boxedResult = portType.query(params);
+        return boxedResult.getCQLQueryResultCollection();
+      }
     }
 
 }
