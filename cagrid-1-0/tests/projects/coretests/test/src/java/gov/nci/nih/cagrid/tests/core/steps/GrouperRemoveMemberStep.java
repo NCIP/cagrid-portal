@@ -8,25 +8,25 @@ import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClient;
 
 import com.atomicobject.haste.framework.Step;
 
-public class GrouperAddMemberStep
+public class GrouperRemoveMemberStep
 	extends Step
 {
 	private String endpoint;
 	private String group;
 	private String subject;
-	private boolean shouldFail = false;
+	private boolean shouldFail;
 	
-	public GrouperAddMemberStep(String group, String subject)
+	public GrouperRemoveMemberStep(String group, String subject)
 	{
 		this(group, subject, false, "https://localhost:9443/wsrf/services/cagrid/GridGrouper");
 	}
 	
-	public GrouperAddMemberStep(String group, String subject, boolean shouldFail)
+	public GrouperRemoveMemberStep(String group, String subject, boolean shouldFail)
 	{
 		this(group, subject, shouldFail, "https://localhost:9443/wsrf/services/cagrid/GridGrouper");
 	}
 	
-	public GrouperAddMemberStep(String group, String subject, boolean shouldFail, String endpoint)
+	public GrouperRemoveMemberStep(String group, String subject, boolean shouldFail, String endpoint)
 	{
 		super();
 		
@@ -43,8 +43,8 @@ public class GrouperAddMemberStep
 		
 		// add member
 		try {
-			grouper.addMember(new GroupIdentifier(null, group), subject);
-			if (shouldFail) fail("addMember should fail");
+			grouper.deleteMember(new GroupIdentifier(null, group), subject);
+			if (shouldFail) fail("deleteMember should fail");
 		} catch (Exception e) {
 			if (! shouldFail) throw e;
 		}
@@ -53,9 +53,9 @@ public class GrouperAddMemberStep
 	public static void main(String[] args) 
 		throws Exception
 	{
-		new GrouperAddMemberStep(
+		new GrouperRemoveMemberStep(
 			"test:mygroup",
-			"/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=subject1"
+			"/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=subject3"
 		).runStep();
 	}
 }
