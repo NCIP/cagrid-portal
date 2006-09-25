@@ -64,10 +64,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="lib/ant-contrib.jar"/>
 	<classpathentry kind="lib" path="lib/caGrid-1.0-core.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-introduce-security-client-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-introduce-security-common-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-introduce-security-service-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-introduce-security-stubs-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
