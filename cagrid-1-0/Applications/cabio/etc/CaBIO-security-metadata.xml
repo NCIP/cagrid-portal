@@ -2,5 +2,5 @@
  <ns1:defaultCommunicationMechanism anonymousPermitted="true" xsi:type="ns1:CommunicationMechanism">
   <ns1:None xsi:type="ns1:None"/>
  </ns1:defaultCommunicationMechanism>
- <ns1:operations xsi:nil="true"/>
+ <ns1:operations/>
 </ns1:ServiceSecurityMetadata>
