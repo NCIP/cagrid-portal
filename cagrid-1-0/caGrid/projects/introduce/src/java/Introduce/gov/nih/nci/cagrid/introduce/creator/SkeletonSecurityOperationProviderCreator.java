@@ -63,7 +63,7 @@ public class SkeletonSecurityOperationProviderCreator {
 
 			MethodTypeImportInformation ii = new MethodTypeImportInformation();
 			ii.setNamespace(SECURITY_SERVICE_NS);
-			ii.setPackageName("gov.nih.nci.cagrid.introduce.security");
+			ii.setPackageName("gov.nih.nci.cagrid.introduce.security.stubs");
 			ii.setPortTypeName("ServiceSecurityPortType");
 			ii.setWsdlFile(SERVICE_SECURITY_WSDL);
 			ii.setInputMessage(new QName(SECURITY_SERVICE_NS, "GetServiceSecurityMetadataRequest"));
@@ -93,6 +93,7 @@ public class SkeletonSecurityOperationProviderCreator {
 				NamespaceType nsType = CommonTools.createNamespaceType(PATH_TO_SCHEMA + "xsd" + File.separator
 					+ SERVICE_SECURITY_XSD);
 				nsType.setGenerateStubs(new Boolean(false));
+				nsType.setPackageName("gov.nih.nci.cagrid.metadata.security");
 				nsType.setLocation("./" + "xsd" + File.separator + SERVICE_SECURITY_XSD);
 				CommonTools.addNamespace(info.getServiceDescriptor(), nsType);
 
