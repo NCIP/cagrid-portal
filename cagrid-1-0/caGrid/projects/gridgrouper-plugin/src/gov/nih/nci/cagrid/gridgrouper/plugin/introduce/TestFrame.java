@@ -4,6 +4,8 @@ import gov.nih.nci.cagrid.gridgrouper.plugin.ui.GridGrouperExpressionBuilder;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -66,7 +68,9 @@ public class TestFrame extends JFrame {
 	 */
 	private JPanel getJPanel() {
 		if (jPanel == null) {
-			jPanel = new GridGrouperExpressionBuilder();
+			List groupers = new ArrayList();
+			groupers.add("https://140.254.80.109:8443/wsrf/services/cagrid/GridGrouper");
+			jPanel = new GridGrouperExpressionBuilder(groupers,true);
 		}
 		return jPanel;
 	}

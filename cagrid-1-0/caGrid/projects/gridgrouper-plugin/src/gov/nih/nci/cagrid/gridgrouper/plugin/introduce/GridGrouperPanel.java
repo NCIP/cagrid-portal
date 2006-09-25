@@ -7,6 +7,8 @@ import gov.nih.nci.cagrid.introduce.portal.extension.AbstractAuthorizationPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -55,7 +57,9 @@ public class GridGrouperPanel extends AbstractAuthorizationPanel {
 	 */
 	private JPanel getExpressionBuilder() {
 		if (expressionBuilder == null) {
-			expressionBuilder = new GridGrouperExpressionBuilder();
+			List groupers = new ArrayList();
+			groupers.add("https://140.254.80.109:8443/wsrf/services/cagrid/GridGrouper");
+			expressionBuilder = new GridGrouperExpressionBuilder(groupers,false);
 		}
 		return expressionBuilder;
 	}

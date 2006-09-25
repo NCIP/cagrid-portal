@@ -80,7 +80,6 @@ public class GridGrouperTree extends JTree {
 		setModel(new DefaultTreeModel(this.rootNode));
 		this.addMouseListener(new GridGrouperTreeEventListener(this,editor));
 		this.setCellRenderer(new TreeRenderer());
-		this.addGridGrouper("https://140.254.80.109:8443/wsrf/services/cagrid/GridGrouper", null);
 	}
 
 	public void addGridGrouper(final String uri, final GlobusCredential cred) {
