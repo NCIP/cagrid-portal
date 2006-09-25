@@ -817,6 +817,15 @@ public class GridGrouperExpressionBuilder extends JPanel {
 		if (jButton == null) {
 			jButton = new JButton();
 			jButton.setText("Load");
+			jButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					getGrouperTree().getRootNode().removeAllGridGroupers();
+					getExpressionTree().getRootNode().removeAllChildren();
+					getGrouperTree().reload();
+					getExpressionTree().reload();
+					getGrouperTree().addGridGrouper((String)getGridGrouperURI().getSelectedItem(),null);
+				}
+			});
 		}
 		return jButton;
 	}

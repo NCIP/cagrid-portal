@@ -104,6 +104,11 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 		}
 
 	}
+	
+	public synchronized void removeAllGridGroupers(){
+		this.groupers.clear();
+		this.removeAllChildren();
+	}
 
 	public synchronized void refresh() {
 		Map old = groupers;
