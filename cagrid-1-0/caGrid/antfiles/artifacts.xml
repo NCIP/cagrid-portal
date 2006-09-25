@@ -21,6 +21,13 @@
 		<artifact track="main" type="jars" id="caCORE.jars">
 			<fileset dir="${share.dir}/lib/caCORE">
 				<include name="*.jar" />
+				<exclude name="*ehcache*.jar" />
+			</fileset>
+		</artifact>
+		<artifact track="main" type="jars" id="caCORE-fixed.jars">
+			<fileset dir="${share.dir}/lib/caCORE">
+				<include name="*.jar" />
+				<exclude name="client.jar" />
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="mds.jars">
