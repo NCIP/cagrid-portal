@@ -393,7 +393,7 @@ public class SyncSource {
 			}
 
 			// remove the old interface method
-			String clientMethod = createClientUnBoxedSignatureStringFromMethod(mod.getJavaMethod());
+			String clientMethod = createClientUnBoxedSignatureStringFromMethod(mod.getIMethod());
 			int startOfMethod = startOfSignature(fileContent, clientMethod);
 			String restOfFile = fileContent.substring(startOfMethod);
 			int endOfMethod = startOfMethod + restOfFile.indexOf(";") + 1;
@@ -425,12 +425,12 @@ public class SyncSource {
 				// just clean up the modified impl
 				modifyImpl(mod);
 				// redo the provider impl method
-				removeProviderImpl(mod.getJavaMethod());
+				removeProviderImpl(mod.getIMethod());
 				addProviderImpl(method);
 			}
 			// redo the client method
 
-			removeClientImpl(mod.getJavaMethod());
+			removeClientImpl(mod.getIMethod());
 			addClientImpl(method);
 		}
 	}
@@ -933,7 +933,7 @@ public class SyncSource {
 
 	public void modifyImpl(Modification mod) throws Exception {
 		MethodType method = mod.getMethodType();
-		JavaMethod oldMethod = mod.getJavaMethod();
+		JavaMethod oldMethod = mod.getImplMethod();
 
 		StringBuffer fileContent = null;
 		try {

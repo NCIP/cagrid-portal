@@ -19,19 +19,29 @@ import org.apache.ws.jaxme.js.JavaMethod;
 public class Modification {
 	
 	private MethodType methodType;
-	private JavaMethod javaMethod;
+	private JavaMethod iMethod;
+	private JavaMethod implMethod;
 
-	public Modification(MethodType methodType, JavaMethod javaMethod) {
+	public Modification(MethodType methodType, JavaMethod iMethod, JavaMethod implMethod) {
 		this.methodType = methodType;
-		this.javaMethod = javaMethod;
+		this.iMethod = iMethod;
+		this.implMethod = implMethod;
 	}
 
-	public JavaMethod getJavaMethod() {
-		return javaMethod;
+	public JavaMethod getIMethod() {
+		return iMethod;
 	}
 
-	public void setJavaMethod(JavaMethod javaMethod) {
-		this.javaMethod = javaMethod;
+	public void setIMethod(JavaMethod iMethod) {
+		this.iMethod = iMethod;
+	}
+	
+	public JavaMethod getImplMethod() {
+		return implMethod;
+	}
+
+	public void setImplMethod(JavaMethod implMethod) {
+		this.implMethod = implMethod;
 	}
 
 	public MethodType getMethodType() {

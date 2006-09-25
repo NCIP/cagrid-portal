@@ -11,10 +11,13 @@ import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.ws.jaxme.js.JavaMethod;
+import org.apache.ws.jaxme.js.JavaQName;
+import org.apache.ws.jaxme.js.JavaQNameImpl;
 import org.apache.ws.jaxme.js.JavaSource;
 import org.apache.ws.jaxme.js.JavaSourceFactory;
 import org.apache.ws.jaxme.js.util.JavaParser;
@@ -35,7 +38,6 @@ import org.projectmobius.common.XMLUtilities;
  */
 public class SyncMethods extends SyncTool {
 
-	private String serviceInterface;
 	private List additions;
 	private List removals;
 	private List modifications;
@@ -79,28 +81,41 @@ public class SyncMethods extends SyncTool {
 
 
 	public void lookForUpdates() throws SynchronizationException {
-		JavaSource sourceI;
+		JavaSource sourceI = null;
+		JavaSource sourceImpl = null;
 		JavaSourceFactory jsf;
 		JavaParser jp;
 
 		jsf = new JavaSourceFactory();
 		jp = new JavaParser(jsf);
 
-		serviceInterface = getBaseDirectory().getAbsolutePath() + File.separator + "src" + File.separator
+		String serviceInterface = getBaseDirectory().getAbsolutePath() + File.separator + "src" + File.separator
 			+ CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName()
 			+ "I.java";
+		String serviceI = getBaseDirectory().getAbsolutePath() + File.separator + "src" + File.separator
+			+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + service.getName()
+			+ "Impl.java";
 
 		try {
 			jp.parse(new File(serviceInterface));
+			jp.parse(new File(serviceI));
+
 		} catch (Exception e) {
 			throw new SynchronizationException("Error parsing service interface:" + e.getMessage(), e);
 		}
-		sourceI = (JavaSource) jsf.getJavaSources().next();
-		sourceI.setForcingFullyQualifiedName(true);
-
-		System.out.println(sourceI.getClassName());
-
+		Iterator it = jsf.getJavaSources();
+		while (it.hasNext()) {
+			JavaSource source = (JavaSource) it.next();
+			if (source.getQName().getClassName().endsWith("I")) {
+				sourceI = source;
+				sourceI.setForcingFullyQualifiedName(true);
+			} else if (source.getQName().getClassName().endsWith("Impl")) {
+				sourceImpl = source;
+				sourceImpl.setForcingFullyQualifiedName(true);
+			}
+		}
 		JavaMethod[] methods = sourceI.getMethods();
+		JavaMethod[] implMethods = sourceImpl.getMethods();
 
 		// look at doc and compare to interface
 		if (service.getMethods() != null && service.getMethods().getMethod() != null) {
@@ -111,7 +126,17 @@ public class SyncMethods extends SyncTool {
 					String methodName = methods[i].getName();
 					if (mel.getName().equals(methodName)) {
 						found = true;
-						this.modifications.add(new Modification(mel, methods[i]));
+						// get the impl method as well....
+						JavaMethod implMethod = null;
+						for (int j = 0; j < implMethods.length; j++) {
+							String implMethodName = implMethods[j].getName();
+							if (mel.getName().equals(implMethodName)) {
+								implMethod = implMethods[j];
+
+								break;
+							}
+						}
+						this.modifications.add(new Modification(mel, methods[i], implMethod));
 						break;
 					}
 				}
