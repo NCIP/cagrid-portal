@@ -13,8 +13,6 @@ need to fix the mem and stackoverflow issue on the mac.
 
 need to have the X button in the method viewer implement what the getDoneButton listener implements 
 
-getResourceHome helper methods need to be created in the serviceimpl for easier use and take advantage of the generic method i have
-
 i am not sure that service/method security on service contexts is right on priority and overides.
 
 when adding a serviceContext and then adding a method that returns its referece
@@ -63,6 +61,8 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+getResourceHome helper methods need to be created in the serviceimpl for easier use and take advantage of the generic method i have
+
 when adding a service context with a custom resource we have seen error in the service wsdl for the new service.
 
 refactor reload button in the types modifyier to not be stupid

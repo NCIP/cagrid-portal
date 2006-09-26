@@ -62,7 +62,36 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 		return this.configuration;
 	}
 	
-	public ResourceHome getResourceHome(String resourceKey) throws Exception {
+	public <%=info.getService().getPackageName()%>.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
+		ResourceHome resource = getResourceHome("home");
+		return (<%=info.getService().getPackageName()%>.service.globus.resource.BaseResourceHome)resource;
+	}
+	
+	<%
+	for(int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++){
+	  ServiceType tserv = info.getServices().getService(serviceI);
+	  if(!tserv.getName().equals(info.getService().getName())){
+	   if(!tserv.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)){
+	%>
+	public <%=tserv.getPackageName()%>.service.globus.resource.BaseResourceHome get<%=tserv.getName()%>ResourceHome() throws Exception {
+		ResourceHome resource = getResourceHome("<%=TemplateUtils.lowerCaseFirstCharacter(tserv.getName())%>Home");
+		return (<%=tserv.getPackageName()%>.service.globus.resource.BaseResourceHome)resource;
+	}
+	<%
+		  } else {
+	%>
+	public ResourceHome get<%=tserv.getName()%>ResourceHome() throws Exception {
+		ResourceHome resource = getResourceHome("<%=TemplateUtils.lowerCaseFirstCharacter(tserv.getName())%>Home");
+		return resource;
+	}
+	<%
+		}
+
+	  }
+	}
+	%>
+	
+	protected ResourceHome getResourceHome(String resourceKey) throws Exception {
 		MessageContext ctx = MessageContext.getCurrentContext();
 
 		ResourceHome resourceHome = null;
