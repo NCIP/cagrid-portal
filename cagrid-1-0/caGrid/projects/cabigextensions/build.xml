@@ -150,6 +150,11 @@
 		<javac srcdir="${src.dir}" destdir="${classes.dir}" source="1.3" target="1.1" debug="on" deprecation="off" optimize="off">
 			<classpath refid="build.classpath" />
 		</javac>
+		<copy toDir="${classes.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- =============================================================== -->

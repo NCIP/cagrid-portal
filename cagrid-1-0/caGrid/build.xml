@@ -184,6 +184,7 @@
 			<artifact refid="core.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="common.metadata.jars" />
+			<artifact refid="data.jars" />
 			<artifact refid="data.metadata.jars" />
 			<artifact refid="metadata.schemas" />
 			<artifact refid="metadatautils.jars" />
@@ -271,7 +272,7 @@
         </resolveDependencies>
       <resolveDependencies extdir="${projects.dir}/authentication-service/schema/AuthenticationService">
 	            <artifact refid="metadata.schemas"/>
-	   </resolveDependencies>
+	        </resolveDependencies>
         <ant dir="${projects.dir}/authentication-service" inheritAll="false" antfile="build.xml" target="all"/>
     </target>
 	

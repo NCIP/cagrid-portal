@@ -2,17 +2,22 @@ package gov.nih.nci.cagrid.introduce.extensions.metadata.codegen;
 
 import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extensions.metadata.constants.MetadataConstants;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.ServiceMetadataHostingResearchCenter;
 import gov.nih.nci.cagrid.metadata.ServiceMetadataServiceDescription;
@@ -33,11 +38,16 @@ import gov.nih.nci.cagrid.metadata.service.ServiceSemanticMetadataCollection;
 import gov.nih.nci.cagrid.metadata.service.ServiceServiceContextCollection;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.utils.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -52,6 +62,8 @@ import org.apache.commons.logging.LogFactory;
 public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcessor {
 	private static final String DEFAULT_FILENAME = "serviceMetadata.xml";
 	private static final String MAIN_RF_TYPE = "main";
+	private static final String SEMANTIC_METADATA_DEFAULTS_DATA_SERVICE = "default-Service-SemanticMetadata-data.xml";
+	private static final String SEMANTIC_METADATA_DEFAULTS_ANALYTICAL_SERVICE = "default-Service-SemanticMetadata-analytical.xml";
 
 	protected static Log LOG = LogFactory.getLog(MetadataCodegenPostProcessor.class.getName());
 
@@ -71,7 +83,9 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 		File mdFile = new File(filename);
 		if (mdFile.exists() && mdFile.canRead()) {
 			try {
-				metadata = (ServiceMetadata) Utils.deserializeDocument(filename, ServiceMetadata.class);
+				FileReader reader = new FileReader(mdFile);
+				metadata = MetadataUtils.deserializeServiceMetadata(reader);
+				reader.close();
 			} catch (Exception e) {
 				LOG.error("Failed to deserialize existing metadata document!  A new one will be created.", e);
 			}
@@ -88,7 +102,9 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 
 		// serialize the model
 		try {
-			Utils.serializeDocument(filename, metadata, MetadataConstants.SERVICE_METADATA_QNAME);
+			FileWriter writer = new FileWriter(filename);
+			MetadataUtils.serializeServiceMetadata(metadata, writer);
+			writer.close();
 		} catch (Exception e) {
 			throw new CodegenExtensionException("Error serializing metadata document.", e);
 		}
@@ -111,7 +127,6 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 				}
 
 				return rp.getFileLocation();
-
 			}
 		}
 
@@ -128,6 +143,11 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 	 */
 	private void populateService(Service service, ServiceInformation info) throws CodegenExtensionException {
 		ServiceType services[] = info.getServiceDescriptor().getServices().getService();
+
+		// we won't set a caDSR registration status
+
+		// initialize the service's semantic metadata
+		editServiceSemanticMetadata(service, info);
 
 		ServiceContext[] newServContexts = new ServiceContext[services.length];
 
@@ -177,6 +197,90 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 
 		// replace the old with the new
 		service.getServiceContextCollection().setServiceContext(newServContexts);
+	}
+
+
+	/**
+	 * TODO: should we move this to the annotateServiceMetadata call?
+	 * 
+	 * @param service
+	 * @param info
+	 */
+	private void editServiceSemanticMetadata(Service service, ServiceInformation info) {
+		// determine if its a data service or analytical service
+		// TODO: how are we classifying data services that add other operations?
+		// (just data or data and analytical)
+		boolean isDataService = isDataService(info);
+		LOG.debug("Service " + (isDataService ? "is" : "is not") + " a data service.");
+		// deserialize the codes based on the type
+		InputStream inputStream = null;
+		if (isDataService) {
+			inputStream = ClassUtils.getResourceAsStream(getClass(), SEMANTIC_METADATA_DEFAULTS_DATA_SERVICE);
+		} else {
+			inputStream = ClassUtils.getResourceAsStream(getClass(), SEMANTIC_METADATA_DEFAULTS_ANALYTICAL_SERVICE);
+		}
+		LOG.debug("Stream:" + inputStream);
+
+		try {
+			// load the appropriate template
+			InputStreamReader reader = new InputStreamReader(inputStream);
+			ServiceMetadata metadata = MetadataUtils.deserializeServiceMetadata(reader);
+			reader.close();
+
+			// set the codes
+			service.setSemanticMetadataCollection(metadata.getServiceDescription().getService()
+				.getSemanticMetadataCollection());
+		} catch (Exception e) {
+			LOG.error("Problem setting service semantic metdata; skipping!", e);
+		}
+	}
+
+
+	/**
+	 * @param info
+	 * @return
+	 */
+	private boolean isDataService(ServiceInformation info) {
+		ServicesType services = info.getServices();
+		if (services != null && services.getService() != null) {
+			ServiceType mainService = null;
+			// find the main service
+			for (int i = 0; i < services.getService().length; i++) {
+				ServiceType serv = services.getService(i);
+				if (serv.getResourceFrameworkType().equals(MAIN_RF_TYPE)) {
+					mainService = serv;
+					break;
+				}
+			}
+			if (mainService != null) {
+				MethodsType methods = mainService.getMethods();
+				if (methods != null) {
+					MethodType[] methodArr = methods.getMethod();
+					if (methodArr != null) {
+						// walk its methods
+						for (int i = 0; i < methodArr.length; i++) {
+							MethodType method = methodArr[i];
+							// if the method name is data service query
+							if (method.getName().equals(DataServiceConstants.QUERY_METHOD_NAME)) {
+								MethodTypeInputs inputs = method.getInputs();
+								if (inputs != null && inputs.getInput().length == 1) {
+									// if it has the right input
+									if (inputs.getInput(0).getQName().equals(DataServiceConstants.CQL_QUERY_QNAME)) {
+										// if it has the right output
+										if (method.getOutput() != null
+											&& method.getOutput().getQName().equals(
+												DataServiceConstants.CQL_RESULT_COLLECTION_QNAME)) {
+											return true;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 

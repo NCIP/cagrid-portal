@@ -87,5 +87,15 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
+	<classpathentry kind="lib" path="ext/lib/ant-contrib.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-cql.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-extension.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-tools.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-utils.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-validation.jar"/>
+	<classpathentry kind="lib" path="ext/lib/wsrf_core_stubs_enum.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

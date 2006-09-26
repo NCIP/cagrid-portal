@@ -1,0 +1,14 @@
+<ns1:ServiceMetadata xsi:type="ns1:ServiceMetadata" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ns1:serviceDescription>
+        <serv:Service xmlns:serv="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+            <serv:semanticMetadataCollection xmlns:serv="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service"
+                xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain">
+                <uml:SemanticMetadata conceptCode="???" conceptName="Data Grid Service"
+                    conceptDefinition="A Grid Data Service." isPrimaryConcept="false" order="1"/>
+                <uml:SemanticMetadata conceptCode="???" conceptName="Grid Service" conceptDefinition="A Grid Service."
+                    isPrimaryConcept="true" order="0"/>
+            </serv:semanticMetadataCollection>
+        </serv:Service>
+    </ns1:serviceDescription>
+</ns1:ServiceMetadata>
