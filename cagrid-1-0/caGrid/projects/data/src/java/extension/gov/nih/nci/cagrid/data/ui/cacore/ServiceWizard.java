@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.ui.cacore;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -44,8 +45,9 @@ public class ServiceWizard extends JDialog {
 	private JPanel mainPanel = null;
 	private JPanel wizardPanel = null;
 	
-	public ServiceWizard(String baseTitle) {
-		super();
+	public ServiceWizard(Frame owner, String baseTitle) {
+		super(owner);
+		setModal(true);
 		this.panelSequence = new LinkedList();
 		this.panelSequenceIter = null;
 		this.stepFont = new Font("Dialog", java.awt.Font.ITALIC, 10);
