@@ -9,7 +9,7 @@
 	<property name="cobertura.report.dir" value="${build.dir}/coverage" />
 	<property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser" />
 
-	<target name="instrument" unless="${dont.instrument}">
+	<target name="instrument" unless="dont.instrument">
 		<taskdef classpathref="test.classpath" resource="tasks.properties" />
 		<mkdir dir="${instrumented.classes.dir}" />
 		<cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
@@ -50,6 +50,40 @@
 					<exclude name="**/GridGrouperTest.java" />
 					<include name="**/*Test.java" />
 					<include name="**/*TestCase.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Consult the logs for details." if="test.failed" />
+		<fail message="Tests errored! Consult the logs for details." if="test.errored" />
+	</target>
+
+	<!-- call the test target for GMEServiceTest  -->
+	<target name="test-gme" depends="instrument">
+		<mkdir dir="${temp.dir}"/>
+		<echo message="Test results dir: ${junit.results.dir}" />
+		<echo message="Test source dir: ${test.src.dir}" />
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="${basedir}" printsummary="yes" haltonfailure="false" haltonerror="false" showoutput="true">
+			<sysproperty key="basedir" value="${basedir}" />
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+			
+			<jvmarg value="-Dbuild.dir=${build.dir}" />
+			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
+			<jvmarg value="-Dtemp.dir=${temp.dir}" />
+			
+			<classpath location="${instrumented.classes.dir}" />
+			<classpath>
+				<path refid="test.classpath" />
+			</classpath>
+			
+			<formatter type="xml" usefile="true"/>
+			<formatter type="plain" usefile="false"/>
+
+			<batchtest fork="yes" haltonfailure="false" haltonerror="false" todir="${junit.results.dir}" 
+				failureproperty="test.failed" errorproperty="test.error"
+			>
+				<fileset dir="${test.src.dir}">
+					<include name="**/GMEServiceTest.java" />
 				</fileset>
 			</batchtest>
 		</junit>
