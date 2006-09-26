@@ -8,7 +8,7 @@
 	<!-- 
 		Properties in these files will override the properties defined in this file.
     -->
-	<property name="introduce.ns.excludes" value="" />
+	<property name="introduce.ns.excludes" value="-x gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" />
 	<property name="service.name" value="ServiceSecurity" />
 	<property name="schema.path" value="${service.name}" />
 

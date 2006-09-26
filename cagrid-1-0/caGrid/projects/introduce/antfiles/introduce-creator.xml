@@ -42,6 +42,7 @@
 			</fileset>
 			<fileset dir="${extensions.lib.dir}">
 				<include name="*.jar"/>
+				<exclude name="${jars.prefixname}*.jar"/>
 			</fileset>
 			<fileset dir="${ant.library.dir}">
 				<include name="*.jar"/>

@@ -24,12 +24,14 @@ import javax.xml.namespace.QName;
 public class SkeletonSecurityOperationProviderCreator {
 
 	private static final String JAR_PREFIX = "caGrid-1.0-Introduce-security";
+	private static final String SECURITY_JAR_PREFIX = "caGrid-1.0-metadata-security";
 	private static final String SERVICE_SECURITY_WSDL = "ServiceSecurity.wsdl";
 	private static final String SERVICE_SECURITY_XSD = "security.xsd";
 	private static final String SECURITY_SERVICE_NS = "http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity";
 	private static final String SECURITY_NS = "gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security";
 	private static final String PATH_TO_BUILD_LIB = "operationProviders" + File.separator + "ServiceSecurity"
 		+ File.separator + "build" + File.separator + "lib" + File.separator;
+	private static final String PATH_TO_EXT_LIB = "ext" + File.separator + "lib" + File.separator;
 	private static final String PATH_TO_SCHEMA = "operationProviders" + File.separator + "ServiceSecurity"
 		+ File.separator + "schema" + File.separator + "ServiceSecurity" + File.separator;
 
@@ -110,6 +112,23 @@ public class SkeletonSecurityOperationProviderCreator {
 					public boolean accept(File pathname) {
 						String name = pathname.getName();
 						return (name.endsWith(".jar") && (name.startsWith(JAR_PREFIX)));
+					}
+				});
+				if (libs != null) {
+					for (int i = 0; i < libs.length; i++) {
+						File outFile = new File(pathToSerLib + libs[i].getName());
+						Utils.copyFile(libs[i], outFile);
+					}
+				}
+				
+				System.out.println("HERE HERE REHR EHR EHRHERHE RHEHR ERHERHEHREHRHER EHREHRHERHERHEHREHRHERHERHEHREHRHERHERHEHREHREHRHERHEREHRHERHERRH");
+
+				// copy over the metadata security jar
+				libDir = new File(PATH_TO_EXT_LIB);
+				libs = libDir.listFiles(new FileFilter() {
+					public boolean accept(File pathname) {
+						String name = pathname.getName();
+						return (name.endsWith(".jar") && (name.startsWith(SECURITY_JAR_PREFIX)));
 					}
 				});
 				if (libs != null) {

@@ -388,6 +388,10 @@
 				<include name="*.jar" />
 				<exclude name="*tests*.jar" />
 			</fileset>
+			<fileset dir="${projects.dir}/introduce/operationProviders/ServiceSecurity/ext/lib">
+				<include name="*.jar" />
+				<exclude name="*tests*.jar" />
+			</fileset>
 		</artifact>
 
 
