@@ -3,19 +3,15 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 To Do:
 
-when i renamed a parameter name, the serviceImpl's signature didn't get updated (but the interface did)
-  -printout complained it couldn't find the method (executeAsynchronously)
-  -the method returns a "reference"... is the sync code looking for an EPR instead?
+cannot remove from service properties table
+
+file imports are not corrent done
 
 (related to above)... when a method isn't found for modification, it should be re-added (in case they deleted it)
 
+need to fix the mem and stackoverflow issue on the mac.  
+
 need to have the X button in the method viewer implement what the getDoneButton listener implements 
-
-when i renamed a parameter name, the serviceImpl's signature didn't get updated (but the interface did) 
-
-refactor reload button in the types modifyier to not be stupid
-
-when adding a service context with a custom resource we have seen error in the service wsdl for the new service.
 
 getResourceHome helper methods need to be created in the serviceimpl for easier use and take advantage of the generic method i have
 
@@ -67,7 +63,16 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+when adding a service context with a custom resource we have seen error in the service wsdl for the new service.
 
+refactor reload button in the types modifyier to not be stupid
+
+when i renamed a parameter name, the serviceImpl's signature didn't get updated (but the interface did) 
+
+when i renamed a parameter name, the serviceImpl's signature didn't get updated (but the interface did)
+  -printout complained it couldn't find the method (executeAsynchronously)
+  -the method returns a "reference"... is the sync code looking for an EPR instead?
+  
 duce generated faults should create both a gobal element and complexType (currently an inner complextype is created) so faults can be extended
 
 (A NEW GUI FOR IMPORTING WILL HANDLE THIS) When importing a method.  if methods names dont match bad stuff happens.
