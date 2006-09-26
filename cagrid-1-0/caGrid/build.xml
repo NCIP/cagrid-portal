@@ -496,6 +496,9 @@
 			<artifact refid="ws.enum.jars" />
 			<artifact refid="ws.enum.schemas" />
 			<artifact refid="core.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="security.metadata.jars" />
+			<artifact refid="introduce.servicesecurity.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/bulkDataTransfer" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
