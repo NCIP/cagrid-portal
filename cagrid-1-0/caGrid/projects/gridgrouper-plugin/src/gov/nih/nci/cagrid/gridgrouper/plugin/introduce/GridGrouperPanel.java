@@ -84,4 +84,9 @@ public class GridGrouperPanel extends AbstractAuthorizationPanel {
 		return expressionBuilder;
 	}
 
+	public void save(boolean isService, String methodName) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

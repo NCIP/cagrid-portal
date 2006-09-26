@@ -24,6 +24,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.extension.AbstractAuthorizationPanel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
 
 import java.awt.BorderLayout;
@@ -32,7 +33,9 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -168,6 +171,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JLabel authLabel = null;
 
 	private ServiceInformation info;
+
+	private Map authPanels = new HashMap();
 
 	public ServiceSecurityPanel(ServiceInformation info) {
 		super();
@@ -365,6 +370,11 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				sa.setNoAuthorization(new NoAuthorization());
 			}
 			ss.setServiceAuthorization(sa);
+
+			AbstractAuthorizationPanel auth = (AbstractAuthorizationPanel)authPanels.get((String)authorizationMechanism.getSelectedItem());
+			if(auth != null){
+				auth.save(true,null);
+			}
 
 			return ss;
 		} else {
@@ -1083,10 +1093,12 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 				AuthorizationExtensionDescriptionType des = (AuthorizationExtensionDescriptionType) l
 						.get(i);
-				authorizationMechanism.addItem(des.getDisplayName());
+				authorizationMechanism.addItem(des.getDisplayName());	
 				try {
-					getAuthPanel().add(ExtensionTools.getAuthorizationPanel(des
-							.getName(), info), des.getDisplayName());
+					AbstractAuthorizationPanel panel = ExtensionTools.getAuthorizationPanel(des
+							.getName(), info); 
+					this.authPanels.put(des.getDisplayName(), panel);
+					getAuthPanel().add(panel, des.getDisplayName());
 				} catch (Exception e) {
 					PortalUtils.showErrorMessage("Error loading the "
 							+ des.getDisplayName()

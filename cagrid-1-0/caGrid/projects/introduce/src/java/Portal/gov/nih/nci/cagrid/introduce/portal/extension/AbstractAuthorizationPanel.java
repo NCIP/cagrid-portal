@@ -10,8 +10,7 @@ public abstract class AbstractAuthorizationPanel extends JPanel {
 
 	private AuthorizationExtensionDescriptionType authDesc;
 	private ServiceInformation serviceInfo;
-
-
+	
 	public AbstractAuthorizationPanel(AuthorizationExtensionDescriptionType authDesc, ServiceInformation serviceInfo) {
 		this.authDesc = authDesc;
 		this.serviceInfo = serviceInfo;
@@ -26,5 +25,8 @@ public abstract class AbstractAuthorizationPanel extends JPanel {
 	public ServiceInformation getServiceInformation() {
 		return serviceInfo;
 	}
-
+	
+	
+	
+	public abstract void save(boolean isService, String methodName) throws Exception;
 }

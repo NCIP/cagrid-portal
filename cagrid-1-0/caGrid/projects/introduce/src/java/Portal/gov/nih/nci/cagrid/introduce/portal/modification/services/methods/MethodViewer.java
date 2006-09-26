@@ -436,7 +436,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					try {
 						method.setName(getNameField().getText());
 
-						method.setMethodSecurity(((MethodSecurityPanel) securityContainerPanel).getMethodSecurity());
+						method.setMethodSecurity(((MethodSecurityPanel) securityContainerPanel).getMethodSecurity(method.getName()));
 
 						// process the inputs
 						MethodTypeInputs inputs = new MethodTypeInputs();

@@ -17,6 +17,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.portal.extension.AbstractAuthorizationPanel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
 
 import java.awt.BorderLayout;
@@ -26,7 +27,9 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -85,6 +88,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JPanel noAuthorizationPanel = null;
 	private ServiceInformation info;
 	private CardLayout authLayout;
+	private Map authPanels = new HashMap();
 	
 	public MethodSecurityPanel(ServiceInformation info,ServiceSecurity sec) {
 		super();
@@ -230,7 +234,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	}
 
 
-	public MethodSecurity getMethodSecurity() throws Exception {
+	public MethodSecurity getMethodSecurity(String methodName) throws Exception {
 		MethodSecurity ms = new MethodSecurity();
 		if (noneButton.isSelected()) {
 			if (this.serviceSecurity == null) {
@@ -264,6 +268,10 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 				ms.setAnonymousClients((AnonymousCommunication) anonymousCommunication.getSelectedItem());
 			} else {
 				ms.setAnonymousClients(AnonymousCommunication.No);
+			}
+			AbstractAuthorizationPanel auth = (AbstractAuthorizationPanel)authPanels.get((String)authorizationMechanism.getSelectedItem());
+			if(auth != null){
+				auth.save(false,methodName);
 			}
 		}
 		if (CommonTools.equals(serviceSecurity, ms)) {
@@ -839,8 +847,10 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 						.get(i);
 				authorizationMechanism.addItem(des.getDisplayName());
 				try {
-					getAuthPanel().add(ExtensionTools.getAuthorizationPanel(des
-							.getName(), info), des.getDisplayName());
+					AbstractAuthorizationPanel panel = ExtensionTools.getAuthorizationPanel(des
+							.getName(), info); 
+					this.authPanels.put(des.getDisplayName(), panel);
+					getAuthPanel().add(panel, des.getDisplayName());
 				} catch (Exception e) {
 					PortalUtils.showErrorMessage("Error loading the "
 							+ des.getDisplayName()
