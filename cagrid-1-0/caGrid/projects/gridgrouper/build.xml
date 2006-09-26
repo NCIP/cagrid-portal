@@ -20,21 +20,21 @@
 	<!-- Post Introduce Edit-->
 	<property name="conf.dir" value="resources/conf" />
 	<property name="hbm.dir" value="resources/hbm" />
-	<property name="cagrid.jar.prefix" value="caGrid-1.0" />
-	<property name="gridgrouper.version" value="0.9" />
+	<property name="jar.prefix" value="caGrid-1.0-gridgrouper" />
+	<property name="gridgrouper.version" value="1.0" />
 	<!-- Post Introduce Edit-->
 	<property name="hibernate.props" value="${conf.dir}/grouper.hibernate.properties"/>
     <property name="ext.lib.dir" value="ext/lib" />
     <property name="etc.dir" value="etc" />
     <property name="schema.dir" value="schema" />
     <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
-    <property name="common.jar.name" value="${cagrid.jar.prefix}-${service.name}-${gridgrouper.version}-common.jar" />
-    <property name="client.jar.name" value="${cagrid.jar.prefix}-${service.name}-${gridgrouper.version}-client.jar" />
-    <property name="service.jar.name" value="${cagrid.jar.prefix}-${service.name}-${gridgrouper.version}-service.jar" />
-	<property name="ui.jar.name" value="${cagrid.jar.prefix}-${service.name}-${gridgrouper.version}-ui.jar" />
-	<property name="resources.jar.name" value="${cagrid.jar.prefix}-${service.name}-${gridgrouper.version}-resources.jar" />
-    <property name="stubs.jar.name" value="${cagrid.jar.prefix}-${service.name}-${gridgrouper.version}-stubs.jar" />
-	<property name="test.jar.name" value="${cagrid.jar.prefix}-${service.name}-${gridgrouper.version}-tests.jar" />
+    <property name="common.jar.name" value="${jar.prefix}-${gridgrouper.version}-common.jar" />
+    <property name="client.jar.name" value="$jar.prefix}-${gridgrouper.version}-client.jar" />
+    <property name="service.jar.name" value="${jar.prefix}-${gridgrouper.version}-service.jar" />
+	<property name="ui.jar.name" value="${jar.prefix}-${gridgrouper.version}-ui.jar" />
+	<property name="resources.jar.name" value="${jar.prefix}-${gridgrouper.version}-resources.jar" />
+    <property name="stubs.jar.name" value="${jar.prefix}-${gridgrouper.version}-stubs.jar" />
+	<property name="test.jar.name" value="${jar.prefix}-${gridgrouper.version}-tests.jar" />
 
     <!-- Important test directories and files -->
     <property name="test.dir" value="test" />

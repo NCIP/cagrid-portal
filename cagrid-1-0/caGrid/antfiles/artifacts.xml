@@ -165,10 +165,10 @@
 		<artifact track="main" type="jars" id="gridgrouper.ui.jars">
 							<antcall target="build-gridgrouper" />
 							<fileset dir="${projects.dir}/gridgrouper/build/lib">
-									<include name="caGrid-*-GridGrouper-*stubs.jar" />
-									<include name="caGrid-*-GridGrouper-*common.jar" />
-									<include name="caGrid-*-GridGrouper-*client.jar" />
-									<include name="caGrid-*-GridGrouper-*ui.jar" />
+									<include name="caGrid-*-gridgrouper-*stubs.jar" />
+									<include name="caGrid-*-gridgrouper-*common.jar" />
+									<include name="caGrid-*-gridgrouper-*client.jar" />
+									<include name="caGrid-*-gridgrouper-*ui.jar" />
 							</fileset>
 							<fileset dir="${projects.dir}/gridgrouper/lib">
 									<include name="*.jar" />
@@ -185,6 +185,12 @@
 				<include name="*.jar" />
 			</fileset>
 		</artifact>
+		
+		<artifact track="main" type="schemas" id="gridgrouper.schemas">
+				<fileset dir="${projects.dir}/gridgrouper/schema/GridGrouper/">
+					<include name="**/*.xsd" />
+				</fileset>
+			</artifact>
 		
 
 		

@@ -48,7 +48,7 @@
 	<!--                  DEFINE THE SUB PROJECTS THAT PROVIDE INTRODUCE EXTENSIONS       -->
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects above -->
-	<property name="introduce.extension.projects.list" value="cabigextensions, cadsr, data, bulkDataTransfer" />
+	<property name="introduce.extension.projects.list" value="cabigextensions, cadsr, data, bulkDataTransfer,gridgrouper-plugin" />
 	<property name="introduce.extensions.dir" value="${projects.dir}/introduce/extensions" />
 
 
@@ -271,7 +271,7 @@
         </resolveDependencies>
       <resolveDependencies extdir="${projects.dir}/authentication-service/schema/AuthenticationService">
 	            <artifact refid="metadata.schemas"/>
-	        </resolveDependencies>
+	   </resolveDependencies>
         <ant dir="${projects.dir}/authentication-service" inheritAll="false" antfile="build.xml" target="all"/>
     </target>
 	
@@ -339,6 +339,9 @@
 			<artifact refid="discovery.jars" />
 			<artifact refid="introduce.jars" />
 			<artifact refid="gridgrouper.ui.jars" />
+		</resolveDependencies>
+		  <resolveDependencies extdir="${projects.dir}/gridgrouper-plugin/schema/gridgrouper">
+			            <artifact refid="gridgrouper.schemas"/>
 		</resolveDependencies>
 		<ant dir="${projects.dir}/gridgrouper-plugin" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
