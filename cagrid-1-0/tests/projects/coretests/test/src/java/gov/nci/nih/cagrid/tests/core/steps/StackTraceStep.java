@@ -3,6 +3,13 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -13,18 +20,25 @@ public class StackTraceStep
 {
 	private long delay;
 	private long frequency;
+	private File logFile;
 	
 	public StackTraceStep()
 	{
-		this(1000 * 60 * 10, 1000 * 5);
+		this(1000 * 60 * 10, 1000 * 5, null);
 	}
 	
-	public StackTraceStep(long delay, long frequency)
+	public StackTraceStep(File file)
+	{
+		this(1000 * 60 * 10, 1000 * 5, file);
+	}
+	
+	public StackTraceStep(long delay, long frequency, File logFile)
 	{
 		super();
 		
 		this.delay = delay;
 		this.frequency = frequency;
+		this.logFile = logFile;
 	}
 	
 	public void runStep() 
@@ -56,14 +70,27 @@ public class StackTraceStep
 			try { sleep(delay); }
 			catch (InterruptedException e) { return; }
 			
+			PrintStream out = System.out;
+			if (logFile != null) {
+				try {
+					out = new PrintStream(new BufferedOutputStream(new FileOutputStream(logFile, true)));
+					out.println("-------------------------------------------------------------");
+					out.println(SimpleDateFormat.getDateTimeInstance().format(new Date()));
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
+			
 			while (true) {
+				out.println("-------------------------------------------------------------");
 				Map<Thread, StackTraceElement[]> threadTable = Thread.getAllStackTraces();
 				for (Thread t : threadTable.keySet()) {
 					if (ignoreThreads.contains(t.getName())) continue;
-					System.out.println(t.getName());
+					out.println(t.getName());
 					for (StackTraceElement ste : threadTable.get(t)) {
-						System.out.println("  " + ste.getFileName() + " (" + ste.getLineNumber() + ")");
+						out.println("  " + ste.getFileName() + " (" + ste.getLineNumber() + ")");
 					}
+					out.flush();
 				}
 				try { sleep(frequency); }
 				catch (InterruptedException e) { break; }
@@ -74,7 +101,7 @@ public class StackTraceStep
 	public static void main(String[] args) 
 		throws Throwable
 	{
-		new StackTraceStep(5000, 1000).runStep();
+		new StackTraceStep(5000, 1000, new File("c:\\test.txt")).runStep();
 		Object sleep = new Object();
 		synchronized (sleep) {
 			sleep.wait(10000);
