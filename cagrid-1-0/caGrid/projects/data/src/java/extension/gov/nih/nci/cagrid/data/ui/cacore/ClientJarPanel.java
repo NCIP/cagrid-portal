@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.data.extension.Data;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -125,14 +124,14 @@ public class ClientJarPanel extends AbstractWizardPanel {
 			addJarButton.setText("Add Jars");
 			addJarButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					String lastDir = (String) getBitBucket().get(CacoreWizardConstants.LAST_DIRECTORY_KEY);
+					String lastDir = (String) getBitBucket().get(CacoreWizardUtils.LAST_DIRECTORY_KEY);
 					JFileChooser chooser = new JFileChooser(lastDir);
 					chooser.setFileFilter(FileFilters.JAR_FILTER);
 					chooser.setMultiSelectionEnabled(true);
 					int choice = chooser.showOpenDialog(ClientJarPanel.this);
 					if (choice == JFileChooser.APPROVE_OPTION) {
 						File[] selectedJars = chooser.getSelectedFiles();
-						getBitBucket().put(CacoreWizardConstants.LAST_DIRECTORY_KEY, selectedJars[0].getAbsolutePath());
+						getBitBucket().put(CacoreWizardUtils.LAST_DIRECTORY_KEY, selectedJars[0].getAbsolutePath());
 						// copy the libs in to the service dir
 						String libDir = getServiceLibDir();
 						String[] jarNames = new String[selectedJars.length];
@@ -262,8 +261,6 @@ public class ClientJarPanel extends AbstractWizardPanel {
 	
 	
 	private String getServiceLibDir() {
-		String serviceDir = getServiceInformation().getIntroduceServiceProperties()
-			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR);
-		return serviceDir + File.separator + "lib";
+		return CacoreWizardUtils.getServiceLibDir(getServiceInformation()) + File.separator + "lib";
 	}
 }

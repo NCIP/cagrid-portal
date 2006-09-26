@@ -7,8 +7,8 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.util.LinkedList;
-import java.util.ListIterator;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -28,9 +28,9 @@ import javax.swing.border.TitledBorder;
  */
 public class ServiceWizard extends JDialog {
 
-	private LinkedList panelSequence;
+	private List panelSequence;
+	private int currentPanelIndex;
 	private String baseTitle;
-	private ListIterator panelSequenceIter;
 	
 	private Font stepFont = null;
 	private JLabel stepLabel = null;
@@ -48,8 +48,8 @@ public class ServiceWizard extends JDialog {
 	public ServiceWizard(Frame owner, String baseTitle) {
 		super(owner);
 		setModal(true);
-		this.panelSequence = new LinkedList();
-		this.panelSequenceIter = null;
+		this.panelSequence = new ArrayList();
+		this.currentPanelIndex = 0;
 		this.stepFont = new Font("Dialog", java.awt.Font.ITALIC, 10);
 		this.baseTitle = baseTitle;
 		initialize();
@@ -95,8 +95,7 @@ public class ServiceWizard extends JDialog {
 	public void showAt(int x, int y) {
 		setLocation(x, y);
 		// get labels and buttons set up
-		panelSequenceIter = panelSequence.listIterator();
-		loadWizardPanel((AbstractWizardPanel) panelSequence.getFirst());
+		loadWizardPanel((AbstractWizardPanel) panelSequence.get(0));
 		setVisible(true);
 	}
 	
@@ -213,8 +212,9 @@ public class ServiceWizard extends JDialog {
 			previousPanelButton.setText("Prev: ");
 			previousPanelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (panelSequenceIter.hasPrevious()) {
-						AbstractWizardPanel prevPanel = (AbstractWizardPanel) panelSequenceIter.previous();
+					if (currentPanelIndex != 0) {
+						currentPanelIndex--;
+						AbstractWizardPanel prevPanel = (AbstractWizardPanel) panelSequence.get(currentPanelIndex);
 						loadWizardPanel(prevPanel);
 					}
 				}
@@ -235,8 +235,9 @@ public class ServiceWizard extends JDialog {
 			nextPanelButton.setText("Next: ");
 			nextPanelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (panelSequenceIter.hasNext()) {
-						AbstractWizardPanel nextPanel = (AbstractWizardPanel) panelSequenceIter.next();
+					if (currentPanelIndex != panelSequence.size() - 1) {
+						currentPanelIndex++;
+						AbstractWizardPanel nextPanel = (AbstractWizardPanel) panelSequence.get(currentPanelIndex);
 						loadWizardPanel(nextPanel);
 					}
 				}
@@ -338,25 +339,24 @@ public class ServiceWizard extends JDialog {
 		// have the panel refresh itself
 		panel.update();
 		
-		int currentStep = panelSequence.indexOf(panel);
 		// set the current step
-		getStepCurrentLabel().setText(String.valueOf(currentStep + 1));
+		getStepCurrentLabel().setText(String.valueOf(currentPanelIndex + 1));
 		getStepTotalLabel().setText(String.valueOf(panelSequence.size()));
 		
 		// enable / disable previous and next buttons as needed
-		getPreviousPanelButton().setEnabled(currentStep != 0);
-		getNextPanelButton().setEnabled(currentStep != panelSequence.size() - 1);
+		getPreviousPanelButton().setEnabled(currentPanelIndex != 0);
+		getNextPanelButton().setEnabled(currentPanelIndex != panelSequence.size() - 1);
 		
 		// set the text of the prev / next buttons
-		if (currentStep < panelSequence.size() - 1) {
-			AbstractWizardPanel nextPanel = (AbstractWizardPanel) panelSequence.get(currentStep + 1);
+		if (currentPanelIndex < panelSequence.size() - 1) {
+			AbstractWizardPanel nextPanel = (AbstractWizardPanel) panelSequence.get(currentPanelIndex + 1);
 			getNextPanelButton().setText("Next: " + nextPanel.getPanelShortName());
 		} else {
 			// TODO: change this to "Done" && handle a clean exit of the wizard
 			getNextPanelButton().setText("Next: ");
 		}
-		if (currentStep != 0) {
-			AbstractWizardPanel prevPanel = (AbstractWizardPanel) panelSequence.get(currentStep - 1);
+		if (currentPanelIndex != 0) {
+			AbstractWizardPanel prevPanel = (AbstractWizardPanel) panelSequence.get(currentPanelIndex - 1);
 			getPreviousPanelButton().setText("Prev: " + prevPanel.getPanelShortName());
 		} else {
 			getPreviousPanelButton().setText("Prev: ");
@@ -376,9 +376,8 @@ public class ServiceWizard extends JDialog {
 		cons.weightx = 1.0d;
 		cons.weighty = 1.0d;
 		cons.fill = GridBagConstraints.BOTH;
-		while (getWizardPanel().getComponentCount() != 0) {
-			getWizardPanel().remove(0);
-		}
+		getWizardPanel().removeAll();
+		((GridBagLayout) getWizardPanel().getLayout()).invalidateLayout(getWizardPanel());
 		getWizardPanel().add(panel, cons);
 	}
 }
