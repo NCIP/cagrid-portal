@@ -13,6 +13,7 @@ import gov.nci.nih.cagrid.tests.core.steps.GMEGetSchemaStep;
 import gov.nci.nih.cagrid.tests.core.steps.GMEPublishSchemaStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
+import gov.nci.nih.cagrid.tests.core.steps.StackTraceStep;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -80,6 +81,7 @@ public class GMEServiceTest
 		);
 			
 		Vector steps = new Vector();
+		steps.add(new StackTraceStep());
 		steps.add(new GlobusCreateStep(globus));
 		steps.add(new GlobusDeployServiceStep(globus, serviceDir));
 		steps.add(new GMEConfigureStep(globus));
