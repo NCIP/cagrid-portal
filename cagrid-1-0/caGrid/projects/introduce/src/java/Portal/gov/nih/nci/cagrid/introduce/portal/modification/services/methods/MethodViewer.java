@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
@@ -588,7 +589,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 						MethodTypeInputsInput input = new MethodTypeInputsInput();
 						input.setQName(new QName(nt.getNamespace(), st.getType()));
 						input.setIsArray(false);
-						input.setName(JavaUtils.xmlNameToJava(st.getType()));
+						input.setName(TemplateUtils.lowerCaseFirstCharacter(JavaUtils.xmlNameToJava(st.getType())));
 						getInputParamTable().addRow(input);
 					} else {
 						JOptionPane.showMessageDialog(MethodViewer.this, "Please select a type to add");
@@ -1116,7 +1117,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 							MethodTypeInputsInput input = new MethodTypeInputsInput();
 							input.setQName(new QName(nt.getNamespace(), st.getType()));
 							input.setIsArray(false);
-							input.setName(JavaUtils.xmlNameToJava(st.getType()));
+							input.setName(TemplateUtils.lowerCaseFirstCharacter(JavaUtils.xmlNameToJava(st.getType())));
 							getInputParamTable().addRow(input);
 						}
 					}
