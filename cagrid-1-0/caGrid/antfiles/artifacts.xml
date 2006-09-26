@@ -188,7 +188,7 @@
 		
 		<artifact track="main" type="schemas" id="gridgrouper.schemas">
 				<fileset dir="${projects.dir}/gridgrouper/schema/GridGrouper/">
-					<include name="**/*.xsd" />
+					<include name="*.xsd" />
 				</fileset>
 			</artifact>
 		

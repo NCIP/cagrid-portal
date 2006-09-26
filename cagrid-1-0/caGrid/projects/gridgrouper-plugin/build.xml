@@ -46,7 +46,7 @@
 		<mkdir dir="${schema.dest}" />
 		<copy toDir="${schema.dest}">
 			<fileset dir="schema" casesensitive="yes">
-				<include name="*" />
+				<include name="**" />
 			</fileset>
 		</copy>
 		<available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
@@ -61,6 +61,7 @@
 			<property name="source.stubs.dir" location="${schema.dest}" />
 			<property name="wsdl.file" value="GridGrouperPlugin.wsdl" />
 			<property name="target.stubs.dir" location="${stubs.src}" />
+			<property name="ns.excludes" value="-x http://cagrid.nci.nih.gov/1/GridGrouper" />
 		</ant>
 	</target>
 

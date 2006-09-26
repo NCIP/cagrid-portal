@@ -2,12 +2,21 @@
 	attributeFormDefault="qualified"
 	elementFormDefault="qualified"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns:plugin="http://cagrid.nci.nih.gov/1/gridgrouper-plugin">
-		 <xsd:element name="Group" type="plugin:Group"/>
- 		 <xsd:complexType name="Group">
+	xmlns:plugin="http://cagrid.nci.nih.gov/1/gridgrouper-plugin" xmlns:grouper="http://cagrid.nci.nih.gov/1/GridGrouper">
+	 <import namespace="http://cagrid.nci.nih.gov/1/GridGrouper" schemaLocation="./gridgrouper/xsd/gridgrouper.xsd" />
+		 <xsd:element name="GridGrouperPlugin" type="plugin:GridGrouperPlugin"/>
+ 		 <xsd:complexType name="GridGrouperPlugin">
 			<xsd:sequence>
-				<xsd:element name="gridgrouperURI" minOccurs="1" maxOccurs="1" type="xsd:string"/>
-				<xsd:element name="groupName" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="ServiceMembershipExpression" minOccurs="1" maxOccurs="1" type="grouper:MembershipExpression"/>
+				<xsd:element name="MethodMembershipExpression" minOccurs="0" maxOccurs="unbounded" type="plugin:MethodMembershipExpression"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		
+		
+		  <xsd:complexType name="MethodMembershipExpression">
+			<xsd:sequence>
+				<xsd:element name="MethodName" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="MembershipExpression" minOccurs="1" maxOccurs="1" type="grouper:MembershipExpression"/>
 			</xsd:sequence>
 		</xsd:complexType>
 </xsd:schema>
