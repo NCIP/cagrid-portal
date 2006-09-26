@@ -81,7 +81,7 @@ public class GMEServiceTest
 		);
 			
 		Vector steps = new Vector();
-		steps.add(new StackTraceStep());
+		steps.add(new StackTraceStep(30*1000, 2 * 1000));
 		steps.add(new GlobusCreateStep(globus));
 		steps.add(new GlobusDeployServiceStep(globus, serviceDir));
 		steps.add(new GMEConfigureStep(globus));
