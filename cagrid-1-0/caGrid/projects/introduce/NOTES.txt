@@ -3,6 +3,10 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 To Do:
 
+make global preferences
+
+make introduce portal conf in the users .cagrid space....
+
 (related to above)... when a method isn't found for modification, it should be re-added (in case they deleted it)
 
 need to fix the mem and stackoverflow issue on the mac.  
