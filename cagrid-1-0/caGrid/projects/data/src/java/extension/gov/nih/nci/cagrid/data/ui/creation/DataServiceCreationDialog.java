@@ -1,9 +1,14 @@
 package gov.nih.nci.cagrid.data.ui.creation;
 
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.extension.ServiceFeatures;
+import gov.nih.nci.cagrid.data.ui.cacore.ClientJarPanel;
+import gov.nih.nci.cagrid.data.ui.cacore.CoreDsIntroPanel;
+import gov.nih.nci.cagrid.data.ui.cacore.DomainModelPanel;
+import gov.nih.nci.cagrid.data.ui.cacore.ServiceWizard;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
@@ -167,6 +172,16 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 			okButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					setFeatureStatus();
+					if (getSdkDataRadioButton().isSelected()) {
+						ServiceWizard wiz = new ServiceWizard(
+							PortalResourceManager.getInstance().getGridPortal(), "caCORE Backend");
+						wiz.addWizardPanel(new CoreDsIntroPanel(getExtensionDescription(), getServiceInfo()));
+						wiz.addWizardPanel(new ClientJarPanel(getExtensionDescription(), getServiceInfo()));
+						wiz.addWizardPanel(new DomainModelPanel(getExtensionDescription(), getServiceInfo()));
+						
+						PortalUtils.centerWindow(wiz);
+						wiz.showAt(wiz.getX(), wiz.getY());
+					}
 					dispose();
 				}
 			});
@@ -243,7 +258,6 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 	private JRadioButton getSdkDataRadioButton() {
 		if (sdkDataRadioButton == null) {
 			sdkDataRadioButton = new JRadioButton();
-			sdkDataRadioButton.setEnabled(false);
 			sdkDataRadioButton.setText("caCORE SDK Data Source");
 		}
 		return sdkDataRadioButton;
