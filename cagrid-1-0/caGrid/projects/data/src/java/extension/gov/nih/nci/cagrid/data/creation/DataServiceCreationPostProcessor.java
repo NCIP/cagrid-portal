@@ -95,19 +95,19 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		// query namespace
 		NamespaceType queryNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ DataServiceConstants.CQL_QUERY_SCHEMA);
-		queryNamespace.setLocation("." + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
+		queryNamespace.setLocation("./" + DataServiceConstants.CQL_QUERY_SCHEMA);
 		// query result namespace
 		NamespaceType resultNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ DataServiceConstants.CQL_RESULT_SET_SCHEMA);
-		resultNamespace.setLocation("." + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
+		resultNamespace.setLocation("./" + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
 		// ds metadata namespace
 		NamespaceType dsMetadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ DataServiceConstants.DATA_METADATA_SCHEMA);
-		dsMetadataNamespace.setLocation("." + File.separator + DataServiceConstants.DATA_METADATA_SCHEMA);
+		dsMetadataNamespace.setLocation("./" + DataServiceConstants.DATA_METADATA_SCHEMA);
 		// caGrid metadata namespace
 		NamespaceType cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ DataServiceConstants.CAGRID_METADATA_SCHEMA);
-		cagridMdNamespace.setLocation("." + File.separator + DataServiceConstants.CAGRID_METADATA_SCHEMA);
+		cagridMdNamespace.setLocation("./" + DataServiceConstants.CAGRID_METADATA_SCHEMA);
 		// prevent metadata beans from being built
 		cagridMdNamespace.setGenerateStubs(Boolean.FALSE);
 		// add those new namespaces to the list of namespace types

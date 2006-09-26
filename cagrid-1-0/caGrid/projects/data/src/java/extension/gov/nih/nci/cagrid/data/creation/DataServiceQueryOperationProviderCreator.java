@@ -30,7 +30,6 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
@@ -132,31 +131,31 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 			// query namespace
 			queryNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.CQL_QUERY_SCHEMA);
-			queryNamespace.setLocation("." + File.separator + DataServiceConstants.CQL_QUERY_SCHEMA);
+			queryNamespace.setLocation("./" + DataServiceConstants.CQL_QUERY_SCHEMA);
 			// query result namespace
 			resultNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.CQL_RESULT_SET_SCHEMA);
-			resultNamespace.setLocation("." + File.separator + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
+			resultNamespace.setLocation("./" + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
 			// ds metadata namespace
 			dsMetadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.DATA_METADATA_SCHEMA);
-			dsMetadataNamespace.setLocation("." + File.separator + DataServiceConstants.DATA_METADATA_SCHEMA);
+			dsMetadataNamespace.setLocation("./" + DataServiceConstants.DATA_METADATA_SCHEMA);
 			// ds exceptions namespace
 			dsExceptionsNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.DATA_SERVICE_EXCEPTIONS_SCHEMA);
-			dsExceptionsNamespace.setLocation("." + File.separator + DataServiceConstants.DATA_SERVICE_EXCEPTIONS_SCHEMA);
+			dsExceptionsNamespace.setLocation("./" + DataServiceConstants.DATA_SERVICE_EXCEPTIONS_SCHEMA);
 			// caGrid metadata namespace
 			cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.CAGRID_METADATA_SCHEMA);
-			cagridMdNamespace.setLocation("." + File.separator + DataServiceConstants.CAGRID_METADATA_SCHEMA);
+			cagridMdNamespace.setLocation("./" + DataServiceConstants.CAGRID_METADATA_SCHEMA);
 			// caDSR umlproject namespace
 			caDsrUmlNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.CADSR_UMLPROJECT_SCHEMA);
-			caDsrUmlNamespace.setLocation("." + File.separator + DataServiceConstants.CADSR_UMLPROJECT_SCHEMA);
+			caDsrUmlNamespace.setLocation("./" + DataServiceConstants.CADSR_UMLPROJECT_SCHEMA);
 			// caDSR domain namespace
 			caDsrDomainNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.CADSR_DOMAIN_SCHEMA);
-			caDsrDomainNamespace.setLocation("." + File.separator + DataServiceConstants.CADSR_DOMAIN_SCHEMA);
+			caDsrDomainNamespace.setLocation("./" + DataServiceConstants.CADSR_DOMAIN_SCHEMA);
 		} catch (MobiusException ex) {
 			throw new CreationExtensionException("Error creating namespace for data service: " + ex.getMessage(), ex);
 		}
@@ -211,7 +210,6 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		queryMethod.setName(DataServiceConstants.QUERY_METHOD_NAME);
 		// get namespaces needed out of the service description
 		NamespaceType queryNamespace = getNamespaceType(description, DataServiceConstants.CQL_QUERY_URI);
-		NamespaceType resultNamespace = getNamespaceType(description, DataServiceConstants.CQL_RESULT_SET_URI);
 		// method input parameters
 		MethodTypeInputs inputs = new MethodTypeInputs();
 		MethodTypeInputsInput queryInput = new MethodTypeInputsInput();
@@ -225,9 +223,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		// method output
 		MethodTypeOutput output = new MethodTypeOutput();
 		output.setIsArray(false);
-		QName resultSetQName = new QName(resultNamespace.getNamespace(), 
-			resultNamespace.getSchemaElement(0).getType());
-		output.setQName(resultSetQName);
+		output.setQName(DataServiceConstants.CQL_RESULT_COLLECTION_QNAME);
 		queryMethod.setOutput(output);
 		// exceptions on query method
 		MethodTypeExceptions queryExceptions = new MethodTypeExceptions();
