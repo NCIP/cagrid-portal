@@ -32,6 +32,7 @@
 			<jvmarg value="-Dbuild.dir=${build.dir}" />
 			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
 			<jvmarg value="-Dtemp.dir=${temp.dir}" />
+			<jvmarg value="-Djunit.results.dir=${junit.results.dir}" />
 			
 			<classpath location="${instrumented.classes.dir}" />
 			<classpath>
