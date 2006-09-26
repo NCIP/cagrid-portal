@@ -3,8 +3,6 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 To Do:
 
-cannot remove from service properties table
-
 file imports are not corrent done
 
 (related to above)... when a method isn't found for modification, it should be re-added (in case they deleted it)
@@ -61,6 +59,8 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+cannot remove from service properties table
+
 getResourceHome helper methods need to be created in the serviceimpl for easier use and take advantage of the generic method i have
 
 when adding a service context with a custom resource we have seen error in the service wsdl for the new service.

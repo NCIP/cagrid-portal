@@ -55,7 +55,7 @@ public class ServicePropertiesTable extends PortalBaseTable {
 		// add new data
 		if (info.getServiceProperties() != null) {
 			ServicePropertiesProperty[] allProperties = info.getServiceProperties().getProperty();
-			if (allProperties != null && allProperties.length != 0) {
+			if (allProperties != null && allProperties.length > 0) {
 				for (int i = 0; i < allProperties.length; i++) {
 					Vector v = new Vector(4);
 					v.add(allProperties[i].getKey());
@@ -120,7 +120,7 @@ public class ServicePropertiesTable extends PortalBaseTable {
 	public void removeSelectedRow() throws IndexOutOfBoundsException {
 		int row = getSelectedRow();
 		if ((row < 0) || (row >= getRowCount())) {
-			throw new IndexOutOfBoundsException("invalid row: " + row);
+			return;
 		}
 		int oldSelectedRow = getSelectedRow();
 		// remove the row from the model

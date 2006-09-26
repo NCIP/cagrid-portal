@@ -802,7 +802,7 @@ public class CommonTools {
 	 */
 	public static boolean removeServiceProperty(ServiceInformation info, String key) {
 		ServicePropertiesProperty[] newProperties = new ServicePropertiesProperty[info.getServiceProperties()
-			.getProperty().length];
+			.getProperty().length-1];
 		int newIndex = 0;
 		boolean removed = false;
 		for (int i = 0; i < info.getServiceProperties().getProperty().length; i++) {
@@ -814,6 +814,7 @@ public class CommonTools {
 				removed = true;
 			}
 		}
+		info.getServiceProperties().setProperty(newProperties);
 		return removed;
 	}
 

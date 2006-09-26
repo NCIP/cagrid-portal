@@ -1777,7 +1777,11 @@ public class ModificationViewer extends GridPortalComponent {
 	private JCheckBox getServicePropertiesIsFromETCCheckBox() {
 		if (propertyIsFromETCCheckBox == null) {
 			propertyIsFromETCCheckBox = new JCheckBox();
-			propertyIsFromETCCheckBox.setText("Is Path From ETC");
+			propertyIsFromETCCheckBox.setToolTipText("Checking this box will let introduce that the value of this property will be a " +
+					"file location which is meant to be relative from the service's etc location in " +
+					"the service container.  The value that is set at deploy time will be replaced " +
+					"with the absolute path to the etc directory pluss the value of the variable.");
+			propertyIsFromETCCheckBox.setText("is value a relative file path from the service's ETC location?");
 		}
 		return propertyIsFromETCCheckBox;
 	}
