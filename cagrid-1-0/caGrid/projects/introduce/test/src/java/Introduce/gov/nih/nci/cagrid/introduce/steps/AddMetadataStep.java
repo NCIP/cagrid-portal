@@ -48,7 +48,7 @@ public class AddMetadataStep extends BaseStep {
 			System.arraycopy(namespaces.getNamespace(), 0, newNamespaceTypes, 0, currentLength);
 		}
 		NamespaceType type = new NamespaceType();
-		type.setLocation("." + File.separator + "caDSRMetadata.xsd");
+		type.setLocation("./" + "caDSRMetadata.xsd");
 		type.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.cadsr");
 		type.setPackageName("gov.nih.nci.cagrid.metadata.cadsr");
 		SchemaElementType etype = new SchemaElementType();

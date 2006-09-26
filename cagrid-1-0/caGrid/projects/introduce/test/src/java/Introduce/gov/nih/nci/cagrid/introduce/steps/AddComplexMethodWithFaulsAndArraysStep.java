@@ -57,7 +57,7 @@ public class AddComplexMethodWithFaulsAndArraysStep extends BaseStep {
 			System.arraycopy(namespaces.getNamespace(), 0, newNamespaceTypes, 0, currentLength);
 		}
 		NamespaceType type = new NamespaceType();
-		type.setLocation("." + File.separator + "bookstore.xsd");
+		type.setLocation("./" + "bookstore.xsd");
 		type.setNamespace("gme://projectmobius.org/1/BookStore");
 		type.setPackageName("projectmobius.org");
 		SchemaElementType etype = new SchemaElementType();

@@ -96,7 +96,7 @@ public class SkeletonSecurityOperationProviderCreator {
 					+ SERVICE_SECURITY_XSD);
 				nsType.setGenerateStubs(new Boolean(false));
 				nsType.setPackageName("gov.nih.nci.cagrid.metadata.security");
-				nsType.setLocation("./" + "xsd" + File.separator + SERVICE_SECURITY_XSD);
+				nsType.setLocation("./xsd/" + SERVICE_SECURITY_XSD);
 				CommonTools.addNamespace(info.getServiceDescriptor(), nsType);
 
 				// copy over the wsdl file and the required schema

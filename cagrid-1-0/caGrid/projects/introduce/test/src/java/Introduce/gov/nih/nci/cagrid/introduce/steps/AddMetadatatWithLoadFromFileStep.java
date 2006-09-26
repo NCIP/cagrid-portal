@@ -49,7 +49,7 @@ public class AddMetadatatWithLoadFromFileStep extends BaseStep {
 					0, currentLength);
 		}
 		NamespaceType type = new NamespaceType();
-		type.setLocation("." + File.separator + "CommonServiceMetadata.xsd");
+		type.setLocation("./CommonServiceMetadata.xsd");
 		type
 				.setNamespace("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common");
 		type.setPackageName("gov.nih.nci.cagrid.metadata.common");
