@@ -100,7 +100,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 				+ "schema" + File.separator + serviceName + File.separator + "enumeration.xsd");
 			nsType = CommonTools.createNamespaceType(enumSchema.getAbsolutePath());
 			// fix the schema location on the namespace type
-			nsType.setLocation("."  + File.separator + "enumeration.xsd");
+			nsType.setLocation("./" + "enumeration.xsd");
 			// change the package mapping
 			nsType.setPackageName(WsEnumConstants.ENUMERATION_PACKAGE_NAME);
 		} catch (MobiusException ex) {

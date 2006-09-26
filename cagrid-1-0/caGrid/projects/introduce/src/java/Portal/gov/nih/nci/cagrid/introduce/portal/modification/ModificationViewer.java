@@ -1355,7 +1355,7 @@ public class ModificationViewer extends GridPortalComponent {
 							info.getServiceDescriptor(), IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
 						// call the sync tools
-						setProgressText("sychronizing skeleton");
+						setProgressText("synchronizing skeleton");
 						SyncTools sync = new SyncTools(methodsDirectory);
 						sync.sync();
 

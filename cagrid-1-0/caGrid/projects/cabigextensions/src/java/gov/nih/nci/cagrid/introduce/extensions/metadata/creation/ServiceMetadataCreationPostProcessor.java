@@ -87,7 +87,7 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
 		// caGrid metadata namespace
 		NamespaceType cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ MetadataConstants.CAGRID_METADATA_SCHEMA);
-		cagridMdNamespace.setLocation("." + File.separator + MetadataConstants.CAGRID_METADATA_SCHEMA);
+		cagridMdNamespace.setLocation("./" + MetadataConstants.CAGRID_METADATA_SCHEMA);
 		cagridMdNamespace.setGenerateStubs(Boolean.FALSE);
 
 		// add those new namespaces to the list of namespace types
