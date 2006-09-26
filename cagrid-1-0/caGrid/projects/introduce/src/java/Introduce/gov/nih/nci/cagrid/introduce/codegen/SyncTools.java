@@ -411,14 +411,14 @@ public class SyncTools {
 
 		// table.dump(System.out);
 		// get the classnames from the axis symbol table
-		try {
-			System.out.println("\n\nSTART OF NAMESPACES\n");
-			Utils.serializeObject(info.getServiceDescriptor().getNamespaces(),new QName("gme://gov.nih.nci.cagrid.introduce/1/Namespace","NamespacesType"),new PrintWriter(System.out));
-			System.out.println("\n\nEND OF NAMESPACES\n");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			System.out.println("\n\nSTART OF NAMESPACES\n");
+//			Utils.serializeObject(info.getServiceDescriptor().getNamespaces(),new QName("gme://gov.nih.nci.cagrid.introduce/1/Namespace","NamespacesType"),new PrintWriter(System.out));
+//			System.out.println("\n\nEND OF NAMESPACES\n");
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
 				NamespaceType ntype = info.getNamespaces().getNamespace(i);
