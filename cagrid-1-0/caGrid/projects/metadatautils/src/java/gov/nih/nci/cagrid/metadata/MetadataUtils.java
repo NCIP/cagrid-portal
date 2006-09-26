@@ -10,9 +10,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 
-import org.apache.axis.message.addressing.EndpointReference;
 import org.apache.axis.message.addressing.EndpointReferenceType;
-import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.axis.utils.ClassUtils;
 import org.globus.wsrf.utils.XmlUtils;
 import org.w3c.dom.Element;
