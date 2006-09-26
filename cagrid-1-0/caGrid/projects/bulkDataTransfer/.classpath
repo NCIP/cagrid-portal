@@ -76,5 +76,11 @@
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_enum.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/jaxmejs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-stubs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
