@@ -131,6 +131,7 @@
 			<artifact refid="caCORE.jars" />
 			<artifact refid="graph.jars" />
 			<artifact refid="introduce.servicesecurity.jars" />
+			<artifact refid="gridgrouper.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${tests.projects.dir}/coretests/test/resources/services/BasicDataService">
 			<artifact refid="cqlprocessors.jars" />
@@ -180,6 +181,9 @@
 	</target>
 	<target name="build-data">
 		<echo>data must be built in the main caGrid build</echo>
+	</target>
+	<target name="build-gridgrouper">
+		<echo>gridgrouper must be built in the main caGrid build</echo>
 	</target>
 
 	<!-- ============================================================== -->
