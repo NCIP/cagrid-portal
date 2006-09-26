@@ -3,7 +3,7 @@
     <ns1:AuthorizationExtensionDescription displayName="Grid Grouper" name="gridgrouperui">
         <ns1:AuthorizationPanel>gov.nih.nci.cagrid.gridgrouper.plugin.introduce.GridGrouperPanel</ns1:AuthorizationPanel>
         <ns1:Properties> 
-            <ns1:Property key="loadOnStartup" value="true" />
+            <ns1:Property key="loadOnStartup" value="false" />
             <ns1:Property key="gridGrouperURL" value="https://localhost:8443/wsrf/services/cagrid/GridGrouper" />
             <ns1:Property key="gridGrouperURL" value="https://140.254.80.109:8443/wsrf/services/cagrid/GridGrouper" />
         </ns1:Properties>
