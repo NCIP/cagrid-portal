@@ -1,10 +1,14 @@
 package gov.nih.nci.cagrid.gridgrouper.plugin.introduce;
 
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.plugin.ui.GridGrouperExpressionBuilder;
 import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.AbstractAuthorizationPanel;
+import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.xml.namespace.QName;
+
+import org.apache.axis.message.MessageElement;
 
 public class GridGrouperPanel extends AbstractAuthorizationPanel {
 
@@ -85,8 +92,30 @@ public class GridGrouperPanel extends AbstractAuthorizationPanel {
 	}
 
 	public void save(boolean isService, String methodName) throws Exception {
-		// TODO Auto-generated method stub
+		MembershipExpression exp = ((GridGrouperExpressionBuilder)getExpressionBuilder()).getMembershipExpression();
 		
+		//TODO: Validate the expression
+		
+		ExtensionType ext = ExtensionTools.getAddServiceExtension("gridgrouper", getServiceInformation());
+		ExtensionTypeExtensionData data = ext.getExtensionData();
+		GridGrouperPlugin plugin = null;
+		MessageElement[] mes = data.get_any();
+		if(mes == null){
+			mes = new MessageElement[1];
+			data.set_any(mes);
+		}
+		
+		if(mes[0]==null){
+			plugin = new GridGrouperPlugin();
+			mes [0] = new MessageElement(new QName("http://cagrid.nci.nih.gov/1/gridgrouper-plugin","GridGrouperPlugin"),plugin);
+		}else{
+			plugin = (GridGrouperPlugin) mes[0].getObjectValue();
+		}
+		if(isService){
+			//TODO: Clean the expression if is a service
+			plugin.setServiceMembershipExpression(exp);
+		}else{
+			//TODO: Finish this.
+		}	
 	}
-	
 }

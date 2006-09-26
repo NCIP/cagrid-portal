@@ -75,6 +75,7 @@
 					<include name="*.jar" />
 					 <exclude name="${jar.name}" />
 					 <exclude name="*GridGrouper*" />
+					 <exclude name="*gridgrouper*" />
 				</fileset>
 				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar" />
@@ -88,10 +89,12 @@
 		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}">
 			<include name="**/*.java" />
 			<classpath>
+				<pathelement location="${stubs.dest}" />
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
 					 <exclude name="${jar.name}" />
-										 <exclude name="*GridGrouper*" />
+					 <exclude name="*GridGrouper*" />
+					<exclude name="*gridgrouper*" />
 				</fileset>
 				<fileset dir="${ext.lib.dir}">
 					<include name="*.jar" />

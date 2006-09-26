@@ -829,4 +829,8 @@ public class GridGrouperExpressionBuilder extends JPanel {
 		}
 		return jButton;
 	}
+	
+	public MembershipExpression getMembershipExpression(){
+		return getExpressionTree().getRootNode().getExpression();
+	}
 }

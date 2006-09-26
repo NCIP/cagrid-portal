@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescri
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ResourcePropertyEditorExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -155,7 +156,7 @@ public class ExtensionTools {
 	public static ExtensionType getAddServiceExtension(String extensionName,
 			ServiceInformation info) throws Exception {
 		return getAddExtension(extensionName,
-				ExtensionsLoader.AUTHORIZATION_EXTENSION, info);
+				ExtensionsLoader.SERVICE_EXTENSION, info);
 	}
 
 	public static ExtensionType getAddAuthorizationExtension(
@@ -194,6 +195,7 @@ public class ExtensionTools {
 		ExtensionType ext = new ExtensionType();
 		ext.setName(extensionName);
 		ext.setExtensionType(extensionType);
+		ext.setExtensionData(new ExtensionTypeExtensionData());
 
 		ExtensionType[] exts = list.getExtension();
 		ExtensionType[] exts2 = null;
