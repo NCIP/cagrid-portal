@@ -1,5 +1,5 @@
 /**
- * $Id: DefaultSAMLProvider.java,v 1.1 2006-09-15 10:52:46 joshua Exp $
+ * $Id: DefaultSAMLProvider.java,v 1.2 2006-09-27 19:59:20 joshua Exp $
  *
  */
 package gov.nih.nci.cagrid.authentication.service;
@@ -40,7 +40,7 @@ import org.apache.xml.security.signature.XMLSignature;
 
 /**
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @author Joshua Phillips
  *
  */
@@ -55,10 +55,25 @@ public class DefaultSAMLProvider implements
     
     public void loadCertificates(){
 	try{
-	    Reader certReader = new FileReader(getCertificateFileName());
-	    setCertificate(CertUtil.loadCertificate(certReader));
+	    File certFile = new File(getCertificateFileName());
+	    if(!certFile.exists()){
+		throw new Exception("Certificate file not found at: " + certFile.getAbsolutePath());
+	    }
+	    Reader certReader = new FileReader(certFile);
+	    X509Certificate cert = CertUtil.loadCertificate(certReader);
+	    if(cert == null){
+		throw new Exception("Failed to load certificate.");
+	    }
+	    setCertificate(cert);
 	    File keyFile = new File(getPrivateKeyFileName());
-	    setPrivateKey(KeyUtil.loadPrivateKey(keyFile, getPassword()));
+	    if(!keyFile.exists()){
+		throw new Exception("Private Key file not found at: " + keyFile.getAbsolutePath());
+	    }
+	    PrivateKey key = KeyUtil.loadPrivateKey(keyFile, getPassword());
+	    if(key == null){
+		throw new Exception("Failed to load private key.");
+	    }
+	    setPrivateKey(key);
 	}catch(Exception ex){
 	    throw new RuntimeException("Error loading certificates: " + ex.getMessage(), ex);
 	}
