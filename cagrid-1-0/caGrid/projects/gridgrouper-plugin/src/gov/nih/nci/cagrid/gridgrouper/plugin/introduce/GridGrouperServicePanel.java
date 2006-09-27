@@ -97,6 +97,7 @@ public class GridGrouperServicePanel extends AbstractServiceAuthorizationPanel {
 						if (ps != null) {
 							exp = ps.getServiceMembershipExpression();
 						}
+						setUsed(true);
 					}
 				}
 

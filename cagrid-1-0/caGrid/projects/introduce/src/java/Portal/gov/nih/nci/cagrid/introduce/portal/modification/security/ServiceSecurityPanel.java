@@ -35,6 +35,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -437,8 +438,21 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 									.setSelectedItem(NO_AUTHORIZATION);
 						}
 					} else {
+						Iterator itr = this.authPanels.keySet().iterator();
+						boolean found = false;
+						while(itr.hasNext()){
+							String name = (String)itr.next();
+							AbstractServiceAuthorizationPanel panel = (AbstractServiceAuthorizationPanel)this.authPanels.get(name);
+							if(panel.isUsed()){
+								this.authorizationMechanism
+								.setSelectedItem(name);
+								found = true;
+							}
+						}
+						if(!found){
 						this.authorizationMechanism
 								.setSelectedItem(NO_AUTHORIZATION);
+						}
 					}
 				}
 
@@ -1101,6 +1115,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 						authorizationMechanism.addItem(des.getDisplayName());
 						this.authPanels.put(des.getDisplayName(), panel);
 						getAuthPanel().add(panel, des.getDisplayName());
+						if(panel.isUsed()){
+					    	authorizationMechanism.setSelectedItem(des.getDisplayName());
+					    }
 					}
 				} catch (Exception e) {
 					PortalUtils.showErrorMessage("Error loading the "

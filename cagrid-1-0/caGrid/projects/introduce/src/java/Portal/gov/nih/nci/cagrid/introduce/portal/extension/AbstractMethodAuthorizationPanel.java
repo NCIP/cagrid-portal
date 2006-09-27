@@ -16,6 +16,8 @@ public abstract class AbstractMethodAuthorizationPanel extends JPanel {
 	private ServiceType service;
 
 	private MethodType method;
+	
+	private boolean isUsed;
 
 	public AbstractMethodAuthorizationPanel(
 			AuthorizationExtensionDescriptionType authDesc,
@@ -25,7 +27,18 @@ public abstract class AbstractMethodAuthorizationPanel extends JPanel {
 		this.serviceInfo = serviceInfo;
 		this.service = service;
 		this.method = method;
+		this.isUsed = false;
 	}
+	
+	
+	public boolean isUsed() {
+		return isUsed;
+	}
+
+	public void setUsed(boolean isUsed) {
+		this.isUsed = isUsed;
+	}
+
 
 	public AuthorizationExtensionDescriptionType getAuthorizationExtensionDescriptionType() {
 		return authDesc;

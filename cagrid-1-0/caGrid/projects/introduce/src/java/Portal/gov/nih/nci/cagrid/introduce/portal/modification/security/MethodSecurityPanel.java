@@ -888,6 +888,9 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 						authorizationMechanism.addItem(des.getDisplayName());
 						this.authPanels.put(des.getDisplayName(), panel);
 						getAuthPanel().add(panel, des.getDisplayName());
+						if(panel.isUsed()){
+					    	authorizationMechanism.setSelectedItem(des.getDisplayName());
+					    }
 					}
 				} catch (Exception e) {
 					PortalUtils.showErrorMessage("Error loading the "
