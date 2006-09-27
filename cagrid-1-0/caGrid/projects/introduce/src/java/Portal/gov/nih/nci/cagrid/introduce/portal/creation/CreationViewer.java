@@ -301,7 +301,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 						getNamespaceDomain().getText(), extensions);
 
 					try {
-						ResourceManager.setServiceURLProperty(ResourceManager.LAST_DIRECTORY, getDir().getText());
+						ResourceManager.setStateProperty(ResourceManager.LAST_DIRECTORY, getDir().getText());
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
