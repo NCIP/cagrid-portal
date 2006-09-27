@@ -47,6 +47,9 @@ E = External to data core
 BUGS:
 
 Select Project caCore(Version: 3), Select Package gov.nih.nci.evs.domain, Add Package,
+	Select all, Save, Refresh From GME, Save, Null Pointer
+	
+Select Project caCore(Version: 3), Select Package gov.nih.nci.evs.domain, Add Package,
 	Save, close the modify service window, click modify service, open same service,
 	add same package as above, try and delete both packages
 	
