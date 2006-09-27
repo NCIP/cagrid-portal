@@ -52,7 +52,7 @@ public class ModifyService extends JDialog {
 
 	private ServiceTypeTreeNode node;
 
-	private JPanel securityPanel = null;
+	private ServiceSecurityPanel securityPanel = null;
 
 
 	/**
@@ -185,7 +185,8 @@ public class ModifyService extends JDialog {
 								+ CommonTools.ALLOWED_JAVA_CLASS_REGEX + ")");
 						return;
 					}
-					// make sure there are no collision problems with namespaces or packages.....
+					// make sure there are no collision problems with namespaces
+					// or packages.....
 					for (int i = 0; i < service.getNamespaces().getNamespace().length; i++) {
 						NamespaceType nsType = service.getNamespaces().getNamespace(i);
 						if (nsType.getNamespace().equals(namespaceTextField.getText())
@@ -223,6 +224,12 @@ public class ModifyService extends JDialog {
 					service.getService().setName(serviceNameTextField.getText());
 					service.getService().setNamespace(namespaceTextField.getText());
 					service.getService().setPackageName(servicePackageNameTextField.getText());
+					try {
+						service.getService().setServiceSecurity(getSecurityPanel().getServiceSecurity());
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(ModifyService.this, e1.getMessage());
+						return;
+					}
 					node.getModel().nodeStructureChanged(node);
 					node.getModel().nodeChanged(node);
 					dispose();
@@ -368,7 +375,7 @@ public class ModifyService extends JDialog {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getSecurityPanel() {
+	private ServiceSecurityPanel getSecurityPanel() {
 		if (securityPanel == null) {
 			securityPanel = new ServiceSecurityPanel(service, service.getService());
 		}
