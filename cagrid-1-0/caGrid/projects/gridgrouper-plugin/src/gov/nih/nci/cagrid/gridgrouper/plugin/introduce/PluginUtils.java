@@ -10,6 +10,10 @@ import org.apache.axis.message.MessageElement;
 
 public class PluginUtils {
 
+	public static final QName NAMESPACE = new QName(
+			"http://cagrid.nci.nih.gov/1/gridgrouper-plugin",
+			"GridGrouperPlugin");
+
 	public static GridGrouperPlugin resetPlugin(ExtensionType ext) {
 		ExtensionTypeExtensionData data = ext.getExtensionData();
 		if (data == null) {
@@ -20,13 +24,11 @@ public class PluginUtils {
 		MessageElement[] mes = new MessageElement[1];
 		data.set_any(mes);
 		plugin = new GridGrouperPlugin();
-		mes[0] = new MessageElement(new QName(
-				"http://cagrid.nci.nih.gov/1/gridgrouper-plugin",
-				"GridGrouperPlugin"), plugin);
+		mes[0] = new MessageElement(NAMESPACE, plugin);
 		return plugin;
 	}
 
-	public static GridGrouperPlugin getPlugin(ExtensionType ext) {
+	public static GridGrouperPlugin getPlugin(ExtensionType ext) throws Exception{
 		ExtensionTypeExtensionData data = ext.getExtensionData();
 		if (data == null) {
 			data = new ExtensionTypeExtensionData();
@@ -41,7 +43,7 @@ public class PluginUtils {
 		if (mes[0] == null) {
 			return null;
 		} else {
-			return (GridGrouperPlugin) mes[0].getObjectValue();
+			return (GridGrouperPlugin) mes[0].getValueAsType(NAMESPACE,GridGrouperPlugin.class);
 		}
 	}
 

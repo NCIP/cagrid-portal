@@ -825,10 +825,10 @@ public class GridGrouperExpressionBuilder extends JPanel {
 							.getRootNode().getExpression())) {
 						getExpressionTree().getRootNode().clearExpression();
 						getExpressionTree().reload();
-						getGrouperTree().getRootNode().removeAllGridGroupers();
-						getGrouperTree().reload();
-						getGrouperTree().addGridGrouper(uri, null);
 					}		
+					getGrouperTree().getRootNode().removeAllGridGroupers();
+					getGrouperTree().reload();
+					getGrouperTree().addGridGrouper(uri, null);
 				}
 			});
 		}
