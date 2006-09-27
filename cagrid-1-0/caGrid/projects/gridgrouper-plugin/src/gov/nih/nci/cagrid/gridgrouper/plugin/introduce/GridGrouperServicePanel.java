@@ -117,9 +117,6 @@ public class GridGrouperServicePanel extends AbstractServiceAuthorizationPanel {
 	public void save() throws Exception {
 		ExtensionType ext = ExtensionTools.getAddServiceExtension(
 				"gridgrouper", getServiceInformation());
-		if (this.getServiceInformation().getServices().getService()[0] == getService()) {
-			PluginUtils.resetPlugin(ext);
-		}
 		// TODO: Validate the expression
 		MembershipExpression exp = ((GridGrouperExpressionBuilder) getExpressionBuilder())
 				.getMembershipExpression();

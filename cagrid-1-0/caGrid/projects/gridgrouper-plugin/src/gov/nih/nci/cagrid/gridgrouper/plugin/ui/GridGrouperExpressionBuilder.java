@@ -819,18 +819,43 @@ public class GridGrouperExpressionBuilder extends JPanel {
 			jButton.setText("Load");
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					getGrouperTree().getRootNode().removeAllGridGroupers();
-					getExpressionTree().getRootNode().removeAllChildren();
-					getGrouperTree().reload();
-					getExpressionTree().reload();
-					getGrouperTree().addGridGrouper((String)getGridGrouperURI().getSelectedItem(),null);
+					
+					String uri = (String) getGridGrouperURI().getSelectedItem();
+					if (!isSameGridGrouper(uri, getExpressionTree()
+							.getRootNode().getExpression())) {
+						getExpressionTree().getRootNode().clearExpression();
+						getExpressionTree().reload();
+						getGrouperTree().getRootNode().removeAllGridGroupers();
+						getGrouperTree().reload();
+						getGrouperTree().addGridGrouper(uri, null);
+					}		
 				}
 			});
 		}
 		return jButton;
 	}
-	
-	public MembershipExpression getMembershipExpression(){
+
+	private boolean isSameGridGrouper(String uri, MembershipExpression exp) {
+		MembershipQuery[] mq = exp.getMembershipQuery();
+		if ((mq != null) && (mq.length > 0)) {
+			if (mq[0].getGroupIdentifier().getGridGrouperURL().equals(uri)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		MembershipExpression[] list = exp.getMembershipExpression();
+		if (list != null) {
+			for (int i = 0; i < list.length; i++) {
+				if (isSameGridGrouper(uri, list[i])) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public MembershipExpression getMembershipExpression() {
 		return getExpressionTree().getRootNode().getExpression();
 	}
 }

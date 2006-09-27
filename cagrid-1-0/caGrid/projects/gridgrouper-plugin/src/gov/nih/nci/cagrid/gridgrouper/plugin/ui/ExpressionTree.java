@@ -93,6 +93,8 @@ public class ExpressionTree extends JTree {
 		}
 		return null;
 	}
+	
+	
 
 	/**
 	 * Get all the selected service nodes

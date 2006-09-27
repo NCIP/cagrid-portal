@@ -64,7 +64,14 @@ public class PluginUtils {
 					"http://cagrid.nci.nih.gov/1/gridgrouper-plugin",
 					"GridGrouperPlugin"), plugin);
 		} else {
-			plugin = (GridGrouperPlugin) mes[0].getObjectValue();
+			if (mes[0].getObjectValue() == null) {
+				plugin = new GridGrouperPlugin();
+				mes[0] = new MessageElement(new QName(
+						"http://cagrid.nci.nih.gov/1/gridgrouper-plugin",
+						"GridGrouperPlugin"), plugin);
+			} else {
+				plugin = (GridGrouperPlugin) mes[0].getObjectValue();
+			}
 		}
 		return plugin;
 	}
@@ -100,7 +107,7 @@ public class PluginUtils {
 				System.arraycopy(services, 0, newservices, 0, services.length);
 				newservices[services.length] = service;
 			}
-		
+			plugin.setProtectedService(newservices);
 			return service;
 		}
 	}
