@@ -64,7 +64,7 @@ public class UMLAttribute {
     }
 
     public void setSemanticMetadataCollection(
-        SemanticMetadata semanticMetadataCollection) {
+            SemanticMetadata semanticMetadataCollection) {
         this.semanticMetadataCollection = semanticMetadataCollection;
     }
 }

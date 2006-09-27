@@ -9,12 +9,11 @@ import org.springframework.core.io.Resource;
 
 
 /**
- *
  * Syncs with Grid Trust Service
  * and makes portal ready to trust
  * secure services
- *
- *
+ * <p/>
+ * <p/>
  * Created by IntelliJ IDEA.
  * User: kherm
  * Date: Aug 2, 2006
@@ -27,7 +26,7 @@ public class SyncGTSInitUtility implements InitializingBean {
     public void afterPropertiesSet() throws PortalInitializationException {
         try {
             SyncGTSDefault.setServiceSyncDescriptionLocation(syncGTSDescriptionFile.getFile()
-                                                                                   .getAbsolutePath());
+                    .getAbsolutePath());
 
             SyncDescription description = SyncGTSDefault.getSyncDescription();
             SyncGTS sync = SyncGTS.getInstance();

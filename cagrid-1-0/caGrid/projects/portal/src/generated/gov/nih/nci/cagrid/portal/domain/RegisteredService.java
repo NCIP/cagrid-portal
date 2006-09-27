@@ -15,6 +15,10 @@ import java.util.Set;
  * @hibernate.class table="REGISTERED_SERVICES"
  */
 public class RegisteredService implements GridService, Comparable {
+
+    public static final String DATA_SERVICE = "Data Service";
+    public static final String ANALYTICAL_SERVICE = "Analyitcal Service";
+
     // Properties
     private Integer pk;
     private String EPR;
@@ -23,7 +27,7 @@ public class RegisteredService implements GridService, Comparable {
     private String description;
 
     //Associations
-    private ResearchCenter researchCenter;
+    private ResearchCenter rc;
     private Set operationCollection = new HashSet();
     private DomainModel domainModel;
     private EndpointReferenceType handle;
@@ -53,6 +57,7 @@ public class RegisteredService implements GridService, Comparable {
 
     /**
      * @hibernate.id generator-class="increment"
+     * default-value="-1"
      * column="ID_KEY"
      */
     public Integer getPk() {
@@ -66,6 +71,8 @@ public class RegisteredService implements GridService, Comparable {
     /**
      * @hibernate.property column="SERVICE_EPR"
      * type="string"
+     * unique="true"
+     * not-null="true"
      */
     public String getEPR() {
         return EPR;
@@ -114,45 +121,70 @@ public class RegisteredService implements GridService, Comparable {
     }
 
     /**
-     * @return
-     * @hibernate.many-to-one class="gov.nih.nci.cagrid.portal.domain.ResearchCenter"
-     * column="RC_ID_KEY"
-     * cascade="none"
+     * @hibernate.one-to-one class="gov.nih.nci.cagrid.portal.domain.ResearchCenter"
+     * cascade="all"
      */
+    private ResearchCenter getRc() {
+        return rc;
+    }
+
+    private void setRc(ResearchCenter rc) {
+        this.rc = rc;
+    }
+
+
     public ResearchCenter getResearchCenter() {
-        return researchCenter;
+        return rc;
     }
 
     public void setResearchCenter(ResearchCenter researchCenter) {
-        this.researchCenter = researchCenter;
+        this.rc = researchCenter;
+        researchCenter.setRegisteredService(this);
     }
 
     /**
      * @hibernate.set name="operationsCollection"
-     * cascade="all-delete-orphan"
-     * lazy="true"
+     * cascade="all"
+     * update="false"
+     * inverse="true"
      * @hibernate.collection-key column="SERVICE_ID_KEY"
      * @hibernate.collection-one-to-many class="gov.nih.nci.cagrid.portal.domain.Operation"
      */
-    public Set getOperationCollection() {
+    private Set getOperationCollection() {
         return operationCollection;
     }
 
-    public void setOperationCollection(Set operationCollection) {
+    private void setOperationCollection(Set operationCollection) {
         this.operationCollection = operationCollection;
+    }
+
+    /**
+     * Public method to add operations
+     *
+     * @param oper
+     */
+    public void addOperation(Operation oper) {
+        oper.setRegisteredService(this);
+        this.operationCollection.add(oper);
     }
 
     /**
      * @hibernate.one-to-one class="gov.nih.nci.cagrid.portal.domain.DomainModel"
      * cascade="all"
-     * lazy="true"
      */
     public DomainModel getDomainModel() {
         return domainModel;
     }
 
-    public void setDomainModel(DomainModel domainModel) {
+    private void setDomainModel(DomainModel domainModel) {
         this.domainModel = domainModel;
+    }
+
+    //public method to set domain model
+    public void setObjectModel(DomainModel domainModel) {
+        this.domainModel = domainModel;
+        domainModel.setRegisteredService(this);
+
     }
 
     public boolean isActive() {
@@ -174,25 +206,18 @@ public class RegisteredService implements GridService, Comparable {
 
 
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if ((o == null) || (getClass() != o.getClass())) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         final RegisteredService that = (RegisteredService) o;
 
-        if (!EPR.equals(that.EPR)) {
-            return false;
-        }
+        if (EPR != null ? !EPR.equals(that.EPR) : that.EPR != null) return false;
 
         return true;
     }
 
     public int hashCode() {
-        return EPR.hashCode();
+        return (EPR != null ? EPR.hashCode() : 0);
     }
 
     public int compareTo(Object o) {

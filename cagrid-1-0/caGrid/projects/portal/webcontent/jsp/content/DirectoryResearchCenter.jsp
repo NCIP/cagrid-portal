@@ -15,7 +15,7 @@
 
 <f:verbatim><br/></f:verbatim>
 
-<!-- Scroller to scroll through results -->
+<%/* Scroller to scroll through results */%>
 <h:column>
     <h:panelGrid columns="1">
         <t:dataScroller id="scroller1"
@@ -70,11 +70,12 @@
 <f:verbatim><br/></f:verbatim>
 
 <h:column>
-    <t:dataTable styleClass="contentInnerTable" id="rcData" var="rc" value="#{portal.rc}"
+    <t:dataTable styleClass="contentMainTable" id="rcData" var="rc"
+                 value="#{portal.rc}"
                  rows="6">
 
         <h:column>
-            <h:panelGrid styleClass="contentMainTable" border="1" cellpadding="3" cellspacing="0"
+            <h:panelGrid styleClass="contentInnerTable"
                          rowClasses="dataRowLight,dataRowDark"
                          columnClasses="dataCellTextBold,dataCellText"
                          headerClass="dataTableHeader" columns="2">
@@ -86,10 +87,17 @@
                 </f:facet>
 
                 <h:column>
-                    <h:outputText value="Name"/>
+                    <h:outputText value="Short Name"/>
                 </h:column>
                 <h:column>
-                    <h:outputText value="#{rc.displayName} (#{rc.shortName})"/>
+                    <h:outputText value="#{rc.shortName}"/>
+                </h:column>
+
+                <h:column>
+                    <h:outputText value="Display Name"/>
+                </h:column>
+                <h:column>
+                    <h:outputText value="#{rc.displayName}"/>
                 </h:column>
 
                 <h:column>
@@ -106,17 +114,41 @@
                     <h:outputLink target="new" value="#{rc.homepageURL}"/>
                 </h:column>
 
-
-                <h:column/>
                 <h:column>
-                    <h:outputLink>
-                        <h:outputText value="More Details>>"/>
-                    </h:outputLink>
+                    <h:outputText value="RSS URL"/>
+                </h:column>
+                <h:column>
+                    <h:outputLink target="new" value="#{rc.homepageURL}"/>
                 </h:column>
 
+                <h:column>
+                    <h:outputText value="Address"/>
+                </h:column>
+                <h:column>
+                    <h:panelGrid border="0" columns="1">
+                        <h:column>
+                            <h:outputText value="#{rc.street1}" rendered="#{rc.street1!=null}"/>
+                        </h:column>
+                        <h:column>
+                            <h:outputText value="#{rc.street2}" rendered="#{rc.street2!=null}"/>
+                        </h:column>
+                        <h:column>
+                            <h:outputText value="#{rc.state}" rendered="#{rc.state!=null}"/>
+                            <h:outputText value=""/>
+                        </h:column>
+                        <h:column>
+                            <h:outputText value="#{rc.postalCode}" rendered="#{rc.postalCode!=null}"/>
+                        </h:column>
+
+                        <h:column>
+                            <h:outputText value="#{rc.country}"/>
+                        </h:column>
+                    </h:panelGrid>
+                </h:column>
             </h:panelGrid>
             <f:verbatim><br/><br/></f:verbatim>
         </h:column>
+
 
     </t:dataTable>
 

@@ -11,13 +11,13 @@ import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
  * To change this template use File | Settings | File Templates.
  */
 public class ResearchCenterLocalTestCase extends BaseSpringDataAccessAbstractTestCase {
-     GridServiceManager gridServiceManager;
+    GridServiceManager gridServiceManager;
 
-    public void testRC(){
+    public void testRC() {
         ResearchCenter rc = new ResearchCenter();
         rc.setDisplayName("test-center");
+        rc.setPostalCode("20852");
 
-       gridServiceManager.save(rc);
 
         PointOfContact poc = new PointOfContact();
         poc.setFirstName("test");
@@ -28,12 +28,11 @@ public class ResearchCenterLocalTestCase extends BaseSpringDataAccessAbstractTes
         gridServiceManager.save(rc);
 
 
-
-
     }
 
 
-    /** For spring
+    /**
+     * For spring
      *
      * @param gridServiceManager
      */

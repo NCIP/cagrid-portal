@@ -116,6 +116,8 @@ public class DomainModel implements DomainObject {
         final DomainModel that = (DomainModel) o;
 
         if (longName != null ? !longName.equals(that.longName) : that.longName != null) return false;
+        if (projectDescription != null ? !projectDescription.equals(that.projectDescription) : that.projectDescription != null)
+            return false;
         if (projectShortName != null ? !projectShortName.equals(that.projectShortName) : that.projectShortName != null)
             return false;
         if (projectVersion != null ? !projectVersion.equals(that.projectVersion) : that.projectVersion != null)
@@ -127,6 +129,7 @@ public class DomainModel implements DomainObject {
     public int hashCode() {
         int result;
         result = (longName != null ? longName.hashCode() : 0);
+        result = 29 * result + (projectDescription != null ? projectDescription.hashCode() : 0);
         result = 29 * result + (projectVersion != null ? projectVersion.hashCode() : 0);
         result = 29 * result + (projectShortName != null ? projectShortName.hashCode() : 0);
         return result;

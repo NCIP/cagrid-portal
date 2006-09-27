@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.portal.dao.jdbc;
 
 import gov.nih.nci.cagrid.portal.dao.ResearchCenterDAO;
 import gov.nih.nci.cagrid.portal.domain.GeoCodeValues;
+import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -32,6 +33,10 @@ public class ResearchCenterDAOImpl extends JdbcDaoSupport implements ResearchCen
             GeoCodeValues obj = new GeoCodeValues(new Float(resultSet.getFloat(1)), new Float(resultSet.getFloat(2)));
             return obj;
         }
+    }
+
+    public void deleteAllPOC(ResearchCenter rc) throws DataAccessException {
+        getJdbcTemplate().execute("Delete from POINT_OF_CONTACT poc where poc.RC_ID_KEY='" + rc.getPk() + "'");
     }
 
 }

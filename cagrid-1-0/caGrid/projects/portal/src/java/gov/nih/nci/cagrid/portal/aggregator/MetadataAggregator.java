@@ -6,10 +6,10 @@ import gov.nih.nci.cagrid.portal.domain.DomainModel;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
+import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
 import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
 import gov.nih.nci.cagrid.portal.utils.GridUtils;
 import gov.nih.nci.cagrid.portal.utils.MetadataAggregatorUtils;
-import org.springframework.dao.DataAccessException;
 
 
 /**
@@ -29,38 +29,32 @@ public class MetadataAggregator extends AbstractAggregator {
     public void run() {
 
         MetadataAggregatorUtils aggrUtil = new MetadataAggregatorUtils();
-
         try {
-            ServiceMetadata mData = GridUtils.getServiceMetadata(service.getHandle());
-            ResearchCenter domainRC = aggrUtil.loadRC(mData);
             try {
-                gridServiceMgr.save(domainRC);
+                ServiceMetadata mData = GridUtils.getServiceMetadata(service.getHandle());
+                ResearchCenter domainRC = aggrUtil.loadRC(mData);
+
                 service.setResearchCenter(domainRC);
-            } catch (DataAccessException e) {
-                _logger.error(e);
-            }
-        } catch (MetadataRetreivalException e) {
-            _logger.warn("Error loading research center for " + service.getEPR());
-        }
 
-        //Load Domain Model
-        try {
-            gov.nih.nci.cagrid.metadata.dataservice.DomainModel dModel = GridUtils.getDomainModel(service.getHandle());
-            DomainModel domainModel = aggrUtil.loadDomainModel(dModel);
-            service.setDomainModel(domainModel);
-        } catch (MetadataRetreivalException e) {
-            //means is not a data service
-            try {
-                aggrUtil.loadOperations(service);
-            } catch (ResourcePropertyRetrievalException e1) {
-                _logger.warn("Service " + service.getEPR() + " has no domain model or operations.");
-            }
-        }
+                //Load Domain Model
+                try {
+                    DomainModel domainModel = aggrUtil.loadDomainModel(GridUtils.getDomainModel(service.getHandle()));
+                    service.setObjectModel(domainModel);
+                } catch (MetadataRetreivalException e) {
+                    //means is not a data service
+                    try {
+                        aggrUtil.loadOperations(service, mData);
+                    } catch (ResourcePropertyRetrievalException e1) {
+                        _logger.warn("Service " + service.getEPR() + " has no domain model or operations.");
+                    }
+                }
 
-        try {
-            _logger.debug("Saving RegisteredService");
+            } catch (MetadataRetreivalException e) {
+                _logger.warn("Error loading research center for " + service.getEPR());
+            }
+
             gridServiceMgr.save(service);
-        } catch (DataAccessException e) {
+        } catch (PortalRuntimeException e) {
             _logger.error(e);
         }
     }

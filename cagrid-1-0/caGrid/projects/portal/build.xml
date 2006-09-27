@@ -246,7 +246,7 @@
                 <filter token="log.level.portal" value="${log.level.portal}"/>
                 <filter token="log.level.portal.tests" value="${log.level.portal.tests}"/>
                 <filter token="log.level.springframework" value="${log.level.spring}"/>
-                <filter token="log.level.org.springframework.orm" value="${log.level.orm}"/>
+                <filter token="log.level.org.hibernate" value="${log.level.orm}"/>
                 <filter token="log.level.javax.faces" value="${log.level.javax.faces}"/>
             </filterset>
         </copy>

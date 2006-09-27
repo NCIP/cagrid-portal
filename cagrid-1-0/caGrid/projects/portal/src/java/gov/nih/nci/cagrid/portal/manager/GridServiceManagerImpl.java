@@ -1,16 +1,21 @@
 package gov.nih.nci.cagrid.portal.manager;
 
-import gov.nih.nci.cagrid.portal.domain.*;
+import gov.nih.nci.cagrid.portal.domain.DomainObject;
+import gov.nih.nci.cagrid.portal.domain.GeoCodeValues;
+import gov.nih.nci.cagrid.portal.domain.RegisteredService;
+import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import gov.nih.nci.cagrid.portal.exception.GeoCoderRetreivalException;
+import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
 import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
 import gov.nih.nci.cagrid.portal.utils.GeoCoderUtility;
 import org.springframework.dao.DataAccessException;
 
-import java.util.Iterator;
 import java.util.List;
 
 
 /**
+ * Service layer. Will log errors
+ * <p/>
  * Created by IntelliJ IDEA.
  * User: kherm
  * Date: Jun 28, 2006
@@ -24,82 +29,103 @@ public class GridServiceManagerImpl extends BaseManagerImpl
         //for spring
     }
 
-
-    public List getAllServices() throws DataAccessException {
-        return super.loadAll(RegisteredService.class);
-    }
-
     /**
-     * All other domain objects are saved this way
+     * @return
+     * @throws PortalRuntimeException
+     * @see GridServiceManager#getAllServices()
      */
-    public void save(DomainObject obj) throws DataAccessException {
+    public List getAllServices() throws PortalRuntimeException {
         try {
-            Integer objectID = gridServiceBaseDAO.getBusinessKey(obj);
-            obj.setPk(objectID);
-        } catch (RecordNotFoundException e) {
-            // New object since id does not exist
-            // Do nothing as this is not unexpected
-            _logger.info("Record not found for domain object. Creating new one");
+            return super.loadAll(RegisteredService.class);
+        } catch (DataAccessException e) {
+            throw new PortalRuntimeException(e);
         }
-        super.save(obj);
-    }
-
-
-    public void save(RegisteredService rService) throws DataAccessException {
-        // save service
-        _logger.debug("Saving registered service " + rService.getEPR());
-        try {
-            Integer objectID = gridServiceBaseDAO.getBusinessKey(rService);
-            rService.setPk(objectID);
-        } catch (RecordNotFoundException e) {
-            // New object since id does not exist
-            // Do nothing as this is not unexpected
-            _logger.info("Record not found for domain object. Creating new one");
-        }
-
-        //save domain model which is a child 1:1 association
-        DomainModel dModel = rService.getDomainModel();
-        if (dModel != null) {
-            dModel.setRegisteredService(rService);
-            dModel.setPk(rService.getPk());
-        }
-
-        _logger.info("Saving Registered Service:" + rService.getEPR());
-        super.save(rService);
     }
 
     /**
-     * Manages storing of a Research Center
+     * @param obj
+     * @throws PortalRuntimeException
+     * @see BaseManager#save(gov.nih.nci.cagrid.portal.domain.DomainObject)
+     */
+    public void save(DomainObject obj) throws PortalRuntimeException {
+        try {
+            try {
+                Integer objectID = gridServiceBaseDAO.getSurrogateKey(obj);
+                obj.setPk(objectID);
+            } catch (RecordNotFoundException e) {
+                // Do nothing as this is not unexpected
+                _logger.info("Record not found for " + obj.getClass() + ". Creating new one with ORM assigned ID");
+            }
+            baseDAO.saveOrUpdate(obj);
+        } catch (DataAccessException e) {
+            throw new PortalRuntimeException(e);
+        }
+    }
+
+    /**
+     * @param rService
+     * @throws PortalRuntimeException
+     * @see GridServiceManager#save(gov.nih.nci.cagrid.portal.domain.RegisteredService)
+     */
+    public synchronized void save(RegisteredService rService) throws PortalRuntimeException {
+
+        try {
+
+            try {
+                Integer objectID = gridServiceBaseDAO.getSurrogateKey(rService);
+
+                //if service exists then flush the Domain Model and Operations
+                RegisteredService rServiceOld = (RegisteredService) gridServiceBaseDAO.getObjectByPrimaryKey(RegisteredService.class, objectID);
+                gridServiceBaseDAO.delete(rServiceOld);
+
+            } catch (RecordNotFoundException e) {
+                // Do nothing as this is not unexpected
+            }
+
+            if (rService.getResearchCenter() != null)
+                prepCenter(rService.getResearchCenter());
+
+            //save the new service. ORM will create a new ID
+            rService.setPk(null);
+            baseDAO.saveOrUpdate(rService);
+
+        } catch (Exception e) {
+            //log exception and rethrow
+            _logger.error("Problem saving Registered Service", e);
+            throw new PortalRuntimeException(e);
+        }
+    }
+
+
+    /**
+     * Will put required
+     * information into an RC object
+     * <p/>
+     * Will put Geocoding information
+     * into the Research Center
      *
      * @param rc
      */
-    public void save(ResearchCenter rc) throws DataAccessException {
+    private void prepCenter(ResearchCenter rc) throws PortalRuntimeException {
         //check if geo Co-ords have been set
         if (rc.getLatitude() == null) {
             try {
+                //Try the external geocoding service first
                 GeoCoderUtility coder = new GeoCoderUtility();
                 GeoCodeValues result = coder.getGeoCode4RC(rc);
                 rc.setLatitude(result.getLatitude());
                 rc.setLongitude(result.getLongitude());
             } catch (GeoCoderRetreivalException e) {
-                _logger.info("Could not reach Geocoding web service. Doing local lookup");
-                GeoCodeValues result = rcDAO.getGeoCodes(rc.getPostalCode());
-                rc.setLatitude(result.getLatitude());
-                rc.setLongitude(result.getLongitude());
+                _logger.warn("Could not reach Geocoding web service. Doing local lookup");
+                try {
+                    //Do a local lookup
+                    GeoCodeValues result = rcDAO.getGeoCodes(rc.getPostalCode());
+                    rc.setLatitude(result.getLatitude());
+                    rc.setLongitude(result.getLongitude());
+                } catch (DataAccessException e1) {
+                    throw new PortalRuntimeException("Error doing local Zip code lookup.", e);
+                }
             }
         }
-
-        /** save POC's **/
-        if (!rc.getPocCollection().isEmpty()) {
-            for (Iterator pocIter = rc.getPocCollection().iterator(); pocIter.hasNext();) {
-                PointOfContact poc = (PointOfContact) pocIter.next();
-                _logger.debug("Saving POC");
-                save(poc);
-            }
-        }
-
-        _logger.debug("Saving RC with " + rc.getPocCollection().size() + " POC's");
-        save((DomainObject) rc);
     }
-
 }

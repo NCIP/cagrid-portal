@@ -75,11 +75,11 @@
 
 
 <h:column>
-    <t:dataTable styleClass="contentInnerTable" id="serviceData" var="service" value="#{portal.services}"
-                 rows="6" width="80%">
+    <t:dataTable styleClass="contentMainTable" id="serviceData" var="service" value="#{portal.services}"
+                 rows="6">
 
         <h:column>
-            <h:panelGrid border="1" cellpadding="3" cellspacing="0"
+            <h:panelGrid styleClass="contentInnerTable"
                          rowClasses="dataRowLight,dataRowDark"
                          columnClasses="dataCellTextBold,dataCellText"
                          headerClass="dataTableHeader" columns="2">

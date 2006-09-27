@@ -12,7 +12,7 @@ package gov.nih.nci.cagrid.portal.exception;
  * Time: 10:12:16 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PortalInitializationException extends RuntimeException {
+public class PortalInitializationException extends PortalRuntimeException {
 
     public PortalInitializationException(String message, Throwable cause) {
         super(message, cause);

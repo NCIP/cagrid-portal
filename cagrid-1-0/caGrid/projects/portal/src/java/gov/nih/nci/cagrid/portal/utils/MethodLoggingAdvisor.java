@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
  * To change this template use File | Settings | File Templates.
  */
 public class MethodLoggingAdvisor implements MethodBeforeAdvice,
-    AfterReturningAdvice, ThrowsAdvice {
+        AfterReturningAdvice, ThrowsAdvice {
     /**
      * Takes appropriate action on
      * an exception being thrown.
@@ -34,7 +34,7 @@ public class MethodLoggingAdvisor implements MethodBeforeAdvice,
     }
 
     public void before(Method method, Object[] objects, Object target)
-        throws Throwable {
+            throws Throwable {
         Category cat = Category.getInstance(target.getClass());
         cat.debug(_debugPrefix + "Begin Method " + method.getName());
     }
@@ -49,7 +49,7 @@ public class MethodLoggingAdvisor implements MethodBeforeAdvice,
      * @throws Throwable
      */
     void afterThrowing(Method m, Object target, Exception ex)
-        throws Throwable {
+            throws Throwable {
         Category cat = Category.getInstance(m.getClass());
         cat.debug("Exception Thrown. Caught by interceptor");
 
@@ -60,12 +60,12 @@ public class MethodLoggingAdvisor implements MethodBeforeAdvice,
         } else {
             // throw custom message
             cat.error("Exception Interceptor" + _errPrefix + "## Class:" +
-                target + " ::Method:" + m + " ## " + ex);
+                    target + " ::Method:" + m + " ## " + ex);
         }
     }
 
     public void afterReturning(Object object, Method method, Object[] objects,
-        Object target) throws Throwable {
+                               Object target) throws Throwable {
         Category cat = Category.getInstance(target.getClass());
         cat.debug(_debugPrefix + "End Method " + method.getName());
     }

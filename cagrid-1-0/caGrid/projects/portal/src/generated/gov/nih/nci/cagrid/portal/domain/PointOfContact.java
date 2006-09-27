@@ -2,14 +2,14 @@ package gov.nih.nci.cagrid.portal.domain;
 
 /**
  * @hibernate.class table="POINT_OF_CONTACT"
- *
+ * <p/>
  * Created by IntelliJ IDEA.
  * User: kherm
  * Date: Aug 9, 2006
  * Time: 11:14:24 AM
  * To change this template use File | Settings | File Templates.
  */
-public class PointOfContact implements DomainObject{
+public class PointOfContact implements DomainObject {
 
     private Integer pk;
     private String affiliation;
@@ -18,6 +18,7 @@ public class PointOfContact implements DomainObject{
     private String lastName;
     private String phoneNumber;
     private String role;
+    private ResearchCenter researchCenter;
 
 
     /**
@@ -33,8 +34,8 @@ public class PointOfContact implements DomainObject{
     }
 
     /**
-     * @hibernate.property column="AFFILIATION"
      * @return
+     * @hibernate.property column="AFFILIATION"
      */
     public String getAffiliation() {
         return affiliation;
@@ -45,8 +46,8 @@ public class PointOfContact implements DomainObject{
     }
 
     /**
-     * @hibernate.property column="EMAIL"
      * @return
+     * @hibernate.property column="EMAIL"
      */
     public String getEmail() {
         return email;
@@ -57,8 +58,8 @@ public class PointOfContact implements DomainObject{
     }
 
     /**
-     * @hibernate.property column="FIRST_NAME"
      * @return
+     * @hibernate.property column="FIRST_NAME"
      */
     public String getFirstName() {
         return firstName;
@@ -69,8 +70,8 @@ public class PointOfContact implements DomainObject{
     }
 
     /**
-     * @hibernate.property column="LAST_NAME"
      * @return
+     * @hibernate.property column="LAST_NAME"
      */
     public String getLastName() {
         return lastName;
@@ -81,8 +82,8 @@ public class PointOfContact implements DomainObject{
     }
 
     /**
-     * @hibernate.property column="PHONE_NUMBER"
      * @return
+     * @hibernate.property column="PHONE_NUMBER"
      */
     public String getPhoneNumber() {
         return phoneNumber;
@@ -94,8 +95,8 @@ public class PointOfContact implements DomainObject{
 
 
     /**
-     * @hibernate.property column="ROLE"
      * @return
+     * @hibernate.property column="ROLE"
      */
     public String getRole() {
         return role;
@@ -105,4 +106,34 @@ public class PointOfContact implements DomainObject{
         this.role = role;
     }
 
+    /**
+     * @hibernate.many-to-one column="RC_ID_KEY"
+     * class="gov.nih.nci.cagrid.portal.domain.ResearchCenter"
+     */
+    public ResearchCenter getResearchCenter() {
+        return researchCenter;
+    }
+
+    public void setResearchCenter(ResearchCenter researchCenter) {
+        this.researchCenter = researchCenter;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final PointOfContact that = (PointOfContact) o;
+
+        if (!email.equals(that.email)) return false;
+        if (!role.equals(that.role)) return false;
+
+        return true;
+    }
+
+    public int hashCode() {
+        int result;
+        result = email.hashCode();
+        result = 29 * result + role.hashCode();
+        return result;
+    }
 }

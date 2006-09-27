@@ -1,7 +1,9 @@
 package gov.nih.nci.cagrid.portal.dao.hibernate;
 
 import gov.nih.nci.cagrid.portal.dao.BaseDAO;
+import gov.nih.nci.cagrid.portal.domain.DomainObject;
 import org.apache.log4j.Category;
+import org.hibernate.HibernateException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -25,15 +27,15 @@ public class BaseDAOImpl extends HibernateDaoSupport implements BaseDAO {
     }
 
     public Object getObjectByPrimaryKey(Class cls, Integer id) throws DataAccessException {
-        return getHibernateTemplate().load(cls, id);
+        return getHibernateTemplate().get(cls, id);
     }
 
     public void saveOrUpdate(Collection objects) throws DataAccessException {
         getHibernateTemplate().saveOrUpdateAll(objects);
     }
 
-    public void saveOrUpdate(Object obj) throws DataAccessException {
-        _logger.debug("Saving " + obj.getClass() + " Object");
+    public void saveOrUpdate(DomainObject obj) throws DataAccessException {
+        _logger.debug("Saving object " + obj.getClass() + " with PK " + obj.getPk());
         getHibernateTemplate().saveOrUpdate(obj);
     }
 
@@ -41,4 +43,12 @@ public class BaseDAOImpl extends HibernateDaoSupport implements BaseDAO {
         return getHibernateTemplate().loadAll(cls);
     }
 
+    public void delete(DomainObject obj) throws HibernateException {
+        _logger.debug("Deleting and cleaning " + obj.getClass() + " with PK " + obj.getPk());
+        getHibernateTemplate().delete(obj);
+    }
+
+    public void deleteAll(Collection objects) throws DataAccessException {
+        getHibernateTemplate().deleteAll(objects);
+    }
 }

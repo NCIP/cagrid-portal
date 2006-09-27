@@ -14,6 +14,7 @@ public class Operation implements DomainObject {
     private java.util.Collection inputParamters;
     private java.lang.String name;
     private UMLClass outputClass;
+    private RegisteredService registeredService;
 
     public Operation() {
     }
@@ -57,6 +58,7 @@ public class Operation implements DomainObject {
     /**
      * @hibernate.many-to-one class="gov.nih.nci.cagrid.portal.domain.UMLClass"
      * column="OUTPUT_ID_KEY"
+     * not-null="false"
      * cascade="all"
      */
     public UMLClass getOutput() {
@@ -94,6 +96,18 @@ public class Operation implements DomainObject {
 
     public void setOutput(UMLClass outputClass) {
         this.outputClass = outputClass;
+    }
+
+    /**
+     * @hibernate.many-to-one column="SERVICE_ID_KEY"
+     * class="gov.nih.nci.cagrid.portal.domain.RegisteredService"
+     */
+    public RegisteredService getRegisteredService() {
+        return registeredService;
+    }
+
+    public void setRegisteredService(RegisteredService registeredService) {
+        this.registeredService = registeredService;
     }
 
     public boolean equals(Object o) {

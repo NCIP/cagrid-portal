@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.portal.dao;
 
 import gov.nih.nci.cagrid.portal.domain.DomainObject;
 import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
+import org.springframework.dao.DataAccessException;
 
 
 /**
@@ -13,6 +14,16 @@ import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
  */
 public interface GridServiceBaseDAO extends BaseDAO {
 
-    public Integer getBusinessKey(DomainObject obj) throws RecordNotFoundException;
+
+    /**
+     * Will return the business key depending
+     * on the type of object
+     *
+     * @param obj
+     * @return Integer key value
+     * @throws RecordNotFoundException will happen if no record is found
+     * @throws DataAccessException     serious error
+     */
+    public Integer getSurrogateKey(DomainObject obj) throws DataAccessException, RecordNotFoundException;
 
 }

@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.dao;
 
 import gov.nih.nci.cagrid.portal.domain.GeoCodeValues;
+import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -22,5 +23,7 @@ public interface ResearchCenterDAO {
      * @throws DataAccessException
      */
     public GeoCodeValues getGeoCodes(String zip) throws DataAccessException;
+
+    public void deleteAllPOC(ResearchCenter rc) throws DataAccessException;
 
 }

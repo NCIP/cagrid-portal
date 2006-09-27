@@ -9,8 +9,8 @@ import org.springframework.context.ApplicationEvent;
  * processing, it can fire off this
  * event (with itself as source) to
  * alert other aggregators that it has finished processing
- *
- *
+ * <p/>
+ * <p/>
  * Created by IntelliJ IDEA.
  * User: kherm
  * Date: Aug 5, 2006

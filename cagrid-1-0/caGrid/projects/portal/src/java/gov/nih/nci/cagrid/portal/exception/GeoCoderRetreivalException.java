@@ -7,7 +7,7 @@ package gov.nih.nci.cagrid.portal.exception;
  * Time: 12:34:14 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GeoCoderRetreivalException extends Exception{
+public class GeoCoderRetreivalException extends Exception {
 
     public GeoCoderRetreivalException(Throwable cause) {
         super(cause);

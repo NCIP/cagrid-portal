@@ -1,7 +1,8 @@
 package gov.nih.nci.cagrid.portal.dao;
 
 import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
-import gov.nih.nci.cagrid.portal.domain.GeoCodeValues;
+import gov.nih.nci.cagrid.portal.domain.PointOfContact;
+import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,17 +13,23 @@ import gov.nih.nci.cagrid.portal.domain.GeoCodeValues;
  */
 public class ResearchCenterDAOLocalTest extends BaseSpringDataAccessAbstractTestCase {
 
-    private ResearchCenterDAO rcDAO;
+    private GridServiceBaseDAO gridServiceBaseDAO;
 
-    public void testGeoCoder() {
-        GeoCodeValues values = rcDAO.getGeoCodes("20852");
-        assertNotNull(values);
+
+    public void testRCDAO() {
+        ResearchCenter rc = new ResearchCenter();
+
+        PointOfContact poc = new PointOfContact();
+        poc.setFirstName("Test");
+
+        rc.addPOC(poc);
+
+        gridServiceBaseDAO.saveOrUpdate(rc);
+
 
     }
 
-    public void setRcDAO(ResearchCenterDAO rcDAO) {
-        this.rcDAO = rcDAO;
-
-
+    public void setGridServiceBaseDAO(GridServiceBaseDAO gridServiceBaseDAO) {
+        this.gridServiceBaseDAO = gridServiceBaseDAO;
     }
 }

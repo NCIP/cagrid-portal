@@ -24,7 +24,7 @@ public class IndexAggregatorFactory extends AbstractAggregator {
      * IOC through Constructor injection
      */
     public IndexAggregatorFactory(java.lang.Boolean metadataCompliance,
-        GridServiceManager idxManager) {
+                                  GridServiceManager idxManager) {
         this.metadataCompliance = metadataCompliance.booleanValue();
         this.idxManager = idxManager;
     }

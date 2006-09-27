@@ -21,7 +21,7 @@
 
 	<category name="gov.nih.nci.cagrid.portal" additivity="false">
 		<priority value="@log.level.portal@"/>
-		<appender-ref ref="consoleAppender"/>
+		<appender-ref ref="fileAppender"/>
 	</category>
 
 	<category name="org.springframework" additivity="false">
@@ -29,9 +29,9 @@
 		<appender-ref ref="fileAppender"/>
 	</category>
 
-     <category name="org.springframework.orm" additivity="false">
-		<priority value="@log.level.org.springframework.orm@"/>
-		<appender-ref ref="consoleAppender"/>
+     <category name="org.hibernate" additivity="false">
+		<priority value="@log.level.org.hibernate@"/>
+		<appender-ref ref="fileAppender"/>
 	</category>
 
     <category name="javax.faces" additivity="false">

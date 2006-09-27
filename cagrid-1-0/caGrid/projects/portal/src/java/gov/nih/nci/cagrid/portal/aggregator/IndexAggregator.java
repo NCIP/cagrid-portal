@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
 import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
 import gov.nih.nci.cagrid.portal.utils.GridUtils;
-
 import org.apache.axis.message.addressing.EndpointReferenceType;
 
 

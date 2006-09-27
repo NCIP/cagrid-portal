@@ -15,7 +15,7 @@
 
 
 <f:verbatim><br/></f:verbatim>
-<!-- Scroller to scroll through results -->
+<%/* Scroller to scroll through results */%>
 <h:column>
     <h:panelGrid columns="1">
         <t:dataScroller id="scroller1"
@@ -70,12 +70,12 @@
 <f:verbatim><br/></f:verbatim>
 
 <h:column>
-    <t:dataTable styleClass="contentInnerTable" id="pocData" var="poc"
+    <t:dataTable styleClass="contentMainTable" id="pocData" var="poc"
                  value="#{portal.poc}"
                  rows="6">
 
         <h:column>
-            <h:panelGrid styleClass="contentMainTable" border="1"
+            <h:panelGrid styleClass="contentInnerTable" border="0"
                          rowClasses="dataRowLight,dataRowDark"
                          columnClasses="dataCellTextBold,dataCellText"
                          headerClass="dataTableHeader" columns="2">
@@ -108,7 +108,7 @@
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="Addiliation"/>
+                    <h:outputText value="Affiliation"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{poc.affiliation}"/>
@@ -118,14 +118,16 @@
                     <h:outputText value="Role"/>
                 </h:column>
                 <h:column>
-                    <h:outputLink target="new" value="#{poc.role}"/>
+                    <h:outputText value="#{poc.role}"/>
                 </h:column>
 
 
-                <h:column/>
+                <h:column>
+                    <h:outputText value="Research Center"/>
+                </h:column>
                 <h:column>
                     <h:outputLink>
-                        <h:outputText value="More Details>>"/>
+                        <h:outputText value="#{poc.researchCenter.shortName}"/>
                     </h:outputLink>
                 </h:column>
 

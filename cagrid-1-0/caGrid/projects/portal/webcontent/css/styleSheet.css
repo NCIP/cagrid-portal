@@ -486,11 +486,13 @@ DATA TABLE BEGINS
 .dataTableHeader {
 /* for the horizontal column headers */
     font-family: arial, helvetica, verdana, sans-serif; /*background-color: #CCCCCC; /* constant: medium gray */
-* / background-color : #797C9C; /* constant: light purple */
-* / color : #FFFFFF; /* constant: black */
+    background-color: #797C9C; /* constant: light purple */
+    color: #FFFFFF; /* constant: black */
     font-weight: bold;
     border-right: 1px solid #CCCCCC; /* constant: dark gray */
     border-bottom: 1px solid #CCCCCC; /* constant: dark gray */
+    border-top: 1px solid #CCCCCC; /* constant: dark gray */
+    border-left: 1px solid #CCCCCC; /* constant: dark gray */
     text-align: left;
 }
 
@@ -512,22 +514,19 @@ DATA TABLE BEGINS
 .dataRowDark {
 /* for the dark color of alternating rows */
     background-color: #D3D3D3; /* constant: light gray */
-* / color : #000000; /* constant: black */
+    color: #000000; /* constant: black */
+
 }
 
 .dataCellText {
 /* for text output cells */
     font-size: 0.9em;
-    border-right: 1px solid #CCCCCC; /* constant: dark gray */
-    border-bottom: 1px solid #CCCCCC; /* constant: dark gray */
     text-align: left;
 }
 
 .dataCellTextBold {
 /* for text output cells */
     font-size: 0.9em;
-    border-right: 1px solid #CCCCCC; /* constant: dark gray */
-    border-bottom: 1px solid #CCCCCC; /* constant: dark gray */
     text-align: left;
     font-weight: bold;
 
@@ -656,15 +655,16 @@ img.img {
 Homepage BEGINS (Each section has a homepage)
 ###############*/
 .contentMainTable {
-    height: 50%;
+    height: 100%;
     width: 100%;
     vertical-align: top;
 }
 
 .contentInnerTable {
     width: 80%;
-    height: 100%;
     vertical-align: top;
+    padding: 0.1em;
+    border: 1px solid #CCCCCC; /* constant: medium gray */
 }
 
 .contentMainTitle {

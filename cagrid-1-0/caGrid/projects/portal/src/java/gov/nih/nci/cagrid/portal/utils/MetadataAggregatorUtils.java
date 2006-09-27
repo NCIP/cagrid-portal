@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.portal.utils;
 
-import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
 import gov.nih.nci.cagrid.metadata.service.ServiceContext;
@@ -62,25 +61,24 @@ public class MetadataAggregatorUtils {
         return modelDomain;
     }
 
-    public final void loadOperations(RegisteredService rService) throws ResourcePropertyRetrievalException {
-        ServiceContext[] contexts = MetadataUtils.getServiceMetadata(rService.getHandle()).getServiceDescription().getService().getServiceContextCollection().getServiceContext();
+    public final void loadOperations(RegisteredService rService, gov.nih.nci.cagrid.metadata.ServiceMetadata sMetadata) throws ResourcePropertyRetrievalException {
+        ServiceContext[] contexts = sMetadata.getServiceDescription().getService().getServiceContextCollection().getServiceContext();
         for (int i = 0; i < contexts.length; i++) {
             gov.nih.nci.cagrid.metadata.service.Operation opers[] = contexts[i].getOperationCollection().getOperation();
-            for (int j = 0; j < opers.length; j++) {
-                gov.nih.nci.cagrid.metadata.service.Operation operation = opers[j];
-                Operation operDomain = new Operation();
-                operDomain.setName(operation.getName());
-                operDomain.setDescription(operation.getDescription());
+            if (opers != null) {
+                for (int j = 0; j < opers.length; j++) {
+                    Operation operDomain = new Operation();
+                    operDomain.setName(opers[j].getName());
+                    operDomain.setDescription(opers[j].getDescription());
 
+                    if (opers[j].getOutput().getUMLClass() != null) {
+                        UMLClass outputClass = translateUMLClass(opers[j].getOutput().getUMLClass());
+                        operDomain.setOutput(outputClass);
+                    }
 
-                if (opers[i].getOutput().getUMLClass() != null) {
-                    UMLClass outputClass = translateUMLClass(opers[i].getOutput().getUMLClass());
-                    operDomain.setOutput(outputClass);
+                    rService.addOperation(operDomain);
                 }
-
-                rService.getOperationCollection().add(operDomain);
             }
-
         }
     }
 
@@ -123,7 +121,7 @@ public class MetadataAggregatorUtils {
             pocDomain.setEmail(poc.getEmail());
             //save and add to Registered Service
 
-            domainRC.getPocCollection().add(pocDomain);
+            domainRC.addPOC(pocDomain);
         }
     }
 

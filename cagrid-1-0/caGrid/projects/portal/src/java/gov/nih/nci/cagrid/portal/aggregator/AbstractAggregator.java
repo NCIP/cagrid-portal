@@ -17,7 +17,7 @@ import java.util.TimerTask;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class AbstractAggregator extends TimerTask
-    implements ApplicationContextAware, ApplicationListener {
+        implements ApplicationContextAware, ApplicationListener {
     ApplicationContext ctx;
     protected Category _logger = Category.getInstance(getClass().getName());
 
