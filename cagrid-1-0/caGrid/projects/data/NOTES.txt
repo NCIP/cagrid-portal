@@ -46,8 +46,12 @@ E = External to data core
 
 BUGS:
 
+Select Project caCore(Version: 3), Select Package gov.nih.nci.evs.domain, Add Package,
+	Save, close the modify service window, click modify service, open same service,
+	add same package as above, try and delete both packages
+	
 Select Project caCore(Version: 3), Select Package gov.nih.nci.evs.domain,
- Add Package, Add Full Project, you can only remove one of the gov.nih.nci.evs.domain
+ 	Add Package, Add Full Project, you can only remove one of the gov.nih.nci.evs.domain
 	
 When the GUI removes a type it does not remove its schema from the project.  If the schema has the same type as a newly added one (e.g. a user picked the wrong version of his schema) it will give axis bean generation all kinds of problems.
 	-- Not a bug; Namespaces can be removed from the service in the Types panel.  There's no simple way to know if the schema added by the domain model building process is in use elsewhere (metadata, methods, etc).
