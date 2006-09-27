@@ -150,7 +150,7 @@ public class GridGrouperExpressionBuilder extends JPanel {
 		gridBagConstraints2.weightx = 1.0;
 		gridBagConstraints2.weighty = 1.0;
 		gridBagConstraints2.gridx = 1;
-		this.setSize(500, 300);
+		//this.setSize(500, 300);
 		this.setLayout(new GridBagLayout());
 		this.add(getJSplitPane(), gridBagConstraints2);
 		setExpressionEditor(expression);

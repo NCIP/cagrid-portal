@@ -6,6 +6,8 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
+import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
+import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.extension.ResourcePropertyEditorExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -21,7 +23,10 @@ import java.awt.Frame;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -209,6 +214,54 @@ public class ExtensionTools {
 									.equals(exts[i].getExtensionType()))) {
 						return exts[i];
 					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public static ExtensionType removeAuthorizationServiceExtensios(
+			ServiceInformation info) throws Exception {
+		List desc = ExtensionsLoader.getInstance().getServiceExtensions();
+		Map toBeRemoved = new HashMap();
+		for (int i = 0; i < desc.size(); i++) {
+			ServiceExtensionDescriptionType sed = (ServiceExtensionDescriptionType) desc
+					.get(i);
+			Properties props = sed.getProperties();
+			if (props != null) {
+				PropertiesProperty[] pp = props.getProperty();
+				if (pp != null) {
+					for (int j = 0; j < pp.length; j++) {
+						if ((pp[j].getKey().equals("isAuthorizationExtension"))
+								&& (pp[j].getValue().equalsIgnoreCase("true"))) {
+							toBeRemoved.put(sed.getName(), sed);
+							break;
+						}
+					}
+				}
+			}
+		}
+		List toBeSaved = new ArrayList();
+		ExtensionsType list = info.getExtensions();
+		if (list != null) {
+			ExtensionType[] exts = list.getExtension();
+			if (exts != null) {
+				for (int i = 0; i < exts.length; i++) {
+					if (!((exts[i].getExtensionType()
+							.equals(ExtensionsLoader.SERVICE_EXTENSION)) && (toBeRemoved
+							.containsKey(exts[i].getName())))) {
+						toBeSaved.add(exts[i]);
+					}
+				}
+				if (toBeSaved.size() > 0) {
+					ExtensionType[] newexts = new ExtensionType[toBeSaved
+							.size()];
+					for (int i = 0; i < toBeSaved.size(); i++) {
+						newexts[i] = (ExtensionType) toBeSaved.get(i);
+					}
+					list.setExtension(newexts);
+				} else {
+					list.setExtension(null);
 				}
 			}
 		}

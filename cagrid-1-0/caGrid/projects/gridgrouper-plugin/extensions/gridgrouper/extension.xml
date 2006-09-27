@@ -3,7 +3,7 @@
     <ns1:ServiceExtensionDescription displayName="Grid Grouper" name="gridgrouper">
         <ns1:CodegenPostProcessor>gov.nih.nci.cagrid.gridgrouper.plugin.introduce.GridGrouperPluginPostProcessor</ns1:CodegenPostProcessor>
         <ns1:Properties> 
-            <ns1:Property key="enableGridFTP" value="false" />
+            <ns1:Property key="isAuthorizationExtension" value="true" />
         </ns1:Properties>
     </ns1:ServiceExtensionDescription>
 </ns1:ExtensionDescription>
