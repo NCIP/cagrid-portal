@@ -299,6 +299,12 @@ public class CreationViewer extends CreationViewerBaseComponent {
 					}
 					createService(getDir().getText(), getService().getText(), getServicePackage().getText(),
 						getNamespaceDomain().getText(), extensions);
+
+					try {
+						ResourceManager.setServiceURLProperty(ResourceManager.LAST_DIRECTORY, getDir().getText());
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 				}
 			});
 		}
@@ -431,7 +437,6 @@ public class CreationViewer extends CreationViewerBaseComponent {
 		}
 		return closeButton;
 	}
-
 
 
 	/**
