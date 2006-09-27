@@ -58,6 +58,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.utils.JavaUtils;
@@ -406,6 +408,20 @@ public class MethodViewer extends GridPortalBaseFrame {
 			doneButton.setText("Done");
 			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// reset selection on table incase it was being edited....
+					int column = getInputParamTable().getEditingColumn();
+					if (column > -1) {
+						TableCellEditor cellEditor = getInputParamTable().getColumnModel().getColumn(column)
+							.getCellEditor();
+						if (cellEditor == null) {
+							cellEditor = getInputParamTable().getDefaultEditor(
+								getInputParamTable().getColumnClass(column));
+						}
+						if (cellEditor != null) {
+							cellEditor.stopCellEditing();
+						}
+					}
+
 					// First process the inputs
 					boolean valid = true;
 					String message = "";
@@ -419,7 +435,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 								MethodType tmethod = methods[j];
 								if (!usedNames.contains(tmethod.getName())) {
 									usedNames.add(tmethod.getName());
-								} else if(!tmethod.getName().equals(method.getName())) {
+								} else if (!tmethod.getName().equals(method.getName())) {
 									valid = false;
 									message = "Method name is not unique: " + tmethod.getName();
 								}
@@ -437,7 +453,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 					try {
 						method.setName(getNameField().getText());
 
-						method.setMethodSecurity(((MethodSecurityPanel) securityContainerPanel).getMethodSecurity(method.getName()));
+						method.setMethodSecurity(((MethodSecurityPanel) securityContainerPanel)
+							.getMethodSecurity(method.getName()));
 
 						// process the inputs
 						MethodTypeInputs inputs = new MethodTypeInputs();
@@ -958,8 +975,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 	 */
 	private JPanel getSecurityContainerPanel() {
 		if (securityContainerPanel == null) {
+
 			securityContainerPanel = new MethodSecurityPanel(info, info.getService(), 
 				this.method);
+
 			securityContainerPanel.setBorder(BorderFactory.createTitledBorder(null,
 				"Method Level Security Configuration", TitledBorder.DEFAULT_JUSTIFICATION,
 				TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
@@ -1423,7 +1442,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			GridBagConstraints gridBagConstraints38 = new GridBagConstraints();
 			gridBagConstraints38.gridx = 1;
 			gridBagConstraints38.gridy = 3;
-			gridBagConstraints38.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints38.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints38.fill = GridBagConstraints.HORIZONTAL;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.gridy = 0;
@@ -2243,8 +2262,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 			parser.parse(new File(baseSchemaDir.getAbsolutePath() + File.separator + namespace.getLocation()));
 			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
 				IntroducePortalConf.RESOURCE);
-			parser.parse(new File(
-					conf.getGlobusLocation() + File.separator + "share" + File.separator + "schema" + File.separator + "wsrf" + File.separator + "faults" + File.separator + "WS-BaseFaults.xsd"));
+			parser.parse(new File(conf.getGlobusLocation() + File.separator + "share" + File.separator + "schema"
+				+ File.separator + "wsrf" + File.separator + "faults" + File.separator + "WS-BaseFaults.xsd"));
 		} catch (SAXException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -2262,9 +2281,10 @@ public class MethodViewer extends GridPortalBaseFrame {
 		} catch (SAXException e) {
 			e.printStackTrace();
 		}
-	
+
 		return false;
-	
+
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="112,37"
+}  // @jve:decl-index=0:visual-constraint="112,37"
+

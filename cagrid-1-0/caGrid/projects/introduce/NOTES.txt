@@ -3,9 +3,6 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 To Do:
 
-editable tables have the "focus issue" where the changes don't take effect unless you click off of what you are editing.
-This is extremely counter-intuitive and will be the source of many user problems.  An example is edit a parameter name and click done (the change will not take effect).
-
 make global preferences
 
 make introduce portal conf in the users .cagrid space....
@@ -64,6 +61,10 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+
+editable tables have the "focus issue" where the changes don't take effect unless you click off of what you are editing.
+This is extremely counter-intuitive and will be the source of many user problems.  An example is edit a parameter name and click done (the change will not take effect).
+
 file imports are not corrent done 
 
 cannot remove from service properties table

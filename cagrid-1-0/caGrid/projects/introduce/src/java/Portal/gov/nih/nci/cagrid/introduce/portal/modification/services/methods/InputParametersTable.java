@@ -4,9 +4,16 @@ import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 
+import java.awt.Component;
 import java.util.Vector;
 
+import javax.swing.AbstractCellEditor;
+import javax.swing.JComponent;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
 import javax.xml.namespace.QName;
 
 
@@ -80,7 +87,7 @@ public class InputParametersTable extends PortalBaseTable {
 
 
 	public void moveSelectedRowUp() throws Exception {
-		if (getSelectedRow() >0 ) {
+		if (getSelectedRow() > 0) {
 			MethodTypeInputsInput input1 = getRowData(getSelectedRow());
 			MethodTypeInputsInput input2 = getRowData(getSelectedRow() - 1);
 			modifySelectedRow(input2);
@@ -92,7 +99,7 @@ public class InputParametersTable extends PortalBaseTable {
 
 
 	public void moveSelectedRowDown() throws Exception {
-		if (getSelectedRow() < getRowCount()-1 && getRowCount() > 1) {
+		if (getSelectedRow() < getRowCount() - 1 && getRowCount() > 1) {
 			MethodTypeInputsInput input1 = getRowData(getSelectedRow());
 			MethodTypeInputsInput input2 = getRowData(getSelectedRow() + 1);
 			modifySelectedRow(input2);
@@ -125,7 +132,7 @@ public class InputParametersTable extends PortalBaseTable {
 		}
 		MethodTypeInputsInput input = new MethodTypeInputsInput();
 
-		String name = ((String) getValueAt(row, 0));
+		String name = ((String)getValueAt(row, 0));
 		boolean isArray = ((Boolean) getValueAt(row, 1)).booleanValue();
 		String namespace = ((String) getValueAt(row, 2));
 		String type = ((String) getValueAt(row, 3));
@@ -158,6 +165,7 @@ public class InputParametersTable extends PortalBaseTable {
 				addRow(this.method.getInputs().getInput(i));
 			}
 		}
+
 	}
 
 
