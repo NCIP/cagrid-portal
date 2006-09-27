@@ -26,11 +26,7 @@
 	<target name="prepare" depends="init">
 		<tstamp/>
 	</target>
-	<target name="checkConf" depends="">
-		<copy file="${basedir}/conf/introduce/introduce-portal-conf.xml.example" overwrite="false"
-			tofile="${basedir}/conf/introduce/introduce-portal-conf.xml"/>
-	</target>
-	<target name="init" depends="checkGlobus,checkConf">
+	<target name="init" depends="checkGlobus">
 		<mkdir dir="${build.dir}"/>
 		<mkdir dir="${classes.dir}"/>
 		<mkdir dir="${introduce.classes.dir}"/>

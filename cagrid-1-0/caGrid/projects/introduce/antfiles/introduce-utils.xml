@@ -3,8 +3,6 @@
 <!-- ======================================================================= -->
 <project name="introduce_utilities" basedir="." default="usage">
 	<property name="conf.dir" location="conf"/>
-	<property name="introduce.portal.conf"
-		location="${conf.dir}/introduce/introduce-portal-conf.xml"/>
 	
 	<!-- ============================================================== -->
 	<!-- Globus properties                                              -->
@@ -28,14 +26,13 @@
 	</target>
 	
 	<target name="introduce" depends="checkGlobus" description="Execute the Introduce GDE">
-		<runPortal configfile="${introduce.portal.conf}"/>
+		<runPortal/>
 	</target>
 	<macrodef name="runPortal">
-		<attribute name="configFile"/>
+		
 		<sequential>
-			<echo message="Running portal with @{configFile}"/>
+			<echo message="Running portal"/>
 			<java classname="gov.nih.nci.cagrid.introduce.portal.Introduce" fork="yes">
-				<arg value="@{configFile}"/>
 				<classpath refid="Portal.run.classpath"/>
 			</java>
 		</sequential>

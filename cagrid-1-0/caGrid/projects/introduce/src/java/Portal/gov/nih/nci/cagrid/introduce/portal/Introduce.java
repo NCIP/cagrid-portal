@@ -1,7 +1,9 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.SplashScreen;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -20,8 +22,6 @@ import org.projectmobius.portal.PortalResourceManager;
 
 
 public final class Introduce {
-
-	public static final String DEFAULT_CONFIG_FILE = "conf/introduce/introduce-portal-conf.xml";
 
 	private static SplashScreen introduceSplash;
 
@@ -48,9 +48,19 @@ public final class Introduce {
 
 	private static void showGridPortal(String confFile) {
 		try {
+			if(!new File(ResourceManager.getConfigFileLocation()).exists()){
+				//need to copy over the example configuration file to the users space
+				try {
+					Utils.copyFile(new File("conf" + File.separator + "introduce" + File.separator + "introduce-portal-conf.xml.example"),new File(ResourceManager.getConfigFileLocation()));
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			}
+			
 			GridPortal portal = null;
 			if (confFile == null) {
-				confFile = DEFAULT_CONFIG_FILE;
+				confFile = ResourceManager.getConfigFileLocation();
 			}
 			checkGlobusLocation(confFile);
 			portal = new GridPortal(confFile);
