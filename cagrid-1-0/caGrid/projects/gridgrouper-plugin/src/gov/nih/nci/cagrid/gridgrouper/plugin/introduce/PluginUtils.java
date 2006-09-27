@@ -94,11 +94,13 @@ public class PluginUtils {
 			ProtectedService[] newservices = null;
 			if (services == null) {
 				newservices = new ProtectedService[1];
+				newservices[0] = service;
 			} else {
 				newservices = new ProtectedService[services.length + 1];
 				System.arraycopy(services, 0, newservices, 0, services.length);
+				newservices[services.length] = service;
 			}
-			newservices[services.length] = service;
+		
 			return service;
 		}
 	}
