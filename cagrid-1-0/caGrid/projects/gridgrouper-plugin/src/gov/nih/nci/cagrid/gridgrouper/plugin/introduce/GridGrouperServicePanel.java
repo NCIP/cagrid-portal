@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.gridgrouper.plugin.introduce;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.plugin.ui.GridGrouperExpressionBuilder;
 import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
@@ -82,8 +83,25 @@ public class GridGrouperServicePanel extends AbstractServiceAuthorizationPanel {
 					}
 				}
 			}
+			MembershipExpression exp = null;
+			try {
+
+				ExtensionType ext = ExtensionTools.getServiceExtension(
+						"gridgrouper", getServiceInformation());
+				GridGrouperPlugin plugin = PluginUtils.getPlugin(ext);
+				if (plugin != null) {
+					ProtectedService ps = PluginUtils.getProtectedService(
+							plugin, getService());
+					if (ps != null) {
+						exp = ps.getServiceMembershipExpression();
+					}
+				}
+
+			} catch (Exception e) {
+				PortalUtils.showErrorMessage(e);
+			}
 			expressionBuilder = new GridGrouperExpressionBuilder(groupers,
-					loadOnStartup);
+					loadOnStartup, exp);
 		}
 		return expressionBuilder;
 	}

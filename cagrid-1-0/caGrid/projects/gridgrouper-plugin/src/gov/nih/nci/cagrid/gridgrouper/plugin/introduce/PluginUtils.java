@@ -26,6 +26,25 @@ public class PluginUtils {
 		return plugin;
 	}
 
+	public static GridGrouperPlugin getPlugin(ExtensionType ext) {
+		ExtensionTypeExtensionData data = ext.getExtensionData();
+		if (data == null) {
+			data = new ExtensionTypeExtensionData();
+			ext.setExtensionData(data);
+		}
+		MessageElement[] mes = data.get_any();
+		if (mes == null) {
+			mes = new MessageElement[1];
+			data.set_any(mes);
+		}
+
+		if (mes[0] == null) {
+			return null;
+		} else {
+			return (GridGrouperPlugin) mes[0].getObjectValue();
+		}
+	}
+
 	public static GridGrouperPlugin getAddPlugin(ExtensionType ext) {
 		ExtensionTypeExtensionData data = ext.getExtensionData();
 		if (data == null) {
