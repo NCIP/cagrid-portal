@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.plugin.introduce;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.gridgrouper.bean.LogicalOperator;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.plugin.ui.GridGrouperExpressionBuilder;
 import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
@@ -99,6 +100,10 @@ public class GridGrouperServicePanel extends AbstractServiceAuthorizationPanel {
 
 			} catch (Exception e) {
 				PortalUtils.showErrorMessage(e);
+			}
+			if(exp == null){
+				exp = new MembershipExpression();
+				exp.setLogicRelation(LogicalOperator.AND);
 			}
 			expressionBuilder = new GridGrouperExpressionBuilder(groupers,
 					loadOnStartup, exp);
