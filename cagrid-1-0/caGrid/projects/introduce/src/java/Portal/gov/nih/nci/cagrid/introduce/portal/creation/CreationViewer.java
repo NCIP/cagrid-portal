@@ -489,6 +489,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 		if (addExtensionButton == null) {
 			addExtensionButton = new JButton();
 			addExtensionButton.setText("Add");
+			addExtensionButton.setIcon(IntroduceLookAndFeel.getAddIcon());
 			addExtensionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (!((String) getServiceStyleSeletor().getSelectedItem()).equals("NONE")) {
@@ -510,6 +511,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 		if (removeExtensionButton == null) {
 			removeExtensionButton = new JButton();
 			removeExtensionButton.setText("Remove");
+			removeExtensionButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
 			removeExtensionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
