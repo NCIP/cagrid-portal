@@ -69,7 +69,13 @@ public class ResourceManager {
 	}
 
 
-	public static Properties getServiceURLProperties() throws Exception {
+	public static Enumeration getServiceURLPropertyKeys() throws Exception {
+		Properties serviceProps = getServiceURLProperties();
+		return serviceProps.keys();
+	}
+
+
+	private static Properties getServiceURLProperties() throws Exception {
 		Properties serviceProps = new Properties();
 		if (!new File(getResourcePath() + File.separator + SERVICE_URL_FILE).exists()) {
 			serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)),
@@ -95,7 +101,13 @@ public class ResourceManager {
 	}
 
 
-	public static Properties getConfigurationProperties() throws Exception {
+	public static Enumeration getConfigurationPropertyKeys() throws Exception {
+		Properties serviceProps = getConfigurationProperties();
+		return serviceProps.keys();
+	}
+
+
+	private static Properties getConfigurationProperties() throws Exception {
 		Properties serviceProps = new Properties();
 		if (!new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE).exists()) {
 			serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator
