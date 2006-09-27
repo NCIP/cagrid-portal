@@ -11,8 +11,6 @@ make introduce portal conf in the users .cagrid space....
 
 need to fix the mem and stackoverflow issue on the mac.  
 
-need to have the X button in the method viewer implement what the getDoneButton listener implements 
-
 i am not sure that service/method security on service contexts is right on priority and overides.
 
 when adding a serviceContext and then adding a method that returns its referece
@@ -61,6 +59,9 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+
+need to have the X button in the method viewer implement what the getDoneButton listener implements 
+
 file imports are not correctly done (replaced with ./ )
 
 editable tables have the "focus issue" where the changes don't take effect unless you click off of what you are editing.
