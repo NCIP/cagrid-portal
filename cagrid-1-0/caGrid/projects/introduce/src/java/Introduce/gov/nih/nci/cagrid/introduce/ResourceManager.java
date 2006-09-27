@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
@@ -36,11 +37,15 @@ import org.projectmobius.common.XMLUtilities;
 public class ResourceManager {
 	public static final int MAX_ARCHIVE = 5;
 
-	public final static String CONFIG_FILE = "introduce-portal-conf.xml";
+	public final static String PORTAL_CONFIG_FILE = "introduce-portal-conf.xml";
+
+	public final static String SERVICE_URL_FILE = "service_urls.properties";
+
+	public final static String CONFIG_PROPERTIES_FILE = "configuration.properties";
 
 	public final static String CACHE_POSTFIX = "_backup.zip";
 
-	public final static String RESOURCE_FILE = "introduce.resources";
+	public final static String STATE_FILE = "introduce.state.resources";
 
 	public final static String LAST_DIRECTORY = "introduce.lastdir";
 
@@ -57,21 +62,76 @@ public class ResourceManager {
 	}
 
 
-	public static String getConfigFileLocation() {
-		return new File(getResourcePath() + File.separator + CONFIG_FILE).getAbsolutePath();
+	public static String getServiceURLProperty(String key) throws Exception {
+		Properties serviceProps = new Properties();
+		if (!new File(getResourcePath() + File.separator + SERVICE_URL_FILE).exists()) {
+			serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)),
+				"Introduce Global Service URLs");
+		} else {
+			serviceProps.load(new FileInputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)));
+		}
+		return (String) serviceProps.get(key);
+	}
+
+
+	public static void setServiceURLProperty(String key, String value) throws Exception {
+		Properties serviceProps = new Properties();
+		serviceProps.load(new FileInputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)));
+		serviceProps.put(key, value);
+		serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)),
+			"Introduce Global Service URLs");
+	}
+
+
+	public static String getConfigurationProperty(String key) throws Exception {
+		Properties serviceProps = new Properties();
+		if (!new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE).exists()) {
+			serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator
+				+ CONFIG_PROPERTIES_FILE)), "Introduce Global Configuration Properties");
+		} else {
+			serviceProps
+				.load(new FileInputStream(new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE)));
+		}
+		return (String) serviceProps.get(key);
+	}
+
+
+	public static void setConfigurationProperty(String key, String value) throws Exception {
+		Properties serviceProps = new Properties();
+		serviceProps.load(new FileInputStream(new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE)));
+		serviceProps.put(key, value);
+		serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE)),
+			"Introduce Global Configuration Properties");
+	}
+
+
+	public static String getPortalConfigFileLocation() {
+		if (!new File(getResourcePath() + File.separator + PORTAL_CONFIG_FILE).exists()) {
+			// need to copy over the example configuration file to the users
+			// space
+			try {
+				Utils.copyFile(new File("conf" + File.separator + "introduce" + File.separator
+					+ "introduce-portal-conf.xml.example"), new File(getResourcePath() + File.separator
+					+ PORTAL_CONFIG_FILE));
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		}
+		return new File(getResourcePath() + File.separator + PORTAL_CONFIG_FILE).getAbsolutePath();
 	}
 
 
 	public static void setConfigFile(Document doc) throws Exception {
-		FileWriter fw = new FileWriter(getConfigFileLocation());
+		FileWriter fw = new FileWriter(getPortalConfigFileLocation());
 		fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
 		fw.close();
 
 	}
 
 
-	public static String getProperty(String key) throws Exception {
-		File lastDir = new File(getResourcePath() + File.separator + RESOURCE_FILE);
+	public static String getStateProperty(String key) throws Exception {
+		File lastDir = new File(getResourcePath() + File.separator + STATE_FILE);
 		Properties properties = new Properties();
 		if (!lastDir.exists()) {
 			lastDir.createNewFile();
@@ -81,9 +141,9 @@ public class ResourceManager {
 	}
 
 
-	public static void setProperty(String key, String value) throws Exception {
+	public static void setStateProperty(String key, String value) throws Exception {
 		if (key != null) {
-			File lastDir = new File(getResourcePath() + File.separator + RESOURCE_FILE);
+			File lastDir = new File(getResourcePath() + File.separator + STATE_FILE);
 			if (!lastDir.exists()) {
 				lastDir.createNewFile();
 			}
@@ -288,8 +348,8 @@ public class ResourceManager {
 		JFileChooser chooser = null;
 		if (defaultLocation != null && defaultLocation.length() > 0 && new File(defaultLocation).exists()) {
 			chooser = new JFileChooser(new File(defaultLocation));
-		} else if (getProperty(LAST_DIRECTORY) != null) {
-			chooser = new JFileChooser(new File(getProperty(LAST_DIRECTORY)));
+		} else if (getStateProperty(LAST_DIRECTORY) != null) {
+			chooser = new JFileChooser(new File(getStateProperty(LAST_DIRECTORY)));
 		} else {
 			chooser = new JFileChooser();
 		}
@@ -301,7 +361,7 @@ public class ResourceManager {
 
 		int returnVal = chooser.showOpenDialog(comp);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			setProperty(ResourceManager.LAST_DIRECTORY, chooser.getSelectedFile().getAbsolutePath());
+			setStateProperty(ResourceManager.LAST_DIRECTORY, chooser.getSelectedFile().getAbsolutePath());
 			return chooser.getSelectedFile().getAbsolutePath();
 		}
 		return null;
@@ -329,8 +389,8 @@ public class ResourceManager {
 		JFileChooser chooser = null;
 		if (defaultLocation != null && defaultLocation.length() != 0 && new File(defaultLocation).exists()) {
 			chooser = new JFileChooser(new File(defaultLocation));
-		} else if (getProperty(LAST_FILE) != null) {
-			chooser = new JFileChooser(new File(getProperty(LAST_FILE)));
+		} else if (getStateProperty(LAST_FILE) != null) {
+			chooser = new JFileChooser(new File(getStateProperty(LAST_FILE)));
 		} else {
 			chooser = new JFileChooser();
 		}
@@ -349,7 +409,7 @@ public class ResourceManager {
 			} else {
 				files = new File[]{chooser.getSelectedFile()};
 			}
-			setProperty(ResourceManager.LAST_FILE, files[0].getAbsolutePath());
+			setStateProperty(ResourceManager.LAST_FILE, files[0].getAbsolutePath());
 			fileNames = new String[files.length];
 			for (int i = 0; i < fileNames.length; i++) {
 				fileNames[i] = files[i].getAbsolutePath();

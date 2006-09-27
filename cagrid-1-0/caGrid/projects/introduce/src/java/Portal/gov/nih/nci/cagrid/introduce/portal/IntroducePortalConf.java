@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.ToolTipManager;
 
 import org.jdom.Element;
@@ -31,7 +34,6 @@ public class IntroducePortalConf implements AbstractMobiusConfiguration {
 		Element globusEl = config.getChild(GLOBUS_LOCATION, config.getNamespace());
 		globusLocation = globusEl.getText();
 	}
-	
 
 	public String getGlobusLocation() {
 		return globusLocation;

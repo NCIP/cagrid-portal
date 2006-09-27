@@ -48,19 +48,9 @@ public final class Introduce {
 
 	private static void showGridPortal(String confFile) {
 		try {
-			if(!new File(ResourceManager.getConfigFileLocation()).exists()){
-				//need to copy over the example configuration file to the users space
-				try {
-					Utils.copyFile(new File("conf" + File.separator + "introduce" + File.separator + "introduce-portal-conf.xml.example"),new File(ResourceManager.getConfigFileLocation()));
-				} catch (Exception e) {
-					e.printStackTrace();
-					System.exit(1);
-				}
-			}
-			
 			GridPortal portal = null;
 			if (confFile == null) {
-				confFile = ResourceManager.getConfigFileLocation();
+				confFile = ResourceManager.getPortalConfigFileLocation();
 			}
 			checkGlobusLocation(confFile);
 			portal = new GridPortal(confFile);

@@ -285,7 +285,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 							setProgressText("setting introduce resource properties...");
 
 							try {
-								ResourceManager.setProperty(ResourceManager.LAST_DEPLOYMENT,
+								ResourceManager.setStateProperty(ResourceManager.LAST_DEPLOYMENT,
 									(String) deploymentTypeSelector.getSelectedItem());
 							} catch (Exception e1) {
 								e1.printStackTrace();
@@ -399,9 +399,9 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			deploymentTypeSelector.addItem(TOMCAT);
 			deploymentTypeSelector.addItem(GLOBUS);
 			try {
-				if (ResourceManager.getProperty(ResourceManager.LAST_DEPLOYMENT) != null) {
+				if (ResourceManager.getStateProperty(ResourceManager.LAST_DEPLOYMENT) != null) {
 					deploymentTypeSelector
-						.setSelectedItem(ResourceManager.getProperty(ResourceManager.LAST_DEPLOYMENT));
+						.setSelectedItem(ResourceManager.getStateProperty(ResourceManager.LAST_DEPLOYMENT));
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
