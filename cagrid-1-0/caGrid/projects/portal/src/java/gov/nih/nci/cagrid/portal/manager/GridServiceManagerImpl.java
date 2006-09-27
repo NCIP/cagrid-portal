@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.portal.manager;
 
-import gov.nih.nci.cagrid.portal.domain.DomainObject;
 import gov.nih.nci.cagrid.portal.domain.GeoCodeValues;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
@@ -42,25 +41,6 @@ public class GridServiceManagerImpl extends BaseManagerImpl
         }
     }
 
-    /**
-     * @param obj
-     * @throws PortalRuntimeException
-     * @see BaseManager#save(gov.nih.nci.cagrid.portal.domain.DomainObject)
-     */
-    public void save(DomainObject obj) throws PortalRuntimeException {
-        try {
-            try {
-                Integer objectID = gridServiceBaseDAO.getSurrogateKey(obj);
-                obj.setPk(objectID);
-            } catch (RecordNotFoundException e) {
-                // Do nothing as this is not unexpected
-                _logger.info("Record not found for " + obj.getClass() + ". Creating new one with ORM assigned ID");
-            }
-            baseDAO.saveOrUpdate(obj);
-        } catch (DataAccessException e) {
-            throw new PortalRuntimeException(e);
-        }
-    }
 
     /**
      * @param rService

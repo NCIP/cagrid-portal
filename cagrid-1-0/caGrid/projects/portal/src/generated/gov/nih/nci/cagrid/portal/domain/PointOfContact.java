@@ -130,10 +130,5 @@ public class PointOfContact implements DomainObject {
         return true;
     }
 
-    public int hashCode() {
-        int result;
-        result = email.hashCode();
-        result = 29 * result + role.hashCode();
-        return result;
-    }
+
 }

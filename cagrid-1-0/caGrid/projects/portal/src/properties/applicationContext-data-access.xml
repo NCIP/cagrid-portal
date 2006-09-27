@@ -30,6 +30,30 @@
         </property>
     </bean>
 
+    <!-- #############   Managers #############                -->
+
+    <!--Base Manager-->
+    <bean id="baseManager" class="gov.nih.nci.cagrid.portal.manager.BaseManagerImpl"
+          abstract="true">
+        <property name="baseDAO">
+            <ref bean="baseDAO"/>
+        </property>
+        <property name="gridServiceBaseDAO">
+            <ref bean="gridServiceBaseDAO"/>
+        </property>
+        <property name="rcDAO">
+            <ref bean="rcDAO"/>
+        </property>
+        <property name="jdbcDAO">
+            <ref bean="jdbcDAO"/>
+        </property>
+    </bean>
+
+    <bean name="rcManager"
+          class="gov.nih.nci.cagrid.portal.manager.ResearchCenterManagerImpl"
+          parent="baseManager"/>
+
+
     <!-- main Service that participates in transactions-->
     <bean id="gridServiceManager"
           class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
@@ -47,6 +71,7 @@
             </props>
         </property>
     </bean>
+
 
     <!-- #############   DAO #############                -->
 
@@ -67,8 +92,12 @@
     </bean>
 
     <bean id="rcDAO"
-          class="gov.nih.nci.cagrid.portal.dao.jdbc.ResearchCenterDAOImpl">
-        <property name="dataSource" ref="jdbcDataSource"/>
+          class="gov.nih.nci.cagrid.portal.dao.hibernate.ResearchCenterDAOImpl">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+        <property name="dataSource"
+                  ref="jdbcDataSource"/>
     </bean>
 
     <bean id="jdbcDAO"
@@ -76,24 +105,5 @@
         <property name="dataSource" ref="jdbcDataSource"/>
     </bean>
 
-
-    <!-- #############   Managers #############                -->
-
-    <!--Base Manager-->
-    <bean id="baseManager" class="gov.nih.nci.cagrid.portal.manager.BaseManagerImpl"
-          abstract="true">
-        <property name="baseDAO">
-            <ref bean="baseDAO"/>
-        </property>
-        <property name="gridServiceBaseDAO">
-            <ref bean="gridServiceBaseDAO"/>
-        </property>
-        <property name="rcDAO">
-            <ref bean="rcDAO"/>
-        </property>
-        <property name="jdbcDAO">
-            <ref bean="jdbcDAO"/>
-        </property>
-    </bean>
 
 </beans>

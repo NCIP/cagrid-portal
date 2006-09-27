@@ -314,15 +314,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/GTS-client.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/ext/lib/globus_wsrf_servicegroup_stubs.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -431,15 +422,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/GTS_stubs.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-Introduce-security-stubs.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -450,15 +432,6 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-Introduce-security-service.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/SyncGTS_stubs.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -494,15 +467,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/GTS-common.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/ext/lib/ant-contrib.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -530,43 +494,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/client.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-metadata-security.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/gridca.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/SyncGTS-common.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/SyncGTS-client.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -705,11 +633,6 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/client.jar" />
-      <url>jar://$MODULE_DIR$/ext/lib/client.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/globus_wsrf_mds_aggregator.jar" />
       <url>jar://$MODULE_DIR$/ext/lib/globus_wsrf_mds_aggregator.jar!/</url>
     </containerElement>
@@ -727,26 +650,6 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/globus_wsrf_servicegroup_stubs.jar" />
       <url>jar://$MODULE_DIR$/ext/lib/globus_wsrf_servicegroup_stubs.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/gridca.jar" />
-      <url>jar://$MODULE_DIR$/ext/lib/gridca.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/GTS-client.jar" />
-      <url>jar://$MODULE_DIR$/ext/lib/GTS-client.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/GTS-common.jar" />
-      <url>jar://$MODULE_DIR$/ext/lib/GTS-common.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/GTS_stubs.jar" />
-      <url>jar://$MODULE_DIR$/ext/lib/GTS_stubs.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -792,21 +695,6 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/spring.jar" />
       <url>jar://$MODULE_DIR$/ext/lib/spring.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/SyncGTS-client.jar" />
-      <url>jar://$MODULE_DIR$/ext/lib/SyncGTS-client.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/SyncGTS-common.jar" />
-      <url>jar://$MODULE_DIR$/ext/lib/SyncGTS-common.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/SyncGTS_stubs.jar" />
-      <url>jar://$MODULE_DIR$/ext/lib/SyncGTS_stubs.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />

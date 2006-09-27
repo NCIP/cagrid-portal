@@ -15,7 +15,7 @@ import java.util.List;
  * Time: 8:20:54 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GridServiceBaseDAOImpl extends BaseDAOImpl
+public final class GridServiceBaseDAOImpl extends BaseDAOImpl
         implements GridServiceBaseDAO {
 
     /**

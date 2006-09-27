@@ -3,6 +3,9 @@ package gov.nih.nci.cagrid.portal.dao;
 import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
 import gov.nih.nci.cagrid.portal.domain.PointOfContact;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
+import org.springframework.dao.DataAccessException;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,7 +16,7 @@ import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
  */
 public class ResearchCenterDAOLocalTest extends BaseSpringDataAccessAbstractTestCase {
 
-    private GridServiceBaseDAO gridServiceBaseDAO;
+    private ResearchCenterDAO rcDAO;
 
 
     public void testRCDAO() {
@@ -24,12 +27,32 @@ public class ResearchCenterDAOLocalTest extends BaseSpringDataAccessAbstractTest
 
         rc.addPOC(poc);
 
-        gridServiceBaseDAO.saveOrUpdate(rc);
+        try {
+            rcDAO.saveOrUpdate(rc);
+            fail("Should fail");
+        } catch (DataAccessException e) {
+            assert(e instanceof DataAccessException);
+        }
 
 
     }
 
-    public void setGridServiceBaseDAO(GridServiceBaseDAO gridServiceBaseDAO) {
-        this.gridServiceBaseDAO = gridServiceBaseDAO;
+    public void testRetreival() {
+        List uniqueCenters = rcDAO.getUniqueCenters();
+        List allCenters = rcDAO.loadAll(ResearchCenter.class);
+
+        assert(uniqueCenters.size() > 1);
+        assert(allCenters.size() > 1);
+        //all centers have to be more than unique centers
+        assertTrue(allCenters.size() > uniqueCenters.size());
+    }
+
+    public void testGeoCode() {
+        assertNotNull(rcDAO.getGeoCodes("20852"));
+
+    }
+
+    public void setRcDAO(ResearchCenterDAO rcDAO) {
+        this.rcDAO = rcDAO;
     }
 }
