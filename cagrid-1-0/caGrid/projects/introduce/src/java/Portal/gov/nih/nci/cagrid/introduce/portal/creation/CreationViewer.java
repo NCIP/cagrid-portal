@@ -572,6 +572,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			gridBagConstraints14.anchor = java.awt.GridBagConstraints.NORTHWEST;
 			gridBagConstraints14.gridy = 1;
 			downExtensionLabel = new JLabel();
+			downExtensionLabel.setToolTipText("moves the selected extension down in the list so that it will be executed after the preceding extensions");
 			downExtensionLabel.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
@@ -584,6 +585,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			});
 			downExtensionLabel.setIcon(IntroduceLookAndFeel.getDownIcon());
 			upExtensionLabel = new JLabel();
+			upExtensionLabel.setToolTipText("moves the selected extension higher in the list so that it will be executed before the following extensions");
 			upExtensionLabel.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);

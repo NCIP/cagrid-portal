@@ -5,8 +5,6 @@ To Do:
 
 make global preferences
 
-make introduce portal conf in the users .cagrid space....
-
 (related to above)... when a method isn't found for modification, it should be re-added (in case they deleted it)
 
 need to fix the mem and stackoverflow issue on the mac.  
@@ -59,6 +57,7 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+make introduce portal conf in the users .cagrid space....
 
 need to have the X button in the method viewer implement what the getDoneButton listener implements 
 
