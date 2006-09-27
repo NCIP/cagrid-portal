@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -74,6 +75,18 @@ public class ResourceManager {
 	}
 
 
+	public static Enumeration getServiceURLKeys() throws Exception {
+		Properties serviceProps = new Properties();
+		if (!new File(getResourcePath() + File.separator + SERVICE_URL_FILE).exists()) {
+			serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)),
+				"Introduce Global Service URLs");
+		} else {
+			serviceProps.load(new FileInputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)));
+		}
+		return serviceProps.keys();
+	}
+
+
 	public static void setServiceURLProperty(String key, String value) throws Exception {
 		Properties serviceProps = new Properties();
 		serviceProps.load(new FileInputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)));
@@ -93,6 +106,19 @@ public class ResourceManager {
 				.load(new FileInputStream(new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE)));
 		}
 		return (String) serviceProps.get(key);
+	}
+
+
+	public static Enumeration getConfigurationPropertyKeys() throws Exception {
+		Properties serviceProps = new Properties();
+		if (!new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE).exists()) {
+			serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator
+				+ CONFIG_PROPERTIES_FILE)), "Introduce Global Configuration Properties");
+		} else {
+			serviceProps
+				.load(new FileInputStream(new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE)));
+		}
+		return serviceProps.keys();
 	}
 
 
