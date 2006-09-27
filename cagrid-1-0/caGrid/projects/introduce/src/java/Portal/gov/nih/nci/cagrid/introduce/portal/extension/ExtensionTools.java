@@ -8,8 +8,10 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ResourcePropertyEditorExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
@@ -65,19 +67,43 @@ public class ExtensionTools {
 		return null;
 	}
 
-	public static AbstractAuthorizationPanel getAuthorizationPanel(
-			String extensionName, ServiceInformation info) throws Exception {
+	public static AbstractServiceAuthorizationPanel getServiceAuthorizationPanel(
+			String extensionName, ServiceInformation info, ServiceType service)
+			throws Exception {
 		AuthorizationExtensionDescriptionType extensionDesc = ExtensionsLoader
 				.getInstance().getAuthorizationExtension(extensionName);
 		if (extensionDesc != null
-				&& extensionDesc.getAuthorizationPanel() != null
-				&& !extensionDesc.getAuthorizationPanel().equals("")) {
-			Class c = Class.forName(extensionDesc.getAuthorizationPanel());
+				&& extensionDesc.getServiceAuthorizationPanel() != null
+				&& !extensionDesc.getServiceAuthorizationPanel().equals("")) {
+			Class c = Class.forName(extensionDesc
+					.getServiceAuthorizationPanel());
 			Constructor con = c.getConstructor(new Class[] {
 					AuthorizationExtensionDescriptionType.class,
-					ServiceInformation.class});
-			Object obj = con.newInstance(new Object[] { extensionDesc, info});
-			return (AbstractAuthorizationPanel) obj;
+					ServiceInformation.class, ServiceType.class });
+			Object obj = con.newInstance(new Object[] { extensionDesc, info,
+					service });
+			return (AbstractServiceAuthorizationPanel) obj;
+		}
+		return null;
+	}
+
+	public static AbstractMethodAuthorizationPanel getMethodAuthorizationPanel(
+			String extensionName, ServiceInformation info, ServiceType service,
+			MethodType method) throws Exception {
+		AuthorizationExtensionDescriptionType extensionDesc = ExtensionsLoader
+				.getInstance().getAuthorizationExtension(extensionName);
+		if (extensionDesc != null
+				&& extensionDesc.getMethodAuthorizationPanel() != null
+				&& !extensionDesc.getMethodAuthorizationPanel().equals("")) {
+			Class c = Class
+					.forName(extensionDesc.getMethodAuthorizationPanel());
+			Constructor con = c.getConstructor(new Class[] {
+					AuthorizationExtensionDescriptionType.class,
+					ServiceInformation.class, ServiceType.class,
+					MethodType.class });
+			Object obj = con.newInstance(new Object[] { extensionDesc, info,
+					service, method });
+			return (AbstractMethodAuthorizationPanel) obj;
 		}
 		return null;
 	}

@@ -21,10 +21,11 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.extension.AbstractAuthorizationPanel;
+import gov.nih.nci.cagrid.introduce.portal.extension.AbstractServiceAuthorizationPanel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
 
 import java.awt.BorderLayout;
@@ -174,19 +175,17 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private Map authPanels = new HashMap();
 
-	public ServiceSecurityPanel(ServiceInformation info) {
+	private ServiceType service;
+
+	public ServiceSecurityPanel(ServiceInformation info, ServiceType service) {
 		super();
 		this.info = info;
-		initialize();
-
-	}
-
-	public ServiceSecurityPanel(ServiceInformation info, ServiceSecurity sec) {
-		super();
-		this.info = info;
+		this.service = service;
 		initialize();
 		try {
-			setServiceSecurity(sec);
+			if (this.service.getServiceSecurity() != null) {
+				setServiceSecurity(this.service.getServiceSecurity());
+			}
 		} catch (Exception e) {
 			// PortalUtils.showErrorMessage(e);
 			ErrorDialog.showErrorDialog(e);
@@ -371,11 +370,11 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			}
 			ss.setServiceAuthorization(sa);
 
-			AbstractAuthorizationPanel auth = (AbstractAuthorizationPanel)authPanels.get((String)authorizationMechanism.getSelectedItem());
-			if(auth != null){
-				auth.save(true,null);
+			AbstractServiceAuthorizationPanel auth = (AbstractServiceAuthorizationPanel) authPanels
+					.get((String) authorizationMechanism.getSelectedItem());
+			if (auth != null) {
+				auth.save();
 			}
-
 			return ss;
 		} else {
 			return null;
@@ -1093,12 +1092,16 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 				AuthorizationExtensionDescriptionType des = (AuthorizationExtensionDescriptionType) l
 						.get(i);
-				authorizationMechanism.addItem(des.getDisplayName());	
+
 				try {
-					AbstractAuthorizationPanel panel = ExtensionTools.getAuthorizationPanel(des
-							.getName(), info); 
-					this.authPanels.put(des.getDisplayName(), panel);
-					getAuthPanel().add(panel, des.getDisplayName());
+					AbstractServiceAuthorizationPanel panel = ExtensionTools
+							.getServiceAuthorizationPanel(des.getName(), info,
+									this.service);
+					if (panel != null) {
+						authorizationMechanism.addItem(des.getDisplayName());
+						this.authPanels.put(des.getDisplayName(), panel);
+						getAuthPanel().add(panel, des.getDisplayName());
+					}
 				} catch (Exception e) {
 					PortalUtils.showErrorMessage("Error loading the "
 							+ des.getDisplayName()

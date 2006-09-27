@@ -95,8 +95,8 @@
 	<xs:element name="AuthorizationExtensionDescription" type="AuthorizationExtensionDescriptionType"/>
 	<xs:complexType name="AuthorizationExtensionDescriptionType">
 		<xs:sequence>
-			<xs:element name="AuthorizationPanel" type="xs:string" minOccurs="0" maxOccurs="1">
-			</xs:element>
+			<xs:element name="ServiceAuthorizationPanel" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="MethodAuthorizationPanel" type="xs:string" minOccurs="0" maxOccurs="1"/>
 			<xs:element ref="Properties"/>
 		</xs:sequence>
 		<xs:attribute name="displayName" type="xs:string" use="required"/>
