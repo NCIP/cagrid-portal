@@ -39,15 +39,25 @@ public class IntroducePortalTest extends Story {
 		Vector steps = new Vector();
 		try {
 			steps.add(new CreateServiceStep());
+			Thread.sleep(1000);
 			steps.add(new AddSchemaStep());
+			Thread.sleep(1000);
 			steps.add(new AddOperationStep());
+			Thread.sleep(1000);
 			steps.add(new ModifyOperationStep());
+			Thread.sleep(1000);
 			steps.add(new RemoveOperationStep());
+			Thread.sleep(1000);
 			steps.add(new AddMultipleOperationsStep());
+			Thread.sleep(1000);
 			steps.add(new ModifyMultipleOperationsStep());
+			Thread.sleep(1000);
 			steps.add(new RemoveMultipleOperationsStep());
+			Thread.sleep(1000);
 			steps.add(new GeneralModifyServiceStep());
+			Thread.sleep(1000);
 			steps.add(new SecurityTestStep());
+			Thread.sleep(1000);
 
 		} catch (Exception e) {
 			e.printStackTrace();
