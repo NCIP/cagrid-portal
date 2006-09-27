@@ -1,7 +1,8 @@
 <ns1:ExtensionDescription extensionType="AUTHORIZATION"
     xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension">
     <ns1:AuthorizationExtensionDescription displayName="Grid Grouper" name="gridgrouperui">
-        <ns1:AuthorizationPanel>gov.nih.nci.cagrid.gridgrouper.plugin.introduce.GridGrouperPanel</ns1:AuthorizationPanel>
+        <ns1:ServiceAuthorizationPanel>gov.nih.nci.cagrid.gridgrouper.plugin.introduce.GridGrouperServicePanel</ns1:ServiceAuthorizationPanel>
+        <ns1:MethodAuthorizationPanel>gov.nih.nci.cagrid.gridgrouper.plugin.introduce.GridGrouperMethodPanel</ns1:MethodAuthorizationPanel>
         <ns1:Properties> 
             <ns1:Property key="loadOnStartup" value="false" />
             <ns1:Property key="gridGrouperURL" value="https://localhost:8443/wsrf/services/cagrid/GridGrouper" />
