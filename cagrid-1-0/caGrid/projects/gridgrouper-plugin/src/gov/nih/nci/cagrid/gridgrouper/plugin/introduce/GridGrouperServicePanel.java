@@ -89,19 +89,22 @@ public class GridGrouperServicePanel extends AbstractServiceAuthorizationPanel {
 
 				ExtensionType ext = ExtensionTools.getServiceExtension(
 						"gridgrouper", getServiceInformation());
-				GridGrouperPlugin plugin = PluginUtils.getPlugin(ext);
-				if (plugin != null) {
-					ProtectedService ps = PluginUtils.getProtectedService(
-							plugin, getService());
-					if (ps != null) {
-						exp = ps.getServiceMembershipExpression();
+				if (ext != null) {
+					GridGrouperPlugin plugin = PluginUtils.getPlugin(ext);
+					if (plugin != null) {
+						ProtectedService ps = PluginUtils.getProtectedService(
+								plugin, getService());
+						if (ps != null) {
+							exp = ps.getServiceMembershipExpression();
+						}
 					}
 				}
 
 			} catch (Exception e) {
+				e.printStackTrace();
 				PortalUtils.showErrorMessage(e);
 			}
-			if(exp == null){
+			if (exp == null) {
 				exp = new MembershipExpression();
 				exp.setLogicRelation(LogicalOperator.AND);
 			}
