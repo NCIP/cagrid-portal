@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.plugin.ui.GridGrouperExpressionBuilder;
 import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -17,9 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
-import javax.xml.namespace.QName;
-
-import org.apache.axis.message.MessageElement;
 
 public class GridGrouperServicePanel extends AbstractServiceAuthorizationPanel {
 
@@ -39,7 +35,6 @@ public class GridGrouperServicePanel extends AbstractServiceAuthorizationPanel {
 	}
 
 	public AuthorizationExtensionDescriptionType getAuthorizationExtensionDescriptionType() {
-		// TODO Auto-generated method stub
 		return super.getAuthorizationExtensionDescriptionType();
 	}
 
@@ -94,33 +89,19 @@ public class GridGrouperServicePanel extends AbstractServiceAuthorizationPanel {
 	}
 
 	public void save() throws Exception {
+		ExtensionType ext = ExtensionTools.getAddServiceExtension(
+				"gridgrouper", getServiceInformation());
+		if (this.getServiceInformation().getServices().getService()[0] == getService()) {
+			PluginUtils.resetPlugin(ext);
+		}
+		// TODO: Validate the expression
 		MembershipExpression exp = ((GridGrouperExpressionBuilder) getExpressionBuilder())
 				.getMembershipExpression();
 
-		// TODO: Validate the expression
-
-		ExtensionType ext = ExtensionTools.getAddServiceExtension(
-				"gridgrouper", getServiceInformation());
-		ExtensionTypeExtensionData data = ext.getExtensionData();
-		GridGrouperPlugin plugin = null;
-		MessageElement[] mes = data.get_any();
-		if (mes == null) {
-			mes = new MessageElement[1];
-			data.set_any(mes);
-		}
-
-		if (mes[0] == null) {
-			plugin = new GridGrouperPlugin();
-			mes[0] = new MessageElement(new QName(
-					"http://cagrid.nci.nih.gov/1/gridgrouper-plugin",
-					"GridGrouperPlugin"), plugin);
-		} else {
-			plugin = (GridGrouperPlugin) mes[0].getObjectValue();
-		}
-
-		plugin.setServiceMembershipExpression(exp);
-		
-		//TODO: Clean up old expressions
+		GridGrouperPlugin plugin = PluginUtils.getAddPlugin(ext);
+		ProtectedService ps = PluginUtils.getAddProtectedService(plugin,
+				getService());
+		ps.setServiceMembershipExpression(exp);
 	}
 
 }

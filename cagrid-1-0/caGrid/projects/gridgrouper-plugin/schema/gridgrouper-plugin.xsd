@@ -7,11 +7,17 @@
 		 <xsd:element name="GridGrouperPlugin" type="plugin:GridGrouperPlugin"/>
  		 <xsd:complexType name="GridGrouperPlugin">
 			<xsd:sequence>
+				<xsd:element name="ProtectedService" minOccurs="1" maxOccurs="unbounded" type="plugin:ProtectedService"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		
+		<xsd:complexType name="ProtectedService">
+			<xsd:sequence>
+				<xsd:element name="ServiceName" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 				<xsd:element name="ServiceMembershipExpression" minOccurs="1" maxOccurs="1" type="grouper:MembershipExpression"/>
 				<xsd:element name="MethodMembershipExpression" minOccurs="0" maxOccurs="unbounded" type="plugin:MethodMembershipExpression"/>
 			</xsd:sequence>
 		</xsd:complexType>
-		
 		
 		  <xsd:complexType name="MethodMembershipExpression">
 			<xsd:sequence>

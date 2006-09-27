@@ -179,6 +179,42 @@ public class ExtensionTools {
 		return null;
 	}
 
+	public static ExtensionType getServiceExtension(String extensionName,
+			ServiceInformation info) throws Exception {
+		return getExtension(extensionName, ExtensionsLoader.SERVICE_EXTENSION,
+				info);
+	}
+
+	public static ExtensionType getAuthorizationExtension(String extensionName,
+			ServiceInformation info) throws Exception {
+		return getExtension(extensionName,
+				ExtensionsLoader.AUTHORIZATION_EXTENSION, info);
+	}
+
+	public static ExtensionType getDiscoveryExtension(String extensionName,
+			ServiceInformation info) throws Exception {
+		return getExtension(extensionName,
+				ExtensionsLoader.DISCOVERY_EXTENSION, info);
+	}
+
+	public static ExtensionType getExtension(String extensionName,
+			String extensionType, ServiceInformation info) throws Exception {
+		ExtensionsType list = info.getExtensions();
+		if (list != null) {
+			ExtensionType[] exts = list.getExtension();
+			if (exts != null) {
+				for (int i = 0; i < exts.length; i++) {
+					if ((extensionName.equals(exts[i].getName()))
+							&& (extensionType
+									.equals(exts[i].getExtensionType()))) {
+						return exts[i];
+					}
+				}
+			}
+		}
+		return null;
+	}
+
 	public static ExtensionType getAddServiceExtension(String extensionName,
 			ServiceInformation info) throws Exception {
 		return getAddExtension(extensionName,
@@ -199,43 +235,38 @@ public class ExtensionTools {
 
 	public static ExtensionType getAddExtension(String extensionName,
 			String extensionType, ServiceInformation info) throws Exception {
-		ExtensionsType list = info.getExtensions();
-		if (list != null) {
-			ExtensionType[] exts = list.getExtension();
-			if (exts != null) {
-				for (int i = 0; i < exts.length; i++) {
-					if ((extensionName.equals(exts[i].getName()))
-							&& (extensionType
-									.equals(exts[i].getExtensionType()))) {
-						return exts[i];
-					}
-				}
-			}
-		}
-		// Not Found add it.
-		if (list == null) {
-			list = new ExtensionsType();
-			info.setExtensions(list);
-		}
 
-		ExtensionType ext = new ExtensionType();
-		ext.setName(extensionName);
-		ext.setExtensionType(extensionType);
-		ext.setExtensionData(new ExtensionTypeExtensionData());
-
-		ExtensionType[] exts = list.getExtension();
-		ExtensionType[] exts2 = null;
-		if (exts != null) {
-			exts2 = new ExtensionType[exts.length + 1];
-			for (int i = 0; i < exts.length; i++) {
-				exts2[i] = exts[i];
-			}
+		ExtensionType ext = getExtension(extensionName, extensionType, info);
+		if (ext != null) {
+			return ext;
 		} else {
-			exts2 = new ExtensionType[1];
+
+			// Not Found add it.
+			ExtensionsType list = info.getExtensions();
+			if (list == null) {
+				list = new ExtensionsType();
+				info.setExtensions(list);
+			}
+
+			ext = new ExtensionType();
+			ext.setName(extensionName);
+			ext.setExtensionType(extensionType);
+			ext.setExtensionData(new ExtensionTypeExtensionData());
+
+			ExtensionType[] exts = list.getExtension();
+			ExtensionType[] exts2 = null;
+			if (exts != null) {
+				exts2 = new ExtensionType[exts.length + 1];
+				for (int i = 0; i < exts.length; i++) {
+					exts2[i] = exts[i];
+				}
+			} else {
+				exts2 = new ExtensionType[1];
+			}
+			exts2[(exts2.length - 1)] = ext;
+			list.setExtension(exts2);
+			return ext;
 		}
-		exts2[(exts2.length - 1)] = ext;
-		list.setExtension(exts2);
-		return ext;
 	}
 
 	/**
