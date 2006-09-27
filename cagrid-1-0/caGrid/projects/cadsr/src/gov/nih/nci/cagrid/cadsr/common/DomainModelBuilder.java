@@ -792,7 +792,7 @@ public class DomainModelBuilder {
 	}
 
 
-	public WorkManager getWorkManager() {
+	public synchronized WorkManager getWorkManager() {
 		if (this.workManager == null) {
 			this.workManager = new WorkManagerImpl(DEFAULT_POOL_SIZE);
 		}
@@ -801,7 +801,7 @@ public class DomainModelBuilder {
 	}
 
 
-	public void setWorkManager(WorkManager workManager) {
+	public synchronized void setWorkManager(WorkManager workManager) {
 		this.workManager = workManager;
 	}
 
