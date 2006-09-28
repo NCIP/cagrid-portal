@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.gridgrouper.plugin.introduce;
 
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 
 import javax.xml.namespace.QName;
@@ -28,7 +29,8 @@ public class PluginUtils {
 		return plugin;
 	}
 
-	public static GridGrouperPlugin getPlugin(ExtensionType ext) throws Exception{
+	public static GridGrouperPlugin getPlugin(ExtensionType ext)
+			throws Exception {
 		ExtensionTypeExtensionData data = ext.getExtensionData();
 		if (data == null) {
 			data = new ExtensionTypeExtensionData();
@@ -43,11 +45,15 @@ public class PluginUtils {
 		if (mes[0] == null) {
 			return null;
 		} else {
+			if(mes[0].getObjectValue()==null){
 			return (GridGrouperPlugin) mes[0].getValueAsType(NAMESPACE,GridGrouperPlugin.class);
+			}else{
+				return (GridGrouperPlugin) mes[0].getObjectValue();
+			}
 		}
 	}
 
-	public static GridGrouperPlugin getAddPlugin(ExtensionType ext) {
+	public static GridGrouperPlugin getAddPlugin(ExtensionType ext) throws Exception{
 		ExtensionTypeExtensionData data = ext.getExtensionData();
 		if (data == null) {
 			data = new ExtensionTypeExtensionData();
@@ -67,10 +73,7 @@ public class PluginUtils {
 					"GridGrouperPlugin"), plugin);
 		} else {
 			if (mes[0].getObjectValue() == null) {
-				plugin = new GridGrouperPlugin();
-				mes[0] = new MessageElement(new QName(
-						"http://cagrid.nci.nih.gov/1/gridgrouper-plugin",
-						"GridGrouperPlugin"), plugin);
+				plugin =  (GridGrouperPlugin) mes[0].getValueAsType(NAMESPACE,GridGrouperPlugin.class);
 			} else {
 				plugin = (GridGrouperPlugin) mes[0].getObjectValue();
 			}
@@ -111,6 +114,41 @@ public class PluginUtils {
 			}
 			plugin.setProtectedService(newservices);
 			return service;
+		}
+	}
+
+	public static MethodMembershipExpression getMethodMembershipExpression(ProtectedService ps, MethodType mt) {
+			MethodMembershipExpression[] methods = ps
+					.getMethodMembershipExpression();
+			if (methods != null) {
+				for (int i = 0; i < methods.length; i++) {
+					if (methods[i].getMethodName().equals(mt.getName())) {
+						return methods[i];
+					}
+				}
+			}
+		return null;
+	}
+	
+	public static MethodMembershipExpression getAddMethodMembershipExpression(ProtectedService ps, MethodType mt) {
+		MethodMembershipExpression method = getMethodMembershipExpression(ps,mt);
+		if (method != null) {
+			return method;
+		} else {
+			method = new MethodMembershipExpression();
+			method.setMethodName(mt.getName());
+			MethodMembershipExpression[] methods = ps.getMethodMembershipExpression();
+			MethodMembershipExpression[] newmethods = null;
+			if (methods == null) {
+				newmethods = new MethodMembershipExpression[1];
+				newmethods[0] = method;
+			} else {
+				newmethods = new MethodMembershipExpression[methods.length + 1];
+				System.arraycopy(methods, 0, newmethods, 0, methods.length);
+				newmethods[methods.length] = method;
+			}
+			ps.setMethodMembershipExpression(newmethods);
+			return method;
 		}
 	}
 

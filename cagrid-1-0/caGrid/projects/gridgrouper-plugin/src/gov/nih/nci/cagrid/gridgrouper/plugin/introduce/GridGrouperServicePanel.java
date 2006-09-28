@@ -57,7 +57,7 @@ public class GridGrouperServicePanel extends AbstractServiceAuthorizationPanel {
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.weighty = 1.0D;
 		gridBagConstraints.gridy = 0;
-		this.setSize(300, 200);
+		//this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		this.add(getExpressionBuilder(), gridBagConstraints);
 	}
@@ -96,8 +96,8 @@ public class GridGrouperServicePanel extends AbstractServiceAuthorizationPanel {
 								plugin, getService());
 						if (ps != null) {
 							exp = ps.getServiceMembershipExpression();
-						}
-						setUsed(true);
+							setUsed(true);
+						}		
 					}
 				}
 

@@ -1420,7 +1420,7 @@ public class ModificationViewer extends GridPortalComponent {
 								}
 							}
 						}
-						ExtensionTools.removeAuthorizationServiceExtensios(info);
+						//ExtensionTools.removeAuthorizationServiceExtensios(info);
 						info.getServices().getService(0).setServiceSecurity(
 								securityPanel.getServiceSecurity());
 

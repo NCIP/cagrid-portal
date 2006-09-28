@@ -1,12 +1,17 @@
 package gov.nih.nci.cagrid.gridgrouper.plugin.introduce;
 
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.gridgrouper.bean.LogicalOperator;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.plugin.ui.GridGrouperExpressionBuilder;
 import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.AbstractMethodAuthorizationPanel;
+import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -55,7 +60,7 @@ public class GridGrouperMethodPanel extends AbstractMethodAuthorizationPanel {
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.weighty = 1.0D;
 		gridBagConstraints.gridy = 0;
-		this.setSize(300, 200);
+		//this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		this.add(getExpressionBuilder(), gridBagConstraints);
 	}
@@ -82,14 +87,55 @@ public class GridGrouperMethodPanel extends AbstractMethodAuthorizationPanel {
 					}
 				}
 			}
+			MembershipExpression exp = null;
+			try {
+
+				ExtensionType ext = ExtensionTools.getServiceExtension(
+						"gridgrouper", getServiceInformation());
+				if (ext != null) {
+					GridGrouperPlugin plugin = PluginUtils.getPlugin(ext);
+					if (plugin != null) {
+						ProtectedService ps = PluginUtils.getProtectedService(
+								plugin, getService());
+						if (ps != null) {
+							MethodMembershipExpression membership = PluginUtils
+									.getMethodMembershipExpression(ps,
+											getMethod());
+							if (membership != null) {
+								exp = membership.getMembershipExpression();
+								setUsed(true);
+							}
+						}	
+					}
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				PortalUtils.showErrorMessage(e);
+			}
+			if (exp == null) {
+				exp = new MembershipExpression();
+				exp.setLogicRelation(LogicalOperator.AND);
+			}
 			expressionBuilder = new GridGrouperExpressionBuilder(groupers,
-					loadOnStartup);
+					loadOnStartup, exp);
 		}
 		return expressionBuilder;
 	}
 
 	public void save() throws Exception {
+		ExtensionType ext = ExtensionTools.getAddServiceExtension(
+				"gridgrouper", getServiceInformation());
+		// TODO: Validate the expression
+		MembershipExpression exp = ((GridGrouperExpressionBuilder) getExpressionBuilder())
+				.getMembershipExpression();
 
+		GridGrouperPlugin plugin = PluginUtils.getAddPlugin(ext);
+		ProtectedService ps = PluginUtils.getAddProtectedService(plugin,
+				getService());
+		MethodMembershipExpression membership = PluginUtils
+				.getAddMethodMembershipExpression(ps, getMethod());
+		membership.setMembershipExpression(exp);
 	}
 
 }
