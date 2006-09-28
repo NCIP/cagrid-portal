@@ -4,6 +4,7 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 To Do:
 
 make global preferences
+GUI needs a way to group common preferences that extensions can use (such as GME URL), intead of each having to define/use their own
 
 (related to above)... when a method isn't found for modification, it should be re-added (in case they deleted it)
 
@@ -18,8 +19,6 @@ namespaceType list and therefore cant be refered to yet
 add tools for autocreating resource and wrapping epr into client handle type for implementation on server side (ResourceCreator.javajet)
 
 refresh button in gme to view uploaded schemas without closing and opening
-
-GUI needs a way to group common preferences that extensions can use (such as GME URL), intead of each having to define/use their own
 
 on save etc i have seen unable to delete namespace2package.mappings.
 
