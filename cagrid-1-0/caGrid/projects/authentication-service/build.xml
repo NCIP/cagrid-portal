@@ -158,6 +158,9 @@
         <path id="service.run.classpath">
             <pathelement location="${build.dest}" />
             <path refid="service.build.classpath" />
+            <fileset dir="${ext.lib.dir}">
+                <include name="*.jar" />
+            </fileset>
         </path>
         <path id="test.build.classpath">
             <fileset dir="${test.lib.dir}">
