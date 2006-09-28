@@ -2,8 +2,8 @@ package gov.nih.nci.cagrid.introduce.portal.modification.discovery.globus;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -16,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.projectmobius.common.Namespace;
-import org.projectmobius.portal.PortalResourceManager;
+
 
 public class GlobusConfigurationPanel extends JPanel {
 
@@ -32,6 +32,7 @@ public class GlobusConfigurationPanel extends JPanel {
 
 	public String filterType = null;
 
+
 	/**
 	 * This method initializes
 	 */
@@ -39,6 +40,7 @@ public class GlobusConfigurationPanel extends JPanel {
 		super();
 		initialize();
 	}
+
 
 	/**
 	 * This method initializes this
@@ -64,6 +66,7 @@ public class GlobusConfigurationPanel extends JPanel {
 		this.add(namespaceLabel, gridBagConstraints9);
 	}
 
+
 	public void discoverFromGlobus() {
 		List namespaces = null;
 
@@ -75,6 +78,7 @@ public class GlobusConfigurationPanel extends JPanel {
 		}
 	}
 
+
 	/**
 	 * This method initializes jComboBox
 	 * 
@@ -83,51 +87,55 @@ public class GlobusConfigurationPanel extends JPanel {
 	public JComboBox getNamespaceComboBox() {
 		if (namespaceComboBox == null) {
 			namespaceComboBox = new JComboBox();
-			namespaceComboBox
-					.addItemListener(new java.awt.event.ItemListener() {
-						public void itemStateChanged(java.awt.event.ItemEvent e) {
-							if (e.getStateChange() == ItemEvent.SELECTED) {
-								String schemaNamespace = (String) namespaceComboBox
-										.getSelectedItem();
-								currentNamespace = schemaNamespace;
-								IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager
-										.getInstance().getResource(
-												IntroducePortalConf.RESOURCE);
-								if (new File(conf.getGlobusLocation()).exists()) {
-									File schemasDir = new File(conf
-											.getGlobusLocation()
-											+ File.separator
-											+ "share"
-											+ File.separator + "schema");
-									try {
-										currentSchemaFile = CommonTools.findSchema(
-												schemaNamespace, schemasDir);
-										
-									} catch (Exception ex) {
-										PortalUtils
-												.showErrorMessage("Globus Location seems to be wrong or corrupted:  Please check setting in the Preferences Menu!");
-									}
-								} else {
+			namespaceComboBox.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						String schemaNamespace = (String) namespaceComboBox.getSelectedItem();
+						currentNamespace = schemaNamespace;
+						try {
+							if (new File(ResourceManager.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION))
+								.exists()) {
+
+								File schemasDir = new File(ResourceManager
+									.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION)
+									+ File.separator + "share" + File.separator + "schema");
+								try {
+									currentSchemaFile = CommonTools.findSchema(schemaNamespace, schemasDir);
+
+								} catch (Exception ex) {
 									PortalUtils
-											.showErrorMessage("Globus Location cannot be found:  Please check setting in the Preferences Menu!");
+										.showErrorMessage("Globus Location seems to be wrong or corrupted:  Please check setting in the Preferences Menu!");
 								}
+
+							} else {
+								PortalUtils
+									.showErrorMessage("Globus Location cannot be found:  Please check setting in the Preferences Menu!");
 							}
+						} catch (Exception ex) {
+							PortalUtils
+								.showErrorMessage("Globus Location cannot be found:  Please check setting in the Preferences Menu!");
 						}
-					});
+					}
+				}
+			});
 		}
 		return namespaceComboBox;
 	}
 
+
 	class SchemaWrapper {
 		Namespace ns;
+
 
 		public Namespace getNamespace() {
 			return ns;
 		}
 
+
 		public SchemaWrapper(Namespace ns) {
 			this.ns = ns;
 		}
+
 
 		public String toString() {
 			return ns.getName();

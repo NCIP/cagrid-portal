@@ -46,7 +46,7 @@ public class PreferenceConfigurationContainerPanel extends JPanel {
 		gridBagConstraints.weighty = 1.0D;
 		gridBagConstraints.gridy = 0;
 		this.setLayout(new GridBagLayout());
-		this.setSize(new java.awt.Dimension(309, 271));
+		this.setSize(new java.awt.Dimension(309, 500));
 		this.add(getMainConfigurationPanel(), gridBagConstraints);
 		this.add(getButtonPanel(), gridBagConstraints1);
 

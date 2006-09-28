@@ -1,10 +1,11 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.globus;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.BorderLayout;
@@ -18,7 +19,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import org.projectmobius.common.XMLUtilities;
-import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
@@ -79,27 +79,29 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 		try {
 			String currentNamespace = getGlobusPanel().currentNamespace;
 			File currentSchemaFile = getGlobusPanel().currentSchemaFile;
-			
+
 			// set the namespace
 			if (currentNamespace != null) {
 				input.setNamespace(currentNamespace);
 			} else {
 				return null;
 			}
-			
+
 			if (currentSchemaFile != null) {
-				IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance()
-					.getResource(IntroducePortalConf.RESOURCE);
+
 				int index = currentSchemaFile.getAbsolutePath().indexOf(
-					conf.getGlobusLocation() + File.separator + "share" + File.separator + "schema" + File.separator)
-					+ new String(conf.getGlobusLocation() + "share" + File.separator + "schema" + File.separator)
-						.length();
-				String location = ".." + File.separator + currentSchemaFile.getAbsolutePath()
-					.substring(index + 1, currentSchemaFile.getAbsolutePath().length());
+					ResourceManager.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION) + File.separator
+						+ "share" + File.separator + "schema" + File.separator)
+					+ new String(ResourceManager.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION) + "share"
+						+ File.separator + "schema" + File.separator).length();
+				String location = ".."
+					+ File.separator
+					+ currentSchemaFile.getAbsolutePath().substring(index + 1,
+						currentSchemaFile.getAbsolutePath().length());
 				input.setLocation(location);
-				gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(
-					input, XMLUtilities.fileNameToDocument(currentSchemaFile.getAbsolutePath()));
-				return new NamespaceType[] {input};
+				gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(input, XMLUtilities
+					.fileNameToDocument(currentSchemaFile.getAbsolutePath()));
+				return new NamespaceType[]{input};
 			} else {
 				return null;
 			}
@@ -128,8 +130,8 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 					NamespaceType[] createdNs = panel.createNamespaceType(new File("."));
 					if (createdNs != null) {
 						for (int i = 0; i < createdNs.length; i++) {
-							System.out.println("Created Namespace:" + createdNs[i].getNamespace() 
-								+ " at location:" + createdNs[i].getLocation());
+							System.out.println("Created Namespace:" + createdNs[i].getNamespace() + " at location:"
+								+ createdNs[i].getLocation());
 						}
 					} else {
 						System.out.println("Problem creating namespace");

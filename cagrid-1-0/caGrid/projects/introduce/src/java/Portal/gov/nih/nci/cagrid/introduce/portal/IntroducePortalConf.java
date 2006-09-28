@@ -10,6 +10,7 @@ import org.projectmobius.common.AbstractMobiusConfiguration;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.MobiusResourceManager;
 
+
 /**
  * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -20,27 +21,13 @@ import org.projectmobius.common.MobiusResourceManager;
 public class IntroducePortalConf implements AbstractMobiusConfiguration {
 
 	public static String RESOURCE = "IntroducePortalConf";
-	public static String GLOBUS_LOCATION = "globusLocation";
 
-	public String globusLocation = "";
 
 	public IntroducePortalConf() {
 		ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
 	}
-	
 
-	public void parse(MobiusResourceManager resourceManager, Element config)
-			throws MobiusException {
-		Element globusEl = config.getChild(GLOBUS_LOCATION, config.getNamespace());
-		globusLocation = globusEl.getText();
-	}
 
-	public String getGlobusLocation() {
-		return globusLocation;
-	}
-	
-	
-	public void setGlobusLocation(String globusLocation) {
-		this.globusLocation = globusLocation;
+	public void parse(MobiusResourceManager resourceManager, Element config) throws MobiusException {
 	}
 }

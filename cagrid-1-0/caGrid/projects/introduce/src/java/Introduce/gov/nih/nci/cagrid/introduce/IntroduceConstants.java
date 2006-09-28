@@ -17,6 +17,8 @@ import javax.xml.namespace.QName;
  */
 public class IntroduceConstants {
 	
+	public static final String GLOBUS_LOCATION = "GLOBUS_LOCATION";
+	
 	public static final String SERVICE_SECURITY_METADATA_METHOD = "getServiceSecurityMetadata";
 
 	// service skeleton properties

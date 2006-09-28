@@ -72,6 +72,7 @@ import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
 import org.xml.sax.SAXException;
 
+import com.sun.naming.internal.ResourceManager;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
@@ -551,7 +552,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 								importInfo.setPortTypeName(((String) getPortTypesComboBox().getSelectedItem())
 									.toString());
 								importInfo.setPackageName(getPackageNameTextField().getText());
-								importInfo.setWsdlFile(getWsdlFileTextField().getText());
+								String wsdlFile = getWsdlFileTextField().getText();
+								wsdlFile = wsdlFile.substring(wsdlFile.lastIndexOf(File.separator)+1);
+								importInfo.setWsdlFile(wsdlFile);
 								if (!getInputMessageNamespaceTextField().getText().equals("")
 									&& !getInputMessageNameTextField().getText().equals("")) {
 									importInfo.setInputMessage(new QName(getInputMessageNamespaceTextField().getText(),
@@ -976,8 +979,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JPanel getSecurityContainerPanel() {
 		if (securityContainerPanel == null) {
 
-			securityContainerPanel = new MethodSecurityPanel(info, info.getService(), 
-				this.method);
+			securityContainerPanel = new MethodSecurityPanel(info, info.getService(), this.method);
 
 			securityContainerPanel.setBorder(BorderFactory.createTitledBorder(null,
 				"Method Level Security Configuration", TitledBorder.DEFAULT_JUSTIFICATION,
@@ -2262,8 +2264,20 @@ public class MethodViewer extends GridPortalBaseFrame {
 			parser.parse(new File(baseSchemaDir.getAbsolutePath() + File.separator + namespace.getLocation()));
 			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
 				IntroducePortalConf.RESOURCE);
-			parser.parse(new File(conf.getGlobusLocation() + File.separator + "share" + File.separator + "schema"
-				+ File.separator + "wsrf" + File.separator + "faults" + File.separator + "WS-BaseFaults.xsd"));
+			try {
+				parser.parse(new File(gov.nih.nci.cagrid.introduce.ResourceManager
+					.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION)
+					+ File.separator
+					+ "share"
+					+ File.separator
+					+ "schema"
+					+ File.separator
+					+ "wsrf"
+					+ File.separator
+					+ "faults" + File.separator + "WS-BaseFaults.xsd"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} catch (SAXException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -2286,5 +2300,5 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	}
 
-}  // @jve:decl-index=0:visual-constraint="112,37"
+} // @jve:decl-index=0:visual-constraint="112,37"
 
