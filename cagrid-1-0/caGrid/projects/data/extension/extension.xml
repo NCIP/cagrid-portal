@@ -1,4 +1,5 @@
-<ns1:ExtensionDescription extensionType="SERVICE" xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension">
+<ns1:ExtensionDescription extensionType="SERVICE"
+	xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension">
 	<ns1:ServiceExtensionDescription displayName="Data Service" name="data">
 		<ns1:CreationUIDialog>gov.nih.nci.cagrid.data.ui.creation.DataServiceCreationDialog</ns1:CreationUIDialog>
 		<ns1:CreationPostProcessor>gov.nih.nci.cagrid.data.creation.DataServiceQueryOperationProviderCreator</ns1:CreationPostProcessor>
@@ -6,9 +7,9 @@
 		<ns1:CodegenPostProcessor>gov.nih.nci.cagrid.data.codegen.DataServiceOperationProviderCodegenPostProcessor</ns1:CodegenPostProcessor>
 		<ns1:ServiceModificationUIPanel>gov.nih.nci.cagrid.data.ui.types.TargetTypeSelectionPanel</ns1:ServiceModificationUIPanel>
 		<ns1:Properties>
-			<ns1:property key="GME_URL"
-			    value="http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"/>
-			<ns1:property key="CADSR_URL"
+			<ns1:property makeGlobal="true" type="SERVICE_URL" key="GME_URL"
+				value="http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/cagrid/GlobalModelExchange"/>
+			<ns1:property makeGlobal="true" type="SERVICE_URL" key="CADSR_URL"
 				value="http://cagrid05.bmi.ohio-state.edu:8080/wsrf/services/cagrid/CaDSRService"/>
 		</ns1:Properties>
 	</ns1:ServiceExtensionDescription>

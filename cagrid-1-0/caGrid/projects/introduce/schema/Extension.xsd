@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Extension"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Extension" elementFormDefault="qualified"
 	attributeFormDefault="unqualified">
 	<xs:element name="Extensions" type="ExtensionsType"/>
@@ -11,9 +12,9 @@
 	<xs:element name="Extension" type="ExtensionType"/>
 	<xs:element name="ExtensionDescription">
 		<xs:annotation>
-			<xs:documentation>he extension type states whether or not this is a discovery type or service type
-				extension. The extension preferencesPanel is a java classname which extends the
-				ExtensionPreferencesConfigurationPanel</xs:documentation>
+			<xs:documentation>he extension type states whether or not this is a discovery type or
+				service type extension. The extension preferencesPanel is a java classname which
+				extends the ExtensionPreferencesConfigurationPanel</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:choice>
@@ -26,10 +27,12 @@
 			<xs:attribute name="extensionPreferencesPanel" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="ResourcePropertyEditorExtensionDescription" type="ResourcePropertyEditorExtensionDescriptionType"/>
+	<xs:element name="ResourcePropertyEditorExtensionDescription"
+		type="ResourcePropertyEditorExtensionDescriptionType"/>
 	<xs:complexType name="ResourcePropertyEditorExtensionDescriptionType">
 		<xs:sequence>
-			<xs:element name="ResourcePropertyEditorPanel" type="xs:string" minOccurs="1" maxOccurs="1">
+			<xs:element name="ResourcePropertyEditorPanel" type="xs:string" minOccurs="1"
+				maxOccurs="1">
 				<xs:annotation>
 					<xs:documentation>Must extend the ResourcePropertyEditorPanel</xs:documentation>
 				</xs:annotation>
@@ -43,14 +46,16 @@
 	<xs:element name="DiscoveryExtensionDescription" type="DiscoveryExtensionDescriptionType"/>
 	<xs:complexType name="DiscoveryExtensionDescriptionType">
 		<xs:sequence>
-			<xs:element name="DiscoveryToolsPanelExtension" type="xs:string" minOccurs="0" maxOccurs="1">
+			<xs:element name="DiscoveryToolsPanelExtension" type="xs:string" minOccurs="0"
+				maxOccurs="1">
 				<xs:annotation>
 					<xs:documentation>Must extend the NamespaceTypeToolsComponent</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="DiscoveryPanelExtension" type="xs:string" minOccurs="0" maxOccurs="1">
 				<xs:annotation>
-					<xs:documentation>Must extend the NamespaceTypeDiscoveryComponent</xs:documentation>
+					<xs:documentation>Must extend the
+					NamespaceTypeDiscoveryComponent</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element ref="Properties"/>
@@ -63,12 +68,14 @@
 		<xs:sequence>
 			<xs:element name="CreationPostProcessor" type="xs:string" minOccurs="0" maxOccurs="1">
 				<xs:annotation>
-					<xs:documentation>Must implement the CreationExtensionPostProcessor</xs:documentation>
+					<xs:documentation>Must implement the
+					CreationExtensionPostProcessor</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="CreationUIDialog" type="xs:string" minOccurs="0" maxOccurs="1">
 				<xs:annotation>
-					<xs:documentation>GUI component that must extend a CreationExtensionUIDialog</xs:documentation>
+					<xs:documentation>GUI component that must extend a
+					CreationExtensionUIDialog</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="CodegenPreProcessor" type="xs:string" minOccurs="0" maxOccurs="1">
@@ -81,10 +88,11 @@
 					<xs:documentation>implement the CodegenExtensionPostProcessor</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="ServiceModificationUIPanel" type="xs:string" minOccurs="0" maxOccurs="1">
+			<xs:element name="ServiceModificationUIPanel" type="xs:string" minOccurs="0"
+				maxOccurs="1">
 				<xs:annotation>
 					<xs:documentation>ModificationViewer GUI component that must extend a
-					ServiceModificatoinUIPanel</xs:documentation>
+						ServiceModificatoinUIPanel</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element ref="Properties"/>
@@ -92,10 +100,12 @@
 		<xs:attribute name="displayName" type="xs:string" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 	</xs:complexType>
-	<xs:element name="AuthorizationExtensionDescription" type="AuthorizationExtensionDescriptionType"/>
+	<xs:element name="AuthorizationExtensionDescription"
+		type="AuthorizationExtensionDescriptionType"/>
 	<xs:complexType name="AuthorizationExtensionDescriptionType">
 		<xs:sequence>
-			<xs:element name="ServiceAuthorizationPanel" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ServiceAuthorizationPanel" type="xs:string" minOccurs="0"
+				maxOccurs="1"/>
 			<xs:element name="MethodAuthorizationPanel" type="xs:string" minOccurs="0" maxOccurs="1"/>
 			<xs:element ref="Properties"/>
 		</xs:sequence>
@@ -110,8 +120,10 @@
 			<xs:sequence>
 				<xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
-						<xs:attribute name="key" type="xs:string"/>
-						<xs:attribute name="value" type="xs:string"/>
+						<xs:attribute name="makeGlobal" type="xs:boolean" use="optional"/>
+						<xs:attribute name="type" type="PropertyTypes" use="optional"/>
+						<xs:attribute name="key" type="xs:string" use="required"/>
+						<xs:attribute name="value" type="xs:string" use="optional"/>
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>
@@ -130,4 +142,10 @@
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="extensionType" type="xs:string"/>
 	</xs:complexType>
+	<xs:simpleType name="PropertyTypes">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SERVICE_URL"/>
+			<xs:enumeration value="GENERAL"/>
+		</xs:restriction>
+	</xs:simpleType>
 </xs:schema>

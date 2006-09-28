@@ -1,9 +1,13 @@
 package gov.nih.nci.cagrid.introduce.extension;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
+import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
+import gov.nih.nci.cagrid.introduce.beans.extension.PropertyTypes;
 import gov.nih.nci.cagrid.introduce.beans.extension.ResourcePropertyEditorExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 
@@ -11,12 +15,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ExtensionsLoader {
 
 	private static ExtensionsLoader loader = null;
 
-	public static final String EXTENSIONS_DIRECTORY = "." + File.separator
-			+ "extensions";
+	public static final String EXTENSIONS_DIRECTORY = "." + File.separator + "extensions";
 
 	public static final String DISCOVERY_EXTENSION = "DISCOVERY";
 
@@ -38,6 +42,7 @@ public class ExtensionsLoader {
 
 	private File extensionsDir;
 
+
 	private ExtensionsLoader() {
 		this.extensionsDir = new File(EXTENSIONS_DIRECTORY);
 		serviceExtensionDescriptors = new ArrayList();
@@ -52,12 +57,14 @@ public class ExtensionsLoader {
 		}
 	}
 
+
 	public static ExtensionsLoader getInstance() {
 		if (loader == null) {
 			loader = new ExtensionsLoader();
 		}
 		return loader;
 	}
+
 
 	private void load() throws Exception {
 
@@ -66,45 +73,41 @@ public class ExtensionsLoader {
 			for (int i = 0; i < dirs.length; i++) {
 				final int count = i;
 				if (dirs[i].isDirectory()) {
-					if (new File(dirs[i].getAbsolutePath() + File.separator
-							+ "extension.xml").exists()) {
+					if (new File(dirs[i].getAbsolutePath() + File.separator + "extension.xml").exists()) {
 
-						System.out.println("Loading extension: "
-								+ dirs[count].getAbsolutePath()
-								+ File.separator + "extension.xml");
+						System.out.println("Loading extension: " + dirs[count].getAbsolutePath() + File.separator
+							+ "extension.xml");
 						ExtensionDescription extDesc = null;
 
 						try {
-							extDesc = (ExtensionDescription) Utils
-									.deserializeDocument(new File(dirs[count]
-											.getAbsolutePath()
-											+ File.separator + "extension.xml")
-											.getAbsolutePath(),
-											ExtensionDescription.class);
+							extDesc = (ExtensionDescription) Utils.deserializeDocument(new File(dirs[count]
+								.getAbsolutePath()
+								+ File.separator + "extension.xml").getAbsolutePath(), ExtensionDescription.class);
+
+							// proces the extension properties and add the ones
+							// that
+							// are desired to be made global if they do not
+							// exist yet
 
 							extensions.add(extDesc);
 
-							if (extDesc.getExtensionType().equals(
-									DISCOVERY_EXTENSION)) {
-								discoveryExtensionDescriptors.add(extDesc
-										.getDiscoveryExtensionDescription());
-							} else if (extDesc.getExtensionType().equals(
-									SERVICE_EXTENSION)) {
-								serviceExtensionDescriptors.add(extDesc
-										.getServiceExtensionDescription());
-							} else if (extDesc.getExtensionType().equals(
-									RESOURCE_PROPERTY_EDITOR_EXTENSION)) {
-								resourcePropertyEditorExtensionDescriptors
-										.add(extDesc
-												.getResourcePropertyEditorExtensionDescription());
-							} else if (extDesc.getExtensionType().equals(
-									AUTHORIZATION_EXTENSION)) {
-								authorizationExtensionDescriptors
-										.add(extDesc.getAuthorizationExtensionDescription());
+							if (extDesc.getExtensionType().equals(DISCOVERY_EXTENSION)) {
+								discoveryExtensionDescriptors.add(extDesc.getDiscoveryExtensionDescription());
+								processExtensionProperties(extDesc.getDiscoveryExtensionDescription().getProperties());
+							} else if (extDesc.getExtensionType().equals(SERVICE_EXTENSION)) {
+								serviceExtensionDescriptors.add(extDesc.getServiceExtensionDescription());
+								processExtensionProperties(extDesc.getServiceExtensionDescription().getProperties());
+							} else if (extDesc.getExtensionType().equals(RESOURCE_PROPERTY_EDITOR_EXTENSION)) {
+								resourcePropertyEditorExtensionDescriptors.add(extDesc
+									.getResourcePropertyEditorExtensionDescription());
+								processExtensionProperties(extDesc.getResourcePropertyEditorExtensionDescription()
+									.getProperties());
+							} else if (extDesc.getExtensionType().equals(AUTHORIZATION_EXTENSION)) {
+								authorizationExtensionDescriptors.add(extDesc.getAuthorizationExtensionDescription());
+								processExtensionProperties(extDesc.getAuthorizationExtensionDescription()
+									.getProperties());
 							} else {
-								System.out
-										.println("Unsupported Extension Type: "
-												+ extDesc.getExtensionType());
+								System.out.println("Unsupported Extension Type: " + extDesc.getExtensionType());
 							}// TODO Auto-generated method stub
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
@@ -119,57 +122,83 @@ public class ExtensionsLoader {
 
 	}
 
+
+	private void processExtensionProperties(Properties properties) {
+		if (properties != null && properties.getProperty() != null) {
+			for (int i = 0; i < properties.getProperty().length; i++) {
+				PropertiesProperty prop = properties.getProperty(i);
+				try {
+					if (prop != null && prop.getMakeGlobal() != null && prop.getMakeGlobal().booleanValue()) {
+						if (prop.getType() != null && prop.getType().getValue().equals(PropertyTypes._SERVICE_URL)) {
+							if (ResourceManager.getServiceURLProperty(prop.getKey()) == null) {
+								ResourceManager.setServiceURLProperty(prop.getKey(), prop.getValue());
+							}
+						} else if (prop.getType() != null && prop.getType().getValue().equals(PropertyTypes._GENERAL)) {
+							if (ResourceManager.getConfigurationProperty(prop.getKey()) == null) {
+								ResourceManager.setConfigurationProperty(prop.getKey(), prop.getValue());
+							}
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println("WARNING: extension property " + prop.getKey() + " could not be processed");
+				}
+			}
+		}
+	}
+
+
 	public List getAuthorizationExtensions() {
 		return this.authorizationExtensionDescriptors;
 	}
+
 
 	public List getServiceExtensions() {
 		return this.serviceExtensionDescriptors;
 	}
 
+
 	public List getResourcePropertyEditorExtensions() {
 		return this.resourcePropertyEditorExtensionDescriptors;
 	}
+
 
 	public ExtensionDescription getExtension(String name) {
 		for (int i = 0; i < extensions.size(); i++) {
 			ExtensionDescription ex = (ExtensionDescription) extensions.get(i);
 			if (ex.getDiscoveryExtensionDescription() != null
-					&& ex.getDiscoveryExtensionDescription().getName().equals(
-							name)) {
+				&& ex.getDiscoveryExtensionDescription().getName().equals(name)) {
 				return ex;
 			} else if (ex.getServiceExtensionDescription() != null
-					&& ex.getServiceExtensionDescription().getName().equals(
-							name)) {
+				&& ex.getServiceExtensionDescription().getName().equals(name)) {
 				return ex;
 			} else if (ex.getResourcePropertyEditorExtensionDescription() != null
-					&& ex.getResourcePropertyEditorExtensionDescription()
-							.getName().equals(name)) {
+				&& ex.getResourcePropertyEditorExtensionDescription().getName().equals(name)) {
 				return ex;
 			} else if (ex.getAuthorizationExtensionDescription() != null
-					&& ex.getAuthorizationExtensionDescription()
-							.getName().equals(name)) {
+				&& ex.getAuthorizationExtensionDescription().getName().equals(name)) {
 				return ex;
 			}
 		}
 		return null;
 	}
+
 
 	public ServiceExtensionDescriptionType getServiceExtension(String name) {
 		for (int i = 0; i < serviceExtensionDescriptors.size(); i++) {
-			ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) serviceExtensionDescriptors
-					.get(i);
+			ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) serviceExtensionDescriptors.get(i);
 			if (ex.getName().equals(name)) {
 				return ex;
 			}
 		}
 		return null;
 	}
-	
+
+
 	public AuthorizationExtensionDescriptionType getAuthorizationExtension(String name) {
 		for (int i = 0; i < authorizationExtensionDescriptors.size(); i++) {
 			AuthorizationExtensionDescriptionType ex = (AuthorizationExtensionDescriptionType) authorizationExtensionDescriptors
-					.get(i);
+				.get(i);
 			if (ex.getName().equals(name)) {
 				return ex;
 			}
@@ -177,11 +206,11 @@ public class ExtensionsLoader {
 		return null;
 	}
 
-	public ResourcePropertyEditorExtensionDescriptionType getResourcePropertyEditorExtension(
-			String name) {
+
+	public ResourcePropertyEditorExtensionDescriptionType getResourcePropertyEditorExtension(String name) {
 		for (int i = 0; i < resourcePropertyEditorExtensionDescriptors.size(); i++) {
 			ResourcePropertyEditorExtensionDescriptionType ex = (ResourcePropertyEditorExtensionDescriptionType) resourcePropertyEditorExtensionDescriptors
-					.get(i);
+				.get(i);
 			if (ex.getName().equals(name)) {
 				return ex;
 			}
@@ -189,22 +218,22 @@ public class ExtensionsLoader {
 		return null;
 	}
 
-	public ServiceExtensionDescriptionType getServiceExtensionByDisplayName(
-			String displayName) {
+
+	public ServiceExtensionDescriptionType getServiceExtensionByDisplayName(String displayName) {
 		for (int i = 0; i < serviceExtensionDescriptors.size(); i++) {
-			ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) serviceExtensionDescriptors
-					.get(i);
+			ServiceExtensionDescriptionType ex = (ServiceExtensionDescriptionType) serviceExtensionDescriptors.get(i);
 			if (ex.getDisplayName().equals(displayName)) {
 				return ex;
 			}
 		}
 		return null;
 	}
+
 
 	public DiscoveryExtensionDescriptionType getDiscoveryExtension(String name) {
 		for (int i = 0; i < discoveryExtensionDescriptors.size(); i++) {
 			DiscoveryExtensionDescriptionType ex = (DiscoveryExtensionDescriptionType) discoveryExtensionDescriptors
-					.get(i);
+				.get(i);
 			if (ex.getName().equals(name)) {
 				return ex;
 			}
@@ -212,23 +241,11 @@ public class ExtensionsLoader {
 		return null;
 	}
 
-	public DiscoveryExtensionDescriptionType getDiscoveryExtensionByDisplayName(
-			String displayName) {
+
+	public DiscoveryExtensionDescriptionType getDiscoveryExtensionByDisplayName(String displayName) {
 		for (int i = 0; i < discoveryExtensionDescriptors.size(); i++) {
 			DiscoveryExtensionDescriptionType ex = (DiscoveryExtensionDescriptionType) discoveryExtensionDescriptors
-					.get(i);
-			if (ex.getDisplayName().equals(displayName)) {
-				return ex;
-			}
-		}
-		return null;
-	}
-	
-	public AuthorizationExtensionDescriptionType getAuthorizationExtensionByDisplayName(
-			String displayName) {
-		for (int i = 0; i < authorizationExtensionDescriptors.size(); i++) {
-			AuthorizationExtensionDescriptionType ex = (AuthorizationExtensionDescriptionType) authorizationExtensionDescriptors
-					.get(i);
+				.get(i);
 			if (ex.getDisplayName().equals(displayName)) {
 				return ex;
 			}
@@ -236,9 +253,23 @@ public class ExtensionsLoader {
 		return null;
 	}
 
+
+	public AuthorizationExtensionDescriptionType getAuthorizationExtensionByDisplayName(String displayName) {
+		for (int i = 0; i < authorizationExtensionDescriptors.size(); i++) {
+			AuthorizationExtensionDescriptionType ex = (AuthorizationExtensionDescriptionType) authorizationExtensionDescriptors
+				.get(i);
+			if (ex.getDisplayName().equals(displayName)) {
+				return ex;
+			}
+		}
+		return null;
+	}
+
+
 	public List getDiscoveryExtensions() {
 		return this.discoveryExtensionDescriptors;
 	}
+
 
 	public File getExtensionsDir() {
 		return extensionsDir;
