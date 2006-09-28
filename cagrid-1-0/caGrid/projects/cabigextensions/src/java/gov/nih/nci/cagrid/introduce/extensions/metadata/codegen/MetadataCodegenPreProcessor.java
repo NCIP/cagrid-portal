@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.extensions.metadata.codegen;
 
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
@@ -42,17 +43,20 @@ public class MetadataCodegenPreProcessor implements CodegenExtensionPreProcessor
 	 */
 	private String setFilename(ServiceInformation info) {
 		ServiceType mainServ = info.getServiceDescriptor().getServices().getService()[0];
-		ResourcePropertyType[] resourceProperty = mainServ.getResourcePropertiesList().getResourceProperty();
-		for (int i = 0; i < resourceProperty.length; i++) {
-			ResourcePropertyType rp = resourceProperty[i];
-			if (rp.getQName().equals(MetadataConstants.SERVICE_METADATA_QNAME)) {
-				String fileLocation = rp.getFileLocation();
-				if (fileLocation == null || fileLocation.trim().equals("")) {
-					rp.setFileLocation(DEFAULT_FILENAME);
+		ResourcePropertiesListType resourcePropertiesList = mainServ.getResourcePropertiesList();
+		if (resourcePropertiesList != null && resourcePropertiesList.getResourceProperty() != null) {
+			ResourcePropertyType[] resourceProperty = resourcePropertiesList.getResourceProperty();
+			for (int i = 0; i < resourceProperty.length; i++) {
+				ResourcePropertyType rp = resourceProperty[i];
+				if (rp.getQName().equals(MetadataConstants.SERVICE_METADATA_QNAME)) {
+					String fileLocation = rp.getFileLocation();
+					if (fileLocation == null || fileLocation.trim().equals("")) {
+						rp.setFileLocation(DEFAULT_FILENAME);
+					}
+
+					return rp.getFileLocation();
+
 				}
-
-				return rp.getFileLocation();
-
 			}
 		}
 

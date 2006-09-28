@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.extensions.metadata.codegen;
 
 import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
