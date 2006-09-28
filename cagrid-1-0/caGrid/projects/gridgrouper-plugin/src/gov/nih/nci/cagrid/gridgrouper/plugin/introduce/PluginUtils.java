@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import javax.xml.namespace.QName;
 
@@ -156,6 +157,11 @@ public class PluginUtils {
 			ps.setMethodMembershipExpression(newmethods);
 			return method;
 		}
+	}
+	
+	public static void prunePlugin(ServiceInformation info){
+		// 1) We need to be able to prune the model with the latest service model
+		// 2) We need to be able to remove the model as well
 	}
 
 }
