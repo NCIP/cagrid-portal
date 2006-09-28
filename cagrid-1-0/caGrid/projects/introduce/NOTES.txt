@@ -3,6 +3,8 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 To Do:
 
+finish wsdl based method import screen....wsdl file locator is not working right...
+
 make global preferences
 GUI needs a way to group common preferences that extensions can use (such as GME URL), intead of each having to define/use their own
 
