@@ -3,6 +3,9 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 To Do:
 
+Null Pointer...go to Metadata, add ServiceSecurityMetadata, then add CommunicationMechanism,
+	then remove ServiceSecurityMetadata, then add ServiceSecurityMetadata
+
 make global preferences
 
 (related to above)... when a method isn't found for modification, it should be re-added (in case they deleted it)
