@@ -136,6 +136,7 @@ public class GridGrouperMethodPanel extends AbstractMethodAuthorizationPanel {
 		MethodMembershipExpression membership = PluginUtils
 				.getAddMethodMembershipExpression(ps, getMethod());
 		membership.setMembershipExpression(exp);
+		System.out.println(ps.getServiceName());
 	}
 
 }

@@ -225,7 +225,7 @@ public class ModifyService extends JDialog {
 					service.getService().setNamespace(namespaceTextField.getText());
 					service.getService().setPackageName(servicePackageNameTextField.getText());
 					try {
-						service.getService().setServiceSecurity(getSecurityPanel().getServiceSecurity());
+						service.getService().setServiceSecurity(getSecurityPanel().getServiceSecurity(true));
 					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(ModifyService.this, e1.getMessage());
 						return;

@@ -27,7 +27,6 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.properties.ServicePropertiesTable;
@@ -684,7 +683,7 @@ public class ModificationViewer extends GridPortalComponent {
 		boolean update = false;
 		ServiceSecurity service = info.getServices().getService(0)
 				.getServiceSecurity();
-		ServiceSecurity curr = securityPanel.getServiceSecurity();
+		ServiceSecurity curr = securityPanel.getServiceSecurity(false);
 		// This should be cleaned up some
 		if ((service == null) && (curr == null)) {
 			update = false;
@@ -1422,7 +1421,7 @@ public class ModificationViewer extends GridPortalComponent {
 						}
 						//ExtensionTools.removeAuthorizationServiceExtensios(info);
 						info.getServices().getService(0).setServiceSecurity(
-								securityPanel.getServiceSecurity());
+								securityPanel.getServiceSecurity(true));
 
 						// check the methods to make sure they are valid.......
 						if (info.getServices() != null

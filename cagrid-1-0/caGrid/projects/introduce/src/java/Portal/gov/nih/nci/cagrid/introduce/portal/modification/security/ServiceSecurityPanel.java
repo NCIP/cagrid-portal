@@ -307,7 +307,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 	}
 
-	public ServiceSecurity getServiceSecurity() throws Exception {
+	public ServiceSecurity getServiceSecurity(boolean isSave) throws Exception {
 
 		if (customButton.isSelected()) {
 			ServiceSecurity ss = new ServiceSecurity();
@@ -373,7 +373,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 			AbstractServiceAuthorizationPanel auth = (AbstractServiceAuthorizationPanel) authPanels
 					.get((String) authorizationMechanism.getSelectedItem());
-			if (auth != null) {
+			if ((auth != null) && (isSave)){
 				auth.save();
 			}
 			return ss;
