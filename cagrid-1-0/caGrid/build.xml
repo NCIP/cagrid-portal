@@ -258,6 +258,8 @@
         	<artifact refid="dorian.jars"/>
             <artifact refid="core.jars"/>
             <artifact refid="common.test.jars"/>
+        	<artifact refid="common.metadata.jars" />
+        	<artifact refid="data.metadata.jars" />
             <artifact refid="test.coverage.jars"/>
             <artifact refid="core.test.jars"/>
             <artifact refid="core.resources"/>
