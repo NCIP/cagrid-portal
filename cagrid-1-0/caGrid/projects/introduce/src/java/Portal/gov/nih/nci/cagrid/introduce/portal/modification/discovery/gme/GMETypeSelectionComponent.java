@@ -112,7 +112,8 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 							String filename = importInfo.getFileName();
 							File schemaFile = new File(schemaDestinationDir.getAbsolutePath() + File.separator + filename);
 							NamespaceType type = CommonTools.createNamespaceType(schemaFile.getAbsolutePath());
-							type.setLocation("./" + schemaFile.getName());
+							String relPath = Utils.getRelativePath(schemaDestinationDir, schemaFile);
+							type.setLocation(relPath);
 							namespaces.add(type);
 						}
 					}
