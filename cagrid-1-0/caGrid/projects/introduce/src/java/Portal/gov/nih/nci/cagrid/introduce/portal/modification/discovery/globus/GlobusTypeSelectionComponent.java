@@ -40,7 +40,7 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 	public GlobusTypeSelectionComponent(DiscoveryExtensionDescriptionType descriptor) {
 		super(descriptor);
 		initialize();
-		this.getGmePanel().discoverFromGlobus();
+		this.getGlobusPanel().discoverFromGlobus();
 	}
 
 
@@ -57,7 +57,7 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 		gridBagConstraints4.weighty = 1.0D;
 		gridBagConstraints4.gridx = 0;
 		this.setLayout(new GridBagLayout());
-		this.add(getGmePanel(), gridBagConstraints4);
+		this.add(getGlobusPanel(), gridBagConstraints4);
 	}
 
 
@@ -66,7 +66,7 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private GlobusConfigurationPanel getGmePanel() {
+	private GlobusConfigurationPanel getGlobusPanel() {
 		if (globusPanel == null) {
 			globusPanel = new GlobusConfigurationPanel();
 		}
@@ -74,41 +74,39 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 	}
 
 
-	public NamespaceType createNamespaceType(File schemaDestinationDir) {
+	public NamespaceType[] createNamespaceType(File schemaDestinationDir) {
 		NamespaceType input = new NamespaceType();
 		try {
-			// set the package name
-
-			if (this.globusPanel.currentNamespace != null) {
-				input.setNamespace(this.globusPanel.currentNamespace);
+			String currentNamespace = getGlobusPanel().currentNamespace;
+			File currentSchemaFile = getGlobusPanel().currentSchemaFile;
+			
+			// set the namespace
+			if (currentNamespace != null) {
+				input.setNamespace(currentNamespace);
 			} else {
 				return null;
 			}
-
-			if (this.globusPanel.currentSchemaFile != null) {
-				IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-					IntroducePortalConf.RESOURCE);
-				int index = globusPanel.currentSchemaFile.getAbsolutePath().indexOf(
+			
+			if (currentSchemaFile != null) {
+				IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance()
+					.getResource(IntroducePortalConf.RESOURCE);
+				int index = currentSchemaFile.getAbsolutePath().indexOf(
 					conf.getGlobusLocation() + File.separator + "share" + File.separator + "schema" + File.separator)
 					+ new String(conf.getGlobusLocation() + "share" + File.separator + "schema" + File.separator)
 						.length();
-				String location = ".."
-					+ File.separator
-					+ globusPanel.currentSchemaFile.getAbsolutePath().substring(index + 1,
-						globusPanel.currentSchemaFile.getAbsolutePath().length());
+				String location = ".." + File.separator + currentSchemaFile.getAbsolutePath()
+					.substring(index + 1, currentSchemaFile.getAbsolutePath().length());
 				input.setLocation(location);
-				gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(input, XMLUtilities
-					.fileNameToDocument(globusPanel.currentSchemaFile.getAbsolutePath()));
+				gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(
+					input, XMLUtilities.fileNameToDocument(currentSchemaFile.getAbsolutePath()));
+				return new NamespaceType[] {input};
 			} else {
 				return null;
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
-
-		return input;
 	}
 
 
@@ -127,10 +125,12 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 			JButton createButton = new JButton("Test Create");
 			createButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					NamespaceType createdNs = panel.createNamespaceType(new File("."));
+					NamespaceType[] createdNs = panel.createNamespaceType(new File("."));
 					if (createdNs != null) {
-						System.out.println("Created Namespace:" + createdNs.getNamespace() + " at location:"
-							+ createdNs.getLocation());
+						for (int i = 0; i < createdNs.length; i++) {
+							System.out.println("Created Namespace:" + createdNs[i].getNamespace() 
+								+ " at location:" + createdNs[i].getLocation());
+						}
 					} else {
 						System.out.println("Problem creating namespace");
 					}

@@ -18,6 +18,8 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -97,9 +99,10 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 	}
 
 
-	public NamespaceType createNamespaceType(File schemaDestinationDir) {
-		NamespaceType input = new NamespaceType();
+	public NamespaceType[] createNamespaceType(File schemaDestinationDir) {
 		try {
+			List namespaceTypes = new ArrayList();
+			NamespaceType rootNamespace = new NamespaceType();
 			String ns = getNsTextField().getText();
 			if (ns.equals("") || ns.equals("unavailable")) {
 				return null;
@@ -145,23 +148,40 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 			// set the package name
 			String packageName = CommonTools.getPackageName(namespace);
-			input.setPackageName(packageName);
+			rootNamespace.setPackageName(packageName);
 
-			input.setNamespace(namespace.getRaw());
+			rootNamespace.setNamespace(namespace.getRaw());
 			ImportInfo ii = new ImportInfo(namespace);
-			input.setLocation("./" + ii.getFileName());
-
+			rootNamespace.setLocation("./" + ii.getFileName());
+			
 			// popualte the schema elements
-			gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(input, XMLUtilities
+			gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(rootNamespace, XMLUtilities
 				.stringToDocument(schemaContents));
+			namespaceTypes.add(rootNamespace);
 			// write the schema and its imports to the filesystem
-			getGME().cacheSchema(namespace, schemaDestinationDir);
+			List writtenNamespaces = getGME().cacheSchema(namespace, schemaDestinationDir);
+			Iterator nsIter = writtenNamespaces.iterator();
+			while (nsIter.hasNext()) {
+				Namespace importedNamesapce = (Namespace) nsIter.next();
+				if (!importedNamesapce.getRaw().equals(rootNamespace.getNamespace())) {
+					ImportInfo imp = new ImportInfo(importedNamesapce);
+					String filename = imp.getFileName();
+					// create a namespace type from the imported schema
+					String fullSchemaName = schemaDestinationDir.getAbsolutePath() + File.separator + filename;
+					NamespaceType type = CommonTools.createNamespaceType(fullSchemaName);
+					// fix the location to be relative to the root schema
+					type.setLocation("./" + filename);
+					namespaceTypes.add(type);					
+				}				
+			}
+			
+			NamespaceType[] nsTypeArray = new NamespaceType[namespaceTypes.size()];
+			namespaceTypes.toArray(nsTypeArray);
+			return nsTypeArray;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
-
-		return input;
 	}
 
 
@@ -221,6 +241,23 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 		}
 		return nsTextField;
 	}
+	
+	
+	public void handlePackageSelection(UMLPackageMetadata pkg) {
+		//TODO: when caDSR supports mappings.. look up the schema here
+		
+		Project proj = getCaDSRPanel().getSelectedProject();
+		if (proj != null) {
+			// TODO: need to get Context
+			String version = proj.getVersion();
+			if (version.indexOf(".") < 0) {
+				version += ".0";
+			}
+			getNsTextField().setText("gme://" + proj.getShortName() + ".caBIG/" + version + "/" + pkg.getName());
+		} else {
+			getNsTextField().setText("unavailable");
+		}
+	}
 
 
 	public static void main(String[] args) {
@@ -238,10 +275,12 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 			JButton createButton = new JButton("Test Create");
 			createButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					NamespaceType createdNs = panel.createNamespaceType(new File("."));
+					NamespaceType[] createdNs = panel.createNamespaceType(new File("."));
 					if (createdNs != null) {
-						System.out.println("Created Namespace:" + createdNs.getNamespace() + " at location:"
-							+ createdNs.getLocation());
+						for (int i = 0; i < createdNs.length; i++) {
+							System.out.println("Created Namespace:" + createdNs[i].getNamespace() + " at location:"
+								+ createdNs[i].getLocation());
+						}
 					} else {
 						System.out.println("Problem creating namespace");
 					}
@@ -255,22 +294,4 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 			e.printStackTrace();
 		}
 	}
-
-
-	public void handlePackageSelection(UMLPackageMetadata pkg) {
-		//TODO: when caDSR supports mappings.. look up the schema here
-		
-		Project proj = getCaDSRPanel().getSelectedProject();
-		if (proj != null) {
-			// TODO: need to get Context
-			String version = proj.getVersion();
-			if (version.indexOf(".") < 0) {
-				version += ".0";
-			}
-			getNsTextField().setText("gme://" + proj.getShortName() + ".caBIG/" + version + "/" + pkg.getName());
-		} else {
-			getNsTextField().setText("unavailable");
-		}
-	}
-
 }

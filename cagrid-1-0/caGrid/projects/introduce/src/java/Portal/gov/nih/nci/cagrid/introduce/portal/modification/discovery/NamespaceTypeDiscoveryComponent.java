@@ -22,6 +22,6 @@ public abstract class NamespaceTypeDiscoveryComponent extends JPanel {
 	}
 
 
-	public abstract NamespaceType createNamespaceType(File schemaDestinationDir);
+	public abstract NamespaceType[] createNamespaceType(File schemaDestinationDir);
 
 }

@@ -56,6 +56,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -290,8 +291,8 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 	}
 
-	public void reInitialize(File methodsDirectory) throws Exception {
-		this.methodsDirectory = methodsDirectory;
+	public void reInitialize(File serviceDir) throws Exception {
+		this.methodsDirectory = serviceDir;
 		this.initialize();
 		this.reInitializeGUI();
 	}
@@ -1108,61 +1109,56 @@ public class ModificationViewer extends GridPortalComponent {
 			namespaceAddButton = new JButton();
 			namespaceAddButton.setText("Add");
 			namespaceAddButton.setIcon(PortalLookAndFeel.getAddIcon());
-			namespaceAddButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							NamespaceType type = ((NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane()
-									.getSelectedComponent())
-									.createNamespaceType(new File(
-											methodsDirectory
-													+ File.separator
-													+ "schema"
-													+ File.separator
-													+ info
-															.getIntroduceServiceProperties()
-															.getProperty(
-																	IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME)));
-							if (type != null) {
-								if (CommonTools.getNamespaceType(info
-										.getNamespaces(), type.getNamespace()) != null) {
-									JOptionPane
-											.showMessageDialog(
-													ModificationViewer.this,
-													"This namespace already exists, it was reloaded");
-
-									if (info.getNamespaces() != null
-											&& info.getNamespaces()
-													.getNamespace() != null) {
-										for (int namespaceI = 0; namespaceI < info
-												.getNamespaces().getNamespace().length; namespaceI++) {
-											NamespaceType tempType = info
-													.getNamespaces()
-													.getNamespace()[namespaceI];
-											if (tempType.getNamespace().equals(
-													type.getNamespace())) {
-												info.getNamespaces()
-														.getNamespace()[namespaceI] = type;
-												break;
-											}
-										}
-
-									}
-
-									getNamespaceJTree().setNamespaces(
-											info.getNamespaces());
-								} else {
-									getNamespaceJTree().addNode(type);
-								}
-							} else {
-								JOptionPane.showMessageDialog(
-										ModificationViewer.this,
-										"Error retrieving schema.");
+			namespaceAddButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					File schemaDir = new File(methodsDirectory + File.separator + "schema"
+						+ File.separator + info.getIntroduceServiceProperties().getProperty(
+							IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+					NamespaceTypeDiscoveryComponent discoveryComponent = 
+						(NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane().getSelectedComponent();
+					NamespaceType[] types = discoveryComponent.createNamespaceType(schemaDir);
+					List messages = new ArrayList(); 
+					if (types != null) {
+						for (int i = 0; i < types.length; i++) {
+							NamespaceType currentType = types[i];
+							if (CommonTools.getNamespaceType(
+								info.getNamespaces(), currentType.getNamespace()) != null) {
+								// namespace type already exists in service
+								messages.add("The namespace " + types[i].getNamespace() 
+									+ " already exists, it was reloaded");
 							}
 						}
-					});
+						
+						NamespacesType namespaces = info.getNamespaces();
+						if (namespaces == null) {
+							namespaces = new NamespacesType();
+						}
+						NamespaceType[] currentNamespaces = namespaces.getNamespace();
+						if (currentNamespaces == null) {
+							currentNamespaces = types;
+						} else {
+							// merge discovered namespaces into existing namespaces
+							currentNamespaces = mergeNamespaceArrays(currentNamespaces, types);
+						}
+						namespaces.setNamespace(currentNamespaces);
+						info.setNamespaces(namespaces);
+						
+						// reload the types tree
+						getNamespaceJTree().setNamespaces(info.getNamespaces());
+					} else {
+						JOptionPane.showMessageDialog(ModificationViewer.this, "Error retrieving schema.");
+					}
+					if (messages.size() != 0) {
+						String[] msg = new String[messages.size()];
+						messages.toArray(msg);
+						JOptionPane.showMessageDialog(ModificationViewer.this, msg);
+					}
+				}
+			});
 		}
 		return namespaceAddButton;
 	}
+	
 
 	/**
 	 * This method initializes namespaceRemoveButton
@@ -1921,5 +1917,26 @@ public class ModificationViewer extends GridPortalComponent {
 			propertyIsFromETCCheckBox.setText("is value a relative file path from the service's ETC location?");
 		}
 		return propertyIsFromETCCheckBox;
+	}
+	
+	
+	private NamespaceType[] mergeNamespaceArrays(NamespaceType[] current, NamespaceType[] additional) {
+		Set additionalNamespaces = new HashSet();
+		for (int i = 0; i < additional.length; i++) {
+			additionalNamespaces.add(additional[i].getNamespace());
+		}
+		List merged = new ArrayList();
+		Collections.addAll(merged, additional);
+		if (current.length != 0) {
+			for (int i = 0; i < current.length; i++) {
+				String currentNamespace = current[i].getNamespace();
+				if (!additionalNamespaces.contains(currentNamespace)) {
+					merged.add(current[i]);
+				}
+			}
+		}
+		NamespaceType[] mergedArray = new NamespaceType[merged.size()];
+		merged.toArray(mergedArray);
+		return mergedArray;
 	}
 }

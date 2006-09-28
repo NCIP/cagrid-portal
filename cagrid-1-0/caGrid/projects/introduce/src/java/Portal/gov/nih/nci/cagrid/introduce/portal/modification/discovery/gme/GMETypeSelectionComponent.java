@@ -16,6 +16,9 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -77,51 +80,63 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 	private GMESchemaLocatorPanel getGmePanel() {
 		if (gmePanel == null) {
 			gmePanel = new GMESchemaLocatorPanel(ExtensionTools.getProperty(getDescriptor().getProperties(),
-				GMETypeSelectionComponent.GME_URL),false);
+				GMETypeSelectionComponent.GME_URL), false);
 		}
 		return gmePanel;
 	}
 
 
-	public NamespaceType createNamespaceType(File schemaDestinationDir) {
-		NamespaceType input = new NamespaceType();
-		try {
-			Namespace selectedNS = gmePanel.getSelectedSchemaNamespace();
-			if (selectedNS != null) {
-				// set the package name
-				String packageName = CommonTools.getPackageName(selectedNS);
-				input.setPackageName(packageName);
-				input.setNamespace(selectedNS.getRaw());
-				ImportInfo ii = new ImportInfo(selectedNS);
-				input.setLocation("./" + ii.getFileName());
-
-				gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(input, XMLUtilities
-					.stringToDocument(gmePanel.currentNode.getSchemaContents()));
-				cacheSchema(schemaDestinationDir, input.getNamespace());
-			} else {
+	public NamespaceType[] createNamespaceType(File schemaDestinationDir) {
+		Namespace selectedNS = getGmePanel().getSelectedSchemaNamespace();
+		if (!selectedNS.getRaw().equals(IntroduceConstants.W3CNAMESPACE)) {
+			try {
+				if (selectedNS != null) {
+					List namespaces = new ArrayList();
+					NamespaceType root = new NamespaceType();
+					// set the package name
+					String packageName = CommonTools.getPackageName(selectedNS);
+					root.setPackageName(packageName);
+					root.setNamespace(selectedNS.getRaw());
+					ImportInfo ii = new ImportInfo(selectedNS);
+					root.setLocation("./" + ii.getFileName());
+					namespaces.add(root);
+					
+					gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(
+						root, XMLUtilities.stringToDocument(gmePanel.currentNode.getSchemaContents()));
+					List importedNamespaces = cacheSchema(schemaDestinationDir, root.getNamespace());
+					Iterator importedNsIter = importedNamespaces.iterator();
+					while (importedNsIter.hasNext()) {
+						Namespace ns = (Namespace) importedNsIter.next();
+						if (!ns.getRaw().equals(root.getNamespace())) {
+							ImportInfo importInfo = new ImportInfo(ns);
+							String filename = importInfo.getFileName();
+							File schemaFile = new File(schemaDestinationDir.getAbsolutePath() + File.separator + filename);
+							NamespaceType type = CommonTools.createNamespaceType(schemaFile.getAbsolutePath());
+							type.setLocation("./" + schemaFile.getName());
+							namespaces.add(type);
+						}
+					}
+					NamespaceType[] types = new NamespaceType[namespaces.size()];
+					namespaces.toArray(types);
+					return types;
+				} else {
+					return null;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 				return null;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+		} else {
+			return new NamespaceType[0];
 		}
-
-		return input;
 	}
+	
 
-
-	private void cacheSchema(File dir, String namespace) throws Exception {
-		if (namespace.equals(IntroduceConstants.W3CNAMESPACE)) {
-			// this is "natively supported" so we don't need to cache it
-			return;
-		}
-
+	private List cacheSchema(File dir, String namespace) throws Exception {
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-
 		XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
 			ExtensionTools.getProperty(getDescriptor().getProperties(), GMETypeSelectionComponent.GME_URL));
-		handle.cacheSchema(new Namespace(namespace), dir);
-
+		return handle.cacheSchema(new Namespace(namespace), dir);
 	}
 
 
@@ -140,10 +155,12 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 			JButton createButton = new JButton("Test Create");
 			createButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					NamespaceType createdNs = panel.createNamespaceType(new File("."));
+					NamespaceType[] createdNs = panel.createNamespaceType(new File("."));
 					if (createdNs != null) {
-						System.out.println("Created Namespace:" + createdNs.getNamespace() + " at location:"
-							+ createdNs.getLocation());
+						for (int i = 0; i < createdNs.length; i++) {
+							System.out.println("Created Namespace:" + createdNs[i].getNamespace() + " at location:"
+								+ createdNs[i].getLocation());
+						}
 					} else {
 						System.out.println("Problem creating namespace");
 					}
