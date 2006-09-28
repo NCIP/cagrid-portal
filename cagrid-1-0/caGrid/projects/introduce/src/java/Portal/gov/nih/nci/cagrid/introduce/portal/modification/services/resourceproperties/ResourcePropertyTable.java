@@ -110,7 +110,7 @@ public class ResourcePropertyTable extends PortalBaseTable {
 	public void removeSelectedRow() throws Exception {
 		int row = getSelectedRow();
 		if ((row < 0) || (row >= getRowCount())) {
-			throw new Exception("invalid row");
+			return;
 		}
 		int oldSelectedRow = getSelectedRow();
 		((DefaultTableModel) getModel()).removeRow(oldSelectedRow);
@@ -120,7 +120,6 @@ public class ResourcePropertyTable extends PortalBaseTable {
 		if (getRowCount() > 0) {
 			setRowSelectionInterval(oldSelectedRow - 1, oldSelectedRow - 1);
 		}
-		repaint();
 	}
 	
 

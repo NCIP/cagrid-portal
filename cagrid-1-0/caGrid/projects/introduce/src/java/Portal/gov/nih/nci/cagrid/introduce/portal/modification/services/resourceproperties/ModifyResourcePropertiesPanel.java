@@ -214,7 +214,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 				public void tableChanged(TableModelEvent e) {
 
 					try {
-						if (resourcePropertiesTable.getSelectedRow() >= 0) {
+
+						if (e.getType() != TableModelEvent.DELETE && resourcePropertiesTable.getSelectedRow() >= 0) {
 							if (resourcePropertiesTable.getRowData(resourcePropertiesTable.getSelectedRow())
 								.isPopulateFromFile()) {
 								getEditInstanceButton().setEnabled(true);
@@ -381,21 +382,21 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 						resource = getResourcePropertiesTable().getRowData(
 							getResourcePropertiesTable().getSelectedRow());
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					int row = getResourcePropertiesTable().getSelectedRow();
-					if ((row < 0) || (row >= getResourcePropertiesTable().getRowCount())) {
 						PortalUtils.showErrorMessage("Please select a metdata type to remove.");
 						return;
 					}
-					getResourcePropertiesTable().removeRow(getResourcePropertiesTable().getSelectedRow());
+					try {
+						getResourcePropertiesTable().removeSelectedRow();
+					} catch (Exception e1) {
+						PortalUtils.showErrorMessage("Please select a metdata type to remove.");
+						return;
+					}
 					// remove from resource properties list
 					ResourcePropertyType[] metadatas;
 					int newLength = properties.getResourceProperty().length - 1;
 					metadatas = new ResourcePropertyType[newLength];
 					int resourcesCount = 0;
-					for (int i = 0; i < newLength; i++) {
+					for (int i = 0; i < properties.getResourceProperty().length; i++) {
 						ResourcePropertyType oldResource = properties.getResourceProperty(i);
 						if (!resource.equals(oldResource)) {
 							metadatas[resourcesCount++] = oldResource;
