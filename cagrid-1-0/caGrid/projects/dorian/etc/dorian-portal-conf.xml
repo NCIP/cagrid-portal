@@ -52,6 +52,13 @@
 			</idp>
 			
 			<idp name="Ohio State University" authPanelClass="edu.osu.idp.ui.OSUIdPAuthenticationPanel"/>
+			
+			<idp name="Ohio State University Authentication Service" authPanelClass="gov.nih.nci.cagrid.dorian.ui.ifs.AuthenticationServicePanel">
+				<parameters>
+					<parameter name="serviceId" value="https://140.254.80.114:8443/wsrf/services/cagrid/AuthenticationService"/>
+				</parameters>
+			</idp>
+			
 			<idp name="Dorian [localhost] IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ui.ifs.AuthenticationServicePanel">
 				<parameters>
 					<parameter name="serviceId" value="https://localhost:8443/wsrf/services/cagrid/Dorian"/>

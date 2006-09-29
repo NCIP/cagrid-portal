@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.authentication.client;
+package gov.nih.nci.cagrid.authentication.common;
 
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 

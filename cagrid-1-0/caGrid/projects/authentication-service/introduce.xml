@@ -87,21 +87,29 @@
       <ns4:Exception name="InsufficientAttributeFault" qname="ns10:InsufficientAttributeFault" xmlns:ns10="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
       <ns4:Exception name="AuthenticationProviderFault" qname="ns11:AuthenticationProviderFault" xmlns:ns11="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
      </ns4:Exceptions>
+     <ns12:MethodSecurity xsi:type="ns12:MethodSecurity" xmlns:ns12="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns12:SecuritySetting xsi:type="ns12:SecuritySetting">Custom</ns12:SecuritySetting>
+      <ns12:TransportLevelSecurity xsi:type="ns12:TransportLevelSecurity">
+       <ns12:CommunicationMethod xsi:type="ns12:CommunicationMethod">Privacy</ns12:CommunicationMethod>
+      </ns12:TransportLevelSecurity>
+      <ns12:RunAsMode xsi:type="ns12:RunAsMode">System</ns12:RunAsMode>
+      <ns12:AnonymousClients xsi:type="ns12:AnonymousCommunication">Yes</ns12:AnonymousClients>
+     </ns12:MethodSecurity>
     </ns4:Method>
    </ns4:Methods>
-   <ns12:ResourcePropertiesList xsi:type="ns12:ResourcePropertiesListType" xmlns:ns12="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
-   <ns13:ServiceSecurity xsi:type="ns13:ServiceSecurity" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns13:SecuritySetting xsi:type="ns13:SecuritySetting">Custom</ns13:SecuritySetting>
-    <ns13:TransportLevelSecurity xsi:type="ns13:TransportLevelSecurity">
-     <ns13:CommunicationMethod xsi:type="ns13:CommunicationMethod">Privacy</ns13:CommunicationMethod>
-    </ns13:TransportLevelSecurity>
-    <ns13:RunAsMode xsi:type="ns13:RunAsMode">System</ns13:RunAsMode>
-    <ns13:AnonymousClients xsi:type="ns13:AnonymousCommunication">No</ns13:AnonymousClients>
-    <ns13:ServiceAuthorization xsi:type="ns13:ServiceAuthorization">
-     <ns13:NoAuthorization xsi:type="ns13:NoAuthorization"/>
-    </ns13:ServiceAuthorization>
-   </ns13:ServiceSecurity>
+   <ns13:ResourcePropertiesList xsi:type="ns13:ResourcePropertiesListType" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns14:ServiceSecurity xsi:type="ns14:ServiceSecurity" xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns14:SecuritySetting xsi:type="ns14:SecuritySetting">Custom</ns14:SecuritySetting>
+    <ns14:TransportLevelSecurity xsi:type="ns14:TransportLevelSecurity">
+     <ns14:CommunicationMethod xsi:type="ns14:CommunicationMethod">Privacy</ns14:CommunicationMethod>
+    </ns14:TransportLevelSecurity>
+    <ns14:RunAsMode xsi:type="ns14:RunAsMode">System</ns14:RunAsMode>
+    <ns14:AnonymousClients xsi:type="ns14:AnonymousCommunication">No</ns14:AnonymousClients>
+    <ns14:ServiceAuthorization xsi:type="ns14:ServiceAuthorization">
+     <ns14:NoAuthorization xsi:type="ns14:NoAuthorization"/>
+    </ns14:ServiceAuthorization>
+   </ns14:ServiceSecurity>
   </ns3:Service>
  </ns3:Services>
- <ns14:Extensions xsi:type="ns14:ExtensionsType" xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns15:Extensions xsi:type="ns15:ExtensionsType" xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
 </ns1:ServiceDescription>

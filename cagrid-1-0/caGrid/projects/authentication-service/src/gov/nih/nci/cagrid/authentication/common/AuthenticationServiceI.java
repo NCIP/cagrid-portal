@@ -10,14 +10,7 @@ import java.rmi.RemoteException;
  */
 public interface AuthenticationServiceI {
 
-    public gov.nih.nci.cagrid.authentication.bean.SAMLAssertion authenticate(
-	    gov.nih.nci.cagrid.authentication.bean.Credential credential)
-	    throws RemoteException,
-	    gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault,
-	    gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault,
-	    gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault;
-
-    public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata()
-	    throws RemoteException;
+public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
+public gov.nih.nci.cagrid.authentication.bean.SAMLAssertion authenticate(gov.nih.nci.cagrid.authentication.bean.Credential credential) throws RemoteException, gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault, gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault, gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault ;
 
 }

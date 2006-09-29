@@ -274,27 +274,35 @@
       <ns4:Exception name="InsufficientAttributeFault" qname="ns77:InsufficientAttributeFault" xmlns:ns77="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
       <ns4:Exception name="AuthenticationProviderFault" qname="ns78:AuthenticationProviderFault" xmlns:ns78="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
      </ns4:Exceptions>
+     <ns79:MethodSecurity xsi:type="ns79:MethodSecurity" xmlns:ns79="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns79:SecuritySetting xsi:type="ns79:SecuritySetting">Custom</ns79:SecuritySetting>
+      <ns79:TransportLevelSecurity xsi:type="ns79:TransportLevelSecurity">
+       <ns79:CommunicationMethod xsi:type="ns79:CommunicationMethod">Privacy</ns79:CommunicationMethod>
+      </ns79:TransportLevelSecurity>
+      <ns79:RunAsMode xsi:type="ns79:RunAsMode">System</ns79:RunAsMode>
+      <ns79:AnonymousClients xsi:type="ns79:AnonymousCommunication">Yes</ns79:AnonymousClients>
+     </ns79:MethodSecurity>
      <ns4:ImportInformation namespace="http://cagrid.nci.nih.gov/AuthenticationService" packageName="gov.nih.nci.cagrid.authentication" portTypeName="AuthenticationServicePortType" wsdlFile="./AuthenticationService.wsdl"/>
     </ns4:Method>
    </ns4:Methods>
-   <ns79:ResourcePropertiesList xsi:type="ns79:ResourcePropertiesListType" xmlns:ns79="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns79:ResourceProperty qName="ns80:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns79:ResourcePropertyType" xmlns:ns80="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns79:ResourcePropertiesList>
-   <ns81:ServiceSecurity xsi:type="ns81:ServiceSecurity" xmlns:ns81="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns81:SecuritySetting xsi:type="ns81:SecuritySetting">Custom</ns81:SecuritySetting>
-    <ns81:TransportLevelSecurity xsi:type="ns81:TransportLevelSecurity">
-     <ns81:CommunicationMethod xsi:type="ns81:CommunicationMethod">Privacy</ns81:CommunicationMethod>
-    </ns81:TransportLevelSecurity>
-    <ns81:RunAsMode xsi:type="ns81:RunAsMode">System</ns81:RunAsMode>
-    <ns81:AnonymousClients xsi:type="ns81:AnonymousCommunication">No</ns81:AnonymousClients>
-    <ns81:ServiceAuthorization xsi:type="ns81:ServiceAuthorization">
-     <ns81:NoAuthorization xsi:type="ns81:NoAuthorization"/>
-    </ns81:ServiceAuthorization>
-   </ns81:ServiceSecurity>
+   <ns80:ResourcePropertiesList xsi:type="ns80:ResourcePropertiesListType" xmlns:ns80="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns80:ResourceProperty qName="ns81:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns80:ResourcePropertyType" xmlns:ns81="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns80:ResourcePropertiesList>
+   <ns82:ServiceSecurity xsi:type="ns82:ServiceSecurity" xmlns:ns82="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns82:SecuritySetting xsi:type="ns82:SecuritySetting">Custom</ns82:SecuritySetting>
+    <ns82:TransportLevelSecurity xsi:type="ns82:TransportLevelSecurity">
+     <ns82:CommunicationMethod xsi:type="ns82:CommunicationMethod">Privacy</ns82:CommunicationMethod>
+    </ns82:TransportLevelSecurity>
+    <ns82:RunAsMode xsi:type="ns82:RunAsMode">System</ns82:RunAsMode>
+    <ns82:AnonymousClients xsi:type="ns82:AnonymousCommunication">No</ns82:AnonymousClients>
+    <ns82:ServiceAuthorization xsi:type="ns82:ServiceAuthorization">
+     <ns82:NoAuthorization xsi:type="ns82:NoAuthorization"/>
+    </ns82:ServiceAuthorization>
+   </ns82:ServiceSecurity>
   </ns3:Service>
  </ns3:Services>
- <ns82:Extensions xsi:type="ns82:ExtensionsType" xmlns:ns82="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns82:Extension name="cagrid_metadata" xsi:type="ns82:ExtensionType"/>
- </ns82:Extensions>
- <ns83:ServiceProperties xmlns:ns83="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
+ <ns83:Extensions xsi:type="ns83:ExtensionsType" xmlns:ns83="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns83:Extension name="cagrid_metadata" xsi:type="ns83:ExtensionType"/>
+ </ns83:Extensions>
+ <ns84:ServiceProperties xmlns:ns84="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
 </ns1:ServiceDescription>

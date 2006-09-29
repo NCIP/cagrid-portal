@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.authentication.client;
 
 import gov.nih.nci.cagrid.authentication.bean.Credential;
+import gov.nih.nci.cagrid.authentication.common.SAMLUtils;
 import gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault;
 import gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault;
 import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
