@@ -80,7 +80,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/ant-contrib.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/client-no-ehcache.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
