@@ -83,7 +83,7 @@ public class DomainModelTypeTraverser implements TypeTraverser {
 		if (umlAttributes != null) {
 			for (int i = 0; i < umlAttributes.length; i++) {
 				String name = umlAttributes[i].getName();
-				String datatype = umlAttributes[i].getValueDomain().getDatatypeName();
+				String datatype = umlAttributes[i].getDataTypeName();
 				AttributeType attrib = new AttributeType(name, datatype);
 				attributes.add(attrib);
 			}

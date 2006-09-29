@@ -1,20 +1,43 @@
 <?xml version="1.0"?>
-<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
-	xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
-	xmlns:cadsr="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" elementFormDefault="qualified">
-		
-	<xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
-		schemaLocation="../cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
-	<xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"
-		schemaLocation="../cadsr/3.0_gov.nih.nci.cadsr.domain.xsd"/>
-		
+<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" elementFormDefault="qualified">
+	<xs:element name="Enumeration" type="com:Enumeration"/>
+	<xs:complexType name="Enumeration">
+		<xs:sequence>
+			<xs:element ref="com:SemanticMetadata" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="permissibleValue" use="required" type="xs:string"/>
+		<xs:attribute name="valueMeaning" use="required" type="xs:string"/>
+	</xs:complexType>
+	<xs:element name="ValueDomain" type="com:ValueDomain"/>
+	<xs:complexType name="ValueDomain">
+		<xs:sequence>
+			<xs:element ref="com:SemanticMetadata" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="enumerationCollection">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="com:Enumeration" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="longName" use="required" type="xs:string"/>
+		<xs:attribute name="unitOfMeasure" use="optional" type="xs:string"/>
+	</xs:complexType>
+	<xs:element name="SemanticMetadata" type="com:SemanticMetadata"/>
+	<xs:complexType name="SemanticMetadata">
+		<xs:sequence/>
+		<xs:attribute name="conceptCode" use="required" type="xs:string"/>
+		<xs:attribute name="conceptDefinition" use="required" type="xs:string"/>
+		<xs:attribute name="conceptName" use="required" type="xs:string"/>
+		<xs:attribute name="order" use="optional" type="xs:int"/>
+		<xs:attribute name="orderLevel" use="optional" type="xs:int"/>
+	</xs:complexType>
 	<xs:element name="PointOfContact" type="com:PointOfContact"/>
 	<xs:complexType name="PointOfContact">
 		<xs:annotation>
-			<xs:documentation>For the static model, instances of these should be the POCs associated with the design and
-				implementation of the service itself (not deployments of it, e.g. not system support staff) The "role"
-				attribute should probably be an enumeration of known types</xs:documentation>
+			<xs:documentation>For the static model, instances of these should be the POCs associated with the design and implementation of the service itself (not deployments of it, e.g. not system support staff)
+
+The "role" attribute should probably be an enumeration of known types</xs:documentation>
 		</xs:annotation>
 		<xs:sequence/>
 		<xs:attribute name="affiliation" use="required" type="xs:string"/>
@@ -27,7 +50,9 @@
 	<xs:element name="UMLClass" type="com:UMLClass"/>
 	<xs:complexType name="UMLClass">
 		<xs:annotation>
-			<xs:documentation>caDSR-related Represents the UML Class of the given input or output.</xs:documentation>
+			<xs:documentation>caDSR-related
+
+Represents the UML Class of the given input or output.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="umlAttributeCollection">
@@ -37,20 +62,13 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="semanticMetadataCollection">
-				<xs:complexType>
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element ref="uml:SemanticMetadata" minOccurs="1" maxOccurs="unbounded"/>
-					</xs:choice>
-				</xs:complexType>
-			</xs:element>
+			<xs:element ref="com:SemanticMetadata" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="className" use="required" type="xs:string"/>
 		<xs:attribute name="description" use="required" type="xs:string"/>
 		<xs:attribute name="id" use="required" type="xs:string">
 			<xs:annotation>
-				<xs:documentation>This is used soley for the purposes of referencing this class in associations. It does
-					not represent any caDSR identifier.</xs:documentation>
+				<xs:documentation>This is used soley for the purposes of referencing this class in associations.  It does not represent any caDSR identifier.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 		<xs:attribute name="packageName" use="required" type="xs:string"/>
@@ -60,22 +78,19 @@
 	<xs:element name="UMLAttribute" type="com:UMLAttribute"/>
 	<xs:complexType name="UMLAttribute">
 		<xs:annotation>
-			<xs:documentation>caDSR-related Represents a UML attribute of the parent UML Class. Indication of
-				isRequired=false means the operation will function without the existence of this
-			attribute.</xs:documentation>
+			<xs:documentation>caDSR-related
+
+Represents a UML attribute of the parent UML Class.  Indication of isRequired=false means the operation will function without the existence of this attribute.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="semanticMetadataCollection">
-				<xs:complexType>
-					<xs:choice minOccurs="0" maxOccurs="unbounded">
-						<xs:element ref="uml:SemanticMetadata" minOccurs="1" maxOccurs="unbounded"/>
-					</xs:choice>
-				</xs:complexType>
-			</xs:element>
-			<xs:element ref="cadsr:ValueDomain" minOccurs="0"/>
+			<xs:element ref="com:SemanticMetadata" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="com:ValueDomain" minOccurs="0"/>
 		</xs:sequence>
+		<xs:attribute name="dataTypeName" use="required" type="xs:string"/>
 		<xs:attribute name="description" use="required" type="xs:string"/>
 		<xs:attribute name="name" use="required" type="xs:string"/>
+		<xs:attribute name="publicID" use="required" type="xs:long"/>
+		<xs:attribute name="version" use="required" type="xs:float"/>
 	</xs:complexType>
 	<xs:element name="ResearchCenter" type="com:ResearchCenter"/>
 	<xs:complexType name="ResearchCenter">

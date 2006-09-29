@@ -48,7 +48,6 @@ public class DiscoveryClient {
 	protected static final String com = "com";
 	protected static final String serv = "serv";
 	protected static final String data = "data";
-	protected static final String uml = "uml";
 
 	// some common paths for reuse
 	protected static final String CONTENT_PATH = wssg + ":Content/" + agg + ":AggregatorData";
@@ -69,7 +68,6 @@ public class DiscoveryClient {
 		nsMap.put(com, MetadataConstants.CAGRID_COMMON_MD_NAMESPACE);
 		nsMap.put(serv, MetadataConstants.CAGRID_SERVICE_MD_NAMESPACE);
 		nsMap.put(data, MetadataConstants.CAGRID_DATA_MD_NAMESPACE);
-		nsMap.put(uml, MetadataConstants.CADSR_UML_NAMESPACE);
 	}
 
 	protected static Log LOG = LogFactory.getLog(DiscoveryClient.class.getName());
@@ -223,8 +221,7 @@ public class DiscoveryClient {
 	 */
 	public EndpointReferenceType[] discoverServicesByConceptCode(String conceptCode)
 		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
-		return discoverByFilter(SERV_PATH + "[" + serv + ":semanticMetadataCollection/" + uml
-			+ ":SemanticMetadata/@conceptCode='" + conceptCode + "']");
+		return discoverByFilter(SERV_PATH + "[" + com + ":SemanticMetadata/@conceptCode='" + conceptCode + "']");
 	}
 
 
@@ -338,8 +335,7 @@ public class DiscoveryClient {
 	public EndpointReferenceType[] discoverServicesByOperationConceptCode(String conceptCode)
 		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 
-		return discoverByFilter(OPER_PATH + "[" + serv + ":semanticMetadataCollection/" + uml
-			+ ":SemanticMetadata/@conceptCode='" + conceptCode + "']");
+		return discoverByFilter(OPER_PATH + "[" + com + ":SemanticMetadata/@conceptCode='" + conceptCode + "']");
 	}
 
 
@@ -373,9 +369,9 @@ public class DiscoveryClient {
 	 * @return
 	 */
 	private String createConceptPredicatedUMLClass(String conceptCode) {
-		return com + ":UMLClass[" + com + ":semanticMetadataCollection/" + uml + ":SemanticMetadata/@conceptCode='"
-			+ conceptCode + "' or " + com + ":umlAttributeCollection/" + com + ":UMLAttribute/" + com
-			+ ":semanticMetadataCollection/" + uml + ":SemanticMetadata/@conceptCode='" + conceptCode + "'" + "]";
+		return com + ":UMLClass[" + com + ":SemanticMetadata/@conceptCode='" + conceptCode + "' or " + com
+			+ ":umlAttributeCollection/" + com + ":UMLAttribute/" + com + ":SemanticMetadata/@conceptCode='"
+			+ conceptCode + "'" + "]";
 	}
 
 

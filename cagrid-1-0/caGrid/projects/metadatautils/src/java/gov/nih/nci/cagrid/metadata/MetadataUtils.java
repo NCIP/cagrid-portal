@@ -11,16 +11,11 @@ import java.io.StringReader;
 import java.io.Writer;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
-import org.apache.axis.utils.ClassUtils;
 import org.globus.wsrf.utils.XmlUtils;
 import org.w3c.dom.Element;
 
 
 public class MetadataUtils {
-
-	private static final String METADATA_WSDD = "/gov/nih/nci/cagrid/metadata/Metadata-client-config.wsdd";
-
-
 	/**
 	 * Obtain the service metadata from the specified service.
 	 * 
@@ -82,8 +77,7 @@ public class MetadataUtils {
 		if (metadata == null || writer == null) {
 			throw new IllegalArgumentException("Null is not a valid argument");
 		}
-		Utils.serializeObject(metadata, MetadataConstants.CAGRID_MD_QNAME, writer, ClassUtils.getResourceAsStream(
-			MetadataUtils.class, METADATA_WSDD));
+		Utils.serializeObject(metadata, MetadataConstants.CAGRID_MD_QNAME, writer);
 	}
 
 
@@ -101,8 +95,7 @@ public class MetadataUtils {
 		if (xmlReader == null) {
 			throw new IllegalArgumentException("Null is not a valid argument");
 		}
-		return (ServiceMetadata) Utils.deserializeObject(xmlReader, ServiceMetadata.class, ClassUtils
-			.getResourceAsStream(MetadataUtils.class, METADATA_WSDD));
+		return (ServiceMetadata) Utils.deserializeObject(xmlReader, ServiceMetadata.class);
 	}
 
 
@@ -118,8 +111,7 @@ public class MetadataUtils {
 		if (domainModel == null || writer == null) {
 			throw new IllegalArgumentException("Null is not a valid argument");
 		}
-		Utils.serializeObject(domainModel, MetadataConstants.CAGRID_DATA_MD_QNAME, writer, ClassUtils
-			.getResourceAsStream(MetadataUtils.class, METADATA_WSDD));
+		Utils.serializeObject(domainModel, MetadataConstants.CAGRID_DATA_MD_QNAME, writer);
 	}
 
 
@@ -137,7 +129,6 @@ public class MetadataUtils {
 		if (xmlReader == null) {
 			throw new IllegalArgumentException("Null is not a valid argument");
 		}
-		return (DomainModel) Utils.deserializeObject(xmlReader, DomainModel.class, ClassUtils.getResourceAsStream(
-			DomainModel.class, METADATA_WSDD));
+		return (DomainModel) Utils.deserializeObject(xmlReader, DomainModel.class);
 	}
 }

@@ -69,15 +69,12 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-discovery.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-data.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
-	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jmi-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/nsuml-0.4.20_modified.jar"/>
 	<classpathentry kind="lib" path="ext/lib/ocl-argo-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="lib" path="ext/lib/swidgets-0.1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/toolbar-1.1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/gef_modified.jar"/>
@@ -96,6 +93,5 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-utils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-validation.jar"/>
 	<classpathentry kind="lib" path="ext/lib/wsrf_core_stubs_enum.jar"/>
-	<classpathentry kind="lib" path="ext/lib/client-no-ehcache.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

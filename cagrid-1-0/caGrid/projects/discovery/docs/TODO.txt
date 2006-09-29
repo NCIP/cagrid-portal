@@ -1,4 +1,5 @@
-
+add discovery scenarios for newly added information
+modify concept based scenarios to look in the additional locations
 
 
 

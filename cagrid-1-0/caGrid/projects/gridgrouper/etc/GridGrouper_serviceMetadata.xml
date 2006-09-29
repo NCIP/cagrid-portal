@@ -9,7 +9,6 @@
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
        <ns2:faultCollection/>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="getStem">
        <ns2:inputParameterCollection>
@@ -20,7 +19,6 @@
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
         <ns2:Fault description="" name="StemNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="getChildStems">
        <ns2:inputParameterCollection>
@@ -31,7 +29,6 @@
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
         <ns2:Fault description="" name="StemNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="getParentStem">
        <ns2:inputParameterCollection>
@@ -42,7 +39,6 @@
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
         <ns2:Fault description="" name="StemNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="updateStem">
        <ns2:inputParameterCollection>
@@ -55,7 +51,6 @@
         <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
         <ns2:Fault description="" name="StemModifyFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="getSubjectsWithStemPrivilege">
        <ns2:inputParameterCollection>
@@ -67,7 +62,6 @@
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
         <ns2:Fault description="" name="StemNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="getStemPrivileges">
        <ns2:inputParameterCollection>
@@ -79,7 +73,6 @@
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
         <ns2:Fault description="" name="StemNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="hasStemPrivilege">
        <ns2:inputParameterCollection>
@@ -92,7 +85,6 @@
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
         <ns2:Fault description="" name="StemNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="grantStemPrivilege">
        <ns2:inputParameterCollection>
@@ -107,7 +99,6 @@
         <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
         <ns2:Fault description="" name="SchemaFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="revokeStemPrivilege">
        <ns2:inputParameterCollection>
@@ -122,7 +113,6 @@
         <ns2:Fault description="" name="SchemaFault"/>
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="addChildStem">
        <ns2:inputParameterCollection>
@@ -137,7 +127,6 @@
         <ns2:Fault description="" name="StemAddFault"/>
         <ns2:Fault description="" name="StemNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="deleteStem">
        <ns2:inputParameterCollection>
@@ -149,7 +138,6 @@
         <ns2:Fault description="" name="StemDeleteFault"/>
         <ns2:Fault description="" name="StemNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="getGroup">
        <ns2:inputParameterCollection>
@@ -160,7 +148,6 @@
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
         <ns2:Fault description="" name="GroupNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="getChildGroups">
        <ns2:inputParameterCollection>
@@ -171,7 +158,6 @@
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
         <ns2:Fault description="" name="StemNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="addChildGroup">
        <ns2:inputParameterCollection>
@@ -185,7 +171,6 @@
         <ns2:Fault description="" name="GroupAddFault"/>
         <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="deleteGroup">
        <ns2:inputParameterCollection>
@@ -197,7 +182,6 @@
         <ns2:Fault description="" name="GroupDeleteFault"/>
         <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="updateGroup">
        <ns2:inputParameterCollection>
@@ -211,7 +195,6 @@
         <ns2:Fault description="" name="GroupModifyFault"/>
         <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="addMember">
        <ns2:inputParameterCollection>
@@ -224,7 +207,6 @@
         <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
         <ns2:Fault description="" name="MemberAddFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="getMembers">
        <ns2:inputParameterCollection>
@@ -236,7 +218,6 @@
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
         <ns2:Fault description="" name="GroupNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="isMemberOf">
        <ns2:inputParameterCollection>
@@ -249,7 +230,6 @@
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
         <ns2:Fault description="" name="GroupNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="getMemberships">
        <ns2:inputParameterCollection>
@@ -261,7 +241,6 @@
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
         <ns2:Fault description="" name="GroupNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="deleteMember">
        <ns2:inputParameterCollection>
@@ -274,7 +253,6 @@
         <ns2:Fault description="" name="GroupNotFoundFault"/>
         <ns2:Fault description="" name="MemberDeleteFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="addCompositeMember">
        <ns2:inputParameterCollection>
@@ -290,7 +268,6 @@
         <ns2:Fault description="" name="MemberAddFault"/>
         <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="deleteCompositeMember">
        <ns2:inputParameterCollection>
@@ -303,7 +280,6 @@
         <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
         <ns2:Fault description="" name="MemberDeleteFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="grantGroupPrivilege">
        <ns2:inputParameterCollection>
@@ -317,7 +293,6 @@
         <ns2:Fault description="" name="GrantPrivilegeFault"/>
         <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="revokeGroupPrivilege">
        <ns2:inputParameterCollection>
@@ -332,7 +307,6 @@
         <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
         <ns2:Fault description="" name="SchemaFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="getSubjectsWithGroupPrivilege">
        <ns2:inputParameterCollection>
@@ -344,7 +318,6 @@
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
         <ns2:Fault description="" name="GroupNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="getGroupPrivileges">
        <ns2:inputParameterCollection>
@@ -356,7 +329,6 @@
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
         <ns2:Fault description="" name="GroupNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="hasGroupPrivilege">
        <ns2:inputParameterCollection>
@@ -369,7 +341,6 @@
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
         <ns2:Fault description="" name="GroupNotFoundFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="isMember">
        <ns2:inputParameterCollection>
@@ -380,7 +351,6 @@
        <ns2:faultCollection>
         <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
        </ns2:faultCollection>
-       <ns2:semanticMetadataCollection/>
       </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
@@ -388,10 +358,8 @@
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>
-   <ns2:semanticMetadataCollection>
-    <ns77:SemanticMetadata conceptCode="???" conceptName="Analytical Grid Service" conceptDefinition="An Grid Analytical Service." isPrimaryConcept="false" order="1" xmlns:ns77="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
-    <ns78:SemanticMetadata conceptCode="???" conceptName="Grid Service" conceptDefinition="A Grid Service." isPrimaryConcept="true" order="0" xmlns:ns78="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
-   </ns2:semanticMetadataCollection>
+   <ns77:SemanticMetadata conceptCode="???" conceptDefinition="A Grid Service." conceptName="Grid Service" order="0" orderLevel="0" xmlns:ns77="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns78:SemanticMetadata conceptCode="???" conceptDefinition="An Grid Analytical Service." conceptName="Analytical Grid Service" order="1" orderLevel="0" xmlns:ns78="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter/>

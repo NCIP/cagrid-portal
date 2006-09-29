@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.cadsr.metadata;
+package gov.nih.nci.cagrid.cadsr;
 
 import gov.nih.nci.cagrid.core.CycleTestCase;
 import junit.framework.TestResult;

@@ -1,12 +1,10 @@
 package gov.nih.nci.cagrid.introduce.extensions.metadata.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -92,40 +90,11 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
 		cagridMdNamespace.setGenerateStubs(Boolean.FALSE);
 		newNamespaces.add(cagridMdNamespace);
 
-		// cadsr uml
-		NamespaceType umlMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-			+ MetadataConstants.CADSR_UMLPROJECT_SCHEMA);
-		umlMdNamespace.setLocation("./" + MetadataConstants.CADSR_UMLPROJECT_SCHEMA);
-		umlMdNamespace.setGenerateStubs(Boolean.FALSE);
-		applySDKSerializationToNamespace(umlMdNamespace);
-		newNamespaces.add(umlMdNamespace);
-
-		// cadsr domain
-		NamespaceType cadsrMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-			+ MetadataConstants.CADSR_DOMAIN_SCHEMA);
-		cadsrMdNamespace.setLocation("./" + MetadataConstants.CADSR_DOMAIN_SCHEMA);
-		cadsrMdNamespace.setGenerateStubs(Boolean.FALSE);
-		applySDKSerializationToNamespace(cadsrMdNamespace);
-		newNamespaces.add(cadsrMdNamespace);
-
 		// add those new namespaces to the list of namespace types
 		NamespaceType[] nsArray = new NamespaceType[newNamespaces.size()];
 		newNamespaces.toArray(nsArray);
 		namespaces.setNamespace(nsArray);
 		description.setNamespaces(namespaces);
-	}
-
-
-	private static void applySDKSerializationToNamespace(NamespaceType umlMdNamespace) {
-		SchemaElementType[] schemaElement = umlMdNamespace.getSchemaElement();
-		if (schemaElement != null) {
-			for (int i = 0; i < schemaElement.length; i++) {
-				SchemaElementType schemaType = schemaElement[i];
-				schemaType.setClassName(schemaType.getType());
-				schemaType.setSerializer(DataServiceConstants.SDK_SERIALIZER);
-				schemaType.setDeserializer(DataServiceConstants.SDK_DESERIALIZER);
-			}
-		}
 	}
 
 
@@ -189,7 +158,7 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
 		File[] libs = libDir.listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
 				String name = pathname.getName();
-				return (name.endsWith(".jar") && (name.startsWith("client") || name.startsWith(METADATA_JAR_PREFIX)));
+				return (name.endsWith(".jar") && (name.startsWith(METADATA_JAR_PREFIX)));
 			}
 		});
 

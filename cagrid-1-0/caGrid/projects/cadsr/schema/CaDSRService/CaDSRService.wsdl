@@ -344,6 +344,26 @@
           </sequence>
         </complexType>
       </element>
+      <element name="AnnotateServiceMetadataRequest">
+        <complexType>
+          <sequence>
+            <element name="serviceMetadata">
+              <complexType>
+                <sequence>
+                  <element ref="ns3:ServiceMetadata" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="AnnotateServiceMetadataResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns3:ServiceMetadata" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="CaDSRServiceResourceProperties">
         <complexType>
           <sequence>
@@ -444,6 +464,12 @@
   <message name="GenerateDomainModelForClassesResponse">
     <part name="parameters" element="tns:GenerateDomainModelForClassesResponse" />
   </message>
+  <message name="AnnotateServiceMetadataRequest">
+    <part name="parameters" element="tns:AnnotateServiceMetadataRequest" />
+  </message>
+  <message name="AnnotateServiceMetadataResponse">
+    <part name="parameters" element="tns:AnnotateServiceMetadataResponse" />
+  </message>
   <message name="InvalidProjectExceptionFaultMessage">
     <part name="fault" element="ns6:InvalidProjectException" />
   </message>
@@ -525,6 +551,10 @@
       <input message="tns:GenerateDomainModelForClassesRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/GenerateDomainModelForClassesRequest" />
       <output message="tns:GenerateDomainModelForClassesResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/GenerateDomainModelForClassesResponse" />
       <fault name="InvalidProjectException" message="tns:InvalidProjectExceptionFaultMessage" wsa:Action="http://cadsr.cagrid.nci.nih.gov/InvalidProjectExceptionFaultMessage" />
+    </operation>
+    <operation name="annotateServiceMetadata">
+      <input message="tns:AnnotateServiceMetadataRequest" wsa:Action="http://cadsr.cagrid.nci.nih.gov/AnnotateServiceMetadataRequest" />
+      <output message="tns:AnnotateServiceMetadataResponse" wsa:Action="http://cadsr.cagrid.nci.nih.gov/AnnotateServiceMetadataResponse" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

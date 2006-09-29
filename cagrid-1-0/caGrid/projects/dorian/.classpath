@@ -66,8 +66,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
-	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
@@ -89,14 +87,12 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/ant-contrib.jar"/>
-	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/client-no-ehcache.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-1.0-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-1.0-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-1.0-stubs.jar"/>

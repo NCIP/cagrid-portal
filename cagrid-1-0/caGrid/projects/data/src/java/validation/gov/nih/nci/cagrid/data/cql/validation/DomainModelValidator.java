@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.cql.validation;
 
-import gov.nih.nci.cadsr.domain.ValueDomain;
 import gov.nih.nci.cagrid.cqlquery.Association;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
@@ -9,8 +8,11 @@ import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.utilities.DomainModelUtils;
+import gov.nih.nci.cagrid.metadata.common.Enumeration;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
+import gov.nih.nci.cagrid.metadata.common.ValueDomain;
+import gov.nih.nci.cagrid.metadata.common.ValueDomainEnumerationCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation;
 
@@ -90,18 +92,32 @@ public class DomainModelValidator implements CqlDomainValidator {
 
 	private void validateAttributeDataType(Attribute attrib, UMLAttribute attribMetadata)
 		throws MalformedQueryException {
-		// if the predicate is a binary operator, verify the value is of the correct type
+		// if the predicate is a binary operator, verify the value is of the
+		// correct type
 		if (attrib.getPredicate() != null
-			&& !(attrib.getPredicate().getValue().equals(Predicate._IS_NOT_NULL) 
-				|| attrib.getPredicate().getValue().equals(Predicate._IS_NULL))) {
+			&& !(attrib.getPredicate().getValue().equals(Predicate._IS_NOT_NULL) || attrib.getPredicate().getValue()
+				.equals(Predicate._IS_NULL))) {
 			String value = attrib.getValue();
+			//check datatype name
+			String datatype = attribMetadata.getDataTypeName();
+			DataTypeValidator.validate(value, datatype);
+			//check enumeration values
 			ValueDomain valueDomain = attribMetadata.getValueDomain();
 			if (valueDomain != null) {
-				try {
-					ValueDomainValidator.validate(value, valueDomain);
-				} catch (Exception ex) {
-					throw new MalformedQueryException("Query for attribute " + attrib.getName() 
-						+ " did not validate: " + ex.getMessage(), ex);
+				ValueDomainEnumerationCollection enumerationCollection = valueDomain.getEnumerationCollection();
+				if (enumerationCollection != null && enumerationCollection.getEnumeration() != null
+					&& enumerationCollection.getEnumeration().length > 0) {
+					Enumeration[] enumeration = enumerationCollection.getEnumeration();
+					Set permValues = new HashSet();
+					for (int i = 0; i < enumeration.length; i++) {
+						Enumeration e = enumeration[i];
+						permValues.add(e.getPermissibleValue());
+					}
+					if (!permValues.contains(value)) {
+						throw new MalformedQueryException("Attribute '" + attrib.getName()
+							+ "' defines a permissible value enumeration, and the value'" + value
+							+ "' is not permissible.");
+					}
 				}
 			} else {
 				// TODO: warn no value domain found
@@ -115,7 +131,8 @@ public class DomainModelValidator implements CqlDomainValidator {
 		// determine if an association exists between the current
 		// and association object
 		String roleName = assoc.getRoleName();
-		// UMLAssociation[] associations = getUmlAssociations(current.getName(), model);
+		// UMLAssociation[] associations = getUmlAssociations(current.getName(),
+		// model);
 		UMLAssociation[] associations = getAllAssociationsFromSource(current.getName(), model);
 		boolean associationFound = false;
 		for (int i = 0; i < associations.length; i++) {
@@ -126,18 +143,19 @@ public class DomainModelValidator implements CqlDomainValidator {
 				String targetClassName = targetClassMd.getPackageName() + "." + targetClassMd.getClassName();
 				if (targetClassName.equals(assoc.getName())) {
 					if (associationFound) {
-						// no role name, and already found an association 
+						// no role name, and already found an association
 						// of the same type
 						throw new MalformedQueryException("The association from " + current.getName() + " to "
 							+ assoc.getName() + " is ambiguous without a role name");
 					}
-					if (roleName != null && assocMd.getTargetUMLAssociationEdge()
-							.getUMLAssociationEdge().getRoleName().equals(roleName)) {
+					if (roleName != null
+						&& assocMd.getTargetUMLAssociationEdge().getUMLAssociationEdge().getRoleName().equals(roleName)) {
 						// association found with specidied role name
 						associationFound = true;
 						break;
 					} else if (roleName == null) {
-						// an association of the right type found, but no role name to compare
+						// an association of the right type found, but no role
+						// name to compare
 						// so association is found, but must check for ambiguity
 						associationFound = true;
 					}
@@ -203,8 +221,8 @@ public class DomainModelValidator implements CqlDomainValidator {
 		}
 		return null;
 	}
-	
-	
+
+
 	private UMLAssociation[] getAllAssociationsFromSource(String sourceClass, DomainModel model) {
 		String[] classNames = getClassHierarchy(sourceClass, model);
 		Set associations = new HashSet();
@@ -215,8 +233,8 @@ public class DomainModelValidator implements CqlDomainValidator {
 		associations.toArray(assocArray);
 		return assocArray;
 	}
-	
-	
+
+
 	private String[] getClassHierarchy(String className, DomainModel model) {
 		UMLClass[] superclasses = DomainModelUtils.getAllSuperclasses(model, className);
 		String[] names = new String[superclasses.length + 1];

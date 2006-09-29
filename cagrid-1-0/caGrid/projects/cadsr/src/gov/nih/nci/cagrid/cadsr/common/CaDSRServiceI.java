@@ -26,5 +26,6 @@ public gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] findAssociationsForClass
 public gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] findAssociationsInPackage(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String packageName) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException ;
 public gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] findAssociationsInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException ;
 public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] fullClassNames) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException ;
+public gov.nih.nci.cagrid.metadata.ServiceMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata) throws RemoteException ;
 
 }

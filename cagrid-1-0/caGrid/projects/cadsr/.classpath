@@ -95,6 +95,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
-	<classpathentry kind="lib" path="ext/lib/client-no-ehcache.jar"/>
+	<classpathentry kind="lib" path="ext/lib/client.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

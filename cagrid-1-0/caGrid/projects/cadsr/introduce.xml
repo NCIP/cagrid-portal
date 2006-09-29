@@ -239,17 +239,24 @@
       <ns4:Exception name="InvalidProjectException" qname="ns51:InvalidProjectException" xmlns:ns51="http://cadsr.cagrid.nci.nih.gov/types"/>
      </ns4:Exceptions>
     </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="annotateServiceMetadata" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns52:ServiceMetadata" isArray="false" name="serviceMetadata" xmlns:ns52="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns53:ServiceMetadata" isArray="false" xmlns:ns53="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
    </ns4:Methods>
-   <ns52:ResourcePropertiesList xsi:type="ns52:ResourcePropertiesListType" xmlns:ns52="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns52:ResourceProperty qName="ns53:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns52:ResourcePropertyType" xmlns:ns53="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns52:ResourcePropertiesList>
+   <ns54:ResourcePropertiesList xsi:type="ns54:ResourcePropertiesListType" xmlns:ns54="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns54:ResourceProperty qName="ns55:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns54:ResourcePropertyType" xmlns:ns55="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns54:ResourcePropertiesList>
   </ns3:Service>
  </ns3:Services>
- <ns54:Extensions xsi:type="ns54:ExtensionsType" xmlns:ns54="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns54:Extension name="cagrid_metadata" xsi:type="ns54:ExtensionType"/>
- </ns54:Extensions>
- <ns55:ServiceProperties xmlns:ns55="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns55:Property key="caCOREServiceURL" value="http://cabio.nci.nih.gov/cacore31/http/remoteService"/>
-  <ns55:Property key="threadPoolSize" value="10"/>
- </ns55:ServiceProperties>
+ <ns56:Extensions xsi:type="ns56:ExtensionsType" xmlns:ns56="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns56:Extension name="cagrid_metadata" xsi:type="ns56:ExtensionType"/>
+ </ns56:Extensions>
+ <ns57:ServiceProperties xmlns:ns57="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns57:Property key="caCOREServiceURL" value="http://cabio.nci.nih.gov/cacore31/http/remoteService"/>
+  <ns57:Property key="threadPoolSize" value="10"/>
+ </ns57:ServiceProperties>
 </ns1:ServiceDescription>

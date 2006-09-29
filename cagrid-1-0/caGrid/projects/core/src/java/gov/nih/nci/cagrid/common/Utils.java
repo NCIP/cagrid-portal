@@ -103,7 +103,6 @@ public class Utils {
 		Object obj = ObjectDeserializer.toObject(doc.getDocumentElement(), objectType);
 		inputStream.close();
 		return obj;
-
 	}
 
 
@@ -174,15 +173,15 @@ public class Utils {
 
 		return newArray;
 	}
-	
-	
+
+
 	/**
 	 * Appends to an array
 	 * 
 	 * @param array
-	 * 		The array to append to
+	 *            The array to append to
 	 * @param appendix
-	 * 		The object to append to the array
+	 *            The object to append to the array
 	 * @return
 	 */
 	public static java.lang.Object appendToArray(java.lang.Object array, java.lang.Object appendix) {
@@ -192,8 +191,8 @@ public class Utils {
 		Array.set(newArray, Array.getLength(newArray) - 1, appendix);
 		return newArray;
 	}
-	
-	
+
+
 	/**
 	 * Removed an object from an array.
 	 * 
@@ -332,6 +331,13 @@ public class Utils {
 		InputSource xmlSource = new InputSource(xmlReader);
 
 		return ConfigurableObjectDeserializer.toObject(xmlSource, clazz, wsdd);
+	}
+
+
+	public static Object deserializeObject(Reader xmlReader, Class clazz) throws Exception {
+		org.w3c.dom.Document doc = XMLUtils.newDocument(new InputSource(xmlReader));
+		Object obj = ObjectDeserializer.toObject(doc.getDocumentElement(), clazz);
+		return obj;
 	}
 
 

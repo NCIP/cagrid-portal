@@ -1,10 +1,6 @@
 <?xml version="1.0"?>
-<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:data="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"
-	xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" elementFormDefault="qualified">
-	<xs:import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
-		schemaLocation="../common/common.xsd"/>
+<xs:schema targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:data="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" elementFormDefault="qualified">
+	<xs:import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" schemaLocation="../common/common.xsd"/>
 	<xs:element name="UMLGeneralization" type="data:UMLGeneralization"/>
 	<xs:complexType name="UMLGeneralization">
 		<xs:sequence>
@@ -74,10 +70,7 @@
 	<xs:element name="UMLClassReference" type="data:UMLClassReference"/>
 	<xs:complexType name="UMLClassReference">
 		<xs:annotation>
-			<xs:documentation>Represents a "pointer/reference" to a UMLClass exposed by this DomainModel. The refid
-				attribute must share the value of an UMLClass.id on the exposedClassCollection of this model. This
-				exists solely as an optimization for not duplicating the UMLClass (in XML) everywhere it is associated
-				(which is a significant savings).</xs:documentation>
+			<xs:documentation>Represents a "pointer/reference" to a UMLClass exposed by this DomainModel.  The refid attribute must share the value of an UMLClass.id on the exposedClassCollection of this model.  This exists solely as an optimization for not duplicating the UMLClass (in XML) everywhere it is associated (which is a significant savings).</xs:documentation>
 		</xs:annotation>
 		<xs:sequence/>
 		<xs:attribute name="refid" use="required" type="xs:string">

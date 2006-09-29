@@ -41,13 +41,11 @@
      <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
     </ns4:Method>
    </ns4:Methods>
-   <ns6:ResourcePropertiesList xsi:type="ns6:ResourcePropertiesListType" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns6:ResourceProperty qName="ns7:ServiceMetadata" populateFromFile="true" register="false" xsi:type="ns6:ResourcePropertyType" xmlns:ns7="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns6:ResourcePropertiesList>
+   <ns6:ResourcePropertiesList xsi:type="ns6:ResourcePropertiesListType" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
   </ns3:Service>
  </ns3:Services>
- <ns8:Extensions xsi:type="ns8:ExtensionsType" xmlns:ns8="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns9:ServiceProperties xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns9:Property key="performFirstSync" value="true"/>
- </ns9:ServiceProperties>
+ <ns7:Extensions xsi:type="ns7:ExtensionsType" xmlns:ns7="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns8:ServiceProperties xmlns:ns8="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns8:Property key="performFirstSync" value="true"/>
+ </ns8:ServiceProperties>
 </ns1:ServiceDescription>

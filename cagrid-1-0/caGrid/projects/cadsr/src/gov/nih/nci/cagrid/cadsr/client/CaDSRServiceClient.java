@@ -371,5 +371,16 @@ public class CaDSRServiceClient extends ServiceSecurityClient implements CaDSRSe
         return boxedResult.getDomainModel();
       }
     }
+    public gov.nih.nci.cagrid.metadata.ServiceMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata) throws RemoteException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"annotateServiceMetadata");
+        gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataRequest params = new gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataRequest();
+        gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataRequestServiceMetadata serviceMetadataContainer = new gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataRequestServiceMetadata();
+        serviceMetadataContainer.setServiceMetadata(serviceMetadata);
+        params.setServiceMetadata(serviceMetadataContainer);
+        gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataResponse boxedResult = portType.annotateServiceMetadata(params);
+        return boxedResult.getServiceMetadata();
+      }
+    }
 
 }

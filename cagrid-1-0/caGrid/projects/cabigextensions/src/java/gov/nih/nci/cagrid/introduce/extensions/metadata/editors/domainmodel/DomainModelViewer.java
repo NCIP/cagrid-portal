@@ -132,7 +132,6 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
 		try {
 			JFileChooser fc = new JFileChooser(".");
 			fc.showOpenDialog(f);
-			
 
 			DomainModel model = MetadataUtils.deserializeDomainModel(new FileReader(fc.getSelectedFile()));
 			viewer.setDomainModel(model);
@@ -188,8 +187,7 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
 						if (c.getUmlAttributeCollection().getUMLAttribute() != null) {
 							for (int j = 0; j < c.getUmlAttributeCollection().getUMLAttribute().length; j++) {
 								UMLAttribute attribute = c.getUmlAttributeCollection().getUMLAttribute()[j];
-								diagramClass.addAttribute(attribute.getValueDomain().getDatatypeName(), attribute
-									.getName());
+								diagramClass.addAttribute(attribute.getDataTypeName(), attribute.getName());
 							}
 						}
 					}

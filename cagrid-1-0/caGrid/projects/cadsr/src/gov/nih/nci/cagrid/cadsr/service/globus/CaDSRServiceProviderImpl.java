@@ -109,4 +109,10 @@ public class CaDSRServiceProviderImpl{
 		return boxedResult;
 	}
 
+	public gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataResponse annotateServiceMetadata(gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataRequest params) throws RemoteException {
+		gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataResponse();
+		boxedResult.setServiceMetadata(impl.annotateServiceMetadata(params.getServiceMetadata().getServiceMetadata()));
+		return boxedResult;
+	}
+
 }

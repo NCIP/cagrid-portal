@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.extensions.metadata.codegen;
 
-import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -20,20 +19,19 @@ import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.ServiceMetadataHostingResearchCenter;
 import gov.nih.nci.cagrid.metadata.ServiceMetadataServiceDescription;
+import gov.nih.nci.cagrid.metadata.common.SemanticMetadata;
 import gov.nih.nci.cagrid.metadata.service.ContextProperty;
 import gov.nih.nci.cagrid.metadata.service.Fault;
 import gov.nih.nci.cagrid.metadata.service.InputParameter;
 import gov.nih.nci.cagrid.metadata.service.Operation;
 import gov.nih.nci.cagrid.metadata.service.OperationFaultCollection;
 import gov.nih.nci.cagrid.metadata.service.OperationInputParameterCollection;
-import gov.nih.nci.cagrid.metadata.service.OperationSemanticMetadataCollection;
 import gov.nih.nci.cagrid.metadata.service.Output;
 import gov.nih.nci.cagrid.metadata.service.Service;
 import gov.nih.nci.cagrid.metadata.service.ServiceContext;
 import gov.nih.nci.cagrid.metadata.service.ServiceContextContextPropertyCollection;
 import gov.nih.nci.cagrid.metadata.service.ServiceContextOperationCollection;
 import gov.nih.nci.cagrid.metadata.service.ServicePointOfContactCollection;
-import gov.nih.nci.cagrid.metadata.service.ServiceSemanticMetadataCollection;
 import gov.nih.nci.cagrid.metadata.service.ServiceServiceContextCollection;
 
 import java.io.File;
@@ -218,7 +216,6 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 		} else {
 			inputStream = ClassUtils.getResourceAsStream(getClass(), SEMANTIC_METADATA_DEFAULTS_ANALYTICAL_SERVICE);
 		}
-		LOG.debug("Stream:" + inputStream);
 
 		try {
 			// load the appropriate template
@@ -227,8 +224,7 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 			reader.close();
 
 			// set the codes
-			service.setSemanticMetadataCollection(metadata.getServiceDescription().getService()
-				.getSemanticMetadataCollection());
+			service.setSemanticMetadata(metadata.getServiceDescription().getService().getSemanticMetadata());
 		} catch (Exception e) {
 			LOG.error("Problem setting service semantic metdata; skipping!", e);
 		}
@@ -378,8 +374,8 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 		}
 
 		// SEMANTIC METADATA
-		if (operation.getSemanticMetadataCollection() == null) {
-			operation.setSemanticMetadataCollection(new OperationSemanticMetadataCollection(new SemanticMetadata[]{}));
+		if (operation.getSemanticMetadata() == null) {
+			operation.setSemanticMetadata(new SemanticMetadata[]{});
 		}
 
 	}
@@ -567,13 +563,6 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 		if (contCol == null) {
 			contCol = new ServiceServiceContextCollection();
 			serv.setServiceContextCollection(contCol);
-		}
-
-		// every service needs a semantic metadata collection
-		ServiceSemanticMetadataCollection semanticMetadataCollection = serv.getSemanticMetadataCollection();
-		if (semanticMetadataCollection == null) {
-			semanticMetadataCollection = new ServiceSemanticMetadataCollection();
-			serv.setSemanticMetadataCollection(semanticMetadataCollection);
 		}
 	}
 }

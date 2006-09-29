@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.io.FileWriter;
+import java.io.Writer;
 
 
 public class DomainModelGenerationExample {
@@ -53,8 +54,9 @@ public class DomainModelGenerationExample {
 			// classNames,
 			// associationExcludes);
 
-			MetadataUtils.serializeDomainModel(domainModel, new FileWriter(project.getShortName() + "_"
-				+ project.getVersion() + "_DomainModel.xml"));
+			Writer writer = new FileWriter(project.getShortName() + "_" + project.getVersion() + "_DomainModel.xml");
+			MetadataUtils.serializeDomainModel(domainModel, writer);
+			writer.close();
 
 			double duration = (System.currentTimeMillis() - start) / 1000.0;
 			System.out.println("Domain Model generation took:" + duration + " seconds.");
