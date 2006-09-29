@@ -62,6 +62,16 @@ public class ServiceWizard extends JDialog {
 		if (isVisible()) {
 			throw new IllegalStateException("Cannot add panels while showing wizard!");
 		}
+		panel.addButtonEnableListener(new ButtonEnableListener() {
+			public void setNextEnabled(boolean enable) {
+				getNextPanelButton().setEnabled(enable);
+			}
+			
+			
+			public void setPrevEnabled(boolean enable) {
+				getPreviousPanelButton().setEnabled(enable);
+			}
+		});
 		panelSequence.add(panel);
 	}
 	

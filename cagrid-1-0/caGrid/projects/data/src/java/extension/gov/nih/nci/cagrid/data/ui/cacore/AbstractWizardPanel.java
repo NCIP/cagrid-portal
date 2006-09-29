@@ -6,6 +6,9 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -24,10 +27,12 @@ public abstract class AbstractWizardPanel extends JPanel {
 
 	private ServiceExtensionDescriptionType extDescription;
 	private ServiceInformation serviceInfo;
+	private List listeners;
 	
 	public AbstractWizardPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
 		this.extDescription = extensionDescription;
 		this.serviceInfo = info;
+		this.listeners = new LinkedList();
 	}
 	
 	
@@ -57,6 +62,43 @@ public abstract class AbstractWizardPanel extends JPanel {
 			bitBucket = new HashMap();
 		}
 		return bitBucket;
+	}
+	
+	
+	/**
+	 * Enable or disable the wizard button which allows moving 
+	 * to the next panel in the sequence.  When the panel is shown,
+	 * the previous and next buttons will be enabled / disabled
+	 * according to the panel's order in the panel sequence.  If the
+	 * buttons state needs to be changed, do so in the update() method.
+	 * @param enable
+	 */
+	protected void setNextEnabled(boolean enable) {
+		Iterator i = listeners.iterator();
+		while (i.hasNext()) {
+			((ButtonEnableListener) i.next()).setNextEnabled(enable);
+		}
+	}
+	
+	
+	/**
+	 * Enable or disable the wizard button which allows moving
+	 * to the previous panel in the sequence.  When the panel is shown,
+	 * the previous and next buttons will be enabled / disabled
+	 * according to the panel's order in the panel sequence.  If the
+	 * buttons state needs to be changed, do so in the update() method.
+	 * @param enable
+	 */
+	protected void setPrevEnabled(boolean enable) {
+		Iterator i = listeners.iterator();
+		while (i.hasNext()) {
+			((ButtonEnableListener) i.next()).setPrevEnabled(enable);
+		}
+	}
+	
+	
+	void addButtonEnableListener(ButtonEnableListener l) {
+		listeners.add(l);
 	}
 	
 	
