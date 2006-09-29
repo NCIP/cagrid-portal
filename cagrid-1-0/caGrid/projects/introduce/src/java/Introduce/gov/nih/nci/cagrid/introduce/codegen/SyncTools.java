@@ -415,7 +415,7 @@ public class SyncTools {
 	private void populateClassnames(ServiceInformation info, MultiServiceSymbolTable table)
 		throws MalformedNamespaceException, SynchronizationException {
 
-		// table.dump(System.out);
+		//table.dump(System.out);
 		// get the classnames from the axis symbol table
 		// try {
 		// System.out.println("\n\nSTART OF NAMESPACES\n");
@@ -494,7 +494,7 @@ public class SyncTools {
 											+ inputParam.getName());
 									} else if (mtype.isIsImported()) {
 										qname = new QName(mtype.getImportInformation().getNamespace(), ">>"
-											+ mtype.getName() + "Request>" + inputParam.getName());
+											+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>" + inputParam.getName());
 									} else {
 										qname = new QName(service.getNamespace(), ">>"
 											+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
