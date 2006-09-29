@@ -1,11 +1,13 @@
 package gov.nih.nci.cagrid.data.ui.cacore;
 
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.io.File;
 
 /** 
  *  CacoreWizardConstants
@@ -32,9 +34,21 @@ public class CacoreWizardUtils {
 	}
 	
 	
-	public static String getServiceLibDir(ServiceInformation info) {
+	public static String getServiceBaseDir(ServiceInformation info) {
 		String serviceDir = info.getIntroduceServiceProperties()
 			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR);
-		return serviceDir + File.separator + "lib";
+		return serviceDir;
+	}
+	
+	
+	public static void setSdkSerialization(NamespaceType nsType) {
+		if (nsType.getSchemaElement() != null) {
+			for (int i = 0; i < nsType.getSchemaElement().length; i++) {
+				SchemaElementType elem = nsType.getSchemaElement(i);
+				elem.setClassName(elem.getType());
+				elem.setSerializer(DataServiceConstants.SDK_SERIALIZER);
+				elem.setDeserializer(DataServiceConstants.SDK_DESERIALIZER);
+			}
+		}
 	}
 }
