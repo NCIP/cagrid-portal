@@ -784,12 +784,8 @@ public class DomainModelBuilder {
 			converted.setConceptCode(sm.getConceptCode());
 			converted.setConceptDefinition(sm.getConceptDefinition());
 			converted.setConceptName(sm.getConceptName());
-			if (sm.getOrder() != null) {
-				converted.setOrder(sm.getOrder().intValue());
-			}
-			if (sm.getOrderLevel() != null) {
-				converted.setOrderLevel(sm.getOrderLevel().intValue());
-			}
+			converted.setOrder(sm.getOrder());
+			converted.setOrderLevel(sm.getOrderLevel());
 			smArray[i++] = converted;
 
 		}
