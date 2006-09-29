@@ -14,18 +14,20 @@
   <Content xsi:type="agg:AggregatorContent" xmlns:agg="http://mds.globus.org/aggregator/types">
     <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
       <agg:GetMultipleResourcePropertiesPollType
-			xmlns:ns5="http://cagrid.nci.nih.gov/Dorian/types"
-			xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
-			xmlns:ns2="http://cagrid.nci.nih.gov/1/dorian-ifs"
+			xmlns:ns7="http://cagrid.nci.nih.gov/Dorian/types"
+			xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
+			xmlns:ns4="http://cagrid.nci.nih.gov/1/dorian-ifs"
+			xmlns:ns1="http://cagrid.nci.nih.gov/1/authentication-service"
 			xmlns:xs="http://www.w3.org/2001/XMLSchema"
-			xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"
-			xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-common"
-			xmlns:ns1="http://cagrid.nci.nih.gov/1/dorian-idp">
+			xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"
+			xmlns:ns2="http://cagrid.nci.nih.gov/1/dorian-common"
+			xmlns:ns0="http://cagrid.nci.nih.gov/AuthenticationService/types"
+			xmlns:ns3="http://cagrid.nci.nih.gov/1/dorian-idp">
         <!-- Specifies that the index should refresh information
             every 300000 milliseconds (once every 5 minutes) -->
         <agg:PollIntervalMillis>300000</agg:PollIntervalMillis>
         <!-- specifies all Resource Properties that should be retrieved from the service -->
-		<agg:ResourcePropertyNames>ns3:ServiceMetadata</agg:ResourcePropertyNames>
+		<agg:ResourcePropertyNames>ns5:ServiceMetadata</agg:ResourcePropertyNames>
 	
       </agg:GetMultipleResourcePropertiesPollType>
     </agg:AggregatorConfig>

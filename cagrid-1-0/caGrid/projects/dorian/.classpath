@@ -97,5 +97,9 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/client-no-ehcache.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-1.0-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-1.0-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-1.0-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-data.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

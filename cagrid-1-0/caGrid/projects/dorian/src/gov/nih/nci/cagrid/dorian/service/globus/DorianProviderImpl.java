@@ -115,4 +115,10 @@ public class DorianProviderImpl{
 		return boxedResult;
 	}
 
+	public gov.nih.nci.cagrid.authentication.AuthenticateResponse authenticate(gov.nih.nci.cagrid.authentication.AuthenticateRequest params) throws RemoteException, gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault, gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault, gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault {
+		gov.nih.nci.cagrid.authentication.AuthenticateResponse boxedResult = new gov.nih.nci.cagrid.authentication.AuthenticateResponse();
+		boxedResult.setSAMLAssertion(impl.authenticate(params.getCredential().getCredential()));
+		return boxedResult;
+	}
+
 }

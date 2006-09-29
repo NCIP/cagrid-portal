@@ -269,5 +269,16 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
         return boxedResult.getIFSUserPolicy();
       }
     }
+    public gov.nih.nci.cagrid.authentication.bean.SAMLAssertion authenticate(gov.nih.nci.cagrid.authentication.bean.Credential credential) throws RemoteException, gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault, gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault, gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"authenticate");
+        gov.nih.nci.cagrid.authentication.AuthenticateRequest params = new gov.nih.nci.cagrid.authentication.AuthenticateRequest();
+        gov.nih.nci.cagrid.authentication.AuthenticateRequestCredential credentialContainer = new gov.nih.nci.cagrid.authentication.AuthenticateRequestCredential();
+        credentialContainer.setCredential(credential);
+        params.setCredential(credentialContainer);
+        gov.nih.nci.cagrid.authentication.AuthenticateResponse boxedResult = portType.authenticate(params);
+        return boxedResult.getSAMLAssertion();
+      }
+    }
 
 }

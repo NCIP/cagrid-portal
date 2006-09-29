@@ -1,5 +1,15 @@
 <ns1:ServiceDescription introduceVersion=".99999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace generateStubs="false" location="./AuthenticationServiceTypes.xsd" namespace="http://cagrid.nci.nih.gov/AuthenticationService/types" packageName="gov.nih.nci.cagrid.authentication.stubs.types" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="AuthenticationServiceReference" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="InvalidCredentialFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="InsufficientAttributeFault" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="AuthenticationProviderFault" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./authentication-service.xsd" namespace="http://cagrid.nci.nih.gov/1/authentication-service" packageName="gov.nih.nci.cagrid.authentication.bean" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="SAMLAssertion" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Credential" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace location="./dorian-common.xsd" namespace="http://cagrid.nci.nih.gov/1/dorian-common" packageName="gov.nih.nci.cagrid.dorian.bean" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="SAMLAssertion" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="X509Certificate" xsi:type="ns2:SchemaElementType"/>
@@ -254,25 +264,37 @@
       <ns4:Exception name="PermissionDeniedFault" qname="ns73:PermissionDeniedFault" xmlns:ns73="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
+    <ns4:Method isImported="true" isProvided="false" name="authenticate" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns74:Credential" isArray="false" name="credential" xmlns:ns74="http://cagrid.nci.nih.gov/1/authentication-service"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns75:SAMLAssertion" isArray="false" xmlns:ns75="http://cagrid.nci.nih.gov/1/authentication-service"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidCredentialFault" qname="ns76:InvalidCredentialFault" xmlns:ns76="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
+      <ns4:Exception name="InsufficientAttributeFault" qname="ns77:InsufficientAttributeFault" xmlns:ns77="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
+      <ns4:Exception name="AuthenticationProviderFault" qname="ns78:AuthenticationProviderFault" xmlns:ns78="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
+     </ns4:Exceptions>
+     <ns4:ImportInformation namespace="http://cagrid.nci.nih.gov/AuthenticationService" packageName="gov.nih.nci.cagrid.authentication" portTypeName="AuthenticationServicePortType" wsdlFile="./AuthenticationService.wsdl"/>
+    </ns4:Method>
    </ns4:Methods>
-   <ns74:ResourcePropertiesList xsi:type="ns74:ResourcePropertiesListType" xmlns:ns74="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns74:ResourceProperty qName="ns75:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns74:ResourcePropertyType" xmlns:ns75="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns74:ResourcePropertiesList>
-   <ns76:ServiceSecurity xsi:type="ns76:ServiceSecurity" xmlns:ns76="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns76:SecuritySetting xsi:type="ns76:SecuritySetting">Custom</ns76:SecuritySetting>
-    <ns76:TransportLevelSecurity xsi:type="ns76:TransportLevelSecurity">
-     <ns76:CommunicationMethod xsi:type="ns76:CommunicationMethod">Privacy</ns76:CommunicationMethod>
-    </ns76:TransportLevelSecurity>
-    <ns76:RunAsMode xsi:type="ns76:RunAsMode">System</ns76:RunAsMode>
-    <ns76:AnonymousClients xsi:type="ns76:AnonymousCommunication">No</ns76:AnonymousClients>
-    <ns76:ServiceAuthorization xsi:type="ns76:ServiceAuthorization">
-     <ns76:NoAuthorization xsi:type="ns76:NoAuthorization"/>
-    </ns76:ServiceAuthorization>
-   </ns76:ServiceSecurity>
+   <ns79:ResourcePropertiesList xsi:type="ns79:ResourcePropertiesListType" xmlns:ns79="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns79:ResourceProperty qName="ns80:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns79:ResourcePropertyType" xmlns:ns80="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns79:ResourcePropertiesList>
+   <ns81:ServiceSecurity xsi:type="ns81:ServiceSecurity" xmlns:ns81="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns81:SecuritySetting xsi:type="ns81:SecuritySetting">Custom</ns81:SecuritySetting>
+    <ns81:TransportLevelSecurity xsi:type="ns81:TransportLevelSecurity">
+     <ns81:CommunicationMethod xsi:type="ns81:CommunicationMethod">Privacy</ns81:CommunicationMethod>
+    </ns81:TransportLevelSecurity>
+    <ns81:RunAsMode xsi:type="ns81:RunAsMode">System</ns81:RunAsMode>
+    <ns81:AnonymousClients xsi:type="ns81:AnonymousCommunication">No</ns81:AnonymousClients>
+    <ns81:ServiceAuthorization xsi:type="ns81:ServiceAuthorization">
+     <ns81:NoAuthorization xsi:type="ns81:NoAuthorization"/>
+    </ns81:ServiceAuthorization>
+   </ns81:ServiceSecurity>
   </ns3:Service>
  </ns3:Services>
- <ns77:Extensions xsi:type="ns77:ExtensionsType" xmlns:ns77="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns77:Extension name="cagrid_metadata" xsi:type="ns77:ExtensionType"/>
- </ns77:Extensions>
- <ns78:ServiceProperties xmlns:ns78="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
+ <ns82:Extensions xsi:type="ns82:ExtensionsType" xmlns:ns82="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns82:Extension name="cagrid_metadata" xsi:type="ns82:ExtensionType"/>
+ </ns82:Extensions>
+ <ns83:ServiceProperties xmlns:ns83="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
 </ns1:ServiceDescription>
