@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.data.ui.cacore;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
+import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
@@ -95,8 +97,16 @@ public class ServiceWizard extends JDialog {
 	public void showAt(int x, int y) {
 		setLocation(x, y);
 		// get labels and buttons set up
+		initPanelLayout();
 		loadWizardPanel((AbstractWizardPanel) panelSequence.get(0));
 		setVisible(true);
+	}
+	
+	
+	private void initPanelLayout() {
+		for (int i = 0; i < panelSequence.size(); i++) {
+			getWizardPanel().add((Component) panelSequence.get(i), String.valueOf(i));
+		}
 	}
 	
 	
@@ -326,7 +336,7 @@ public class ServiceWizard extends JDialog {
 	 */
 	private JPanel getWizardPanel() {
 		if (wizardPanel == null) {
-			wizardPanel = new JPanel(new GridBagLayout());
+			wizardPanel = new JPanel(new CardLayout());
 			wizardPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
 				null, "Panel Title", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
@@ -370,14 +380,7 @@ public class ServiceWizard extends JDialog {
 		setTitle(baseTitle + ": " + panel.getPanelTitle());
 		
 		// load the panel into the wizard panel
-		GridBagConstraints cons = new GridBagConstraints();
-		cons.gridx = 0;
-		cons.gridy = 0;
-		cons.weightx = 1.0d;
-		cons.weighty = 1.0d;
-		cons.fill = GridBagConstraints.BOTH;
-		getWizardPanel().removeAll();
-		((GridBagLayout) getWizardPanel().getLayout()).invalidateLayout(getWizardPanel());
-		getWizardPanel().add(panel, cons);
+		((CardLayout) getWizardPanel().getLayout())
+			.show(getWizardPanel(), String.valueOf(currentPanelIndex));
 	}
 }
