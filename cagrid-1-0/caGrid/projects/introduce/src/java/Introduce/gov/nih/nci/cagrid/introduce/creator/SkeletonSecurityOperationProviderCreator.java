@@ -24,18 +24,16 @@ import javax.xml.namespace.QName;
 public class SkeletonSecurityOperationProviderCreator {
 
 	private static final String JAR_PREFIX = "caGrid-1.0-Introduce-security";
-	private static final String SECURITY_JAR_PREFIX = "caGrid-1.0-metadata-security";
+	private static final String SECURITY_JAR_PREFIX = "caGrid-1.0-ServiceSecurityProvider";
+	private static final String SECURITY_METADATA_JAR_PREFIX = "caGrid-1.0-metadata-security";
 	private static final String SERVICE_SECURITY_WSDL = "ServiceSecurity.wsdl";
 	private static final String SERVICE_SECURITY_XSD = "security.xsd";
 	private static final String SECURITY_SERVICE_NS = "http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity";
 	private static final String SECURITY_NS = "gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security";
-	private static final String PATH_TO_BUILD_LIB = "operationProviders" + File.separator + "ServiceSecurity"
-		+ File.separator + "build" + File.separator + "lib" + File.separator;
+	private static final String PATH_TO_BUILD_LIB = ".." + File.separator + "service-security-provider" + File.separator + "build" + File.separator + "lib";
+	private static final String PATH_TO_WSDL = ".." + File.separator + "service-security-provider" + File.separator + "schema" + File.separator + "ServiceSecurity";
 	private static final String PATH_TO_EXT_LIB = "ext" + File.separator + "lib" + File.separator;
-	private static final String PATH_TO_SCHEMA = "operationProviders" + File.separator + "ServiceSecurity"
-		+ File.separator + "schema" + File.separator + "ServiceSecurity" + File.separator;
-
-
+	private static final String PATH_TO_SCHEMA = "ext" + File.separator + "xsd" + File.separator + "cagrid" + File.separator + "types" + File.separator + "security";
 	public SkeletonSecurityOperationProviderCreator() {
 	}
 
@@ -92,7 +90,7 @@ public class SkeletonSecurityOperationProviderCreator {
 					+ File.separator;
 
 				// add in the namespace type
-				NamespaceType nsType = CommonTools.createNamespaceType(PATH_TO_SCHEMA + "xsd" + File.separator
+				NamespaceType nsType = CommonTools.createNamespaceType(PATH_TO_SCHEMA + File.separator
 					+ SERVICE_SECURITY_XSD);
 				nsType.setGenerateStubs(new Boolean(false));
 				nsType.setPackageName("gov.nih.nci.cagrid.metadata.security");
@@ -100,9 +98,9 @@ public class SkeletonSecurityOperationProviderCreator {
 				CommonTools.addNamespace(info.getServiceDescriptor(), nsType);
 
 				// copy over the wsdl file and the required schema
-				Utils.copyFile(new File(PATH_TO_SCHEMA + SERVICE_SECURITY_WSDL), new File(pathToServSchema
+				Utils.copyFile(new File(PATH_TO_WSDL + File.separator + SERVICE_SECURITY_WSDL), new File(pathToServSchema
 					+ SERVICE_SECURITY_WSDL));
-				Utils.copyFile(new File(PATH_TO_SCHEMA + "xsd" + File.separator + SERVICE_SECURITY_XSD), new File(
+				Utils.copyFile(new File(PATH_TO_SCHEMA + File.separator + SERVICE_SECURITY_XSD), new File(
 					pathToServSchema + "xsd" + File.separator + SERVICE_SECURITY_XSD));
 
 				// copy over the jars which contain the stubs and the service
@@ -126,7 +124,7 @@ public class SkeletonSecurityOperationProviderCreator {
 				libs = libDir.listFiles(new FileFilter() {
 					public boolean accept(File pathname) {
 						String name = pathname.getName();
-						return (name.endsWith(".jar") && (name.startsWith(SECURITY_JAR_PREFIX)));
+						return (name.endsWith(".jar") && (name.startsWith(SECURITY_JAR_PREFIX) || name.startsWith(SECURITY_METADATA_JAR_PREFIX)  ));
 					}
 				});
 				if (libs != null) {

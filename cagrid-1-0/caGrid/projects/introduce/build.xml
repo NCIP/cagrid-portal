@@ -14,8 +14,6 @@
 	<!-- Cleans up generated stuff                                           -->
 	<!-- =================================================================== -->
 	<target name="clean">
-		<ant dir="${basedir}/operationProviders/ServiceSecurity" antfile="build.xml" target="clean"
-			inheritall="false"/>
 		<delete dir="${build.dir}"/>
 		<delete dir="${templates.created.src.dir}"/>
 		<delete dir="${beans.created.src.dir}"/>
@@ -236,18 +234,12 @@
 	<!-- Builds the project                                                  -->
 	<!-- =================================================================== -->
 	<target name="build" description="Builds the entire application" depends="jar, jar-tests"/>
-	<!-- =================================================================== -->
-	<!-- Builds the Security OperationProvider                               -->
-	<!-- =================================================================== -->
-	<target name="buildServiceSecurity" description="Builds the ServiceSecurity service">
-		<ant dir="${basedir}/operationProviders/ServiceSecurity" antfile="build.xml" target="all"
-			inheritall="false"/>
-	</target>
+
 	<!-- =================================================================== -->
 	<!-- Builds the project from a clean start                               -->
 	<!-- =================================================================== -->
 	<target name="all" description="Cleans and build the entire application" depends="clean,
-		generateStubs,   build, buildServiceSecurity"/>
+		generateStubs,   build"/>
 		
 	<!-- =================================================================== -->
 	<!-- Builds the project and the docs for a release                       -->

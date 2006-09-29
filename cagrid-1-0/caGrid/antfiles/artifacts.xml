@@ -21,6 +21,13 @@
 		<artifact track="main" type="jars" id="caCORE.jars">
 			<fileset dir="${share.dir}/lib/caCORE">
 				<include name="*.jar" />
+				<exclude name="*ehcache*.jar" />
+			</fileset>
+		</artifact>
+		<artifact track="main" type="jars" id="caCORE-fixed.jars">
+			<fileset dir="${share.dir}/lib/caCORE">
+				<include name="*.jar" />
+				<exclude name="client.jar" />
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="mds.jars">
@@ -80,6 +87,10 @@
 			<antcall target="build-metadata" />
 			<fileset dir="${projects.dir}/metadata/build/lib">
 				<include name="*-common*.jar" />
+				<exclude name="*test*.jar" />
+			</fileset>
+			<fileset dir="${projects.dir}/metadata/ext/lib">
+				<include name="*.jar" />
 				<exclude name="*test*.jar" />
 			</fileset>
 		</artifact>
@@ -395,13 +406,13 @@
 				<include name="**" />
 			</fileset>
 		</artifact>
-		<artifact track="main" type="jars" id="introduce.servicesecurity.jars">
-			<antcall target="build-introduceServiceSecurity" />
-			<fileset dir="${projects.dir}/introduce/operationProviders/ServiceSecurity/build/lib">
+		<artifact track="main" type="jars" id="servicesecurity.jars">
+			<antcall target="build-service-security-provider" />
+			<fileset dir="${projects.dir}/service-security-provider/build/lib">
 				<include name="*.jar" />
 				<exclude name="*tests*.jar" />
 			</fileset>
-			<fileset dir="${projects.dir}/introduce/operationProviders/ServiceSecurity/ext/lib">
+			<fileset dir="${projects.dir}/service-security-provider/ext/lib">
 				<include name="*.jar" />
 				<exclude name="*tests*.jar" />
 			</fileset>
@@ -423,10 +434,6 @@
 		
 		<artifact track="main" type="jars" id="metadatautils.jars">
 			<antcall target="build-metadatautils" />
-			<fileset dir="${projects.dir}/metadatautils/ext/lib">
-				<include name="*.jar" />
-				<exclude name="*tests*.jar" />
-			</fileset>
 			<fileset dir="${projects.dir}/metadatautils/build/jars">
 				<include name="*.jar" />
 				<exclude name="*tests*.jar" />

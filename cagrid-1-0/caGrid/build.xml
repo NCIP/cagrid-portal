@@ -38,7 +38,7 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, idpservice, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service,gridgrouper-plugin" />
+	<property name="projects.list" value="bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, portal, dorian, fqp, gme, graph, gridca, idpservice, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service,gridgrouper-plugin, service-security-provider" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
@@ -48,7 +48,7 @@
 	<!--                  DEFINE THE SUB PROJECTS THAT PROVIDE INTRODUCE EXTENSIONS       -->
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects above -->
-	<property name="introduce.extension.projects.list" value="cabigextensions, cadsr, data, bulkDataTransfer" />
+	<property name="introduce.extension.projects.list" value="cabigextensions, cadsr, data, bulkDataTransfer,gridgrouper-plugin" />
 	<property name="introduce.extensions.dir" value="${projects.dir}/introduce/extensions" />
 
 
@@ -111,6 +111,10 @@
 	<!-- METADATA: This may only depend on core                          -->
 	<!-- =============================================================== -->
 	<target name="build-metadata" if="isJDK1.5" depends="prepare" description="Builds the common metadata">
+		<resolveDependencies extdir="${projects.dir}/metadata/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="caCORE-fixed.jars" />
+		</resolveDependencies>
 		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="jar" />
 	</target>
 
@@ -154,7 +158,6 @@
 	<target name="build-portal" if="isJDK1.5" depends="prepare" description="Builds the portal project">
 		<resolveDependencies extdir="${projects.dir}/portal/ext">
 			<artifact refid="core.jars" />
-			<artifact refid="caCORE.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="test.coverage.jars" />
@@ -217,11 +220,11 @@
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="data.metadata.jars" />
 			<artifact refid="metadatautils.jars" />
-			<artifact refid="caCORE.jars" />
+			<artifact refid="caCORE-fixed.jars" />
 			<artifact refid="introduce.jars" />
 			<artifact refid="graph.jars" />
 			<artifact refid="gme.globus.client.jars" />
-			<artifact refid="introduce.servicesecurity.jars" />
+			<artifact refid="servicesecurity.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/cadsr/schema/CaDSRService">
 			<artifact refid="metadata.schemas" />
@@ -265,7 +268,7 @@
             <artifact refid="opensaml.jars"/>
         	<artifact refid="opensaml.endorsed"/>
         	<artifact refid="opensaml.codec"/>
-            <artifact refid="introduce.servicesecurity.jars"/>
+            <artifact refid="servicesecurity.jars"/>
             <artifact refid="security.metadata.jars"/>
         </resolveDependencies>
       <resolveDependencies extdir="${projects.dir}/authentication-service/schema/AuthenticationService">
@@ -287,13 +290,13 @@
 			<artifact refid="core.resources" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="mobius.jars" />
+                  <artifact refid="authentication.service.client.jars" />
 			<artifact refid="opensaml.jars" />
 			<artifact refid="opensaml.endorsed" />
 			<artifact refid="gts.client.jars" />
-			<artifact refid="introduce.servicesecurity.jars" />
+			<artifact refid="servicesecurity.jars" />
 			<artifact refid="security.metadata.jars" />
-			<artifact refid="common.metadata.jars" />
-			<artifact refid="authentication.service.client.jars" />
+                  <artifact refid="common.metadata.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/dorian/schema/Dorian">
 			<artifact refid="metadata.schemas" />
@@ -322,9 +325,9 @@
 			<artifact refid="core.test.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="gridca.jars" />
-			<artifact refid="introduce.servicesecurity.jars" />
+			<artifact refid="servicesecurity.jars" />
 			<artifact refid="security.metadata.jars" />
-			<artifact refid="common.metadata.jars" />
+                  <artifact refid="common.metadata.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/gridgrouper/schema/GridGrouper">
 			<artifact refid="metadata.schemas" />
@@ -362,7 +365,7 @@
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="mobius.jars" />
-			<artifact refid="introduce.servicesecurity.jars" />
+			<artifact refid="servicesecurity.jars" />
 			<artifact refid="security.metadata.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/gts/schema/GTS">
@@ -385,7 +388,7 @@
 			<artifact refid="gridca.jars" />
 			<artifact refid="mobius.jars" />
 			<artifact refid="gts.client.jars" />
-			<artifact refid="introduce.servicesecurity.jars" />
+			<artifact refid="servicesecurity.jars" />
 			<artifact refid="security.metadata.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/syncgts/schema/SyncGTS">
@@ -403,7 +406,7 @@
 			<artifact refid="dorian.jars" />
 			<artifact refid="dorian.schemas" />
 			<artifact refid="gridca.jars" />
-			<artifact refid="introduce.servicesecurity.jars" />
+			<artifact refid="servicesecurity.jars" />
 			<artifact refid="opensaml.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/idpservice" inheritAll="false" antfile="build.xml" target="all" />
@@ -412,7 +415,7 @@
 	<!-- =============================================================== -->
 	<!-- INTRODUCE:                                                      -->
 	<!-- =============================================================== -->
-	<target name="build-introduce" depends="prepare, build-introduceServiceSecurity" description="Builds Introduce">
+	<target name="build-introduce" depends="prepare" description="Builds Introduce">
 		<resolveDependencies extdir="${projects.dir}/introduce/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="common.test.jars" />
@@ -424,22 +427,29 @@
 			<artifact refid="metadata.schemas" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="security.metadata.jars" />
+			<artifact refid="servicesecurity.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/introduce/skeleton">
 			<artifact refid="mds.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
-	<target name="build-introduceServiceSecurity" depends="prepare" description="Builds Introduce's ServiceSecurity Operation Provider">
-		<resolveDependencies extdir="${projects.dir}/introduce/operationProviders/ServiceSecurity/ext">
+	
+	<!-- =============================================================== -->
+	<!-- SERVICE SECURITY PROVIDER:                                      -->
+	<!-- =============================================================== -->
+	<target name="build-service-security-provider" depends="prepare" description="Builds Service Security Provider">
+		<resolveDependencies extdir="${projects.dir}/service-security-provider/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="security.metadata.jars" />
 		</resolveDependencies>
-		<resolveDependencies extdir="${projects.dir}/introduce/operationProviders/ServiceSecurity/schema/ServiceSecurity">
+		<resolveDependencies extdir="${projects.dir}/service-security-provider/ext">
 			<artifact refid="security.metadata.schemas" />
 		</resolveDependencies>
-		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="buildServiceSecurity" />
+
+		<ant dir="${projects.dir}/service-security-provider" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
+
 
 	<!-- =============================================================== -->
 	<!-- CAGRID GME:                                                     -->
@@ -457,7 +467,7 @@
 
 
 	<!-- =============================================================== -->
-	<!-- CAGRID Installer:                                                     -->
+	<!-- CAGRID Installer:                                               -->
 	<!-- =============================================================== -->
 	<target name="build-installer" depends="prepare" description="Builds caGrid Installer">
 		<resolveDependencies extdir="${projects.dir}/installer/ext">
@@ -504,7 +514,7 @@
 			<artifact refid="core.jars" />
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="security.metadata.jars" />
-			<artifact refid="introduce.servicesecurity.jars" />
+			<artifact refid="servicesecurity.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/bulkDataTransfer" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -573,7 +583,7 @@
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="mds.jars" />
 			<artifact refid="common.metadata.jars" />
-			<artifact refid="introduce.servicesecurity.jars" />
+			<artifact refid="servicesecurity.jars" />
 			<artifact refid="data.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/fqp/schema/FederatedQueryProcessor">
