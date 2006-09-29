@@ -111,10 +111,6 @@
 	<!-- METADATA: This may only depend on core                          -->
 	<!-- =============================================================== -->
 	<target name="build-metadata" if="isJDK1.5" depends="prepare" description="Builds the common metadata">
-		<resolveDependencies extdir="${projects.dir}/metadata/ext">
-			<artifact refid="core.jars" />
-			<artifact refid="caCORE-fixed.jars" />
-		</resolveDependencies>
 		<ant dir="${projects.dir}/metadata" inheritAll="false" antfile="build.xml" target="jar" />
 	</target>
 
@@ -220,7 +216,7 @@
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="data.metadata.jars" />
 			<artifact refid="metadatautils.jars" />
-			<artifact refid="caCORE-fixed.jars" />
+			<artifact refid="caCORE.jars" />
 			<artifact refid="introduce.jars" />
 			<artifact refid="graph.jars" />
 			<artifact refid="gme.globus.client.jars" />
