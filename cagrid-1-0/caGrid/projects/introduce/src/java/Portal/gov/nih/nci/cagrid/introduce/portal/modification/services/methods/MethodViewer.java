@@ -510,25 +510,27 @@ public class MethodViewer extends GridPortalBaseFrame {
 							// validate the import
 							// make sure the port type actually has the
 							// operation in it
-							List portTypeEls = currentWSDLDoc.getRootElement().getChildren("portType",
-								Namespace.getNamespace(IntroduceConstants.WSDLAMESPACE));
-							for (int i = 0; i < portTypeEls.size(); i++) {
-								Element el = (Element) portTypeEls.get(i);
-								if (el.getAttributeValue("name").equals(getPortTypesComboBox().getSelectedItem())) {
-									boolean found = false;
-									List opels = el.getChildren("operation", Namespace
-										.getNamespace(IntroduceConstants.WSDLAMESPACE));
-									for (int j = 0; j < opels.size(); j++) {
-										Element opEl = (Element) opels.get(j);
-										if (opEl.getAttributeValue("name").toLowerCase().equals(
-											getNameField().getText().toLowerCase())) {
-											found = true;
+							if (currentWSDLDoc != null) {
+								List portTypeEls = currentWSDLDoc.getRootElement().getChildren("portType",
+									Namespace.getNamespace(IntroduceConstants.WSDLAMESPACE));
+								for (int i = 0; i < portTypeEls.size(); i++) {
+									Element el = (Element) portTypeEls.get(i);
+									if (el.getAttributeValue("name").equals(getPortTypesComboBox().getSelectedItem())) {
+										boolean found = false;
+										List opels = el.getChildren("operation", Namespace
+											.getNamespace(IntroduceConstants.WSDLAMESPACE));
+										for (int j = 0; j < opels.size(); j++) {
+											Element opEl = (Element) opels.get(j);
+											if (opEl.getAttributeValue("name").toLowerCase().equals(
+												getNameField().getText().toLowerCase())) {
+												found = true;
+											}
 										}
-									}
-									if (!found) {
-										valid = false;
-										message = "Cannot find imported operation \"" + getNameField().getText()
-											+ "\" in port type \"" + el.getAttributeValue("name") + "\"";
+										if (!found) {
+											valid = false;
+											message = "Cannot find imported operation \"" + getNameField().getText()
+												+ "\" in port type \"" + el.getAttributeValue("name") + "\"";
+										}
 									}
 								}
 							}
@@ -553,7 +555,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 									.toString());
 								importInfo.setPackageName(getPackageNameTextField().getText());
 								String wsdlFile = getWsdlFileTextField().getText();
-								wsdlFile = wsdlFile.substring(wsdlFile.lastIndexOf(File.separator)+1);
+								wsdlFile = wsdlFile.substring(wsdlFile.lastIndexOf(File.separator) + 1);
 								importInfo.setWsdlFile(wsdlFile);
 								if (!getInputMessageNamespaceTextField().getText().equals("")
 									&& !getInputMessageNameTextField().getText().equals("")) {
@@ -1856,7 +1858,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField getInputMessageNamespaceTextField() {
 		if (inputMessageNamespaceTextField == null) {
 			inputMessageNamespaceTextField = new JTextField();
-			if (method.isIsImported()) {
+			if (method.isIsImported() && method.getImportInformation().getInputMessage() != null) {
 				inputMessageNamespaceTextField.setText(method.getImportInformation().getInputMessage()
 					.getNamespaceURI());
 			}
@@ -1873,7 +1875,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField getOutputMessageNamespaceTextField() {
 		if (outputMessageNamespaceTextField == null) {
 			outputMessageNamespaceTextField = new JTextField();
-			if (method.isIsImported()) {
+			if (method.isIsImported() && method.getImportInformation().getOutputMessage() != null) {
 				outputMessageNamespaceTextField.setText(method.getImportInformation().getOutputMessage()
 					.getNamespaceURI());
 			}
@@ -1939,7 +1941,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField getInputMessageNameTextField() {
 		if (inputMessageNameTextField == null) {
 			inputMessageNameTextField = new JTextField();
-			if (method.isIsImported()) {
+			if (method.isIsImported() && method.getImportInformation().getInputMessage() != null) {
 				inputMessageNameTextField.setText(method.getImportInformation().getInputMessage().getLocalPart());
 			}
 		}
@@ -1955,7 +1957,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField getOutputMessageNameTextField() {
 		if (outputMessageNameTextField == null) {
 			outputMessageNameTextField = new JTextField();
-			if (method.isIsImported()) {
+			if (method.isIsImported() && method.getImportInformation().getOutputMessage() != null) {
 				outputMessageNameTextField.setText(method.getImportInformation().getOutputMessage().getLocalPart());
 			}
 		}
@@ -2240,6 +2242,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JComboBox getPortTypesComboBox() {
 		if (portTypesComboBox == null) {
 			portTypesComboBox = new JComboBox();
+			if (method.isIsImported()) {
+				portTypesComboBox.addItem(method.getImportInformation().getPortTypeName());
+			}
 		}
 		return portTypesComboBox;
 	}
@@ -2253,6 +2258,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JTextField getNamespaceTextField() {
 		if (namespaceTextField == null) {
 			namespaceTextField = new JTextField();
+			if (method.isIsImported()) {
+				namespaceTextField.setText(method.getImportInformation().getNamespace());
+			}
 		}
 		return namespaceTextField;
 	}
@@ -2262,8 +2270,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 		XSOMParser parser = new XSOMParser();
 		try {
 			parser.parse(new File(baseSchemaDir.getAbsolutePath() + File.separator + namespace.getLocation()));
-			IntroducePortalConf conf = (IntroducePortalConf) PortalResourceManager.getInstance().getResource(
-				IntroducePortalConf.RESOURCE);
 			try {
 				parser.parse(new File(gov.nih.nci.cagrid.introduce.ResourceManager
 					.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION)
