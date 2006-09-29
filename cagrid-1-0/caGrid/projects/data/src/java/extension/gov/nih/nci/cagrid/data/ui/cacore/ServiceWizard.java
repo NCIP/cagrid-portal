@@ -9,13 +9,17 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 
 /** 
@@ -124,6 +128,24 @@ public class ServiceWizard extends JDialog {
         this.setSize(new java.awt.Dimension(640, 325));
         this.setContentPane(getMainPanel());
         this.setTitle(baseTitle);
+        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+        	public void windowClosing(WindowEvent e) {
+        		String[] message = {
+        			"Closing this wizard before completing all steps may",
+        			"have unexpected concequences, such as errors editing",
+        			"the service and incomplete or incorrect functionality.\n",
+        			"Close wizard anyway?"
+        		};
+        		int choice = JOptionPane.showConfirmDialog(
+        			ServiceWizard.this, message, "Question", JOptionPane.YES_NO_OPTION);
+        		if (choice == JOptionPane.YES_OPTION) {
+        			// ok then...
+        			setVisible(false);
+        			dispose();
+        		}
+        	}
+        });
 	}
 
 
