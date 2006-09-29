@@ -62,10 +62,17 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 		return this.configuration;
 	}
 	
+	<%
+	if(!info.getService().getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE)){
+	%>
 	public <%=info.getService().getPackageName()%>.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("home");
 		return (<%=info.getService().getPackageName()%>.service.globus.resource.BaseResourceHome)resource;
 	}
+
+	<%
+	}
+	%>
 	
 	<%
 	for(int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++){
