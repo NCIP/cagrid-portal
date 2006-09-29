@@ -261,6 +261,6 @@ public class ClientJarPanel extends AbstractWizardPanel {
 	
 	
 	private String getServiceLibDir() {
-		return CacoreWizardUtils.getServiceLibDir(getServiceInformation()) + File.separator + "lib";
+		return CacoreWizardUtils.getServiceBaseDir(getServiceInformation()) + File.separator + "lib";
 	}
 }

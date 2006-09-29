@@ -263,7 +263,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 					if (choice == JFileChooser.APPROVE_OPTION) {
 						File selectedFile = chooser.getSelectedFile();
 						getBitBucket().put(CacoreWizardUtils.LAST_DIRECTORY_KEY, selectedFile.getAbsolutePath());
-						String serviceEtcDir = CacoreWizardUtils.getServiceLibDir(getServiceInformation()) + File.separator + "etc";
+						String serviceEtcDir = CacoreWizardUtils.getServiceBaseDir(getServiceInformation()) + File.separator + "etc";
 						File outputFile = new File(serviceEtcDir + File.separator + selectedFile.getName());
 						try {
 							Utils.copyFile(selectedFile, outputFile);
