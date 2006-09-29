@@ -162,6 +162,24 @@
 			</fileset>
 		</artifact>
 		
+		<artifact track="main" type="jars" id="authentication.service.client.jars">
+									<antcall target="build-authentication-service" />
+									<fileset dir="${projects.dir}/authentication-service/build/lib">
+											<include name="caGrid-*-authentication-service-*stubs.jar" />
+											<include name="caGrid-*-authentication-service-*common.jar" />
+											<include name="caGrid-*-authentication-service-*client.jar" />
+											<include name="caGrid-*-authentication-service-*ui.jar" />
+									</fileset>
+									<fileset dir="${projects.dir}/authentication-service/lib">
+											<include name="*.jar" />
+											<exclude name="*test*.jar" />
+									</fileset>
+									<fileset dir="${projects.dir}/authentication-service/ext/lib">
+											<include name="*.jar" />
+											<exclude name="*test*.jar" />
+									</fileset>
+				</artifact>
+		
 		<artifact track="main" type="jars" id="gridgrouper.ui.jars">
 							<antcall target="build-gridgrouper" />
 							<fileset dir="${projects.dir}/gridgrouper/build/lib">

@@ -255,7 +255,6 @@
     <target name="build-authentication-service" depends="prepare" description="Builds the Authentication Service project">
         <resolveDependencies extdir="${projects.dir}/authentication-service/ext">
         	<artifact refid="ant-contrib.jars"/>
-        	<artifact refid="dorian.jars"/>
             <artifact refid="core.jars"/>
             <artifact refid="common.test.jars"/>
         	<artifact refid="common.metadata.jars" />
@@ -297,6 +296,7 @@
 			<artifact refid="introduce.servicesecurity.jars" />
 			<artifact refid="security.metadata.jars" />
 			<artifact refid="common.metadata.jars" />
+			<artifact refid="authentication.service.client.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/dorian/schema/Dorian">
 			<artifact refid="metadata.schemas" />
