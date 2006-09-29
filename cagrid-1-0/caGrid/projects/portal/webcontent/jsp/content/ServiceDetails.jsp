@@ -33,35 +33,35 @@
             <h:outputText value="Name"/>
         </h:column>
         <h:column>
-            <h:outputText value="#{serviceDetails.service.name}"/>
+            <h:outputText value="#{services.navigatedService.name}"/>
         </h:column>
 
         <h:column>
             <h:outputText value="Version"/>
         </h:column>
         <h:column>
-            <h:outputText value="#{serviceDetails.service.version}"/>
+            <h:outputText value="#{services.navigatedService.version}"/>
         </h:column>
 
         <h:column>
             <h:outputText value="URL"/>
         </h:column>
         <h:column>
-            <h:outputText value="#{serviceDetails.service.EPR}"/>
+            <h:outputText value="#{services.navigatedService.EPR}"/>
         </h:column>
 
         <h:column>
             <h:outputText value="Descriptions"/>
         </h:column>
         <h:column>
-            <h:outputText value="#{serviceDetails.service.description}"/>
+            <h:outputText value="#{services.navigatedService.description}"/>
         </h:column>
 
         <h:column>
             <h:outputText value="Version"/>
         </h:column>
         <h:column>
-            <h:outputText value="#{serviceDetails.service.version}"/>
+            <h:outputText value="#{services.navigatedService.version}"/>
         </h:column>
 
         <h:column>
@@ -69,9 +69,9 @@
         </h:column>
         <h:column>
             <h:commandLink action="#{centerDetails.navigateTo}">
-                <h:outputText value="#{serviceDetails.service.researchCenter.shortName}"/>
+                <h:outputText value="#{services.navigatedService.researchCenter.shortName}"/>
                 <f:param id="navigatedCenterPk" name="navigatedCenterPk"
-                         value="#{serviceDetails.service.researchCenter.pk}"/>
+                         value="#{services.navigatedService.researchCenter.pk}"/>
             </h:commandLink>
         </h:column>
 
@@ -79,14 +79,14 @@
             <h:outputText value="Service Type"/>
         </h:column>
         <h:column>
-            <h:outputText value="#{serviceDetails.type}"/>
+            <h:outputText value="#{services.navigatedType}"/>
         </h:column>
 
     </h:panelGrid>
     <f:verbatim><br/><br/></f:verbatim>
 </h:column>
 
-<h:column rendered="#{serviceDetails.dataService}">
+<h:column rendered="#{services.showModel}">
     <h:panelGrid styleClass="contentInnerTable" border="1"
                  cellpadding="3" cellspacing="0"
                  rowClasses="dataRowLight,dataRowDark"

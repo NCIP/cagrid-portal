@@ -71,7 +71,7 @@
 
 <h:column>
     <t:dataTable styleClass="contentMainTable" id="rcData" var="rc"
-                 value="#{portal.rc}"
+                 value="#{centers.list}"
                  rows="6">
 
         <h:column>

@@ -41,18 +41,10 @@
         <property name="gridServiceBaseDAO">
             <ref bean="gridServiceBaseDAO"/>
         </property>
-        <property name="rcDAO">
-            <ref bean="rcDAO"/>
-        </property>
         <property name="jdbcDAO">
             <ref bean="jdbcDAO"/>
         </property>
     </bean>
-
-    <bean name="rcManager"
-          class="gov.nih.nci.cagrid.portal.manager.ResearchCenterManagerImpl"
-          parent="baseManager"/>
-
 
     <!-- main Service that participates in transactions-->
     <bean id="gridServiceManager"
@@ -72,6 +64,22 @@
         </property>
     </bean>
 
+    <bean name="rcManager"
+          class="gov.nih.nci.cagrid.portal.manager.ResearchCenterManagerImpl"
+          parent="baseManager">
+        <property name="rcDAO">
+            <ref bean="rcDAO"/>
+        </property>
+    </bean>
+
+    <bean name="pocManager"
+          class="gov.nih.nci.cagrid.portal.manager.PointOfContactManagerImpl"
+          parent="baseManager">
+        <property name="pocDAO">
+            <ref bean="pocDAO"/>
+        </property>
+    </bean>
+
 
     <!-- #############   DAO #############                -->
 
@@ -84,8 +92,7 @@
 
 
     <bean id="gridServiceBaseDAO"
-          class="gov.nih.nci.cagrid.portal.dao.hibernate.GridServiceBaseDAOImpl"
-            >
+          class="gov.nih.nci.cagrid.portal.dao.hibernate.GridServiceBaseDAOImpl">
         <property name="sessionFactory">
             <ref bean="sessionFactory"/>
         </property>
@@ -96,8 +103,13 @@
         <property name="sessionFactory">
             <ref bean="sessionFactory"/>
         </property>
-        <property name="dataSource"
-                  ref="jdbcDataSource"/>
+    </bean>
+
+    <bean id="pocDAO"
+          class="gov.nih.nci.cagrid.portal.dao.hibernate.PointOfContactDAOImpl">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
     </bean>
 
     <bean id="jdbcDAO"

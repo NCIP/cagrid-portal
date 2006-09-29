@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.portal.dao;
 
-import gov.nih.nci.cagrid.portal.domain.GeoCodeValues;
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -12,16 +11,6 @@ import org.springframework.dao.DataAccessException;
  */
 public interface ResearchCenterDAO extends BaseDAO {
 
-
-    /**
-     * Will do a local lookup
-     * for Geocodes based on a Zip code value
-     *
-     * @param zip
-     * @return
-     * @throws DataAccessException
-     */
-    public GeoCodeValues getGeoCodes(String zip) throws DataAccessException;
 
     public java.util.List getUniqueCenters() throws DataAccessException;
 

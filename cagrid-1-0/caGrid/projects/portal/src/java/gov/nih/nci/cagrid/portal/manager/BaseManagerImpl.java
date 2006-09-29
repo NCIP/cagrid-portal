@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.portal.manager;
 import gov.nih.nci.cagrid.portal.dao.BaseDAO;
 import gov.nih.nci.cagrid.portal.dao.GridServiceBaseDAO;
 import gov.nih.nci.cagrid.portal.dao.JdbcDAO;
-import gov.nih.nci.cagrid.portal.dao.ResearchCenterDAO;
 import gov.nih.nci.cagrid.portal.domain.DomainObject;
 import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
 import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
@@ -35,7 +34,6 @@ public abstract class BaseManagerImpl implements BaseManager {
 
     protected GridServiceBaseDAO gridServiceBaseDAO;
     protected JdbcDAO jdbcDAO;
-    protected ResearchCenterDAO rcDAO;
 
     protected Category _logger = Category.getInstance(getClass().getName());
 
@@ -80,11 +78,6 @@ public abstract class BaseManagerImpl implements BaseManager {
      * setters for spring *
      */
 
-    public void setRcDAO(ResearchCenterDAO rcDAO) {
-        this.rcDAO = rcDAO;
-    }
-
-
     public void setBaseDAO(BaseDAO baseDAO) {
         this.baseDAO = baseDAO;
     }
@@ -96,6 +89,7 @@ public abstract class BaseManagerImpl implements BaseManager {
     public void setGridServiceBaseDAO(GridServiceBaseDAO gridServiceBaseDAO) {
         this.gridServiceBaseDAO = gridServiceBaseDAO;
     }
+
 
     public void setJdbcDAO(JdbcDAO jdbcDAO) {
         this.jdbcDAO = jdbcDAO;

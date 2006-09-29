@@ -22,7 +22,8 @@
         <h:column>
 
             <h:panelGrid columns="1"
-                         styleClass="contentTable" columnClasses="errorContent">
+                         styleClass="contentTable"
+                         columnClasses="errorContent">
 
                 <h:column>
                     <h:outputText value="caGrid Portal has encountered an error condition.
@@ -42,7 +43,7 @@
                 </h:column>
 
                 <h:column rendered="#{errorDisplay.showError}">
-                    <h:inputTextarea cols="80" rows="40" readonly="true"
+                    <h:inputTextarea cols="80" rows="30" readonly="true"
                                      value="#{errorDisplay.stackTrace}"
                             />
                 </h:column>

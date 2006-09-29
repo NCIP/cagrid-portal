@@ -99,7 +99,7 @@ public class GridServiceManagerImpl extends BaseManagerImpl
                 _logger.warn("Could not reach Geocoding web service. Doing local lookup");
                 try {
                     //Do a local lookup
-                    GeoCodeValues result = rcDAO.getGeoCodes(rc.getPostalCode());
+                    GeoCodeValues result = jdbcDAO.getGeoCodes(rc.getPostalCode());
                     rc.setLatitude(result.getLatitude());
                     rc.setLongitude(result.getLongitude());
                 } catch (DataAccessException e1) {

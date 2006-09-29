@@ -679,6 +679,11 @@ Homepage BEGINS (Each section has a homepage)
     text-align: left;
 }
 
+.subMenuTable {
+    height: 100%;
+
+}
+
 .mainContent {
 /*for the area below the title content of the home page * / font-family : arial, helvetica, verdana, sans-serif;*/
     font-size: 0.8em;
@@ -713,4 +718,11 @@ Homepage BEGINS (Each section has a homepage)
     color: #FF0033; /* constant: white */
     height: 20;
     text-align: left;
+}
+
+.errorContent {
+    font-size: 0.9em;
+    padding: 1em;
+    line-height: 1.5em;
+    vertical-align: top;
 }

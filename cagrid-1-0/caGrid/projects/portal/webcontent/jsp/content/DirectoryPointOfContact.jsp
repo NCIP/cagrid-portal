@@ -71,7 +71,7 @@
 
 <h:column>
     <t:dataTable styleClass="contentMainTable" id="pocData" var="poc"
-                 value="#{portal.poc}"
+                 value="#{persons.list}"
                  rows="6">
 
         <h:column>

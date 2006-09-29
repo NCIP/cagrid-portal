@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.portal.manager;
 
+import gov.nih.nci.cagrid.portal.dao.ResearchCenterDAO;
 import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
+import org.springframework.dao.DataAccessException;
 
 import java.util.List;
 
@@ -14,6 +16,7 @@ import java.util.List;
 public class ResearchCenterManagerImpl extends BaseManagerImpl
         implements ResearchCenterManager {
 
+    private ResearchCenterDAO rcDAO;
 
     /**
      * Will return all UNIQUE/DISTINCT
@@ -27,8 +30,18 @@ public class ResearchCenterManagerImpl extends BaseManagerImpl
      * @see gov.nih.nci.cagrid.portal.manager.BaseManager#loadAll(Class)
      */
     public List getUniqueCenters() throws PortalRuntimeException {
-        return rcDAO.getUniqueCenters();
+        List result;
+        try {
+            result = rcDAO.getUniqueCenters();
+        } catch (DataAccessException e) {
+            _logger.error("Error getting Centers from DAO", e);
+            throw new PortalRuntimeException(e);
+        }
+        return result;
+
     }
 
-
+    public void setRcDAO(ResearchCenterDAO rcDAO) {
+        this.rcDAO = rcDAO;
+    }
 }

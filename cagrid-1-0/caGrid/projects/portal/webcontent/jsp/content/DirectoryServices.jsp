@@ -75,7 +75,7 @@
 
 
 <h:column>
-    <t:dataTable styleClass="contentMainTable" id="serviceData" var="service" value="#{portal.services}"
+    <t:dataTable styleClass="contentMainTable" id="serviceData" var="service" value="#{services.list}"
                  rows="6">
 
         <h:column>
@@ -113,7 +113,7 @@
 
                 <h:column/>
                 <h:column>
-                    <h:commandLink action="#{serviceDetails.navigateTo}">
+                    <h:commandLink action="#{services.navigateToService}">
                         <h:outputText value="More Details>>"/>
                         <f:param id="navigatedServicePk" name="navigatedServicePk" value="#{service.pk}"/>
                     </h:commandLink>

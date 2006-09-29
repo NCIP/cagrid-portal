@@ -134,7 +134,7 @@
     <!-- Cleans up generated stuff                                      -->
     <!-- Not to be called directly                                      -->
     <!-- ============================================================== -->
-    <target name="clean" description="Removes generated files.">
+    <target name="clean">
         <delete dir="${test.log.dir}"/>
         <delete dir="${webinf.lib.dir}"/>
         <delete dir="${webinf.classes.dir}"/>
@@ -144,21 +144,26 @@
     </target>
 
 
+    <target name="buildPortal" description="Will build it locally in the local directory"
+            depends="clean,compile,hibernate.xdoclet,copyLibsLocal,copyResourcesLocal"/>
+
+
     <!-- ============================================================== -->
     <!-- Deploy Target                                               -->
     <!-- ============================================================== -->
-    <target name="deployExploded"
-            depends="clean,cleanDeployment,compile,hibernate.xdoclet,copyLibsLocal,copyResourcesLocal,deployPreBuilt"
-            description="Deploy Application into tomcat"/>
 
-
-    <target name="deployPreBuilt" description="Deploys pre-built webapp">
+    <target name="deployTomcatPreBuilt" description="Deploys pre-built webapp">
         <copy todir="${tomcat.webapps.dir}/${project.name}" overwrite="true">
             <fileset dir="${webcontent.dir}"/>
         </copy>
     </target>
 
-    <target name="deployAsWar" depends="cleanDeployment,war" description="Deploy Application into Tomcat as a war">
+    <target name="deployTomcatExploded"
+            depends="cleanDeployment,deployTomcatPreBuilt"
+            description="Deploy Application into tomcat"/>
+
+    <target name="deployTomcatWar" depends="cleanDeployment,war"
+            description="Deploy Application into Tomcat as a war">
         <copy file="${build.dir}/${project.name}.war" todir="${tomcat.webapps.dir}"/>
     </target>
 
@@ -175,7 +180,7 @@
     </target>
 
 
-    <target name="cleanDeployment" description="Removes tomcat deployment">
+    <target name="cleanDeployment">
         <delete dir="${tomcat.webapps.dir}/${project.name}" failonerror="false"/>
         <!--Delete the war file if one exists-->
         <delete file="${tomcat.webapps.dir}/${project.name}.war"/>
@@ -330,10 +335,10 @@
         <fail message="Tests failed! Check test reports." if="test.failed"/>
     </target>
 
-    <target name="hibernate" description="Does all the hibernate generation stuff"
+    <target name="hibernate"
             depends="hibernate.xdoclet,file-list"/>
 
-    <target name="hibernate.xdoclet" depends="compile" description="Creates the hbm.xml files">
+    <target name="hibernate.xdoclet" depends="compile">
         <taskdef name="hibernatedoclet"
                  classname="xdoclet.modules.hibernate.HibernateDocletTask">
             <classpath refid="xdoclet.classpath"/>
@@ -352,8 +357,7 @@
         </hibernatedoclet>
     </target>
 
-    <target name="file-list"
-            description="Create hibernate mapping file list">
+    <target name="file-list">
         <taskdef name="scriptdef" classname="org.apache.tools.ant.taskdefs.optional.Script">
             <classpath>
                 <fileset dir="${lib.dir}/xdoclet">

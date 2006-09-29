@@ -17,6 +17,7 @@ import java.util.List;
 public class ResearchCenterDAOLocalTest extends BaseSpringDataAccessAbstractTestCase {
 
     private ResearchCenterDAO rcDAO;
+    private JdbcDAO jdbcDAO;
 
 
     public void testRCDAO() {
@@ -48,8 +49,12 @@ public class ResearchCenterDAOLocalTest extends BaseSpringDataAccessAbstractTest
     }
 
     public void testGeoCode() {
-        assertNotNull(rcDAO.getGeoCodes("20852"));
+        assertNotNull(jdbcDAO.getGeoCodes("20852"));
 
+    }
+
+    public void setJdbcDAO(JdbcDAO jdbcDAO) {
+        this.jdbcDAO = jdbcDAO;
     }
 
     public void setRcDAO(ResearchCenterDAO rcDAO) {

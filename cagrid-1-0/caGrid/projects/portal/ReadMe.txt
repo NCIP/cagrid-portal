@@ -72,9 +72,10 @@ Portal ReadMe
         - Build with "ant all"
         - Optionally run "ant createDatabase"
 
-        - Run "ant deployExploded" OR "ant deployAsWar" to deploy
+        - Run "ant deployTomcatExploded" OR "ant deployTomcatWar" to deploy
         into tomcat
            OR
+        - Run "ant portalPortal"
         - Copy the webcontent/META-INF/context.xml file to $CATALINA_HOME\conf\Catalina\localhost\portal.xml
         (This *might* not work if you are running the app server from an IDE)
 

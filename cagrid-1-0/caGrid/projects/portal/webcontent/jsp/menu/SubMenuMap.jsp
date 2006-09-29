@@ -1,10 +1,49 @@
 <%-- sub-items begin --%>
-<table summary="" cellpadding="0" cellspacing="0" border="0" height="100%">
-    <tr>
-        <td class="mainMenuSubItems">&nbsp;&nbsp;</td>
-        <td class="mainMenuSubItems"><a class="mainMenuSubLink" href="#">Services</a></td>
-        <td class="mainMenuSubItemsSpacer"><img src="images/mainMenuSeparator.gif" width="1" height="16" alt=""/></td>
-        <td class="mainMenuSubItems"><a class="mainMenuSubLink" href="#">Research Center</a></td>
-    </tr>
-</table>
+<%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
+<%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
+
+<f:subview id="subMenu">
+
+    <h:panelGrid styleClass="subMenuTable"
+                 columnClasses="mainMenuSubItems,mainMenuSubItemsSpacer,mainMenuSubItems,mainMenuSubItemsSpacer,mainMenuSubItems,mainMenuSubItemsSpacer"
+                 cellpadding="0" cellspacing="4"
+                 columns="6">
+
+        <h:column>
+            <h:commandLink styleClass="mainMenuSubLink"
+                           action="#{map.navigateToServicesDirectory}">
+                <h:outputText value="Services" styleClass="mainMenuSubLink"/>
+            </h:commandLink>
+        </h:column>
+
+        <h:column>
+            <t:graphicImage url="images/mainMenuSeparator.gif" height="16"/>
+        </h:column>
+
+        <h:column>
+            <h:commandLink styleClass="mainMenuSubLink"
+                           action="#{map.navigateToRCDirectory}">
+                <h:outputText value="Research Center"/>
+            </h:commandLink>
+        </h:column>
+
+        <h:column>
+            <t:graphicImage url="images/mainMenuSeparator.gif" width="1" height="16"/>
+        </h:column>
+
+        <h:column>
+            <h:commandLink styleClass="mainMenuSubLink"
+                           action="#{map.navigateToPOCDirectory}">
+                <h:outputText value="People"/>
+            </h:commandLink>
+        </h:column>
+
+        <h:column>
+            <t:graphicImage url="images/mainMenuSeparator.gif" width="1" height="16"/>
+        </h:column>
+
+    </h:panelGrid>
+</f:subview>
+
 <%-- sub-items end --%>

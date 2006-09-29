@@ -94,8 +94,6 @@ public class RegisteredServiceLocalTestCase extends BaseSpringDataAccessAbstract
 
             gridServiceManager.save(rService);
 
-
-            setComplete();
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -126,7 +124,7 @@ public class RegisteredServiceLocalTestCase extends BaseSpringDataAccessAbstract
 
         try {
             gridServiceManager.save(service);
-            setComplete();
+
         } catch (PortalRuntimeException e) {
             fail(e.getMessage());
         }

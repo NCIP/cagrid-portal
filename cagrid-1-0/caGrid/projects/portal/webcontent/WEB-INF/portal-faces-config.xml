@@ -20,7 +20,6 @@
         <message-bundle>messages</message-bundle>
     </application>
 
-
     <managed-bean>
         <managed-bean-name>directoryTabbedPaneBean</managed-bean-name>
         <managed-bean-class>gov.nih.nci.cagrid.portal.web.DirectoryTabbedPaneBean</managed-bean-class>
@@ -29,9 +28,28 @@
 
 
     <managed-bean>
-        <description>JSF managed bean referencing a spring bean</description>
-        <managed-bean-name>portal</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.portal.web.PortalApplicationBean</managed-bean-class>
+        <description>Bean that sets up ALL directory listing</description>
+        <managed-bean-name>directory</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.portal.web.DirectorySetup</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <property-name>gridServiceManager</property-name>
+            <value>#{gridServiceManager}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>rcManager</property-name>
+            <value>#{rcManager}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>pocManager</property-name>
+            <value>#{pocManager}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <description>Directory List of services</description>
+        <managed-bean-name>services</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.portal.web.ServicesList</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
         <managed-property>
             <property-name>gridServiceManager</property-name>
@@ -40,14 +58,27 @@
     </managed-bean>
 
     <managed-bean>
-        <managed-bean-name>serviceDetails</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.portal.web.ServiceDetailsBean</managed-bean-class>
+        <description>Directory List of centers</description>
+        <managed-bean-name>centers</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.portal.web.CenterList</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
         <managed-property>
-            <property-name>gridServiceManager</property-name>
-            <value>#{gridServiceManager}</value>
+            <property-name>rcManager</property-name>
+            <value>#{rcManager}</value>
         </managed-property>
     </managed-bean>
+
+    <managed-bean>
+        <description>Directory List of people</description>
+        <managed-bean-name>people</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.portal.web.PeopleList</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <property-name>pocManager</property-name>
+            <value>#{pocManager}</value>
+        </managed-property>
+    </managed-bean>
+
 
     <managed-bean>
         <managed-bean-name>errorDisplay</managed-bean-name>
@@ -57,10 +88,36 @@
 
     <!--Navigation Rules-->
     <navigation-rule>
-        <from-view-id>*</from-view-id>
         <navigation-case>
+            <from-action>#{directory.navigateToServicesDirectory}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>servicesDirectory.portal</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{directory.navigateToCenterDirectory}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>rcDirectory.portal</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{directory.navigateToPeopleDirectory}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>pocDirectory.portal</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-action>#{services.navigateToService}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>serviceDetails.portal</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-action>#{center.navigateToCenter}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>centerDetails.portal</to-view-id>
         </navigation-case>
     </navigation-rule>
 
