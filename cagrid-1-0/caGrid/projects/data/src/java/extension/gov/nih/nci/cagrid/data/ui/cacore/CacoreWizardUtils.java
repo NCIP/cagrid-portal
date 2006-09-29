@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.cacore;
 
 import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -35,8 +34,11 @@ public class CacoreWizardUtils {
 	
 	
 	public static String getServiceBaseDir(ServiceInformation info) {
+		/* You'd think this would be right, but no...
 		String serviceDir = info.getIntroduceServiceProperties()
 			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR);
+		*/
+		String serviceDir = info.getBaseDirectory().getAbsolutePath();
 		return serviceDir;
 	}
 	
