@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="build/stubs-ServiceSecurity/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
+	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
