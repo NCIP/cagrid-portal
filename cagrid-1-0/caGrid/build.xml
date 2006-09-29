@@ -48,7 +48,7 @@
 	<!--                  DEFINE THE SUB PROJECTS THAT PROVIDE INTRODUCE EXTENSIONS       -->
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects above -->
-	<property name="introduce.extension.projects.list" value="cabigextensions, cadsr, data, bulkDataTransfer,gridgrouper-plugin" />
+	<property name="introduce.extension.projects.list" value="cabigextensions, cadsr, data, bulkDataTransfer" />
 	<property name="introduce.extensions.dir" value="${projects.dir}/introduce/extensions" />
 
 
@@ -296,6 +296,7 @@
 			<artifact refid="gts.client.jars" />
 			<artifact refid="introduce.servicesecurity.jars" />
 			<artifact refid="security.metadata.jars" />
+			<artifact refid="common.metadata.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/dorian/schema/Dorian">
 			<artifact refid="metadata.schemas" />
@@ -326,6 +327,7 @@
 			<artifact refid="gridca.jars" />
 			<artifact refid="introduce.servicesecurity.jars" />
 			<artifact refid="security.metadata.jars" />
+			<artifact refid="common.metadata.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/gridgrouper/schema/GridGrouper">
 			<artifact refid="metadata.schemas" />
