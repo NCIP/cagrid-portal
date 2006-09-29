@@ -90,12 +90,6 @@
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-ui.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-tests.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-client.jar"/>
 	<classpathentry kind="lib" path="lib/csmapi.jar"/>
 	<classpathentry kind="lib" path="lib/csm_ext.jar"/>
 	<classpathentry kind="output" path="bin"/>

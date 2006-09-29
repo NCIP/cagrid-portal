@@ -1,21 +1,12 @@
 package gov.nih.nci.cagrid.authentication.client;
 
-import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
-import gov.nih.nci.cagrid.authentication.bean.Credential;
-import gov.nih.nci.cagrid.authentication.bean.SAMLAssertion;
 import gov.nih.nci.cagrid.authentication.common.AuthenticationServiceI;
 import gov.nih.nci.cagrid.authentication.stubs.AuthenticationServicePortType;
 import gov.nih.nci.cagrid.authentication.stubs.service.AuthenticationServiceAddressingLocator;
-import gov.nih.nci.cagrid.dorian.client.DorianClient;
-import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 
 import java.io.InputStream;
 import java.rmi.RemoteException;
-import java.security.KeyPair;
-import java.security.cert.X509Certificate;
 
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.client.AxisClient;
@@ -105,6 +96,7 @@ public class AuthenticationServiceClient extends ServiceSecurityClient
 	try {
 	    if (!(args.length < 2)) {
 		if (args[0].equals("-url")) {
+			/*
 		    String dorianUrl = "https://cbiovdev5012.nci.nih.gov:28443/wsrf/services/cagrid/Dorian";
 		    AuthenticationServiceClient client = new AuthenticationServiceClient(
 			    args[1]);
@@ -138,7 +130,7 @@ public class AuthenticationServiceClient extends ServiceSecurityClient
 		    GlobusCredential gridCred = new GlobusCredential(pair
 			    .getPrivate(), certs);
 		    System.out.println("Issuer: " + gridCred.getIssuer());
-
+*/
 		} else {
 		    usage();
 		    System.exit(1);
