@@ -75,18 +75,23 @@
 			<dorian-service>https://localhost:8443/wsrf/services/cagrid/Dorian</dorian-service>
 		</dorian-services>
 		<idps>
-			<idp name="Dorian [cagrid05.bmi.ohio-state.edu]  IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ui.ifs.DorianIdPAuthenticationPanel">
+			<idp name="cagrid05.bmi.ohio-state.edu Dorian  IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ui.ifs.AuthenticationServicePanel">
 				<parameters>
 					<parameter name="serviceId" value="https://cagrid05.bmi.ohio-state.edu:8443/wsrf/services/cagrid/Dorian"/>
 				</parameters>
 			</idp>
-			<idp name="Ohio State University" authPanelClass="edu.osu.idp.ui.OSUIdPAuthenticationPanel"/>
-			<idp name="Dorian [localhost] IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ui.ifs.DorianIdPAuthenticationPanel">
+			
+			<idp name="Ohio State University" authPanelClass="gov.nih.nci.cagrid.dorian.ui.ifs.AuthenticationServicePanel">
+				<parameters>
+					<parameter name="serviceId" value="https://cagrid01.bmi.ohio-state.edu:8443/wsrf/services/cagrid/AuthenticationService"/>
+				</parameters>
+			</idp>
+			
+			<idp name="Localhost Dorian IdP" authPanelClass="gov.nih.nci.cagrid.dorian.ui.ifs.AuthenticationServicePanel">
 				<parameters>
 					<parameter name="serviceId" value="https://localhost:8443/wsrf/services/cagrid/Dorian"/>
 				</parameters>
 			</idp>
-			
 		</idps>
         </dorian-portal-config>
 	</resource>
