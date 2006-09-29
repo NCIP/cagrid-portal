@@ -187,6 +187,12 @@
 				</fileset>
 			</classpath>
 		</java>
+		<!-- Post Introduce Edit-->
+				<copy todir="${ext.globus.dir}/endorsed">
+							<fileset dir="${ext.endorsed.dir}">
+								<include name="*.jar" />
+							</fileset>
+				</copy>
 		
 		<delete dir="${gar.name}" />
 		<!-- deploy the gar -->
