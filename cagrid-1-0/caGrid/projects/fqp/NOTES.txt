@@ -7,6 +7,8 @@ DCQL Foriegn Predicate values must be a subset of CQL Predicate values, as the f
 ISSUES:
 ==============================
 
+need resource lifetime on query results
+
 change build to create client-usable engine (outside of service)
 
 clean up result service code (errors, etc)
