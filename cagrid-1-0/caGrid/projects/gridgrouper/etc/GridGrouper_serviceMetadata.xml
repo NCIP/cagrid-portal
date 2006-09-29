@@ -1,0 +1,398 @@
+<ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
+ <ns1:serviceDescription>
+  <ns2:Service description="The GridGrouper grid service, created with caGrid Introduce, version:.99999." name="GridGrouper" version=".99999" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+   <ns2:pointOfContactCollection/>
+   <ns2:serviceContextCollection>
+    <ns2:ServiceContext description="" name="GridGrouper">
+     <ns2:operationCollection>
+      <ns2:Operation description="" name="getServiceSecurityMetadata">
+       <ns2:inputParameterCollection/>
+       <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+       <ns2:faultCollection/>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getStem">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns4:StemIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="stem" xmlns:ns4="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns5:StemDescriptor" dimensionality="1" isArray="false" xmlns:ns5="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="StemNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getChildStems">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns6:StemIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="parentStem" xmlns:ns6="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns7:StemDescriptor" dimensionality="1" isArray="true" xmlns:ns7="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="StemNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getParentStem">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns8:StemIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="childStem" xmlns:ns8="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns9:StemDescriptor" dimensionality="1" isArray="false" xmlns:ns9="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="StemNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="updateStem">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns10:StemIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="stem" xmlns:ns10="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns11:StemUpdate" dimensionality="1" index="1" isArray="false" isRequired="false" name="update" xmlns:ns11="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns12:StemDescriptor" dimensionality="1" isArray="false" xmlns:ns12="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
+        <ns2:Fault description="" name="StemModifyFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getSubjectsWithStemPrivilege">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns13:StemIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="stem" xmlns:ns13="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns14:StemPrivilegeType" dimensionality="1" index="1" isArray="false" isRequired="false" name="privilege" xmlns:ns14="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns15:SubjectIdentifier" dimensionality="1" isArray="true" xmlns:ns15="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="StemNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getStemPrivileges">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns16:StemIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="stem" xmlns:ns16="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns17:SubjectIdentifier" dimensionality="1" index="1" isArray="false" isRequired="false" name="subject" xmlns:ns17="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns18:StemPrivilege" dimensionality="1" isArray="true" xmlns:ns18="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="StemNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="hasStemPrivilege">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns19:StemIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="stem" xmlns:ns19="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns20:SubjectIdentifier" dimensionality="1" index="1" isArray="false" isRequired="false" name="subject" xmlns:ns20="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns21:StemPrivilegeType" dimensionality="1" index="2" isArray="false" isRequired="false" name="privilege" xmlns:ns21="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="xsd:boolean" dimensionality="1" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="StemNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="grantStemPrivilege">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns22:StemIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="stem" xmlns:ns22="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns23:SubjectIdentifier" dimensionality="1" index="1" isArray="false" isRequired="false" name="subject" xmlns:ns23="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns24:StemPrivilegeType" dimensionality="1" index="2" isArray="false" isRequired="false" name="privilege" xmlns:ns24="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="StemNotFoundFault"/>
+        <ns2:Fault description="" name="GrantPrivilegeFault"/>
+        <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
+        <ns2:Fault description="" name="SchemaFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="revokeStemPrivilege">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns25:StemIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="stem" xmlns:ns25="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns26:SubjectIdentifier" dimensionality="1" index="1" isArray="false" isRequired="false" name="subject" xmlns:ns26="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns27:StemPrivilegeType" dimensionality="1" index="2" isArray="false" isRequired="false" name="privilege" xmlns:ns27="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="StemNotFoundFault"/>
+        <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
+        <ns2:Fault description="" name="RevokePrivilegeFault"/>
+        <ns2:Fault description="" name="SchemaFault"/>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="addChildStem">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns28:StemIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="stem" xmlns:ns28="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="xsd:string" dimensionality="1" index="1" isArray="false" isRequired="false" name="extension" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+        <ns2:InputParameter qName="xsd:string" dimensionality="1" index="2" isArray="false" isRequired="false" name="displayExtension" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns29:StemDescriptor" dimensionality="1" isArray="false" xmlns:ns29="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
+        <ns2:Fault description="" name="StemAddFault"/>
+        <ns2:Fault description="" name="StemNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="deleteStem">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns30:StemIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="stem" xmlns:ns30="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
+        <ns2:Fault description="" name="StemDeleteFault"/>
+        <ns2:Fault description="" name="StemNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getGroup">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns31:GroupIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="group" xmlns:ns31="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns32:GroupDescriptor" dimensionality="1" isArray="false" xmlns:ns32="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getChildGroups">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns33:StemIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="stem" xmlns:ns33="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns34:GroupDescriptor" dimensionality="1" isArray="true" xmlns:ns34="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="StemNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="addChildGroup">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns35:StemIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="stem" xmlns:ns35="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="xsd:string" dimensionality="1" index="1" isArray="false" isRequired="false" name="extension" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+        <ns2:InputParameter qName="xsd:string" dimensionality="1" index="2" isArray="false" isRequired="false" name="displayExtension" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns36:GroupDescriptor" dimensionality="1" isArray="false" xmlns:ns36="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupAddFault"/>
+        <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="deleteGroup">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns37:GroupIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="group" xmlns:ns37="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+        <ns2:Fault description="" name="GroupDeleteFault"/>
+        <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="updateGroup">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns38:GroupIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="group" xmlns:ns38="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns39:GroupUpdate" dimensionality="1" index="1" isArray="false" isRequired="false" name="update" xmlns:ns39="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns40:GroupDescriptor" dimensionality="1" isArray="false" xmlns:ns40="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+        <ns2:Fault description="" name="GroupModifyFault"/>
+        <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="addMember">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns41:GroupIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="group" xmlns:ns41="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns42:SubjectIdentifier" dimensionality="1" index="1" isArray="false" isRequired="false" name="subject" xmlns:ns42="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+        <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
+        <ns2:Fault description="" name="MemberAddFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getMembers">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns43:GroupIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="group" xmlns:ns43="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns44:MemberFilter" dimensionality="1" index="1" isArray="false" isRequired="false" name="filter" xmlns:ns44="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns45:MemberDescriptor" dimensionality="1" isArray="true" xmlns:ns45="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="isMemberOf">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns46:GroupIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="group" xmlns:ns46="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns47:SubjectIdentifier" dimensionality="1" index="1" isArray="false" isRequired="false" name="member" xmlns:ns47="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns48:MemberFilter" dimensionality="1" index="2" isArray="false" isRequired="false" name="filter" xmlns:ns48="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="xsd:boolean" dimensionality="1" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getMemberships">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns49:GroupIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="group" xmlns:ns49="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns50:MemberFilter" dimensionality="1" index="1" isArray="false" isRequired="false" name="filter" xmlns:ns50="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns51:MembershipDescriptor" dimensionality="1" isArray="true" xmlns:ns51="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="deleteMember">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns52:GroupIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="group" xmlns:ns52="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns53:SubjectIdentifier" dimensionality="1" index="1" isArray="false" isRequired="false" name="member" xmlns:ns53="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+        <ns2:Fault description="" name="MemberDeleteFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="addCompositeMember">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns54:GroupCompositeType" dimensionality="1" index="0" isArray="false" isRequired="false" name="type" xmlns:ns54="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns55:GroupIdentifier" dimensionality="1" index="1" isArray="false" isRequired="false" name="composite" xmlns:ns55="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns56:GroupIdentifier" dimensionality="1" index="2" isArray="false" isRequired="false" name="left" xmlns:ns56="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns57:GroupIdentifier" dimensionality="1" index="3" isArray="false" isRequired="false" name="right" xmlns:ns57="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns58:GroupDescriptor" dimensionality="1" isArray="false" xmlns:ns58="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+        <ns2:Fault description="" name="MemberAddFault"/>
+        <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="deleteCompositeMember">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns59:GroupIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="group" xmlns:ns59="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns60:GroupDescriptor" dimensionality="1" isArray="false" xmlns:ns60="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+        <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
+        <ns2:Fault description="" name="MemberDeleteFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="grantGroupPrivilege">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns61:GroupIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="group" xmlns:ns61="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns62:SubjectIdentifier" dimensionality="1" index="1" isArray="false" isRequired="false" name="subject" xmlns:ns62="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns63:GroupPrivilegeType" dimensionality="1" index="2" isArray="false" isRequired="false" name="privilege" xmlns:ns63="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+        <ns2:Fault description="" name="GrantPrivilegeFault"/>
+        <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="revokeGroupPrivilege">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns64:GroupIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="group" xmlns:ns64="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns65:SubjectIdentifier" dimensionality="1" index="1" isArray="false" isRequired="false" name="subject" xmlns:ns65="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns66:GroupPrivilegeType" dimensionality="1" index="2" isArray="false" isRequired="false" name="privilege" xmlns:ns66="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+        <ns2:Fault description="" name="RevokePrivilegeFault"/>
+        <ns2:Fault description="" name="InsufficientPrivilegeFault"/>
+        <ns2:Fault description="" name="SchemaFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getSubjectsWithGroupPrivilege">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns67:GroupIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="group" xmlns:ns67="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns68:GroupPrivilegeType" dimensionality="1" index="1" isArray="false" isRequired="false" name="privilege" xmlns:ns68="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns69:SubjectIdentifier" dimensionality="1" isArray="true" xmlns:ns69="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getGroupPrivileges">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns70:GroupIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="group" xmlns:ns70="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns71:SubjectIdentifier" dimensionality="1" index="1" isArray="false" isRequired="false" name="subject" xmlns:ns71="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns72:GroupPrivilege" dimensionality="1" isArray="true" xmlns:ns72="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="hasGroupPrivilege">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns73:GroupIdentifier" dimensionality="1" index="0" isArray="false" isRequired="false" name="group" xmlns:ns73="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns74:SubjectIdentifier" dimensionality="1" index="1" isArray="false" isRequired="false" name="subject" xmlns:ns74="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+        <ns2:InputParameter qName="ns75:GroupPrivilegeType" dimensionality="1" index="2" isArray="false" isRequired="false" name="privilege" xmlns:ns75="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="xsd:boolean" dimensionality="1" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+        <ns2:Fault description="" name="GroupNotFoundFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="isMember">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="member" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+        <ns2:InputParameter qName="ns76:MembershipExpression" dimensionality="1" index="1" isArray="false" isRequired="false" name="expression" xmlns:ns76="http://cagrid.nci.nih.gov/1/GridGrouper"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="xsd:boolean" dimensionality="1" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="GridGrouperRuntimeFault"/>
+       </ns2:faultCollection>
+       <ns2:semanticMetadataCollection/>
+      </ns2:Operation>
+     </ns2:operationCollection>
+     <ns2:contextPropertyCollection>
+      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
+     </ns2:contextPropertyCollection>
+    </ns2:ServiceContext>
+   </ns2:serviceContextCollection>
+   <ns2:semanticMetadataCollection>
+    <ns77:SemanticMetadata conceptCode="???" conceptName="Analytical Grid Service" conceptDefinition="An Grid Analytical Service." isPrimaryConcept="false" order="1" xmlns:ns77="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+    <ns78:SemanticMetadata conceptCode="???" conceptName="Grid Service" conceptDefinition="A Grid Service." isPrimaryConcept="true" order="0" xmlns:ns78="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"/>
+   </ns2:semanticMetadataCollection>
+  </ns2:Service>
+ </ns1:serviceDescription>
+ <ns1:hostingResearchCenter/>
+</ns1:ServiceMetadata>

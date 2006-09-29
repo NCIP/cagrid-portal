@@ -117,10 +117,11 @@
 
     <!-- Sets up the build directory structure -->
     <target name="init" depends="checkGlobus, defineClasspaths">
+    	<delete file="${ext.lib.dir}/hibernate3.jar"/>
         <mkdir dir="${build.dir}" />
         <mkdir dir="${build.dest}" />
     	<!-- Post Introduce Edit-->
-    	 <mkdir dir="${build.sql}" />
+    	<mkdir dir="${build.sql}" />
         <mkdir dir="${test.build.dest}" />
         <mkdir dir="${test.log.dir}" />
         <mkdir dir="${build.lib.dir}" />
@@ -128,7 +129,6 @@
         <mkdir dir="${stubs.dir}" />
         <mkdir dir="${stubs.src}" />
         <mkdir dir="${stubs.dest}" />
-
         <mkdir dir="${schema.dest}" />
         <copy toDir="${schema.dest}">
             <fileset dir="${schema.src}" casesensitive="yes">

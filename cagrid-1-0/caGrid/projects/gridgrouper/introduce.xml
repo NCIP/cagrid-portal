@@ -19,6 +19,9 @@
    <ns2:SchemaElement type="MemberFilter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GroupCompositeType" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="ServiceMetadata" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
@@ -455,19 +458,23 @@
      </ns4:Exceptions>
     </ns4:Method>
    </ns4:Methods>
-   <ns165:ResourcePropertiesList xsi:type="ns165:ResourcePropertiesListType" xmlns:ns165="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
-   <ns166:ServiceSecurity xsi:type="ns166:ServiceSecurity" xmlns:ns166="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns166:SecuritySetting xsi:type="ns166:SecuritySetting">Custom</ns166:SecuritySetting>
-    <ns166:TransportLevelSecurity xsi:type="ns166:TransportLevelSecurity">
-     <ns166:CommunicationMethod xsi:type="ns166:CommunicationMethod">Privacy</ns166:CommunicationMethod>
-    </ns166:TransportLevelSecurity>
-    <ns166:RunAsMode xsi:type="ns166:RunAsMode">System</ns166:RunAsMode>
-    <ns166:AnonymousClients xsi:type="ns166:AnonymousCommunication">No</ns166:AnonymousClients>
-    <ns166:ServiceAuthorization xsi:type="ns166:ServiceAuthorization">
-     <ns166:NoAuthorization xsi:type="ns166:NoAuthorization"/>
-    </ns166:ServiceAuthorization>
-   </ns166:ServiceSecurity>
+   <ns165:ResourcePropertiesList xsi:type="ns165:ResourcePropertiesListType" xmlns:ns165="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns165:ResourceProperty qName="ns166:ServiceMetadata" fileLocation="GridGrouper_serviceMetadata.xml" populateFromFile="false" register="true" xsi:type="ns165:ResourcePropertyType" xmlns:ns166="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns165:ResourcePropertiesList>
+   <ns167:ServiceSecurity xsi:type="ns167:ServiceSecurity" xmlns:ns167="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns167:SecuritySetting xsi:type="ns167:SecuritySetting">Custom</ns167:SecuritySetting>
+    <ns167:TransportLevelSecurity xsi:type="ns167:TransportLevelSecurity">
+     <ns167:CommunicationMethod xsi:type="ns167:CommunicationMethod">Privacy</ns167:CommunicationMethod>
+    </ns167:TransportLevelSecurity>
+    <ns167:RunAsMode xsi:type="ns167:RunAsMode">System</ns167:RunAsMode>
+    <ns167:AnonymousClients xsi:type="ns167:AnonymousCommunication">No</ns167:AnonymousClients>
+    <ns167:ServiceAuthorization xsi:type="ns167:ServiceAuthorization">
+     <ns167:NoAuthorization xsi:type="ns167:NoAuthorization"/>
+    </ns167:ServiceAuthorization>
+   </ns167:ServiceSecurity>
   </ns3:Service>
  </ns3:Services>
- <ns167:Extensions xsi:type="ns167:ExtensionsType" xmlns:ns167="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns168:Extensions xsi:type="ns168:ExtensionsType" xmlns:ns168="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns168:Extension name="cagrid_metadata" xsi:type="ns168:ExtensionType"/>
+ </ns168:Extensions>
 </ns1:ServiceDescription>
