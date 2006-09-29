@@ -14,6 +14,7 @@ import java.rmi.RemoteException;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 
+
 /**
  * TODO:DOCUMENT ME
  * 
@@ -22,6 +23,7 @@ import org.springframework.core.io.ClassPathResource;
 public class AuthenticationServiceImpl extends AuthenticationServiceImplBase {
 
 	private AuthenticationProvider auth;
+
 
 	public AuthenticationServiceImpl() throws RemoteException {
 		super();
@@ -35,7 +37,12 @@ public class AuthenticationServiceImpl extends AuthenticationServiceImplBase {
 		}
 	}
 
-	public gov.nih.nci.cagrid.authentication.bean.SAMLAssertion authenticate(gov.nih.nci.cagrid.authentication.bean.Credential credential) throws RemoteException, gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault, gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault, gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault {
+
+	public gov.nih.nci.cagrid.authentication.bean.SAMLAssertion authenticate(
+		gov.nih.nci.cagrid.authentication.bean.Credential credential) throws RemoteException,
+		gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault,
+		gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault,
+		gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault {
 
 		gov.nih.nci.cagrid.authentication.bean.SAMLAssertion saml = null;
 		try {
@@ -43,18 +50,24 @@ public class AuthenticationServiceImpl extends AuthenticationServiceImplBase {
 			saml = new gov.nih.nci.cagrid.authentication.bean.SAMLAssertion(sa.toString());
 		} catch (InvalidCredentialException ex) {
 			InvalidCredentialFault fault = new InvalidCredentialFault();
+			fault.setFaultString(ex.getMessage());
 			FaultHelper fh = new FaultHelper(fault);
 			fh.addFaultCause(ex);
+			fault = (InvalidCredentialFault) fh.getFault();
 			throw fault;
 		} catch (InsufficientAttributeException ex) {
 			InsufficientAttributeFault fault = new InsufficientAttributeFault();
+			fault.setFaultString(ex.getMessage());
 			FaultHelper fh = new FaultHelper(fault);
 			fh.addFaultCause(ex);
+			fault = (InsufficientAttributeFault) fh.getFault();
 			throw fault;
 		} catch (Exception ex) {
 			AuthenticationProviderFault fault = new AuthenticationProviderFault();
+			fault.setFaultString(ex.getMessage());
 			FaultHelper fh = new FaultHelper(fault);
 			fh.addFaultCause(ex);
+			fault = (AuthenticationProviderFault) fh.getFault();
 			throw fault;
 		}
 		return saml;
