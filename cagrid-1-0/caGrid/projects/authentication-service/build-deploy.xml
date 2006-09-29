@@ -130,15 +130,16 @@
 	<target name="createDeploymentGar" depends="all, addFilters">
 		
 		<echo message="Creating a gar for service ${gar.name}" />
-		<fileset dir="${ext.lib.dir}">
-				<include name="*.jar" />
-		</fileset>
-		
+
 		<copy todir="${build.lib.dir}">
-			<fileset dir="${basedir}/lib">
-				<include name="*.jar" />
-			</fileset>
-		</copy>
+					<fileset dir="${basedir}/lib">
+						<include name="*.jar" />
+					</fileset>
+					<!-- Post Introduce Edit-->
+					<fileset dir="${ext.lib.dir}">
+											<include name="*.jar" />
+										</fileset>
+				</copy>
 		
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
