@@ -121,8 +121,6 @@ public class SkeletonSecurityOperationProviderCreator {
 					}
 				}
 				
-				System.out.println("HERE HERE REHR EHR EHRHERHE RHEHR ERHERHEHREHRHER EHREHRHERHERHEHREHRHERHERHEHREHRHERHERHEHREHREHRHERHEREHRHERHERRH");
-
 				// copy over the metadata security jar
 				libDir = new File(PATH_TO_EXT_LIB);
 				libs = libDir.listFiles(new FileFilter() {
