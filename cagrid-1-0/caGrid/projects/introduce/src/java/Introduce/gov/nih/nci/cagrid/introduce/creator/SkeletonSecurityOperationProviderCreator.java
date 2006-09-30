@@ -93,6 +93,7 @@ public class SkeletonSecurityOperationProviderCreator {
 				CommonTools.addNamespace(info.getServiceDescriptor(), nsType);
 				
 				//should i set the messages to not be generated again....
+				//if so add the ns to the excludes list...
 
 				// copy over the wsdl file and the required schema
 				Utils.copyFile(new File(PATH_TO_WSDL + File.separator + SERVICE_SECURITY_WSDL), new File(pathToServSchema

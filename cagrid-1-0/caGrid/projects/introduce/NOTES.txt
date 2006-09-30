@@ -3,6 +3,8 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 To Do:
 
+what is the limited amount of jars thta be base introduce generated service needs.
+
 				//should i set the messages to not be generated again....
 				//if so add the ns to the excludes list...
 
