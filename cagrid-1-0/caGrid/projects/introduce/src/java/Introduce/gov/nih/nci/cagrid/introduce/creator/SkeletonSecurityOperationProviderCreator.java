@@ -11,7 +11,6 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 
 import java.io.File;
-import java.io.FileFilter;
 
 import javax.xml.namespace.QName;
 
