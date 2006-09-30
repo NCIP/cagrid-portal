@@ -407,7 +407,7 @@
 			</fileset>
 		</artifact>
 		
-		<artifact track="main" type="schema" id="servicesecurity.wsdl">
+		<artifact track="main" type="schemas" id="servicesecurity.wsdl">
 			<fileset dir="${projects.dir}/service-security-provider/schema/ServiceSecurity">
 				<include name="*.wsdl" />
 			</fileset>

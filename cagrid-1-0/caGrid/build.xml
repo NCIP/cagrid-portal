@@ -423,6 +423,8 @@
 			<artifact refid="gme.globus.client.jars" />
 			<artifact refid="metadata.schemas" />
 			<artifact refid="gridca.jars" />
+			<artifact refid="security.metadata.jars" />
+			<artifact refid="servicesecurity.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/introduce/skeleton">
 			<artifact refid="core.jars" />
