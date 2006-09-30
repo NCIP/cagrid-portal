@@ -440,7 +440,7 @@
 			<artifact refid="core.jars" />
 			<artifact refid="security.metadata.jars" />
 		</resolveDependencies>
-		<resolveDependencies extdir="${projects.dir}/service-security-provider/ext">
+		<resolveDependencies extdir="${projects.dir}/service-security-provider/schema/ServiceSecurity/xsd">
 			<artifact refid="security.metadata.schemas" />
 		</resolveDependencies>
 
