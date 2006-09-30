@@ -1,1 +1,13 @@
 globus*.jar
+caGrid-1.0-core.jar
+caGrid-1.0-metadata-security.jar
+caGrid-1.0-ServiceSecurityProvider-client.jar
+caGrid-1.0-ServiceSecurityProvider-common.jar
+caGrid-1.0-ServiceSecurityProvider-service.jar
+caGrid-1.0-ServiceSecurityProvider-stubs.jar
+castor-0.9.9.jar
+mobius_common_client-1.1.jar
+mobius_factories-1.1.jar
+mobius_gme_client-1.1.jar
+mobius_mako_client-1.1.jar
+mobius_tools-1.1.jar
