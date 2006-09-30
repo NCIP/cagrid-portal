@@ -425,12 +425,10 @@
 			<artifact refid="gridca.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/introduce/skeleton">
+			<artifact refid="core.jars" />
 			<artifact refid="mds.jars" />
 			<artifact refid="security.metadata.jars" />
 			<artifact refid="servicesecurity.jars" />
-		</resolveDependencies>
-		<resolveDependencies extdir="${projects.dir}/introduce/ext">
-			<artifact refid="security.metadata.schemas" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
