@@ -406,6 +406,12 @@
 				<exclude name="*tests*.jar" />
 			</fileset>
 		</artifact>
+		
+		<artifact track="main" type="schema" id="servicesecurity.wsdl">
+			<fileset dir="${projects.dir}/service-security-provider/schema/ServiceSecurity">
+				<include name="*.wsdl" />
+			</fileset>
+		</artifact>
 
 
 		<artifact track="main" type="jars" id="discovery.jars">

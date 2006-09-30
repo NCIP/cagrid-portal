@@ -430,6 +430,9 @@
 			<artifact refid="security.metadata.jars" />
 			<artifact refid="servicesecurity.jars" />
 		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/introduce/ext">
+			<artifact refid="servicesecurity.wsdl" />
+		</resolveDependencies>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 	
