@@ -60,7 +60,7 @@ public abstract class GridGrouperBaseTreeNode extends BaseTreeNode {
 
 	private GridGrouperTree tree;
 
-	public GridGrouperBaseTreeNode(GridGrouperExpressionBuilder editor) {
+	public GridGrouperBaseTreeNode(GridGrouperExpressionEditor editor) {
 		super(editor);
 	}
 

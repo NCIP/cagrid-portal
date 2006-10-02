@@ -63,7 +63,7 @@ public class QueryNode extends ExpressionBaseTreeNode {
 
 	private MembershipQuery query;
 
-	public QueryNode(GridGrouperExpressionBuilder editor, MembershipQuery query) {
+	public QueryNode(GridGrouperExpressionEditor editor, MembershipQuery query) {
 		super(editor);
 		this.query = query;
 	}

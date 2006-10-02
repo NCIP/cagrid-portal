@@ -58,13 +58,13 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 public abstract class BaseTreeNode extends DefaultMutableTreeNode {
 
-	private GridGrouperExpressionBuilder editor;
+	private GridGrouperExpressionEditor editor;
 
-	public BaseTreeNode(GridGrouperExpressionBuilder editor) {
+	public BaseTreeNode(GridGrouperExpressionEditor editor) {
 		this.editor = editor;
 	}
 
-	public GridGrouperExpressionBuilder getEditor() {
+	public GridGrouperExpressionEditor getEditor() {
 		return editor;
 	}
 

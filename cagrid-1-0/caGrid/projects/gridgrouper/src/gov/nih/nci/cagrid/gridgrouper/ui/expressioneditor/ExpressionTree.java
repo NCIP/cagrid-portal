@@ -68,7 +68,7 @@ public class ExpressionTree extends JTree {
 
 	private ExpressionNode rootNode;
 
-	public ExpressionTree(GridGrouperExpressionBuilder editor,
+	public ExpressionTree(GridGrouperExpressionEditor editor,
 			MembershipExpression expression) {
 		super();
 		setLargeModel(true);

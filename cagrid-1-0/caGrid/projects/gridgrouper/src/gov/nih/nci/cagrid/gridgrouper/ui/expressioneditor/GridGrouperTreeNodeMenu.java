@@ -18,7 +18,7 @@ import org.projectmobius.portal.PortalResourceManager;
  *          Exp $
  */
 public abstract class GridGrouperTreeNodeMenu extends JPopupMenu {
-	private GridGrouperExpressionBuilder editor;
+	private GridGrouperExpressionEditor editor;
 
 	private GridGrouperTree tree;
 	
@@ -26,7 +26,7 @@ public abstract class GridGrouperTreeNodeMenu extends JPopupMenu {
 
 	private JMenuItem refresh = null;
 
-	public GridGrouperTreeNodeMenu(GridGrouperExpressionBuilder browser,
+	public GridGrouperTreeNodeMenu(GridGrouperExpressionEditor browser,
 			GridGrouperTree tree) {
 		super("");
 		this.editor = browser;
@@ -45,7 +45,7 @@ public abstract class GridGrouperTreeNodeMenu extends JPopupMenu {
 			
 	}
 
-	public GridGrouperExpressionBuilder getEditor() {
+	public GridGrouperExpressionEditor getEditor() {
 		return editor;
 	}
 

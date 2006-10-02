@@ -41,7 +41,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class GridGrouperExpressionBuilder extends JPanel {
+public class GridGrouperExpressionEditor extends JPanel {
 
 	private static final String EXPRESSION_EDITOR = "ExpressionEditor"; // @jve:decl-index=0:
 
@@ -119,7 +119,7 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public GridGrouperExpressionBuilder(List gridGrouperURIs, boolean loadOnStartup) {
+	public GridGrouperExpressionEditor(List gridGrouperURIs, boolean loadOnStartup) {
 		super();
 		this.gridGrouperURIs = gridGrouperURIs;
 		this.expression = new MembershipExpression();
@@ -131,7 +131,7 @@ public class GridGrouperExpressionBuilder extends JPanel {
 	}
 
 
-	public GridGrouperExpressionBuilder(List gridGrouperURIs, boolean loadOnStartup, MembershipExpression expression) {
+	public GridGrouperExpressionEditor(List gridGrouperURIs, boolean loadOnStartup, MembershipExpression expression) {
 		super();
 		this.gridGrouperURIs = gridGrouperURIs;
 		this.expression = expression;

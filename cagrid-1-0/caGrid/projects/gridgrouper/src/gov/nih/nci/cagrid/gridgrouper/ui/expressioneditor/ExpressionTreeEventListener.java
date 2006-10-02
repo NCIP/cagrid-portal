@@ -64,12 +64,12 @@ public class ExpressionTreeEventListener extends MouseAdapter {
 
 	private ExpressionTree tree;
 
-	private GridGrouperExpressionBuilder editor;
+	private GridGrouperExpressionEditor editor;
 
 	private HashMap popupMappings;
 
 	public ExpressionTreeEventListener(ExpressionTree owningTree,
-			GridGrouperExpressionBuilder editor) {
+			GridGrouperExpressionEditor editor) {
 		this.tree = owningTree;
 		this.popupMappings = new HashMap();
 		this.editor= editor;

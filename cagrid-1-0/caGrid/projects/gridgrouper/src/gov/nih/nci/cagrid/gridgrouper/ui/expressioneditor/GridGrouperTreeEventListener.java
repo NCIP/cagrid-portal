@@ -64,12 +64,12 @@ public class GridGrouperTreeEventListener extends MouseAdapter {
 
 	private GridGrouperTree tree;
 
-	private GridGrouperExpressionBuilder editor;
+	private GridGrouperExpressionEditor editor;
 
 	private HashMap popupMappings;
 
 	public GridGrouperTreeEventListener(GridGrouperTree owningTree,
-			GridGrouperExpressionBuilder editor) {
+			GridGrouperExpressionEditor editor) {
 		this.tree = owningTree;
 		this.popupMappings = new HashMap();
 		this.editor = editor;

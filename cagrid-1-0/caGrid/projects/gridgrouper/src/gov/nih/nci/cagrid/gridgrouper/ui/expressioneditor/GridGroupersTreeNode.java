@@ -71,7 +71,7 @@ public class GridGroupersTreeNode extends GridGrouperBaseTreeNode {
 
 	private Map groupers;
 
-	public GridGroupersTreeNode(GridGrouperExpressionBuilder editor) {
+	public GridGroupersTreeNode(GridGrouperExpressionEditor editor) {
 		super(editor);
 		this.groupers = new HashMap();
 	}

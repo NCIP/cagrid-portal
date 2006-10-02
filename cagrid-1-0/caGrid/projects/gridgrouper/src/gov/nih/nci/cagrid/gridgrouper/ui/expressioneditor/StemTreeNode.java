@@ -72,7 +72,7 @@ public class StemTreeNode extends GridGrouperBaseTreeNode {
 
 	private boolean rootStem;
 
-	public StemTreeNode(GridGrouperExpressionBuilder editor, Stem stem, boolean root) {
+	public StemTreeNode(GridGrouperExpressionEditor editor, Stem stem, boolean root) {
 		super(editor);
 		this.rootStem = root;
 		this.stem = stem;

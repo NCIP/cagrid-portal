@@ -73,7 +73,7 @@ public class GridGrouperTree extends JTree {
 
 	private GridGroupersTreeNode rootNode;
 
-	public GridGrouperTree(GridGrouperExpressionBuilder editor) {
+	public GridGrouperTree(GridGrouperExpressionEditor editor) {
 		super();	
 		setLargeModel(true);
 		this.rootNode = new GridGroupersTreeNode(editor);

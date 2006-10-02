@@ -70,7 +70,7 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 
 	private boolean rootStem;
 
-	public ExpressionNode(GridGrouperExpressionBuilder editor,
+	public ExpressionNode(GridGrouperExpressionEditor editor,
 			MembershipExpression expression, boolean root) {
 		super(editor);
 		this.rootStem = root;

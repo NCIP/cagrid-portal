@@ -11,7 +11,7 @@ package gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor;
  *          Exp $
  */
 public class GroupNodeMenu extends GridGrouperTreeNodeMenu {
-	public GroupNodeMenu(GridGrouperExpressionBuilder editor,
+	public GroupNodeMenu(GridGrouperExpressionEditor editor,
 			GridGrouperTree tree) {
 		super(editor, tree);
 	}

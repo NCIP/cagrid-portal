@@ -60,7 +60,7 @@ public abstract class ExpressionBaseTreeNode extends BaseTreeNode {
 
 	private ExpressionTree tree;
 
-	public ExpressionBaseTreeNode(GridGrouperExpressionBuilder editor) {
+	public ExpressionBaseTreeNode(GridGrouperExpressionEditor editor) {
 		super(editor);
 	}
 

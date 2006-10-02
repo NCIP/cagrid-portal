@@ -63,7 +63,7 @@ public class GroupTreeNode extends GridGrouperBaseTreeNode {
 
 	private Group group;
 
-	public GroupTreeNode(GridGrouperExpressionBuilder editor, Group group) {
+	public GroupTreeNode(GridGrouperExpressionEditor editor, Group group) {
 		super(editor);
 		this.group = group;
 	}
