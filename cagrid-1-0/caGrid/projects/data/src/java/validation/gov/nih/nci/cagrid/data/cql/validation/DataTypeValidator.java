@@ -43,9 +43,8 @@ public class DataTypeValidator {
 
 	private static void validateInteger(String value) throws MalformedQueryException {
 		// parse the integer
-		int intValue;
 		try {
-			intValue = Integer.parseInt(value);
+			Integer.parseInt(value);
 		} catch (Exception ex) {
 			throw new MalformedQueryException("Value " + value + " does not parse as an Integer");
 		}
@@ -54,9 +53,8 @@ public class DataTypeValidator {
 
 	private static void validateLong(String value) throws MalformedQueryException {
 		// parse the long
-		long longValue;
 		try {
-			longValue = Long.parseLong(value);
+			Long.parseLong(value);
 		} catch (Exception ex) {
 			throw new MalformedQueryException("Value " + value + " does not parse as a Long");
 		}

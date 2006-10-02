@@ -92,8 +92,7 @@ public class DomainModelValidator implements CqlDomainValidator {
 
 	private void validateAttributeDataType(Attribute attrib, UMLAttribute attribMetadata)
 		throws MalformedQueryException {
-		// if the predicate is a binary operator, verify the value is of the
-		// correct type
+		// if the predicate is a binary operator, verify the value is of the correct type
 		if (attrib.getPredicate() != null
 			&& !(attrib.getPredicate().getValue().equals(Predicate._IS_NOT_NULL) || attrib.getPredicate().getValue()
 				.equals(Predicate._IS_NULL))) {
@@ -119,8 +118,6 @@ public class DomainModelValidator implements CqlDomainValidator {
 							+ "' is not permissible.");
 					}
 				}
-			} else {
-				// TODO: warn no value domain found
 			}
 		}
 	}
@@ -131,8 +128,7 @@ public class DomainModelValidator implements CqlDomainValidator {
 		// determine if an association exists between the current
 		// and association object
 		String roleName = assoc.getRoleName();
-		// UMLAssociation[] associations = getUmlAssociations(current.getName(),
-		// model);
+		// UMLAssociation[] associations = getUmlAssociations(current.getName(), model);
 		UMLAssociation[] associations = getAllAssociationsFromSource(current.getName(), model);
 		boolean associationFound = false;
 		for (int i = 0; i < associations.length; i++) {
