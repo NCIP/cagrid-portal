@@ -3,3 +3,4 @@ build
 ext
 WEB-INF/classes
 WEB-INF/lib
+junit*.properties
