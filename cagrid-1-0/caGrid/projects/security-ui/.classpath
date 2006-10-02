@@ -12,22 +12,16 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cagrid-opensaml-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/commons-httpclient-3.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
-	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_server-1.1.jar"/>
@@ -36,7 +30,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
-	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
@@ -103,7 +96,19 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-1.0-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-1.0-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-1.0-ui.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/client-no-ehcache.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-1.0-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-1.0-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-1.0-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-1.0-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-data.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/csm_ext.jar"/>
+	<classpathentry kind="lib" path="ext/lib/csmapi.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.1.11-bin.jar"/>
+	<classpathentry kind="lib" path="ext/lib/spring-beans.jar"/>
+	<classpathentry kind="lib" path="ext/lib/spring-core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
