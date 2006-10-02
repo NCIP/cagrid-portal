@@ -62,14 +62,28 @@ public class ResourceManager {
 	}
 
 
-	public static String getServiceURLProperty(String key) throws Exception {
-		Properties serviceProps = getServiceURLProperties();
+	public static String getServiceURLProperty(String key) {
+		Properties serviceProps = null;
+		try {
+			serviceProps = getServiceURLProperties();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 		return (String) serviceProps.get(key);
 	}
 
 
-	public static Enumeration getServiceURLPropertyKeys() throws Exception {
-		Properties serviceProps = getServiceURLProperties();
+	public static Enumeration getServiceURLPropertyKeys() {
+		Properties serviceProps = null;
+		try {
+			serviceProps = getServiceURLProperties();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 		return serviceProps.keys();
 	}
 
@@ -94,14 +108,28 @@ public class ResourceManager {
 	}
 
 
-	public static String getConfigurationProperty(String key) throws Exception {
-		Properties serviceProps = getConfigurationProperties();
+	public static String getConfigurationProperty(String key){
+		Properties serviceProps  = null;
+		try {
+			serviceProps = getConfigurationProperties();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 		return (String) serviceProps.get(key);
 	}
 
 
-	public static Enumeration getConfigurationPropertyKeys() throws Exception {
-		Properties serviceProps = getConfigurationProperties();
+	public static Enumeration getConfigurationPropertyKeys(){
+		Properties serviceProps = null;
+		try {
+			serviceProps = getConfigurationProperties();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 		return serviceProps.keys();
 	}
 
