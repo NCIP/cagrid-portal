@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -79,8 +80,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 	 */
 	private GMESchemaLocatorPanel getGmePanel() {
 		if (gmePanel == null) {
-			gmePanel = new GMESchemaLocatorPanel(ExtensionTools.getProperty(getDescriptor().getProperties(),
-				GMETypeSelectionComponent.GME_URL), false);
+			gmePanel = new GMESchemaLocatorPanel(ResourceManager.getServiceURLProperty(GMETypeSelectionComponent.GME_URL), false);
 		}
 		return gmePanel;
 	}
@@ -136,7 +136,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 	private List cacheSchema(File dir, String namespace) throws Exception {
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 		XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
-			ExtensionTools.getProperty(getDescriptor().getProperties(), GMETypeSelectionComponent.GME_URL));
+			ResourceManager.getServiceURLProperty(GMETypeSelectionComponent.GME_URL));
 		return handle.cacheSchema(new Namespace(namespace), dir);
 	}
 

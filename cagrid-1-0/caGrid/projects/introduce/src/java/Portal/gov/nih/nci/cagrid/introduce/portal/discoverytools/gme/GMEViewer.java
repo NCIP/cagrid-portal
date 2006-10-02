@@ -257,8 +257,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 	 */
 	private GMESchemaLocatorPanel getGmeSchemaLocatorPanel() {
 		if (gmeSchemaLocatorPanel == null) {
-			gmeSchemaLocatorPanel = new GMESchemaLocatorPanel(ExtensionTools.getProperty(getDescriptor()
-				.getProperties(), GMESchemaLocatorPanel.GME_URL), false);
+			gmeSchemaLocatorPanel = new GMESchemaLocatorPanel(ResourceManager.getServiceURLProperty(GMESchemaLocatorPanel.GME_URL), false);
 			gmeSchemaLocatorPanel.getSchemaComboBox().addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -360,8 +359,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 					try {
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
 							.getGridService(
-								ExtensionTools.getProperty(getDescriptor().getProperties(),
-									GMESchemaLocatorPanel.GME_URL));
+								ResourceManager.getServiceURLProperty(GMESchemaLocatorPanel.GME_URL));
 
 						// get the target namespace of the schema and make sure
 						// that it is acceptable by the GME
