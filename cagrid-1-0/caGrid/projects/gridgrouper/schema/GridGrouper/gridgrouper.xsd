@@ -62,7 +62,7 @@
 	<xsd:element name="GroupIdentifier" type="grouper:GroupIdentifier" />
 	<xsd:complexType name="GroupIdentifier">
 		<xsd:sequence>
-			<xsd:element name="gridGrouperURL" minOccurs="1" maxOccurs="1" type="xsd:string" use="optional"/>
+			<xsd:element name="gridGrouperURL" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 			<xsd:element name="GroupName" minOccurs="1" maxOccurs="1" type="xsd:string" />
 		</xsd:sequence>
 	</xsd:complexType>
