@@ -3,6 +3,8 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 To Do:
 
+put add remove etc button service contexts
+
 reload preferences from defaults
 
 finish wsdl based method import screen....wsdl file locator is not working right...

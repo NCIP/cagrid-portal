@@ -99,11 +99,6 @@
 				<include name="caGrid-1.0-core.jar"/>
 			</fileset>
 		</copy>
-		<!-- call our creation ant task -->
-		<createSkeleton/>
-		<!-- do replacements on the basic service files -->
-		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings" token=":" value="\:"/>
-		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings" token="\\:" value="\:"/>
 		<!-- create the propertites files for this project-->
 		<propertyfile file="${introduce.skeleton.destination.dir}/introduce.properties"
 			comment="Service introdue properties">
@@ -113,6 +108,11 @@
 			<entry key="introduce.skeleton.services.list" value="${introduce.skeleton.service.name}"/>
 			<entry key="introduce.skeleton.extensions" value="${introduce.skeleton.extensions}"/>
 		</propertyfile>
+		<!-- call our creation ant task -->
+		<createSkeleton/>
+		<!-- do replacements on the basic service files -->
+		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings" token=":" value="\:"/>
+		<replace file="${introduce.skeleton.destination.dir}/namespace2package.mappings" token="\\:" value="\:"/>
 	</target>
 	<target name="checkLoadPropertiesFile" if="introduce.properties">
 		<property file="${introduce.properties}"/>
