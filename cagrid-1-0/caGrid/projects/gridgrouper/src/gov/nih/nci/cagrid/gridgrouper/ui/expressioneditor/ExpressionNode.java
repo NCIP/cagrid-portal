@@ -82,6 +82,12 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 		expression.setMembershipQuery(null);
 		super.removeAllChildren();
 	}
+	
+	public synchronized void resetExpression(MembershipExpression expression){
+		super.removeAllChildren();
+		this.expression = expression;
+		this.refresh();
+	}
 
 	public void loadExpression() {
 		this.removeAllChildren();

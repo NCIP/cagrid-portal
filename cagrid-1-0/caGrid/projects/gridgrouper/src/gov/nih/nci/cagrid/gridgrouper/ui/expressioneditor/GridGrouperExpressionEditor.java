@@ -409,6 +409,12 @@ public class GridGrouperExpressionEditor extends JPanel {
 		this.editorLayout.show(getEditorPanel(), EXPRESSION_EDITOR);
 		repaint();
 	}
+	
+	public void setExpression(MembershipExpression exp){
+		this.expression = exp;
+		getExpressionTree().getRootNode().resetExpression(exp);
+		setExpressionEditor(exp);
+	}
 
 
 	public void setExpressionQuery(MembershipQuery query) {

@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.ui.CertificatePanel;
 import gov.nih.nci.cagrid.gridca.ui.ProxyPanel;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor.GridGrouperExpressionEditor;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.GridMapAuthorization;
@@ -103,7 +104,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private final static String GRID_GROUPER_AUTHORIZATION = "Grid Grouper";
 
-	private final static String FILE_SYSTEM_PROXY = "Proxy from file system";  //  @jve:decl-index=0:
+	private final static String FILE_SYSTEM_PROXY = "Proxy from file system"; // @jve:decl-index=0:
 
 	private final static String FILE_SYSTEM_CERT_KEY = "Certificate/Private Key from file system";
 
@@ -363,11 +364,10 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				gma.setGridMapFileLocation(((GridMapPanel) gridmapPanel).saveGridMapAndGetLocation());
 				sa.setGridMapAuthorization(gma);
 			} else if (authType.equals(GRID_GROUPER_AUTHORIZATION)) {
-				
-				//TODO::
-				//gridGrouper.get
+				// TODO: Validate the expression
+				MembershipExpression exp = ((GridGrouperExpressionEditor) getGridGrouper()).getMembershipExpression();
+				sa.setGridGrouperAuthorization(exp);
 			} else {
-
 				sa.setNoAuthorization(new NoAuthorization());
 			}
 			ss.setServiceAuthorization(sa);
@@ -429,10 +429,12 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 							this.authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
 						}
 					} else if (sa.getGridGrouperAuthorization() != null) {
-						// TODO: Fill out the Grouper Authorization
+						this.getGridGrouper().setExpression(sa.getGridGrouperAuthorization());
+						this.authorizationMechanism.setSelectedItem(GRID_GROUPER_AUTHORIZATION);
+					} else {
+						this.authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
 					}
 				}
-
 				synchronize();
 			}
 		}
@@ -1212,14 +1214,16 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	/**
-	 * This method initializes gridGrouper	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes gridGrouper
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private GridGrouperExpressionEditor getGridGrouper() {
 		if (gridGrouper == null) {
-			gridGrouper = new GridGrouperExpressionEditor(new ArrayList(),false);
-			gridGrouper.setLayout(new GridBagLayout());
+			ArrayList list = new ArrayList();
+			// TODO: REMOVE THIS HARDCODE
+			list.add("https://cagrid02.bmi.ohio-state.edu:8443/wsrf/services/cagrid/GridGrouper");
+			gridGrouper = new GridGrouperExpressionEditor(list, false);
 			gridGrouper.setName(GRID_GROUPER_AUTHORIZATION);
 		}
 		return gridGrouper;
