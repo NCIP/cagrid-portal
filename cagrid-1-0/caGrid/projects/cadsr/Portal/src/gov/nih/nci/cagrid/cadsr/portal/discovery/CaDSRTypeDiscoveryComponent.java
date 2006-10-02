@@ -29,6 +29,7 @@ import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JButton;
 
 
 /**
@@ -43,6 +44,8 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
 	private CaDSRBrowserPanel caDSRPanel = null;
 	private JPanel graphPanel = null;
 	private UMLDiagram umlDiagram;
+	private JPanel refreshPanel = null;
+	private JButton refreshButton = null;
 
 
 	/**
@@ -63,12 +66,16 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
 
 
 	private void initialize() {
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.gridy = 1;
+		gridBagConstraints11.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints11.gridx = 0;
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.gridx = 0;
 		gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints1.weightx = 1.0D;
 		gridBagConstraints1.weighty = 1.0D;
-		gridBagConstraints1.gridy = 1;
+		gridBagConstraints1.gridy = 2;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -77,6 +84,7 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
 		gridBagConstraints.weighty = 0.0D;
 		this.setLayout(new GridBagLayout());
 		this.add(getCaDSRPanel(), gridBagConstraints);
+		this.add(getRefreshPanel(), gridBagConstraints11);
 		this.add(getGraphPanel(), gridBagConstraints1);
 	}
 
@@ -236,6 +244,40 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
 
 		}
 		return umlDiagram;
+	}
+
+
+	/**
+	 * This method initializes refreshPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getRefreshPanel() {
+		if (refreshPanel == null) {
+			refreshPanel = new JPanel();
+			refreshPanel.add(getRefreshButton(), null);
+		}
+		return refreshPanel;
+	}
+
+
+	/**
+	 * This method initializes refreshButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getRefreshButton() {
+		if (refreshButton == null) {
+			refreshButton = new JButton();
+			refreshButton.setText("Refresh");
+			refreshButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					getCaDSRPanel().getCadsr().setText(getCaDSRURL());
+					getCaDSRPanel().discoverFromCaDSR();
+				}
+			});
+		}
+		return refreshButton;
 	}
 
 
