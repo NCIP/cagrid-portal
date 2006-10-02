@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
@@ -77,8 +78,7 @@ public class GMEExtensionPreferencesConfigurationPanel extends ExtensionsPrefere
 	private JTextField getGmeLocationTextField() {
 		if (gmeLocationTextField == null) {
 			gmeLocationTextField = new JTextField();
-			String gmeLocation = ExtensionTools.getProperty(getExtensionDescription().getDiscoveryExtensionDescription().getProperties(),
-				GMESchemaLocatorPanel.GME_URL);
+			String gmeLocation = ResourceManager.getServiceURLProperty(GMESchemaLocatorPanel.GME_URL);
 			gmeLocationTextField.setText(gmeLocation);
 		}
 		return gmeLocationTextField;
