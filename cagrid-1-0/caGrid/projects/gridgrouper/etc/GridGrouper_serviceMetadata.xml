@@ -358,8 +358,8 @@
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>
-   <ns77:SemanticMetadata conceptCode="???" conceptDefinition="A Grid Service." conceptName="Grid Service" order="0" orderLevel="0" xmlns:ns77="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
-   <ns78:SemanticMetadata conceptCode="???" conceptDefinition="An Grid Analytical Service." conceptName="Analytical Grid Service" order="1" orderLevel="0" xmlns:ns78="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns77:SemanticMetadata conceptCode="???" conceptDefinition="A Grid Service." conceptName="Grid Service" order="0" xmlns:ns77="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns78:SemanticMetadata conceptCode="???" conceptDefinition="An Grid Analytical Service." conceptName="Analytical Grid Service" order="1" xmlns:ns78="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter/>

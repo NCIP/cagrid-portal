@@ -459,7 +459,7 @@
     </ns4:Method>
    </ns4:Methods>
    <ns165:ResourcePropertiesList xsi:type="ns165:ResourcePropertiesListType" xmlns:ns165="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns165:ResourceProperty qName="ns166:ServiceMetadata" fileLocation="GridGrouper_serviceMetadata.xml" populateFromFile="false" register="true" xsi:type="ns165:ResourcePropertyType" xmlns:ns166="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+    <ns165:ResourceProperty qName="ns166:ServiceMetadata" fileLocation="GridGrouper_serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns165:ResourcePropertyType" xmlns:ns166="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
    </ns165:ResourcePropertiesList>
    <ns167:ServiceSecurity xsi:type="ns167:ServiceSecurity" xmlns:ns167="gme://gov.nih.nci.cagrid.introduce/1/Security">
     <ns167:SecuritySetting xsi:type="ns167:SecuritySetting">Custom</ns167:SecuritySetting>

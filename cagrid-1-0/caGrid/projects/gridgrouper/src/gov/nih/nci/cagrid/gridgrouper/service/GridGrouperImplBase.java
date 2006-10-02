@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.service;
 
 import gov.nih.nci.cagrid.gridgrouper.service.globus.resource.BaseResource;
+import gov.nih.nci.cagrid.gridgrouper.service.ServiceConfiguration;
 
 import java.rmi.RemoteException;
 
@@ -47,10 +48,13 @@ public abstract class GridGrouperImplBase {
 		return this.configuration;
 	}
 	
+	
 	public gov.nih.nci.cagrid.gridgrouper.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("home");
 		return (gov.nih.nci.cagrid.gridgrouper.service.globus.resource.BaseResourceHome)resource;
 	}
+
+	
 	
 	
 	

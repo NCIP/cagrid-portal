@@ -28,6 +28,8 @@ import org.globus.wsrf.utils.AddressingUtils;
 
 import commonj.timers.Timer;
 
+import gov.nih.nci.cagrid.common.Utils;
+
 public class BaseResource implements Resource, ResourceProperties {
 
 	static final Log logger = LogFactory.getLog(BaseResource.class);
@@ -182,10 +184,24 @@ public class BaseResource implements Resource, ResourceProperties {
 
 	private void populateResourceProperty() {
 	
+		loadServiceMetadataFromFile();
+	
 	}
 
 
-			
+		
+	private void loadServiceMetadataFromFile() {
+		try {
+			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
+					+ getConfiguration().getServiceMetadataFile());
+			this.serviceMetadataMD = (gov.nih.nci.cagrid.metadata.ServiceMetadata) Utils.deserializeDocument(dataFile.getAbsolutePath(),
+				gov.nih.nci.cagrid.metadata.ServiceMetadata.class);
+		} catch (Exception e) {
+			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
+		}
+	}		
+	
+		
 
 
 	//Getters/Setters for ResourceProperties

@@ -32,8 +32,8 @@
 	<resource name="GridGrouperUI" class="gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperUIConf">
 		<grid-grouper-ui>
 		<grid-groupers>
+			<grid-grouper>https://cagrid02.bmi.ohio-state.edu:8443/wsrf/services/cagrid/GridGrouper</grid-grouper>
 			<grid-grouper>https://localhost:8443/wsrf/services/cagrid/GridGrouper</grid-grouper>
-			<grid-grouper>https://127.0.0.1:8443/wsrf/services/cagrid/GridGrouper</grid-grouper>
 		</grid-groupers>
         </grid-grouper-ui>
 	</resource>
