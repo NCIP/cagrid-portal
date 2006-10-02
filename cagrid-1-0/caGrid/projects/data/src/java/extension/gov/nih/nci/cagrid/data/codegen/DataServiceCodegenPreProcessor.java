@@ -5,8 +5,11 @@ import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
+import gov.nih.nci.cagrid.data.extension.CQLProcessorConfig;
+import gov.nih.nci.cagrid.data.extension.CQLProcessorConfigProperty;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -19,7 +22,6 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPreProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
-import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
@@ -30,13 +32,10 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.axis.message.MessageElement;
 import org.apache.log4j.Logger;
-import org.jdom.Element;
 
 
 /**
@@ -285,24 +284,18 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		
 		if (qpClassname != null && qpClassname.length() != 0) {
 			// get the query processor parameters
-			ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-			MessageElement paramMe = ExtensionTools.getExtensionDataElement(data,
-				DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
-			if (paramMe != null) {
-				Element paramElement = AxisJdomUtils.fromMessageElement(paramMe);
-				Iterator paramElemIter = paramElement.getChildren(
-					DataServiceConstants.QUERY_PROCESSOR_PROPERTY_ELEMENT).iterator();
-				while (paramElemIter.hasNext()) {
-					Element paramElem = (Element) paramElemIter.next();
-					String name = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX
-						+ paramElem.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_NAME);
+			ExtensionTypeExtensionData extensionData = ExtensionTools.getExtensionData(desc, info);
+			Data data = ExtensionDataUtils.getExtensionData(extensionData);
+			CQLProcessorConfig config = data.getCQLProcessorConfig();
+			if (config != null && config.getProperty() != null) {
+				for (int i = 0; i < config.getProperty().length; i++) {
+					CQLProcessorConfigProperty prop = config.getProperty(i);
+					String name = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + prop.getName();
 					if (!CommonTools.isValidJavaField(name)) {
-						throw new CodegenExtensionException("The query processor's required parameter " + name
-							+ " is not a valid Java field name.");
+						throw new CodegenExtensionException("The query processor class's required config parameter "
+							+ prop.getName() + " converted to " + name + " which is NOT a valid Java field name!");						
 					}
-					String value = paramElem.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_VALUE);
-					// add a new property to the service props list
-					keptProperties.add(new ServicePropertiesProperty(new Boolean(false), name, value));
+					keptProperties.add(new ServicePropertiesProperty(new Boolean(false), name, prop.getValue()));
 				}
 				// add the query processor class name to the properties
 				for (int i = 0; i < keptProperties.size(); i++) {

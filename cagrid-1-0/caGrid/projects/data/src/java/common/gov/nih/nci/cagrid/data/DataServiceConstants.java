@@ -68,10 +68,6 @@ public class DataServiceConstants {
 	
 	// query processor config constants
 	public static final String QUERY_PROCESSOR_CONFIG_PREFIX = "cqlQueryProcessorConfig_";
-	public static final String QUERY_PROCESSOR_CONFIG_ELEMENT = "queryProcessorConfig";
-	public static final String QUERY_PROCESSOR_PROPERTY_ELEMENT = "property";
-	public static final String QUERY_PROCESSOR_PROPERTY_NAME = "name";
-	public static final String QUERY_PROCESSOR_PROPERTY_VALUE = "value";
 	
 	// exceptions
 	public static final String DATA_SERVICE_EXCEPTIONS_NAMESPACE = "http://gov.nih.nci.cagrid.data/DataServiceExceptions";

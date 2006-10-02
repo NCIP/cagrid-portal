@@ -420,7 +420,12 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			// listen for class selection events
 			classBrowserPanel.addClassSelectionListener(new ClassSelectionListener() {
 				public void classSelectionChanged(ClassSelectionEvent e) {
-					setProcessorClass(classBrowserPanel.getSelectedClassName());
+					try {
+						setProcessorClass(classBrowserPanel.getSelectedClassName());
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						ErrorDialog.showErrorDialog("Error setting the query processor class: " + ex.getMessage(), ex);
+					}
 				}
 			});
 			// listen for jar addition events
@@ -445,12 +450,14 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	}
 	
 	
-	private void setProcessorClass(String className) {
+	private void setProcessorClass(String className) throws Exception {
 		if (className != null) {
 			CommonTools.setServiceProperty(
-				getServiceInfo(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false); // TODO: is false correct here?
+				getServiceInfo(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false);
 			// blow away the query processor class properties from the extension data
-			ExtensionTools.removeExtensionDataElement(getExtensionTypeExtensionData(), DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
+			Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
+			data.setCQLProcessorConfig(null);
+			ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
 		}
 	}
 	

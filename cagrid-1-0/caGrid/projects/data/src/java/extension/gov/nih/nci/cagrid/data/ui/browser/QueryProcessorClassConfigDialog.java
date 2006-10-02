@@ -6,11 +6,12 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
+import gov.nih.nci.cagrid.data.extension.CQLProcessorConfig;
+import gov.nih.nci.cagrid.data.extension.CQLProcessorConfigProperty;
+import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
-import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.awt.GridBagConstraints;
@@ -34,8 +35,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.apache.axis.message.MessageElement;
-import org.jdom.Element;
 import org.projectmobius.portal.PortalResourceManager;
 
 /** 
@@ -118,7 +117,13 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 			setPropertiesButton.setText("Set Properties");
 			setPropertiesButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					storeProperties();
+					try {
+						storeProperties();
+						dispose();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						ErrorDialog.showErrorDialog("Error storing properties", ex);
+					}
 				}
 			});
 		}
@@ -249,7 +254,14 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 		Properties requiredParams = processor.getRequiredParameters();
 		
 		// get any properties currently defined for the query processor
-		Properties currentProperties = getCurrentQueryProcessorParams();
+		Properties currentProperties = null;
+		try {
+			currentProperties = getCurrentQueryProcessorParams();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			ErrorDialog.showErrorDialog("Error getting current query processor properties: " + ex.getMessage(), ex);
+			return;
+		}
 		
 		// merge the two sets of properties
 		Properties configuredParams = new Properties();
@@ -283,17 +295,14 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 	}
 	
 	
-	private Properties getCurrentQueryProcessorParams() {
+	private Properties getCurrentQueryProcessorParams() throws Exception {
 		Properties props = new Properties();
-		MessageElement propsMe = ExtensionTools.getExtensionDataElement(extensionData, DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
-		if (propsMe != null) {
-			Element propsElement = AxisJdomUtils.fromMessageElement(propsMe);
-			Iterator propIter = propsElement.getChildren(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_ELEMENT).iterator();
-			while (propIter.hasNext()) {
-				Element propElement = (Element) propIter.next();
-				String name = propElement.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_NAME);
-				String value = propElement.getAttributeValue(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_VALUE);
-				props.setProperty(name, value);
+		Data data = ExtensionDataUtils.getExtensionData(extensionData);
+		CQLProcessorConfig config = data.getCQLProcessorConfig();
+		if (config != null && config.getProperty() != null) {
+			for (int i = 0; i < config.getProperty().length; i++) {
+				CQLProcessorConfigProperty prop = config.getProperty(i);
+				props.setProperty(prop.getName(), prop.getValue());					
 			}
 		}
 		return props;
@@ -313,26 +322,23 @@ public class QueryProcessorClassConfigDialog extends JDialog {
 	}
 	
 	
-	private void storeProperties() {
-		// blow away QP config properties element in extension data
-		ExtensionTools.removeExtensionDataElement(extensionData, DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
-		
-		// create new element for configured properties
-		Element configuredProperties = new Element(DataServiceConstants.QUERY_PROCESSOR_CONFIG_ELEMENT);
+	private void storeProperties() throws Exception {
+		Data data = ExtensionDataUtils.getExtensionData(extensionData);
+		CQLProcessorConfig config = data.getCQLProcessorConfig();
+		if (config == null) {
+			config = new CQLProcessorConfig();
+			data.setCQLProcessorConfig(config);
+		}
+		CQLProcessorConfigProperty[] props = new CQLProcessorConfigProperty[getPropertiesPanel().getComponentCount()];
 		for (int i = 0; i < getPropertiesPanel().getComponentCount(); i++) {
 			PropertyRow row = (PropertyRow) getPropertiesPanel().getComponent(i);
-			Element propertyElem = new Element(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_ELEMENT);
-			propertyElem.setAttribute(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_NAME, row.getPropertyName());
-			propertyElem.setAttribute(DataServiceConstants.QUERY_PROCESSOR_PROPERTY_VALUE, row.getValue());
-			configuredProperties.addContent(propertyElem);
+			CQLProcessorConfigProperty property = new CQLProcessorConfigProperty();
+			property.setName(row.getPropertyName());
+			property.setValue(row.getValue());
+			props[i] = property;
 		}
-		try {
-			MessageElement configuredPropertiesMe = AxisJdomUtils.fromElement(configuredProperties);
-			ExtensionTools.updateExtensionDataElement(extensionData, configuredPropertiesMe);
-			dispose();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		config.setProperty(props);
+		ExtensionDataUtils.storeExtensionData(extensionData, data);
 	}
 	
 	
