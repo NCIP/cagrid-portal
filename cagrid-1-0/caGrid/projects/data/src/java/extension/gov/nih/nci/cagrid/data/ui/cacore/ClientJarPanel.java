@@ -1,9 +1,12 @@
 package gov.nih.nci.cagrid.data.ui.cacore;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
+import gov.nih.nci.cagrid.data.extension.CQLProcessorConfig;
+import gov.nih.nci.cagrid.data.extension.CQLProcessorConfigProperty;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
@@ -20,11 +23,15 @@ import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /** 
  *  ClientJarPanel
@@ -43,7 +50,11 @@ public class ClientJarPanel extends AbstractWizardPanel {
 	private JButton addJarButton = null;
 	private JButton removeButton = null;
 	private JPanel additionalJarButtonsPanel = null;
-
+	private JLabel serviceUrlLabel = null;
+	private JTextField serviceUrlTextField = null;
+	private JPanel urlPanel = null;
+	private JPanel requiredJarsPanel = null;
+	
 	public ClientJarPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
 		super(extensionDescription, info);
 		initialize();
@@ -51,22 +62,21 @@ public class ClientJarPanel extends AbstractWizardPanel {
 	
 	
 	private void initialize() {
-		GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-		gridBagConstraints6.gridx = 0;
-		gridBagConstraints6.anchor = java.awt.GridBagConstraints.EAST;
-		gridBagConstraints6.gridy = 1;
-		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-		gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraints3.gridy = 0;
-		gridBagConstraints3.weightx = 1.0;
-		gridBagConstraints3.weighty = 1.0D;
-		gridBagConstraints3.gridx = 0;
-		this.setLayout(new GridBagLayout());
-		this.setBorder(javax.swing.BorderFactory.createTitledBorder(
-			null, "Additional Jars", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
-			javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-		this.add(getAdditionalJarsScrollPane(), gridBagConstraints3);
-		this.add(getAdditionalJarButtonsPanel(), gridBagConstraints6);		
+        GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+        gridBagConstraints7.gridx = 0;
+        gridBagConstraints7.weightx = 1.0D;
+        gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints7.gridy = 1;
+        GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+        gridBagConstraints2.gridx = 0;
+        gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints2.weightx = 1.0D;
+        gridBagConstraints2.weighty = 1.0D;
+        gridBagConstraints2.gridy = 0;
+        this.setLayout(new GridBagLayout());
+        this.setSize(new java.awt.Dimension(351,220));
+        this.add(getRequiredJarsPanel(), gridBagConstraints2);
+        this.add(getUrlPanel(), gridBagConstraints7);			
 	}
 
 
@@ -262,5 +272,130 @@ public class ClientJarPanel extends AbstractWizardPanel {
 	
 	private String getServiceLibDir() {
 		return CacoreWizardUtils.getServiceBaseDir(getServiceInformation()) + File.separator + "lib";
+	}
+
+
+	/**
+	 * This method initializes jLabel	
+	 * 	
+	 * @return javax.swing.JLabel	
+	 */
+	private JLabel getServiceUrlLabel() {
+		if (serviceUrlLabel == null) {
+			serviceUrlLabel = new JLabel();
+			serviceUrlLabel.setText("Service URL:");
+		}
+		return serviceUrlLabel;
+	}
+
+
+	/**
+	 * This method initializes jTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getServiceUrlTextField() {
+		if (serviceUrlTextField == null) {
+			serviceUrlTextField = new JTextField();
+			serviceUrlTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void insertUpdate(DocumentEvent e) {
+					changeAppServiceUrl();
+				}
+
+			    
+			    public void removeUpdate(DocumentEvent e) {
+			    	changeAppServiceUrl();
+			    }
+			    
+
+			    public void changedUpdate(DocumentEvent e) {
+			    	changeAppServiceUrl();
+			    }
+			});
+		}
+		return serviceUrlTextField;
+	}
+
+
+	/**
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getUrlPanel() {
+		if (urlPanel == null) {
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.weightx = 1.0;
+			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints1.gridx = 1;
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints.gridy = 0;
+			urlPanel = new JPanel();
+			urlPanel.setLayout(new GridBagLayout());
+			urlPanel.add(getServiceUrlLabel(), gridBagConstraints);
+			urlPanel.add(getServiceUrlTextField(), gridBagConstraints1);
+		}
+		return urlPanel;
+	}
+
+
+	/**
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getRequiredJarsPanel() {
+		if (requiredJarsPanel == null) {
+			requiredJarsPanel = new JPanel();
+			requiredJarsPanel.setLayout(new GridBagLayout());
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.gridx = 0;
+			gridBagConstraints6.anchor = java.awt.GridBagConstraints.EAST;
+			gridBagConstraints6.gridy = 1;
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints3.gridy = 0;
+			gridBagConstraints3.weightx = 1.0;
+			gridBagConstraints3.weighty = 1.0D;
+			gridBagConstraints3.gridx = 0;
+			requiredJarsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Required Jar Files", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			requiredJarsPanel.add(getAdditionalJarsScrollPane(), gridBagConstraints3);
+			requiredJarsPanel.add(getAdditionalJarButtonsPanel(), gridBagConstraints6);
+		}
+		return requiredJarsPanel;
+	}
+	
+	
+	private void changeAppServiceUrl() {
+		try {
+			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
+			CQLProcessorConfig config = data.getCQLProcessorConfig();
+			if (config == null) {
+				config = new CQLProcessorConfig();
+				data.setCQLProcessorConfig(config);
+			}
+			CQLProcessorConfigProperty[] props = config.getProperty();
+			if (props == null || props.length == 0) {
+				props = new CQLProcessorConfigProperty[] {
+					new CQLProcessorConfigProperty("appserviceUrl", getServiceUrlTextField().getText())};
+				config.setProperty(props);
+			} else {
+				for (int i = 0; i < props.length; i++) {
+					if (props[i].getName().equals("appserviceUrl")) {
+						props[i].setValue(getServiceUrlTextField().getText());
+					}
+				}
+			}
+			ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			ErrorDialog.showErrorDialog("Error setting the application service URL: " + ex.getMessage(), ex);
+		}
 	}
 }
