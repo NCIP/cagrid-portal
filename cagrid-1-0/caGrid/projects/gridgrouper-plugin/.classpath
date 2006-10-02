@@ -74,17 +74,12 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca-1.0.jar"/>
 	<classpathentry sourcepath="/caGrid-1.0-introduce" kind="lib" path="ext/lib/caGrid-1.0-Introduce-core.jar"/>
 	<classpathentry sourcepath="/caGrid-1.0-introduce" kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-security-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-data.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cglib-full-2.0.2.jar"/>
-	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/commons-dbcp-1.2.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/commons-lang-2.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/commons-pool-1.2.jar"/>
@@ -98,7 +93,6 @@
 	<classpathentry kind="lib" path="ext/lib/GroboUtilThread-1.0.0alpha2-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/grouper.jar"/>
 	<classpathentry kind="lib" path="ext/lib/hibernate2-2.1.8.jar"/>
-	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/hsqldb-1.7.2.11.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jta-1.0.1B.jar"/>
@@ -111,13 +105,15 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="ext/lib/odmg-3.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
 	<classpathentry kind="lib" path="ext/lib/subject-0.2.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-1.0-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-1.0-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-1.0-ui.jar"/>
 	<classpathentry kind="lib" path="ext/lib/ant-contrib.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-core-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/client-no-ehcache.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-1.0-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
