@@ -425,6 +425,7 @@
 			<artifact refid="gridca.jars" />
 			<artifact refid="security.metadata.jars" />
 			<artifact refid="servicesecurity.jars" />
+			<artifact refid="gridgrouper.ui.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/introduce/skeleton">
 			<artifact refid="core.jars" />
@@ -432,6 +433,9 @@
 			<artifact refid="security.metadata.jars" />
 			<artifact refid="servicesecurity.jars" />
 		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/introduce/schema/gridgrouper">
+				            <artifact refid="gridgrouper.schemas"/>
+	 	</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/introduce/ext">
 			<artifact refid="servicesecurity.wsdl" />
 		</resolveDependencies>

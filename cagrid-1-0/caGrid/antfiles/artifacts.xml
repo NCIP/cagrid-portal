@@ -203,6 +203,7 @@
 							<exclude name="*test*.jar" />
 					</fileset>
 		</artifact>
+		
 		<artifact track="endorsed" type="jars" id="dorian.endorsed">
 			<fileset dir="${projects.dir}/dorian/ext/endorsed/lib">
 				<include name="*.jar"/>
