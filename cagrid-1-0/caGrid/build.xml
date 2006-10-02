@@ -48,7 +48,7 @@
 	<!--                  DEFINE THE SUB PROJECTS THAT PROVIDE INTRODUCE EXTENSIONS       -->
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects above -->
-	<property name="introduce.extension.projects.list" value="cabigextensions, cadsr, data, bulkDataTransfer,gridgrouper-plugin" />
+	<property name="introduce.extension.projects.list" value="cabigextensions, cadsr, data, bulkDataTransfer" />
 	<property name="introduce.extensions.dir" value="${projects.dir}/introduce/extensions" />
 
 
