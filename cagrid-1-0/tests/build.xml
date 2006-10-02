@@ -130,7 +130,7 @@
 			<artifact refid="metadatautils.jars" />
 			<artifact refid="caCORE.jars" />
 			<artifact refid="graph.jars" />
-			<artifact refid="introduce.servicesecurity.jars" />
+			<!-- <artifact refid="introduce.servicesecurity.jars" /> -->
 			<artifact refid="gridgrouper.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${tests.projects.dir}/coretests/test/resources/services/BasicDataService">
