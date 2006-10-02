@@ -21,8 +21,6 @@ namespaceType list and therefore cant be refered to yet
 
 add tools for autocreating resource and wrapping epr into client handle type for implementation on server side (ResourceCreator.javajet)
 
-refresh button in gme to view uploaded schemas without closing and opening
-
 on save etc i have seen unable to delete namespace2package.mappings.
 
 Introduce Portal (or something it uses) is leaving file handles open
@@ -59,6 +57,9 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+
+refresh button in gme to view uploaded schemas without closing and opening
+
 //in the securityoperationprovider
 //should i set the messages to not be generated again....
 //if so add the ns to the excludes list...

@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.JEditTextArea;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.XMLTokenMarker;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
@@ -257,7 +256,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 	 */
 	private GMESchemaLocatorPanel getGmeSchemaLocatorPanel() {
 		if (gmeSchemaLocatorPanel == null) {
-			gmeSchemaLocatorPanel = new GMESchemaLocatorPanel(ResourceManager.getServiceURLProperty(GMESchemaLocatorPanel.GME_URL), false);
+			gmeSchemaLocatorPanel = new GMESchemaLocatorPanel(false);
 			gmeSchemaLocatorPanel.getSchemaComboBox().addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -448,7 +447,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 								new GlobusGMEXMLDataModelServiceFactory());
 							try {
 								XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-									.getGridService(gmeSchemaLocatorPanel.getGme().getText());
+									.getGridService(ResourceManager.getServiceURLProperty(GMESchemaLocatorPanel.GME_URL));
 								if (gmeSchemaLocatorPanel.getSchemaComboBox().getSelectedItem() != null) {
 									handle.cacheSchema(((SchemaWrapper) gmeSchemaLocatorPanel.getSchemaComboBox()
 										.getSelectedItem()).getNamespace(), new File(location));

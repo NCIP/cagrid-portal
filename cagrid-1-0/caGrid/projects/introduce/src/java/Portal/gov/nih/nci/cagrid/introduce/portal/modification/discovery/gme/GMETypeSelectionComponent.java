@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptio
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.gme.GMESchemaLocatorPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
@@ -80,7 +79,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 	 */
 	private GMESchemaLocatorPanel getGmePanel() {
 		if (gmePanel == null) {
-			gmePanel = new GMESchemaLocatorPanel(ResourceManager.getServiceURLProperty(GMETypeSelectionComponent.GME_URL), false);
+			gmePanel = new GMESchemaLocatorPanel(false);
 		}
 		return gmePanel;
 	}
@@ -100,9 +99,9 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 					ImportInfo ii = new ImportInfo(selectedNS);
 					root.setLocation("./" + ii.getFileName());
 					namespaces.add(root);
-					
-					gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(
-						root, XMLUtilities.stringToDocument(gmePanel.currentNode.getSchemaContents()));
+
+					gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(root, XMLUtilities
+						.stringToDocument(gmePanel.currentNode.getSchemaContents()));
 					List importedNamespaces = cacheSchema(schemaDestinationDir, root.getNamespace());
 					Iterator importedNsIter = importedNamespaces.iterator();
 					while (importedNsIter.hasNext()) {
@@ -110,7 +109,8 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 						if (!ns.getRaw().equals(root.getNamespace())) {
 							ImportInfo importInfo = new ImportInfo(ns);
 							String filename = importInfo.getFileName();
-							File schemaFile = new File(schemaDestinationDir.getAbsolutePath() + File.separator + filename);
+							File schemaFile = new File(schemaDestinationDir.getAbsolutePath() + File.separator
+								+ filename);
 							NamespaceType type = CommonTools.createNamespaceType(schemaFile.getAbsolutePath());
 							String relPath = Utils.getRelativePath(schemaDestinationDir, schemaFile);
 							type.setLocation(relPath);
@@ -131,7 +131,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 			return new NamespaceType[0];
 		}
 	}
-	
+
 
 	private List cacheSchema(File dir, String namespace) throws Exception {
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
