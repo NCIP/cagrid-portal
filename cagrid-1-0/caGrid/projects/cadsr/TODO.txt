@@ -17,6 +17,8 @@ returning too many assocations
 
 
 ==================================================
+(DONE) Pull properties from preferences
+
 (FIXED/WORKAROUND?) returning too many classes when there are package aliases
 
 (DONE) reimplement generateDomainModel(proj,class,assoc)

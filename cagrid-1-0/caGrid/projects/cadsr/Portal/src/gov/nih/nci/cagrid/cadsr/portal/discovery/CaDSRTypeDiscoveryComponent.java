@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.cadsr.portal.discovery;
 
 import gov.nih.nci.cadsr.domain.ValueDomain;
+import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
@@ -9,12 +10,13 @@ import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.cadsr.portal.PackageSelectedListener;
+import gov.nih.nci.cagrid.cadsr.portal.ProjectSelectedListener;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.graph.uml.UMLClass;
 import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
 
 import java.awt.BorderLayout;
@@ -34,9 +36,10 @@ import javax.swing.JPanel;
  * 
  */
 
-public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent implements PackageSelectedListener {
-
-	private String cadsrURL = null;
+public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
+	implements
+		PackageSelectedListener,
+		ProjectSelectedListener {
 	private CaDSRBrowserPanel caDSRPanel = null;
 	private JPanel graphPanel = null;
 	private UMLDiagram umlDiagram;
@@ -48,10 +51,14 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 	 */
 	public CaDSRTypeDiscoveryComponent(DiscoveryExtensionDescriptionType desc) {
 		super(desc);
-		this.cadsrURL = ExtensionTools.getProperty(desc.getProperties(), "CADSR_URL");
 		initialize();
-		this.getCaDSRPanel().setDefaultCaDSRURL(this.cadsrURL);
+		this.getCaDSRPanel().setDefaultCaDSRURL(getCaDSRURL());
 		this.getCaDSRPanel().discoverFromCaDSR();
+	}
+
+
+	private String getCaDSRURL() {
+		return ResourceManager.getServiceURLProperty(CaDSRDiscoveryConstants.CADSR_URL_PROPERTY);
 	}
 
 
@@ -83,12 +90,19 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 		if (caDSRPanel == null) {
 			caDSRPanel = new CaDSRBrowserPanel(false, false);
 			caDSRPanel.addPackageSelectionListener(this);
+			caDSRPanel.addProjectSelectionListener(this);
 		}
 		return caDSRPanel;
 	}
 
 
+	public void handleProjectSelection(Project project) {
+		this.getCaDSRPanel().getCadsr().setText(getCaDSRURL());
+	}
+
+
 	public void handlePackageSelection(final UMLPackageMetadata pkg) {
+		this.getCaDSRPanel().getCadsr().setText(getCaDSRURL());
 		// update the graph for the given package
 		Thread t = new Thread() {
 			public void run() {
@@ -243,5 +257,4 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent imp
 			e.printStackTrace();
 		}
 	}
-
 }

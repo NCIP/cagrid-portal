@@ -4,12 +4,13 @@ import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.cadsr.portal.PackageSelectedListener;
+import gov.nih.nci.cagrid.cadsr.portal.ProjectSelectedListener;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.BorderLayout;
@@ -40,11 +41,10 @@ import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.protocol.gme.SchemaNode;
 
 
-public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent implements PackageSelectedListener {
-
-	private String gmeURL = null;
-	private String cadsrURL = null;
-
+public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
+	implements
+		PackageSelectedListener,
+		ProjectSelectedListener {
 	private CaDSRBrowserPanel caDSRPanel = null;
 	private JPanel nsPanel = null;
 	private JLabel nsLabel = null;
@@ -53,11 +53,19 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 	public CaDSRTypeSelectionComponent(DiscoveryExtensionDescriptionType desc) {
 		super(desc);
-		this.cadsrURL = ExtensionTools.getProperty(desc.getProperties(), "CADSR_URL");
-		this.gmeURL = ExtensionTools.getProperty(desc.getProperties(), "GME_URL");
 		initialize();
-		this.getCaDSRPanel().setDefaultCaDSRURL(this.cadsrURL);
+		this.getCaDSRPanel().setDefaultCaDSRURL(getCaDSRURL());
 		this.getCaDSRPanel().discoverFromCaDSR();
+	}
+
+
+	private String getCaDSRURL() {
+		return ResourceManager.getServiceURLProperty(CaDSRDiscoveryConstants.CADSR_URL_PROPERTY);
+	}
+
+
+	private String getGMEURL() {
+		return ResourceManager.getServiceURLProperty(CaDSRDiscoveryConstants.GME_URL_PROPERTY);
 	}
 
 
@@ -94,6 +102,7 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 		if (caDSRPanel == null) {
 			caDSRPanel = new CaDSRBrowserPanel(false, false);
 			caDSRPanel.addPackageSelectionListener(this);
+			caDSRPanel.addProjectSelectionListener(this);
 		}
 		return caDSRPanel;
 	}
@@ -153,7 +162,7 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 			rootNamespace.setNamespace(namespace.getRaw());
 			ImportInfo ii = new ImportInfo(namespace);
 			rootNamespace.setLocation("./" + ii.getFileName());
-			
+
 			// popualte the schema elements
 			gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(rootNamespace, XMLUtilities
 				.stringToDocument(schemaContents));
@@ -171,10 +180,10 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 					NamespaceType type = CommonTools.createNamespaceType(fullSchemaName);
 					// fix the location to be relative to the root schema
 					type.setLocation("./" + filename);
-					namespaceTypes.add(type);					
-				}				
+					namespaceTypes.add(type);
+				}
 			}
-			
+
 			NamespaceType[] nsTypeArray = new NamespaceType[namespaceTypes.size()];
 			namespaceTypes.toArray(nsTypeArray);
 			return nsTypeArray;
@@ -195,7 +204,7 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 	private XMLDataModelService getGME() throws MobiusException {
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 		XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-			.getGridService(this.gmeURL);
+			.getGridService(getGMEURL());
 		return handle;
 	}
 
@@ -241,11 +250,17 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 		}
 		return nsTextField;
 	}
-	
-	
+
+
+	public void handleProjectSelection(Project project) {
+		this.getCaDSRPanel().getCadsr().setText(getCaDSRURL());
+	}
+
+
 	public void handlePackageSelection(UMLPackageMetadata pkg) {
-		//TODO: when caDSR supports mappings.. look up the schema here
-		
+		this.getCaDSRPanel().getCadsr().setText(getCaDSRURL());
+		// TODO: when caDSR supports mappings.. look up the schema here
+
 		Project proj = getCaDSRPanel().getSelectedProject();
 		if (proj != null) {
 			// TODO: need to get Context
