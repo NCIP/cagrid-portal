@@ -68,8 +68,16 @@ public class GMESchemaLocatorPanel extends JPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.add(getMainPanel(), null);
-
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.insets = new java.awt.Insets(0,0,0,0);
+		gridBagConstraints.gridy = 0;
+		gridBagConstraints.weighty = 1.0D;
+		gridBagConstraints.ipadx = 0;
+		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints.weightx = 1.0D;
+		gridBagConstraints.gridx = 0;
+		this.setLayout(new GridBagLayout());
+		this.add(getSchemaPanel(), gridBagConstraints);
 	}
 
 
@@ -80,17 +88,10 @@ public class GMESchemaLocatorPanel extends JPanel {
 	 */
 	public JPanel getMainPanel() {
 		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints.weightx = 1.0D;
-			gridBagConstraints.weighty = 1.0D;
-			gridBagConstraints.gridy = 1;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			if (this.showGMESelection) {
 			}
-			mainPanel.add(getSchemaPanel(), gridBagConstraints);
 		}
 		return mainPanel;
 	}
