@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.introduce.portal.preferences;
 import gov.nih.nci.cagrid.introduce.common.BasePreferenceConfigurationPanel;
 
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.LayoutManager;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ public abstract class DynamicPreferencesConfigurationPanel extends BasePreferenc
 
 	public DynamicPreferencesConfigurationPanel() {
 		super();
+		this.setLayout(new GridBagLayout());
 		this.textFields = new HashMap();
 		this.labels = new HashMap();
 		this.passwordFields = new HashMap();

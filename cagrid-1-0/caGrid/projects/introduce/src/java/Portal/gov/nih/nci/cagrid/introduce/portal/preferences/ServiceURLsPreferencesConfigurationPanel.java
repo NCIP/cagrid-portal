@@ -16,10 +16,11 @@ public class ServiceURLsPreferencesConfigurationPanel extends DynamicPreferences
 	private void initialize() {
 		try {
 			Enumeration enumeration = ResourceManager.getServiceURLPropertyKeys();
+			int count = 0;
 			while (enumeration.hasMoreElements()) {
 				String key = (String) enumeration.nextElement();
 				String value = ResourceManager.getServiceURLProperty(key);
-				addTextField(this, key, value, 0, true);
+				addTextField(this, key, value, count++, true);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
