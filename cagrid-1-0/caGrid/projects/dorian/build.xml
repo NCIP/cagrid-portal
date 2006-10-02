@@ -10,7 +10,7 @@
     -->
 	<property file="introduce.properties" />
 	<property name="introduce.ns.excludes" value="" />
-	<property name="jar.prefix" value="caGrid-1.0" />
+	<property name="jar.prefix" value="caGrid-1.0-dorian" />
 	<property name="service.name" value="${introduce.skeleton.service.name}" />
 	<property name="service.version" value="1.0" />
 	<property name="schema.path" value="${introduce.skeleton.service.name}" />
@@ -26,11 +26,11 @@
 	<property name="schema.dir" value="schema" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 	<!-- Post Introduce Edit-->
-	<property name="ui.jar.name" value="${jar.prefix}-${service.name}-${service.version}-ui.jar" />
-	<property name="common.jar.name" value="${jar.prefix}-${service.name}-${service.version}-common.jar" />
-	<property name="client.jar.name" value="${jar.prefix}-${service.name}-${service.version}-client.jar" />
-	<property name="service.jar.name" value="${jar.prefix}-${service.name}-${service.version}-service.jar" />
-	<property name="stubs.jar.name" value="${jar.prefix}-${service.name}-${service.version}-stubs.jar" />
+	<property name="ui.jar.name" value="${jar.prefix}-${service.version}-ui.jar" />
+	<property name="common.jar.name" value="${jar.prefix}-${service.version}-common.jar" />
+	<property name="client.jar.name" value="${jar.prefix}-${service.version}-client.jar" />
+	<property name="service.jar.name" value="${jar.prefix}-${service.version}-service.jar" />
+	<property name="stubs.jar.name" value="${jar.prefix}-${service.version}-stubs.jar" />
 
 	<!-- Important test directories and files -->
 	<property name="test.dir" value="test" />

@@ -187,21 +187,21 @@
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="dorian.ui.jars">
-			<antcall target="build-dorian"/>
-			<fileset dir="${projects.dir}/dorian/build/lib">
-				<include name="caGrid-*-Dorian-*stubs.jar"/>
-				<include name="caGrid-*-Dorian-*common.jar"/>
-				<include name="caGrid-*-Dorian-*client.jar"/>
-				<include name="caGrid-*-Dorian-*ui.jar"/>
-			</fileset>
-			<fileset dir="${projects.dir}/dorian/lib">
-				<include name="*.jar"/>
-				<exclude name="*test*.jar"/>
-			</fileset>
-			<fileset dir="${projects.dir}/dorian/ext/lib">
-				<include name="*.jar"/>
-				<exclude name="*test*.jar"/>
-			</fileset>
+					<antcall target="build-dorian" />
+					<fileset dir="${projects.dir}/dorian/build/lib">
+							<include name="caGrid-*-dorian-*stubs.jar" />
+							<include name="caGrid-*-dorian-*common.jar" />
+							<include name="caGrid-*-dorian-*client.jar" />
+							<include name="caGrid-*-dorian-*ui.jar" />
+					</fileset>
+					<fileset dir="${projects.dir}/dorian/lib">
+							<include name="*.jar" />
+							<exclude name="*test*.jar" />
+					</fileset>
+					<fileset dir="${projects.dir}/dorian/ext/lib">
+							<include name="*.jar" />
+							<exclude name="*test*.jar" />
+					</fileset>
 		</artifact>
 		<artifact track="endorsed" type="jars" id="dorian.endorsed">
 			<fileset dir="${projects.dir}/dorian/ext/endorsed/lib">
@@ -209,21 +209,22 @@
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="dorian.client.jars">
-			<antcall target="build-dorian"/>
-			<fileset dir="${projects.dir}/dorian/build/lib">
-				<include name="caGrid-*-Dorian-*stubs.jar"/>
-				<include name="caGrid-*-Dorian-*common.jar"/>
-				<include name="caGrid-*-Dorian-*client.jar"/>
-			</fileset>
-			<fileset dir="${projects.dir}/dorian/lib">
-				<include name="*.jar"/>
-				<exclude name="*test*.jar"/>
-			</fileset>
-			<fileset dir="${projects.dir}/dorian/ext/lib">
-				<include name="*.jar"/>
-				<exclude name="*test*.jar"/>
-			</fileset>
-		</artifact>
+						<antcall target="build-dorian" />
+						<fileset dir="${projects.dir}/dorian/build/lib">
+								<include name="caGrid-*-dorian-*stubs.jar" />
+								<include name="caGrid-*-dorian-*common.jar" />
+								<include name="caGrid-*-dorian-*client.jar" />
+						</fileset>
+						<fileset dir="${projects.dir}/dorian/lib">
+								<include name="*.jar" />
+								<exclude name="*test*.jar" />
+						</fileset>
+						<fileset dir="${projects.dir}/dorian/ext/lib">
+								<include name="*.jar" />
+								<exclude name="*test*.jar" />
+						</fileset>
+			</artifact>
+
 		<artifact track="main" type="jars" id="dorian.jars">
 			<antcall target="build-dorian"/>
 			<fileset dir="${projects.dir}/dorian/build/lib">

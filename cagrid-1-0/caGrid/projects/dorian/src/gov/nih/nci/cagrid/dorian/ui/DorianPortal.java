@@ -36,7 +36,12 @@ public final class DorianPortal {
 
 
 	private static void showDorianSplash() {
-		dorianSplash = new SplashScreen("/dorianSplash.png");
+		try {
+			dorianSplash = new SplashScreen("/dorianSplash.png");
+		} catch (Exception e) {
+
+		}
+		
 	}
 
 
@@ -48,7 +53,12 @@ public final class DorianPortal {
 			}
 			portal = new GridPortal(confFile);
 			Dimension dim = PortalResourceManager.getInstance().getGridPortalConfig().getApplicationDimensions();
-			portal.pack();
+			try {
+				portal.pack();
+			} catch (Exception e) {
+				portal.setIconImage(null);
+				portal.pack();
+			}
 			portal.setSize(dim);
 			portal.setVisible(true);
 			portal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,7 +71,12 @@ public final class DorianPortal {
 
 	private static final class DorianSplashCloser implements Runnable {
 		public void run() {
-			dorianSplash.dispose();
+			try {
+				dorianSplash.dispose();
+			} catch (Exception e) {
+
+			}
+			
 		}
 	}
 }

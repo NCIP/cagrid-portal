@@ -4,10 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="ext/lib/ant-contrib.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Dorian-1.0-ui.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-common.jar"/>

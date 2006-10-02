@@ -39,7 +39,12 @@ public final class GridGrouperUI {
 			portal = new GridPortal(confFile);
 			Dimension dim = PortalResourceManager.getInstance()
 					.getGridPortalConfig().getApplicationDimensions();
-			portal.pack();
+			try {
+				portal.pack();
+			} catch (Exception e) {
+				portal.setIconImage(null);
+				portal.pack();
+			}
 			portal.setSize(dim);
 			portal.setVisible(true);
 			portal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
