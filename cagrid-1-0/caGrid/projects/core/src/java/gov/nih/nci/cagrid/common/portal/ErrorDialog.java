@@ -115,6 +115,11 @@ public class ErrorDialog extends JDialog {
 	}
 	
 	
+	public static void showErrorDialog(String error, String detail) {
+		addError(error, detail);
+	}
+	
+	
 	public static void showErrorDialog(String error, String[] detail) {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < detail.length; i++) {
@@ -124,7 +129,7 @@ public class ErrorDialog extends JDialog {
 	}
 	
 	
-	public static void showErrorDialog(final String message, Exception ex) {
+	public static void showErrorDialog(String message, Exception ex) {
 		StringWriter writer = new StringWriter();
 		ex.printStackTrace(new PrintWriter(writer));
 		String detail = writer.getBuffer().toString();
