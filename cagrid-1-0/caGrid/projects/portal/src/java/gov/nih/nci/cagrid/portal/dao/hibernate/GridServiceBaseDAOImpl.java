@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
 import org.springframework.dao.DataAccessException;
 
 import java.util.List;
+import java.util.StringTokenizer;
 
 
 /**
@@ -69,5 +70,30 @@ public final class GridServiceBaseDAOImpl extends BaseDAOImpl
             throw new RecordNotFoundException();
         }
         return id;
+    }
+
+    /**
+     * Will do a free text search
+     *
+     * @param keyword
+     * @return List of PointOfContact objects
+     */
+    public List keywordSearch(String keyword) {
+
+        StringBuffer sb = new StringBuffer("from RegisteredService service where");
+        StringTokenizer st = new StringTokenizer(keyword);
+        while (st.hasMoreTokens()) {
+            String hqlQueryStr = st.nextToken();
+            sb.append(" service.EPR like '%").append(keyword.trim()).append("%'");
+            sb.append(" or service.name like '%").append(keyword.trim()).append("%'");
+            sb.append(" or service.description like '%").append(keyword.trim()).append("%'");
+            _logger.debug("Find Registered Services for keyword" + keyword);
+        }
+        try {
+            return getHibernateTemplate().find(sb.toString());
+        } catch (DataAccessException e) {
+            _logger.error(e);
+            throw e;
+        }
     }
 }

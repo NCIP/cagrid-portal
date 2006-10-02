@@ -1,7 +1,9 @@
 package gov.nih.nci.cagrid.portal.web;
 
+import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
 import gov.nih.nci.cagrid.portal.manager.PointOfContactManager;
 
+import javax.faces.FacesException;
 import java.util.List;
 
 /**
@@ -18,6 +20,14 @@ public class PeopleList {
 
     public List getList() {
         return list;
+    }
+
+    public void setupKeywordSearch(String keyword) throws FacesException {
+        try {
+            list = pocManager.keywordSearch(keyword);
+        } catch (PortalRuntimeException e) {
+            new FacesException(e);
+        }
     }
 
     public void setList(List list) {

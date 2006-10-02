@@ -1,8 +1,10 @@
 package gov.nih.nci.cagrid.portal.web;
 
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
+import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
 import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
 
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,13 @@ public class ServicesList {
         return "success";
     }
 
+    public void setupKeywordSearch(String keyword) throws FacesException {
+        try {
+            list = gridServiceManager.keywordSearch(keyword);
+        } catch (PortalRuntimeException e) {
+            new FacesException(e);
+        }
+    }
 
     public List getList() {
         return list;

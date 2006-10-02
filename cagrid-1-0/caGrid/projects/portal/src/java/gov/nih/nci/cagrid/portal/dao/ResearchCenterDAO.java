@@ -14,5 +14,12 @@ public interface ResearchCenterDAO extends BaseDAO {
 
     public java.util.List getUniqueCenters() throws DataAccessException;
 
+    /**
+     * Will do a free text search
+     *
+     * @param keyword
+     * @return List of ResearchCenter objects
+     */
+    public java.util.List keywordSearch(String keyword);
 
 }

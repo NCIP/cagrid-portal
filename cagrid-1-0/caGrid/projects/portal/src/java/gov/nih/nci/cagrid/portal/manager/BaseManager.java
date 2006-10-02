@@ -40,4 +40,12 @@ public interface BaseManager {
      */
     public java.util.List loadAll(Class cls) throws PortalRuntimeException;
 
+    /**
+     * Keyword base searches. SHould be implemented by specific Managers(implementing classes)
+     *
+     * @param keyword
+     * @return
+     * @throws PortalRuntimeException
+     */
+    public java.util.List keywordSearch(String keyword) throws PortalRuntimeException;
 }

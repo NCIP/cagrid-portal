@@ -1,8 +1,10 @@
 package gov.nih.nci.cagrid.portal.web;
 
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
+import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
 import gov.nih.nci.cagrid.portal.manager.ResearchCenterManager;
 
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import java.util.List;
 
@@ -25,9 +27,15 @@ public class CenterList {
                 .getRequestParameterMap().get("navigatedServicePk"));
 
         navigatedCenter = (ResearchCenter) rcManager.getObjectByPrimaryKey(ResearchCenter.class, pk);
-
-
         return "success";
+    }
+
+    public void setupKeywordSearch(String keyword) throws FacesException {
+        try {
+            list = rcManager.keywordSearch(keyword);
+        } catch (PortalRuntimeException e) {
+            new FacesException(e);
+        }
     }
 
     public List getList() {

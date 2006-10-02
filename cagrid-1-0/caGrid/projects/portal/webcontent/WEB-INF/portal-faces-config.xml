@@ -79,6 +79,12 @@
         </managed-property>
     </managed-bean>
 
+    <managed-bean>
+        <description>Search Utility</description>
+        <managed-bean-name>keywordSearch</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.portal.web.KeywordSearchSetup</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
 
     <managed-bean>
         <managed-bean-name>errorDisplay</managed-bean-name>
@@ -121,5 +127,12 @@
         </navigation-case>
     </navigation-rule>
 
+    <navigation-rule>
+        <navigation-case>
+            <from-action>#{keywordSearch.navigateToKeywordSearchResults}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>keywordSearchResults.portal</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 
 </faces-config>

@@ -507,13 +507,13 @@ DATA TABLE BEGINS
 
 .dataRowLight {
 /* for the light color of alternating rows */
-    background-color: #EEEEE0; /* constant: white */
+    background-color: #EEEEE0; /* constant: blue */
     color: #000000; /* constant: black */
 }
 
 .dataRowDark {
 /* for the dark color of alternating rows */
-    background-color: #D3D3D3; /* constant: light gray */
+    background-color: #D3D3D3; /* constant: dark blue */
     color: #000000; /* constant: black */
 
 }
@@ -652,16 +652,34 @@ img.img {
 }
 
 /*###############
-Homepage BEGINS (Each section has a homepage)
+Custom styles for Portal
 ###############*/
+
+.searchButton {
+    font-family: arial, helvetica, verdana, sans-serif;
+    font-size: 1.1em;
+    font-weight: bold;
+    background-color: #797C9C;
+    color: #FFFFFF; /* constant: white */
+    text-align: center;
+    padding: 0.1em;;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    border: 0px;
+}
+
 .contentMainTable {
-    height: 100%;
     width: 100%;
+    vertical-align: top;
+}
+
+.contentMainTableRow {
     vertical-align: top;
 }
 
 .contentInnerTable {
     width: 80%;
+    height: 100%;
     vertical-align: top;
     padding: 0.1em;
     border: 1px solid #CCCCCC; /* constant: medium gray */
@@ -706,6 +724,24 @@ Homepage BEGINS (Each section has a homepage)
     line-height: 1.5em;
     vertical-align: top;
     font-weight: bold;
+}
+
+.searchTabbedPaneActive {
+/* for the selected tab in the main menu */
+    font-size: 1.1em;
+    font-weight: bold;
+    background-color: #797C9C; /* darker */
+    color: #FFFFFF; /* constant: white */
+    text-align: center;
+}
+
+.searchTabbedPaneInactive {
+    font-size: 1.1em;
+    font-weight: bold;
+    background-color: #000000;
+    color: #FFFFFF; /* constant: white */
+    text-align: center;
+    border: 1px solid #0000FF;
 }
 
 .errorTitle {

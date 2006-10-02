@@ -12,14 +12,14 @@
             <a class="mainMenuLink" href="home.portal">HOME</a>
         </td>
         <td class="mainMenuSpacer">&nbsp;</td>
-        <td height="20" class="mainMenuItemOn" onmouseover="changeMenuStyle(this,'mainMenuItemOn'),showCursor()"
-            onmouseout="changeMenuStyle(this,'mainMenuItemOn'),hideCursor()"
+        <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
+            onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()"
             onclick="document.location.href='directory.portal'">
             <a class="mainMenuLink" href="directory.portal">DIRECTORY</a>
         </td>
         <td class="mainMenuSpacer">&nbsp;</td>
-        <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
-            onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()"
+        <td height="20" class="mainMenuItemOn" onmouseover="changeMenuStyle(this,'mainMenuItemOn'),showCursor()"
+            onmouseout="changeMenuStyle(this,'mainMenuItemOn'),hideCursor()"
             onclick="document.location.href='map.portal'">
             <a class="mainMenuLink" href="search.portal">SEARCH</a>
         </td>

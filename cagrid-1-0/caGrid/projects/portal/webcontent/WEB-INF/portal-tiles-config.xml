@@ -7,6 +7,14 @@
 <tiles-definitions>
 
     <!--Base Layouts-->
+    <definition name="Home" page="/jsp/layout/PortalBaseLayout.jsp">
+        <put name="nciHeader" value="/jsp/header/NCIHeader.jsp"/>
+        <put name="portalHeader" value="/jsp/header/PortalHeader.jsp"/>
+        <put name="portalBanner" value="/jsp/header/PortalBanner.jsp"/>
+        <put name="appFooter" value="/jsp/footer/PortalFooter.jsp"/>
+        <put name="nciFooter" value="/jsp/footer/NCIFooter.jsp"/>
+    </definition>
+
     <definition name="Base" page="/jsp/layout/PortalBaseLayout.jsp">
         <put name="nciHeader" value="/jsp/header/NCIHeader.jsp"/>
         <put name="portalHeader" value="/jsp/header/PortalHeader.jsp"/>
@@ -14,15 +22,8 @@
         <put name="nciFooter" value="/jsp/footer/NCIFooter.jsp"/>
     </definition>
 
-    <definition name="Homepage" page="/jsp/layout/PortalHomepageLayout.jsp">
-        <put name="nciHeader" value="/jsp/header/NCIHeader.jsp"/>
-        <put name="portalHeader" value="/jsp/header/PortalHeader.jsp"/>
-        <put name="appFooter" value="/jsp/footer/PortalFooter.jsp"/>
-        <put name="nciFooter" value="/jsp/footer/NCIFooter.jsp"/>
-    </definition>
 
-
-    <definition name="/home.tiles" extends="Homepage">
+    <definition name="/home.tiles" extends="Home">
         <put name="mainMenu" value="/jsp/menu/MainMenuHome.jsp"/>
         <put name="subMenu" value="/jsp/menu/SubMenuBlank.jsp"/>
         <put name="mainContent" value="/jsp/content/PortalHomepage.jsp"/>
@@ -56,13 +57,35 @@
     </definition>
 
 
-    <!--End Directory Section-->
+    <!--    Search Section              -->
+    <!--Search Section layout-->
+    <definition name="Search" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuSearch.jsp"/>
+        <put name="subMenu" value="/jsp/menu/SubMenuSearch.jsp"/>
+        <!--has no content. is a layout-->
+    </definition>
+
+    <definition name="/search.tiles" extends="Search">
+        <put name="mainContent" value="/jsp/content/KeywordSearch.jsp"/>
+    </definition>
+
+    <definition name="SearchResult" page="/jsp/content/SearchResults.jsp">
+        <put name="serviceSearchResult" value="/jsp/content/DirectoryServices.jsp"/>
+        <put name="rcSearchResult" value="/jsp/content/DirectoryResearchCenter.jsp"/>
+        <put name="pocSearchResult" value="/jsp/content/DirectoryPointOfContent.jsp"/>
+    </definition>
+
+    <definition name="/keywordSearchResults.tiles" extends="Search">
+        <put name="mainContent" value="/jsp/content/KeywordSearch.jsp"/>
+        <put name="subMainContent" value="SearchResult"/>
+    </definition>
 
 
+    <!--Map Section-->
     <definition name="/map.tiles" extends="Base">
         <put name="mainMenu" value="/jsp/menu/MainMenuMap.jsp"/>
-        <put name="subMenu" value="/jsp/menu/SubMenuMap.jsp"/>
-        <put name="mainContent" value="/jsp/menu/SubMenuBlank.jsp"/>
+        <put name="subMenu" value="/jsp/menu/SubMenuBlank.jsp"/>
+        <put name="mainContent" value="/jsp/menu/Map.jsp"/>
     </definition>
 
     <definition name="/help.tiles" extends="Base">

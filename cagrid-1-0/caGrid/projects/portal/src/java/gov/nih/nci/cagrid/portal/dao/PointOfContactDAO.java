@@ -22,4 +22,13 @@ public interface PointOfContactDAO extends BaseDAO {
      * @return List PointOfContacts
      */
     public List getUniquePeople() throws DataAccessException;
+
+    /**
+     * Will do a free text search
+     *
+     * @param keyword
+     * @return List of PointOfContact objects
+     */
+    public java.util.List keywordSearch(String keyword);
+
 }

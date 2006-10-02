@@ -41,6 +41,15 @@ public class ResearchCenterManagerImpl extends BaseManagerImpl
 
     }
 
+    public List keywordSearch(String keyword) throws PortalRuntimeException {
+        try {
+            return rcDAO.keywordSearch(keyword);
+        } catch (Exception e) {
+            _logger.error(e);
+            throw new PortalRuntimeException(e);
+        }
+    }
+
     public void setRcDAO(ResearchCenterDAO rcDAO) {
         this.rcDAO = rcDAO;
     }

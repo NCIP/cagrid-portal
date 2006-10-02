@@ -76,6 +76,22 @@ public class GridServiceManagerImpl extends BaseManagerImpl
         }
     }
 
+    /**
+     * Keyword base searches. SHould be implemented by specific Managers(implementing classes)
+     *
+     * @param keyword
+     * @return
+     * @throws gov.nih.nci.cagrid.portal.exception.PortalRuntimeException
+     *
+     */
+    public List keywordSearch(String keyword) throws PortalRuntimeException {
+        try {
+            return gridServiceBaseDAO.keywordSearch(keyword);
+        } catch (DataAccessException e) {
+            _logger.error(e);
+            throw new PortalRuntimeException(e);
+        }
+    }
 
     /**
      * Will put required

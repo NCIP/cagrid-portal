@@ -38,6 +38,24 @@ public class PointOfContactManagerImpl extends BaseManagerImpl
         return result;
     }
 
+    /**
+     * Keyword base searches. SHould be implemented by specific Managers(implementing classes)
+     *
+     * @param keyword
+     * @return
+     * @throws gov.nih.nci.cagrid.portal.exception.PortalRuntimeException
+     *
+     */
+    public List keywordSearch(String keyword) throws PortalRuntimeException {
+        try {
+            return pocDAO.keywordSearch(keyword);
+        } catch (Exception e) {
+            _logger.error(e);
+            throw new PortalRuntimeException(e);
+        }
+
+    }
+
     public void setPocDAO(PointOfContactDAO pocDAO) {
         this.pocDAO = pocDAO;
     }

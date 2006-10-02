@@ -7,8 +7,6 @@ import gov.nih.nci.cagrid.portal.manager.ResearchCenterManager;
 import org.apache.log4j.Category;
 
 import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
-import javax.faces.el.EvaluationException;
 
 /**
  * Sets up the Directory section.
@@ -35,7 +33,7 @@ public class DirectorySetup {
         _logger.debug("Setting up directory of services");
 
         try {
-            ServicesList services = (ServicesList) getBean("services");
+            ServicesList services = (ServicesList) PortalWebUtils.getBean("services");
             services.setList(gridServiceManager.getAllServices());
         } catch (PortalRuntimeException e) {
             //log so admin knows
@@ -51,7 +49,7 @@ public class DirectorySetup {
         _logger.debug("Setting up directory of centers");
 
         try {
-            CenterList centers = (CenterList) getBean("centers");
+            CenterList centers = (CenterList) PortalWebUtils.getBean("centers");
             centers.setList(rcManager.getUniqueCenters());
         } catch (PortalRuntimeException e) {
             //log so admin knows
@@ -67,7 +65,7 @@ public class DirectorySetup {
         _logger.debug("Setting up directory of people");
 
         try {
-            PeopleList people = (PeopleList) getBean("people");
+            PeopleList people = (PeopleList) PortalWebUtils.getBean("people");
             people.setList(pocManager.getUniquePeople());
         } catch (PortalRuntimeException e) {
             //log so admin knows
@@ -77,12 +75,6 @@ public class DirectorySetup {
         }
         _logger.debug("Navigating to people directory");
         return "success";
-    }
-
-
-    private Object getBean(String beanName) throws EvaluationException {
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        return ctx.getApplication().getVariableResolver().resolveVariable(ctx, beanName);
     }
 
 
