@@ -223,6 +223,7 @@
 			<artifact refid="gme.globus.client.jars" />
 			<artifact refid="servicesecurity.jars" />
 		</resolveDependencies>
+		<delete dir="${projects.dir}/cadsr/schema/CaDSRService/xsd" />
 		<resolveDependencies extdir="${projects.dir}/cadsr/schema/CaDSRService">
 			<artifact refid="metadata.schemas" />
 		</resolveDependencies>
@@ -230,7 +231,7 @@
 		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
-	
+
 	<!-- =============================================================== -->
 	<!-- Grid CA:                                                        -->
 	<!-- =============================================================== -->
@@ -246,34 +247,35 @@
 
 
 
-    <!-- =============================================================== -->
-    <!-- Authentication Service:                                         -->
-    <!-- =============================================================== -->
-    <target name="build-authentication-service" depends="prepare" description="Builds the Authentication Service project">
-        <resolveDependencies extdir="${projects.dir}/authentication-service/ext">
-        	<artifact refid="ant-contrib.jars"/>
-            <artifact refid="core.jars"/>
-            <artifact refid="common.test.jars"/>
-        	<artifact refid="common.metadata.jars" />
-        	<artifact refid="data.metadata.jars" />
-            <artifact refid="test.coverage.jars"/>
-            <artifact refid="core.test.jars"/>
-            <artifact refid="core.resources"/>
-            <artifact refid="gridca.jars"/>
-        	<artifact refid="mobius.jars"/>
-        	<artifact refid="mds.jars"/>
-            <artifact refid="opensaml.jars"/>
-        	<artifact refid="opensaml.endorsed"/>
-        	<artifact refid="opensaml.codec"/>
-            <artifact refid="servicesecurity.jars"/>
-            <artifact refid="security.metadata.jars"/>
-        </resolveDependencies>
-      <resolveDependencies extdir="${projects.dir}/authentication-service/schema/AuthenticationService">
-	            <artifact refid="metadata.schemas"/>
-	        </resolveDependencies>
-        <ant dir="${projects.dir}/authentication-service" inheritAll="false" antfile="build.xml" target="all"/>
-    </target>
-	
+	<!-- =============================================================== -->
+	<!-- Authentication Service:                                         -->
+	<!-- =============================================================== -->
+	<target name="build-authentication-service" depends="prepare" description="Builds the Authentication Service project">
+		<resolveDependencies extdir="${projects.dir}/authentication-service/ext">
+			<artifact refid="ant-contrib.jars" />
+			<artifact refid="core.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="data.metadata.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="core.resources" />
+			<artifact refid="gridca.jars" />
+			<artifact refid="mobius.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="opensaml.jars" />
+			<artifact refid="opensaml.endorsed" />
+			<artifact refid="opensaml.codec" />
+			<artifact refid="servicesecurity.jars" />
+			<artifact refid="security.metadata.jars" />
+		</resolveDependencies>
+		<delete dir="${projects.dir}/authentication-service/schema/AuthenticationService/xsd" />
+		<resolveDependencies extdir="${projects.dir}/authentication-service/schema/AuthenticationService">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/authentication-service" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+
 	<!-- =============================================================== -->
 	<!-- DORIAN:                                                         -->
 	<!-- =============================================================== -->
@@ -287,14 +289,15 @@
 			<artifact refid="core.resources" />
 			<artifact refid="gridca.jars" />
 			<artifact refid="mobius.jars" />
-                  <artifact refid="authentication.service.client.jars" />
+			<artifact refid="authentication.service.client.jars" />
 			<artifact refid="opensaml.jars" />
 			<artifact refid="opensaml.endorsed" />
 			<artifact refid="gts.client.jars" />
 			<artifact refid="servicesecurity.jars" />
 			<artifact refid="security.metadata.jars" />
-                  <artifact refid="common.metadata.jars" />
+			<artifact refid="common.metadata.jars" />
 		</resolveDependencies>
+		<delete dir="${projects.dir}/dorian/schema/Dorian/xsd" />
 		<resolveDependencies extdir="${projects.dir}/dorian/schema/Dorian">
 			<artifact refid="metadata.schemas" />
 		</resolveDependencies>
@@ -324,14 +327,15 @@
 			<artifact refid="gridca.jars" />
 			<artifact refid="servicesecurity.jars" />
 			<artifact refid="security.metadata.jars" />
-                  <artifact refid="common.metadata.jars" />
+			<artifact refid="common.metadata.jars" />
 		</resolveDependencies>
+		<delete dir="${projects.dir}/gridgrouper/schema/GridGrouper/xsd" />
 		<resolveDependencies extdir="${projects.dir}/gridgrouper/schema/GridGrouper">
 			<artifact refid="metadata.schemas" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/gridgrouper" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
-	
+
 	<!-- =============================================================== -->
 	<!-- Grid Grouper Plugin                                             -->
 	<!-- =============================================================== -->
@@ -342,8 +346,9 @@
 			<artifact refid="introduce.jars" />
 			<artifact refid="gridgrouper.ui.jars" />
 		</resolveDependencies>
-		  <resolveDependencies extdir="${projects.dir}/gridgrouper-plugin/schema/gridgrouper">
-			            <artifact refid="gridgrouper.schemas"/>
+		<delete dir="${projects.dir}/gridgrouper-plugin/schema/gridgrouper/xsd" />
+		<resolveDependencies extdir="${projects.dir}/gridgrouper-plugin/schema/gridgrouper">
+			<artifact refid="gridgrouper.schemas" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/gridgrouper-plugin" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -365,6 +370,7 @@
 			<artifact refid="servicesecurity.jars" />
 			<artifact refid="security.metadata.jars" />
 		</resolveDependencies>
+		<delete dir="${projects.dir}/gts/schema/GTS/xsd" />
 		<resolveDependencies extdir="${projects.dir}/gts/schema/GTS">
 			<artifact refid="metadata.schemas" />
 		</resolveDependencies>
@@ -388,6 +394,7 @@
 			<artifact refid="servicesecurity.jars" />
 			<artifact refid="security.metadata.jars" />
 		</resolveDependencies>
+		<delete dir="${projects.dir}/syncgts/schema/SyncGTS/xsd" />
 		<resolveDependencies extdir="${projects.dir}/syncgts/schema/SyncGTS">
 			<artifact refid="metadata.schemas" />
 		</resolveDependencies>
@@ -434,15 +441,16 @@
 			<artifact refid="servicesecurity.jars" />
 			<artifact refid="gridgrouper.client.jars" />
 		</resolveDependencies>
+		<delete dir="${projects.dir}/introduce/schema/gridgrouper/xsd"/>
 		<resolveDependencies extdir="${projects.dir}/introduce/schema/gridgrouper">
-				            <artifact refid="gridgrouper.schemas"/>
-	 	</resolveDependencies>
+			<artifact refid="gridgrouper.schemas" />
+		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/introduce/ext">
 			<artifact refid="servicesecurity.wsdl" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/introduce" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
-	
+
 	<!-- =============================================================== -->
 	<!-- SERVICE SECURITY PROVIDER:                                      -->
 	<!-- =============================================================== -->
@@ -451,6 +459,7 @@
 			<artifact refid="core.jars" />
 			<artifact refid="security.metadata.jars" />
 		</resolveDependencies>
+		<delete dir="${projects.dir}/service-security-provider/schema/ServiceSecurity/xsd" />
 		<resolveDependencies extdir="${projects.dir}/service-security-provider/schema/ServiceSecurity">
 			<artifact refid="security.metadata.schemas" />
 		</resolveDependencies>
@@ -584,7 +593,7 @@
 	<!-- Federated Query Processor:                                      -->
 	<!-- =============================================================== -->
 	<target name="build-fqp" if="isJDK1.5" depends="prepare" description="Federated Query Processor">
-		<resolveDependencies extdir="${projects.dir}/fqp/ext">						
+		<resolveDependencies extdir="${projects.dir}/fqp/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="common.test.jars" />
@@ -594,6 +603,7 @@
 			<artifact refid="servicesecurity.jars" />
 			<artifact refid="data.jars" />
 		</resolveDependencies>
+		<delete dir="${projects.dir}/fqp/schema/FederatedQueryProcessor/xsd" />
 		<resolveDependencies extdir="${projects.dir}/fqp/schema/FederatedQueryProcessor">
 			<artifact refid="data.cql.schemas" />
 			<artifact refid="metadata.schemas" />
