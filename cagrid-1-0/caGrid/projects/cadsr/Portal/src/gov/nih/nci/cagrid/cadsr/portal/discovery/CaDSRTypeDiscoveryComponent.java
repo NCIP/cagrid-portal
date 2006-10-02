@@ -12,6 +12,7 @@ import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.cadsr.portal.PackageSelectedListener;
 import gov.nih.nci.cagrid.cadsr.portal.ProjectSelectedListener;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.graph.uml.UMLClass;
 import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
@@ -26,10 +27,9 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 
 /**
@@ -199,14 +199,13 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
 
 				} catch (RemoteException e) {
 					e.printStackTrace();
-					JOptionPane.showMessageDialog(CaDSRTypeDiscoveryComponent.this,
-						"Error communicating with caDSR; please check the caDSR URL!");
+					ErrorDialog.showErrorDialog("Error communicating with caDSR; please check the caDSR URL!", e);
 					getCaDSRPanel().getMultiEventProgressBar().stopAll(
 						"Error communicating with caDSR; please check the caDSR URL!");
 					getUMLDiagram().clear();
 				} catch (Exception e) {
 					e.printStackTrace();
-					JOptionPane.showMessageDialog(CaDSRTypeDiscoveryComponent.this, "Error processing model!");
+					ErrorDialog.showErrorDialog("Error processing model!", e);
 					getCaDSRPanel().getMultiEventProgressBar().stopAll("Error processing model!");
 					getUMLDiagram().clear();
 				}
@@ -248,9 +247,9 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
 
 
 	/**
-	 * This method initializes refreshPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes refreshPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getRefreshPanel() {
 		if (refreshPanel == null) {
@@ -262,9 +261,9 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
 
 
 	/**
-	 * This method initializes refreshButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes refreshButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getRefreshButton() {
 		if (refreshButton == null) {

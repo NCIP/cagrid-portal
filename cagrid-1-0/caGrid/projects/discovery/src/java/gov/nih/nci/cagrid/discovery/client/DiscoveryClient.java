@@ -621,6 +621,8 @@ public class DiscoveryClient {
 						&& commonMetadata.getHostingResearchCenter().getResearchCenter() != null) {
 						System.out.println("Service is from:"
 							+ commonMetadata.getHostingResearchCenter().getResearchCenter().getDisplayName());
+					} else if (commonMetadata != null) {
+						System.out.println("Service is not providing research center information.");
 					}
 				} catch (ResourcePropertyRetrievalException e) {
 					// e.printStackTrace();
