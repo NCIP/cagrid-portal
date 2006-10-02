@@ -158,6 +158,22 @@
 				<exclude name="*test*.jar"/>
 			</fileset>
 		</artifact>
+		<artifact track="main" type="jars" id="gridgrouper.client.jars">
+			<antcall target="build-gridgrouper"/>
+			<fileset dir="${projects.dir}/gridgrouper/build/lib">
+				<include name="caGrid-*-gridgrouper-*stubs.jar"/>
+				<include name="caGrid-*-gridgrouper-*common.jar"/>
+				<include name="caGrid-*-gridgrouper-*client.jar"/>
+			</fileset>
+			<fileset dir="${projects.dir}/gridgrouper/lib">
+				<include name="*grouper*.jar"/>
+				<include name="*subject*.jar"/>
+			</fileset>
+			<fileset dir="${projects.dir}/gridgrouper/ext/lib">
+				<include name="*.jar"/>
+				<exclude name="*test*.jar"/>
+			</fileset>
+		</artifact>
 		<artifact track="main" type="jars" id="gridgrouper.ui.jars">
 			<antcall target="build-gridgrouper"/>
 			<fileset dir="${projects.dir}/gridgrouper/build/lib">
@@ -167,8 +183,8 @@
 				<include name="caGrid-*-gridgrouper-*ui.jar"/>
 			</fileset>
 			<fileset dir="${projects.dir}/gridgrouper/lib">
-				<include name="*.jar"/>
-				<exclude name="*test*.jar"/>
+				<include name="*grouper*.jar"/>
+				<include name="*subject*.jar"/>
 			</fileset>
 			<fileset dir="${projects.dir}/gridgrouper/ext/lib">
 				<include name="*.jar"/>

@@ -432,6 +432,7 @@
 			<artifact refid="mds.jars" />
 			<artifact refid="security.metadata.jars" />
 			<artifact refid="servicesecurity.jars" />
+			<artifact refid="gridgrouper.client.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/introduce/schema/gridgrouper">
 				            <artifact refid="gridgrouper.schemas"/>
