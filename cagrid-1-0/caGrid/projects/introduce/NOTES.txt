@@ -3,9 +3,7 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 To Do:
 
-//in the securityoperationprovider
-//should i set the messages to not be generated again....
-//if so add the ns to the excludes list...
+reload preferences from defaults
 
 finish wsdl based method import screen....wsdl file locator is not working right...
 
@@ -59,6 +57,10 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+//in the securityoperationprovider
+//should i set the messages to not be generated again....
+//if so add the ns to the excludes list...
+
 make global preferences
 GUI needs a way to group common preferences that extensions can use (such as GME URL), intead of each having to define/use their own
 
