@@ -103,7 +103,7 @@ public class PreferenceConfigurationContainerPanel extends JPanel {
 	public JButton getApplyButton() {
 		if (applyButton == null) {
 			applyButton = new JButton();
-			applyButton.setText("apply");
+			applyButton.setText("Apply");
 			applyButton.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
