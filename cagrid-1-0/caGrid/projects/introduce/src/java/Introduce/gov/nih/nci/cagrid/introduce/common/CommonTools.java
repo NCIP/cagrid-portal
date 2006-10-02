@@ -4,6 +4,8 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
@@ -38,8 +40,6 @@ import org.jdom.Element;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
-
-import com.sun.xml.xsom.XSSimpleType;
 
 
 /**
@@ -720,8 +720,8 @@ public class CommonTools {
 		}
 		ServicePropertiesProperty[] allProperties = props.getProperty();
 		if (allProperties == null) {
-			allProperties = new ServicePropertiesProperty[]{new ServicePropertiesProperty(new Boolean(isFromETC), key,
-				value)};
+			allProperties = new ServicePropertiesProperty[] {new ServicePropertiesProperty(
+				new Boolean(isFromETC), key, value)};
 		} else {
 			boolean found = false;
 			for (int i = 0; i < allProperties.length; i++) {
@@ -733,11 +733,8 @@ public class CommonTools {
 				}
 			}
 			if (!found) {
-				ServicePropertiesProperty[] tmpProperties = new ServicePropertiesProperty[allProperties.length + 1];
-				System.arraycopy(allProperties, 0, tmpProperties, 0, allProperties.length);
-				tmpProperties[tmpProperties.length - 1] = new ServicePropertiesProperty(new Boolean(isFromETC), key,
-					value);
-				allProperties = tmpProperties;
+				allProperties = (ServicePropertiesProperty[]) Utils.appendToArray(allProperties, 
+					new ServicePropertiesProperty(new Boolean(isFromETC), key, value));
 			}
 		}
 		props.setProperty(allProperties);
@@ -864,17 +861,16 @@ public class CommonTools {
 						}
 					}
 					// exceptions
-					// TODO: This is disabled until exceptions can be typed from
-					// schema
-					/*
-					 * MethodTypeExceptions exceptions = method.getExceptions();
-					 * if (exceptions != null) { for (int e = 0;
-					 * exceptions.getException() != null && e <
-					 * exceptions.getException().length; e++) {
-					 * MethodTypeExceptionsException exception =
-					 * exceptions.getException(e); // TODO: verify exception
-					 * QName against nsuri } }
-					 */
+					MethodTypeExceptions exceptions = method.getExceptions();
+					if (exceptions != null) {
+						for (int e = 0;	exceptions.getException() != null 
+							&& e < exceptions.getException().length; e++) {
+							MethodTypeExceptionsException exception = exceptions.getException(e);
+							if (exception.getQname().getNamespaceURI().equals(namespace)) {
+								return true;
+							}
+						}
+					}
 				}
 			}
 		}
