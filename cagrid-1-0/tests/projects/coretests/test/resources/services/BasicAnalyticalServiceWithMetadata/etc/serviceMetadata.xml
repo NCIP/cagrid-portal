@@ -13,7 +13,6 @@ C:\caBIG\cagrid-1-0\tests\projects\coretests\test\resources\services\BasicAnalyt
 							<ns2:inputParameterCollection/>
 							<ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false" xsi:type="ns2:Output" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
 							<ns2:faultCollection/>
-							<ns2:semanticMetadataCollection/>
 						</ns2:Operation>
 						<ns2:Operation description="" name="reverseTranslate" xsi:type="ns2:Operation">
 							<ns2:inputParameterCollection>
@@ -21,7 +20,6 @@ C:\caBIG\cagrid-1-0\tests\projects\coretests\test\resources\services\BasicAnalyt
 							</ns2:inputParameterCollection>
 							<ns2:Output qName="xsd:string" dimensionality="1" isArray="false" xsi:type="ns2:Output" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 							<ns2:faultCollection/>
-							<ns2:semanticMetadataCollection/>
 						</ns2:Operation>
 					</ns2:operationCollection>
 					<ns2:contextPropertyCollection>
@@ -29,7 +27,6 @@ C:\caBIG\cagrid-1-0\tests\projects\coretests\test\resources\services\BasicAnalyt
 					</ns2:contextPropertyCollection>
 				</ns2:ServiceContext>
 			</ns2:serviceContextCollection>
-			<ns2:semanticMetadataCollection/>
 		</ns2:Service>
 	</ns1:serviceDescription>
 	<ns1:hostingResearchCenter>
