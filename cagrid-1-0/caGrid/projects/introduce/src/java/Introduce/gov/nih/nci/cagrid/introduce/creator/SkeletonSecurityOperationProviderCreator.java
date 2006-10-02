@@ -11,6 +11,9 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Properties;
 
 import javax.xml.namespace.QName;
 
@@ -23,14 +26,16 @@ import javax.xml.namespace.QName;
 public class SkeletonSecurityOperationProviderCreator {
 
 	private static final String SERVICE_SECURITY_WSDL = "ServiceSecurity.wsdl";
+	private static final String SERVICE_NS_EXCLUDE = "-x http\\://security.introduce.cagrid.nci.nih.gov/ServiceSecurity";
 	private static final String SERVICE_SECURITY_XSD = "security.xsd";
 	private static final String SECURITY_SERVICE_NS = "http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity";
 	private static final String SECURITY_SERVICE_PACKAGE = "gov.nih.nci.cagrid.introduce.security.stubs";
 	private static final String SECURITY_NS = "gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security";
 	private static final String PATH_TO_WSDL = "ext" + File.separator + "xsd";
-	private static final String PATH_TO_SCHEMA = "ext" + File.separator + "xsd" + File.separator + "cagrid" + File.separator + "types" + File.separator + "security";
+	private static final String PATH_TO_SCHEMA = "ext" + File.separator + "xsd" + File.separator + "cagrid"
+		+ File.separator + "types" + File.separator + "security";
 
-	
+
 	public SkeletonSecurityOperationProviderCreator() {
 	}
 
@@ -91,16 +96,26 @@ public class SkeletonSecurityOperationProviderCreator {
 				nsType.setPackageName("gov.nih.nci.cagrid.metadata.security");
 				nsType.setLocation("./xsd/" + SERVICE_SECURITY_XSD);
 				CommonTools.addNamespace(info.getServiceDescriptor(), nsType);
-				
-				//should i set the messages to not be generated again....
-				//if so add the ns to the excludes list...
+
+				// should i set the messages to not be generated again....
+				// if so add the ns to the excludes list...
 
 				// copy over the wsdl file and the required schema
-				Utils.copyFile(new File(PATH_TO_WSDL + File.separator + SERVICE_SECURITY_WSDL), new File(pathToServSchema
-					+ SERVICE_SECURITY_WSDL));
+				Utils.copyFile(new File(PATH_TO_WSDL + File.separator + SERVICE_SECURITY_WSDL), new File(
+					pathToServSchema + SERVICE_SECURITY_WSDL));
 				Utils.copyFile(new File(PATH_TO_SCHEMA + File.separator + SERVICE_SECURITY_XSD), new File(
 					pathToServSchema + "xsd" + File.separator + SERVICE_SECURITY_XSD));
 
+				// set the namespace of hte sercure service to be in the ns
+				// excludes do that
+				// the message beans are not generated again
+				Properties props = new Properties();
+				props.load(new FileInputStream(new File(info.getBaseDirectory().getAbsolutePath() + File.separator
+					+ "introduce.properties")));
+				props.setProperty("introduce.ns.excludes", props.getProperty("introduce.ns.excludes") + " "
+					+ SERVICE_NS_EXCLUDE);
+				props.store(new FileOutputStream(new File(info.getBaseDirectory().getAbsolutePath() + File.separator
+					+ "introduce.properties")), "Introduce service properties");
 			}
 		}
 	}
