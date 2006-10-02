@@ -76,6 +76,7 @@
 			<property name="source.stubs.dir" location="${basedir}/schema"/>
 			<property name="target.stubs.dir" location="${src.dir}/Introduce"/>
 			<property name="wsdl.file" value="beans.wsdl"/>
+			<property name="ns.excludes" value="-x http://cagrid.nci.nih.gov/1/GridGrouper" />
 		</ant>
 	</target>
 	<!-- =================================================================== -->

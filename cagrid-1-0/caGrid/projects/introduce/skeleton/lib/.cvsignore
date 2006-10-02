@@ -11,3 +11,10 @@ mobius_factories-1.1.jar
 mobius_gme_client-1.1.jar
 mobius_mako_client-1.1.jar
 mobius_tools-1.1.jar
+subject-0.2.1.jar
+caGrid-1.0-gridgrouper-1.0-client.jar
+grouper.jar
+caGrid-1.0-metadata-common.jar
+caGrid-1.0-gridgrouper-1.0-common.jar
+caGrid-1.0-gridca-1.0.jar
+caGrid-1.0-gridgrouper-1.0-stubs.jar

@@ -73,13 +73,13 @@
 	<classpathentry kind="var" path="ANT_HOME/lib/ant.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-launcher.jar"/>
 	<classpathentry kind="lib" path="test/lib/shaste-1.0.jar"/>
-	<classpathentry sourcepath="/caGrid-1.0-core" kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar" sourcepath="/caGrid-1.0-core"/>
 	<classpathentry kind="lib" path="test/lib/uispec4j-0.15.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
-	<classpathentry sourcepath="/mobius" kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar" sourcepath="/mobius"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
-	<classpathentry sourcepath="/mobius" kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar" sourcepath="/mobius"/>
 	<classpathentry kind="lib" path="ext/lib/GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius-castor-0.9.4.3-xml.jar"/>
@@ -109,5 +109,10 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/relaxngDatatype.jar"/>
 	<classpathentry kind="lib" path="lib/xsom14.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-1.0-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-1.0-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-1.0-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridgrouper-1.0-ui.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

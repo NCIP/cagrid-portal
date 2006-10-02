@@ -6,3 +6,4 @@ gme\://gov.nih.nci.cagrid.introduce/1/Namespace=gov.nih.nci.cagrid.introduce.bea
 gme\://gov.nih.nci.cagrid.introduce/1/Extension=gov.nih.nci.cagrid.introduce.beans.extension
 gme\://gov.nih.nci.cagrid.introduce/1/Property=gov.nih.nci.cagrid.introduce.beans.property
 gme\://gov.nih.nci.cagrid.introduce/1/Services=gov.nih.nci.cagrid.introduce.beans.service
+http\://cagrid.nci.nih.gov/1/GridGrouper=gov.nih.nci.cagrid.gridgrouper.bean
