@@ -5,12 +5,13 @@ package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.util.CaDSRExtractUtils;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
-import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
+//import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
+import gov.nih.nci.cagrid.metadata.common.SemanticMetadata;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
@@ -111,8 +112,8 @@ public class CaDSRCheckServiceStep
 			assertEquals(extractCl.getPackageName() + "." + extractCl.getClassName(), cl.getFullyQualifiedName());
 			assertEquals(extractCl.getDescription(), cl.getDescription());
 
-			SemanticMetadata[] extractMetadata = extractCl.getSemanticMetadataCollection().getSemanticMetadata();
-			SemanticMetadata[] metadata = cadsr.findSemanticMetadataForClass(project, cl);
+			SemanticMetadata[] extractMetadata = extractCl.getSemanticMetadata();
+			gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata[] metadata = cadsr.findSemanticMetadataForClass(project, cl);
 			assertEquals(extractMetadata.length, metadata.length);			
 			compareMetadata(cadsr, extractMetadata, metadata);
 			
@@ -123,20 +124,20 @@ public class CaDSRCheckServiceStep
 		}
 	}
 
-	private void compareMetadata(CaDSRServiceI cadsr, SemanticMetadata[] extractMetadata, SemanticMetadata[] metadata)
+	private void compareMetadata(CaDSRServiceI cadsr, SemanticMetadata[] extractMetadata, gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata[] metadata)
 	{
 		for (SemanticMetadata em : extractMetadata) {
 			assertNotNull(em);
-			SemanticMetadata m = findSemanticMetadata(em, metadata);
+			gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata m = findSemanticMetadata(em, metadata);
 			assertNotNull(m);
 			
-			assertEquals(m.conceptCode, em.conceptCode);
-			assertEquals(m.conceptDefinition, em.conceptDefinition);
-			assertEquals(m.conceptName, em.conceptName);
-			assertEquals(m.id, em.id);
-			assertEquals(m.isPrimaryConcept, em.isPrimaryConcept);
-			assertEquals(m.order, em.order);
-			assertEquals(m.orderLevel, em.orderLevel);
+			assertEquals(m.getConceptCode(), em.getConceptCode());
+			assertEquals(m.getConceptDefinition(), em.getConceptDefinition());
+			assertEquals(m.getConceptName(), em.getConceptName());
+			//assertEquals(m.id, em.id);
+			//assertEquals(m.isPrimaryConcept, em.isPrimaryConcept);
+			assertEquals(m.getOrder(), em.getOrder());
+			assertEquals(m.getOrderLevel(), em.getOrderLevel());
 		}
 	}
 
@@ -199,10 +200,10 @@ public class CaDSRCheckServiceStep
 		return extractName;
 	}
 
-	private SemanticMetadata findSemanticMetadata(SemanticMetadata em, SemanticMetadata[] metadata)
+	private gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata findSemanticMetadata(SemanticMetadata em, gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata[] metadata)
 	{
-		for (SemanticMetadata m : metadata) {
-			if (em.id.equals(m.id)) return m;
+		for (gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata m : metadata) {
+			if (em.getConceptCode().equals(m.getConceptCode())) return m;
 		}
 		return null;
 	}
