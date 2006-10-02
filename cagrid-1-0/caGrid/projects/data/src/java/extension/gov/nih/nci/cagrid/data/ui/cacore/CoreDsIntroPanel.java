@@ -1,13 +1,21 @@
 package gov.nih.nci.cagrid.data.ui.cacore;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.ExtensionDataUtils;
+import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
+import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.File;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
@@ -25,6 +33,9 @@ import javax.swing.border.BevelBorder;
  */
 public class CoreDsIntroPanel extends AbstractWizardPanel {
 	
+	public static final String SDK_QUERY_LIB = "../sdkQuery/build/lib/caGrid-1.0-sdkQuery.jar";
+	public static final String SDK_QUERY_PROCESSOR = "gov.nih.nci.cagrid.data.cql.cacore.HQLCoreQueryProcessor";
+
 	/**
 	 * This is the text message shown to the user to let them know what the wizard does
 	 * and what it expects from them.  A better idea may be to load this from a text file
@@ -41,12 +52,14 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 
 	private JLabel wizardLabel = null;
 	private JTextArea infoTextArea = null;
-
 	private JScrollPane infoTextScrollPane = null;
+	
+	private boolean sdkInitDone;
 
 
 	public CoreDsIntroPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
 		super(extensionDescription, info);
+		sdkInitDone = false;
 		initialize();
 	}
 	
@@ -68,12 +81,11 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
         this.setSize(new java.awt.Dimension(427,225));
         this.add(getWizardLabel(), gridBagConstraints);
         this.add(getInfoTextScrollPane(), gridBagConstraints1);
-		
 	}
 
 
 	public void update() {
-		// this does nothing
+		initSdkDataService();
 	}
 
 
@@ -134,5 +146,68 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 			infoTextScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		}
 		return infoTextScrollPane;
+	}
+	
+	
+	/**
+	 * Copies the caCORE SDK query processor jar into the data service
+	 * and sets the query processor class property
+	 */
+	private void initSdkDataService() {
+		if (!sdkInitDone) {
+			// get the path to the SDK Query project
+			File sdkQuery = new File(SDK_QUERY_LIB);
+			if (!sdkQuery.exists()) {
+				String[] error = {
+					"The SDK Query project does not exist or has not",
+					"yet been built.  Please build this project first!"
+				};
+				JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+			} else {
+				// copy the library to the service's lib dir
+				File sdkQueryOut = new File(CacoreWizardUtils.getServiceBaseDir(getServiceInformation())
+					+ File.separator + sdkQuery.getName());
+				try {
+					Utils.copyDirectory(sdkQuery, sdkQueryOut);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					String[] error = {
+						"Error copying the required query processor library:",
+						ex.getMessage()
+					};
+					JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				// add the library to the service's additional libs list
+				try {
+					Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
+					AdditionalLibraries libs = data.getAdditionalLibraries();
+					if (libs == null) {
+						libs = new AdditionalLibraries();
+					}
+					String[] names = libs.getJarName();
+					if (names == null) {
+						names = new String[] {sdkQueryOut.getName()};
+					} else {
+						names = (String[]) Utils.appendToArray(names, sdkQuery.getName());
+					}
+					libs.setJarName(names);
+					data.setAdditionalLibraries(libs);
+					ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					String[] error = {
+						"Error adding the library to the service information:",
+						ex.getMessage()
+					};
+					JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				// add the query processor class name
+				CommonTools.setServiceProperty(getServiceInformation(), 
+					DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, SDK_QUERY_PROCESSOR, false);
+				sdkInitDone = true;
+			}			
+		}
 	}
 }
