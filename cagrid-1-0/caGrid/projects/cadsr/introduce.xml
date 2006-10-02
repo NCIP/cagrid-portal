@@ -11,7 +11,7 @@
    <ns2:SchemaElement type="Operation" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CommunicationStyle" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./xsd/cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement className="Project" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Project" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="SubProject" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="SubProject" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="UMLPackageMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="UMLPackageMetadata" xsi:type="ns2:SchemaElementType"/>
@@ -23,7 +23,7 @@
    <ns2:SchemaElement className="AttributeTypeMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="AttributeTypeMetadata" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="TypeEnumerationMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="TypeEnumerationMetadata" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./xsd/cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.domain.xsd" namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" packageName="gov.nih.nci.cadsr.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./cadsr/3.0_gov.nih.nci.cadsr.domain.xsd" namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" packageName="gov.nih.nci.cadsr.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="AdministeredComponent" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ConceptualDomain" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DataElementConcept" xsi:type="ns2:SchemaElementType"/>

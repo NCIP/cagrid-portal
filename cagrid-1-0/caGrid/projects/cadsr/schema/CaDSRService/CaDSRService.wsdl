@@ -13,9 +13,9 @@
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
       <import namespace="http://cadsr.cagrid.nci.nih.gov/types" schemaLocation="./CaDSRServiceTypes.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./xsd/cagrid/types/caGridMetadata.xsd" />
-      <import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="./xsd/cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" />
+      <import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="./cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" schemaLocation="./xsd/cagrid/types/data/data.xsd" />
-      <import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" schemaLocation="./xsd/cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.domain.xsd" />
+      <import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" schemaLocation="./cadsr/3.0_gov.nih.nci.cadsr.domain.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/cagrid/types/security/security.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice" schemaLocation="./1.0_gov.nih.nci.cagrid.cadsrservice.xsd" />
       <element name="FindAllProjectsRequest">

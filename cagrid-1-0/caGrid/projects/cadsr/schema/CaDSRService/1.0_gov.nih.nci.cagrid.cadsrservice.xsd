@@ -4,7 +4,7 @@
     targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice"
     xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" elementFormDefault="qualified">
     <xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
-        schemaLocation="./xsd/cagrid/types/cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
+        schemaLocation="./cadsr/3.0_gov.nih.nci.cadsr.umlproject.domain.xsd"/>
     <xs:element name="UMLAssociation" type="UMLAssociation"/>
     <xs:complexType name="UMLAssociation">
         <xs:sequence>
