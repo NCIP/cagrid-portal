@@ -731,14 +731,14 @@ Custom styles for Portal
     font-size: 1.1em;
     font-weight: bold;
     background-color: #797C9C; /* darker */
-    color: #FFFFFF; /* constant: white */
+    color: #797C9C; /* constant: white */
     text-align: center;
 }
 
 .searchTabbedPaneInactive {
     font-size: 1.1em;
     font-weight: bold;
-    background-color: #000000;
+    background-color: #9FA2BA;
     color: #FFFFFF; /* constant: white */
     text-align: center;
     border: 1px solid #0000FF;

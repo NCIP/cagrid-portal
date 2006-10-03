@@ -12,7 +12,7 @@
 
         <h:column>
             <h:commandLink styleClass="mainMenuSubLink"
-                           action="#{map.navigateToServicesDirectory}">
+                           action="#{map.navigateToServicesMap}">
                 <h:outputText value="Services" styleClass="mainMenuSubLink"/>
             </h:commandLink>
         </h:column>
@@ -23,7 +23,7 @@
 
         <h:column>
             <h:commandLink styleClass="mainMenuSubLink"
-                           action="#{map.navigateToRCDirectory}">
+                           action="#{map.navigateToRCMap}">
                 <h:outputText value="Research Center"/>
             </h:commandLink>
         </h:column>

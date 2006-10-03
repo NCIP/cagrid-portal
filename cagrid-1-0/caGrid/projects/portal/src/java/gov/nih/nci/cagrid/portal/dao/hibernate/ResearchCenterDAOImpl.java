@@ -50,6 +50,7 @@ public final class ResearchCenterDAOImpl extends BaseDAOImpl
             sb.append(" or rc.state like '%").append(keyword.trim()).append("%'");
             sb.append(" or rc.shortName like '%").append(keyword.trim()).append("%'");
             sb.append(" or rc.rssNewsURL like '%").append(keyword.trim()).append("%'");
+            sb.append(" group by rc.shortName");
         }
 
         _logger.debug("Find Research Centers for keyword" + keyword);

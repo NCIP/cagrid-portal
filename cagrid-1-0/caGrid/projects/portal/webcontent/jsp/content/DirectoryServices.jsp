@@ -4,7 +4,7 @@
 
 
 <f:subview id="servicesDirectory">
-<h:form>
+
 
 <h:panelGrid styleClass="contentMainTable" headerClass="contentMainTitle" columns="1">
 
@@ -131,5 +131,5 @@
 </h:column>
 
 </h:panelGrid>
-</h:form>
+
 </f:subview>

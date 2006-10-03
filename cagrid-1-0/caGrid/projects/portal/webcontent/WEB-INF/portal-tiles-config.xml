@@ -82,11 +82,24 @@
 
 
     <!--Map Section-->
-    <definition name="/map.tiles" extends="Base">
+    <definition name="/mapHome.tiles" extends="Base">
         <put name="mainMenu" value="/jsp/menu/MainMenuMap.jsp"/>
-        <put name="subMenu" value="/jsp/menu/SubMenuBlank.jsp"/>
-        <put name="mainContent" value="/jsp/menu/Map.jsp"/>
+        <put name="subMenu" value="/jsp/menu/SubMenuMap.jsp"/>
+        <put name="mainContent" value="/jsp/content/MapHome.jsp"/>
     </definition>
+
+    <definition name="/rcMap.tiles" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuMap.jsp"/>
+        <put name="subMenu" value="/jsp/menu/SubMenuMap.jsp"/>
+        <put name="mainContent" value="/jsp/content/MapResearchCenter.jsp"/>
+    </definition>
+
+    <definition name="/servicesMap.tiles" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuMap.jsp"/>
+        <put name="subMenu" value="/jsp/menu/SubMenuMap.jsp"/>
+        <put name="mainContent" value="/jsp/content/MapServices.jsp"/>
+    </definition>
+
 
     <definition name="/help.tiles" extends="Base">
         <put name="mainMenu" value="/jsp/menu/MainMenuHelp.jsp"/>

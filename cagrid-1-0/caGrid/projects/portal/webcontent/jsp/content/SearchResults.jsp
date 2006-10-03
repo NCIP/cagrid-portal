@@ -7,9 +7,10 @@
 <f:subview id="searchResults">
 
     <t:panelTabbedPane activeTabStyleClass="searchTabbedPaneActive"
-                       inactiveTabStyleClass="searchTabbedPaneInactive"
+                       inactiveTabStyleClass="searchTabbedPaneActive"
+                       activeSubStyleClass="searchTabbedPaneActive"
                        width="80%"
-                       styleClass="contentInnerTable">
+            >
 
         <t:panelTab id="services" label="Registered Service">
             <tiles:insert attribute="serviceSearchResult" flush="false" ignore="true"/>

@@ -68,7 +68,7 @@
             <h:outputText value="Research Center"/>
         </h:column>
         <h:column>
-            <h:commandLink action="#{centerDetails.navigateTo}">
+            <h:commandLink action="#{center.navigateToCenter}">
                 <h:outputText value="#{services.navigatedService.researchCenter.shortName}"/>
                 <f:param id="navigatedCenterPk" name="navigatedCenterPk"
                          value="#{services.navigatedService.researchCenter.pk}"/>

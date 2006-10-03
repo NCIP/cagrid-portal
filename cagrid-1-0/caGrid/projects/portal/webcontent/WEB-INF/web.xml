@@ -115,6 +115,10 @@
         <filter-name>extensionsFilter</filter-name>
         <url-pattern>*.portal</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>extensionsFilter</filter-name>
+        <url-pattern>/faces/myFacesExtensionResource/*</url-pattern>
+    </filter-mapping>
 
 
     <!-- Spring Integration -->
