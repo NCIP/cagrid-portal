@@ -900,7 +900,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private ServiceSecurityPanel getSecurityPanel() {
 		if (securityPanel == null) {
 			try {
-				securityPanel = new ServiceSecurityPanel(info, info.getServices().getService(0));
+				securityPanel = new ServiceSecurityPanel(info.getServices().getService(0));
 			} catch (Exception e) {
 				e.printStackTrace();
 				ErrorDialog.showErrorDialog(e);

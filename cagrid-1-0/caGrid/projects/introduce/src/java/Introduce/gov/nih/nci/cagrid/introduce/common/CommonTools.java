@@ -343,6 +343,10 @@ public class CommonTools {
 			return false;
 		} else if (!Utils.equals(ss.getTransportLevelSecurity(), ms.getTransportLevelSecurity())) {
 			return false;
+		} else if ((!Utils.equals(ss.getServiceAuthorization(), ms.getMethodAuthorization()))
+			&& (!Utils.equals(ss.getServiceAuthorization().getGridGrouperAuthorization(), ms.getMethodAuthorization()
+				.getGridGrouperAuthorization()))) {
+			return false;
 		} else {
 			return true;
 		}
@@ -799,7 +803,7 @@ public class CommonTools {
 	 */
 	public static boolean removeServiceProperty(ServiceInformation info, String key) {
 		ServicePropertiesProperty[] newProperties = new ServicePropertiesProperty[info.getServiceProperties()
-			.getProperty().length-1];
+			.getProperty().length - 1];
 		int newIndex = 0;
 		boolean removed = false;
 		for (int i = 0; i < info.getServiceProperties().getProperty().length; i++) {

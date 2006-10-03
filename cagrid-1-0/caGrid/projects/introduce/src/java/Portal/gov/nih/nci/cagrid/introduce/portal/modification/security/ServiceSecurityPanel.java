@@ -23,7 +23,6 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.BorderLayout;
@@ -170,16 +169,13 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private JLabel authLabel = null;
 
-	private ServiceInformation info;
-
 	private ServiceType service;
 
 	private GridGrouperExpressionEditor gridGrouper = null;
 
 
-	public ServiceSecurityPanel(ServiceInformation info, ServiceType service) {
+	public ServiceSecurityPanel(ServiceType service) {
 		super();
-		this.info = info;
 		this.service = service;
 		initialize();
 		try {

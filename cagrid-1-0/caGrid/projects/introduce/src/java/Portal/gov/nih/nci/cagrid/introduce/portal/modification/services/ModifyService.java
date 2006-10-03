@@ -370,7 +370,7 @@ public class ModifyService extends JDialog {
 	 */
 	private ServiceSecurityPanel getSecurityPanel() {
 		if (securityPanel == null) {
-			securityPanel = new ServiceSecurityPanel(service, service.getService());
+			securityPanel = new ServiceSecurityPanel(service.getService());
 		}
 		return securityPanel;
 	}
