@@ -600,9 +600,9 @@ public class SyncSource {
 				}
 			}
 		}
-		if(service.getServiceSecurity()!=null){
-			if(service.getServiceSecurity().getServiceAuthorization()!=null){
-				if(service.getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization()!=null){
+		if (service.getServiceSecurity() != null) {
+			if (service.getServiceSecurity().getServiceAuthorization() != null) {
+				if (service.getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization() != null) {
 					return service.getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization();
 				}
 			}
@@ -666,28 +666,50 @@ public class SyncSource {
 			// slh -- in migration to globus 4 we need to check here for
 			// autoboxing
 			// and get appropriate
-			clientMethod = "\n\t" + createBoxedSignatureStringFromMethod(method) + " " + createExceptions(method, serviceInfo, service);
+			clientMethod = "\n\t" + createBoxedSignatureStringFromMethod(method) + " "
+				+ createExceptions(method, serviceInfo, service);
 
 			// clientMethod += " throws RemoteException";
 			clientMethod += "{\n";
 
 			// TODO: Add CODE HERE
 			MembershipExpression exp = this.getGridGrouperAuthorization(method);
-			if(exp!=null){
+			if (exp != null) {
 				String xml = GridGrouperClientUtils.expressionToXML(exp);
 				xml = xml.replaceAll("\"", "\\\\\"");
 				StringBuffer gg = new StringBuffer();
-				gg.append(lineStart+"StringBuffer grouperXML = new StringBuffer();\n");
+				gg.append(lineStart + "StringBuffer grouperXML = new StringBuffer();\n");
 				BufferedReader reader = new BufferedReader(new StringReader(xml));
-			    String line = reader.readLine();
-			    while(line!=null){
-			    	gg.append(lineStart+"grouperXML.append(\""+line+"\");\n");
-			    	line = reader.readLine();
-			    }
+				String line = reader.readLine();
+				while (line != null) {
+					gg.append(lineStart + "grouperXML.append(\"" + line + "\");\n");
+					line = reader.readLine();
+				}
+				gg.append(lineStart + "\n");
+				gg.append(lineStart + "String gridIdentity = getCallerIdentity();\n");
+				gg.append(lineStart + "\n");
+				gg.append(lineStart + "boolean isMember=false;\n");
+				gg.append(lineStart + "if(gridIdentity!=null){\n");
+				gg.append(lineStart + "\t" + "try{\n");
+				gg
+					.append(lineStart
+						+ "\t\t"
+						+ "isMember=gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClientUtils.isMember(grouperXML.toString(),gridIdentity);\n");
+				gg.append(lineStart + "\t" + "}catch(Exception e){\n");
+				gg.append(lineStart + "\t\t" + "e.printStackTrace();\n");
+				gg
+					.append(lineStart
+						+ "\t\t"
+						+ "throw new java.rmi.RemoteException(\"Error determining if caller is authorized to perform request\");\n");
+				gg.append(lineStart + "\t" + "}\n");
+				gg.append(lineStart + "}\n");
+				gg.append(lineStart + "if(!isMember){\n");
+				gg.append(lineStart + "\t"
+					+ "throw new java.rmi.RemoteException(\"Not authorized to perform request\");\n");
+				gg.append(lineStart + "}\n");
 				clientMethod += gg.toString();
 			}
-			
-			
+
 			methodString = "";
 			MethodTypeOutput returnTypeEl = method.getOutput();
 
@@ -759,7 +781,8 @@ public class SyncSource {
 
 		} else {
 			// create a boxed call
-			clientMethod = "\n\t" + createBoxedSignatureStringFromMethod(method) + " " + createExceptions(method, serviceInfo, service);
+			clientMethod = "\n\t" + createBoxedSignatureStringFromMethod(method) + " "
+				+ createExceptions(method, serviceInfo, service);
 			clientMethod += "{\n";
 			clientMethod += "\t\treturn " + var + "." + methodName + "(params);\n";
 
