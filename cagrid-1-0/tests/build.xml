@@ -130,6 +130,7 @@
 			<artifact refid="metadatautils.jars" />
 			<artifact refid="caCORE.jars" />
 			<artifact refid="graph.jars" />
+                  <artifact refid="authentication.service.client.jars" />
 			<!-- <artifact refid="introduce.servicesecurity.jars" /> -->
 			<artifact refid="gridgrouper.jars" />
 		</resolveDependencies>
@@ -184,6 +185,9 @@
 	</target>
 	<target name="build-gridgrouper">
 		<echo>gridgrouper must be built in the main caGrid build</echo>
+	</target>
+	<target name="build-authentication-service">
+		<echo>authentication-service must be built in the main caGrid build</echo>
 	</target>
 
 	<!-- ============================================================== -->
