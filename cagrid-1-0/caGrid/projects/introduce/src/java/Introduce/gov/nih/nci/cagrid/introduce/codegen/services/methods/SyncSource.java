@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.introduce.codegen.services.methods;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
+import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClientUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
@@ -87,9 +89,12 @@ public class SyncSource {
 			}
 			for (int i = 0; i < exceptionsEl.getException().length; i++) {
 				MethodTypeExceptionsException fault = exceptionsEl.getException(i);
-				SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), fault.getQname());
-				String ex = info.getType().getPackageName() + "." + TemplateUtils.upperCaseFirstCharacter(
-					info.getType().getClassName() != null ? info.getType().getClassName() : info.getType().getType());
+				SchemaInformation info = CommonTools
+					.getSchemaInformation(serviceInfo.getNamespaces(), fault.getQname());
+				String ex = info.getType().getPackageName()
+					+ "."
+					+ TemplateUtils.upperCaseFirstCharacter(info.getType().getClassName() != null ? info.getType()
+						.getClassName() : info.getType().getType());
 				exceptions += ex;
 				if (i < exceptionsEl.getException().length - 1) {
 					exceptions += ", ";
@@ -107,10 +112,10 @@ public class SyncSource {
 		String exceptions = "";
 		// process the faults for this method...
 		MethodTypeExceptions exceptionsEl = method.getExceptions();
-		//String packageName = service.getPackageName() + ".stubs";
-		//if (method.isIsImported()) {
-		//	packageName = method.getImportInformation().getPackageName();
-		//}
+		// String packageName = service.getPackageName() + ".stubs";
+		// if (method.isIsImported()) {
+		// packageName = method.getImportInformation().getPackageName();
+		// }
 		exceptions += "RemoteException";
 		if (exceptionsEl != null && exceptionsEl.getException() != null) {
 			if (exceptionsEl.getException().length > 0) {
@@ -118,9 +123,12 @@ public class SyncSource {
 			}
 			for (int i = 0; i < exceptionsEl.getException().length; i++) {
 				MethodTypeExceptionsException fault = exceptionsEl.getException(i);
-				SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), fault.getQname());
-				String ex = info.getType().getPackageName() + "." + TemplateUtils.upperCaseFirstCharacter(
-					info.getType().getClassName() != null ? info.getType().getClassName() : info.getType().getType());
+				SchemaInformation info = CommonTools
+					.getSchemaInformation(serviceInfo.getNamespaces(), fault.getQname());
+				String ex = info.getType().getPackageName()
+					+ "."
+					+ TemplateUtils.upperCaseFirstCharacter(info.getType().getClassName() != null ? info.getType()
+						.getClassName() : info.getType().getType());
 				exceptions += ex;
 				if (i < exceptionsEl.getException().length - 1) {
 					exceptions += ", ";
@@ -251,7 +259,8 @@ public class SyncSource {
 	}
 
 
-	public static String createUnBoxedSignatureStringFromMethod(JavaMethod method, ServiceInformation serviceInfo) throws Exception {
+	public static String createUnBoxedSignatureStringFromMethod(JavaMethod method, ServiceInformation serviceInfo)
+		throws Exception {
 		String methodString = "";
 		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
 		String returnType = "";
@@ -408,7 +417,8 @@ public class SyncSource {
 
 			// insert the new client method
 			int endOfClass = fileContent.lastIndexOf("}");
-			clientMethod = createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " " + createClientExceptions(method);
+			clientMethod = createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+				+ createClientExceptions(method);
 			clientMethod += ";\n";
 
 			fileContent.insert(endOfClass - 1, clientMethod);
@@ -526,7 +536,8 @@ public class SyncSource {
 							methodString += lineStart + "return clientArray;\n";
 						} else {
 							methodString += "EndpointReferenceType ref = boxedResult.get";
-							methodString += TemplateUtils.upperCaseFirstCharacter(info.getType().getType()) + "().getEndpointReference();\n";
+							methodString += TemplateUtils.upperCaseFirstCharacter(info.getType().getType())
+								+ "().getEndpointReference();\n";
 							methodString += lineStart + "return new " + returnTypeEl.getClientHandleClass()
 								+ "(ref);\n";
 						}
@@ -580,6 +591,27 @@ public class SyncSource {
 	}
 
 
+	private MembershipExpression getGridGrouperAuthorization(MethodType method) {
+		MembershipExpression exp = null;
+		if (method.getMethodSecurity() != null) {
+			if (method.getMethodSecurity().getMethodAuthorization() != null) {
+				if (method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization() != null) {
+					return method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization();
+				}
+			}
+		}
+		if(service.getServiceSecurity()!=null){
+			if(service.getServiceSecurity().getServiceAuthorization()!=null){
+				if(service.getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization()!=null){
+					return service.getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization();
+				}
+			}
+		}
+
+		return null;
+	}
+
+
 	public void addImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
@@ -590,7 +622,8 @@ public class SyncSource {
 
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
-		String clientMethod = "\n\t" + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " " + createExceptions(method,serviceInfo, service);
+		String clientMethod = "\n\t" + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+			+ createExceptions(method, serviceInfo, service);
 
 		clientMethod += "{\n";
 		clientMethod += "\t\t//TODO: Implement this autogenerated method\n";
@@ -638,6 +671,23 @@ public class SyncSource {
 			// clientMethod += " throws RemoteException";
 			clientMethod += "{\n";
 
+			// TODO: Add CODE HERE
+			MembershipExpression exp = this.getGridGrouperAuthorization(method);
+			if(exp!=null){
+				String xml = GridGrouperClientUtils.expressionToXML(exp);
+				xml = xml.replaceAll("\"", "\\\\\"");
+				StringBuffer gg = new StringBuffer();
+				gg.append(lineStart+"StringBuffer grouperXML = new StringBuffer();\n");
+				BufferedReader reader = new BufferedReader(new StringReader(xml));
+			    String line = reader.readLine();
+			    while(line!=null){
+			    	gg.append(lineStart+"grouperXML.append(\""+line+"\");\n");
+			    	line = reader.readLine();
+			    }
+				clientMethod += gg.toString();
+			}
+			
+			
 			methodString = "";
 			MethodTypeOutput returnTypeEl = method.getOutput();
 
@@ -902,8 +952,7 @@ public class SyncSource {
 					prevChar = fileContent.toString().charAt(--index);
 				}
 				index++;
-				startLocation = index;
-				;
+				startLocation = index;;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -955,7 +1004,8 @@ public class SyncSource {
 		fileContent.delete(startOfMethod, endOfSignature);
 
 		// add in the new modified signature
-		clientMethod = "\t" + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " " + createExceptions(method,serviceInfo, service);
+		clientMethod = "\t" + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+			+ createExceptions(method, serviceInfo, service);
 		clientMethod += "{";
 		fileContent.insert(startOfMethod, clientMethod);
 
