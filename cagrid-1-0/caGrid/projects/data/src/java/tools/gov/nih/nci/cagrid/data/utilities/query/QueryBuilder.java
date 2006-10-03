@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data.utilities.query;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.cqlquery.Association;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
@@ -32,6 +33,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -55,6 +58,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.ScrollPaneConstants;
@@ -111,6 +115,7 @@ public class QueryBuilder extends JFrame {
 		lastDirectory = "c:/caGrid/cagrid-1-0/caGrid/projects/data";
 		setTitle("CQL Query Builder");
 		domainValidator = new DomainModelValidator();
+		ErrorDialog.setOwnerFrame(this);
 		initialize();
 	}
 	
@@ -183,6 +188,40 @@ public class QueryBuilder extends JFrame {
 						}						
 					} else {
 						enableQueryBuildingButtons(new JButton[] {});
+					}
+				}
+			});
+			
+			queryTree.addMouseListener(new MouseAdapter() {
+				public void mousePressed(MouseEvent e) {
+					if (e.isPopupTrigger()) {
+						maybePopup(e);
+					}
+				}
+				
+				
+				public void mouseReleased(MouseEvent e) {
+					if (e.isPopupTrigger()) {
+						maybePopup(e);
+					}
+				}
+				
+				
+				private void maybePopup(MouseEvent e) {
+					java.lang.Object node = 
+						queryTree.getSelectionPath().getLastPathComponent();
+					if (node instanceof TargetTreeNode) {
+						JPopupMenu pop = new JPopupMenu();
+						JMenuItem modsItem = new JMenuItem("Modifications");
+						modsItem.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent ae) {
+								// see if there are existing query mods
+								QueryModifierDialog.getModifier(
+									queryTree.getQueryTreeNode().getQuery().getTarget(), 
+									getTypeDisplayPanel().getTypeTraverser());
+							}
+						});
+						pop.show(queryTree, e.getX(), e.getY());
 					}
 				}
 			});
@@ -875,11 +914,8 @@ public class QueryBuilder extends JFrame {
 				try {
 					query = (CQLQuery) Utils.deserializeDocument(cqlFile.getAbsolutePath(), CQLQuery.class);
 				} catch (Exception ex) {
-					String[] error = {
-						"Error loading CQL Query:",
-						ex.getMessage()
-					};
-					JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+					ex.printStackTrace();
+					ErrorDialog.showErrorDialog("Error loading CQL Query", ex);
 					return;
 				}
 				
@@ -888,11 +924,7 @@ public class QueryBuilder extends JFrame {
 					CqlStructureValidator structureValidator = new ObjectWalkingCQLValidator();
 					structureValidator.validateCqlStructure(query);
 				} catch (MalformedQueryException ex) {
-					String[] error = {
-						"The specified query is not structuraly valid CQL:",
-						ex.getMessage()
-					};
-					JOptionPane.showMessageDialog(this, error, "CQL Structure Error", JOptionPane.ERROR_MESSAGE);
+					ErrorDialog.showErrorDialog("The specified query is not structuraly valid CQL", ex);
 					return;
 				}
 				
@@ -900,11 +932,7 @@ public class QueryBuilder extends JFrame {
 				try {
 					domainValidator.validateDomainModel(query, domainModel);
 				} catch (MalformedQueryException ex) {
-					String[] error = {
-						"Error validating query against currently loaded domain model:",
-						ex.getMessage()
-					};
-					JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+					ErrorDialog.showErrorDialog("Error validating query", ex);
 				}
 				
 				// set the query into the query tree
@@ -932,12 +960,8 @@ public class QueryBuilder extends JFrame {
 				Utils.serializeObject(query, DataServiceConstants.CQL_QUERY_QNAME, writer);
 				writer.close();
 			} catch (Exception ex) {
-				String[] error = {
-					"Error saving the CQL Query to disk:",
-					ex.getMessage()
-				};
 				ex.printStackTrace();
-				JOptionPane.showMessageDialog(this, error, "Error Saving CQL", JOptionPane.ERROR_MESSAGE);
+				ErrorDialog.showErrorDialog("Error saving the CQL Query to disk", ex);
 			}
 		}
 	}
@@ -955,11 +979,8 @@ public class QueryBuilder extends JFrame {
 				FileReader fileReader = new FileReader(dmFile);
 				tempModel = MetadataUtils.deserializeDomainModel(fileReader);
 			} catch (Exception ex) {
-				String[] error = {
-					"Error loading the domain model:",
-					ex.getMessage()
-				};
-				JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+				ex.printStackTrace();
+				ErrorDialog.showErrorDialog("Error loading the domain model", ex);
 				return;
 			}			
 			attemptInstallDomainModel(tempModel);
@@ -976,11 +997,8 @@ public class QueryBuilder extends JFrame {
 				DataServiceClient client = new DataServiceClient(url);
 				tempModel = MetadataUtils.getDomainModel(client.getEndpointReference());
 			} catch (Exception ex) {
-				String[] error = {
-					"Error retrieving domain model from service:",
-					ex.getMessage()
-				};
-				JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+				ex.printStackTrace();
+				ErrorDialog.showErrorDialog("Error retrieving domain model from service", ex);
 				return;
 			}
 			attemptInstallDomainModel(tempModel);
@@ -1030,11 +1048,8 @@ public class QueryBuilder extends JFrame {
 					writer.flush();
 					writer.close();
 				} catch (Exception ex) {
-					String[] error = {
-						"Error saving domain model to disk:",
-						ex.getMessage()
-					};
-					JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+					ex.printStackTrace();
+					ErrorDialog.showErrorDialog("Error saving domain model to disk", ex);
 				}
 			}
 		} else {
