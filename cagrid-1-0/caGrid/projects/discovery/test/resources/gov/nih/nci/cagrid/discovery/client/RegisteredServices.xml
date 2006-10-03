@@ -748,7 +748,64 @@
 												<ns2:InputParameter qName="ns4:CQLQuery" dimensionality="1" index="0"
 													isArray="false" isRequired="false" name="cqlQuery"
 													xsi:type="ns2:InputParameter"
-													xmlns:ns4="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"/>
+													xmlns:ns4="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+													<com:UMLClass className="String" description="String" id="String"
+														packageName="String" projectName="String"
+														projectVersion="String"
+														xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+														<com:umlAttributeCollection>
+															<com:UMLAttribute dataTypeName="String" description="String"
+															name="String" publicID="2147483647" version="3.14159">
+															<com:SemanticMetadata conceptCode="String"
+															conceptDefinition="String" conceptName="String"
+															order="0" orderLevel="0"/>
+															<com:SemanticMetadata conceptCode="attributeMD"
+															conceptDefinition="String" conceptName="String"
+															order="0" orderLevel="0"/>
+															<com:ValueDomain longName="String"
+															unitOfMeasure="String">
+															<com:SemanticMetadata conceptCode="valuedomainMD"
+															conceptDefinition="String" conceptName="String"
+															order="0" orderLevel="0"/>
+															<com:SemanticMetadata conceptCode="String"
+															conceptDefinition="String" conceptName="String"
+															order="0" orderLevel="0"/>
+															<com:enumerationCollection>
+															<com:Enumeration permissibleValue="String"
+															valueMeaning="String">
+															<com:SemanticMetadata conceptCode="String"
+															conceptDefinition="String"
+															conceptName="String" order="0"
+															orderLevel="0"/>
+															<com:SemanticMetadata
+															conceptCode="enumerationMD"
+															conceptDefinition="String"
+															conceptName="String" order="0"
+															orderLevel="0"/>
+															</com:Enumeration>
+															<com:Enumeration permissibleValue="value1"
+															valueMeaning="String">
+															<com:SemanticMetadata conceptCode="String"
+															conceptDefinition="String"
+															conceptName="String" order="0"
+															orderLevel="0"/>
+															<com:SemanticMetadata conceptCode="String"
+															conceptDefinition="String"
+															conceptName="String" order="0"
+															orderLevel="0"/>
+															</com:Enumeration>
+															</com:enumerationCollection>
+															</com:ValueDomain>
+															</com:UMLAttribute>
+														</com:umlAttributeCollection>
+														<com:SemanticMetadata conceptCode="String"
+															conceptDefinition="String" conceptName="String" order="0"
+															orderLevel="0"/>
+														<com:SemanticMetadata conceptCode="classMD"
+															conceptDefinition="String" conceptName="String" order="0"
+															orderLevel="0"/>
+													</com:UMLClass>
+												</ns2:InputParameter>
 											</ns2:inputParameterCollection>
 											<ns2:Output qName="ns5:CQLQueryResultCollection" dimensionality="1"
 												isArray="false" xsi:type="ns2:Output"

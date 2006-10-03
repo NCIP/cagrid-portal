@@ -263,7 +263,7 @@ public class DiscoveryClient {
 		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		String umlClassPredicate = buildUMLClassPredicate(clazzPrototype);
 
-		return discoverByFilter(OPER_PATH + "/" + serv + ":inputParameterCollection/" + serv + ":InputParam/" + com
+		return discoverByFilter(OPER_PATH + "/" + serv + ":inputParameterCollection/" + serv + ":InputParameter/" + com
 			+ ":UMLClass[" + umlClassPredicate + "]");
 	}
 
@@ -316,7 +316,7 @@ public class DiscoveryClient {
 		String umlClassPredicate = buildUMLClassPredicate(clazzPrototype);
 
 		return discoverByFilter(OPER_PATH + "[" + serv + ":Output/" + com + ":UMLClass[" + umlClassPredicate + "] or "
-			+ serv + ":inputParameterCollection/" + serv + ":InputParam/" + com + ":UMLClass[" + umlClassPredicate
+			+ serv + ":inputParameterCollection/" + serv + ":InputParameter/" + com + ":UMLClass[" + umlClassPredicate
 			+ "]" + "]");
 	}
 
@@ -341,8 +341,9 @@ public class DiscoveryClient {
 
 	/**
 	 * Searches to find services that have an operation defined that produces
-	 * the or takes as input, a Class based on the given concept code or one
-	 * with attributes based on that concept code.
+	 * the or takes as input, a Class with an attribute , attribute value domain ,
+	 * enumerated value meaning, or the class itself based on the given concept
+	 * code.
 	 * 
 	 * @param conceptCode
 	 *            The concept to look for
@@ -356,22 +357,60 @@ public class DiscoveryClient {
 		String conceptPredicatedUMLClass = createConceptPredicatedUMLClass(conceptCode);
 
 		return discoverByFilter(OPER_PATH + "[" + serv + ":Output/" + conceptPredicatedUMLClass + " or " + serv
-			+ ":inputParameterCollection/" + serv + ":InputParam/" + conceptPredicatedUMLClass + "]");
+			+ ":inputParameterCollection/" + serv + ":InputParameter/" + conceptPredicatedUMLClass + "]");
 	}
 
 
 	/**
-	 * Creates a UMLClass step that is predicated to contain either an attribute
-	 * based on the given concept, or the class itself based on that concept.
+	 * Searches to find services that have an operation defined that produces or
+	 * takes as input, a Class with an attribute allowing the given value.
+	 * 
+	 * @param value
+	 *            The permissible value to look for
+	 * @return EndpointReferenceType[] matching the criteria
+	 * @throws ResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws RemoteResourcePropertyRetrievalException
+	 */
+	public EndpointReferenceType[] discoverServicesByPermissibleValue(String value)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
+		String conceptPredicatedUMLClass = createPermissibleValuePredicatedUMLClass(value);
+
+		return discoverByFilter(OPER_PATH + "[" + serv + ":Output/" + conceptPredicatedUMLClass + " or " + serv
+			+ ":inputParameterCollection/" + serv + ":InputParameter/" + conceptPredicatedUMLClass + "]");
+	}
+
+
+	/**
+	 * Creates a UMLClass step that is predicated to contain either an attribute ,
+	 * attribute value domain , enumerated value meaning, or the class itself
+	 * based on that concept.
+	 * 
+	 * @param conceptCode
+	 *            the code to look for
+	 * @return
+	 */
+	private String createPermissibleValuePredicatedUMLClass(String value) {
+		return com + ":UMLClass[" + com + ":umlAttributeCollection/" + com + ":UMLAttribute/" + com + ":ValueDomain/"
+			+ com + ":enumerationCollection/" + com + ":Enumeration/@permissibleValue='" + value + "']";
+	}
+
+
+	/**
+	 * Creates a UMLClass step that is predicated to contain either an attribute ,
+	 * attribute value domain , enumerated value meaning, or the class itself
+	 * based on that concept.
 	 * 
 	 * @param conceptCode
 	 *            the code to look for
 	 * @return
 	 */
 	private String createConceptPredicatedUMLClass(String conceptCode) {
-		return com + ":UMLClass[" + com + ":SemanticMetadata/@conceptCode='" + conceptCode + "' or " + com
-			+ ":umlAttributeCollection/" + com + ":UMLAttribute/" + com + ":SemanticMetadata/@conceptCode='"
-			+ conceptCode + "'" + "]";
+		return com + ":UMLClass[" + com + ":SemanticMetadata/@conceptCode='" + conceptCode + "'" + " or " + com
+			+ ":umlAttributeCollection/" + com + ":UMLAttribute[" + com + ":SemanticMetadata/@conceptCode='"
+			+ conceptCode + "'" + " or " + com + ":ValueDomain/" + com + ":SemanticMetadata/@conceptCode='"
+			+ conceptCode + "'" + " or " + com + ":ValueDomain/" + com + ":enumerationCollection/" + com
+			+ ":Enumeration/" + com + ":SemanticMetadata/@conceptCode='" + conceptCode + "'" + "]" + "]";
 	}
 
 
@@ -407,6 +446,18 @@ public class DiscoveryClient {
 	}
 
 
+	/**
+	 * Searches to find data services that expose a Class with an attribute ,
+	 * attribute value domain , enumerated value meaning, or the class itself
+	 * based on the given concept code.
+	 * 
+	 * @param conceptCode
+	 *            The concept to look for
+	 * @return
+	 * @throws RemoteResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws ResourcePropertyRetrievalException
+	 */
 	public EndpointReferenceType[] discoverDataServicesByModelConceptCode(String conceptCode)
 		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		return discoverByFilter(DATA_MD_PATH + "/" + data + ":exposedUMLClassCollection/"
@@ -414,6 +465,24 @@ public class DiscoveryClient {
 	}
 
 
+	/**
+	 * Searches for data services that expose the given class. Any fields set on
+	 * the UMLClass are checked for a match. For example, you can set only the
+	 * packageName, and only it will be checked, or you can specify several
+	 * feilds and they all must be equal.
+	 * 
+	 * NOTE: Only attributes of the UMLClass are examined (associated objects
+	 * (e.g. UMLAttributeCollection and SemanticMetadataCollection) are
+	 * ignored).
+	 * 
+	 * @param clazzPrototype
+	 *            The protype UMLClass
+	 * @param clazzPrototype
+	 * @return
+	 * @throws RemoteResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws ResourcePropertyRetrievalException
+	 */
 	public EndpointReferenceType[] discoverDataServicesByExposedClass(UMLClass clazzPrototype)
 		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		String umlClassPredicate = buildUMLClassPredicate(clazzPrototype);
@@ -423,6 +492,41 @@ public class DiscoveryClient {
 	}
 
 
+	/**
+	 * Searches for data services that expose a class with an attribute allowing
+	 * the given value.
+	 * 
+	 * @param value
+	 *            The permissible value to look for
+	 * @return
+	 * @throws RemoteResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws ResourcePropertyRetrievalException
+	 */
+	public EndpointReferenceType[] discoverDataServicesByPermissibleValue(String permissibleValue)
+		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
+		String umlClassPredicate = createPermissibleValuePredicatedUMLClass(permissibleValue);
+
+		return discoverByFilter(DATA_MD_PATH + "/" + data + ":exposedUMLClassCollection/" + umlClassPredicate);
+	}
+
+
+	/**
+	 * Searches for data services that expose an association to or from the
+	 * given class. Any fields set on the UMLClass are checked for a match. For
+	 * example, you can set only the packageName, and only it will be checked,
+	 * or you can specify several feilds and they all must be equal.
+	 * 
+	 * NOTE: Only attributes of the UMLClass are examined (associated objects
+	 * (e.g. UMLAttributeCollection and SemanticMetadataCollection) are
+	 * ignored).
+	 * 
+	 * @param clazzPrototype
+	 * @return
+	 * @throws RemoteResourcePropertyRetrievalException
+	 * @throws QueryInvalidException
+	 * @throws ResourcePropertyRetrievalException
+	 */
 	public EndpointReferenceType[] discoverDataServicesByAssociationsWithClass(UMLClass clazzPrototype)
 		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		String referenceFiler = data + ":UMLAssociationEdge/" + data + ":UMLClassReference/@refid=" + data

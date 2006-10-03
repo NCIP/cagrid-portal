@@ -41,21 +41,23 @@ public class DiscoveryClientTestCase extends TestCase {
 	// DEFINE THE DISCOVERY METHODS
 	private static final int ALL_SERVICES = 0;
 	private static final int BY_NAME = 1;
-	private static final int BY_CODE = 16;
-	private static final int BY_OP_NAME = 2;
-	private static final int BY_OP_INPUT = 3;
-	private static final int BY_OP_OUTPUT = 4;
-	private static final int BY_OP_CLASS = 5;
-	private static final int BY_OP_CODE = 15;
-	private static final int BY_POC = 6;
-	private static final int BY_CENTER = 7;
-	private static final int BY_STRING = 8;
-	private static final int BY_DATA_CODE = 9;
-	private static final int BY_DS_MODEL = 10;
-	private static final int BY_DS_CODE = 11;
-	private static final int BY_DS_CLASS = 12;
-	private static final int BY_DS_ASSOC = 13;
-	private static final int ALL_DS = 14;
+	private static final int BY_CODE = 2;
+	private static final int BY_PERM = 3;
+	private static final int BY_OP_NAME = 4;
+	private static final int BY_OP_INPUT = 5;
+	private static final int BY_OP_OUTPUT = 6;
+	private static final int BY_OP_CLASS = 7;
+	private static final int BY_OP_CODE = 8;
+	private static final int BY_POC = 9;
+	private static final int BY_CENTER = 10;
+	private static final int BY_STRING = 11;
+	private static final int BY_DATA_CODE = 12;
+	private static final int BY_DS_MODEL = 13;
+	private static final int BY_DS_CODE = 14;
+	private static final int BY_DS_CLASS = 15;
+	private static final int BY_DS_ASSOC = 16;
+	private static final int BY_DS_PERM = 17;
+	private static final int ALL_DS = 18;
 
 	private EndpointReferenceType service1EPR = null;
 	private EndpointReferenceType service2EPR = null;
@@ -154,6 +156,27 @@ public class DiscoveryClientTestCase extends TestCase {
 
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C28421");
 		assertResultsEqual(new EndpointReferenceType[]{service3EPR}, services);
+
+	}
+
+
+	public void testDiscoverServicesByPermissibleValue() {
+		final int operation = BY_PERM;
+		EndpointReferenceType[] services = null;
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "foo");
+		assertEquals(0, services.length);
+
+		// services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation,
+		// "true");
+		// assertResultsEqual(new EndpointReferenceType[]{service3EPR},
+		// services);
 
 	}
 
@@ -348,9 +371,21 @@ public class DiscoveryClientTestCase extends TestCase {
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "not present");
 		assertEquals(0, services.length);
 
-		// TODO: add some positive tests when the test examples have UML info
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C28421");
 		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "classMD");
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
+		
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "attributeMD");
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
+		
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "valuedomainMD");
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
+		
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "enumerationMD");
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
+
 	}
 
 
@@ -402,7 +437,51 @@ public class DiscoveryClientTestCase extends TestCase {
 
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C28709");
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
+		
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "classMD");
+		assertEquals(0, services.length);
+		
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "attributeMD");
+		assertEquals(0, services.length);
+		
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "valuedomainMD");
+		assertEquals(0, services.length);
+		
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "enumerationMD");
+		assertEquals(0, services.length);
+		
+		//target concept (class)
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C19389");
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
+		
+		//disease and disorders concept (attribute)
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C2991");
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
+		
+		//??? concept (value domain.. doesn't seem to be any in the cabio model)
+		
+		//female concept (enumeration)
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C16576");
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
 
+	}
+
+
+	public void testDiscoverDataServicesByPermissibleValue() {
+		final int operation = BY_DS_PERM;
+		EndpointReferenceType[] services = null;
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, "");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "not present");
+		assertEquals(0, services.length);
+
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "Intersexed");
+		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
 	}
 
 
@@ -519,6 +598,9 @@ public class DiscoveryClientTestCase extends TestCase {
 				case BY_OP_CODE :
 					eprs = client.discoverServicesByOperationConceptCode((String) criteria);
 					break;
+				case BY_PERM :
+					eprs = client.discoverServicesByPermissibleValue((String) criteria);
+					break;
 				case BY_POC :
 					eprs = client.discoverServicesByPointOfContact((PointOfContact) criteria);
 					break;
@@ -539,6 +621,9 @@ public class DiscoveryClientTestCase extends TestCase {
 					break;
 				case BY_DS_ASSOC :
 					eprs = client.discoverDataServicesByAssociationsWithClass((UMLClass) criteria);
+					break;
+				case BY_DS_PERM :
+					eprs = client.discoverDataServicesByPermissibleValue((String) criteria);
 					break;
 				case ALL_DS :
 					eprs = client.getAllDataServices();
