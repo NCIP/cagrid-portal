@@ -46,6 +46,17 @@ public class PackageSchemasTable extends JTable {
 	}
 	
 	
+	public boolean isPackageInTable(CadsrPackage info) {
+		for (int i = 0; i < getRowCount(); i++) {
+			if (info.getName().equals(getValueAt(i, 0)) 
+				&& info.getMappedNamespace().equals(getValueAt(i, 1))) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
 	public void addNewCadsrPackage(ServiceInformation serviceInfo, CadsrPackage pack) {
 		Vector row = new Vector(4);
 		row.add(pack.getName());

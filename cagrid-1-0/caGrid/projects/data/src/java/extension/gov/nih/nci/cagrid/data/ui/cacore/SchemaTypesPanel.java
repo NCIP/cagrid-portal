@@ -63,25 +63,24 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 
 
 	public void update() {
-		populatePackageSchemasTable();
-		
-	}
-	
-	
-	private void populatePackageSchemasTable() {
 		try {
 			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
 			CadsrInformation info = data.getCadsrInformation();
 			if (info != null && info.getPackages() != null) {
 				CadsrPackage[] packs = info.getPackages();
-				for (int i = 0; packs != null && i < packs.length; i++) {
-					getPackageNamespaceTable().addNewCadsrPackage(getServiceInformation(), packs[i]);
+				if (packs != null && packs.length != 0) {
+					for (int i = 0; i < packs.length; i++) {
+						if (!getPackageNamespaceTable().isPackageInTable(packs[i])) {
+							getPackageNamespaceTable().addNewCadsrPackage(getServiceInformation(), packs[i]);
+						}
+					}
 				}
 			}
+			setWizardComplete(allSchemasResolved());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error populating the packages table", ex);
-		}
+		}		
 	}
 
 
@@ -136,7 +135,8 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 		if (gmeUrlTextField == null) {
 			gmeUrlTextField = new JTextField();
 			Properties extensionProperties = getExtensionDescription().getProperties();
-			for (int i = 0; extensionProperties.getProperty() != null && i < extensionProperties.getProperty().length; i++) {
+			for (int i = 0; extensionProperties.getProperty() != null 
+				&& i < extensionProperties.getProperty().length; i++) {
 				PropertiesProperty prop = extensionProperties.getProperty(i);
 				if (prop.getKey().equals("GME_URL")) {
 					gmeUrlTextField.setText(prop.getValue());
@@ -229,14 +229,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 			packageNamespaceTable.getModel().addTableModelListener(new TableModelListener() {
 				public void tableChanged(TableModelEvent e) {
 					if (e.getType() == TableModelEvent.UPDATE) {
-						setWizardComplete(true);
-						for (int i = 0; i < getPackageNamespaceTable().getRowCount(); i++) {
-							String status = (String) getPackageNamespaceTable().getValueAt(i, 2);
-							if (!status.equals(PackageSchemasTable.STATUS_SCHEMA_FOUND)) {
-								setWizardComplete(false);
-								break;
-							}
-						}
+						setWizardComplete(allSchemasResolved());
 					}
 				}
 			});
@@ -318,5 +311,16 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 			nsType.setLocation("./" + location.getName());
 			CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
 		}
+	}
+	
+	
+	private boolean allSchemasResolved() {
+		for (int i = 0; i < getPackageNamespaceTable().getRowCount(); i++) {
+			String status = (String) getPackageNamespaceTable().getValueAt(i, 2);
+			if (!status.equals(PackageSchemasTable.STATUS_SCHEMA_FOUND)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
