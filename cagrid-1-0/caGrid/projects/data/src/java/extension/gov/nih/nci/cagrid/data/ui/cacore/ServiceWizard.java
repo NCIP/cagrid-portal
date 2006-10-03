@@ -9,6 +9,8 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -34,9 +36,12 @@ import javax.swing.border.TitledBorder;
  */
 public class ServiceWizard extends JDialog {
 
+	public static final String DONE_BUTTON_TEXT = "Done";
+	
 	private List panelSequence;
 	private int currentPanelIndex;
 	private String baseTitle;
+	private boolean wizardDone;
 	
 	private Font stepFont = null;
 	private JLabel stepLabel = null;
@@ -51,29 +56,53 @@ public class ServiceWizard extends JDialog {
 	private JPanel mainPanel = null;
 	private JPanel wizardPanel = null;
 	
+	private ActionListener nextButtonListener = null;
+	private ActionListener doneButtonListener = null;
+	
 	public ServiceWizard(Frame owner, String baseTitle) {
 		super(owner);
 		setModal(true);
 		this.panelSequence = new ArrayList();
 		this.currentPanelIndex = 0;
-		this.stepFont = new Font("Dialog", java.awt.Font.ITALIC, 10);
 		this.baseTitle = baseTitle;
+		this.stepFont = new Font("Dialog", java.awt.Font.ITALIC, 10);
 		initialize();
 	}
 	
 	
 	public void addWizardPanel(AbstractWizardPanel panel) {
 		if (isVisible()) {
-			throw new IllegalStateException("Cannot add panels while showing wizard!");
+			throw new IllegalStateException("Cannot add panels while wizard is showing!");
 		}
 		panel.addButtonEnableListener(new ButtonEnableListener() {
 			public void setNextEnabled(boolean enable) {
-				getNextPanelButton().setEnabled(enable);
+				// only allow changing this if we're NOT done with the wizard
+				if (!getNextPanelButton().getText().equals(DONE_BUTTON_TEXT)) {
+					getNextPanelButton().setEnabled(enable);
+				}
 			}
 			
 			
 			public void setPrevEnabled(boolean enable) {
 				getPreviousPanelButton().setEnabled(enable);
+			}
+			
+			
+			public void setWizardDone(boolean done) {
+				wizardDone = done;
+				if (done) {
+					// change the text of the next button
+					getNextPanelButton().setText(DONE_BUTTON_TEXT);
+					getNextPanelButton().setEnabled(true);
+					// remove 'next' action listener from next button
+					getNextPanelButton().removeActionListener(getNextButtonActionListener());
+					getNextPanelButton().addActionListener(getDoneButtonActionListener());
+				} else {
+					getNextPanelButton().removeActionListener(getDoneButtonActionListener());
+					getNextPanelButton().addActionListener(getNextButtonActionListener());
+					// reload the current panel to fix prev / next buttons, etc
+					loadWizardPanel((AbstractWizardPanel) panelSequence.get(currentPanelIndex));
+				}
 			}
 		});
 		panelSequence.add(panel);
@@ -394,7 +423,6 @@ public class ServiceWizard extends JDialog {
 			AbstractWizardPanel nextPanel = (AbstractWizardPanel) panelSequence.get(currentPanelIndex + 1);
 			getNextPanelButton().setText("Next: " + nextPanel.getPanelShortName());
 		} else {
-			// TODO: change this to "Done" && handle a clean exit of the wizard
 			getNextPanelButton().setText("Next: ");
 		}
 		if (currentPanelIndex != 0) {
@@ -414,5 +442,34 @@ public class ServiceWizard extends JDialog {
 		// load the panel into the wizard panel
 		((CardLayout) getWizardPanel().getLayout())
 			.show(getWizardPanel(), String.valueOf(currentPanelIndex));
+	}
+	
+	
+	private ActionListener getNextButtonActionListener() {
+		if (nextButtonListener == null) {
+			nextButtonListener = new ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (currentPanelIndex != panelSequence.size() - 1) {
+						currentPanelIndex++;
+						AbstractWizardPanel nextPanel = (AbstractWizardPanel) panelSequence.get(currentPanelIndex);
+						loadWizardPanel(nextPanel);
+					}
+				}
+			};
+		}
+		return nextButtonListener;
+	}
+	
+	
+	private ActionListener getDoneButtonActionListener() {
+		if (doneButtonListener == null) {
+			doneButtonListener = new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					setVisible(false);
+					dispose();
+				}
+			};
+		}
+		return doneButtonListener;
 	}
 }

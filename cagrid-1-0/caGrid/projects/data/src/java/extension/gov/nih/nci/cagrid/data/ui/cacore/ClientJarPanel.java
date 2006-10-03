@@ -81,7 +81,17 @@ public class ClientJarPanel extends AbstractWizardPanel {
 
 
 	public void update() {
-		// TODO Auto-generated method stub
+		// load any existing additional jars into the list
+		try {
+			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
+			AdditionalLibraries libs = data.getAdditionalLibraries();
+			if (libs != null && libs.getJarName() != null) {
+				getAdditionalJarsList().setListData(libs.getJarName());
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			ErrorDialog.showErrorDialog("Error loading extension data", ex);
+		}
 	}
 
 
@@ -170,11 +180,7 @@ public class ClientJarPanel extends AbstractWizardPanel {
 							getAdditionalJarsList().setListData(additionalLibNames);
 						} catch (Exception ex) {
 							ex.printStackTrace();
-							String[] error = {
-								"Error copying jar file:",
-								ex.getMessage()
-							};
-							JOptionPane.showMessageDialog(ClientJarPanel.this, error, "Error", JOptionPane.ERROR_MESSAGE);
+							ErrorDialog.showErrorDialog("Error copying jar file", ex);
 						}
 					}
 				}
@@ -233,11 +239,7 @@ public class ClientJarPanel extends AbstractWizardPanel {
 						data.setAdditionalLibraries(libs);
 						ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
 					} catch (Exception ex) {
-						String[] error = {
-							"Error removing libraries from service:",
-							ex.getMessage()
-						};
-						JOptionPane.showMessageDialog(ClientJarPanel.this, error, "Error", JOptionPane.ERROR_MESSAGE);
+						ErrorDialog.showErrorDialog("Error removing libraries from service", ex);
 					}					
 				}
 			});

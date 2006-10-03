@@ -15,4 +15,7 @@ public interface ButtonEnableListener {
 	
 	
 	public void setPrevEnabled(boolean enable);
+	
+	
+	public void setWizardDone(boolean done);
 }

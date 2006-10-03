@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data.ui.cacore;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
@@ -15,7 +16,6 @@ import java.awt.GridBagLayout;
 import java.io.File;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
@@ -162,7 +162,7 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 					"The SDK Query project does not exist or has not",
 					"yet been built.  Please build this project first!"
 				};
-				JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+				ErrorDialog.showErrorDialog("SDK Query Not Found", error);
 			} else {
 				// copy the library to the service's lib dir
 				File sdkQueryOut = new File(CacoreWizardUtils.getServiceBaseDir(getServiceInformation())
@@ -171,11 +171,7 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 					Utils.copyDirectory(sdkQuery, sdkQueryOut);
 				} catch (Exception ex) {
 					ex.printStackTrace();
-					String[] error = {
-						"Error copying the required query processor library:",
-						ex.getMessage()
-					};
-					JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+					ErrorDialog.showErrorDialog("Error copying the required query processor library", ex);
 					return;
 				}
 				// add the library to the service's additional libs list
@@ -196,18 +192,14 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 					ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
 				} catch (Exception ex) {
 					ex.printStackTrace();
-					String[] error = {
-						"Error adding the library to the service information:",
-						ex.getMessage()
-					};
-					JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+					ErrorDialog.showErrorDialog("Error adding the library to the service information", ex);
 					return;
 				}
 				// add the query processor class name
 				CommonTools.setServiceProperty(getServiceInformation(), 
 					DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, SDK_QUERY_PROCESSOR, false);
 				sdkInitDone = true;
-			}			
+			}
 		}
 	}
 }

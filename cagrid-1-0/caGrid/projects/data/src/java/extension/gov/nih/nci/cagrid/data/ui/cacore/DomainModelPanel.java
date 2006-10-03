@@ -6,6 +6,7 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
@@ -75,7 +76,34 @@ public class DomainModelPanel extends AbstractWizardPanel {
 
 
 	public void update() {
-		
+		try {
+			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
+			CadsrInformation info = data.getCadsrInformation();
+			if (info != null) {
+				if (info.getServiceUrl() != null) {
+					getCaDsrBrowser().setDefaultCaDSRURL(info.getServiceUrl());
+					getCaDsrBrowser().getCadsr().setText(info.getServiceUrl());
+				}
+				if (info.getSuppliedDomainModel() != null) {
+					getFileTextField().setText(info.getSuppliedDomainModel());
+				}
+				if (info.getProjectLongName() != null && info.getProjectVersion() != null) {
+					lastSelectedProject = new Project();
+					lastSelectedProject.setLongName(info.getProjectLongName());
+					lastSelectedProject.setVersion(info.getProjectVersion());
+				}
+				if (info.getPackages() != null) {
+					String[] names = new String[info.getPackages().length];
+					for (int i = 0; i < info.getPackages().length; i++) {
+						names[i] = info.getPackages(i).getName();
+					}
+					getSelectedPackagesList().setListData(names);
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			ErrorDialog.showErrorDialog("Error loading extension data", ex);
+		}
 	}
 
 
@@ -239,6 +267,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	private JTextField getFileTextField() {
 		if (fileTextField == null) {
 			fileTextField = new JTextField();
+			fileTextField.setEditable(false);
 		}
 		return fileTextField;
 	}
@@ -277,11 +306,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 							ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
 						} catch (Exception ex) {
 							ex.printStackTrace();
-							String[] error = {
-								"Error copying selected file to service:",
-								ex.getMessage()
-							};
-							JOptionPane.showMessageDialog(DomainModelPanel.this, error, "Error", JOptionPane.ERROR_MESSAGE);
+							ErrorDialog.showErrorDialog("Error copying selected file to service", ex);
 						}
 					}
 				}
@@ -390,7 +415,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 								DomainModelPanel.this, message, "Project Conflict", JOptionPane.YES_NO_OPTION);
 							if (choice == JOptionPane.YES_OPTION) {
 								// remove all packages from list, set the last selected project
-											
+								// TODO: implement me
 							} else {
 								// user selected no, so bail out
 								return;
@@ -510,13 +535,13 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			} else {
 				packages = (CadsrPackage[]) Utils.appendToArray(packages, newPackage);
 			}
+			info.setPackages(packages);
+			info.setServiceUrl(getCaDsrBrowser().getCadsr().getText());
+			data.setCadsrInformation(info);
+			ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			String[] error = {
-				"Error storing the new package information:",
-				ex.getMessage()
-			};
-			JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+			ErrorDialog.showErrorDialog("Error storing the new package information", ex);
 		}
 	}
 	
@@ -565,11 +590,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			String[] error = {
-				"Error removing the selected packages from the model:",
-				ex.getMessage()
-			};
-			JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+			ErrorDialog.showErrorDialog("Error removing the selected packages from the model", ex);
 		}
 	}
 }
