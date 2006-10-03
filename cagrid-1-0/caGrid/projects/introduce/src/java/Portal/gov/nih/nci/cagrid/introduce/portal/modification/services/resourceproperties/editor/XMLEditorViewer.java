@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.editor;
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.JEditTextArea;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.XMLTokenMarker;
@@ -12,7 +13,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.projectmobius.common.MobiusException;
@@ -129,7 +129,7 @@ public class XMLEditorViewer extends ResourcePropertyEditorPanel {
 			e.printStackTrace();
 		}
 		if (xml == null) {
-			JOptionPane.showMessageDialog(XMLEditorViewer.this, "ERROR: Invalid XML Document");
+			ErrorDialog.showErrorDialog("ERROR: Invalid XML Document");
 		} else {
 			return true;
 		}

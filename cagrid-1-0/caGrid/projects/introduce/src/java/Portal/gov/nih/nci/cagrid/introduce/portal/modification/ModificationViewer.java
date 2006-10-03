@@ -225,7 +225,6 @@ public class ModificationViewer extends GridPortalComponent {
 			// should never get here but in case.....
 			e.printStackTrace();
 		}
-
 	}
 
 	private Thread createChooserThread() {
@@ -241,47 +240,42 @@ public class ModificationViewer extends GridPortalComponent {
 					return;
 				}
 				File file = new File(methodsDirectory.getAbsolutePath()
-						+ File.separator + "introduce.xml");
+					+ File.separator + "introduce.xml");
 				if (file.exists() && file.canRead()) {
 					try {
 						initialize();
 					} catch (Exception e) {
 						e.printStackTrace();
-						JOptionPane.showMessageDialog(ModificationViewer.this,
-								e.getMessage());
+						ErrorDialog.showErrorDialog(e);
 						ModificationViewer.this.dispose();
 					}
 				} else {
-					JOptionPane
-							.showMessageDialog(
-									ModificationViewer.this,
-									"Directory "
-											+ methodsDirectory
-													.getAbsolutePath()
-											+ " does not seem to be an introduce service");
+					JOptionPane.showMessageDialog(ModificationViewer.this,
+						"Directory " + methodsDirectory.getAbsolutePath() 
+						+ " does not seem to be an introduce service");
 					ModificationViewer.this.dispose();
 				}
 			}
 		};
 		return th;
 	}
+	
 
 	private void loadServiceProps() {
 		try {
 			serviceProperties = new Properties();
-			serviceProperties.load(new FileInputStream(this.methodsDirectory
-					.getAbsolutePath()
-					+ File.separator
-					+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
+			serviceProperties.load(new FileInputStream(this.methodsDirectory.getAbsolutePath() 
+				+ File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
 			serviceProperties.setProperty(
-					IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR,
-					methodsDirectory.getAbsolutePath());
+				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR,
+				methodsDirectory.getAbsolutePath());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
 
 	private void chooseService() throws Exception {
 		String dir = ResourceManager.promptDir(this, null);
@@ -302,13 +296,12 @@ public class ModificationViewer extends GridPortalComponent {
 		getMethodsTable().clearTable();
 		getMethodsTable().setMethods(info.getServices().getService(0));
 		getRpHolderPanel().reInitialize(
-				info.getServices().getService(0).getResourcePropertiesList(),
-				info.getNamespaces());
+			info.getServices().getService(0).getResourcePropertiesList(), info.getNamespaces());
 		getServicePropertiesTable().setServiceInformation(info);
 		this.resetMethodSecurityIfServiceSecurityChanged();
 		for (int i = 0; i < this.extensionPanels.size(); i++) {
-			ServiceModificationUIPanel panel = (ServiceModificationUIPanel) extensionPanels
-					.get(i);
+			ServiceModificationUIPanel panel = 
+				(ServiceModificationUIPanel) extensionPanels.get(i);
 			panel.setServiceInfo(this.info);
 		}
 	}
@@ -320,24 +313,20 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	private void initialize() throws Exception {
 		if (this.methodsDirectory != null) {
-			ServiceDescription introService = (ServiceDescription) Utils
-					.deserializeDocument(this.methodsDirectory
-							.getAbsolutePath()
-							+ File.separator + "introduce.xml",
-							ServiceDescription.class);
+			ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(
+				this.methodsDirectory.getAbsolutePath() + File.separator + "introduce.xml",
+				ServiceDescription.class);
 			if (introService.getIntroduceVersion() == null
-					|| !introService.getIntroduceVersion().equals(
-							IntroduceConstants.INTRODUCE_VERSION)) {
+				|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
 				throw new Exception(
-						"Introduce version in project does not match version provided by Introduce Toolkit ( "
-								+ IntroduceConstants.INTRODUCE_VERSION
-								+ " ): "
-								+ introService.getIntroduceVersion());
+					"Introduce version in project does not match version provided by Introduce Toolkit ( "
+					+ IntroduceConstants.INTRODUCE_VERSION + " ): "
+					+ introService.getIntroduceVersion());
 			}
 			loadServiceProps();
-
-			this.info = new ServiceInformation(introService, serviceProperties,
-					methodsDirectory);
+			
+			this.info = new ServiceInformation(
+				introService, serviceProperties, methodsDirectory);
 			this.setContentPane(getMainPanel());
 			this.setTitle("Modify Service Interface");
 			this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
@@ -485,8 +474,7 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints23.gridy = 1;
 			saveLocationLabel = new JLabel();
 			saveLocationLabel.setText("Location");
-			saveLocationLabel.setFont(new java.awt.Font("Dialog",
-					java.awt.Font.BOLD, 12));
+			saveLocationLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
 			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
 			gridBagConstraints22.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints22.gridy = 1;
@@ -501,8 +489,7 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints21.gridy = 1;
 			lastSavedLabel = new JLabel();
 			lastSavedLabel.setText("Last Saved");
-			lastSavedLabel.setFont(new java.awt.Font("Dialog",
-					java.awt.Font.BOLD, 12));
+			lastSavedLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
 			gridBagConstraints20.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints20.gridy = 0;
@@ -516,8 +503,7 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints19.gridy = 0;
 			namespaceLable = new JLabel();
 			namespaceLable.setText("Namespace");
-			namespaceLable.setFont(new java.awt.Font("Dialog",
-					java.awt.Font.BOLD, 12));
+			namespaceLable.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
 			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
 			gridBagConstraints18.gridx = 0;
 			gridBagConstraints18.anchor = java.awt.GridBagConstraints.WEST;
@@ -532,15 +518,12 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints17.weightx = 1.0;
 			serviceNameLabel = new JLabel();
 			serviceNameLabel.setText("Service Name");
-			serviceNameLabel.setFont(new java.awt.Font("Dialog",
-					java.awt.Font.BOLD, 12));
+			serviceNameLabel.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 12));
 			selectPanel = new JPanel();
 			selectPanel.setLayout(new GridBagLayout());
 			selectPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Properties",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					PortalLookAndFeel.getPanelLabelColor()));
+				null, "Properties", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			selectPanel.add(serviceNameLabel, gridBagConstraints18);
 			selectPanel.add(getServiceName(), gridBagConstraints17);
 			selectPanel.add(namespaceLable, gridBagConstraints19);
@@ -561,7 +544,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private MethodsTable getMethodsTable() {
 		if (methodsTable == null) {
 			methodsTable = new MethodsTable(info.getServices().getService(0),
-					this.methodsDirectory, this.serviceProperties);
+				this.methodsDirectory, this.serviceProperties);
 			methodsTable.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
@@ -597,34 +580,30 @@ public class ModificationViewer extends GridPortalComponent {
 			addMethodButton = new JButton(PortalLookAndFeel.getAddIcon());
 			addMethodButton.setText("Add");
 			addMethodButton.setToolTipText("add new operation");
-			addMethodButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							dirty = true;
-							MethodType method = new MethodType();
-							method.setName("newMethod");
-							Set methodSet = new HashSet();
-							for (int i = 0; i < getMethodsTable().getRowCount(); i++) {
-								methodSet.add(getMethodsTable()
-										.getMethodType(i).getName());
-							}
-							if (methodSet.contains(method.getName())) {
-								int index = 2;
-								while (methodSet.contains(method.getName()
-										+ index)) {
-									index++;
-								}
-								method.setName(method.getName() + index);
-							}
-							MethodTypeOutput output = new MethodTypeOutput();
-							output.setQName(new QName("", "void"));
-							method.setOutput(output);
-
-							getMethodsTable().addRow(method);
-
-							performMethodModify();
+			addMethodButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dirty = true;
+					MethodType method = new MethodType();
+					method.setName("newMethod");
+					Set methodSet = new HashSet();
+					for (int i = 0; i < getMethodsTable().getRowCount(); i++) {
+						methodSet.add(getMethodsTable().getMethodType(i).getName());
+					}
+					if (methodSet.contains(method.getName())) {
+						int index = 2;
+						while (methodSet.contains(method.getName() + index)) {
+							index++;
 						}
-					});
+						method.setName(method.getName() + index);
+					}
+					MethodTypeOutput output = new MethodTypeOutput();
+					output.setQName(new QName("", "void"));
+					method.setOutput(output);
+					getMethodsTable().addRow(method);
+					
+					performMethodModify();
+				}
+			});
 		}
 		return addMethodButton;
 	}
@@ -658,22 +637,19 @@ public class ModificationViewer extends GridPortalComponent {
 			removeButton = new JButton(PortalLookAndFeel.getRemoveIcon());
 			removeButton.setText("Remove");
 			removeButton.setToolTipText("remove selected operation");
-			removeButton.addActionListener(new java.awt.event.ActionListener() {
-
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dirty = true;
-					int row = getMethodsTable().getSelectedRow();
-					if ((row < 0) || (row >= getMethodsTable().getRowCount())) {
-						PortalUtils
-								.showErrorMessage("Please select a method to remove.");
-						return;
-					}
-					try {
-						getMethodsTable().removeSelectedRow();
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
+			removeButton.addActionListener(new java.awt.event.ActionListener() {				public void actionPerformed(java.awt.event.ActionEvent e) {
+				dirty = true;
+				int row = getMethodsTable().getSelectedRow();
+				if ((row < 0) || (row >= getMethodsTable().getRowCount())) {
+					PortalUtils.showErrorMessage("Please select a method to remove.");
+					return;
 				}
+				try {
+					getMethodsTable().removeSelectedRow();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
 			});
 		}
 		return removeButton;
@@ -703,8 +679,7 @@ public class ModificationViewer extends GridPortalComponent {
 				if (methods != null) {
 					for (int i = 0; i < methods.length; i++) {
 						if ((methods[i].getMethodSecurity() != null)
-								&& (!CommonTools.equals(curr, methods[i]
-										.getMethodSecurity()))) {
+							&& (!CommonTools.equals(curr, methods[i].getMethodSecurity()))) {
 							methods[i].setMethodSecurity(null);
 							changes.add(methods[i].getName());
 						}
@@ -712,8 +687,8 @@ public class ModificationViewer extends GridPortalComponent {
 				}
 				if (changes.size() > 0) {
 					StringBuffer sb = new StringBuffer();
-					sb
-							.append("Service security configuration changed, the security configurations for the following methods were reset:\n");
+					sb.append("Service security configuration changed, " +
+						"the security configurations for the following methods were reset:\n");
 					for (int i = 0; i < changes.size(); i++) {
 						String method = (String) changes.get(i);
 						sb.append("    " + (i + 1) + ") " + method);
@@ -729,7 +704,7 @@ public class ModificationViewer extends GridPortalComponent {
 			this.resetMethodSecurityIfServiceSecurityChanged();
 		} catch (Exception e) {
 			e.printStackTrace();
-			PortalUtils.showErrorMessage(e);
+			ErrorDialog.showErrorDialog(e);
 			return;
 		}
 		MethodType method = getMethodsTable().getSelectedMethodType();
@@ -738,12 +713,10 @@ public class ModificationViewer extends GridPortalComponent {
 			return;
 		}
 		// TODO: check this.... setting this for now......
-		MethodViewer mv = new MethodViewer(method,
-				new SpecificServiceInformation(info, info.getServices()
-						.getService(0)));
+		MethodViewer mv = new MethodViewer(method, 
+			new SpecificServiceInformation(info, info.getServices().getService(0)));
 
-		PortalResourceManager.getInstance().getGridPortal()
-				.addGridPortalComponent(mv);
+		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(mv);
 		// TODO: total hack for now to avoid tryin sort action listerners and
 		// having to pass the table into the method modification viewer.
 		mv.getDoneButton().addActionListener(new ActionListener() {
@@ -811,8 +784,7 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints5.gridx = 0;
 			operationsButtonPanel = new JPanel();
 			operationsButtonPanel.setLayout(new GridBagLayout());
-			operationsButtonPanel
-					.add(getAddMethodButton(), gridBagConstraints5);
+			operationsButtonPanel.add(getAddMethodButton(), gridBagConstraints5);
 			operationsButtonPanel.add(getModifyButton(), gridBagConstraints6);
 			operationsButtonPanel.add(getRemoveButton(), gridBagConstraints7);
 		}
@@ -832,39 +804,31 @@ public class ModificationViewer extends GridPortalComponent {
 			undoButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					int decision = JOptionPane.showConfirmDialog(
-							ModificationViewer.this,
-							"Are you sure you wish to roll back.");
+						ModificationViewer.this, "Are you sure you wish to roll back?");
 					if (decision == JOptionPane.OK_OPTION) {
 						BusyDialogRunnable r = new BusyDialogRunnable(
-								PortalResourceManager.getInstance()
-										.getGridPortal(), "Undo") {
+							PortalResourceManager.getInstance().getGridPortal(), "Undo") {
 							public void process() {
-								System.out
-										.println("Loading in last known save for this project");
+								System.out.println("Loading in last known save for this project");
 								try {
 									if (!dirty) {
 										setProgressText("restoring from local cache");
-										ResourceManager
-												.restoreLatest(
-														serviceProperties
-																.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP),
-														serviceProperties
-																.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME),
-														serviceProperties
-																.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+										String timestamp = serviceProperties.getProperty(
+											IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP);
+										String name = serviceProperties.getProperty(
+											IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+										String destDir = serviceProperties.getProperty(
+											IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR); 
+										ResourceManager.restoreLatest(
+											timestamp, name, destDir);
 									}
 									dispose();
-									PortalResourceManager.getInstance()
-											.getGridPortal()
-											.addGridPortalComponent(
-													new ModificationViewer(
-															methodsDirectory));
+									PortalResourceManager.getInstance().getGridPortal()
+										.addGridPortalComponent(
+											new ModificationViewer(methodsDirectory));
 								} catch (Exception e1) {
 									// e1.printStackTrace();
-									JOptionPane
-											.showMessageDialog(
-													ModificationViewer.this,
-													"Unable to roll back, there may be no older versions available");
+									ErrorDialog.showErrorDialog("Unable to roll back, there may be no older versions available");
 									return;
 								}
 							}
@@ -877,6 +841,7 @@ public class ModificationViewer extends GridPortalComponent {
 		}
 		return undoButton;
 	}
+	
 
 	/**
 	 * This method initializes contentTabbedPane
@@ -887,39 +852,29 @@ public class ModificationViewer extends GridPortalComponent {
 		if (contentTabbedPane == null) {
 			contentTabbedPane = new JTabbedPane();
 			contentTabbedPane.addTab("Types", null, getTypesSplitPane(), null);
-			contentTabbedPane.addTab("Operations", null, getMethodsPanel(),
-					null);
-			contentTabbedPane
-					.addTab("Metadata", null, getRpHolderPanel(), null);
-			contentTabbedPane.addTab("Service Properties", null,
-					getServicePropertiesPanel(), null);
-			contentTabbedPane.addTab("Service Contexts", null,
-					getResourceesTabbedPanel(), null);
-			contentTabbedPane
-					.addTab("Security", null, getSecurityPanel(), null);
+			contentTabbedPane.addTab("Operations", null, getMethodsPanel(),null);
+			contentTabbedPane.addTab("Metadata", null, getRpHolderPanel(), null);
+			contentTabbedPane.addTab("Service Properties", null, getServicePropertiesPanel(), null);
+			contentTabbedPane.addTab("Service Contexts", null, getResourceesTabbedPanel(), null);
+			contentTabbedPane.addTab("Security", null, getSecurityPanel(), null);
 			// add a tab for each extension...
 			ExtensionsType exts = info.getExtensions();
 			if (exts != null && exts.getExtension() != null) {
 				ExtensionType[] extsTypes = exts.getExtension();
 				for (int i = 0; i < extsTypes.length; i++) {
-					ServiceExtensionDescriptionType extDtype = ExtensionsLoader
-							.getInstance().getServiceExtension(
-									extsTypes[i].getName());
+					ServiceExtensionDescriptionType extDtype = ExtensionsLoader.getInstance()
+						.getServiceExtension(extsTypes[i].getName());
 					try {
 						if (extDtype.getServiceModificationUIPanel() != null
-								&& !extDtype.getServiceModificationUIPanel()
-										.equals("")) {
+								&& !extDtype.getServiceModificationUIPanel().equals("")) {
 							ServiceModificationUIPanel extPanel = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
-									.getServiceModificationUIPanel(extDtype
-											.getName(), info);
+								.getServiceModificationUIPanel(extDtype.getName(), info);
 							extensionPanels.add(extPanel);
-							contentTabbedPane.addTab(extDtype.getDisplayName(),
-									null, extPanel, null);
+							contentTabbedPane.addTab(extDtype.getDisplayName(), null, extPanel, null);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
-						ErrorDialog.showErrorDialog("Cannot load extension: "
-								+ extDtype.getDisplayName());
+						ErrorDialog.showErrorDialog("Cannot load extension: " + extDtype.getDisplayName(), e);
 					}
 				}
 			}
@@ -945,11 +900,10 @@ public class ModificationViewer extends GridPortalComponent {
 	private ServiceSecurityPanel getSecurityPanel() {
 		if (securityPanel == null) {
 			try {
-				securityPanel = new ServiceSecurityPanel(info, info
-						.getServices().getService(0));
+				securityPanel = new ServiceSecurityPanel(info, info.getServices().getService(0));
 			} catch (Exception e) {
 				e.printStackTrace();
-				PortalUtils.showErrorMessage(e);
+				ErrorDialog.showErrorDialog(e);
 			}
 		}
 		return securityPanel;
@@ -964,11 +918,9 @@ public class ModificationViewer extends GridPortalComponent {
 		if (serviceName == null) {
 			serviceName = new JTextField();
 			serviceName.setEditable(false);
-			serviceName.setFont(new java.awt.Font("Dialog",
-					java.awt.Font.ITALIC, 12));
-			serviceName
-					.setText(serviceProperties
-							.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+			serviceName.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
+			serviceName.setText(serviceProperties.getProperty(
+				IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 		}
 		return serviceName;
 	}
@@ -981,11 +933,9 @@ public class ModificationViewer extends GridPortalComponent {
 	private JTextField getNamespace() {
 		if (namespace == null) {
 			namespace = new JTextField();
-			namespace
-					.setText(serviceProperties
-							.getProperty(IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN));
-			namespace.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC,
-					12));
+			namespace.setText(serviceProperties.getProperty(
+				IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN));
+			namespace.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
 			namespace.setEditable(false);
 		}
 		return namespace;
@@ -1000,10 +950,8 @@ public class ModificationViewer extends GridPortalComponent {
 		if (lastSaved == null) {
 			lastSaved = new JTextField();
 			lastSaved.setEditable(false);
-			lastSaved.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC,
-					12));
-			setLastSaved(serviceProperties
-					.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
+			lastSaved.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
+			setLastSaved(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
 		}
 		return lastSaved;
 	}
@@ -1028,8 +976,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (saveLocation == null) {
 			saveLocation = new JTextField();
 			saveLocation.setText(methodsDirectory.getAbsolutePath());
-			saveLocation.setFont(new java.awt.Font("Dialog",
-					java.awt.Font.ITALIC, 12));
+			saveLocation.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
 			saveLocation.setEditable(false);
 		}
 		return saveLocation;
@@ -1056,16 +1003,11 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints16.insets = new java.awt.Insets(2, 2, 2, 2);
 			discoveryPanel = new JPanel();
 			discoveryPanel.setLayout(new GridBagLayout());
-			discoveryPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Select Type",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									new java.awt.Font("Dialog",
-											java.awt.Font.BOLD, 12),
-									PortalLookAndFeel.getPanelLabelColor()));
+			discoveryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Select Type", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, 
+				new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+				PortalLookAndFeel.getPanelLabelColor()));
 			discoveryPanel.add(getDiscoveryTabbedPane(), gridBagConstraints16);
 			discoveryPanel.add(getDiscoveryButtonPanel(), gridBagConstraints27);
 
@@ -1090,10 +1032,8 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints30.gridy = 0;
 			discoveryButtonPanel = new JPanel();
 			discoveryButtonPanel.setLayout(new GridBagLayout());
-			discoveryButtonPanel.add(getNamespaceAddButton(),
-					gridBagConstraints30);
-			discoveryButtonPanel.add(getNamespaceRemoveButton(),
-					gridBagConstraints31);
+			discoveryButtonPanel.add(getNamespaceAddButton(), gridBagConstraints30);
+			discoveryButtonPanel.add(getNamespaceRemoveButton(), gridBagConstraints31);
 		}
 		return discoveryButtonPanel;
 	}
@@ -1145,7 +1085,7 @@ public class ModificationViewer extends GridPortalComponent {
 						// reload the types tree
 						getNamespaceJTree().setNamespaces(info.getNamespaces());
 					} else {
-						JOptionPane.showMessageDialog(ModificationViewer.this, "Error retrieving schema.");
+						ErrorDialog.showErrorDialog("Error retrieving schema");
 					}
 					if (messages.size() != 0) {
 						String[] msg = new String[messages.size()];
@@ -1169,46 +1109,33 @@ public class ModificationViewer extends GridPortalComponent {
 			namespaceRemoveButton = new JButton();
 			namespaceRemoveButton.setText("Remove");
 			namespaceRemoveButton.setIcon(PortalLookAndFeel.getRemoveIcon());
-			namespaceRemoveButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							try {
-								if (getNamespaceJTree().getCurrentNode() instanceof NamespaceTypeTreeNode) {
-									NamespaceType type = (NamespaceType) getNamespaceJTree()
-											.getCurrentNode().getUserObject();
-
-									if (!type.getNamespace().equals(
-											IntroduceConstants.W3CNAMESPACE)) {
-										if (CommonTools
-												.isNamespaceTypeInUse(
-														type,
-														info
-																.getServiceDescriptor())) {
-											String[] message = {
-													"The namespace "
-															+ type
-																	.getNamespace(),
-													"contains types in use by this service." };
-											JOptionPane.showMessageDialog(
-													ModificationViewer.this,
-													message);
-										} else {
-											getNamespaceJTree()
-													.removeSelectedNode();
-										}
-									} else {
-										PortalUtils
-												.showMessage("Cannot remove "
-														+ IntroduceConstants.W3CNAMESPACE);
-									}
+			namespaceRemoveButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						if (getNamespaceJTree().getCurrentNode() instanceof NamespaceTypeTreeNode) {
+							NamespaceType type = (NamespaceType) getNamespaceJTree()
+								.getCurrentNode().getUserObject();							
+							if (!type.getNamespace().equals(
+								IntroduceConstants.W3CNAMESPACE)) {
+								if (CommonTools.isNamespaceTypeInUse(
+									type, info.getServiceDescriptor())) {
+									String[] message = {
+										"The namespace " + type.getNamespace(),
+										"contains types in use by this service." };
+									JOptionPane.showMessageDialog(ModificationViewer.this, message);
+								} else {
+									getNamespaceJTree().removeSelectedNode();
 								}
-							} catch (Exception ex) {
-								JOptionPane.showMessageDialog(
-										ModificationViewer.this,
-										"Please select namespace to Remove");
+							} else {
+								PortalUtils.showMessage("Cannot remove " + IntroduceConstants.W3CNAMESPACE);
 							}
 						}
-					});
+					} catch (Exception ex) {
+						// TODO: there has to be a better check for namespace selection than this!!
+						JOptionPane.showMessageDialog(ModificationViewer.this, "Please select namespace to Remove");
+					}
+				}
+			});
 		}
 		return namespaceRemoveButton;
 	}
@@ -1235,47 +1162,31 @@ public class ModificationViewer extends GridPortalComponent {
 		if (namespaceJTree == null) {
 			namespaceJTree = new NamespacesJTree(info.getNamespaces(), true);
 			namespaceJTree.setVisibleRowCount(10);
-			namespaceJTree
-					.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-						public void valueChanged(
-								javax.swing.event.TreeSelectionEvent e) {
-							DefaultMutableTreeNode node = getNamespaceJTree()
-									.getCurrentNode();
-							if (node instanceof NamespaceTypeTreeNode) {
-								getNamespaceTypeConfigurationPanel()
-										.setNamespaceType(
-												(NamespaceType) ((NamespaceTypeTreeNode) node)
-														.getUserObject());
-								getSchemaElementTypeConfigurationPanel()
-										.clear();
-							} else if (node instanceof SchemaElementTypeTreeNode) {
-								NamespaceTypeTreeNode parentNode = (NamespaceTypeTreeNode) node
-										.getParent();
-								NamespaceType nsType = (NamespaceType) parentNode
-										.getUserObject();
-								if (nsType.getNamespace().equals(
-										IntroduceConstants.W3CNAMESPACE)) {
-									getSchemaElementTypeConfigurationPanel()
-											.setSchemaElementType(
-													(SchemaElementType) ((SchemaElementTypeTreeNode) node)
-															.getUserObject(),
-													false);
-								} else {
-									getSchemaElementTypeConfigurationPanel()
-											.setSchemaElementType(
-													(SchemaElementType) ((SchemaElementTypeTreeNode) node)
-															.getUserObject(),
-													true);
-								}
-								getNamespaceTypeConfigurationPanel()
-										.setNamespaceType(nsType);
-							} else {
-								getNamespaceTypeConfigurationPanel().clear();
-								getSchemaElementTypeConfigurationPanel()
-										.clear();
-							}
+			namespaceJTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+				public void valueChanged(
+					javax.swing.event.TreeSelectionEvent e) {
+					DefaultMutableTreeNode node = getNamespaceJTree().getCurrentNode();
+					if (node instanceof NamespaceTypeTreeNode) {
+						getNamespaceTypeConfigurationPanel().setNamespaceType(
+							(NamespaceType) node.getUserObject());
+						getSchemaElementTypeConfigurationPanel().clear();
+					} else if (node instanceof SchemaElementTypeTreeNode) {
+						NamespaceTypeTreeNode parentNode = (NamespaceTypeTreeNode) node.getParent();
+						NamespaceType nsType = (NamespaceType) parentNode.getUserObject();
+						if (nsType.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+							getSchemaElementTypeConfigurationPanel().setSchemaElementType(
+								(SchemaElementType) node.getUserObject(), false);
+						} else {
+							getSchemaElementTypeConfigurationPanel().setSchemaElementType(
+								(SchemaElementType) node.getUserObject(), true);
 						}
-					});
+						getNamespaceTypeConfigurationPanel().setNamespaceType(nsType);
+					} else {
+						getNamespaceTypeConfigurationPanel().clear();
+						getSchemaElementTypeConfigurationPanel().clear();
+					}
+				}
+			});
 		}
 		return namespaceJTree;
 	}
@@ -1300,10 +1211,9 @@ public class ModificationViewer extends GridPortalComponent {
 			namespaceTypePropertiesPanel = new JPanel();
 			namespaceTypePropertiesPanel.setLayout(new GridBagLayout());
 			namespaceTypePropertiesPanel.add(
-					getNamespaceTypeConfigurationPanel(), gridBagConstraints33);
+				getNamespaceTypeConfigurationPanel(), gridBagConstraints33);
 			namespaceTypePropertiesPanel.add(
-					getSchemaElementTypeConfigurationPanel(),
-					gridBagConstraints34);
+				getSchemaElementTypeConfigurationPanel(), gridBagConstraints34);
 		}
 		return namespaceTypePropertiesPanel;
 	}
@@ -1316,8 +1226,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private NamespaceTypeConfigurePanel getNamespaceTypeConfigurationPanel() {
 		if (namespaceTypeConfigurationPanel == null) {
 			namespaceTypeConfigurationPanel = new NamespaceTypeConfigurePanel();
-			namespaceTypeConfigurationPanel
-					.setName("namespaceTypeCconfigurationPanel");
+			namespaceTypeConfigurationPanel.setName("namespaceTypeCconfigurationPanel");
 		}
 		return namespaceTypeConfigurationPanel;
 	}
@@ -1342,25 +1251,21 @@ public class ModificationViewer extends GridPortalComponent {
 	private JTabbedPane getDiscoveryTabbedPane() {
 		if (discoveryTabbedPane == null) {
 			discoveryTabbedPane = new JTabbedPane();
-			List discoveryTypes = ExtensionsLoader.getInstance()
-					.getDiscoveryExtensions();
+			List discoveryTypes = ExtensionsLoader.getInstance().getDiscoveryExtensions();
 			if (discoveryTypes != null) {
 				for (int i = 0; i < discoveryTypes.size(); i++) {
-					DiscoveryExtensionDescriptionType dd = (DiscoveryExtensionDescriptionType) discoveryTypes
-							.get(i);
+					DiscoveryExtensionDescriptionType dd = 
+						(DiscoveryExtensionDescriptionType) discoveryTypes.get(i);
 					try {
 						NamespaceTypeDiscoveryComponent comp = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
-								.getNamespaceTypeDiscoveryComponent(dd
-										.getName());
+							.getNamespaceTypeDiscoveryComponent(dd.getName());
 						if (comp != null) {
-							discoveryTabbedPane.addTab(dd.getDisplayName(),
-									comp);
+							discoveryTabbedPane.addTab(dd.getDisplayName(), comp);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
-						JOptionPane.showMessageDialog(ModificationViewer.this,
-								"Error loading discovery type: "
-										+ dd.getDisplayName());
+						ErrorDialog.showErrorDialog(
+							"Error loading discovery type: " + dd.getDisplayName(), e);
 					}
 				}
 			}
@@ -1370,17 +1275,17 @@ public class ModificationViewer extends GridPortalComponent {
 
 	private void saveModifications() {
 		int confirmed = JOptionPane.showConfirmDialog(ModificationViewer.this,
-				"Are you sure you want to save?", "Confirm Save",
-				JOptionPane.YES_NO_OPTION);
+			"Are you sure you want to save?", "Confirm Save",
+			JOptionPane.YES_NO_OPTION);
 		if (confirmed == JOptionPane.OK_OPTION) {
 			// verify no needed namespace types have been removed or modified
 			if (!CommonTools.usedTypesAvailable(info.getServiceDescriptor())) {
-				Set unavailable = CommonTools.getUnavailableUsedTypes(info
-						.getServiceDescriptor());
+				Set unavailable = CommonTools.getUnavailableUsedTypes(
+					info.getServiceDescriptor());
 				String[] message = {
-						"The following schema element types used in the service",
-						"are not available in the specified namespace types!",
-						"Please add schemas as appropriate.", "\n" };
+					"The following schema element types used in the service",
+					"are not available in the specified namespace types!",
+					"Please add schemas as appropriate.", "\n" };
 				String[] err = new String[unavailable.size() + message.length];
 				System.arraycopy(message, 0, err, 0, message.length);
 				int index = message.length;
@@ -1390,30 +1295,27 @@ public class ModificationViewer extends GridPortalComponent {
 					index++;
 				}
 				JOptionPane.showMessageDialog(ModificationViewer.this, err,
-						"Unavailable types found", JOptionPane.WARNING_MESSAGE);
+					"Unavailable types found", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 
-			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager
-					.getInstance().getGridPortal(), "Save") {
+			BusyDialogRunnable r = new BusyDialogRunnable(
+				PortalResourceManager.getInstance().getGridPortal(), "Save") {
 				public void process() {
 					try {
 						// walk the namespaces and make sure they are valid
 						setProgressText("validating namespaces");
 						NamespacesType namespaces = info.getNamespaces();
 						if (namespaces != null
-								&& namespaces.getNamespace() != null) {
+							&& namespaces.getNamespace() != null) {
 							for (int i = 0; i < namespaces.getNamespace().length; i++) {
-								NamespaceType currentNs = namespaces
-										.getNamespace(i);
+								NamespaceType currentNs = namespaces.getNamespace(i);
 								if (currentNs.getPackageName() != null) {
-									if (!CommonTools
-											.isValidPackageName(currentNs
-													.getPackageName())) {
+									if (!CommonTools.isValidPackageName(
+										currentNs.getPackageName())) {
 										setErrorMessage("Error: Invalid package name for namespace "
-												+ currentNs.getNamespace()
-												+ " : "
-												+ currentNs.getPackageName());
+											+ currentNs.getNamespace()
+											+ " : " + currentNs.getPackageName());
 										return;
 									}
 								}
@@ -1421,34 +1323,23 @@ public class ModificationViewer extends GridPortalComponent {
 						}
 						//ExtensionTools.removeAuthorizationServiceExtensios(info);
 						info.getServices().getService(0).setServiceSecurity(
-								securityPanel.getServiceSecurity(true));
+							securityPanel.getServiceSecurity(true));
 
 						// check the methods to make sure they are valid.......
-						if (info.getServices() != null
-								&& info.getServices().getService() != null) {
-							for (int serviceI = 0; serviceI < info
-									.getServices().getService().length; serviceI++) {
-								ServiceType service = info.getServices()
-										.getService(serviceI);
-								if (service.getMethods() != null
-										&& service.getMethods().getMethod() != null) {
+						if (info.getServices() != null && info.getServices().getService() != null) {
+							for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+								ServiceType service = info.getServices().getService(serviceI);
+								if (service.getMethods() != null && service.getMethods().getMethod() != null) {
 									List methodNames = new ArrayList();
-									if (service.getMethods() != null
-											&& service.getMethods().getMethod() != null) {
-										for (int methodI = 0; methodI < service
-												.getMethods().getMethod().length; methodI++) {
-											MethodType method = service
-													.getMethods().getMethod(
-															methodI);
-											if (!(methodNames.contains(method
-													.getName()))) {
-												methodNames.add(method
-														.getName());
+									if (service.getMethods() != null 
+										&& service.getMethods().getMethod() != null) {
+										for (int methodI = 0; methodI < service.getMethods().getMethod().length; methodI++) {
+											MethodType method = service.getMethods().getMethod(methodI);
+											if (!(methodNames.contains(method.getName()))) {
+												methodNames.add(method.getName());
 											} else {
-												setErrorMessage("The service "
-														+ service.getName()
-														+ " has duplicate methods "
-														+ method.getName());
+												setErrorMessage("The service " + service.getName() 
+													+ " has duplicate methods " + method.getName());
 												return;
 											}
 										}
@@ -1460,11 +1351,9 @@ public class ModificationViewer extends GridPortalComponent {
 						// save the metadata and methods and then call the
 						// resync and build
 						setProgressText("writting service document");
-						Utils.serializeDocument(methodsDirectory
-								.getAbsolutePath()
-								+ File.separator + "introduce.xml", info
-								.getServiceDescriptor(),
-								IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+						Utils.serializeDocument(methodsDirectory.getAbsolutePath()
+							+ File.separator + "introduce.xml", info.getServiceDescriptor(),
+							IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
 						// call the sync tools
 						setProgressText("synchronizing skeleton");
@@ -1473,8 +1362,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 						// build the synchronized service
 						setProgressText("rebuilding skeleton");
-						String cmd = CommonTools.getAntCommand("clean all",
-								methodsDirectory.getAbsolutePath());
+						String cmd = CommonTools.getAntCommand("clean all", methodsDirectory.getAbsolutePath());
 						Process p = CommonTools.createAndOutputProcess(cmd);
 						p.waitFor();
 
@@ -1484,10 +1372,9 @@ public class ModificationViewer extends GridPortalComponent {
 						dirty = false;
 						setProgressText("loading service properties");
 						loadServiceProps();
-						setLastSaved(serviceProperties
-								.getProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
+						setLastSaved(serviceProperties.getProperty(
+							IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
 						this.setProgressText("");
-
 					} catch (Exception e1) {
 						e1.printStackTrace();
 						setErrorMessage("Error: " + e1.getMessage());
@@ -1516,8 +1403,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private JPanel getNamespaceConfPanel() {
 		if (namespaceConfPanel == null) {
 			namespaceConfPanel = new JPanel();
-			namespaceConfPanel.setLayout(new BoxLayout(namespaceConfPanel,
-					BoxLayout.Y_AXIS));
+			namespaceConfPanel.setLayout(new BoxLayout(namespaceConfPanel, BoxLayout.Y_AXIS));
 			namespaceConfPanel.add(getDiscoveryPanel());
 			namespaceConfPanel.add(getNamespaceTypePropertiesPanel());
 		}
@@ -1543,11 +1429,8 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints25.gridy = 1;
 			servicePropertiesPanel = new JPanel();
 			servicePropertiesPanel.setLayout(new GridBagLayout());
-			servicePropertiesPanel.add(
-					getServicePropertiesTableContainerPanel(),
-					gridBagConstraints26);
-			servicePropertiesPanel.add(getServicePropertiesControlPanel(),
-					gridBagConstraints25);
+			servicePropertiesPanel.add(getServicePropertiesTableContainerPanel(), gridBagConstraints26);
+			servicePropertiesPanel.add(getServicePropertiesControlPanel(), gridBagConstraints25);
 		}
 		return servicePropertiesPanel;
 	}
@@ -1568,9 +1451,8 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints28.insets = new java.awt.Insets(5, 5, 5, 5);
 			servicePropertiesTableContainerPanel = new JPanel();
 			servicePropertiesTableContainerPanel.setLayout(new GridBagLayout());
-			servicePropertiesTableContainerPanel
-					.add(getServicePropertiesTableScrollPane(),
-							gridBagConstraints28);
+			servicePropertiesTableContainerPanel.add(
+				getServicePropertiesTableScrollPane(), gridBagConstraints28);
 		}
 		return servicePropertiesTableContainerPanel;
 	}
@@ -1583,8 +1465,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private JScrollPane getServicePropertiesTableScrollPane() {
 		if (servicePropertiesTableScrollPane == null) {
 			servicePropertiesTableScrollPane = new JScrollPane();
-			servicePropertiesTableScrollPane
-					.setViewportView(getServicePropertiesTable());
+			servicePropertiesTableScrollPane.setViewportView(getServicePropertiesTable());
 		}
 		return servicePropertiesTableScrollPane;
 	}
@@ -1648,19 +1529,12 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints43.gridx = 0;
 			servicePropertiesControlPanel = new JPanel();
 			servicePropertiesControlPanel.setLayout(new GridBagLayout());
-			servicePropertiesControlPanel.add(getServicePropertyKeyTextField(),
-					gridBagConstraints38);
-			servicePropertiesControlPanel.add(
-					getServicePropertyValueTextField(), gridBagConstraints39);
-			servicePropertiesControlPanel.add(servicePropertiesKeyLabel,
-					gridBagConstraints40);
-			servicePropertiesControlPanel.add(servicePropertiesValueLabel,
-					gridBagConstraints41);
-			servicePropertiesControlPanel.add(
-					getServicePropertiesButtonPanel(), gridBagConstraints42);
-			servicePropertiesControlPanel.add(
-					getServicePropertiesIsFromETCCheckBox(),
-					gridBagConstraints43);
+			servicePropertiesControlPanel.add(getServicePropertyKeyTextField(), gridBagConstraints38);
+			servicePropertiesControlPanel.add(getServicePropertyValueTextField(), gridBagConstraints39);
+			servicePropertiesControlPanel.add(servicePropertiesKeyLabel, gridBagConstraints40);
+			servicePropertiesControlPanel.add(servicePropertiesValueLabel, gridBagConstraints41);
+			servicePropertiesControlPanel.add(getServicePropertiesButtonPanel(), gridBagConstraints42);
+			servicePropertiesControlPanel.add(getServicePropertiesIsFromETCCheckBox(), gridBagConstraints43);
 		}
 		return servicePropertiesControlPanel;
 	}
@@ -1675,32 +1549,21 @@ public class ModificationViewer extends GridPortalComponent {
 			addServiceProperyButton = new JButton();
 			addServiceProperyButton.setText("Add");
 			addServiceProperyButton.setIcon(PortalLookAndFeel.getAddIcon());
-			addServiceProperyButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							if (getServicePropertyKeyTextField().getText()
-									.length() > 0
-									&& CommonTools
-											.isValidJavaField(getServicePropertyKeyTextField()
-													.getText())) {
-								String key = getServicePropertyKeyTextField()
-										.getText();
-								String value = getServicePropertyValueTextField()
-										.getText();
-								boolean isFromETC = getServicePropertiesIsFromETCCheckBox()
-										.isSelected();
-								getServicePropertiesTable().addRow(key, value,
-										isFromETC);
-								getServicePropertiesIsFromETCCheckBox()
-										.setSelected(false);
-							} else {
-								JOptionPane
-										.showMessageDialog(
-												ModificationViewer.this,
-												"Service Property key must be a valid java identifier, beginning with a lowercase character.");
-							}
-						}
-					});
+			addServiceProperyButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (getServicePropertyKeyTextField().getText().length() != 0
+						&& CommonTools.isValidJavaField(getServicePropertyKeyTextField().getText())) {
+						String key = getServicePropertyKeyTextField().getText();
+						String value = getServicePropertyValueTextField().getText();
+						boolean isFromETC = getServicePropertiesIsFromETCCheckBox().isSelected();
+						getServicePropertiesTable().addRow(key, value, isFromETC);
+						getServicePropertiesIsFromETCCheckBox().setSelected(false);
+					} else {
+						JOptionPane.showMessageDialog(ModificationViewer.this,
+						"Service Property key must be a valid java identifier, beginning with a lowercase character.");
+					}
+				}
+			});
 		}
 		return addServiceProperyButton;
 	}
@@ -1714,18 +1577,17 @@ public class ModificationViewer extends GridPortalComponent {
 		if (removeServicePropertyButton == null) {
 			removeServicePropertyButton = new JButton();
 			removeServicePropertyButton.setText("Remove");
-			removeServicePropertyButton.setIcon(PortalLookAndFeel
-					.getRemoveIcon());
-			removeServicePropertyButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							try {
-								getServicePropertiesTable().removeSelectedRow();
-							} catch (Exception e1) {
-								e1.printStackTrace();
-							}
-						}
-					});
+			removeServicePropertyButton.setIcon(PortalLookAndFeel.getRemoveIcon());
+			removeServicePropertyButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						getServicePropertiesTable().removeSelectedRow();
+					} catch (Exception e1) {
+						e1.printStackTrace();
+						ErrorDialog.showErrorDialog(e1);
+					}
+				}
+			});
 		}
 		return removeServicePropertyButton;
 	}
@@ -1773,10 +1635,9 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints32.gridx = 0;
 			servicePropertiesButtonPanel = new JPanel();
 			servicePropertiesButtonPanel.setLayout(new GridBagLayout());
-			servicePropertiesButtonPanel.add(getRemoveServicePropertyButton(),
-					gridBagConstraints32);
-			servicePropertiesButtonPanel.add(getAddServiceProperyButton(),
-					gridBagConstraints37);
+			servicePropertiesButtonPanel.add(
+				getRemoveServicePropertyButton(), gridBagConstraints32);
+			servicePropertiesButtonPanel.add(getAddServiceProperyButton(), gridBagConstraints37);
 		}
 		return servicePropertiesButtonPanel;
 	}
@@ -1796,8 +1657,7 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints45.gridx = 1;
 			resourceesTabbedPanel = new JPanel();
 			resourceesTabbedPanel.setLayout(new GridBagLayout());
-			resourceesTabbedPanel
-					.add(getResourcesPanel(), gridBagConstraints45);
+			resourceesTabbedPanel.add(getResourcesPanel(), gridBagConstraints45);
 		}
 		return resourceesTabbedPanel;
 	}
@@ -1846,12 +1706,10 @@ public class ModificationViewer extends GridPortalComponent {
 			resourcesJTree = new ServicesJTree(info.getServices(), info);
 			resourcesJTree.setVisibleRowCount(10);
 			resourcesJTree.addFocusListener(new FocusAdapter() {
-
 				public void focusGained(FocusEvent e) {
 					super.focusGained(e);
 					getResourcesJTree().setServices(info.getServices(), info);
 				}
-
 			});
 		}
 		return resourcesJTree;
@@ -1867,19 +1725,13 @@ public class ModificationViewer extends GridPortalComponent {
 			if (info.getServices().getService(0).getResourcePropertiesList() == null) {
 				ResourcePropertiesListType properties = new ResourcePropertiesListType();
 				properties.setResourceProperty(null);
-				info.getServices().getService(0).setResourcePropertiesList(
-						properties);
+				info.getServices().getService(0).setResourcePropertiesList(properties);
 			}
-			rpHolderPanel = new ModifyResourcePropertiesPanel(info
-					.getServices().getService(0), info.getNamespaces(),
-					new File(info.getBaseDirectory().getAbsolutePath()
-							+ File.separator + "etc"), new File(info
-							.getBaseDirectory().getAbsolutePath()
-							+ File.separator
-							+ "schema"
-							+ File.separator
-							+ info.getServices().getService(0).getName()),
-					false);
+			rpHolderPanel = new ModifyResourcePropertiesPanel(
+				info.getServices().getService(0), info.getNamespaces(),
+				new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "etc"), 
+				new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "schema"
+					+ File.separator + info.getServices().getService(0).getName()), false);
 		}
 		return rpHolderPanel;
 	}

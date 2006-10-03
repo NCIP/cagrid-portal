@@ -80,15 +80,10 @@ public class TypesToolsComponent extends GridPortalComponent {
 						contentTabbedPane.addTab(desc.getDisplayName(), comp);
 					}
 				} catch (Exception e) {
-					ErrorDialog.showErrorDialog("Could not load types tool: "
-						+ desc.getDisplayName());
-					// JOptionPane.showMessageDialog(TypesToolsComponent.this, "Could not load types tool: "
-					//	+ desc.getDisplayName());
+					ErrorDialog.showErrorDialog("Could not load types tool: " + desc.getDisplayName(), e);
 				}
 			}
 		}
-
 		return contentTabbedPane;
 	}
-
-} // @jve:decl-index=0:visual-constraint="10,10"
+}

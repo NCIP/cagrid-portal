@@ -97,20 +97,15 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 						initialize();
 					} catch (Exception e) {
 						ErrorDialog.showErrorDialog("Error initializing the deployment: "
-							+ e.getMessage());
-						// JOptionPane.showMessageDialog(DeploymentViewer.this, "Error initializing the deployment: "
-						// 	+ e.getMessage());
+							+ e.getMessage(), e);
 						DeploymentViewer.this.dispose();
 					}
 				} else {
-					ErrorDialog.showErrorDialog("Directory "
-						+ serviceDirectory.getAbsolutePath() + " does not seem to be an introduce service");
-					// JOptionPane.showMessageDialog(DeploymentViewer.this, "Directory "
-					// 	+ serviceDirectory.getAbsolutePath() + " does not seem to be an introduce service");
+					ErrorDialog.showErrorDialog("Error deleting directory", 
+						"Directory " + serviceDirectory.getAbsolutePath() + " does not seem to be an introduce service");
 					DeploymentViewer.this.dispose();
 				}
 			}
-
 		});
 		return th;
 	}

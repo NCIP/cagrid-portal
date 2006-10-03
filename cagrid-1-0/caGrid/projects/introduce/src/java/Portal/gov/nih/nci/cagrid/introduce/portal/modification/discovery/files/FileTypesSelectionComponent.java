@@ -109,10 +109,7 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 						currentNamespace = new Namespace(doc.getRootElement().getAttributeValue("targetNamespace"));
 						getNamespaceText().setText(currentNamespace.getRaw());
 					} catch (Exception ex) {
-						// JOptionPane.showMessageDialog(FileTypesSelectionComponent.this,
-						// 	"Please make sure the file is a valid XML Schema: \"" + ex.getMessage() + "\"");
-						ErrorDialog.showErrorDialog("Please make sure the file is a valid XML Schema: \""
-							+ ex.getMessage() + "\"");
+						ErrorDialog.showErrorDialog("Please make sure the file is a valid XML Schema", ex);
 					}
 				}
 			});

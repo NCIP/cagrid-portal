@@ -296,7 +296,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 						}
 						uploadLocationText.setText(location);
 					} catch (Exception e1) {
-						JOptionPane.showMessageDialog(GMEViewer.this, "Error selecting schema file");
+						ErrorDialog.showErrorDialog("Error selecting schema file", e1);
 					}
 					File file = new File(location);
 					if (file.exists() && file.canRead()) {
@@ -309,8 +309,6 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 							e1.printStackTrace();
 						}
 					} else {
-						// JOptionPane.showMessageDialog(GMEViewer.this,
-						//	"Cannot read selected file or file does not exist!");
 						ErrorDialog.showErrorDialog("Cannot read selected file or file does not exist!");
 						uploadLocationText.setText("");
 					}
@@ -347,7 +345,6 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 			uploadUploadButton.setText("Upload");
 			uploadUploadButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-
 					if (uploadSchemaTextPane.getText().length() <= 0) {
 						JOptionPane.showMessageDialog(GMEViewer.this, "Please select a schema");
 						return;
@@ -364,8 +361,8 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 						// that it is acceptable by the GME
 
 						// Load the schema into the schema object
-						SchemaReader sr = new SchemaReader(new InputSource(new StringInputStream(uploadSchemaTextPane
-							.getText())));
+						SchemaReader sr = new SchemaReader(new InputSource(new StringInputStream(
+							uploadSchemaTextPane.getText())));
 						sr.setValidation(false);
 						org.projectmobius.castor.xml.schema.Schema schema = sr.read();
 						Namespace schemaTargetNamespace = new Namespace(schema.getTargetNamespace());
@@ -378,11 +375,8 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 						JOptionPane.showMessageDialog(GMEViewer.this, "Schema was successfully uploaded.");
 					} catch (Exception e1) {
 						e1.printStackTrace();
-						JOptionPane
-							.showMessageDialog(
-								GMEViewer.this,
-								"Please check the GME URL and make sure that you have the appropriate credentials and make sure the schema is well formed!"
-									+ "\nError:" + e1.getMessage());
+						ErrorDialog.showErrorDialog("Error contacting GME", "Please check the GME URL and make sure that you have " +
+							"the appropriate credentials " + "and make sure the schema is well formed!");
 					}
 					uploadLocationText.setText("");
 					uploadSchemaTextPane.setText("");
@@ -440,29 +434,27 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 			gmeDownloadButton.setText("Download");
 			gmeDownloadButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					String location = null;
 					try {
-						String location = ResourceManager.promptDir(GMEViewer.this, null);
-						if (location != null && location.length() > 0) {
-							GridServiceResolver.getInstance().setDefaultFactory(
-								new GlobusGMEXMLDataModelServiceFactory());
-							try {
-								XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-									.getGridService(ResourceManager.getServiceURLProperty(GMESchemaLocatorPanel.GME_URL));
-								if (gmeSchemaLocatorPanel.getSchemaComboBox().getSelectedItem() != null) {
-									handle.cacheSchema(((SchemaWrapper) gmeSchemaLocatorPanel.getSchemaComboBox()
-										.getSelectedItem()).getNamespace(), new File(location));
-								}
-							} catch (MobiusException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-								JOptionPane
-									.showMessageDialog(GMEViewer.this,
-										"Please check the GME URL and make sure that you have the appropriate credentials!");
+						location = ResourceManager.promptDir(GMEViewer.this, null);
+					} catch (Exception ex) {
+						ErrorDialog.showErrorDialog(ex);
+					}
+					if (location != null && location.length() > 0) {
+						GridServiceResolver.getInstance().setDefaultFactory(
+							new GlobusGMEXMLDataModelServiceFactory());
+						try {
+							XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
+							.getGridService(ResourceManager.getServiceURLProperty(GMESchemaLocatorPanel.GME_URL));
+							if (gmeSchemaLocatorPanel.getSchemaComboBox().getSelectedItem() != null) {
+								handle.cacheSchema(((SchemaWrapper) gmeSchemaLocatorPanel.getSchemaComboBox()
+									.getSelectedItem()).getNamespace(), new File(location));
 							}
+						} catch (MobiusException e1) {
+							e1.printStackTrace();
+							ErrorDialog.showErrorDialog("Error contacting GME", 
+							"Please check the GME URL and make sure that you have the appropriate credentials!");
 						}
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
 					}
 				}
 			});

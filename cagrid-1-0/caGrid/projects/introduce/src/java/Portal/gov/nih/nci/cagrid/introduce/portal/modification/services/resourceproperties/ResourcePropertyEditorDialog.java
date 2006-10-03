@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
 
 import java.awt.Frame;
@@ -11,7 +12,6 @@ import java.io.InputStream;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.projectmobius.common.XMLUtilities;
@@ -129,8 +129,7 @@ public class ResourcePropertyEditorDialog extends JDialog {
 							fw.close();
 						} catch (Exception e1) {
 							e1.printStackTrace();
-							JOptionPane.showMessageDialog(ResourcePropertyEditorDialog.this,
-								"ERROR: Invalid XML Document");
+							ErrorDialog.showErrorDialog("ERROR: Invalid XML Document", e1);
 							return;
 						}
 

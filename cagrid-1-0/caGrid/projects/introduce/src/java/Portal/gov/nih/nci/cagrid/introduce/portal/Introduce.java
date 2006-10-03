@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal;
 
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.SplashScreen;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
@@ -8,7 +9,6 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.portal.GridPortal;
@@ -63,26 +63,26 @@ public final class Introduce {
 		}
 	}
 
-
+	
 	private static void checkGlobusLocation() {
-		try {
-			String currGlobusLocation = ResourceManager.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION);
-			if (currGlobusLocation == null || currGlobusLocation.length() == 0) {
+		String currGlobusLocation = ResourceManager.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION);
+		if (currGlobusLocation == null || currGlobusLocation.length() == 0) {
+			try {
+				String globusLocation = System.getenv("GLOBUS_LOCATION");
+				ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, globusLocation);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				String[] error = {"Error getting GLOBUS_LOCATION environment variable: ", ex.getMessage(),
+				"Please set GLOBUS_LOCATION in preferences!"};
+				ErrorDialog.showErrorDialog("Error getting GLOBUS_LOCATION", error);
 				try {
-					String globusLocation = System.getenv("GLOBUS_LOCATION");
-					ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, globusLocation);
-				} catch (Exception ex) {
 					ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, "");
-					ex.printStackTrace();
-					String[] error = {"Error getting GLOBUS_LOCATION environment variable: ", ex.getMessage(),
-							"Please set GLOBUS_LOCATION in preferences!"};
-					JOptionPane.showMessageDialog(null, error, "ConfigurationError", JOptionPane.ERROR_MESSAGE);
+				} catch (Exception configEx) {
+					// now what?
+					configEx.printStackTrace();
+					ErrorDialog.showErrorDialog(configEx);
 				}
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			String[] error = {"Error updating configuration:", ex.getMessage()};
-			JOptionPane.showMessageDialog(null, error, "Configuration Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

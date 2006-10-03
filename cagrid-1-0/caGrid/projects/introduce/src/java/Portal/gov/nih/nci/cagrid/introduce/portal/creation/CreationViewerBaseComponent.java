@@ -76,7 +76,6 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 				"Creating") {
 				public void process() {
 					try {
-
 						setProgressText("Validating service name...");
 						String serviceName = service;
 						String dirName = dir;

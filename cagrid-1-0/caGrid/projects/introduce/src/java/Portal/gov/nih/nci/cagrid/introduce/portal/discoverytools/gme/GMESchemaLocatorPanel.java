@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -15,7 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.projectmobius.common.GridServiceResolver;
@@ -115,12 +113,9 @@ public class GMESchemaLocatorPanel extends JPanel {
 					makeCombosEnabled(true);
 				} catch (Throwable e1) {
 					e1.printStackTrace();
-					JOptionPane.showMessageDialog(GMESchemaLocatorPanel.this,
+					ErrorDialog.showErrorDialog("Error contacting GME", 
 						"Please check the GME URL and make sure that you have the appropriate credentials!");
-					// ErrorDialog.showErrorDialog("Please check the GME URL and
-					// make sure that you have the appropriate credentials!");
 				}
-
 			}
 		};
 		t.start();
@@ -180,15 +175,12 @@ public class GMESchemaLocatorPanel extends JPanel {
 										makeCombosEnabled(true);
 									} catch (MobiusException e1) {
 										e1.printStackTrace();
-										JOptionPane
-											.showMessageDialog(GMESchemaLocatorPanel.this,
-												"Please check the GME URL and make sure that you have the appropriate credentials!");
+										ErrorDialog.showErrorDialog("Error contacting GME", "Please check the GME URL and make sure that you have the appropriate credentials!");
 									}
 								}
 							};
 							t.start();
 						}
-
 					}
 				}
 			});
@@ -219,11 +211,8 @@ public class GMESchemaLocatorPanel extends JPanel {
 							}
 						} catch (MobiusException e1) {
 							e1.printStackTrace();
-							// JOptionPane.showMessageDialog(GMESchemaLocatorPanel.this,
-							// "Please check the GME URL and make sure that you
-							// have the appropriate credentials!");
-							ErrorDialog
-								.showErrorDialog("Please check the GME URL and make sure that you have the appropriate credentials!");
+							ErrorDialog.showErrorDialog("Error contacting GME", 
+								"Please check the GME URL and make sure that you have the appropriate credentials!");
 						}
 					}
 				}
