@@ -16,6 +16,7 @@
 	<property name="junit.results.dir" value="${test.build.dir}/junit"/>
 	<property name="deploy.dir" value="${env.CATALINA_HOME}/webapps"/>
 	
+
 	<target name="init">
 		<mkdir dir="${build.classes.dir}"/>
 		<mkdir dir="${build.war.dir}"/>	
@@ -30,6 +31,9 @@
             <fileset dir="${lib.dir}">
                 <include name="*.jar" />
             </fileset>
+        	<fileset dir="${env.GLOBUS_LOCATION}/lib">
+        		<include name="*.jar"/>
+        	</fileset>
         </path>
         <path id="test.build.classpath">
             <fileset dir="${test.lib.dir}">
@@ -57,8 +61,14 @@
 		</javac>
 	</target>
 	
-	<target name="war" depends="compile">
+	<target name="war" depends="compile,compileTests">
+		<copy todir="${build.war.dir}/WEB-INF/classes">
+			<fileset dir="${src.java.dir}">
+				<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
 		<copy todir="${build.war.dir}">
+			<!-- TODO: Conditionally include testing JSPs. -->
 			<fileset dir="${src.web.dir}">
 				<include name="**"/>
 			</fileset>
@@ -67,6 +77,21 @@
 			<fileset dir="${build.dir}">
 				<include name="classes/**"/>
 			</fileset>
+			<!-- TODO: Conditionally include testing code. -->
+			<fileset dir="${test.build.dir}">
+				<include name="classes/**"/>
+			</fileset>
+		</copy>
+		<copy todir="${build.war.dir}/WEB-INF/lib">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${env.GLOBUS_LOCATION}/lib">
+				<include name="*.jar"/>
+			</fileset>			
 		</copy>
 		<jar destfile="${build.dir}/${war.name}.war">
 			<fileset dir="${build.dir}/${war.name}">
@@ -75,11 +100,12 @@
 		</jar>
 	</target>
 	
-	<target name="deploy" depends="undeploy,compile,war">
+	<target name="deploy" depends="undeploy,war">
 		<copy file="${build.dir}/${war.name}.war" todir="${deploy.dir}"/>
 	</target>
 	
 	<target name="undeploy">
+		<delete dir="${env.CATALINA_HOME}/work/Catalina/localhost/${war.name}"/>
 		<delete dir="${deploy.dir}/${war.name}"/>
 		<delete file="${deploy.dir}/${war.name}.war"/>
 	</target>

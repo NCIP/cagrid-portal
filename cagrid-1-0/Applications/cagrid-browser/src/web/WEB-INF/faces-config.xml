@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN" "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+<faces-config>
+    <application>
+        <locale-config>
+            <default-locale>en</default-locale>
+        </locale-config>
+        <message-bundle>
+            labels
+        </message-bundle>
+        <message-bundle>
+            messages
+        </message-bundle>
+    </application>
+    
+    
+    <!-- Begin test rules -->
+    <navigation-rule>
+        <from-view-id>/jsp/test/CQLQueryWizardSetup.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/jsp/tree/CQLQueryWizard.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <!-- End test rules -->
+    <!--
+    <managed-bean>
+        <managed-bean-name>discoveredServices</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.DiscoveredServices</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    -->
+
+    <!--
+    <managed-bean>
+        <managed-bean-name>
+            browserConfig
+        </managed-bean-name>
+        <managed-bean-class>
+            gov.nih.nci.cagrid.browser.beans.BrowserConfig
+        </managed-bean-class>
+        <managed-bean-scope>
+            session
+        </managed-bean-scope>
+        <managed-property>
+            <property-name>caCOREServiceURL</property-name>
+            <value>http://cabio.nci.nih.gov/cacore30/server/HTTPServer</value>
+        </managed-property>
+        
+        <managed-property>
+            <property-name>indexService</property-name>
+            <property-class>gov.nih.nci.cagrid.browser.beans.IndexService</property-class>
+            <value>#{indexService}</value>
+        </managed-property>
+    </managed-bean>
+    -->
+
+    <!-- Index Service Bean
+    <managed-bean>
+        <managed-bean-name>
+            indexService
+        </managed-bean-name>
+        <managed-bean-class>
+            gov.nih.nci.cagrid.browser.beans.IndexService
+        </managed-bean-class>
+        <managed-bean-scope>
+            session
+        </managed-bean-scope>
+
+        <managed-property>
+            <property-name>url</property-name>
+            <value>http://cagrid-registry.nci.nih.gov/ogsa/services/cagrid/IndexService</value>
+        </managed-property>
+
+        <managed-property>
+            <property-name>indexList</property-name>
+            <list-entries>
+                <value>http://156.40.135.120:8080/ogsa/services/cagrid/IndexService</value>
+                <value>http://cagrid-registry-qa.nci.nih.gov/ogsa/services/cagrid/IndexService</value>
+            </list-entries>
+        </managed-property>
+    </managed-bean>
+    -->
+
+    <managed-bean>
+        <managed-bean-name>queryWizard</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.tree.beans.QueryWizardTreeBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <property-name>modelLoader</property-name>
+            <property-class>gov.nih.nci.cagrid.browser.tree.util.TreeModelLoader</property-class>
+            <value>#{modelLoader}</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>modelLoader</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.tree.util.BrowserTreeModelLoader</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    
+    <!-- Begin test beans -->
+    <managed-bean>
+        <managed-bean-name>test_queryWizardInit</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.tree.beans.QueryWizardTreeBeanInit</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+        <managed-property>
+            <property-name>serviceUrl</property-name>
+            <value>http://156.40.132.182:8080/wsrf/services/cagrid/CaBIO</value>
+        </managed-property>
+        <managed-property>
+            <property-name>domainObject</property-name>
+            <value>Gene</value>
+        </managed-property>
+    </managed-bean>
+    <!-- End test beans -->
+    
+    
+</faces-config>
