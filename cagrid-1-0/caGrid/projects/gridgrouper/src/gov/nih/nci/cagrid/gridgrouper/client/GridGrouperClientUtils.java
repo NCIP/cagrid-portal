@@ -8,6 +8,7 @@ import javax.xml.namespace.QName;
 import edu.internet2.middleware.grouper.GroupNotFoundException;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipQuery;
 
 import org.globus.gsi.GlobusCredential;
 
@@ -42,27 +43,45 @@ public class GridGrouperClientUtils {
 	}
 
 
-	public static boolean isMember(String gridGrouperURI, GlobusCredential cred, String xml, String memberId)
-		throws Exception {
-		GridGrouper client = new GridGrouper(gridGrouperURI, cred);
-		return client.isMember(memberId, xmlToExpression(xml));
+	public static boolean isMember(GlobusCredential cred, String xml, String memberId) throws Exception {
+		return isMember(null, xmlToExpression(xml), memberId);
 	}
 
 
-	public static boolean isMember(String gridGrouperURI, String xml, String memberId) throws Exception {
-		return isMember(gridGrouperURI, null, xml, memberId);
+	public static boolean isMember(String xml, String memberId) throws Exception {
+		return isMember(null, xml, memberId);
 	}
 
 
-	public static boolean isMember(String gridGrouperURI, GlobusCredential cred, MembershipExpression exp,
-		String memberId) {
-		GridGrouper client = new GridGrouper(gridGrouperURI, cred);
+	public static boolean isMember(GlobusCredential cred, MembershipExpression exp, String memberId) throws Exception {
+		String uri = findGridGrouperURI(exp);
+		if (uri == null) {
+			throw new Exception("No Grid Grouper URI found in the expression!!!");
+		}
+		GridGrouper client = new GridGrouper(uri, cred);
 		return client.isMember(memberId, exp);
 	}
 
 
-	public static boolean isMember(String gridGrouperURI, MembershipExpression exp, String memberId) {
-		return isMember(gridGrouperURI, null, exp, memberId);
+	public static String findGridGrouperURI(MembershipExpression exp) {
+		MembershipQuery[] mq = exp.getMembershipQuery();
+		if ((mq != null) && (mq.length > 0)) {
+			if (mq[0].getGroupIdentifier().getGridGrouperURL() != null) {
+				return mq[0].getGroupIdentifier().getGridGrouperURL();
+			}
+		}
+		MembershipExpression[] list = exp.getMembershipExpression();
+		if (list != null) {
+			for (int i = 0; i < list.length; i++) {
+				return findGridGrouperURI(list[i]);
+			}
+		}
+		return null;
+	}
+
+
+	public static boolean isMember(MembershipExpression exp, String memberId) throws Exception {
+		return isMember(null, exp, memberId);
 	}
 
 
