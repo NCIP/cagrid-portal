@@ -39,20 +39,14 @@ public class DomainModelGenerationExample {
 
 			// UNCOMMENT FOR: a specific set of classes, with excluded
 			// associations
-			// String classNames[] = new String[]{Gene.class.getName(),
-			// Chromosome.class.getName(), Taxon.class.getName(),
-			// Tissue.class.getName()};
-			// UMLAssociationExclude exclude1 = new
-			// UMLAssociationExclude(Gene.class.getName(), "geneCollection",
-			// Chromosome.class.getName(), "chromosome");
-			// UMLAssociationExclude exclude2 = new UMLAssociationExclude("*",
-			// "*", Tissue.class.getName(), "*");
-			// UMLAssociationExclude associationExcludes[] = new
-			// UMLAssociationExclude[]{exclude1, exclude2};
-			// DomainModel domainModel =
-			// builder.createDomainModelForClassesWithExcludes(project,
-			// classNames,
-			// associationExcludes);
+//			 String classNames[] = new String[]{Gene.class.getName(), Chromosome.class.getName(), Taxon.class.getName(),
+//					Tissue.class.getName()};
+//			UMLAssociationExclude exclude1 = new UMLAssociationExclude(Gene.class.getName(), "geneCollection",
+//				Chromosome.class.getName(), "chromosome");
+//			UMLAssociationExclude exclude2 = new UMLAssociationExclude("*", "*", Tissue.class.getName(), "*");
+//			UMLAssociationExclude associationExcludes[] = new UMLAssociationExclude[]{exclude1, exclude2};
+//			DomainModel domainModel = builder.createDomainModelForClassesWithExcludes(project, classNames,
+//				associationExcludes);
 
 			Writer writer = new FileWriter(project.getShortName() + "_" + project.getVersion() + "_DomainModel.xml");
 			MetadataUtils.serializeDomainModel(domainModel, writer);

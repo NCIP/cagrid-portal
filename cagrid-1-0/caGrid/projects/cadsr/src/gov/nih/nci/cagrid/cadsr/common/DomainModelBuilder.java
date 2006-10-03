@@ -297,22 +297,47 @@ public class DomainModelBuilder {
 		String excludesFilter = createAssociationExcludeFilter(excludedAssociations, associationAlias);
 
 		// get all associations in project
-		HQLCriteria hql = new HQLCriteria(("FROM UMLAssociationMetadata AS " + associationAlias + " WHERE "
-			+ associationAlias + ".project.id='" + proj.getId() + "' AND " + associationAlias
-			+ ".sourceUMLClassMetadata.id " + classIDFilter + " AND " + associationAlias
-			+ ".targetUMLClassMetadata.id " + classIDFilter + " " + excludesFilter).trim());
+		HQLCriteria hql = new HQLCriteria(("SELECT " + associationAlias + ", " + associationAlias + ".sourceRoleName, "
+			+ associationAlias + ".sourceUMLClassMetadata.id, " + associationAlias + ".targetRoleName, "
+			+ associationAlias + ".targetUMLClassMetadata.id " +
+
+			"FROM UMLAssociationMetadata AS " + associationAlias + " WHERE " + associationAlias + ".project.id='"
+			+ proj.getId() + "' AND " + associationAlias + ".sourceUMLClassMetadata.id " + classIDFilter + " AND "
+			+ associationAlias + ".targetUMLClassMetadata.id " + classIDFilter + " " + excludesFilter).trim());
 
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Issuing Association query:" + hql.getHqlString());
 		}
 
+		// association, src role, src id, tar role, tar id
 		long start = System.currentTimeMillis();
 		List rList = this.cadsr.query(hql, UMLAssociationMetadata.class.getName());
+		// the query incorrectly returns more than one association for the same
+		// thing (the association ids are even different), so
+		// I build up a unique set based on source and target ids and role names
+		// I shouldn't have to do this (its a database view bug), but it creates
+		// a lot of unecessaray processing so I'm cutting it out here
+		Iterator iterator = rList.iterator();
+		Map uniqMap = new HashMap();
+		while (iterator.hasNext()) {
+			Object[] res = (Object[]) iterator.next();
+			UMLAssociationMetadata assoc = (UMLAssociationMetadata) res[0];
+			String srcRole = (String) res[1];
+			String srcID = (String) res[2];
+			String targetRole = (String) res[3];
+			String targetID = (String) res[4];
+			String createdKey = srcRole + srcID + targetRole + targetID;
+			LOG.debug("Created unique key:" + createdKey);
+			uniqMap.put(createdKey, assoc);
+		}
 
-		UMLAssociationMetadata assocArr[] = new UMLAssociationMetadata[rList.size()];
+		Collection uniqList = uniqMap.values();
+		LOG.info("Association filtering eliminated " + (rList.size() - uniqList.size())
+			+ " associations from returned list of:" + rList.size());
+		UMLAssociationMetadata assocArr[] = new UMLAssociationMetadata[uniqList.size()];
 		// caCORE's toArray(arr) is broken (cacore bug #1382), so need to do
 		// this way
-		System.arraycopy(rList.toArray(), 0, assocArr, 0, rList.size());
+		System.arraycopy(uniqList.toArray(), 0, assocArr, 0, uniqList.size());
 
 		double duration = (System.currentTimeMillis() - start) / 1000.0;
 		LOG.info(proj.getShortName() + "'s association fetch took " + duration + " seconds, and found "
@@ -724,7 +749,8 @@ public class DomainModelBuilder {
 			converted.setValueDomain(attVD);
 
 			// populate vd semantic md
-			attVD.setSemanticMetadata(semanticMetadataCollectionToArray(attTypemd.getSemanticMetadataCollection()));
+			//TODO: turn this on if it should yeild results... currently does not
+			//attVD.setSemanticMetadata(semanticMetadataCollectionToArray(attTypemd.getSemanticMetadataCollection()));
 
 			// populate enumeration
 			ValueDomainEnumerationCollection enumCollection = new ValueDomainEnumerationCollection();
