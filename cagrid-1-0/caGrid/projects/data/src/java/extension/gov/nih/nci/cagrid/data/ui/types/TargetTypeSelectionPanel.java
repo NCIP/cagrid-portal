@@ -4,6 +4,7 @@ import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
@@ -350,9 +351,20 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 							PortalResourceManager.getInstance().getGridPortal(),
 							"Package incompatability...", message, choices, choices[1]);
 						if (choice == choices[0]) {
+							// try to remove the namespaces from the service
+							Iterator nsNameIter = packageToNamespace.values().iterator();
+							while (nsNameIter.hasNext()) {
+								String namespace = (String) nsNameIter.next();
+								NamespaceType nsType = CommonTools.getNamespaceType(
+									getServiceInfo().getNamespaces(), namespace);
+								if (!CommonTools.isNamespaceTypeInUse(nsType, getServiceInfo().getServiceDescriptor())) {
+									NamespaceType[] allNamespaces = getServiceInfo().getNamespaces().getNamespace();
+									NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(
+										allNamespaces, nsType);
+									getServiceInfo().getNamespaces().setNamespace(cleanedNamespaces);
+								}
+							}
 							// ok, clear out the existing packages and classes
-							// TODO:  Could remove the namespaces added by deriving from caDSR
-							// packages, but those types might be in use elsewhere
 							packageToNamespace.clear();
 							// clear out the types table
 							while (getTypesTable().getRowCount() != 0) {
@@ -737,9 +749,20 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 							PortalResourceManager.getInstance().getGridPortal(),
 							"Package incompatability...", message, choices, choices[1]);
 						if (choice == choices[0]) {
-							// ok, clear out the existing packages and classes
-							// TODO:  Could remove the namespaces added by deriving from caDSR
-							// packages, but those types might be in use elsewhere
+							// try to remove namespaces from the service
+							Iterator nsNameIter = packageToNamespace.values().iterator();
+							while (nsNameIter.hasNext()) {
+								String namespace = (String) nsNameIter.next();
+								NamespaceType nsType = CommonTools.getNamespaceType(
+									getServiceInfo().getNamespaces(), namespace);
+								if (!CommonTools.isNamespaceTypeInUse(nsType, getServiceInfo().getServiceDescriptor())) {
+									NamespaceType[] allNamespaces = getServiceInfo().getNamespaces().getNamespace();
+									NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(
+										allNamespaces, nsType);
+									getServiceInfo().getNamespaces().setNamespace(cleanedNamespaces);
+								}
+							}
+							// clear out the existing packages and classes
 							packageToNamespace.clear();
 							// clear out the types table
 							while (getTypesTable().getRowCount() != 0) {
@@ -802,28 +825,30 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	
 	private void addPackageToModel(Project project, UMLPackageMetadata pack) {
-		// determine if the namespace type already exists in the service
-		String namespaceUri = NamespaceUtils.createNamespaceString(project, pack);
-		NamespaceType nsType = NamespaceUtils.getServiceNamespaceType(getServiceInfo(), namespaceUri);
-		if (nsType == null) {
-			// create a new namespace from the package
-			try {
-				nsType = NamespaceUtils.createNamespaceFromUmlPackage(
-					project, pack, getGME(), getSchemaDir());
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				ErrorDialog.showErrorDialog("Error creating namespace type: " + ex.getMessage());
+		if (!packageToNamespace.containsKey(pack.getName())) {
+			// determine if the namespace type already exists in the service
+			String namespaceUri = NamespaceUtils.createNamespaceString(project, pack);
+			NamespaceType nsType = NamespaceUtils.getServiceNamespaceType(getServiceInfo(), namespaceUri);
+			if (nsType == null) {
+				// create a new namespace from the package
+				try {
+					nsType = NamespaceUtils.createNamespaceFromUmlPackage(
+						project, pack, getGME(), getSchemaDir());
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					ErrorDialog.showErrorDialog("Error creating namespace type: " + ex.getMessage());
+				}
+				
+				if (nsType != null) {
+					// add the new namespace to the service
+					CommonTools.addNamespace(getServiceInfo().getServiceDescriptor(), nsType);
+				}
 			}
-			
 			if (nsType != null) {
-				// add the new namespace to the service
-				CommonTools.addNamespace(getServiceInfo().getServiceDescriptor(), nsType);
+				// map the package to the new namespace and add it to the types tree
+				packageToNamespace.put(pack.getName(), nsType.getNamespace());
+				getTypesTree().addNamespaceType(nsType);
 			}
-		}
-		if (nsType != null) {
-			// map the package to the new namespace and add it to the types tree
-			packageToNamespace.put(pack.getName(), nsType.getNamespace());
-			getTypesTree().addNamespaceType(nsType);
 		}
 	}
 
@@ -846,6 +871,16 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 							// remove the package from the namespace types tree
 							getTypesTree().removeNamespaceType(
 								(String) packageToNamespace.get(selectedPackage.getName()));
+							// see about removing the namespace from the service
+							String namespace = (String) packageToNamespace.get(selectedPackage.getName());
+							NamespaceType nsType = CommonTools.getNamespaceType(
+								getServiceInfo().getNamespaces(), namespace);
+							if (!CommonTools.isNamespaceTypeInUse(nsType, getServiceInfo().getServiceDescriptor())) {
+								NamespaceType[] allNamespaces = getServiceInfo().getNamespaces().getNamespace();
+								NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(
+									allNamespaces, nsType);
+								getServiceInfo().getNamespaces().setNamespace(cleanedNamespaces);
+							}
 							// remove namespace from the packageMapping
 							packageToNamespace.remove(selectedPackage.getName());
 							// store the new information in the extension data
