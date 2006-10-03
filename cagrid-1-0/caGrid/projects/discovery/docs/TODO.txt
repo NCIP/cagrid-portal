@@ -1,10 +1,5 @@
-add discovery scenarios for newly added information
-modify concept based scenarios to look in the additional locations
-
-
-
-
-
+-(DONE) add discovery scenarios for newly added information
+-(DONE) modify concept based scenarios to look in the additional locations
 -(DONE) add concept discovery for operations and service
 -(DONE) add xpath tests against xml with actual results
 -(DONE) clean up exception handling
