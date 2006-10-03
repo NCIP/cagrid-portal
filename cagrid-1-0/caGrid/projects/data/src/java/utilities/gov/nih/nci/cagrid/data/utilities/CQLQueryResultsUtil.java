@@ -155,7 +155,7 @@ public class CQLQueryResultsUtil {
 			TargetAttribute[] typeAttribs = new TargetAttribute[attribs.length];
 			for (int i = 0; i < attribs.length; i++) {
 				TargetAttribute typeAttrib = new TargetAttribute(
-					attribNames[i], attribs[i].toString());
+					attribNames[i], attribs[i] == null ? null : attribs[i].toString());
 				typeAttribs[i] = typeAttrib;
 			}
 			attribResult.setAttribute(typeAttribs);
