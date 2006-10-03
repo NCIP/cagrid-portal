@@ -356,13 +356,7 @@ public class AddGroupWindow extends GridPortalComponent {
 		if (parentStem == null) {
 			parentStem = new JTextField();
 			parentStem.setEditable(false);
-			GridGrouperBaseTreeNode parent = (GridGrouperBaseTreeNode) node.getParent();
-			if (parent instanceof StemTreeNode) {
-				parentStem.setText(((StemTreeNode) parent).getStem()
-						.getDisplayName());
-			} else {
-				parentStem.setText("Root");
-			}
+		    parentStem.setText(this.node.getStem().getDisplayName());
 		}
 		return parentStem;
 	}
