@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.common.portal;
 
-import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -74,27 +73,32 @@ public class ErrorDialog extends JDialog {
 	}
 	
 	
-	private static void addError(String error, String detail) {
+	private static void addError(final String error, final String detail) {
 		if (dialog == null) {
 			dialog = new ErrorDialog(getOwnerFrame());	
 		}
-		dialog.setAlwaysOnTop(true);
-		ErrorContainer container = new ErrorContainer(error, detail);
-		if (errors == null) {
-			errors = new Vector();
-		}
-		errors.add(container);
-		dialog.getErrorList().setListData(errors);
-		if (!dialog.isVisible()) {
-			dialog.setModal(true);
-			dialog.pack();
-			dialog.setSize(500, 450);
-			if (getOwnerFrame() == PortalResourceManager.getInstance().getGridPortal()
-				&& PortalResourceManager.getInstance().getGridPortal() != null) {
-				centerDialog();
+		Runnable r = new Runnable() {
+			public void run() {
+				dialog.setAlwaysOnTop(true);
+				ErrorContainer container = new ErrorContainer(error, detail);
+				if (errors == null) {
+					errors = new Vector();
+				}
+				errors.add(container);
+				dialog.getErrorList().setListData(errors);
+				if (!dialog.isVisible()) {
+					dialog.setModal(true);
+					dialog.pack();
+					dialog.setSize(500, 450);
+					if (getOwnerFrame() == PortalResourceManager.getInstance().getGridPortal()
+						&& PortalResourceManager.getInstance().getGridPortal() != null) {
+						PortalUtils.centerWindow(dialog);
+					}
+					dialog.setVisible(true);
+				}
 			}
-			dialog.setVisible(true);
-		}
+		};
+		SwingUtilities.invokeLater(r);
 	}
 	
 	
@@ -134,17 +138,6 @@ public class ErrorDialog extends JDialog {
 		ex.printStackTrace(new PrintWriter(writer));
 		String detail = writer.getBuffer().toString();
 		addError(message, detail);
-	}
-	
-	
-	private final static void centerDialog() {
-		// Determine the new location of the window
-		int w = PortalResourceManager.getInstance().getGridPortal().getSize().width;
-		int h = PortalResourceManager.getInstance().getGridPortal().getSize().height;
-		int x = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().x;
-		int y = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().y;
-		Dimension dim = dialog.getSize();
-		dialog.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
 	}
 
 	
@@ -340,11 +333,7 @@ public class ErrorDialog extends JDialog {
 
 	public static void main(String[] args) {
 		for (int i = 0; i < 10; i++) {
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					ErrorDialog.showErrorDialog(new Exception("Oh Noes!"));
-				}
-			});			
+			ErrorDialog.showErrorDialog(new Exception("Oh Noes!"));		
 			try {
 				Thread.sleep(1000);
 			} catch (Exception ex) {
