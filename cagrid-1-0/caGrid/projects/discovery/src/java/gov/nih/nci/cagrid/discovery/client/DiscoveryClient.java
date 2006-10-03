@@ -390,7 +390,7 @@ public class DiscoveryClient {
 	 *            the code to look for
 	 * @return
 	 */
-	private String createPermissibleValuePredicatedUMLClass(String value) {
+	protected String createPermissibleValuePredicatedUMLClass(String value) {
 		return com + ":UMLClass[" + com + ":umlAttributeCollection/" + com + ":UMLAttribute/" + com + ":ValueDomain/"
 			+ com + ":enumerationCollection/" + com + ":Enumeration/@permissibleValue='" + value + "']";
 	}
@@ -405,7 +405,7 @@ public class DiscoveryClient {
 	 *            the code to look for
 	 * @return
 	 */
-	private String createConceptPredicatedUMLClass(String conceptCode) {
+	protected String createConceptPredicatedUMLClass(String conceptCode) {
 		return com + ":UMLClass[" + com + ":SemanticMetadata/@conceptCode='" + conceptCode + "'" + " or " + com
 			+ ":umlAttributeCollection/" + com + ":UMLAttribute[" + com + ":SemanticMetadata/@conceptCode='"
 			+ conceptCode + "'" + " or " + com + ":ValueDomain/" + com + ":SemanticMetadata/@conceptCode='"
