@@ -24,7 +24,6 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -709,18 +708,18 @@ public class CommonTools {
 	 * specified. If the property is found to exist in the service, it's value
 	 * is changed to the one specified.
 	 * 
-	 * @param info
+	 * @param desc
 	 *            The service information to set a property on
 	 * @param key
 	 *            The key of the service property to set
 	 * @param value
 	 *            The value to associate with the property key
 	 */
-	public static void setServiceProperty(ServiceInformation info, String key, String value, boolean isFromETC) {
-		ServiceProperties props = info.getServiceProperties();
+	public static void setServiceProperty(ServiceDescription desc, String key, String value, boolean isFromETC) {
+		ServiceProperties props = desc.getServiceProperties();
 		if (props == null) {
 			props = new ServiceProperties();
-			info.setServiceProperties(props);
+			desc.setServiceProperties(props);
 		}
 		ServicePropertiesProperty[] allProperties = props.getProperty();
 		if (allProperties == null) {
@@ -755,9 +754,9 @@ public class CommonTools {
 	 *            The property to check for
 	 * @return True if a property with the key name is found, false otherwise
 	 */
-	public static boolean servicePropertyExists(ServiceInformation info, String key) {
-		if (info.getServiceProperties() != null && info.getServiceProperties().getProperty() != null) {
-			ServicePropertiesProperty[] props = info.getServiceProperties().getProperty();
+	public static boolean servicePropertyExists(ServiceDescription desc, String key) {
+		if (desc.getServiceProperties() != null && desc.getServiceProperties().getProperty() != null) {
+			ServicePropertiesProperty[] props = desc.getServiceProperties().getProperty();
 			for (int i = 0; i < props.length; i++) {
 				if (props[i].getKey().equals(key)) {
 					return true;
@@ -771,7 +770,7 @@ public class CommonTools {
 	/**
 	 * Gets the value of a service property from service information
 	 * 
-	 * @param info
+	 * @param desc
 	 *            The service information to pull a property value from
 	 * @param key
 	 *            The key of the property value to find
@@ -779,9 +778,9 @@ public class CommonTools {
 	 * @throws Exception
 	 *             If no property with the specified key is found
 	 */
-	public static String getServicePropertyValue(ServiceInformation info, String key) throws Exception {
-		if (info.getServiceProperties() != null && info.getServiceProperties().getProperty() != null) {
-			ServicePropertiesProperty[] props = info.getServiceProperties().getProperty();
+	public static String getServicePropertyValue(ServiceDescription desc, String key) throws Exception {
+		if (desc.getServiceProperties() != null && desc.getServiceProperties().getProperty() != null) {
+			ServicePropertiesProperty[] props = desc.getServiceProperties().getProperty();
 			for (int i = 0; i < props.length; i++) {
 				if (props[i].getKey().equals(key)) {
 					return props[i].getValue();
@@ -795,19 +794,19 @@ public class CommonTools {
 	/**
 	 * Removes a service property from service information
 	 * 
-	 * @param info
+	 * @param desc
 	 *            The service information to remove a property from
 	 * @param key
 	 *            The key name of the property to remove
 	 * @return True if the property existed and was removed, false otherwise
 	 */
-	public static boolean removeServiceProperty(ServiceInformation info, String key) {
-		ServicePropertiesProperty[] newProperties = new ServicePropertiesProperty[info.getServiceProperties()
+	public static boolean removeServiceProperty(ServiceDescription desc, String key) {
+		ServicePropertiesProperty[] newProperties = new ServicePropertiesProperty[desc.getServiceProperties()
 			.getProperty().length - 1];
 		int newIndex = 0;
 		boolean removed = false;
-		for (int i = 0; i < info.getServiceProperties().getProperty().length; i++) {
-			ServicePropertiesProperty current = info.getServiceProperties().getProperty(i);
+		for (int i = 0; i < desc.getServiceProperties().getProperty().length; i++) {
+			ServicePropertiesProperty current = desc.getServiceProperties().getProperty(i);
 			if (!current.getKey().equals(key)) {
 				newProperties[newIndex] = current;
 				newIndex++;
@@ -815,7 +814,7 @@ public class CommonTools {
 				removed = true;
 			}
 		}
-		info.getServiceProperties().setProperty(newProperties);
+		desc.getServiceProperties().setProperty(newProperties);
 		return removed;
 	}
 
@@ -926,17 +925,14 @@ public class CommonTools {
 						usedTypes.add(output.getQName());
 					}
 					// exceptions
-					// TODO: This is disabled until exceptions can be typed from
-					// schema
-					/*
-					 * MethodTypeExceptions exceptions = method.getExceptions();
-					 * if (exceptions != null) { for (int e = 0;
-					 * exceptions.getException() != null && e <
-					 * exceptions.getException().length; e++) {
-					 * MethodTypeExceptionsException exception =
-					 * exceptions.getException(e); // TODO: verify exception
-					 * QName against nsuri } }
-					 */
+					MethodTypeExceptions exceptions = method.getExceptions();
+					if (exceptions != null) {
+						for (int e = 0;	exceptions.getException() != null 
+							&& e < exceptions.getException().length; e++) {
+							MethodTypeExceptionsException exception = exceptions.getException(e);
+							usedTypes.add(exception.getQname());
+						}
+					}
 				}
 			}
 		}

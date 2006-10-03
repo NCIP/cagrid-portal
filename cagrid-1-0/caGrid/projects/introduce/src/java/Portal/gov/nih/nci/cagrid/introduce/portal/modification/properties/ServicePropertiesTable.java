@@ -84,7 +84,7 @@ public class ServicePropertiesTable extends PortalBaseTable {
 
 	public void addRow(String key, String value, boolean isFromETC) {
 		// add the property to the service model
-		CommonTools.setServiceProperty(info, key, value, isFromETC);
+		CommonTools.setServiceProperty(info.getServiceDescriptor(), key, value, isFromETC);
 
 		// add the row to the GUI
 		refreshView();
@@ -125,7 +125,7 @@ public class ServicePropertiesTable extends PortalBaseTable {
 		int oldSelectedRow = getSelectedRow();
 		// remove the row from the model
 		String removeKey = info.getServiceProperties().getProperty(oldSelectedRow).getKey();
-		CommonTools.removeServiceProperty(info, removeKey);
+		CommonTools.removeServiceProperty(info.getServiceDescriptor(), removeKey);
 
 		// update GUI
 		refreshView();
