@@ -21,6 +21,8 @@
 
 	<!-- call the test target for each project and aggregates the log resutls  -->
 	<target name="test" depends="instrument">
+		<property name="test" value="*Test"/>
+		
 		<mkdir dir="${temp.dir}"/>
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<echo message="Test source dir: ${test.src.dir}" />
@@ -49,8 +51,8 @@
 					<exclude name="**/*Abstract*.java" />
 					<exclude name="**/WorkflowTest.java" />
 					<!--<exclude name="**/GridGrouperTest.java" />-->
-					<include name="**/*Test.java" />
-					<include name="**/*TestCase.java" />
+					<include name="**/${test}.java" />
+					<!-- <include name="**/*TestCase.java" /> -->
 				</fileset>
 			</batchtest>
 		</junit>

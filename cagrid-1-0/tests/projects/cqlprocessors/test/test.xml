@@ -21,6 +21,8 @@
 
 	<!-- call the test target for each project and aggregates the log resutls  -->
 	<target name="test" depends="instrument">
+		<property name="test" value="*Test"/>
+
 		<mkdir dir="${temp.dir}"/>
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<echo message="Test source dir: ${test.src.dir}" />
@@ -44,8 +46,8 @@
 			<batchtest fork="yes" haltonfailure="true" haltonerror="true" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
 					<exclude name="**/*Abstract*.java" />
-					<include name="**/*Test.java" />
-					<include name="**/*TestCase.java" />
+					<include name="**/${test}.java" />
+					<!-- <include name="**/*TestCase.java" /> -->
 				</fileset>
 			</batchtest>
 		</junit>

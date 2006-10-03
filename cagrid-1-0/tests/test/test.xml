@@ -10,6 +10,8 @@
 	<!-- Call test for each project and aggregates the log resutls       -->
 	<!-- =============================================================== -->
 	<target name="test" depends="prepare,createDartTestFiles" description="Test all the projects.">
+		<property name="test" value="*Test"/>
+
 		<!-- Clean out old logs first -->
 		<mkdir dir="${junit.results.dir}"/>
 		<delete>
@@ -27,6 +29,7 @@
 						<ant inheritall="false" dir="projects/@{project.name}" antfile="build.xml" target="test">
 							<property name="junit.results.dir" value="${junit.results.dir}" />
 							<property name="dont.instrument" value="${dont.instrument}"/>
+							<property name="test" value="${test}"/>
 						</ant>
 					</try>
 					<catch>
