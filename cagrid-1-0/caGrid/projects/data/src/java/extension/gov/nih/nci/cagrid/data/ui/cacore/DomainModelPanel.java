@@ -537,6 +537,8 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			}
 			info.setPackages(packages);
 			info.setServiceUrl(getCaDsrBrowser().getCadsr().getText());
+			info.setProjectLongName(lastSelectedProject.getLongName());
+			info.setProjectVersion(lastSelectedProject.getVersion());
 			data.setCadsrInformation(info);
 			ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
 		} catch (Exception ex) {
