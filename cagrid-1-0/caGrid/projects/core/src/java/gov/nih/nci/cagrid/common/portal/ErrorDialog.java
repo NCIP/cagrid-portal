@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.common.portal;
 
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,6 +10,7 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -90,10 +92,8 @@ public class ErrorDialog extends JDialog {
 					dialog.setModal(true);
 					dialog.pack();
 					dialog.setSize(500, 450);
-					if (getOwnerFrame() == PortalResourceManager.getInstance().getGridPortal()
-						&& PortalResourceManager.getInstance().getGridPortal() != null) {
-						PortalUtils.centerWindow(dialog);
-					}
+					// attempt to center the dialog
+					centerDialog();
 					dialog.setVisible(true);
 				}
 			}
@@ -329,16 +329,35 @@ public class ErrorDialog extends JDialog {
 		}
 		return errorsSplitPane;
 	}
+	
+	
+	private static void centerDialog() {
+		// Determine the new location of the window
+		Frame owner = getOwnerFrame();
+		if (owner != null) {
+			int w = owner.getSize().width;
+			int h = owner.getSize().height;
+			int x = owner.getLocationOnScreen().x;
+			int y = owner.getLocationOnScreen().y;
+			Dimension dim = dialog.getSize();
+			dialog.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);			
+		}
+	}
 
 
 	public static void main(String[] args) {
+		JFrame frame = new JFrame();
+		frame.setTitle("HELLO THERE");
+		frame.setSize(new Dimension(400,400));
+		frame.setVisible(true);
+		ErrorDialog.setOwnerFrame(frame);
 		for (int i = 0; i < 10; i++) {
-			ErrorDialog.showErrorDialog(new Exception("Oh Noes!"));		
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(5000);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
+			ErrorDialog.showErrorDialog(new Exception("Oh Noes!"));		
 		}
 	}
 	
