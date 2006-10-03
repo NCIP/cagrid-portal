@@ -21,6 +21,10 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
 	public final static ImageIcon getResyncIcon() {
 		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/view-refresh.png"));
 	}
+	
+	public final static ImageIcon getKeyIcon() {
+		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/key.png"));
+	}
 
 
 	public final static ImageIcon getServiceIcon() {
@@ -65,11 +69,6 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
 
 	public final static ImageIcon getRemoveMethodIcon() {
 		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/page_delete.png"));
-	}
-
-
-	public final static ImageIcon getCredentialsIcon() {
-		return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/BCard.gif"));
 	}
 
 
