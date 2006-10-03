@@ -186,16 +186,7 @@ public class CommonTools {
 
 
 	public static String getAntDeployTomcatCommand(String buildFileDir) throws Exception {
-		String dir = buildFileDir;
-		File dirF = new File(dir);
-		if (!dirF.isAbsolute()) {
-			dir = buildFileDir + File.separator + dir;
-		}
-		dir = fixPathforOS(dir);
-		String cmd = " -Dservice.properties.file=" + dir + File.separator
-			+ IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES;
-		cmd = getAntCommand("deployTomcat", buildFileDir) + " " + cmd;
-		return cmd;
+		return createDeploymentCommand(buildFileDir, "deployTomcat");
 	}
 
 
@@ -211,16 +202,21 @@ public class CommonTools {
 
 
 	public static String getAntDeployGlobusCommand(String buildFileDir) throws Exception {
+		return createDeploymentCommand(buildFileDir, "deployGlobus");
+	}
+
+
+	private static String createDeploymentCommand(String buildFileDir, String deployTarget) throws Exception {
 		String dir = buildFileDir;
 		File dirF = new File(dir);
 		if (!dirF.isAbsolute()) {
 			dir = buildFileDir + File.separator + dir;
 		}
 		dir = fixPathforOS(dir);
-
-		String cmd = " -Dservice.properties.file=" + buildFileDir + File.separator
+		String cmd = " -Dservice.properties.file=" + dir + File.separator
 			+ IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES;
-		cmd = getAntCommand("deployGlobus", buildFileDir) + " " + cmd;
+
+		cmd = getAntCommand(deployTarget, buildFileDir) + " " + cmd;
 		return cmd;
 	}
 
@@ -723,8 +719,8 @@ public class CommonTools {
 		}
 		ServicePropertiesProperty[] allProperties = props.getProperty();
 		if (allProperties == null) {
-			allProperties = new ServicePropertiesProperty[] {new ServicePropertiesProperty(
-				new Boolean(isFromETC), key, value)};
+			allProperties = new ServicePropertiesProperty[]{new ServicePropertiesProperty(new Boolean(isFromETC), key,
+				value)};
 		} else {
 			boolean found = false;
 			for (int i = 0; i < allProperties.length; i++) {
@@ -736,7 +732,7 @@ public class CommonTools {
 				}
 			}
 			if (!found) {
-				allProperties = (ServicePropertiesProperty[]) Utils.appendToArray(allProperties, 
+				allProperties = (ServicePropertiesProperty[]) Utils.appendToArray(allProperties,
 					new ServicePropertiesProperty(new Boolean(isFromETC), key, value));
 			}
 		}
@@ -866,8 +862,7 @@ public class CommonTools {
 					// exceptions
 					MethodTypeExceptions exceptions = method.getExceptions();
 					if (exceptions != null) {
-						for (int e = 0;	exceptions.getException() != null 
-							&& e < exceptions.getException().length; e++) {
+						for (int e = 0; exceptions.getException() != null && e < exceptions.getException().length; e++) {
 							MethodTypeExceptionsException exception = exceptions.getException(e);
 							if (exception.getQname().getNamespaceURI().equals(namespace)) {
 								return true;
@@ -927,8 +922,7 @@ public class CommonTools {
 					// exceptions
 					MethodTypeExceptions exceptions = method.getExceptions();
 					if (exceptions != null) {
-						for (int e = 0;	exceptions.getException() != null 
-							&& e < exceptions.getException().length; e++) {
+						for (int e = 0; exceptions.getException() != null && e < exceptions.getException().length; e++) {
 							MethodTypeExceptionsException exception = exceptions.getException(e);
 							usedTypes.add(exception.getQname());
 						}
