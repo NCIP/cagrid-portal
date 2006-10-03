@@ -13,8 +13,6 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
-import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
-import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
@@ -232,22 +230,13 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	
 	
 	private void modifyServiceProperties(ServiceDescription desc) throws Exception {
-		ServicePropertiesProperty prop = new ServicePropertiesProperty();
-		prop.setKey(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-		prop.setValue(""); // empty value to be populated later
-		ServiceProperties serviceProperties = desc.getServiceProperties();
-		if (serviceProperties == null) {
-			serviceProperties = new ServiceProperties();
-		}
-		ServicePropertiesProperty[] allProps = serviceProperties.getProperty();
-		if (allProps != null) {
-			ServicePropertiesProperty[] tmpProps = new ServicePropertiesProperty[allProps.length + 1];
-			System.arraycopy(allProps, 0, tmpProps, 0, allProps.length);
-			tmpProps[tmpProps.length - 1] = prop;
+		// does the query processor class property exist?
+		if (!CommonTools.servicePropertyExists(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
+			CommonTools.setServiceProperty(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, "", false);
 		} else {
-			allProps = new ServicePropertiesProperty[] {prop};
+			String value = CommonTools.getServicePropertyValue(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+			System.out.println(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY 
+				+ " property is already defined as " + value);
 		}
-		serviceProperties.setProperty(allProps);
-		desc.setServiceProperties(serviceProperties);
 	}
 }

@@ -196,7 +196,7 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 					return;
 				}
 				// add the query processor class name
-				CommonTools.setServiceProperty(getServiceInformation(), 
+				CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
 					DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, SDK_QUERY_PROCESSOR, false);
 				sdkInitDone = true;
 			}

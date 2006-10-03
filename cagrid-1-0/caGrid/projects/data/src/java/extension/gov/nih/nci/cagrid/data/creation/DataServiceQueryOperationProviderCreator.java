@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.data.creation;
 
-import gov.nih.nci.cadsr.domain.ValueDomain;
-import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
@@ -23,7 +21,6 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
@@ -312,6 +309,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		if (currentProps != null) {			
 			Collections.addAll(allProps, currentProps);
 		}
+		
 		allProps.add(qpClassProp);
 		allProps.add(cqlValidatorProp);
 		allProps.add(dmValidatorProp);

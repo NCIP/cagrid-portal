@@ -97,10 +97,10 @@ public class ClassBrowserPanel extends JPanel {
 		populateClassDropdown();
 		// set the selected query processor class
 		if (CommonTools.servicePropertyExists(
-			serviceInfo, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
+			serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
 			try {
 				String qpClassname = CommonTools.getServicePropertyValue(
-					serviceInfo, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+					serviceInfo.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
 				getClassSelectionComboBox().setSelectedItem(qpClassname);
 			} catch (Exception ex) {
 				ex.printStackTrace();

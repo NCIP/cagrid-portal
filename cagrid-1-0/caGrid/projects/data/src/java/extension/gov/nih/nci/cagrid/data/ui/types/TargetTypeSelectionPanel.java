@@ -452,8 +452,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	private void setProcessorClass(String className) throws Exception {
 		if (className != null) {
-			CommonTools.setServiceProperty(
-				getServiceInfo(), DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false);
+			CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(), 
+				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false);
 			// blow away the query processor class properties from the extension data
 			Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
 			data.setCQLProcessorConfig(null);
@@ -899,16 +899,17 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			cqlSyntaxValidationCheckBox.setText("CQL Syntax");
 			cqlSyntaxValidationCheckBox.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
-					CommonTools.setServiceProperty(getServiceInfo(), DataServiceConstants.VALIDATE_CQL_FLAG, 
-						String.valueOf(getCqlSyntaxValidationCheckBox().isSelected()), false);
+					CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(),
+						DataServiceConstants.VALIDATE_CQL_FLAG,	String.valueOf(
+							getCqlSyntaxValidationCheckBox().isSelected()), false);
 				}
 			});
 			// set the check box selection
-			if (CommonTools.servicePropertyExists(getServiceInfo(), DataServiceConstants.VALIDATE_CQL_FLAG)) {
+			if (CommonTools.servicePropertyExists(getServiceInfo().getServiceDescriptor(), DataServiceConstants.VALIDATE_CQL_FLAG)) {
 				try {
 					cqlSyntaxValidationCheckBox.setSelected(Boolean.valueOf(
 						CommonTools.getServicePropertyValue(
-							getServiceInfo(), DataServiceConstants.VALIDATE_CQL_FLAG)).booleanValue());
+							getServiceInfo().getServiceDescriptor(), DataServiceConstants.VALIDATE_CQL_FLAG)).booleanValue());
 				} catch (Exception ex) {
 					System.err.println("Error getting service property value for " + DataServiceConstants.VALIDATE_CQL_FLAG);
 					ex.printStackTrace();
@@ -930,16 +931,16 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			domainModelValidationCheckBox.setText("Domain Model");
 			domainModelValidationCheckBox.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
-					CommonTools.setServiceProperty(getServiceInfo(), DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, 
+					CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(), DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, 
 						String.valueOf(getDomainModelValidationCheckBox().isSelected()), false);
 				}
 			});
 			// set the check box selection
-			if (CommonTools.servicePropertyExists(getServiceInfo(), DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)) {
+			if (CommonTools.servicePropertyExists(getServiceInfo().getServiceDescriptor(), DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)) {
 				try {
 					domainModelValidationCheckBox.setSelected(Boolean.valueOf(
 						CommonTools.getServicePropertyValue(
-							getServiceInfo(), DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)).booleanValue());
+							getServiceInfo().getServiceDescriptor(), DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)).booleanValue());
 				} catch (Exception ex) {
 					System.err.println("Error getting service property value for " + DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG);
 					ex.printStackTrace();

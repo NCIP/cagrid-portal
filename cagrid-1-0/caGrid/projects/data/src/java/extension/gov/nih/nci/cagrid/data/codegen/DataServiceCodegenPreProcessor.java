@@ -262,7 +262,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		}
 
 		// verify we've got a query processor class configured
-		String qpClassname = CommonTools.getServicePropertyValue(info,
+		String qpClassname = CommonTools.getServicePropertyValue(info.getServiceDescriptor(),
 			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
 		if (qpClassname != null && !qpClassname.equals(getQueryProcessorStubClassName(info))) {
 			// edit the stub to include a note RE: the stub can be removed

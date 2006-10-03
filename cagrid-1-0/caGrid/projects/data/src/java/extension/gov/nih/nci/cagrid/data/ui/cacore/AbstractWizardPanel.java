@@ -97,6 +97,14 @@ public abstract class AbstractWizardPanel extends JPanel {
 	}
 	
 	
+	protected void setWizardComplete(boolean done) {
+		Iterator i = listeners.iterator();
+		while (i.hasNext()) {
+			((ButtonEnableListener) i.next()).setWizardDone(done);
+		}
+	}
+	
+	
 	void addButtonEnableListener(ButtonEnableListener l) {
 		listeners.add(l);
 	}

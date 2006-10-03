@@ -27,6 +27,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.GridServiceFactory;
@@ -62,6 +64,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 
 	public void update() {
 		populatePackageSchemasTable();
+		
 	}
 	
 	
@@ -222,7 +225,21 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 	 */
 	private PackageSchemasTable getPackageNamespaceTable() {
 		if (packageNamespaceTable == null) {
-			packageNamespaceTable = new PackageSchemasTable(); 
+			packageNamespaceTable = new PackageSchemasTable();
+			packageNamespaceTable.getModel().addTableModelListener(new TableModelListener() {
+				public void tableChanged(TableModelEvent e) {
+					if (e.getType() == TableModelEvent.UPDATE) {
+						setWizardComplete(true);
+						for (int i = 0; i < getPackageNamespaceTable().getRowCount(); i++) {
+							String status = (String) getPackageNamespaceTable().getValueAt(i, 2);
+							if (!status.equals(PackageSchemasTable.STATUS_SCHEMA_FOUND)) {
+								setWizardComplete(false);
+								break;
+							}
+						}
+					}
+				}
+			});
 		}
 		return packageNamespaceTable;
 	}
