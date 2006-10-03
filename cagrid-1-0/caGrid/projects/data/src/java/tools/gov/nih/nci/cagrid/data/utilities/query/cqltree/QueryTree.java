@@ -45,6 +45,7 @@ public class QueryTree extends JTree {
 	
 	
 	public void setQuery(CQLQuery query) {
+		rootNode.removeAllChildren();
 		QueryTreeNode queryNode = new QueryTreeNode(query);
 		rootNode.add(queryNode);
 		refreshTree();
