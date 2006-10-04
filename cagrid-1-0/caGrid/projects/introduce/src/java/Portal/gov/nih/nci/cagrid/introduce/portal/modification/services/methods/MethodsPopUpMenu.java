@@ -61,10 +61,7 @@ public class MethodsPopUpMenu extends JPopupMenu {
 		return addMethodMenuItem;
 	}
 
-
 	public static void addMethod(MethodsTypeTreeNode node) {
-		System.out.println("adding a new method");
-
 		MethodType method = new MethodType();
 		method.setName("newMethod");
 		MethodTypeOutput output = new MethodTypeOutput();
