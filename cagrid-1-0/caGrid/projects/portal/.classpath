@@ -109,5 +109,6 @@
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
+	<classpathentry kind="lib" path="lib/nocopy/jsp-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
