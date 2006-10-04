@@ -98,7 +98,6 @@ public class SyncTools {
 			this.info = info;
 			this.excludedSet = excludedSet;
 			symbolTables = new ArrayList();
-			generateSymbolTable(excludedSet);
 		}
 
 
@@ -148,7 +147,7 @@ public class SyncTools {
 		}
 
 
-		public void generateSymbolTable(Set excludeSet) throws Exception {
+		public void generateSymbolTable() throws Exception {
 
 			if (info.getServices() != null && info.getServices().getService() != null) {
 				for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
@@ -163,7 +162,7 @@ public class SyncTools {
 
 					List excludeList = new ArrayList();
 					// one hammer(List), one solution
-					excludeList.addAll(excludeSet);
+					excludeList.addAll(this.excludedSet);
 					parser.setNamespaceExcludes(excludeList);
 
 					parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
@@ -354,6 +353,7 @@ public class SyncTools {
 
 		// STEP 5: run axis to get the symbol table
 		MultiServiceSymbolTable table = new MultiServiceSymbolTable(info, excludeSet);
+		table.generateSymbolTable();
 
 		// STEP 6: fill out the object model with the generated classnames where
 		// the user didn't specify them explicitly
@@ -415,7 +415,7 @@ public class SyncTools {
 	private void populateClassnames(ServiceInformation info, MultiServiceSymbolTable table)
 		throws MalformedNamespaceException, SynchronizationException {
 
-		//table.dump(System.out);
+		// table.dump(System.out);
 		// get the classnames from the axis symbol table
 		// try {
 		// System.out.println("\n\nSTART OF NAMESPACES\n");
@@ -494,7 +494,8 @@ public class SyncTools {
 											+ inputParam.getName());
 									} else if (mtype.isIsImported()) {
 										qname = new QName(mtype.getImportInformation().getNamespace(), ">>"
-											+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>" + inputParam.getName());
+											+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
+											+ inputParam.getName());
 									} else {
 										qname = new QName(service.getNamespace(), ">>"
 											+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
