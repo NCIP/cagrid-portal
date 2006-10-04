@@ -21,8 +21,6 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
-import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
-import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
@@ -35,7 +33,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -284,41 +281,22 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 	
 	
 	private void modifyServiceProperties(ServiceDescription desc) throws CreationExtensionException {
-		ServicePropertiesProperty qpClassProp = new ServicePropertiesProperty();
-		qpClassProp.setKey(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-		qpClassProp.setValue(""); // empty value to be populated later
-		ServicePropertiesProperty cqlValidatorProp = new ServicePropertiesProperty();
-		cqlValidatorProp.setKey(DataServiceConstants.CQL_VALIDATOR_CLASS);
-		cqlValidatorProp.setValue(DEFAULT_CQL_VALIDATOR_CLASS);
-		ServicePropertiesProperty dmValidatorProp = new ServicePropertiesProperty();
-		dmValidatorProp.setKey(DataServiceConstants.DOMAIN_MODEL_VALIDATOR_CLASS);
-		dmValidatorProp.setValue(DEFAULT_DOMAIN_MODEL_VALIDATOR);
-		ServicePropertiesProperty useCqlValidation = new ServicePropertiesProperty();
-		useCqlValidation.setKey(DataServiceConstants.VALIDATE_CQL_FLAG);
-		useCqlValidation.setValue(String.valueOf(false));
-		ServicePropertiesProperty useDomainValidation = new ServicePropertiesProperty();
-		useDomainValidation.setKey(DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG);
-		useDomainValidation.setValue(String.valueOf(false));
-		
-		ServiceProperties serviceProperties = desc.getServiceProperties();
-		if (serviceProperties == null) {
-			serviceProperties = new ServiceProperties();
+		// does the query processor class property exist?
+		if (!CommonTools.servicePropertyExists(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
+			CommonTools.setServiceProperty(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, "", false);
+		} else {
+			try {
+				String value = CommonTools.getServicePropertyValue(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+				System.out.println(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY 
+					+ " property is already defined as " + value);
+			} catch (Exception ex) {
+				// ?
+			}
 		}
-		List allProps = new ArrayList();
-		ServicePropertiesProperty[] currentProps = serviceProperties.getProperty();
-		if (currentProps != null) {			
-			Collections.addAll(allProps, currentProps);
-		}
-		
-		allProps.add(qpClassProp);
-		allProps.add(cqlValidatorProp);
-		allProps.add(dmValidatorProp);
-		allProps.add(useCqlValidation);
-		allProps.add(useDomainValidation);
-		currentProps = new ServicePropertiesProperty[allProps.size()];
-		allProps.toArray(currentProps);
-		serviceProperties.setProperty(currentProps);
-		desc.setServiceProperties(serviceProperties);
+		CommonTools.setServiceProperty(desc, DataServiceConstants.CQL_VALIDATOR_CLASS, DEFAULT_CQL_VALIDATOR_CLASS, false);
+		CommonTools.setServiceProperty(desc, DataServiceConstants.DOMAIN_MODEL_VALIDATOR_CLASS, DEFAULT_DOMAIN_MODEL_VALIDATOR, false);
+		CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_CQL_FLAG, String.valueOf(false), false);
+		CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, String.valueOf(false), false);
 	}
 	
 	
