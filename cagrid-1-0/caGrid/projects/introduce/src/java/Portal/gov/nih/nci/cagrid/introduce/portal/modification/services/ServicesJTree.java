@@ -7,13 +7,16 @@ import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodT
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertyTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.portal.preferences.PreferencesTypeTreeNode;
 
+import java.awt.CardLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -32,17 +35,23 @@ public class ServicesJTree extends JTree {
 
 	private ServiceInformation info;
 
+	private JPanel optionsPanel;
 
-	public ServicesJTree(ServicesType services, ServiceInformation info) {
+	private DefaultMutableTreeNode currentNode = null;
+
+
+	public ServicesJTree(ServicesType services, ServiceInformation info, JPanel optionsPanel) {
+		this.optionsPanel = optionsPanel;
 		setCellRenderer(new ServicesTreeRenderer());
 		setServices(services, info);
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
 				ServicesJTree.this.setSelectionRow(ServicesJTree.this.getRowForLocation(e.getX(), e.getY()));
-				if (SwingUtilities.isRightMouseButton(e)) {
-					List nodes = ServicesJTree.this.getSelectedNodes();
-					if (nodes.size() >= 1) {
+				List nodes = ServicesJTree.this.getSelectedNodes();
+				if (nodes.size() >= 1) {
+					ServicesJTree.this.currentNode = (DefaultMutableTreeNode) nodes.get(0);
+					if (SwingUtilities.isRightMouseButton(e)) {
 						if (nodes.get(0) instanceof MethodsTypeTreeNode) {
 							((MethodsTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(), e.getX(),
 								e.getY());
@@ -62,11 +71,33 @@ public class ServicesJTree extends JTree {
 							((ServiceTypeTreeNode) nodes.get(0)).getPopUpMenu().show(e.getComponent(), e.getX(),
 								e.getY());
 						}
+					} else if (SwingUtilities.isLeftMouseButton(e)) {
+
+						if (nodes.get(0) instanceof MethodsTypeTreeNode) {
+
+						} else if (nodes.get(0) instanceof MethodTypeTreeNode) {
+
+						} else if (nodes.get(0) instanceof ResourcePropertiesTypeTreeNode) {
+
+						} else if (nodes.get(0) instanceof ServicesTypeTreeNode) {
+							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
+								ServicesJTree.this.optionsPanel, "services");
+						} else if (nodes.get(0) instanceof ResourcePropertyTypeTreeNode) {
+
+						} else if (nodes.get(0) instanceof ServiceTypeTreeNode) {
+							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
+								ServicesJTree.this.optionsPanel, "service");
+						}
 					}
 				}
 			}
 		});
 
+	}
+
+
+	public ServicesTypeTreeNode getRoot() {
+		return root;
 	}
 
 
@@ -90,7 +121,7 @@ public class ServicesJTree extends JTree {
 	public void setServices(ServicesType ns, ServiceInformation info) {
 		this.services = ns;
 		this.info = info;
-		
+
 		removeAllNodes(root);
 		((DefaultTreeModel) this.getModel()).setRoot(null);
 		this.root = new ServicesTypeTreeNode(info);
@@ -101,14 +132,7 @@ public class ServicesJTree extends JTree {
 
 
 	public DefaultMutableTreeNode getCurrentNode() {
-		TreePath currentSelection = this.getSelectionPath();
-		if (currentSelection != null) {
-			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection.getLastPathComponent();
-			// if (currentNode != this.root) {
-			return currentNode;
-			// }
-		}
-		return null;
+		return currentNode;
 	}
 
 

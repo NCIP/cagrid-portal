@@ -991,7 +991,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	}
 
 
-	/**
+	/** 
 	 * This method initializes configureTabbedPane
 	 * 
 	 * @return javax.swing.JTabbedPane
