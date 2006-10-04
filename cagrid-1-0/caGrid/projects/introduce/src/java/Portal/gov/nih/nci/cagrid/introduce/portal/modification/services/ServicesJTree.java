@@ -77,10 +77,10 @@ public class ServicesJTree extends JTree {
 								ServicesJTree.this.optionsPanel, "methods");
 						} else if (nodes.get(0) instanceof MethodTypeTreeNode) {
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
-								ServicesJTree.this.optionsPanel, "blank");
+								ServicesJTree.this.optionsPanel, "method");
 						} else if (nodes.get(0) instanceof ResourcePropertiesTypeTreeNode) {
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
-								ServicesJTree.this.optionsPanel, "blank");
+								ServicesJTree.this.optionsPanel, "resources");
 						} else if (nodes.get(0) instanceof ServicesTypeTreeNode) {
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
 								ServicesJTree.this.optionsPanel, "services");

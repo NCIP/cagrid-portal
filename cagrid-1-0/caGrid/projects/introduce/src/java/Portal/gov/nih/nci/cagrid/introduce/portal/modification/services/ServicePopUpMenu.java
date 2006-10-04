@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
-import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 
@@ -13,7 +12,6 @@ import javax.swing.JPopupMenu;
 
 public class ServicePopUpMenu extends JPopupMenu {
 
-	private JMenuItem removeMethodMenuItem = null;
 	ServiceTypeTreeNode node;
 	private JMenuItem modificationMenuItem = null;
 
@@ -32,29 +30,7 @@ public class ServicePopUpMenu extends JPopupMenu {
 	 * This method initializes this
 	 */
 	private void initialize() {
-		this.add(getRemoveMethodMenuItem());
 		this.add(getModificationMenuItem());
-	}
-
-
-	/**
-	 * This method initializes removeMethodMenuItem
-	 * 
-	 * @return javax.swing.JMenuItem
-	 */
-	private JMenuItem getRemoveMethodMenuItem() {
-		if (removeMethodMenuItem == null) {
-			removeMethodMenuItem = new JMenuItem();
-			removeMethodMenuItem.setText("Remove Service Context");
-			removeMethodMenuItem.setIcon(PortalLookAndFeel.getRemoveIcon());
-			removeMethodMenuItem.addMouseListener(new MouseAdapter() {
-				public void mousePressed(MouseEvent e) {
-					super.mousePressed(e);
-					((ServicesTypeTreeNode) node.getParent()).removeResource(node);
-				}
-			});
-		}
-		return removeMethodMenuItem;
 	}
 
 
