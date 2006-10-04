@@ -35,7 +35,7 @@ public class GlobusHelper
 	private boolean secure;
 	private File tmpGlobusLocation;
 	private Process p;
-	private File securityDescriptor = new File("security-descriptor.xml");
+	private File securityDescriptor;
 	private Exception isGlobusRunningException;
 	
 	public GlobusHelper() 
@@ -59,6 +59,9 @@ public class GlobusHelper
 		
 		this.secure = secure;
 		this.tmpDir = tmpDir;
+		this.securityDescriptor = new File(
+			System.getProperty("globus.securitydescriptor", "security-descriptor.xml")
+		);
 	}
 	
 	public void createTempGlobus() 
