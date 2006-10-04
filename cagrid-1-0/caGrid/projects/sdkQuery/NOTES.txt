@@ -18,6 +18,9 @@ CoreQueryProcessor / CQL2DetachedCriteria:
 	-- Try the HQLCoreQueryProcessor, which uses the CQL2HQL helper to make HQL queries
 
 CQL2HQL doesn't properly handle queries begining on the 'many' end of an association (eg Gene's chromosomeCollection).  Valid HQL is generated, but the query will never return true
-	-- Fix In Progress
+	-- Fix In Progress (First cut 2006-10-04)
+	-- http://forum.hibernate.org/viewtopic.php?t=947247&highlight=multiple+joins sums up the issue with using joins to solve the problem.
+		-- If only we used a more recent version of Hibernate... hmmmm
+	
 	
 Running multiple instances of a DataService using the SDK query processor in the same container is impossible due to a bug in the caCORE.  Please see http://gforge.nci.nih.gov/tracker/index.php?func=detail&aid=2784&group_id=38&atid=279 for more information.
