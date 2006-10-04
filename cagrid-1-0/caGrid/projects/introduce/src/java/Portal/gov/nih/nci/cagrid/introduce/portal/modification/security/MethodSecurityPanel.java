@@ -27,7 +27,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -930,11 +929,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	 */
 	private GridGrouperExpressionEditor getGridGrouper() {
 		if (gridGrouper == null) {
-			ArrayList list = new ArrayList();
-			// TODO: REMOVE THIS HARDCODE
-			list.add("https://cagrid02.bmi.ohio-state.edu:8443/wsrf/services/cagrid/GridGrouper");
-			gridGrouper = new GridGrouperExpressionEditor(list, false);
-			gridGrouper = new GridGrouperExpressionEditor(list, false);
+			gridGrouper = new GridGrouperExpressionEditor(GridGrouperURLManager.getGridGroupers(), GridGrouperURLManager.getLoadOnStartup());
 			gridGrouper.setName(GRID_GROUPER_AUTHORIZATION);
 		}
 		return gridGrouper;

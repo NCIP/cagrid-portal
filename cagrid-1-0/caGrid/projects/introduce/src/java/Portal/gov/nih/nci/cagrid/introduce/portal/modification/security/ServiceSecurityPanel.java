@@ -31,7 +31,6 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
-import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -1216,10 +1215,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	 */
 	private GridGrouperExpressionEditor getGridGrouper() {
 		if (gridGrouper == null) {
-			ArrayList list = new ArrayList();
-			// TODO: REMOVE THIS HARDCODE
-			list.add("https://cagrid02.bmi.ohio-state.edu:8443/wsrf/services/cagrid/GridGrouper");
-			gridGrouper = new GridGrouperExpressionEditor(list, false);
+			gridGrouper = new GridGrouperExpressionEditor(GridGrouperURLManager.getGridGroupers(), GridGrouperURLManager.getLoadOnStartup());
 			gridGrouper.setName(GRID_GROUPER_AUTHORIZATION);
 		}
 		return gridGrouper;
