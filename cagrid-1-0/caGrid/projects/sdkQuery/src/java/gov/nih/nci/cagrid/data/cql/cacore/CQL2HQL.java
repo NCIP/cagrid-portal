@@ -89,13 +89,14 @@ public class CQL2HQL {
 		hql.append("select count(");
 		if (mods.getDistinctAttribute() != null) {
 			// counting distinct attributes
-			hql.append("distinct ").append(mods.getDistinctAttribute()).append(") ");
-			processObject(hql, target);
+			hql.append("distinct ").append(TARGET_ALIAS);
+			hql.append(".").append(mods.getDistinctAttribute()).append(") ");
+			processTarget(hql, target, false);
 		} else if (mods.getAttributeNames() != null) {
 			// counting objects where any one of the attribs is not null
 			hql.append("*) ");
 			// process the target object normally
-			processObject(hql, target);
+			processTarget(hql, target, false);
 			// only add a where statement if the target has no child restrictions
 			boolean addWhereStatement = target.getAssociation() == null 
 				&& target.getAttribute() == null && target.getGroup()== null;
@@ -108,6 +109,7 @@ public class CQL2HQL {
 			StringBuilder attribClause = new StringBuilder();
 			attribClause.append("(");
 			for (int i = 0; i < mods.getAttributeNames().length; i++) {
+				attribClause.append(TARGET_ALIAS).append(".");
 				attribClause.append(mods.getAttributeNames(i));
 				attribClause.append(" is not null");
 				if (i + 1 < mods.getAttributeNames().length) {
@@ -121,12 +123,7 @@ public class CQL2HQL {
 			// counting unique objects
 			// need to use an alias in the count clause
 			hql.append(TARGET_ALIAS).append(") ");
-			int currentIndex = hql.length();
-			processObject(hql, target);
-			// add the alias to the object
-			int targetClassIndex = hql.indexOf(target.getName(), currentIndex);
-			targetClassIndex += target.getName().length();
-			hql.insert(targetClassIndex, " " + TARGET_ALIAS + " ");
+			processTarget(hql, target, false);
 		}
 	}
 	
@@ -145,13 +142,13 @@ public class CQL2HQL {
 	private static void processAttributeQuery(StringBuilder hql, QueryModifier mods, Object target) throws QueryProcessingException {
 		if (mods.getDistinctAttribute() != null) {
 			// counting distinct attributes
-			hql.append("select distinct ").append(mods.getDistinctAttribute());
+			hql.append("select distinct ").append(TARGET_ALIAS).append(".").append(mods.getDistinctAttribute());
 		} else {
 			String[] names = mods.getAttributeNames();
 			if (names != null) {
 				hql.append("select ");
 				for (int i = 0; i < names.length; i++) {
-					hql.append(names[i]);
+					hql.append(TARGET_ALIAS).append(".").append(names[i]);
 					if (i + 1 < names.length) {
 						hql.append(", ");
 					}
@@ -159,7 +156,7 @@ public class CQL2HQL {
 			}
 		}
 		hql.append(" ");
-		processObject(hql, target);
+		processTarget(hql, target, false);
 	}
 	
 	
@@ -167,8 +164,8 @@ public class CQL2HQL {
 		throws QueryProcessingException {
 		String objName = target.getName();
 		hql.append("From ").append(objName);
-		if (eliminateSubclasses) {
-			hql.append(" as ").append(TARGET_ALIAS);
+		hql.append(" as ").append(TARGET_ALIAS);
+		if (eliminateSubclasses) {			
 			hql.append(" where ").append(TARGET_ALIAS).append(".class = ").append(objName);
 		}
 		if (target.getAttribute() != null) {
@@ -177,7 +174,7 @@ public class CQL2HQL {
 			} else {
 				hql.append(" where ");
 			}
-			processAttribute(hql, target.getAttribute(), eliminateSubclasses);
+			processAttribute(hql, target.getAttribute(), true);
 		}
 		if (target.getAssociation() != null) {
 			if (eliminateSubclasses) {
@@ -185,7 +182,7 @@ public class CQL2HQL {
 			} else {
 				hql.append(" where ");
 			}
-			processAssociation(hql, objName, target.getAssociation(), eliminateSubclasses);
+			processAssociation(hql, objName, target.getAssociation(), true);
 		}
 		if (target.getGroup() != null) {
 			if (eliminateSubclasses) {
@@ -193,7 +190,7 @@ public class CQL2HQL {
 			} else {
 				hql.append(" where ");
 			}
-			processGroup(hql, objName, target.getGroup(), eliminateSubclasses);
+			processGroup(hql, objName, target.getGroup(), true);
 		}
 	}
 	
@@ -209,7 +206,7 @@ public class CQL2HQL {
 	 */
 	private static void processObject(StringBuilder hql, Object obj) throws QueryProcessingException {
 		String objName = obj.getName();
-		hql.append("From ").append(objName);
+		hql.append("select id From ").append(objName);
 		if (obj.getAttribute() != null) {
 			hql.append(" where ");
 			processAttribute(hql, obj.getAttribute(), false);
@@ -280,7 +277,7 @@ public class CQL2HQL {
 		if (useAlias) {
 			hql.append(TARGET_ALIAS).append(".");
 		}
-		hql.append(roleName).append(" in (");
+		hql.append(roleName).append(".id in (");
 		processObject(hql, assoc);
 		hql.append(")");
 	}
