@@ -89,7 +89,6 @@ public class ServiceWizard extends JDialog {
 			
 			
 			public void setWizardDone(boolean done) {
-				wizardDone = done;
 				if (done) {
 					// change the text of the next button
 					getNextPanelButton().setText(DONE_BUTTON_TEXT);
@@ -100,9 +99,8 @@ public class ServiceWizard extends JDialog {
 				} else {
 					getNextPanelButton().removeActionListener(getDoneButtonActionListener());
 					getNextPanelButton().addActionListener(getNextButtonActionListener());
-					// reload the current panel to fix prev / next buttons, etc
-					loadWizardPanel((AbstractWizardPanel) panelSequence.get(currentPanelIndex));
 				}
+				wizardDone = done;
 			}
 		});
 		panelSequence.add(panel);

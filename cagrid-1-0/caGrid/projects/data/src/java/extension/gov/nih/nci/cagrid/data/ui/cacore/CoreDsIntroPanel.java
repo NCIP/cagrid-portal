@@ -166,7 +166,7 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 			} else {
 				// copy the library to the service's lib dir
 				File sdkQueryOut = new File(CacoreWizardUtils.getServiceBaseDir(getServiceInformation())
-					+ File.separator + sdkQuery.getName());
+					+ File.separator + "lib" + File.separator + sdkQuery.getName());
 				try {
 					Utils.copyDirectory(sdkQuery, sdkQueryOut);
 				} catch (Exception ex) {
