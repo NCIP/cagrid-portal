@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodT
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertyTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.preferences.PreferencesTypeTreeNode;
 
 import java.awt.CardLayout;
 import java.awt.event.MouseAdapter;
@@ -74,16 +73,20 @@ public class ServicesJTree extends JTree {
 					} else if (SwingUtilities.isLeftMouseButton(e)) {
 
 						if (nodes.get(0) instanceof MethodsTypeTreeNode) {
-
+							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
+								ServicesJTree.this.optionsPanel, "methods");
 						} else if (nodes.get(0) instanceof MethodTypeTreeNode) {
-
+							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
+								ServicesJTree.this.optionsPanel, "blank");
 						} else if (nodes.get(0) instanceof ResourcePropertiesTypeTreeNode) {
-
+							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
+								ServicesJTree.this.optionsPanel, "blank");
 						} else if (nodes.get(0) instanceof ServicesTypeTreeNode) {
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
 								ServicesJTree.this.optionsPanel, "services");
 						} else if (nodes.get(0) instanceof ResourcePropertyTypeTreeNode) {
-
+							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
+								ServicesJTree.this.optionsPanel, "blank");
 						} else if (nodes.get(0) instanceof ServiceTypeTreeNode) {
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
 								ServicesJTree.this.optionsPanel, "service");

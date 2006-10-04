@@ -31,6 +31,7 @@ import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.properties.ServicePropertiesTable;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.MethodsButtonPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.ServiceButtonPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesButtonPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
@@ -1751,6 +1752,8 @@ public class ModificationViewer extends GridPortalComponent {
 			// initialize the option cards for this tree
 			resourcesOptionsPanel.add(new ServicesButtonPanel(resourcesJTree), "services");
 			resourcesOptionsPanel.add(new ServiceButtonPanel(resourcesJTree), "service");
+			resourcesOptionsPanel.add(new MethodsButtonPanel(resourcesJTree), "methods");
+			resourcesOptionsPanel.add(new JPanel(), "blank");
 		}
 		return resourcesJTree;
 	}

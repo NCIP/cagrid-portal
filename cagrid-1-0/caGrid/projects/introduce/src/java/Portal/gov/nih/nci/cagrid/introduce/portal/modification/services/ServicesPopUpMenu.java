@@ -54,27 +54,30 @@ public class ServicesPopUpMenu extends JPopupMenu {
 
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
-					ServiceType service = new ServiceType();
-					service.setMethods(new MethodsType());
-					service.setResourcePropertiesList(new ResourcePropertiesListType());
-					service.setResourceFrameworkType(IntroduceConstants.INTRODUCE_BASE_RESOURCE);
-					//service.setServiceSecurity(new ServiceSecurity());
-					service.setMethods(new MethodsType());
-					ServiceTypeTreeNode newNode = node.addService(service);
-					ModifyService comp = new ModifyService(newNode, new SpecificServiceInformation(node.getInfo(),
-						service),true);
-					// PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-					// new ModifyService(newNode, new
-					// SpecificServiceInformation(node.getInfo(),service)));
-					comp.pack();
-					PortalUtils.centerWindow(comp);
-					comp.setVisible(true);
-
+					ServicesPopUpMenu.addService(ServicesPopUpMenu.this.node);
 				}
 
 			});
 		}
 		return addResourceMenuItem;
+	}
+
+
+	public static void addService(ServicesTypeTreeNode node) {
+		ServiceType service = new ServiceType();
+		service.setMethods(new MethodsType());
+		service.setResourcePropertiesList(new ResourcePropertiesListType());
+		service.setResourceFrameworkType(IntroduceConstants.INTRODUCE_BASE_RESOURCE);
+		// service.setServiceSecurity(new ServiceSecurity());
+		service.setMethods(new MethodsType());
+		ServiceTypeTreeNode newNode = node.addService(service);
+		ModifyService comp = new ModifyService(newNode, new SpecificServiceInformation(node.getInfo(), service), true);
+		// PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
+		// new ModifyService(newNode, new
+		// SpecificServiceInformation(node.getInfo(),service)));
+		comp.pack();
+		PortalUtils.centerWindow(comp);
+		comp.setVisible(true);
 	}
 
 }

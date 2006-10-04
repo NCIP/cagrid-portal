@@ -54,7 +54,7 @@ public class MethodsPopUpMenu extends JPopupMenu {
 			addMethodMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
-					MethodsPopUpMenu.this.addMethod();
+					MethodsPopUpMenu.addMethod(MethodsPopUpMenu.this.node);
 				}
 			});
 		}
@@ -62,7 +62,7 @@ public class MethodsPopUpMenu extends JPopupMenu {
 	}
 
 
-	private void addMethod() {
+	public static void addMethod(MethodsTypeTreeNode node) {
 		System.out.println("adding a new method");
 
 		MethodType method = new MethodType();

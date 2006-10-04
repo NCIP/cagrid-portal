@@ -49,19 +49,23 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
 			modifyResourcePropetiesMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
-					ModifyResourcePropertiesComponent comp = new ModifyResourcePropertiesComponent(
-						node.getService(), node.getInfo().getNamespaces(),
-						new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator + "etc"),
-						new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator + "schema"
-							+ File.separator + node.getInfo().getServices().getService(0).getName()), true);
-					comp.setSize(600, 300);
-					PortalUtils.centerWindow(comp);
-					comp.setVisible(true);
+					ResourcePropertiesPopUpMenu.modifyResourceProperties(ResourcePropertiesPopUpMenu.this.node);
 				}
 
 			});
 		}
 		return modifyResourcePropetiesMenuItem;
+	}
+
+
+	public static void modifyResourceProperties(ResourcePropertiesTypeTreeNode node) {
+		ModifyResourcePropertiesComponent comp = new ModifyResourcePropertiesComponent(node.getService(), node
+			.getInfo().getNamespaces(), new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator
+			+ "etc"), new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator + "schema"
+			+ File.separator + node.getInfo().getServices().getService(0).getName()), true);
+		comp.setSize(600, 300);
+		PortalUtils.centerWindow(comp);
+		comp.setVisible(true);
 	}
 
 }

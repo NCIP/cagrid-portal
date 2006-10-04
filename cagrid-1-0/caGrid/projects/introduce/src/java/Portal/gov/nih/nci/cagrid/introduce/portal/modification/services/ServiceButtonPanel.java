@@ -46,25 +46,25 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsPopUpMenu;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesPopUpMenu;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertyTypeTreeNode;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 
 public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
 
 	private JButton modifyServiceButton = null;
+	private JButton addMethodButton = null;
+	private JButton modifyResourcesButton = null;
 
 
 	public ServiceButtonPanel(ServicesJTree tree) {
@@ -77,12 +77,25 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+		gridBagConstraints2.gridx = 0;
+		gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
+		gridBagConstraints2.gridy = 2;
+		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+		gridBagConstraints1.gridx = 0;
+		gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
+		gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints1.gridy = 1;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints.gridy = 0;
 		this.setLayout(new GridBagLayout());
 		this.add(getModifyServiceButton(), gridBagConstraints);
+		this.add(getAddMethodButton(), gridBagConstraints1);
+		this.add(getModifyResourcesButton(), gridBagConstraints2);
 	}
 
 
@@ -104,7 +117,7 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
 					if (tnode instanceof ServiceTypeTreeNode) {
 						ServiceTypeTreeNode node = (ServiceTypeTreeNode) tnode;
 						ModifyService comp = new ModifyService(node, new SpecificServiceInformation(node.getInfo(),
-							node.getServiceType()),false);
+							node.getServiceType()), false);
 						comp.pack();
 						PortalUtils.centerWindow(comp);
 						comp.setVisible(true);
@@ -114,6 +127,56 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
 			});
 		}
 		return modifyServiceButton;
+	}
+
+
+	/**
+	 * This method initializes addMethodButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getAddMethodButton() {
+		if (addMethodButton == null) {
+			addMethodButton = new JButton();
+			addMethodButton.setText("Add Method");
+			addMethodButton.setIcon(IntroduceLookAndFeel.getMethodIcon());
+			addMethodButton.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					DefaultMutableTreeNode tnode = ServiceButtonPanel.this.getTree().getCurrentNode();
+					if (tnode instanceof MethodsTypeTreeNode) {
+						MethodsPopUpMenu.addMethod((MethodsTypeTreeNode) tnode);
+					}
+				}
+
+			});
+		}
+		return addMethodButton;
+	}
+
+
+	/**
+	 * This method initializes modifyResourcesButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getModifyResourcesButton() {
+		if (modifyResourcesButton == null) {
+			modifyResourcesButton = new JButton();
+			modifyResourcesButton.setText("Modify Resources");
+			modifyResourcesButton.setIcon(IntroduceLookAndFeel.getResourcePropertiesIcon());
+			modifyResourcesButton.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					DefaultMutableTreeNode tnode = ServiceButtonPanel.this.getTree().getCurrentNode();
+					if (tnode instanceof ResourcePropertiesTypeTreeNode) {
+						ResourcePropertiesPopUpMenu.modifyResourceProperties((ResourcePropertiesTypeTreeNode) tnode);
+					}
+				}
+
+			});
+		}
+		return modifyResourcesButton;
 	}
 
 }
