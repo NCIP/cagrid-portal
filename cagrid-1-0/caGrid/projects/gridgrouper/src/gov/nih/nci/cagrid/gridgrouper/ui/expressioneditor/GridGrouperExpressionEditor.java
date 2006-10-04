@@ -124,9 +124,9 @@ public class GridGrouperExpressionEditor extends JPanel {
 		this.gridGrouperURIs = gridGrouperURIs;
 		this.expression = new MembershipExpression();
 		this.expression.setLogicRelation(LogicalOperator.AND);
-		this.setBorder(BorderFactory.createTitledBorder(null, "Grid Grouper Expression Editor",
-			TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
-			new Color(62, 109, 181)));
+//		this.setBorder(BorderFactory.createTitledBorder(null, "Grid Grouper Expression Editor",
+//			TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+//			new Color(62, 109, 181)));
 		initialize();
 		if ((loadOnStartup) && (gridGrouperURIs != null) && (gridGrouperURIs.size() > 0)) {
 			this.getGrouperTree().addGridGrouper((String) gridGrouperURIs.get(0), null);
@@ -209,6 +209,9 @@ public class GridGrouperExpressionEditor extends JPanel {
 			gridBagConstraints1.weightx = 1.0;
 			treePanel = new JPanel();
 			treePanel.setLayout(new GridBagLayout());
+			treePanel.setBorder(BorderFactory.createTitledBorder(null, "Grid Grouper Browser",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+				new Color(62, 109, 181)));
 			treePanel.add(getProgress(), gridBagConstraints3);
 			treePanel.add(getJScrollPane(), gridBagConstraints1);
 			treePanel.add(getGrouperButtonPanel(), gridBagConstraints17);
@@ -242,6 +245,9 @@ public class GridGrouperExpressionEditor extends JPanel {
 			gridBagConstraints.gridx = 0;
 			expressionPanel = new JPanel();
 			expressionPanel.setLayout(new GridBagLayout());
+			expressionPanel.setBorder(BorderFactory.createTitledBorder(null, "Grid Grouper Expression Editor",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+				new Color(62, 109, 181)));
 			expressionPanel.add(getJScrollPane1(), gridBagConstraints);
 			expressionPanel.add(getEditorPanel(), gridBagConstraints4);
 		}
