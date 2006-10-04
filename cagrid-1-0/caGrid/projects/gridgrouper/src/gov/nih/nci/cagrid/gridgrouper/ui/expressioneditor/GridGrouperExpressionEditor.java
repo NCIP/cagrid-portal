@@ -111,7 +111,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 
 	private JComboBox gridGrouperURI = null;
 
-	private JButton jButton = null;
+	private JButton loadGridGrouper = null;
 
 	private List gridGrouperURIs;
 
@@ -510,6 +510,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 		if (addExpression == null) {
 			addExpression = new JButton();
 			addExpression.setText("Add Expression");
+			addExpression.setIcon(GridGrouperLookAndFeel.getAddIcon());
 			addExpression.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					DefaultMutableTreeNode currentNode = getExpressionTree().getCurrentNode();
@@ -536,6 +537,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 		if (addGroup == null) {
 			addGroup = new JButton();
 			addGroup.setText("Add Group");
+			addGroup.setIcon(GridGrouperLookAndFeel.getAddIcon());
 			addGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					DefaultMutableTreeNode currentNode = getGrouperTree().getCurrentNode();
@@ -561,6 +563,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 		if (removeExpression == null) {
 			removeExpression = new JButton();
 			removeExpression.setText("Remove");
+			removeExpression.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
 			removeExpression.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					DefaultMutableTreeNode currentNode = getExpressionTree().getCurrentNode();
@@ -671,6 +674,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 		if (removeGroup == null) {
 			removeGroup = new JButton();
 			removeGroup.setText("Remove");
+			removeGroup.setIcon(GridGrouperLookAndFeel.getRemoveIcon());
 			removeGroup.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					DefaultMutableTreeNode currentNode = getExpressionTree().getCurrentNode();
@@ -791,7 +795,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
 				new Color(62, 109, 181)));
 			grouperButtonPanel.add(getGridGrouperURI(), gridBagConstraints19);
-			grouperButtonPanel.add(getJButton(), gridBagConstraints20);
+			grouperButtonPanel.add(getLoadGridGrouper(), gridBagConstraints20);
 		}
 		return grouperButtonPanel;
 	}
@@ -815,15 +819,16 @@ public class GridGrouperExpressionEditor extends JPanel {
 
 
 	/**
-	 * This method initializes jButton
+	 * This method initializes loadGridGrouper
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getJButton() {
-		if (jButton == null) {
-			jButton = new JButton();
-			jButton.setText("Load");
-			jButton.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getLoadGridGrouper() {
+		if (loadGridGrouper == null) {
+			loadGridGrouper = new JButton();
+			loadGridGrouper.setText("Load");
+			loadGridGrouper.setIcon(GridGrouperLookAndFeel.getGrouperIconNoBackground22X22());
+			loadGridGrouper.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 
 					String uri = (String) getGridGrouperURI().getSelectedItem();
@@ -837,7 +842,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 				}
 			});
 		}
-		return jButton;
+		return loadGridGrouper;
 	}
 
 
