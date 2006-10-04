@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://fqp.cagrid.nci.nih.gov/FederatedResults" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns2="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" xmlns:ns7="http://fqp.cagrid.nci.nih.gov/FederatedResults/types" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns1="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" xmlns:ns4="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types" xmlns:ns3="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns0="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult" name="FederatedQueryResults" targetNamespace="http://fqp.cagrid.nci.nih.gov/FederatedResults">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://fqp.cagrid.nci.nih.gov/FederatedResults" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns3="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" xmlns:ns8="http://fqp.cagrid.nci.nih.gov/FederatedResults/types" xmlns:ns7="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns2="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" xmlns:ns5="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types" xmlns:ns4="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns1="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult" xmlns:ns0="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" name="FederatedQueryResults" targetNamespace="http://fqp.cagrid.nci.nih.gov/FederatedResults">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
+  <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" location="./WS-ResourceLifetime.wsdl" />
   <import namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" location="./ServiceSecurity.wsdl" />
   <!--============================================================
 
@@ -19,6 +20,7 @@
       <import namespace="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql" schemaLocation="./Distributed_CQL_schema_2.0.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/cagrid/types/security/security.xsd" />
       <import namespace="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult" schemaLocation="./Distributed_CQL_Results_schema_2.0.xsd" />
+      <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" schemaLocation="..\wsrf\lifetime\WS-ResourceLifetime.xsd" />
       <element name="GetResultsRequest">
         <complexType>
           <sequence />
@@ -27,7 +29,7 @@
       <element name="GetResultsResponse">
         <complexType>
           <sequence>
-            <element ref="ns0:DCQLQueryResultsCollection" minOccurs="1" maxOccurs="1" />
+            <element ref="ns1:DCQLQueryResultsCollection" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -45,7 +47,10 @@
       </element>
       <element name="FederatedQueryResultsResourceProperties">
         <complexType>
-          <sequence />
+          <sequence>
+            <element ref="ns0:CurrentTime" />
+            <element ref="ns0:TerminationTime" />
+          </sequence>
         </complexType>
       </element>
     </schema>
@@ -64,10 +69,10 @@
     <part name="parameters" element="tns:IsProcessingCompleteResponse" />
   </message>
   <message name="ProcessingNotCompleteFaultFaultMessage">
-    <part name="fault" element="ns7:ProcessingNotCompleteFault" />
+    <part name="fault" element="ns8:ProcessingNotCompleteFault" />
   </message>
   <message name="FederatedQueryProcessingFaultFaultMessage">
-    <part name="fault" element="ns4:FederatedQueryProcessingFault" />
+    <part name="fault" element="ns5:FederatedQueryProcessingFault" />
   </message>
   <!--============================================================
 
@@ -110,6 +115,12 @@
       <input message="wns0:GetServiceSecurityMetadataRequest" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest" />
       <output message="wns0:GetServiceSecurityMetadataResponse" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataResponse" />
     </operation>
+    <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="Destroy">
+      <wsdl:input message="wsrlw:DestroyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime/Destroy" />
+      <wsdl:output message="wsrlw:DestroyResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime/DestroyResponse" />
+      <wsdl:fault message="wsrlw:ResourceNotDestroyedFault" name="ResourceNotDestroyedFault" />
+      <wsdl:fault message="wsrlw:ResourceUnknownFault" name="ResourceUnknownFault" />
+    </wsdl:operation>
   </portType>
 </definitions>
 

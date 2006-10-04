@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
  */
 public interface FederatedQueryResultsI {
 
+	public void destroy() throws RemoteException ;
 public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection getResults() throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault ;
 public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 public boolean isProcessingComplete() throws RemoteException ;

@@ -100,6 +100,13 @@ public class FederatedQueryResultsClient extends ServiceSecurityClient implement
 		}
 	}
 
+    public void destroy() throws RemoteException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"destroy");
+        org.oasis.wsrf.lifetime.Destroy params = new org.oasis.wsrf.lifetime.Destroy();
+        org.oasis.wsrf.lifetime.DestroyResponse boxedResult = portType.destroy(params);
+      }
+    }
     public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection getResults() throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getResults");

@@ -48,7 +48,22 @@ public abstract class FederatedQueryProcessorImplBase {
 		return this.configuration;
 	}
 	
-	public ResourceHome getResourceHome(String resourceKey) throws Exception {
+	
+	public gov.nih.nci.cagrid.fqp.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
+		ResourceHome resource = getResourceHome("home");
+		return (gov.nih.nci.cagrid.fqp.service.globus.resource.BaseResourceHome)resource;
+	}
+
+	
+	
+	
+	public ResourceHome getFederatedQueryResultsResourceHome() throws Exception {
+		ResourceHome resource = getResourceHome("federatedQueryResultsHome");
+		return resource;
+	}
+	
+	
+	protected ResourceHome getResourceHome(String resourceKey) throws Exception {
 		MessageContext ctx = MessageContext.getCurrentContext();
 
 		ResourceHome resourceHome = null;

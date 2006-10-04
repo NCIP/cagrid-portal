@@ -12,6 +12,7 @@ import gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference
 import gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault;
 
 import java.rmi.RemoteException;
+import java.util.Calendar;
 
 import org.apache.axis.MessageContext;
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -24,6 +25,7 @@ import org.globus.wsrf.utils.AddressingUtils;
 import commonj.work.Work;
 import commonj.work.WorkManager;
 
+
 /**
  * Federated Query Service
  * 
@@ -32,15 +34,20 @@ import commonj.work.WorkManager;
  */
 public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase {
 	private static final int DEFAULT_POOL_SIZE = 10;
+	private static final int DEFAULT_RESULT_LEASE_MINS = 30;
 	private WorkManager workManager = null;
 
 	protected static Log LOG = LogFactory.getLog(FederatedQueryProcessorImpl.class.getName());
+
 
 	public FederatedQueryProcessorImpl() throws RemoteException {
 		super();
 	}
 
-	public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults executeAndAggregateResults(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
+
+	public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults executeAndAggregateResults(
+		gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException,
+		gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
 		FederatedQueryEngine engine = new FederatedQueryEngine();
 		CQLQueryResults results = null;
 		try {
@@ -55,7 +62,9 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		return results;
 	}
 
-	public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection execute(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
+
+	public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection execute(gov.nih.nci.cagrid.dcql.DCQLQuery query)
+		throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
 		FederatedQueryEngine engine = new FederatedQueryEngine();
 		DCQLQueryResultsCollection results = null;
 		try {
@@ -70,18 +79,20 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		return results;
 	}
 
+
 	public gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference executeAsynchronously(
 		gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException {
 
 		// create a result resource
 		FQPResultResourceHome resultHome = null;
 		try {
-			resultHome = (FQPResultResourceHome) getResourceHome("federatedQueryResultsHome");
+			resultHome = (FQPResultResourceHome) getFederatedQueryResultsResourceHome();
 		} catch (Exception e) {
 			// TODO: change to throw "internal error"
 			e.printStackTrace();
 			throw new RemoteException("Problem locating result home.", e);
 		}
+
 		FQPResultResource fqpResultResource = null;
 		ResourceKey key = null;
 		try {
@@ -92,9 +103,12 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 			throw new RemoteException("Creatng and accessing resource.", e);
 		}
 
-		// set initial status and complete=false
-		fqpResultResource.setComplete(false);
+		// set initial status
 		fqpResultResource.setStatusMessage("Queued for processing");
+		// set to terminate after lease expires
+		Calendar termTime = Calendar.getInstance();
+		termTime.add(Calendar.MINUTE, getLeaseDurationInMinutes());
+		fqpResultResource.setTerminationTime(termTime);
 
 		// create a worker thread to execute query
 		Work work = new QueryExecutionWork(fqpResultResource, query);
@@ -102,13 +116,19 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		// add worker to pool
 		try {
 			getWorkManager().schedule(work);
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 			// TODO: change to throw "internal error"
-			throw new RemoteException("Problem scheduling processing.", e1);
+			throw new RemoteException("Problem scheduling processing.", e);
 		}
 
 		// return handle to resource
+		return createEPR(key);
+	}
+
+
+	private gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference createEPR(ResourceKey key)
+		throws RemoteException {
 		MessageContext ctx = MessageContext.getCurrentContext();
 		String transportURL = (String) ctx.getProperty(org.apache.axis.MessageContext.TRANS_URL);
 		transportURL = transportURL.substring(0, transportURL.lastIndexOf('/') + 1);
@@ -123,6 +143,20 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 			throw new RemoteException("Problem returning reference to result.", e);
 		}
 	}
+
+
+	public int getLeaseDurationInMinutes() {
+		int mins = DEFAULT_RESULT_LEASE_MINS;
+		try {
+			String leaseProp = getConfiguration().getInitialResultLeaseInMinutes();
+			LOG.debug("Result Lease Minutes property was:" + leaseProp);
+			mins = Integer.parseInt(leaseProp);
+		} catch (Exception e) {
+			LOG.error("Problem determing result lease duration, using default(" + mins + ").", e);
+		}
+		return mins;
+	}
+
 
 	public synchronized WorkManager getWorkManager() {
 		if (this.workManager == null) {
@@ -140,6 +174,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		return this.workManager;
 	}
 
+
 	public synchronized void setWorkManager(WorkManager workManager) {
 		this.workManager = workManager;
 	}
@@ -147,18 +182,20 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 class QueryExecutionWork implements Work {
 	FQPResultResource resource;
 	DCQLQuery query;
-	
+
 
 	public QueryExecutionWork(FQPResultResource resource, DCQLQuery query) {
 		this.resource = resource;
 		this.query = query;
 	}
 
+
 	public void run() {
 		FederatedQueryEngine engine = new FederatedQueryEngine();
 
 		try {
 			this.resource.setStatusMessage("Processing");
+			this.resource.setComplete(false);
 			DCQLQueryResultsCollection collection = engine.execute(query);
 			this.resource.setResults(collection);
 			this.resource.setStatusMessage("Completed");
@@ -171,9 +208,11 @@ class QueryExecutionWork implements Work {
 
 	}
 
+
 	public boolean isDaemon() {
 		return false;
 	}
+
 
 	public void release() {
 		// Do nothing

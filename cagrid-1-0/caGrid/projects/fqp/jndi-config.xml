@@ -25,15 +25,6 @@
     <resourceLink name="federatedQueryProcessorHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/FederatedQueryProcessor/home" />
   </service>
   <service name="SERVICE-INSTANCE-PREFIX/FederatedQueryProcessor">
-    <resource name="home" type="gov.nih.nci.cagrid.fqp.service.globus.resource.BaseResourceHome">
-      <resourceParams>
-        <parameter>
-          <name>factory</name>
-          <value>org.globus.wsrf.jndi.BeanFactory</value>
-        </parameter>
-      </resourceParams>
-    </resource>
-    <resourceLink name="federatedQueryResultsHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/FederatedQueryResults/home" />
     <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.fqp.service.ServiceConfiguration">
       <resourceParams>
         <parameter>
@@ -43,6 +34,10 @@
         <parameter>
           <name>threadPoolSize</name>
           <value>@threadPoolSize@</value>
+        </parameter>
+        <parameter>
+          <name>initialResultLeaseInMinutes</name>
+          <value>@initialResultLeaseInMinutes@</value>
         </parameter>
       </resourceParams>
     </resource>
@@ -69,6 +64,15 @@
         </parameter>
       </resourceParams>
     </resource>
+    <resource name="home" type="gov.nih.nci.cagrid.fqp.service.globus.resource.BaseResourceHome">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+      </resourceParams>
+    </resource>
+    <resourceLink name="federatedQueryResultsHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/FederatedQueryResults/home" />
   </service>
 </jndiConfig>
 

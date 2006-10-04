@@ -10,6 +10,8 @@ public class ServiceConfiguration {
 	
 	private String threadPoolSize;
 	
+	private String initialResultLeaseInMinutes;
+	
 
 	
 	public String getThreadPoolSize() {
@@ -18,6 +20,15 @@ public class ServiceConfiguration {
 	
 	public void setThreadPoolSize(String threadPoolSize) {
 		this.threadPoolSize = threadPoolSize;
+	}
+
+	
+	public String getInitialResultLeaseInMinutes() {
+		return initialResultLeaseInMinutes;
+	}
+	
+	public void setInitialResultLeaseInMinutes(String initialResultLeaseInMinutes) {
+		this.initialResultLeaseInMinutes = initialResultLeaseInMinutes;
 	}
 
 	
