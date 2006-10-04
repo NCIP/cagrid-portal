@@ -47,7 +47,7 @@ public class AssociationManyCheckCache {
 					roleName = ClassAccessUtilities.getRoleName(parent.getName(), target);
 				}
 				// get the field from the parent class
-				Field targetField = parentClass.getField(roleName);
+				Field targetField = parentClass.getDeclaredField(roleName);
 				// if field is array or collection, return true
 				Class targetFieldType = targetField.getType();
 				isMany = new Boolean(targetFieldType.isArray()
