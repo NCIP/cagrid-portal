@@ -20,7 +20,6 @@ import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
-import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.MethodSecurityPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeNode;
@@ -58,7 +57,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.xml.namespace.QName;
 
@@ -69,10 +67,8 @@ import org.jdom.Namespace;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.portal.GridPortalBaseFrame;
-import org.projectmobius.portal.PortalResourceManager;
 import org.xml.sax.SAXException;
 
-import com.sun.naming.internal.ResourceManager;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;

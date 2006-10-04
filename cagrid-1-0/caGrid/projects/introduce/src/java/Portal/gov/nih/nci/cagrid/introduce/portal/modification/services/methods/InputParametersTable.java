@@ -4,16 +4,9 @@ import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 
-import java.awt.Component;
 import java.util.Vector;
 
-import javax.swing.AbstractCellEditor;
-import javax.swing.JComponent;
-import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableColumn;
 import javax.xml.namespace.QName;
 
 

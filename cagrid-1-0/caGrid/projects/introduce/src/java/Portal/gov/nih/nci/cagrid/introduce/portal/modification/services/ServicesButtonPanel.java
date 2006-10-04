@@ -1,26 +1,15 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
-import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertyTypeTreeNode;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 
 public class ServicesButtonPanel extends ServiceContextsOptionsPanel {
@@ -60,14 +49,17 @@ public class ServicesButtonPanel extends ServiceContextsOptionsPanel {
 		if (addServiceButton == null) {
 			addServiceButton = new JButton();
 			addServiceButton.setText("Add Service");
-			addServiceButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addServiceButton.setIcon(IntroduceLookAndFeel.getCreateServiceIcon());
 			addServiceButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 
-					DefaultMutableTreeNode node = ServicesButtonPanel.this.getTree().getCurrentNode();
+					DefaultMutableTreeNode node = ServicesButtonPanel.this.getTree().getRoot();
 					if (node instanceof ServicesTypeTreeNode) {
 						ServicesPopUpMenu.addService((ServicesTypeTreeNode) node);
 					}
+					
+					((DefaultTreeModel)getTree().getModel()).nodeStructureChanged(node);
+					((DefaultTreeModel)getTree().getModel()).nodeChanged(node);
 				}
 			});
 		}

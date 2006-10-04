@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 
 public class MethodsButtonPanel extends ServiceContextsOptionsPanel {
@@ -50,7 +51,7 @@ public class MethodsButtonPanel extends ServiceContextsOptionsPanel {
 		if (addServiceButton == null) {
 			addServiceButton = new JButton();
 			addServiceButton.setText("Add Method");
-			addServiceButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addServiceButton.setIcon(IntroduceLookAndFeel.getAddMethodIcon());
 			addServiceButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 
@@ -58,6 +59,8 @@ public class MethodsButtonPanel extends ServiceContextsOptionsPanel {
 					if (tnode instanceof MethodsTypeTreeNode) {
 						MethodsPopUpMenu.addMethod((MethodsTypeTreeNode) tnode);
 					}
+					((DefaultTreeModel)getTree().getModel()).nodeStructureChanged(tnode);
+					((DefaultTreeModel)getTree().getModel()).nodeChanged(tnode);
 
 				}
 

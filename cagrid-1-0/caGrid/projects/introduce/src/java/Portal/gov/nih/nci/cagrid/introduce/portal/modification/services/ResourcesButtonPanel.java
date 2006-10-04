@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsPopUpMenu;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesPopUpMenu;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
 
@@ -13,6 +11,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 
 public class ResourcesButtonPanel extends ServiceContextsOptionsPanel {
@@ -52,13 +51,15 @@ public class ResourcesButtonPanel extends ServiceContextsOptionsPanel {
 		if (addServiceButton == null) {
 			addServiceButton = new JButton();
 			addServiceButton.setText("Modify Resources");
-			addServiceButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addServiceButton.setIcon(IntroduceLookAndFeel.getModifyIcon());
 			addServiceButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					DefaultMutableTreeNode tnode = ResourcesButtonPanel.this.getTree().getCurrentNode();
 					if (tnode instanceof ResourcePropertiesTypeTreeNode) {
 						ResourcePropertiesPopUpMenu.modifyResourceProperties((ResourcePropertiesTypeTreeNode) tnode);
 					}
+					((DefaultTreeModel) getTree().getModel()).nodeStructureChanged(tnode);
+					((DefaultTreeModel) getTree().getModel()).nodeChanged(tnode);
 				}
 
 			});

@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodPopUpMenu;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodViewer;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 import org.projectmobius.portal.PortalResourceManager;
 
@@ -19,6 +20,7 @@ import org.projectmobius.portal.PortalResourceManager;
 public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 
 	private JButton addServiceButton = null;
+	private JButton removeButton = null;
 
 
 	/**
@@ -34,13 +36,19 @@ public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 	 * This method initializes this
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+		gridBagConstraints3.gridx = 0;
+		gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints3.gridy = 1;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints.gridy = 0;
+		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints.gridx = 0;
 		this.setLayout(new GridBagLayout());
 		this.add(getAddServiceButton(), gridBagConstraints);
-
+		this.add(getRemoveButton(), gridBagConstraints3);
 	}
 
 
@@ -53,7 +61,7 @@ public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 		if (addServiceButton == null) {
 			addServiceButton = new JButton();
 			addServiceButton.setText("Modify Method");
-			addServiceButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addServiceButton.setIcon(IntroduceLookAndFeel.getModifyIcon());
 			addServiceButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 
@@ -62,6 +70,8 @@ public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 						PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 							new MethodViewer(((MethodTypeTreeNode) tnode).getMethod(), ((MethodTypeTreeNode) tnode)
 								.getInfo()));
+						((DefaultTreeModel) getTree().getModel()).nodeStructureChanged(tnode);
+						((DefaultTreeModel) getTree().getModel()).nodeChanged(tnode);
 					}
 
 				}
@@ -69,6 +79,32 @@ public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 			});
 		}
 		return addServiceButton;
+	}
+
+
+	/**
+	 * This method initializes removeButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getRemoveButton() {
+		if (removeButton == null) {
+			removeButton = new JButton();
+			removeButton.setText("Remove Method");
+			removeButton.setIcon(IntroduceLookAndFeel.getRemoveMethodIcon());
+			removeButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					DefaultMutableTreeNode tnode = MethodButtonPanel.this.getTree().getCurrentNode();
+					if (tnode instanceof MethodTypeTreeNode) {
+						((MethodsTypeTreeNode) tnode.getParent()).removeMethod((MethodTypeTreeNode) tnode);
+					}
+					((DefaultTreeModel) getTree().getModel()).nodeStructureChanged(tnode.getParent());
+					((DefaultTreeModel) getTree().getModel()).nodeChanged(tnode.getParent());
+
+				}
+			});
+		}
+		return removeButton;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"
