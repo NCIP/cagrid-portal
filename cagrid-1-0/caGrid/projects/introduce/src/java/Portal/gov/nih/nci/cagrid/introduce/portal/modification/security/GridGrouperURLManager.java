@@ -11,15 +11,15 @@ public class GridGrouperURLManager {
 	public final static String GRID_GROUPER_URL_PROPERTY = "Grid Grouper URLs";
 	public final static String GRID_GROUPER_LOAD_PROPERTY = "Grid Grouper Load On Startup";
 	public final static String DEFAULT_GRID_GROUPER_URL = "https://cagrid02.bmi.ohio-state.edu:8443/wsrf/services/cagrid/GridGrouper";
-	public final static String DEFAULT_LOAD_ON_STARTUP = "true";
+	public final static String DEFAULT_LOAD_ON_STARTUP = "false";
 
 	public static boolean getLoadOnStartup() {
 		boolean loadOnStartup = false;
 		try {
-			String load = ResourceManager.getStateProperty(GRID_GROUPER_LOAD_PROPERTY);
+			String load = ResourceManager.getConfigurationProperty(GRID_GROUPER_LOAD_PROPERTY);
 			if (load == null) {
-				ResourceManager.setStateProperty(GRID_GROUPER_LOAD_PROPERTY, DEFAULT_LOAD_ON_STARTUP);
-				load = ResourceManager.getStateProperty(GRID_GROUPER_LOAD_PROPERTY);
+				ResourceManager.setConfigurationProperty(GRID_GROUPER_LOAD_PROPERTY, DEFAULT_LOAD_ON_STARTUP);
+				load = ResourceManager.getConfigurationProperty(GRID_GROUPER_LOAD_PROPERTY);
 			}
 			if (load.equalsIgnoreCase("true")) {
 				loadOnStartup = true;
