@@ -1,6 +1,5 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.common;
+package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
-import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
 
 import javax.swing.JPanel;
 
