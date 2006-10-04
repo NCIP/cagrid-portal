@@ -62,7 +62,7 @@ public class ServicesPopUpMenu extends JPopupMenu {
 					service.setMethods(new MethodsType());
 					ServiceTypeTreeNode newNode = node.addService(service);
 					ModifyService comp = new ModifyService(newNode, new SpecificServiceInformation(node.getInfo(),
-						service));
+						service),true);
 					// PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 					// new ModifyService(newNode, new
 					// SpecificServiceInformation(node.getInfo(),service)));

@@ -78,7 +78,7 @@ public class ServicesButtonPanel extends ServiceContextsOptionsPanel {
 							ServiceTypeTreeNode newNode = ServicesButtonPanel.this.getTree().getRoot().addService(
 								service);
 							ModifyService comp = new ModifyService(newNode, new SpecificServiceInformation(
-								ServicesButtonPanel.this.getTree().getRoot().getInfo(), service));
+								ServicesButtonPanel.this.getTree().getRoot().getInfo(), service), true);
 							// PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
 							// new ModifyService(newNode, new
 							// SpecificServiceInformation(node.getInfo(),service)));

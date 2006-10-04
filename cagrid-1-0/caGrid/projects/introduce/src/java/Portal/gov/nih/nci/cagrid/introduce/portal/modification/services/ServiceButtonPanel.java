@@ -105,7 +105,7 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
 					if (tnode instanceof ServiceTypeTreeNode) {
 						ServiceTypeTreeNode node = (ServiceTypeTreeNode) tnode;
 						ModifyService comp = new ModifyService(node, new SpecificServiceInformation(node.getInfo(),
-							node.getServiceType()));
+							node.getServiceType()),false);
 						comp.pack();
 						PortalUtils.centerWindow(comp);
 						comp.setVisible(true);

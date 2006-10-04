@@ -73,7 +73,7 @@ public class ServicePopUpMenu extends JPopupMenu {
 					super.mousePressed(e);
 					
 					ModifyService comp = new ModifyService(node, new SpecificServiceInformation(node.getInfo(),
-						node.getServiceType()));
+						node.getServiceType()),false);
 					comp.pack();
 					PortalUtils.centerWindow(comp);
 					comp.setVisible(true);
