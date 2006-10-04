@@ -78,7 +78,7 @@ public class QueryNode extends ExpressionBaseTreeNode {
 	}
 
 	public ImageIcon getIcon() {
-		return GridGrouperLookAndFeel.getStemIcon16x16();
+		return GridGrouperLookAndFeel.getGroupIcon16x16();
 	}
 
 	public String toString() {

@@ -124,6 +124,9 @@ public class GridGrouperExpressionEditor extends JPanel {
 		this.gridGrouperURIs = gridGrouperURIs;
 		this.expression = new MembershipExpression();
 		this.expression.setLogicRelation(LogicalOperator.AND);
+		this.setBorder(BorderFactory.createTitledBorder(null, "Grid Grouper Expression Editor",
+			TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+			new Color(62, 109, 181)));
 		initialize();
 		if ((loadOnStartup) && (gridGrouperURIs != null) && (gridGrouperURIs.size() > 0)) {
 			this.getGrouperTree().addGridGrouper((String) gridGrouperURIs.get(0), null);

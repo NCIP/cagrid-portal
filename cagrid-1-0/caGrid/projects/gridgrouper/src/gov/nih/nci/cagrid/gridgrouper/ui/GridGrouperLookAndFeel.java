@@ -45,6 +45,11 @@ public class GridGrouperLookAndFeel extends PortalLookAndFeel {
 				.getResource("/applications-internet-16x16.png"));
 	}
 	
+	public final static ImageIcon getMembershipExpressionIcon16x16() {
+		return new javax.swing.ImageIcon(GridGrouperLookAndFeel.class
+				.getResource("/edit-find-16x16.png"));
+	}
+	
 	
 	
 	public final static ImageIcon getGrouperIcon16x16() {

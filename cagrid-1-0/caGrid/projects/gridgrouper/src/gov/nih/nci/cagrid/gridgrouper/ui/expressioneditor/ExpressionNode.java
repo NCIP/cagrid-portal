@@ -234,7 +234,7 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 	}
 
 	public ImageIcon getIcon() {
-		return GridGrouperLookAndFeel.getStemIcon16x16();
+		return GridGrouperLookAndFeel.getMembershipExpressionIcon16x16();
 	}
 
 	public String toString() {
