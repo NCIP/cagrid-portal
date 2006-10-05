@@ -3,9 +3,9 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 To Do:
 
-look at he upper case vs lower case methods issues.....
+expose getResourceProperties through the generated clients.
 
-put add remove etc button service contexts
+look at he upper case vs lower case methods issues.....
 
 reload preferences from defaults
 
@@ -59,6 +59,7 @@ secure message privacy does not work (STEVE)
 support for open saml callouts and everything that globus supports (STEVE)
 
 ============================ D O N E ================================================================
+put add remove etc button service contexts
 
 refresh button in gme to view uploaded schemas without closing and opening
 
