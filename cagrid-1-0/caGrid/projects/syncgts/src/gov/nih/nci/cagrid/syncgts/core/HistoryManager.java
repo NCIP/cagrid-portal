@@ -30,6 +30,80 @@ public class HistoryManager {
 	}
 
 
+	public SyncReport getLastReport() throws Exception{
+		File dir = getLastestDayDir();
+		if (dir != null) {
+			File latest = null;
+			int num = -1;
+			File files[] = dir.listFiles();
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isFile()) {
+					
+						int index = files[i].getName().indexOf(".xml");
+						if (index != -1) {
+							try {
+							int temp = Integer.valueOf(files[i].getName().substring(0,index)).intValue();
+							if (temp > num) {
+								num = temp;
+								latest = files[i];
+							}
+							} catch (NumberFormatException e) {
+
+							}
+						}
+					
+				}
+			}
+			if(latest != null){
+				return getReport(latest.getAbsolutePath());
+			}
+
+		}
+		return null;
+	}
+
+
+	private File getLastestDayDir() {
+		return getLatestDir(getLatestMonthDir());
+	}
+
+
+	private File getLatestMonthDir() {
+		return getLatestDir(getLatestYearDir());
+	}
+
+
+	private File getLatestYearDir() {
+		return getLatestDir(getHistoryDirectory());
+	}
+
+
+	private File getLatestDir(File dir) {
+		File latest = null;
+		int num = -1;
+		if (dir != null) {
+			if (dir.exists() && dir.isDirectory()) {
+				File[] dirs = dir.listFiles();
+				for (int i = 0; i < dirs.length; i++) {
+					if (dirs[i].isDirectory()) {
+						try {
+							int temp = Integer.valueOf(dirs[i].getName()).intValue();
+							if (temp > num) {
+								num = temp;
+								latest = dirs[i];
+							}
+						} catch (NumberFormatException e) {
+
+						}
+					}
+				}
+
+			}
+		}
+		return latest;
+	}
+
+
 	public SyncReport getReport(String fileName) throws Exception {
 		return (SyncReport) Utils.deserializeDocument(fileName, SyncReport.class);
 	}
@@ -44,24 +118,22 @@ public class HistoryManager {
 		int checkMax = 0;
 		int iterator = 0;
 		this.incrementDate(end);
-		while(!start.equals(end)){
+		while (!start.equals(end)) {
 			File startDir = getDirectory(start);
-			if((startDir.exists())&&(startDir.isDirectory())){
+			if ((startDir.exists()) && (startDir.isDirectory())) {
 				String[] fileList = startDir.list();
 				checkMax = checkMax + fileList.length;
-				if(checkMax > maxSyncReports)
-					throw  new Exception();
+				if (checkMax > maxSyncReports)
+					throw new Exception();
 				else {
-					for(int i = 0; i < fileList.length; i++)
-					{
-						File inputFile = new File(startDir.getAbsolutePath()+File.separator + fileList[i]);
+					for (int i = 0; i < fileList.length; i++) {
+						File inputFile = new File(startDir.getAbsolutePath() + File.separator + fileList[i]);
 						FileReader in = new FileReader(inputFile);
-						if(in.read() != -1)
-						{
-							reports[iterator] = this.getReport(startDir.getAbsolutePath() + File.separator + fileList[i]);
+						if (in.read() != -1) {
+							reports[iterator] = this.getReport(startDir.getAbsolutePath() + File.separator
+								+ fileList[i]);
 							iterator++;
-						}
-						else
+						} else
 							throw new Exception();
 						in.close();
 					}
@@ -71,10 +143,11 @@ public class HistoryManager {
 		}
 		SyncReport[] returnReports = new SyncReport[checkMax];
 		System.arraycopy(reports, 0, returnReports, 0, returnReports.length);
-		
+
 		return returnReports;
 	}
-	
+
+
 	public SyncReport[] search(DateFilter startDate, DateFilter end, File histDir) throws Exception {
 		DateFilter start = new DateFilter();
 		start.setDay(startDate.getDay());
@@ -84,24 +157,22 @@ public class HistoryManager {
 		int checkMax = 0;
 		int iterator = 0;
 		this.incrementDate(end);
-		while(!start.equals(end)){
+		while (!start.equals(end)) {
 			File startDir = getDirectory(start, histDir);
-			if((startDir.exists())&&(startDir.isDirectory())){
+			if ((startDir.exists()) && (startDir.isDirectory())) {
 				String[] fileList = startDir.list();
 				checkMax = checkMax + fileList.length;
-				if(checkMax > maxSyncReports)
-					throw  new Exception();
+				if (checkMax > maxSyncReports)
+					throw new Exception();
 				else {
-					for(int i = 0; i < fileList.length; i++)
-					{
-						File inputFile = new File(startDir.getAbsolutePath()+File.separator + fileList[i]);
+					for (int i = 0; i < fileList.length; i++) {
+						File inputFile = new File(startDir.getAbsolutePath() + File.separator + fileList[i]);
 						FileReader in = new FileReader(inputFile);
-						if(in.read() != -1)
-						{
-							reports[iterator] = this.getReport(startDir.getAbsolutePath() + File.separator + fileList[i]);
+						if (in.read() != -1) {
+							reports[iterator] = this.getReport(startDir.getAbsolutePath() + File.separator
+								+ fileList[i]);
 							iterator++;
-						}
-						else
+						} else
 							throw new Exception();
 						in.close();
 					}
@@ -111,7 +182,7 @@ public class HistoryManager {
 		}
 		SyncReport[] returnReports = new SyncReport[checkMax];
 		System.arraycopy(reports, 0, returnReports, 0, returnReports.length);
-		
+
 		return returnReports;
 	}
 
@@ -133,38 +204,35 @@ public class HistoryManager {
 		File histDir = getHistoryDirectory();
 		String month;
 		String day;
-		if(f.getMonth()<10){
+		if (f.getMonth() < 10) {
 			month = "0" + f.getMonth();
-		}
-		else
+		} else
 			month = "" + f.getMonth();
-		
-		if(f.getDay()<10){
+
+		if (f.getDay() < 10) {
 			day = "0" + f.getDay();
-		}
-		else
+		} else
 			day = "" + f.getDay();
-			
+
 		File dir = new File(histDir.getAbsolutePath() + File.separator + f.getYear() + File.separator + month
 			+ File.separator + day);
 		return dir;
 	}
-	
+
+
 	private File getDirectory(DateFilter f, File histDir) {
 		String month;
 		String day;
-		if(f.getMonth()<10){
+		if (f.getMonth() < 10) {
 			month = "0" + f.getMonth();
-		}
-		else
+		} else
 			month = "" + f.getMonth();
-		
-		if(f.getDay()<10){
+
+		if (f.getDay() < 10) {
 			day = "0" + f.getDay();
-		}
-		else
+		} else
 			day = "" + f.getDay();
-			
+
 		File dir = new File(histDir.getAbsolutePath() + File.separator + f.getYear() + File.separator + month
 			+ File.separator + day);
 		return dir;
@@ -181,21 +249,20 @@ public class HistoryManager {
 		dir.mkdirs();
 		return dir;
 	}
-	
-	private void incrementDate(DateFilter f){
-		if(f.getDay() >= 31){
+
+
+	private void incrementDate(DateFilter f) {
+		if (f.getDay() >= 31) {
 			f.setDay(1);
-			if(f.getMonth() >= 12){
+			if (f.getMonth() >= 12) {
 				f.setMonth(1);
-				f.setYear(f.getYear()+1);
+				f.setYear(f.getYear() + 1);
+			} else {
+				f.setMonth(f.getMonth() + 1);
 			}
-			else{
-				f.setMonth(f.getMonth()+1);
-			}
-		}
-		else
-			f.setDay(f.getDay()+1);
-		
+		} else
+			f.setDay(f.getDay() + 1);
+
 	}
 
 }

@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.syncgts.core;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.Lifetime;
 import gov.nih.nci.cagrid.gts.bean.Status;
@@ -21,15 +22,20 @@ import java.math.BigInteger;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.log4j.Logger;
 import org.globus.common.CoGProperties;
+import org.globus.gsi.TrustedCertificatesLock;
 import org.globus.wsrf.impl.security.authorization.IdentityAuthorization;
 import org.projectmobius.common.MobiusDate;
 import org.projectmobius.common.MobiusRunnable;
@@ -43,7 +49,7 @@ import org.projectmobius.common.MobiusRunnable;
  *          Exp $
  */
 public class SyncGTS {
-
+	private final static QName TRUSTED_CA_QN = new QName(SyncGTSDefault.SYNC_GTS_NAMESPACE, "TrustedCA");
 	private Map caListings;
 	private Map listingsById;
 	private Logger logger;
@@ -152,10 +158,10 @@ public class SyncGTS {
 		SyncReport report = new SyncReport();
 		try {
 			reset();
+			
 			String dt = MobiusDate.getCurrentDateTimeAsString();
 			report.setSyncDescription(description);
 			report.setTimestamp(dt);
-			this.readInCurrentCADirectory(description);
 			Map master = new HashMap();
 			String error = null;
 			SyncDescriptor[] des = description.getSyncDescriptor();
@@ -222,7 +228,7 @@ public class SyncGTS {
 						mess.setValue(msg);
 						messages.add(mess);
 					} else {
-						master.put(ta.getName(), new TrustedCAListing(uri, ta));
+						master.put(ta.getName(), new TrustedCAListing(uri, ta,des[i]));
 					}
 				}
 				this.logger.debug("Done syncing with the GTS " + uri + " " + taMap.size()
@@ -233,131 +239,169 @@ public class SyncGTS {
 				}
 			}
 
-			// TODO: Write out tas.
-			int taCount = 0;
-			Iterator itr = master.values().iterator();
-			List addedList = new ArrayList();
-			while (itr.hasNext()) {
-				taCount = taCount + 1;
-				int fid = 0;
-				String filePrefix = CoGProperties.getDefault().getCaCertLocations() + File.separator
-					+ description.getFilePrefix() + "-" + dt + "-" + taCount;
-				File caFile = new File(filePrefix + "." + fid);
-				File crlFile = new File(filePrefix + ".r" + fid);
-				try {
-					TrustedCA ca = new TrustedCA();
-					TrustedCAListing listing = (TrustedCAListing) itr.next();
-					TrustedAuthority ta = listing.getTrustedAuthority();
-					X509Certificate cert = CertUtil.loadCertificate(ta.getCertificate().getCertificateEncodedString());
-					ca.setName(cert.getSubjectDN().getName());
-					ca.setGts(listing.getService());
-					CertUtil.writeCertificate(cert, caFile);
-					ca.setCertificateFile(caFile.getAbsolutePath());
-					logger.debug("Wrote out the certificate for the Trusted Authority " + ta.getName()
-						+ " to the file " + caFile.getAbsolutePath());
-					if (ta.getCRL() != null) {
-						if (ta.getCRL().getCrlEncodedString() != null) {
-							X509CRL crl = CertUtil.loadCRL(ta.getCRL().getCrlEncodedString());
-							CertUtil.writeCRL(crl, crlFile);
-							ca.setCRLFile(crlFile.getAbsolutePath());
-							logger.debug("Wrote out the CRL for the Trusted Authority " + ta.getName()
-								+ " to the file " + crlFile.getAbsolutePath());
-						}
-					}
-					addedList.add(ca);
-				} catch (Exception e) {
-					logger.error("An unexpected error occurred writing out the Trusted Authorities!!!", e);
-					caFile.delete();
-					crlFile.delete();
-				}
-			}
-			Message mess = new Message();
-			mess.setType(MessageType.Info);
-			mess.setValue("Successfully wrote out " + taCount + " Trusted Authority(s) to "
-				+ CoGProperties.getDefault().getCaCertLocations());
-			messages.add(mess);
-			logger.info(mess.getValue());
+			synchronized (TrustedCertificatesLock.getInstance()) {
 
-			TrustedCA[] addedCAs = new TrustedCA[taCount];
-			for (int i = 0; i < addedList.size(); i++) {
-				addedCAs[i] = (TrustedCA) addedList.get(i);
-			}
-			AddedTrustedCAs atc = new AddedTrustedCAs();
-			atc.setTrustedCA(addedCAs);
-			report.setAddedTrustedCAs(atc);
+				this.readInCurrentCADirectory(description);
 
-			int removeCount = 0;
-			List removedList = new ArrayList();
-			Iterator del = caListings.values().iterator();
-			while (del.hasNext()) {
-				TrustedCAFileListing fl = (TrustedCAFileListing) del.next();
-				if ((description.isDeleteExistingTrustedRoots())
-					|| (fl.getName().indexOf(description.getFilePrefix()) >= 0)) {
-					TrustedCA ca = new TrustedCA();
-					removeCount = removeCount + 1;
-					if (fl.getCertificate() != null) {
-						X509Certificate cert = CertUtil.loadCertificate(fl.getCertificate());
+				// TODO: Write out tas.
+				int taCount = 0;
+				Iterator itr = master.values().iterator();
+				List addedList = new ArrayList();
+				while (itr.hasNext()) {
+					taCount = taCount + 1;
+					int fid = 0;
+					String filePrefix = CoGProperties.getDefault().getCaCertLocations() + File.separator
+						+ description.getFilePrefix() + "-" + dt + "-" + taCount;
+					File caFile = new File(filePrefix + "." + fid);
+					File crlFile = new File(filePrefix + ".r" + fid);
+					File metadataFile = new File(filePrefix +".syncgts"+fid);
+					try {
+						TrustedCA ca = new TrustedCA();
+						TrustedCAListing listing = (TrustedCAListing) itr.next();
+						
+						TrustedAuthority ta = listing.getTrustedAuthority();
+						X509Certificate cert = CertUtil.loadCertificate(ta.getCertificate()
+							.getCertificateEncodedString());
 						ca.setName(cert.getSubjectDN().getName());
-						ca.setCertificateFile(fl.getCertificate().getAbsolutePath());
-						if (fl.getCertificate().delete()) {
-							logger.debug("Removed the certificate (" + fl.getCertificate().getAbsolutePath()
-								+ ") for the CA " + ca.getName() + ".");
-						} else {
-							Message err = new Message();
-							err.setType(MessageType.Error);
-							err.setValue("Error removing the certificate (" + fl.getCertificate().getAbsolutePath()
-								+ ") for the CA " + ca.getName() + ".");
-							this.messages.add(err);
-							logger.error(err.getValue());
+						ca.setGts(listing.getService());
+						ca.setMetadataFile(metadataFile.getAbsolutePath());
+						CertUtil.writeCertificate(cert, caFile);
+						ca.setCertificateFile(caFile.getAbsolutePath());
+						logger.debug("Wrote out the certificate for the Trusted Authority " + ta.getName()
+							+ " to the file " + caFile.getAbsolutePath());
+						if (ta.getCRL() != null) {
+							if (ta.getCRL().getCrlEncodedString() != null) {
+								X509CRL crl = CertUtil.loadCRL(ta.getCRL().getCrlEncodedString());
+								CertUtil.writeCRL(crl, crlFile);
+								ca.setCRLFile(crlFile.getAbsolutePath());
+								logger.debug("Wrote out the CRL for the Trusted Authority " + ta.getName()
+									+ " to the file " + crlFile.getAbsolutePath());
+							}
 						}
-					}
-
-					if (fl.getCRL() != null) {
-						ca.setCRLFile(fl.getCRL().getAbsolutePath());
-						if (fl.getCRL().delete()) {
-							logger.debug("Removed the CRL (" + fl.getCRL().getAbsolutePath() + ") for the CA "
-								+ ca.getName() + ".");
-						} else {
-							Message err = new Message();
-							err.setType(MessageType.Error);
-							err.setValue("Error removing the CRL (" + fl.getCRL().getAbsolutePath() + ") for the CA "
-								+ ca.getName() + ".");
-							this.messages.add(err);
-							logger.error(err.getValue());
+						Calendar cal = new GregorianCalendar();
+						ca.setDiscovered(cal.getTimeInMillis());
+						if(listing.getDescriptor().getExpiration()!=null){
+							cal.add(Calendar.HOUR_OF_DAY, listing.getDescriptor().getExpiration().getHours());
+							cal.add(Calendar.MINUTE, listing.getDescriptor().getExpiration().getMinutes());
+							cal.add(Calendar.SECOND, listing.getDescriptor().getExpiration().getSeconds());
+							ca.setExpiration(cal.getTimeInMillis());
+						}else{
+							ca.setExpiration(cal.getTimeInMillis());
 						}
+						Utils.serializeDocument(metadataFile.getAbsolutePath(), ca, TRUSTED_CA_QN);
+						logger.debug("Wrote out the metadata for the Trusted Authority " + ta.getName()
+							+ " to the file " + metadataFile.getAbsolutePath());
+						addedList.add(ca);
+					} catch (Exception e) {
+						logger.error("An unexpected error occurred writing out the Trusted Authorities!!!", e);
+						caFile.delete();
+						crlFile.delete();
+						metadataFile.delete();
 					}
-
-					if (fl.getSigningPolicy() != null) {
-						ca.setSigningPolicyFile(fl.getSigningPolicy().getAbsolutePath());
-						if (fl.getSigningPolicy().delete()) {
-							logger.debug("Removed the Signing Policy (" + fl.getCertificate().getAbsolutePath()
-								+ ") for the CA " + ca.getName() + ".");
-						} else {
-							Message err = new Message();
-							err.setType(MessageType.Error);
-							err.setValue("Error removing the Signing Policy (" + fl.getCRL().getAbsolutePath()
-								+ ") for the CA " + ca.getName() + ".");
-							this.messages.add(err);
-							logger.error(err.getValue());
-						}
-					}
-
-					removedList.add(ca);
 				}
+				Message mess = new Message();
+				mess.setType(MessageType.Info);
+				mess.setValue("Successfully wrote out " + taCount + " Trusted Authority(s) to "
+					+ CoGProperties.getDefault().getCaCertLocations());
+				messages.add(mess);
+				logger.info(mess.getValue());
+
+				TrustedCA[] addedCAs = new TrustedCA[taCount];
+				for (int i = 0; i < addedList.size(); i++) {
+					addedCAs[i] = (TrustedCA) addedList.get(i);
+				}
+				AddedTrustedCAs atc = new AddedTrustedCAs();
+				atc.setTrustedCA(addedCAs);
+				report.setAddedTrustedCAs(atc);
+
+				int removeCount = 0;
+				List removedList = new ArrayList();
+				Iterator del = caListings.values().iterator();
+				while (del.hasNext()) {
+					TrustedCAFileListing fl = (TrustedCAFileListing) del.next();
+					if ((description.isDeleteExistingTrustedRoots())
+						|| (fl.getName().indexOf(description.getFilePrefix()) >= 0)) {
+						TrustedCA ca = new TrustedCA();
+						removeCount = removeCount + 1;
+						if (fl.getCertificate() != null) {
+							X509Certificate cert = CertUtil.loadCertificate(fl.getCertificate());
+							ca.setName(cert.getSubjectDN().getName());
+							ca.setCertificateFile(fl.getCertificate().getAbsolutePath());
+							if (fl.getCertificate().delete()) {
+								logger.debug("Removed the certificate (" + fl.getCertificate().getAbsolutePath()
+									+ ") for the CA " + ca.getName() + ".");
+							} else {
+								Message err = new Message();
+								err.setType(MessageType.Error);
+								err.setValue("Error removing the certificate (" + fl.getCertificate().getAbsolutePath()
+									+ ") for the CA " + ca.getName() + ".");
+								this.messages.add(err);
+								logger.error(err.getValue());
+							}
+						}
+
+						if (fl.getCRL() != null) {
+							ca.setCRLFile(fl.getCRL().getAbsolutePath());
+							if (fl.getCRL().delete()) {
+								logger.debug("Removed the CRL (" + fl.getCRL().getAbsolutePath() + ") for the CA "
+									+ ca.getName() + ".");
+							} else {
+								Message err = new Message();
+								err.setType(MessageType.Error);
+								err.setValue("Error removing the CRL (" + fl.getCRL().getAbsolutePath()
+									+ ") for the CA " + ca.getName() + ".");
+								this.messages.add(err);
+								logger.error(err.getValue());
+							}
+						}
+
+						if (fl.getSigningPolicy() != null) {
+							ca.setSigningPolicyFile(fl.getSigningPolicy().getAbsolutePath());
+							if (fl.getSigningPolicy().delete()) {
+								logger.debug("Removed the Signing Policy (" + fl.getCertificate().getAbsolutePath()
+									+ ") for the CA " + ca.getName() + ".");
+							} else {
+								Message err = new Message();
+								err.setType(MessageType.Error);
+								err.setValue("Error removing the Signing Policy (" + fl.getCRL().getAbsolutePath()
+									+ ") for the CA " + ca.getName() + ".");
+								this.messages.add(err);
+								logger.error(err.getValue());
+							}
+						}
+						
+						if (fl.getMetadata() != null) {
+							ca.setMetadataFile(fl.getMetadata().getAbsolutePath());
+							if (fl.getMetadata().delete()) {
+								logger.debug("Removed the CA Metadata (" + fl.getMetadata().getAbsolutePath()
+									+ ") for the CA " + ca.getName() + ".");
+							} else {
+								Message err = new Message();
+								err.setType(MessageType.Error);
+								err.setValue("Error removing the metadata (" + fl.getMetadata().getAbsolutePath()
+									+ ") for the CA " + ca.getName() + ".");
+								this.messages.add(err);
+								logger.error(err.getValue());
+							}
+						}
+
+						removedList.add(ca);
+					}
+				}
+				TrustedCA[] removedCAs = new TrustedCA[removedList.size()];
+				for (int i = 0; i < removedList.size(); i++) {
+					removedCAs[i] = (TrustedCA) removedList.get(i);
+				}
+				RemovedTrustedCAs rtc = new RemovedTrustedCAs();
+				rtc.setTrustedCA(removedCAs);
+				report.setRemovedTrustedCAs(rtc);
+				Message mess2 = new Message();
+				mess2.setType(MessageType.Info);
+				mess2.setValue("Successfully removed " + removeCount + " Trusted Authority(s) from "
+					+ CoGProperties.getDefault().getCaCertLocations());
+				messages.add(mess2);
+				logger.info(mess2.getValue());
 			}
-			TrustedCA[] removedCAs = new TrustedCA[removedList.size()];
-			for (int i = 0; i < removedList.size(); i++) {
-				removedCAs[i] = (TrustedCA) removedList.get(i);
-			}
-			RemovedTrustedCAs rtc = new RemovedTrustedCAs();
-			rtc.setTrustedCA(removedCAs);
-			report.setRemovedTrustedCAs(rtc);
-			Message mess2 = new Message();
-			mess2.setType(MessageType.Info);
-			mess2.setValue("Successfully removed " + removeCount + " Trusted Authority(s) from "
-				+ CoGProperties.getDefault().getCaCertLocations());
-			messages.add(mess2);
-			logger.info(mess2.getValue());
 		} catch (Exception e) {
 			logger.fatal(e.getMessage(), e);
 			Message error = new Message();
@@ -365,6 +409,7 @@ public class SyncGTS {
 			error.setValue(e.getMessage());
 			messages.add(error);
 		}
+
 		// Add messages to the report
 		Message[] list = new Message[messages.size()];
 		for (int i = 0; i < messages.size(); i++) {
@@ -416,7 +461,7 @@ public class SyncGTS {
 			int index = fn.lastIndexOf(".");
 			if (index == -1) {
 				handleUnexpectedFile(description, list[i]);
-				break;
+				continue;
 			}
 			String name = fn.substring(0, index);
 			String extension = fn.substring(index + 1);
@@ -434,9 +479,11 @@ public class SyncGTS {
 				ca.setCRL(list[i]);
 			} else if (extension.equals("signing_policy")) {
 				ca.setSigningPolicy(list[i]);
-			} else {
+			} else if (extension.indexOf("syncgts")!=-1) {
+				ca.setMetadata(list[i]);
+			}else {
 				handleUnexpectedFile(description, list[i]);
-				break;
+				continue;
 			}
 
 		}
@@ -470,7 +517,7 @@ public class SyncGTS {
 			mess.setValue("The ca " + ca.getName() + " is invalid and will be removed!!!");
 			messages.add(mess);
 			logger.warn(mess.getValue());
-
+			// TODO: LOCK DELETE
 			if (ca.getCertificate() != null) {
 				ca.getCertificate().delete();
 			}
@@ -497,6 +544,7 @@ public class SyncGTS {
 			mess.setValue("The file " + f.getAbsolutePath() + " is unexpected and will be removed!!!");
 			messages.add(mess);
 			logger.warn(mess.getValue());
+			// TODO: LOCK DELETE
 			f.delete();
 		} else {
 			Message mess = new Message();

@@ -1,6 +1,9 @@
 package gov.nih.nci.cagrid.syncgts.core;
 
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
+import gov.nih.nci.cagrid.syncgts.bean.SyncDescriptor;
+
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -12,11 +15,13 @@ public class TrustedCAListing {
 
 	private String service;
 	private TrustedAuthority trustedAuthority;
+	private SyncDescriptor descriptor;
 
 
-	public TrustedCAListing(String service, TrustedAuthority ta) {
+	public TrustedCAListing(String service, TrustedAuthority ta, SyncDescriptor des) {
 		this.service = service;
 		this.trustedAuthority = ta;
+		this.descriptor = des;
 	}
 
 
@@ -27,6 +32,11 @@ public class TrustedCAListing {
 
 	public TrustedAuthority getTrustedAuthority() {
 		return trustedAuthority;
+	}
+
+
+	public SyncDescriptor getDescriptor() {
+		return descriptor;
 	}
 
 }

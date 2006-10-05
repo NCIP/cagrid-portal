@@ -14,6 +14,7 @@ public class TrustedCAFileListing {
 	private File certificate;
 	private File crl;
 	private File signingPolicy;
+	private File metadata;
 	private String name;
 	private Integer fileId;
 
@@ -90,6 +91,16 @@ public class TrustedCAFileListing {
 		sb.append("}\n");
 
 		return sb.toString();
+	}
+
+
+	public File getMetadata() {
+		return metadata;
+	}
+
+
+	public void setMetadata(File metadata) {
+		this.metadata = metadata;
 	}
 
 }
