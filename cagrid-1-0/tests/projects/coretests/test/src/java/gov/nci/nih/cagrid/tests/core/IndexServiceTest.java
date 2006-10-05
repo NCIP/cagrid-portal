@@ -42,8 +42,9 @@ public class IndexServiceTest
 	@SuppressWarnings("unchecked")
 	protected Vector steps() 
 	{
-		super.init("BasicAnalyticalServiceWithMetadata");
-
+		//super.init("BasicAnalyticalServiceWithMetadata");
+		super.init("BasicDataService");
+		
 		File indexServiceDir = new File(System.getProperty("index.dir",
 			".." + File.separator + ".." + File.separator + ".." + File.separator + 
 			"caGrid" + File.separator + "projects" + File.separator + "index"
@@ -60,7 +61,7 @@ public class IndexServiceTest
 		steps.add(new GlobusDeployServiceStep(globus, createServiceStep.getServiceDir()));
 		steps.add(new GlobusDeployServiceStep(globus, indexServiceDir, "deployIndexGlobus"));		
 		steps.add(new GlobusStartStep(globus, port));
-		steps.add(new SleepStep(3000));
+		steps.add(new SleepStep(6000));
 		try {
 			steps.add(new ServiceDiscoveryStep(port, super.endpoint, super.metadataFile));
 		} catch (Exception e) {
