@@ -749,8 +749,7 @@ public class DomainModelBuilder {
 			converted.setValueDomain(attVD);
 
 			// populate vd semantic md
-			//TODO: turn this on if it should yeild results... currently does not
-			//attVD.setSemanticMetadata(semanticMetadataCollectionToArray(attTypemd.getSemanticMetadataCollection()));
+			attVD.setSemanticMetadata(semanticMetadataCollectionToArray(attTypemd.getSemanticMetadataCollection()));
 
 			// populate enumeration
 			ValueDomainEnumerationCollection enumCollection = new ValueDomainEnumerationCollection();
