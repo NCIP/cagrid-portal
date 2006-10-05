@@ -171,7 +171,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		if (typesTree == null) {
 			typesTree = new TargetTypesTree();
 			// listener for check and uncheck operations on the tree
-			typesTree.addTypeSelectionListener(new CheckTreeSelectionListener() {
+			typesTree.addCheckTreeSelectionListener(new CheckTreeSelectionListener() {
 				public void nodeChecked(CheckTreeSelectionEvent e) {
 					if (e.getNode() instanceof TypeTreeNode) {
 						TypeTreeNode typeNode = (TypeTreeNode) e.getNode();
