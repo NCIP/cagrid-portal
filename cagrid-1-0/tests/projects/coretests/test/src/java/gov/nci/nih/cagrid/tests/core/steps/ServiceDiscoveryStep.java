@@ -5,8 +5,10 @@ package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.common.PointOfContact;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.service.Operation;
 import gov.nih.nci.cagrid.metadata.service.ServiceContext;
 
@@ -26,6 +28,7 @@ public class ServiceDiscoveryStep
 	extends Step
 {
 	private EndpointReferenceType indexServiceEndpoint;
+	private EndpointReferenceType domainServiceEndpoint;
 	private String domainServicePath;
 	private ServiceMetadata metadata;
 	
@@ -42,6 +45,7 @@ public class ServiceDiscoveryStep
 		this.indexServiceEndpoint = indexServiceEndpoint;
 		this.metadata = (ServiceMetadata) Utils.deserializeDocument(metadataFile.toString(), ServiceMetadata.class);
 
+		this.domainServiceEndpoint = domainServiceEndpoint;
 		domainServicePath = domainServiceEndpoint.getAddress().toString();
 		String search = ":" + domainServiceEndpoint.getAddress().getPort() + "/";
 		int index = domainServicePath.indexOf(search);
@@ -77,7 +81,13 @@ public class ServiceDiscoveryStep
 			assertTrue(foundService(
 				client.discoverServicesByPointOfContact(poc)
 			));
-		}			
+		}
+		
+		// model
+		DomainModel model = MetadataUtils.getDomainModel(domainServiceEndpoint);
+		assertTrue(foundService(
+			client.discoverDataServicesByModelConceptCode(model.getExposedUMLClassCollection().getUMLClass()[0].getUmlAttributeCollection().getUMLAttribute(0).getSemanticMetadata(0).getConceptCode())
+		));		
 	}
 	
 	private boolean foundService(EndpointReferenceType[] endpoints)
