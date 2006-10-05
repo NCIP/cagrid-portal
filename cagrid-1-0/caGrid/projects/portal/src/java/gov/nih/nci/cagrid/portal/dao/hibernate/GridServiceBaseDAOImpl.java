@@ -19,6 +19,10 @@ import java.util.StringTokenizer;
 public final class GridServiceBaseDAOImpl extends BaseDAOImpl
         implements GridServiceBaseDAO {
 
+    public List getAllServices() throws DataAccessException {
+        return getHibernateTemplate().find("from RegisteredService service order by service.name desc");
+    }
+
     /**
      * @param obj
      * @return

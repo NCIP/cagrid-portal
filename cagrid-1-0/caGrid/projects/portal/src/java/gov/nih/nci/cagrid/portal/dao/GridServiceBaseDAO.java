@@ -4,6 +4,8 @@ import gov.nih.nci.cagrid.portal.domain.DomainObject;
 import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
 import org.springframework.dao.DataAccessException;
 
+import java.util.List;
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,6 +16,13 @@ import org.springframework.dao.DataAccessException;
  */
 public interface GridServiceBaseDAO extends BaseDAO {
 
+    /**
+     * Will get an Ordered List of services
+     *
+     * @return
+     * @throws DataAccessException
+     */
+    public List getAllServices() throws DataAccessException;
 
     /**
      * Will return the business key depending

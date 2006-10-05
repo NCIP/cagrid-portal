@@ -4,7 +4,6 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 
 <f:subview id="subMenu">
-
     <h:panelGrid styleClass="subMenuTable"
                  columnClasses="mainMenuSubItems,mainMenuSubItemsSpacer,mainMenuSubItems,mainMenuSubItemsSpacer,mainMenuSubItems,mainMenuSubItemsSpacer"
                  cellpadding="0" cellspacing="4"

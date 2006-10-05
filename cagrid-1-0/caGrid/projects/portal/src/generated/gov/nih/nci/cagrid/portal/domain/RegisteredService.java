@@ -25,6 +25,8 @@ public class RegisteredService implements GridService, Comparable {
     private String version;
     private String name;
     private String description;
+    //service type defaults to Analytical Service
+    private String type = RegisteredService.ANALYTICAL_SERVICE;
 
     //Associations
     private ResearchCenter rc;
@@ -143,14 +145,13 @@ public class RegisteredService implements GridService, Comparable {
     }
 
     /**
-     * @hibernate.set name="operationsCollection"
-     * cascade="all"
+     * @hibernate.set cascade="all"
      * update="false"
      * inverse="true"
      * @hibernate.collection-key column="SERVICE_ID_KEY"
      * @hibernate.collection-one-to-many class="gov.nih.nci.cagrid.portal.domain.Operation"
      */
-    private Set getOperationCollection() {
+    public Set getOperationCollection() {
         return operationCollection;
     }
 
@@ -204,6 +205,21 @@ public class RegisteredService implements GridService, Comparable {
         this.version = version;
     }
 
+    /**
+     * ToDo should be in DB
+     *
+     * @return
+     */
+    public String getType() {
+        if (this.domainModel != null) {
+            return RegisteredService.DATA_SERVICE;
+        } else
+            return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public boolean equals(Object o) {
         if (this == o) return true;

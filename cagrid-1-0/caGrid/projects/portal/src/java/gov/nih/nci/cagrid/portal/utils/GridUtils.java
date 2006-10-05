@@ -36,6 +36,7 @@ public final class GridUtils {
     public static String getServiceName(EndpointReferenceType serviceEPR)
             throws MetadataRetreivalException {
         return GridUtils.getService(serviceEPR).getName();
+
     }
 
     public static String getServiceVersion(EndpointReferenceType serviceEPR)

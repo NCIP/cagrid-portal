@@ -515,21 +515,25 @@ DATA TABLE BEGINS
 /* for the dark color of alternating rows */
     background-color: #D3D3D3; /* constant: dark blue */
     color: #000000; /* constant: black */
-
 }
 
 .dataCellText {
 /* for text output cells */
-    font-size: 0.9em;
-    text-align: left;
+    font-size: 0.8em;
+    padding: 0em;
+    line-height: 1.5em;
+    vertical-align: middle;
 }
 
 .dataCellTextBold {
 /* for text output cells */
-    font-size: 0.9em;
-    text-align: left;
+    font-size: 0.8em;
+    padding: 0em;
+    padding-left: 0.1cm;
+    line-height: 1.5em;
+    vertical-align: top;
     font-weight: bold;
-
+    width: 19%;
 }
 
 .dataCellNumerical {
@@ -622,7 +626,14 @@ p, .p {
 
 .txtHighlight {
 /* adds emphasis to text */
-    color: #A90101;
+    color: #797C9C;
+    font-weight: bold;
+}
+
+.txtHighlightOn {
+/* adds emphasis to text */
+    color: #9FA2BA;
+    font-weight: bold;
 }
 
 .welcomeTitle {
@@ -659,10 +670,10 @@ Custom styles for Portal
     font-family: arial, helvetica, verdana, sans-serif;
     font-size: 1.1em;
     font-weight: bold;
-    background-color: #797C9C;
+    background-color: #5C5C5C;
     color: #FFFFFF; /* constant: white */
     text-align: center;
-    padding: 0.1em;;
+    padding: 0.2em;
     padding-left: 0.3em;
     padding-right: 0.3em;
     border: 0px;
@@ -675,6 +686,25 @@ Custom styles for Portal
 
 .contentMainTableRow {
     vertical-align: top;
+}
+
+.contentSubInnerTable {
+    width: 80%;
+    height: 100%;
+    vertical-align: top;
+    padding: 0.1em;
+    border: 1px solid #CCCCCC; /* constant: medium gray */
+}
+
+.contentSubInnerTableTitle {
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 0.8em;
+    font-weight: bold;
+    padding-left: 0.8em;
+    background-color: #5C5C5C; /* constant: dark gray */
+    color: #FFFFFF; /* constant: white */
+    height: 20;
+    text-align: left;
 }
 
 .contentInnerTable {
@@ -694,6 +724,21 @@ Custom styles for Portal
     background-color: #5C5C5C; /* constant: dark gray */
     color: #FFFFFF; /* constant: white */
     height: 20;
+    text-align: left;
+}
+
+.contentTableHeader {
+/* for the horizontal column headers */
+    font-family: arial, helvetica, verdana, sans-serif; /*background-color: #CCCCCC; /* constant: medium gray */
+    font-size: 0.9em;
+    background-color: #797C9C; /* constant: light purple */
+    color: #FFFFFF; /* constant: black */
+    font-weight: bold;
+    padding: 0.1cm;
+    border-right: 1px solid #CCCCCC; /* constant: dark gray */
+    border-bottom: 1px solid #CCCCCC; /* constant: dark gray */
+    border-top: 1px solid #CCCCCC; /* constant: dark gray */
+    border-left: 1px solid #CCCCCC; /* constant: dark gray */
     text-align: left;
 }
 
@@ -726,22 +771,71 @@ Custom styles for Portal
     font-weight: bold;
 }
 
-.searchTabbedPaneActive {
-/* for the selected tab in the main menu */
-    font-size: 1.1em;
-    font-weight: bold;
-    background-color: #797C9C; /* darker */
-    color: #797C9C; /* constant: white */
-    text-align: center;
+/* For tabbed Panes */
+table.tabbedPane {
+    width: 100% ! important;
+    height: 100% ! important;
+    vertical-align: top ! important;
+    border-collapse: separate ! important;
+    border-spacing: 0px ! important;
+    background-color: #FFFFFF;
 }
 
-.searchTabbedPaneInactive {
-    font-size: 1.1em;
-    font-weight: bold;
-    background-color: #9FA2BA;
-    color: #FFFFFF; /* constant: white */
-    text-align: center;
-    border: 1px solid #0000FF;
+td.activeTab {
+    width: 33% ! important;
+    font-size: 0.6em ! important;
+    background-color: #797C9C ! important;
+    color: #FFFFFF ! important;
+    border: 1px solid #CCCCCC ! important;
+    text-align: center ! important;
+    font-weight: bold ! important;
+}
+
+td.activeTab input {
+    background-color: #797C9C ! important;
+    color: #FFFFFF ! important;
+    text-align: center ! important;
+    font-weight: bold ! important;
+}
+
+td.inactiveTab {
+    width: 33% ! important;
+    font-size: 0.6em ! important;
+    background-color: #9FA2BA ! important;
+    color: #797C9C ! important;
+    border: 1px solid #CCCCCC ! important;
+    text-align: center ! important;
+    font-weight: bold ! important;
+}
+
+td.inactiveTab input {
+    background-color: #9FA2BA ! important;
+    color: #FFFFFF ! important;
+    text-align: center ! important;
+    font-weight: bold ! important;
+}
+
+td.myFaces_panelTabbedPane_emptyHeaderCell {
+    background-color: #FFFFFF ! important;
+    border-bottom: 1px solid #91A0CA ! important;
+    border-left: 0px none ! important;
+    border-right: 0px none ! important;
+    border-top: 0px none ! important;
+}
+
+.myFaces_panelTabbedPane_activeHeaderCell input:hover,
+    .myFaces_panelTabbedPane_inactiveHeaderCell input:hover {
+    border-top: orange solid 1px ! important;
+}
+
+td.tabContent {
+    background-color: #FFFFFF ! important;
+    border: 0px none ! important;
+    vertical-align: top ! important;
+    padding-top: 5px ! important;
+    padding-left: 0px ! important;
+    padding-right: 0px ! important;
+    height: 100% ! important;
 }
 
 .errorTitle {
@@ -758,7 +852,8 @@ Custom styles for Portal
 
 .errorContent {
     font-size: 0.9em;
-    padding: 1em;
-    line-height: 1.5em;
+    padding: 0em;
+    font-weight: bold;
+    line-height: 1.0em;
     vertical-align: top;
 }

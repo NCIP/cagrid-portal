@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.portal.web;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
 import gov.nih.nci.cagrid.portal.manager.ResearchCenterManager;
+import org.apache.log4j.Category;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -20,13 +21,23 @@ public class CenterList {
     private List list;
     private ResearchCenter navigatedCenter;
     private ResearchCenterManager rcManager;
+    private int listSize;
 
+    private Category _logger = Category.getInstance(getClass().getName());
 
-    public String navigateToCenter() {
-        Integer pk = new Integer((String) FacesContext.getCurrentInstance().getExternalContext()
-                .getRequestParameterMap().get("navigatedServicePk"));
+    public String navigateToCenter() throws FacesException {
+        try {
+            Integer pk = new Integer((String) FacesContext.getCurrentInstance().getExternalContext()
+                    .getRequestParameterMap().get("navigatedCenterPk"));
 
-        navigatedCenter = (ResearchCenter) rcManager.getObjectByPrimaryKey(ResearchCenter.class, pk);
+            navigatedCenter = (ResearchCenter) rcManager.getObjectByPrimaryKey(ResearchCenter.class, pk);
+        } catch (NumberFormatException e) {
+            _logger.error(e);
+            throw new FacesException(e);
+        } catch (PortalRuntimeException e) {
+            _logger.error(e);
+            throw new FacesException(e);
+        }
         return "success";
     }
 
@@ -40,6 +51,10 @@ public class CenterList {
 
     public List getList() {
         return list;
+    }
+
+    public int getListSize() {
+        return list.size();
     }
 
     public void setList(List list) {

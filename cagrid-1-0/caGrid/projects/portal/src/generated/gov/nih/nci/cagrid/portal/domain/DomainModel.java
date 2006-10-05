@@ -83,8 +83,7 @@ public class DomainModel implements DomainObject {
     }
 
     /**
-     * @hibernate.set name="umlClassCollection"
-     * cascade="all-delete-orphan"
+     * @hibernate.set cascade="all-delete-orphan"
      * @hibernate.collection-key column="DOMAIN_MODEL_ID_KEY"
      * @hibernate.collection-one-to-many class="gov.nih.nci.cagrid.portal.domain.UMLClass"
      */

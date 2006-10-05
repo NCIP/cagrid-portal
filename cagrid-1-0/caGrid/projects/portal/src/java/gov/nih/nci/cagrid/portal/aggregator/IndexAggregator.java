@@ -3,9 +3,7 @@ package gov.nih.nci.cagrid.portal.aggregator;
 import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
-import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
-import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
-import gov.nih.nci.cagrid.portal.utils.GridUtils;
+import gov.nih.nci.cagrid.portal.exception.PortalFatalRuntimeException;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 
 
@@ -23,18 +21,17 @@ public class IndexAggregator extends AbstractAggregator {
     private DiscoveryClient discClient;
     private boolean metadataCompliance = true;
     private IndexService indexService;
-    private GridServiceManager idxMgr;
+
 
     /**
      * Initialize the runnable class with the
      * index service to aggregate from
      */
     public IndexAggregator(IndexService indexService,
-                           GridServiceManager idxMgr, boolean metadataCompliance) {
+                           boolean metadataCompliance) {
         this.indexService = indexService;
 
         // Inherit the manager
-        this.idxMgr = idxMgr;
         this.metadataCompliance = metadataCompliance;
 
         // create discovery client for the index
@@ -58,27 +55,14 @@ public class IndexAggregator extends AbstractAggregator {
         for (int i = 0; i < serviceEPR.length; i++) {
             _logger.debug("Adding " + serviceEPR[i] + " to index.");
 
-            RegisteredService rService = null;
-
-            rService = new RegisteredService(serviceEPR[i]);
-            // rService.setIndex(indexService);
-
-            try {
-                rService.setDescription(GridUtils.getServiceDescription(
-                        serviceEPR[i]));
-                rService.setName(GridUtils.getServiceDescription(serviceEPR[i]));
-            } catch (MetadataRetreivalException e) {
-                _logger.info(e);
-            } finally {
-                idxMgr.save(rService);
-            }
+            RegisteredService rService = new RegisteredService(serviceEPR[i]);
 
             try {
                 _logger.debug("Found Service. Publishing Event");
                 ctx.publishEvent(new RegisteredServiceFoundEvent(this, rService));
             } catch (NullPointerException e) {
-                _logger.error(
-                        "IndexAggregator does not have a proper context to publish events");
+                throw new PortalFatalRuntimeException("IndexAggregator does " +
+                        "not have a proper context to publish events");
             }
 
             _logger.debug("Event Published");
@@ -92,7 +76,4 @@ public class IndexAggregator extends AbstractAggregator {
         this.indexService = indexService;
     }
 
-    public void setIdxMgr(GridServiceManager idxMgr) {
-        this.idxMgr = idxMgr;
-    }
 }

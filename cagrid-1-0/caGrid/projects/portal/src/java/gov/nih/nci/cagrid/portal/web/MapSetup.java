@@ -21,7 +21,7 @@ public class MapSetup {
 
     private Category _logger = Category.getInstance(getClass().getName());
 
-    public String navigateToServicesMap() {
+    public String navigateToServicesMap() throws FacesException {
         _logger.debug("Setting up map of services");
 
         try {
@@ -37,7 +37,7 @@ public class MapSetup {
         return "success";
     }
 
-    public String navigateToRCMap() {
+    public String navigateToRCMap() throws FacesException {
         _logger.debug("Setting up Map of centers");
 
         try {

@@ -19,7 +19,7 @@ public final class ResearchCenterDAOImpl extends BaseDAOImpl
 
     public List getUniqueCenters() throws DataAccessException {
         try {
-            return getHibernateTemplate().find("from ResearchCenter rc group by rc.latitude");
+            return getHibernateTemplate().find("from ResearchCenter rc group by rc.latitude order by rc.displayName");
         } catch (DataAccessException e) {
             _logger.error(e);
             throw e;

@@ -8,14 +8,8 @@ import java.io.StringWriter;
 import java.util.Map;
 
 public class ErrorDisplayServlet {
-    private static final long serialVersionUID = 3123969847287207137L;
-    private static final String BEAN_NAME = ErrorDisplayServlet.class.getName();
     private boolean showError = true;
-
-    public String getInfoMessage() {
-        return "An unexpected processing error has occurred." +
-                "Please cut and paste the following information" + " into an email and send it to the admin";
-    }
+    private int recurseCount = 0;
 
 
     public String getStackTrace() {
@@ -24,13 +18,22 @@ public class ErrorDisplayServlet {
         Throwable ex = (Throwable) requestMap.get("javax.servlet.error.exception");
         StringWriter writer = new StringWriter();
         PrintWriter pw = new PrintWriter(writer);
+
+        recurseCount = 0;
+
+
         fillStackTrace(ex, pw);
 
         return writer.toString();
     }
 
     private void fillStackTrace(Throwable ex, PrintWriter pw) {
-        if (null == ex) {
+        /** prevent infinte loops **/
+        if (recurseCount > 10)
+            return;
+        else //increment
+            recurseCount++;
+        if (null == ex || pw == null) {
             return;
         }
 

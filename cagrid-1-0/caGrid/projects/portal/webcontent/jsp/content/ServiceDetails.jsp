@@ -1,5 +1,6 @@
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
+<%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t" %>
 
 
 <f:subview id="serviceDetails">
@@ -21,7 +22,7 @@
     <h:panelGrid styleClass="contentInnerTable" cellpadding="3"
                  rowClasses="dataRowLight,dataRowDark"
                  columnClasses="dataCellTextBold,dataCellText"
-                 headerClass="dataTableHeader" columns="2">
+                 headerClass="contentTableHeader" columns="2">
 
         <f:facet name="header">
             <h:column>
@@ -67,10 +68,11 @@
         <h:column>
             <h:outputText value="Research Center"/>
         </h:column>
+
         <h:column>
-            <h:commandLink action="#{center.navigateToCenter}">
+            <h:commandLink action="#{centers.navigateToCenter}">
                 <h:outputText value="#{services.navigatedService.researchCenter.shortName}"/>
-                <f:param id="navigatedCenterPk" name="navigatedCenterPk"
+                <f:param name="navigatedCenterPk"
                          value="#{services.navigatedService.researchCenter.pk}"/>
             </h:commandLink>
         </h:column>
@@ -79,19 +81,67 @@
             <h:outputText value="Service Type"/>
         </h:column>
         <h:column>
-            <h:outputText value="#{services.navigatedType}"/>
+            <h:outputText value="#{services.navigatedService.type}"/>
         </h:column>
 
     </h:panelGrid>
     <f:verbatim><br/><br/></f:verbatim>
 </h:column>
 
-<h:column rendered="#{services.showModel}">
-    <h:panelGrid styleClass="contentInnerTable" border="1"
-                 cellpadding="3" cellspacing="0"
+
+<%-- Operations List --%>
+<h:column rendered="#{not empty services.navigatedService.operationCollection}">
+    <t:panelGrid styleClass="contentInnerTable" cellpadding="3"
                  rowClasses="dataRowLight,dataRowDark"
                  columnClasses="dataCellTextBold,dataCellText"
-                 headerClass="dataTableHeader" columns="2">
+                 headerClass="contentTableHeader">
+
+        <f:facet name="header">
+            <h:column>
+                <h:outputText value="Supported Operations"/>
+            </h:column>
+        </f:facet>
+
+
+        <h:column>
+            <t:dataTable var="operation"
+                         styleClass="contentSubInnerTable" cellpadding="3"
+                         rowClasses="dataRowLight,dataRowDark"
+                         columnClasses="dataCellTextBold,dataCellText"
+                         headerClass="contentSubInnerTableTitle"
+                         value="#{services.navigatedService.operationCollection}">
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Operation Name"/>
+                    </f:facet>
+
+                    <h:outputText value="#{operation.name}"/>
+                </h:column>
+
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Description"/>
+                    </f:facet>
+
+                    <h:outputText value="#{operation.description}"/>
+                </h:column>
+
+
+            </t:dataTable>
+        </h:column>
+
+    </t:panelGrid>
+</h:column>
+
+
+<%-- Domain Model Display --%>
+<h:column rendered="#{not empty services.navigatedService.domainModel}">
+    <h:panelGrid styleClass="contentInnerTable" cellpadding="3"
+                 rowClasses="dataRowLight,dataRowDark"
+                 columnClasses="dataCellTextBold,dataCellText"
+                 headerClass="contentTableHeader" columns="2">
 
         <f:facet name="header">
             <h:column>
@@ -104,14 +154,14 @@
             <h:outputText value="Name"/>
         </h:column>
         <h:column>
-            <h:outputText value="#{serviceDetails.service.domainModel.longName}"/>
+            <h:outputText value="#{services.navigatedService.domainModel.longName}"/>
         </h:column>
 
         <h:column>
             <h:outputText value="Project Name"/>
         </h:column>
         <h:column>
-            <h:outputText value="#{serviceDetails.service.domainModel.projectShortName}"/>
+            <h:outputText value="#{services.navigatedService.domainModel.projectShortName}"/>
         </h:column>
 
 
@@ -119,14 +169,14 @@
             <h:outputText value="Project Version"/>
         </h:column>
         <h:column>
-            <h:outputText value="#{serviceDetails.service.domainModel.projectVersion}"/>
+            <h:outputText value="#{services.navigatedService.domainModel.projectVersion}"/>
         </h:column>
 
         <h:column>
             <h:outputText value="Project Description"/>
         </h:column>
         <h:column>
-            <h:outputText value="#{serviceDetails.service.domainModel.projectDescription}"/>
+            <h:outputText value="#{services.navigatedService.domainModel.projectDescription}"/>
         </h:column>
 
 
@@ -134,7 +184,30 @@
             <h:outputText value="Object Model"/>
         </h:column>
         <h:column>
-            <h:outputText value="#{serviceDetails.service.domainModel.projectDescription}"/>
+            <t:dataTable var="umlClass"
+                         styleClass="contentSubInnerTable" cellpadding="3"
+                         rowClasses="dataRowLight,dataRowDark"
+                         columnClasses="dataCellTextBold,dataCellText"
+                         headerClass="contentSubInnerTableTitle"
+                         value="#{services.navigatedService.domainModel.umlClassCollection}">
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Class Name"/>
+                    </f:facet>
+
+                    <h:outputText value="#{umlClass.className}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Package Name"/>
+                    </f:facet>
+
+                    <h:outputText value="#{umlClass.packageName}"/>
+                </h:column>
+
+            </t:dataTable>
         </h:column>
 
 

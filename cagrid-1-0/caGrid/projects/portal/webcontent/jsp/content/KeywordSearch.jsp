@@ -21,7 +21,7 @@
                 <h:panelGrid styleClass="contentInnerTable"
                              rowClasses="dataRowLight,dataRowDark"
                              columnClasses="dataCellTextBold,dataCellText"
-                             headerClass="dataTableHeader" columns="2">
+                             headerClass="contentTableHeader" columns="2">
                     <f:facet name="header">
                         <h:column>
                             <h:outputText value="Search"/>
@@ -34,6 +34,7 @@
                     <h:column>
                         <h:inputText id="searchKeyword" required="true" value="#{keywordSearch.searchKeyword}"
                                      size="50"/>
+                        <h:outputText value=" For eg. caDSR" styleClass="mainContent"/>
                     </h:column>
 
                     <h:column>
@@ -41,7 +42,7 @@
                     </h:column>
 
                     <h:column>
-                        <f:verbatim>&nbsp;&nbsp;</f:verbatim>
+                        <f:verbatim>&nbsp;&nbsp;&nbsp;&nbsp</f:verbatim>
                         <h:commandButton value="Search"
                                          action="#{keywordSearch.navigateToKeywordSearchResults}"
                                          styleClass="searchButton"/>

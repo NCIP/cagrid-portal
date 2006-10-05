@@ -6,22 +6,23 @@
 
 <f:subview id="searchResults">
 
-    <t:panelTabbedPane activeTabStyleClass="searchTabbedPaneActive"
-                       inactiveTabStyleClass="searchTabbedPaneActive"
-                       activeSubStyleClass="searchTabbedPaneActive"
+    <t:panelTabbedPane activeTabStyleClass="activeTab"
+                       inactiveTabStyleClass="inactiveTab"
+
+                       styleClass="tabbedPane"
                        width="80%"
             >
 
-        <t:panelTab id="services" label="Registered Service">
+        <t:panelTab id="services" label="Registered Service  (#{services.listSize})">
             <tiles:insert attribute="serviceSearchResult" flush="false" ignore="true"/>
         </t:panelTab>
 
-        <t:panelTab id="rc" label="Research Center">
+        <t:panelTab id="rc" label="Research Center (#{centers.listSize})">
             <tiles:insert attribute="rcSearchResult" flush="false" ignore="true"/>
         </t:panelTab>
 
 
-        <t:panelTab id="poc" label="People">
+        <t:panelTab id="poc" label="People (#{people.listSize})">
             <tiles:insert attribute="pocSearchResult" flush="false" ignore="true"/>
         </t:panelTab>
 

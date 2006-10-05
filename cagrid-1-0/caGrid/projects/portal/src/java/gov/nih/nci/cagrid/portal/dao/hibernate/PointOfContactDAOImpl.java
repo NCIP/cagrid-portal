@@ -25,7 +25,7 @@ public class PointOfContactDAOImpl extends BaseDAOImpl
      * @return List PointOfContacts
      */
     public List getUniquePeople() throws DataAccessException {
-        return getHibernateTemplate().find("from PointOfContact poc group by poc.email");
+        return getHibernateTemplate().find("from PointOfContact poc group by poc.email order by poc.firstName");
     }
 
     public List keywordSearch(String keyword) {

@@ -12,6 +12,7 @@
 </head>
 
 <f:view>
+<h:form>
 <body>
 
 
@@ -31,7 +32,7 @@
 <tr>
 <td height="100%" align="center" valign="top">
 
-<table cellpadding="0" cellspacing="0" border="0" height="100%" width="771">
+<table cellpadding="0" cellspacing="0" border="0" height="100%" width="85%">
 
         <%-- application hdr begins --%>
     <tr>
@@ -146,5 +147,6 @@
 </tr>
 </table>
 </body>
+</h:form>
 </f:view>
 </html>

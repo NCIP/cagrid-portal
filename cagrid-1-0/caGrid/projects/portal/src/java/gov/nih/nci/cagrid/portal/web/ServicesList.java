@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.portal.web;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
 import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
+import org.apache.log4j.Category;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -20,21 +21,23 @@ public class ServicesList {
 
     private List list = new ArrayList();
     private RegisteredService navigatedService;
-    private String navigatedType;
     private GridServiceManager gridServiceManager;
-    private boolean showModel = false;
+    private int listSize;
 
+    private Category _logger = Category.getInstance(getClass().getName());
 
-    public String navigateToService() {
-        Integer pk = new Integer((String) FacesContext.getCurrentInstance().getExternalContext()
-                .getRequestParameterMap().get("navigatedServicePk"));
+    public String navigateToService() throws FacesException {
+        try {
+            Integer pk = new Integer((String) FacesContext.getCurrentInstance().getExternalContext()
+                    .getRequestParameterMap().get("navigatedServicePk"));
 
-        navigatedService = (RegisteredService) gridServiceManager.getObjectByPrimaryKey(RegisteredService.class, pk);
-
-        if (navigatedService.getDomainModel() != null) {
-            navigatedType = RegisteredService.DATA_SERVICE;
-        } else {
-            navigatedType = RegisteredService.ANALYTICAL_SERVICE;
+            navigatedService = (RegisteredService) gridServiceManager.getObjectByPrimaryKey(RegisteredService.class, pk);
+        } catch (NumberFormatException e) {
+            _logger.error(e);
+            throw new FacesException(e);
+        } catch (PortalRuntimeException e) {
+            _logger.error(e);
+            throw new FacesException(e);
         }
 
         return "success";
@@ -46,6 +49,10 @@ public class ServicesList {
         } catch (PortalRuntimeException e) {
             new FacesException(e);
         }
+    }
+
+    public int getListSize() {
+        return list.size();
     }
 
     public List getList() {
@@ -60,24 +67,8 @@ public class ServicesList {
         return navigatedService;
     }
 
-    public String getNavigatedType() {
-        return navigatedType;
-    }
-
-    public boolean isShowModel() {
-        return showModel;
-    }
-
-    public void setShowModel(boolean showModel) {
-        this.showModel = showModel;
-    }
-
     public void setGridServiceManager(GridServiceManager gridServiceManager) {
         this.gridServiceManager = gridServiceManager;
-    }
-
-    public void setNavigatedType(String navigatedType) {
-        this.navigatedType = navigatedType;
     }
 
     public void setNavigatedService(RegisteredService navigatedService) {

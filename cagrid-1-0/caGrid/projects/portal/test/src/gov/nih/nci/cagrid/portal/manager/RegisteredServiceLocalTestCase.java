@@ -41,7 +41,9 @@ public class RegisteredServiceLocalTestCase extends BaseSpringDataAccessAbstract
         MetadataAggregatorUtils mUtils = new MetadataAggregatorUtils();
 
         try {
-            RegisteredService rService = new RegisteredService("http://test");
+            RegisteredService rService = new RegisteredService("http://nci.nih.gov/Test");
+            rService.setName("Test Service");
+            rService.setDescription("Portal Test Service");
             org.springframework.core.io.Resource resource = new ClassPathResource(DOMAIN_XML);
 
             try {

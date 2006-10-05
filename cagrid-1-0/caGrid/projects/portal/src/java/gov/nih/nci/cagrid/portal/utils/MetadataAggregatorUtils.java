@@ -73,7 +73,7 @@ public class MetadataAggregatorUtils {
 
                     if (opers[j].getOutput().getUMLClass() != null) {
                         UMLClass outputClass = translateUMLClass(opers[j].getOutput().getUMLClass());
-                        operDomain.setOutput(outputClass);
+                        operDomain.setOutputClass(outputClass);
                     }
 
                     rService.addOperation(operDomain);

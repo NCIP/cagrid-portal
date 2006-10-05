@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<project basedir=".">
+
+    <target name="setUpMapComponent">
+        <property name="map.src.dir" value="${src.dir}/java/gov/nih/nci/cagrid/portal/map"/>
+        <copy todir="${webinf.dir}">
+            <fileset dir="${map.src.dir}">
+                <include name="**/PortalMap.tld"/>
+                <include name="**/map-faces-config.xml"/>
+            </fileset>
+        </copy>
+    </target>
+
+</project>

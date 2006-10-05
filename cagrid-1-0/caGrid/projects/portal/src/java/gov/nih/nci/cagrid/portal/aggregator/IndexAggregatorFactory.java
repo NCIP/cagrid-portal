@@ -40,7 +40,7 @@ public class IndexAggregatorFactory extends AbstractAggregator {
 
         for (ListIterator iter = indexes.listIterator(); iter.hasNext();) {
             IndexService idx = (IndexService) iter.next();
-            IndexAggregator idxAggrTask = new IndexAggregator(idx, idxManager,
+            IndexAggregator idxAggrTask = new IndexAggregator(idx,
                     this.metadataCompliance);
 
             //Aggregators don't have the spring context. So this needs to be set

@@ -61,7 +61,7 @@ public class Operation implements DomainObject {
      * not-null="false"
      * cascade="all"
      */
-    public UMLClass getOutput() {
+    public UMLClass getOutputClass() {
         return outputClass;
     }
 
@@ -94,7 +94,7 @@ public class Operation implements DomainObject {
     }
 
 
-    public void setOutput(UMLClass outputClass) {
+    public void setOutputClass(UMLClass outputClass) {
         this.outputClass = outputClass;
     }
 

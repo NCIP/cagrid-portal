@@ -15,7 +15,7 @@
     <context-param>
         <param-name>javax.faces.CONFIG_FILES</param-name>
         <param-value>
-            /WEB-INF/portal-faces-config.xml
+            /WEB-INF/portal-faces-config.xml,/WEB-INF/classes/map-faces-config.xml
         </param-value>
         <description>
             Comma separated list of URIs of (additional) faces config files.
@@ -154,6 +154,10 @@
     </error-page>
     <error-page>
         <error-code>404</error-code>
+        <location>/error.portal</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
         <location>/error.portal</location>
     </error-page>
 

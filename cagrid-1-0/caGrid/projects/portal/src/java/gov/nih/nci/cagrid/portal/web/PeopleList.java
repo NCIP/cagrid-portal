@@ -17,6 +17,7 @@ public class PeopleList {
 
     private List list;
     private PointOfContactManager pocManager;
+    private int listSize;
 
     public List getList() {
         return list;
@@ -30,9 +31,14 @@ public class PeopleList {
         }
     }
 
+    public int getListSize() {
+        return list.size();
+    }
+
     public void setList(List list) {
         this.list = list;
     }
+
 
     public void setPocManager(PointOfContactManager pocManager) {
         this.pocManager = pocManager;

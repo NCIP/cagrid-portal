@@ -20,19 +20,6 @@
         <message-bundle>messages</message-bundle>
     </application>
 
-    <!--Custom Map component-->
-    <component>
-        <component-type>gov.nih.nci.cagrid.portal.Map</component-type>
-        <component-class>gov.nih.nci.cagrid.portal.map.PortalMapComponent</component-class>
-    </component>
-
-    <render-kit>
-        <renderer>
-            <component-family>javax.faces.Data</component-family>
-            <renderer-type>gov.nih.nci.cagrid.portal.Map</renderer-type>
-            <renderer-class>gov.nih.nci.cagrid.portal.map.PortalMapHTMLRenderer</renderer-class>
-        </renderer>
-    </render-kit>
 
     <managed-bean>
         <managed-bean-name>directoryTabbedPaneBean</managed-bean-name>
@@ -124,6 +111,7 @@
 
     <!--Navigation Rules-->
     <navigation-rule>
+        <from-view-id>*</from-view-id>
         <navigation-case>
             <from-action>#{directory.navigateToServicesDirectory}</from-action>
             <from-outcome>success</from-outcome>
@@ -139,41 +127,26 @@
             <from-outcome>success</from-outcome>
             <to-view-id>pocDirectory.portal</to-view-id>
         </navigation-case>
-    </navigation-rule>
-
-    <navigation-rule>
         <navigation-case>
             <from-action>#{map.navigateToRCMap}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>rcMap.portal</to-view-id>
         </navigation-case>
-    </navigation-rule>
-
-    <navigation-rule>
         <navigation-case>
             <from-action>#{map.navigateToServicesMap}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>servicesMap.portal</to-view-id>
         </navigation-case>
-    </navigation-rule>
-
-    <navigation-rule>
         <navigation-case>
             <from-action>#{services.navigateToService}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>serviceDetails.portal</to-view-id>
         </navigation-case>
-    </navigation-rule>
-
-    <navigation-rule>
         <navigation-case>
-            <from-action>#{center.navigateToCenter}</from-action>
+            <from-action>#{centers.navigateToCenter}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>centerDetails.portal</to-view-id>
         </navigation-case>
-    </navigation-rule>
-
-    <navigation-rule>
         <navigation-case>
             <from-action>#{keywordSearch.navigateToKeywordSearchResults}</from-action>
             <from-outcome>success</from-outcome>

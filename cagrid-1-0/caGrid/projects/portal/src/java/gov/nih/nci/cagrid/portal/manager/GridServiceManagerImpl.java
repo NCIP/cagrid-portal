@@ -35,7 +35,7 @@ public class GridServiceManagerImpl extends BaseManagerImpl
      */
     public List getAllServices() throws PortalRuntimeException {
         try {
-            return super.loadAll(RegisteredService.class);
+            return gridServiceBaseDAO.getAllServices();
         } catch (DataAccessException e) {
             throw new PortalRuntimeException(e);
         }

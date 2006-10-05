@@ -32,8 +32,13 @@ public class MetadataAggregator extends AbstractAggregator {
         try {
             try {
                 ServiceMetadata mData = GridUtils.getServiceMetadata(service.getHandle());
-                ResearchCenter domainRC = aggrUtil.loadRC(mData);
+                //initiati
+                gov.nih.nci.cagrid.metadata.service.Service sMetadata = GridUtils.getService(service.getHandle());
+                service.setName(sMetadata.getName());
+                service.setVersion(sMetadata.getVersion());
+                service.setDescription(sMetadata.getDescription());
 
+                ResearchCenter domainRC = aggrUtil.loadRC(mData);
                 service.setResearchCenter(domainRC);
 
                 //Load Domain Model
