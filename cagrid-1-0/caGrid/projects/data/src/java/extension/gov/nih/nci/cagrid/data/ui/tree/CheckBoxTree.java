@@ -34,11 +34,11 @@ import javax.swing.tree.TreeSelectionModel;
 public class CheckBoxTree extends JTree {
 	private DefaultTreeModel model;
 	private DefaultMutableTreeNode rootNode;
-	private List typeSelectionListeners;
+	private List checkTreeSelectionListeners;
 	
 	public CheckBoxTree() {
 		super();
-		typeSelectionListeners = new LinkedList();
+		checkTreeSelectionListeners = new LinkedList();
 		setCellRenderer(new CellRenderer());
 		setCellEditor(new CellEditor());
 		setEditable(true);
@@ -131,18 +131,18 @@ public class CheckBoxTree extends JTree {
 	}
 	
 	
-	public void addTypeSelectionListener(CheckTreeSelectionListener listener) {
-		typeSelectionListeners.add(listener);
+	public void addCheckTreeSelectionListener(CheckTreeSelectionListener listener) {
+		checkTreeSelectionListeners.add(listener);
 	}
 	
 	
-	public boolean removeTypeSelectionListener(CheckTreeSelectionListener listener) {
-		return typeSelectionListeners.remove(listener);
+	public boolean removeCheckTreeSelectionListener(CheckTreeSelectionListener listener) {
+		return checkTreeSelectionListeners.remove(listener);
 	}
 	
 	
 	protected void fireNodeChecked(CheckBoxTreeNode node) {
-		Iterator listenerIter = typeSelectionListeners.iterator();
+		Iterator listenerIter = checkTreeSelectionListeners.iterator();
 		CheckTreeSelectionEvent event = null;
 		while (listenerIter.hasNext()) {
 			if (event == null) {
@@ -154,7 +154,7 @@ public class CheckBoxTree extends JTree {
 	
 	
 	protected void fireNodeUnchecked(CheckBoxTreeNode node) {
-		Iterator listenerIter = typeSelectionListeners.iterator();
+		Iterator listenerIter = checkTreeSelectionListeners.iterator();
 		CheckTreeSelectionEvent event = null;
 		while (listenerIter.hasNext()) {
 			if (event == null) {

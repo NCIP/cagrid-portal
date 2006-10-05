@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.data.ui.tree;
 
-import gov.nih.nci.cagrid.data.ui.types.TypeTreeNode;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -82,7 +80,7 @@ public abstract class CheckBoxTreeNode extends DefaultMutableTreeNode {
 				public void actionPerformed(ActionEvent e) {
 					int childCount = getChildCount();
 					for (int i = 0; i < childCount; i++) {
-						TypeTreeNode node = (TypeTreeNode) getChildAt(i);
+						CheckBoxTreeNode node = (CheckBoxTreeNode) getChildAt(i);
 						node.getCheckBox().setSelected(isChecked());
 						parentTree.getTreeModel().nodeChanged(node);
 					}
@@ -130,7 +128,7 @@ public abstract class CheckBoxTreeNode extends DefaultMutableTreeNode {
 	public boolean allChildrenChecked() {
 		int childCount = getChildCount();
 		for (int i = 0; i < childCount; i++) {
-			TypeTreeNode node = (TypeTreeNode) getChildAt(i);
+			CheckBoxTreeNode node = (CheckBoxTreeNode) getChildAt(i);
 			if (!node.isChecked()) {
 				return false;
 			}
@@ -142,7 +140,7 @@ public abstract class CheckBoxTreeNode extends DefaultMutableTreeNode {
 	public boolean noChildrenChecked() {
 		int childCount = getChildCount();
 		for (int i = 0; i < childCount; i++) {
-			TypeTreeNode node = (TypeTreeNode) getChildAt(i);
+			CheckBoxTreeNode node = (CheckBoxTreeNode) getChildAt(i);
 			if (node.isChecked()) {
 				return false;
 			}
