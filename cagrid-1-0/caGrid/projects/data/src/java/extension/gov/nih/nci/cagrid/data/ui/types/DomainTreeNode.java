@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.types;
 
+import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTreeNode;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
@@ -32,7 +33,7 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 	private Map typeCheckBoxes;
 
 	public DomainTreeNode(TargetTypesTree tree, NamespaceType namespace) {
-		super(namespace.getNamespace());
+		super(tree, namespace.getNamespace());
 		this.parentTree = tree;
 		this.namespace = namespace;
 		this.checkBoxTypes = new HashMap();
@@ -41,31 +42,9 @@ public class DomainTreeNode extends CheckBoxTreeNode {
 		// add child nodes
 		SchemaElementType[] types = namespace.getSchemaElement();
 		if (types != null) {
-			ActionListener childListener = new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if (allChildrenChecked()) {
-						getCheckBox().setSelected(true);
-					} else if (noChildrenChecked()) {
-						getCheckBox().setSelected(false);
-					}
-				}
-			};
-			ItemListener childItemListener = new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					// tell everybody that the type selection has been changed
-					JCheckBox checkBox = (JCheckBox) e.getSource();
-					if (checkBox.isSelected()) {
-						parentTree.fireTypeSelectionAdded(getNamespace(), (SchemaElementType) checkBoxTypes.get(checkBox));
-					} else {
-						parentTree.fireTypeSelectionRemoved(getNamespace(), (SchemaElementType) checkBoxTypes.get(checkBox));
-					}
-				}
-			};
 			// add the nodes
 			for (int i = 0; i < types.length; i++) {
-				TypeTreeNode node = new TypeTreeNode(types[i]);
-				node.getCheckBox().addActionListener(childListener);
-				node.getCheckBox().addItemListener(childItemListener);
+				TypeTreeNode node = new TypeTreeNode(tree, types[i]);
 				checkBoxTypes.put(node.getCheckBox(), node.getType());
 				typeCheckBoxes.put(node.getType(), node.getCheckBox());
 				add(node);

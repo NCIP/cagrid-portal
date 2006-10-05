@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.types;
 
+import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTreeNode;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
 
@@ -17,8 +18,8 @@ public class TypeTreeNode extends CheckBoxTreeNode {
 	
 	private SchemaElementType type;
 	
-	public TypeTreeNode(SchemaElementType type) {
-		super(type.getType());
+	public TypeTreeNode(TargetTypesTree tree, SchemaElementType type) {
+		super(tree, type.getType());
 		setAllowsChildren(false);
 		this.type = type;
 	}

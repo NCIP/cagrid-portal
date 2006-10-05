@@ -21,6 +21,8 @@ import gov.nih.nci.cagrid.data.ui.browser.ClassBrowserPanel;
 import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionEvent;
 import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionListener;
 import gov.nih.nci.cagrid.data.ui.browser.QueryProcessorClassConfigDialog;
+import gov.nih.nci.cagrid.data.ui.tree.CheckTreeSelectionEvent;
+import gov.nih.nci.cagrid.data.ui.tree.CheckTreeSelectionListener;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
@@ -169,16 +171,23 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		if (typesTree == null) {
 			typesTree = new TargetTypesTree();
 			// listener for check and uncheck operations on the tree
-			typesTree.addTypeSelectionListener(new TypeSelectionListener() {
-				public void typeSelectionAdded(TypeSelectionEvent e) {
-					getTypesTable().addType(e.getNamespaceType(), e.getSchemaElementType());
-					updateSelectedClasses();
+			typesTree.addTypeSelectionListener(new CheckTreeSelectionListener() {
+				public void nodeChecked(CheckTreeSelectionEvent e) {
+					if (e.getNode() instanceof TypeTreeNode) {
+						TypeTreeNode typeNode = (TypeTreeNode) e.getNode();
+						DomainTreeNode nsNode = (DomainTreeNode) typeNode.getParent();
+						getTypesTable().addType(nsNode.getNamespace(), typeNode.getType());
+						updateSelectedClasses();
+					}
 				}
 				
 				
-				public void typeSelectionRemoved(TypeSelectionEvent e) {
-					getTypesTable().removeSchemaElementType(e.getSchemaElementType());
-					updateSelectedClasses();
+				public void nodeUnchecked(CheckTreeSelectionEvent e) {
+					if (e.getNode() instanceof TypeTreeNode) {
+						TypeTreeNode typeNode = (TypeTreeNode) e.getNode();
+						getTypesTable().removeSchemaElementType(typeNode.getType());
+						updateSelectedClasses();
+					}
 				}
 				
 				
