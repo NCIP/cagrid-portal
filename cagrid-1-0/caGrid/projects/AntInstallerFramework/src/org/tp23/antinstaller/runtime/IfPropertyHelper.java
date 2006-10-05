@@ -15,6 +15,12 @@
  */
 package org.tp23.antinstaller.runtime;
 
+
+
+import gov.nih.nci.cagrid.antinstaller.utils.JavaExpressionEvaluator;
+
+import java.util.ArrayList;
+
 import org.tp23.antinstaller.InstallerContext;
 import org.tp23.antinstaller.page.Page;
 import org.tp23.antinstaller.page.SimpleInputPage;
@@ -31,7 +37,7 @@ import org.tp23.antinstaller.page.SimpleInputPage;
  * of the configuration files would be impared.
  * REF: 1145496
  * @author Paul Hinds
- * @version $Id: IfPropertyHelper.java,v 1.2 2006-09-11 02:18:07 kumarvi Exp $
+ * @version $Id: IfPropertyHelper.java,v 1.3 2006-10-05 20:48:22 kumarvi Exp $
  */
 public class IfPropertyHelper {
 	
@@ -39,13 +45,73 @@ public class IfPropertyHelper {
 	protected IfPropertyHelper(InstallerContext ctx){
 		this.ctx = ctx;
 	}
+	
+	/**
+	 * This is a new method introduced for a better control of flow of pages.
+	 * @param next
+	 * @return
+	 */
+	
+	public boolean ifProperty(Page next){
+		boolean retValue = true;
+		
+		if(next instanceof SimpleInputPage){
+			SimpleInputPage conditionalPage = (SimpleInputPage) next;
+			String ifProperty = conditionalPage.getIfProperty();
+			System.out.println("IFProperty2:"+ifProperty);
+			if (ifProperty != null) {
+				ArrayList variables = extractVariables(ifProperty);
+				JavaExpressionEvaluator jee = new JavaExpressionEvaluator(ifProperty, variables);
+				retValue = jee.evaluate();
+			}
+		}
+		return retValue; // show the page by default
+	}
+	
+	private ArrayList extractVariables(String str){
+		ArrayList keys = new ArrayList();
+		
+		int currindex = 0;
+		int startPos =0;
+		
+		int counter=0;
+		String currStr = str;
+		boolean done = false;
+		while(!done){
+			currindex = currStr.indexOf("$");
+			startPos = currindex+2;
+			int endPos = currStr.indexOf("}", startPos);
+			if(currindex==-1){
+				done=true;
+				break;
+			}else{
+				counter++;
+				String name = currStr.substring(currindex,endPos+1);
+				System.out.println("Name:"+name);
+				String propValue = ctx.getInstaller().getResultContainer().getDefaultValue(name);
+				String key = currStr.substring(startPos,endPos);
+				System.out.println(key);
+				ReferenceVariable rf = new ReferenceVariable();
+				rf.setValue(propValue);
+				rf.setKey(key);
+				rf.setName(name);
+				rf.setReplaceableKey("var"+counter);
+				keys.add(rf);
+			}
+			
+			currStr= currStr.substring(endPos+1,currStr.length());
+			
+		}
+		
+		return keys;
+	}
 
 	/**
 	 * Returns true if the ifProperty is set and the test fails so the page should
 	 * be skipped
 	 * @return boolean true to SHOW the page
 	 */
-	public boolean ifProperty(Page next){
+	public boolean ifPropertyXX(Page next){
 		System.out.println("IFProperty1:"+"called!!!!!!!");
 		// show page if ifProperty is specified and property is correct
 		if(next instanceof SimpleInputPage){
