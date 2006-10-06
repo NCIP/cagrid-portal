@@ -255,7 +255,7 @@ public class SyncGTS {
 						+ description.getFilePrefix() + "-" + dt + "-" + taCount;
 					File caFile = new File(filePrefix + "." + fid);
 					File crlFile = new File(filePrefix + ".r" + fid);
-					File metadataFile = new File(filePrefix + ".syncgts" + fid);
+					File metadataFile = new File(filePrefix + ".syncgts");
 					try {
 						TrustedCA ca = new TrustedCA();
 						TrustedCAListing listing = (TrustedCAListing) itr.next();
