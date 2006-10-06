@@ -9,10 +9,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.JCheckBox;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 
 /** 
  *  CheckBoxTreeNode
@@ -32,43 +29,6 @@ public abstract class CheckBoxTreeNode extends DefaultMutableTreeNode {
 		super();
 		this.parentTree = parentTree;;
 		setUserObject(nodeText);
-		
-		
-		
-		
-		
-		
-		parentTree.getModel().addTreeModelListener(new TreeModelListener() {
-			public void treeNodesChanged(TreeModelEvent e) {
-				// ignore this
-			}
-			
-			
-			public void treeNodesInserted(TreeModelEvent e) {
-				// is the node in question a child?
-				if (e.getTreePath().getParentPath() != null 
-					&& e.getTreePath().getParentPath().getLastPathComponent() == CheckBoxTreeNode.this) {
-					TreeNode[] inserted = (TreeNode[]) e.getChildren();
-					for (int i = 0; i < inserted.length; i++) {
-						
-					}
-				}
-			}
-			
-			
-			public void treeNodesRemoved(TreeModelEvent e) {
-				// is the node in question a child?
-				if (e.getTreePath().getParentPath() != null 
-					&& e.getTreePath().getLastPathComponent() == CheckBoxTreeNode.this) {
-					
-				}
-			}
-			
-			
-			public void treeStructureChanged(TreeModelEvent e) {
-				
-			}
-		});
 	}
 	
 	
