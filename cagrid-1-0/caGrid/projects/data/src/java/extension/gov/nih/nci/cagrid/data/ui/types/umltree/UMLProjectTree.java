@@ -4,6 +4,7 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTree;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,14 +34,48 @@ public class UMLProjectTree extends CheckBoxTree {
 	}
 	
 	
+	public void removeUmlPackage(UMLPackageMetadata pack) {
+		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(pack);
+		if (packNode == null) {
+			throw new IllegalArgumentException("Package " + pack.getName() + " is not in this tree!");
+		}
+		getRootNode().remove(packNode);
+		reloadFromRoot();
+	}
+	
+	
 	public void addUmlClass(UMLPackageMetadata pack, UMLClassMetadata clazz) {
-		// find the class node
+		// find the packag node
 		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(pack.getName());
 		if (packNode == null) {
 			throw new IllegalArgumentException("Package " + pack.getName() + " is not in this tree!");
 		}
-		UMLCLassTreeNode classNode = new UMLCLassTreeNode(this, clazz);
+		UMLClassTreeNode classNode = new UMLClassTreeNode(this, clazz);
 		packNode.add(classNode);
+		reloadFromRoot();
+	}
+	
+	
+	public void removeUmlClass(UMLPackageMetadata pack, UMLClassMetadata clazz) {
+		// find the package node
+		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(pack);
+		if (packNode == null) {
+			throw new IllegalArgumentException("Package " + pack.getName() + " is not in this tree!");
+		}
+		// find the class node
+		UMLClassTreeNode classNode = null;
+		Enumeration classNodeEnum = packNode.children();
+		while (classNodeEnum.hasMoreElements()) {
+			UMLClassTreeNode node = (UMLClassTreeNode) classNodeEnum.nextElement();
+			if (node.getClassMetadata().equals(clazz)) {
+				classNode = node;
+				break;
+			}
+		}
+		if (classNode == null) {
+			throw new IllegalArgumentException("Class " + clazz.getFullyQualifiedName() + " is not in this tree!");
+		}
+		packNode.remove(classNode);
 		reloadFromRoot();
 	}
 }

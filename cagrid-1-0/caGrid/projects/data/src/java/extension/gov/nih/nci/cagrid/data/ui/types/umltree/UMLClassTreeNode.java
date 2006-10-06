@@ -13,10 +13,10 @@ import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTreeNode;
  * @created Oct 5, 2006 
  * @version $Id$ 
  */
-public class UMLCLassTreeNode extends CheckBoxTreeNode {
+public class UMLClassTreeNode extends CheckBoxTreeNode {
 	private UMLClassMetadata classMd;
 
-	public UMLCLassTreeNode(CheckBoxTree parentTree, UMLClassMetadata classMd) {
+	public UMLClassTreeNode(CheckBoxTree parentTree, UMLClassMetadata classMd) {
 		super(parentTree, classMd.getName());
 		getCheckBox().setToolTipText(classMd.getFullyQualifiedName());
 		this.classMd = classMd;

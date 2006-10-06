@@ -33,7 +33,7 @@ public class UMLPackageTreeNode extends CheckBoxTreeNode {
 		CheckBoxTreeNode[] checked = getCheckedChildren();
 		UMLClassMetadata[] md = new UMLClassMetadata[checked.length];
 		for (int i = 0; i < checked.length; i++) {
-			md[i] = ((UMLCLassTreeNode) checked[i]).getClassMetadata();
+			md[i] = ((UMLClassTreeNode) checked[i]).getClassMetadata();
 		}
 		return md;
 	}
