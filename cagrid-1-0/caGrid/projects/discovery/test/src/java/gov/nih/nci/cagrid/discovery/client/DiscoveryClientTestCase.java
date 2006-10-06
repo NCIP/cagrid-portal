@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.SchemaValidationException;
 import gov.nih.nci.cagrid.common.SchemaValidator;
 import gov.nih.nci.cagrid.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
+import gov.nih.nci.cagrid.metadata.dataservice.UMLClassReference;
 
 import java.io.File;
 import java.io.InputStream;
@@ -376,13 +377,13 @@ public class DiscoveryClientTestCase extends TestCase {
 
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "classMD");
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
-		
+
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "attributeMD");
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
-		
+
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "valuedomainMD");
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
-		
+
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "enumerationMD");
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
 
@@ -437,30 +438,31 @@ public class DiscoveryClientTestCase extends TestCase {
 
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C28709");
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
-		
+
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "classMD");
 		assertEquals(0, services.length);
-		
+
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "attributeMD");
 		assertEquals(0, services.length);
-		
+
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "valuedomainMD");
 		assertEquals(0, services.length);
-		
+
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "enumerationMD");
 		assertEquals(0, services.length);
-		
-		//target concept (class)
+
+		// target concept (class)
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C19389");
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
-		
-		//disease and disorders concept (attribute)
+
+		// disease and disorders concept (attribute)
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C2991");
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
-		
-		//??? concept (value domain.. doesn't seem to be any in the cabio model)
-		
-		//female concept (enumeration)
+
+		// ??? concept (value domain.. doesn't seem to be any in the cabio
+		// model)
+
+		// female concept (enumeration)
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, "C16576");
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
 
@@ -488,7 +490,8 @@ public class DiscoveryClientTestCase extends TestCase {
 	public void testDiscoverDataServicesByExposedClass() {
 		final int operation = BY_DS_CLASS;
 		EndpointReferenceType[] services = null;
-		UMLClass clazz = new UMLClass();
+		gov.nih.nci.cagrid.metadata.dataservice.UMLClass clazz = new gov.nih.nci.cagrid.metadata.dataservice.UMLClass();
+		clazz.setAllowableAsTarget(true);
 
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
 		assertEquals(0, services.length);
@@ -504,7 +507,13 @@ public class DiscoveryClientTestCase extends TestCase {
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, clazz);
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
 
+		clazz.setClassName("Gene");
+		clazz.setAllowableAsTarget(false);
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, clazz);
+		assertEquals(0, services.length);
+
 		clazz.setClassName("Taxon");
+		clazz.setAllowableAsTarget(true);
 		clazz.setPackageName("gov.nih.nci.cabio.domain");
 		clazz.setProjectName("caCORE");
 		clazz.setProjectVersion("3");
@@ -517,7 +526,8 @@ public class DiscoveryClientTestCase extends TestCase {
 	public void testDiscoverDataServicesByAssociationsWithClass() {
 		final int operation = BY_DS_ASSOC;
 		EndpointReferenceType[] services = null;
-		UMLClass clazz = new UMLClass();
+		gov.nih.nci.cagrid.metadata.dataservice.UMLClass clazz = new gov.nih.nci.cagrid.metadata.dataservice.UMLClass();
+		clazz.setAllowableAsTarget(true);
 
 		services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
 		assertEquals(0, services.length);
@@ -533,7 +543,13 @@ public class DiscoveryClientTestCase extends TestCase {
 		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, clazz);
 		assertResultsEqual(new EndpointReferenceType[]{service4EPR}, services);
 
+		clazz.setClassName("Gene");
+		clazz.setAllowableAsTarget(false);
+		services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, clazz);
+		assertEquals(0, services.length);
+
 		clazz.setClassName("Taxon");
+		clazz.setAllowableAsTarget(true);
 		clazz.setPackageName("gov.nih.nci.cabio.domain");
 		clazz.setProjectName("caCORE");
 		clazz.setProjectVersion("3");
@@ -614,13 +630,15 @@ public class DiscoveryClientTestCase extends TestCase {
 					eprs = client.discoverDataServicesByDomainModel((String) criteria);
 					break;
 				case BY_DS_CLASS :
-					eprs = client.discoverDataServicesByExposedClass((UMLClass) criteria);
+					eprs = client
+						.discoverDataServicesByExposedClass((gov.nih.nci.cagrid.metadata.dataservice.UMLClass) criteria);
 					break;
 				case BY_DS_CODE :
 					eprs = client.discoverDataServicesByModelConceptCode((String) criteria);
 					break;
 				case BY_DS_ASSOC :
-					eprs = client.discoverDataServicesByAssociationsWithClass((UMLClass) criteria);
+					eprs = client
+						.discoverDataServicesByAssociationsWithClass((gov.nih.nci.cagrid.metadata.dataservice.UMLClass) criteria);
 					break;
 				case BY_DS_PERM :
 					eprs = client.discoverDataServicesByPermissibleValue((String) criteria);

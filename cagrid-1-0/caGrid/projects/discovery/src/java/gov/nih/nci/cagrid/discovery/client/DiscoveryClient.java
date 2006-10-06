@@ -354,7 +354,7 @@ public class DiscoveryClient {
 	 */
 	public EndpointReferenceType[] discoverServicesByDataConceptCode(String conceptCode)
 		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
-		String conceptPredicatedUMLClass = createConceptPredicatedUMLClass(conceptCode);
+		String conceptPredicatedUMLClass = createConceptPredicatedUMLClass(conceptCode, false);
 
 		return discoverByFilter(OPER_PATH + "[" + serv + ":Output/" + conceptPredicatedUMLClass + " or " + serv
 			+ ":inputParameterCollection/" + serv + ":InputParameter/" + conceptPredicatedUMLClass + "]");
@@ -374,7 +374,7 @@ public class DiscoveryClient {
 	 */
 	public EndpointReferenceType[] discoverServicesByPermissibleValue(String value)
 		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
-		String conceptPredicatedUMLClass = createPermissibleValuePredicatedUMLClass(value);
+		String conceptPredicatedUMLClass = createPermissibleValuePredicatedUMLClass(value, false);
 
 		return discoverByFilter(OPER_PATH + "[" + serv + ":Output/" + conceptPredicatedUMLClass + " or " + serv
 			+ ":inputParameterCollection/" + serv + ":InputParameter/" + conceptPredicatedUMLClass + "]");
@@ -390,9 +390,10 @@ public class DiscoveryClient {
 	 *            the code to look for
 	 * @return
 	 */
-	protected String createPermissibleValuePredicatedUMLClass(String value) {
-		return com + ":UMLClass[" + com + ":umlAttributeCollection/" + com + ":UMLAttribute/" + com + ":ValueDomain/"
-			+ com + ":enumerationCollection/" + com + ":Enumeration/@permissibleValue='" + value + "']";
+	protected String createPermissibleValuePredicatedUMLClass(String value, boolean isDataService) {
+		return (isDataService ? data : com) + ":UMLClass[" + com + ":umlAttributeCollection/" + com + ":UMLAttribute/"
+			+ com + ":ValueDomain/" + com + ":enumerationCollection/" + com + ":Enumeration/@permissibleValue='"
+			+ value + "']";
 	}
 
 
@@ -405,12 +406,13 @@ public class DiscoveryClient {
 	 *            the code to look for
 	 * @return
 	 */
-	protected String createConceptPredicatedUMLClass(String conceptCode) {
-		return com + ":UMLClass[" + com + ":SemanticMetadata/@conceptCode='" + conceptCode + "'" + " or " + com
-			+ ":umlAttributeCollection/" + com + ":UMLAttribute[" + com + ":SemanticMetadata/@conceptCode='"
-			+ conceptCode + "'" + " or " + com + ":ValueDomain/" + com + ":SemanticMetadata/@conceptCode='"
-			+ conceptCode + "'" + " or " + com + ":ValueDomain/" + com + ":enumerationCollection/" + com
-			+ ":Enumeration/" + com + ":SemanticMetadata/@conceptCode='" + conceptCode + "'" + "]" + "]";
+	protected String createConceptPredicatedUMLClass(String conceptCode, boolean isDataService) {
+		return (isDataService ? data : com) + ":UMLClass[" + com + ":SemanticMetadata/@conceptCode='" + conceptCode
+			+ "'" + " or " + com + ":umlAttributeCollection/" + com + ":UMLAttribute[" + com
+			+ ":SemanticMetadata/@conceptCode='" + conceptCode + "'" + " or " + com + ":ValueDomain/" + com
+			+ ":SemanticMetadata/@conceptCode='" + conceptCode + "'" + " or " + com + ":ValueDomain/" + com
+			+ ":enumerationCollection/" + com + ":Enumeration/" + com + ":SemanticMetadata/@conceptCode='"
+			+ conceptCode + "'" + "]" + "]";
 	}
 
 
@@ -461,7 +463,7 @@ public class DiscoveryClient {
 	public EndpointReferenceType[] discoverDataServicesByModelConceptCode(String conceptCode)
 		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		return discoverByFilter(DATA_MD_PATH + "/" + data + ":exposedUMLClassCollection/"
-			+ createConceptPredicatedUMLClass(conceptCode));
+			+ createConceptPredicatedUMLClass(conceptCode, true));
 	}
 
 
@@ -483,11 +485,12 @@ public class DiscoveryClient {
 	 * @throws QueryInvalidException
 	 * @throws ResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] discoverDataServicesByExposedClass(UMLClass clazzPrototype)
+	public EndpointReferenceType[] discoverDataServicesByExposedClass(
+		gov.nih.nci.cagrid.metadata.dataservice.UMLClass clazzPrototype)
 		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
-		String umlClassPredicate = buildUMLClassPredicate(clazzPrototype);
+		String umlClassPredicate = buildDataUMLClassPredicate(clazzPrototype);
 
-		return discoverByFilter(DATA_MD_PATH + "/" + data + ":exposedUMLClassCollection/" + com + ":UMLClass["
+		return discoverByFilter(DATA_MD_PATH + "/" + data + ":exposedUMLClassCollection/" + data + ":UMLClass["
 			+ umlClassPredicate + "]");
 	}
 
@@ -505,7 +508,7 @@ public class DiscoveryClient {
 	 */
 	public EndpointReferenceType[] discoverDataServicesByPermissibleValue(String permissibleValue)
 		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
-		String umlClassPredicate = createPermissibleValuePredicatedUMLClass(permissibleValue);
+		String umlClassPredicate = createPermissibleValuePredicatedUMLClass(permissibleValue, true);
 
 		return discoverByFilter(DATA_MD_PATH + "/" + data + ":exposedUMLClassCollection/" + umlClassPredicate);
 	}
@@ -527,10 +530,12 @@ public class DiscoveryClient {
 	 * @throws QueryInvalidException
 	 * @throws ResourcePropertyRetrievalException
 	 */
-	public EndpointReferenceType[] discoverDataServicesByAssociationsWithClass(UMLClass clazzPrototype)
+	public EndpointReferenceType[] discoverDataServicesByAssociationsWithClass(
+		gov.nih.nci.cagrid.metadata.dataservice.UMLClass clazzPrototype)
 		throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
 		String referenceFiler = data + ":UMLAssociationEdge/" + data + ":UMLClassReference/@refid=" + data
-			+ ":exposedUMLClassCollection/" + com + ":UMLClass[" + buildUMLClassPredicate(clazzPrototype) + "]/@id";
+			+ ":exposedUMLClassCollection/" + data + ":UMLClass[" + buildDataUMLClassPredicate(clazzPrototype)
+			+ "]/@id";
 
 		return discoverByFilter(DATA_MD_PATH + "[" + data + ":exposedUMLAssociationCollection/" + data
 			+ ":UMLAssociation/" + data + ":targetUMLAssociationEdge/" + referenceFiler + " or " + data
@@ -585,6 +590,17 @@ public class DiscoveryClient {
 			umlPredicate += addNonNullPredicate("className", clazz.getClassName(), true);
 			umlPredicate += addNonNullPredicate("packageName", clazz.getPackageName(), true);
 			umlPredicate += addNonNullPredicate("description", clazz.getDescription(), true);
+		}
+
+		return umlPredicate;
+	}
+
+
+	protected static String buildDataUMLClassPredicate(gov.nih.nci.cagrid.metadata.dataservice.UMLClass clazz) {
+		String umlPredicate = buildUMLClassPredicate(clazz);
+
+		if (clazz != null) {
+			umlPredicate += addNonNullPredicate("allowableAsTarget", String.valueOf(clazz.isAllowableAsTarget()), true);
 		}
 
 		return umlPredicate;

@@ -676,6 +676,7 @@ public class DomainModelBuilder {
 		UMLClass converted = null;
 		if (classMetadata != null) {
 			converted = new UMLClass();
+			converted.setAllowableAsTarget(true);
 			converted.setClassName(classMetadata.getName());
 			converted.setDescription(classMetadata.getDescription());
 			if (converted.getDescription() == null) {
