@@ -59,7 +59,6 @@
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_common_server-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
-	<classpathentry kind="lib" path="ext/lib/cagrid-opensaml-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
@@ -85,13 +84,6 @@
 	<classpathentry kind="lib" path="ext/lib/ant-contrib.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-1.0-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-1.0-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-1.0-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-data.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-common.jar"/>
@@ -104,5 +96,13 @@
 	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.1.11-bin.jar"/>
 	<classpathentry kind="lib" path="ext/lib/spring-beans.jar"/>
 	<classpathentry kind="lib" path="ext/lib/spring-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gts-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gts-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gts-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-opensaml-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
