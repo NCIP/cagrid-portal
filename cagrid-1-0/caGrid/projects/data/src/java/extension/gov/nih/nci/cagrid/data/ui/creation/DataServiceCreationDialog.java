@@ -175,7 +175,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 					setFeatureStatus();
 					if (getSdkDataRadioButton().isSelected()) {
 						ServiceWizard wiz = new ServiceWizard(
-							PortalResourceManager.getInstance().getGridPortal(), "caCORE Backend");
+							PortalResourceManager.getInstance().getGridPortal(), "caCORE Data Source");
 						wiz.addWizardPanel(new CoreDsIntroPanel(getExtensionDescription(), getServiceInfo()));
 						wiz.addWizardPanel(new ClientJarPanel(getExtensionDescription(), getServiceInfo()));
 						wiz.addWizardPanel(new DomainModelPanel(getExtensionDescription(), getServiceInfo()));
