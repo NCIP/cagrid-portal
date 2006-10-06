@@ -46,7 +46,7 @@ GSBT - Globus Service Build Tools
 
 
 	<!-- Name of the JAR files to be generated -->
-	<property name="jar.name" value="${jar.prefix}-.jar" />
+	<property name="jar.name" value="${jar.prefix}.jar" />
 
 
 
