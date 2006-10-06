@@ -25,9 +25,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 
@@ -158,7 +160,7 @@ public class SyncGTS {
 		SyncReport report = new SyncReport();
 		try {
 			reset();
-			
+			Set unableToSync = new HashSet();
 			String dt = MobiusDate.getCurrentDateTimeAsString();
 			report.setSyncDescription(description);
 			report.setTimestamp(dt);
@@ -204,6 +206,7 @@ public class SyncGTS {
 						}
 
 					} catch (Exception e) {
+						unableToSync.add(uri);
 						Message mess = new Message();
 						mess.setType(MessageType.Error);
 						mess.setValue("An error occurred syncing with " + uri + " using filter " + filter + "\n "
@@ -228,7 +231,7 @@ public class SyncGTS {
 						mess.setValue(msg);
 						messages.add(mess);
 					} else {
-						master.put(ta.getName(), new TrustedCAListing(uri, ta,des[i]));
+						master.put(ta.getName(), new TrustedCAListing(uri, ta, des[i]));
 					}
 				}
 				this.logger.debug("Done syncing with the GTS " + uri + " " + taMap.size()
@@ -242,8 +245,6 @@ public class SyncGTS {
 			synchronized (TrustedCertificatesLock.getInstance()) {
 
 				this.readInCurrentCADirectory(description);
-
-				// TODO: Write out tas.
 				int taCount = 0;
 				Iterator itr = master.values().iterator();
 				List addedList = new ArrayList();
@@ -254,11 +255,11 @@ public class SyncGTS {
 						+ description.getFilePrefix() + "-" + dt + "-" + taCount;
 					File caFile = new File(filePrefix + "." + fid);
 					File crlFile = new File(filePrefix + ".r" + fid);
-					File metadataFile = new File(filePrefix +".syncgts"+fid);
+					File metadataFile = new File(filePrefix + ".syncgts" + fid);
 					try {
 						TrustedCA ca = new TrustedCA();
 						TrustedCAListing listing = (TrustedCAListing) itr.next();
-						
+
 						TrustedAuthority ta = listing.getTrustedAuthority();
 						X509Certificate cert = CertUtil.loadCertificate(ta.getCertificate()
 							.getCertificateEncodedString());
@@ -280,12 +281,12 @@ public class SyncGTS {
 						}
 						Calendar cal = new GregorianCalendar();
 						ca.setDiscovered(cal.getTimeInMillis());
-						if(listing.getDescriptor().getExpiration()!=null){
+						if (listing.getDescriptor().getExpiration() != null) {
 							cal.add(Calendar.HOUR_OF_DAY, listing.getDescriptor().getExpiration().getHours());
 							cal.add(Calendar.MINUTE, listing.getDescriptor().getExpiration().getMinutes());
 							cal.add(Calendar.SECOND, listing.getDescriptor().getExpiration().getSeconds());
 							ca.setExpiration(cal.getTimeInMillis());
-						}else{
+						} else {
 							ca.setExpiration(cal.getTimeInMillis());
 						}
 						Utils.serializeDocument(metadataFile.getAbsolutePath(), ca, TRUSTED_CA_QN);
@@ -322,6 +323,27 @@ public class SyncGTS {
 					if ((description.isDeleteExistingTrustedRoots())
 						|| (fl.getName().indexOf(description.getFilePrefix()) >= 0)) {
 						TrustedCA ca = new TrustedCA();
+						if (fl.getMetadata() != null) {
+							try {
+								TrustedCA tca = (TrustedCA) Utils.deserializeDocument(fl.getMetadata()
+									.getAbsolutePath(), TrustedCA.class);
+								ca.setDiscovered(tca.getDiscovered());
+								ca.setExpiration(tca.getExpiration());
+								if(unableToSync.contains(tca.getGts())){
+									Calendar c = new GregorianCalendar();
+									if(c.getTimeInMillis()<tca.getExpiration()){
+										Message m = new Message();
+										m.setType(MessageType.Info);
+										m.setValue("Unable to communicate with the GTS "+tca.getGts()+", did not remove the the CA " + tca.getName() + " because it was not expired.");
+										this.messages.add(m);
+										logger.warn(m.getValue());
+										continue;
+									}
+								}
+							} catch (Exception e) {
+								logger.error(e.getMessage(), e);
+							}
+						}
 						removeCount = removeCount + 1;
 						if (fl.getCertificate() != null) {
 							X509Certificate cert = CertUtil.loadCertificate(fl.getCertificate());
@@ -369,7 +391,7 @@ public class SyncGTS {
 								logger.error(err.getValue());
 							}
 						}
-						
+
 						if (fl.getMetadata() != null) {
 							ca.setMetadataFile(fl.getMetadata().getAbsolutePath());
 							if (fl.getMetadata().delete()) {
@@ -479,9 +501,9 @@ public class SyncGTS {
 				ca.setCRL(list[i]);
 			} else if (extension.equals("signing_policy")) {
 				ca.setSigningPolicy(list[i]);
-			} else if (extension.indexOf("syncgts")!=-1) {
+			} else if (extension.indexOf("syncgts") != -1) {
 				ca.setMetadata(list[i]);
-			}else {
+			} else {
 				handleUnexpectedFile(description, list[i]);
 				continue;
 			}
@@ -517,7 +539,6 @@ public class SyncGTS {
 			mess.setValue("The ca " + ca.getName() + " is invalid and will be removed!!!");
 			messages.add(mess);
 			logger.warn(mess.getValue());
-			// TODO: LOCK DELETE
 			if (ca.getCertificate() != null) {
 				ca.getCertificate().delete();
 			}
@@ -544,7 +565,6 @@ public class SyncGTS {
 			mess.setValue("The file " + f.getAbsolutePath() + " is unexpected and will be removed!!!");
 			messages.add(mess);
 			logger.warn(mess.getValue());
-			// TODO: LOCK DELETE
 			f.delete();
 		} else {
 			Message mess = new Message();
