@@ -8,7 +8,7 @@
 	     pointing to that directory -->
 	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
 	<!-- Set global properties for this build -->
-	<property name="distname" value="cagrid-opensaml" />
+	<property name="distname" value="caGrid-1.0-opensaml" />
 	<property name="root" value="." />
 	<property name="src" value="src" />
     <property name="data" value="data" />

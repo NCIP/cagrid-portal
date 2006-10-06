@@ -111,7 +111,7 @@
 		<artifact track="main" type="jars" id="opensaml.jars">
 			<antcall target="build-opensaml"/>
 			<fileset dir="${projects.dir}/opensaml/dist">
-				<include name="cagrid-opensaml-1.1.jar"/>
+				<include name="caGrid-1.0-opensaml-1.1.jar"/>
 			</fileset>
 		</artifact>
 		<artifact track="endorsed" type="jars" id="opensaml.endorsed">
@@ -257,10 +257,10 @@
 		<artifact track="main" type="jars" id="gts.ui.jars">
 			<antcall target="build-gts"/>
 			<fileset dir="${projects.dir}/gts/build/lib">
-				<include name="caGrid-*-GTS-*stubs.jar"/>
-				<include name="caGrid-*-GTS-*common.jar"/>
-				<include name="caGrid-*-GTS-*client.jar"/>
-				<include name="caGrid-*-GTS-*ui.jar"/>
+				<include name="caGrid-*-gts-*stubs.jar"/>
+				<include name="caGrid-*-gts-*common.jar"/>
+				<include name="caGrid-*-gts-*client.jar"/>
+				<include name="caGrid-*-gts-*ui.jar"/>
 			</fileset>
 			<fileset dir="${projects.dir}/gts/lib">
 				<include name="*.jar"/>
@@ -274,9 +274,9 @@
 		<artifact track="main" type="jars" id="gts.client.jars">
 			<antcall target="build-gts"/>
 			<fileset dir="${projects.dir}/gts/build/lib">
-				<include name="caGrid-*-GTS-*stubs.jar"/>
-				<include name="caGrid-*-GTS-*common.jar"/>
-				<include name="caGrid-*-GTS-*client.jar"/>
+				<include name="caGrid-*-gts-*stubs.jar"/>
+				<include name="caGrid-*-gts-*common.jar"/>
+				<include name="caGrid-*-gts-*client.jar"/>
 			</fileset>
 			<fileset dir="${projects.dir}/gts/lib">
 				<include name="*.jar"/>
@@ -290,9 +290,9 @@
 		<artifact track="main" type="jars" id="syncgts.client.jars">
 			<antcall target="build-syncgts"/>
 			<fileset dir="${projects.dir}/syncgts/build/lib">
-				<include name="caGrid-*-SyncGTS-*stubs.jar"/>
-				<include name="caGrid-*-SyncGTS-*common.jar"/>
-				<include name="caGrid-*-SyncGTS-*client.jar"/>
+				<include name="caGrid-*-syncgts-*stubs.jar"/>
+				<include name="caGrid-*-syncgts-*common.jar"/>
+				<include name="caGrid-*-syncgts-*client.jar"/>
 			</fileset>
 			<fileset dir="${projects.dir}/syncgts/lib">
 				<include name="*.jar"/>
