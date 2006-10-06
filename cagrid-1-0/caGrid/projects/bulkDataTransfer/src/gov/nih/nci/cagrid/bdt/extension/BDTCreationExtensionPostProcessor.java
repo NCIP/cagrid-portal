@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.bdt.templates.BDTResourceTemplate;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -36,12 +37,14 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 	private Properties serviceProperties;
 
 
-	public void postCreate(ServiceDescription serviceDescription, Properties serviceProperties)
+	public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo)
 		throws CreationExtensionException {
+
+		ServiceDescription serviceDescription = serviceInfo.getServiceDescriptor();
+		this.serviceProperties = serviceInfo.getIntroduceServiceProperties();
 
 		info = new ServiceInformation(serviceDescription, serviceProperties, new File(serviceProperties
 			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)));
-		this.serviceProperties = serviceProperties;
 
 		// apply data service requirements to it
 		try {
@@ -101,7 +104,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		// metadata
 		NamespaceType metadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ BDTServiceConstants.METADATA_SCHEMA);
-		//metadataNamespace.setGenerateStubs(new Boolean(false));
+		// metadataNamespace.setGenerateStubs(new Boolean(false));
 		metadataNamespace.setPackageName("gov.nih.nci.cagrid.bdt.beans.metadata");
 		// transfer
 		NamespaceType transferNamespace = CommonTools.createNamespaceType(schemaDir + File.separator

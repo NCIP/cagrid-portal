@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.extensions.metadata.creation;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
@@ -13,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.extensions.metadata.constants.MetadataConstants;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.ServiceMetadataServiceDescription;
 import gov.nih.nci.cagrid.metadata.service.Service;
@@ -37,9 +39,12 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
 	private static final String METADATA_JAR_PREFIX = "caGrid-1.0-metadata";
 
 
-	public void postCreate(ServiceDescription serviceDescription, Properties serviceProperties)
+	public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CreationExtensionException {
 		try {
+			Properties serviceProperties = info.getIntroduceServiceProperties();
+			ServiceDescription serviceDescription = info.getServiceDescriptor();
+			
 			// grab schemas and copy them into the service's directory
 			copyMetadataSchemas(getServiceSchemaDir(serviceProperties));
 

@@ -45,7 +45,7 @@
 	</xs:complexType>
 	<xs:complexType name="NamespaceType">
 		<xs:sequence>
-			<xs:element name="SchemaElement" type="SchemaElementType" maxOccurs="unbounded"/>
+			<xs:element name="SchemaElement" type="SchemaElementType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="namespace" type="xs:string" use="required">
 			<xs:annotation>

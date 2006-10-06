@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.extensions.wsenum.creation;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
@@ -17,6 +18,7 @@ import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
 
 import java.io.File;
@@ -29,21 +31,25 @@ import javax.xml.namespace.QName;
 import org.globus.ws.enumeration.EnumProvider;
 import org.projectmobius.common.MobiusException;
 
-/** 
- *  WsEnumCreationPostProcessor
- *  Creation extension for Introduce to add WS-Enumeration support
+
+/**
+ * WsEnumCreationPostProcessor Creation extension for Introduce to add
+ * WS-Enumeration support
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
- * @created Aug 1, 2006 
- * @version $Id$ 
+ * @created Aug 1, 2006
+ * @version $Id$
  */
 public class WsEnumCreationPostProcessor implements CreationExtensionPostProcessor {
-	
-	public void postCreate(ServiceDescription desc, Properties props) throws CreationExtensionException {
+
+	public void postCreate(ServiceExtensionDescriptionType extnDesc, ServiceInformation info)
+		throws CreationExtensionException {
+		Properties props = info.getIntroduceServiceProperties();
+		ServiceDescription desc = info.getServiceDescriptor();
+
 		// get the service directory
-		File serviceDir = new File(props.getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
+		File serviceDir = new File(props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
 		// add the namespace and schemas for WS-Enumeration
 		addEnumerationNamespace(serviceDir, desc, props);
 		// get the service type
@@ -54,50 +60,51 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		// add the modified Globus WsCore 4.0.2 jars to the service
 		addWsEnumLibraries(serviceDir);
 	}
-	
-	
+
+
 	/**
-	 * Copies the ws-enumeration schema into the service and adds the namespace type for it
+	 * Copies the ws-enumeration schema into the service and adds the namespace
+	 * type for it
+	 * 
 	 * @param serviceDir
 	 * @param desc
 	 * @param props
 	 * @throws CreationExtensionException
 	 */
-	private static void addEnumerationNamespace(File serviceDir, ServiceDescription desc, Properties props) 
+	private static void addEnumerationNamespace(File serviceDir, ServiceDescription desc, Properties props)
 		throws CreationExtensionException {
-		String serviceName = props.getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+		String serviceName = props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 		// copy the schemas
 		File schemaBaseDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "cagrid_wsEnum"
 			+ File.separator + "schema" + File.separator);
 		List schemas = Utils.recursiveListFiles(schemaBaseDir, new FileFilters.XSDFileFilter());
 		for (int i = 0; i < schemas.size(); i++) {
 			File schemaFile = (File) schemas.get(i);
-			File schemaOutFile = new File(serviceDir.getAbsolutePath() + File.separator 
-				+ "schema" + File.separator + serviceName + File.separator + schemaFile.getName());
+			File schemaOutFile = new File(serviceDir.getAbsolutePath() + File.separator + "schema" + File.separator
+				+ serviceName + File.separator + schemaFile.getName());
 			try {
 				Utils.copyFile(schemaFile, schemaOutFile);
 			} catch (Exception ex) {
 				throw new CreationExtensionException("Error copying enumeration schema file: " + ex.getMessage(), ex);
 			}
 		}
-		
+
 		// copy the wsdl
 		File enumWsdlFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "cagrid_wsEnum"
 			+ File.separator + "schema" + File.separator + "enumeration.wsdl");
-		File enumWsdlOut = new File(serviceDir.getAbsolutePath() + File.separator 
-			+ "schema" + File.separator + serviceName + File.separator + "enumeration.wsdl");
+		File enumWsdlOut = new File(serviceDir.getAbsolutePath() + File.separator + "schema" + File.separator
+			+ serviceName + File.separator + "enumeration.wsdl");
 		try {
 			Utils.copyFile(enumWsdlFile, enumWsdlOut);
 		} catch (Exception ex) {
 			throw new CreationExtensionException("Error copying enumeration wsdl file: " + ex.getMessage(), ex);
 		}
-		
+
 		// add the namespace type for the enumeration schema
 		NamespaceType nsType = null;
 		try {
-			File enumSchema = new File(serviceDir.getAbsolutePath() + File.separator 
-				+ "schema" + File.separator + serviceName + File.separator + "enumeration.xsd");
+			File enumSchema = new File(serviceDir.getAbsolutePath() + File.separator + "schema" + File.separator
+				+ serviceName + File.separator + "enumeration.xsd");
 			nsType = CommonTools.createNamespaceType(enumSchema.getAbsolutePath());
 			// fix the schema location on the namespace type
 			nsType.setLocation("./" + "enumeration.xsd");
@@ -108,11 +115,11 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		}
 		CommonTools.addNamespace(desc, nsType);
 	}
-	
-	
+
+
 	/**
 	 * Adds the methods to the service required for WS-Enumeration
-	 *  
+	 * 
 	 * @param service
 	 * @throws CreationExtensionException
 	 */
@@ -125,7 +132,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		pullParameter.setIsArray(false);
 		pullParameter.setName("pull");
 		pullParameter.setQName(new QName(WsEnumConstants.WS_ENUMERATION_URI, "Pull"));
-		pullInputs.setInput(new MethodTypeInputsInput[] {pullParameter});
+		pullInputs.setInput(new MethodTypeInputsInput[]{pullParameter});
 		pullMethod.setInputs(pullInputs);
 		MethodTypeOutput pullOutput = new MethodTypeOutput();
 		pullOutput.setIsArray(false);
@@ -133,7 +140,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		pullMethod.setOutput(pullOutput);
 		setMethodImportInformation(pullMethod, "PullMessage", "PullResponseMessage");
 		CommonTools.addMethod(service, pullMethod);
-		
+
 		// Renew method
 		MethodType renewMethod = new MethodType();
 		renewMethod.setName("RenewOp");
@@ -142,7 +149,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		renewParameter.setIsArray(false);
 		renewParameter.setName("renew");
 		renewParameter.setQName(new QName(WsEnumConstants.WS_ENUMERATION_URI, "Renew"));
-		renewInputs.setInput(new MethodTypeInputsInput[] {renewParameter});
+		renewInputs.setInput(new MethodTypeInputsInput[]{renewParameter});
 		renewMethod.setInputs(renewInputs);
 		MethodTypeOutput renewOutput = new MethodTypeOutput();
 		renewOutput.setIsArray(false);
@@ -150,7 +157,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		renewMethod.setOutput(renewOutput);
 		setMethodImportInformation(renewMethod, "RenewMessage", "RenewResponseMessage");
 		CommonTools.addMethod(service, renewMethod);
-		
+
 		// GetStatus method
 		MethodType getStatusMethod = new MethodType();
 		getStatusMethod.setName("GetStatusOp");
@@ -159,7 +166,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		getStatusParam.setIsArray(false);
 		getStatusParam.setName("status");
 		getStatusParam.setQName(new QName(WsEnumConstants.WS_ENUMERATION_URI, "GetStatus"));
-		getStatusInputs.setInput(new MethodTypeInputsInput[] {getStatusParam});
+		getStatusInputs.setInput(new MethodTypeInputsInput[]{getStatusParam});
 		getStatusMethod.setInputs(getStatusInputs);
 		MethodTypeOutput getStatusOutput = new MethodTypeOutput();
 		getStatusOutput.setIsArray(false);
@@ -167,7 +174,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		getStatusMethod.setOutput(getStatusOutput);
 		setMethodImportInformation(getStatusMethod, "GetStatusMessage", "GetStatusResponseMessage");
 		CommonTools.addMethod(service, getStatusMethod);
-		
+
 		// Release method
 		MethodType releaseMethod = new MethodType();
 		releaseMethod.setName("ReleaseOp");
@@ -176,7 +183,7 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		releaseParameter.setIsArray(false);
 		releaseParameter.setName("release");
 		releaseParameter.setQName(new QName(WsEnumConstants.WS_ENUMERATION_URI, "Release"));
-		releaseInputs.setInput(new MethodTypeInputsInput[] {releaseParameter});
+		releaseInputs.setInput(new MethodTypeInputsInput[]{releaseParameter});
 		releaseMethod.setInputs(releaseInputs);
 		// even void return methods require a method output
 		MethodTypeOutput releaseOutput = new MethodTypeOutput();
@@ -186,8 +193,8 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		setMethodImportInformation(releaseMethod, "ReleaseMessage", "ReleaseResponseMessage");
 		CommonTools.addMethod(service, releaseMethod);
 	}
-	
-	
+
+
 	private static void setMethodImportInformation(MethodType method, String inputName, String outputName) {
 		method.setIsImported(true);
 		method.setIsProvided(true);
@@ -207,8 +214,8 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		method.setImportInformation(info);
 		method.setProviderInformation(provider);
 	}
-	
-	
+
+
 	private static void addWsEnumLibraries(File serviceDir) throws CreationExtensionException {
 		File libDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "lib");
 		List enumLibs = Utils.recursiveListFiles(libDir, new FileFilter() {

@@ -4,9 +4,12 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
 import java.util.Properties;
@@ -47,11 +50,15 @@ public class SkeletonPostCreator extends Task {
 			throw be;
 		}
 
+		ServiceInformation serviceInfo = new ServiceInformation(introService, properties, baseDirectory);
+
 		// run any extensions that need to be ran
 		if (introService.getExtensions() != null && introService.getExtensions().getExtension() != null) {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for (int i = 0; i < extensions.length; i++) {
 				CreationExtensionPostProcessor pp = null;
+				ServiceExtensionDescriptionType desc = ExtensionsLoader.getInstance().getServiceExtension(
+					extensions[i].getName());
 				try {
 					pp = ExtensionTools.getCreationPostProcessor(extensions[i].getName());
 				} catch (Exception e1) {
@@ -62,7 +69,7 @@ public class SkeletonPostCreator extends Task {
 				}
 				try {
 					if (pp != null) {
-						pp.postCreate(introService, properties);
+						pp.postCreate(desc,serviceInfo);
 					}
 				} catch (CreationExtensionException e) {
 					BuildException be = new BuildException(e.getMessage());

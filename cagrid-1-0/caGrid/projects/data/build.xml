@@ -68,14 +68,15 @@
     <property name="ext.schema.dir" location="${basedir}/ext/xsd" />
 
     <!-- source directories -->
-    <property name="src.dir" location="${basedir}/src/java" />
-    <property name="utils.src.dir" location="${src.dir}/utilities" />
-    <property name="extension.src.dir" location="${src.dir}/extension" />
-    <property name="service.src.dir" location="${src.dir}/service" />
-    <property name="validation.src.dir" location="${src.dir}/validation" />
-    <property name="common.src.dir" location="${src.dir}/common" />
-    <property name="cql.src.dir" location="${src.dir}/cql" />
-	<property name="tools.src.dir" location="${src.dir}/tools" />
+    <property name="src.dir" location="${basedir}/src" />
+	<property name="java.src.dir" location="${src.dir}/java" />
+    <property name="utils.src.dir" location="${java.src.dir}/utilities" />
+    <property name="extension.src.dir" location="${java.src.dir}/extension" />
+    <property name="service.src.dir" location="${java.src.dir}/service" />
+    <property name="validation.src.dir" location="${java.src.dir}/validation" />
+    <property name="common.src.dir" location="${java.src.dir}/common" />
+    <property name="cql.src.dir" location="${java.src.dir}/cql" />
+	<property name="tools.src.dir" location="${java.src.dir}/tools" />
 
     <!-- libraries -->
     <property name="lib.dir" location="${basedir}/lib" />
@@ -290,7 +291,7 @@
 
 
     <!-- compiles the extension source code -->
-    <target name="compileExtension" depends="compileStubs, compileCommon, compileService, compileCql, compileValidation">
+    <target name="compileExtension" depends="compileStubs, compileCommon, compileService, compileCql, compileValidation, generateJETClasses">
         <javac srcdir="${extension.src.dir}" destdir="${build.extension.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
             	<path refid="base.classpath"/>
@@ -305,6 +306,26 @@
             </classpath>
         </javac>
     </target>
+	
+	<!-- =================================================================== -->
+	<!--  Generate JET template classes                                      -->
+	<!-- =================================================================== -->
+	<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
+		<classpath>
+			<fileset dir="${lib.dir}/jet">
+				<include name="boot.jar"/>
+				<include name="osgi.jar"/>
+				<include name="resources.jar"/>
+				<include name="runtime.jar"/>
+				<include name="codegen.jar"/>
+				<include name="jdtcore.jar"/>
+				<include name="jetc-task.jar"/>
+			</fileset>
+		</classpath>
+	</taskdef>
+	<target name="generateJETClasses">
+		<jetc destdir="${extension.src.dir}" template="${src.dir}/jettemplates/CQLResultTypes.xsd.xmljet"/>
+	</target>
 
 
     <!-- compiles the service side code -->
@@ -496,6 +517,7 @@
         <delete dir="tmp" />
         <delete dir="${build.dir}" />
         <delete dir="${extension.out.dir}" />
+    	<delete dir="${extension.src.dir}/gov/nih/nci/cagrid/data/codegen/templates" failonerror="false"/>
         <delete file="${extension.base.dir}/DataServiceExtension.zip" />
     </target>
 
@@ -505,7 +527,7 @@
         <delete dir="${stubs.src}" />
         <delete dir="${stubs.dest}" />
     </target>
-
+    
 
     <!-- Build and install extensions for introduce -->
     <!-- this target installs the default introduce extension, which adds an operation provider to a service

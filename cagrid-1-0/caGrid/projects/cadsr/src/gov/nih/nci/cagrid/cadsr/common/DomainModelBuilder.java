@@ -12,7 +12,7 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cagrid.cadsr.domain.UMLAssociationExclude;
 import gov.nih.nci.cagrid.metadata.common.Enumeration;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
-import gov.nih.nci.cagrid.metadata.common.UMLClass;
+import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.metadata.common.UMLClassUmlAttributeCollection;
 import gov.nih.nci.cagrid.metadata.common.ValueDomainEnumerationCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;

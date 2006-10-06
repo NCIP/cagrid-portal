@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
@@ -19,6 +20,7 @@ import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -42,12 +44,12 @@ import org.projectmobius.tools.common.viewer.XSDFileFilter;
  */
 public class DataServiceCreationPostProcessor implements CreationExtensionPostProcessor {
 
-	public void postCreate(ServiceDescription serviceDescription, Properties serviceProperties)
+	public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CreationExtensionException {
 		// apply data service requirements to it
 		try {
 			System.out.println("Adding data service components to template");
-			makeDataService(serviceDescription, serviceProperties);
+			makeDataService(info.getServiceDescriptor(), info.getIntroduceServiceProperties());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new CreationExtensionException("Error adding data service components to template! " + ex.getMessage(), ex);
@@ -55,7 +57,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		// add the proper deployment properties
 		try {
 			System.out.println("Adding deploy property for query processor class");
-			modifyServiceProperties(serviceDescription);
+			modifyServiceProperties(info.getServiceDescriptor());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new CreationExtensionException("Error adding query processor parameter to service! " + ex.getMessage(), ex);

@@ -1,0 +1,60 @@
+<%@ jet package="gov.nih.nci.cagrid.data.codegen.templates" class="CQLResultTypesTemplate" 
+imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.* gov.nih.nci.cagrid.data.extension.*" %>
+<% 
+	gov.nih.nci.cagrid.data.codegen.ResultTypeGeneratorInformation info = (gov.nih.nci.cagrid.data.codegen.ResultTypeGeneratorInformation) argument;
+  	ServiceInformation serviceInfo = info.getServiceInfo();
+	ServiceType service = serviceInfo.getServices().getService(0);
+	CadsrInformation cadsrInfo = info.getCadsrInfo();
+	
+%><?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="<%=service.getNamespace()%>/CQLResultTypes" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    
+    <!-- Exposed Objects' schemas are imported here -->
+
+<%
+		if (cadsrInfo != null) {
+			CadsrPackage[] packages = cadsrInfo.getPackages();
+			if (packages != null) {
+				for (int i = 0; i < packages.length; i++) {
+					CadsrPackage pack = packages[i];
+					String psNS = pack.getMappedNamespace();
+					NamespaceType ns=CommonTools.getNamespaceType(serviceInfo.getNamespaces(), psNS);
+					String location ="";
+					if(ns!=null){
+						location=ns.getLocation();
+					}
+					stringBuffer
+						.append("\t<xs:import namespace=\"" + psNS + "\" schemaLocation=\"" + location + "\"/>\n");
+				}
+			}
+		}
+	%>
+
+
+    <xs:group name="PermissibleCQLObjectResults">
+        <xs:choice>        
+        <!-- element references to exposed objects -->
+
+<%
+		if (cadsrInfo != null) {
+			CadsrPackage[] packages = cadsrInfo.getPackages();
+			if (packages != null) {
+				for (int i = 0; i < packages.length; i++) {
+					CadsrPackage pack = packages[i];
+					String psNS = pack.getMappedNamespace();
+					String[] packClasses = pack.getSelectedClass();
+					if (packClasses != null) {
+						for (int j = 0; j < packClasses.length; j++) {
+							String clazzName = packClasses[j];
+							// TODO: extract the element name when that is
+							// stored here
+							stringBuffer.append("\t\t<xs:element ref=\"ns0:" + clazzName + "\" xmlns:ns0=\"" + psNS+ "\"/>\n");
+						}
+					}
+
+				}
+			}
+		}%> 
+        </xs:choice>
+    </xs:group>
+</xs:schema>
