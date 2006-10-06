@@ -507,40 +507,6 @@
     </target>
 
 
-    <!-- builds the Introduce extension package -->
-    <target name="buildExtension" description="Builds and packages the introduce extension" depends="clean, jarStubs, jarExtension, jarService, jarCql">
-        <mkdir dir="${extension.out.dir}" />
-        <mkdir dir="${extension.out.dir}/lib" />
-        <mkdir dir="${extension.out.dir}/schema" />
-        <copy file="${extension.description.file}" todir="${extension.out.dir}" />
-        <copy file="${stubs.jar.file}" todir="${extension.out.dir}/lib" />
-        <copy file="${extension.jar.file}" todir="${extension.out.dir}/lib" />
-        <copy file="${service.jar.file}" todir="${extension.out.dir}/lib" />
-        <copy file="${cql.jar.file}" todir="${extension.out.dir}/lib" />
-        <copy toDir="${extension.out.dir}/schema">
-            <fileset dir="schema/Data" casesensitive="yes">
-                <include name="**/*.xsd" />
-                <include name="**/*.wsdl" />
-            </fileset>
-        </copy>
-        <copy toDir="${extension.out.dir}/lib">
-            <fileset dir="${lib.dir}">
-                <include name="**/*.jar" />
-            </fileset>
-            <fileset dir="${ext.lib.dir}">
-                <include name="**/*.jar" />
-            </fileset>
-        </copy>
-        <zip destfile="${extension.base.dir}/DataServiceExtension.zip">
-            <fileset dir="${extension.base.dir}">
-                <include name="**/*" />
-                <exclude name="*.xml" />
-                <exclude name="*.zip" />
-            </fileset>
-        </zip>
-    </target>
-
-
     <!-- Build and install extensions for introduce -->
     <!-- this target installs the default introduce extension, which adds an operation provider to a service
 	which MAKES it a data service -->
