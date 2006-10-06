@@ -36,5 +36,6 @@
 	<classpathentry kind="lib" path="lib/antlib/ant-xslp.jar"/>
 	<classpathentry kind="lib" path="lib/antlib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/antlib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/bsh-2.0b4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
