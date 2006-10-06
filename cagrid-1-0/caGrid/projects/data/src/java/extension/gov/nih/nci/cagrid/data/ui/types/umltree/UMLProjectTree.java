@@ -35,7 +35,7 @@ public class UMLProjectTree extends CheckBoxTree {
 	
 	
 	public void removeUmlPackage(UMLPackageMetadata pack) {
-		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(pack);
+		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(pack.getName());
 		if (packNode == null) {
 			throw new IllegalArgumentException("Package " + pack.getName() + " is not in this tree!");
 		}
@@ -58,7 +58,7 @@ public class UMLProjectTree extends CheckBoxTree {
 	
 	public void removeUmlClass(UMLPackageMetadata pack, UMLClassMetadata clazz) {
 		// find the package node
-		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(pack);
+		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(pack.getName());
 		if (packNode == null) {
 			throw new IllegalArgumentException("Package " + pack.getName() + " is not in this tree!");
 		}
@@ -67,13 +67,13 @@ public class UMLProjectTree extends CheckBoxTree {
 		Enumeration classNodeEnum = packNode.children();
 		while (classNodeEnum.hasMoreElements()) {
 			UMLClassTreeNode node = (UMLClassTreeNode) classNodeEnum.nextElement();
-			if (node.getClassMetadata().equals(clazz)) {
+			if (node.getClassMetadata().getName().equals(clazz.getName())) {
 				classNode = node;
 				break;
 			}
 		}
 		if (classNode == null) {
-			throw new IllegalArgumentException("Class " + clazz.getFullyQualifiedName() + " is not in this tree!");
+			throw new IllegalArgumentException("Class " + clazz.getName() + " is not in this tree!");
 		}
 		packNode.remove(classNode);
 		reloadFromRoot();

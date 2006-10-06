@@ -18,7 +18,6 @@ public class UMLClassTreeNode extends CheckBoxTreeNode {
 
 	public UMLClassTreeNode(CheckBoxTree parentTree, UMLClassMetadata classMd) {
 		super(parentTree, classMd.getName());
-		getCheckBox().setToolTipText(classMd.getFullyQualifiedName());
 		this.classMd = classMd;
 		this.setAllowsChildren(false);
 	}

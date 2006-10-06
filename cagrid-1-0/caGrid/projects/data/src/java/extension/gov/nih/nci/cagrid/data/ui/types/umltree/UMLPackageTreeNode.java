@@ -19,7 +19,6 @@ public class UMLPackageTreeNode extends CheckBoxTreeNode {
 
 	public UMLPackageTreeNode(CheckBoxTree parentTree, UMLPackageMetadata pack) {
 		super(parentTree, pack.getName());
-		getCheckBox().setToolTipText(pack.getDescription());
 		this.pack = pack;
 	}
 	
