@@ -47,7 +47,7 @@ public class AntUtils
 			while (keys.hasMoreElements()) {
 				String name = (String) keys.nextElement();
 				String value = (String) sysProps.getProperty(name);
-				value.replaceAll(" ", "\\ ");
+				value = value.replaceAll(" ", "\\\\ ");
 				cmd.add("\"-D" + name + "=" + value + "\"");
 			}
 		}
