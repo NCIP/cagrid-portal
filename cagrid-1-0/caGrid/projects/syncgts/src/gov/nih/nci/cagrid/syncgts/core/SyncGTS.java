@@ -329,12 +329,14 @@ public class SyncGTS {
 									.getAbsolutePath(), TrustedCA.class);
 								ca.setDiscovered(tca.getDiscovered());
 								ca.setExpiration(tca.getExpiration());
-								if(unableToSync.contains(tca.getGts())){
+								if (unableToSync.contains(tca.getGts())) {
 									Calendar c = new GregorianCalendar();
-									if(c.getTimeInMillis()<tca.getExpiration()){
+									if (c.getTimeInMillis() < tca.getExpiration()) {
 										Message m = new Message();
 										m.setType(MessageType.Info);
-										m.setValue("Unable to communicate with the GTS "+tca.getGts()+", did not remove the the CA " + tca.getName() + " because it was not expired.");
+										m.setValue("Unable to communicate with the GTS " + tca.getGts()
+											+ " did not remove the the CA " + tca.getName()
+											+ " because it was not expired.");
 										this.messages.add(m);
 										logger.warn(m.getValue());
 										continue;
