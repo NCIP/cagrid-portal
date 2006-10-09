@@ -224,7 +224,6 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		queryMethod.setExceptions(queryExceptions);
 		// query method is imported
 		MethodTypeImportInformation importInfo = new MethodTypeImportInformation();
-		importInfo.setFromIntroduce(true);
 		importInfo.setNamespace(DataServiceConstants.DATA_SERVICE_NAMESPACE);
 		importInfo.setPackageName(DataServiceConstants.DATA_SERVICE_PACKAGE);
 		importInfo.setPortTypeName(DataServiceConstants.DATA_SERVICE_PORT_TYPE_NAME);

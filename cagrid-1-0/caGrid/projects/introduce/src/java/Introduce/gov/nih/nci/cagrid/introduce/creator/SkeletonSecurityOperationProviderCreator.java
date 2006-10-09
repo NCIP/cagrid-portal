@@ -68,7 +68,6 @@ public class SkeletonSecurityOperationProviderCreator {
 			ii.setPackageName(SECURITY_SERVICE_PACKAGE);
 			ii.setPortTypeName("ServiceSecurityPortType");
 			ii.setWsdlFile(SERVICE_SECURITY_WSDL);
-			ii.setFromIntroduce(true);
 			//ii.setInputMessage(new QName(SECURITY_SERVICE_NS, "GetServiceSecurityMetadataRequest"));
 			//ii.setOutputMessage(new QName(SECURITY_SERVICE_NS, "GetServiceSecurityMetadataResponse"));
 			method.setIsImported(true);

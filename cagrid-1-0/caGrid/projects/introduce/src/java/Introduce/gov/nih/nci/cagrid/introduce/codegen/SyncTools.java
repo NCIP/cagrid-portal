@@ -480,7 +480,8 @@ public class SyncTools {
 						MethodType mtype = service.getMethods().getMethod(i);
 						// process the inputs
 						if (!mtype.isIsImported()
-							|| (mtype.isIsImported() && mtype.getImportInformation().isFromIntroduce())) {
+							|| (mtype.getImportInformation().getFromIntroduce() == null || mtype.getImportInformation()
+								.getFromIntroduce().booleanValue())) {
 							if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
 								for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
 									MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);

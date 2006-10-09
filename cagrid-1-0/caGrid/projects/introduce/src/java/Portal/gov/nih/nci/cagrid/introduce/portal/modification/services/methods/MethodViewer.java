@@ -619,7 +619,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 								String outputMessageName = outputMessageType.substring(colonIndex + 1);
 
 								MethodTypeImportInformation importInfo = new MethodTypeImportInformation();
-								importInfo.setFromIntroduce(false);
+								importInfo.setFromIntroduce(new Boolean(false));
 								importInfo.setNamespace(namespace);
 								importInfo.setWsdlFile(getWsdlFileNameTextField().getText());
 								importInfo.setPortTypeName(((ElementHolder) getWsdlServiceServicesComboBox()
@@ -2126,7 +2126,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			gridBagConstraints42.gridx = 0;
 			gridBagConstraints42.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints42.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints42.gridy = 3;
+			gridBagConstraints42.gridy = 2;
 			wsdlImportPackageNameLabel = new JLabel();
 			wsdlImportPackageNameLabel.setText("Package Name");
 			wsdlImportPackageNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);

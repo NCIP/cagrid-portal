@@ -359,7 +359,8 @@ public class SyncSource {
 			// insert the new client method
 			int endOfClass = fileContent.lastIndexOf("}");
 			String clientMethod = null;
-			if (method.isIsImported() && !method.getImportInformation().isFromIntroduce()) {
+			if (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null
+				&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
 				clientMethod = "\n    " + createBoxedSignatureStringFromMethod(method) + " "
 					+ createClientExceptions(method);
 			} else {
@@ -462,7 +463,8 @@ public class SyncSource {
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
 		String clientMethod = null;
-		if (method.isIsImported() && !method.getImportInformation().isFromIntroduce()) {
+		if (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null
+			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
 			clientMethod = "\n\t" + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
 		} else {
 			clientMethod = "\n\t" + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
@@ -480,7 +482,9 @@ public class SyncSource {
 		String methodString = lineStart;
 		MethodTypeOutput returnTypeEl = method.getOutput();
 
-		if (!method.isIsImported() || (method.isIsImported() && method.getImportInformation().isFromIntroduce())) {
+		if (!method.isIsImported()
+			|| ((method.getImportInformation().getFromIntroduce() == null) || (method.getImportInformation()
+				.getFromIntroduce().booleanValue()))) {
 			// always a boxed call now becuase using complex types in the wsdl
 			// create handle for the boxed wrapper
 			methodString += method.getInputMessageClass() + " params = new " + method.getInputMessageClass() + "();\n";
@@ -611,7 +615,9 @@ public class SyncSource {
 		String clientMethod = null;
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
-		if (method.isIsImported() && !method.getImportInformation().isFromIntroduce()) {
+		if (method.isIsImported()
+			&& (method.getImportInformation().getFromIntroduce() == null || !method.getImportInformation()
+				.getFromIntroduce().booleanValue())) {
 			clientMethod = "\t\n" + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
 		} else {
 			clientMethod = "\n\t" + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
@@ -655,7 +661,9 @@ public class SyncSource {
 		String methodString = "";
 
 		// can i create the unboxed call to the implementation
-		if (!method.isIsImported() || (method.isIsImported() && method.getImportInformation().isFromIntroduce())) {
+		if (!method.isIsImported()
+			|| (method.getImportInformation().getFromIntroduce() == null || method.getImportInformation()
+				.getFromIntroduce().booleanValue())) {
 			// slh -- in migration to globus 4 we need to check here for
 			// autoboxing
 			// and get appropriate
