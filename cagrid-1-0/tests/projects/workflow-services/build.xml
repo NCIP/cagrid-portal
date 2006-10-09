@@ -6,6 +6,7 @@
         <ant dir="SampleService1" target="all"/>
         <ant dir="SampleService2" target="all"/>
         <ant dir="SecureSample" target="all"/>
+        <ant dir="BasicDataService" target="all"/>
     </target>
 
 
@@ -25,6 +26,7 @@
         <ant dir="SampleService1" target="clean"/>
         <ant dir="SampleService2" target="clean"/>
         <ant dir="SecureSample" target="clean"/>
+        <ant dir="BasicDataService" target="clean"/>
     </target>
 
 </project>
