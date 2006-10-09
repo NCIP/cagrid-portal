@@ -30,7 +30,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * specific look-feel or additions one should extend this panel and add this
  * componenet to the introduce portal configuration.
  * 
- * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>	
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @created Jul 7, 2006

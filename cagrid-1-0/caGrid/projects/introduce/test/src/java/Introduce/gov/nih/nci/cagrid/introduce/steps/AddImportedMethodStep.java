@@ -32,6 +32,7 @@ public class AddImportedMethodStep extends BaseStep {
 		System.out.println("Adding an imported simple method.");
 
 		MethodTypeImportInformation ii = new MethodTypeImportInformation();
+		ii.setFromIntroduce(new Boolean(true));
 		ii.setNamespace(importedTCI.getNamespace());
 		ii.setPortTypeName(importedTCI.getName() + "PortType");
 		ii.setPackageName(importedTCI.getPackageName() + ".stubs");

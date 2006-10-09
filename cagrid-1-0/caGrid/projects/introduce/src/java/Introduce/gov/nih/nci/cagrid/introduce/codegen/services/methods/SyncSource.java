@@ -75,10 +75,6 @@ public class SyncSource {
 		String exceptions = "";
 		// process the faults for this method...
 		MethodTypeExceptions exceptionsEl = method.getExceptions();
-		String packageName = service.getPackageName() + ".stubs";
-		if (method.isIsImported()) {
-			packageName = method.getImportInformation().getPackageName();
-		}
 		exceptions += "RemoteException";
 		if (method.getOutput().getIsClientHandle() != null && method.getOutput().getIsClientHandle().booleanValue()) {
 			exceptions += ", org.apache.axis.types.URI.MalformedURIException";
@@ -333,7 +329,7 @@ public class SyncSource {
 	}
 
 
-	public String createBoxedSignatureStringFromMethod(MethodType method) throws Exception {
+	public String createBoxedSignatureStringFromMethod(MethodType method) {
 		String methodString = "";
 
 		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
@@ -362,8 +358,15 @@ public class SyncSource {
 
 			// insert the new client method
 			int endOfClass = fileContent.lastIndexOf("}");
-			String clientMethod = "\n\t" + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
-				+ createClientExceptions(method);
+			String clientMethod = null;
+			if (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null
+				&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
+				clientMethod = "\n    " + createBoxedSignatureStringFromMethod(method) + " "
+					+ createClientExceptions(method);
+			} else {
+				clientMethod = "\n    " + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+					+ createClientExceptions(method);
+			}
 			clientMethod += ";\n";
 
 			fileContent.insert(endOfClass - 1, clientMethod);
@@ -459,8 +462,14 @@ public class SyncSource {
 
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
-		String clientMethod = "\n    " + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
-			+ createClientExceptions(method);
+		String clientMethod = null;
+		if (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null
+			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
+			clientMethod = "\n\t" + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
+		} else {
+			clientMethod = "\n\t" + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+				+ createClientExceptions(method);
+		}
 		clientMethod += "{\n";
 		clientMethod += lineStart + "synchronized(portTypeMutex){\n";
 		lineStart += "  ";
@@ -473,7 +482,9 @@ public class SyncSource {
 		String methodString = lineStart;
 		MethodTypeOutput returnTypeEl = method.getOutput();
 
-		if (method.getIsUnBoxable().booleanValue()) {
+		if (!method.isIsImported()
+			|| (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null && method
+				.getImportInformation().getFromIntroduce().booleanValue())) {
 			// always a boxed call now becuase using complex types in the wsdl
 			// create handle for the boxed wrapper
 			methodString += method.getInputMessageClass() + " params = new " + method.getInputMessageClass() + "();\n";
@@ -551,28 +562,9 @@ public class SyncSource {
 		} else {
 			// is the method is unboxable then i need to just call it straight
 			// up.
-			if (method.getOutput() != null && !method.getOutput().getQName().getLocalPart().equals("void")) {
-				methodString += "return ";
-			}
-			methodString += var + "." + TemplateUtils.lowerCaseFirstCharacter(method.getName());
-			if (method.getInputs() != null && method.getInputs().getInput() != null) {
-				SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), method
-					.getInputs().getInput(0).getQName());
-				String packageName = info.getType().getPackageName();
-				String classType = null;
-				if (packageName != null && packageName.length() > 0) {
-					classType = packageName + "." + info.getType().getClassName();
-				} else {
-					classType = info.getType().getClassName();
-				}
-				if (method.getInputs().getInput(0).isIsArray()) {
-					classType += "[]";
-				}
-				String paramName = method.getInputs().getInput(0).getName();
-				methodString += "(" + paramName + ");\n";
-			} else {
-				methodString += "();\n";
-			}
+
+			methodString += "return " + var + "." + TemplateUtils.lowerCaseFirstCharacter(method.getName());
+			methodString += "(params);\n";
 		}
 
 		clientMethod += methodString;
@@ -620,10 +612,16 @@ public class SyncSource {
 			e.printStackTrace();
 		}
 
+		String clientMethod = null;
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
-		String clientMethod = "\n\t" + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
-			+ createExceptions(method, serviceInfo, service);
+		if (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null
+			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
+			clientMethod = "\t\n" + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
+		} else {
+			clientMethod = "\n\t" + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+				+ createExceptions(method, serviceInfo, service);
+		}
 
 		clientMethod += "{\n";
 		clientMethod += "\t\t//TODO: Implement this autogenerated method\n";
@@ -662,7 +660,9 @@ public class SyncSource {
 		String methodString = "";
 
 		// can i create the unboxed call to the implementation
-		if (method.getIsUnBoxable().booleanValue()) {
+		if (!method.isIsImported()
+			|| (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null && method
+				.getImportInformation().getFromIntroduce().booleanValue())) {
 			// slh -- in migration to globus 4 we need to check here for
 			// autoboxing
 			// and get appropriate
@@ -975,7 +975,7 @@ public class SyncSource {
 					prevChar = fileContent.toString().charAt(--index);
 				}
 				index++;
-				startLocation = index;;
+				startLocation = index;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

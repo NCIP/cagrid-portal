@@ -15,6 +15,12 @@
 		<java classname="gov.nih.nci.cagrid.introduce.codegen.SyncTools" fork="yes" failonerror="true">
 			<arg value="-d" />
 			<arg value="${introduce.skeleton.destination.dir}" />
+			<!--
+			<jvmarg value="-Xdebug"/>
+			<jvmarg value="-Xnoagent"/>
+			<jvmarg value="-Djava.compiler=NONE"/>
+			<jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,address=21000"/>	
+			-->	 
 			<classpath>
 				<fileset dir="${build.lib.dir}">
 					<include name="*.jar" />

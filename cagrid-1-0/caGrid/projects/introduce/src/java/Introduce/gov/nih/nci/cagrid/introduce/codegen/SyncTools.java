@@ -478,55 +478,55 @@ public class SyncTools {
 				if (service.getMethods() != null && service.getMethods().getMethod() != null) {
 					for (int i = 0; i < service.getMethods().getMethod().length; i++) {
 						MethodType mtype = service.getMethods().getMethod(i);
-						mtype.setIsUnBoxable(new Boolean(true));
 						// process the inputs
-						if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
-							for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
-								MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
-								SchemaInformation namespace = CommonTools.getSchemaInformation(info.getNamespaces(),
-									inputParam.getQName());
-								if (!namespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
-									QName qname = null;
-									if (mtype.isIsImported() && mtype.getImportInformation().getInputMessage() != null) {
-										qname = new QName(mtype.getImportInformation().getInputMessage()
-											.getNamespaceURI(), ">>"
-											+ mtype.getImportInformation().getInputMessage().getLocalPart() + ">"
-											+ inputParam.getName());
-									} else if (mtype.isIsImported()) {
-										qname = new QName(mtype.getImportInformation().getNamespace(), ">>"
-											+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
-											+ inputParam.getName());
-									} else {
-										qname = new QName(service.getNamespace(), ">>"
-											+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
-											+ inputParam.getName());
-									}
-
-									Type type = table.getType(qname);
-									if (type == null && !mtype.isIsImported()) {
-										table.dump(System.err);
-										throw new SynchronizationException(
-											"Unable to find Element in symbol table for: " + qname);
-									} else if (type == null && mtype.isIsImported()) {
-										mtype.setIsUnBoxable(new Boolean(false));
-										System.out
-											.println("There may not be a container class for the element becuase it is being imported and does not seem to be an introduce generated service");
-									} else {
-
+						if (!mtype.isIsImported()
+							|| (mtype.isIsImported() && mtype.getImportInformation().getFromIntroduce() != null && mtype
+								.getImportInformation().getFromIntroduce().booleanValue())) {
+							if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
+								for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
+									MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
+									SchemaInformation namespace = CommonTools.getSchemaInformation(
+										info.getNamespaces(), inputParam.getQName());
+									if (!namespace.getNamespace().getNamespace()
+										.equals(IntroduceConstants.W3CNAMESPACE)) {
+										QName qname = null;
 										if (mtype.isIsImported()) {
-											inputParam.setContainerClass(mtype.getImportInformation().getPackageName()
-												+ "." + getRelativeClassName(type.getName()));
+											qname = new QName(mtype.getImportInformation().getNamespace(), ">>"
+												+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
+												+ inputParam.getName());
 										} else {
-											inputParam.setContainerClass(service.getPackageName() + ".stubs."
-												+ getRelativeClassName(type.getName()));
+											qname = new QName(service.getNamespace(), ">>"
+												+ TemplateUtils.upperCaseFirstCharacter(mtype.getName()) + "Request>"
+												+ inputParam.getName());
+										}
+
+										Type type = table.getType(qname);
+										if (type == null && !mtype.isIsImported()) {
+											table.dump(System.err);
+											throw new SynchronizationException(
+												"Unable to find Element in symbol table for: " + qname);
+										} else if (type == null) {
+											System.out.println("ERROR: The lement cannot be found in the symbol table: "
+												+ mtype.getName() + ":" + inputParam.getName());
+										} else {
+
+											if (mtype.isIsImported()) {
+												inputParam.setContainerClass(mtype.getImportInformation()
+													.getPackageName()
+													+ "." + getRelativeClassName(type.getName()));
+											} else {
+												inputParam.setContainerClass(service.getPackageName() + ".stubs."
+													+ getRelativeClassName(type.getName()));
+											}
 										}
 									}
-								}
 
+								}
 							}
 						}
 
-						// process the messages so that we can find the types
+						// process the messages so that we can find the
+						// types
 						// and the part names
 						System.out.println("LOOKING AT METHOD: " + mtype.getName());
 						// populate the input message class name

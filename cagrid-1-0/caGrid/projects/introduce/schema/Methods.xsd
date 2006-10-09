@@ -57,6 +57,7 @@
 					<xs:attribute name="namespace" type="xs:string" use="required"/>
 					<xs:attribute name="packageName" type="xs:string" use="required"/>
 					<xs:attribute name="wsdlFile" type="xs:string" use="required"/>
+					<xs:attribute name="fromIntroduce" type="xs:boolean" use="optional"/>
 					<xs:attribute name="inputMessage" type="xs:QName" use="optional"/>
 					<xs:attribute name="outputMessage" type="xs:QName" use="optional"/>
 				</xs:complexType>
@@ -72,7 +73,6 @@
 		<xs:attribute name="isProvided" type="xs:boolean" use="required"/>
 		<xs:attribute name="inputMessageClass" type="xs:string" use="optional"/>
 		<xs:attribute name="outputMessageClass" type="xs:string" use="optional"/>
-		<xs:attribute name="isUnBoxable" type="xs:boolean" use="optional"/>
 		<xs:attribute name="boxedInputParameter" type="xs:string" use="optional"/>
 		<xs:attribute name="boxedOutputParameter" type="xs:string" use="optional"/>
 	</xs:complexType>
