@@ -344,6 +344,22 @@ public class SyncSource {
 	}
 
 
+	public String createBoxedSignatureStringFromMethod(JavaMethod method) {
+		String methodString = "";
+
+		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
+
+		methodString += "public " + method.getType().getPackageName() + "." + method.getType().getClassName() + " "
+			+ methodName + "(";
+
+		methodString += method.getParams()[0].getType().getPackageName() + "."
+			+ method.getParams()[0].getType().getClassName() + " params";
+
+		methodString += ")";
+		return methodString;
+	}
+
+
 	public void addMethods(List additions) throws Exception {
 		for (int i = 0; i < additions.size(); i++) {
 			// add it to the interface
@@ -405,7 +421,14 @@ public class SyncSource {
 			}
 
 			// remove the old interface method
-			String clientMethod = createClientUnBoxedSignatureStringFromMethod(mod.getIMethod());
+			String clientMethod = null;
+
+			if (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null
+				&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
+				clientMethod = "\n    " + createBoxedSignatureStringFromMethod(mod.getIMethod());
+			} else {
+				clientMethod = "\n    " + createClientUnBoxedSignatureStringFromMethod(mod.getIMethod());
+			}
 			int startOfMethod = startOfSignature(fileContent, clientMethod);
 			String restOfFile = fileContent.substring(startOfMethod);
 			int endOfMethod = startOfMethod + restOfFile.indexOf(";") + 1;
@@ -420,8 +443,15 @@ public class SyncSource {
 
 			// insert the new client method
 			int endOfClass = fileContent.lastIndexOf("}");
-			clientMethod = createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
-				+ createClientExceptions(method);
+
+			if (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null
+				&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
+				clientMethod = "\n    " + createBoxedSignatureStringFromMethod(method) + " "
+					+ createClientExceptions(method);
+			} else {
+				clientMethod = "\n    " + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+					+ createClientExceptions(method);
+			}
 			clientMethod += ";\n";
 
 			fileContent.insert(endOfClass - 1, clientMethod);
@@ -1016,7 +1046,13 @@ public class SyncSource {
 		}
 
 		// remove the old method signature
-		String clientMethod = createClientUnBoxedSignatureStringFromMethod(oldMethod);
+		String clientMethod = "";
+		if (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null
+			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
+			clientMethod = "\n    " + createBoxedSignatureStringFromMethod(oldMethod);
+		} else {
+			clientMethod = "\n    " + createClientUnBoxedSignatureStringFromMethod(oldMethod);
+		}
 		int startOfMethod = startOfSignature(fileContent, clientMethod);
 		int endOfSignature = endOfSignature(fileContent, startOfMethod);
 
