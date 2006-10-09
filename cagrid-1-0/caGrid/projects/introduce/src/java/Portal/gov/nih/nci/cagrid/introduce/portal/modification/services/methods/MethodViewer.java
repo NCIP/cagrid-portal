@@ -312,7 +312,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JComboBox wsdlServiceServicesComboBox = null;
 
-	private Document currentWSDL;
+	private Document currentImporWSDL;
+
+	private ServiceDescription currentImportServiceSescription;
 
 	private JLabel portTypeLabel = null;
 
@@ -559,45 +561,131 @@ public class MethodViewer extends GridPortalBaseFrame {
 							if (getIsFromIntroduceCheckBox().isSelected()) {
 								// // //this method is to be imported from
 								// introduce....
-								//
-								// MethodTypeImportInformation importInfo = new
-								// MethodTypeImportInformation();
-								// importInfo.setNamespace(getNamespaceTextField().getText());
-								// importInfo.setPortTypeName(((String)
-								// getPortTypesComboBox().getSelectedItem())
-								// .toString());
-								// importInfo.setPackageName(getPackageNameTextField().getText());
-								// String wsdlFile =
-								// getWsdlFileTextField().getText();
-								// wsdlFile =
-								// wsdlFile.substring(wsdlFile.lastIndexOf(File.separator)
-								// + 1);
-								// importInfo.setWsdlFile(wsdlFile);
-								// if
-								// (!getInputMessageNamespaceTextField().getText().equals("")
-								// &&
-								// !getInputMessageNameTextField().getText().equals(""))
-								// {
-								// importInfo.setInputMessage(new
-								// QName(getInputMessageNamespaceTextField().getText(),
-								// getInputMessageNameTextField().getText()));
-								// }
-								// if
-								// (!getOutputMessageNamespaceTextField().getText().equals("")
-								// &&
-								// !getOutputMessageNameTextField().getText().equals(""))
-								// {
-								// importInfo.setOutputMessage(new
-								// QName(getOutputMessageNamespaceTextField()
-								// .getText(),
-								// getOutputMessageNameTextField().getText()));
-								// }
-								// method.setImportInformation(importInfo);
+
+								ServiceType importService = ((ServiceHolder) introduceServiceServicesComboBox
+									.getSelectedItem()).getService();
+								MethodType importMethod = CommonTools.getMethod(importService.getMethods(),
+									getNameField().getText());
+								if (importMethod.isIsImported()) {
+									JOptionPane.showMessageDialog(MethodViewer.this,
+										"Cannot import an method which itself is an imported method");
+									return;
+								}
+								List requiredNamespaces = new ArrayList();
+								if (importMethod.getInputs() != null && importMethod.getInputs().getInput() != null) {
+									for (int inputI = 0; inputI < importMethod.getInputs().getInput().length; inputI++) {
+										MethodTypeInputsInput input = importMethod.getInputs().getInput(inputI);
+										if (!requiredNamespaces.contains(input.getQName().getNamespaceURI())) {
+											requiredNamespaces.add(input.getQName().getNamespaceURI());
+										}
+									}
+								}
+								if (importMethod.getOutput() != null) {
+									if (!requiredNamespaces.contains(importMethod.getOutput().getQName()
+										.getNamespaceURI())) {
+										requiredNamespaces.add(importMethod.getOutput().getQName().getNamespaceURI());
+									}
+								}
+								if (importMethod.getExceptions() != null
+									&& importMethod.getExceptions().getException() != null) {
+									for (int exceptionI = 0; exceptionI < importMethod.getExceptions().getException().length; exceptionI++) {
+										if (!requiredNamespaces.contains(importMethod.getExceptions().getException(
+											exceptionI).getQname().getNamespaceURI())) {
+											requiredNamespaces.add(importMethod.getExceptions()
+												.getException(exceptionI).getQname().getNamespaceURI());
+										}
+									}
+								}
+								// for each of the requred namespaces that i
+								// don't already have i need to copy them over
+								for (int nsI = 0; nsI < requiredNamespaces.size(); nsI++) {
+									String uri = (String) requiredNamespaces.get(nsI);
+									if (CommonTools.getNamespaceType(info.getNamespaces(), uri) == null) {
+										JOptionPane
+											.showMessageDialog(MethodViewer.this,
+												"There are namespaces/types that are used by the imported method which are not yet imported into this service");
+										return;
+									}
+								}
+
+								String wsdlFile = introduceServiceLocationTextField.getText() + File.separator
+									+ "schema" + File.separator
+									+ currentImportServiceSescription.getServices().getService(0).getName()
+									+ File.separator + importService.getName() + ".wsdl";
+
+								if (!(new File(wsdlFile).exists())) {
+									JOptionPane.showMessageDialog(MethodViewer.this,
+										"Cannot locate the WSDL file for this imported method");
+								}
+
+								Document wsdlDoc = null;
+								try {
+									wsdlDoc = XMLUtilities.fileNameToDocument(wsdlFile);
+								} catch (MobiusException e1) {
+									e1.printStackTrace();
+									return;
+								}
+
+								List portTypes = wsdlDoc.getRootElement().getChildren("portType",
+									Namespace.getNamespace(IntroduceConstants.WSDLAMESPACE));
+								
+								boolean foundMethod = false;
+								Element methodEl = null;
+								for (int portTypeI = 0; portTypeI < portTypes.size(); portTypeI++) {
+									Element portTypeEl = (Element) portTypes.get(portTypeI);
+									if (portTypeEl.getAttributeValue("name").equals(importService.getName())) {
+										List operationEls = portTypeEl.getChildren("operation", Namespace
+											.getNamespace(IntroduceConstants.WSDLAMESPACE));
+										for (int opI = 0; opI < operationEls.size(); opI++) {
+											Element opEl = (Element) operationEls.get(opI);
+											if (opEl.getAttributeValue("name").equals(getNameField().getText())) {
+												foundMethod = true;
+												methodEl = opEl;
+												break;
+											}
+										}
+										break;
+									}
+								}
+								//get the message types
+								
+								Element input = methodEl.getChild("input", Namespace
+									.getNamespace(IntroduceConstants.WSDLAMESPACE));
+								String inputMessageType = input.getAttributeValue("message");
+								int colonIndex = inputMessageType.indexOf(":");
+								String inputMessageNamespace = currentImporWSDL.getRootElement().getNamespace(
+									inputMessageType.substring(0, colonIndex)).getURI();
+								String inputMessageName = inputMessageType.substring(colonIndex + 1);
+								// get the outputMessage
+								Element output = methodEl.getChild("output", Namespace
+									.getNamespace(IntroduceConstants.WSDLAMESPACE));
+								String outputMessageType = output.getAttributeValue("message");
+								colonIndex = outputMessageType.indexOf(":");
+								String outputMessageNamespace = currentImporWSDL.getRootElement().getNamespace(
+									outputMessageType.substring(0, colonIndex)).getURI();
+								String outputMessageName = outputMessageType.substring(colonIndex + 1);
+								
+								// so far we are valid.
+								// copy over the imports outputs and etc
+								method.setInputs(importMethod.getInputs());
+								method.setOutput(importMethod.getOutput());
+								method.setExceptions(importMethod.getExceptions());
+
+								MethodTypeImportInformation importInfo = new MethodTypeImportInformation();
+								importInfo.setNamespace(importService.getNamespace());
+								importInfo.setPortTypeName(importService.getName());
+								importInfo.setPackageName(importService.getPackageName());
+								importInfo.setInputMessage(new QName(inputMessageNamespace, inputMessageName));
+								importInfo.setOutputMessage(new QName(outputMessageNamespace, outputMessageName));
+								method.setImportInformation(importInfo);
+								method.setIsImported(true);
+
 
 							} else {
 								// this method is to be imported from WSDL
 								// prep the informaiton needed....
-								String namespace = currentWSDL.getRootElement().getAttributeValue("targetNamespace");
+								String namespace = currentImporWSDL.getRootElement().getAttributeValue(
+									"targetNamespace");
 								Element methodEl = ((ElementHolder) getWsdlServiceServicesComboBox().getSelectedItem())
 									.getMethod();
 
@@ -606,7 +694,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 									.getNamespace(IntroduceConstants.WSDLAMESPACE));
 								String inputMessageType = input.getAttributeValue("message");
 								int colonIndex = inputMessageType.indexOf(":");
-								String inputMessageNamespace = currentWSDL.getRootElement().getNamespace(
+								String inputMessageNamespace = currentImporWSDL.getRootElement().getNamespace(
 									inputMessageType.substring(0, colonIndex)).getURI();
 								String inputMessageName = inputMessageType.substring(colonIndex + 1);
 								// get the outputMessage
@@ -614,7 +702,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 									.getNamespace(IntroduceConstants.WSDLAMESPACE));
 								String outputMessageType = output.getAttributeValue("message");
 								colonIndex = outputMessageType.indexOf(":");
-								String outputMessageNamespace = currentWSDL.getRootElement().getNamespace(
+								String outputMessageNamespace = currentImporWSDL.getRootElement().getNamespace(
 									outputMessageType.substring(0, colonIndex)).getURI();
 								String outputMessageName = outputMessageType.substring(colonIndex + 1);
 
@@ -2247,6 +2335,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 						return;
 					}
 
+					currentImportServiceSescription = desc;
+
 					getIntroduceServiceServicesComboBox().removeAllItems();
 					// populate the combo boxes
 					for (int serviceI = 0; serviceI < desc.getServices().getService().length; serviceI++) {
@@ -2345,7 +2435,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					Document wsdlDoc = null;
 					try {
 						wsdlDoc = XMLUtilities.fileNameToDocument(chooser.getSelectedFile().getAbsolutePath());
-						currentWSDL = wsdlDoc;
+						currentImporWSDL = wsdlDoc;
 					} catch (MobiusException e1) {
 						e1.printStackTrace();
 						return;
