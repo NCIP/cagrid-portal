@@ -35,7 +35,7 @@ public class ClassElementSerializationTable extends JTable {
 	public ClassElementSerializationTable() {
 		super(createTableModel());
 		setDefaultRenderer(Object.class, new ComponentCellRenderer());
-		setDefaultEditor(Object.class, new ComponentCellEditor());
+		setDefaultEditor(Component.class, new ComponentCellEditor());
 		this.classInformationChangeListeners = new LinkedList();
 		getModel().addTableModelListener(new TableModelListener() {
 			public void tableChanged(TableModelEvent e) {
@@ -110,6 +110,13 @@ public class ClassElementSerializationTable extends JTable {
 	}
 	
 	
+	public void clearTable() {
+		while (getRowCount() != 0) {
+			((DefaultTableModel) getModel()).removeRow(0);
+		}
+	}
+	
+	
 	protected void fireElementNameChanged(int row) {
 		ClassChangeEvent e = getChangeForRow(row);
 		Iterator i = classInformationChangeListeners.iterator();
@@ -153,7 +160,11 @@ public class ClassElementSerializationTable extends JTable {
 	
 	
 	private static DefaultTableModel createTableModel() {
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel() {
+			public Class getColumnClass(int column) {
+				return column == 6 ? Component.class : Object.class;
+			}
+		};
 		model.addColumn("Package Name");
 		model.addColumn("Class Name");
 		model.addColumn("Namespace");
