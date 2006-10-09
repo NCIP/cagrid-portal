@@ -75,13 +75,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="lib" path="test/lib/spring-mock.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-GTS-1.0-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-SyncGTS-1.0-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-SyncGTS-1.0-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-SyncGTS-1.0-stubs.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/commons-beanutils.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/commons-codec.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/commons-collections.jar"/>
@@ -110,5 +103,13 @@
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="lib/nocopy/jsp-api.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gts-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gts-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gts-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-syncgts-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-syncgts-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-syncgts-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/cog-jglobus.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
