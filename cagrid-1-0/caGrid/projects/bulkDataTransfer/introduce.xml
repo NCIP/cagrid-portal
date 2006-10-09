@@ -103,7 +103,7 @@
       <ns4:Input qName="ns7:Pull" isArray="false" name="pull" xmlns:ns7="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
      </ns4:Inputs>
      <ns4:Output qName="ns8:PullResponse" isArray="false" xmlns:ns8="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
-     <ns4:ImportInformation inputMessage="ns9:PullMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns9:PullResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns9="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns9:PullMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns9:PullResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns9="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
      <ns4:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
     </ns4:Method>
     <ns4:Method isImported="true" isProvided="true" name="RenewOp" xsi:type="ns4:MethodType">
@@ -111,7 +111,7 @@
       <ns4:Input qName="ns10:Renew" isArray="false" name="renew" xmlns:ns10="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
      </ns4:Inputs>
      <ns4:Output qName="ns11:RenewResponse" isArray="false" xmlns:ns11="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
-     <ns4:ImportInformation inputMessage="ns12:RenewMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns12:RenewResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns12="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns12:RenewMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns12:RenewResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns12="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
      <ns4:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
     </ns4:Method>
     <ns4:Method isImported="true" isProvided="true" name="GetStatusOp" xsi:type="ns4:MethodType">
@@ -119,7 +119,7 @@
       <ns4:Input qName="ns13:GetStatus" isArray="false" name="status" xmlns:ns13="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
      </ns4:Inputs>
      <ns4:Output qName="ns14:GetStatusResponse" isArray="false" xmlns:ns14="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
-     <ns4:ImportInformation inputMessage="ns15:GetStatusMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns15:GetStatusResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns15="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns15:GetStatusMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns15:GetStatusResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns15="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
      <ns4:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
     </ns4:Method>
     <ns4:Method isImported="true" isProvided="true" name="ReleaseOp" xsi:type="ns4:MethodType">
@@ -127,7 +127,7 @@
       <ns4:Input qName="ns16:Release" isArray="false" name="release" xmlns:ns16="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
-     <ns4:ImportInformation inputMessage="ns17:ReleaseMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns17:RepeaseResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns17="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns4:ImportInformation  fromIntroduce="false" inputMessage="ns17:ReleaseMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns17:RepeaseResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns17="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
      <ns4:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="CreateEnumeration" xsi:type="ns4:MethodType">
@@ -141,7 +141,7 @@
      </ns4:Inputs>
      <ns4:Output qName="ns20:AnyXml" isArray="false" xmlns:ns20="http://www.globus.org/transfer"/>
      <ns4:Exceptions/>
-     <ns4:ImportInformation inputMessage="ns21:EmptyMessage" namespace="http://www.globus.org/transfer" outputMessage="ns21:AnyXmlMessage" packageName="org.globus.transfer" portTypeName="Resource" wsdlFile="./transfer_port_type.wsdl" xmlns:ns21="http://www.globus.org/transfer"/>
+     <ns4:ImportInformation  fromIntroduce="false" inputMessage="ns21:EmptyMessage" namespace="http://www.globus.org/transfer" outputMessage="ns21:AnyXmlMessage" packageName="org.globus.transfer" portTypeName="Resource" wsdlFile="./transfer_port_type.wsdl" xmlns:ns21="http://www.globus.org/transfer"/>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="GetGridFTPURLs" xsi:type="ns4:MethodType">
      <ns4:Inputs/>
