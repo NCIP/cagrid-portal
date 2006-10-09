@@ -645,9 +645,8 @@ public class SyncSource {
 		String clientMethod = null;
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
-		if (method.isIsImported()
-			&& (method.getImportInformation().getFromIntroduce() == null || !method.getImportInformation()
-				.getFromIntroduce().booleanValue())) {
+		if (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null
+			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
 			clientMethod = "\t\n" + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
 		} else {
 			clientMethod = "\n\t" + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
@@ -1064,8 +1063,13 @@ public class SyncSource {
 		fileContent.delete(startOfMethod, endOfSignature);
 
 		// add in the new modified signature
-		clientMethod = "\t" + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
-			+ createExceptions(method, serviceInfo, service);
+		if (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null
+			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
+			clientMethod = "\t\n" + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
+		} else {
+			clientMethod = "\n\t" + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+				+ createExceptions(method, serviceInfo, service);
+		}
 		clientMethod += "{";
 		fileContent.insert(startOfMethod, clientMethod);
 
