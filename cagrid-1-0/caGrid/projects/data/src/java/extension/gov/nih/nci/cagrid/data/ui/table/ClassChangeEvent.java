@@ -16,15 +16,17 @@ import javax.swing.JTable;
 public class ClassChangeEvent extends EventObject {
 	private String packageName;
 	private String className;
+	private String namespace;
 	private String elementName;
 	private String serializer;
 	private String deserializer;
 
-	public ClassChangeEvent(JTable table, String packName, String className, 
+	public ClassChangeEvent(JTable table, String packName, String className, String namespace, 
 		String elementName, String serializer, String deserializer) {
 		super(table);
 		this.packageName = packName;
 		this.className = className;
+		this.namespace = namespace;
 		this.elementName = elementName;
 		this.serializer = serializer;
 		this.deserializer = deserializer;
@@ -43,6 +45,11 @@ public class ClassChangeEvent extends EventObject {
 	
 	public String getElementName() {
 		return elementName;
+	}
+	
+	
+	public String getNamespace() {
+		return namespace;
 	}
 
 	

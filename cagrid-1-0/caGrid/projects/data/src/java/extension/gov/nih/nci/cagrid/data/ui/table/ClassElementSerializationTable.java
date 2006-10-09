@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.table;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +28,9 @@ public class ClassElementSerializationTable extends JTable {
 			public void tableChanged(TableModelEvent e) {
 				if (e.getType() == TableModelEvent.UPDATE) {
 					if (e.getColumn() == 3) {
-						
+						fireElementNameChanged(e.getFirstRow());
+					} else if (e.getColumn() == 4 || e.getColumn() == 5) {
+						fireSerializationChanged(e.getFirstRow());
 					}
 				}
 			}
@@ -55,6 +58,38 @@ public class ClassElementSerializationTable extends JTable {
 			new ClassInformatonChangeListener[classInformationChangeListeners.size()];
 		classInformationChangeListeners.toArray(listeners);
 		return listeners;
+	}
+	
+	
+	protected void fireElementNameChanged(int row) {
+		ClassChangeEvent e = getChangeForRow(row);
+		Iterator i = classInformationChangeListeners.iterator();
+		while (i.hasNext()) {
+			((ClassInformatonChangeListener) i.next()).elementNameChanged(e);
+		}
+	}
+	
+	
+	protected void fireSerializationChanged(int row) {
+		ClassChangeEvent e = getChangeForRow(row);
+		Iterator i = classInformationChangeListeners.iterator();
+		while (i.hasNext()) {
+			((ClassInformatonChangeListener) i.next()).serializationChanged(e);
+		}
+	}
+	
+	
+	private ClassChangeEvent getChangeForRow(int row) {
+		String packName = (String) getValueAt(row, 0);
+		String className = (String) getValueAt(row, 1);
+		String namespace = (String) getValueAt(row, 2);
+		String elemName = (String) getValueAt(row, 3);
+		String serializer = (String) getValueAt(row, 4);
+		String deserializer = (String) getValueAt(row, 5);
+		
+		ClassChangeEvent event = new ClassChangeEvent(this, packName,
+			className, namespace, elemName, serializer, deserializer);
+		return event;
 	}
 	
 	
