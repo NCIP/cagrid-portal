@@ -42,13 +42,11 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 				for (int i = 0; i < packages.length; i++) {
 					CadsrPackage pack = packages[i];
 					String psNS = pack.getMappedNamespace();
-					String[] packClasses = pack.getSelectedClass();
+					ClassMapping[] packClasses = pack.getCadsrClass();
 					if (packClasses != null) {
 						for (int j = 0; j < packClasses.length; j++) {
-							String clazzName = packClasses[j];
-							// TODO: extract the element name when that is
-							// stored here
-							stringBuffer.append("\t\t<xs:element ref=\"ns0:" + clazzName + "\" xmlns:ns0=\"" + psNS+ "\"/>\n");
+							String elementName = packClasses[j].getElementName();
+							stringBuffer.append("\t\t<xs:element ref=\"ns0:" + elementName + "\" xmlns:ns0=\"" + psNS+ "\"/>\n");
 						}
 					}
 

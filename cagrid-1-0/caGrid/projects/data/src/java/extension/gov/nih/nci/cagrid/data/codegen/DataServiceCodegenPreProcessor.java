@@ -159,17 +159,16 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			proj.setVersion(cadsrInfo.getProjectVersion());
 
 			// sets for holding all selected classes and associations
-			Set allClasses = new HashSet();
+			Set selectedClasses = new HashSet();
 
 			// walk through the selected packages
 			for (int i = 0; i < cadsrInfo.getPackages().length; i++) {
 				CadsrPackage packageInfo = cadsrInfo.getPackages(i);
 				String packName = packageInfo.getName();
 				// get selected classes from the package
-				String[] packageClassNames = packageInfo.getSelectedClass();
-				if (packageClassNames != null) {
-					for (int j = 0; j < packageClassNames.length; j++) {
-						allClasses.add(packName + "." + packageClassNames[j]);
+				if (packageInfo.getCadsrClass() != null) {
+					for (int j = 0; j < packageInfo.getCadsrClass().length; j++) {
+						selectedClasses.add(packName + "." + packageInfo.getCadsrClass(j).getClassName());
 					}
 				}
 			}
@@ -196,8 +195,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			DomainModel model = null;
 			try {
 				// TODO; change this to use EXCLUDED associations
-				String classNames[] = new String[allClasses.size()];
-				allClasses.toArray(classNames);
+				String classNames[] = new String[selectedClasses.size()];
+				selectedClasses.toArray(classNames);
 				model = cadsrClient.generateDomainModelForClasses(proj, classNames);
 				if (model == null) {
 					throw new CodegenExtensionException("caDSR returned a null domain model.");

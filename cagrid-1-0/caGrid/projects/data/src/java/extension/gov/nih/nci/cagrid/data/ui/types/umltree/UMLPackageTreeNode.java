@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.data.ui.types.umltree;
 
-import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTree;
 import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTreeNode;
 
@@ -15,25 +13,25 @@ import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTreeNode;
  * @version $Id$ 
  */
 public class UMLPackageTreeNode extends CheckBoxTreeNode {
-	private UMLPackageMetadata pack;
+	private String packageName;
 
-	public UMLPackageTreeNode(CheckBoxTree parentTree, UMLPackageMetadata pack) {
-		super(parentTree, pack.getName());
-		this.pack = pack;
+	public UMLPackageTreeNode(CheckBoxTree parentTree, String packageName) {
+		super(parentTree, packageName);
+		this.packageName = packageName;
 	}
 	
 	
-	public UMLPackageMetadata getPackage() {
-		return pack;
+	public String getPackageName() {
+		return packageName;
 	}
 	
 	
-	public UMLClassMetadata[] getSelectedClasses() {
+	public String[] getSelectedClasses() {
 		CheckBoxTreeNode[] checked = getCheckedChildren();
-		UMLClassMetadata[] md = new UMLClassMetadata[checked.length];
+		String[] classes = new String[checked.length];
 		for (int i = 0; i < checked.length; i++) {
-			md[i] = ((UMLClassTreeNode) checked[i]).getClassMetadata();
+			classes[i] = ((UMLClassTreeNode) checked[i]).getClassName();
 		}
-		return md;
+		return classes;
 	}
 }

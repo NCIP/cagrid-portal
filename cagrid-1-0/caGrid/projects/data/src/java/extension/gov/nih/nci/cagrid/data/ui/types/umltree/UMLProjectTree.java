@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.data.ui.types.umltree;
 
-import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTree;
 
 import java.util.Enumeration;
@@ -26,54 +24,83 @@ public class UMLProjectTree extends CheckBoxTree {
 	}
 	
 	
-	public void addUmlPackage(UMLPackageMetadata pack) {
-		UMLPackageTreeNode packNode = new UMLPackageTreeNode(this, pack);
-		packageNodes.put(pack.getName(), packNode);
+	public UMLPackageTreeNode addUmlPackage(String packageName) {
+		UMLPackageTreeNode packNode = new UMLPackageTreeNode(this, packageName);
+		packageNodes.put(packageName, packNode);
 		getRootNode().add(packNode);
 		reloadFromRoot();
+		return packNode;
 	}
 	
 	
-	public void removeUmlPackage(UMLPackageMetadata pack) {
-		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(pack.getName());
+	public UMLPackageTreeNode getUmlPackageNode(String packageName) {
+		Enumeration packEnum = getRootNode().children();
+		while (packEnum.hasMoreElements()) {
+			UMLPackageTreeNode node = (UMLPackageTreeNode) packEnum.nextElement();
+			if (node.getPackageName().equals(packageName)) {
+				return node;
+			}
+		}
+		return null;
+	}
+	
+	
+	public void removeUmlPackage(String packageName) {
+		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(packageName);
 		if (packNode == null) {
-			throw new IllegalArgumentException("Package " + pack.getName() + " is not in this tree!");
+			throw new IllegalArgumentException("Package " + packageName + " is not in this tree!");
 		}
 		getRootNode().remove(packNode);
 		reloadFromRoot();
 	}
 	
 	
-	public void addUmlClass(UMLPackageMetadata pack, UMLClassMetadata clazz) {
+	public UMLClassTreeNode addUmlClass(String packageName, String className) {
 		// find the packag node
-		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(pack.getName());
+		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(packageName);
 		if (packNode == null) {
-			throw new IllegalArgumentException("Package " + pack.getName() + " is not in this tree!");
+			throw new IllegalArgumentException("Package " + packageName + " is not in this tree!");
 		}
-		UMLClassTreeNode classNode = new UMLClassTreeNode(this, clazz);
+		UMLClassTreeNode classNode = new UMLClassTreeNode(this, className);
 		packNode.add(classNode);
 		reloadFromRoot();
+		return classNode;
 	}
 	
 	
-	public void removeUmlClass(UMLPackageMetadata pack, UMLClassMetadata clazz) {
+	public UMLClassTreeNode getUmlClassNode(String packageName, String className) {
+		UMLPackageTreeNode packNode = getUmlPackageNode(packageName);
+		if (packNode != null) {
+			Enumeration classNodes = packNode.children();
+			while (classNodes.hasMoreElements()) {
+				UMLClassTreeNode classNode = (UMLClassTreeNode) classNodes.nextElement();
+				if (classNode.equals(className)) {
+					return classNode;
+				}
+			}
+		}
+		return null;
+	}
+	
+	
+	public void removeUmlClass(String packageName, String className) {
 		// find the package node
-		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(pack.getName());
+		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(packageName);
 		if (packNode == null) {
-			throw new IllegalArgumentException("Package " + pack.getName() + " is not in this tree!");
+			throw new IllegalArgumentException("Package " + packageName + " is not in this tree!");
 		}
 		// find the class node
 		UMLClassTreeNode classNode = null;
 		Enumeration classNodeEnum = packNode.children();
 		while (classNodeEnum.hasMoreElements()) {
 			UMLClassTreeNode node = (UMLClassTreeNode) classNodeEnum.nextElement();
-			if (node.getClassMetadata().getName().equals(clazz.getName())) {
+			if (node.getClassName().equals(className)) {
 				classNode = node;
 				break;
 			}
 		}
 		if (classNode == null) {
-			throw new IllegalArgumentException("Class " + clazz.getName() + " is not in this tree!");
+			throw new IllegalArgumentException("Class " + className + " is not in this tree!");
 		}
 		packNode.remove(classNode);
 		reloadFromRoot();

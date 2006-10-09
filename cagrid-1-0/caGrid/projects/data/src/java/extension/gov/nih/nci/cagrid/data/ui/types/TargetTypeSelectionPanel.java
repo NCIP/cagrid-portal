@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data.ui.types;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
+import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
@@ -14,6 +15,7 @@ import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.ui.browser.AdditionalJarsChangeListener;
 import gov.nih.nci.cagrid.data.ui.browser.AdditionalJarsChangedEvent;
@@ -23,13 +25,14 @@ import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionListener;
 import gov.nih.nci.cagrid.data.ui.browser.QueryProcessorClassConfigDialog;
 import gov.nih.nci.cagrid.data.ui.tree.CheckTreeSelectionEvent;
 import gov.nih.nci.cagrid.data.ui.tree.CheckTreeSelectionListener;
+import gov.nih.nci.cagrid.data.ui.types.umltree.UMLClassTreeNode;
+import gov.nih.nci.cagrid.data.ui.types.umltree.UMLProjectTree;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
@@ -42,13 +45,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -78,8 +78,8 @@ import org.projectmobius.portal.PortalResourceManager;
 public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	private CaDSRBrowserPanel domainBrowserPanel = null;
-	private TargetTypesTree typesTree = null;
-	private JScrollPane typesTreeScrollPane = null;
+	private UMLProjectTree umlTree = null;
+	private JScrollPane umlTreeScrollPane = null;
 	private DataServiceTypesTable typesTable = null;
 	private JScrollPane typesTableScrollPane = null;
 	private JPanel typeSelectionPanel = null;
@@ -99,10 +99,12 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	
 	private transient Project mostRecentProject = null;
 	private transient Map packageToNamespace = null;
+	private transient Map packageToClassMap = null;
 	
 	public TargetTypeSelectionPanel(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo) {
 		super(desc, serviceInfo);
 		packageToNamespace = new HashMap();
+		packageToClassMap = new HashMap();
 		loadMostRecentProjectInfo();
 		initialize();
 	}
@@ -167,89 +169,59 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	}
 	
 	
-	private TargetTypesTree getTypesTree() {
-		if (typesTree == null) {
-			typesTree = new TargetTypesTree();
-			// listener for check and uncheck operations on the tree
-			typesTree.addCheckTreeSelectionListener(new CheckTreeSelectionListener() {
+	private UMLProjectTree getUmlTree() {
+		if (umlTree == null) {
+			umlTree = new UMLProjectTree();
+			umlTree.addCheckTreeSelectionListener(new CheckTreeSelectionListener() {
 				public void nodeChecked(CheckTreeSelectionEvent e) {
-					if (e.getNode() instanceof TypeTreeNode) {
-						TypeTreeNode typeNode = (TypeTreeNode) e.getNode();
-						DomainTreeNode nsNode = (DomainTreeNode) typeNode.getParent();
-						getTypesTable().addType(nsNode.getNamespace(), typeNode.getType());
-						updateSelectedClasses();
+					if (e.getNode() instanceof UMLClassTreeNode) {
+						
 					}
 				}
 				
 				
 				public void nodeUnchecked(CheckTreeSelectionEvent e) {
-					if (e.getNode() instanceof TypeTreeNode) {
-						TypeTreeNode typeNode = (TypeTreeNode) e.getNode();
-						getTypesTable().removeSchemaElementType(typeNode.getType());
-						updateSelectedClasses();
-					}
-				}
-				
-				
-				private void updateSelectedClasses() {
-					try {
-						storeCaDSRInfo();
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						ErrorDialog.showErrorDialog("Error storing selected classes: " + ex.getMessage());
+					if (e.getNode() instanceof UMLClassTreeNode) {
+						
 					}
 				}
 			});
-			
 			// if there's existing cadsr configuration, apply it
-			CadsrInformation cadsrInfo = null;
-			try {
-				cadsrInfo = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData()).getCadsrInformation();
-			} catch (Exception ex) {
-				ErrorDialog.showErrorDialog("Error getting cadsrInformation from extension data: " + ex.getMessage(), ex);
-			}
-			if (cadsrInfo != null) {
-				// walk through packages
-				for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {
-					CadsrPackage pack = cadsrInfo.getPackages(i);
-					String packageName = pack.getName();
-					String namespace = pack.getMappedNamespace();
-					packageToNamespace.put(packageName, namespace);
-					// find the namespace needed for this package in the service description
-					NamespaceType[] serviceNamespaces = getServiceInfo().getNamespaces().getNamespace();
-					NamespaceType nsType = null;
-					for (int nsIndex = 0; nsIndex < serviceNamespaces.length; nsIndex++) {
-						NamespaceType ns = serviceNamespaces[nsIndex];
-						if (ns.getNamespace().equals(namespace)) {
-							nsType = ns;
-							break;
-						}
-					}
-					if (nsType != null) {
-						// add the namespace to the types tree
-						typesTree.addNamespaceType(nsType);
-						// convert the set of type names selected in the cadsr info to an
-						// array of schema element types
-						Set typeNames = new HashSet();
-						if (pack.getSelectedClass() != null) {
-							Collections.addAll(typeNames, pack.getSelectedClass());
-						}
-						List selectedTypes = new ArrayList();
-						for (int j = 0; j < nsType.getSchemaElement().length; j++) {
-							if (typeNames.contains(nsType.getSchemaElement(j).getType())) {
-								selectedTypes.add(nsType.getSchemaElement(j));
-							}
-						}
-						SchemaElementType[] types = new SchemaElementType[selectedTypes.size()];
-						selectedTypes.toArray(types);
-						
-						// check off type nodes on the types tree
-						typesTree.checkTypeNodes(nsType, types);
-					}
-				}
-			}
+			loadCadsrInformation();
+			/*
+			 // listener for check and uncheck operations on the tree
+			  typesTree.addCheckTreeSelectionListener(new CheckTreeSelectionListener() {
+			  public void nodeChecked(CheckTreeSelectionEvent e) {
+			  if (e.getNode() instanceof TypeTreeNode) {
+			  TypeTreeNode typeNode = (TypeTreeNode) e.getNode();
+			  DomainTreeNode nsNode = (DomainTreeNode) typeNode.getParent();
+			  getTypesTable().addType(nsNode.getNamespace(), typeNode.getType());
+			  updateSelectedClasses();
+			  }
+			  }
+			  
+			  
+			  public void nodeUnchecked(CheckTreeSelectionEvent e) {
+			  if (e.getNode() instanceof TypeTreeNode) {
+			  TypeTreeNode typeNode = (TypeTreeNode) e.getNode();
+			  getTypesTable().removeSchemaElementType(typeNode.getType());
+			  updateSelectedClasses();
+			  }
+			  }
+			  
+			  
+			  private void updateSelectedClasses() {
+			  try {
+			  storeCaDSRInfo();
+			  } catch (Exception ex) {
+			  ex.printStackTrace();
+			  ErrorDialog.showErrorDialog("Error storing selected classes: " + ex.getMessage());
+			  }
+			  }
+			  });
+			  */
 		}
-		return typesTree;
+		return umlTree;
 	}
 	
 	
@@ -258,15 +230,15 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	 * 	
 	 * @return javax.swing.JScrollPane	
 	 */
-	private JScrollPane getTypesTreeScrollPane() {
-		if (typesTreeScrollPane == null) {
-			typesTreeScrollPane = new JScrollPane();
-			typesTreeScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
+	private JScrollPane getUmlTreeScrollPane() {
+		if (umlTreeScrollPane == null) {
+			umlTreeScrollPane = new JScrollPane();
+			umlTreeScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
 				null, "Model Data Types", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-			typesTreeScrollPane.setViewportView(getTypesTree());
+			umlTreeScrollPane.setViewportView(getUmlTree());
 		}
-		return typesTreeScrollPane;
+		return umlTreeScrollPane;
 	}
 	
 	
@@ -323,7 +295,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			typeSelectionPanel = new JPanel();
 			typeSelectionPanel.setLayout(new GridBagLayout());
 			typeSelectionPanel.add(getDomainBrowserPanel(), gridBagConstraints);
-			typeSelectionPanel.add(getTypesTreeScrollPane(), gridBagConstraints1);
+			typeSelectionPanel.add(getUmlTreeScrollPane(), gridBagConstraints1);
 			typeSelectionPanel.add(getAddToModelButtonsPanel(), gridBagConstraints2);
 			typeSelectionPanel.add(getDomainModelSelectionPanel(), gridBagCosntraints32);
 		}
@@ -358,7 +330,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 						};
 						String choice = PromptButtonDialog.prompt(
 							PortalResourceManager.getInstance().getGridPortal(),
-							"Package incompatability...", message, choices, choices[1]);
+							"Project incompatability...", message, choices, choices[1]);
 						if (choice == choices[0]) {
 							// try to remove the namespaces from the service
 							Iterator nsNameIter = packageToNamespace.values().iterator();
@@ -375,12 +347,13 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 							}
 							// ok, clear out the existing packages and classes
 							packageToNamespace.clear();
+							packageToClassMap.clear();
 							// clear out the types table
 							while (getTypesTable().getRowCount() != 0) {
 								getTypesTable().removeSchemaElementType(0);
 							}
 							// clear out the types tree
-							getTypesTree().clearTree();
+							getUmlTree().clearTree();
 						} else {
 							shouldAddPackage = false;
 						}
@@ -511,8 +484,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 		cadsrInfo.setProjectVersion(mostRecentProject.getVersion());
 		
 		List packages = new ArrayList();
-		
-		// selected packages
+		// selected packages and classes
 		Iterator packageIter = packageToNamespace.keySet().iterator();
 		while (packageIter.hasNext()) {
 			String packName = (String) packageIter.next();
@@ -521,22 +493,29 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			pack.setName(packName);
 			pack.setMappedNamespace(nsTypeName);
 			
-			List selected = new ArrayList();
-			// find the namespace type
-			for (int i = 0; i < getServiceInfo().getNamespaces().getNamespace().length; i++) {
-				NamespaceType ns = getServiceInfo().getNamespaces().getNamespace(i);
-				if (ns.getNamespace().equals(nsTypeName)) {
-					// selected classes from the namespace
-					SchemaElementType[] types = getTypesTree().getCheckedTypes(ns);
-					for (int j = 0; j < types.length; j++) {
-						selected.add(types[j].getType());
-					}
-					break;
-				}
+			Map classNameToElementName = (Map) packageToClassMap.get(packName);
+			Iterator classNameIter = classNameToElementName.keySet().iterator();
+			List classMappings = new ArrayList();
+			while (classNameIter.hasNext()) {
+				ClassMapping mapping = new ClassMapping();
+				String className = (String) classNameIter.next();
+				mapping.setClassName(className);
+				
+				// find the element name mapping for the node
+				String elementName = (String) classNameToElementName.get(className);
+				mapping.setElementName(elementName);
+				
+				// find the node in the tree
+				UMLClassTreeNode node = getUmlTree().getUmlClassNode(packName, className);
+				boolean selected = node.isChecked();
+				mapping.setSelected(selected);
+				classMappings.add(mapping);
 			}
-			String[] selectedClasses = new String[selected.size()];
-			selected.toArray(selectedClasses);
-			pack.setSelectedClass(selectedClasses);
+			
+			ClassMapping[] classMaps = new ClassMapping[classMappings.size()];
+			classMappings.toArray(classMaps);
+			pack.setCadsrClass(classMaps);
+			
 			packages.add(pack);
 		}
 		CadsrPackage[] selectedPackages = new CadsrPackage[packages.size()];
@@ -778,7 +757,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 								getTypesTable().removeSchemaElementType(0);
 							}
 							// clear out the types tree
-							getTypesTree().clearTree();
+							getUmlTree().clearTree();
 						} else {
 							shouldAddPackages = false;
 						}
@@ -856,7 +835,23 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			if (nsType != null) {
 				// map the package to the new namespace and add it to the types tree
 				packageToNamespace.put(pack.getName(), nsType.getNamespace());
-				getTypesTree().addNamespaceType(nsType);
+				getUmlTree().addUmlPackage(pack.getName());
+				// get classes for the package
+				String cadsrUrl = getDomainBrowserPanel().getCadsr().getText();
+				try {
+					CaDSRServiceClient cadsrClient = new CaDSRServiceClient(cadsrUrl);
+					UMLClassMetadata[] classMd = cadsrClient.findClassesInPackage(project, pack.getName());
+					for (int i = 0; i < classMd.length; i++) {
+						getUmlTree().addUmlClass(pack.getName(), classMd[i].getName());
+					}
+					// map the classes to schema types
+					Map classToType = NamespaceUtils.mapClassesToElementNames(classMd, nsType);
+					// store the mapping
+					packageToClassMap.put(pack.getName(), classToType);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					ErrorDialog.showErrorDialog("Error getting classes from caDSR", ex);
+				}				
 			}
 		}
 	}
@@ -877,10 +872,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 					if (selectedProject != null && projectEquals(selectedProject, mostRecentProject)) {
 						UMLPackageMetadata selectedPackage = getDomainBrowserPanel().getSelectedPackage();
 						if (selectedPackage != null && packageToNamespace.containsKey(selectedPackage.getName())) {
-							// remove the package from the namespace types tree
-							getTypesTree().removeNamespaceType(
-								(String) packageToNamespace.get(selectedPackage.getName()));
-							// see about removing the namespace from the service
+							// remove the package from the uml types tree
+							getUmlTree().removeUmlPackage(selectedPackage.getName());
 							String namespace = (String) packageToNamespace.get(selectedPackage.getName());
 							NamespaceType nsType = CommonTools.getNamespaceType(
 								getServiceInfo().getNamespaces(), namespace);
@@ -892,6 +885,9 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 							}
 							// remove namespace from the packageMapping
 							packageToNamespace.remove(selectedPackage.getName());
+							// remove the mapping for its classes
+							packageToClassMap.remove(selectedPackage);
+							// see about removing the namespace from the service
 							// store the new information in the extension data
 							storeCaDSRInfo();
 						}
@@ -1007,6 +1003,62 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				&& p1.getVersion().equals(p2.getVersion());
 		}
 		return false;
+	}
+	
+	
+	private void loadCadsrInformation() {
+		Thread loader = new Thread() {
+			public void run() {
+				// if there's existing cadsr configuration, apply it
+				CadsrInformation cadsrInfo = null;
+				try {
+					cadsrInfo = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData()).getCadsrInformation();
+				} catch (Exception ex) {
+					ErrorDialog.showErrorDialog("Error getting cadsrInformation from extension data: " + ex.getMessage(), ex);
+				}
+				if (cadsrInfo != null) {
+					getUmlTree().setEnabled(false);
+					// set the caDSR service URL in the GUI
+					getDomainBrowserPanel().setDefaultCaDSRURL(cadsrInfo.getServiceUrl());
+					getDomainBrowserPanel().getCadsr().setText(cadsrInfo.getServiceUrl());
+					// walk through packages
+					for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {
+						CadsrPackage pack = cadsrInfo.getPackages(i);
+						String packageName = pack.getName();
+						String namespace = pack.getMappedNamespace();
+						// keep track of the mapped package / namespace combination
+						packageToNamespace.put(packageName, namespace);
+						// find the namespace needed for this package in the service description
+						NamespaceType[] serviceNamespaces = getServiceInfo().getNamespaces().getNamespace();
+						NamespaceType nsType = null;
+						for (int nsIndex = 0; nsIndex < serviceNamespaces.length; nsIndex++) {
+							NamespaceType ns = serviceNamespaces[nsIndex];
+							if (ns.getNamespace().equals(namespace)) {
+								nsType = ns;
+								break;
+							}
+						}
+						if (nsType != null) {
+							// add the package to the types tree
+							getUmlTree().addUmlPackage(packageName);
+							// prepare a mapping of class to element names
+							Map classToElementNames = new HashMap();
+							packageToClassMap.put(packageName, classToElementNames);
+							for (int j = 0; pack.getCadsrClass() != null && j < pack.getCadsrClass().length; j++) {
+								ClassMapping map = pack.getCadsrClass(j);
+								classToElementNames.put(map.getClassName(), map.getElementName());
+								// add the classes for the uml package to the tree
+								UMLClassTreeNode node = getUmlTree().addUmlClass(packageName, map.getClassName());
+								node.getCheckBox().setSelected(map.isSelected());
+								// TODO: I may have to add the type to the types table here
+							}
+						}
+					}
+				}
+				getUmlTree().setEnabled(true);
+			}
+		};
+		loader.start();
 	}
 	
 	

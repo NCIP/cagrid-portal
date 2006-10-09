@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.ui.types.NamespaceUtils;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -527,7 +528,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			// create cadsr package for the new metadata package
 			CadsrPackage newPackage = new CadsrPackage();
 			newPackage.setName(pack.getName());
-			newPackage.setSelectedClass(getClassNamesFromPackage(lastSelectedProject, pack));
+			newPackage.setCadsrClass(getClassNamesFromPackage(lastSelectedProject, pack));
 			newPackage.setMappedNamespace(NamespaceUtils.createNamespaceString(lastSelectedProject, pack));			
 			CadsrPackage[] packages = info.getPackages();
 			if (packages == null) {
@@ -548,14 +549,18 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	}
 	
 	
-	private String[] getClassNamesFromPackage(Project proj, UMLPackageMetadata pack) throws Exception {
+	private ClassMapping[] getClassNamesFromPackage(Project proj, UMLPackageMetadata pack) throws Exception {
 		CaDSRServiceClient client = new CaDSRServiceClient(getCaDsrBrowser().getCadsr().getText());
 		UMLClassMetadata[] classMdArray = client.findClassesInPackage(proj, pack.getName());
-		String[] names = new String[classMdArray.length];
+		ClassMapping[] mappings = new ClassMapping[classMdArray.length];
 		for (int i = 0; i < classMdArray.length; i++) {
-			names[i] = classMdArray[i].getName();
+			ClassMapping map = new ClassMapping();
+			map.setClassName(classMdArray[i].getName());
+			map.setElementName(classMdArray[i].getName());
+			map.setSelected(true);
+			mappings[i] = map;
 		}
-		return names;
+		return mappings;
 	}
 	
 	

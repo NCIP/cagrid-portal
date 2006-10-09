@@ -39,7 +39,7 @@
 			<xsd:documentation>Package selected from the caDSR</xsd:documentation>
 		</xsd:annotation>
 		<xsd:sequence>
-			<xsd:element name="SelectedClass" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="CadsrClass" type="ext:ClassMapping" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 		<xsd:attribute name="name" type="xsd:string" use="required"/>
 		<xsd:attribute name="mappedNamespace" type="xsd:string" use="required"/>
@@ -64,5 +64,13 @@
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ClassMapping">
+		<xsd:annotation>
+			<xsd:documentation>Mapping between exposed caDSR class and schema element name</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="className" type="xsd:string" use="required"/>
+		<xsd:attribute name="elementName" type="xsd:string" use="required"/>
+		<xsd:attribute name="selected" type="xsd:boolean" use="required"/>
 	</xsd:complexType>
 </xsd:schema>

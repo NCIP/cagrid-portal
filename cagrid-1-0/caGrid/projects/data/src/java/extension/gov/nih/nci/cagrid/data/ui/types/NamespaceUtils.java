@@ -1,13 +1,17 @@
 package gov.nih.nci.cagrid.data.ui.types;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
+import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -146,6 +150,31 @@ public class NamespaceUtils {
 			return nsType;
 		}
 		return null;
+	}
+	
+	
+	/**
+	 * Makes a map from class name to a element name for that class.
+	 * Classes for which no type can be found are mapped to <code>null</code>
+	 * @param classes
+	 * @param nsType
+	 * @return
+	 */
+	public static Map mapClassesToElementNames(UMLClassMetadata[] classes, NamespaceType nsType) {
+		Map mapping = new HashMap();
+		for (int i = 0; i < classes.length; i++) {
+			UMLClassMetadata currentClass = classes[i];
+			SchemaElementType mappedType = null;
+			for (int j = 0; j < nsType.getSchemaElement().length; j++) {
+				SchemaElementType type = nsType.getSchemaElement(j);
+				if (type.getType().equals(currentClass.getName())) {
+					mappedType = type;
+					break;
+				}
+			}
+			mapping.put(currentClass.getName(), mappedType == null ? null : mappedType.getType());
+		}
+		return mapping;
 	}
 	
 	

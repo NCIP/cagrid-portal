@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.ui.types.umltree;
 
-import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTree;
 import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTreeNode;
 
@@ -14,16 +13,16 @@ import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTreeNode;
  * @version $Id$ 
  */
 public class UMLClassTreeNode extends CheckBoxTreeNode {
-	private UMLClassMetadata classMd;
+	private String className;
 
-	public UMLClassTreeNode(CheckBoxTree parentTree, UMLClassMetadata classMd) {
-		super(parentTree, classMd.getName());
-		this.classMd = classMd;
+	public UMLClassTreeNode(CheckBoxTree parentTree, String className) {
+		super(parentTree, className);
+		this.className = className;
 		this.setAllowsChildren(false);
 	}
 	
 	
-	public UMLClassMetadata getClassMetadata() {
-		return classMd;
+	public String getClassName() {
+		return className;
 	}
 }
