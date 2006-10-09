@@ -178,6 +178,18 @@ public class NamespaceUtils {
 	}
 	
 	
+	public static SchemaElementType getElementByName(NamespaceType nsType, String typeName) {
+		if (nsType.getSchemaElement() != null) {
+			for (int i = 0; i < nsType.getSchemaElement().length; i++) {
+				if (nsType.getSchemaElement(i).getType().equals(typeName)) {
+					return nsType.getSchemaElement(i);
+				}
+			}
+		}
+		return null;
+	}
+	
+	
 	private static String getSchema(XMLDataModelService gmeHandle, Namespace namespace) throws Exception {
 		SchemaNode schema = gmeHandle.getSchema(namespace, false);
 		return schema.getSchemaContents();

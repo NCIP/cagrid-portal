@@ -46,7 +46,7 @@ public class UMLProjectTree extends CheckBoxTree {
 	
 	
 	public void removeUmlPackage(String packageName) {
-		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.get(packageName);
+		UMLPackageTreeNode packNode = (UMLPackageTreeNode) packageNodes.remove(packageName);
 		if (packNode == null) {
 			throw new IllegalArgumentException("Package " + packageName + " is not in this tree!");
 		}
@@ -74,7 +74,7 @@ public class UMLProjectTree extends CheckBoxTree {
 			Enumeration classNodes = packNode.children();
 			while (classNodes.hasMoreElements()) {
 				UMLClassTreeNode classNode = (UMLClassTreeNode) classNodes.nextElement();
-				if (classNode.equals(className)) {
+				if (classNode.getClassName().equals(className)) {
 					return classNode;
 				}
 			}

@@ -64,7 +64,7 @@ public abstract class CheckBoxTreeNode extends DefaultMutableTreeNode {
 	
 	
 	public boolean isChecked() {
-		return check.isSelected();
+		return getCheckBox().isSelected();
 	}
 	
 	

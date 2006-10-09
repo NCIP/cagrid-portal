@@ -15,4 +15,7 @@ public interface ClassInformatonChangeListener {
 	
 	
 	public void serializationChanged(ClassChangeEvent e);
+	
+	
+	public void targetabilityChanged(ClassChangeEvent e);
 }

@@ -20,9 +20,10 @@ public class ClassChangeEvent extends EventObject {
 	private String elementName;
 	private String serializer;
 	private String deserializer;
+	private boolean targetable;
 
 	public ClassChangeEvent(JTable table, String packName, String className, String namespace, 
-		String elementName, String serializer, String deserializer) {
+		String elementName, String serializer, String deserializer, boolean targetable) {
 		super(table);
 		this.packageName = packName;
 		this.className = className;
@@ -30,6 +31,7 @@ public class ClassChangeEvent extends EventObject {
 		this.elementName = elementName;
 		this.serializer = serializer;
 		this.deserializer = deserializer;
+		this.targetable = targetable;
 	}
 
 	
@@ -60,5 +62,10 @@ public class ClassChangeEvent extends EventObject {
 	
 	public String getSerializer() {
 		return serializer;
-	}	
+	}
+	
+	
+	public boolean isTargetable() {
+		return targetable;
+	}
 }
