@@ -6,6 +6,8 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
 import java.awt.Component;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -189,7 +191,7 @@ public class ClassElementSerializationTable extends JTable {
 	
 	
 	private static class ComponentCellEditor extends AbstractCellEditor implements TableCellEditor {
-		
+		private ItemListener checkListener = null;
 		private Object editorValue = null;
 		
 		public ComponentCellEditor() {
@@ -205,7 +207,20 @@ public class ClassElementSerializationTable extends JTable {
 		public Component getTableCellEditorComponent(JTable table, Object value, 
 			boolean isSelected, int row, int column) {
 			editorValue = value;
+			((JCheckBox) value).addItemListener(getCheckListener());
 			return (Component) value;
+		}
+		
+		
+		private ItemListener getCheckListener() {
+			checkListener = new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					JCheckBox check = (JCheckBox) e.getSource();
+					check.removeItemListener(this);
+					fireEditingStopped();
+				}
+			};
+			return checkListener;
 		}
 	}
 }
