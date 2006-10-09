@@ -72,5 +72,6 @@
 		<xsd:attribute name="className" type="xsd:string" use="required"/>
 		<xsd:attribute name="elementName" type="xsd:string" use="required"/>
 		<xsd:attribute name="selected" type="xsd:boolean" use="required"/>
+		<xsd:attribute name="targetable" type="xsd:boolean" use="required"/>
 	</xsd:complexType>
 </xsd:schema>
