@@ -398,6 +398,19 @@ public class CommonTools {
 	}
 
 
+	public static MethodType getMethod(MethodsType methods, String name) {
+		if (methods != null && methods.getMethod() != null) {
+			for (int i = 0; i < methods.getMethod().length; i++) {
+				if (methods.getMethod(i).getName().equals(name)) {
+					return methods.getMethod(i);
+				}
+			}
+		}
+
+		return null;
+	}
+
+
 	public static String methodTypeToString(MethodType method) {
 		// assume its void to start with
 		String output = "void";
