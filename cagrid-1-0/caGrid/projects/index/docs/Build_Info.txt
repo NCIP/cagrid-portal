@@ -15,19 +15,20 @@ http://www.globus.org/toolkit/docs/development/remote-cvs.html
 
 FROM WHERE YOU WANT TO WORK:
 --------------------
-mkdir gt4.0.2
+mkdir gt4.0.3
+cd gt4.0.3
 setenv CVSROOT :pserver:anonymous@cvs.globus.org:/home/globdev/CVS/globus-packages
-cvs co -r globus_4_0_2 packaging
+cvs co -r globus_4_0_3 packaging
 cd packaging
 
-run this script:
+run this script (NOTE: needs Ant 1.6 or greater, should be run with Java 1.4):
 ------------------------------
 #!/bin/sh
 
 BUNDLE_DIR=gt4-mds-bundle
 
 mkdir ${BUNDLE_DIR}
-./make-packages.pl --verbose --anonymous --deps --t4=globus_4_0_2 --bundles=gt4-mds --install=/tmp/globus
+./make-packages.pl --verbose --anonymous --deps --gt4-tag=globus_4_0_3 --bundles=gt4-mds --install=/tmp/globus
 find bundle-output/BUILD -name "*" | grep \\.gar$ | grep -v ws_core | xargs -i cp {} ${BUNDLE_DIR}
 ------------------------------
 
@@ -45,9 +46,9 @@ CREATING AND DEPLOYING AN MDS INSTALL FROM SOURCE
 
 Alternatively, if you are on a supported platform, you can use make-packages.pl to directly install as follows:
 ------------------------------
-Download: http://www-unix.globus.org/toolkit/survey/index.php?download=gt4.0.2-all-source-installer.tar.gz
-tar xvzf gt4.0.2-all-source-installer.tar.gz
-cd gt4.0.2-all-source-installer
+Download: http://www-unix.globus.org/toolkit/survey/index.php?download=gt4.0.3-all-source-installer.tar.gz
+tar xvzf gt4.0.3-all-source-installer.tar.gz
+cd gt4.0.3-all-source-installer
 ./configure  --prefix=/usr/local/globus
 make wsjava wsmds install
 
