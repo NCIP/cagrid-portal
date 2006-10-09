@@ -619,7 +619,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 								String outputMessageName = outputMessageType.substring(colonIndex + 1);
 
 								MethodTypeImportInformation importInfo = new MethodTypeImportInformation();
-								importInfo.setFromIntroduce(new Boolean(false));
+								importInfo.setFromIntroduce(false);
 								importInfo.setNamespace(namespace);
 								importInfo.setWsdlFile(getWsdlFileNameTextField().getText());
 								importInfo.setPortTypeName(((ElementHolder) getWsdlServiceServicesComboBox()
