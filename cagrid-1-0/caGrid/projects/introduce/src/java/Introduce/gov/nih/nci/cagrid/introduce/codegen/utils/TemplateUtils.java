@@ -136,11 +136,8 @@ public class TemplateUtils {
 											ns = fromDoc.getRootElement().getNamespace();
 										}
 										List nslist = toDoc.getRootElement().getAdditionalNamespaces();
-										System.out.println("Looking for URI: " + ns.getURI());
 										for (int nsli = 0; nsli < nslist.size(); nsli++) {
 											Namespace tempns = (Namespace) nslist.get(nsli);
-											System.out.println("Looking at namespace: " + tempns.getPrefix() + " : "
-												+ tempns.getURI());
 											if (tempns.getURI().equals(ns.getURI())) {
 												System.out.println("Setting message " + message + " nsPrefix: "
 													+ tempns.getPrefix());
