@@ -49,6 +49,17 @@ import org.bouncycastle.openssl.PEMReader;
  */
 public class CertUtil {
 
+	public static String getHashCode(X509Certificate cert){
+		byte[] bytes = cert.getSubjectDN().getName().getBytes();
+		byte[] hashBytes = new byte[4];
+		int count = 0;
+		for(int i = (bytes.length-1); i>=0; i--){
+			hashBytes[count] = bytes[i];
+			count = count +1;
+		}
+		return new String(hashBytes);
+	}
+	
 	public static PKCS10CertificationRequest generateCertficateRequest(String subject, KeyPair pair) throws Exception {
 		SecurityUtil.init();
 		return new PKCS10CertificationRequest("MD5WithRSAEncryption", new X509Principal(subject), pair.getPublic(),
