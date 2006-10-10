@@ -10,6 +10,8 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -506,5 +508,12 @@ public class Utils {
 			count++;
 		}
 		return count;
+	}
+	
+	
+	public static Object cloneBean(Object bean, QName qname) throws Exception {
+		StringWriter writer = new StringWriter();
+		serializeObject(bean, qname, writer);
+		return deserializeObject(new StringReader(writer.getBuffer().toString()), bean.getClass());
 	}
 }
