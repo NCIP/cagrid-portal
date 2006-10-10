@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.common.portal;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Window;
 
@@ -70,5 +72,16 @@ public class PortalUtils {
 		int y = PortalResourceManager.getInstance().getGridPortal().getLocationOnScreen().y;
 		Dimension dim = comp.getSize();
 		comp.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);
+	}
+	
+	
+	public static void setContainerEnabled(Container con, boolean enable) {
+		for (int i = 0; i < con.getComponentCount(); i++) {
+			Component comp = con.getComponent(i);
+			comp.setEnabled(enable);
+			if (comp instanceof Container) {
+				setContainerEnabled((Container) comp, enable);
+			}
+		}
 	}
 }
