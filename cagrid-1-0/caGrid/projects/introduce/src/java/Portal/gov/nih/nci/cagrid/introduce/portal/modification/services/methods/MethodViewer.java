@@ -1614,9 +1614,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 			isImportedCheckBox.setSelected(method.isIsImported());
 			if (isImportedCheckBox.isSelected()) {
 				getTabbedPanel().setEnabledAt(3, true);
+				getTabbedPanel().setEnabledAt(0, false);
+				getTabbedPanel().setSelectedIndex(3);
 			} else {
 				getTabbedPanel().setEnabledAt(3, false);
 				if (getTabbedPanel().getSelectedIndex() == 3) {
+					getTabbedPanel().setEnabledAt(0, true);
 					getTabbedPanel().setSelectedIndex(0);
 				}
 			}
@@ -2142,6 +2145,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					}
 				}
 			});
+			isFromIntroduceCheckBox.setSelected(true);
 		}
 		return isFromIntroduceCheckBox;
 	}
