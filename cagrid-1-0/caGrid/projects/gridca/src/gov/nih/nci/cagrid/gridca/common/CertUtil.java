@@ -14,6 +14,7 @@ import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
@@ -48,18 +49,23 @@ import org.bouncycastle.openssl.PEMReader;
  *          Exp $
  */
 public class CertUtil {
-
-	public static String getHashCode(X509Certificate cert){
-		byte[] bytes = cert.getSubjectDN().getName().getBytes();
-		byte[] hashBytes = new byte[4];
-		int count = 0;
-		for(int i = (bytes.length-1); i>=0; i--){
-			hashBytes[count] = bytes[i];
-			count = count +1;
+	public static String getHashCode(X509Certificate cert) throws Exception {
+		X509Principal x509 = (X509Principal) cert.getSubjectDN();
+		MessageDigest digest = MessageDigest.getInstance("MD5");
+		byte[] bytes = digest.digest(x509.getEncoded());
+		StringBuffer hexString = new StringBuffer();
+		for (int i = 0; i < 4; i++) {
+			String hex = Integer.toHexString(0xFF & bytes[i]);
+			if (hex.length() == 1) {
+				hexString.insert(0, "0" + hex);
+			} else {
+				hexString.insert(0, hex);
+			}
 		}
-		return new String(hashBytes);
+		return hexString.toString();
 	}
-	
+
+
 	public static PKCS10CertificationRequest generateCertficateRequest(String subject, KeyPair pair) throws Exception {
 		SecurityUtil.init();
 		return new PKCS10CertificationRequest("MD5WithRSAEncryption", new X509Principal(subject), pair.getPublic(),
