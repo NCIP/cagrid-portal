@@ -101,6 +101,7 @@ public class MethodsTable extends PortalBaseTable {
 				}
 			}
 		}
+		sort();
 	}
 
 
