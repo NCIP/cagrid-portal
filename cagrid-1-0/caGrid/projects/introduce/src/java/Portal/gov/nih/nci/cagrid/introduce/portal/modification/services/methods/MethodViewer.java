@@ -322,7 +322,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JLabel wsdlImportPackageNameLabel = null;
 
-
+	
 	public MethodViewer(MethodType method, SpecificServiceInformation info) {
 		this.info = info;
 		this.method = method;
