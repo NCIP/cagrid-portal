@@ -19,11 +19,16 @@ package org.tp23.antinstaller.runtime;
 
 import gov.nih.nci.cagrid.antinstaller.utils.JavaExpressionEvaluator;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.tp23.antinstaller.InstallerContext;
 import org.tp23.antinstaller.page.Page;
 import org.tp23.antinstaller.page.SimpleInputPage;
+
+import java.util.logging.Logger;
+import java.util.logging.*;
+import gov.nih.nci.cagrid.antinstaller.utils.ClassPathModifier;
 
 
 /**
@@ -37,13 +42,38 @@ import org.tp23.antinstaller.page.SimpleInputPage;
  * of the configuration files would be impared.
  * REF: 1145496
  * @author Paul Hinds
- * @version $Id: IfPropertyHelper.java,v 1.3 2006-10-05 20:48:22 kumarvi Exp $
+ * @version $Id: IfPropertyHelper.java,v 1.4 2006-10-10 02:25:22 kumarvi Exp $
  */
 public class IfPropertyHelper {
 	
+	private static Logger logger = Logger.getLogger(IfPropertyHelper.class.getName());
+	
+
 	InstallerContext ctx = null;
 	protected IfPropertyHelper(InstallerContext ctx){
 		this.ctx = ctx;
+		
+		
+		
+		 try{
+			 FileHandler fh = new FileHandler("C:/temp/ifpropertyhelper.log");
+			 logger.addHandler(fh);
+			 logger.setLevel(Level.FINEST);
+		 }catch(Exception ex){
+			 ex.printStackTrace();
+		 }
+		 
+		 try{
+			 	File installRoot = InstallerContext.getLatestInstallDir();
+				File resources = new File(installRoot,"resources");
+				File custom_libs = new File(resources,"custom_libs");
+				File bsh_jar = new File(custom_libs,"bsh-2.0b4.jar");
+				ClassPathModifier.addFile(bsh_jar);
+			 
+		 }catch(Exception e){
+			 logger.info("Could not configure the classpath"+e.getMessage());
+			 e.printStackTrace();
+		 }
 	}
 	
 	/**
@@ -53,11 +83,13 @@ public class IfPropertyHelper {
 	 */
 	
 	public boolean ifProperty(Page next){
+		logger.info("Called ifproperty method");
 		boolean retValue = true;
 		
 		if(next instanceof SimpleInputPage){
 			SimpleInputPage conditionalPage = (SimpleInputPage) next;
 			String ifProperty = conditionalPage.getIfProperty();
+			logger.info("Value of the ifproperty:"+ifProperty);
 			System.out.println("IFProperty2:"+ifProperty);
 			if (ifProperty != null) {
 				ArrayList variables = extractVariables(ifProperty);
@@ -88,8 +120,11 @@ public class IfPropertyHelper {
 				counter++;
 				String name = currStr.substring(currindex,endPos+1);
 				System.out.println("Name:"+name);
+				logger.info("Name:"+name);
 				String propValue = ctx.getInstaller().getResultContainer().getDefaultValue(name);
+				logger.info("propValue:"+propValue);
 				String key = currStr.substring(startPos,endPos);
+				logger.info("Key:"+key);
 				System.out.println(key);
 				ReferenceVariable rf = new ReferenceVariable();
 				rf.setValue(propValue);

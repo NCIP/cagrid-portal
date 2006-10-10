@@ -40,7 +40,7 @@ import org.tp23.antinstaller.runtime.exe.AntLauncherFilter;
  * exist for the duration of the Install screens and the runing of
  * the Ant Script. </p>
  * @author Paul Hinds
- * @version $Id: InstallerContext.java,v 1.2 2006-09-11 02:17:21 kumarvi Exp $
+ * @version $Id: InstallerContext.java,v 1.3 2006-10-10 02:25:04 kumarvi Exp $
  */
 public class InstallerContext {
 
@@ -257,7 +257,7 @@ public class InstallerContext {
 		
 	}
 	
-	private static File getLatestInstallDir(){
+	public static File getLatestInstallDir(){
 		String tempDirName = System.getProperty("java.io.tmpdir");
 		
 		System.out.println("Using temp dir:"+tempDirName);
