@@ -3,6 +3,7 @@
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 
+
 <f:subview id="subMenu">
 
     <h:panelGrid styleClass="subMenuTable"
@@ -13,7 +14,7 @@
         <h:column>
             <h:commandLink styleClass="mainMenuSubLink"
                            action="#{map.navigateToServicesMap}">
-                <h:outputText value="Services" styleClass="mainMenuSubLink"/>
+                <h:outputText value="#{labels.services}" styleClass="mainMenuSubLink"/>
             </h:commandLink>
         </h:column>
 
@@ -24,7 +25,7 @@
         <h:column>
             <h:commandLink styleClass="mainMenuSubLink"
                            action="#{map.navigateToRCMap}">
-                <h:outputText value="Research Center"/>
+                <h:outputText value="#{labels.hostingCenter}"/>
             </h:commandLink>
         </h:column>
 

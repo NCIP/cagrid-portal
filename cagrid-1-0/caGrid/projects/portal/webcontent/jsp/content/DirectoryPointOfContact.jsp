@@ -9,7 +9,7 @@
 
 <f:facet name="header">
     <h:column>
-        <h:outputText value="Point Of Contacts Directory"/>
+        <h:outputText value="#{labels.pocDirectory}"/>
     </h:column>
 </f:facet>
 
@@ -80,41 +80,41 @@
                          headerClass="contentTableHeader" columns="2">
                 <f:facet name="header">
                     <h:column>
-                        <h:outputText value="Contact Details"/>
+                        <h:outputText value="#{labels.contactDetails}"/>
                     </h:column>
 
                 </f:facet>
 
                 <h:column>
-                    <h:outputText value="Name"/>
+                    <h:outputText value="#{labels.name"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{poc.firstName} #{poc.lastName}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="Phone Number"/>
+                    <h:outputText value="#{labels.phNumber"/>
                 </h:column>
                 <h:column>
                     <h:outputLink target="new" value="#{poc.phoneNumber}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="Email"/>
+                    <h:outputText value="#{labels.email}"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{poc.email}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="Affiliation"/>
+                    <h:outputText value="#{labels.affiliation}"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{poc.affiliation}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="Role"/>
+                    <h:outputText value="#{labels.role}"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{poc.role}"/>
@@ -122,7 +122,7 @@
 
 
                 <h:column>
-                    <h:outputText value="Research Center"/>
+                    <h:outputText value="#{labels.hostingCenter}"/>
                 </h:column>
 
                 <h:column>

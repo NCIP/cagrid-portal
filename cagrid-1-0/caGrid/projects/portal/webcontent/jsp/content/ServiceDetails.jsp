@@ -26,43 +26,43 @@
 
         <f:facet name="header">
             <h:column>
-                <h:outputText value="Service Details"/>
+                <h:outputText value="#{labels.serviceDetails}"/>
             </h:column>
         </f:facet>
 
         <h:column>
-            <h:outputText value="Name"/>
+            <h:outputText value="#{labels.name}"/>
         </h:column>
         <h:column>
             <h:outputText value="#{services.navigatedService.name}"/>
         </h:column>
 
         <h:column>
-            <h:outputText value="Version"/>
+            <h:outputText value="#{labels.version}"/>
         </h:column>
         <h:column>
             <h:outputText value="#{services.navigatedService.version}"/>
         </h:column>
 
         <h:column>
-            <h:outputText value="URL"/>
+            <h:outputText value="#{labels.url}"/>
         </h:column>
         <h:column>
             <h:outputText value="#{services.navigatedService.EPR}"/>
         </h:column>
 
         <h:column>
-            <h:outputText value="Descriptions"/>
+            <h:outputText value="#{labels.description}"/>
         </h:column>
         <h:column>
             <h:outputText value="#{services.navigatedService.description}"/>
         </h:column>
 
         <h:column>
-            <h:outputText value="Version"/>
+            <h:outputText value="#{labels.status}"/>
         </h:column>
         <h:column>
-            <h:outputText value="#{services.navigatedService.version}"/>
+
         </h:column>
 
         <h:column>

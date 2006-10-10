@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
 
-    $Id: web-facesconfig_1_1.dtd,v 1.1 2006-09-12 21:40:06 kherm Exp $
+    $Id: web-facesconfig_1_1.dtd,v 1.1 2006-10-10 20:13:02 kherm Exp $
 
 -->
 

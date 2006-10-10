@@ -8,14 +8,12 @@
                  headerClass="contentMainTitle" columnClasses="mainContent">
         <f:facet name="header">
             <h:column>
-                <h:outputText value="caGrid Directory"/>
+                <h:outputText value="#{labels.caGridDirectory}"/>
             </h:column>
         </f:facet>
 
         <h:column>
-            <h:outputText value="caGrid Directory is a yellow pages of all services, people, research center
-                    that are part of the caGrid 1.0 infastructure. You can lookup information on caGrid through
-                    the Portal Directory"/>
+            <h:outputText value="#{labels.directoryMessage}"/>
         </h:column>
     </h:panelGrid>
     <%-- welcome ends --%>

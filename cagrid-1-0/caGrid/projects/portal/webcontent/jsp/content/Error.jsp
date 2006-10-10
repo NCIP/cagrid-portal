@@ -18,14 +18,13 @@
         <f:verbatim><br/></f:verbatim>
 
         <h:column>
-            <h:outputText value="caGrid Portal has encountered an error condition.
-                Please try again or contact a system administrator"/>
+            <h:outputText value="#{labels.errorMessage}"/>
         </h:column>
 
 
         <f:verbatim><br/></f:verbatim>
         <h:column>
-            <h:outputText value="Complete Error Stack"
+            <h:outputText value="#{labels.errorStack}"
                     />
         </h:column>
 

@@ -10,7 +10,7 @@
 
         <f:facet name="header">
             <h:column>
-                <h:outputText value="Research Center Details"/>
+                <h:outputText value="#{labels.centerDetails}"/>
             </h:column>
         </f:facet>
 
@@ -26,48 +26,48 @@
                          headerClass="contentTableHeader" columns="2">
                 <f:facet name="header">
                     <h:column>
-                        <h:outputText value="Research Center Details"/>
+                        <h:outputText value="#{labels.centerDetails}"/>
                     </h:column>
 
                 </f:facet>
 
                 <h:column>
-                    <h:outputText value="Short Name"/>
+                    <h:outputText value="#{labels.shortName}"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{centers.navigatedCenter.shortName}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="Display Name"/>
+                    <h:outputText value="#{labels.displayName}"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{centers.navigatedCenter.displayName}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="Description"/>
+                    <h:outputText value="#{labels.description}"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{centers.navigatedCenter.description}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="Homepage URL"/>
+                    <h:outputText value="#{labels.homepageURL}"/>
                 </h:column>
                 <h:column>
                     <h:outputLink target="new" value="#{centers.navigatedCenter.homepageURL}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="RSS URL"/>
+                    <h:outputText value="#{labels.rssURL}"/>
                 </h:column>
                 <h:column>
                     <h:outputLink target="new" value="#{centers.navigatedCenter.homepageURL}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="Address"/>
+                    <h:outputText value="#{labels.address}"/>
                 </h:column>
                 <h:column>
                     <h:panelGrid columnClasses="dataCellText">

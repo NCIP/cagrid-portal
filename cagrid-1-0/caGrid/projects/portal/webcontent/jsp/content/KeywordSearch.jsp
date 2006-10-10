@@ -10,7 +10,7 @@
 
             <f:facet name="header">
                 <h:column>
-                    <h:outputText value="Keyword Search"/>
+                    <h:outputText value="#{labels.keywordSearchTitle}"/>
                 </h:column>
             </f:facet>
 
@@ -24,17 +24,17 @@
                              headerClass="contentTableHeader" columns="2">
                     <f:facet name="header">
                         <h:column>
-                            <h:outputText value="Search"/>
+                            <h:outputText value="#{labels.search}"/>
                         </h:column>
                     </f:facet>
 
                     <h:column>
-                        <h:outputText value="Keyword:"/>
+                        <h:outputText value="#{labels.keyword}"/>
                     </h:column>
                     <h:column>
                         <h:inputText id="searchKeyword" required="true" value="#{keywordSearch.searchKeyword}"
                                      size="50"/>
-                        <h:outputText value=" For eg. caDSR" styleClass="mainContent"/>
+                        <h:outputText value="#{labels.searchExample}" styleClass="mainContent"/>
                     </h:column>
 
                     <h:column>
@@ -43,7 +43,7 @@
 
                     <h:column>
                         <f:verbatim>&nbsp;&nbsp;&nbsp;&nbsp</f:verbatim>
-                        <h:commandButton value="Search"
+                        <h:commandButton value="#{labels.search}"
                                          action="#{keywordSearch.navigateToKeywordSearchResults}"
                                          styleClass="searchButton"/>
                     </h:column>

@@ -10,7 +10,7 @@
 
 <f:facet name="header">
     <h:column>
-        <h:outputText value="Registered Services Directory"/>
+        <h:outputText value="#{labels.servicesDirectory}"/>
     </h:column>
 </f:facet>
 
@@ -86,27 +86,27 @@
                     >
                 <f:facet name="header">
                     <h:column>
-                        <h:outputText value="Service Details"/>
+                        <h:outputText value="#{labels.servicesDetails}"/>
                     </h:column>
 
                 </f:facet>
 
                 <h:column>
-                    <h:outputText value="Name"/>
+                    <h:outputText value="#{labels.name}"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{service.name}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="URL"/>
+                    <h:outputText value="#{labels.url}"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{service.EPR}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="Descriptions"/>
+                    <h:outputText value="#{labels.description}"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{service.description}"/>
@@ -118,7 +118,7 @@
                         <h:outputText styleClass="txtHighlight"
                                       onmouseover="changeMenuStyle(this,'txtHighlightOn'),showCursor()"
                                       onmouseout="changeMenuStyle(this,'txtHighlight'),hideCursor()"
-                                      value="More Details>>"/>
+                                      value="#{labels.moreDetails}"/>
                         <f:param id="navigatedServicePk" name="navigatedServicePk" value="#{service.pk}"/>
                     </h:commandLink>
                 </h:column>

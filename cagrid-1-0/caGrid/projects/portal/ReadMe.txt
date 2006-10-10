@@ -5,9 +5,9 @@ Portal ReadMe
 1. Pre-requistie software
 ===========================================================================
 1. JDK 1.4.x + version (or caGrid recommended JDK version)
-2. Install Globus and set $GLOBUS_LOCATION set
-3. Install Tomcat and set $CATALINA_LOCATION set
-4. mySQL database. Set the db connection details in the build properties
+2. Install Globus and set $GLOBUS_LOCATION environment variable
+3. Install Tomcat and set $CATALINA_LOCATION environment variable
+4. mySQL database. Set the db connection details in the portal-build properties
 
 
 ===========================================================================
@@ -22,9 +22,9 @@ Portal ReadMe
 
         - Configure the jdbc connection in portal-build.properties
             or in ${user.home}/.portal-build.properties/
-           file.
 
         - Create DB with the portal/resources/Portal_Data_Model.SQL script
+        - Run the
             OR
         - Create a database called portal in mysql
         - Configure connection details in the portal-build.properties file
@@ -53,31 +53,82 @@ Portal ReadMe
 
         Replace the current entries in the indexList to your own
 
+      ===========================================================================
+      2.3 Security Settings
+      ===========================================================================
+        Portal will automatically sync with the caGrid trust fabric to establish
+        trust to other caGrid services/resources. For deployment, copy
+        portal/resources/trust-ca-cert.1
+        to ~/.globus/certificates directory in Unix
+        OR
+        C:\Documents and Settings\kherm\.globus or similar in Windows
+
+      ===========================================================================
+      2.4 Portal Localization and Internationalization
+      ===========================================================================
+        Portal is a I9 compliant application. All the text that is displayed in
+        the portal is externalized into a message bundle. This is configured
+         in the portal-faces-config.xml file.
+
+         <message-bundle>
+            Portal-Labels
+        </message-bundle>
+
+         By editing this message bundle file
+        file (located portal/webcontent/resources/Portal-Labels_en.properties
+        you can changet the text in the portal
+
+        You can also localizae the portal by adding your own Portal-Labels message
+        bundle. Look at the following section in faces-config.xml
+
+          <locale-config>
+        		<default-locale>en</default-locale>
+        		<supported-locale>en</supported-locale>
+          </locale-config>
+
+
+        You can add other supported locale and provide an appropriate Portal-Labels
+
+        For eg.
+
+          <locale-config>
+        		<default-locale>fr</default-locale>
+        		<supported-locale>en</supported-locale>
+        		<supported-locale>fr</supported-locale>
+          </locale-config>
+
+          This means Portal will look for a Portal_Labels_fr.propeerties
+          file in the classpath to display its text.
+          This way you can translate the portal into french or other languages
+
+        For a brief tutorial on this please refer
+        http://www.laliluna.de/javaserver-faces-message-resource-bundle-tutorial.html
 
 
 ===========================================================================
 3. Build Instructions
 ===========================================================================
     -Use the portal-build.properties file to configure the build
-    for your environment.
-    This file will be used in absense of the
+    for your environment. This file will be used in absense of the
     ${user.home}/.portal-build.properties file.
     The ${user.home}/.portal-build.properties file is usually written by
     the caGrid Installer.
 
-
     - Use the build.xml file to build the project.
     (During development and source releases the Portal project is to be built
-    from main (Master) build
+    from main (Master) build (../../caGrid)
         - Build with "ant all"
-        - Optionally run "ant createDatabase"
+        - Optionally run "ant createDatabase" (see section 2.1 Database)
 
         - Run "ant deployTomcatExploded" OR "ant deployTomcatWar" to deploy
-        into tomcat
-           OR
-        - Run "ant portalPortal"
-        - Copy the webcontent/META-INF/context.xml file to $CATALINA_HOME\conf\Catalina\localhost\portal.xml
-        (This *might* not work if you are running the app server from an IDE)
+        into tomcat application server
+
+           OR during DEVELOPMENT
+
+        - Run "ant buildPortal"
+        - Copy the webcontent/META-INF/context-dev.xml file to $CATALINA_HOME\conf\Catalina\localhost\portal.xml
+
+            OR
 
     - The project can be setup as a web project in an IDE, where webcontent
     directory is the web resources root directory. This way you can use the IDE

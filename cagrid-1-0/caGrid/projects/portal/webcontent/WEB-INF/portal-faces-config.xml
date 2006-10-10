@@ -8,6 +8,15 @@
 <faces-config>
     <application>
         <view-handler>org.apache.myfaces.application.jsp.JspTilesViewHandlerImpl</view-handler>
+
+        <locale-config>
+            <default-locale>en</default-locale>
+            <supported-locale>en</supported-locale>
+        </locale-config>
+
+        <message-bundle>
+            Portal-Labels
+        </message-bundle>
     </application>
 
     <!-- Spring Integration -->

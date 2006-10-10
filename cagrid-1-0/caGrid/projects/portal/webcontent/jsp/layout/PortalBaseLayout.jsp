@@ -11,6 +11,9 @@
     <title>caGrid Portal</title>
 </head>
 
+<!--Load message bundle-->
+<f:loadBundle basename="Portal-Labels" var="labels"/>
+
 <f:view>
 <h:form>
 <body>
@@ -62,7 +65,7 @@
                             <tr>
                                 <td height="30" class="mainMenuSub">
                                         <%--Sub menu begins--%>
-                                    <tiles:insert attribute="subMenu" flush="false"/>
+                                    <tiles:insert attribute="subMenu" flush="false" ignore="true"/>
                                         <%--Sub menu ends--%>
                                 </td>
                             </tr>
@@ -98,7 +101,7 @@
 
                                         <%-- target of anchor to skip menus --%><a name="content"/>
                                     <f:subview id="mainContent">
-                                        <tiles:insert attribute="mainContent" flush="false"/>
+                                        <tiles:insert attribute="mainContent" flush="false" ignore="true"/>
                                     </f:subview>
 
                                     <f:verbatim><br/></f:verbatim>

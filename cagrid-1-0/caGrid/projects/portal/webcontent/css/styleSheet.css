@@ -742,9 +742,13 @@ Custom styles for Portal
     text-align: left;
 }
 
+.mainMenuTable {
+    height: 100%;
+    width: 100%;
+}
+
 .subMenuTable {
     height: 100%;
-
 }
 
 .mainContent {

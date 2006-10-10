@@ -9,26 +9,18 @@
 
             <f:facet name="header">
                 <h:column>
-                    <h:outputText value="caGrid Map"/>
+                    <h:outputText value="#{labels.mapcaGrid}"/>
                 </h:column>
             </f:facet>
 
             <f:verbatim><br/></f:verbatim>
 
             <h:column>
-
+                <!--Custom portal map component. See documentation for details
                 <portal:map id="portalMap"
                             style="background-color: #5C5C5C;  border:2px; border-color:black; width:700px; height:430px"
                             var="rc" value="#{centers.list}"
                             useGoogle="true">
-                    <h:column>
-                        <h:outputText value="#{rc.latitude}"/>
-                    </h:column>
-                    <h:column>
-                        <h:outputText value="#{rc.longitude}"/>
-                    </h:column>
-
-
                 </portal:map>
 
             </h:column>

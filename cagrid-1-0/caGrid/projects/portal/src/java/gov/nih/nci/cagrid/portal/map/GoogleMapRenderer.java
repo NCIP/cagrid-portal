@@ -12,7 +12,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -29,10 +28,6 @@ import java.util.Set;
 public class GoogleMapRenderer extends HtmlRenderer {
 
     private String GOOGLE_MAP_SCRIPT_RESOURCE_KEY = HtmlRenderer.class.getName() + ".MAP_SCRIPTS_WRITTEN";
-
-    //ToDo has to come from somewhere else. Maybe a properties file?
-    private final String GOOGLE_MAP_KEY_VALUE = "ABQIAAAARxXVpwVgTtCYim7Kvfkm4BTBfUk9TZrBRaIteybtnU2KziHEpRRZjiilkGRYazxwPL9oucEwvUSErA";
-    private final String GOOGLE_MAP_SCRIPT_SRC = "http://maps.google.com/maps?file=api&v=2&key=";
 
     private final String _newLine = "\n";
 
@@ -52,7 +47,7 @@ public class GoogleMapRenderer extends HtmlRenderer {
 
         //render scripts needed
         //ToDo make this optional
-        writeMapScriptResouces(facesContext, encodeGoogleMapScriptUrl());
+        writeMapScriptResouces(facesContext, GoogleMapRendererUtils.encodeGoogleMapScriptUrl());
         HtmlRendererUtils.writePrettyLineSeparator(facesContext);
         //ToDO should come from properties file
         writeMapScriptResouces(facesContext, "js/CustomMapScript.js");
@@ -93,19 +88,6 @@ public class GoogleMapRenderer extends HtmlRenderer {
 
     public void encodeChildren(FacesContext facesContext, UIComponent uiComponent) throws IOException {
         ResponseWriter out = facesContext.getResponseWriter();
-        //setupicon
-        /*
-        out.write("var baseIcon = new GIcon();");
-        out.write("baseIcon.image = \"http://labs.google.com/ridefinder/images/mm_20_red.png\";");
-        out.write("baseIcon.shadow = \"http://labs.google.com/ridefinder/images/mm_20_shadow.png\";");
-        out.write("baseIcon.iconSize = new GSize(20, 34);");
-        out.write("baseIcon.shadowSize = new GSize(37, 34);");
-        out.write("baseIcon.iconAnchor = new GPoint(9, 34);");
-
-        //setup icon for research center
-        out.write("var rcIcon = new GIcon(baseIcon);");
-        out.write("rcIcon.image = \"http://www.google.com/mapfiles/markerR.png\";");
-          */
 
         UIData data = (UIData) uiComponent;
 
@@ -152,14 +134,6 @@ public class GoogleMapRenderer extends HtmlRenderer {
 
     }
 
-    /** Utility methods begin **/
-    /**
-     * ToDo should be in a utility class *
-     */
-    private String encodeGoogleMapScriptUrl() throws UnsupportedEncodingException {
-        String gMapsURL = GOOGLE_MAP_SCRIPT_SRC + GOOGLE_MAP_KEY_VALUE;
-        return gMapsURL;
-    }
 
     /**
      * Will write out the map scripting resources]

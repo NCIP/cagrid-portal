@@ -8,13 +8,12 @@
                  headerClass="contentMainTitle" columnClasses="mainContent">
         <f:facet name="header">
             <h:column>
-                <h:outputText value="caGrid Map View"/>
+                <h:outputText value="#{labels.mapHomeTitle}"/>
             </h:column>
         </f:facet>
 
         <h:column>
-            <h:outputText value="caGrid Map displays caGrid Resources (Research Centers, Services) on
-                 the US map "/>
+            <h:outputText value="#{labels.mapHomeDescription}"/>
         </h:column>
     </h:panelGrid>
     <%-- welcome ends --%>

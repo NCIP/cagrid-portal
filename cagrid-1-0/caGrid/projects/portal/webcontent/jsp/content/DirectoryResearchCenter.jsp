@@ -9,7 +9,7 @@
 
 <f:facet name="header">
     <h:column>
-        <h:outputText value="Research Center Directory"/>
+        <h:outputText value="#{labels.centerDirectory}"/>
     </h:column>
 </f:facet>
 
@@ -81,27 +81,27 @@
                          headerClass="contentTableHeader" columns="2">
                 <f:facet name="header">
                     <h:column>
-                        <h:outputText value="Center Details"/>
+                        <h:outputText value="#{labels.centerDetails}"/>
                     </h:column>
 
                 </f:facet>
 
                 <h:column>
-                    <h:outputText value="Short Name"/>
+                    <h:outputText value="#{labels.shortName}"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{rc.shortName}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="Display Name"/>
+                    <h:outputText value="#{labels.displayName}"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{rc.displayName}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="Description"/>
+                    <h:outputText value="#{labels.description}"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{rc.description}"/>
@@ -114,7 +114,7 @@
                         <h:outputText styleClass="txtHighlight"
                                       onmouseover="changeMenuStyle(this,'txtHighlightOn'),showCursor()"
                                       onmouseout="changeMenuStyle(this,'txtHighlight'),hideCursor()"
-                                      value="More Details>>"/>
+                                      value="#{labels.moreDetails}"/>/>
                         <f:param id="navigatedCenterPk" name="navigatedCenterPk" value="#{rc.pk}"/>
                     </h:commandLink>
                 </h:column>

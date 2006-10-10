@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="portal" default="all" basedir=".">
+<project name="portal" default="war" basedir=".">
 
     <!-- Local Environment -->
     <property environment="env"/>
@@ -28,6 +28,7 @@
     <property name='webinf.dir' value='${webcontent.dir}/WEB-INF'/>
     <property name='webinf.classes.dir' value='${webinf.dir}/classes'/>
     <property name='webinf.lib.dir' value='${webinf.dir}/lib'/>
+    <property name="webcontent.resources.dir" value="${webcontent.dir}/resources"/>
 
     <!-- Library folders -->
     <property name="lib.dir" value="${basedir}/lib"/>
@@ -40,6 +41,7 @@
     <!-- build directories -->
     <property name='build.dir' value='${webinf.dir}'/>
     <property name='build.classes.dir' value='${build.dir}/classes'/>
+    <property name="war.build.dir" value="${basedir}/build"/>
 
     <!-- Important test directories and files -->
     <property name="test.dir" value="${basedir}/test"/>
@@ -141,7 +143,7 @@
         <ant antfile="${basedir}/build-map.xml" dir="${basedir}" inheritall="true" target="cleanMapComponent"/>
 
         <!-- Delete war file if created -->
-        <delete file="${build.dir}/${project.name}.war"/>
+        <delete file="${war.build.dir}/${project.name}.war" failonerror="false"/>
     </target>
 
 
@@ -165,7 +167,7 @@
 
     <target name="deployTomcatWar" depends="cleanDeployment,war"
             description="Deploy Application into Tomcat as a war">
-        <copy file="${build.dir}/${project.name}.war" todir="${tomcat.webapps.dir}"/>
+        <copy file="${war.build.dir}/${project.name}.war" todir="${tomcat.webapps.dir}"/>
     </target>
 
 
@@ -173,8 +175,10 @@
     <!-- Create war for deployment                                      -->
     <!-- ============================================================== -->
     <target name="war" depends="clean,compile,hibernate,copyLibsLocal,copyResourcesLocal">
+        <mkdir dir="${war.build.dir}"/>
+
         <war basedir="${webcontent.dir}"
-             destfile="${build.dir}/${project.name}.war"
+             destfile="${war.build.dir}/${project.name}.war"
              webxml="${webinf.dir}/web.xml"
              excludesfile="${webinf.dir}/web.xml">
         </war>
@@ -272,7 +276,11 @@
                 <include name="*.properties"/>
                 <include name="*.wsdd"/>
             </fileset>
+            <fileset dir="${webcontent.resources.dir}">
+                <include name="Portal-Labels_en.properties"/>
+            </fileset>
         </copy>
+
 
     </target>
 
@@ -387,6 +395,7 @@
             <batchtest fork="yes" todir="${junit.results.dir}">
                 <fileset dir="${test.src.dir}">
                     <include name="**/DBCreationUtility.java"/>
+                    <include name="**/DBPopulateSeedDataUtility.java"/>
                 </fileset>
             </batchtest>
         </junit>

@@ -9,13 +9,13 @@
                      headerClass="welcomeTitle" columnClasses="welcomeContent">
             <f:facet name="header">
                 <h:column>
-                    <h:outputText value="Welcome to caGrid Portal"/>
+
+                    <h:outputText value="#{labels.portalHomeTitle}"/>
                 </h:column>
             </f:facet>
 
             <h:column>
-                <h:outputText value="caGrid Monitoring and Discovery Portal (MD Portal)
-                 provides an overview of caGrid. Site is under development"/>
+                <h:outputText value="#{labels.portalHomeDescription}"/>
             </h:column>
         </h:panelGrid>
         <%-- welcome ends --%>
@@ -32,12 +32,12 @@
                              width="100%">
                     <f:facet name="header">
                         <h:column>
-                            <h:outputText value="WHAT'S NEW"/>
+                            <h:outputText value="#{labels.whatsNewTitle}"/>
                         </h:column>
                     </f:facet>
 
                     <h:column>
-                        <h:outputText value="caGrid 1.0 beta has been released"/>
+                        <h:outputText value="#{labels.whatsNewDescription}"/>
                     </h:column>
                 </h:panelGrid>
             </h:column>
@@ -50,12 +50,12 @@
                              summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
                     <f:facet name="header">
                         <h:column>
-                            <h:outputText value="DID YOU KNOW"/>
+                            <h:outputText value="#{labels.didYouKnowTitle}"/>
                         </h:column>
                     </f:facet>
 
                     <h:column>
-                        <h:outputText value="MD Portal will release November 1st 2006"/>
+                        <h:outputText value="#{labels.didYouKnowDescription}"/>
                     </h:column>
                 </h:panelGrid>
             </h:column>

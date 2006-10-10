@@ -25,7 +25,6 @@
 
     <definition name="/home.tiles" extends="Home">
         <put name="mainMenu" value="/jsp/menu/MainMenuHome.jsp"/>
-        <put name="subMenu" value="/jsp/menu/SubMenuBlank.jsp"/>
         <put name="mainContent" value="/jsp/content/PortalHomepage.jsp"/>
     </definition>
 
@@ -65,7 +64,6 @@
     <!--Search Section layout-->
     <definition name="Search" extends="Base">
         <put name="mainMenu" value="/jsp/menu/MainMenuSearch.jsp"/>
-        <put name="subMenu" value="/jsp/menu/SubMenuSearch.jsp"/>
         <!--has no content. is a layout-->
     </definition>
 
@@ -107,8 +105,6 @@
 
     <definition name="/help.tiles" extends="Base">
         <put name="mainMenu" value="/jsp/menu/MainMenuHelp.jsp"/>
-        <put name="subMenu" value="/jsp/menu/SubMenuBlank.jsp"/>
-        <put name="mainContent" value="/jsp/menu/SubMenuBlank.jsp"/>
     </definition>
 
     <definition name="/error.tiles" extends="Base">

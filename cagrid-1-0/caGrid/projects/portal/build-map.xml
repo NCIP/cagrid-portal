@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <project basedir=".">
 
+    <property name="map.src.dir" value="${src.dir}/java/gov/nih/nci/cagrid/portal/map"/>
 
     <target name="cleanMapComponent">
         <property name="map.src.dir" value="${src.dir}/java/gov/nih/nci/cagrid/portal/map"/>
@@ -10,12 +11,13 @@
     </target>
 
 
-    <target name="setUpMapComponent">
-        <property name="map.src.dir" value="${src.dir}/java/gov/nih/nci/cagrid/portal/map"/>
+    <target name="setUpMapComponent"
+            description="Main target to build and setup map component">
+
         <copy todir="${webinf.classes.dir}">
             <fileset dir="${map.src.dir}">
-                <include name="**/PortalMap.tld"/>
-                <include name="**/map-faces-config.xml"/>
+                <include name="PortalMap.tld"/>
+                <include name="map-faces-config.xml"/>
             </fileset>
         </copy>
 
@@ -23,6 +25,16 @@
             <fileset dir="${map.src.dir}">
                 <include name="CustomMapScript.js"/>
             </fileset>
+        </copy>
+
+        <copy
+                file="${map.src.dir}/googleMap.properties.template"
+                tofile="${webinf.classes.dir}/googleMap.properties"
+                filtering="true"
+                overwrite="true">
+            <filterset>
+                <filter token="GOOGLE_MAP_KEY_VALUE" value="${google.map.key}"/>
+            </filterset>
         </copy>
     </target>
 </project>

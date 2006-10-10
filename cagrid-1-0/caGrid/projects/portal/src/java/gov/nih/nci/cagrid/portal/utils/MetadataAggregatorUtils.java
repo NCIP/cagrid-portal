@@ -62,23 +62,27 @@ public class MetadataAggregatorUtils {
     }
 
     public final void loadOperations(RegisteredService rService, gov.nih.nci.cagrid.metadata.ServiceMetadata sMetadata) throws ResourcePropertyRetrievalException {
-        ServiceContext[] contexts = sMetadata.getServiceDescription().getService().getServiceContextCollection().getServiceContext();
-        for (int i = 0; i < contexts.length; i++) {
-            gov.nih.nci.cagrid.metadata.service.Operation opers[] = contexts[i].getOperationCollection().getOperation();
-            if (opers != null) {
-                for (int j = 0; j < opers.length; j++) {
-                    Operation operDomain = new Operation();
-                    operDomain.setName(opers[j].getName());
-                    operDomain.setDescription(opers[j].getDescription());
+        try {
+            ServiceContext[] contexts = sMetadata.getServiceDescription().getService().getServiceContextCollection().getServiceContext();
+            for (int i = 0; i < contexts.length; i++) {
+                gov.nih.nci.cagrid.metadata.service.Operation opers[] = contexts[i].getOperationCollection().getOperation();
+                if (opers != null) {
+                    for (int j = 0; j < opers.length; j++) {
+                        Operation operDomain = new Operation();
+                        operDomain.setName(opers[j].getName());
+                        operDomain.setDescription(opers[j].getDescription());
 
-                    if (opers[j].getOutput().getUMLClass() != null) {
-                        UMLClass outputClass = translateUMLClass(opers[j].getOutput().getUMLClass());
-                        operDomain.setOutputClass(outputClass);
+                        if (opers[j].getOutput().getUMLClass() != null) {
+                            UMLClass outputClass = translateUMLClass(opers[j].getOutput().getUMLClass());
+                            operDomain.setOutputClass(outputClass);
+                        }
+
+                        rService.addOperation(operDomain);
                     }
-
-                    rService.addOperation(operDomain);
                 }
             }
+        } catch (NullPointerException e) {
+            //expected. Ignore
         }
     }
 

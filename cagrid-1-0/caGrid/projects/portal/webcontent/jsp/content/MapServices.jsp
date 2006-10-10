@@ -9,23 +9,17 @@
 
         <f:facet name="header">
             <h:column>
-                <h:outputText value="caGrid Map"/>
+                <h:outputText value="#{labels.mapcaGrid}"/>
             </h:column>
         </f:facet>
 
         <f:verbatim><br/></f:verbatim>
 
         <h:column>
+            <!--Custom portal map component. See documentation for details
             <portal:map id="portalMap" style="width:700px;  height:430px"
                         var="service" value="#{services.list}"
                         useGoogle="true">
-
-                <h:column>
-                    <h:outputText value="#{service.researchCenter.latitude}"/>
-                </h:column>
-                <h:column>
-                    <h:outputText value="#{service.researchCenter.longitude}"/>
-                </h:column>
             </portal:map>
 
         </h:column>
