@@ -412,6 +412,13 @@ public class CommonTools {
 
 
 	public static String methodTypeToString(MethodType method) {
+		//if it is imported from wsdl just return the name
+		if (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null
+			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
+			return method.getName() + "\t(imported from wsdl)";
+		}
+		
+		
 		// assume its void to start with
 		String output = "void";
 
@@ -470,7 +477,12 @@ public class CommonTools {
 
 		output += "  " + method.getName() + "(" + input + ")";
 
+		if (method.isIsImported()) {
+			output += "\t(imported from introduce service)";
+		}
+
 		return output;
+
 	}
 
 
