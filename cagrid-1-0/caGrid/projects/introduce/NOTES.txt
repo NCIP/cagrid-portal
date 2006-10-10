@@ -3,6 +3,8 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 To Do:
 
+fix method name table sorter
+
 expose getResourceProperties through the generated clients.
 
 look at he upper case vs lower case methods issues.....

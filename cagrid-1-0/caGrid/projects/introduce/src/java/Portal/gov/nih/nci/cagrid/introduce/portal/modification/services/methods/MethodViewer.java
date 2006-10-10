@@ -322,7 +322,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 	private JLabel wsdlImportPackageNameLabel = null;
 
-	
+
 	public MethodViewer(MethodType method, SpecificServiceInformation info) {
 		this.info = info;
 		this.method = method;
@@ -508,45 +508,49 @@ public class MethodViewer extends GridPortalBaseFrame {
 						method.setMethodSecurity(((MethodSecurityPanel) securityContainerPanel)
 							.getMethodSecurity(method.getName()));
 
-						// process the inputs
-						MethodTypeInputs inputs = new MethodTypeInputs();
-						MethodTypeInputsInput[] inputsA = new MethodTypeInputsInput[getInputParamTable().getRowCount()];
+						if (!getIsImportedCheckBox().isSelected()) {
 
-						usedNames = new ArrayList();
-						for (int i = 0; i < getInputParamTable().getRowCount(); i++) {
-							MethodTypeInputsInput input = getInputParamTable().getRowData(i);
-							// validate the input param
-							if (usedNames.contains(input.getName())) {
-								valid = false;
-								message = "Method " + method.getName() + " contains more that one parameter named "
-									+ input.getName();
+							// process the inputs
+							MethodTypeInputs inputs = new MethodTypeInputs();
+							MethodTypeInputsInput[] inputsA = new MethodTypeInputsInput[getInputParamTable()
+								.getRowCount()];
+
+							usedNames = new ArrayList();
+							for (int i = 0; i < getInputParamTable().getRowCount(); i++) {
+								MethodTypeInputsInput input = getInputParamTable().getRowData(i);
+								// validate the input param
+								if (usedNames.contains(input.getName())) {
+									valid = false;
+									message = "Method " + method.getName() + " contains more that one parameter named "
+										+ input.getName();
+								}
+								usedNames.add(input.getName());
+								if (!JavaUtils.isJavaId(input.getName())) {
+									valid = false;
+									message = "Parameter name must be a valid java identifier: Method: "
+										+ method.getName() + " param: " + input.getName();
+								}
+								inputsA[i] = input;
 							}
-							usedNames.add(input.getName());
-							if (!JavaUtils.isJavaId(input.getName())) {
-								valid = false;
-								message = "Parameter name must be a valid java identifier: Method: " + method.getName()
-									+ " param: " + input.getName();
+
+							inputs.setInput(inputsA);
+							method.setInputs(inputs);
+
+							// process exceptions
+							MethodTypeExceptions exceptions = new MethodTypeExceptions();
+							MethodTypeExceptionsException[] exceptionsA = new MethodTypeExceptionsException[getExceptionsTable()
+								.getRowCount()];
+							for (int i = 0; i < getExceptionsTable().getRowCount(); i++) {
+								MethodTypeExceptionsException exception = getExceptionsTable().getRowData(i);
+								exceptionsA[i] = exception;
 							}
-							inputsA[i] = input;
+							exceptions.setException(exceptionsA);
+							method.setExceptions(exceptions);
+
+							// now process the output
+							MethodTypeOutput outputT = getOutputTypeTable().getRowData(0);
+							method.setOutput(outputT);
 						}
-
-						inputs.setInput(inputsA);
-						method.setInputs(inputs);
-
-						// process exceptions
-						MethodTypeExceptions exceptions = new MethodTypeExceptions();
-						MethodTypeExceptionsException[] exceptionsA = new MethodTypeExceptionsException[getExceptionsTable()
-							.getRowCount()];
-						for (int i = 0; i < getExceptionsTable().getRowCount(); i++) {
-							MethodTypeExceptionsException exception = getExceptionsTable().getRowData(i);
-							exceptionsA[i] = exception;
-						}
-						exceptions.setException(exceptionsA);
-						method.setExceptions(exceptions);
-
-						// now process the output
-						MethodTypeOutput outputT = getOutputTypeTable().getRowData(0);
-						method.setOutput(outputT);
 
 						if (getIsProvidedCheckBox().isSelected()) {
 							method.setIsProvided(true);
@@ -608,25 +612,25 @@ public class MethodViewer extends GridPortalBaseFrame {
 									}
 								}
 
-								String wsdlFile = introduceServiceLocationTextField.getText() + File.separator
+								String remoteWsdlFile = introduceServiceLocationTextField.getText() + File.separator
 									+ "schema" + File.separator
 									+ currentImportServiceSescription.getServices().getService(0).getName()
 									+ File.separator + importService.getName() + ".wsdl";
 
-								if (!(new File(wsdlFile).exists())) {
+								if (!(new File(remoteWsdlFile).exists())) {
 									JOptionPane.showMessageDialog(MethodViewer.this,
 										"Cannot locate the WSDL file for this imported method");
 								}
 
-								Document wsdlDoc = null;
+								Document remoteWsdlDoc = null;
 								try {
-									wsdlDoc = XMLUtilities.fileNameToDocument(wsdlFile);
+									remoteWsdlDoc = XMLUtilities.fileNameToDocument(remoteWsdlFile);
 								} catch (MobiusException e1) {
 									e1.printStackTrace();
 									return;
 								}
 
-								List portTypes = wsdlDoc.getRootElement().getChildren("portType",
+								List portTypes = remoteWsdlDoc.getRootElement().getChildren("portType",
 									Namespace.getNamespace(IntroduceConstants.WSDLAMESPACE));
 
 								boolean foundMethod = false;
@@ -660,7 +664,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 									.getNamespace(IntroduceConstants.WSDLAMESPACE));
 								String inputMessageType = input.getAttributeValue("message");
 								int colonIndex = inputMessageType.indexOf(":");
-								String inputMessageNamespace = wsdlDoc.getRootElement().getNamespace(
+								String inputMessageNamespace = remoteWsdlDoc.getRootElement().getNamespace(
 									inputMessageType.substring(0, colonIndex)).getURI();
 								String inputMessageName = inputMessageType.substring(colonIndex + 1);
 								// get the outputMessage
@@ -668,7 +672,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 									.getNamespace(IntroduceConstants.WSDLAMESPACE));
 								String outputMessageType = output.getAttributeValue("message");
 								colonIndex = outputMessageType.indexOf(":");
-								String outputMessageNamespace = wsdlDoc.getRootElement().getNamespace(
+								String outputMessageNamespace = remoteWsdlDoc.getRootElement().getNamespace(
 									outputMessageType.substring(0, colonIndex)).getURI();
 								String outputMessageName = outputMessageType.substring(colonIndex + 1);
 
@@ -678,8 +682,24 @@ public class MethodViewer extends GridPortalBaseFrame {
 								method.setOutput(importMethod.getOutput());
 								method.setExceptions(importMethod.getExceptions());
 
+								String localWsdlFileName = remoteWsdlFile.substring(remoteWsdlFile
+									.lastIndexOf(File.separator) + 1);
+								String localWsdlFileLocation = info.getBaseDirectory() + File.separator + "schema"
+									+ File.separator + info.getServices().getService(0).getName() + File.separator
+									+ localWsdlFileName;
+
+								String mess = "You must make sure that the WSDL file containing the imported method ("
+									+ remoteWsdlFile
+									+ ") and all accompanying XSD documents have been copied over to this services schema location ("
+									+ info.getBaseDirectory() + File.separator + "schema" + File.separator
+									+ info.getServices().getService(0).getName() + ")";
+								JOptionPane.showMessageDialog(MethodViewer.this, mess);
+								while (!(new File(localWsdlFileLocation).exists())) {
+									JOptionPane.showMessageDialog(MethodViewer.this, mess);
+								}
+
 								MethodTypeImportInformation importInfo = new MethodTypeImportInformation();
-								importInfo.setWsdlFile(wsdlFile.substring(wsdlFile.lastIndexOf(File.separator) + 1));
+								importInfo.setWsdlFile(localWsdlFileName);
 								importInfo.setNamespace(importService.getNamespace());
 								importInfo.setPortTypeName(importService.getName() + "PortType");
 								importInfo.setPackageName(importService.getPackageName());
@@ -2132,7 +2152,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JCheckBox getIsFromIntroduceCheckBox() {
 		if (isFromIntroduceCheckBox == null) {
 			isFromIntroduceCheckBox = new JCheckBox();
-			isFromIntroduceCheckBox.setText("Is Method From An Introduce Generated Service?");
+			isFromIntroduceCheckBox.setText("Method Is From An Introduce Generated Service?");
 			isFromIntroduceCheckBox.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (getIsFromIntroduceCheckBox().isSelected()) {
