@@ -16,7 +16,9 @@
             <f:verbatim><br/></f:verbatim>
 
             <h:column>
-                <portal:map id="portalMap" style="width:700px;  height:430px"
+
+                <portal:map id="portalMap"
+                            style="background-color: #5C5C5C;  border:2px; border-color:black; width:700px; height:430px"
                             var="rc" value="#{centers.list}"
                             useGoogle="true">
                     <h:column>

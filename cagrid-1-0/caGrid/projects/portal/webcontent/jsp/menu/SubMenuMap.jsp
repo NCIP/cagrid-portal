@@ -8,7 +8,7 @@
     <h:panelGrid styleClass="subMenuTable"
                  columnClasses="mainMenuSubItems,mainMenuSubItemsSpacer,mainMenuSubItems,mainMenuSubItemsSpacer,mainMenuSubItems,mainMenuSubItemsSpacer"
                  cellpadding="0" cellspacing="4"
-                 columns="6">
+                 columns="4">
 
         <h:column>
             <h:commandLink styleClass="mainMenuSubLink"
@@ -32,16 +32,6 @@
             <t:graphicImage url="images/mainMenuSeparator.gif" width="1" height="16"/>
         </h:column>
 
-        <h:column>
-            <h:commandLink styleClass="mainMenuSubLink"
-                           action="#{map.navigateToPOCDirectory}">
-                <h:outputText value="People"/>
-            </h:commandLink>
-        </h:column>
-
-        <h:column>
-            <t:graphicImage url="images/mainMenuSeparator.gif" width="1" height="16"/>
-        </h:column>
 
     </h:panelGrid>
 </f:subview>

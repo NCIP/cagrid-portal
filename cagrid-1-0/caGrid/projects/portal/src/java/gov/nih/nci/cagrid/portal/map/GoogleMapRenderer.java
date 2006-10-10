@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.map;
 
+import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import org.apache.myfaces.renderkit.html.HTML;
 import org.apache.myfaces.renderkit.html.HtmlRenderer;
@@ -53,6 +54,8 @@ public class GoogleMapRenderer extends HtmlRenderer {
         //ToDo make this optional
         writeMapScriptResouces(facesContext, encodeGoogleMapScriptUrl());
         HtmlRendererUtils.writePrettyLineSeparator(facesContext);
+        //ToDO should come from properties file
+        writeMapScriptResouces(facesContext, "js/CustomMapScript.js");
 
         /*Start the div tag*/
         out.startElement(HTML.DIV_ELEM, uiComponent);
@@ -72,9 +75,10 @@ public class GoogleMapRenderer extends HtmlRenderer {
         /** Start writing map. Setup all properties herer **/
         out.write("var " + mapVar + " = new GMap2(document.getElementById(\"" + mapCompID + "\"));" + _newLine);
         //center over usa
-        out.write(" map.setCenter(new GLatLng(40, -95), 4);");
+        out.write(mapVar + ".setCenter(new GLatLng(40, -95), 4);");
         //enable zooming
         out.write(mapVar + ".enableDoubleClickZoom();");
+        out.write(mapVar + ".addControl(new GSmallMapControl());");
 
     }
 
@@ -90,6 +94,7 @@ public class GoogleMapRenderer extends HtmlRenderer {
     public void encodeChildren(FacesContext facesContext, UIComponent uiComponent) throws IOException {
         ResponseWriter out = facesContext.getResponseWriter();
         //setupicon
+        /*
         out.write("var baseIcon = new GIcon();");
         out.write("baseIcon.image = \"http://labs.google.com/ridefinder/images/mm_20_red.png\";");
         out.write("baseIcon.shadow = \"http://labs.google.com/ridefinder/images/mm_20_shadow.png\";");
@@ -100,23 +105,53 @@ public class GoogleMapRenderer extends HtmlRenderer {
         //setup icon for research center
         out.write("var rcIcon = new GIcon(baseIcon);");
         out.write("rcIcon.image = \"http://www.google.com/mapfiles/markerR.png\";");
+          */
 
         UIData data = (UIData) uiComponent;
+
         for (int i = 0; i < data.getRowCount(); i++) {
-            ResearchCenter rc = (ResearchCenter) data.getRowData();
-            String lat = rc.getLatitude().toString();
-            String lng = rc.getLongitude().toString();
-
-            out.write("var point = new GLatLng(" + lat + "," + lng + ");");
-            out.write("var marker = new GMarker(point, rcIcon);");
-            out.write(mapVar + ".addOverlay(marker);");
-
+            data.setRowIndex(i);
             //scrolled past the last row
-            if (!data.isRowAvailable())
+            if (!data.isRowAvailable()) {
                 break;
+            }
+            Object row = data.getRowData();
+            if (row instanceof ResearchCenter) {
+                ResearchCenter rc = (ResearchCenter) row;
+
+                String lat = rc.getLatitude().toString();
+                String lng = rc.getLongitude().toString();
+
+                if (lat != null && lng != null) {
+                    out.write("var point = new GLatLng(" + lat + "," + lng + ");");
+                    out.write("var marker" + i + " = new GMarker(point);");
+                    out.write("GEvent.addListener(marker" + i + ", \"click\", function() {");
+                    out.write("marker" + i + ".openInfoWindowHtml(\"" + rc.getShortName() + "<br>" + rc.getDisplayName() + "\");");
+                    out.write("});");
+                    //out.write(mapVar + ".addOverlay(createMarker(point,\"" + rc.getShortName() + "\",\"" + rc.getDisplayName() + "\"))");
+                    out.write("map.addOverlay(marker" + i + ");");
+                }
+            } else if (row instanceof RegisteredService) {
+                RegisteredService service = (RegisteredService) row;
+
+                if (service.getResearchCenter() != null) {
+                    String lat = service.getResearchCenter().getLatitude().toString();
+                    String lng = service.getResearchCenter().getLongitude().toString();
+
+                    if (lat != null && lng != null) {
+                        out.write("var point = new GLatLng(" + lat + "," + lng + ");");
+                        if (service.getType() == RegisteredService.ANALYTICAL_SERVICE)
+                            out.write("var marker = new GMarker(point, asIcon);");
+                        if (service.getType() == RegisteredService.DATA_SERVICE)
+                            out.write("var marker = new GMarker(point, dsIcon);");
+                        out.write(mapVar + ".addOverlay(marker);");
+                    }
+                }
+            }
         }
 
     }
+
     /** Utility methods begin **/
     /**
      * ToDo should be in a utility class *

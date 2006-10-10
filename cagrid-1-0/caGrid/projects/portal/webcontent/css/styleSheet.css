@@ -857,3 +857,13 @@ td.tabContent {
     line-height: 1.0em;
     vertical-align: top;
 }
+
+.mapStyle {
+    border: 2px;
+    border-color: black;
+    background-color: #5C5C5C; /* constant: dark gray */
+    width: 700px;
+    height: 400px;
+    vertical-align: middle;
+    padding: 0.5cm;
+}

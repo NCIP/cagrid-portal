@@ -138,7 +138,8 @@
         <delete dir="${test.log.dir}"/>
         <delete dir="${webinf.lib.dir}"/>
         <delete dir="${webinf.classes.dir}"/>
-        <antcall target="cleanMapComponent"/>
+        <ant antfile="${basedir}/build-map.xml" dir="${basedir}" inheritall="true" target="cleanMapComponent"/>
+
         <!-- Delete war file if created -->
         <delete file="${build.dir}/${project.name}.war"/>
     </target>
@@ -209,7 +210,7 @@
 
     <target name="copyResourcesLocal">
         <!--Setup the map component-->
-        <antcall target="setUpMapComponent"/>
+        <ant antfile="${basedir}/build-map.xml" dir="${basedir}" inheritall="true" target="setUpMapComponent"/>
 
         <!-- copy syncgts description file -->
         <copy file="${ext.resources.dir}/sync-description.xml" todir="${webinf.classes.dir}"/>
@@ -391,23 +392,5 @@
         </junit>
     </target>
 
-    <!--Map component targets -->
-
-    <target name="cleanMapComponent">
-        <property name="map.src.dir" value="${src.dir}/java/gov/nih/nci/cagrid/portal/map"/>
-        <delete file="${webinf.classes.dir}/PortalMap.tld"/>
-        <delete file="${webinf.classes.dir}/map-faces-config.xml"/>
-    </target>
-
-
-    <target name="setUpMapComponent">
-        <property name="map.src.dir" value="${src.dir}/java/gov/nih/nci/cagrid/portal/map"/>
-        <copy todir="${webinf.classes.dir}">
-            <fileset dir="${map.src.dir}">
-                <include name="**/PortalMap.tld"/>
-                <include name="**/map-faces-config.xml"/>
-            </fileset>
-        </copy>
-    </target>
 
 </project>

@@ -1,14 +1,28 @@
 <?xml version="1.0"?>
 <project basedir=".">
 
+
+    <target name="cleanMapComponent">
+        <property name="map.src.dir" value="${src.dir}/java/gov/nih/nci/cagrid/portal/map"/>
+        <delete file="${webinf.classes.dir}/PortalMap.tld"/>
+        <delete file="${webinf.classes.dir}/map-faces-config.xml"/>
+        <delete file="${webcontent.dir}/js/CustomMapScript.js"/>
+    </target>
+
+
     <target name="setUpMapComponent">
         <property name="map.src.dir" value="${src.dir}/java/gov/nih/nci/cagrid/portal/map"/>
-        <copy todir="${webinf.dir}">
+        <copy todir="${webinf.classes.dir}">
             <fileset dir="${map.src.dir}">
                 <include name="**/PortalMap.tld"/>
                 <include name="**/map-faces-config.xml"/>
             </fileset>
         </copy>
-    </target>
 
+        <copy todir="${webcontent.dir}/js">
+            <fileset dir="${map.src.dir}">
+                <include name="CustomMapScript.js"/>
+            </fileset>
+        </copy>
+    </target>
 </project>

@@ -109,49 +109,51 @@
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
 
-    <!--Navigation Rules-->
+    <!--Default Navigation Rules-->
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <navigation-case>
             <from-action>#{directory.navigateToServicesDirectory}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>servicesDirectory.portal</to-view-id>
+            <to-view-id>/servicesDirectory.portal</to-view-id>
+            <redirect/>
         </navigation-case>
         <navigation-case>
             <from-action>#{directory.navigateToCenterDirectory}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>rcDirectory.portal</to-view-id>
+            <to-view-id>/rcDirectory.portal</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{directory.navigateToPeopleDirectory}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>pocDirectory.portal</to-view-id>
+            <to-view-id>/pocDirectory.portal</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{map.navigateToRCMap}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>rcMap.portal</to-view-id>
+            <to-view-id>/rcMap.portal</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{map.navigateToServicesMap}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>servicesMap.portal</to-view-id>
+            <to-view-id>/servicesMap.portal</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{services.navigateToService}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>serviceDetails.portal</to-view-id>
+            <to-view-id>/serviceDetails.portal</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{centers.navigateToCenter}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>centerDetails.portal</to-view-id>
+            <to-view-id>/centerDetails.portal</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{keywordSearch.navigateToKeywordSearchResults}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>keywordSearchResults.portal</to-view-id>
+            <to-view-id>/keywordSearchResults.portal</to-view-id>
         </navigation-case>
     </navigation-rule>
+
 
 </faces-config>
