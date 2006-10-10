@@ -660,7 +660,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 									.getNamespace(IntroduceConstants.WSDLAMESPACE));
 								String inputMessageType = input.getAttributeValue("message");
 								int colonIndex = inputMessageType.indexOf(":");
-								String inputMessageNamespace = currentImporWSDL.getRootElement().getNamespace(
+								String inputMessageNamespace = wsdlDoc.getRootElement().getNamespace(
 									inputMessageType.substring(0, colonIndex)).getURI();
 								String inputMessageName = inputMessageType.substring(colonIndex + 1);
 								// get the outputMessage
@@ -668,7 +668,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 									.getNamespace(IntroduceConstants.WSDLAMESPACE));
 								String outputMessageType = output.getAttributeValue("message");
 								colonIndex = outputMessageType.indexOf(":");
-								String outputMessageNamespace = currentImporWSDL.getRootElement().getNamespace(
+								String outputMessageNamespace = wsdlDoc.getRootElement().getNamespace(
 									outputMessageType.substring(0, colonIndex)).getURI();
 								String outputMessageName = outputMessageType.substring(colonIndex + 1);
 
@@ -679,8 +679,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 								method.setExceptions(importMethod.getExceptions());
 
 								MethodTypeImportInformation importInfo = new MethodTypeImportInformation();
+								importInfo.setWsdlFile(wsdlFile.substring(wsdlFile.lastIndexOf(File.separator) + 1));
 								importInfo.setNamespace(importService.getNamespace());
-								importInfo.setPortTypeName(importService.getName());
+								importInfo.setPortTypeName(importService.getName() + "PortType");
 								importInfo.setPackageName(importService.getPackageName());
 								importInfo.setInputMessage(new QName(inputMessageNamespace, inputMessageName));
 								importInfo.setOutputMessage(new QName(outputMessageNamespace, outputMessageName));
