@@ -1,77 +1,106 @@
 package gov.nih.nci.cagrid.gts.service;
 
+import gov.nih.nci.cagrid.gts.service.db.TrustedAuthorityTable;
+import gov.nih.nci.cagrid.gts.service.db.TrustedAuthorityTrustLevelsTable;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectStatement {
+
+public class TrustedAuthoritySelectStatement {
 	private List fields;
 
 	private List whereFields;
 
 	private List whereValues;
-	
+
 	private List whereOperators;
-	
+
 	private List clauses;
 
-	private String table;
+	private boolean isJoin;
 
-	public SelectStatement(String table) {
-		this.table = table;
+
+	public TrustedAuthoritySelectStatement() {
 		this.fields = new ArrayList();
 		this.whereFields = new ArrayList();
 		this.whereValues = new ArrayList();
 		this.whereOperators = new ArrayList();
 		this.clauses = new ArrayList();
+		isJoin = false;
 	}
 
-	public void addSelectField(String field) {
-		this.fields.add(field);
+
+	public void addSelectField(String table, String field) {
+		if (table == null) {
+			this.fields.add(field);
+		} else {
+			this.fields.add(table + "." + field);
+		}
+
 	}
 
-	public void addWhereField(String field, String operator, Object value) {
-		this.whereFields.add(field);
+
+	public void addWhereField(String table, String field, String operator, Object value) {
+		if (table == null) {
+			this.whereFields.add(field);
+		} else {
+			if (table.equals(TrustedAuthorityTrustLevelsTable.TABLE_NAME)) {
+				isJoin = true;
+			}
+			this.whereFields.add(table + "." + field);
+		}
+
 		this.whereOperators.add(operator);
 		this.whereValues.add(value);
 	}
-	
-	public void addClause(String clause){
+
+
+	public void addClause(String clause) {
 		this.clauses.add(clause);
 	}
 
-	
+
 	public PreparedStatement prepareStatement(Connection c) throws Exception {
 		StringBuffer sql = new StringBuffer("select ");
 		boolean first = true;
 		for (int i = 0; i < fields.size(); i++) {
 			if (!first) {
 				sql.append(",");
-			}else{
+			} else {
 				first = false;
 			}
 			sql.append((String) fields.get(i));
 		}
-		sql.append(" FROM "+table);
-		if ((whereFields.size() > 0) || (clauses.size()>0)){
+		sql.append(" FROM " + TrustedAuthorityTable.TABLE_NAME);
+		if (isJoin) {
+			sql.append("," + TrustedAuthorityTrustLevelsTable.TABLE_NAME);
+		}
+		if ((whereFields.size() > 0) || (clauses.size() > 0) || isJoin) {
 			sql.append(" WHERE ");
 		}
-
 		first = true;
+		if (isJoin) {
+			first = false;
+			sql.append(TrustedAuthorityTable.TABLE_NAME + "." + TrustedAuthorityTable.NAME + "="
+				+ TrustedAuthorityTrustLevelsTable.TABLE_NAME + "." + TrustedAuthorityTrustLevelsTable.NAME);
+		}
+
 		for (int i = 0; i < whereFields.size(); i++) {
 			if (!first) {
 				sql.append(" AND ");
-			}else{
+			} else {
 				first = false;
 			}
-			sql.append((String) whereFields.get(i) + " "+(String)whereOperators.get(i)+" ?");
+			sql.append((String) whereFields.get(i) + " " + (String) whereOperators.get(i) + " ?");
 		}
-		
+
 		for (int i = 0; i < clauses.size(); i++) {
 			if (!first) {
 				sql.append(" AND");
-			}else{
+			} else {
 				first = false;
 			}
 			sql.append((String) clauses.get(i));
@@ -81,7 +110,7 @@ public class SelectStatement {
 
 		for (int i = 0; i < whereValues.size(); i++) {
 			Object o = whereValues.get(i);
-			int index =  i + 1;
+			int index = i + 1;
 			if (o instanceof String) {
 				s.setString((index), (String) o);
 			} else if (o instanceof Long) {
@@ -89,10 +118,10 @@ public class SelectStatement {
 			} else if (o instanceof Integer) {
 				s.setInt((index), ((Integer) o).intValue());
 			} else {
-				throw new Exception("Unsupported type "
-						+ o.getClass().getName());
+				throw new Exception("Unsupported type " + o.getClass().getName());
 			}
 		}
+		//System.out.println(sql.toString());
 		return s;
 	}
 

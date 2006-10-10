@@ -7,6 +7,8 @@ import gov.nih.nci.cagrid.gts.service.db.DBManager;
 import gov.nih.nci.cagrid.gts.service.db.PermissionsTable;
 import gov.nih.nci.cagrid.gts.service.db.TrustLevelTable;
 import gov.nih.nci.cagrid.gts.service.db.TrustedAuthorityTable;
+import gov.nih.nci.cagrid.gts.service.db.TrustedAuthorityTrustLevelsTable;
+
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -27,29 +29,43 @@ public class MySQLManager implements DBManager {
 
 	private PermissionsTable permissionsTable;
 
+	private TrustedAuthorityTrustLevelsTable trustLevels;
+
+
 	public MySQLManager(MySQLDatabase db) {
 		this.db = db;
 		authorityTable = new MySQLAuthorityTable();
 		trustedAuthorityTable = new MySQLTrustedAuthorityTable();
 		trustLevelTable = new MySQLTrustLevelTable();
 		permissionsTable = new MySQLPermissionsTable();
+		trustLevels = new MySQLTrustedAuthorityTrustLevelsTable();
 	}
+
 
 	public TrustedAuthorityTable getTrustedAuthorityTable() {
 		return trustedAuthorityTable;
 	}
 
+
 	public AuthorityTable getAuthorityTable() {
 		return authorityTable;
 	}
+
 
 	public TrustLevelTable getTrustLevelTable() {
 		return trustLevelTable;
 	}
 
+
 	public PermissionsTable getPermissionsTable() {
 		return permissionsTable;
 	}
+
+
+	public TrustedAuthorityTrustLevelsTable getTrustedAuthorityTrustLevelsTable() {
+		return trustLevels;
+	}
+
 
 	public Database getDatabase() {
 		return db;

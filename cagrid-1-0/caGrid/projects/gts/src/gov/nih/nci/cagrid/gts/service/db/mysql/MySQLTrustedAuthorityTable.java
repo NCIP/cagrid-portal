@@ -16,7 +16,6 @@ public class MySQLTrustedAuthorityTable extends TrustedAuthorityTable {
 				+ "" + TrustedAuthorityTable.NAME
 				+ " VARCHAR(255) NOT NULL PRIMARY KEY,"
 				+ TrustedAuthorityTable.CERTIFICATE_DN
-				+ " VARCHAR(255) NOT NULL," + TrustedAuthorityTable.TRUST_LEVEL
 				+ " VARCHAR(255) NOT NULL," + TrustedAuthorityTable.STATUS
 				+ " VARCHAR(50) NOT NULL," + TrustedAuthorityTable.IS_AUTHORITY
 				+ " VARCHAR(5) NOT NULL," + TrustedAuthorityTable.AUTHORITY_GTS

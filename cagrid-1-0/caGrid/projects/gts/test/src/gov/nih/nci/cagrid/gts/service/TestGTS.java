@@ -167,7 +167,7 @@ public class TestGTS extends TestCase {
 			ta.setName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(LEVEL_ONE);
+			ta.setTrustLevel(toArray(LEVEL_ONE));
 
 			Permission userPerm = new Permission();
 			userPerm.setGridIdentity(user);
@@ -354,7 +354,7 @@ public class TestGTS extends TestCase {
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel("INVALID_LEVEL");
+			ta.setTrustLevel(toArray("INVALID_LEVEL"));
 
 			try {
 				gts.addTrustedAuthority(ta, ADMIN_USER);
@@ -406,7 +406,7 @@ public class TestGTS extends TestCase {
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(LEVEL_ONE);
+			ta.setTrustLevel(toArray(LEVEL_ONE));
 
 			// Test null
 			try {
@@ -474,7 +474,7 @@ public class TestGTS extends TestCase {
 			ta2.setName(ca2.getCertificate().getSubjectDN().toString());
 			ta2.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca2.getCertificate())));
 			ta2.setStatus(Status.Trusted);
-			ta2.setTrustLevel(LEVEL_ONE);
+			ta2.setTrustLevel(toArray(LEVEL_ONE));
 
 			try {
 				gts.addTrustedAuthority(ta, user);
@@ -530,20 +530,25 @@ public class TestGTS extends TestCase {
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(LEVEL_ONE);
+			ta.setTrustLevel(toArray(LEVEL_ONE));
+			
+			TrustedAuthorityFilter f = new TrustedAuthorityFilter();
+			f.setTrustLevel(LEVEL_ONE);
 
 			gts.addTrustedAuthority(ta, ADMIN_USER);
-			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
-			assertEquals(ta, gts.findTrustAuthorities(new TrustedAuthorityFilter())[0]);
-			assertTrue(gts.validate(userCert, new TrustedAuthorityFilter()));
+			assertEquals(1, gts.findTrustAuthorities(f).length);
+			assertEquals(ta, gts.findTrustAuthorities(f)[0]);
+			assertTrue(gts.validate(userCert, f));
 
 			gts.removeTrustLevel(l1.getName(), ADMIN_USER);
 
-			assertEquals(0, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertEquals(0, gts.findTrustAuthorities(f).length);
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertEquals(0, gts.findTrustAuthorities(new TrustedAuthorityFilter())[0].getTrustLevel().length);
 			try {
-				assertFalse(gts.validate(userCert, new TrustedAuthorityFilter()));
+				assertFalse(gts.validate(userCert, f));
 				fail("Should not be able to validate the user ceritifcate!!!");
-			} catch (CertificateValidationFault f) {
+			} catch (CertificateValidationFault fault) {
 
 			}
 
@@ -695,7 +700,7 @@ public class TestGTS extends TestCase {
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(LEVEL_ONE);
+			ta.setTrustLevel(toArray(LEVEL_ONE));
 			ta = gts.addTrustedAuthority(ta, ADMIN_USER);
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
 			assertTrue(gts.validate(userCert,new TrustedAuthorityFilter()));
@@ -707,7 +712,7 @@ public class TestGTS extends TestCase {
 			ca.updateCRL(crlE);
 			updated.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			updated.setStatus(Status.Suspended);
-			updated.setTrustLevel(LEVEL_TWO);
+			updated.setTrustLevel(toArray(LEVEL_TWO));
 
 			// Test null
 			try {
@@ -841,7 +846,7 @@ public class TestGTS extends TestCase {
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(LEVEL_ONE);
+			ta.setTrustLevel(toArray(LEVEL_ONE));
 
 			ta = gts.addTrustedAuthority(ta, ADMIN_USER);
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
@@ -1326,12 +1331,16 @@ public class TestGTS extends TestCase {
 			ta.setName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(remote1[1].getName());
+			ta.setTrustLevel(toArray(remote1[1].getName()));
 			gts.addTrustedAuthority(ta, ADMIN_USER);
+			TrustedAuthorityFilter filter = new TrustedAuthorityFilter();
+			filter.setTrustLevel(remote1[1].getName());
 			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertEquals(1, gts.findTrustAuthorities(filter).length);
 
 			gts.synchronizeTrustLevels(auth1.getServiceURI(), null);
-			assertEquals(0, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+			assertEquals(0, gts.findTrustAuthorities(filter).length);
 			assertEquals(3, gts.getTrustLevels(GTS_URI).length);
 			assertEquals(0, gts.getTrustLevels(auth1.getServiceURI()).length);
 			assertEquals(2, gts.getTrustLevels(auth2.getServiceURI()).length);
@@ -1398,7 +1407,7 @@ public class TestGTS extends TestCase {
 		ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 		ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 		ta.setStatus(Status.Trusted);
-		ta.setTrustLevel(LEVEL_ONE);
+		ta.setTrustLevel(toArray(LEVEL_ONE));
 		ta.setIsAuthority(Boolean.TRUE);
 		return ta;
 	}
@@ -1475,6 +1484,12 @@ public class TestGTS extends TestCase {
 		super.setUp();
 		cacount = 0;
 		GTS.SYNC_WITH_AUTHORITIES = false;
+	}
+	
+	public String[] toArray(String s){
+		String[] array = new String[1];
+		array[0] = s;
+		return array;
 	}
 
 }

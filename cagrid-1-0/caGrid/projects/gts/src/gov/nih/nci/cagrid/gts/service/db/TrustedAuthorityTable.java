@@ -14,8 +14,6 @@ public abstract class TrustedAuthorityTable {
 
 	public static final String CERTIFICATE_DN = "CERTIFICATE_DN";
 
-	public static final String TRUST_LEVEL = "TRUST_LEVEL";
-
 	public static final String STATUS = "STATUS";
 
 	public static final String IS_AUTHORITY = "IS_AUTHORITY";

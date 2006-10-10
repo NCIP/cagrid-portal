@@ -13,6 +13,8 @@ public interface DBManager {
 	public AuthorityTable getAuthorityTable();
 
 	public TrustedAuthorityTable getTrustedAuthorityTable();
+	
+	public TrustedAuthorityTrustLevelsTable getTrustedAuthorityTrustLevelsTable();
 
 	public TrustLevelTable getTrustLevelTable();
 

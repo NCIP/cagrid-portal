@@ -81,7 +81,7 @@
 		<xsd:complexType name="TrustedAuthority">
 			<xsd:sequence>
 				<xsd:element name="Name" minOccurs="1" maxOccurs="1" type="xsd:string"/>
-				<xsd:element name="TrustLevel" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="TrustLevel" minOccurs="1" maxOccurs="unbounded" type="xsd:string"/>
 				<xsd:element name="Status" minOccurs="1" maxOccurs="1" type="gts:Status"/>
 				<xsd:element name="IsAuthority" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
 				<xsd:element name="AuthorityGTS" minOccurs="0" maxOccurs="1" type="xsd:string"/>
