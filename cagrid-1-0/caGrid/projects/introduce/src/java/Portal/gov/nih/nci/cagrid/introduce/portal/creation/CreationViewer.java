@@ -371,6 +371,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 		if (dirButton == null) {
 			dirButton = new JButton();
 			dirButton.setText("Browse");
+			dirButton.setIcon(IntroduceLookAndFeel.getBrowseIcon());
 			dirButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
