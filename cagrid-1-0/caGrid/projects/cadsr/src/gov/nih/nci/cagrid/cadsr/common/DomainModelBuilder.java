@@ -9,10 +9,9 @@ import gov.nih.nci.cadsr.umlproject.domain.TypeEnumerationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
-import gov.nih.nci.cagrid.cadsr.domain.UMLAssociationExclude;
+import gov.nih.nci.cagrid.cadsrservice.UMLAssociationExclude;
 import gov.nih.nci.cagrid.metadata.common.Enumeration;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
-import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.metadata.common.UMLClassUmlAttributeCollection;
 import gov.nih.nci.cagrid.metadata.common.ValueDomainEnumerationCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
@@ -23,6 +22,7 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationSourceUMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationTargetUMLAssociationEdge;
+import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLClassReference;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLGeneralization;
 import gov.nih.nci.common.util.HQLCriteria;
@@ -57,14 +57,11 @@ import commonj.work.WorkManager;
 
 /**
  * DomainModelBuilder Builds a DomainModel using a thread pool for concurrent
- * requests to the remote ApplicationService.
- * 
- * TODO: attempt to handle remote connection refusals by sleeping for a few
- * seconds and retrying?
+ * requests to the remote ApplicationService. TODO: attempt to handle remote
+ * connection refusals by sleeping for a few seconds and retrying?
  * 
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
  * @created Jun 1, 2006
  * @version $Id$
  */
@@ -91,7 +88,12 @@ public class DomainModelBuilder {
 	 * @return
 	 */
 	public DomainModel createDomainModel(Project project) throws DomainModelGenerationException {
-		Project proj = findCompleteProject(project);
+		Project proj;
+		try {
+			proj = CaDSRUtils.findCompleteProject(this.cadsr, project);
+		} catch (CaDSRGeneralException e) {
+			throw new DomainModelGenerationException("Problem with specified project:" + e.getMessage(), e);
+		}
 		// get all classes in project, preloading attributes, semantic
 		// metadata (current hibernate we are using doesn't process more
 		// than 1 preload, but this should work when we move forward)
@@ -131,7 +133,12 @@ public class DomainModelBuilder {
 	 */
 	public DomainModel createDomainModelForPackages(Project project, String[] packageNames)
 		throws DomainModelGenerationException {
-		Project proj = findCompleteProject(project);
+		Project proj;
+		try {
+			proj = CaDSRUtils.findCompleteProject(this.cadsr, project);
+		} catch (CaDSRGeneralException e) {
+			throw new DomainModelGenerationException("Problem with specified project:" + e.getMessage(), e);
+		}
 		UMLClassMetadata classArr[] = null;
 		UMLAssociationMetadata[] assocArr = null;
 
@@ -170,10 +177,8 @@ public class DomainModelBuilder {
 
 
 	/**
-	 * 
 	 * Gets a DomainModel that represents the project and listed classes;
 	 * associations will all those between listed classes.
-	 * 
 	 * 
 	 * @param project
 	 *            The project to build a domain model for
@@ -189,11 +194,9 @@ public class DomainModelBuilder {
 
 
 	/**
-	 * 
 	 * Gets a DomainModel that represents the project and listed classes;
 	 * associations will all those between listed classes that are not in the
 	 * excludes list.
-	 * 
 	 * 
 	 * @param project
 	 *            The project to build a domain model for
@@ -206,7 +209,12 @@ public class DomainModelBuilder {
 	 */
 	public DomainModel createDomainModelForClassesWithExcludes(Project project, String[] fullClassNames,
 		UMLAssociationExclude[] excludedAssociations) throws DomainModelGenerationException {
-		Project proj = findCompleteProject(project);
+		Project proj;
+		try {
+			proj = CaDSRUtils.findCompleteProject(this.cadsr, project);
+		} catch (CaDSRGeneralException e) {
+			throw new DomainModelGenerationException("Problem with specified project:" + e.getMessage(), e);
+		}
 		UMLClassMetadata classArr[] = null;
 		UMLAssociationMetadata[] assocArr = null;
 
@@ -851,39 +859,6 @@ public class DomainModelBuilder {
 			+ ((assoc.isBidirectional()) ? "<" : "") + " -->" + target.getRoleName() + "(" + target.getMinCardinality()
 			+ "..." + target.getMaxCardinality() + ")";
 
-	}
-
-
-	private Project findCompleteProject(Project prototype) throws DomainModelGenerationException {
-		if (prototype == null) {
-			throw new DomainModelGenerationException("Null project not valid.");
-		}
-
-		// clear this out and refresh it (in case its stale)
-		prototype.setId(null);
-
-		List completeProjects = new ArrayList();
-		Iterator projectIter = null;
-		Project proj = null;
-		try {
-			projectIter = this.cadsr.search(Project.class, prototype).iterator();
-		} catch (Exception ex) {
-			throw new DomainModelGenerationException("Error retrieving complete project: " + ex.getMessage(), ex);
-		}
-		// should be ONLY ONE project from the caDSR
-		while (projectIter.hasNext()) {
-			completeProjects.add(projectIter.next());
-		}
-		if (completeProjects.size() == 1) {
-			proj = (Project) completeProjects.get(0);
-		} else if (completeProjects.size() == 0) {
-			throw new DomainModelGenerationException("No project found in caDSR");
-		} else {
-			throw new DomainModelGenerationException("More than one project (" + completeProjects.size()
-				+ ") found.  Prototype project is ambiguous");
-		}
-
-		return proj;
 	}
 
 

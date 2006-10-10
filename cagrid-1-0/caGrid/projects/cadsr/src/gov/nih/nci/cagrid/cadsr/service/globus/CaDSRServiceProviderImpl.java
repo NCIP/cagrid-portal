@@ -19,6 +19,12 @@ public class CaDSRServiceProviderImpl{
 	}
 	
 
+	public gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectResponse findContextForProject(gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequest params) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+		gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectResponse();
+		boxedResult.setContext(impl.findContextForProject(params.getProject().getProject()));
+		return boxedResult;
+	}
+
 	public gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse findAllProjects(gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsRequest params) throws RemoteException {
 		gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse();
 		boxedResult.setProject(impl.findAllProjects());

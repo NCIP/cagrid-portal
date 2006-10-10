@@ -16,10 +16,10 @@
       <agg:GetMultipleResourcePropertiesPollType
 			xmlns:ns6="http://cadsr.cagrid.nci.nih.gov/types"
 			xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
-			xmlns:ns1="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain"
 			xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"
+			xmlns:ns2="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.domain"
+			xmlns:ns1="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.umlproject.domain"
 			xmlns:xs="http://www.w3.org/2001/XMLSchema"
-			xmlns:ns2="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain"
 			xmlns:ns0="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"
 			xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice">
         <!-- Specifies that the index should refresh information

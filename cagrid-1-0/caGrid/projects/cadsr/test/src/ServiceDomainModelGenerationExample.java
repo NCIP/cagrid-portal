@@ -4,7 +4,7 @@ import gov.nih.nci.cabio.domain.Taxon;
 import gov.nih.nci.cabio.domain.Tissue;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
-import gov.nih.nci.cagrid.cadsr.domain.UMLAssociationExclude;
+import gov.nih.nci.cagrid.cadsrservice.UMLAssociationExclude;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 

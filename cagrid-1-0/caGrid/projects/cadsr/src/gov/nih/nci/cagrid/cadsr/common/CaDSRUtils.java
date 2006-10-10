@@ -1,21 +1,22 @@
 package gov.nih.nci.cagrid.cadsr.common;
 
+import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
-import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
-import gov.nih.nci.cagrid.cadsr.domain.UMLAssociationSourceUMLClassMetadata;
-import gov.nih.nci.cagrid.cadsr.domain.UMLAssociationTargetUMLClassMetadata;
+import gov.nih.nci.cagrid.cadsrservice.UMLAssociation;
+import gov.nih.nci.cagrid.cadsrservice.UMLAssociationSourceUMLClassMetadata;
+import gov.nih.nci.cagrid.cadsrservice.UMLAssociationTargetUMLClassMetadata;
 import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 
 /**
  * @author oster
- * 
  */
 public class CaDSRUtils {
 
@@ -77,4 +78,38 @@ public class CaDSRUtils {
 
 		return pkg;
 	}
+
+
+	public static Project findCompleteProject(ApplicationService appService, Project prototype) throws CaDSRGeneralException {
+		if (prototype == null) {
+			throw new CaDSRGeneralException("Null project not valid.");
+		}
+
+		// clear this out and refresh it (in case its stale)
+		prototype.setId(null);
+
+		List completeProjects = new ArrayList();
+		Iterator projectIter = null;
+		Project proj = null;
+		try {
+			projectIter = appService.search(Project.class, prototype).iterator();
+		} catch (Exception ex) {
+			throw new CaDSRGeneralException("Error retrieving complete project: " + ex.getMessage(), ex);
+		}
+		// should be ONLY ONE project from the caDSR
+		while (projectIter.hasNext()) {
+			completeProjects.add(projectIter.next());
+		}
+		if (completeProjects.size() == 1) {
+			proj = (Project) completeProjects.get(0);
+		} else if (completeProjects.size() == 0) {
+			throw new CaDSRGeneralException("No project found in caDSR");
+		} else {
+			throw new CaDSRGeneralException("More than one project (" + completeProjects.size()
+				+ ") found.  Prototype project is ambiguous");
+		}
+
+		return proj;
+	}
+
 }

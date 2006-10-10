@@ -1,7 +1,10 @@
 package gov.nih.nci.cagrid.cadsr.portal.discovery;
 
+import gov.nih.nci.cadsr.domain.Context;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
+import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
+import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.cadsr.portal.PackageSelectedListener;
 import gov.nih.nci.cagrid.cadsr.portal.ProjectSelectedListener;
@@ -263,12 +266,22 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 		Project proj = getCaDSRPanel().getSelectedProject();
 		if (proj != null) {
-			// TODO: need to get Context
+			//get the Context
+			String context = "caBIG";
+			try {
+				CaDSRServiceI cadsrService = new CaDSRServiceClient(getCaDSRURL());
+				Context ctx = cadsrService.findContextForProject(proj);
+				context = ctx.getName();
+			} catch (Exception e) {
+				// just use the default, and don't bother the user.
+				e.printStackTrace();
+			}
 			String version = proj.getVersion();
 			if (version.indexOf(".") < 0) {
 				version += ".0";
 			}
-			getNsTextField().setText("gme://" + proj.getShortName() + ".caBIG/" + version + "/" + pkg.getName());
+			getNsTextField().setText(
+				"gme://" + proj.getShortName() + "." + context + "/" + version + "/" + pkg.getName());
 		} else {
 			getNsTextField().setText("unavailable");
 		}
