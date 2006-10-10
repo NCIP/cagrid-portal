@@ -8,13 +8,13 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.apache.axis.message.MessageElement;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.xml.sax.InputSource;
-
 /** 
  *  CQLObjectResultIterator
  *  Iterator over CQL Object Results
@@ -59,15 +59,17 @@ public class CQLObjectResultIterator implements Iterator {
 		}
 		MessageElement element = results[currentIndex].get_any()[0];
 		try {
-			String documentString = element.getAsString();
-			if (xmlOnly) {
+			StringWriter writer = new StringWriter();
+			Utils.serializeObject(element, element.getQName(), writer);
+			String documentString = writer.getBuffer().toString();
+	        if (xmlOnly) {
 				return documentString;
 			}
 			InputStream configStream = getConsumableInputStream();
 			if (configStream != null) {
 				return Utils.deserializeObject(new StringReader(documentString), objectClass, 
 					getConsumableInputStream());
-			} else {				
+			} else {
 				InputSource objectSource = new InputSource(new StringReader(documentString));
 				return ObjectDeserializer.deserialize(objectSource, objectClass);
 			}

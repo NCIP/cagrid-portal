@@ -558,6 +558,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			map.setClassName(classMdArray[i].getName());
 			map.setElementName(classMdArray[i].getName());
 			map.setSelected(true);
+			map.setTargetable(true);
 			mappings[i] = map;
 		}
 		return mappings;

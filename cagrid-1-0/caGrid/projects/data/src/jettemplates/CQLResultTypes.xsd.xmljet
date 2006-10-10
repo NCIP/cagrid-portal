@@ -45,11 +45,15 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 					ClassMapping[] packClasses = pack.getCadsrClass();
 					if (packClasses != null) {
 						for (int j = 0; j < packClasses.length; j++) {
-							String elementName = packClasses[j].getElementName();
-							stringBuffer.append("\t\t<xs:element ref=\"ns0:" + elementName + "\" xmlns:ns0=\"" + psNS+ "\"/>\n");
+							if (packClasses[j].isTargetable() && packClasses[j].getElementName() != null) {
+								stringBuffer.append("\t\t<xs:element ref=\"ns0:");
+								stringBuffer.append(packClasses[j].getElementName());
+								stringBuffer.append("\" xmlns:ns0=\"");
+								stringBuffer.append(psNS);
+								stringBuffer.append("\"/>\n");
+							}
 						}
 					}
-
 				}
 			}
 		}%> 

@@ -94,6 +94,20 @@ public class ClassElementSerializationTable extends JTable {
 	}
 	
 	
+	public boolean isTargetable(String packName, String className) {
+		// find the row needed
+		int row = 0;
+		while (row < getRowCount()) {
+			if (packName.equals(getValueAt(row, 0)) && className.equals(getValueAt(row, 1))) {
+				JCheckBox check = (JCheckBox) getValueAt(row, 6);
+				return check.isSelected();
+			}
+			row++;
+		}
+		return false;
+	}
+	
+	
 	public void addClassInformatonChangeListener(ClassInformatonChangeListener l) {
 		classInformationChangeListeners.add(l);
 	}

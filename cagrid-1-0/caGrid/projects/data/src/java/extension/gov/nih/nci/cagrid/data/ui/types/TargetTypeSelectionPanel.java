@@ -23,9 +23,13 @@ import gov.nih.nci.cagrid.data.ui.browser.ClassBrowserPanel;
 import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionEvent;
 import gov.nih.nci.cagrid.data.ui.browser.ClassSelectionListener;
 import gov.nih.nci.cagrid.data.ui.browser.QueryProcessorClassConfigDialog;
+import gov.nih.nci.cagrid.data.ui.table.ClassChangeEvent;
+import gov.nih.nci.cagrid.data.ui.table.ClassElementSerializationTable;
+import gov.nih.nci.cagrid.data.ui.table.ClassInformatonChangeListener;
 import gov.nih.nci.cagrid.data.ui.tree.CheckTreeSelectionEvent;
 import gov.nih.nci.cagrid.data.ui.tree.CheckTreeSelectionListener;
 import gov.nih.nci.cagrid.data.ui.types.umltree.UMLClassTreeNode;
+import gov.nih.nci.cagrid.data.ui.types.umltree.UMLPackageTreeNode;
 import gov.nih.nci.cagrid.data.ui.types.umltree.UMLProjectTree;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
@@ -33,6 +37,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptio
 import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
@@ -80,8 +85,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	private CaDSRBrowserPanel domainBrowserPanel = null;
 	private UMLProjectTree umlTree = null;
 	private JScrollPane umlTreeScrollPane = null;
-	private DataServiceTypesTable typesTable = null;
-	private JScrollPane typesTableScrollPane = null;
+	private ClassElementSerializationTable classConfigTable = null;
+	private JScrollPane classConfigTableScrollPane = null;
 	private JPanel typeSelectionPanel = null;
 	private JButton addPackageButton = null;
 	private ClassBrowserPanel classBrowserPanel = null;
@@ -175,53 +180,93 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			umlTree.addCheckTreeSelectionListener(new CheckTreeSelectionListener() {
 				public void nodeChecked(CheckTreeSelectionEvent e) {
 					if (e.getNode() instanceof UMLClassTreeNode) {
-						
+						UMLClassTreeNode classNode = (UMLClassTreeNode) e.getNode();
+						// add the type to the configuration table
+						String packName = ((UMLPackageTreeNode) classNode.getParent()).getPackageName();
+						String className = classNode.getClassName();
+						String namespace = (String) packageToNamespace.get(packName);
+						NamespaceType nsType = CommonTools.getNamespaceType(getServiceInfo().getNamespaces(), namespace);
+						String elemName = (String) ((Map) packageToClassMap.get(packName)).get(className);
+						ClassMapping mapping = new ClassMapping();
+						mapping.setSelected(true);
+						mapping.setTargetable(true);
+						mapping.setClassName(className);
+						mapping.setElementName(elemName);
+						getClassConfigTable().addClass(packName, mapping, nsType);
+						storeCaDSRInfo();
 					}
 				}
 				
 				
 				public void nodeUnchecked(CheckTreeSelectionEvent e) {
 					if (e.getNode() instanceof UMLClassTreeNode) {
-						
+						UMLClassTreeNode classNode = (UMLClassTreeNode) e.getNode();
+						// add the type to the configuration table
+						String packName = ((UMLPackageTreeNode) classNode.getParent()).getPackageName();
+						String className = classNode.getClassName();
+						getClassConfigTable().removeRow(packName, className);
+						storeCaDSRInfo();
 					}
 				}
 			});
 			// if there's existing cadsr configuration, apply it
 			loadCadsrInformation();
-			/*
-			 // listener for check and uncheck operations on the tree
-			  typesTree.addCheckTreeSelectionListener(new CheckTreeSelectionListener() {
-			  public void nodeChecked(CheckTreeSelectionEvent e) {
-			  if (e.getNode() instanceof TypeTreeNode) {
-			  TypeTreeNode typeNode = (TypeTreeNode) e.getNode();
-			  DomainTreeNode nsNode = (DomainTreeNode) typeNode.getParent();
-			  getTypesTable().addType(nsNode.getNamespace(), typeNode.getType());
-			  updateSelectedClasses();
-			  }
-			  }
-			  
-			  
-			  public void nodeUnchecked(CheckTreeSelectionEvent e) {
-			  if (e.getNode() instanceof TypeTreeNode) {
-			  TypeTreeNode typeNode = (TypeTreeNode) e.getNode();
-			  getTypesTable().removeSchemaElementType(typeNode.getType());
-			  updateSelectedClasses();
-			  }
-			  }
-			  
-			  
-			  private void updateSelectedClasses() {
-			  try {
-			  storeCaDSRInfo();
-			  } catch (Exception ex) {
-			  ex.printStackTrace();
-			  ErrorDialog.showErrorDialog("Error storing selected classes: " + ex.getMessage());
-			  }
-			  }
-			  });
-			  */
 		}
 		return umlTree;
+	}
+	
+	
+	private ClassElementSerializationTable getClassConfigTable() {
+		if (classConfigTable == null) {
+			classConfigTable = new ClassElementSerializationTable();
+			classConfigTable.addClassInformatonChangeListener(new ClassInformatonChangeListener() {
+				public void elementNameChanged(ClassChangeEvent e) {
+					// get the namespace type for the class
+					NamespaceType nsType = CommonTools.getNamespaceType(
+						getServiceInfo().getNamespaces(), e.getNamespace());
+					// find the schema element type
+					SchemaElementType schemaType = NamespaceUtils.getElementByName(
+						nsType, e.getElementName());
+					if (schemaType == null) {
+						// WARNING: You've selected a non-existant element name!
+						ErrorDialog.showErrorDialog("No element named " + e.getElementName() + " in namespace " + e.getNamespace());
+					}
+					// get class to element mapping
+					Map classToElement = (Map) packageToClassMap.get(e.getPackageName());
+					// change the element name mapping
+					classToElement.put(e.getClassName(), e.getElementName());
+					// save the mapping info
+					storeCaDSRInfo();
+				}
+				
+				
+				public void serializationChanged(ClassChangeEvent e) {
+					// get the namespace type for the class
+					NamespaceType nsType = CommonTools.getNamespaceType(
+						getServiceInfo().getNamespaces(), e.getNamespace());
+					// find the schema element type
+					SchemaElementType schemaType = NamespaceUtils.getElementByName(
+						nsType, e.getElementName());
+					// very real posibility the user has changed the element name
+					// to something not in the schema
+					// TODO: can I prevent that???
+					if (schemaType != null) {
+						schemaType.setSerializer(e.getSerializer());
+						schemaType.setDeserializer(e.getDeserializer());
+						storeCaDSRInfo();
+					} else {
+						ErrorDialog.showErrorDialog("No element named " + e.getElementName() + " in namespace " + e.getNamespace(), 
+							"Serialization for class " + e.getPackageName() + "." + e.getClassName() + " was not changed!");
+					}
+				}
+				
+				
+				public void targetabilityChanged(ClassChangeEvent e) {
+					storeCaDSRInfo();
+				}
+			});
+		}
+		return classConfigTable;
 	}
 	
 	
@@ -242,28 +287,20 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 	}
 	
 	
-	private DataServiceTypesTable getTypesTable() {
-		if (typesTable == null) {
-			typesTable = new DataServiceTypesTable();
-		}
-		return typesTable;
-	}
-	
-	
 	/**
 	 * This method initializes jScrollPane	
 	 * 	
 	 * @return javax.swing.JScrollPane	
 	 */
-	private JScrollPane getTypesTableScrollPane() {
-		if (typesTableScrollPane == null) {
-			typesTableScrollPane = new JScrollPane();
-			typesTableScrollPane.setViewportView(getTypesTable());
-			typesTableScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
-				null, "Type Serialization", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
+	private JScrollPane getClassConfigTableScrollPane() {
+		if (classConfigTableScrollPane == null) {
+			classConfigTableScrollPane = new JScrollPane();
+			classConfigTableScrollPane.setViewportView(getClassConfigTable());
+			classConfigTableScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Class Mapping Configuration", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 		}
-		return typesTableScrollPane;
+		return classConfigTableScrollPane;
 	}
 	
 	
@@ -349,9 +386,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 							packageToNamespace.clear();
 							packageToClassMap.clear();
 							// clear out the types table
-							while (getTypesTable().getRowCount() != 0) {
-								getTypesTable().removeSchemaElementType(0);
-							}
+							getClassConfigTable().clearTable();
 							// clear out the types tree
 							getUmlTree().clearTree();
 						} else {
@@ -508,6 +543,8 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 				// find the node in the tree
 				UMLClassTreeNode node = getUmlTree().getUmlClassNode(packName, className);
 				boolean selected = node.isChecked();
+				boolean targetable = getClassConfigTable().isTargetable(packName, className);
+				mapping.setTargetable(targetable);
 				mapping.setSelected(selected);
 				classMappings.add(mapping);
 			}
@@ -564,7 +601,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 			configurationPanel = new JPanel();
 			configurationPanel.setLayout(new GridBagLayout());
 			configurationPanel.add(getConfigureButton(), gridBagConstraints4);
-			configurationPanel.add(getTypesTableScrollPane(), gridBagConstraints3);
+			configurationPanel.add(getClassConfigTableScrollPane(), gridBagConstraints3);
 			configurationPanel.add(getClassBrowserPanel(), gridBagConstraints2);
 			configurationPanel.add(getValidationConfigPanel(), gridBagConstraints13);
 		}
@@ -753,9 +790,7 @@ public class TargetTypeSelectionPanel extends ServiceModificationUIPanel {
 							// clear out the existing packages and classes
 							packageToNamespace.clear();
 							// clear out the types table
-							while (getTypesTable().getRowCount() != 0) {
-								getTypesTable().removeSchemaElementType(0);
-							}
+							getClassConfigTable().clearTable();
 							// clear out the types tree
 							getUmlTree().clearTree();
 						} else {
