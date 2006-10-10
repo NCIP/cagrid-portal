@@ -628,12 +628,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 								List portTypes = wsdlDoc.getRootElement().getChildren("portType",
 									Namespace.getNamespace(IntroduceConstants.WSDLAMESPACE));
-								
+
 								boolean foundMethod = false;
 								Element methodEl = null;
 								for (int portTypeI = 0; portTypeI < portTypes.size(); portTypeI++) {
 									Element portTypeEl = (Element) portTypes.get(portTypeI);
-									if (portTypeEl.getAttributeValue("name").equals(importService.getName())) {
+									if (portTypeEl.getAttributeValue("name").equals(
+										importService.getName() + "PortType")) {
 										List operationEls = portTypeEl.getChildren("operation", Namespace
 											.getNamespace(IntroduceConstants.WSDLAMESPACE));
 										for (int opI = 0; opI < operationEls.size(); opI++) {
@@ -647,8 +648,14 @@ public class MethodViewer extends GridPortalBaseFrame {
 										break;
 									}
 								}
-								//get the message types
-								
+
+								if (!foundMethod) {
+									JOptionPane.showMessageDialog(MethodViewer.this,
+										"Cannot find method in imported services wsdl document");
+									return;
+								}
+								// get the message types
+
 								Element input = methodEl.getChild("input", Namespace
 									.getNamespace(IntroduceConstants.WSDLAMESPACE));
 								String inputMessageType = input.getAttributeValue("message");
@@ -664,7 +671,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 								String outputMessageNamespace = currentImporWSDL.getRootElement().getNamespace(
 									outputMessageType.substring(0, colonIndex)).getURI();
 								String outputMessageName = outputMessageType.substring(colonIndex + 1);
-								
+
 								// so far we are valid.
 								// copy over the imports outputs and etc
 								method.setInputs(importMethod.getInputs());
@@ -679,7 +686,6 @@ public class MethodViewer extends GridPortalBaseFrame {
 								importInfo.setOutputMessage(new QName(outputMessageNamespace, outputMessageName));
 								method.setImportInformation(importInfo);
 								method.setIsImported(true);
-
 
 							} else {
 								// this method is to be imported from WSDL
