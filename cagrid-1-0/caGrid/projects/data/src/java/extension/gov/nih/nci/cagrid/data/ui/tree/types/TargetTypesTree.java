@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.ui.types;
+package gov.nih.nci.cagrid.data.ui.tree.types;
 
 import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTree;
 import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTreeNode;

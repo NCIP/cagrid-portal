@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.ui.types;
+package gov.nih.nci.cagrid.data.ui;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;

@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.data.ui.tree;
 
-import gov.nih.nci.cagrid.data.ui.types.DomainTreeNode;
-import gov.nih.nci.cagrid.data.ui.types.TypeTreeNode;
+import gov.nih.nci.cagrid.data.ui.tree.types.DomainTreeNode;
+import gov.nih.nci.cagrid.data.ui.tree.types.TypeTreeNode;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 

@@ -1,21 +1,25 @@
 package gov.nih.nci.cagrid.data.ui.table;
 
 import gov.nih.nci.cagrid.data.extension.ClassMapping;
-import gov.nih.nci.cagrid.data.ui.types.NamespaceUtils;
+import gov.nih.nci.cagrid.data.ui.NamespaceUtils;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -33,12 +37,19 @@ import javax.swing.table.TableCellEditor;
  */
 public class ClassElementSerializationTable extends JTable {
 	private List classInformationChangeListeners = null;
+	private SerializationPopupMenu popup = null;
 
 	public ClassElementSerializationTable() {
 		super(createTableModel());
 		setDefaultRenderer(Object.class, new ComponentCellRenderer());
 		setDefaultEditor(Component.class, new ComponentCellEditor());
+		DefaultListSelectionModel listSelection = new DefaultListSelectionModel();
+		listSelection.setSelectionMode(
+			ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		setSelectionModel(listSelection);
+		setRowSelectionAllowed(true);
 		this.classInformationChangeListeners = new LinkedList();
+		// add model listener to fire off editing events
 		getModel().addTableModelListener(new TableModelListener() {
 			public void tableChanged(TableModelEvent e) {
 				if (e.getType() == TableModelEvent.UPDATE) {
@@ -53,6 +64,24 @@ public class ClassElementSerializationTable extends JTable {
 						case 6:
 							fireTargetabilityChanged(e.getFirstRow());
 							break;
+					}
+				}
+			}
+		});
+		// add mouse listener to open popup menu for serialization
+		addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger() && getSelectedRows().length != 0) {
+					if (getSelectedRows().length != 0) {
+						getPopup().show(ClassElementSerializationTable.this, e.getX(), e.getY());
+					}
+				}
+			}
+			
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger() && getSelectedRows().length != 0) {
+					if (getSelectedRows().length != 0) {
+						getPopup().show(ClassElementSerializationTable.this, e.getX(), e.getY());
 					}
 				}
 			}
@@ -90,7 +119,7 @@ public class ClassElementSerializationTable extends JTable {
 	
 	
 	public boolean isCellEditable(int row, int column) {
-		return column >= 3;
+		return column == 3 || column == 6;
 	}
 	
 	
@@ -172,6 +201,14 @@ public class ClassElementSerializationTable extends JTable {
 		ClassChangeEvent event = new ClassChangeEvent(this, packName,
 			className, namespace, elemName, serializer, deserializer, targetable);
 		return event;
+	}
+	
+	
+	private SerializationPopupMenu getPopup() {
+		if (popup == null) {
+			popup = new SerializationPopupMenu(this);
+		}
+		return popup;
 	}
 	
 	

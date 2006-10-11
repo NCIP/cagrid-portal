@@ -1,11 +1,12 @@
-package gov.nih.nci.cagrid.data.ui.types;
+package gov.nih.nci.cagrid.data.ui.table;
 
 import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
@@ -25,12 +26,11 @@ public class SerializationPopupMenu extends JPopupMenu {
 	private JCheckBoxMenuItem sdkCheckItem = null;
 	private JCheckBoxMenuItem customCheckItem = null;
 	private ButtonGroup checkItemGroup = null;
-	
-	private DataServiceTypesTable typesTable = null;
-	private SchemaElementType[] schemaTypes = null;
+		
+	private ClassElementSerializationTable classConfigTable = null;
 
-	public SerializationPopupMenu(DataServiceTypesTable typesTable) {
-		this.typesTable = typesTable;
+	public SerializationPopupMenu(ClassElementSerializationTable typesTable) {
+		this.classConfigTable = typesTable;
 		add(getDefaultCheckItem());
 		add(getSdkCheckItem());
 		addSeparator();
@@ -38,49 +38,38 @@ public class SerializationPopupMenu extends JPopupMenu {
 	}
 	
 	
-	public void show(Component invoker, int x, int y, SchemaElementType[] selectedTypes) {
-		this.schemaTypes = selectedTypes;
+	public void show(Component invoker, int x, int y) {
 		// figgure out which item to check
-		if (!allSameSerialization(selectedTypes)) {
+		if (!allSameSerialization()) {
 			getButtonGroup().setSelected(getCustomCheckItem().getModel(), true);
-		} else if (isSdkSerialization(selectedTypes)) {
+		} else if (isSdkSerialization()) {
 			getButtonGroup().setSelected(getSdkCheckItem().getModel(), true);
 		}
 		super.show(invoker, x, y);
 	}
 	
 	
-	private boolean allSameSerialization(SchemaElementType[] types) {
-		String firstSer = types[0].getSerializer();
-		String firstDeser = types[0].getDeserializer();
-		for (int i = 1; i < types.length; i++) {
-			if (firstSer != null) {
-				if (!firstSer.equals(types[i].getSerializer())) {
-					return false;
-				}
-			} else {
-				if (types[i].getSerializer() != null) {
-					return false;
-				}
-			}
-			if (firstDeser != null) {
-				if (!firstDeser.equals(types[i].getDeserializer())) {
-					return false;
-				}
-			} else {
-				if (types[i].getDeserializer() != null) {
-					return false;
-				}
-			}
+	private boolean allSameSerialization() {
+		int[] selectedRows = classConfigTable.getSelectedRows();
+		Set serializers = new HashSet();
+		Set deserializers = new HashSet();
+		for (int i = 0; i < selectedRows.length; i++) {
+			String rowSerializer = (String) classConfigTable.getValueAt(selectedRows[i], 4);
+			String rowDeserializer = (String) classConfigTable.getValueAt(selectedRows[i], 5);
+			serializers.add(rowSerializer);
+			deserializers.add(rowDeserializer);
 		}
-		return true;
+		int serSize = serializers.size();
+		int desSize = deserializers.size();
+		return ((serSize == desSize) && (serSize == 0 || serSize == 1) && (desSize == 0 || desSize == 1));
 	}
 	
 	
-	private boolean isSdkSerialization(SchemaElementType[] types) {
-		for (int i = 0; i < types.length; i++) {
-			String ser = types[i].getSerializer();
-			String des = types[i].getDeserializer();
+	private boolean isSdkSerialization() {
+		int[] selectedRows = classConfigTable.getSelectedRows();
+		for (int i = 0; i < selectedRows.length; i++) {
+			String ser = (String) classConfigTable.getValueAt(selectedRows[i], 4);
+			String des = (String) classConfigTable.getValueAt(selectedRows[i], 5);
 			if (!(ser != null && des != null && 
 				ser.equals(DataServiceConstants.SDK_SERIALIZER) 
 				&& des.equals(DataServiceConstants.SDK_DESERIALIZER))) {
@@ -98,11 +87,10 @@ public class SerializationPopupMenu extends JPopupMenu {
 			defaultCheckItem.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						for (int i = 0; i < schemaTypes.length; i++) {
-							schemaTypes[i].setSerializer("");
-							schemaTypes[i].setDeserializer("");
-							schemaTypes[i].setClassName("");
-							typesTable.refreshSerialization(schemaTypes[i]);
+						int[] selectedRows = classConfigTable.getSelectedRows();
+						for (int i = 0; i < selectedRows.length; i++) {
+							classConfigTable.setValueAt("", selectedRows[i], 4);
+							classConfigTable.setValueAt("", selectedRows[i], 5);
 						}
 					}
 				}
@@ -119,11 +107,10 @@ public class SerializationPopupMenu extends JPopupMenu {
 			sdkCheckItem.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						for (int i = 0; i < schemaTypes.length; i++) {
-							schemaTypes[i].setSerializer(DataServiceConstants.SDK_SERIALIZER);
-							schemaTypes[i].setDeserializer(DataServiceConstants.SDK_DESERIALIZER);
-							schemaTypes[i].setClassName(schemaTypes[i].getType());
-							typesTable.refreshSerialization(schemaTypes[i]);
+						int[] selectedRows = classConfigTable.getSelectedRows();
+						for (int i = 0; i < selectedRows.length; i++) {
+							classConfigTable.setValueAt(DataServiceConstants.SDK_SERIALIZER, selectedRows[i], 4);
+							classConfigTable.setValueAt(DataServiceConstants.SDK_DESERIALIZER, selectedRows[i], 5);
 						}
 					}
 				}
@@ -140,9 +127,13 @@ public class SerializationPopupMenu extends JPopupMenu {
 			customCheckItem.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						new CustomSerializationDialog(schemaTypes);
-						for (int i = 0; i < schemaTypes.length; i++) {
-							typesTable.refreshSerialization(schemaTypes[i]);
+						CustomSerializationDialog dialog = new CustomSerializationDialog();
+						String serializer = dialog.getCustomSerializer();
+						String deserializer = dialog.getCustomDeserializer();
+						int[] selectedRows = classConfigTable.getSelectedRows();
+						for (int i = 0; i < selectedRows.length; i++) {
+							classConfigTable.setValueAt(serializer, selectedRows[i], 4);
+							classConfigTable.setValueAt(deserializer, selectedRows[i], 5);
 						}
 					}
 				}

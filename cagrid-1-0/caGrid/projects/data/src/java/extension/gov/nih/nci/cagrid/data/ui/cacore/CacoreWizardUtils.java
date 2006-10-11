@@ -5,9 +5,6 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
-import java.awt.Component;
-import java.awt.Container;
-
 /** 
  *  CacoreWizardConstants
  *  TODO:DOCUMENT ME
@@ -20,18 +17,7 @@ import java.awt.Container;
 public class CacoreWizardUtils {
 
 	public static final String LAST_DIRECTORY_KEY = "LastDirectory";
-	
-	
-	public static void setContainerEnabled(Container con, boolean enable) {
-		for (int i = 0; i < con.getComponentCount(); i++) {
-			Component comp = con.getComponent(i);
-			comp.setEnabled(enable);
-			if (comp instanceof Container) {
-				setContainerEnabled((Container) comp, enable);
-			}
-		}
-	}
-	
+		
 	
 	public static String getServiceBaseDir(ServiceInformation info) {
 		/* You'd think this would be right, but no...

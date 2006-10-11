@@ -1,7 +1,6 @@
-package gov.nih.nci.cagrid.data.ui.types;
+package gov.nih.nci.cagrid.data.ui.table;
 
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -24,7 +23,6 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id$ 
  */
 public class CustomSerializationDialog extends JDialog {
-	private SchemaElementType[] types;
 	
 	private JLabel serializerLabel = null;
 	private JLabel deserialierLabel = null;
@@ -36,10 +34,19 @@ public class CustomSerializationDialog extends JDialog {
 	private JPanel buttonPanel = null;
 	private JPanel mainPanel = null;
 
-	public CustomSerializationDialog(SchemaElementType[] types) {
+	public CustomSerializationDialog() {
 		super(PortalResourceManager.getInstance().getGridPortal(), "Custom Serialization", true);
-		this.types = types;
 		this.initialize();		
+	}
+	
+	
+	public String getCustomSerializer() {
+		return getSerialzierTextField().getText();
+	}
+	
+	
+	public String getCustomDeserializer() {
+		return getDeserializerTextField().getText();
 	}
 	
 	
@@ -116,13 +123,6 @@ public class CustomSerializationDialog extends JDialog {
 			okButton.setText("OK");
 			okButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					String serializer = getSerialzierTextField().getText();
-					String deserializer = getDeserializerTextField().getText();
-					for (int i = 0; i < types.length; i++) {
-						types[i].setSerializer(serializer);
-						types[i].setDeserializer(deserializer);
-						types[i].setClassName(types[i].getType());
-					}
 					dispose();
 				}
 			});
@@ -142,6 +142,8 @@ public class CustomSerializationDialog extends JDialog {
 			cancelButton.setText("Cancel");
 			cancelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					getSerialzierTextField().setText("");
+					getDeserializerTextField().setText("");
 					dispose();
 				}
 			});
@@ -237,4 +239,4 @@ public class CustomSerializationDialog extends JDialog {
 		}
 		return mainPanel;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+}

@@ -8,12 +8,13 @@ import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.extension.Data;
-import gov.nih.nci.cagrid.data.ui.types.NamespaceUtils;
+import gov.nih.nci.cagrid.data.ui.NamespaceUtils;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -152,8 +153,8 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			noDomainModelRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (noDomainModelRadioButton.isSelected()) {
-						CacoreWizardUtils.setContainerEnabled(getDmFilePanel(), false);
-						CacoreWizardUtils.setContainerEnabled(getCaDsrPanel(), false);
+						PortalUtils.setContainerEnabled(getDmFilePanel(), false);
+						PortalUtils.setContainerEnabled(getCaDsrPanel(), false);
 					}
 				}
 			});
@@ -174,8 +175,8 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			fromFileRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (fromFileRadioButton.isSelected()) {
-						CacoreWizardUtils.setContainerEnabled(getDmFilePanel(), true);
-						CacoreWizardUtils.setContainerEnabled(getCaDsrPanel(), false);
+						PortalUtils.setContainerEnabled(getDmFilePanel(), true);
+						PortalUtils.setContainerEnabled(getCaDsrPanel(), false);
 					}
 				}
 			});
@@ -196,8 +197,8 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			fromCaDsrRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (fromCaDsrRadioButton.isSelected()) {
-						CacoreWizardUtils.setContainerEnabled(getDmFilePanel(), false);
-						CacoreWizardUtils.setContainerEnabled(getCaDsrPanel(), true);
+						PortalUtils.setContainerEnabled(getDmFilePanel(), false);
+						PortalUtils.setContainerEnabled(getCaDsrPanel(), true);
 					}
 				}
 			});
