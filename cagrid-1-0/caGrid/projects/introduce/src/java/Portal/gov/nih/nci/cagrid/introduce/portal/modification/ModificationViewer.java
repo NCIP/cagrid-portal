@@ -53,7 +53,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -84,8 +83,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.namespace.QName;
 
@@ -565,20 +562,39 @@ public class ModificationViewer extends GridPortalComponent {
 		if (methodsTable == null) {
 			methodsTable = new MethodsTable(info.getServices().getService(0), this.methodsDirectory,
 				this.serviceProperties);
-		    methodsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			
+			methodsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
 				public void valueChanged(ListSelectionEvent e) {
-					System.out.println("CHANGED");
-			
+
+					int row = getMethodsTable().getSelectedRow();
+					if (row >= 0 && row < getMethodsTable().getRowCount()) {
+						MethodType type = getMethodsTable().getMethodType(getMethodsTable().getSelectedRow());
+						if (type.isIsImported()) {
+							getModifyButton().setEnabled(false);
+						} else {
+							getModifyButton().setEnabled(true);
+						}
+					}  else {
+						getModifyButton().setEnabled(false);
+					}
+					
+					
+
 				}
-			
+
 			});
 			methodsTable.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
 						dirty = true;
-						performMethodModify();
-					} 
+						int row = getMethodsTable().getSelectedRow();
+						if (row >= 0 && row < getMethodsTable().getRowCount()) {
+							MethodType type = getMethodsTable().getMethodType(getMethodsTable().getSelectedRow());
+							if (!type.isIsImported()) {
+								performMethodModify();
+							}
+						}
+					}
 				}
 			});
 		}
@@ -784,6 +800,7 @@ public class ModificationViewer extends GridPortalComponent {
 		if (modifyButton == null) {
 			modifyButton = new JButton(IntroduceLookAndFeel.getModifyIcon());
 			modifyButton.setText("Modify");
+			modifyButton.setEnabled(false);
 			modifyButton.setToolTipText("modify seleted operation");
 			modifyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
