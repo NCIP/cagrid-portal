@@ -1163,10 +1163,10 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	private JTabbedPane getMainTabbedPane() {
 		if (mainTabbedPane == null) {
 			mainTabbedPane = new JTabbedPane();
-			mainTabbedPane.setSize(new java.awt.Dimension(605,385));
 			mainTabbedPane.addTab("Domain Model", null, getDomainConfigPanel(), null);
 			mainTabbedPane.addTab("Query Processor", null, getProcessorConfigPanel(), null);
-			mainTabbedPane.addTab("Details", null, getDetailConfigPanel(), "Class to element mapping, validation");
+			mainTabbedPane.addTab("Details", null, getDetailConfigPanel(), 
+				"Class to element mapping, serialization, validation");
 		}
 		return mainTabbedPane;
 	}
