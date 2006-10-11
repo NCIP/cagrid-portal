@@ -54,6 +54,9 @@ public class PreferencesDialog extends JDialog {
 		this.setContentPane(getMainPanel());
 		this.setTitle("Preferences");
 
+		this.setSize(new java.awt.Dimension(650,400));
+		this.setPreferredSize(new java.awt.Dimension(650,400));
+		
 	}
 
 
