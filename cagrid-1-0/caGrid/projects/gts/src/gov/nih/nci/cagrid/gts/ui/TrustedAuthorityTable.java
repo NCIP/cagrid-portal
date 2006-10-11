@@ -20,8 +20,6 @@ public class TrustedAuthorityTable extends PortalBaseTable {
 
 	public final static String NAME = "Trust Authority Name";
 
-	public final static String TRUST_LEVEL = "Trust Level";
-
 	public final static String STATUS = "Status";
 
 	TrustedAuthoritiesWindow window;
@@ -35,10 +33,6 @@ public class TrustedAuthorityTable extends PortalBaseTable {
 		c.setPreferredWidth(0);
 		c.setResizable(false);
 
-		c = this.getColumn(NAME);
-		c.setMaxWidth(500);
-		c.setMinWidth(500);
-
 		c = this.getColumn(STATUS);
 		c.setMaxWidth(100);
 		c.setMinWidth(100);
@@ -51,7 +45,6 @@ public class TrustedAuthorityTable extends PortalBaseTable {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(TRUSTED_AUTHORITY);
 		model.addColumn(NAME);
-		model.addColumn(TRUST_LEVEL);
 		model.addColumn(STATUS);
 		return model;
 
@@ -61,7 +54,6 @@ public class TrustedAuthorityTable extends PortalBaseTable {
 		Vector v = new Vector();
 		v.add(ta);
 		v.add(ta.getName());
-		v.add(ta.getTrustLevel());
 		v.add(ta.getStatus().getValue());
 		addRow(v);
 	}

@@ -33,7 +33,7 @@
     <property name="test.src.dir" value="${test.dir}/src" />
     <property name="test.lib.dir" value="${test.dir}/lib" />
     <property name="test.log.dir" value="test/logs" />
-    <property name="test.jar.name" value="${jar.prefix}-${service.name}-${service.version}-tests.jar" />
+    <property name="test.jar.name" value="${jar.prefix}-tests.jar" />
     <property name="ext.test.lib.dir" value="ext/test/lib" />
     <property name="junit.results.dir" value="${test.log.dir}/junit" />
     <property name="force.config.replace" value="false" />
