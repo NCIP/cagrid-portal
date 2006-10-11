@@ -111,6 +111,7 @@ public class PackageSchemasTable extends JTable {
 		// resolve the schemas manually
 		boolean resolved = SchemaResolutionDialog.resolveSchemas(info, pack);
 		if (resolved) {
+			setValueAt(pack.getMappedNamespace(), dataRow, 1);
 			setValueAt(STATUS_SCHEMA_FOUND, dataRow, 2);
 		}
 	}

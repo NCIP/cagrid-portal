@@ -19,7 +19,6 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -199,59 +198,16 @@ public class SchemaResolutionDialog extends JDialog {
 			ErrorDialog.showErrorDialog("Error getting types from discovery component");
 			return false;
 		}
-		// see if the namespaces have the mapped namespace of the cadsrPackage
-		boolean mappedNsFound = false;
-		for (int i = 0; i < namespaces.length; i++) {
-			if (namespaces[i].getNamespace().equals(cadsrPackage.getMappedNamespace())) {
-				mappedNsFound = true;
-				break;
-			}
-		}
-		if (!mappedNsFound) {
-			// tell user, ask which one should be mapped
-			String[] message = {
-				"The package's default namespace of",
-				cadsrPackage.getMappedNamespace(),
-				"could not be found in the selected schema",
-				"or any of its imports.\n",
-				"Please select a namespace to map",
-				"the package to"
-			};
-			String[] namespaceChoices = new String[namespaces.length];
+		if (namespaces.length != 0) {
+			// user may have mapped the package to a different namespace...
+			cadsrPackage.setMappedNamespace(namespaces[0].getNamespace());
+			// add the namespace types to the service
 			for (int i = 0; i < namespaces.length; i++) {
-				namespaceChoices[i] = namespaces[i].getNamespace();
+				CommonTools.addNamespace(serviceInfo.getServiceDescriptor(), namespaces[i]);
 			}
-			String choice = (String) JOptionPane.showInputDialog(
-				this, message, "Namespace Not Found", JOptionPane.QUESTION_MESSAGE, 
-				null, namespaceChoices, namespaceChoices[0]);
-			if (choice != null) {
-				// fix up the mapping
-				cadsrPackage.setMappedNamespace(choice);
-			} else {
-				// if they don't pick a mapping, allow them to try again
-				// with no extra garbage in their service dir
-				deleteSchemasForNamespaces(namespaces);
-				return false;
-			}
+			// successful schema resolution
+			return true;
 		}
-		// add the namespace types to the service
-		for (int i = 0; i < namespaces.length; i++) {
-			CommonTools.addNamespace(serviceInfo.getServiceDescriptor(), namespaces[i]);
-		}
-		// successful schema resolution
-		return true;
-	}
-	
-	
-	private void deleteSchemasForNamespaces(NamespaceType[] namespaces) {
-		String schemaDir = CacoreWizardUtils.getServiceBaseDir(serviceInfo) 
-			+ File.separator + "schema"  + File.separator
-			+ serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-		for (int i = 0; i < namespaces.length; i++) {
-			File schemaFile = new File(schemaDir + File.separator + namespaces[i].getLocation());
-			if (schemaFile.exists()) {
-				schemaFile.delete();
-			}
-		}
+		return false;
 	}
 }
