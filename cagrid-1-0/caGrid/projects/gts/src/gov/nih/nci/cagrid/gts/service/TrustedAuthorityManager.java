@@ -135,7 +135,6 @@ public class TrustedAuthorityManager {
 			while (rs.next()) {
 				String name = rs.getString(TrustedAuthorityTable.TABLE_NAME + "." + TrustedAuthorityTable.NAME);
 				if (!authorities.containsKey(name)) {
-
 					TrustedAuthority ta = new TrustedAuthority();
 					ta.setName(name);
 					ta.setTrustLevel(getTrustLevels(name));
@@ -551,7 +550,7 @@ public class TrustedAuthorityManager {
 				if (!lookup.doesTrustLevelExist(ta.getTrustLevel()[i])) {
 					IllegalTrustedAuthorityFault fault = new IllegalTrustedAuthorityFault();
 					fault.setFaultString("The Trusted Authority " + ta.getName()
-						+ " could not be added, the trust level " + ta.getTrustLevel() + " does not exist.");
+						+ " could not be added, the trust level " + ta.getTrustLevel()[i] + " does not exist.");
 					throw fault;
 				}
 			}
@@ -646,7 +645,7 @@ public class TrustedAuthorityManager {
 				+ " where " + TrustedAuthorityTrustLevelsTable.NAME + "= ?");
 			s.setString(1, name);
 			ResultSet rs = s.executeQuery();
-			if (rs.next()) {
+			while (rs.next()) {
 				list.add(rs.getString(TrustedAuthorityTrustLevelsTable.TRUST_LEVEL));
 			}
 			rs.close();
