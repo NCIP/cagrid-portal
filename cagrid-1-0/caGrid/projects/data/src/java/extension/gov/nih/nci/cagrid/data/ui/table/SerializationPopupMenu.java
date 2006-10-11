@@ -3,10 +3,10 @@ package gov.nih.nci.cagrid.data.ui.table;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
@@ -22,11 +22,11 @@ import javax.swing.JPopupMenu;
  * @version $Id$ 
  */
 public class SerializationPopupMenu extends JPopupMenu {
+	private boolean dontShowDialog;
 	private JCheckBoxMenuItem defaultCheckItem = null;
 	private JCheckBoxMenuItem sdkCheckItem = null;
 	private JCheckBoxMenuItem customCheckItem = null;
-	private ButtonGroup checkItemGroup = null;
-		
+	private ButtonGroup checkItemGroup = null;	
 	private ClassElementSerializationTable classConfigTable = null;
 
 	public SerializationPopupMenu(ClassElementSerializationTable typesTable) {
@@ -40,28 +40,16 @@ public class SerializationPopupMenu extends JPopupMenu {
 	
 	public void show(Component invoker, int x, int y) {
 		// figgure out which item to check
-		if (!allSameSerialization()) {
-			getButtonGroup().setSelected(getCustomCheckItem().getModel(), true);
+		if (isDefaultSerialization()) {
+			getButtonGroup().setSelected(getDefaultCheckItem().getModel(), true);
 		} else if (isSdkSerialization()) {
 			getButtonGroup().setSelected(getSdkCheckItem().getModel(), true);
+		} else {
+			dontShowDialog = true;
+			getButtonGroup().setSelected(getCustomCheckItem().getModel(), true);
+			dontShowDialog = false;
 		}
 		super.show(invoker, x, y);
-	}
-	
-	
-	private boolean allSameSerialization() {
-		int[] selectedRows = classConfigTable.getSelectedRows();
-		Set serializers = new HashSet();
-		Set deserializers = new HashSet();
-		for (int i = 0; i < selectedRows.length; i++) {
-			String rowSerializer = (String) classConfigTable.getValueAt(selectedRows[i], 4);
-			String rowDeserializer = (String) classConfigTable.getValueAt(selectedRows[i], 5);
-			serializers.add(rowSerializer);
-			deserializers.add(rowDeserializer);
-		}
-		int serSize = serializers.size();
-		int desSize = deserializers.size();
-		return ((serSize == desSize) && (serSize == 0 || serSize == 1) && (desSize == 0 || desSize == 1));
 	}
 	
 	
@@ -73,6 +61,20 @@ public class SerializationPopupMenu extends JPopupMenu {
 			if (!(ser != null && des != null && 
 				ser.equals(DataServiceConstants.SDK_SERIALIZER) 
 				&& des.equals(DataServiceConstants.SDK_DESERIALIZER))) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	
+	private boolean isDefaultSerialization() {
+		int[] selectedRows = classConfigTable.getSelectedRows();
+		for (int i = 0; i < selectedRows.length; i++) {
+			String ser = (String) classConfigTable.getValueAt(selectedRows[i], 4);
+			String des = (String) classConfigTable.getValueAt(selectedRows[i], 5);
+			if ((ser != null && ser.length() != 0) 
+				|| (des != null && des.length() != 0)) {
 				return false;
 			}
 		}
@@ -124,22 +126,34 @@ public class SerializationPopupMenu extends JPopupMenu {
 		if (customCheckItem == null) {
 			customCheckItem = new JCheckBoxMenuItem();
 			customCheckItem.setText("Custom Serialization");
+			customCheckItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (customCheckItem.isSelected()) {
+						showCustomSerializationConfig();
+					}
+				}
+			});
 			customCheckItem.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						CustomSerializationDialog dialog = new CustomSerializationDialog();
-						String serializer = dialog.getCustomSerializer();
-						String deserializer = dialog.getCustomDeserializer();
-						int[] selectedRows = classConfigTable.getSelectedRows();
-						for (int i = 0; i < selectedRows.length; i++) {
-							classConfigTable.setValueAt(serializer, selectedRows[i], 4);
-							classConfigTable.setValueAt(deserializer, selectedRows[i], 5);
-						}
+					if (e.getStateChange() == ItemEvent.SELECTED && !dontShowDialog) {
+						showCustomSerializationConfig();
 					}
 				}
 			});
 		}
 		return customCheckItem;
+	}
+	
+	
+	private void showCustomSerializationConfig() {
+		CustomSerializationDialog dialog = new CustomSerializationDialog();
+		String serializer = dialog.getCustomSerializer();
+		String deserializer = dialog.getCustomDeserializer();
+		int[] selectedRows = classConfigTable.getSelectedRows();
+		for (int i = 0; i < selectedRows.length; i++) {
+			classConfigTable.setValueAt(serializer, selectedRows[i], 4);
+			classConfigTable.setValueAt(deserializer, selectedRows[i], 5);
+		}
 	}
 	
 	
