@@ -65,6 +65,7 @@ public class ServiceWizard extends JDialog {
 		this.panelSequence = new ArrayList();
 		this.currentPanelIndex = 0;
 		this.baseTitle = baseTitle;
+		this.wizardDone = false;
 		this.stepFont = new Font("Dialog", java.awt.Font.ITALIC, 10);
 		initialize();
 	}
@@ -77,7 +78,7 @@ public class ServiceWizard extends JDialog {
 		panel.addButtonEnableListener(new ButtonEnableListener() {
 			public void setNextEnabled(boolean enable) {
 				// only allow changing this if we're NOT done with the wizard
-				if (!getNextPanelButton().getText().equals(DONE_BUTTON_TEXT)) {
+				if (!wizardDone) {
 					getNextPanelButton().setEnabled(enable);
 				}
 			}
@@ -89,18 +90,7 @@ public class ServiceWizard extends JDialog {
 			
 			
 			public void setWizardDone(boolean done) {
-				if (done) {
-					// change the text of the next button
-					getNextPanelButton().setText(DONE_BUTTON_TEXT);
-					getNextPanelButton().setEnabled(true);
-					// remove 'next' action listener from next button
-					getNextPanelButton().removeActionListener(getNextButtonActionListener());
-					getNextPanelButton().addActionListener(getDoneButtonActionListener());
-				} else {
-					getNextPanelButton().removeActionListener(getDoneButtonActionListener());
-					getNextPanelButton().addActionListener(getNextButtonActionListener());
-				}
-				wizardDone = done;
+				ServiceWizard.this.setWizardDone(done);
 			}
 		});
 		panelSequence.add(panel);
@@ -141,6 +131,23 @@ public class ServiceWizard extends JDialog {
 		initPanelLayout();
 		loadWizardPanel((AbstractWizardPanel) panelSequence.get(0));
 		setVisible(true);
+	}
+	
+	
+	private void setWizardDone(boolean done) {
+		if (done && !wizardDone) {
+			// change the text of the next button
+			getNextPanelButton().setText(DONE_BUTTON_TEXT);
+			getNextPanelButton().setEnabled(true);
+			// remove 'next' action listener from next button
+			getNextPanelButton().removeActionListener(getNextButtonActionListener());
+			// add the 'done' action listener
+			getNextPanelButton().addActionListener(getDoneButtonActionListener());
+		} else if (!done && wizardDone) {
+			getNextPanelButton().removeActionListener(getDoneButtonActionListener());
+			getNextPanelButton().addActionListener(getNextButtonActionListener());
+		}
+		wizardDone = done;
 	}
 	
 	
@@ -282,6 +289,8 @@ public class ServiceWizard extends JDialog {
 			previousPanelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (currentPanelIndex != 0) {
+						// wizard is clearly not done if previous is hit...
+						setWizardDone(false);
 						currentPanelIndex--;
 						AbstractWizardPanel prevPanel = (AbstractWizardPanel) panelSequence.get(currentPanelIndex);
 						loadWizardPanel(prevPanel);
@@ -404,10 +413,7 @@ public class ServiceWizard extends JDialog {
 	}
 	
 	
-	private void loadWizardPanel(AbstractWizardPanel panel) {
-		// have the panel refresh itself
-		panel.update();
-		
+	private void loadWizardPanel(AbstractWizardPanel panel) {		
 		// set the current step
 		getStepCurrentLabel().setText(String.valueOf(currentPanelIndex + 1));
 		getStepTotalLabel().setText(String.valueOf(panelSequence.size()));
@@ -436,6 +442,9 @@ public class ServiceWizard extends JDialog {
 		
 		// set the title of the dialog
 		setTitle(baseTitle + ": " + panel.getPanelTitle());
+		
+		// have the panel refresh itself
+		panel.update();
 		
 		// load the panel into the wizard panel
 		((CardLayout) getWizardPanel().getLayout())
