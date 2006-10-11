@@ -10,6 +10,8 @@ import gov.nih.nci.cagrid.data.extension.CQLProcessorConfigProperty;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
+import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
@@ -70,12 +72,32 @@ public class QueryProcessorParametersTable extends JTable {
 			Class selected = getQueryProcessorClass();
 			// get an instance of the class
 			CQLQueryProcessor proc = (CQLQueryProcessor) selected.newInstance();
-			Properties props = proc.getRequiredParameters();
-			Enumeration propKeys = props.keys();
+			// get the default parameters
+			Properties defaultProps = proc.getRequiredParameters();
+			// get any configured parameters
+			Properties configuredProps = new Properties();
+			ServiceProperties serviceProps = serviceInfo.getServiceProperties();
+			if (serviceProps != null) {
+				for (int i = 0; serviceProps.getProperty() != null && i < serviceProps.getProperty().length; i++) {
+					ServicePropertiesProperty property = serviceProps.getProperty(i);
+					String rawKey = property.getKey();
+					if (rawKey.startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
+						String key = rawKey.substring(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.length());
+						configuredProps.setProperty(key, property.getValue());
+					}
+				}
+			}
+			Enumeration propKeys = defaultProps.keys();
 			while (propKeys.hasMoreElements()) {
 				String key = (String) propKeys.nextElement();
-				String val = props.getProperty(key);
-				((DefaultTableModel) getModel()).addRow(new String[] {key, val, val});
+				String def = defaultProps.getProperty(key);
+				String val = null;
+				if (configuredProps.containsKey(key)) {
+					val = configuredProps.getProperty(key);
+				} else {
+					val = defaultProps.getProperty(key);
+				}
+				((DefaultTableModel) getModel()).addRow(new String[] {key, def, val});
 			}
 			storeProperties();
 		} catch (Exception ex) {
