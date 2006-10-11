@@ -34,7 +34,8 @@ import org.projectmobius.common.XMLUtilities;
  * Validates CQL Results for a particular service. This contacts the service to
  * parse its WSDL, extracting the CQL Results schema, and rewriting it using the
  * schema information the service publishes about the allowable types the
- * service is exposing.
+ * service is exposing. Not only the structure of the result set is validated,
+ * but the actual object instances are too.
  * 
  * @author oster
  */
