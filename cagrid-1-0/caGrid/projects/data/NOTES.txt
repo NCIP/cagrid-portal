@@ -36,12 +36,12 @@ TODO:
     * Need to describe the relationship between the Map returned by getRequiredParameters, and that passed in to initialize
 27[D]: Have DS extension add type mappings for SemanticMetadata / DomainModel stuff to the server-config.wsdd and client-config.wsdd of created services
 28[D]: Provide configuration to turn on / off validation for both CQL syntax and domain model conformance.
-29[ ]: Add available types to wsdl under some well defined name as an xsd:choice of available types
+29[D]: Add available types to wsdl under some well defined name as an xsd:choice of available types
 30[I]: Determine if data services should expose additional metadata describing (for example) CQL version, support for ws-enum / bdt / identifier resolution, backend data source info, etc.
-31[ ]: caCORE creation wizard should use introduce preferences bucket
+31[ ]: caCORE creation wizard (actually all of DS extension) should use introduce preferences bucket
 32[I]: create CQLResult schema validator tool (using templated RestrictedCQLResultSet.xsd to poll allowable types from service)
-33[ ]: allow data service tab to configure "allowable as target" option for exposed classes (domain model needs to edited with it, and result type xsd generation needs to use it)  
-34[ ]: schema resolution dialog doesn't look at what tab you are on (seems to always use cadsr)
+33[D]: allow data service tab to configure "allowable as target" option for exposed classes (domain model needs to edited with it, and result type xsd generation needs to use it)  
+34[I]: schema resolution dialog doesn't look at what tab you are on (seems to always use cadsr)
 
 I = In Progress
 D = Done
