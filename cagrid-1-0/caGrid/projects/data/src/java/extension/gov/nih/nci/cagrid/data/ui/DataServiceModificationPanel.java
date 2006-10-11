@@ -1228,7 +1228,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	
 	private QueryProcessorParametersTable getQpParamsTable() {
 		if (qpParamsTable == null) {
-			qpParamsTable = new QueryProcessorParametersTable(getExtensionTypeExtensionData(), getServiceInfo());
+			qpParamsTable = new QueryProcessorParametersTable(
+				getExtensionTypeExtensionData(), getServiceInfo());
 		}
 		return qpParamsTable;
 	}
