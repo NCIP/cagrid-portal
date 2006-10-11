@@ -153,7 +153,6 @@ public class ErrorDialog extends JDialog {
 			errorList.addListSelectionListener(new ListSelectionListener() {
 				public void valueChanged(ListSelectionEvent e) {
 					int index = errorList.getSelectedIndex();
-					System.out.println("SELECTION: " + index);
 					if (index != -1) {
 						ErrorContainer cont = (ErrorContainer) getErrorList().getSelectedValue();
 						getDetailTextArea().setText(cont.getDetail());
