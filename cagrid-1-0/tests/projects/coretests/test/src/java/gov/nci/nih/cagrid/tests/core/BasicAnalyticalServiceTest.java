@@ -40,18 +40,18 @@ public class BasicAnalyticalServiceTest
 		super.init("BasicAnalyticalService");
 
 		Vector steps = new Vector();
-		steps.add(createServiceStep);
-		steps.add(new GlobusCreateStep(globus));
-		steps.add(new GlobusDeployServiceStep(globus, createServiceStep.getServiceDir()));
-		steps.add(new GlobusStartStep(globus, port));
+		steps.add(getCreateServiceStep());
+		steps.add(new GlobusCreateStep(getGlobus()));
+		steps.add(new GlobusDeployServiceStep(getGlobus(), getCreateServiceStep().getServiceDir()));
+		steps.add(new GlobusStartStep(getGlobus(), getPort()));
 		try {
 			addInvokeSteps(steps);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("could not add invoke steps", e);
 		}
 		//steps.add(new CheckServiceMetadataStep(endpoint, metadataFile));
-		steps.add(new GlobusStopStep(globus, port));
-		steps.add(new GlobusCleanupStep(globus));
+		steps.add(new GlobusStopStep(getGlobus(), getPort()));
+		steps.add(new GlobusCleanupStep(getGlobus()));
 		return steps;
 	}
 

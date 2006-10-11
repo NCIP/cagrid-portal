@@ -51,24 +51,24 @@ public class IndexServiceTest
 		));
 
 		Vector steps = new Vector();
-		steps.add(createServiceStep);
+		steps.add(getCreateServiceStep());
 		try {
-			steps.add(new ServiceAdvertiseConfigStep(port, serviceDir));
+			steps.add(new ServiceAdvertiseConfigStep(getPort(), getServiceDir()));
 		} catch (MalformedURIException e) {
 			throw new IllegalArgumentException("could not add advertise steps", e);
 		}
-		steps.add(new GlobusCreateStep(globus));
-		steps.add(new GlobusDeployServiceStep(globus, createServiceStep.getServiceDir()));
-		steps.add(new GlobusDeployServiceStep(globus, indexServiceDir, "deployIndexGlobus"));		
-		steps.add(new GlobusStartStep(globus, port));
+		steps.add(new GlobusCreateStep(getGlobus()));
+		steps.add(new GlobusDeployServiceStep(getGlobus(), getCreateServiceStep().getServiceDir()));
+		steps.add(new GlobusDeployServiceStep(getGlobus(), indexServiceDir, "deployIndexGlobus"));		
+		steps.add(new GlobusStartStep(getGlobus(), getPort()));
 		steps.add(new SleepStep(6000));
 		try {
-			steps.add(new ServiceDiscoveryStep(port, super.endpoint, super.metadataFile));
+			steps.add(new ServiceDiscoveryStep(getPort(), getEndpoint(), getMetadataFile()));
 		} catch (Exception e) {
 			throw new IllegalArgumentException("could not add discovery step", e);
 		}
-		steps.add(new GlobusStopStep(globus, port));
-		steps.add(new GlobusCleanupStep(globus));
+		steps.add(new GlobusStopStep(getGlobus(), getPort()));
+		steps.add(new GlobusCleanupStep(getGlobus()));
 		return steps;
 	}
 

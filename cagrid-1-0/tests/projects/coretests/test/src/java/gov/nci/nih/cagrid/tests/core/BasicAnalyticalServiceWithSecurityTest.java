@@ -69,22 +69,22 @@ public class BasicAnalyticalServiceWithSecurityTest
 		);
 
 		Vector steps = new Vector();
-		steps.add(createServiceStep);
-		steps.add(new GlobusCreateStep(globus));
-		steps.add(new GTSSyncOnceStep(globus));
-		steps.add(new GlobusDeployServiceStep(globus, dorianDir));
-		steps.add(new GlobusDeployServiceStep(globus, new File("..", "echo")));
-		steps.add(new GlobusDeployServiceStep(globus, createServiceStep.getServiceDir()));
-		steps.add(new GlobusStartStep(globus, port));
-		steps.add(new DorianAuthenticateStep("dorian", "password", port));
-		steps.add(new DorianAddTrustedCAStep(caFile, port));
+		steps.add(getCreateServiceStep());
+		steps.add(new GlobusCreateStep(getGlobus()));
+		steps.add(new GTSSyncOnceStep(getGlobus()));
+		steps.add(new GlobusDeployServiceStep(getGlobus(), dorianDir));
+		steps.add(new GlobusDeployServiceStep(getGlobus(), new File("..", "echo")));
+		steps.add(new GlobusDeployServiceStep(getGlobus(), getCreateServiceStep().getServiceDir()));
+		steps.add(new GlobusStartStep(getGlobus(), getPort()));
+		steps.add(new DorianAuthenticateStep("dorian", "password", getPort()));
+		steps.add(new DorianAddTrustedCAStep(caFile, getPort()));
 		try {
 			addInvokeSteps(steps);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("could not add invoke steps", e);
 		}
-		steps.add(new GlobusStopStep(globus, port));
-		steps.add(new GlobusCleanupStep(globus));
+		steps.add(new GlobusStopStep(getGlobus(), getPort()));
+		steps.add(new GlobusCleanupStep(getGlobus()));
 		steps.add(new DorianCleanupStep());
 		steps.add(new DorianDestroyDefaultProxyStep());
 		return steps;

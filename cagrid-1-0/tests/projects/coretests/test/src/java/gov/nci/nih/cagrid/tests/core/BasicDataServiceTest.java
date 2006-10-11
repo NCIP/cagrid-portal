@@ -29,9 +29,9 @@ public class BasicDataServiceTest
 		super.init("BasicDataService");
 
 		Vector steps = new Vector();
-		steps.add(createServiceStep);
-		steps.add(new GlobusCreateStep(globus));
-		steps.add(new GlobusDeployServiceStep(globus, createServiceStep.getServiceDir()));
+		steps.add(getCreateServiceStep());
+		steps.add(new GlobusCreateStep(getGlobus()));
+		steps.add(new GlobusDeployServiceStep(getGlobus(), getCreateServiceStep().getServiceDir()));
 		
 		// add gme/cadsr deploy/configure steps
 		//steps.add(new GlobusDeployServiceStep(globus, gmeServiceDir));
@@ -39,15 +39,15 @@ public class BasicDataServiceTest
 		//steps.add(new GlobusDeployServiceStep(globus, cadsrServiceDir));
 		//steps.add(new CaDSRServiceConfigStep(globus));
 
-		steps.add(new GlobusStartStep(globus, port));
+		steps.add(new GlobusStartStep(getGlobus(), getPort()));
 		try {
 			addInvokeSteps(steps);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("could not add invoke steps", e);
 		}
 		//steps.add(new CheckServiceMetadataStep(endpoint, metadataFile));
-		steps.add(new GlobusStopStep(globus, port));
-		steps.add(new GlobusCleanupStep(globus));
+		steps.add(new GlobusStopStep(getGlobus(), getPort()));
+		steps.add(new GlobusCleanupStep(getGlobus()));
 		return steps;
 	}
 

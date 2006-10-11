@@ -58,7 +58,7 @@ public class ServiceInvokeStep
 		this.url = url;
 		
 		// set className
-		File serviceXmlDescriptor = new File(testDir, IntroduceServiceInfo.INTRODUCE_SERVICEXML_FILENAME);
+		File serviceXmlDescriptor = new File(serviceDir, IntroduceServiceInfo.INTRODUCE_SERVICEXML_FILENAME);
 		IntroduceServiceInfo serviceInfo = new IntroduceServiceInfo(serviceXmlDescriptor);
 		String serviceName = serviceInfo.getServiceName();
 		String packageName = serviceInfo.getPackageName();

@@ -69,10 +69,11 @@ public class IntroduceServiceInfo
 	{
 		// create class loader and load class
 		File[] jars = getServiceJars(serviceDir);
-		URL[] urls = new URL[jars.length];
+		URL[] urls = new URL[jars.length + 1];
 		for (int i = 0; i < jars.length; i++) {
 			urls[i] = jars[i].toURL();
 		}
+		urls[urls.length-1] = new File(serviceDir, "src").toURL();
 		ClassLoader cloader = new URLClassLoader(urls);
 		return cloader.loadClass(className);
 	}
