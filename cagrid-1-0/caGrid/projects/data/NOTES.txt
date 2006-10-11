@@ -41,6 +41,7 @@ TODO:
 31[ ]: caCORE creation wizard should use introduce preferences bucket
 32[I]: create CQLResult schema validator tool (using templated RestrictedCQLResultSet.xsd to poll allowable types from service)
 33[ ]: allow data service tab to configure "allowable as target" option for exposed classes (domain model needs to edited with it, and result type xsd generation needs to use it)  
+34[ ]: schema resolution dialog doesn't look at what tab you are on (seems to always use cadsr)
 
 I = In Progress
 D = Done
