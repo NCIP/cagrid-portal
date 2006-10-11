@@ -1057,27 +1057,6 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 					assertEquals(num, tas4.length);
 				}
 
-				/*
-				 * // Filter by ALL TrustedAuthorityFilter tf7 = new
-				 * TrustedAuthorityFilter(); tf7.setName(name);
-				 * TrustedAuthority[] tas7 = trust.findTrustAuthorities(tf7);
-				 * assertEquals(1, tas7.length); assertEquals(auths[i],
-				 * tas7[0]); tf7.setCertificateDN(dn); tas7 =
-				 * trust.findTrustAuthorities(tf7); assertEquals(1,
-				 * tas7.length); assertEquals(auths[i], tas7[0]);
-				 * tf7.setTrustLevel(LEVEL_ONE); tas7 =
-				 * trust.findTrustAuthorities(tf7); assertEquals(1,
-				 * tas7.length); assertEquals(auths[i], tas7[0]);
-				 * tf7.setStatus(Status.Trusted); tas7 =
-				 * trust.findTrustAuthorities(tf7); assertEquals(1,
-				 * tas7.length); assertEquals(auths[i], tas7[0]);
-				 * tf7.setIsAuthority(Boolean.TRUE); tas7 =
-				 * trust.findTrustAuthorities(tf7); assertEquals(1,
-				 * tas7.length); assertEquals(auths[i], tas7[0]);
-				 * tf7.setAuthorityGTS("localhost"); tas7 =
-				 * trust.findTrustAuthorities(tf7); assertEquals(1,
-				 * tas7.length); assertEquals(auths[i], tas7[0]);
-				 */
 			}
 			// Test Remove
 			int remaining = count;
