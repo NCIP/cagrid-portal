@@ -192,7 +192,7 @@ public class SchemaResolutionDialog extends JDialog {
 			(NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane().getSelectedComponent();
 		// get the service's schema directory
 		File schemaDir = new File(CacoreWizardUtils.getServiceBaseDir(serviceInfo) 
-			+ File.separator + "schema" 
+			+ File.separator + "schema" + File.separator
 			+ serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 		NamespaceType[] namespaces = discComponent.createNamespaceType(schemaDir);
 		if (namespaces == null) {
@@ -245,7 +245,7 @@ public class SchemaResolutionDialog extends JDialog {
 	
 	private void deleteSchemasForNamespaces(NamespaceType[] namespaces) {
 		String schemaDir = CacoreWizardUtils.getServiceBaseDir(serviceInfo) 
-			+ File.separator + "schema" 
+			+ File.separator + "schema"  + File.separator
 			+ serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 		for (int i = 0; i < namespaces.length; i++) {
 			File schemaFile = new File(schemaDir + File.separator + namespaces[i].getLocation());
