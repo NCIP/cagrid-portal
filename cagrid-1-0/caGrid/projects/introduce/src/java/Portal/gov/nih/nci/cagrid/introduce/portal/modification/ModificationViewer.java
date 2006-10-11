@@ -53,6 +53,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -81,6 +82,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.namespace.QName;
 
@@ -560,12 +565,20 @@ public class ModificationViewer extends GridPortalComponent {
 		if (methodsTable == null) {
 			methodsTable = new MethodsTable(info.getServices().getService(0), this.methodsDirectory,
 				this.serviceProperties);
+		    methodsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+				public void valueChanged(ListSelectionEvent e) {
+					System.out.println("CHANGED");
+			
+				}
+			
+			});
 			methodsTable.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {
 						dirty = true;
 						performMethodModify();
-					}
+					} 
 				}
 			});
 		}

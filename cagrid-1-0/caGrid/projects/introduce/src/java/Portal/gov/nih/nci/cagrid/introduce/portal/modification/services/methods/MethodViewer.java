@@ -2502,6 +2502,16 @@ public class MethodViewer extends GridPortalBaseFrame {
 					String relativeFile = chooser.getSelectedFile().getAbsolutePath().substring(
 						chooser.getSelectedFile().getAbsolutePath().indexOf(schemaDir) + schemaDir.length() + 1);
 					getWsdlFileNameTextField().setText(relativeFile);
+
+					String namespace = currentImporWSDL.getRootElement().getAttributeValue("targetNamespace");
+					NamespaceType type = CommonTools.getNamespaceType(info.getNamespaces(), namespace);
+					if (type != null) {
+						wsdlImportPackageNameTextField.setText(type.getPackageName());
+						wsdlImportPackageNameTextField.setEditable(false);
+					} else {
+						wsdlImportPackageNameTextField.setEditable(true);
+					}
+
 				}
 			});
 		}

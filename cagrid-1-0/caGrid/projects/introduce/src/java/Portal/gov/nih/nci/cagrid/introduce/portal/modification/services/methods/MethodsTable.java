@@ -84,7 +84,7 @@ public class MethodsTable extends PortalBaseTable {
 		this.setAutoCreateColumnsFromModel(false);
 		this.setRowSelectionAllowed(true);
 		this.getTableHeader().setReorderingAllowed(false);
-		
+
 		for (int i = this.getRowCount() - 1; i == 0; i--) {
 			this.removeRow(i);
 		}
@@ -110,7 +110,12 @@ public class MethodsTable extends PortalBaseTable {
 		MethodType method = getMethodType(rowIndex);
 		c.setForeground(Color.BLACK);
 		if (method.isIsImported()) {
-			c.setBackground(new Color(235, 235, 235));
+			if (method.getImportInformation().getFromIntroduce() != null
+				&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
+				c.setBackground(new Color(235, 255, 235));
+			} else {
+				c.setBackground(new Color(235, 235, 255));
+			}
 		} else {
 			c.setBackground(getBackground());
 		}
