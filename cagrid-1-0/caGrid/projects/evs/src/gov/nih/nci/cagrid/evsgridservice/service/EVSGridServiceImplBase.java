@@ -76,6 +76,21 @@ public abstract class EVSGridServiceImplBase {
 		return resourceHome;
 	}
 	
+	
+	
+	
+	protected gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadataMD(){
+		BaseResource serviceBaseResource;
+		try {
+			serviceBaseResource = (BaseResource)ResourceContext.getResourceContext().getResource();
+		} catch (ResourceContextException e) {
+			return null;
+		} catch (ResourceException e) {
+			return null;
+		}
+		return serviceBaseResource.getServiceMetadataMD();
+	}
+
 		
 	
 	

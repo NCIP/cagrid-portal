@@ -26,6 +26,9 @@
    <ns2:SchemaElement type="EVSHistoryRecordsSearchParams" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="EVSSourceSearchParams" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="ServiceMetadata" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
@@ -135,8 +138,12 @@
      <ns4:Exceptions/>
     </ns4:Method>
    </ns4:Methods>
-   <ns16:ResourcePropertiesList xsi:type="ns16:ResourcePropertiesListType" xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns16:ResourcePropertiesList xsi:type="ns16:ResourcePropertiesListType" xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns16:ResourceProperty qName="ns17:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns16:ResourcePropertyType" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns16:ResourcePropertiesList>
   </ns3:Service>
  </ns3:Services>
- <ns17:Extensions xsi:type="ns17:ExtensionsType" xmlns:ns17="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns18:Extensions xsi:type="ns18:ExtensionsType" xmlns:ns18="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns18:Extension name="cagrid_metadata" xsi:type="ns18:ExtensionType"/>
+ </ns18:Extensions>
 </ns1:ServiceDescription>
