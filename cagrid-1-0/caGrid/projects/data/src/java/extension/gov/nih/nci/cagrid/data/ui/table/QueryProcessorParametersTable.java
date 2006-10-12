@@ -70,37 +70,42 @@ public class QueryProcessorParametersTable extends JTable {
 		try {
 			// get the selected class
 			Class selected = getQueryProcessorClass();
-			// get an instance of the class
-			CQLQueryProcessor proc = (CQLQueryProcessor) selected.newInstance();
-			// get the default parameters
-			Properties defaultProps = proc.getRequiredParameters();
-			// get any configured parameters
-			Properties configuredProps = new Properties();
-			ServiceProperties serviceProps = serviceInfo.getServiceProperties();
-			if (serviceProps != null) {
-				for (int i = 0; serviceProps.getProperty() != null && i < serviceProps.getProperty().length; i++) {
-					ServicePropertiesProperty property = serviceProps.getProperty(i);
-					String rawKey = property.getKey();
-					if (rawKey.startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
-						String key = rawKey.substring(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.length());
-						configuredProps.setProperty(key, property.getValue());
+			if (selected != null) {
+				// get an instance of the class
+				CQLQueryProcessor proc = (CQLQueryProcessor) selected.newInstance();
+				// get the default parameters
+				Properties defaultProps = proc.getRequiredParameters();
+				// get any configured parameters
+				Properties configuredProps = new Properties();
+				ServiceProperties serviceProps = serviceInfo.getServiceProperties();
+				if (serviceProps != null) {
+					for (int i = 0; serviceProps.getProperty() != null && i < serviceProps.getProperty().length; i++) {
+						ServicePropertiesProperty property = serviceProps.getProperty(i);
+						String rawKey = property.getKey();
+						if (rawKey.startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
+							String key = rawKey.substring(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.length());
+							configuredProps.setProperty(key, property.getValue());
+						}
 					}
 				}
-			}
-			Enumeration propKeys = defaultProps.keys();
-			while (propKeys.hasMoreElements()) {
-				String key = (String) propKeys.nextElement();
-				String def = defaultProps.getProperty(key);
-				String val = null;
-				if (configuredProps.containsKey(key)) {
-					val = configuredProps.getProperty(key);
-				} else {
-					val = defaultProps.getProperty(key);
+				Enumeration propKeys = defaultProps.keys();
+				while (propKeys.hasMoreElements()) {
+					String key = (String) propKeys.nextElement();
+					String def = defaultProps.getProperty(key);
+					String val = null;
+					if (configuredProps.containsKey(key)) {
+						val = configuredProps.getProperty(key);
+					} else {
+						val = defaultProps.getProperty(key);
+					}
+					((DefaultTableModel) getModel()).addRow(new String[] {key, def, val});
 				}
-				((DefaultTableModel) getModel()).addRow(new String[] {key, def, val});
+				storeProperties();
+			} else {
+				System.out.println("NO QUERY PROCESSOR CLASS SELECTED");
 			}
-			storeProperties();
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error loading query processor", ex);
 		}
 	}
@@ -111,16 +116,9 @@ public class QueryProcessorParametersTable extends JTable {
 	}
 	
 	
-	private String getQpClassname() {
-		String classname = null;
-		try {
-			classname = CommonTools.getServicePropertyValue(serviceInfo.getServiceDescriptor(),
-				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error getting query processor classname", ex);
-		}
-		return classname;
+	private String getQpClassname() throws Exception {
+		return CommonTools.getServicePropertyValue(serviceInfo.getServiceDescriptor(),
+			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
 	}
 	
 	
@@ -132,8 +130,12 @@ public class QueryProcessorParametersTable extends JTable {
 			urls[i] = libFile.toURL();
 		}
 		ClassLoader loader = new URLClassLoader(urls, getClass().getClassLoader());
-		Class qpClass = loader.loadClass(getQpClassname());
-		return qpClass;
+		String className = getQpClassname();
+		if (className != null && !className.endsWith(DataServiceConstants.QUERY_PROCESSOR_STUB_NAME)) {
+			Class qpClass = loader.loadClass(className);
+			return qpClass;
+		}
+		return null;
 	}
 	
 	
@@ -142,17 +144,16 @@ public class QueryProcessorParametersTable extends JTable {
 			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
 		AdditionalLibraries additionalLibs = 
 			ExtensionDataUtils.getExtensionData(extData).getAdditionalLibraries();
+		List namesList = new ArrayList();
 		if (additionalLibs != null && additionalLibs.getJarName() != null) {
-			List namesList = new ArrayList();
 			for (int i = 0; i < additionalLibs.getJarName().length; i++) {
 				String name = additionalLibs.getJarName(i);
 				namesList.add(libDir + File.separator + name);
 			}
-			String[] names = new String[namesList.size()];
-			namesList.toArray(names);
-			return names;
 		}
-		return null;
+		String[] names = new String[namesList.size()];
+		namesList.toArray(names);
+		return names;
 	}
 	
 	

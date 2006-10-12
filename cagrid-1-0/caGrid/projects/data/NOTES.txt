@@ -51,7 +51,7 @@ BUGS:
 Schema resolution dialog doesn't look at what tab you are on (seems to always use cadsr)
 	-- Totally different issue, actually, but fixed 2006-10-12
 When I create a new data service it says "Error loading query processor" in an error dialog
-
+	-- Fixed 2006-10-12
 I create a new data service (also with metadata extension), loading metadata extract from file.  I choose cadsr supplied domain model.  I choose rproteomics->statml.  I add just that model and select the schema provided.  I click save.  It says error: "Error initializing caDSR client: cannot initialize URI with empty parameters".
 
 Select Project caCore(Version: 3), Select Package gov.nih.nci.evs.domain, Add Package,
