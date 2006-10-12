@@ -2,13 +2,13 @@ package gov.nih.nci.cagrid.data.ui.cacore;
 
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
-import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -134,15 +134,8 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 	private JTextField getGmeUrlTextField() {
 		if (gmeUrlTextField == null) {
 			gmeUrlTextField = new JTextField();
-			Properties extensionProperties = getExtensionDescription().getProperties();
-			for (int i = 0; extensionProperties.getProperty() != null 
-				&& i < extensionProperties.getProperty().length; i++) {
-				PropertiesProperty prop = extensionProperties.getProperty(i);
-				if (prop.getKey().equals("GME_URL")) {
-					gmeUrlTextField.setText(prop.getValue());
-					break;
-				}
-			}
+			String url = ResourceManager.getServiceURLProperty(DataServiceConstants.GME_SERVICE_URL);
+			gmeUrlTextField.setText(url);
 		}
 		return gmeUrlTextField;
 	}

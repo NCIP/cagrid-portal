@@ -9,12 +9,14 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.ui.NamespaceUtils;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -362,6 +364,9 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	private CaDSRBrowserPanel getCaDsrBrowser() {
 		if (caDsrBrowser == null) {
 			caDsrBrowser = new CaDSRBrowserPanel(true, false);
+			String url = ResourceManager.getServiceURLProperty(DataServiceConstants.CADSR_SERVICE_URL);
+			caDsrBrowser.setDefaultCaDSRURL(url);
+			caDsrBrowser.getCadsr().setText(url);
 		}
 		return caDsrBrowser;
 	}

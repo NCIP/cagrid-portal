@@ -179,8 +179,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				mostRecentProject.setLongName(projectName);
 				mostRecentProject.setVersion(projectVersion);
 			} else {
-				// get the default caDSR url out of the extension config
-				url = ExtensionTools.getProperty(getExtensionDescription().getProperties(), "CADSR_URL");
+				// get the caDSR url out of the Introduce property bucket
+				url = ResourceManager.getServiceURLProperty(DataServiceConstants.CADSR_SERVICE_URL);
 			}
 			if (url != null) {
 				// configure selected items in the cadsr panel

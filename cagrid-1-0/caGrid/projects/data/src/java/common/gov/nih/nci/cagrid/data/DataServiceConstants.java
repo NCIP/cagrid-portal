@@ -90,6 +90,10 @@ public class DataServiceConstants {
 	// service metadata QName
 	public static final QName SERVICE_METADATA_QNAME = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata", "ServiceMetadata");
 	
+	// service URL parameter constants
+	public static final String CADSR_SERVICE_URL = "CADSR_URL";
+	public static final String GME_SERVICE_URL = "GME_URL";
+	
 	private DataServiceConstants() {
 		
 	}
