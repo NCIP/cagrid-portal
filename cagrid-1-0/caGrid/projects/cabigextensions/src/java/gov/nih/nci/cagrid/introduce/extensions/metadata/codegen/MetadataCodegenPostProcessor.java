@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
@@ -114,16 +115,20 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 	 */
 	private String getFilename(ServiceInformation info) {
 		ServiceType mainServ = info.getServiceDescriptor().getServices().getService()[0];
-		ResourcePropertyType[] resourceProperty = mainServ.getResourcePropertiesList().getResourceProperty();
-		for (int i = 0; i < resourceProperty.length; i++) {
-			ResourcePropertyType rp = resourceProperty[i];
-			if (rp.getQName().equals(MetadataConstants.SERVICE_METADATA_QNAME)) {
-				String fileLocation = rp.getFileLocation();
-				if (fileLocation == null || fileLocation.trim().equals("")) {
-					rp.setFileLocation(DEFAULT_FILENAME);
-				}
+		ResourcePropertiesListType resourcePropertiesList = mainServ.getResourcePropertiesList();
+		if (resourcePropertiesList != null && resourcePropertiesList.getResourceProperty() != null) {
+			ResourcePropertyType[] resourceProperty = resourcePropertiesList.getResourceProperty();
+			for (int i = 0; i < resourceProperty.length; i++) {
+				ResourcePropertyType rp = resourceProperty[i];
+				if (rp.getQName().equals(MetadataConstants.SERVICE_METADATA_QNAME)) {
+					String fileLocation = rp.getFileLocation();
+					if (fileLocation == null || fileLocation.trim().equals("")) {
+						rp.setFileLocation(DEFAULT_FILENAME);
+					}
 
-				return rp.getFileLocation();
+					return rp.getFileLocation();
+
+				}
 			}
 		}
 
