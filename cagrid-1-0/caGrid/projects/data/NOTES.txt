@@ -41,10 +41,6 @@ TODO:
 31[ ]: caCORE creation wizard (actually all of DS extension) should use introduce preferences bucket
 32[I]: create CQLResult schema validator tool (using templated RestrictedCQLResultSet.xsd to poll allowable types from service)
 33[D]: allow data service tab to configure "allowable as target" option for exposed classes (domain model needs to edited with it, and result type xsd generation needs to use it)  
-34[D]: schema resolution dialog doesn't look at what tab you are on (seems to always use cadsr)
-	-- Totally different issue, actually
-35[ ]: when i create a new data service it says "Error loading query processor" in an error dialog
-36[ ]: i create a new data service (also with metadata extension), loading metadata extract from file.  i choose cadsr supplied domain model.  i choose rproteomics->statml.  i add just that model and select the schema provided.  i click save.  it says error: "Error initializing caDSR client: cannot initialize URI with empty parameters".
 
 I = In Progress
 D = Done
@@ -52,25 +48,37 @@ W = Won't implement
 E = External to data core
 
 BUGS:
+Schema resolution dialog doesn't look at what tab you are on (seems to always use cadsr)
+	-- Totally different issue, actually
+When I create a new data service it says "Error loading query processor" in an error dialog
+
+I create a new data service (also with metadata extension), loading metadata extract from file.  I choose cadsr supplied domain model.  I choose rproteomics->statml.  I add just that model and select the schema provided.  I click save.  It says error: "Error initializing caDSR client: cannot initialize URI with empty parameters".
 
 Select Project caCore(Version: 3), Select Package gov.nih.nci.evs.domain, Add Package,
 	Select all, Save, Refresh From caDSR, Save, Null Pointer
 	-- Can't reproduce by these steps 2006-10-03	
+	
 Select Project caCore(Version: 3), Select Package gov.nih.nci.evs.domain, Add Package,
 	Save, close the modify service window, click modify service, open same service,
 	add same package as above, try and delete both packages
 	-- Fixed by preventing duplicate packages 2006-10-03
+	
 Select Project caCore(Version: 3), Select Package gov.nih.nci.evs.domain,
  	Add Package, Add Full Project, you can only remove one of the gov.nih.nci.evs.domain
 	-- Fixed by preventing duplicate packages 2006-10-03	
+	
 When the GUI removes a type it does not remove its schema from the project.  If the schema has the same type as a newly added one (e.g. a user picked the wrong version of his schema) it will give axis bean generation all kinds of problems.
 	-- Fixed 2006-10-03
+	
 I added a package and it said that it could not find a schema, so I hit cancel.  No model was added to the models list (correctly).  Next I selected a different package, and it popped up the Package incompatibility dialog.  This should not pop up because there are no models added yet.
 	-- Fixed 2006-08-01
+	
 Eclipse classpath is incorrect (duplicate entries for cagrid core)
 	-- Fixed 2006-06-07
+	
 Type Serialization Table sizing is screwed up
 	-- Fixed 2006-06-07
+	
 Need a "None" option for query processor... theres no way to not select an impl found in a jar
 	-- Not a bug, you can edit the query processor class selection manually, including blanking it out
 	
