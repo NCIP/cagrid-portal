@@ -43,6 +43,7 @@ TODO:
 33[D]: allow data service tab to configure "allowable as target" option for exposed classes (domain model needs to edited with it, and result type xsd generation needs to use it)  
 34[I]: schema resolution dialog doesn't look at what tab you are on (seems to always use cadsr)
 35[?]: when i create a new data service it says "Error loading query processor" in an error dialog
+36[?]: i create a new data service (also with metadata extension), loading metadata extract from file.  i choose cadsr supplied domain model.  i choose rproteomics->statml.  i add just that model and select the schema provided.  i click save.  it says error: "Error initializing caDSR client: cannot initialize URI with empty parameters".
 
 I = In Progress
 D = Done
