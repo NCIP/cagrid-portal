@@ -56,6 +56,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -259,6 +260,7 @@ public class ModificationViewer extends GridPortalComponent {
 				if (file.exists() && file.canRead()) {
 					try {
 						initialize();
+						ModificationViewer.this.setMaximum(true);
 					} catch (Exception e) {
 						e.printStackTrace();
 						ErrorDialog.showErrorDialog(e);
@@ -343,7 +345,6 @@ public class ModificationViewer extends GridPortalComponent {
 			this.setContentPane(getMainPanel());
 			this.setTitle("Modify Service Interface");
 			this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
-			this.setMaximum(true);
 		}
 	}
 

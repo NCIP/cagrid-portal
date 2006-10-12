@@ -43,19 +43,6 @@ add tests to system tests for (coverage report shows no coverage):
 - (DONE) methods returning arrays
 - (DONE) servicename ending in Service
 
-(steve)
-Open a service with no security. Go to service security, click custom, check all the options for secure communication.  Go to authz tab, select grid map.
-Now click back on the Operations tab, and click modify to modify a method.
-It gives an appropriate error “No Grid Map File Specified!!!” and dumps this exception, but the problem is there is no context as to where to fix the problem.  It should at least set the security tab as the active tab, and go to the authorization tab.
-
-since you cant edit anything on any security tabs unless you have checked custom, all tabs should be disabled
-when you check custom, it should only enable the secure communication tab (as you cant edit any tabs until you check a form of secure com)
-when you check some for of secure comm, the other tabs should be enabled.
-
-secure message privacy does not work (STEVE)
-
-support for open saml callouts and everything that globus supports (STEVE)
-
 ============================ D O N E ================================================================
 
 finish wsdl based method import screen....wsdl file locator is not working right...
