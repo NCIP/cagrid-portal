@@ -341,7 +341,7 @@ public class ModificationViewer extends GridPortalComponent {
 			this.setContentPane(getMainPanel());
 			this.setTitle("Modify Service Interface");
 			this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
-			this.pack();
+			this.setMaximum(true);
 		}
 	}
 
