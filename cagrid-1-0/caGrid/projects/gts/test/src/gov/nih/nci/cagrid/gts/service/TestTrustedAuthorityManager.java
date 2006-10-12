@@ -1043,9 +1043,6 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				
 				//Test Multiple Trust Levels
 				for (int j = 0; j < levels.length; j++) {
-					if((i==2)&&(j==2)){
-						System.out.println("MULTIPLE");
-					}
 					TrustLevels tls = getTrustLevels(levels, j);
 					TrustedAuthorityFilter tf4 = new TrustedAuthorityFilter();
 					tf4.setTrustLevels(tls);
