@@ -96,13 +96,12 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 					try {
 						initialize();
 					} catch (Exception e) {
-						ErrorDialog.showErrorDialog("Error initializing the deployment: "
-							+ e.getMessage(), e);
+						ErrorDialog.showErrorDialog("Error initializing the deployment: " + e.getMessage(), e);
 						DeploymentViewer.this.dispose();
 					}
 				} else {
-					ErrorDialog.showErrorDialog("Error deleting directory", 
-						"Directory " + serviceDirectory.getAbsolutePath() + " does not seem to be an introduce service");
+					ErrorDialog.showErrorDialog("Error deleting directory", "Directory "
+						+ serviceDirectory.getAbsolutePath() + " does not seem to be an introduce service");
 					DeploymentViewer.this.dispose();
 				}
 			}
@@ -112,7 +111,7 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 
 
 	private void chooseService() throws Exception {
-		String dir = ResourceManager.promptDir(this, null);
+		String dir = ResourceManager.promptDir(null);
 		if (dir != null) {
 			this.serviceDirectory = new File(dir);
 		}
@@ -395,8 +394,8 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 			deploymentTypeSelector.addItem(GLOBUS);
 			try {
 				if (ResourceManager.getStateProperty(ResourceManager.LAST_DEPLOYMENT) != null) {
-					deploymentTypeSelector
-						.setSelectedItem(ResourceManager.getStateProperty(ResourceManager.LAST_DEPLOYMENT));
+					deploymentTypeSelector.setSelectedItem(ResourceManager
+						.getStateProperty(ResourceManager.LAST_DEPLOYMENT));
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

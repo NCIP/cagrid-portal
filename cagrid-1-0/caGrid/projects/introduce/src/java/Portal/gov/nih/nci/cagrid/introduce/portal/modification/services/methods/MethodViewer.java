@@ -2329,6 +2329,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 					// chose the introduce directory
 					JFileChooser chooser = new JFileChooser();
 					chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					PortalUtils.centerComponent(chooser);
 					int returnVal = chooser.showOpenDialog(MethodViewer.this);
 					if (returnVal != JFileChooser.APPROVE_OPTION) {
 						return;
@@ -2455,6 +2456,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 
 					});
 					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+					PortalUtils.centerComponent(chooser);
 					int returnVal = chooser.showOpenDialog(MethodViewer.this);
 					if (returnVal != JFileChooser.APPROVE_OPTION) {
 						return;

@@ -102,7 +102,7 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 			browseButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						currentFile = new File(ResourceManager.promptFile(FileTypesSelectionComponent.this, null,
+						currentFile = new File(ResourceManager.promptFile(null,
 							FileFilters.XSD_FILTER)).getAbsolutePath();
 						getFilenameText().setText(currentFile);
 						Document doc = XMLUtilities.fileNameToDocument(currentFile);

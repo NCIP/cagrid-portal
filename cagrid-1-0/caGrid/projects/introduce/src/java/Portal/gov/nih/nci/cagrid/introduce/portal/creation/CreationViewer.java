@@ -376,7 +376,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
 						String previous = getDir().getText();
-						String location = ResourceManager.promptDir(CreationViewer.this, previous);
+						String location = ResourceManager.promptDir(previous);
 						if (location != null && location.length() > 0) {
 							getDir().setText(location);
 						} else {

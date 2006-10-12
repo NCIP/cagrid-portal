@@ -290,7 +290,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					String location = null;
 					try {
-						location = ResourceManager.promptFile(GMEViewer.this, null, FileFilters.XSD_FILTER);
+						location = ResourceManager.promptFile(null, FileFilters.XSD_FILTER);
 						if (location == null) {
 							return;
 						}
@@ -436,7 +436,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					String location = null;
 					try {
-						location = ResourceManager.promptDir(GMEViewer.this, null);
+						location = ResourceManager.promptDir( null);
 					} catch (Exception ex) {
 						ErrorDialog.showErrorDialog(ex);
 					}

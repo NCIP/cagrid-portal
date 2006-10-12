@@ -26,6 +26,7 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.portal.IntroducePortalConf;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
@@ -87,6 +88,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.namespace.QName;
 
 import org.projectmobius.portal.GridPortalComponent;
+import org.projectmobius.portal.GridPortalConfig;
 import org.projectmobius.portal.PortalResourceManager;
 
 
@@ -289,7 +291,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	private void chooseService() throws Exception {
-		String dir = ResourceManager.promptDir(this, null);
+		String dir = ResourceManager.promptDir(null);
 		if (dir != null) {
 			this.methodsDirectory = new File(dir);
 		}

@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 
 import java.awt.Component;
 import java.io.BufferedInputStream;
@@ -27,6 +28,7 @@ import javax.swing.filechooser.FileFilter;
 
 import org.jdom.Document;
 import org.projectmobius.common.XMLUtilities;
+import org.projectmobius.portal.PortalResourceManager;
 
 
 /**
@@ -108,8 +110,8 @@ public class ResourceManager {
 	}
 
 
-	public static String getConfigurationProperty(String key){
-		Properties serviceProps  = null;
+	public static String getConfigurationProperty(String key) {
+		Properties serviceProps = null;
 		try {
 			serviceProps = getConfigurationProperties();
 		} catch (Exception e) {
@@ -121,7 +123,7 @@ public class ResourceManager {
 	}
 
 
-	public static Enumeration getConfigurationPropertyKeys(){
+	public static Enumeration getConfigurationPropertyKeys() {
 		Properties serviceProps = null;
 		try {
 			serviceProps = getConfigurationProperties();
@@ -394,7 +396,7 @@ public class ResourceManager {
 	}
 
 
-	public static String promptDir(Component comp, String defaultLocation) throws Exception {
+	public static String promptDir(String defaultLocation) throws Exception {
 		JFileChooser chooser = null;
 		if (defaultLocation != null && defaultLocation.length() > 0 && new File(defaultLocation).exists()) {
 			chooser = new JFileChooser(new File(defaultLocation));
@@ -408,8 +410,9 @@ public class ResourceManager {
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooser.setMultiSelectionEnabled(false);
+		PortalUtils.centerComponent(chooser);
 
-		int returnVal = chooser.showOpenDialog(comp);
+		int returnVal = chooser.showOpenDialog(PortalResourceManager.getInstance().getGridPortal());
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			setStateProperty(ResourceManager.LAST_DIRECTORY, chooser.getSelectedFile().getAbsolutePath());
 			return chooser.getSelectedFile().getAbsolutePath();
@@ -418,8 +421,8 @@ public class ResourceManager {
 	}
 
 
-	public static String promptFile(Component comp, String defaultLocation, FileFilter filter) throws Exception {
-		String[] files = internalPromptFiles(comp, defaultLocation, filter, false, "Select File");
+	public static String promptFile(String defaultLocation, FileFilter filter) throws Exception {
+		String[] files = internalPromptFiles(defaultLocation, filter, false, "Select File");
 		if (files != null) {
 			return files[0];
 		}
@@ -428,13 +431,13 @@ public class ResourceManager {
 
 
 	public static String[] promptMultiFiles(Component comp, String defaultLocation, FileFilter filter) throws Exception {
-		String[] files = internalPromptFiles(comp, defaultLocation, filter, true, "Select File(s)");
+		String[] files = internalPromptFiles(defaultLocation, filter, true, "Select File(s)");
 		return files;
 	}
 
 
-	private static String[] internalPromptFiles(Component invoker, String defaultLocation, FileFilter filter,
-		boolean multiSelect, String title) throws Exception {
+	private static String[] internalPromptFiles(String defaultLocation, FileFilter filter, boolean multiSelect,
+		String title) throws Exception {
 		String[] fileNames = null;
 		JFileChooser chooser = null;
 		if (defaultLocation != null && defaultLocation.length() != 0 && new File(defaultLocation).exists()) {
@@ -450,8 +453,9 @@ public class ResourceManager {
 		chooser.setDialogTitle(title);
 		chooser.setFileFilter(filter);
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		PortalUtils.centerComponent(chooser);
 
-		int choice = chooser.showOpenDialog(invoker);
+		int choice = chooser.showOpenDialog(PortalResourceManager.getInstance().getGridPortal());
 		if (choice == JFileChooser.APPROVE_OPTION) {
 			File[] files = null;
 			if (multiSelect) {
