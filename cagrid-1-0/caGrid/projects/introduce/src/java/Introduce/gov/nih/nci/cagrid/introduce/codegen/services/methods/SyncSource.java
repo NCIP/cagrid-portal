@@ -334,10 +334,15 @@ public class SyncSource {
 
 		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
 
-		methodString += "public " + method.getOutputMessageClass() + " " + methodName + "(";
+		if (method.getOutputMessageClass() != null) {
+			methodString += "public " + method.getOutputMessageClass() + " " + methodName + "(";
+		} else {
+			methodString += "public void " + methodName + "(";
+		}
 
-		// boxed
-		methodString += method.getInputMessageClass() + " params";
+		if (method.getInputMessageClass() != null) {
+			methodString += method.getInputMessageClass() + " params";
+		}
 
 		methodString += ")";
 		return methodString;
@@ -593,8 +598,15 @@ public class SyncSource {
 			// is the method is unboxable then i need to just call it straight
 			// up.
 
-			methodString += "return " + var + "." + TemplateUtils.lowerCaseFirstCharacter(method.getName());
-			methodString += "(params);\n";
+			if (method.getOutputMessageClass() != null) {
+				methodString += "return ";
+			}
+			methodString += var + "." + TemplateUtils.lowerCaseFirstCharacter(method.getName());
+			if (method.getInputMessageClass() != null) {
+				methodString += "(params);\n";
+			} else {
+				methodString += "();\n";
+			}
 		}
 
 		clientMethod += methodString;
@@ -813,8 +825,16 @@ public class SyncSource {
 			// create a boxed call
 			clientMethod = "\n\t" + createBoxedSignatureStringFromMethod(method) + " "
 				+ createExceptions(method, serviceInfo, service);
-			clientMethod += "{\n";
-			clientMethod += "\t\treturn " + var + "." + methodName + "(params);\n";
+			clientMethod += "{\n\t\t";
+			if (method.getOutputMessageClass() != null) {
+				clientMethod += "return ";
+			}
+			clientMethod += var + "." + methodName;
+			if (method.getInputMessageClass() != null) {
+				clientMethod += "(params);\n";
+			} else {
+				clientMethod += "();\n";
+			}
 
 			clientMethod += methodString;
 			clientMethod += "\t}\n";

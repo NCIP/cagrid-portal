@@ -600,7 +600,7 @@ public class SyncTools {
 										.getName()));
 								}
 							} else {
-								System.out.println("WARNING: Cannot find output message entry: " + messageQName);
+								System.out.println("WARNING: message type does not have any parts: " + messageQName);
 							}
 						} else {
 							System.out.println("WARNING: Cannot find output message entry: " + messageQName);
