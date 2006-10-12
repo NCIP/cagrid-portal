@@ -21,7 +21,7 @@ public class CreateSkeletonStep extends BaseStep {
 
 		String cmd = CommonTools.getAntSkeletonCreationCommand(getBaseDir(),
 				tci.getName(), tci.getDir(), tci.getPackageName(), tci
-						.getNamespace(), "service_example");
+						.getNamespace(), "");
 
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
@@ -29,30 +29,13 @@ public class CreateSkeletonStep extends BaseStep {
 
 		cmd = CommonTools.getAntSkeletonPostCreationCommand(getBaseDir(), tci
 				.getName(), tci.getDir(), tci.getPackageName(), tci
-				.getNamespace(), "service_example");
+				.getNamespace(), "");
 
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		assertEquals("Checking creation status", 0, p.exitValue());
 
 		buildStep();
-
-		// check to see that the extensions ran ok
-		File createFile = new File(tci.getDir() + File.separator
-				+ ExampleCreationPostProcessor.class.getName());
-		if (!createFile.exists()) {
-			fail("Creation Extension was not ran");
-		}
-		File syncPreFile = new File(tci.getDir() + File.separator
-				+ ExampleCodegenPreProcessor.class.getName());
-		if (!syncPreFile.exists()) {
-			fail("Codegen Pre Extension was not ran");
-		}
-		File syncPostFile = new File(tci.getDir() + File.separator
-				+ ExampleCodegenPostProcessor.class.getName());
-		if (!syncPostFile.exists()) {
-			fail("Codegen Post Extension was not ran");
-		}
 
 	}
 
