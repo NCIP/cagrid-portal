@@ -310,6 +310,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 			NamespaceType nsType = CommonTools.createNamespaceType(location.getAbsolutePath());
 			nsType.setLocation("./" + location.getName());
 			CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
+			// TODO: add ClassMappings to cadsr package information!
 		}
 	}
 	
