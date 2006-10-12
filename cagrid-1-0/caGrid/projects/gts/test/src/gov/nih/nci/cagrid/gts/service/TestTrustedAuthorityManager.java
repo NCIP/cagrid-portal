@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.gridca.common.CRLEntry;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.Lifetime;
 import gov.nih.nci.cagrid.gts.bean.Status;
+import gov.nih.nci.cagrid.gts.bean.TrustLevels;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.bean.X509CRL;
@@ -74,7 +75,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			ta.setName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(toArray(LEVEL_ONE));
+			ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 			ta.setIsAuthority(Boolean.FALSE);
 			ta.setSourceGTS("Some Source");
 			ta.setAuthorityGTS("Some Authority");
@@ -146,7 +147,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				auths[i].setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				auths[i].setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 				auths[i].setStatus(Status.Trusted);
-				auths[i].setTrustLevel(toArray(LEVEL_ONE));
+				auths[i].setTrustLevels(toTrustLevels(LEVEL_ONE));
 				auths[i].setIsAuthority(Boolean.FALSE);
 				auths[i].setAuthorityGTS(authorityGTS[authIndex]);
 				auths[i].setSourceGTS(authorityGTS[sourceIndex]);
@@ -177,7 +178,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				assertEquals(validCount, trust.findTrustAuthorities(f4).length);
 
 				TrustedAuthorityFilter f5 = new TrustedAuthorityFilter();
-				f5.setTrustLevel(LEVEL_ONE);
+				f5.setTrustLevels(toTrustLevels(LEVEL_ONE));
 				assertEquals((i + 1), trust.findTrustAuthorities(f5).length);
 
 				TrustedAuthorityFilter f6 = new TrustedAuthorityFilter();
@@ -213,7 +214,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				auths[i].setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				auths[i].setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 				auths[i].setStatus(Status.Suspended);
-				auths[i].setTrustLevel(toArray(LEVEL_TWO));
+				auths[i].setTrustLevels(toTrustLevels(LEVEL_TWO));
 				auths[i].setIsAuthority(Boolean.FALSE);
 				auths[i].setAuthorityGTS(authorityGTS[authIndex]);
 				auths[i].setSourceGTS(authorityGTS[sourceIndex]);
@@ -244,11 +245,11 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				assertEquals(validCount, trust.findTrustAuthorities(f5).length);
 
 				TrustedAuthorityFilter f6 = new TrustedAuthorityFilter();
-				f6.setTrustLevel(LEVEL_TWO);
+				f6.setTrustLevels(toTrustLevels(LEVEL_TWO));
 				assertEquals((i + 1), trust.findTrustAuthorities(f6).length);
 
 				TrustedAuthorityFilter f7 = new TrustedAuthorityFilter();
-				f7.setTrustLevel(LEVEL_ONE);
+				f7.setTrustLevels(toTrustLevels(LEVEL_ONE));
 				assertEquals((count - (i + 1)), trust.findTrustAuthorities(f7).length);
 
 				TrustedAuthorityFilter f8 = new TrustedAuthorityFilter();
@@ -295,7 +296,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(toArray(LEVEL_ONE));
+			ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 			trust.addTrustedAuthority(ta);
 			assertEquals(ta, trust.getTrustedAuthority(ta.getName()));
 		} catch (Exception e) {
@@ -326,7 +327,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				ta.setCRL(new X509CRL(CertUtil.writeCRL(ca2.getCRL())));
 				ta.setStatus(Status.Trusted);
-				ta.setTrustLevel(toArray(LEVEL_ONE));
+				ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 				trust.addTrustedAuthority(ta);
 				fail("Did not generate error when an invalidly signed CRL was provided.");
 			} catch (IllegalTrustedAuthorityFault f) {
@@ -358,7 +359,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				ta.setName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				ta.setStatus(Status.Trusted);
-				ta.setTrustLevel(toArray("INVALID_LEVEL"));
+				ta.setTrustLevels(toTrustLevels("INVALID_LEVEL"));
 				trust.addTrustedAuthority(ta);
 				fail("Did not generate error when an invalid Trusted Authority was provided.");
 			} catch (IllegalTrustedAuthorityFault f) {
@@ -370,7 +371,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setName(ca.getCertificate().getSubjectDN().toString());
 				ta.setStatus(Status.Trusted);
-				ta.setTrustLevel(toArray(LEVEL_ONE));
+				ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 				trust.addTrustedAuthority(ta);
 				fail("Did not generate error when an invalid Trusted Authority was provided.");
 			} catch (IllegalTrustedAuthorityFault f) {
@@ -381,24 +382,13 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
-				ta.setTrustLevel(toArray(LEVEL_ONE));
+				ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 				trust.addTrustedAuthority(ta);
 				fail("Did not generate error when an invalid Trusted Authority was provided.");
 			} catch (IllegalTrustedAuthorityFault f) {
 
 			}
 
-			// INTERNAL ADD: No Trust Level
-			try {
-				TrustedAuthority ta = new TrustedAuthority();
-				ta.setName(ca.getCertificate().getSubjectDN().toString());
-				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
-				ta.setStatus(Status.Trusted);
-				trust.addTrustedAuthority(ta);
-				fail("Did not generate error when an invalid Trusted Authority was provided.");
-			} catch (IllegalTrustedAuthorityFault f) {
-
-			}
 
 			// EXTERNAL ADD: Invalid Trust Level
 			try {
@@ -406,7 +396,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				ta.setName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				ta.setStatus(Status.Trusted);
-				ta.setTrustLevel(toArray("INVALID_LEVEL"));
+				ta.setTrustLevels(toTrustLevels("INVALID_LEVEL"));
 				ta.setIsAuthority(Boolean.FALSE);
 				ta.setSourceGTS("Some Source");
 				ta.setAuthorityGTS("Some Authority");
@@ -422,7 +412,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setName(ca.getCertificate().getSubjectDN().toString());
 				ta.setStatus(Status.Trusted);
-				ta.setTrustLevel(toArray("LEVEL_ONE"));
+				ta.setTrustLevels(toTrustLevels("LEVEL_ONE"));
 				ta.setIsAuthority(Boolean.FALSE);
 				ta.setSourceGTS("Some Source");
 				ta.setAuthorityGTS("Some Authority");
@@ -438,7 +428,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				TrustedAuthority ta = new TrustedAuthority();
 				ta.setName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
-				ta.setTrustLevel(toArray(LEVEL_ONE));
+				ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 				ta.setIsAuthority(Boolean.FALSE);
 				ta.setSourceGTS("Some Source");
 				ta.setAuthorityGTS("Some Authority");
@@ -449,21 +439,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 
 			}
 
-			// EXTERNAL ADD: No Trust Level
-			try {
-				TrustedAuthority ta = new TrustedAuthority();
-				ta.setName(ca.getCertificate().getSubjectDN().toString());
-				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
-				ta.setStatus(Status.Trusted);
-				ta.setIsAuthority(Boolean.FALSE);
-				ta.setSourceGTS("Some Source");
-				ta.setAuthorityGTS("Some Authority");
-				ta.setExpires(1);
-				trust.addTrustedAuthority(ta, false);
-				fail("Did not generate error when an invalid Trusted Authority was provided.");
-			} catch (IllegalTrustedAuthorityFault f) {
 
-			}
 
 			// EXTERNAL ADD: No Authority
 			try {
@@ -471,7 +447,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				ta.setName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				ta.setStatus(Status.Trusted);
-				ta.setTrustLevel(toArray(LEVEL_ONE));
+				ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 				ta.setSourceGTS("Some Source");
 				ta.setAuthorityGTS("Some Authority");
 				ta.setExpires(1);
@@ -487,7 +463,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				ta.setName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				ta.setStatus(Status.Trusted);
-				ta.setTrustLevel(toArray(LEVEL_ONE));
+				ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 				ta.setIsAuthority(Boolean.TRUE);
 				ta.setSourceGTS("Some Source");
 				ta.setAuthorityGTS("Some Authority");
@@ -504,7 +480,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				ta.setName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				ta.setStatus(Status.Trusted);
-				ta.setTrustLevel(toArray(LEVEL_ONE));
+				ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 				ta.setIsAuthority(Boolean.FALSE);
 				ta.setSourceGTS("Some Source");
 				ta.setExpires(1);
@@ -520,7 +496,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				ta.setName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				ta.setStatus(Status.Trusted);
-				ta.setTrustLevel(toArray(LEVEL_ONE));
+				ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 				ta.setIsAuthority(Boolean.FALSE);
 				ta.setAuthorityGTS("Some Authority");
 				ta.setExpires(1);
@@ -536,7 +512,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				ta.setName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				ta.setStatus(Status.Trusted);
-				ta.setTrustLevel(toArray(LEVEL_ONE));
+				ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 				ta.setIsAuthority(Boolean.FALSE);
 				ta.setSourceGTS("Some Source");
 				ta.setAuthorityGTS("Some Authority");
@@ -553,7 +529,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				ta.setName(ca.getCertificate().getSubjectDN().toString());
 				ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				ta.setStatus(Status.Trusted);
-				ta.setTrustLevel(toArray(LEVEL_ONE));
+				ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 				ta.setIsAuthority(Boolean.FALSE);
 				ta.setSourceGTS("Some Source");
 				ta.setAuthorityGTS("Some Authority");
@@ -589,7 +565,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(toArray(LEVEL_ONE));
+			ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 			trust.addTrustedAuthority(ta);
 			assertEquals(ta, trust.getTrustedAuthority(ta.getName()));
 
@@ -602,7 +578,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			ta2.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca2.getCertificate())));
 			ta2.setCRL(new X509CRL(CertUtil.writeCRL(ca2.getCRL())));
 			ta2.setStatus(Status.Trusted);
-			ta2.setTrustLevel(toArray(LEVEL_ONE));
+			ta2.setTrustLevels(toTrustLevels(LEVEL_ONE));
 			ta2.setIsAuthority(Boolean.FALSE);
 			ta2.setAuthorityGTS("some other service");
 			ta2.setSourceGTS("some other service");
@@ -687,7 +663,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 
 			try {
 				TrustedAuthority u = trust.getTrustedAuthority(ta.getName());
-				u.setTrustLevel(toArray("INVALID"));
+				u.setTrustLevels(toTrustLevels("INVALID"));
 				trust.updateTrustedAuthority(u);
 				fail("Should not be able to update a trusted authority!!!");
 			} catch (IllegalTrustedAuthorityFault f) {
@@ -757,7 +733,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 
 			try {
 				TrustedAuthority u = trust.getTrustedAuthority(ta.getName());
-				u.setTrustLevel(toArray("INVALID"));
+				u.setTrustLevels(toTrustLevels("INVALID"));
 				trust.updateTrustedAuthority(u, false);
 				fail("Should not be able to update a trusted authority!!!");
 			} catch (IllegalTrustedAuthorityFault f) {
@@ -791,7 +767,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			ta.setName(ca.getCertificate().getSubjectDN().toString());
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(toArray(LEVEL_ONE));
+			ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 			trust.addTrustedAuthority(ta);
 			assertEquals(ta, trust.getTrustedAuthority(ta.getName()));
 		} catch (Exception e) {
@@ -820,7 +796,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 			ta.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 			ta.setStatus(Status.Trusted);
-			ta.setTrustLevel(toArray(LEVEL_ONE));
+			ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
 			trust.addTrustedAuthority(ta);
 			assertEquals(ta, trust.getTrustedAuthority(ta.getName()));
 			trust.removeTrustedAuthority(ta.getName());
@@ -870,7 +846,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				auths[i].setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				auths[i].setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 				auths[i].setStatus(Status.Trusted);
-				auths[i].setTrustLevel(toArray(LEVEL_ONE));
+				auths[i].setTrustLevels(toTrustLevels(LEVEL_ONE));
 				trust.addTrustedAuthority(auths[i]);
 				assertEquals(auths[i], trust.getTrustedAuthority(auths[i].getName()));
 				TrustedAuthority[] tas = trust.findTrustAuthorities(new TrustedAuthorityFilter());
@@ -898,10 +874,10 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 
 				// Filter by Trust Level
 				TrustedAuthorityFilter tf4 = new TrustedAuthorityFilter();
-				tf4.setTrustLevel(LEVEL_ONE);
+				tf4.setTrustLevels(toTrustLevels(LEVEL_ONE));
 				TrustedAuthority[] tas4 = trust.findTrustAuthorities(tf4);
 				assertEquals((i + 1), tas4.length);
-				tf4.setTrustLevel(LEVEL_TWO);
+				tf4.setTrustLevels(toTrustLevels(LEVEL_TWO));
 				tas4 = trust.findTrustAuthorities(tf4);
 				assertEquals(0, tas4.length);
 
@@ -938,7 +914,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				tas7 = trust.findTrustAuthorities(tf7);
 				assertEquals(1, tas7.length);
 				assertEquals(auths[i], tas7[0]);
-				tf7.setTrustLevel(LEVEL_ONE);
+				tf7.setTrustLevels(toTrustLevels(LEVEL_ONE));
 				tas7 = trust.findTrustAuthorities(tf7);
 				assertEquals(1, tas7.length);
 				assertEquals(auths[i], tas7[0]);
@@ -987,6 +963,9 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 			levels[0] = LEVEL_ONE;
 			levels[1] = LEVEL_TWO;
 			levels[2] = LEVEL_THREE;
+			
+			TrustLevels trustLevels = new TrustLevels();
+			trustLevels.setTrustLevel(levels);
 
 			TrustedAuthority[] auths = new TrustedAuthority[count];
 			for (int i = 0; i < count; i++) {
@@ -1007,8 +986,10 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				for (int j = 0; j < i; j++) {
 					localLevels[j] = levels[j];
 				}
+				TrustLevels tl = new TrustLevels();
+				tl.setTrustLevel(localLevels);
 
-				auths[i].setTrustLevel(localLevels);
+				auths[i].setTrustLevels(tl);
 
 				trust.addTrustedAuthority(auths[i]);
 
@@ -1017,11 +998,22 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				TrustedAuthority[] tas = trust.findTrustAuthorities(new TrustedAuthorityFilter());
 				assertEquals(tas.length, (i + 1));
 
+//				 Filter by Name
+				TrustedAuthorityFilter tf3 = new TrustedAuthorityFilter();
+				tf3.setName(name);
+				TrustedAuthority[] tas3 = trust.findTrustAuthorities(tf3);
+				assertEquals(1, tas3.length);
+				assertEquals(auths[i], tas3[0]);
+				assertEquals(auths[i].getTrustLevels().getTrustLevel().length, tas3[0].getTrustLevels().getTrustLevel().length);
+				tf3.setName("yada yada");
+				tas3 = trust.findTrustAuthorities(tf3);
+				assertEquals(0, tas3.length);
+				
 				// Filter by name and trust level
 				for (int j = 0; j < levels.length; j++) {
 					TrustedAuthorityFilter tf2 = new TrustedAuthorityFilter();
 					tf2.setName(name);
-					tf2.setTrustLevel(levels[j]);
+					tf2.setTrustLevels(toTrustLevels(levels[j]));
 					TrustedAuthority[] tas2 = trust.findTrustAuthorities(tf2);
 					int expected = 0;
 					if (i > j) {
@@ -1030,33 +1022,40 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 					assertEquals(expected, tas2.length);
 					if (expected == 1) {
 						assertEquals(auths[i], tas2[0]);
-						assertEquals(auths[i].getTrustLevel().length, tas2[0].getTrustLevel().length);
+						assertEquals(auths[i].getTrustLevels().getTrustLevel().length, tas2[0].getTrustLevels().getTrustLevel().length);
 					}
 				}
 
-				// Filter by Name
-				TrustedAuthorityFilter tf3 = new TrustedAuthorityFilter();
-				tf3.setName(name);
-				TrustedAuthority[] tas3 = trust.findTrustAuthorities(tf3);
-				assertEquals(1, tas3.length);
-				assertEquals(auths[i], tas3[0]);
-				assertEquals(auths[i].getTrustLevel().length, tas3[0].getTrustLevel().length);
-				tf3.setName("yada yada");
-				tas3 = trust.findTrustAuthorities(tf3);
-				assertEquals(0, tas3.length);
+				
 
 				// Filter by Trust Level
 				for (int j = 0; j < levels.length; j++) {
 					TrustedAuthorityFilter tf4 = new TrustedAuthorityFilter();
-					tf4.setTrustLevel(levels[j]);
+					tf4.setTrustLevels(toTrustLevels(levels[j]));
 					TrustedAuthority[] tas4 = trust.findTrustAuthorities(tf4);
 					int num = i - j;
+					
 					if (num < 0) {
 						num = 0;
 					}
 					assertEquals(num, tas4.length);
-				}
-
+				}	
+				
+				//Test Multiple Trust Levels
+				for (int j = 0; j < levels.length; j++) {
+					if((i==2)&&(j==2)){
+						System.out.println("MULTIPLE");
+					}
+					TrustLevels tls = getTrustLevels(levels, j);
+					TrustedAuthorityFilter tf4 = new TrustedAuthorityFilter();
+					tf4.setTrustLevels(tls);
+					TrustedAuthority[] tas4 = trust.findTrustAuthorities(tf4);
+					int expected = (i+1)-j;
+					if(expected<0){
+						expected = 0;
+					}
+					assertEquals(expected, tas4.length);
+				}			
 			}
 			// Test Remove
 			int remaining = count;
@@ -1078,6 +1077,15 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 		}
 	}
 
+	private TrustLevels getTrustLevels(String[] list, int count){
+		TrustLevels levels = new TrustLevels();
+		String[] trustLevels = new String[count];
+		for(int i=0; i<count; i++){
+			trustLevels[i] = list[i];
+		}
+		levels.setTrustLevel(trustLevels);
+		return levels;
+	}
 
 	public void testUpdateTrustedAuthorities() {
 		TrustedAuthorityManager trust = new TrustedAuthorityManager("localhost", this, db);
@@ -1099,7 +1107,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				auths[i].setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
 				auths[i].setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 				auths[i].setStatus(Status.Trusted);
-				auths[i].setTrustLevel(toArray(LEVEL_ONE));
+				auths[i].setTrustLevels(toTrustLevels(LEVEL_ONE));
 				trust.addTrustedAuthority(auths[i]);
 				assertEquals(auths[i], trust.getTrustedAuthority(auths[i].getName()));
 				TrustedAuthority[] tas = trust.findTrustAuthorities(new TrustedAuthorityFilter());
@@ -1182,18 +1190,18 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 
 				// Test update trust level
 				TrustedAuthority u6 = trust.findTrustAuthorities(f)[0];
-				u6.setTrustLevel(toArray(LEVEL_THREE));
+				u6.setTrustLevels(toTrustLevels(LEVEL_THREE));
 				trust.updateTrustedAuthority(u6);
 				assertEquals(1, trust.findTrustAuthorities(f).length);
 				assertEquals(u6, trust.findTrustAuthorities(f)[0]);
-				u6.setTrustLevel(toArray("INVALID_LEVEL"));
+				u6.setTrustLevels(toTrustLevels("INVALID_LEVEL"));
 				try {
 					trust.updateTrustedAuthority(u6);
 					fail("Should not be able to update a Trusted Authority with an invalid trust level!!!");
 				} catch (IllegalTrustedAuthorityFault itaf) {
 
 				}
-				u6.setTrustLevel(toArray(LEVEL_THREE));
+				u6.setTrustLevels(toTrustLevels(LEVEL_THREE));
 				assertEquals(1, trust.findTrustAuthorities(f).length);
 				assertEquals(u6, trust.findTrustAuthorities(f)[0]);
 
@@ -1218,7 +1226,7 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 				ca.updateCRL(crlE);
 				u8.setCRL(new X509CRL(CertUtil.writeCRL(ca.getCRL())));
 				u8.setStatus(Status.Trusted);
-				u8.setTrustLevel(toArray(LEVEL_THREE));
+				u8.setTrustLevels(toTrustLevels(LEVEL_THREE));
 				trust.updateTrustedAuthority(u8);
 				assertEquals(1, trust.findTrustAuthorities(f).length);
 				assertEquals(u8, trust.findTrustAuthorities(f)[0]);
@@ -1283,10 +1291,12 @@ public class TestTrustedAuthorityManager extends TestCase implements TrustLevelL
 	}
 
 
-	public String[] toArray(String s) {
+	public TrustLevels toTrustLevels(String s){
+		TrustLevels levels = new TrustLevels();
 		String[] array = new String[1];
 		array[0] = s;
-		return array;
+		levels.setTrustLevel(array);
+		return levels;
 	}
 
 }

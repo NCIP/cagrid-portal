@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.gts.service.db.TrustedAuthorityTable;
-import gov.nih.nci.cagrid.gts.service.db.TrustedAuthorityTrustLevelsTable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,8 +19,6 @@ public class TrustedAuthoritySelectStatement {
 
 	private List clauses;
 
-	private boolean isJoin;
-
 
 	public TrustedAuthoritySelectStatement() {
 		this.fields = new ArrayList();
@@ -29,30 +26,16 @@ public class TrustedAuthoritySelectStatement {
 		this.whereValues = new ArrayList();
 		this.whereOperators = new ArrayList();
 		this.clauses = new ArrayList();
-		isJoin = false;
 	}
 
 
-	public void addSelectField(String table, String field) {
-		if (table == null) {
-			this.fields.add(field);
-		} else {
-			this.fields.add(table + "." + field);
-		}
-
+	public void addSelectField(String field) {
+		this.fields.add(field);
 	}
 
 
-	public void addWhereField(String table, String field, String operator, Object value) {
-		if (table == null) {
-			this.whereFields.add(field);
-		} else {
-			if (table.equals(TrustedAuthorityTrustLevelsTable.TABLE_NAME)) {
-				isJoin = true;
-			}
-			this.whereFields.add(table + "." + field);
-		}
-
+	public void addWhereField(String field, String operator, Object value) {
+		this.whereFields.add(field);
 		this.whereOperators.add(operator);
 		this.whereValues.add(value);
 	}
@@ -75,19 +58,11 @@ public class TrustedAuthoritySelectStatement {
 			sql.append((String) fields.get(i));
 		}
 		sql.append(" FROM " + TrustedAuthorityTable.TABLE_NAME);
-		if (isJoin) {
-			sql.append("," + TrustedAuthorityTrustLevelsTable.TABLE_NAME);
-		}
-		if ((whereFields.size() > 0) || (clauses.size() > 0) || isJoin) {
+
+		if ((whereFields.size() > 0) || (clauses.size() > 0)) {
 			sql.append(" WHERE ");
 		}
 		first = true;
-		if (isJoin) {
-			first = false;
-			sql.append(TrustedAuthorityTable.TABLE_NAME + "." + TrustedAuthorityTable.NAME + "="
-				+ TrustedAuthorityTrustLevelsTable.TABLE_NAME + "." + TrustedAuthorityTrustLevelsTable.NAME);
-		}
-
 		for (int i = 0; i < whereFields.size(); i++) {
 			if (!first) {
 				sql.append(" AND ");
@@ -121,7 +96,7 @@ public class TrustedAuthoritySelectStatement {
 				throw new Exception("Unsupported type " + o.getClass().getName());
 			}
 		}
-		//System.out.println(sql.toString());
+		// System.out.println(sql.toString());
 		return s;
 	}
 

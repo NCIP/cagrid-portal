@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.gridca.ui.CertificatePanel;
 import gov.nih.nci.cagrid.gridca.ui.ProxyCaddy;
 import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
+import gov.nih.nci.cagrid.gts.bean.TrustLevels;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
 import gov.nih.nci.cagrid.gts.client.GTSPublicClient;
@@ -156,11 +157,15 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 		this.updateTrustLevels();
 		this.getTrustedAuthorityName().setText(ta.getName());
 		((StatusComboBox) this.getStatus()).setSelectedItem(ta.getStatus());
-		String[] list = ta.getTrustLevel();
-		for (int i = 0; i < list.length; i++) {
-			JCheckBox box = (JCheckBox) this.levelsMap.get(list[i]);
-			if (box != null) {
-				box.setSelected(true);
+		if (ta.getTrustLevels() != null) {
+			if (ta.getTrustLevels().getTrustLevel() != null) {
+				String[] list = ta.getTrustLevels().getTrustLevel();
+				for (int i = 0; i < list.length; i++) {
+					JCheckBox box = (JCheckBox) this.levelsMap.get(list[i]);
+					if (box != null) {
+						box.setSelected(true);
+					}
+				}
 			}
 		}
 		this.getIsAuthority().setText(ta.getIsAuthority().toString());
@@ -761,7 +766,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			TrustedAuthority ta = new TrustedAuthority();
 			ta.setName(this.trustedAuthorityName.getText());
 			ta.setStatus(((StatusComboBox) getStatus()).getStatus());
-			ta.setTrustLevel(getSelectedTrustLevels());
+			ta.setTrustLevels(getSelectedTrustLevels());
 			ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(CertUtil.writeCertificate(cert)));
 			if (crlPanel.getCRL() != null) {
 				ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(CertUtil.writeCRL(crlPanel.getCRL())));
@@ -788,7 +793,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 			TrustedAuthority ta = new TrustedAuthority();
 			ta.setName(this.trustedAuthorityName.getText());
 			ta.setStatus(((StatusComboBox) getStatus()).getStatus());
-			ta.setTrustLevel(getSelectedTrustLevels());
+			ta.setTrustLevels(getSelectedTrustLevels());
 			if (crlPanel.getCRL() != null) {
 				ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(CertUtil.writeCRL(crlPanel.getCRL())));
 			}
@@ -930,7 +935,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 		int col = size % 3;
 		int colOffset = col;
 		if (col != 0) {
-			colOffset = col*2;
+			colOffset = col * 2;
 		}
 
 		GridBagConstraints gbc1 = new GridBagConstraints();
@@ -954,7 +959,7 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 	}
 
 
-	private String[] getSelectedTrustLevels() {
+	private TrustLevels getSelectedTrustLevels() {
 		List list = new ArrayList();
 		Iterator itr = this.levelsMap.keySet().iterator();
 		while (itr.hasNext()) {
@@ -968,7 +973,9 @@ public class TrustedAuthorityWindow extends GridPortalComponent {
 		for (int i = 0; i < list.size(); i++) {
 			tl[i] = (String) list.get(i);
 		}
-		return tl;
+		TrustLevels levels = new TrustLevels();
+		levels.setTrustLevel(tl);
+		return levels;
 	}
 
 }

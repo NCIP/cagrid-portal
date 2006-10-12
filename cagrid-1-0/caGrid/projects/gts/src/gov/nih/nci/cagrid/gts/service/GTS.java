@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.PermissionFilter;
 import gov.nih.nci.cagrid.gts.bean.Status;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
+import gov.nih.nci.cagrid.gts.bean.TrustLevels;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.bean.X509CRL;
@@ -381,7 +382,11 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 
 	public boolean isTrustLevelUsed(String name) throws GTSInternalFault {
 		TrustedAuthorityFilter f = new TrustedAuthorityFilter();
-		f.setTrustLevel(name);
+		String[] level = new String[1];
+		level[0] = name;
+		TrustLevels levels = new TrustLevels();
+		levels.setTrustLevel(level);
+		f.setTrustLevels(levels);
 		TrustedAuthority[] ta = this.findTrustAuthorities(f);
 		if ((ta == null) || (ta.length == 0)) {
 			return false;

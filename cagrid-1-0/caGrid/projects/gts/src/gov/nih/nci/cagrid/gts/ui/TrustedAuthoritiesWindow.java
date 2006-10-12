@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.gridca.ui.ProxyComboBox;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
+import gov.nih.nci.cagrid.gts.bean.TrustLevels;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
@@ -475,7 +476,11 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 			if (tl.equals(ANY)) {
 				tl = null;
 			}
-			filter.setTrustLevel(tl);
+			TrustLevels levels = new TrustLevels();
+			String[] list = new String[1];
+			list[0] = tl;
+			levels.setTrustLevel(list);
+			filter.setTrustLevels(levels);
 			filter.setStatus(((StatusComboBox) status).getStatus());
 			filter.setLifetime(this.lifetime.getLifetime());
 			filter.setIsAuthority(this.getIsAuthority().getIsAuthority());
