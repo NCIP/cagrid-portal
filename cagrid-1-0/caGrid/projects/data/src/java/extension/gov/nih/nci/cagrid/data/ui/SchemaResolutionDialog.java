@@ -1,7 +1,8 @@
-package gov.nih.nci.cagrid.data.ui.cacore;
+package gov.nih.nci.cagrid.data.ui;
 
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.ui.cacore.CacoreWizardUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -24,7 +25,7 @@ import javax.swing.JTabbedPane;
 
 /** 
  *  SchemaResolutionDialog
- *  Dialog to resolve schemas either from the GME or the local file system
+ *  Dialog to resolve schemas from all available namespace type discovery extension components
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 

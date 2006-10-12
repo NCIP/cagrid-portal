@@ -44,12 +44,17 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -58,6 +63,7 @@ import java.util.Map;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -523,6 +529,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		if (domainModelNameTextField == null) {
 			domainModelNameTextField = new JTextField();
 			domainModelNameTextField.setToolTipText("Optional xml file name of an existing domain model");
+			domainModelNameTextField.setEditable(false);
 			domainModelNameTextField.getDocument().addDocumentListener(new DocumentListener() {
 				public void insertUpdate(DocumentEvent e) {
 					setDomainModelFile();
@@ -573,32 +580,95 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	
 	
 	private void setDomainModelFile() {
-    	String filename = getDomainModelNameTextField().getText();
-    	Data data = null;
-    	try {
-    		data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
-    	} catch (Exception ex) {
-    		ex.printStackTrace();
-    		ErrorDialog.showErrorDialog("Error loading existing caDSR information: " + ex.getMessage(), ex);
-    	}
-    	CadsrInformation cadsrInfo = data.getCadsrInformation();
-    	if (cadsrInfo == null) {
-    		cadsrInfo = new CadsrInformation();
-    		data.setCadsrInformation(cadsrInfo);
-    	}
-    	if (filename == null || filename.length() == 0) {
-    		cadsrInfo.setSuppliedDomainModel(null);
-    	} else {
-    		cadsrInfo.setSuppliedDomainModel(filename);
-    	}
-    	// store the changed information
-    	try {
-    		ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
-    	} catch (Exception ex) {
-    		ex.printStackTrace();
-    		ErrorDialog.showErrorDialog("Error storing domain model filename: " + ex.getMessage());
-    	}
-    }
+		try {
+			String filename = getDomainModelNameTextField().getText();
+			Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
+			CadsrInformation cadsrInfo = data.getCadsrInformation();
+			if (cadsrInfo == null) {
+				cadsrInfo = new CadsrInformation();
+				data.setCadsrInformation(cadsrInfo);
+			}
+			// set the domain model file name
+			cadsrInfo.setSuppliedDomainModel(filename);
+			// get the domain model
+			DomainModel model = MetadataUtils.deserializeDomainModel(new FileReader(filename));
+			// set the most recent project information
+			Project proj = new Project();
+			proj.setDescription(model.getProjectDescription());
+			proj.setLongName(model.getProjectLongName());
+			proj.setShortName(model.getProjectShortName());
+			proj.setVersion(model.getProjectVersion());
+			mostRecentProject = proj;
+			// set cadsr project information
+			cadsrInfo.setProjectLongName(model.getProjectLongName());
+			cadsrInfo.setProjectVersion(model.getProjectVersion());
+			// walk classes, creating package groupings as needed
+			Map packageClasses = new HashMap();
+			UMLClass[] modelClasses = model.getExposedUMLClassCollection().getUMLClass(); 
+			for (int i = 0; i < modelClasses.length; i++) {
+				String packageName = modelClasses[i].getPackageName();
+				if (packageClasses.containsKey(packageName)) {
+					((List) packageClasses.get(packageName)).add(modelClasses[i].getClassName());
+				} else {
+					List classList = new ArrayList();
+					classList.add(modelClasses[i].getClassName());
+					packageClasses.put(packageName, classList);
+				}
+			}
+			// create cadsr packages
+			CadsrPackage[] packages = new CadsrPackage[packageClasses.keySet().size()];
+			int packIndex = 0;
+			Iterator packageNameIter = packageClasses.keySet().iterator();
+			while (packageNameIter.hasNext()) {
+				String packName = (String) packageNameIter.next();
+				String mappedNamespace = NamespaceUtils.createNamespaceString(
+					model.getProjectShortName(), model.getProjectVersion(), packName);
+				CadsrPackage pack = new CadsrPackage();
+				pack.setName(packName);
+				pack.setMappedNamespace(mappedNamespace);
+				// does the mapped namespace exist in the service?
+				if (CommonTools.getNamespaceType(getServiceInfo().getNamespaces(), mappedNamespace) != null) {
+					String[] message = {
+						"The imported domain model has a package which maps to the namespace",
+						mappedNamespace + ".",
+						"This namespace is not yet loaded into the service.",
+						"Please locate a suitable namespace."
+					};
+					JOptionPane.showMessageDialog(this, message);
+					boolean resolved = SchemaResolutionDialog.resolveSchemas(getServiceInfo(), pack);
+					if (!resolved) {
+						String[] error = {
+							"The package " + packName + " was not mapped to a namespace.",
+							"This can cause errors when the service builds."
+						};
+						ErrorDialog.showErrorDialog("No namespace mapping provided", error);
+					}
+				}
+				// create ClassMappings for the package's classes
+				List classNameList = (List) packageClasses.get(packName);
+				ClassMapping[] mappings = new ClassMapping[classNameList.size()];
+				for (int i = 0; i < classNameList.size(); i++) {
+					ClassMapping mapping = new ClassMapping();
+					String className = (String) classNameList.get(i);
+					mapping.setClassName(className);
+					mapping.setElementName(className);
+					mapping.setSelected(true);
+					mapping.setTargetable(true);
+					mappings[i] = mapping;
+				}
+				pack.setCadsrClass(mappings);
+				packages[packIndex] = pack;
+				packIndex++;
+			}
+			cadsrInfo.setPackages(packages);
+			ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
+			// store the changed information
+			ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			ErrorDialog.showErrorDialog("Error loading existing caDSR information: " + ex.getMessage(), ex);
+		}
+	}
 	
 	
 	/**
@@ -999,8 +1069,10 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			noDomainModelRadioButton.setText("No Domain Model");
 			noDomainModelRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
+					removeStoredCadsrInformation();
 					PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), false);
 					PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), false);
+					getDomainModelNameTextField().setText("");
 				}
 			});
 		}
@@ -1019,8 +1091,10 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			cadsrDomainModelRadioButton.setText("caDSR Domain Model");
 			cadsrDomainModelRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
+					removeStoredCadsrInformation();
 					PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), false);
 					PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), true);
+					getDomainModelNameTextField().setText("");
 				}
 			});
 		}
@@ -1039,6 +1113,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			suppliedDomainModelRadioButton.setText("Supplied Domain Model");
 			suppliedDomainModelRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
+					removeStoredCadsrInformation();
 					PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), true);
 					PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), false);
 				}
@@ -1438,6 +1513,19 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error removing class mapping", ex);
+		}
+	}
+	
+	
+	private void removeStoredCadsrInformation() {
+		// take out cadsr information from extension data
+		try {
+			Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
+			data.setCadsrInformation(null);
+			ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			ErrorDialog.showErrorDialog("Error removing cadsr information from extension", ex);
 		}
 	}
 }
