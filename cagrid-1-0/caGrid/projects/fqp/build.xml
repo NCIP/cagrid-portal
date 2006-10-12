@@ -25,7 +25,6 @@
 	<property name="common.jar.name" value="${jar.name}-common.jar" />
 	<property name="client.jar.name" value="${jar.name}-client.jar" />
 	<property name="service.jar.name" value="${jar.name}-service.jar" />
-	<property name="portal.jar.name" value="${jar.name}-portal.jar" />
 	<property name="stubs.jar.name" value="${jar.name}-stubs.jar" />
 	<property name="test.jar.name" value="${jar.name}-tests.jar" />
 
