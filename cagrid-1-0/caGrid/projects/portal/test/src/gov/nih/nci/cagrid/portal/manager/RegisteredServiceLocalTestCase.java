@@ -108,7 +108,7 @@ public class RegisteredServiceLocalTestCase extends BaseSpringDataAccessAbstract
         try {
 
             try {
-                service = new RegisteredService("https://cagrid02.bmi.ohio-state.edu:8442/wsrf/services/cagrid/SyncGTS");
+                service = new RegisteredService("http://cagrid04.bmi.ohio-state.edu:7080/wsrf/services/cagrid/CaDSRService");
             } catch (URI.MalformedURIException e) {
                 fail(e.getMessage());
             }

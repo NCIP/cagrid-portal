@@ -1,6 +1,8 @@
 
 Portal ReadMe
 
+You can ignore sections marked (Optional)
+
 ===========================================================================
 1. Pre-requistie software
 ===========================================================================
@@ -33,7 +35,7 @@ Portal ReadMe
           data.
 
     ===========================================================================
-    2.2 Index Service Configuration
+    2.2 Index Service Configuration  (Optional)
     ===========================================================================
 
         When deploying Portal, the only information needed to connect the Portal
@@ -53,9 +55,37 @@ Portal ReadMe
 
         Replace the current entries in the indexList to your own
 
-      ===========================================================================
-      2.3 Security Settings
-      ===========================================================================
+    ===========================================================================
+    2.3 Metadata Aggregation   (Optional)
+    ===========================================================================
+        Portal has background processes that aggregate information on caGrid.
+        The frequency of these process can be configured in
+        portal/src/properties/applicationContext-aggregators.xml file
+
+        Look for the section
+
+        <bean id="indexAggregatorTask"
+          class="org.springframework.scheduling.timer.ScheduledTimerTask">
+        <property name="timerTask">
+            <ref local="indexAggregatorFactory"/>
+        </property>
+        <property name="period">
+            <!--Run it every 10 mins-->
+            <value>600000</value>
+        </property>
+        <property name="delay">
+            <!--Put a delay so doesn't start before DB initialized-->
+            <value>8000</value>
+        </property>
+        </bean>
+
+        Here the aggregator task starts 8 seconds after Portal is installed
+        and runs every 10 minutes. You can change these to suit your needs
+
+
+    ===========================================================================
+    2.4 Security Settings
+    ===========================================================================
         Portal will automatically sync with the caGrid trust fabric to establish
         trust to other caGrid services/resources. For deployment, copy
         portal/resources/trust-ca-cert.1
@@ -63,9 +93,10 @@ Portal ReadMe
         OR
         C:\Documents and Settings\kherm\.globus or similar in Windows
 
-      ===========================================================================
-      2.4 Portal Localization and Internationalization
-      ===========================================================================
+
+    ===========================================================================
+      2.5 Portal Localization and Internationalization  (Optional)
+    ===========================================================================
         Portal is a I9 compliant application. All the text that is displayed in
         the portal is externalized into a message bundle. This is configured
          in the portal-faces-config.xml file.
@@ -104,6 +135,22 @@ Portal ReadMe
         For a brief tutorial on this please refer
         http://www.laliluna.de/javaserver-faces-message-resource-bundle-tutorial.html
 
+    ===========================================================================
+      2.6 Portal map component
+    ===========================================================================
+    There is a custom Map component in Portal. To use it refer to the map JSF
+    pages.
+
+    By default the Map component will use google maps to build its maps.
+    Before building/deploying maps on the server you will need to register
+    and obtain a Google MAP key. Key can be obtained by going here
+
+     http://www.google.com/apis/maps/signup.html
+
+     After getting a key, put the new key in the portal-build.properties file
+     by replacing the "google.map.key" property
+
+
 
 ===========================================================================
 3. Build Instructions
@@ -137,7 +184,7 @@ Portal ReadMe
 
 
 ===========================================================================
-4. Testing Instructions
+4. Testing Instructions   (Optional)
 ===========================================================================
 
     To execute the tests just run 'ant testLocal' after setting your
@@ -156,7 +203,7 @@ Portal ReadMe
 
 
 ===========================================================================
-5. Logging Instructions
+5. Logging Instructions    (Optional)
 ===========================================================================
     Logging is done through log4j
 

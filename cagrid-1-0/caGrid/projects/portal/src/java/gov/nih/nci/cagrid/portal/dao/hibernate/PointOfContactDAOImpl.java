@@ -40,6 +40,7 @@ public class PointOfContactDAOImpl extends BaseDAOImpl
             sb.append(" or poc.lastName like '%").append(keyword.trim()).append("%'");
             sb.append(" or poc.phoneNumber like '%").append(keyword.trim()).append("%'");
             sb.append(" or poc.role like '%").append(keyword.trim()).append("%'");
+            sb.append(" group by poc.email");
         }
 
         _logger.debug("Finding Point of Contacts for keyword" + keyword);

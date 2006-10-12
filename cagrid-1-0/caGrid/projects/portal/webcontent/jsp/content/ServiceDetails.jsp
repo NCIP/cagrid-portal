@@ -66,7 +66,7 @@
         </h:column>
 
         <h:column>
-            <h:outputText value="Research Center"/>
+            <h:outputText value="#{labels.hostingCenter}"/>
         </h:column>
 
         <h:column>
@@ -78,7 +78,7 @@
         </h:column>
 
         <h:column>
-            <h:outputText value="Service Type"/>
+            <h:outputText value="#{labels.serviceType}"/>
         </h:column>
         <h:column>
             <h:outputText value="#{services.navigatedService.type}"/>
@@ -98,7 +98,7 @@
 
         <f:facet name="header">
             <h:column>
-                <h:outputText value="Supported Operations"/>
+                <h:outputText value="#{labels.supportedOperations}"/>
             </h:column>
         </f:facet>
 
@@ -113,7 +113,7 @@
 
                 <h:column>
                     <f:facet name="header">
-                        <h:outputText value="Operation Name"/>
+                        <h:outputText value="#{labels.operationName}"/>
                     </f:facet>
 
                     <h:outputText value="#{operation.name}"/>
@@ -122,7 +122,7 @@
 
                 <h:column>
                     <f:facet name="header">
-                        <h:outputText value="Description"/>
+                        <h:outputText value="#{labels.description}"/>
                     </f:facet>
 
                     <h:outputText value="#{operation.description}"/>
@@ -145,20 +145,20 @@
 
         <f:facet name="header">
             <h:column>
-                <h:outputText value="Domain Model"/>
+                <h:outputText value="#{labels.domainModel}"/>
             </h:column>
         </f:facet>
 
 
         <h:column>
-            <h:outputText value="Name"/>
+            <h:outputText value="#{labels.name}"/>
         </h:column>
         <h:column>
             <h:outputText value="#{services.navigatedService.domainModel.longName}"/>
         </h:column>
 
         <h:column>
-            <h:outputText value="Project Name"/>
+            <h:outputText value="#{labels.projectName}"/>
         </h:column>
         <h:column>
             <h:outputText value="#{services.navigatedService.domainModel.projectShortName}"/>
@@ -166,14 +166,14 @@
 
 
         <h:column>
-            <h:outputText value="Project Version"/>
+            <h:outputText value="#{labels.projectVersion}"/>
         </h:column>
         <h:column>
             <h:outputText value="#{services.navigatedService.domainModel.projectVersion}"/>
         </h:column>
 
         <h:column>
-            <h:outputText value="Project Description"/>
+            <h:outputText value="#{labels.projectDescription}"/>
         </h:column>
         <h:column>
             <h:outputText value="#{services.navigatedService.domainModel.projectDescription}"/>
@@ -181,7 +181,7 @@
 
 
         <h:column>
-            <h:outputText value="Object Model"/>
+            <h:outputText value="#{labels.objectModel}"/>
         </h:column>
         <h:column>
             <t:dataTable var="umlClass"
@@ -193,7 +193,7 @@
 
                 <h:column>
                     <f:facet name="header">
-                        <h:outputText value="Class Name"/>
+                        <h:outputText value="#{labels.className}"/>
                     </f:facet>
 
                     <h:outputText value="#{umlClass.className}"/>
@@ -201,7 +201,7 @@
 
                 <h:column>
                     <f:facet name="header">
-                        <h:outputText value="Package Name"/>
+                        <h:outputText value="{labels.packageName}"/>
                     </f:facet>
 
                     <h:outputText value="#{umlClass.packageName}"/>

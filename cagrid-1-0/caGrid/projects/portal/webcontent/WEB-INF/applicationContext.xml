@@ -42,7 +42,6 @@
         <property name="indexSet">
             <set>
                 <value>http://cagrid04.bmi.ohio-state.edu:7080/wsrf/services/DefaultIndexService</value>
-                <value>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService</value>
             </set>
         </property>
         <property name="manager">

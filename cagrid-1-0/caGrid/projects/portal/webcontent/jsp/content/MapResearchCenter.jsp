@@ -18,7 +18,8 @@
             <h:column>
                 <!--Custom portal map component. See documentation for details
                 <portal:map id="portalMap"
-                            style="background-color: #5C5C5C;  border:2px; border-color:black; width:700px; height:430px"
+                            styleClass="mapStyle"
+
                             var="rc" value="#{centers.list}"
                             useGoogle="true">
                 </portal:map>

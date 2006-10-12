@@ -4,7 +4,7 @@ hibernate.connection.url @hibernate.connection.url@
 hibernate.connection.username @hibernate.connection.username@
 hibernate.connection.password @hibernate.connection.password@
 
-ibernate.c3p0.min_size @hibernate.c3p0.min_size@
+hibernate.c3p0.min_size @hibernate.c3p0.min_size@
 hibernate.c3p0.max_size @hibernate.c3p0.max_size@
 hibernate.c3p0.timeout @hibernate.c3p0.timeout@
 hibernate.c3p0.max_statements @hibernate.c3p0.max_statements@

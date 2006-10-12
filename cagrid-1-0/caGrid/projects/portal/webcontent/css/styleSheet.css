@@ -54,11 +54,6 @@ HDR AND FTR BEGINS
     border-top: 1px solid #CCCCCC; /* constant: medium gray */
 }
 
-.ftrTable {
-/* for the table that contains the footer */
-    padding-top: 0.4em;
-}
-
 /*###############
 MENU BEGINS
 ###############*/
@@ -689,7 +684,7 @@ Custom styles for Portal
 }
 
 .contentSubInnerTable {
-    width: 80%;
+    width: 100%;
     height: 100%;
     vertical-align: top;
     padding: 0.1em;
@@ -862,12 +857,37 @@ td.tabContent {
     vertical-align: top;
 }
 
-.mapStyle {
-    border: 2px;
-    border-color: black;
-    background-color: #5C5C5C; /* constant: dark gray */
+div.mapStyle {
+    border: 4px solid #5C5C5C;
+    margin-left: auto;
+    margin-right: auto;
     width: 700px;
     height: 400px;
-    vertical-align: middle;
-    padding: 0.5cm;
 }
+
+.ftrTable {
+/* for the table that contains the footer */
+    font-family: verdana, arial, helvetica, sans-serif;
+    vertical-align: top;
+    width: 90%;
+}
+
+.ftrHeader {
+/* for the titles of the individual sidebar sections */
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 0.9em;
+    font-weight: bold;
+    padding-left: 0.8em;
+    background-color: #5C5C5C; /* constant: dark gray */
+    color: #FFFFFF; /* constant: white */
+    height: 20;
+    text-align: left;
+}
+
+.ftrContent {
+    font-family: arial, helvetica, sans-serif;
+    font-size: 0.8em;
+    padding-left: 0.2cm;
+    text-align: left;
+}
+

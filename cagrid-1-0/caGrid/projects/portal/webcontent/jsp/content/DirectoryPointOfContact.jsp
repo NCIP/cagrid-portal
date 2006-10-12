@@ -86,14 +86,14 @@
                 </f:facet>
 
                 <h:column>
-                    <h:outputText value="#{labels.name"/>
+                    <h:outputText value="#{labels.name}"/>
                 </h:column>
                 <h:column>
                     <h:outputText value="#{poc.firstName} #{poc.lastName}"/>
                 </h:column>
 
                 <h:column>
-                    <h:outputText value="#{labels.phNumber"/>
+                    <h:outputText value="#{labels.phNumber}"/>
                 </h:column>
                 <h:column>
                     <h:outputLink target="new" value="#{poc.phoneNumber}"/>

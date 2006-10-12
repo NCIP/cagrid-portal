@@ -3,8 +3,7 @@
 
 
 <f:subview id="footer">
-    <h:panelGrid id="footerTable" align="center" border="0" cellspacing="0" cellpadding="0"
-                 styleClass="ftrTable" columnClasses="footerColumns">
+    <h:panelGrid id="footerTable" align="center" border="0" cellspacing="0" cellpadding="0">
         <h:column>
             <h:outputLink id="cancer" value="http://www.cancer.gov/">
                 <h:graphicImage id="img_cancer" url="images/footer_nci.gif" width="63" height="31"

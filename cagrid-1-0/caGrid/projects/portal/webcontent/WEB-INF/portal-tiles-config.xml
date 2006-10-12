@@ -113,6 +113,26 @@
         <put name="mainContent" value="/jsp/content/Error.jsp"/>
     </definition>
 
+    <!--    Footer Section      -->
+    <definition name="/accessibilityFtr.tiles" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuNeutral.jsp"/>
+        <put name="mainContent" value='/jsp/footer/Accessibility.jsp'/>
+    </definition>
+
+    <definition name="/applicationSupportFtr.tiles" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuNeutral.jsp"/>
+        <put name="mainContent" value='/jsp/footer/AppSupport.jsp'/>
+    </definition>
+
+    <definition name="/contactUsFtr.tiles" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuNeutral.jsp"/>
+        <put name="mainContent" value='/jsp/footer/ContactUs.jsp'/>
+    </definition>
+
+    <definition name="/disclaimerFtr.tiles" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuNeutral.jsp"/>
+        <put name="mainContent" value='/jsp/footer/Disclaimer.jsp'/>
+    </definition>
 
 </tiles-definitions>
 

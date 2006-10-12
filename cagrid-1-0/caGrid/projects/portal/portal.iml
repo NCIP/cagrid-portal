@@ -12,7 +12,7 @@
       <sourceFolder url="file://$MODULE_DIR$/test/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/webcontent/resources" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="1.4 (1)" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Tomcat" level="application_server_libraries" />
     <orderEntry type="library" name="Globus-4.0" level="application" />
