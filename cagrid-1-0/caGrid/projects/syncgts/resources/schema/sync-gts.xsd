@@ -10,9 +10,7 @@
 	   <xsd:complexType name="SyncDescription">
 			<xsd:sequence>
 			    <xsd:element name="SyncDescriptor" minOccurs="0" maxOccurs="unbounded" type="sync:SyncDescriptor"/>
-				<xsd:element name="DeleteInvalidFiles" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
-				<xsd:element name="DeleteExistingTrustedRoots" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
-				<xsd:element name="FilePrefix" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="ExcludedCAs" minOccurs="1" maxOccurs="1" type="sync:ExcludedCAs"/>
 				<xsd:element name="NextSync" minOccurs="1" maxOccurs="1" type="xsd:integer"/>
 				<xsd:element name="PerformAuthorization" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
 				<xsd:element name="HostIdentity" minOccurs="0" maxOccurs="1" type="xsd:string"/>
@@ -99,6 +97,13 @@
 			    <xsd:element name="day" type="xsd:int"/>
 			</xsd:sequence>
 	    </xsd:complexType>
+	    
+	    <xsd:complexType name="ExcludedCAs">
+			<xsd:sequence>
+			    <xsd:element name="excludedCAFilePrefix" minOccurs="0" maxOccurs="unbounded" type="xsd:string"/>
+			</xsd:sequence>
+	    </xsd:complexType>
+	    
 	    
 	<xsd:complexType name="Expiration">
 		<xsd:attribute name="hours" type="xsd:int"/>
