@@ -47,11 +47,15 @@ public class NamespaceUtils {
 	
 	
 	public static String createNamespaceString(Project project, UMLPackageMetadata pack) {
-		String version = project.getVersion();
-		if (version.indexOf(".") == -1) {
-			version += ".0";
+		return createNamespaceString(project.getShortName(), project.getVersion(), pack.getName());
+	}
+	
+	
+	public static String createNamespaceString(String projectShortName, String projectVersion, String packName) {
+		if (projectVersion.indexOf(".") == -1) {
+			projectVersion += ".0";
 		}
-		return "gme://" + project.getShortName() + ".caBIG/" + version + "/" + pack.getName();
+		return "gme://" + projectShortName + ".caBIG/" + projectVersion + "/" + packName;
 	}
 	
 	
