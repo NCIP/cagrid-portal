@@ -36,7 +36,6 @@ public class CreateSkeletonStep extends BaseStep {
 		assertEquals("Checking creation status", 0, p.exitValue());
 
 		buildStep();
-
 	}
 
 }
