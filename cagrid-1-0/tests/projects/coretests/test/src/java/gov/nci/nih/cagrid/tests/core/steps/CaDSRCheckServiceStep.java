@@ -10,7 +10,6 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
-import gov.nih.nci.cagrid.cadsr.domain.UMLAssociation;
 import gov.nih.nci.cagrid.metadata.common.SemanticMetadata;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
@@ -94,7 +93,7 @@ public class CaDSRCheckServiceStep
 		compareClasses(cadsr, extractCls, project, cls);
 		
 		gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[] extractAssocations = extract.getExposedUMLAssociationCollection().getUMLAssociation();
-		gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] assocations = cadsr.findAssociationsInProject(project);
+		gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] assocations = cadsr.findAssociationsInProject(project);
 		if (extractAssocations == null && assocations == null) {
 			// some models don't have associations?
 		} else {
@@ -161,18 +160,18 @@ public class CaDSRCheckServiceStep
 	}
 	
 	
-	private void compareAssociations(gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[] extractAssociations, gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] associations)
+	private void compareAssociations(gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation[] extractAssociations, gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] associations)
 	{
 		for (gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation extractAssociation : extractAssociations) {
 			assertNotNull(extractAssociation);
-			gov.nih.nci.cagrid.cadsr.domain.UMLAssociation association = findAssociation(extractAssociation, associations);
+			gov.nih.nci.cagrid.cadsrservice.UMLAssociation association = findAssociation(extractAssociation, associations);
 			assertNotNull(association);
 		}
 	}
 
-	private UMLAssociation findAssociation(gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation extractAssociation, gov.nih.nci.cagrid.cadsr.domain.UMLAssociation[] associations)
+	private gov.nih.nci.cagrid.cadsrservice.UMLAssociation findAssociation(gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation extractAssociation, gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] associations)
 	{
-		for (gov.nih.nci.cagrid.cadsr.domain.UMLAssociation association : associations) {
+		for (gov.nih.nci.cagrid.cadsrservice.UMLAssociation association : associations) {
 			//String extractSourceClass = extractAssociation.getSourceUMLAssociationEdge().getUMLAssociationEdge().getUmlClass().getUMLClass().getClassName();
 			//String sourceClass = association.getSourceUMLClassMetadata().getUMLClassMetadata().fullyQualifiedName;
 			//assertEquals(extractSourceClass, sourceClass);
