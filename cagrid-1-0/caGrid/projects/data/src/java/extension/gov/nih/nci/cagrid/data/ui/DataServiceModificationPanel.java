@@ -501,7 +501,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			selectDomainModelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						String filename = ResourceManager.promptFile(null, new FileFilters.XMLFileFilter());
+						String filename = ResourceManager.promptFile(null, FileFilters.XML_FILTER);
 						getDomainModelNameTextField().setText(filename);
 					} catch (Exception ex) {
 						ex.printStackTrace();
