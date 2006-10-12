@@ -57,6 +57,7 @@ public class CQLQueryResultsValidator {
 	private String cqlResultXSDLocation = null;
 	private String serviceResultTypesXSDLocation;
 	private String serviceResultTypesNamespace;
+	private String xsdText = null;
 
 
 	public CQLQueryResultsValidator(EndpointReferenceType serviceEPR) {
@@ -78,16 +79,15 @@ public class CQLQueryResultsValidator {
 			}
 
 			// populate the resultset template
-			String templateString;
 			try {
-				templateString = XMLUtilities.streamToString(templateResourceAsStream);
-				LOG.debug("Initial XSD:\n" + templateString);
-				templateString = templateString.replaceAll(TOKEN_CQL_RESULT_XSD_LOCATION, this.cqlResultXSDLocation);
-				templateString = templateString.replaceAll(TOKEN_SERVICE_RESTRICTIONS_XSD_LOCATION,
+				xsdText = XMLUtilities.streamToString(templateResourceAsStream);
+				LOG.debug("Initial XSD:\n" + xsdText);
+				xsdText = xsdText.replaceAll(TOKEN_CQL_RESULT_XSD_LOCATION, this.cqlResultXSDLocation);
+				xsdText = xsdText.replaceAll(TOKEN_SERVICE_RESTRICTIONS_XSD_LOCATION,
 					this.serviceResultTypesXSDLocation);
-				templateString = templateString.replaceAll(TOKEN_SERVICE_RESTRICTIONS_XSD_NAMESPACE,
-					this.serviceResultTypesNamespace);
-				LOG.debug("Created XSD:\n" + templateString);
+				xsdText = xsdText
+					.replaceAll(TOKEN_SERVICE_RESTRICTIONS_XSD_NAMESPACE, this.serviceResultTypesNamespace);
+				LOG.debug("Created XSD:\n" + xsdText);
 			} catch (MobiusException e) {
 				LOG.error(e);
 				throw new SchemaValidationException("Problem configuring service specific XSD.");
@@ -97,11 +97,11 @@ public class CQLQueryResultsValidator {
 			String xsdFileLocation;
 			try {
 				File xsdFile = File.createTempFile("RestrictedCQLResultSet", ".xsd");
+				xsdFile.deleteOnExit();
 				xsdFileLocation = xsdFile.getAbsolutePath();
 				LOG.debug("Writing XSD to file:" + xsdFileLocation);
-				xsdFile.deleteOnExit();
 				FileWriter fw = new FileWriter(xsdFile);
-				fw.write(templateString);
+				fw.write(xsdText);
 				fw.close();
 			} catch (IOException e) {
 				LOG.error(e);
@@ -111,6 +111,19 @@ public class CQLQueryResultsValidator {
 			// configure the validator to point to the XSD
 			validator = new SchemaValidator(xsdFileLocation);
 			initialized = true;
+		}
+	}
+
+
+	public void saveRestrictedCQLResultSetXSD(File fileLocation) throws SchemaValidationException {
+		initializeRestrictedXSD();
+		try {
+			FileWriter fw = new FileWriter(fileLocation);
+			fw.write(xsdText);
+			fw.close();
+		} catch (IOException e) {
+			LOG.error(e);
+			throw new SchemaValidationException("Unable to save XSD to file.");
 		}
 	}
 
@@ -199,7 +212,6 @@ public class CQLQueryResultsValidator {
 			CQLQueryResults result = (CQLQueryResults) Utils.deserializeDocument(args[1], CQLQueryResults.class);
 			validator.validateCQLResultSet(result);
 			System.out.println("Results were valid.");
-
 		} catch (Exception e) {
 			System.out.println("Results were invalid.");
 			e.printStackTrace();
