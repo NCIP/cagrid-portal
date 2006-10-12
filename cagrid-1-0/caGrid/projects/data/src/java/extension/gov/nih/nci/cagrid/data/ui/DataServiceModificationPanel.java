@@ -181,6 +181,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			} else {
 				// get the caDSR url out of the Introduce property bucket
 				url = ResourceManager.getServiceURLProperty(DataServiceConstants.CADSR_SERVICE_URL);
+				// store the just-loaded URL in the service information
+				storeCadsrServiceUrl();
 			}
 			if (url != null) {
 				// configure selected items in the cadsr panel
@@ -1092,6 +1094,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			cadsrDomainModelRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					removeStoredCadsrInformation();
+					storeCadsrServiceUrl();
 					PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), false);
 					PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), true);
 					getDomainModelNameTextField().setText("");
@@ -1471,10 +1474,11 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			if (!found) {
 				ClassMapping[] current = pack.getCadsrClass();
 				if (current == null) {
-					current = new ClassMapping[0];
+					current = new ClassMapping[] {mapping};
+				} else {
+					current = (ClassMapping[]) Utils.appendToArray(current, mapping);
 				}
-				ClassMapping[] mappings = (ClassMapping[]) Utils.appendToArray(current, mapping);
-				pack.setCadsrClass(mappings);
+				pack.setCadsrClass(current);
 			}
 			ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
 		} catch (Exception ex) {
