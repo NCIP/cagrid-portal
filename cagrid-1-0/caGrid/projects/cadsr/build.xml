@@ -349,7 +349,7 @@
 		<delete file="${gar.name}" />
 	</target>
 
-	<target name="runClient" depends="checkGlobus, defineClasspaths" description="Run the sample Discovery Client">
+	<target name="runClient" depends="checkGlobus, defineClasspaths" description="Run the sample caDSR Client">
 		<property name="cadsr.service.url" value="http://localhost:8080/wsrf/services/cagrid/CaDSRService" />
 		<echo message="Connecting to service: ${cadsr.service.url}" />
 		<java classname="gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient" classpathref="run.classpath" fork="no">
