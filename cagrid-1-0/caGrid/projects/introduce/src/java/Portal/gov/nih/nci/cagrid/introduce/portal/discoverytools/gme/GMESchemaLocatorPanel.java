@@ -175,7 +175,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 										makeCombosEnabled(true);
 									} catch (MobiusException e1) {
 										e1.printStackTrace();
-										ErrorDialog.showErrorDialog("Error contacting GME", "Please check the GME URL and make sure that you have the appropriate credentials!");
+										ErrorDialog.showErrorDialog("Error contacting GME", "Please check the GME_URL property in the preferences menu");
 									}
 								}
 							};
@@ -211,8 +211,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 							}
 						} catch (MobiusException e1) {
 							e1.printStackTrace();
-							ErrorDialog.showErrorDialog("Error contacting GME", 
-								"Please check the GME URL and make sure that you have the appropriate credentials!");
+							ErrorDialog.showErrorDialog("Error contacting GME", "Please check the GME_URL property in the preferences menu");
 						}
 					}
 				}
