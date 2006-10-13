@@ -10,7 +10,7 @@ import java.rmi.RemoteException;
  */
 public interface SyncGTSI {
 
-public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
+    public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 
 }
 
