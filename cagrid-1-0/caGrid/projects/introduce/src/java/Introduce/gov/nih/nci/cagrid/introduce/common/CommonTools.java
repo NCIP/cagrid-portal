@@ -949,7 +949,12 @@ public class CommonTools {
 					if (exceptions != null) {
 						for (int e = 0; exceptions.getException() != null && e < exceptions.getException().length; e++) {
 							MethodTypeExceptionsException exception = exceptions.getException(e);
+							if(exception.getQname()!=null){
 							usedTypes.add(exception.getQname());
+							} else {
+								//this is just added int he gui and not in the actual types list yet
+								//it will be after the save
+							}
 						}
 					}
 				}
