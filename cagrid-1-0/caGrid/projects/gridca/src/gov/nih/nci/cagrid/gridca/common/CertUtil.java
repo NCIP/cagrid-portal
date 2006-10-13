@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -63,6 +64,15 @@ public class CertUtil {
 			}
 		}
 		return hexString.toString();
+	}
+
+
+	public static void writeSigningPolicy(X509Certificate cert, File f) throws Exception {
+		PrintWriter out = new PrintWriter(f);
+		out.println("access_id_CA X509 '" + cert.getSubjectDN().getName() + "'");
+		out.println("pos_rights globus CA:sign");
+		out.println("cond_subjects globus '\"*\"'");
+		out.close();
 	}
 
 
