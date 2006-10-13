@@ -1340,24 +1340,24 @@ public class ModificationViewer extends GridPortalComponent {
 		int confirmed = JOptionPane.showConfirmDialog(ModificationViewer.this, "Are you sure you want to save?",
 			"Confirm Save", JOptionPane.YES_NO_OPTION);
 		if (confirmed == JOptionPane.OK_OPTION) {
-			// verify no needed namespace types have been removed or modified
-			if (!CommonTools.usedTypesAvailable(info.getServiceDescriptor())) {
-				Set unavailable = CommonTools.getUnavailableUsedTypes(info.getServiceDescriptor());
-				String[] message = {"The following schema element types used in the service",
-						"are not available in the specified namespace types!", "Please add schemas as appropriate.",
-						"\n"};
-				String[] err = new String[unavailable.size() + message.length];
-				System.arraycopy(message, 0, err, 0, message.length);
-				int index = message.length;
-				Iterator unavailableIter = unavailable.iterator();
-				while (unavailableIter.hasNext()) {
-					err[index] = unavailableIter.next().toString();
-					index++;
-				}
-				JOptionPane.showMessageDialog(ModificationViewer.this, err, "Unavailable types found",
-					JOptionPane.WARNING_MESSAGE);
-				return;
-			}
+//			// verify no needed namespace types have been removed or modified
+//			if (!CommonTools.usedTypesAvailable(info.getServiceDescriptor())) {
+//				Set unavailable = CommonTools.getUnavailableUsedTypes(info.getServiceDescriptor());
+//				String[] message = {"The following schema element types used in the service",
+//						"are not available in the specified namespace types!", "Please add schemas as appropriate.",
+//						"\n"};
+//				String[] err = new String[unavailable.size() + message.length];
+//				System.arraycopy(message, 0, err, 0, message.length);
+//				int index = message.length;
+//				Iterator unavailableIter = unavailable.iterator();
+//				while (unavailableIter.hasNext()) {
+//					err[index] = unavailableIter.next().toString();
+//					index++;
+//				}
+//				JOptionPane.showMessageDialog(ModificationViewer.this, err, "Unavailable types found",
+//					JOptionPane.WARNING_MESSAGE);
+//				return;
+//			}
 
 			BusyDialogRunnable r = new BusyDialogRunnable(PortalResourceManager.getInstance().getGridPortal(), "Save") {
 				public void process() {
