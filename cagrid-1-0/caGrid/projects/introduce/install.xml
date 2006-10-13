@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
-
-
 <installation version="1.0">
-
-    <native type="izpack" name="ShellLink.dll"/>
 
     <info>
         <appname>Introduce</appname>
@@ -23,7 +19,6 @@
    
     <locale>
         <langpack iso3="eng"/>
-        <langpack iso3="fra"/>
     </locale>
     
     <resources>
@@ -55,7 +50,6 @@
             <file src="lib" targetdir="$INSTALL_PATH"/> <!-- Reccursive adding -->
             <file src="build/jars" targetdir="$INSTALL_PATH/build"/>
             <file src="resources" targetdir="$INSTALL_PATH"/>
-            <file src="operationProviders" targetdir="$INSTALL_PATH"/>
             <file src="antfiles" targetdir="$INSTALL_PATH"/>
             <file src="extensions" targetdir="$INSTALL_PATH"/>
             <file src="ext" targetdir="$INSTALL_PATH"/>
