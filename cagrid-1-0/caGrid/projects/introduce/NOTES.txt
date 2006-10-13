@@ -9,6 +9,10 @@ assumption is made that when a method is imported from a wsdl that all the messa
 
 To Do:
 
+when people add introduce.jars to the extensions dir they get ran instead.
+
+set package name better in import window....use wsdl namespaces
+
 expose getResourceProperties through the generated clients.
 
 look at the upper case vs lower case methods issues.....
