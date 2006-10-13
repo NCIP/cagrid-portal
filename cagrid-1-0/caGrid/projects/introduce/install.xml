@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<!-- in order to create an installer from this install file you will
+need to download IZForge and run the following command (modify paths of course)
+
+    C:\Program Files\IzPack\bin\compile c:\projects\cagrid\caGrid\projects\introduce
+    \install.xml -b c:\projects\cagrid\caGrid\projects\introduce -o c:\introduce-1.0
+    .jar
+
+-->
+
 <installation version="1.0">
 
     <info>
