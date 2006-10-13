@@ -1630,7 +1630,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 			isImportedCheckBox = new JCheckBox();
 			isImportedCheckBox
 				.setToolTipText("Check this if you want to import the the WSDL operation from another service");
-			isImportedCheckBox.setText("imported");
+			isImportedCheckBox.setText("Imported");
 			isImportedCheckBox.setSelected(method.isIsImported());
 			if (isImportedCheckBox.isSelected()) {
 				getTabbedPanel().setEnabledAt(3, true);
@@ -2152,7 +2152,7 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JCheckBox getIsFromIntroduceCheckBox() {
 		if (isFromIntroduceCheckBox == null) {
 			isFromIntroduceCheckBox = new JCheckBox();
-			isFromIntroduceCheckBox.setText("Method Is From An Introduce Generated Service?");
+			isFromIntroduceCheckBox.setText("Method is from an introduce generated service.");
 			isFromIntroduceCheckBox.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (getIsFromIntroduceCheckBox().isSelected()) {
