@@ -30,6 +30,7 @@ import org.projectmobius.common.MobiusRunnable;
 import org.projectmobius.portal.GridPortalBaseFrame;
 import org.projectmobius.portal.PortalResourceManager;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -37,8 +38,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @version $Id: TrustedAuthoritiesWindow.java,v 1.2 2006/03/27 19:05:40
  *          langella Exp $
  */
-public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
-		TrustedAuthorityRefresher {
+public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements TrustedAuthorityRefresher {
 
 	private final static String ANY = "Any";
 
@@ -112,6 +112,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 
 	private GTSServiceListComboBox sourceGTS = null;
 
+
 	/**
 	 * This is the default constructor
 	 */
@@ -120,6 +121,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		initialize();
 		this.setFrameIcon(GTSLookAndFeel.getTrustedAuthorityIcon());
 	}
+
 
 	/**
 	 * This method initializes this
@@ -133,6 +135,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		updateTrustLevels();
 
 	}
+
 
 	private void updateTrustLevels() {
 		trustLevel.removeAllItems();
@@ -151,12 +154,12 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				PortalUtils
-						.showErrorMessage("Error obtaining the trust levels from "
-								+ service + ":\n" + e.getMessage());
+				PortalUtils.showErrorMessage("Error obtaining the trust levels from " + service + ":\n"
+					+ e.getMessage());
 			}
 		}
 	}
+
 
 	/**
 	 * This method initializes jContentPane
@@ -171,6 +174,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		}
 		return jContentPane;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -225,6 +229,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		return mainPanel;
 	}
 
+
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -235,14 +240,9 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
-			contentPanel
-					.setBorder(javax.swing.BorderFactory
-							.createTitledBorder(
-									null,
-									"Trusted Authority(s)",
-									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-									javax.swing.border.TitledBorder.DEFAULT_POSITION,
-									null, GTSLookAndFeel.getPanelLabelColor()));
+			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trusted Authority(s)",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.gridx = 0;
@@ -252,6 +252,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		}
 		return contentPanel;
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -268,6 +269,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		return buttonPanel;
 	}
 
+
 	/**
 	 * This method initializes jTable
 	 * 
@@ -279,6 +281,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		}
 		return trustedAuthorityTable;
 	}
+
 
 	/**
 	 * This method initializes jScrollPane
@@ -293,6 +296,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		return jScrollPane;
 	}
 
+
 	/**
 	 * This method initializes manageUser
 	 * 
@@ -302,49 +306,43 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		if (viewTrustedAuthority == null) {
 			viewTrustedAuthority = new JButton();
 			viewTrustedAuthority.setText("View/Edit Trusted Authority");
-			viewTrustedAuthority.setIcon(GTSLookAndFeel
-					.getModifyTrustedAuthorityIcon());
-			viewTrustedAuthority
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							MobiusRunnable runner = new MobiusRunnable() {
-								public void execute() {
-									disableAllActions();
-									showTrustedAuthority();
-									enableAllActions();
-								}
-							};
-							try {
-								PortalResourceManager.getInstance()
-										.getThreadManager()
-										.executeInBackground(runner);
-							} catch (Exception t) {
-								t.getMessage();
-							}
+			viewTrustedAuthority.setIcon(GTSLookAndFeel.getModifyTrustedAuthorityIcon());
+			viewTrustedAuthority.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							disableAllActions();
+							showTrustedAuthority();
+							enableAllActions();
 						}
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
 
-					});
+			});
 		}
 
 		return viewTrustedAuthority;
 	}
 
+
 	public void showTrustedAuthority() {
 		try {
-			String service = ((GTSServiceListComboBox) getService())
-					.getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy())
-					.getSelectedProxy();
-			TrustedAuthorityWindow window = new TrustedAuthorityWindow(service,
-					proxy, this.getTrustedAuthorityTable()
-							.getSelectedTrustedAuthority(), this);
-			PortalResourceManager.getInstance().getGridPortal()
-					.addGridPortalComponent(window);
+			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			TrustedAuthorityWindow window = new TrustedAuthorityWindow(service, proxy, this.getTrustedAuthorityTable()
+				.getSelectedTrustedAuthority(), this);
+			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(window);
 		} catch (Exception e) {
 			e.printStackTrace();
 			PortalUtils.showErrorMessage(e);
 		}
 	}
+
 
 	/**
 	 * This method initializes jPanel
@@ -364,6 +362,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		}
 		return jPanel;
 	}
+
 
 	/**
 	 * This method initializes jPanel2
@@ -403,11 +402,9 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 			jLabel14.setText("Service");
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
-					"GTS/Login Information",
-					TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
-							.getPanelLabelColor()));
+			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "GTS/Login Information",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
+					.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
 			jPanel2.add(proxyLabel, gridBagConstraints29);
@@ -415,6 +412,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		}
 		return jPanel2;
 	}
+
 
 	/**
 	 * This method initializes queryPanel
@@ -428,6 +426,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		}
 		return queryPanel;
 	}
+
 
 	/**
 	 * This method initializes query
@@ -449,8 +448,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 						}
 					};
 					try {
-						PortalResourceManager.getInstance().getThreadManager()
-								.executeInBackground(runner);
+						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -461,25 +459,24 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		return query;
 	}
 
+
 	private void findTrustedAuthorities() {
 
 		this.getTrustedAuthorityTable().clearTable();
 		this.updateProgress(true, "Finding Trusted Authorities...");
 
 		try {
-			String service = ((GTSServiceListComboBox) getService())
-					.getSelectedService();
+			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
 
 			TrustedAuthorityFilter filter = new TrustedAuthorityFilter();
 			filter.setName(Utils.clean(trustedAuthorityName.getText()));
 			String tl = (String) trustLevel.getSelectedItem();
-			if (tl.equals(ANY)) {
-				tl = null;
-			}
 			TrustLevels levels = new TrustLevels();
-			String[] list = new String[1];
-			list[0] = tl;
-			levels.setTrustLevel(list);
+			if (!tl.equals(ANY)) {
+				String[] list = new String[1];
+				list[0] = tl;
+				levels.setTrustLevel(list);
+			}
 			filter.setTrustLevels(levels);
 			filter.setStatus(((StatusComboBox) status).getStatus());
 			filter.setLifetime(this.lifetime.getLifetime());
@@ -497,8 +494,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 			}
 			searchDone = true;
 
-			this.updateProgress(false, "Completed [Found " + length
-					+ " Trusted Authority(s)]");
+			this.updateProgress(false, "Completed [Found " + length + " Trusted Authority(s)]");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -506,6 +502,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 			this.updateProgress(false, "Error");
 		}
 	}
+
 
 	/**
 	 * This method initializes service
@@ -524,6 +521,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		return service;
 	}
 
+
 	/**
 	 * This method initializes proxy
 	 * 
@@ -535,6 +533,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		}
 		return proxy;
 	}
+
 
 	/**
 	 * This method initializes progressPanel
@@ -556,6 +555,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		return progressPanel;
 	}
 
+
 	/**
 	 * This method initializes progress
 	 * 
@@ -571,6 +571,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		return progress;
 	}
 
+
 	public void updateProgress(final boolean working, final String s) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -581,6 +582,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 
 	}
 
+
 	/**
 	 * This method initializes removeUser
 	 * 
@@ -590,40 +592,34 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		if (removeTrustedAuthorityButton == null) {
 			removeTrustedAuthorityButton = new JButton();
 			removeTrustedAuthorityButton.setText("Remove Trusted Authority");
-			removeTrustedAuthorityButton
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							MobiusRunnable runner = new MobiusRunnable() {
-								public void execute() {
-									disableAllActions();
-									removeTrustedAuthority();
-									enableAllActions();
-								}
-							};
-							try {
-								PortalResourceManager.getInstance()
-										.getThreadManager()
-										.executeInBackground(runner);
-							} catch (Exception t) {
-								t.getMessage();
-							}
+			removeTrustedAuthorityButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					MobiusRunnable runner = new MobiusRunnable() {
+						public void execute() {
+							disableAllActions();
+							removeTrustedAuthority();
+							enableAllActions();
 						}
-					});
-			removeTrustedAuthorityButton.setIcon(GTSLookAndFeel
-					.getRemoveTrustedAuthorityIcon());
+					};
+					try {
+						PortalResourceManager.getInstance().getThreadManager().executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+			});
+			removeTrustedAuthorityButton.setIcon(GTSLookAndFeel.getRemoveTrustedAuthorityIcon());
 		}
 		return removeTrustedAuthorityButton;
 	}
 
+
 	private void removeTrustedAuthority() {
 		try {
-			String service = ((GTSServiceListComboBox) getService())
-					.getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy())
-					.getSelectedProxy();
+			String service = ((GTSServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			GTSAdminClient client = new GTSAdminClient(service, proxy);
-			client.removeTrustedAuthority(this.getTrustedAuthorityTable()
-					.getSelectedTrustedAuthority().getName());
+			client.removeTrustedAuthority(this.getTrustedAuthorityTable().getSelectedTrustedAuthority().getName());
 			this.getTrustedAuthorityTable().removeSelectedTrustedAuthority();
 			refreshTrustedAuthorities();
 
@@ -631,6 +627,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 			PortalUtils.showErrorMessage(e);
 		}
 	}
+
 
 	/**
 	 * This method initializes filterPanel
@@ -737,10 +734,9 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 			jLabel.setText("Trusted Authority Name");
 			filterPanel = new JPanel();
 			filterPanel.setLayout(new GridBagLayout());
-			filterPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Search Criteria", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
-							.getPanelLabelColor()));
+			filterPanel.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, GTSLookAndFeel
+					.getPanelLabelColor()));
 			filterPanel.add(jLabel, gridBagConstraints10);
 			filterPanel.add(getTrustedAuthorityName(), gridBagConstraints3);
 			filterPanel.add(jLabel1, gridBagConstraints5);
@@ -759,6 +755,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		return filterPanel;
 	}
 
+
 	/**
 	 * This method initializes trustedAuthorityName
 	 * 
@@ -770,6 +767,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		}
 		return trustedAuthorityName;
 	}
+
 
 	/**
 	 * This method initializes trustLevel
@@ -784,6 +782,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		return trustLevel;
 	}
 
+
 	/**
 	 * This method initializes status
 	 * 
@@ -795,6 +794,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		}
 		return status;
 	}
+
 
 	/**
 	 * This method initializes addButton
@@ -817,10 +817,11 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		return addButton;
 	}
 
+
 	private void addTrustedAuthority() {
-		PortalResourceManager.getInstance().getGridPortal()
-				.addGridPortalComponent(new TrustedAuthorityWindow(this));
+		PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new TrustedAuthorityWindow(this));
 	}
+
 
 	private void disableAllActions() {
 		getQuery().setEnabled(false);
@@ -829,12 +830,14 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		getRemoveTrustedAuthorityButton().setEnabled(false);
 	}
 
+
 	private void enableAllActions() {
 		getQuery().setEnabled(true);
 		getAddButton().setEnabled(true);
 		getViewTrustedAuthority().setEnabled(true);
 		getRemoveTrustedAuthorityButton().setEnabled(true);
 	}
+
 
 	public void refreshTrustedAuthorities() {
 		if (searchDone) {
@@ -843,6 +846,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 			enableAllActions();
 		}
 	}
+
 
 	/**
 	 * This method initializes lifetime
@@ -856,6 +860,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		return lifetime;
 	}
 
+
 	/**
 	 * This method initializes isAuthority
 	 * 
@@ -868,6 +873,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		return isAuthority;
 	}
 
+
 	/**
 	 * This method initializes authorityGTS
 	 * 
@@ -879,6 +885,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements
 		}
 		return authorityGTS;
 	}
+
 
 	/**
 	 * This method initializes sourceGTS
