@@ -9,6 +9,8 @@ assumption is made that when a method is imported from a wsdl that all the messa
 
 To Do:
 
+do not let imported methods be modified in the service contexts
+
 when people add introduce.jars to the extensions dir they get ran instead.
 
 set package name better in import window....use wsdl namespaces
