@@ -123,13 +123,14 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode {
 
 
 	public void removeMethod(MethodTypeTreeNode node) {
+		MethodType removedMethod = (MethodType)node.getUserObject();
 
 		MethodType[] newMethods = new MethodType[getMethods().getMethod().length - 1];
 		int newMethodsCount = 0;
-		for (int i = 0; i < this.getChildCount(); i++) {
-			MethodTypeTreeNode treenode = (MethodTypeTreeNode) this.getChildAt(i);
-			if (!treenode.equals(node)) {
-				newMethods[newMethodsCount++] = (MethodType) treenode.getUserObject();
+		for (int i = 0; i < getMethods().getMethod().length; i++) {
+			MethodType potentialMethod = (MethodType)getMethods().getMethod(i);
+			if (!potentialMethod.equals(removedMethod)) {
+				newMethods[newMethodsCount++] = potentialMethod;
 			}
 		}
 
