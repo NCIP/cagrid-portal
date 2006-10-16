@@ -17,6 +17,8 @@ package <%=info.getService().getPackageName()%>.client;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.client.AxisClient;
 import org.apache.axis.client.Stub;
@@ -24,6 +26,8 @@ import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.axis.utils.ClassUtils;
+
+import org.oasis.wsrf.properties.GetResourcePropertyResponse;
 
 import org.globus.gsi.GlobusCredential;
 
@@ -87,6 +91,10 @@ public class <%=info.getService().getName()%>Client extends ServiceSecurityClien
 		}
 
 		return port;
+	}
+	
+	public GetResourcePropertyResponse getResourceProperty(QName resourcePropertyQName) throws RemoteException {
+		return portType.getResourceProperty(resourcePropertyQName);
 	}
 
 	public static void usage(){

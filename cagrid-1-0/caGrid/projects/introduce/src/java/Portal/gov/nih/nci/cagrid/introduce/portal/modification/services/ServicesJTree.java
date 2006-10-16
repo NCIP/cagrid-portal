@@ -76,6 +76,15 @@ public class ServicesJTree extends JTree {
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
 								ServicesJTree.this.optionsPanel, "methods");
 						} else if (nodes.get(0) instanceof MethodTypeTreeNode) {
+							//make sure the method cannot be edited if it is imported
+							if (((MethodTypeTreeNode) nodes.get(0)).getMethod().isIsImported()) {
+								((MethodButtonPanel) ServicesJTree.this.optionsPanel.getComponent(3))
+									.setCanModify(false);
+							} else {
+								((MethodButtonPanel) ServicesJTree.this.optionsPanel.getComponent(3))
+									.setCanModify(true);
+							}
+							//show the correct card for editing a method
 							((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
 								ServicesJTree.this.optionsPanel, "method");
 						} else if (nodes.get(0) instanceof ResourcePropertiesTypeTreeNode) {

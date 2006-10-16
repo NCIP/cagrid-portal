@@ -9,13 +9,7 @@ assumption is made that when a method is imported from a wsdl that all the messa
 
 To Do:
 
-do not let imported methods be modified in the service contexts
-
-when people add introduce.jars to the extensions dir they get ran instead.
-
 set package name better in import window....use wsdl namespaces
-
-expose getResourceProperties through the generated clients.
 
 look at the upper case vs lower case methods issues.....
 
@@ -54,6 +48,13 @@ add tests to system tests for (coverage report shows no coverage):
 - (DONE) servicename ending in Service
 
 ============================ D O N E ================================================================
+expose getResourceProperties through the generated clients.
+
+when people add introduce.jars to the extensions dir they get ran instead.
+
+make sure if someone says it is provided that they provide a class for it inthe method viewer.....
+
+do not let imported methods be modified in the service contexts
 
 finish wsdl based method import screen....wsdl file locator is not working right...
 

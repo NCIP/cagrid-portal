@@ -39,7 +39,7 @@ public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.gridx = 0;
 		gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
-		gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
+		gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints3.gridy = 1;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -49,6 +49,11 @@ public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 		this.setLayout(new GridBagLayout());
 		this.add(getAddServiceButton(), gridBagConstraints);
 		this.add(getRemoveButton(), gridBagConstraints3);
+	}
+
+
+	public void setCanModify(boolean canModify) {
+		this.getAddServiceButton().setEnabled(canModify);
 	}
 
 
