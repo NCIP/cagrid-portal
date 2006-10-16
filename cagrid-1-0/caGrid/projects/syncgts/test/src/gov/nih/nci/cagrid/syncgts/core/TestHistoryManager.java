@@ -1,16 +1,16 @@
 package gov.nih.nci.cagrid.syncgts.core;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.syncgts.bean.DateFilter;
-import gov.nih.nci.cagrid.syncgts.bean.SyncReport;
-import junit.framework.TestCase;
+
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.BufferedInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import junit.framework.TestCase;
 
 public class TestHistoryManager extends TestCase {
 
