@@ -255,11 +255,11 @@
 	<!-- Creates the installer                                               -->
 	<!-- =================================================================== -->
 	<target name="createInstaller" description="Creates the installler" depends="">
-		<izpack input="${basedir}/install.xml"
+		<izpack input="${basedir}/install/install.xml"
 			output="${basedir}/${jars.prefixname}installer.jar"
 			installerType="standard"
 			basedir="${basedir}"
-			izPackDir="${basedir}/"/>
+			izPackDir="${basedir}/install"/>
 	</target>
 	
 	

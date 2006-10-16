@@ -9,6 +9,8 @@ need to download IZForge and run the following command (modify paths of course)
 -->
 
 <installation version="1.0">
+    
+    <native type="izpack" name="ShellLink.dll"/>
 
     <info>
         <appname>Introduce</appname>
@@ -35,7 +37,7 @@ need to download IZForge and run the following command (modify paths of course)
         <res id="InfoPanel.info" src="Readme.txt"/>
         <res id="Installer.image" src="resources/portal/introduce/introduceSplash.png" />
         <res id="installer.langsel.img" src="resources/portal/introduce/introduceSplash.png" />
-        <res id="shortcutSpec.xml" src="shortcutSpec.xml"/>
+        <res id="shortcutSpec.xml" src="install/shortcutSpec.xml"/>
     </resources>
     
     <panels>
@@ -66,7 +68,7 @@ need to download IZForge and run the following command (modify paths of course)
             <file src="schema" targetdir="$INSTALL_PATH"/>
             <file src="skeleton" targetdir="$INSTALL_PATH"/>
             <file src="test" targetdir="$INSTALL_PATH"/>
-            <singlefile src="run.xml" target="$INSTALL_PATH/build.xml"/>
+            <singlefile src="install/run.xml" target="$INSTALL_PATH/build.xml"/>
             <file src="doc" targetdir="$INSTALL_PATH"/> 
         </pack>
         <pack name="Docs" required="no">
