@@ -23,6 +23,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import org.projectmobius.portal.PortalResourceManager;
+
 /** 
  *  SchemaResolutionDialog
  *  Dialog to resolve schemas from all available namespace type discovery extension components
@@ -47,7 +49,7 @@ public class SchemaResolutionDialog extends JDialog {
 	private boolean resolutionSuccess;
 	
 	private SchemaResolutionDialog(ServiceInformation info, CadsrPackage pack) {
-		super();
+		super(PortalResourceManager.getInstance().getGridPortal(), "Schema Resolution", true);
 		this.serviceInfo = info;
 		this.cadsrPackage = pack;
 		this.resolutionSuccess = false;

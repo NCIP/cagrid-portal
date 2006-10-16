@@ -223,6 +223,12 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 				public void tableChanged(TableModelEvent e) {
 					if (e.getType() == TableModelEvent.UPDATE) {
 						setWizardComplete(allSchemasResolved());
+						try {
+							storePackageMappings();
+						} catch (Exception ex) {
+							ex.printStackTrace();
+							ErrorDialog.showErrorDialog("Error storing namespace mappings", ex);
+						}
 					}
 				}
 			});
@@ -316,5 +322,27 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 			}
 		}
 		return true;
+	}
+	
+	
+	private void storePackageMappings() throws Exception {
+		Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
+		CadsrInformation info = data.getCadsrInformation();
+		if (info == null) {
+			info = new CadsrInformation();
+			data.setCadsrInformation(info);
+		}
+		for (int i = 0; info.getPackages() != null && i < info.getPackages().length; i++) {
+			CadsrPackage currentPackage = info.getPackages(i);
+			// find the package's row in the table
+			for (int row = 0; row < getPackageNamespaceTable().getRowCount(); row++) {
+				if (currentPackage.getName().equals(getPackageNamespaceTable().getValueAt(row, 0))) {
+					// set the mapped namespace
+					currentPackage.setMappedNamespace((String) getPackageNamespaceTable().getValueAt(row, 1));
+					break;
+				}
+			}
+		}
+		ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
 	}
 }
