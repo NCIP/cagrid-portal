@@ -14,6 +14,8 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.client.AxisClient;
 import org.apache.axis.client.Stub;
@@ -25,6 +27,7 @@ import org.apache.axis.utils.ClassUtils;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.impl.security.authorization.Authorization;
 import org.globus.wsrf.impl.security.authorization.NoAuthorization;
+import org.oasis.wsrf.properties.GetResourcePropertyResponse;
 
 
 /**
@@ -102,8 +105,6 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 	public void setProxy(GlobusCredential proxy) {
 		this.proxy = proxy;
 	}
-
-
 
 	private ServiceSecurityPortType getPortType() throws RemoteException {
 
