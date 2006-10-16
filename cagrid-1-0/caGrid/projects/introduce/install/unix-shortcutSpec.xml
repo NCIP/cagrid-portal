@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+
+  <programGroup defaultName="Introduce" location="applications"/>
+
+   <shortcut
+     name="Introduce"
+     programGroup="yes"
+     desktop="no"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     workingDirectory="$INSTALL_PATH"
+     target="ant"
+     initialState="noShow"
+     commandLine="introduce"
+     iconFile="$INSTALL_PATH/resources/portal/introduce/introduce.ico"
+     iconIndex="0"
+     description="Launch the Introduce GDE"
+     type="Application"
+     encoding="UTF-8"
+     terminal="true">
+     <createForPack name="Base" />
+   </shortcut>
+   
+  <shortcut
+    name="API Documentation"
+    programGroup="yes"
+    desktop="no"
+    applications="no"
+    startMenu="yes"
+    startup="no"
+    target="$INSTALL_PATH/doc/javadoc/index.html"
+    workingDirectory=""
+    commandLine=""
+    initialState="noShow"
+    url="$INSTALL_PATH/doc/javadoc/index.html"
+    type="Link"
+    encoding="UTF-8"
+    description="View the Introduce API Documentation">
+    <createForPack name="Docs"/>
+  </shortcut>
+   
+</shortcuts>

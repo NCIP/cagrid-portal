@@ -55,10 +55,19 @@ public class ResourceManager {
 
 	public final static String LAST_FILE = "introduce.lastfile";
 
+	public static File getIntroduceUserHome() {
+		String userHome = System.getProperty("user.home");
+		File userHomeF = new File(userHome);
+		File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".introduce");
+		if (!caGridCache.exists()) {
+			caGridCache.mkdirs();
+		}
+		return caGridCache;
+	}
+
 
 	public static String getResourcePath() {
-		File caGridCache = Utils.getCaGridUserHome();
-		File introduceCache = new File(caGridCache + File.separator + "introduce");
+		File introduceCache = getIntroduceUserHome();
 		introduceCache.mkdir();
 		return introduceCache.getAbsolutePath();
 	}
