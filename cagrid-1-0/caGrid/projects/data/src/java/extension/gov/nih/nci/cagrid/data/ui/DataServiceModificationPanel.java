@@ -1071,10 +1071,12 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			noDomainModelRadioButton.setText("No Domain Model");
 			noDomainModelRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					removeStoredCadsrInformation();
-					PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), false);
-					PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), false);
-					getDomainModelNameTextField().setText("");
+					if (noDomainModelRadioButton.isSelected()) {
+						removeStoredCadsrInformation();
+						PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), false);
+						PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), false);
+						getDomainModelNameTextField().setText("");
+					}
 				}
 			});
 		}
@@ -1093,11 +1095,12 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			cadsrDomainModelRadioButton.setText("caDSR Domain Model");
 			cadsrDomainModelRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					removeStoredCadsrInformation();
-					storeCadsrServiceUrl();
-					PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), false);
-					PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), true);
-					getDomainModelNameTextField().setText("");
+					if (cadsrDomainModelRadioButton.isSelected()) {
+						storeCadsrServiceUrl();
+						PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), false);
+						PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), true);
+						getDomainModelNameTextField().setText("");
+					}
 				}
 			});
 		}
@@ -1116,9 +1119,11 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			suppliedDomainModelRadioButton.setText("Supplied Domain Model");
 			suppliedDomainModelRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					removeStoredCadsrInformation();
-					PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), true);
-					PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), false);
+					if (suppliedDomainModelRadioButton.isSelected()) {
+						removeStoredCadsrInformation();
+						PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), true);
+						PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), false);
+					}
 				}
 			});
 		}
@@ -1163,7 +1168,24 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			group.add(getNoDomainModelRadioButton());
 			group.add(getCadsrDomainModelRadioButton());
 			group.add(getSuppliedDomainModelRadioButton());
-			group.setSelected(getNoDomainModelRadioButton().getModel(), true);
+			// decide which domain model mode to auto-select
+			try {
+				Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
+				CadsrInformation info = data.getCadsrInformation();
+				if (info != null) {
+					if (info.getSuppliedDomainModel() != null) {
+						group.setSelected(getSuppliedDomainModelRadioButton().getModel(), true);
+					} else {
+						group.setSelected(getCadsrDomainModelRadioButton().getModel(), true);
+					}
+				} else {
+					group.setSelected(getNoDomainModelRadioButton().getModel(), true);
+				}
+			} catch (Exception ex) {
+				
+			}
+			
+			
 		}
 		return domainModelSourcePanel;
 	}

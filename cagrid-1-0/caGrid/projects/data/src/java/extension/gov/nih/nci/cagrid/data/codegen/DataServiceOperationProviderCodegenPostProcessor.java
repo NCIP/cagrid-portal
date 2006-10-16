@@ -24,19 +24,22 @@ public class DataServiceOperationProviderCodegenPostProcessor extends BaseCodege
 		// add the necessary jars to the eclipse .classpath
 		modifyEclipseClasspath(desc, info);
 
-		// create the XSD with the group of allowable return types for the
-		// service
+		// create the XSD with the group of allowable return types for the service
 		ResultTypeGeneratorInformation typeInfo = new ResultTypeGeneratorInformation();
 		typeInfo.setServiceInfo(info);
 		CadsrInformation cadsrInfo = null;
+		ExtensionTypeExtensionData data = null;
 		try {
-			ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
+			data = ExtensionTools.getExtensionData(desc, info);
 			cadsrInfo = ExtensionDataUtils.getExtensionData(data).getCadsrInformation();
 		} catch (Exception ex) {
 			throw new CodegenExtensionException("Error getting extension data: " + ex.getMessage());
 		}
 		typeInfo.setCadsrInfo(cadsrInfo);
 		CQLResultTypesGenerator.generateCQLResultTypesXSD(typeInfo);
+		
+		// create the class to QName mapping
+		generateClassToQnameMapping(data, info);
 	}
 
 }

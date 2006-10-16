@@ -41,6 +41,7 @@ TODO:
 31[D]: caCORE creation wizard (actually all of DS extension) should use introduce preferences bucket
 32[D]: create CQLResult schema validator tool (using templated RestrictedCQLResultSet.xsd to poll allowable types from service)
 33[D]: allow data service tab to configure "allowable as target" option for exposed classes (domain model needs to edited with it, and result type xsd generation needs to use it)  
+34[I]: Add utility features for class name to QName mapping.  Generated at service build time with introduce extension.
 
 I = In Progress
 D = Done

@@ -41,8 +41,10 @@ public class DataServiceCodegenPostProcessor extends BaseCodegenPostProcessorExt
 	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
 		modifyEclipseClasspath(desc, info);
-		// see if the query method has already been implemented
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
+		generateClassToQnameMapping(data, info);
+		// see if the query method has already been implemented
+		// FIXME: this belongs in extension data
 		MessageElement implAddedElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_IMPLEMENTATION_ADDED);
 		if (implAddedElement == null || implAddedElement.getValue() == null 
 			|| implAddedElement.getValue().equals(String.valueOf(false))) {
