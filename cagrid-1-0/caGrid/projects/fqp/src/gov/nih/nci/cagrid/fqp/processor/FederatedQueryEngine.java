@@ -54,7 +54,7 @@ public class FederatedQueryEngine {
 			// aggregate results
 			CQLQueryResults currResults = DataServiceQueryExecutor.queryDataService(cqlQuery, targetServiceURLs[i]);
 			r.setCQLQueryResultCollection(currResults);
-			if (!currResults.getTargetClassname().equals(dcqlQuery.getTargetObject().getName())) {
+			if (currResults.getTargetClassname()==null || !currResults.getTargetClassname().equals(dcqlQuery.getTargetObject().getName())) {
 				throw new RemoteDataServiceException("Data service (" + targetServiceURLs[i]
 					+ ") returned results of type (" + currResults.getTargetClassname() + ") when type ("
 					+ dcqlQuery.getTargetObject().getName() + ") was requested!");

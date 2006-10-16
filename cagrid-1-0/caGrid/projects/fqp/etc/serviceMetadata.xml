@@ -64,6 +64,10 @@
        <ns2:inputParameterCollection/>
        <ns2:faultCollection/>
       </ns2:Operation>
+      <ns2:Operation description="" name="SetTerminationTime">
+       <ns2:inputParameterCollection/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
       <ns2:ContextProperty description="" name="{http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd}CurrentTime"/>

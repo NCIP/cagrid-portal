@@ -6,7 +6,8 @@ http\://fqp.cagrid.nci.nih.gov/FederatedResults=gov.nih.nci.cagrid.fqp.results.s
 http\://fqp.cagrid.nci.nih.gov/FederatedResults/bindings=gov.nih.nci.cagrid.fqp.results.stubs.bindings
 http\://fqp.cagrid.nci.nih.gov/FederatedResults/service=gov.nih.nci.cagrid.fqp.results.stubs.service
 http\://security.introduce.cagrid.nci.nih.gov/ServiceSecurity=gov.nih.nci.cagrid.introduce.security.stubs
-http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl=wsrf-ws-resourcelifetime-1.2-draft-01.wsdl
+http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl=org.oasis.wsrf.lifetime
+http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl=org.oasis.wsrf.lifetime
 
 http\://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery=gov.nih.nci.cagrid.cqlquery
 http\://fqp.cagrid.nci.nih.gov/FederatedResults/types=gov.nih.nci.cagrid.fqp.results.stubs.types

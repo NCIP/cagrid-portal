@@ -100,14 +100,19 @@ public class FederatedQueryResultsClient extends ServiceSecurityClient implement
 		}
 	}
 
-    public void destroy() throws RemoteException {
+	public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"destroy");
-        org.oasis.wsrf.lifetime.Destroy params = new org.oasis.wsrf.lifetime.Destroy();
-        org.oasis.wsrf.lifetime.DestroyResponse boxedResult = portType.destroy(params);
+        return portType.destroy(params);
       }
     }
-    public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection getResults() throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
+	public org.oasis.wsrf.lifetime.SetTerminationTimeResponse setTerminationTime(org.oasis.wsrf.lifetime.SetTerminationTime params) throws RemoteException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"setTerminationTime");
+        return portType.setTerminationTime(params);
+      }
+    }
+	public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection getResults() throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getResults");
         gov.nih.nci.cagrid.fqp.results.stubs.GetResultsRequest params = new gov.nih.nci.cagrid.fqp.results.stubs.GetResultsRequest();
@@ -115,7 +120,7 @@ public class FederatedQueryResultsClient extends ServiceSecurityClient implement
         return boxedResult.getDCQLQueryResultsCollection();
       }
     }
-    public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
+	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
         gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
@@ -123,7 +128,7 @@ public class FederatedQueryResultsClient extends ServiceSecurityClient implement
         return boxedResult.getServiceSecurityMetadata();
       }
     }
-    public boolean isProcessingComplete() throws RemoteException {
+	public boolean isProcessingComplete() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"isProcessingComplete");
         gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteRequest params = new gov.nih.nci.cagrid.fqp.results.stubs.IsProcessingCompleteRequest();

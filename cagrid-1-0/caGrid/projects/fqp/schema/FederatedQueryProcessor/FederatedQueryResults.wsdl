@@ -121,6 +121,13 @@
       <wsdl:fault message="wsrlw:ResourceNotDestroyedFault" name="ResourceNotDestroyedFault" />
       <wsdl:fault message="wsrlw:ResourceUnknownFault" name="ResourceUnknownFault" />
     </wsdl:operation>
+    <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="SetTerminationTime">
+      <wsdl:input message="wsrlw:SetTerminationTimeRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime/SetTerminationTime" />
+      <wsdl:output message="wsrlw:SetTerminationTimeResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime/SetTerminationTimeResponse" />
+      <wsdl:fault message="wsrlw:UnableToSetTerminationTimeFault" name="UnableToSetTerminationTimeFault" />
+      <wsdl:fault message="wsrlw:ResourceUnknownFault" name="ResourceUnknownFault" />
+      <wsdl:fault message="wsrlw:TerminationTimeChangeRejectedFault" name="TerminationTimeChangeRejectedFault" />
+    </wsdl:operation>
   </portType>
 </definitions>
 

@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 
 import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.util.Calendar;
 
 import javax.xml.namespace.QName;
 
@@ -25,6 +26,8 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.axis.utils.ClassUtils;
 import org.globus.gsi.GlobusCredential;
+import org.oasis.wsrf.lifetime.SetTerminationTime;
+import org.oasis.wsrf.lifetime.SetTerminationTimeResponse;
 
 
 /**
@@ -115,10 +118,8 @@ public class FederatedQueryProcessorClient extends ServiceSecurityClient impleme
 					DCQLQuery dcql = (DCQLQuery) Utils.deserializeDocument(args[3], DCQLQuery.class);
 					FederatedQueryResultsClient resultsClilent = client.executeAsynchronously(dcql);
 
-					// Utils.serializeDocument("resultEPR.xml",
-					// resultsClilent.getEndpointReference(), new QName(
-					// "http://schemas.xmlsoap.org/ws/2004/03/addressing",
-					// "EndPointReference"));
+					Utils.serializeDocument("resultEPR.xml", resultsClilent.getEndpointReference(), new QName(
+						"http://schemas.xmlsoap.org/ws/2004/03/addressing", "EndPointReference"));
 
 					// hackish... need to subscribe to isComplete RP
 					while (!resultsClilent.isProcessingComplete()) {
@@ -147,7 +148,32 @@ public class FederatedQueryProcessorClient extends ServiceSecurityClient impleme
 						System.out.println("Got no results.");
 					}
 
-					resultsClilent.destroy();
+//					SetTerminationTime termTime = new SetTerminationTime();
+//					Calendar terminateAt = Calendar.getInstance();
+//					terminateAt.add(Calendar.SECOND, 10);
+//					termTime.setRequestedTerminationTime(terminateAt);
+//
+//					SetTerminationTimeResponse response = resultsClilent.setTerminationTime(termTime);
+//
+//					System.out.println("Current time               " + response.getCurrentTime().getTime());
+//					System.out.println("Requested termination time " + terminateAt.getTime());
+//					System.out.println("Scheduled termination time " + response.getNewTerminationTime().getTime());
+//
+//					boolean terminated = false;
+//					while (!terminated) {
+//						try {
+//							System.out.println("Should terminate in: "+(response.getNewTerminationTime().getTimeInMillis() - Calendar
+//								.getInstance().getTimeInMillis()) / 1000 +" seconds.");
+//							dcqlResultsCol = resultsClilent.getResults();
+//							Thread.sleep(1000);
+//
+//						} catch (RemoteException e) {
+//							System.out.println("Resource has been destroyed");
+//							terminated = true;
+//						}
+//					}
+
+					// resultsClilent.destroy(new Destroy());
 
 				} else {
 					usage();

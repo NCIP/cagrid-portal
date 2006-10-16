@@ -10,10 +10,13 @@ import java.rmi.RemoteException;
  */
 public interface FederatedQueryProcessorI {
 
-public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
-public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults executeAndAggregateResults(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault ;
-public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection execute(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault ;
-public gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient executeAsynchronously(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, org.apache.axis.types.URI.MalformedURIException ;
+    public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
+
+    public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults executeAndAggregateResults(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault ;
+
+    public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection execute(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault ;
+
+    public gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient executeAsynchronously(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, org.apache.axis.types.URI.MalformedURIException ;
 
 }
 

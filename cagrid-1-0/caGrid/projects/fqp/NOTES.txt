@@ -6,16 +6,14 @@ DCQL Foriegn Predicate values must be a subset of CQL Predicate values, as the f
 
 ISSUES:
 ==============================
-
-add properties to main service to track number of active resources?
-
-allow client setting of termination time of result resource (currently configured by the service, and destroyable by the client... no way to renew lease) 
-
 change build to create client-usable engine (outside of service)
 
-clean up result service code (errors, etc)
-
 unify service code that uses processor to reuse better
+
+
+FUTURE WORK:
+==============================
+add properties to main service to track number of active resources?
 
 add topic notification to query completion status
 
@@ -28,7 +26,11 @@ add unit and system tests
 add DCQL XSD validation?
 
 
+COMPLETED WORK:
+==============================
+(DONE) clean up result service code (errors, etc)
 
+(DONE) allow client setting of termination time of result resource (currently configured by the service, and destroyable by the client... no way to renew lease)
 
 (DONE) need resource lifetime on query results
 

@@ -146,24 +146,27 @@
      <ns17:Exceptions/>
     </ns17:Method>
     <ns17:Method isImported="true" isProvided="true" name="Destroy" xsi:type="ns17:MethodType">
-     <ns17:Inputs/>
      <ns17:Output qName="void" isArray="false"/>
-     <ns17:Exceptions/>
-     <ns17:ImportInformation inputMessage="ns23:DestroyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns23:DestroyResponse" packageName="wsrf-ws-resourcelifetime-1.2-draft-01.wsdl" portTypeName="ImmediateResourceTermination" wsdlFile="WS-ResourceLifetime.wsdl" xmlns:ns23="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
+     <ns17:ImportInformation fromIntroduce="false" inputMessage="ns23:DestroyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns23:DestroyResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ImmediateResourceTermination" wsdlFile="WS-ResourceLifetime.wsdl" xmlns:ns23="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
      <ns17:ProviderInformation providerClass="DestroyProvider"/>
     </ns17:Method>
+    <ns17:Method isImported="true" isProvided="true" name="SetTerminationTime" xsi:type="ns17:MethodType">
+     <ns17:Output qName="void" isArray="false"/>
+     <ns17:ImportInformation fromIntroduce="false" inputMessage="ns24:SetTerminationTimeRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns24:SetTerminationTimeResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ScheduledResourceTermination" wsdlFile="WS-ResourceLifetime.wsdl" xmlns:ns24="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
+     <ns17:ProviderInformation providerClass="SetTerminationTimeProvider"/>
+    </ns17:Method>
    </ns17:Methods>
-   <ns24:ResourcePropertiesList xsi:type="ns24:ResourcePropertiesListType" xmlns:ns24="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns24:ResourceProperty qName="ns25:CurrentTime" fileLocation="FederatedQueryResults_currentTime.xml" populateFromFile="false" register="false" xsi:type="ns24:ResourcePropertyType" xmlns:ns25="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
-    <ns24:ResourceProperty qName="ns26:TerminationTime" fileLocation="FederatedQueryResults_terminationTime.xml" populateFromFile="false" register="false" xsi:type="ns24:ResourcePropertyType" xmlns:ns26="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
-   </ns24:ResourcePropertiesList>
+   <ns25:ResourcePropertiesList xsi:type="ns25:ResourcePropertiesListType" xmlns:ns25="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns25:ResourceProperty qName="ns26:CurrentTime" fileLocation="FederatedQueryResults_currentTime.xml" populateFromFile="false" register="false" xsi:type="ns25:ResourcePropertyType" xmlns:ns26="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
+    <ns25:ResourceProperty qName="ns27:TerminationTime" fileLocation="FederatedQueryResults_terminationTime.xml" populateFromFile="false" register="false" xsi:type="ns25:ResourcePropertyType" xmlns:ns27="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
+   </ns25:ResourcePropertiesList>
   </ns3:Service>
  </ns3:Services>
- <ns27:Extensions xsi:type="ns27:ExtensionsType" xmlns:ns27="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns27:Extension name="cagrid_metadata" xsi:type="ns27:ExtensionType"/>
- </ns27:Extensions>
- <ns28:ServiceProperties xmlns:ns28="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns28:Property isFromETC="false" key="threadPoolSize" value="10"/>
-  <ns28:Property isFromETC="false" key="initialResultLeaseInMinutes" value="30"/>
- </ns28:ServiceProperties>
+ <ns28:Extensions xsi:type="ns28:ExtensionsType" xmlns:ns28="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns28:Extension name="cagrid_metadata" xsi:type="ns28:ExtensionType"/>
+ </ns28:Extensions>
+ <ns29:ServiceProperties xmlns:ns29="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns29:Property isFromETC="false" key="threadPoolSize" value="10"/>
+  <ns29:Property isFromETC="false" key="initialResultLeaseInMinutes" value="30"/>
+ </ns29:ServiceProperties>
 </ns1:ServiceDescription>
