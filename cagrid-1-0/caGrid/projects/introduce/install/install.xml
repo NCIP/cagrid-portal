@@ -24,18 +24,29 @@ need to download IZForge and run the following command (modify paths of course)
             <author name="Joel Saltz" email="saltz@bmi.osu.edu"/>
         </authors>
         <url>http://www.introduce.msc.osu.edu/</url>
+        <webdir>http://bmi.osu.edu/~hastings</webdir>
     </info>
     
-    <guiprefs width="640" height="350" resizable="no"/>
+    <guiprefs height="350" resizable="yes" width="640">
+        <laf name="metouia">
+            <os family="unix" />
+        </laf>
+        <laf name="liquid">
+            <os family="windows" />
+            <param name="decorate.dialogs" value="yes" />
+            <param name="decorate.frames" value="yes" />
+        </laf>
+    </guiprefs>
    
     <locale>
         <langpack iso3="eng"/>
+        <langpack iso3="fra"/>
     </locale>
     
     <resources>
         <res id="LicencePanel.licence" src="Licence.txt"/>
         <res id="InfoPanel.info" src="Readme.txt"/>
-        <res id="Installer.image" src="resources/portal/introduce/introduceSplash.png" />
+        <res id="Installer.image" src="" />
         <res id="installer.langsel.img" src="resources/portal/introduce/introduceSplash.png" />
         <res id="shortcutSpec.xml" src="install/shortcutSpec.xml"/>
     </resources>
