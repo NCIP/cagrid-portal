@@ -15,8 +15,6 @@ Globus Toolkit Core 1.4.2
 -------------------------------------------
 B U I L D I N G
 -------------------------------------------
-To build type: ant all
-For information on available targets, 
-	type: ant -projecthelp
+To launch Introduce: ant introduce
 
 Thank you for using Introduce.
