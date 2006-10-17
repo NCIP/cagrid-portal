@@ -8,6 +8,10 @@ import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERObject;
 import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.X509Extensions;
+import org.globus.gsi.CertUtil;
+import org.globus.gsi.bc.BouncyCastleUtil;
+import org.globus.gsi.proxy.ext.ProxyCertInfo;
 
 
 /**
@@ -53,6 +57,8 @@ public class CertificateExtensionsUtil {
 			return "AuthorityKeyIdentifier";
 		} else if (oid.equals(policyConstraintsOID)) {
 			return "PolicyConstraints";
+		} else if (oid.equals(ProxyCertInfo.OID.getId())) {
+			return "ProxyCertInfo";
 		} else {
 			return "*** UNKNOWN ***";
 		}
@@ -177,6 +183,21 @@ public class CertificateExtensionsUtil {
 				return "*** DISPLAY NOT SUPPORTED ***";
 			} else if (oid.equals(policyConstraintsOID)) {
 				return "*** DISPLAY NOT SUPPORTED ***";
+			} else if (oid.equals(ProxyCertInfo.OID.getId())) {
+				StringBuffer sb = new StringBuffer();
+				int type = BouncyCastleUtil.getCertificateType(cert);
+				String typeStr = (type == -1) ? "Unknown Proxy Type" : CertUtil.getProxyTypeAsString(type);
+				sb.append(typeStr);
+				sb.append(", Delegation Path Length: ");
+				try {
+					X509Extensions exts = BouncyCastleUtil.getTBSCertificateStructure(cert).getExtensions();
+					ProxyCertInfo info = BouncyCastleUtil.getProxyCertInfo(exts.getExtension(ProxyCertInfo.OID));
+					sb.append(info.getPathLenConstraint());
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					sb.append("UNKNOWN");
+				}
+				return sb.toString();
 			} else {
 				return "*** UNKNOWN ***";
 			}

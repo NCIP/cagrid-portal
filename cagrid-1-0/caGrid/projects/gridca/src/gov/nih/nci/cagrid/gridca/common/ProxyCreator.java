@@ -36,6 +36,7 @@ public class ProxyCreator {
 		return createProxyCertificate(certs, privateKey, proxyPublicKey, lifetimeHours, lifetimeMinutes,
 			lifetimeSeconds, GSIConstants.GSI_4_IMPERSONATION_PROXY, null);
 	}
+	
 
 
 	public static X509Certificate[] createProxyCertificate(X509Certificate[] certs, PrivateKey privateKey,
@@ -50,6 +51,8 @@ public class ProxyCreator {
 		System.arraycopy(certs, 0, newCerts, 1, certs.length);
 		return newCerts;
 	}
+	
+	
 
 
 	protected static X509Certificate createProxyCertificate(X509Certificate issuerCert, PrivateKey issuerKey,
