@@ -1,0 +1,7 @@
+#! /bin/sh
+echo "Starting Introduce...
+
+
+"
+ant_exec_command="exec ant introduce"
+eval $ant_exec_command
