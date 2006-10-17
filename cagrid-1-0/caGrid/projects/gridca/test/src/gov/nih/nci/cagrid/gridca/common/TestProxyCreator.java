@@ -26,7 +26,6 @@ public class TestProxyCreator extends TestCase {
 		return s.replace('/', ',');
 	}
 
-
 	public void testCreateProxy() {
 		checkCreateProxy(Integer.MAX_VALUE);
 	}
