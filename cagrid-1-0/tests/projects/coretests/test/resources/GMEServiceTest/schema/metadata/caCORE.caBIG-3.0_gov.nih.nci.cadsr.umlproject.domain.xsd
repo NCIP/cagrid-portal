@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Scott Oster (BMI) -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:gov.nih.nci.cadsr.domain="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" targetNamespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" elementFormDefault="qualified">
-  <xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" schemaLocation="3.0_gov.nih.nci.cadsr.domain.xsd" />
+  <xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain" schemaLocation="caCORE.caBIG-3.0_gov.nih.nci.cadsr.domain.xsd" />
   <xs:element name="Project" type="Project" />
   <xs:complexType name="Project">
     <xs:sequence>

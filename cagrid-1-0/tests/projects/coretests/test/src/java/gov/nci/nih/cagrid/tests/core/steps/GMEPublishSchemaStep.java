@@ -135,7 +135,7 @@ public class GMEPublishSchemaStep
 	{
 		new GMEPublishSchemaStep(
 			8080, 
-			new File("test", "resources" + File.separator + "GMEServiceTest" + File.separator + "schema" + File.separator + "1.0_gov.nih.nci.cagrid.metadata.common.xsd")//"3.0_gov.nih.nci.cadsr.domain.xsd")
+			new File("test", "resources" + File.separator + "GMEServiceTest" + File.separator + "schema" + File.separator + "caGrid.caBIG-1.0_gov.nih.nci.cagrid.metadata.common.xsd")//"3.0_gov.nih.nci.cadsr.domain.xsd")
 		).runStep(); 
 	}
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:uml="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" targetNamespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" elementFormDefault="qualified" attributeFormDefault="unqualified">
-  <xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" />
+  <xs:import namespace="gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="caCORE.caBIG-3.0_gov.nih.nci.cadsr.umlproject.domain.xsd" />
   <xs:element name="PointOfContact" type="com:PointOfContact" />
   <xs:complexType name="PointOfContact">
     <xs:sequence>
