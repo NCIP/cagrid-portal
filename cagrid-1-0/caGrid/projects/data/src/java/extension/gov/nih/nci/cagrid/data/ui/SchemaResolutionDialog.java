@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.data.ui.cacore.CacoreWizardUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
@@ -46,20 +45,29 @@ public class SchemaResolutionDialog extends JDialog {
 	private JPanel buttonPanel = null;
 	private JPanel mainPanel = null;
 	private JTabbedPane discoveryTabbedPane = null;
-	private boolean resolutionSuccess;
+	private NamespaceType[] resolvedSchemas;
 	
 	private SchemaResolutionDialog(ServiceInformation info, CadsrPackage pack) {
 		super(PortalResourceManager.getInstance().getGridPortal(), "Schema Resolution", true);
 		this.serviceInfo = info;
 		this.cadsrPackage = pack;
-		this.resolutionSuccess = false;
+		this.resolvedSchemas = null;
 		initialize();
 	}
 	
 	
-	public static boolean resolveSchemas(ServiceInformation info, CadsrPackage pack) {
+	/**
+	 * Resolves schemas for the given cadsr package
+	 * @param info
+	 * @param pack
+	 * @return
+	 * 		null if an error occurs resolving schemas
+	 * 		an empty array (length == 0) if user cancels the dialog
+	 * 		array of NamespaceType (length != 0) if resolution was successful
+	 */
+	public static NamespaceType[] resolveSchemas(ServiceInformation info, CadsrPackage pack) {
 		SchemaResolutionDialog dialog = new SchemaResolutionDialog(info, pack);
-		return dialog.resolutionSuccess;
+		return dialog.resolvedSchemas;
 	}
 	
 	
@@ -82,7 +90,9 @@ public class SchemaResolutionDialog extends JDialog {
 			loadSchemasButton.setText("Load Schemas");
 			loadSchemasButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					resolutionSuccess = loadSchemas();
+					resolvedSchemas = loadSchemas();
+					// set the new namespace mapping of the cadsr package
+					cadsrPackage.setMappedNamespace(resolvedSchemas[0].getNamespace());
 					dispose();
 				}
 			});
@@ -102,7 +112,7 @@ public class SchemaResolutionDialog extends JDialog {
 			cancelButton.setText("Cancel");
 			cancelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					resolutionSuccess = false;
+					resolvedSchemas = new NamespaceType[0];
 					dispose();
 				}
 			});
@@ -188,7 +198,7 @@ public class SchemaResolutionDialog extends JDialog {
 	}
 	
 	
-	private boolean loadSchemas() {
+	private NamespaceType[] loadSchemas() {
 		// get the disvovery type component
 		NamespaceTypeDiscoveryComponent discComponent = 
 			(NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane().getSelectedComponent();
@@ -199,18 +209,7 @@ public class SchemaResolutionDialog extends JDialog {
 		NamespaceType[] namespaces = discComponent.createNamespaceType(schemaDir);
 		if (namespaces == null) {
 			ErrorDialog.showErrorDialog("Error getting types from discovery component");
-			return false;
 		}
-		if (namespaces.length != 0) {
-			// user may have mapped the package to a different namespace...
-			cadsrPackage.setMappedNamespace(namespaces[0].getNamespace());
-			// add the namespace types to the service
-			for (int i = 0; i < namespaces.length; i++) {
-				CommonTools.addNamespace(serviceInfo.getServiceDescriptor(), namespaces[i]);
-			}
-			// successful schema resolution
-			return true;
-		}
-		return false;
+		return namespaces;
 	}
 }

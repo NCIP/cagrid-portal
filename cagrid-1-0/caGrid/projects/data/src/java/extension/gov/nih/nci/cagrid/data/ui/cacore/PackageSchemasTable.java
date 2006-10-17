@@ -1,10 +1,14 @@
 package gov.nih.nci.cagrid.data.ui.cacore;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.ErrorDialog;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.ui.SchemaResolutionDialog;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.awt.Component;
@@ -110,10 +114,26 @@ public class PackageSchemasTable extends JTable {
 	
 	private void resolveSchema(ServiceInformation info, CadsrPackage pack, int dataRow) {
 		// resolve the schemas manually
-		boolean resolved = SchemaResolutionDialog.resolveSchemas(info, pack);
-		if (resolved) {
-			setValueAt(pack.getMappedNamespace(), dataRow, 1);
-			setValueAt(STATUS_SCHEMA_FOUND, dataRow, 2);
+		NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(info, pack);
+		if (resolved != null) {
+			if (resolved.length != 0) {
+				// set the resolution status on the table
+				setValueAt(pack.getMappedNamespace(), dataRow, 1);
+				setValueAt(STATUS_SCHEMA_FOUND, dataRow, 2);
+				// set the serializers / deserializers for the FIRST namespace type's schema elements
+				SchemaElementType[] types = resolved[0].getSchemaElement();
+				for (int i = 0; types != null && i < types.length; i++) {
+					types[i].setClassName(types[i].getType());
+					types[i].setSerializer(DataServiceConstants.SDK_SERIALIZER);
+					types[i].setDeserializer(DataServiceConstants.SDK_DESERIALIZER);
+				}
+				// add the types to the service
+				for (int i = 0; i < resolved.length; i++) {
+					CommonTools.addNamespace(info.getServiceDescriptor(), resolved[i]);
+				} 
+			}
+		} else {
+			ErrorDialog.showErrorDialog("Error retrieving schemas!");
 		}
 	}
 	

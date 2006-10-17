@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
@@ -307,9 +308,16 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 			ImportInfo storedSchemaInfo = new ImportInfo(storedNs);
 			File location = new File(schemaDir.getAbsolutePath() + File.separator + storedSchemaInfo.getFileName());
 			NamespaceType nsType = CommonTools.createNamespaceType(location.getAbsolutePath());
+			// make the location relative to the schema directory
 			nsType.setLocation("./" + location.getName());
+			// fix the serialization / deserialization on the namespace types
+			for (int i = 0; nsType.getSchemaElement() != null && i < nsType.getSchemaElement().length; i++) {
+				SchemaElementType type = nsType.getSchemaElement(i);
+				type.setSerializer(DataServiceConstants.SDK_SERIALIZER);
+				type.setDeserializer(DataServiceConstants.SDK_DESERIALIZER);
+				type.setClassName(type.getType());
+			}
 			CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
-			// TODO: add ClassMappings to cadsr package information!
 		}
 	}
 	

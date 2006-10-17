@@ -637,13 +637,18 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 						"Please locate a suitable namespace."
 					};
 					JOptionPane.showMessageDialog(this, message);
-					boolean resolved = SchemaResolutionDialog.resolveSchemas(getServiceInfo(), pack);
-					if (!resolved) {
+					NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(getServiceInfo(), pack);
+					if (resolved == null || resolved.length == 0) {
 						String[] error = {
 							"The package " + packName + " was not mapped to a namespace.",
 							"This can cause errors when the service builds."
 						};
 						ErrorDialog.showErrorDialog("No namespace mapping provided", error);
+					} else {
+						for (int i = 0; i < resolved.length; i++) {
+							// add the resolved namespaces to the service
+							CommonTools.addNamespace(getServiceInfo().getServiceDescriptor(), resolved[i]);
+						}
 					}
 				}
 				// create ClassMappings for the package's classes
