@@ -10,9 +10,8 @@ import java.io.IOException;
 import com.atomicobject.haste.framework.Step;
 
 /**
- * This is a step that replaces \@caCOREServiceURL\@ in the jndi-config.xml of a Globus deployed caDSR service
- * with the production location of the caDSR APIs (http://cabio.nci.nih.gov/cacore31/http/remoteService).
- * @author Patrick McConnell
+ * This step configures the EVS grid service
+ * @author Avinash Shanbhag
  */
 public class EvsServiceConfigStep
 	extends Step
