@@ -95,11 +95,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			generateDomainModel(desc, info, domainModelFile);
 		}
 
-		// if the domain model was actually placed in the service's etc
-		// directory, then add the resource property for the domain model
-		if (!domainModelResourcePropertyExists(info)) {
-			addDomainModelResourceProperty(info, filename);
-		}
+		// set the domain model file name
+		setDomainModelResourceProperty(info, filename);
 
 		// if the domainModel.xml doesn't exist, don't try to populate the
 		// domain model metadata on service startup
@@ -327,37 +324,37 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 	}
 
 
-	private String getSuppliedDomainModelFilename(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
-		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-		CadsrInformation cadsrInfo = ExtensionDataUtils.getExtensionData(data).getCadsrInformation();
-		if (cadsrInfo != null) {
-			return cadsrInfo.getSuppliedDomainModel();
-		}
-		return null;
-	}
-
-
-	private void addDomainModelResourceProperty(ServiceInformation info, String fileLocation) {
-		ResourcePropertyType domainMetadata = new ResourcePropertyType();
-		domainMetadata.setPopulateFromFile(true);
-		domainMetadata.setFileLocation(fileLocation);
-		domainMetadata.setRegister(true);
-		domainMetadata.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
+	private void setDomainModelResourceProperty(ServiceInformation info, String fileLocation) {
+		ResourcePropertyType domainMetadata = null;
+		// try to find the existing property in the service informaton
 		ResourcePropertiesListType propsList = info.getServices().getService(0).getResourcePropertiesList();
 		if (propsList == null) {
 			propsList = new ResourcePropertiesListType();
 			info.getServices().getService(0).setResourcePropertiesList(propsList);
 		}
 		ResourcePropertyType[] metadataArray = propsList.getResourceProperty();
-		if (metadataArray == null || metadataArray.length == 0) {
-			metadataArray = new ResourcePropertyType[]{domainMetadata};
-		} else {
-			ResourcePropertyType[] tmpArray = new ResourcePropertyType[metadataArray.length + 1];
-			System.arraycopy(metadataArray, 0, tmpArray, 0, metadataArray.length);
-			tmpArray[metadataArray.length] = domainMetadata;
-			metadataArray = tmpArray;
+		for (int i = 0; metadataArray != null && i < metadataArray.length; i++) {
+			if (metadataArray[i].getQName().equals(DataServiceConstants.DOMAIN_MODEL_QNAME)) {
+				domainMetadata = metadataArray[i];
+				break;
+			}
 		}
-		propsList.setResourceProperty(metadataArray);
+		if (domainMetadata == null) {
+			// no metadata found, create a new one
+			domainMetadata = new ResourcePropertyType();
+			domainMetadata.setPopulateFromFile(true);
+			domainMetadata.setRegister(true);
+			domainMetadata.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
+			// add the domain metadata back to the resouce properties list
+			if (metadataArray != null) {
+				metadataArray = (ResourcePropertyType[]) Utils.appendToArray(metadataArray, domainMetadata);
+			} else {
+				metadataArray = new ResourcePropertyType[] {domainMetadata};
+			}
+			propsList.setResourceProperty(metadataArray);
+		}
+		// set the file location of the metadata
+		domainMetadata.setFileLocation(fileLocation);
 	}
 
 
@@ -375,23 +372,15 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		}
 		return null;
 	}
-
-
-	private boolean domainModelResourcePropertyExists(ServiceInformation info) {
-		ResourcePropertiesListType propsList = info.getServices().getService()[0].getResourcePropertiesList();
-		if (propsList == null) {
-			return false;
+	
+	
+	private String getSuppliedDomainModelFilename(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
+		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
+		CadsrInformation cadsrInfo = ExtensionDataUtils.getExtensionData(data).getCadsrInformation();
+		if (cadsrInfo != null) {
+			return cadsrInfo.getSuppliedDomainModel();
 		}
-		ResourcePropertyType[] props = propsList.getResourceProperty();
-		if (props == null || props.length == 0) {
-			return false;
-		}
-		for (int i = 0; i < props.length; i++) {
-			if (props[i].getQName().equals(DataServiceConstants.DOMAIN_MODEL_QNAME)) {
-				return true;
-			}
-		}
-		return false;
+		return null;
 	}
 	
 	
