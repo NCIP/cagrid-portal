@@ -591,7 +591,7 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
 		if (addExtensionButton == null) {
 			addExtensionButton = new JButton();
 			addExtensionButton.setText("Add");
-			addExtensionButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addExtensionButton.setIcon(PortalLookAndFeel.getAddIcon());
 			addExtensionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (!((String) getServiceStyleSeletor().getSelectedItem()).equals("NONE")) {
@@ -613,7 +613,7 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
 		if (removeExtensionButton == null) {
 			removeExtensionButton = new JButton();
 			removeExtensionButton.setText("Remove");
-			removeExtensionButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+			removeExtensionButton.setIcon(PortalLookAndFeel.getRemoveIcon());
 			removeExtensionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
