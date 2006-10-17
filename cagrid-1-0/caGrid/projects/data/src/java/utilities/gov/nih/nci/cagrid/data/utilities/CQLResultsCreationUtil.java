@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.utilities;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlresultset.CQLAttributeResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLCountResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
@@ -8,8 +7,6 @@ import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.cqlresultset.TargetAttribute;
 import gov.nih.nci.cagrid.data.mapping.Mappings;
 
-import java.io.InputStream;
-import java.io.StringWriter;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -36,24 +33,6 @@ public class CQLResultsCreationUtil {
 	 * 		The name of the targeted class which produced these results
 	 * @param classToQname
 	 * 		A Mapping from class name to QName
-	 * @return
-	 * 
-	 * @throws ResultsCreationException
-	 */
-	public static CQLQueryResults createObjectResults(List objects, String targetName, Mappings classToQname) throws ResultsCreationException {
-		return createObjectResults(objects, targetName, classToQname, null);
-	}
-	
-
-	/**
-	 * Creates a CQL Query Results object containing object results
-	 * 
-	 * @param objects
-	 * 		The objects to serialize and place in the object results
-	 * @param targetName
-	 * 		The name of the targeted class which produced these results
-	 * @param classToQname
-	 * 		A Mapping from class name to QName
 	 * @param configStream
 	 * 		An InputStream to configure the message context for discovering the 
 	 * 		serializers for the targeted class
@@ -61,25 +40,13 @@ public class CQLResultsCreationUtil {
 	 * 
 	 * @throws ResultsCreationException
 	 */
-	public static CQLQueryResults createObjectResults(List objects, String targetName, Mappings classToQname, InputStream configStream) throws ResultsCreationException {
+	public static CQLQueryResults createObjectResults(List objects, String targetName, Mappings classToQname) throws ResultsCreationException {
 		CQLQueryResults results = new CQLQueryResults();
 		results.setTargetClassname(targetName);
 		QName targetQName = getQname(targetName, classToQname);
 		CQLObjectResult[] objectResults = new CQLObjectResult[objects.size()];
 		for (int i = 0; i < objects.size(); i++) {
-			MessageElement elem = new MessageElement();
-			// serialize the object to a string using the mapped qname
-			StringWriter writer = new StringWriter();
-			try {
-				if (configStream == null) {
-					Utils.serializeObject(objects.get(i), targetQName, writer);				
-				} else {
-					Utils.serializeObject(objects.get(i), targetQName, writer, configStream);
-				}
-			} catch (Exception ex) {
-				throw new ResultsCreationException("Error serialzing object result: " + ex.getMessage(), ex);
-			}
-			elem.setValue(writer.getBuffer().toString());
+			MessageElement elem = new MessageElement(targetQName, objects.get(i));
 			objectResults[i] = new CQLObjectResult(new MessageElement[] {elem});
 		}
 		results.setObjectResult(objectResults);
@@ -143,10 +110,5 @@ public class CQLResultsCreationUtil {
 			}
 		}
 		return null;
-	}
-	
-	
-	public static void main(String[] args) {
-		
 	}
 }

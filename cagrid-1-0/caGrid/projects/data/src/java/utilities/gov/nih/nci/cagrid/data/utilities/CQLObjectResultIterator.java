@@ -60,12 +60,18 @@ public class CQLObjectResultIterator implements Iterator {
 		MessageElement element = results[currentIndex].get_any()[0];
 		try {
 			StringWriter writer = new StringWriter();
-			Utils.serializeObject(element, element.getQName(), writer);
+			InputStream configStream = getConsumableInputStream();
+			if (configStream != null) {
+				Utils.serializeObject(element, element.getQName(), writer, configStream);
+			} else {
+				Utils.serializeObject(element, element.getQName(), writer);
+			}
 			String documentString = writer.getBuffer().toString();
 	        if (xmlOnly) {
 				return documentString;
 			}
-			InputStream configStream = getConsumableInputStream();
+	        // since the config stream has been read and closed, it must be recreated
+			configStream = getConsumableInputStream();
 			if (configStream != null) {
 				return Utils.deserializeObject(new StringReader(documentString), objectClass, 
 					getConsumableInputStream());
