@@ -555,10 +555,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 						if (getIsProvidedCheckBox().isSelected()) {
 							if (getProviderClassnameTextField().getText() == null
 								|| getProviderClassnameTextField().getText().length() <= 0) {
-								JOptionPane
-									.showMessageDialog(MethodViewer.this,
-										"Please fill out the \"Provider Information\" tab or uncheck the \"Provided\" checkbox.");
-								return;
+								JOptionPane.showMessageDialog(MethodViewer.this,
+									"Please fill out the \"Provider Information\" tab or uncheck the \"Provided\" checkbox.");
+							return;
 							}
 							method.setIsProvided(true);
 							MethodTypeProviderInformation pi = new MethodTypeProviderInformation();
@@ -574,9 +573,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 								// introduce....
 
 								if (((ServiceHolder) introduceServiceServicesComboBox.getSelectedItem()) == null) {
-									JOptionPane
-										.showMessageDialog(MethodViewer.this,
-											"Please browse to an Introduce generated service and select the service from which to import this method.");
+									JOptionPane.showMessageDialog(MethodViewer.this,
+										"Please browse to an Introduce generated service and select the service from which to import this method.");
 									return;
 								}
 
@@ -2542,8 +2540,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 							wsdlImportPackageNameTextField.setText(service.getPackageName());
 							wsdlImportPackageNameTextField.setEditable(false);
 						} else {
-							wsdlImportPackageNameTextField.setEditable(true);
-						}
+						wsdlImportPackageNameTextField.setEditable(true);
+					}
 					}
 
 				}

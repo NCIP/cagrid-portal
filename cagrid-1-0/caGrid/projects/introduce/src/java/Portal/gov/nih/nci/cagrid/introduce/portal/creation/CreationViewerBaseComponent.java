@@ -30,7 +30,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * specific look-feel or additions one should extend this panel and add this
  * componenet to the introduce portal configuration.
  * 
- * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>	
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @created Jul 7, 2006
@@ -130,9 +130,8 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 						Properties properties = new Properties();
 						properties.load(new FileInputStream(dir + File.separator
 							+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
-						ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(dir
-
-						+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
+						ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(
+							dir	+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE, ServiceDescription.class);
 						ServiceInformation info = new ServiceInformation(introService, properties, new File(dir));
 
 						for (int i = 0; i < extensions.size(); i++) {
@@ -170,7 +169,6 @@ public abstract class CreationViewerBaseComponent extends GridPortalComponent {
 							ModificationViewer modViewer = new ModificationViewer(new File(dirName));
 							PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(modViewer);
 							modViewer.setMaximum(true);
-
 						} else {
 							setErrorMessage("Error creating new service!");
 							return;
