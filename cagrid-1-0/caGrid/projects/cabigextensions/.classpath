@@ -81,7 +81,7 @@
 	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-graph.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal.jar"/>
+	<classpathentry sourcepath="/caGrid-1.0-introduce" kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/ant-contrib.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-common.jar"/>

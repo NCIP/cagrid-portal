@@ -14,6 +14,7 @@ public class ExtensionsTable extends PortalBaseTable {
 
 	public static String NAME = "Extension Name";
 
+
 	public ExtensionsTable() {
 		super(createTableModel());
 	}
@@ -32,8 +33,25 @@ public class ExtensionsTable extends PortalBaseTable {
 			}
 		}
 
-		((DefaultTableModel) this.getModel()).addRow(new String[] {input});
+		((DefaultTableModel) this.getModel()).addRow(new String[]{input});
 		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
+	}
+
+
+	public void removeRow(String input) {
+		for (int i = 0; i < getRowCount(); i++) {
+			String existing = (String) getValueAt(i, 0);
+			if (existing.equals(input)) {
+				((DefaultTableModel) getModel()).removeRow(i);
+				if (i == 0) {
+					i++;
+				}
+				if (getRowCount() > 0) {
+					setRowSelectionInterval(i - 1, i - 1);
+				}
+			}
+		}
+
 	}
 
 
@@ -55,7 +73,7 @@ public class ExtensionsTable extends PortalBaseTable {
 
 
 	public void moveSelectedRowUp() throws Exception {
-		if (getSelectedRow() >0 ) {
+		if (getSelectedRow() > 0) {
 			String input1 = getRowData(getSelectedRow());
 			String input2 = getRowData(getSelectedRow() - 1);
 			modifySelectedRow(input2);
@@ -67,7 +85,7 @@ public class ExtensionsTable extends PortalBaseTable {
 
 
 	public void moveSelectedRowDown() throws Exception {
-		if (getSelectedRow() < getRowCount()-1 && getRowCount() > 1) {
+		if (getSelectedRow() < getRowCount() - 1 && getRowCount() > 1) {
 			String input1 = getRowData(getSelectedRow());
 			String input2 = getRowData(getSelectedRow() + 1);
 			modifySelectedRow(input2);
@@ -81,7 +99,7 @@ public class ExtensionsTable extends PortalBaseTable {
 	public void removeSelectedRow() throws Exception {
 		int row = getSelectedRow();
 		if ((row < 0) || (row >= getRowCount())) {
-			throw new Exception("invalid row");
+			return;
 		}
 		int oldSelectedRow = getSelectedRow();
 		((DefaultTableModel) getModel()).removeRow(oldSelectedRow);
