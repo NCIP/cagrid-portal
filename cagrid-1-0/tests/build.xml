@@ -134,6 +134,7 @@
 			<!-- <artifact refid="introduce.servicesecurity.jars" /> -->
 			<artifact refid="gridgrouper.jars" />
 			<artifact refid="gridgrouper.client.jars" />
+			<artifact refid="evs.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${tests.projects.dir}/coretests/test/resources/services/BasicDataService">
 			<artifact refid="cqlprocessors.jars" />

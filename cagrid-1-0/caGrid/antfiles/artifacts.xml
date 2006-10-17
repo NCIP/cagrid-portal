@@ -322,6 +322,19 @@
 				<include name="*.jar"/>
 			</fileset>
 		</artifact>
+		<artifact track="main" type="jars" id="evs.jars">
+			<antcall target="build-cadsr"/>
+			<fileset dir="${projects.dir}/evs/build/lib">
+				<include name="*.jar"/>
+				<exclude name="*test*.jar"/>
+			</fileset>
+			<fileset dir="${projects.dir}/evs/lib">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${projects.dir}/evs/ext/lib">
+				<include name="*.jar"/>
+			</fileset>
+		</artifact>
 		<artifact track="main" type="jars" id="data.jars">
 			<antcall target="build-data"/>
 			<fileset dir="${projects.dir}/data/build/lib">
