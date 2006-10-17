@@ -66,7 +66,7 @@ public class DorianAuthenticateStep
 		saml = client.authenticate();
 
 		IFSUserClient c2 = new IFSUserClient(serviceURL);
-		credential = c2.createProxy(saml, new ProxyLifetime(hours, 0, 0));
+		credential = c2.createProxy(saml, new ProxyLifetime(hours, 0, 0), 2);
 		ProxyManager.getInstance().addProxy(credential);
 		ProxyUtil.saveProxyAsDefault(credential);
 	}
