@@ -71,6 +71,13 @@
 			</xsd:sequence>
 	    </xsd:complexType>
 	    
+	     <xsd:element name="DelegationPathLength" type="ifs:DelegationPathLength"/>
+	    <xsd:complexType name="DelegationPathLength">
+			<xsd:sequence>
+			    <xsd:element name="length" type="xsd:int"/>
+			</xsd:sequence>
+	    </xsd:complexType>
+	    
 	    <xsd:simpleType name="IFSUserRole">
   			<xsd:restriction base="xsd:string">
    				<xsd:enumeration value="Administrator"/>

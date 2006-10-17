@@ -22,24 +22,16 @@ import org.globus.gsi.X509ExtensionSet;
 public class IFSProxyCreator {
 
 	public static X509Certificate[] createImpersonationProxyCertificate(X509Certificate cert, PrivateKey privateKey,
-		PublicKey proxyPublicKey, ProxyLifetime lifetime) throws GeneralSecurityException {
-		return createProxyCertificate(new X509Certificate[]{cert}, privateKey, proxyPublicKey, lifetime,
-			GSIConstants.GSI_4_IMPERSONATION_PROXY, null);
+		PublicKey proxyPublicKey, ProxyLifetime lifetime, int delegationPathLength) throws GeneralSecurityException {
+		return ProxyCreator.createImpersonationProxyCertificate(cert, privateKey, proxyPublicKey, lifetime.getHours(),
+			lifetime.getMinutes(), lifetime.getSeconds(), delegationPathLength);
 	}
 
 
 	public static X509Certificate[] createImpersonationProxyCertificate(X509Certificate[] certs, PrivateKey privateKey,
-		PublicKey proxyPublicKey, ProxyLifetime lifetime) throws GeneralSecurityException {
-		return createProxyCertificate(certs, privateKey, proxyPublicKey, lifetime,
-			GSIConstants.GSI_4_IMPERSONATION_PROXY, null);
-	}
-
-
-	public static X509Certificate[] createProxyCertificate(X509Certificate[] certs, PrivateKey privateKey,
-		PublicKey proxyPublicKey, ProxyLifetime lifetime, int delegationMode, X509ExtensionSet extSet)
-		throws GeneralSecurityException {
-		return ProxyCreator.createProxyCertificate(certs, privateKey, proxyPublicKey, lifetime.getHours(), lifetime
-			.getMinutes(), lifetime.getSeconds(), delegationMode, extSet);
+		PublicKey proxyPublicKey, ProxyLifetime lifetime, int delegationPathLength) throws GeneralSecurityException {
+		return ProxyCreator.createImpersonationProxyCertificate(certs, privateKey, proxyPublicKey, lifetime.getHours(),
+			lifetime.getMinutes(), lifetime.getSeconds(), delegationPathLength);
 	}
 
 }

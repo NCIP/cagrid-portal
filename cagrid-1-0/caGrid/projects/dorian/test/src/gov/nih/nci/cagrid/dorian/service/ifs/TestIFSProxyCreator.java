@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.io.InputStream;
@@ -29,8 +30,20 @@ public class TestIFSProxyCreator extends TestCase {
 		String s = identity.substring(1);
 		return s.replace('/',',');
 	}
-
+	
 	public void testCreateProxy() {
+		checkCreateProxy(Integer.MAX_VALUE);
+	}
+	
+	public void testDelegationProxyLength0() {
+		checkCreateProxy(0);
+	}
+	
+	public void testDelegationProxyLength5() {
+		checkCreateProxy(5);
+	}
+
+	public void checkCreateProxy(int delegationLength) {
 		try {
 				InputStream certLocation = TestCase.class.getResourceAsStream(Constants.DORIAN_CERT);
 				InputStream keyLocation = TestCase.class.getResourceAsStream(Constants.DORIAN_KEY);
@@ -47,7 +60,7 @@ public class TestIFSProxyCreator extends TestCase {
 				assertNotNull(proxyPublicKey);
 				X509Certificate cert = CertUtil.loadCertificate(certLocation);
 				assertNotNull(cert);
-				X509Certificate[] certs = IFSProxyCreator.createImpersonationProxyCertificate(cert,key, proxyPublicKey,lifetime);
+				X509Certificate[] certs = IFSProxyCreator.createImpersonationProxyCertificate(cert,key, proxyPublicKey,lifetime,delegationLength);
 				assertNotNull(certs);
 				assertEquals(2,certs.length);
 				GlobusCredential cred = new GlobusCredential(pair.getPrivate(),certs);
@@ -55,6 +68,7 @@ public class TestIFSProxyCreator extends TestCase {
 				long timeLeft = cred.getTimeLeft();
 				assertEquals(cert.getSubjectDN().toString(),identityToSubject(cred.getIdentity()));
 				assertEquals(cred.getIssuer(),identityToSubject(cred.getIdentity()));
+				assertEquals(delegationLength, CertificateExtensionsUtil.getDelegationPathLength(certs[0]));
 				
 				long okMax = lifetime.getHours()*60*60;
 				//Allow some Buffer
@@ -86,7 +100,7 @@ public class TestIFSProxyCreator extends TestCase {
 				assertNotNull(proxyPublicKey);
 				X509Certificate cert = CertUtil.loadCertificate(certLocation);
 				assertNotNull(cert);
-			    IFSProxyCreator.createImpersonationProxyCertificate(cert,key, proxyPublicKey,lifetime);
+			    IFSProxyCreator.createImpersonationProxyCertificate(cert,key, proxyPublicKey,lifetime,5);
 				assertTrue(false);
 		} catch (Exception e) {
 			assertEquals("Cannot create a proxy that expires after issuing certificate.",e.getMessage());	

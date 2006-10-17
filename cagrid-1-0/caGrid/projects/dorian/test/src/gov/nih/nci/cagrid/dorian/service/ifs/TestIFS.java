@@ -20,6 +20,7 @@ import gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
@@ -64,6 +65,8 @@ public class TestIFS extends TestCase {
 
 	private static final int SHORT_CREDENTIALS_VALID = 7;
 
+	private static final int DELEGATION_LENGTH = 5;
+
 	public final static String INITIAL_ADMIN = "admin";
 
 	private Database db;
@@ -77,7 +80,7 @@ public class TestIFS extends TestCase {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
-		
+
 			ifs = new IFS(conf, db, ca);
 			String uid = "user";
 			String adminSubject = UserManager.getUserSubject(ca.getCACertificate().getSubjectDN().getName(), idp
@@ -86,8 +89,9 @@ public class TestIFS extends TestCase {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
-			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(uid, idp), publicKey, lifetime);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(uid, idp), publicKey, lifetime,
+				DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
 			IFSUserFilter f1 = new IFSUserFilter();
 			f1.setIdPId(idp.getIdp().getId());
 			f1.setUID(uid);
@@ -111,7 +115,7 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
-		}finally {
+		} finally {
 			try {
 				ifs.clearDatabase();
 			} catch (Exception e) {
@@ -139,8 +143,8 @@ public class TestIFS extends TestCase {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
 				ProxyLifetime lifetime = getProxyLifetime();
-				X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(uid, idp), publicKey, lifetime);
-				createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+				X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(uid, idp), publicKey, lifetime, i);
+				createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, i);
 				ucount = ucount + 1;
 				assertEquals(ucount, ifs.findUsers(adminGridId, new IFSUserFilter()).length);
 				IFSUserFilter f1 = new IFSUserFilter();
@@ -177,7 +181,7 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
-		}finally {
+		} finally {
 			try {
 				ifs.clearDatabase();
 			} catch (Exception e) {
@@ -199,12 +203,13 @@ public class TestIFS extends TestCase {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
-			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion("user", idp), publicKey, lifetime);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion("user", idp), publicKey, lifetime,
+				DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
-		}finally {
+		} finally {
 			try {
 				ifs.clearDatabase();
 			} catch (Exception e) {
@@ -228,7 +233,7 @@ public class TestIFS extends TestCase {
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
 			try {
-				ifs.createProxy(getSAMLAssertion("user", idp), publicKey, lifetime);
+				ifs.createProxy(getSAMLAssertion("user", idp), publicKey, lifetime, DELEGATION_LENGTH);
 				fail("Should have thrown exception attempting to create proxy.");
 			} catch (PermissionDeniedFault f) {
 
@@ -236,7 +241,7 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
-		}finally {
+		} finally {
 			try {
 				ifs.clearDatabase();
 			} catch (Exception e) {
@@ -259,18 +264,22 @@ public class TestIFS extends TestCase {
 				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			//give a chance for others to run right before we enter timing sensitive code
+			// give a chance for others to run right before we enter timing
+			// sensitive code
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			Thread.currentThread().yield();
-			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,
+				DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
 
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			try {
 				KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey2 = pair2.getPublic();
-				ifs.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort());
+				ifs
+					.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort(),
+						DELEGATION_LENGTH);
 				fail("Should have thrown exception attempting to create proxy.");
 			} catch (PermissionDeniedFault fault) {
 
@@ -279,7 +288,7 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
-		}finally {
+		} finally {
 			try {
 				ifs.clearDatabase();
 			} catch (Exception e) {
@@ -302,7 +311,7 @@ public class TestIFS extends TestCase {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			try {
-				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
 				fail("Should have thrown exception attempting to create proxy.");
 			} catch (PermissionDeniedFault fault) {
 
@@ -312,7 +321,7 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
-		}finally {
+		} finally {
 			try {
 				ifs.clearDatabase();
 			} catch (Exception e) {
@@ -334,18 +343,21 @@ public class TestIFS extends TestCase {
 				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			//give a chance for others to run right before we enter timing sensitive code
+			// give a chance for others to run right before we enter timing
+			// sensitive code
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			Thread.currentThread().yield();
-			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,
+				DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
 			IFSUser before = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey2 = pair2.getPublic();
-			certs = ifs.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort());
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+			certs = ifs.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort(),
+				DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
 			IFSUser after = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			if (before.getCertificate().equals(after.getCertificate())) {
@@ -355,7 +367,7 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
-		}finally {
+		} finally {
 			try {
 				ifs.clearDatabase();
 			} catch (Exception e) {
@@ -378,7 +390,8 @@ public class TestIFS extends TestCase {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 
 			try {
-				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
+				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),
+					DELEGATION_LENGTH);
 				fail("Should have thrown exception attempting to create proxy.");
 			} catch (PermissionDeniedFault f) {
 
@@ -387,18 +400,21 @@ public class TestIFS extends TestCase {
 			usr.setUserStatus(IFSUserStatus.Active);
 			ifs.updateUser(gridId, usr);
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			//give a chance for others to run right before we enter timing sensitive code
+			// give a chance for others to run right before we enter timing
+			// sensitive code
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			Thread.currentThread().yield();
-			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+			X509Certificate[] certs = ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,
+				DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
 			IFSUser before = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey2 = pair2.getPublic();
-			certs = ifs.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort());
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+			certs = ifs.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort(),
+				DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
 			IFSUser after = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			if (before.getCertificate().equals(after.getCertificate())) {
@@ -408,7 +424,7 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
-		}finally {
+		} finally {
 			try {
 				ifs.clearDatabase();
 			} catch (Exception e) {
@@ -424,7 +440,7 @@ public class TestIFS extends TestCase {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getConf();
 			conf.setInitalTrustedIdP(idp.getIdp());
-		    ifs = new IFS(conf, db, ca);
+			ifs = new IFS(conf, db, ca);
 			Thread.sleep(500);
 			try {
 				ProxyLifetime valid = new ProxyLifetime();
@@ -433,7 +449,7 @@ public class TestIFS extends TestCase {
 				valid.setSeconds(1);
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
-				ifs.createProxy(getSAMLAssertion("user", idp), publicKey, valid);
+				ifs.createProxy(getSAMLAssertion("user", idp), publicKey, valid, DELEGATION_LENGTH);
 				fail("Should have thrown an exception creating an invalid proxy.");
 			} catch (InvalidProxyFault f) {
 
@@ -441,7 +457,7 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
-		}finally {
+		} finally {
 			try {
 				ifs.clearDatabase();
 			} catch (Exception e) {
@@ -461,7 +477,8 @@ public class TestIFS extends TestCase {
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
-				ifs.createProxy(getSAMLAssertionUnspecifiedMethod("user", idp), publicKey, getProxyLifetime());
+				ifs.createProxy(getSAMLAssertionUnspecifiedMethod("user", idp), publicKey, getProxyLifetime(),
+					DELEGATION_LENGTH);
 				fail("Should have thrown an exception creating a proxy with an invalid SAML assertion.");
 			} catch (InvalidAssertionFault f) {
 
@@ -469,7 +486,7 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
-		}finally {
+		} finally {
 			try {
 				ifs.clearDatabase();
 			} catch (Exception e) {
@@ -491,7 +508,7 @@ public class TestIFS extends TestCase {
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
-				ifs.createProxy(getSAMLAssertion("user", idp2), publicKey, getProxyLifetime());
+				ifs.createProxy(getSAMLAssertion("user", idp2), publicKey, getProxyLifetime(), DELEGATION_LENGTH);
 				fail("Should have thrown an exception creating a proxy with an invalid SAML assertion.");
 			} catch (InvalidAssertionFault f) {
 
@@ -499,7 +516,7 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
-		}finally {
+		} finally {
 			try {
 				ifs.clearDatabase();
 			} catch (Exception e) {
@@ -519,7 +536,7 @@ public class TestIFS extends TestCase {
 			try {
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 				PublicKey publicKey = pair.getPublic();
-				ifs.createProxy(getExpiredSAMLAssertion("user", idp), publicKey, getProxyLifetime());
+				ifs.createProxy(getExpiredSAMLAssertion("user", idp), publicKey, getProxyLifetime(), DELEGATION_LENGTH);
 				fail("Should have thrown an exception creating a proxy with an invalid SAML assertion.");
 			} catch (InvalidAssertionFault f) {
 
@@ -527,7 +544,7 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
-		}finally {
+		} finally {
 			try {
 				ifs.clearDatabase();
 			} catch (Exception e) {
@@ -584,7 +601,7 @@ public class TestIFS extends TestCase {
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
-		}finally {
+		} finally {
 			try {
 				ifs.clearDatabase();
 			} catch (Exception e) {
@@ -682,8 +699,8 @@ public class TestIFS extends TestCase {
 			org.apache.xml.security.Init.init();
 			X509Certificate cert = idp.getCert();
 			PrivateKey key = idp.getKey();
-			String firstName="first"+id;
-			String lastName="first"+id;
+			String firstName = "first" + id;
+			String lastName = "first" + id;
 			String email = id + "@test.com";
 
 			String issuer = cert.getSubjectDN().toString();
@@ -698,27 +715,29 @@ public class TestIFS extends TestCase {
 			SAMLSubject sub2 = new SAMLSubject(ni2, null, null, null);
 			SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub, method, new Date(), ipAddress,
 				subjectDNS, null);
-			
-			
+
 			QName quid = new QName(SAMLConstants.UID_ATTRIBUTE_NAMESPACE, SAMLConstants.UID_ATTRIBUTE);
 			List vals1 = new ArrayList();
 			vals1.add(id);
 			SAMLAttribute uidAtt = new SAMLAttribute(quid.getLocalPart(), quid.getNamespaceURI(), quid, 0, vals1);
-			
+
 			QName qfirst = new QName(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE, SAMLConstants.FIRST_NAME_ATTRIBUTE);
 			List vals2 = new ArrayList();
 			vals2.add(firstName);
-			SAMLAttribute firstNameAtt = new SAMLAttribute(qfirst.getLocalPart(), qfirst.getNamespaceURI(), qfirst, 0, vals2);
-			
+			SAMLAttribute firstNameAtt = new SAMLAttribute(qfirst.getLocalPart(), qfirst.getNamespaceURI(), qfirst, 0,
+				vals2);
+
 			QName qLast = new QName(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE, SAMLConstants.LAST_NAME_ATTRIBUTE);
 			List vals3 = new ArrayList();
 			vals3.add(lastName);
-			SAMLAttribute lastNameAtt = new SAMLAttribute(qLast.getLocalPart(), qLast.getNamespaceURI(), qLast, 0, vals3);
-			
+			SAMLAttribute lastNameAtt = new SAMLAttribute(qLast.getLocalPart(), qLast.getNamespaceURI(), qLast, 0,
+				vals3);
+
 			QName qemail = new QName(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE, SAMLConstants.EMAIL_ATTRIBUTE);
 			List vals4 = new ArrayList();
 			vals4.add(email);
-			SAMLAttribute emailAtt = new SAMLAttribute(qemail.getLocalPart(), qemail.getNamespaceURI(), qemail, 0, vals4);
+			SAMLAttribute emailAtt = new SAMLAttribute(qemail.getLocalPart(), qemail.getNamespaceURI(), qemail, 0,
+				vals4);
 
 			List atts = new ArrayList();
 			atts.add(uidAtt);
@@ -842,7 +861,8 @@ public class TestIFS extends TestCase {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
 		}
-		//return the thread to normal priority for those tests which raise the thread priority
+		// return the thread to normal priority for those tests which raise the
+		// thread priority
 		Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
 	}
 
@@ -865,8 +885,8 @@ public class TestIFS extends TestCase {
 	}
 
 
-	private void createAndCheckProxyLifetime(ProxyLifetime lifetime, PrivateKey key, X509Certificate[] certs)
-		throws Exception {
+	private void createAndCheckProxyLifetime(ProxyLifetime lifetime, PrivateKey key, X509Certificate[] certs,
+		int delegationLength) throws Exception {
 		assertNotNull(certs);
 		assertEquals(2, certs.length);
 		GlobusCredential cred = new GlobusCredential(key, certs);
@@ -879,6 +899,7 @@ public class TestIFS extends TestCase {
 		assertTrue(timeLeft <= max);
 		assertEquals(certs[1].getSubjectDN().toString(), identityToSubject(cred.getIdentity()));
 		assertEquals(cred.getIssuer(), identityToSubject(cred.getIdentity()));
+		assertEquals(delegationLength, CertificateExtensionsUtil.getDelegationPathLength(certs[0]));
 		cred.verify();
 	}
 

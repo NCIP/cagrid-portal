@@ -51,7 +51,7 @@ public class DorianProviderImpl{
 
 	public gov.nih.nci.cagrid.dorian.stubs.CreateProxyResponse createProxy(gov.nih.nci.cagrid.dorian.stubs.CreateProxyRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault, gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		gov.nih.nci.cagrid.dorian.stubs.CreateProxyResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.CreateProxyResponse();
-		boxedResult.setX509Certificate(impl.createProxy(params.getSaml().getSAMLAssertion(),params.getPublicKey().getPublicKey(),params.getLifetime().getProxyLifetime()));
+		boxedResult.setX509Certificate(impl.createProxy(params.getSaml().getSAMLAssertion(),params.getPublicKey().getPublicKey(),params.getLifetime().getProxyLifetime(),params.getDelegation().getDelegationPathLength()));
 		return boxedResult;
 	}
 

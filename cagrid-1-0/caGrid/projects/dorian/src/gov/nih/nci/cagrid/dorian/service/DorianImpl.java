@@ -120,11 +120,11 @@ public class DorianImpl {
 		}
 	}
 
-	public gov.nih.nci.cagrid.dorian.bean.X509Certificate[] createProxy(gov.nih.nci.cagrid.dorian.bean.SAMLAssertion saml,gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey publicKey,gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime lifetime) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault, gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+	public gov.nih.nci.cagrid.dorian.bean.X509Certificate[] createProxy(gov.nih.nci.cagrid.dorian.bean.SAMLAssertion saml,gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey publicKey,gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime lifetime,gov.nih.nci.cagrid.dorian.ifs.bean.DelegationPathLength delegation) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault, gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		try {
 			PublicKey key = KeyUtil.loadPublicKey(publicKey.getKeyAsString());
 			SAMLAssertion s = SAMLUtils.stringToSAMLAssertion(saml.getXml());
-			X509Certificate[] certs = dorian.createProxy(s, key, lifetime);
+			X509Certificate[] certs = dorian.createProxy(s, key, lifetime,delegation.getLength());
 
 			gov.nih.nci.cagrid.dorian.bean.X509Certificate[] certList = new gov.nih.nci.cagrid.dorian.bean.X509Certificate[certs.length];
 			for (int i = 0; i < certs.length; i++) {

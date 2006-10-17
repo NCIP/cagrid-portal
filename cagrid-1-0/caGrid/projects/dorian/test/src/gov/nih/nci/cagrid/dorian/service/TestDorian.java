@@ -33,6 +33,7 @@ import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
+import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
@@ -78,6 +79,8 @@ public class TestDorian extends TestCase {
 	private int count = 0;
 
 	private CertificateAuthority ca;
+	
+	private static final int DELEGATION_LENGTH = 5;
 
 	private static final int SHORT_PROXY_VALID = 2;
 
@@ -316,8 +319,8 @@ public class TestDorian extends TestCase {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
-			X509Certificate[] certs = jm.createProxy(saml, publicKey, lifetime);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+			X509Certificate[] certs = jm.createProxy(saml, publicKey, lifetime,DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,DELEGATION_LENGTH);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -348,8 +351,8 @@ public class TestDorian extends TestCase {
 			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			X509Certificate[] certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs);
+			X509Certificate[] certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,DELEGATION_LENGTH);
 
 			IFSUserFilter filter = new IFSUserFilter();
 			filter.setUID(username);
@@ -359,7 +362,7 @@ public class TestDorian extends TestCase {
 			IFSUser before = ifsUser[0];
 			assertEquals(before.getUserStatus(), IFSUserStatus.Active);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
-			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			certs = jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
 			ifsUser = jm.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];
@@ -399,7 +402,7 @@ public class TestDorian extends TestCase {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			try {
-				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
+				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),DELEGATION_LENGTH);
 				fail("Should not be able to create a proxy with an IdP that is not approved");
 			} catch (PermissionDeniedFault f) {
 
@@ -414,9 +417,9 @@ public class TestDorian extends TestCase {
 			assertEquals(before.getUserStatus(), IFSUserStatus.Pending);
 			before.setUserStatus(IFSUserStatus.Active);
 			jm.updateIFSUser(gridId, before);
-			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
-			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
 			ifsUser = jm.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];
@@ -455,7 +458,7 @@ public class TestDorian extends TestCase {
 			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
 
 			IFSUserFilter filter = new IFSUserFilter();
 			filter.setUID(username);
@@ -469,14 +472,14 @@ public class TestDorian extends TestCase {
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 
 			try {
-				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
+				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),DELEGATION_LENGTH);
 				fail("Should not be able to create a proxy with an IdP that has not been renewed");
 			} catch (PermissionDeniedFault f) {
 
 			}
 			jm.renewIFSUserCredentials(gridId, ifsUser[0]);
 
-			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
 			ifsUser = jm.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];
@@ -517,7 +520,7 @@ public class TestDorian extends TestCase {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			try {
-				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
+				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),DELEGATION_LENGTH);
 				fail("Should not be able to create a proxy with an IdP that has not been approved");
 			} catch (PermissionDeniedFault f) {
 
@@ -532,19 +535,19 @@ public class TestDorian extends TestCase {
 			assertEquals(before.getUserStatus(), IFSUserStatus.Pending);
 			before.setUserStatus(IFSUserStatus.Active);
 			jm.updateIFSUser(gridId, before);
-			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
 			X509Certificate certBefore = CertUtil.loadCertificate(before.getCertificate().getCertificateAsString());
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 
 			try {
-				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
+				jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),DELEGATION_LENGTH);
 				fail("Should not be able to create a proxy with an IdP that has not been renewed");
 			} catch (PermissionDeniedFault f) {
 
 			}
 			jm.renewIFSUserCredentials(gridId, ifsUser[0]);
 
-			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+			jm.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,DELEGATION_LENGTH);
 			ifsUser = jm.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];
@@ -737,7 +740,7 @@ public class TestDorian extends TestCase {
 	}
 
 
-	private void createAndCheckProxyLifetime(ProxyLifetime lifetime, PrivateKey key, X509Certificate[] certs)
+	private void createAndCheckProxyLifetime(ProxyLifetime lifetime, PrivateKey key, X509Certificate[] certs, int delegationLength)
 		throws Exception {
 		assertNotNull(certs);
 		assertEquals(2, certs.length);
@@ -751,6 +754,7 @@ public class TestDorian extends TestCase {
 		}
 		assertEquals(certs[1].getSubjectDN().toString(), identityToSubject(cred.getIdentity()));
 		assertEquals(cred.getIssuer(), identityToSubject(cred.getIdentity()));
+		assertEquals(delegationLength, CertificateExtensionsUtil.getDelegationPathLength(certs[0]));
 		cred.verify();
 	}
 

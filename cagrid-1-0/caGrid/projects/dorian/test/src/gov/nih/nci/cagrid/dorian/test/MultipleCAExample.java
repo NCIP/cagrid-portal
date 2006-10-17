@@ -49,14 +49,14 @@ public class MultipleCAExample {
 			ProxyLifetime lifetime = new ProxyLifetime(10000,0,0);
 			
 			KeyPair proxy1Pair = KeyUtil.generateRSAKeyPair512();
-			GlobusCredential proxy1 = new GlobusCredential(proxy1Pair.getPrivate(),IFSProxyCreator.createImpersonationProxyCertificate(usercert,userKeys.getPrivate(),proxy1Pair.getPublic(),lifetime));
+			GlobusCredential proxy1 = new GlobusCredential(proxy1Pair.getPrivate(),IFSProxyCreator.createImpersonationProxyCertificate(usercert,userKeys.getPrivate(),proxy1Pair.getPublic(),lifetime,Integer.MAX_VALUE));
 			gov.nih.nci.cagrid.common.security.ProxyUtil.saveProxy(proxy1,store+"userx-proxy-1.proxy");
 			
 			KeyPair proxy2Pair = KeyUtil.generateRSAKeyPair512();
 			X509Certificate[] proxy2certs = new X509Certificate[2];
 			proxy2certs[0] = usercert;
 			proxy2certs[1] = midcacert;
-			GlobusCredential proxy2 = new GlobusCredential(proxy2Pair.getPrivate(),IFSProxyCreator.createImpersonationProxyCertificate(proxy2certs,userKeys.getPrivate(),proxy2Pair.getPublic(),lifetime));
+			GlobusCredential proxy2 = new GlobusCredential(proxy2Pair.getPrivate(),IFSProxyCreator.createImpersonationProxyCertificate(proxy2certs,userKeys.getPrivate(),proxy2Pair.getPublic(),lifetime,Integer.MAX_VALUE));
 			gov.nih.nci.cagrid.common.security.ProxyUtil.saveProxy(proxy2,store+"userx-proxy-2.proxy");
 			
 			KeyPair proxy3Pair = KeyUtil.generateRSAKeyPair512();
@@ -64,7 +64,7 @@ public class MultipleCAExample {
 			proxy3certs[0] = usercert;
 			proxy3certs[1] = midcacert;
 			proxy3certs[2] = rootcacert;
-			GlobusCredential proxy3 = new GlobusCredential(proxy3Pair.getPrivate(),IFSProxyCreator.createImpersonationProxyCertificate(proxy3certs,userKeys.getPrivate(),proxy3Pair.getPublic(),lifetime));
+			GlobusCredential proxy3 = new GlobusCredential(proxy3Pair.getPrivate(),IFSProxyCreator.createImpersonationProxyCertificate(proxy3certs,userKeys.getPrivate(),proxy3Pair.getPublic(),lifetime,Integer.MAX_VALUE));
 			gov.nih.nci.cagrid.common.security.ProxyUtil.saveProxy(proxy3,store+"userx-proxy-3.proxy");
 			
 		} catch (Exception e) {

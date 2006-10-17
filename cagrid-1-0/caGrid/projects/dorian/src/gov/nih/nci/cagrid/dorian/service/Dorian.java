@@ -46,6 +46,7 @@ import java.security.cert.X509Certificate;
 import org.projectmobius.common.MobiusConfigurator;
 import org.projectmobius.common.MobiusResourceManager;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -69,9 +70,11 @@ public class Dorian extends MobiusResourceManager {
 
 	private IFSConfiguration ifsConfiguration;
 
+
 	public Dorian(String confFile, String serviceId) throws DorianInternalFault {
 		this(getFileInputStream(confFile), serviceId);
 	}
+
 
 	public Dorian(InputStream in, String serviceId) throws DorianInternalFault {
 		try {
@@ -80,8 +83,7 @@ public class Dorian extends MobiusResourceManager {
 			IdentityProvider.ADMIN_USER_ID = IDP_ADMIN_USER_ID;
 			IdentityProvider.ADMIN_PASSWORD = IDP_ADMIN_PASSWORD;
 
-			this.db = new Database(getConfiguration().getConnectionManager(),
-					getConfiguration().getDorianInternalId());
+			this.db = new Database(getConfiguration().getConnectionManager(), getConfiguration().getDorianInternalId());
 			this.db.createDatabaseIfNeeded();
 			DorianCertificateAuthorityConf caconf = (DorianCertificateAuthorityConf) getResource(DorianCertificateAuthorityConf.RESOURCE);
 			this.ca = new DorianCertificateAuthority(db, caconf);
@@ -92,15 +94,10 @@ public class Dorian extends MobiusResourceManager {
 			TrustedIdP idp = new TrustedIdP();
 			idp.setName(serviceId);
 			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-			methods[0] = SAMLAuthenticationMethod
-					.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
+			methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
 			idp.setAuthenticationMethod(methods);
-			idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class
-					.getName());
-			idp
-					.setIdPCertificate(CertUtil
-							.writeCertificate(this.identityProvider
-									.getIdPCertificate()));
+			idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+			idp.setIdPCertificate(CertUtil.writeCertificate(this.identityProvider.getIdPCertificate()));
 			idp.setStatus(TrustedIdPStatus.Active);
 			SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
 			uid.setNamespaceURI(SAMLConstants.UID_ATTRIBUTE_NAMESPACE);
@@ -108,14 +105,12 @@ public class Dorian extends MobiusResourceManager {
 			idp.setUserIdAttributeDescriptor(uid);
 
 			SAMLAttributeDescriptor firstName = new SAMLAttributeDescriptor();
-			firstName
-					.setNamespaceURI(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE);
+			firstName.setNamespaceURI(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE);
 			firstName.setName(SAMLConstants.FIRST_NAME_ATTRIBUTE);
 			idp.setFirstNameAttributeDescriptor(firstName);
 
 			SAMLAttributeDescriptor lastName = new SAMLAttributeDescriptor();
-			lastName
-					.setNamespaceURI(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE);
+			lastName.setNamespaceURI(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE);
 			lastName.setName(SAMLConstants.LAST_NAME_ATTRIBUTE);
 			idp.setLastNameAttributeDescriptor(lastName);
 
@@ -125,8 +120,7 @@ public class Dorian extends MobiusResourceManager {
 			idp.setEmailAttributeDescriptor(email);
 
 			IFSUser usr = new IFSUser();
-			IdPUser idpUsr = identityProvider.getUser(IDP_ADMIN_USER_ID,
-					IDP_ADMIN_USER_ID);
+			IdPUser idpUsr = identityProvider.getUser(IDP_ADMIN_USER_ID, IDP_ADMIN_USER_ID);
 			usr.setUID(idpUsr.getUserId());
 			usr.setFirstName(idpUsr.getFirstName());
 			usr.setLastName(idpUsr.getLastName());
@@ -143,8 +137,7 @@ public class Dorian extends MobiusResourceManager {
 
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("An unexpected error occurred in configuring the service.");
+			fault.setFaultString("An unexpected error occurred in configuring the service.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -152,14 +145,13 @@ public class Dorian extends MobiusResourceManager {
 		}
 	}
 
-	private static FileInputStream getFileInputStream(String file)
-			throws DorianInternalFault {
+
+	private static FileInputStream getFileInputStream(String file) throws DorianInternalFault {
 		try {
 			return new FileInputStream(new File(file));
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("An unexpected error occurred in configuring the service.");
+			fault.setFaultString("An unexpected error occurred in configuring the service.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -167,22 +159,23 @@ public class Dorian extends MobiusResourceManager {
 		}
 	}
 
+
 	public DorianConfiguration getConfiguration() {
-		return (DorianConfiguration) this
-				.getResource(DorianConfiguration.RESOURCE);
+		return (DorianConfiguration) this.getResource(DorianConfiguration.RESOURCE);
 	}
+
 
 	public Database getDatabase() {
 		return this.db;
 	}
+
 
 	public X509Certificate getCACertificate() throws DorianInternalFault {
 		try {
 			return this.ca.getCACertificate();
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault
-					.setFaultString("An unexpected error occurred, in obtaining the CA certificate.");
+			fault.setFaultString("An unexpected error occurred, in obtaining the CA certificate.");
 			FaultHelper helper = new FaultHelper(fault);
 			helper.addFaultCause(e);
 			fault = (DorianInternalFault) helper.getFault();
@@ -190,16 +183,17 @@ public class Dorian extends MobiusResourceManager {
 		}
 	}
 
+
 	public X509Certificate getIdPCertificate() throws DorianInternalFault {
 		return identityProvider.getIdPCertificate();
 	}
 
-	public IdPUser[] findIdPUsers(String gridIdentity, IdPUserFilter filter)
-			throws DorianInternalFault, PermissionDeniedFault {
+
+	public IdPUser[] findIdPUsers(String gridIdentity, IdPUserFilter filter) throws DorianInternalFault,
+		PermissionDeniedFault {
 		String uid = null;
 		try {
-			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider
-					.getIdPCertificate(), gridIdentity);
+			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
 		} catch (Exception e) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("Invalid IdP User.");
@@ -208,13 +202,12 @@ public class Dorian extends MobiusResourceManager {
 		return this.identityProvider.findUsers(uid, filter);
 	}
 
-	public void updateIdPUser(String gridIdentity, IdPUser u)
-			throws DorianInternalFault, PermissionDeniedFault, NoSuchUserFault,
-			InvalidUserPropertyFault {
+
+	public void updateIdPUser(String gridIdentity, IdPUser u) throws DorianInternalFault, PermissionDeniedFault,
+		NoSuchUserFault, InvalidUserPropertyFault {
 		String uid = null;
 		try {
-			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider
-					.getIdPCertificate(), gridIdentity);
+			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
 		} catch (Exception e) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("Invalid IdP User.");
@@ -223,12 +216,11 @@ public class Dorian extends MobiusResourceManager {
 		this.identityProvider.updateUser(uid, u);
 	}
 
-	public void removeIdPUser(String gridIdentity, String userId)
-			throws DorianInternalFault, PermissionDeniedFault {
+
+	public void removeIdPUser(String gridIdentity, String userId) throws DorianInternalFault, PermissionDeniedFault {
 		String uid = null;
 		try {
-			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider
-					.getIdPCertificate(), gridIdentity);
+			uid = ifs.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
 		} catch (Exception e) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("Invalid IdP User.");
@@ -238,74 +230,78 @@ public class Dorian extends MobiusResourceManager {
 
 	}
 
-	public SAMLAssertion authenticate(BasicAuthCredential credential)
-			throws DorianInternalFault, PermissionDeniedFault {
+
+	public SAMLAssertion authenticate(BasicAuthCredential credential) throws DorianInternalFault, PermissionDeniedFault {
 		return this.identityProvider.authenticate(credential);
 	}
 
-	public String registerWithIdP(Application a) throws DorianInternalFault,
-			InvalidUserPropertyFault {
+
+	public String registerWithIdP(Application a) throws DorianInternalFault, InvalidUserPropertyFault {
 		return this.identityProvider.register(a);
 	}
 
+
 	/** *************** IFS FUNCTIONS ********************** */
 
-	public IFSUserPolicy[] getIFSUserPolicies(String callerGridIdentity)
-			throws DorianInternalFault, PermissionDeniedFault {
+	public IFSUserPolicy[] getIFSUserPolicies(String callerGridIdentity) throws DorianInternalFault,
+		PermissionDeniedFault {
 		return ifs.getUserPolicies(callerGridIdentity);
 	}
 
-	public X509Certificate[] createProxy(SAMLAssertion saml,
-			PublicKey publicKey, ProxyLifetime lifetime)
-			throws DorianInternalFault, InvalidAssertionFault,
-			InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {
-		return this.ifs.createProxy(saml, publicKey, lifetime);
+
+	public X509Certificate[] createProxy(SAMLAssertion saml, PublicKey publicKey, ProxyLifetime lifetime,
+		int delegationPathLength) throws DorianInternalFault, InvalidAssertionFault, InvalidProxyFault,
+		UserPolicyFault, PermissionDeniedFault {
+		return this.ifs.createProxy(saml, publicKey, lifetime, delegationPathLength);
 	}
 
-	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity)
-			throws DorianInternalFault, PermissionDeniedFault {
+
+	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity) throws DorianInternalFault, PermissionDeniedFault {
 		return ifs.getTrustedIdPs(callerGridIdentity);
 	}
 
-	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp)
-			throws DorianInternalFault, InvalidTrustedIdPFault,
-			PermissionDeniedFault {
+
+	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
+		InvalidTrustedIdPFault, PermissionDeniedFault {
 		return ifs.addTrustedIdP(callerGridIdentity, idp);
 	}
 
-	public void updateTrustedIdP(String callerGridIdentity, TrustedIdP idp)
-			throws DorianInternalFault, InvalidTrustedIdPFault,
-			PermissionDeniedFault {
+
+	public void updateTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
+		InvalidTrustedIdPFault, PermissionDeniedFault {
 		ifs.updateTrustedIdP(callerGridIdentity, idp);
 	}
 
-	public void removeTrustedIdP(String callerGridIdentity, TrustedIdP idp)
-			throws DorianInternalFault, InvalidTrustedIdPFault,
-			PermissionDeniedFault {
+
+	public void removeTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
+		InvalidTrustedIdPFault, PermissionDeniedFault {
 		ifs.removeTrustedIdP(callerGridIdentity, idp.getId());
 	}
 
-	public IFSUser[] findIFSUsers(String callerGridIdentity,
-			IFSUserFilter filter) throws DorianInternalFault,
-			PermissionDeniedFault {
+
+	public IFSUser[] findIFSUsers(String callerGridIdentity, IFSUserFilter filter) throws DorianInternalFault,
+		PermissionDeniedFault {
 		return ifs.findUsers(callerGridIdentity, filter);
 	}
 
-	public void updateIFSUser(String callerGridIdentity, IFSUser usr)
-			throws DorianInternalFault, InvalidUserFault, PermissionDeniedFault {
+
+	public void updateIFSUser(String callerGridIdentity, IFSUser usr) throws DorianInternalFault, InvalidUserFault,
+		PermissionDeniedFault {
 		ifs.updateUser(callerGridIdentity, usr);
 	}
 
-	public void removeIFSUser(String callerGridIdentity, IFSUser usr)
-			throws DorianInternalFault, InvalidUserFault, PermissionDeniedFault {
+
+	public void removeIFSUser(String callerGridIdentity, IFSUser usr) throws DorianInternalFault, InvalidUserFault,
+		PermissionDeniedFault {
 		ifs.removeUser(callerGridIdentity, usr);
 	}
 
-	public IFSUser renewIFSUserCredentials(String callerGridIdentity,
-			IFSUser usr) throws DorianInternalFault, InvalidUserFault,
-			PermissionDeniedFault {
+
+	public IFSUser renewIFSUserCredentials(String callerGridIdentity, IFSUser usr) throws DorianInternalFault,
+		InvalidUserFault, PermissionDeniedFault {
 		return ifs.renewUserCredentials(callerGridIdentity, usr);
 	}
+
 
 	public void clearDatabase() throws DorianInternalFault {
 		this.identityProvider.clearDatabase();

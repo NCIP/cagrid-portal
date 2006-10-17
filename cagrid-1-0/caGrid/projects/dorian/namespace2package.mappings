@@ -13,6 +13,4 @@ http\://cagrid.nci.nih.gov/1/dorian-common=gov.nih.nci.cagrid.dorian.bean
 http\://cagrid.nci.nih.gov/AuthenticationService/types=gov.nih.nci.cagrid.authentication.stubs.types
 http\://cagrid.nci.nih.gov/1/dorian-idp=gov.nih.nci.cagrid.dorian.idp.bean
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service
-gme\://caCORE.caBIG/3.0/gov.nih.nci.cadsr.umlproject.domain=gov.nih.nci.cadsr.umlproject.domain
-gme\://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain=gov.nih.nci.cadsr.domain
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common=gov.nih.nci.cagrid.metadata.common

@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
 import gov.nih.nci.cagrid.dorian.common.SAMLUtils;
+import gov.nih.nci.cagrid.dorian.ifs.bean.DelegationPathLength;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
@@ -15,6 +16,7 @@ import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
+import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
@@ -33,7 +35,7 @@ public class IFSUserClient{
 	}
 
 
-	public GlobusCredential createProxy(SAMLAssertion saml, ProxyLifetime lifetime) throws DorianFault,
+	public GlobusCredential createProxy(SAMLAssertion saml, ProxyLifetime lifetime, int delegationPathLength) throws DorianFault,
 		DorianInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {
 
 		try {
@@ -43,7 +45,7 @@ public class IFSUserClient{
 				.writePublicKey(pair.getPublic()));
 			gov.nih.nci.cagrid.dorian.bean.SAMLAssertion s = new gov.nih.nci.cagrid.dorian.bean.SAMLAssertion(SAMLUtils
 				.samlAssertionToString(saml));
-			gov.nih.nci.cagrid.dorian.bean.X509Certificate list[] = client.createProxy(s, key, lifetime);
+			gov.nih.nci.cagrid.dorian.bean.X509Certificate list[] = client.createProxy(s, key, lifetime,new DelegationPathLength(delegationPathLength));
 			X509Certificate[] certs = new X509Certificate[list.length];
 			for (int i = 0; i < list.length; i++) {
 				certs[i] = CertUtil.loadCertificate(list[i].getCertificateAsString());
