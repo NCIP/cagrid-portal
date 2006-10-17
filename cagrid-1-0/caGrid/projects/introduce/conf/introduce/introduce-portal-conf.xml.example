@@ -6,7 +6,8 @@
         <name>Introduce: Grid Service Authoring Toolkit</name>
         <icon>/applications-internet.png</icon>
         <initializer>gov.nih.nci.cagrid.introduce.portal.init.IntroducePortalInitializer</initializer>
-        <about><![CDATA[<html><h2>Introduce Grid Service Authoring Toolkit</h2><h3>Authors:</h3><a href="mailto:hastings@bmi.osu.edu">Shannon Hastings</a> and <a href="mailto:langella@bmi.osu.edu">Stephen Langella</a> and <a href="mailto:oster@bmi.osu.edu">Scott Oster</a> and <a href="mailto:ervin@bmi.osu.edu">David Ervin</a>]]></about>
+        <about><![CDATA[<html><center><h2>Introduce: Grid Service Authoring Toolkit</h2></center><center><h3>Version 1.0</h3></center><br><h3>Authors:</h3><br><a href="mailto:hastings@bmi.osu.edu">Shannon Hastings</a><br><a href="mailto:langella@bmi.osu.edu">Stephen Langella</a><br> <a href="mailto:oster@bmi.osu.edu">Scott Oster</a><br><a href="mailto:ervin@bmi.osu.edu">David Ervin</a>]]>
+        </about>
         <dimensions>
           <width>1000</width>
           <height>900</height>
