@@ -11,6 +11,9 @@ import java.util.GregorianCalendar;
 import org.globus.gsi.GSIConstants;
 import org.globus.gsi.X509ExtensionSet;
 import org.globus.gsi.bc.BouncyCastleCertProcessingFactory;
+import org.globus.gsi.proxy.ext.ProxyCertInfo;
+import org.globus.gsi.proxy.ext.ProxyCertInfoExtension;
+import org.globus.gsi.proxy.ext.ProxyPolicy;
 
 
 /**
@@ -25,34 +28,52 @@ public class ProxyCreator {
 	public static X509Certificate[] createImpersonationProxyCertificate(X509Certificate cert, PrivateKey privateKey,
 		PublicKey proxyPublicKey, int lifetimeHours, int lifetimeMinutes, int lifetimeSeconds)
 		throws GeneralSecurityException {
-		return createProxyCertificate(new X509Certificate[]{cert}, privateKey, proxyPublicKey, lifetimeHours,
-			lifetimeMinutes, lifetimeSeconds, GSIConstants.GSI_4_IMPERSONATION_PROXY, null);
+		return createImpersonationProxyCertificate(new X509Certificate[]{cert}, privateKey, proxyPublicKey,
+			lifetimeHours, lifetimeMinutes, lifetimeSeconds);
+	}
+
+
+	public static X509Certificate[] createImpersonationProxyCertificate(X509Certificate cert, PrivateKey privateKey,
+		PublicKey proxyPublicKey, int lifetimeHours, int lifetimeMinutes, int lifetimeSeconds, int delegationPathLength)
+		throws GeneralSecurityException {
+		return createImpersonationProxyCertificate(new X509Certificate[]{cert}, privateKey, proxyPublicKey,
+			lifetimeHours, lifetimeMinutes, lifetimeSeconds, delegationPathLength);
 	}
 
 
 	public static X509Certificate[] createImpersonationProxyCertificate(X509Certificate[] certs, PrivateKey privateKey,
 		PublicKey proxyPublicKey, int lifetimeHours, int lifetimeMinutes, int lifetimeSeconds)
 		throws GeneralSecurityException {
-		return createProxyCertificate(certs, privateKey, proxyPublicKey, lifetimeHours, lifetimeMinutes,
-			lifetimeSeconds, GSIConstants.GSI_4_IMPERSONATION_PROXY, null);
+		return createImpersonationProxyCertificate(certs, privateKey, proxyPublicKey, lifetimeHours, lifetimeMinutes,
+			lifetimeSeconds, Integer.MAX_VALUE);
 	}
-	
+
+
+	public static X509Certificate[] createImpersonationProxyCertificate(X509Certificate[] certs, PrivateKey privateKey,
+		PublicKey proxyPublicKey, int lifetimeHours, int lifetimeMinutes, int lifetimeSeconds, int delegationPathLength)
+		throws GeneralSecurityException {
+		ProxyPolicy policy = new ProxyPolicy(ProxyPolicy.IMPERSONATION);
+		ProxyCertInfo proxyCertInfo = new ProxyCertInfo(delegationPathLength, policy);
+		org.globus.gsi.X509Extension x509Ext = new ProxyCertInfoExtension(proxyCertInfo);
+		X509ExtensionSet extSet = new X509ExtensionSet();
+		extSet.add(x509Ext);
+		return createProxyCertificate(certs, privateKey, proxyPublicKey, lifetimeHours, lifetimeMinutes,
+			lifetimeSeconds, GSIConstants.GSI_4_IMPERSONATION_PROXY, extSet);
+	}
 
 
 	public static X509Certificate[] createProxyCertificate(X509Certificate[] certs, PrivateKey privateKey,
-		PublicKey proxyPublicKey, int lifetimeHours, int lifetimeMinutes, int lifetimeSeconds, int delegationMode,
+		PublicKey proxyPublicKey, int lifetimeHours, int lifetimeMinutes, int lifetimeSeconds, int proxyType,
 		X509ExtensionSet extSet) throws GeneralSecurityException {
 		SecurityUtil.init();
 		X509Certificate newCert = createProxyCertificate(certs[0], privateKey, proxyPublicKey, lifetimeHours,
-			lifetimeMinutes, lifetimeSeconds, delegationMode, extSet);
+			lifetimeMinutes, lifetimeSeconds, proxyType, extSet);
 
 		X509Certificate[] newCerts = new X509Certificate[certs.length + 1];
 		newCerts[0] = newCert;
 		System.arraycopy(certs, 0, newCerts, 1, certs.length);
 		return newCerts;
 	}
-	
-	
 
 
 	protected static X509Certificate createProxyCertificate(X509Certificate issuerCert, PrivateKey issuerKey,

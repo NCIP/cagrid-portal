@@ -190,9 +190,7 @@ public class CertificateExtensionsUtil {
 				sb.append(typeStr);
 				sb.append(", Delegation Path Length: ");
 				try {
-					X509Extensions exts = BouncyCastleUtil.getTBSCertificateStructure(cert).getExtensions();
-					ProxyCertInfo info = BouncyCastleUtil.getProxyCertInfo(exts.getExtension(ProxyCertInfo.OID));
-					sb.append(info.getPathLenConstraint());
+					sb.append(getDelegationPathLength(cert));
 				} catch (Exception ex) {
 					ex.printStackTrace();
 					sb.append("UNKNOWN");
@@ -207,6 +205,13 @@ public class CertificateExtensionsUtil {
 			return "*** ERROR DETERMINING VALUE ***";
 		}
 
+	}
+
+
+	public static int getDelegationPathLength(X509Certificate cert) throws Exception {
+		X509Extensions exts = BouncyCastleUtil.getTBSCertificateStructure(cert).getExtensions();
+		ProxyCertInfo info = BouncyCastleUtil.getProxyCertInfo(exts.getExtension(ProxyCertInfo.OID));
+		return info.getPathLenConstraint();
 	}
 
 }
