@@ -553,10 +553,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 						}
 
 						if (getIsProvidedCheckBox().isSelected()) {
-							if(getProviderClassnameTextField().getText()==null || getProviderClassnameTextField().getText().length()<=0){
-								JOptionPane.showMessageDialog(MethodViewer.this,
-								"Please fill out the \"Provider Information\" tab or uncheck the \"Provided\" checkbox.");
-							return;
+							if (getProviderClassnameTextField().getText() == null
+								|| getProviderClassnameTextField().getText().length() <= 0) {
+								JOptionPane
+									.showMessageDialog(MethodViewer.this,
+										"Please fill out the \"Provider Information\" tab or uncheck the \"Provided\" checkbox.");
+								return;
 							}
 							method.setIsProvided(true);
 							MethodTypeProviderInformation pi = new MethodTypeProviderInformation();
@@ -572,8 +574,9 @@ public class MethodViewer extends GridPortalBaseFrame {
 								// introduce....
 
 								if (((ServiceHolder) introduceServiceServicesComboBox.getSelectedItem()) == null) {
-									JOptionPane.showMessageDialog(MethodViewer.this,
-										"Please browse to an Introduce generated service and select the service from which to import this method.");
+									JOptionPane
+										.showMessageDialog(MethodViewer.this,
+											"Please browse to an Introduce generated service and select the service from which to import this method.");
 									return;
 								}
 
@@ -2522,7 +2525,25 @@ public class MethodViewer extends GridPortalBaseFrame {
 						wsdlImportPackageNameTextField.setText(type.getPackageName());
 						wsdlImportPackageNameTextField.setEditable(false);
 					} else {
-						wsdlImportPackageNameTextField.setEditable(true);
+						// see if the namespace is used by another service, if
+						// so
+						// we can suggest it's package name for these imports
+						boolean isUsedAlready = true;
+						ServiceType service = null;
+						for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+							ServiceType tservice = info.getServices().getService(serviceI);
+							if (tservice.getNamespace().equals(namespace)) {
+								isUsedAlready = true;
+								service = tservice;
+								break;
+							}
+						}
+						if (service != null && isUsedAlready) {
+							wsdlImportPackageNameTextField.setText(service.getPackageName());
+							wsdlImportPackageNameTextField.setEditable(false);
+						} else {
+							wsdlImportPackageNameTextField.setEditable(true);
+						}
 					}
 
 				}
