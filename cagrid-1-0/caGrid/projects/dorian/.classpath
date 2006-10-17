@@ -99,7 +99,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca.jar" sourcepath="/caGrid-1.0-gridca"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gts-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gts-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gts-stubs.jar"/>

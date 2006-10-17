@@ -347,7 +347,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 			GlobusCredential cred = c2.createProxy(saml,lifetime);
 			 this.updateProgress(false,"Proxy Created!!!");	 
 			 ProxyManager.getInstance().addProxy(cred);
-			 PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new ProxyManagerComponent(cred),600,450);		 
+			 PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(new ProxyManagerComponent(cred),700,450);		 
 			 dispose();
 	     }catch(Exception e){
 	    	e.printStackTrace();
