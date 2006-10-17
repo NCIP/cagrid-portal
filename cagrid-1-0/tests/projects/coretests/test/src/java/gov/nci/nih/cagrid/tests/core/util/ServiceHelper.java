@@ -67,9 +67,9 @@ public class ServiceHelper
 
 		// parse introduce service info
 		try {
-			this.serviceDir = serviceDir;
-			if (this.serviceDir == null) this.serviceDir =  testDir;
-			serviceInfo = new IntroduceServiceInfo(new File(this.serviceDir, "introduce.xml"));
+			//this.serviceDir = serviceDir;
+			//if (this.serviceDir == null) this.serviceDir =  testDir;
+			serviceInfo = new IntroduceServiceInfo(new File(this.testDir, "introduce.xml"));
 		} catch (Exception e) {
 			throw new IllegalArgumentException("could not parse introduce.xml", e);
 		}

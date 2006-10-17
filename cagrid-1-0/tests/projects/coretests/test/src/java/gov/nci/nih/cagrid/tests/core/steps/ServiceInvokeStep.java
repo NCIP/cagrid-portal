@@ -15,8 +15,6 @@ import java.io.FilenameFilter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -58,7 +56,8 @@ public class ServiceInvokeStep
 		this.url = url;
 		
 		// set className
-		File serviceXmlDescriptor = new File(serviceDir, IntroduceServiceInfo.INTRODUCE_SERVICEXML_FILENAME);
+		File serviceXmlDescriptor = new File(testDir, IntroduceServiceInfo.INTRODUCE_SERVICEXML_FILENAME);
+		if (! serviceXmlDescriptor.exists()) serviceXmlDescriptor = new File(serviceDir, IntroduceServiceInfo.INTRODUCE_SERVICEXML_FILENAME);
 		IntroduceServiceInfo serviceInfo = new IntroduceServiceInfo(serviceXmlDescriptor);
 		String serviceName = serviceInfo.getServiceName();
 		String packageName = serviceInfo.getPackageName();

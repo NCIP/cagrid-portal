@@ -41,6 +41,7 @@ public class ServiceCreateStep
 	private File[] jars;
 	private File[] etcFiles;
 	private Properties introduceProps;
+	private File testDir;
 	
 	public ServiceCreateStep(File introduceDir, File testDir, File tmpDir) 
 		throws ParserConfigurationException, SAXException, IOException
@@ -49,6 +50,7 @@ public class ServiceCreateStep
 		
 		// set introduceDir
 		this.introduceDir = introduceDir;
+		this.testDir = testDir;
 		
 		// set serviceXmlDescriptor, serviceName, pkg, and namespace
 		this.serviceXmlDescriptor = new File(testDir, IntroduceServiceInfo.INTRODUCE_SERVICEXML_FILENAME);
@@ -144,6 +146,12 @@ public class ServiceCreateStep
 		
 		// copy interface
 		FileUtils.copy(serviceXmlDescriptor, new File(serviceDir, IntroduceServiceInfo.INTRODUCE_SERVICEXML_FILENAME));
+		
+		// copy service properties
+		File serviceProperties = new File(testDir, "service.properties");
+		if (serviceProperties.exists()) {
+			FileUtils.copy(serviceProperties, new File(serviceDir, serviceProperties.getName()));
+		}
 		
 		// copy jars
 		File libDir = new File(serviceDir, "lib");
