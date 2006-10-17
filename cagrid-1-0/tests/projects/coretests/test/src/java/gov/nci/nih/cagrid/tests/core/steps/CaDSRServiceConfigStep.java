@@ -32,7 +32,7 @@ public class CaDSRServiceConfigStep
 		throws IOException
 	{
 		FileUtils.replace(
-			new File(globusHelper.getTempGlobusLocation(), "etc" + File.separator + "CaDSRService" + File.separator + "jndi-config.xml"),
+			new File(globusHelper.getTempGlobusLocation(), "etc" + File.separator + "cagrid_CaDSRService" + File.separator + "jndi-config.xml"),
 			"@caCOREServiceURL@",
 			"http://cabio.nci.nih.gov/cacore31/http/remoteService"
 		);
