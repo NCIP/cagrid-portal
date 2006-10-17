@@ -13,7 +13,6 @@
 				<password></password>
 				<pool>1</pool>
 			</database>
-			<outgoing-email host="columbus.bmi.ohio-state.edu" port="25" protocol="smtp"/>
 		</dorian-config>
 	</resource>
 	<resource name="IdPConfiguration" class="gov.nih.nci.cagrid.dorian.service.idp.IdPConfiguration">
