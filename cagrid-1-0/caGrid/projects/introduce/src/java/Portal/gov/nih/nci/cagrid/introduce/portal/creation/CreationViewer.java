@@ -15,14 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -98,12 +95,6 @@ public class CreationViewer extends CreationViewerBaseComponent {
 
 	private JPanel serviceStylePanel = null;
 
-	private JRadioButton dataRadioButton = null;
-
-	private JRadioButton analyticalRadioButton = null;
-
-	private ButtonGroup serviceStyleButtonGroup = null;
-
 
 	public CreationViewer() {
 		super();
@@ -140,7 +131,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints11.gridy = 4;
-			gridBagConstraints11.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints11.gridx = 0;
 			namespaceLabel = new JLabel();
 			namespaceLabel.setText("STEP 4:  Enter a namespace for the generated WSDL:");
@@ -699,7 +690,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints15.gridx = 0;
 			gridBagConstraints15.gridy = 0;
-			gridBagConstraints15.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints15.weightx = 1.0;
 			extSelectionPanel = new JPanel();
 			extSelectionPanel.setLayout(new GridBagLayout());
@@ -726,23 +717,8 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			gridBagConstraints17.gridy = 0;
 			serviceStylePanel = new JPanel();
 			serviceStylePanel.setLayout(new GridBagLayout());
-			serviceStylePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Customize the service",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-				new java.awt.Color(62, 109, 181)));
 			serviceStylePanel.add(getExtensionsPanel(), gridBagConstraints17);
 		}
 		return serviceStylePanel;
 	}
-
-
-	private ButtonGroup getServiceStyleButtonGroup() {
-		if (serviceStyleButtonGroup == null) {
-			serviceStyleButtonGroup = new ButtonGroup();
-		}
-		return serviceStyleButtonGroup;
-	}
-
-
-
 }
