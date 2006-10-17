@@ -1,9 +1,8 @@
 package gov.nih.nci.cagrid.portal.utils;
 
 import gov.nih.nci.cagrid.portal.domain.GeoCodeValues;
-import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
+import gov.nih.nci.cagrid.portal.domain.GeocodedDomainObject;
 import gov.nih.nci.cagrid.portal.exception.GeoCoderRetreivalException;
-import org.apache.log4j.Category;
 import us.geocoder.rpc.Geo.Coder.US.GeoCode_PortType;
 import us.geocoder.rpc.Geo.Coder.US.GeoCode_Service;
 import us.geocoder.rpc.Geo.Coder.US.GeoCode_ServiceLocator;
@@ -20,21 +19,17 @@ import java.rmi.RemoteException;
  * To change this template use File | Settings | File Templates.
  */
 public class GeoCoderUtility {
-    protected Category _logger = Category.getInstance(getClass().getName());
 
-
-    public final GeoCodeValues getGeoCode4RC(ResearchCenter rc) throws GeoCoderRetreivalException {
+    public static GeoCodeValues geocodeDomainObject(GeocodedDomainObject obj) throws GeoCoderRetreivalException {
         GeoCode_Service gService = new GeoCode_ServiceLocator();
 
         GeocoderResult[] result = new GeocoderResult[0];
         try {
             GeoCode_PortType gPort = gService.getGeoCode_Port();
-            result = gPort.geocode(rc.getPostalCode());
+            result = gPort.geocode(obj.getPostalCode());
         } catch (ServiceException e) {
-            _logger.error(e);
             throw new GeoCoderRetreivalException(e);
         } catch (RemoteException e) {
-            _logger.error(e);
             throw new GeoCoderRetreivalException(e);
         }
         GeoCodeValues geoCode = new GeoCodeValues();
@@ -43,6 +38,4 @@ public class GeoCoderUtility {
 
         return geoCode;
     }
-
-
 }

@@ -9,7 +9,7 @@
         <td align="center" height="20" class="footerMenuItem"
             onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()"
             onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()">
-            &nbsp;&nbsp;<a class="footerMenuLink" href="#">PRIVACY NOTICE</a>&nbsp;&nbsp;
+            &nbsp;&nbsp;<a class="footerMenuLink" href="privacyNoticeFtr.portal">PRIVACY NOTICE</a>&nbsp;&nbsp;
         </td>
         <td><img src="images/ftrMenuSeparator.gif" width="1" height="16" alt=""/></td>
         <td align="center" height="20" class="footerMenuItem"

@@ -46,6 +46,9 @@
         </property>
     </bean>
 
+    <bean id="geocodingManager" class="gov.nih.nci.cagrid.portal.manager.GeocodingBaseManagerImpl"
+          parent="baseManager" abstract="true"/>
+
     <!-- main Service that participates in transactions-->
     <bean id="gridServiceManager"
           class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
@@ -64,9 +67,26 @@
         </property>
     </bean>
 
+    <bean id="caBIGWorkspaceManager"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="target">
+            <bean class="gov.nih.nci.cagrid.portal.manager.CaBIGWorkspaceManagerImpl"
+                  parent="geocodingManager">
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="save*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+            </props>
+        </property>
+    </bean>
+
+
     <bean name="rcManager"
           class="gov.nih.nci.cagrid.portal.manager.ResearchCenterManagerImpl"
-          parent="baseManager">
+          parent="geocodingManager">
         <property name="rcDAO">
             <ref bean="rcDAO"/>
         </property>

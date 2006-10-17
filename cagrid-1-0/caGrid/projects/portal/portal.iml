@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4" relativePaths="true" type="J2EE_WEB_MODULE" j2ee-integration="Tomcat Server">
+  <component name="AppServerSpecificValidatorsManager" />
   <component name="ModuleRootManager" />
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/webcontent/WEB-INF/classes" />
@@ -352,24 +353,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-Introduce-security-common.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-Introduce-security-client.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/ext/lib/hibernate3.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -416,24 +399,6 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-metadataUtils.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-Introduce-security-stubs.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-Introduce-security-service.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -541,7 +506,25 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/test/resources" />
+          <root url="jar://$MODULE_DIR$/lib/poi/poi-2.5.1-final-20040804.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/resources" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/src/properties" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -573,26 +556,6 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-discovery.jar" />
       <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-discovery.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-Introduce-security-client.jar" />
-      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-Introduce-security-client.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-Introduce-security-common.jar" />
-      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-Introduce-security-common.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-Introduce-security-service.jar" />
-      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-Introduce-security-service.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-Introduce-security-stubs.jar" />
-      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-Introduce-security-stubs.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -791,6 +754,11 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/poi-2.5.1-final-20040804.jar" />
+      <url>jar://$MODULE_DIR$/lib/poi/poi-2.5.1-final-20040804.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/bsf.jar" />
       <url>jar://$MODULE_DIR$/lib/xdoclet/bsf.jar!/</url>
     </containerElement>
@@ -841,13 +809,18 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/spring-mock.jar" />
-      <url>jar://$MODULE_DIR$/test/lib/spring-mock.jar!/</url>
+      <attribute name="URI" value="/WEB-INF/classes" />
+      <url>file://$MODULE_DIR$/resources</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/classes" />
-      <url>file://$MODULE_DIR$/test/resources</url>
+      <url>file://$MODULE_DIR$/src/properties</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/spring-mock.jar" />
+      <url>jar://$MODULE_DIR$/test/lib/spring-mock.jar!/</url>
     </containerElement>
     <containerElement type="library" level="application" name="Globus-4.0">
       <attribute name="method" value="1" />
@@ -859,8 +832,6 @@
       <root url="file://$MODULE_DIR$/webcontent" relative="/" />
     </webroots>
   </component>
-  <component name="WeblogicWebModuleProperties">
-    <option name="IS_RUN_APPC" value="false" />
-  </component>
+  <component name="WeblogicWebModuleProperties" />
 </module>
 

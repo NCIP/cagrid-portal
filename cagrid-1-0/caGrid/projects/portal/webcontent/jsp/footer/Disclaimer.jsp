@@ -20,7 +20,11 @@
         </h:column>
 
         <h:column>
-            <h:outputText value="#{labels.discliamerDescription3}"/>
+            <h:outputText value="#{labels.disclaimerDescription3}"/>
+        </h:column>
+
+        <h:column>
+            <h:outputText value="#{labels.disclaimerDescription4}"/>
         </h:column>
 
     </h:panelGrid>

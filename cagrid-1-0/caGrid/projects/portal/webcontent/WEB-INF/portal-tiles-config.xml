@@ -134,5 +134,11 @@
         <put name="mainContent" value='/jsp/footer/Disclaimer.jsp'/>
     </definition>
 
+    <definition name="/privacyNoticeFtr.tiles" extends="Base">
+        <put name="mainMenu" value="/jsp/menu/MainMenuNeutral.jsp"/>
+        <put name="mainContent" value='/jsp/footer/PrivacyNotice.jsp'/>
+    </definition>
+
+
 </tiles-definitions>
 

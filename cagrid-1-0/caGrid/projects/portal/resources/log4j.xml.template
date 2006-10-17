@@ -19,6 +19,11 @@
 		</layout>
 	</appender>
 
+	<category name="gov.nih.nci.cagrid.portal.db" additivity="false">
+		<priority value="DEBUG"/>
+		<appender-ref ref="consoleAppender"/>
+	</category>
+
 	<category name="gov.nih.nci.cagrid.portal" additivity="false">
 		<priority value="@log.level.portal@"/>
 		<appender-ref ref="fileAppender"/>

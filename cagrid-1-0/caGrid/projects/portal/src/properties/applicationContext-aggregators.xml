@@ -28,7 +28,7 @@
         </property>
         <property name="period">
             <!--Run it every 10 mins-->
-            <value>600000</value>
+            <value>@aggregator.frequency@</value>
         </property>
         <property name="delay">
             <!--Put a delay so doesn't start before DB initialized-->

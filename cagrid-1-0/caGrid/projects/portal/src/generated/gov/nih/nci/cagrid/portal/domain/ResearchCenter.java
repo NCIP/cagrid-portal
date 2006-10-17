@@ -9,7 +9,7 @@ import java.util.Set;
  * @hibernate.class table="RESEARCH_CENTER"
  * @created 19-Jun-2006 4:08:50 PM
  */
-public class ResearchCenter implements DomainObject {
+public class ResearchCenter implements GeocodedDomainObject {
     private java.lang.String country;
     private java.lang.String description;
     private java.lang.String displayName;

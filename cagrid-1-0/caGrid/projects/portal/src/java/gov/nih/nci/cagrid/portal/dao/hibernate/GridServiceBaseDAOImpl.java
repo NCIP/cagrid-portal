@@ -24,6 +24,11 @@ public final class GridServiceBaseDAOImpl extends BaseDAOImpl
     }
 
     /**
+     * This method is to recycle identifiers from hibernate.
+     * Since there is a lot of updating in portal, we want to make sure
+     * new objects are not created by hibernate. Assigning existing id's
+     * lets hibernate update instead of creating a new object
+     *
      * @param obj
      * @return
      * @throws RecordNotFoundException
@@ -61,7 +66,14 @@ public final class GridServiceBaseDAOImpl extends BaseDAOImpl
             } else if (obj instanceof PointOfContact) {
                 PointOfContact poc = (PointOfContact) obj;
                 resultSet = getHibernateTemplate().find("Select poc.pk from PointOfContact poc where poc.email = ? and poc.role = ?", new Object[]{poc.getEmail(), poc.getRole()});
+            } else if (obj instanceof CaBIGWorkspace) {
+                CaBIGWorkspace workspace = (CaBIGWorkspace) obj;
+                resultSet = getHibernateTemplate().find("Select ws.pk from CaBIGWorkspace ws where ws.shortName = ?", workspace.getShortName());
+            } else if (obj instanceof CaBIGParticipant) {
+                CaBIGParticipant participant = (CaBIGParticipant) obj;
+                resultSet = getHibernateTemplate().find("Select p.pk from CaBIGParticipant p where p.name = ?", participant.getName());
             }
+
         } catch (DataAccessException e) {
             _logger.error(e);
             //rethrow

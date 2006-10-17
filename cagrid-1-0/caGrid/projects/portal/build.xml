@@ -77,6 +77,9 @@
             <fileset dir="${lib.dir}/nocopy">
                 <include name="*.jar"/>
             </fileset>
+            <fileset dir="${lib.dir}/poi">
+                <include name="*.jar"/>
+            </fileset>
             <fileset dir="${lib.dir}/myfaces">
                 <include name="*.jar"/>
             </fileset>
@@ -86,6 +89,11 @@
             <fileset dir="${globus.lib.dir}">
                 <include name="*.jar"/>
             </fileset>
+        </path>
+
+        <path id="portal.run.classpath">
+            <path refid="portal.classpath"/>
+            <pathelement location="${build.classes.dir}"/>
         </path>
 
         <path id="test.classpath">
@@ -142,8 +150,7 @@
         <delete dir="${webinf.classes.dir}"/>
         <ant antfile="${basedir}/build-map.xml" dir="${basedir}" inheritall="true" target="cleanMapComponent"/>
 
-        <!-- Delete war file if created -->
-        <delete file="${war.build.dir}/${project.name}.war" failonerror="false"/>
+        <delete file="${war.build.dir}" failonerror="false"/>
     </target>
 
 
@@ -270,9 +277,17 @@
         <copyReplaceDBProperties src.filename="${props.src.dir}/applicationContext-data-access-mock.xml"
                                  dest.filename="${webinf.classes.dir}/applicationContext-data-access-mock.xml"/>
 
+
+        <copy todir="${webinf.classes.dir}"
+              file="${props.src.dir}/applicationContext-aggregators.xml"
+              filtering="true" overwrite="true">
+            <filterset>
+                <filter token="aggregator.frequency" value="${metadata.aggregator.frequncy}"/>
+            </filterset>
+        </copy>
+
         <copy todir="${webinf.classes.dir}">
             <fileset dir="${props.src.dir}">
-                <include name="applicationContext-aggregators.xml"/>
                 <include name="*.properties"/>
                 <include name="*.wsdd"/>
             </fileset>
@@ -382,24 +397,29 @@
         <scriptdef language="beanshell" src="${scripts.src.dir}/create_hbnfile.sh"/>
     </target>
 
-    <target name="createDatabase" depends="setClasspath,compileTests" description="Will drop the Portal Database">
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed"
-               showoutput="true">
-            <classpath refid="test.classpath"/>
+    <!-- will create Portal DB and drop seed data -->
+    <!-- Read the Readme.txt for more infor -->
+    <target name="createDatabase" depends="setClasspath" description="Will drop the Portal Database">
+        <java classname="gov.nih.nci.cagrid.portal.db.ExecutePortalDDL"
+              failonerror="true" logerror="true">
             <classpath>
-                <pathelement path="${test.classes.dir}"/>
-                <pathelement path="${resources.dir}"/>
+                <path refid="portal.run.classpath"/>
+                <dirset dir="${resources.dir}"/>
+                <dirset dir="${props.src.dir}"/>
             </classpath>
-            <sysproperty key="build.dir" value="${test.classes.dir}"/>
-            <jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
-            <batchtest fork="yes" todir="${junit.results.dir}">
-                <fileset dir="${test.src.dir}">
-                    <include name="**/DBCreationUtility.java"/>
-                    <include name="**/DBPopulateSeedDataUtility.java"/>
-                </fileset>
-            </batchtest>
-        </junit>
+        </java>
     </target>
 
+
+    <target name="populateDBWithSeedData" depends="setClasspath">
+        <java classname="gov.nih.nci.cagrid.portal.db.PopulateDBWithSeedData"
+              failonerror="true" logerror="true">
+            <classpath>
+                <path refid="portal.run.classpath"/>
+                <dirset dir="${resources.dir}"/>
+                <dirset dir="${props.src.dir}"/>
+            </classpath>
+        </java>
+    </target>
 
 </project>

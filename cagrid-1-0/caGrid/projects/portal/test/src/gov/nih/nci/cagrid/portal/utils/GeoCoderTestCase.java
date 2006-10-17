@@ -24,7 +24,7 @@ public class GeoCoderTestCase extends TestCase {
 
         GeoCoderUtility coder = new GeoCoderUtility();
         try {
-            GeoCodeValues geoString = coder.getGeoCode4RC(rc);
+            GeoCodeValues geoString = GeoCoderUtility.geocodeDomainObject(rc);
             assertNotNull(geoString);
         } catch (GeoCoderRetreivalException e) {
             fail(e.getMessage());

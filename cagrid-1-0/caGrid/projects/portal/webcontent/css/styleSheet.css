@@ -866,10 +866,8 @@ div.mapStyle {
 }
 
 .ftrTable {
-/* for the table that contains the footer */
-    font-family: verdana, arial, helvetica, sans-serif;
+    width: 100%;
     vertical-align: top;
-    width: 90%;
 }
 
 .ftrHeader {
@@ -885,9 +883,10 @@ div.mapStyle {
 }
 
 .ftrContent {
-    font-family: arial, helvetica, sans-serif;
     font-size: 0.8em;
-    padding-left: 0.2cm;
-    text-align: left;
+    padding: 1em;
+    line-height: 1.5em;
+    vertical-align: top;
+
 }
 

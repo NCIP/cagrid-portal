@@ -24,15 +24,9 @@ You can ignore sections marked (Optional)
 
         - Configure the jdbc connection in portal-build.properties
             or in ${user.home}/.portal-build.properties/
-
-        - Create DB with the portal/resources/Portal_Data_Model.SQL script
-        - Run the
-            OR
         - Create a database called portal in mysql
-        - Configure connection details in the portal-build.properties file
-        - run "ant createDatabase" This script will automatically create
-          the tables etc. needed by portal and populate it with seed
-          data.
+        - Run the "createDatabase" ant target in the portal build
+
 
     ===========================================================================
     2.2 Index Service Configuration  (Optional)
@@ -59,25 +53,12 @@ You can ignore sections marked (Optional)
     2.3 Metadata Aggregation   (Optional)
     ===========================================================================
         Portal has background processes that aggregate information on caGrid.
-        The frequency of these process can be configured in
-        portal/src/properties/applicationContext-aggregators.xml file
+        The frequency of these process can be configured in the portal-build.properties
 
-        Look for the section
+        By default, aggregation is set for every 1 hour
 
-        <bean id="indexAggregatorTask"
-          class="org.springframework.scheduling.timer.ScheduledTimerTask">
-        <property name="timerTask">
-            <ref local="indexAggregatorFactory"/>
-        </property>
-        <property name="period">
-            <!--Run it every 10 mins-->
-            <value>600000</value>
-        </property>
-        <property name="delay">
-            <!--Put a delay so doesn't start before DB initialized-->
-            <value>8000</value>
-        </property>
-        </bean>
+        metadata.aggregator.frequncy 3600000
+
 
         Here the aggregator task starts 8 seconds after Portal is installed
         and runs every 10 minutes. You can change these to suit your needs

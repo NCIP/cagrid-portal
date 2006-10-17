@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+
+<beans>
+    <import resource="classpath:applicationContext-data-access.xml"/>
+
+    <!--bean provides all configuration for portal db environment -->
+    <bean id="abstractDDLExecutor" class="gov.nih.nci.cagrid.portal.db.AbstractPortalDDLExecutor"
+          abstract="true">
+        <property name="caBIGWorkspaceManager">
+            <ref bean="caBIGWorkspaceManager"/>
+        </property>
+
+        <!--Classpath reource. DDL to be excuted -->
+        <property name="ddlScriptResource">
+            <value>Portal_Data_Model.SQL</value>
+        </property>
+        <property name="zipCodeSeedData">
+            <value>ZIP_CODES.txt</value>
+        </property>
+        <property name="cabigParticipantsSeedData">
+            <value>caBIG_Workspaces_participants.xls</value>
+        </property>
+        <!-- caBIG workspaces. Should match the excel sheetnames in cabigParticipantsSeedData -->
+        <property name="caBIGWorkspaces">
+            <map>
+                <entry key="CTMS">
+                    <value>Clinical Trial Management Systems</value>
+                </entry>
+                <entry key="ICR">
+                    <value>Integrative Cancer Research</value>
+                </entry>
+                <entry key="IMAGING">
+                    <value>Imaging</value>
+                </entry>
+                <entry key="TBPT">
+                    <value>Tissue Banks and Pathology Tools</value>
+                </entry>
+                <entry key="ARCH">
+                    <value>Architecture</value>
+                </entry>
+                <entry key="VCDE">
+                    <value>Vocabularies and Common Data Elements</value>
+                </entry>
+                <entry key="SP">
+                    <value>Strategic Planning</value>
+                </entry>
+                <entry key="DSIC">
+                    <value>Data Sharing and Intellectual Capital</value>
+                </entry>
+                <entry key="TRAINING">
+                    <value>Training</value>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="mysqlDDLExecutor" parent="abstractDDLExecutor"
+          class="gov.nih.nci.cagrid.portal.db.PortalMysqlDDLExecutor">
+        <property name="jdbcDAO">
+            <ref bean="jdbcDAO"/>
+        </property>
+    </bean>
+
+
+    <!-- default DDL execution. Portal installer will execute "ddlExtractor" bean -->
+    <!-- If you are providing custom db implementation. Change this bean class -->
+    <bean id="ddlExecutor"
+          class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="proxyInterfaces">
+            <value>gov.nih.nci.cagrid.portal.db.PortalDDLExecutor</value>
+        </property>
+        <!-- Change this to your custom exector. Make sure the class
+         implements "PortalDDLExecutor"
+        or you will break the contract -->
+        <property name="target">
+            <ref local="mysqlDDLExecutor"/>
+        </property>
+    </bean>
+
+</beans>
