@@ -16,6 +16,16 @@
         <component>
           <title>Create Service</title>
           <description>Create Service Skeleton</description>
+          <class>gov.nih.nci.cagrid.introduce.portal.creation.CreationViewer</class>
+          <icon>/cog_add.png</icon>
+          <dimensions>
+            <width>600</width>
+            <height>450</height>
+          </dimensions>
+        </component>
+        <component>
+          <title>Create caBIG Service</title>
+          <description>Create Service Skeleton</description>
           <class>gov.nih.nci.cagrid.introduce.portal.creation.CaBIGCreationViewer</class>
           <icon>/cog_add.png</icon>
           <dimensions>

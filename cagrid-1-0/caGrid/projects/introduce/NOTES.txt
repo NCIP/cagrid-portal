@@ -1,4 +1,4 @@
-NOTES:
+cd .NOTES:
 
 Exceptions will now be in the <serviceNamespace>.stubs.types package and no the <serviceNamespace>.stubs packages
 

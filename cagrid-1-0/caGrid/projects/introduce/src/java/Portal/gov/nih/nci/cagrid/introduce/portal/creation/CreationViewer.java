@@ -8,19 +8,24 @@ import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 
 /**
@@ -37,11 +42,11 @@ public class CreationViewer extends CreationViewerBaseComponent {
 
 	public static final String SCHEMA_DIR = "schema";
 
-	private static String DEFAULT_NAME = "HelloWorld";
+	private static final String DEFAULT_NAME = "HelloWorld";
 
-	private static String DEFAULT_JAVA_PACKAGE = "gov.nih.nci.cagrid.helloworld";
+	private static final String DEFAULT_JAVA_PACKAGE = "gov.nih.nci.cagrid.helloworld";
 
-	private static String DEFAULT_NAMESPACE = "http://helloworld.cagrid.nci.nih.gov/HelloWorld";
+	private static final String DEFAULT_NAMESPACE = "http://helloworld.cagrid.nci.nih.gov/HelloWorld";
 
 	private JPanel inputPanel = null;
 
@@ -91,6 +96,14 @@ public class CreationViewer extends CreationViewerBaseComponent {
 
 	private JPanel extSelectionPanel = null;
 
+	private JPanel serviceStylePanel = null;
+
+	private JRadioButton dataRadioButton = null;
+
+	private JRadioButton analyticalRadioButton = null;
+
+	private ButtonGroup serviceStyleButtonGroup = null;
+
 
 	public CreationViewer() {
 		super();
@@ -106,7 +119,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 	private void initialize() {
 		this.setContentPane(getMainPanel());
 		this.setFrameIcon(IntroduceLookAndFeel.getCreateServiceIcon());
-		this.setTitle("Create Grid Service");
+		this.setTitle("Create a Grid Service");
 	}
 
 
@@ -117,7 +130,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 		if (inputPanel == null) {
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints12.gridy = 3;
+			gridBagConstraints12.gridy = 4;
 			gridBagConstraints12.weightx = 1.0;
 			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -126,11 +139,11 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			gridBagConstraints12.gridx = 1;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints11.gridy = 3;
-			gridBagConstraints11.insets = new java.awt.Insets(0, 0, 0, 0);
+			gridBagConstraints11.gridy = 4;
+			gridBagConstraints11.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints11.gridx = 0;
 			namespaceLabel = new JLabel();
-			namespaceLabel.setText("Namespace");
+			namespaceLabel.setText("STEP 4:  Enter a namespace for the generated WSDL:");
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints10.gridy = 3;
@@ -142,11 +155,12 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			gridBagConstraints10.gridx = 1;
 			inputPanel = new JPanel();
 			inputPanel.setLayout(new GridBagLayout());
-			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Grid Service",
+			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Define the service",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+				new java.awt.Color(62, 109, 181)));
 			packageLabel = new JLabel();
-			packageLabel.setText("Package");
+			packageLabel.setText("STEP 3:  Enter a Java package for the generated code:");
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.gridx = 0;
 			gridBagConstraints9.gridy = 3;
@@ -154,7 +168,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints8.gridy = 2;
+			gridBagConstraints8.gridy = 3;
 			gridBagConstraints8.weightx = 1.0;
 			gridBagConstraints8.gridwidth = 2;
 			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
@@ -163,11 +177,11 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			gridBagConstraints8.gridx = 1;
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints7.gridy = 2;
+			gridBagConstraints7.gridy = 3;
 			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints7.gridx = 0;
 			destinationLabel = new JLabel();
-			destinationLabel.setText("Creation Directory");
+			destinationLabel.setText("STEP 1:  Select a directory for your service:");
 			destinationLabel.setName("Destination Directory");
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
@@ -182,7 +196,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			gridBagConstraints5.gridx = 0;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints4.gridy = 0;
+			gridBagConstraints4.gridy = 2;
 			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints4.gridx = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
@@ -197,16 +211,16 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints2.gridx = 1;
-			gridBagConstraints2.gridy = 0;
+			gridBagConstraints2.gridy = 2;
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.gridwidth = 2;
 			gridBagConstraints2.weighty = 1.0D;
 			gridBagConstraints2.weightx = 1.0;
 			inputPanel.add(destinationLabel, gridBagConstraints5);
 			inputPanel.add(getDirButton(), gridBagConstraints6);
-			inputPanel.add(packageLabel, gridBagConstraints7);
 			serviceLabel = new JLabel();
-			serviceLabel.setText("Service Name");
+			serviceLabel.setText("STEP 2:  Enter a name for the service:");
+			inputPanel.add(packageLabel, gridBagConstraints7);
 			inputPanel.add(getService(), gridBagConstraints2);
 			inputPanel.add(getDir(), gridBagConstraints3);
 			inputPanel.add(getServicePackage(), gridBagConstraints8);
@@ -225,15 +239,12 @@ public class CreationViewer extends CreationViewerBaseComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			gridBagConstraints17.anchor = GridBagConstraints.WEST;
-			gridBagConstraints17.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints17.gridwidth = 3;
-			gridBagConstraints17.gridx = 0;
-			gridBagConstraints17.gridy = 1;
-			gridBagConstraints17.weightx = 1.0D;
-			gridBagConstraints17.weighty = 1.0D;
-			gridBagConstraints17.fill = java.awt.GridBagConstraints.BOTH;
+			GridBagConstraints gridBagConstraints110 = new GridBagConstraints();
+			gridBagConstraints110.gridx = 0;
+			gridBagConstraints110.weightx = 1.0;
+			gridBagConstraints110.weighty = 1.0;
+			gridBagConstraints110.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints110.gridy = 1;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints1.gridx = 0;
@@ -252,8 +263,8 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(getInputPanel(), gridBagConstraints);
-			mainPanel.add(getExtensionsPanel(), gridBagConstraints17);
 			mainPanel.add(getButtonPanel(), gridBagConstraints1);
+			mainPanel.add(getServiceStylePanel(), gridBagConstraints110);
 		}
 		return mainPanel;
 	}
@@ -342,8 +353,46 @@ public class CreationViewer extends CreationViewerBaseComponent {
 		if (service == null) {
 			service = new JTextField();
 			service.setText(DEFAULT_NAME);
+			service.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					updateSuggestedNamespace();
+				}
+
+
+				public void removeUpdate(DocumentEvent e) {
+					updateSuggestedNamespace();
+				}
+
+
+				public void insertUpdate(DocumentEvent e) {
+					updateSuggestedNamespace();
+				}
+			});
 		}
 		return service;
+	}
+
+
+	protected void updateSuggestedNamespace() {
+		String servName = getService().getText();
+		String pack = getServicePackage().getText();
+
+		if (servName.equals("") || pack.equals("")) {
+			return;
+		}
+
+		String ns = "";
+		StringTokenizer strtok = new StringTokenizer(pack, ".", false);
+		while (strtok.hasMoreElements()) {
+			String packageItem = strtok.nextToken();
+			if (!ns.equals("")) {
+				ns = "." + ns;
+			}
+			ns = packageItem + ns;
+		}
+
+		String new_ns = "http://" + ns + "/" + getService().getText();
+		getNamespaceDomain().setText(new_ns);
 	}
 
 
@@ -401,6 +450,21 @@ public class CreationViewer extends CreationViewerBaseComponent {
 		if (servicePackage == null) {
 			servicePackage = new JTextField();
 			servicePackage.setText((DEFAULT_JAVA_PACKAGE).toLowerCase());
+			servicePackage.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					updateSuggestedNamespace();
+				}
+
+
+				public void removeUpdate(DocumentEvent e) {
+					updateSuggestedNamespace();
+				}
+
+
+				public void insertUpdate(DocumentEvent e) {
+					updateSuggestedNamespace();
+				}
+			});
 		}
 		return servicePackage;
 	}
@@ -550,7 +614,6 @@ public class CreationViewer extends CreationViewerBaseComponent {
 	private ExtensionsTable getExtensionsTable() {
 		if (extensionsTable == null) {
 			extensionsTable = new ExtensionsTable();
-			extensionsTable.setMinimumSize(new java.awt.Dimension(100, 150));
 		}
 		return extensionsTable;
 	}
@@ -573,7 +636,8 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			gridBagConstraints14.anchor = java.awt.GridBagConstraints.NORTHWEST;
 			gridBagConstraints14.gridy = 1;
 			downExtensionLabel = new JLabel();
-			downExtensionLabel.setToolTipText("moves the selected extension down in the list so that it will be executed after the preceding extensions");
+			downExtensionLabel
+				.setToolTipText("moves the selected extension down in the list so that it will be executed after the preceding extensions");
 			downExtensionLabel.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
@@ -586,7 +650,8 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			});
 			downExtensionLabel.setIcon(IntroduceLookAndFeel.getDownIcon());
 			upExtensionLabel = new JLabel();
-			upExtensionLabel.setToolTipText("moves the selected extension higher in the list so that it will be executed before the following extensions");
+			upExtensionLabel
+				.setToolTipText("moves the selected extension higher in the list so that it will be executed before the following extensions");
 			upExtensionLabel.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
@@ -634,6 +699,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints15.gridx = 0;
 			gridBagConstraints15.gridy = 0;
+			gridBagConstraints15.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints15.weightx = 1.0;
 			extSelectionPanel = new JPanel();
 			extSelectionPanel.setLayout(new GridBagLayout());
@@ -643,4 +709,40 @@ public class CreationViewer extends CreationViewerBaseComponent {
 		}
 		return extSelectionPanel;
 	}
+
+
+	/**
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getServiceStylePanel() {
+		if (serviceStylePanel == null) {
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.gridx = 0;
+			gridBagConstraints17.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints17.weightx = 1.0D;
+			gridBagConstraints17.weighty = 1.0D;
+			gridBagConstraints17.gridy = 0;
+			serviceStylePanel = new JPanel();
+			serviceStylePanel.setLayout(new GridBagLayout());
+			serviceStylePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Customize the service",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
+				new java.awt.Color(62, 109, 181)));
+			serviceStylePanel.add(getExtensionsPanel(), gridBagConstraints17);
+		}
+		return serviceStylePanel;
+	}
+
+
+	private ButtonGroup getServiceStyleButtonGroup() {
+		if (serviceStyleButtonGroup == null) {
+			serviceStyleButtonGroup = new ButtonGroup();
+		}
+		return serviceStyleButtonGroup;
+	}
+
+
+
 }
