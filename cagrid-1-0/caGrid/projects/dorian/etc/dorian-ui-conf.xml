@@ -9,10 +9,20 @@
 	  	</about>
 	  	<dimensions>
 	  		<width>850</width>
-	  		<height>750</height>
+	  		<height>700</height>
 	  	</dimensions>
 	  </application>
 	  <components>
+	        <component>
+	  		<title>Login</title>
+	  		<description>Authenticate with Credential Provider or Identity Provider</description>
+	  		<class>gov.nih.nci.cagrid.dorian.ui.ifs.CreateProxyComponent</class>
+	  		<icon>/Door.gif</icon>
+	  		<dimensions>
+	  			<width>550</width>
+	  			<height>350</height>
+	  		</dimensions>
+	  	</component>
 	    	<component>
 	  		<title>Grid Account Management</title>
 	  		<description>Identity Provider (IdP) Menu</description>
@@ -37,7 +47,7 @@
 	  </components>
 	  </grid-portal-config>
 	</resource>	
-	<resource name="DorianPortalConf" class="gov.nih.nci.cagrid.dorian.ui.DorianPortalConf">
+	<resource name="DorianUIConf" class="gov.nih.nci.cagrid.dorian.ui.DorianUIConf">
 		<dorian-portal-config>
 		<dorian-services>
 			<dorian-service>https://cagrid05.bmi.ohio-state.edu:8443/wsrf/services/cagrid/Dorian</dorian-service>

@@ -17,8 +17,8 @@ public class DorianServiceListComboBox extends JComboBox {
 	private static String lastSelectedService;
 
 	public DorianServiceListComboBox() {
-		DorianPortalConf conf = (DorianPortalConf) PortalResourceManager
-				.getInstance().getResource(DorianPortalConf.RESOURCE);
+		DorianUIConf conf = (DorianUIConf) PortalResourceManager
+				.getInstance().getResource(DorianUIConf.RESOURCE);
 		List services = conf.getDorianServiceList();
 		for (int i = 0; i < services.size(); i++) {
 			this.addItem(services.get(i));

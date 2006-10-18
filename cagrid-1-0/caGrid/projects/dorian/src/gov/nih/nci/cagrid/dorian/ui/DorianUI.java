@@ -12,9 +12,9 @@ import org.projectmobius.portal.GridPortal;
 import org.projectmobius.portal.PortalResourceManager;
 
 
-public final class DorianPortal {
+public final class DorianUI {
 
-	public static final String DEFAULT_CONFIG_FILE = "etc/dorian-portal-conf.xml";
+	public static final String DEFAULT_CONFIG_FILE = "etc/dorian-ui-conf.xml";
 
 	private static SplashScreen dorianSplash;
 

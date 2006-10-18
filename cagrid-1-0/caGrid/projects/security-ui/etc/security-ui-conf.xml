@@ -67,7 +67,7 @@
 	  </components>
 	  </grid-portal-config>
 	</resource>	
-	<resource name="DorianPortalConf" class="gov.nih.nci.cagrid.dorian.ui.DorianPortalConf">
+	<resource name="DorianUIConf" class="gov.nih.nci.cagrid.dorian.ui.DorianUIConf">
 		<dorian-portal-config>
 		<dorian-services>
 			<dorian-service>https://cagrid05.bmi.ohio-state.edu:8443/wsrf/services/cagrid/Dorian</dorian-service>

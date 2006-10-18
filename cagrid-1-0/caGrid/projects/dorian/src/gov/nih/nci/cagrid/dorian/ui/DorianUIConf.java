@@ -15,15 +15,15 @@ import org.projectmobius.common.MobiusResourceManager;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class DorianPortalConf implements AbstractMobiusConfiguration {
+public class DorianUIConf implements AbstractMobiusConfiguration {
 
-	public static String RESOURCE = "DorianPortalConf";
+	public static String RESOURCE = "DorianUIConf";
 
 	public List dorianServices;
 
 	private List idps;
 
-	public DorianPortalConf() {
+	public DorianUIConf() {
 		this.idps = new ArrayList();
 	}
 

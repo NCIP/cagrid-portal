@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
-import gov.nih.nci.cagrid.dorian.ui.DorianPortalConf;
+import gov.nih.nci.cagrid.dorian.ui.DorianUIConf;
 import gov.nih.nci.cagrid.dorian.ui.DorianServiceListComboBox;
 import gov.nih.nci.cagrid.dorian.ui.IdPConf;
 import gov.nih.nci.cagrid.gridca.ui.ProxyManager;
@@ -73,8 +73,8 @@ public class CreateProxyComponent extends GridPortalComponent {
 	public CreateProxyComponent() {
 		super();
 		initialize();
-		DorianPortalConf conf = (DorianPortalConf) PortalResourceManager.getInstance().getResource(
-			DorianPortalConf.RESOURCE);
+		DorianUIConf conf = (DorianUIConf) PortalResourceManager.getInstance().getResource(
+			DorianUIConf.RESOURCE);
 		authPanels = new HashMap();
 		List idps = conf.getIdPs();
 		for (int i = 0; i < idps.size(); i++) {

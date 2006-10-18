@@ -352,7 +352,7 @@
 	
 	<!-- Post Introduce Edit-->
 	<target name="ui" description="Run the dorian ui" depends="checkGlobus">
-		<java classname="gov.nih.nci.cagrid.dorian.ui.DorianPortal" fork="yes">
+		<java classname="gov.nih.nci.cagrid.dorian.ui.DorianUI" fork="yes">
 			<jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
 			<classpath>
 				<pathelement location="${stubs.dest}" />
