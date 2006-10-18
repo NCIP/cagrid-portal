@@ -7,6 +7,7 @@ import java.awt.Component;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
@@ -27,6 +28,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
 import org.jdom.Document;
+import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.portal.PortalResourceManager;
 
@@ -99,7 +101,7 @@ public class ResourceManager {
 	}
 
 
-	private static Properties getServiceURLProperties() throws Exception {
+	private static Properties getServiceURLProperties() throws IOException {
 		Properties serviceProps = new Properties();
 		if (!new File(getResourcePath() + File.separator + SERVICE_URL_FILE).exists()) {
 			serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)),
@@ -111,7 +113,7 @@ public class ResourceManager {
 	}
 
 
-	public static void setServiceURLProperty(String key, String value) throws Exception {
+	public static void setServiceURLProperty(String key, String value) throws IOException {
 		Properties serviceProps = getServiceURLProperties();
 		serviceProps.put(key, value);
 		serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)),
@@ -145,20 +147,20 @@ public class ResourceManager {
 	}
 
 
-	private static Properties getConfigurationProperties() throws Exception {
+	private static Properties getConfigurationProperties() throws IOException {
 		Properties serviceProps = new Properties();
 		if (!new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE).exists()) {
 			serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator
 				+ CONFIG_PROPERTIES_FILE)), "Introduce Global Configuration Properties");
 		} else {
-			serviceProps
-				.load(new FileInputStream(new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE)));
+			serviceProps.load(new FileInputStream(new File(
+				getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE)));
 		}
 		return serviceProps;
 	}
 
 
-	public static void setConfigurationProperty(String key, String value) throws Exception {
+	public static void setConfigurationProperty(String key, String value) throws IOException {
 		Properties serviceProps = getConfigurationProperties();
 		serviceProps.put(key, value);
 		serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE)),
@@ -183,15 +185,14 @@ public class ResourceManager {
 	}
 
 
-	public static void setConfigFile(Document doc) throws Exception {
+	public static void setConfigFile(Document doc) throws IOException, MobiusException {
 		FileWriter fw = new FileWriter(getPortalConfigFileLocation());
 		fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
 		fw.close();
-
 	}
 
 
-	public static String getStateProperty(String key) throws Exception {
+	public static String getStateProperty(String key) throws IOException {
 		File lastDir = new File(getResourcePath() + File.separator + STATE_FILE);
 		Properties properties = new Properties();
 		if (!lastDir.exists()) {
@@ -202,7 +203,7 @@ public class ResourceManager {
 	}
 
 
-	public static void setStateProperty(String key, String value) throws Exception {
+	public static void setStateProperty(String key, String value) throws IOException {
 		if (key != null) {
 			File lastDir = new File(getResourcePath() + File.separator + STATE_FILE);
 			if (!lastDir.exists()) {
@@ -239,7 +240,7 @@ public class ResourceManager {
 	}
 
 
-	public static synchronized void purgeArchives(String serviceName) throws Exception {
+	public static synchronized void purgeArchives(String serviceName) {
 		String introduceCache = getResourcePath();
 
 		final String finalServiceName = serviceName;
@@ -264,7 +265,8 @@ public class ResourceManager {
 	}
 
 
-	public static synchronized void createArchive(String id, String serviceName, String baseDir) throws Exception {
+	public static synchronized void createArchive(String id, String serviceName, String baseDir) 
+		throws FileNotFoundException, IOException {
 		File dir = new File(baseDir);
 
 		String introduceCache = getResourcePath();
@@ -347,8 +349,7 @@ public class ResourceManager {
 
 
 	public static synchronized void restoreLatest(String currentId, String serviceName, String baseDir)
-		throws Exception {
-
+		throws FileNotFoundException, IOException {
 		File introduceCache = new File(getResourcePath());
 		introduceCache.mkdir();
 
@@ -389,23 +390,12 @@ public class ResourceManager {
 	}
 
 
-	public static void main(String[] args) {
-		try {
-			ResourceManager.createArchive(String.valueOf(System.currentTimeMillis()), "HelloWorld", "c:\\HelloWorld");
-
-			Thread.sleep(5000);
-
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public static String promptDir(String defaultLocation) throws IOException {
+		return promptDir(PortalResourceManager.getInstance().getGridPortal(), defaultLocation);
 	}
 
 
-	public static String promptDir(String defaultLocation) throws Exception {
+	public static String promptDir(Component owner, String defaultLocation) throws IOException {
 		JFileChooser chooser = null;
 		if (defaultLocation != null && defaultLocation.length() > 0 && new File(defaultLocation).exists()) {
 			chooser = new JFileChooser(new File(defaultLocation));
@@ -421,32 +411,43 @@ public class ResourceManager {
 		chooser.setMultiSelectionEnabled(false);
 		PortalUtils.centerComponent(chooser);
 
-		int returnVal = chooser.showOpenDialog(PortalResourceManager.getInstance().getGridPortal());
+		int returnVal = chooser.showOpenDialog(owner);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			setStateProperty(ResourceManager.LAST_DIRECTORY, chooser.getSelectedFile().getAbsolutePath());
 			return chooser.getSelectedFile().getAbsolutePath();
 		}
 		return null;
 	}
+	
+	
+	public static String promptFile(String defaultLocation, FileFilter filter) throws IOException {
+		return promptFile(PortalResourceManager.getInstance().getGridPortal(), defaultLocation, filter);
+	}
 
 
-	public static String promptFile(String defaultLocation, FileFilter filter) throws Exception {
-		String[] files = internalPromptFiles(defaultLocation, filter, false, "Select File");
+	public static String promptFile(Component owner, String defaultLocation, FileFilter filter) throws IOException {
+		String[] files = internalPromptFiles(owner, defaultLocation, filter, false, "Select File");
 		if (files != null) {
 			return files[0];
 		}
 		return null;
 	}
+	
+	
+	public static String[] promptMultiFiles(String defaultLocation, FileFilter filter) throws IOException {
+		return promptMultiFiles(PortalResourceManager.getInstance().getGridPortal(), defaultLocation, filter);
+	}
 
 
-	public static String[] promptMultiFiles(Component comp, String defaultLocation, FileFilter filter) throws Exception {
-		String[] files = internalPromptFiles(defaultLocation, filter, true, "Select File(s)");
+	public static String[] promptMultiFiles(Component owner, 
+		String defaultLocation, FileFilter filter) throws IOException {
+		String[] files = internalPromptFiles(owner, defaultLocation, filter, true, "Select File(s)");
 		return files;
 	}
 
 
-	private static String[] internalPromptFiles(String defaultLocation, FileFilter filter, boolean multiSelect,
-		String title) throws Exception {
+	private static String[] internalPromptFiles(Component owner, String defaultLocation, 
+		FileFilter filter, boolean multiSelect,	String title) throws IOException {
 		String[] fileNames = null;
 		JFileChooser chooser = null;
 		if (defaultLocation != null && defaultLocation.length() != 0 && new File(defaultLocation).exists()) {
@@ -461,10 +462,10 @@ public class ResourceManager {
 		chooser.setMultiSelectionEnabled(multiSelect);
 		chooser.setDialogTitle(title);
 		chooser.setFileFilter(filter);
-		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		PortalUtils.centerComponent(chooser);
 
-		int choice = chooser.showOpenDialog(PortalResourceManager.getInstance().getGridPortal());
+		int choice = chooser.showOpenDialog(owner);
 		if (choice == JFileChooser.APPROVE_OPTION) {
 			File[] files = null;
 			if (multiSelect) {
@@ -479,5 +480,19 @@ public class ResourceManager {
 			}
 		}
 		return fileNames;
+	}
+	
+	
+	public static void main(String[] args) {
+		try {
+			ResourceManager.createArchive(String.valueOf(System.currentTimeMillis()), "HelloWorld", "c:\\HelloWorld");
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
