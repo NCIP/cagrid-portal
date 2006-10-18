@@ -93,10 +93,14 @@ public abstract class BaseCodegenPostProcessorExtension implements CodegenExtens
 					for (int clazz = 0; currentPackage.getCadsrClass() != null 
 						&& clazz < currentPackage.getCadsrClass().length; clazz++) {
 						ClassMapping map = currentPackage.getCadsrClass(clazz);
-						ClassToQname toQname = new ClassToQname();
-						toQname.setClassName(currentPackage.getName() + "." + map.getClassName());
-						toQname.setQname((new QName(currentPackage.getMappedNamespace(), map.getElementName()).toString()));
-						classMappings.add(toQname);
+						if (map.getElementName() != null) {
+							String classname = currentPackage.getName() + "." + map.getClassName();
+							QName qname = new QName(currentPackage.getMappedNamespace(), map.getElementName());
+							ClassToQname toQname = new ClassToQname();
+							toQname.setClassName(classname);
+							toQname.setQname(qname.toString());
+							classMappings.add(toQname);
+						}
 					}
 				}
 				ClassToQname[] mapArray = new ClassToQname[classMappings.size()];

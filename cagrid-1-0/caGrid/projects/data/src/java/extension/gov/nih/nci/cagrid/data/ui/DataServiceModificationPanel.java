@@ -70,7 +70,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
@@ -920,57 +919,52 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	
 	
 	private void loadUmlTreeInformation() {
-		Runnable loader = new Runnable() {
-			public void run() {
-				// if there's existing cadsr configuration, apply it
-				CadsrInformation cadsrInfo = null;
-				try {
-					cadsrInfo = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData()).getCadsrInformation();
-				} catch (Exception ex) {
-					ErrorDialog.showErrorDialog("Error getting cadsrInformation from extension data: " + ex.getMessage(), ex);
-				}
-				if (cadsrInfo != null) {
-					getUmlTree().setEnabled(false);
-					// set the caDSR service URL in the GUI
-					getCadsrBrowserPanel().setDefaultCaDSRURL(cadsrInfo.getServiceUrl());
-					getCadsrBrowserPanel().getCadsr().setText(cadsrInfo.getServiceUrl());
-					// walk through packages
-					for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {
-						CadsrPackage pack = cadsrInfo.getPackages(i);
-						String packageName = pack.getName();
-						String namespace = pack.getMappedNamespace();
-						// keep track of the mapped package / namespace combination
-						packageToNamespace.put(packageName, namespace);
-						// find the namespace needed for this package in the service description
-						NamespaceType[] serviceNamespaces = getServiceInfo().getNamespaces().getNamespace();
-						NamespaceType nsType = null;
-						for (int nsIndex = 0; nsIndex < serviceNamespaces.length; nsIndex++) {
-							NamespaceType ns = serviceNamespaces[nsIndex];
-							if (ns.getNamespace().equals(namespace)) {
-								nsType = ns;
-								break;
-							}
-						}
-						if (nsType != null) {
-							// add the package to the types tree
-							getUmlTree().addUmlPackage(packageName);
-							// prepare a mapping of class to element names
-							Map classToElementNames = new HashMap();
-							packageToClassMap.put(packageName, classToElementNames);
-							for (int j = 0; pack.getCadsrClass() != null && j < pack.getCadsrClass().length; j++) {
-								ClassMapping map = pack.getCadsrClass(j);
-								classToElementNames.put(map.getClassName(), map.getElementName());
-								// add the classes for the uml package to the tree
-								UMLClassTreeNode node = getUmlTree().addUmlClass(packageName, map.getClassName());
-								node.getCheckBox().setSelected(map.isSelected());								// TODO: I may have to add the type to the types table here
-							}
-						}
+		// if there's existing cadsr configuration, apply it
+		CadsrInformation cadsrInfo = null;
+		try {
+			cadsrInfo = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData()).getCadsrInformation();
+		} catch (Exception ex) {
+			ErrorDialog.showErrorDialog("Error getting cadsrInformation from extension data: " + ex.getMessage(), ex);
+		}
+		if (cadsrInfo != null) {
+			getUmlTree().setEnabled(false);
+			// set the caDSR service URL in the GUI
+			getCadsrBrowserPanel().setDefaultCaDSRURL(cadsrInfo.getServiceUrl());
+			getCadsrBrowserPanel().getCadsr().setText(cadsrInfo.getServiceUrl());
+			// walk through packages
+			for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {
+				CadsrPackage pack = cadsrInfo.getPackages(i);
+				String packageName = pack.getName();
+				String namespace = pack.getMappedNamespace();
+				// keep track of the mapped package / namespace combination
+				packageToNamespace.put(packageName, namespace);
+				// find the namespace needed for this package in the service description
+				NamespaceType[] serviceNamespaces = getServiceInfo().getNamespaces().getNamespace();
+				NamespaceType nsType = null;
+				for (int nsIndex = 0; nsIndex < serviceNamespaces.length; nsIndex++) {
+					NamespaceType ns = serviceNamespaces[nsIndex];
+					if (ns.getNamespace().equals(namespace)) {
+						nsType = ns;
+						break;
 					}
 				}
-				getUmlTree().setEnabled(true);
+				if (nsType != null) {
+					// add the package to the types tree
+					getUmlTree().addUmlPackage(packageName);
+					// prepare a mapping of class to element names
+					Map classToElementNames = new HashMap();
+					packageToClassMap.put(packageName, classToElementNames);
+					for (int j = 0; pack.getCadsrClass() != null && j < pack.getCadsrClass().length; j++) {
+						ClassMapping map = pack.getCadsrClass(j);
+						classToElementNames.put(map.getClassName(), map.getElementName());
+						// add the classes for the uml package to the tree
+						UMLClassTreeNode node = getUmlTree().addUmlClass(packageName, map.getClassName());
+						node.getCheckBox().setSelected(map.isSelected());								// TODO: I may have to add the type to the types table here
+					}
+				}
 			}
-		};
-		SwingUtilities.invokeLater(loader);
+		}
+		getUmlTree().setEnabled(true);
 	}
 
 
