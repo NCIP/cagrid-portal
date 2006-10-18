@@ -103,7 +103,8 @@ public abstract class BaseCodegenPostProcessorExtension implements CodegenExtens
 				classMappings.toArray(mapArray);
 				mappings.setMapping(mapArray);
 				// create the filename where the mapping will be stored
-				String mappingFilename = info.getBaseDirectory().getAbsolutePath() + File.separator + "etc" + File.separator + "classToQname.xml";
+				String mappingFilename = info.getBaseDirectory().getAbsolutePath() + File.separator + "etc" 
+					+ File.separator + DataServiceConstants.CLASS_TO_QNAME_XML;
 				// serialize the mapping to that file
 				Utils.serializeDocument(mappingFilename, mappings, DataServiceConstants.MAPPING_QNAME);
 			}

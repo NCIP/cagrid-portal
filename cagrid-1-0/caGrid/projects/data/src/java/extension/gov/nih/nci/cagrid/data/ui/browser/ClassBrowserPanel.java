@@ -88,7 +88,7 @@ public class ClassBrowserPanel extends JPanel {
 		try {
 			additionalLibs = ExtensionDataUtils.getExtensionData(extensionData).getAdditionalLibraries();
 		} catch (Exception ex) {
-			// ?
+			ErrorDialog.showErrorDialog("Error loading list of additional jars", ex);
 		}
 		if (additionalLibs != null && additionalLibs.getJarName() != null) {
 			addJars(additionalLibs.getJarName());
@@ -152,7 +152,6 @@ public class ClassBrowserPanel extends JPanel {
 		gridBagConstraints6.weightx = 1.0D;
 		gridBagConstraints6.gridy = 0;
 		this.setLayout(new GridBagLayout());
-		this.setSize(new java.awt.Dimension(304, 229));
 		this.add(getClassSelectionPanel(), gridBagConstraints6);
 		this.add(getJarsPanel(), gridBagConstraints7);
 	}
@@ -190,7 +189,7 @@ public class ClassBrowserPanel extends JPanel {
 				try {
 					additionalLibs = ExtensionDataUtils.getExtensionData(extensionData).getAdditionalLibraries();
 				} catch (Exception ex) {
-					// ?
+					ErrorDialog.showErrorDialog("Error loading list of additional jars", ex);
 				}
 				if (additionalLibs != null && additionalLibs.getJarName() != null) {
 					additionalJarsList.setListData(additionalLibs.getJarName());
@@ -209,8 +208,8 @@ public class ClassBrowserPanel extends JPanel {
 	private JScrollPane getAdditionalJarsScrollPane() {
 		if (additionalJarsScrollPane == null) {
 			additionalJarsScrollPane = new JScrollPane();
-			additionalJarsScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Additional Jars",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+			additionalJarsScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Additional Jars", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			additionalJarsScrollPane.setViewportView(getAdditionalJarsList());
 		}
@@ -282,9 +281,8 @@ public class ClassBrowserPanel extends JPanel {
 
 
 	private void deleteAdditionalJar(String shortJarName) {
-		String libDir = serviceInfo.getIntroduceServiceProperties()
-			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
-			+ File.separator + "lib";
+		String libDir = serviceInfo.getIntroduceServiceProperties().getProperty(
+			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
 		File jarFile = new File(libDir + File.separator + shortJarName);
 		jarFile.deleteOnExit();
 	}
@@ -430,13 +428,12 @@ public class ClassBrowserPanel extends JPanel {
 	
 
 	private synchronized void copyJarToService(final String jarFile, final String shortJarName) {
-		String libDir = serviceInfo.getIntroduceServiceProperties()
-			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
-			+ File.separator + "lib";
+		String libDir = serviceInfo.getIntroduceServiceProperties().getProperty(
+			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
 		try {
 			BufferedInputStream input = new BufferedInputStream(new FileInputStream(jarFile));
-			BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(libDir + File.separator
-				+ shortJarName));
+			BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(
+				libDir + File.separator	+ shortJarName));
 			int len = -1;
 			byte[] buff = new byte[4096];
 			while ((len = input.read(buff)) != -1) {
@@ -453,9 +450,8 @@ public class ClassBrowserPanel extends JPanel {
 
 
 	private void populateClassDropdown() {
-		String libDir = serviceInfo.getIntroduceServiceProperties()
-			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
-			+ File.separator + "lib";
+		String libDir = serviceInfo.getIntroduceServiceProperties().getProperty(
+			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
 		SortedSet classNames = new TreeSet();
 		String[] jars = getAdditionalJars();
 		try {

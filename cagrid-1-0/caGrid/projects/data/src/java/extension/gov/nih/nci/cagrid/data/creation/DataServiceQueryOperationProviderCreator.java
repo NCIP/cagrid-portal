@@ -58,6 +58,7 @@ import org.projectmobius.common.MobiusException;
  * @version $Id$
  */
 public class DataServiceQueryOperationProviderCreator implements CreationExtensionPostProcessor {
+	
 	public static final String DEFAULT_CQL_VALIDATOR_CLASS = ObjectWalkingCQLValidator.class.getName();
 	public static final String DEFAULT_DOMAIN_MODEL_VALIDATOR = DomainModelValidator.class.getName();
 
@@ -325,13 +326,16 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 				// ?
 			}
 		}
-		CommonTools.setServiceProperty(desc, DataServiceConstants.CQL_VALIDATOR_CLASS, DEFAULT_CQL_VALIDATOR_CLASS,
-			false);
+		CommonTools.setServiceProperty(desc, DataServiceConstants.CQL_VALIDATOR_CLASS, 
+			DEFAULT_CQL_VALIDATOR_CLASS, false);
 		CommonTools.setServiceProperty(desc, DataServiceConstants.DOMAIN_MODEL_VALIDATOR_CLASS,
 			DEFAULT_DOMAIN_MODEL_VALIDATOR, false);
-		CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_CQL_FLAG, String.valueOf(false), false);
-		CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, String.valueOf(false),
-			false);
+		CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_CQL_FLAG, 
+			String.valueOf(false), false);
+		CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, 
+			String.valueOf(false), false);
+		CommonTools.setServiceProperty(desc, DataServiceConstants.CLASS_MAPPINGS_FILENAME,
+			DataServiceConstants.CLASS_TO_QNAME_XML, true);
 	}
 
 
