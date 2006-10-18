@@ -15,7 +15,9 @@
         <exclude name="*test*"/>
         <exclude name="*example*"/>
         <exclude name="*sample*"/>
-        <exclude name="pdp.jar"/>
+        <exclude name="${jar.name}*.jar"/>
+        <exclude name="csm*.jar"/>
+        <exclude name="spring*.jar"/>
     </patternset>
     
     <path id="cp">
@@ -104,6 +106,6 @@
         <delete dir="build"/>
     </target>
     
-    <target name="all"></target>
+    <target name="all" depends="clean, jar"/>
     
 </project>
