@@ -17,7 +17,7 @@ import org.projectmobius.common.MobiusResourceManager;
  */
 public class GTSUIConf implements AbstractMobiusConfiguration {
 
-	public static String RESOURCE = "GTSPortalConf";
+	public static String RESOURCE = "GTSUIConf";
 
 	private static String SERVICES_ELEMENT = "gts-services";
 

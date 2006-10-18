@@ -9,7 +9,7 @@
 	  	</about>
 	  	<dimensions>
 	  		<width>850</width>
-	  		<height>750</height>
+	  		<height>650</height>
 	  	</dimensions>
 	  </application>
 	  <components>
@@ -26,7 +26,7 @@
 	  </components>
 	  </grid-portal-config>
 	</resource>	
-	<resource name="GTSPortalConf" class="gov.nih.nci.cagrid.gts.ui.GTSUIConf">
+	<resource name="GTSUIConf" class="gov.nih.nci.cagrid.gts.ui.GTSUIConf">
 		<gts-portal-config>
 		<gts-services>
 			<gts-service>https://cagrid01.bmi.ohio-state.edu:8442/wsrf/services/cagrid/GTS</gts-service>
