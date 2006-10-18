@@ -111,5 +111,8 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-syncgts-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-syncgts-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/cog-jglobus.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-2.5.1-final-20040804.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-contrib-2.5.1-final-20040804.jar"/>
+	<classpathentry kind="lib" path="lib/poi/poi-scratchpad-2.5.1-final-20040804.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
