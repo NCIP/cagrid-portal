@@ -148,8 +148,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			inputPanel.setLayout(new GridBagLayout());
 			inputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Define the service",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", java.awt.Font.BOLD, 12),
-				new java.awt.Color(62, 109, 181)));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			packageLabel = new JLabel();
 			packageLabel.setText("STEP 3:  Enter a Java package for the generated code:");
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -545,7 +544,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 		if (addExtensionButton == null) {
 			addExtensionButton = new JButton();
 			addExtensionButton.setText("Add");
-			addExtensionButton.setIcon(IntroduceLookAndFeel.getAddIcon());
+			addExtensionButton.setIcon(PortalLookAndFeel.getAddIcon());
 			addExtensionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (!((String) getServiceStyleSeletor().getSelectedItem()).equals("NONE")) {
@@ -567,7 +566,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 		if (removeExtensionButton == null) {
 			removeExtensionButton = new JButton();
 			removeExtensionButton.setText("Remove");
-			removeExtensionButton.setIcon(IntroduceLookAndFeel.getRemoveIcon());
+			removeExtensionButton.setIcon(PortalLookAndFeel.getRemoveIcon());
 			removeExtensionButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
@@ -627,8 +626,8 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			gridBagConstraints14.anchor = java.awt.GridBagConstraints.NORTHWEST;
 			gridBagConstraints14.gridy = 1;
 			downExtensionLabel = new JLabel();
-			downExtensionLabel
-				.setToolTipText("moves the selected extension down in the list so that it will be executed after the preceding extensions");
+			downExtensionLabel.setToolTipText("moves the selected extension down " +
+					"in the list so that it will be executed after the preceding extensions");
 			downExtensionLabel.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
@@ -641,8 +640,8 @@ public class CreationViewer extends CreationViewerBaseComponent {
 			});
 			downExtensionLabel.setIcon(IntroduceLookAndFeel.getDownIcon());
 			upExtensionLabel = new JLabel();
-			upExtensionLabel
-				.setToolTipText("moves the selected extension higher in the list so that it will be executed before the following extensions");
+			upExtensionLabel.setToolTipText("moves the selected extension " +
+					"higher in the list so that it will be executed before the following extensions");
 			upExtensionLabel.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					super.mouseClicked(e);
