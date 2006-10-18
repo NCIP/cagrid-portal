@@ -20,7 +20,7 @@ imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codege
   <!-- The ServiceGroupEPR defines the servicegroup to which registrations will be made -->
   <ServiceGroupEPR>
     <!-- TODO: deploytime template this for the Index Service EPR -->
-    <wsa:Address>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService</wsa:Address>
+    <wsa:Address>INDEX_SERVICE_URL</wsa:Address>
   </ServiceGroupEPR>
   <!-- Specifies that the registration will be renewed every 10 minutes -->
   <RefreshIntervalSecs>600</RefreshIntervalSecs>

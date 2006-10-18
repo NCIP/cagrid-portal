@@ -35,7 +35,7 @@
 	
 	<!-- Configuration files (security, etc.) to be included in the GAR file -->
 	<property name="garetc.id" value="garetc" />
-	<fileset dir="${etc.dir}" id="garetc" />
+	<fileset dir="tmp/etc" id="garetc" />
 	
 	
 	<!-- ============================================================== -->
@@ -92,13 +92,20 @@
 				<include name="jndi-config.xml" />
 			</fileset>
 		</copy>
-		<delete dir="tmp" />
-		<!-- Copy skeleton files to Tomcat and rename -->
-		<copy overwrite="true" toDir="${service.deployment.dir}">
-			<fileset dir="${basedir}/etc">
-				<include name="*" />
+		<mkdir dir="tmp/etc"/>
+		<copy overwrite="true" toDir="tmp/etc">
+			<fileset dir="etc">
+				<include name="**/*" />
 			</fileset>
 		</copy>
+		<replace file="tmp/etc/registration.xml" value="${index.service.url}" token="INDEX_SERVICE_URL" />
+		<!-- Copy skeleton files to Tomcat and rename -->
+		<copy overwrite="true" toDir="${service.deployment.dir}">
+			<fileset dir="tmp/etc">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<delete dir="tmp" />
 		<!--copy over the jars to the lib -->
 		<copy overwrite="true" toDir="${tomcat.deploy.lib.dir}">
 			<fileset dir="lib">
@@ -142,6 +149,13 @@
 		<replace file="tmp/jndi-config.xml" value="${introduce.skeleton.service.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.prefix}" token="SERVICE-INSTANCE-PREFIX" />
 		<replace file="tmp/jndi-config.xml" value="etc/${service.deployment.dir.name}" token="ETC-PATH" />
+		<mkdir dir="tmp/etc"/>
+		<copy overwrite="true" toDir="tmp/etc">
+			<fileset dir="etc">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<replace file="tmp/etc/registration.xml" value="${index.service.url}" token="INDEX_SERVICE_URL" />
 		<!-- make the gar file -->
 		<ant antfile="${build.packages}" target="makeGar">
 			<property name="garserverdeployment.file" value="${basedir}/tmp/server-config.wsdd" />
