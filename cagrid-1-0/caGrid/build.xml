@@ -38,7 +38,7 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, evs, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service, service-security-provider" />
+	<property name="projects.list" value="authz, bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, evs, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service, service-security-provider" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
@@ -609,6 +609,18 @@
 	<!-- =============================================================== -->
 	<target name="build-workflow" depends="prepare" description="Builds caGrid workflow">
 		<ant dir="${projects.dir}/workflow" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+	
+	<!-- =============================================================== -->
+	<!-- Authz:                                               			 -->
+	<!-- =============================================================== -->
+	<target name="build-authz" depends="prepare" description="Builds the authz component">
+		<resolveDependencies extdir="${projects.dir}/authz/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="servicesecurity.jars" />
+		</resolveDependencies>
+		<ant dir="${projects.dir}/authz" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 
