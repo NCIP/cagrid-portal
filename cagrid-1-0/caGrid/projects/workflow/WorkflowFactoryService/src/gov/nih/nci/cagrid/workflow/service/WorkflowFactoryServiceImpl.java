@@ -17,6 +17,9 @@ import java.rmi.RemoteException;
  */
 public class WorkflowFactoryServiceImpl extends WorkflowFactoryServiceImplBase {
 
+	public static String BPEL_EXTENSION = ".bpel";
+	
+	protected String abAdminRoot = "http://localhost:8080/active-bpel/services/";
 	
 	public WorkflowFactoryServiceImpl() throws RemoteException {
 		super();
@@ -28,7 +31,7 @@ public class WorkflowFactoryServiceImpl extends WorkflowFactoryServiceImplBase {
 		String workflowName = wMSInputElement.getWorkflowName();
 		String bpelProcess = wMSInputElement.getBpelDoc();
 		WMSOutputType output;
-		String BPEL_EXTENSION = ".bpel";
+		
 		File bpelFile = null;
 		try {
 			String bpelFileName = System.getProperty("java.io.tmpdir")
@@ -38,12 +41,17 @@ public class WorkflowFactoryServiceImpl extends WorkflowFactoryServiceImplBase {
 			Utils.stringBufferToFile(new StringBuffer(bpelProcess),
 					bpelFileName);
 			WSDLReferences[] wsdlRefArray = wMSInputElement.getWsdlReferences();
-			//deploy(bpelFileName, workflowName, wsdlRefArray);
+			String returnString = deploy(bpelFileName, workflowName, wsdlRefArray);
+			System.out.println(returnString);
 		} catch (Exception e){
 			throw new RemoteException ("Exception deploying workflow:"+ workflowName ,e );
 		}
 		return null;
 	}
 
+	private String deploy(String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws Exception {
+        String abAdminUrl = this.abAdminRoot + "BpelEngineAdmin";
+		return ActiveBPELAdapter.deployBpr(abAdminUrl, bpelFileName ,workflowName, wsdlRefArray);
+	}
 }
 

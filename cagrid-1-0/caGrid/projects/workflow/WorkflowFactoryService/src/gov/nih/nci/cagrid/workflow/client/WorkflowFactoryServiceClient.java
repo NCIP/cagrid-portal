@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.workflow.client;
 
+import java.io.File;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 
@@ -17,7 +18,9 @@ import gov.nih.nci.cagrid.workflow.stubs.WorkflowFactoryServicePortType;
 import gov.nih.nci.cagrid.workflow.stubs.service.WorkflowFactoryServiceAddressingLocator;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowInputType;
 import gov.nih.nci.cagrid.workflow.common.WorkflowFactoryServiceI;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 
 /**
@@ -80,22 +83,41 @@ public class WorkflowFactoryServiceClient extends ServiceSecurityClient implemen
 		System.out.println(WorkflowFactoryServiceClient.class.getName() + " -url <service url>");
 	}
 	
+	public static WMSInputType createInput(String bpelFile) throws Exception {
+		WMSInputType input = new WMSInputType();
+		
+		String bpelProcess = Utils.fileToStringBuffer(new File(bpelFile)).toString();
+		
+		WorkflowInputType inputArgs = new WorkflowInputType();
+		input.setBpelDoc(bpelProcess);
+		input.setWorkflowName("Test");
+		return input;
+	}
 	public static void main(String [] args){
 	    System.out.println("Running the Grid Service Client");
 		try{
-		if(!(args.length < 2)){
-			if(args[0].equals("-url")){
-			  WorkflowFactoryServiceClient client = new WorkflowFactoryServiceClient(args[1]);
-			  // place client calls here if you want to use this main as a
-			  // test....
-			} else {
-				usage();
-				System.exit(1);
-			}
-		} else {
-			usage();
-			System.exit(1);
-		}
+			String url = null;
+		    String fileName = null;
+		    if (args.length < 4) {
+					usage();
+					System.exit(-1);
+				} else {
+					if (args[0].equals("-url")) {
+						url = args[1];
+					} else {
+						usage();
+						System.exit(-1);
+					}
+					if (args[2].equals("-file")) {
+						fileName = args[3];
+					} else {
+						usage();
+						System.exit(-1);
+					}
+				}
+		    WorkflowFactoryServiceClient client = new WorkflowFactoryServiceClient(url);
+		    WMSInputType input = createInput(fileName);
+		    client.createWorkflow(input);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);

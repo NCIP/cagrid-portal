@@ -86,6 +86,7 @@
 	<classpathentry kind="lib" path="lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/subject-0.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/abadmin.jar"/>
 
 	<classpathentry kind="output" path="bin"/>
 </classpath>
