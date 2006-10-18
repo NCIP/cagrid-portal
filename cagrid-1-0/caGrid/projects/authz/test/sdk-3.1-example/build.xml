@@ -67,7 +67,7 @@
             src="${build.dir}/authztest.sql"
             classpathref="cp"
         />
-        
+        <!--
         <sql
             driver="com.mysql.jdbc.Driver"
             url="jdbc:mysql://${db.host}:${db.port}/${db.name}"
@@ -85,7 +85,7 @@
             src="${build.dir}/cabioexampledata.sql"
             classpathref="cp"
         />
-        
+        -->
         
     </target>
     
