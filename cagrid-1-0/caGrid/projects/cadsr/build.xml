@@ -22,13 +22,13 @@
 	<property name="schema.dir" value="schema" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 
-	<property name="jar.name" value="caGrid-1.0-caDSR" />
-	<property name="common.jar.name" value="${jar.name}-common.jar" />
-	<property name="client.jar.name" value="${jar.name}-client.jar" />
-	<property name="service.jar.name" value="${jar.name}-service.jar" />
-	<property name="portal.jar.name" value="${jar.name}-portal.jar" />
-	<property name="stubs.jar.name" value="${jar.name}-stubs.jar" />
-	<property name="test.jar.name" value="${jar.name}-tests.jar" />
+	<property name="project.name" value="caGrid-1.0-caDSR" />
+	<property name="common.jar.name" value="${project.name}-common.jar" />
+	<property name="client.jar.name" value="${project.name}-client.jar" />
+	<property name="service.jar.name" value="${project.name}-service.jar" />
+	<property name="portal.jar.name" value="${project.name}-portal.jar" />
+	<property name="stubs.jar.name" value="${project.name}-stubs.jar" />
+	<property name="test.jar.name" value="${project.name}-tests.jar" />
 
 	<!-- Important test directories and files -->
 	<property name="test.dir" value="test" />
@@ -46,6 +46,7 @@
 
 	<!-- Auxiliary directory where all the intermediate files will be placed -->
 	<property name="build.dir" location="build" />
+	<property name="javadoc.dir" location="${build.dir}/javadoc" />
 	<!-- Directory for compiled service classes -->
 	<property name="build.dest" location="${build.dir}/classes" />
 	<property name="test.build.dest" value="${build.dir}/test/classes" />
@@ -363,6 +364,25 @@
 			<arg value="-url" />
 			<arg value="${cadsr.service.url}" />
 		</java>
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Builds Code Docuementation                                          -->
+	<!-- =================================================================== -->
+	<target name="javadoc" depends="compile" description="Creates the API documentation.">
+		<javadoc packagenames="*" destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="${project.name} API">
+			<sourcepath>
+				<pathelement path="${src.dir}" />
+				<pathelement path="${portal.src.dir}" />
+			</sourcepath>
+
+			<classpath>
+				<path refid="run.classpath" />
+			</classpath>
+
+			<tag name="todo" scope="all" description="To do:" />
+			<tag name="created" scope="all" description="Created On:" />
+		</javadoc>
 	</target>
 
 

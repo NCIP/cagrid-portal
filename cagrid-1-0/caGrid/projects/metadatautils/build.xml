@@ -16,6 +16,7 @@
 
     <property name="src.dir" value="${basedir}/src/java" />
     <property name="build.dir" value="${basedir}/build" />
+	<property name="javadoc.dir" value="${build.dir}/javadoc" />
     <property name="classes.dir" value="${build.dir}/classes" />
     <property name="jar.dir" value="${build.dir}/jars" />
     <property name="project.jarfile" value="${jar.dir}/${project.name}.jar" />
@@ -174,6 +175,25 @@
             </manifest>
         </jar>
     </target>
+	
+	
+	<!-- =================================================================== -->
+	<!-- Builds Code Docuementation                                          -->
+	<!-- =================================================================== -->
+	<target name="javadoc" depends="compile" description="Creates the API documentation.">
+		<javadoc packagenames="*" destdir="${javadoc.dir}" author="true" version="true" use="true" windowtitle="${project.name} API">
+			<sourcepath>
+				<pathelement path="${src.dir}" />
+			</sourcepath>
+
+			<classpath>
+				<path refid="build.classpath" />
+			</classpath>
+
+			<tag name="todo" scope="all" description="To do:" />
+			<tag name="created" scope="all" description="Created On:" />
+		</javadoc>
+	</target>
 
 
     <!-- ============================================================== -->
