@@ -30,6 +30,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,7 +43,6 @@ import java.util.Vector;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -295,32 +295,32 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			browseButton.setText("Browse");
 			browseButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					String lastDir = (String) getBitBucket().get(CacoreWizardUtils.LAST_DIRECTORY_KEY);
-					JFileChooser chooser = new JFileChooser(lastDir);
-					chooser.setFileFilter(FileFilters.XML_FILTER);
-					chooser.setMultiSelectionEnabled(false);
-					int choice = chooser.showOpenDialog(DomainModelPanel.this);
-					if (choice == JFileChooser.APPROVE_OPTION) {
-						File selectedFile = chooser.getSelectedFile();
-						getBitBucket().put(CacoreWizardUtils.LAST_DIRECTORY_KEY, selectedFile.getAbsolutePath());
-						String serviceEtcDir = CacoreWizardUtils.getServiceBaseDir(getServiceInformation()) + File.separator + "etc";
-						File outputFile = new File(serviceEtcDir + File.separator + selectedFile.getName());
-						getFileTextField().setText(outputFile.getAbsolutePath());
-						try {
-							Utils.copyFile(selectedFile, outputFile);
-							Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-							CadsrInformation info = data.getCadsrInformation();
-							if (info == null) {
-								info = new CadsrInformation();
-							}
-							info.setSuppliedDomainModel(outputFile.getName());
-							data.setCadsrInformation(info);
-							ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
-							loadDomainModelFile();
-						} catch (Exception ex) {
-							ex.printStackTrace();
-							ErrorDialog.showErrorDialog("Error copying selected file to service", ex);
+					String selectedFilename = null;
+					try {
+						selectedFilename = ResourceManager.promptFile(DomainModelPanel.this, null, FileFilters.XML_FILTER);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						ErrorDialog.showErrorDialog("Error getting filename", ex);
+					}
+					if (selectedFilename != null);
+					File selectedFile = new File(selectedFilename);
+					String serviceEtcDir = CacoreWizardUtils.getServiceBaseDir(getServiceInformation()) + File.separator + "etc";
+					File outputFile = new File(serviceEtcDir + File.separator + selectedFile.getName());
+					getFileTextField().setText(outputFile.getAbsolutePath());
+					try {
+						Utils.copyFile(selectedFile, outputFile);
+						Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
+						CadsrInformation info = data.getCadsrInformation();
+						if (info == null) {
+							info = new CadsrInformation();
 						}
+						info.setSuppliedDomainModel(outputFile.getName());
+						data.setCadsrInformation(info);
+						ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
+						loadDomainModelFile();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						ErrorDialog.showErrorDialog("Error copying selected file to service", ex);
 					}
 				}
 			});

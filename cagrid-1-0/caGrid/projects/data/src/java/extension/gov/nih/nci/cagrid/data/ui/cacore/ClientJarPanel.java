@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.data.extension.CQLProcessorConfig;
 import gov.nih.nci.cagrid.data.extension.CQLProcessorConfigProperty;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -15,6 +16,7 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,7 +24,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -144,22 +145,23 @@ public class ClientJarPanel extends AbstractWizardPanel {
 			addJarButton.setText("Add Jars");
 			addJarButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					String lastDir = (String) getBitBucket().get(CacoreWizardUtils.LAST_DIRECTORY_KEY);
-					JFileChooser chooser = new JFileChooser(lastDir);
-					chooser.setFileFilter(FileFilters.JAR_FILTER);
-					chooser.setMultiSelectionEnabled(true);
-					int choice = chooser.showOpenDialog(ClientJarPanel.this);
-					if (choice == JFileChooser.APPROVE_OPTION) {
-						File[] selectedJars = chooser.getSelectedFiles();
-						getBitBucket().put(CacoreWizardUtils.LAST_DIRECTORY_KEY, selectedJars[0].getAbsolutePath());
+					String[] selectedJarNames = null;
+					try {
+						ResourceManager.promptMultiFiles(ClientJarPanel.this, null, FileFilters.JAR_FILTER);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						ErrorDialog.showErrorDialog("Error getting filenames", ex);
+					}
+					if (selectedJarNames != null) {
 						// copy the libs in to the service dir
 						String libDir = getServiceLibDir();
-						String[] jarNames = new String[selectedJars.length];
+						String[] jarNames = new String[selectedJarNames.length];
 						try {
-							for (int i = 0; i < selectedJars.length; i++) {
-								File outJarFile = new File(libDir + File.separator + selectedJars[i].getName());
-								jarNames[i] = selectedJars[i].getName();
-								Utils.copyFile(selectedJars[i], outJarFile);
+							for (int i = 0; i < selectedJarNames.length; i++) {
+								File inJarFile = new File(selectedJarNames[i]);
+								File outJarFile = new File(libDir + File.separator + inJarFile.getName());
+								jarNames[i] = inJarFile.getName();
+								Utils.copyFile(inJarFile, outJarFile);
 							}
 							Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
 							AdditionalLibraries libs = data.getAdditionalLibraries();
