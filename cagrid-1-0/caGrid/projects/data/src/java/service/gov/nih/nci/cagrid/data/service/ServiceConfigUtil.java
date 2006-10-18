@@ -103,6 +103,31 @@ public class ServiceConfigUtil {
 	}
 	
 	
+	public static String getClassToQnameMappingsFile() throws Exception {
+		String getterName = "get" + Character.toUpperCase(DataServiceConstants.CLASS_MAPPINGS_FILENAME.charAt(0))
+			+ DataServiceConstants.CLASS_MAPPINGS_FILENAME.substring(1);
+		try {
+			Object serviceConfig = getServiceConfigObject();
+			Class configClass = serviceConfig.getClass();
+			Method[] configMethods = configClass.getMethods();
+			for (int i = 0; i < configMethods.length; i++) {
+				Method current = configMethods[i];
+				if (current.getName().startsWith(getterName)
+					&& current.getReturnType().equals(String.class)
+					&& Modifier.isPublic(current.getModifiers())) {
+					String name = current.getName().substring(3);
+					name = String.valueOf(Character.toLowerCase(name.charAt(0))) + name.substring(1);
+					String value = (String) current.invoke(serviceConfig, new Object[] {});
+					return value;
+				}
+			}
+			throw new NoSuchMethodException("Method " + getterName + " not found on " + configClass.getName());
+		} catch (Exception ex) {
+			throw new Exception("Unable to get class mappings filename: " + ex.getMessage(), ex);
+		}
+	}
+	
+	
 	private static Object getServiceConfigObject() throws NamingException {
 		MessageContext context = MessageContext.getCurrentContext();
 		String servicePath = context.getTargetService();

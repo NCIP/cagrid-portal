@@ -77,8 +77,12 @@ public class DataServiceConstants {
 	public static final QName QUERY_PROCESSING_EXCEPTION_QNAME = new QName(DATA_SERVICE_EXCEPTIONS_NAMESPACE, QUERY_PROCESSING_EXCEPTION_NAME);
 	public static final QName MALFORMED_QUERY_EXCEPTION_QNAME = new QName(DATA_SERVICE_EXCEPTIONS_NAMESPACE, MALFORMED_QUERY_EXCEPTION_NAME);
 	
-	// validation constants
+	// data service specific service parameters
 	public static final String DATA_SERVICE_PARAMS_PREFIX = "dataService";
+	public static final String CLASS_MAPPINGS_FILENAME = DATA_SERVICE_PARAMS_PREFIX + "_classMappingsFilename";
+	public static final String CLASS_TO_QNAME_XML = "classToQname.xml";
+	
+	// validation constants
 	public static final String CQL_VALIDATOR_CLASS = DATA_SERVICE_PARAMS_PREFIX + "_cqlValidatorClass";
 	public static final String DOMAIN_MODEL_VALIDATOR_CLASS = DATA_SERVICE_PARAMS_PREFIX + "_domainModelValidatorClass";
 	public static final String VALIDATE_CQL_FLAG = DATA_SERVICE_PARAMS_PREFIX + "_validateCqlFlag";
