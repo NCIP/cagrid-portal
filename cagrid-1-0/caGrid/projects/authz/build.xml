@@ -1,0 +1,109 @@
+<project name="authz" default="all">
+    
+    <property file="build.properties"/>
+    <property environment="env"/>
+    <property name="build.dir" value="build"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="ext.lib.dir" value="ext/lib"/>
+    <property name="src.java.dir" value="src/java"/>
+    <property name="test.src.java.dir" value="test/src/java"/>
+    <property name="jar.name" value="pdp"/>
+    
+    <patternset id="globus.jars">
+        <include name="*.jar"/>
+        <exclude name="*test*"/>
+        <exclude name="*example*"/>
+        <exclude name="*sample*"/>
+        <exclude name="pdp.jar"/>
+    </patternset>
+    
+    <path id="cp">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${ext.lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>        
+    </path>
+    
+    <target name="init">
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${ext.lib.dir}/globus"/>
+        <copy todir="${ext.lib.dir}/globus">
+            <fileset dir="${env.GLOBUS_LOCATION}/lib">
+                <patternset refid="globus.jars"/>
+            </fileset>
+        </copy>
+    </target>
+    
+    <target name="compile" depends="init">
+        <javac srcdir="${src.java.dir}" destdir="${build.classes.dir}">
+            <classpath refid="cp"/>
+        </javac>
+    </target>
+    
+    <target name="compile-test" depends="compile">
+        <javac srcdir="${test.src.java.dir}" destdir="${build.classes.dir}">
+            <classpath refid="cp"/>
+        </javac>
+    </target>
+    
+    <target name="jar" depends="compile">
+        <jar basedir="${build.classes.dir}" destfile="build/${jar.name}.jar"/>
+    </target>
+    
+    <target name="authzTest">
+        
+        <property name="test.dir" value="test/sdk-3.1-example"/>
+        <property name="catalina.home" value="${test.dir}/jakarta-tomcat-3.0.50"/>
+        
+        <java classname="gov.nih.nci.cagrid.authorization.TestAuthorization" fork="true">
+            
+            <jvmarg value="-Djava.security.auth.login.config=${catalina.home}/conf/jaas.config"/>
+            <jvmarg value="-Dgov.nih.nci.security.configFile=${catalina.home}/conf/ApplicationSecurityConfig.xml"/>
+            
+            <classpath>
+                <pathelement location="${build.classes.dir}"/>
+                <pathelement location="${build.dir}/${jar.name}.jar"/>
+                <pathelement location="${test.dir}/build"/>
+            </classpath>
+            <classpath refid="cp"/>
+        </java>
+    </target>
+    
+    
+    <target name="test" depends="compile-test">
+        
+        <property name="sdk.tomcat.dir" value="test/sdk-3.1-example/for_sdk/apache-tomcat-4.1.34"/>
+        
+        <junit printsummary="yes" showoutput="true" fork="true">
+            
+            <jvmarg value="-Dgov.nih.nci.security.configFile=${sdk.tomcat.dir}/conf/ApplicationSecurityConfig.xml"/>
+            <jvmarg value="-Djava.security.auth.login.config=${sdk.tomcat.dir}/conf/jaas.config"/>
+            
+            <classpath>
+                
+                <pathelement location="${sdk.tomcat.dir}/conf"/>
+                <pathelement location="${build.classes.dir}"/>
+
+                <fileset dir="${sdk.tomcat.dir}/webapps/example/WEB-INF/lib">
+                    <include name="*.jar"/>
+                </fileset>
+
+            </classpath>
+            <classpath refid="cp"/>
+
+            <formatter type="plain"/>
+            <test name="gov.nih.nci.cagrid.authorization.GridAuthorizationTestCase" haltonfailure="no" outfile="test/authz-junit"/>
+
+        </junit>
+    </target>
+    
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+    
+    <target name="all"></target>
+    
+</project>
