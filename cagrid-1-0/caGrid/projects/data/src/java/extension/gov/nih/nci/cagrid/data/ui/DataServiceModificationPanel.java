@@ -333,60 +333,9 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			addPackageButton.setText("Add Package");
 			addPackageButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// verify we're in the same project as the other packages
 					Project selectedProject = getCadsrBrowserPanel().getSelectedProject();
-					boolean shouldAddPackage = true;
-					if (mostRecentProject != null &&
-						(!mostRecentProject.getLongName().equals(selectedProject.getLongName()) ||
-						!mostRecentProject.getVersion().equals(selectedProject.getVersion()))) {
-						// not the same project, can't allow packages from more than one project!
-						String[] choices = {"Remove all other packages and insert", "Cancel"};
-						String[] message = {
-							"Domain models may only be derived from one project.",
-							"To add the package you've selected, all other packages",
-							"currently in the domain model will have to be removed.",
-							"Should this operation procede?"
-						};
-						String choice = PromptButtonDialog.prompt(
-							PortalResourceManager.getInstance().getGridPortal(),
-							"Project incompatability...", message, choices, choices[1]);
-						if (choice == choices[0]) {
-							// try to remove the namespaces from the service
-							Iterator nsNameIter = packageToNamespace.values().iterator();
-							while (nsNameIter.hasNext()) {
-								String namespace = (String) nsNameIter.next();
-								NamespaceType nsType = CommonTools.getNamespaceType(
-									getServiceInfo().getNamespaces(), namespace);
-								if (!CommonTools.isNamespaceTypeInUse(nsType, getServiceInfo().getServiceDescriptor())) {
-									NamespaceType[] allNamespaces = getServiceInfo().getNamespaces().getNamespace();
-									NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(
-										allNamespaces, nsType);
-									getServiceInfo().getNamespaces().setNamespace(cleanedNamespaces);
-								}
-							}
-							// ok, clear out the existing packages and classes
-							packageToNamespace.clear();
-							packageToClassMap.clear();
-							// clear out the types table
-							getClassConfigTable().clearTable();
-							// clear out the types tree
-							getUmlTree().clearTree();
-						} else {
-							shouldAddPackage = false;
-						}
-					}
-					if (shouldAddPackage) {
-						UMLPackageMetadata pack = getCadsrBrowserPanel().getSelectedPackage();
-						if (pack != null) {
-							addPackageToModel(selectedProject, pack);
-							// change the most recently added project
-							mostRecentProject = selectedProject;
-							// store the (potential) change to project info
-							storeMostRecentProjectInformation();
-							// store the package information
-							storeUpdatedPackageInformation();
-						}
-					}
+					UMLPackageMetadata selectedPackage = cadsrBrowserPanel.getSelectedPackage();
+					handlePackageAddition(selectedProject, new UMLPackageMetadata[] {selectedPackage});
 				}
 			});
 		}
@@ -394,33 +343,30 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	}
 	
 	
-	private XMLDataModelService getGME() throws MobiusException {
-		String serviceId = null;
-		// try to find the GME url as configured in the introduce properties
-		List discoveryExtensions = ExtensionsLoader.getInstance().getDiscoveryExtensions();
-		for (int i = 0; i < discoveryExtensions.size(); i++) {
-			DiscoveryExtensionDescriptionType disc = (DiscoveryExtensionDescriptionType) discoveryExtensions.get(i);
-			if (disc.getName().equals("gme_discovery")) {
-				Properties props = disc.getProperties();
-				serviceId = ExtensionTools.getProperty(props, "GME_URL");
-			}				
+	/**
+	 * This method initializes jButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getAddFullProjectButton() {
+		if (addFullProjectButton == null) {
+			addFullProjectButton = new JButton();
+			addFullProjectButton.setText("Add Full Project");
+			addFullProjectButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Project selectedProject = getCadsrBrowserPanel().getSelectedProject();
+					try {
+						CaDSRServiceClient cadsrClient = new CaDSRServiceClient(getCadsrBrowserPanel().getCadsr().getText());
+						UMLPackageMetadata[] packages = cadsrClient.findPackagesInProject(selectedProject);
+						handlePackageAddition(selectedProject, packages);
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						ErrorDialog.showErrorDialog("Error getting packages from caDSR", ex);
+					}
+				}
+			});
 		}
-		if (serviceId == null) {
-			// get GME url from properties
-			serviceId = ExtensionTools.getProperty(getExtensionDescription().getProperties(), "GME_URL");
-		}
-		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-		XMLDataModelService gmeHandle = (XMLDataModelService) GridServiceResolver.getInstance()
-			.getGridService(serviceId);
-		return gmeHandle;
-	}
-	
-	
-	private File getSchemaDir() {
-		String dir = getServiceInfo().getBaseDirectory().getAbsolutePath() + File.separator +
-			"schema" + File.separator + getServiceInfo().getIntroduceServiceProperties()
-			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-		return new File(dir);
+		return addFullProjectButton;
 	}
 	
 	
@@ -673,128 +619,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error loading existing caDSR information: " + ex.getMessage(), ex);
-		}
-	}
-	
-	
-	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */
-	private JButton getAddFullProjectButton() {
-		if (addFullProjectButton == null) {
-			addFullProjectButton = new JButton();
-			addFullProjectButton.setText("Add Full Project");
-			addFullProjectButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// verify we're in the same project as the other packages
-					final Project selectedProject = getCadsrBrowserPanel().getSelectedProject();
-					boolean shouldAddPackages = true;
-					if (mostRecentProject != null &&
-						(!mostRecentProject.getLongName().equals(selectedProject.getLongName()) ||
-						!mostRecentProject.getVersion().equals(selectedProject.getVersion()))) {
-						// not the same project, can't allow packages from more than one project!
-						String[] choices = {"Remove all other packages and insert", "Cancel"};
-						String[] message = {
-							"Domain models may only be derived from one project.",
-							"To add the package you've selected, all other packages",
-							"currently in the domain model will have to be removed.",
-							"Should this operation procede?"
-						};
-						String choice = PromptButtonDialog.prompt(
-							PortalResourceManager.getInstance().getGridPortal(),
-							"Package incompatability...", message, choices, choices[1]);
-						if (choice == choices[0]) {
-							// try to remove namespaces from the service
-							Iterator nsNameIter = packageToNamespace.values().iterator();
-							while (nsNameIter.hasNext()) {
-								String namespace = (String) nsNameIter.next();
-								NamespaceType nsType = CommonTools.getNamespaceType(
-									getServiceInfo().getNamespaces(), namespace);
-								if (!CommonTools.isNamespaceTypeInUse(nsType, getServiceInfo().getServiceDescriptor())) {
-									NamespaceType[] allNamespaces = getServiceInfo().getNamespaces().getNamespace();
-									NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(
-										allNamespaces, nsType);
-									getServiceInfo().getNamespaces().setNamespace(cleanedNamespaces);
-								}
-							}
-							// clear out the existing packages and classes
-							packageToNamespace.clear();
-							packageToClassMap.clear();
-							// clear out the types table
-							getClassConfigTable().clearTable();
-							// clear out the types tree
-							getUmlTree().clearTree();
-						} else {
-							shouldAddPackages = false;
-						}
-					}
-					if (shouldAddPackages) {
-						try {
-							CaDSRServiceClient cadsrClient = new CaDSRServiceClient(getCadsrBrowserPanel().getCadsr().getText());
-							UMLPackageMetadata[] packages = cadsrClient.findPackagesInProject(selectedProject);
-							for (int i = 0; i < packages.length; i++) {
-								addPackageToModel(selectedProject, packages[i]);
-							}
-						} catch (Exception ex) {
-							ex.printStackTrace();
-							ErrorDialog.showErrorDialog("Error adding project: " + ex.getMessage());
-						}
-						mostRecentProject = selectedProject;
-						// store the (potential) change to project info
-						storeMostRecentProjectInformation();
-						// store the package information
-						storeUpdatedPackageInformation();
-					}
-				}
-			});
-		}
-		return addFullProjectButton;
-	}
-	
-	
-	private void addPackageToModel(Project project, UMLPackageMetadata pack) {
-		if (!packageToNamespace.containsKey(pack.getName())) {
-			// determine if the namespace type already exists in the service
-			String namespaceUri = NamespaceUtils.createNamespaceString(project, pack);
-			NamespaceType nsType = NamespaceUtils.getServiceNamespaceType(getServiceInfo(), namespaceUri);
-			if (nsType == null) {
-				// create a new namespace from the package
-				try {
-					nsType = NamespaceUtils.createNamespaceFromUmlPackage(
-						project, pack, getGME(), getSchemaDir());
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					ErrorDialog.showErrorDialog("Error creating namespace type: " + ex.getMessage());
-				}
-				
-				if (nsType != null) {
-					// add the new namespace to the service
-					CommonTools.addNamespace(getServiceInfo().getServiceDescriptor(), nsType);
-				}
-			}
-			if (nsType != null) {
-				// map the package to the new namespace and add it to the types tree
-				packageToNamespace.put(pack.getName(), nsType.getNamespace());
-				getUmlTree().addUmlPackage(pack.getName());
-				// get classes for the package
-				String cadsrUrl = getCadsrBrowserPanel().getCadsr().getText();
-				try {
-					CaDSRServiceClient cadsrClient = new CaDSRServiceClient(cadsrUrl);
-					UMLClassMetadata[] classMd = cadsrClient.findClassesInPackage(project, pack.getName());
-					for (int i = 0; i < classMd.length; i++) {
-						getUmlTree().addUmlClass(pack.getName(), classMd[i].getName());
-					}
-					// map the classes to schema types
-					Map classToType = NamespaceUtils.mapClassesToElementNames(classMd, nsType);
-					// store the mapping
-					packageToClassMap.put(pack.getName(), classToType);
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					ErrorDialog.showErrorDialog("Error getting classes from caDSR", ex);
-				}				
-			}
 		}
 	}
 
@@ -1342,6 +1166,136 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			qpParamsScrollPane.setViewportView(getQpParamsTable());
 		}
 		return qpParamsScrollPane;
+	}
+	
+	
+	private void handlePackageAddition(final Project selectedProject, final UMLPackageMetadata[] selectedPackages) {
+		// verify we're in the same project as the other packages
+		boolean shouldAddPackages = true;
+		if (mostRecentProject != null &&
+			(!mostRecentProject.getLongName().equals(selectedProject.getLongName()) ||
+				!mostRecentProject.getVersion().equals(selectedProject.getVersion()))) {
+			// not the same project, can't allow packages from more than one project!
+			String[] choices = {"Remove all other packages and insert", "Cancel"};
+			String[] message = {
+				"Domain models may only be derived from one project.",
+				"To add the package you've selected, all other packages",
+				"currently in the domain model will have to be removed.",
+				"Should this operation procede?"
+			};
+			String choice = PromptButtonDialog.prompt(
+				PortalResourceManager.getInstance().getGridPortal(),
+				"Package incompatability...", message, choices, choices[1]);
+			if (choice == choices[0]) {
+				// try to remove namespaces from the service
+				Iterator nsNameIter = packageToNamespace.values().iterator();
+				while (nsNameIter.hasNext()) {
+					String namespace = (String) nsNameIter.next();
+					NamespaceType nsType = CommonTools.getNamespaceType(
+						getServiceInfo().getNamespaces(), namespace);
+					if (!CommonTools.isNamespaceTypeInUse(nsType, getServiceInfo().getServiceDescriptor())) {
+						NamespaceType[] allNamespaces = getServiceInfo().getNamespaces().getNamespace();
+						NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(
+							allNamespaces, nsType);
+						getServiceInfo().getNamespaces().setNamespace(cleanedNamespaces);
+					}
+				}
+				// clear out the existing packages and classes
+				packageToNamespace.clear();
+				packageToClassMap.clear();
+				// clear out the types table
+				getClassConfigTable().clearTable();
+				// clear out the types tree
+				getUmlTree().clearTree();
+			} else {
+				shouldAddPackages = false;
+			}
+		}
+		if (shouldAddPackages) {
+			for (int i = 0; i < selectedPackages.length; i++) {
+				addPackageToModel(selectedProject, selectedPackages[i]);
+			}
+			mostRecentProject = selectedProject;
+			// store the (potential) change to project info
+			storeMostRecentProjectInformation();
+			// store the package information
+			storeUpdatedPackageInformation();
+		}
+	}
+	
+	
+	private void addPackageToModel(Project project, UMLPackageMetadata pack) {
+		if (!packageToNamespace.containsKey(pack.getName())) {
+			// determine if the namespace type already exists in the service
+			String namespaceUri = NamespaceUtils.createNamespaceString(project, pack);
+			NamespaceType nsType = NamespaceUtils.getServiceNamespaceType(getServiceInfo(), namespaceUri);
+			if (nsType == null) {
+				// create a new namespace from the package
+				try {
+					nsType = NamespaceUtils.createNamespaceFromUmlPackage(
+						project, pack, getGME(), getSchemaDir());
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					ErrorDialog.showErrorDialog("Error creating namespace type: " + ex.getMessage());
+				}
+				
+				if (nsType != null) {
+					// add the new namespace to the service
+					CommonTools.addNamespace(getServiceInfo().getServiceDescriptor(), nsType);
+				}
+			}
+			if (nsType != null) {
+				// map the package to the new namespace and add it to the types tree
+				packageToNamespace.put(pack.getName(), nsType.getNamespace());
+				getUmlTree().addUmlPackage(pack.getName());
+				// get classes for the package
+				String cadsrUrl = getCadsrBrowserPanel().getCadsr().getText();
+				try {
+					CaDSRServiceClient cadsrClient = new CaDSRServiceClient(cadsrUrl);
+					UMLClassMetadata[] classMd = cadsrClient.findClassesInPackage(project, pack.getName());
+					for (int i = 0; i < classMd.length; i++) {
+						getUmlTree().addUmlClass(pack.getName(), classMd[i].getName());
+					}
+					// map the classes to schema types
+					Map classToType = NamespaceUtils.mapClassesToElementNames(classMd, nsType);
+					// store the mapping
+					packageToClassMap.put(pack.getName(), classToType);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					ErrorDialog.showErrorDialog("Error getting classes from caDSR", ex);
+				}				
+			}
+		}
+	}
+	
+	
+	private XMLDataModelService getGME() throws MobiusException {
+		String serviceId = null;
+		// try to find the GME url as configured in the introduce properties
+		List discoveryExtensions = ExtensionsLoader.getInstance().getDiscoveryExtensions();
+		for (int i = 0; i < discoveryExtensions.size(); i++) {
+			DiscoveryExtensionDescriptionType disc = (DiscoveryExtensionDescriptionType) discoveryExtensions.get(i);
+			if (disc.getName().equals("gme_discovery")) {
+				Properties props = disc.getProperties();
+				serviceId = ExtensionTools.getProperty(props, "GME_URL");
+			}				
+		}
+		if (serviceId == null) {
+			// get GME url from properties
+			serviceId = ExtensionTools.getProperty(getExtensionDescription().getProperties(), "GME_URL");
+		}
+		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
+		XMLDataModelService gmeHandle = (XMLDataModelService) GridServiceResolver.getInstance()
+			.getGridService(serviceId);
+		return gmeHandle;
+	}
+	
+	
+	private File getSchemaDir() {
+		String dir = getServiceInfo().getBaseDirectory().getAbsolutePath() + File.separator +
+			"schema" + File.separator + getServiceInfo().getIntroduceServiceProperties()
+			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+		return new File(dir);
 	}
 	
 	
