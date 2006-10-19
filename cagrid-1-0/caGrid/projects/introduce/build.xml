@@ -240,7 +240,7 @@
 	<!-- Builds the project from a clean start                               -->
 	<!-- =================================================================== -->
 	<target name="all" description="Cleans and build the entire application" depends="clean,
-		generateStubs,   build"/>
+		generateStubs, build"/>
 		
 	<!-- =================================================================== -->
 	<!-- Builds the project and the docs for a release                       -->
@@ -261,9 +261,5 @@
 			basedir="${basedir}"
 			izPackDir="${basedir}/install"/>
 	</target>
-	
-	
-		
-	
 	
 </project>
