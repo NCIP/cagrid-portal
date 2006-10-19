@@ -246,10 +246,11 @@
 	</target>
 
 	<!-- Compile the test implementation classes (service, resource, etc.) -->
+	<!--
 	<target name="compileTests" depends="compile">
 		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
 	</target>
-
+-->
 
 	<!-- Create a JAR file with the implementation classes -->
 	<target name="jar" depends="compile">
@@ -275,10 +276,11 @@
 
 
 	<!-- Create a JAR file with the test implementation classes -->
+	<!--
 	<target name="jarTests" depends="jar,compileTests">
 		<jar jarfile="${build.lib.dir}/${test.jar.name}" basedir="${test.build.dest}" />
 	</target>
-
+-->
 
 	<!-- Create a JAR file with the stub classes -->
 	<target name="jarStubs" depends="compileStubs">
@@ -287,7 +289,7 @@
 
 
 	<!-- Empty target, in case we simply want to generate the JAR files -->
-	<target name="jars" depends="jarStubs, jar, jarTests" />
+	<target name="jars" depends="jarStubs, jar" />
 
 
 	<!-- Clean up all the intermediate files -->
@@ -302,6 +304,7 @@
 
 
 	<!-- call the test target for each project and aggregates the log resutls  -->
+	<!--
 	<target name="test" depends="checkGlobus">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
@@ -320,7 +323,7 @@
 		</junit>
         <fail message="Tests failed! Check test reports." if="test.failed" />   
 	</target>
-
+-->
 	<target name="deployTrustedCerts" depends="">
 		<mkdir dir="${globus.trusted.ca.dir}" />
 		<copy toDir="${globus.trusted.ca.dir}">
