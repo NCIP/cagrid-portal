@@ -78,7 +78,7 @@ public class EvsServiceTest
 		try {
 			steps.add(new EvsCheckServiceStep(port));
 		} catch (MalformedURIException e) {
-			throw new RuntimeException("unable to instantiate CheckCaDSRStep", e);
+			throw new RuntimeException("unable to instantiate EvsCheckServiceStep", e);
 		}
 		steps.add(new GlobusStopStep(globus, port));
 		steps.add(new GlobusCleanupStep(globus));
