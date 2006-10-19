@@ -75,9 +75,8 @@ public class CertUtil {
 		out.close();
 	}
 	
-	public static String subjectToIdentity(String subject){
-		String s = subject.substring(1);
-		return s.replace(',','/');
+	public static String subjectToIdentity(String subject) {
+		return "/" + subject.replace(',', '/');
 	}
 
 
