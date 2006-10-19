@@ -7,12 +7,13 @@ import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.LazyCQLQueryProcessor;
-import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsUtil;
+import gov.nih.nci.cagrid.data.mapping.Mappings;
+import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
+import gov.nih.nci.cagrid.data.utilities.CQLResultsCreationUtil;
+import gov.nih.nci.cagrid.data.utilities.ResultsCreationException;
 import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -42,34 +43,22 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	private static Logger LOG = Logger.getLogger(HQLCoreQueryProcessor.class);
 	
 	private ApplicationService coreService;
-	private StringBuffer wsddContents; 
 	
 	public HQLCoreQueryProcessor() {
 		super();
 	}
 	
-	
-	private InputStream getWsdd() throws Exception {
-		if (getConfiguredWsddStream() != null) {
-			if (wsddContents == null) {
-				wsddContents = Utils.inputStreamToStringBuffer(getConfiguredWsddStream());
-			}
-			return new ByteArrayInputStream(wsddContents.toString().getBytes());
-		} else {
-			return null;
-		}
-	}
-	
 
 	public CQLQueryResults processQuery(CQLQuery cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException {
-		InputStream configStream = null;
-		try {
-			configStream = getWsdd();
-		} catch (Exception ex) {
-			throw new QueryProcessingException(ex);
-		}
 		List coreResultsList = queryCoreService(cqlQuery);
+		String targetName = cqlQuery.getTarget().getName();
+		Mappings mappings = null;
+		try {
+			mappings = getClassToQnameMappings();
+		} catch (Exception ex) {
+			throw new QueryProcessingException("Error getting class to qname mappings: " + ex.getMessage(), ex);
+		}
 		CQLQueryResults results = null;
 		// decide on type of results
 		boolean objectResults = cqlQuery.getQueryModifier() == null ||
@@ -77,16 +66,18 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 				&& cqlQuery.getQueryModifier().getAttributeNames() == null 
 				&& cqlQuery.getQueryModifier().getDistinctAttribute() == null);
 		if (objectResults) {
-			results = CQLQueryResultsUtil.createQueryResults(
-				coreResultsList, cqlQuery.getTarget().getName(), configStream);
+			try {
+				results = CQLResultsCreationUtil.createObjectResults(coreResultsList, targetName, mappings);
+			} catch (ResultsCreationException ex) {
+				throw new QueryProcessingException(ex.getMessage(), ex);
+			}
 		} else {
 			QueryModifier mod = cqlQuery.getQueryModifier();
 			if (mod.isCountOnly()) {
 				// parse the value as a string to long.  This covers returning
 				// integers, shorts, and longs
 				Long val = Long.valueOf(coreResultsList.get(0).toString());
-				results = CQLQueryResultsUtil.createCountQueryResults(
-					val.longValue(), cqlQuery.getTarget().getName());
+				results = CQLResultsCreationUtil.createCountResults(val.longValue(), targetName);
 			} else {
 				// attributes distinct or otherwise
 				String[] names = null;
@@ -95,8 +86,8 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 				} else {
 					names = mod.getAttributeNames();
 				}
-				results = CQLQueryResultsUtil.createAttributeQueryResults(
-					coreResultsList, cqlQuery.getTarget().getName(), names);
+				results = CQLResultsCreationUtil.createAttributeResults(
+					coreResultsList, targetName, names);
 			}
 		}
 		return results;
@@ -230,6 +221,14 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 			coreService = ApplicationService.getRemoteInstance(url);
 		}
 		return coreService;
+	}
+	
+	
+	private Mappings getClassToQnameMappings() throws Exception {
+		// get the mapping file name
+		String filename = ServiceConfigUtil.getClassToQnameMappingsFile();
+		Mappings mappings = (Mappings) Utils.deserializeDocument(filename, Mappings.class);
+		return mappings;
 	}
 	
 	
