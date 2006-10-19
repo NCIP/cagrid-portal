@@ -635,28 +635,27 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			removePackageButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Project selectedProject = getCadsrBrowserPanel().getSelectedProject();
-					if (selectedProject != null && projectEquals(selectedProject, mostRecentProject)) {
-						UMLPackageMetadata selectedPackage = getCadsrBrowserPanel().getSelectedPackage();
-						if (selectedPackage != null && packageToNamespace.containsKey(selectedPackage.getName())) {
-							// remove the package from the uml types tree
-							getUmlTree().removeUmlPackage(selectedPackage.getName());
-							String namespace = (String) packageToNamespace.get(selectedPackage.getName());
-							NamespaceType nsType = CommonTools.getNamespaceType(
-								getServiceInfo().getNamespaces(), namespace);
-							// if the namespace type is no longer in use, remove it from the service
-							if (!CommonTools.isNamespaceTypeInUse(nsType, getServiceInfo().getServiceDescriptor())) {
-								NamespaceType[] allNamespaces = getServiceInfo().getNamespaces().getNamespace();
-								NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(
-									allNamespaces, nsType);
-								getServiceInfo().getNamespaces().setNamespace(cleanedNamespaces);
-							}
-							// remove namespace from the packageMapping
-							packageToNamespace.remove(selectedPackage.getName());
-							// remove the mapping for its classes
-							packageToClassMap.remove(selectedPackage);
-							// store the new information in the extension data
-							storeUpdatedPackageInformation();
+					UMLPackageMetadata selectedPackage = getCadsrBrowserPanel().getSelectedPackage();
+					if (selectedProject != null && projectEquals(selectedProject, mostRecentProject)
+						&& selectedPackage != null && packageToNamespace.containsKey(selectedPackage.getName())) {
+						// remove the package from the uml types tree
+						getUmlTree().removeUmlPackage(selectedPackage.getName());
+						String namespace = (String) packageToNamespace.get(selectedPackage.getName());
+						NamespaceType nsType = CommonTools.getNamespaceType(
+							getServiceInfo().getNamespaces(), namespace);
+						// if the namespace type is no longer in use, remove it from the service
+						if (!CommonTools.isNamespaceTypeInUse(nsType, getServiceInfo().getServiceDescriptor())) {
+							NamespaceType[] allNamespaces = getServiceInfo().getNamespaces().getNamespace();
+							NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(
+								allNamespaces, nsType);
+							getServiceInfo().getNamespaces().setNamespace(cleanedNamespaces);
 						}
+						// remove namespace from the packageMapping
+						packageToNamespace.remove(selectedPackage.getName());
+						// remove the mapping for its classes
+						packageToClassMap.remove(selectedPackage);
+						// store the new information in the extension data
+						storeUpdatedPackageInformation();
 					} else {
 						PortalUtils.showMessage("Please select a package involved in the current domain model.");
 					}
@@ -704,19 +703,22 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		if (domainModelValidationCheckBox == null) {
 			domainModelValidationCheckBox = new JCheckBox();
 			domainModelValidationCheckBox.setText("Validate Domain Model");
-			domainModelValidationCheckBox.setToolTipText("Causes the data service to ensure all queries remain within the limits of the exposed domain model");
+			domainModelValidationCheckBox.setToolTipText("Causes the data service to ensure "
+				+ "all queries remain within the limits of the exposed domain model");
 			domainModelValidationCheckBox.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
-					CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(), DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, 
+					CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(),
+						DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, 
 						String.valueOf(getDomainModelValidationCheckBox().isSelected()), false);
 				}
 			});
 			// set the check box selection
-			if (CommonTools.servicePropertyExists(getServiceInfo().getServiceDescriptor(), DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)) {
+			if (CommonTools.servicePropertyExists(getServiceInfo().getServiceDescriptor(), 
+				DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)) {
 				try {
 					domainModelValidationCheckBox.setSelected(Boolean.valueOf(
-						CommonTools.getServicePropertyValue(
-							getServiceInfo().getServiceDescriptor(), DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)).booleanValue());
+						CommonTools.getServicePropertyValue(getServiceInfo().getServiceDescriptor(), 
+							DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)).booleanValue());
 				} catch (Exception ex) {
 					System.err.println("Error getting service property value for " + DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG);
 					ex.printStackTrace();
@@ -748,7 +750,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		try {
 			cadsrInfo = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData()).getCadsrInformation();
 		} catch (Exception ex) {
-			ErrorDialog.showErrorDialog("Error getting cadsrInformation from extension data: " + ex.getMessage(), ex);
+			ErrorDialog.showErrorDialog("Error getting caDSR information from extension data: " + ex.getMessage(), ex);
 		}
 		if (cadsrInfo != null) {
 			getUmlTree().setEnabled(false);
@@ -1005,10 +1007,9 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 					group.setSelected(getNoDomainModelRadioButton().getModel(), true);
 				}
 			} catch (Exception ex) {
-				
-			}
-			
-			
+				ex.printStackTrace();
+				ErrorDialog.showErrorDialog(ex);
+			}	
 		}
 		return domainModelSourcePanel;
 	}
