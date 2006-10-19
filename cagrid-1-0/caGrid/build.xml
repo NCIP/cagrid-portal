@@ -619,6 +619,7 @@
 			<artifact refid="core.jars" />
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="servicesecurity.jars" />
+			<artifact refid="gridgrouper.client.jars" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/authz" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
