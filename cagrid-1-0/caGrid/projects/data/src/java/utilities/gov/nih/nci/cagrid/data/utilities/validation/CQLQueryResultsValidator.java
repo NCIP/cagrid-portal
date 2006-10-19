@@ -49,7 +49,9 @@ public class CQLQueryResultsValidator {
 
 	protected static Log LOG = LogFactory.getLog(CQLQueryResultsValidator.class.getName());
 
+	//	 wsdl sources
 	private EndpointReferenceType epr = null;
+	private String wsdlFile = null;
 
 	private boolean initialized = false;
 	private SchemaValidator validator = null;
@@ -62,6 +64,11 @@ public class CQLQueryResultsValidator {
 
 	public CQLQueryResultsValidator(EndpointReferenceType serviceEPR) {
 		this.epr = serviceEPR;
+	}
+	
+	
+	public CQLQueryResultsValidator(String wsdlFileName) {
+		this.wsdlFile = wsdlFileName;
 	}
 
 
@@ -132,7 +139,12 @@ public class CQLQueryResultsValidator {
 		// parse the WSDL
 		Definition wsdlDefinition;
 		try {
-			String location = WSDLUtils.getWSDLLocation(this.epr);
+			String location = null;
+			if (this.epr != null) {
+				location = WSDLUtils.getWSDLLocation(this.epr);
+			} else {
+				location = this.wsdlFile;
+			}
 			LOG.debug("Looking for WSDL at:" + location);
 			wsdlDefinition = WSDLUtils.parseServiceWSDL(location);
 		} catch (Exception e) {
