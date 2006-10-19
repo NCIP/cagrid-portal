@@ -369,6 +369,49 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	}
 	
 	
+	/**
+	 * This method initializes jButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getRemovePackageButton() {
+		if (removePackageButton == null) {
+			removePackageButton = new JButton();
+			removePackageButton.setText("Remove Package");
+			removePackageButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Project selectedProject = getCadsrBrowserPanel().getSelectedProject();
+					UMLPackageMetadata selectedPackage = getCadsrBrowserPanel().getSelectedPackage();
+					if (selectedProject != null && projectEquals(selectedProject, mostRecentProject)
+						&& selectedPackage != null && packageToNamespace.containsKey(selectedPackage.getName())) {
+						// remove the package from the uml types tree
+						getUmlTree().removeUmlPackage(selectedPackage.getName());
+						String namespace = (String) packageToNamespace.get(selectedPackage.getName());
+						NamespaceType nsType = CommonTools.getNamespaceType(
+							getServiceInfo().getNamespaces(), namespace);
+						// if the namespace type is no longer in use, remove it from the service
+						if (nsType != null && !CommonTools.isNamespaceTypeInUse(nsType, getServiceInfo().getServiceDescriptor())) {
+							NamespaceType[] allNamespaces = getServiceInfo().getNamespaces().getNamespace();
+							NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(
+								allNamespaces, nsType);
+							getServiceInfo().getNamespaces().setNamespace(cleanedNamespaces);
+						}
+						// remove namespace from the packageMapping
+						packageToNamespace.remove(selectedPackage.getName());
+						// remove the mapping for its classes
+						packageToClassMap.remove(selectedPackage.getName());
+						// store the new information in the extension data
+						storeUpdatedPackageInformation();
+					} else {
+						PortalUtils.showMessage("Please select a package involved in the current domain model.");
+					}
+				}
+			});
+		}
+		return removePackageButton;
+	}
+	
+	
 	private ClassBrowserPanel getClassBrowserPanel() {
 		if (classBrowserPanel == null) {
 			classBrowserPanel = new ClassBrowserPanel(getExtensionTypeExtensionData(), getServiceInfo());
@@ -587,49 +630,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error loading existing caDSR information: " + ex.getMessage(), ex);
 		}
-	}
-
-
-	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */
-	private JButton getRemovePackageButton() {
-		if (removePackageButton == null) {
-			removePackageButton = new JButton();
-			removePackageButton.setText("Remove Package");
-			removePackageButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Project selectedProject = getCadsrBrowserPanel().getSelectedProject();
-					UMLPackageMetadata selectedPackage = getCadsrBrowserPanel().getSelectedPackage();
-					if (selectedProject != null && projectEquals(selectedProject, mostRecentProject)
-						&& selectedPackage != null && packageToNamespace.containsKey(selectedPackage.getName())) {
-						// remove the package from the uml types tree
-						getUmlTree().removeUmlPackage(selectedPackage.getName());
-						String namespace = (String) packageToNamespace.get(selectedPackage.getName());
-						NamespaceType nsType = CommonTools.getNamespaceType(
-							getServiceInfo().getNamespaces(), namespace);
-						// if the namespace type is no longer in use, remove it from the service
-						if (!CommonTools.isNamespaceTypeInUse(nsType, getServiceInfo().getServiceDescriptor())) {
-							NamespaceType[] allNamespaces = getServiceInfo().getNamespaces().getNamespace();
-							NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(
-								allNamespaces, nsType);
-							getServiceInfo().getNamespaces().setNamespace(cleanedNamespaces);
-						}
-						// remove namespace from the packageMapping
-						packageToNamespace.remove(selectedPackage.getName());
-						// remove the mapping for its classes
-						packageToClassMap.remove(selectedPackage);
-						// store the new information in the extension data
-						storeUpdatedPackageInformation();
-					} else {
-						PortalUtils.showMessage("Please select a package involved in the current domain model.");
-					}
-				}
-			});
-		}
-		return removePackageButton;
 	}
 	
 	
