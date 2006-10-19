@@ -69,10 +69,15 @@ public class CertUtil {
 
 	public static void writeSigningPolicy(X509Certificate cert, File f) throws Exception {
 		PrintWriter out = new PrintWriter(f);
-		out.println("access_id_CA X509 '" + cert.getSubjectDN().getName() + "'");
+		out.println("access_id_CA X509 '" + subjectToIdentity(cert.getSubjectDN().getName()) + "'");
 		out.println("pos_rights globus CA:sign");
 		out.println("cond_subjects globus '\"*\"'");
 		out.close();
+	}
+	
+	public static String subjectToIdentity(String subject){
+		String s = subject.substring(1);
+		return s.replace(',','/');
 	}
 
 
