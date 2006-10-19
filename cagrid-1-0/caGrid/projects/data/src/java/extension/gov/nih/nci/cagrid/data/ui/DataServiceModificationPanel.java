@@ -129,7 +129,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		super(desc, info);
 		packageToNamespace = new HashMap();
 		packageToClassMap = new HashMap();
-		loadMostRecentProjectInfo();
 		// if there's existing cadsr configuration, apply it
 		loadUmlTreeInformation();
 		initialize();
@@ -290,15 +289,13 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 					// find the schema element type
 					SchemaElementType schemaType = NamespaceUtils.getElementByName(
 						nsType, e.getElementName());
-					// very real posibility the user has changed the element name
-					// to something not in the schema
-					// TODO: can I prevent that???
+					// user may have selected an element type name which is not
+					// in the namespace type.
+					// TODO: what do I do in that case?  maybe prevent that in
+					// handling element name changed
 					if (schemaType != null) {
 						schemaType.setSerializer(e.getSerializer());
 						schemaType.setDeserializer(e.getDeserializer());
-					} else {
-						ErrorDialog.showErrorDialog("No element named " + e.getElementName() + " in namespace " + e.getNamespace(), 
-							"Serialization for class " + e.getPackageName() + "." + e.getClassName() + " was not changed!");
 					}
 				}
 				
@@ -356,7 +353,9 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Project selectedProject = getCadsrBrowserPanel().getSelectedProject();
 					try {
-						CaDSRServiceClient cadsrClient = new CaDSRServiceClient(getCadsrBrowserPanel().getCadsr().getText());
+						// use the caDSR client to get all the packages from the selected project
+						CaDSRServiceClient cadsrClient = new CaDSRServiceClient(
+							getCadsrBrowserPanel().getCadsr().getText());
 						UMLPackageMetadata[] packages = cadsrClient.findPackagesInProject(selectedProject);
 						handlePackageAddition(selectedProject, packages);
 					} catch (Exception ex) {
@@ -381,7 +380,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			classBrowserPanel.addClassSelectionListener(new ClassSelectionListener() {
 				public void classSelectionChanged(ClassSelectionEvent e) {
 					try {
-						setProcessorClass(classBrowserPanel.getSelectedClassName());
+						saveProcessorClassName(classBrowserPanel.getSelectedClassName());
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						ErrorDialog.showErrorDialog("Error setting the query processor class: " + ex.getMessage(), ex);
@@ -407,38 +406,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			});
 		}
 		return classBrowserPanel;
-	}
-	
-	
-	private void setProcessorClass(String className) throws Exception {
-		if (className != null) {
-			CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(), 
-				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false);
-			// blow away the query processor class properties from the extension data
-			Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
-			data.setCQLProcessorConfig(null);
-			ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
-			getQpParamsTable().classChanged();
-		}
-	}
-	
-	
-	private void loadMostRecentProjectInfo() {
-		CadsrInformation cadsrInfo = null;
-		try {
-			cadsrInfo = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData()).getCadsrInformation();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error loading project information: " + ex.getMessage(), ex);
-		}
-		if (cadsrInfo != null) {
-			String longName = cadsrInfo.getProjectLongName();
-			String version = cadsrInfo.getProjectVersion();
-			Project tempProject = new Project();
-			tempProject.setLongName(longName);
-			tempProject.setVersion(version);
-			mostRecentProject = tempProject;
-		}
 	}
 
 
@@ -727,71 +694,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		}
 		return domainModelValidationCheckBox;
 	}
-	
-	
-	/**
-	 * p1 must be non-null!!
-	 * @param p1
-	 * @param p2
-	 * @return
-	 */
-	private boolean projectEquals(Project p1, Project p2) {
-		if (p2 != null) {
-			return p1.getLongName().equals(p2.getLongName()) 
-				&& p1.getVersion().equals(p2.getVersion());
-		}
-		return false;
-	}
-	
-	
-	private void loadUmlTreeInformation() {
-		// if there's existing cadsr configuration, apply it
-		CadsrInformation cadsrInfo = null;
-		try {
-			cadsrInfo = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData()).getCadsrInformation();
-		} catch (Exception ex) {
-			ErrorDialog.showErrorDialog("Error getting caDSR information from extension data: " + ex.getMessage(), ex);
-		}
-		if (cadsrInfo != null) {
-			getUmlTree().setEnabled(false);
-			// set the caDSR service URL in the GUI
-			getCadsrBrowserPanel().setDefaultCaDSRURL(cadsrInfo.getServiceUrl());
-			getCadsrBrowserPanel().getCadsr().setText(cadsrInfo.getServiceUrl());
-			// walk through packages
-			for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {
-				CadsrPackage pack = cadsrInfo.getPackages(i);
-				String packageName = pack.getName();
-				String namespace = pack.getMappedNamespace();
-				// keep track of the mapped package / namespace combination
-				packageToNamespace.put(packageName, namespace);
-				// find the namespace needed for this package in the service description
-				NamespaceType[] serviceNamespaces = getServiceInfo().getNamespaces().getNamespace();
-				NamespaceType nsType = null;
-				for (int nsIndex = 0; nsIndex < serviceNamespaces.length; nsIndex++) {
-					NamespaceType ns = serviceNamespaces[nsIndex];
-					if (ns.getNamespace().equals(namespace)) {
-						nsType = ns;
-						break;
-					}
-				}
-				if (nsType != null) {
-					// add the package to the types tree
-					getUmlTree().addUmlPackage(packageName);
-					// prepare a mapping of class to element names
-					Map classToElementNames = new HashMap();
-					packageToClassMap.put(packageName, classToElementNames);
-					for (int j = 0; pack.getCadsrClass() != null && j < pack.getCadsrClass().length; j++) {
-						ClassMapping map = pack.getCadsrClass(j);
-						classToElementNames.put(map.getClassName(), map.getElementName());
-						// add the classes for the uml package to the tree
-						UMLClassTreeNode node = getUmlTree().addUmlClass(packageName, map.getClassName());
-						node.getCheckBox().setSelected(map.isSelected());								// TODO: I may have to add the type to the types table here
-					}
-				}
-			}
-		}
-		getUmlTree().setEnabled(true);
-	}
 
 
 	/**
@@ -1009,7 +911,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				ErrorDialog.showErrorDialog(ex);
-			}	
+			}
 		}
 		return domainModelSourcePanel;
 	}
@@ -1167,6 +1069,100 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			qpParamsScrollPane.setViewportView(getQpParamsTable());
 		}
 		return qpParamsScrollPane;
+	}
+	
+	
+	/**
+	 * p1 must be non-null!!
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
+	private boolean projectEquals(Project p1, Project p2) {
+		if (p2 != null) {
+			return p1.getLongName().equals(p2.getLongName()) 
+				&& p1.getVersion().equals(p2.getVersion());
+		}
+		return false;
+	}
+	
+	
+	private void loadUmlTreeInformation() {
+		// if there's existing cadsr configuration, apply it
+		CadsrInformation cadsrInfo = null;
+		try {
+			cadsrInfo = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData()).getCadsrInformation();
+		} catch (Exception ex) {
+			ErrorDialog.showErrorDialog("Error getting caDSR information from extension data: " + ex.getMessage(), ex);
+		}
+		if (cadsrInfo != null) {
+			getUmlTree().setEnabled(false);
+			// set the most recent package info
+			String longName = cadsrInfo.getProjectLongName();
+			String version = cadsrInfo.getProjectVersion();
+			if (longName != null && version != null) {
+				Project tempProject = new Project();
+				tempProject.setLongName(longName);
+				tempProject.setVersion(version);
+				mostRecentProject = tempProject;
+			}
+			// set the caDSR service URL in the GUI, if there is one
+			if (cadsrInfo.getServiceUrl() != null) {
+				getCadsrBrowserPanel().setDefaultCaDSRURL(cadsrInfo.getServiceUrl());
+				getCadsrBrowserPanel().getCadsr().setText(cadsrInfo.getServiceUrl());
+			}
+			// set the domain model filename if there is one
+			if (cadsrInfo.getSuppliedDomainModel() != null) {
+				getDomainModelNameTextField().setText(cadsrInfo.getSuppliedDomainModel());
+			}
+			// walk through packages, adding them to the UML tree
+			for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {
+				CadsrPackage pack = cadsrInfo.getPackages(i);
+				String packageName = pack.getName();
+				String namespace = pack.getMappedNamespace();
+				// keep track of the mapped package / namespace combination
+				packageToNamespace.put(packageName, namespace);
+				// find the namespace needed for this package in the service description
+				NamespaceType[] serviceNamespaces = getServiceInfo().getNamespaces().getNamespace();
+				NamespaceType nsType = null;
+				for (int nsIndex = 0; nsIndex < serviceNamespaces.length; nsIndex++) {
+					NamespaceType ns = serviceNamespaces[nsIndex];
+					if (ns.getNamespace().equals(namespace)) {
+						nsType = ns;
+						break;
+					}
+				}
+				if (nsType != null) {
+					// add the package to the types tree
+					getUmlTree().addUmlPackage(packageName);
+					// prepare a mapping of class to element names
+					Map classToElementNames = new HashMap();
+					packageToClassMap.put(packageName, classToElementNames);
+					for (int j = 0; pack.getCadsrClass() != null && j < pack.getCadsrClass().length; j++) {
+						ClassMapping map = pack.getCadsrClass(j);
+						classToElementNames.put(map.getClassName(), map.getElementName());
+						// add the classes for the uml package to the tree
+						UMLClassTreeNode node = getUmlTree().addUmlClass(packageName, map.getClassName());
+						node.getCheckBox().setSelected(map.isSelected());								// TODO: I may have to add the type to the types table here
+					}
+				}
+			}
+		}
+		getUmlTree().setEnabled(true);
+	}
+	
+	
+	private void saveProcessorClassName(String className) throws Exception {
+		if (className != null) {
+			// store the property
+			CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(), 
+				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false);
+			// blow away the query processor class properties from the extension data
+			Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
+			data.setCQLProcessorConfig(null);
+			ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
+			getQpParamsTable().classChanged();
+		}
 	}
 	
 	
