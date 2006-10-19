@@ -102,7 +102,8 @@ public class QueryProcessorParametersTable extends JTable {
 				}
 				storeProperties();
 			} else {
-				System.out.println("NO QUERY PROCESSOR CLASS SELECTED");
+				// no query processor selected, clear all the rows
+				clearTable();
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -113,6 +114,13 @@ public class QueryProcessorParametersTable extends JTable {
 	
 	public boolean isCellEditable(int row, int column) {
 		return column == 2;
+	}
+	
+	
+	public void clearTable() {
+		while (getRowCount() != 0) {
+			((DefaultTableModel) getModel()).removeRow(0);
+		}
 	}
 	
 	
