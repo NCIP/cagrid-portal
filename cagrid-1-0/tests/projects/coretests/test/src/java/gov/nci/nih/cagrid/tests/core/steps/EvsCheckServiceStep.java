@@ -81,6 +81,8 @@ public class EvsCheckServiceStep
             for (int i=0; i < sources.length; i++)
             {
                 Source source = sources[i];
+                System.out.println("Source[" + i + "]=Abbr:" +  source.getAbbreviation()+ "desc: " + source.getDescription());
+
                 assertNotNull("Source object is null", source);
                 assertNotNull("Attribute:Abbreviation is null", source.getAbbreviation());
                 assertNotNull("Attribute;Description is null", source.getDescription());
