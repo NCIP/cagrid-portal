@@ -254,7 +254,7 @@
 	<!-- =================================================================== -->
 	<!-- Creates the installer                                               -->
 	<!-- =================================================================== -->
-	<target name="createInstaller" description="Creates the installler" depends="">
+	<target name="createInstaller" description="Creates the installler" depends="all,javadoc">
 		<izpack input="${basedir}/install/install.xml"
 			output="${basedir}/${jars.prefixname}installer.jar"
 			installerType="standard"
