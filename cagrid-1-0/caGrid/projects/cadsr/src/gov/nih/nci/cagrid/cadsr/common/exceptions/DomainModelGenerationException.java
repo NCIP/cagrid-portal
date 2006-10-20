@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.cadsr.common;
+package gov.nih.nci.cagrid.cadsr.common.exceptions;
 
 /**
  * @author oster

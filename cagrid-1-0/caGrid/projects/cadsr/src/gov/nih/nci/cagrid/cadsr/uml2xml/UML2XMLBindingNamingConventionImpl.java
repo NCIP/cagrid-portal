@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.cadsr.uml2xml;
 
-import gov.nih.nci.cagrid.cadsr.common.CaDSRGeneralException;
+import gov.nih.nci.cagrid.cadsr.common.exceptions.CaDSRGeneralException;
 
 import javax.xml.namespace.QName;
 

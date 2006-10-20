@@ -9,6 +9,7 @@ import gov.nih.nci.cadsr.umlproject.domain.TypeEnumerationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
+import gov.nih.nci.cagrid.cadsr.common.exceptions.CaDSRGeneralException;
 import gov.nih.nci.cagrid.cadsrservice.UMLAssociation;
 import gov.nih.nci.cagrid.cadsrservice.UMLAssociationSourceUMLClassMetadata;
 import gov.nih.nci.cagrid.cadsrservice.UMLAssociationTargetUMLClassMetadata;

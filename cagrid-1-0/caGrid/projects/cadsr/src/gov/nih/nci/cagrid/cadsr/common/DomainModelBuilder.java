@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.cadsr.common;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
+import gov.nih.nci.cagrid.cadsr.common.exceptions.CaDSRGeneralException;
+import gov.nih.nci.cagrid.cadsr.common.exceptions.DomainModelGenerationException;
 import gov.nih.nci.cagrid.cadsrservice.UMLAssociationExclude;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLAssociationCollection;

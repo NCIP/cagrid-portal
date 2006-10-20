@@ -4,6 +4,7 @@ import gov.nih.nci.cadsr.domain.ClassificationScheme;
 import gov.nih.nci.cadsr.domain.Context;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
+import gov.nih.nci.cagrid.cadsr.common.exceptions.CaDSRGeneralException;
 import gov.nih.nci.cagrid.cadsr.uml2xml.UML2XMLBinding;
 import gov.nih.nci.cagrid.cadsr.uml2xml.UML2XMLBindingNamingConventionImpl;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
