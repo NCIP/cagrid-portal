@@ -4,6 +4,7 @@
 package gov.nci.nih.cagrid.tests.core;
 
 import gov.nci.nih.cagrid.tests.core.steps.ServiceCreateStep;
+import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 import gov.nci.nih.cagrid.tests.core.util.IntroduceServiceInfo;
 import gov.nci.nih.cagrid.tests.core.util.ServiceHelper;
 

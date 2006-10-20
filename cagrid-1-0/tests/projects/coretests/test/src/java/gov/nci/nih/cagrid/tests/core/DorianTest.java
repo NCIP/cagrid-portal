@@ -17,6 +17,7 @@ import gov.nci.nih.cagrid.tests.core.steps.DorianSubmitRegistrationStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 import gov.nci.nih.cagrid.tests.core.steps.GTSSyncOnceStep;
+import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 

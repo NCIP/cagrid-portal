@@ -3,9 +3,10 @@
  */
 package gov.nci.nih.cagrid.tests.core.util;
 
-import gov.nci.nih.cagrid.tests.core.GlobusHelper;
 import gov.nci.nih.cagrid.tests.core.steps.ServiceCreateStep;
 import gov.nci.nih.cagrid.tests.core.steps.ServiceInvokeStep;
+import gov.nci.nih.cagrid.tests.core.util.FileUtils;
+import gov.nci.nih.cagrid.tests.core.util.IntroduceServiceInfo;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -77,6 +78,7 @@ public class ServiceHelper
 		// set globus helper and port
 		String protocol = "http";
 		globus = new GlobusHelper(serviceInfo.isTransportSecurity(), tempDir);
+		globus.setEchoHelper(this);
 		if (serviceInfo.isTransportSecurity()) {
 			port = Integer.parseInt(System.getProperty("test.globus.secure.port", "8443"));
 			protocol = "https";

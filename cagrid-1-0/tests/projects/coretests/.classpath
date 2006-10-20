@@ -92,11 +92,6 @@
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
-	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/IntroduceEcho-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jmi-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>

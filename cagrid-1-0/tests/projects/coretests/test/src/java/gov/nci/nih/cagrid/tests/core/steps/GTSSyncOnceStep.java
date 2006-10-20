@@ -3,9 +3,9 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
-import gov.nci.nih.cagrid.tests.core.GlobusHelper;
 import gov.nci.nih.cagrid.tests.core.util.AntUtils;
 import gov.nci.nih.cagrid.tests.core.util.EnvUtils;
+import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 
 import java.io.File;
 import java.util.Properties;

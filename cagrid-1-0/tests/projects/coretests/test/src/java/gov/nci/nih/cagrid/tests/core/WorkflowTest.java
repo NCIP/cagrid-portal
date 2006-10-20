@@ -9,6 +9,7 @@ import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 import gov.nci.nih.cagrid.tests.core.steps.WorkflowConfigureStep;
+import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 
 import java.io.File;
 import java.io.FileFilter;

@@ -3,8 +3,8 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
-import gov.nci.nih.cagrid.tests.core.GlobusHelper;
 import gov.nci.nih.cagrid.tests.core.util.FileUtils;
+import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 
 import java.io.File;
 import java.io.IOException;

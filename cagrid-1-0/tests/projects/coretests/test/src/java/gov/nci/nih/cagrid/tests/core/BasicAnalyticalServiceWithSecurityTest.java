@@ -13,6 +13,7 @@ import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 import gov.nci.nih.cagrid.tests.core.steps.GTSSyncOnceStep;
+import gov.nci.nih.cagrid.tests.core.util.ServiceHelper;
 
 import java.io.File;
 import java.util.Vector;
@@ -59,6 +60,8 @@ public class BasicAnalyticalServiceWithSecurityTest
 	{
 		super.init("BasicAnalyticalServiceWithSecurity");
 		
+		ServiceHelper echoHelper = new ServiceHelper("IntroduceEcho"); 
+		
 		File dorianDir = new File(System.getProperty("dorian.dir",
 			".." + File.separator + ".." + File.separator + ".." + File.separator + 
 			"caGrid" + File.separator + "projects" + File.separator + "dorian"
@@ -69,11 +72,12 @@ public class BasicAnalyticalServiceWithSecurityTest
 		);
 
 		Vector steps = new Vector();
+		steps.add(echoHelper.getCreateServiceStep());
 		steps.add(getCreateServiceStep());
 		steps.add(new GlobusCreateStep(getGlobus()));
 		steps.add(new GTSSyncOnceStep(getGlobus()));
 		steps.add(new GlobusDeployServiceStep(getGlobus(), dorianDir));
-		steps.add(new GlobusDeployServiceStep(getGlobus(), new File("..", "echo")));
+		steps.add(new GlobusDeployServiceStep(getGlobus(), echoHelper.getCreateServiceStep().getServiceDir()));
 		steps.add(new GlobusDeployServiceStep(getGlobus(), getCreateServiceStep().getServiceDir()));
 		steps.add(new GlobusStartStep(getGlobus(), getPort()));
 		steps.add(new DorianAuthenticateStep("dorian", "password", getPort()));

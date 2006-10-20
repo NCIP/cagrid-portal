@@ -5,7 +5,7 @@ package gov.nci.nih.cagrid.tests.core.steps;
 
 import com.atomicobject.haste.framework.Step;
 
-import gov.nci.nih.cagrid.tests.core.GlobusHelper;
+import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 
 /**
  * This step attempts to stop a running temporary globus container by first running the 

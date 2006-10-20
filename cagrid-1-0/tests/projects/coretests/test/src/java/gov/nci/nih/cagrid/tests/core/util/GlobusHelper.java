@@ -1,12 +1,12 @@
 /*
  * Created on Apr 22, 2006
  */
-package gov.nci.nih.cagrid.tests.core;
+package gov.nci.nih.cagrid.tests.core.util;
 
 import gov.nci.nih.cagrid.tests.core.util.EnvUtils;
 import gov.nci.nih.cagrid.tests.core.util.FileUtils;
 import gov.nci.nih.cagrid.tests.core.util.StdIOThread;
-import gov.nih.nci.cagrid.tests.client.IntroduceEchoClient;
+//import gov.nih.nci.cagrid.tests.client.IntroduceEchoClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +36,8 @@ public class GlobusHelper
 	private File tmpGlobusLocation;
 	private Process p;
 	private File securityDescriptor;
-	private Exception isGlobusRunningException;
+	private Throwable isGlobusRunningException;
+	private ServiceHelper echoHelper;
 	
 	public GlobusHelper() 
 	{
@@ -226,14 +227,22 @@ public class GlobusHelper
 		if (secure) url = "https://localhost:" + port + "/wsrf/services/cagrid/IntroduceEcho";
 		
 		try {
-			IntroduceEchoClient client = new IntroduceEchoClient(url);
-			if (! "are you alive?".equals(client.echo("are you alive?"))) return false;
+			if (echoHelper != null) {
+				echoHelper.getInvokeSteps().get(0).runStep();
+			} else {
+				//IntroduceEchoClient client = new IntroduceEchoClient(url);
+				//if (! "are you alive?".equals(client.echo("are you alive?"))) return false;
+				throw new Exception("should not get here");
+			}
 			return true;
 		} catch (MalformedURIException e) {
 			this.isGlobusRunningException = e;
 			return false;
 		} catch (RemoteException e) {
 			this.isGlobusRunningException = e;
+			return false;
+		} catch (Throwable t) {
+			this.isGlobusRunningException = t;
 			return false;
 		}
 	}
@@ -285,5 +294,10 @@ public class GlobusHelper
 	public void setUseCounterCheck(boolean useCounterCheck)
 	{
 		this.useCounterCheck = useCounterCheck;
+	}
+
+	public void setEchoHelper(ServiceHelper echoHelper)
+	{
+		this.echoHelper = echoHelper;
 	}
 }

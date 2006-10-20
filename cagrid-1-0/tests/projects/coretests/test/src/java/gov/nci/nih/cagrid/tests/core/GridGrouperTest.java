@@ -31,6 +31,7 @@ import gov.nci.nih.cagrid.tests.core.steps.GrouperInitStep;
 import gov.nci.nih.cagrid.tests.core.steps.GrouperRemoveMemberStep;
 import gov.nci.nih.cagrid.tests.core.steps.GrouperRemoveStemStep;
 import gov.nci.nih.cagrid.tests.core.steps.GrouperRevokePrivilegeStep;
+import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 
