@@ -463,6 +463,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 					try {
 						String filename = ResourceManager.promptFile(null, FileFilters.XML_FILTER);
 						getDomainModelNameTextField().setText(filename);
+						setDomainModelFile();
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						ErrorDialog.showErrorDialog("Error selecting file: " + ex.getMessage());
@@ -581,11 +582,13 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				pack.setName(packName);
 				pack.setMappedNamespace(mappedNamespace);
 				// does the mapped namespace exist in the service?
-				if (CommonTools.getNamespaceType(getServiceInfo().getNamespaces(), mappedNamespace) != null) {
+				NamespaceType packageNamespace = CommonTools.getNamespaceType(
+					getServiceInfo().getNamespaces(), mappedNamespace); 
+				if (packageNamespace == null) {
 					String[] message = {
 						"The imported domain model has a package which maps to the namespace",
 						mappedNamespace + ".",
-						"This namespace is not yet loaded into the service.",
+						"This namespace is not loaded into the service.",
 						"Please locate a suitable namespace."
 					};
 					JOptionPane.showMessageDialog(this, message);
@@ -601,6 +604,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 							// add the resolved namespaces to the service
 							CommonTools.addNamespace(getServiceInfo().getServiceDescriptor(), resolved[i]);
 						}
+						packageNamespace = resolved[0];
 					}
 				}
 				// create ClassMappings for the package's classes
@@ -614,6 +618,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 					mapping.setSelected(true);
 					mapping.setTargetable(true);
 					mappings[i] = mapping;
+					// add class mapping to the class config panel
+					getClassConfigTable().addClass(pack.getName(), mapping, packageNamespace);
 				}
 				pack.setCadsrClass(mappings);
 				packages[packIndex] = pack;
@@ -634,7 +640,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		if (cqlSyntaxValidationCheckBox == null) {
 			cqlSyntaxValidationCheckBox = new JCheckBox();
 			cqlSyntaxValidationCheckBox.setText("Validate CQL Syntax");
-			cqlSyntaxValidationCheckBox.setToolTipText("Causes the Data Service to validate all CQL queries for syntactic correctness");
+			cqlSyntaxValidationCheckBox.setToolTipText("Causes the Data Service to "
+				+ "validate all CQL queries for syntactic correctness");
 			cqlSyntaxValidationCheckBox.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
 					CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(),
