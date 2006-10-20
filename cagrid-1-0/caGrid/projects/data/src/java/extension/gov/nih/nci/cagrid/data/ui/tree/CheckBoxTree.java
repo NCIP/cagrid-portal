@@ -1,10 +1,5 @@
 package gov.nih.nci.cagrid.data.ui.tree;
 
-import gov.nih.nci.cagrid.data.ui.tree.types.DomainTreeNode;
-import gov.nih.nci.cagrid.data.ui.tree.types.TypeTreeNode;
-import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
-import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
-
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -67,67 +62,8 @@ public class CheckBoxTree extends JTree {
 	
 	
 	public void reloadFromRoot() {
-		model.reload(rootNode);
-	}
-	
-	
-	public void checkTypeNodes(NamespaceType ns, SchemaElementType[] types) {
-		for (int i = 0; i < rootNode.getChildCount(); i++) {
-			DomainTreeNode domainNode = (DomainTreeNode) rootNode.getChildAt(i);
-			if (domainNode.getNamespace().equals(ns)) {
-				domainNode.checkTypeNodes(types);
-				break;
-			}
-		}
-	}
-	
-	
-	public NamespaceType[] getNamespaceTypes() {
-		NamespaceType[] namespaces = new NamespaceType[rootNode.getChildCount()];
-		for (int i = 0; i < rootNode.getChildCount(); i++) {
-			namespaces[i] = ((DomainTreeNode) rootNode.getChildAt(i)).getNamespace();
-		}
-		return namespaces;
-	}
-	
-	
-	public SchemaElementType[] getCheckedTypes(NamespaceType namespace) {
-		List selected = new ArrayList();
-		// find the namespace node
-		for (int i = 0; i < rootNode.getChildCount(); i++) {
-			DomainTreeNode domainNode = (DomainTreeNode) rootNode.getChildAt(i);
-			if (domainNode.getNamespace().getNamespace().equals(namespace.getNamespace())) {
-				int childCount = domainNode.getChildCount();
-				for (int j = 0; j < childCount; j++) {
-					TypeTreeNode typeNode = (TypeTreeNode) domainNode.getChildAt(j);
-					if (typeNode.isChecked()) {
-						selected.add(typeNode.getType());
-					}
-				}
-				break;
-			}
-		}
-		SchemaElementType[] types = new SchemaElementType[selected.size()];
-		selected.toArray(types);
-		return types;
-	}
-	
-	
-	public SchemaElementType[] getAllCheckedTypes() {
-		List selected = new ArrayList();
-		Enumeration nodes = rootNode.depthFirstEnumeration();
-		while (nodes.hasMoreElements()) {
-			TreeNode treeNode = (TreeNode) nodes.nextElement();
-			if (treeNode instanceof TypeTreeNode) {
-				TypeTreeNode typeNode = (TypeTreeNode) treeNode;
-				if (typeNode.isChecked()) {
-					selected.add(typeNode.getType());
-				}
-			}
-		}
-		SchemaElementType[] types = new SchemaElementType[selected.size()];
-		selected.toArray(types);
-		return types;
+		this.model = new DefaultTreeModel(rootNode);
+		this.setModel(this.model);
 	}
 	
 	

@@ -384,6 +384,13 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 					UMLPackageMetadata selectedPackage = getCadsrBrowserPanel().getSelectedPackage();
 					if (selectedProject != null && projectEquals(selectedProject, mostRecentProject)
 						&& selectedPackage != null && packageToNamespace.containsKey(selectedPackage.getName())) {
+						String packName = selectedPackage.getName();
+						// get the selected classes from this package
+						String[] classNames = getUmlTree().getSelectedClassNames(packName);
+						// remove them from the class config table
+						for (int i = 0; i < classNames.length; i++) {
+							getClassConfigTable().removeRow(packName, classNames[i]);
+						}
 						// remove the package from the uml types tree
 						getUmlTree().removeUmlPackage(selectedPackage.getName());
 						String namespace = (String) packageToNamespace.get(selectedPackage.getName());

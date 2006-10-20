@@ -2,8 +2,10 @@ package gov.nih.nci.cagrid.data.ui.tree.uml;
 
 import gov.nih.nci.cagrid.data.ui.tree.CheckBoxTree;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /** 
@@ -104,5 +106,19 @@ public class UMLProjectTree extends CheckBoxTree {
 		}
 		packNode.remove(classNode);
 		reloadFromRoot();
+	}
+	
+	
+	public String[] getSelectedClassNames(String packageName) {
+		List names = new ArrayList();
+		UMLPackageTreeNode packNode = getUmlPackageNode(packageName);
+		Enumeration classNodes = packNode.children();
+		while (classNodes.hasMoreElements()) {
+			UMLClassTreeNode classNode = (UMLClassTreeNode) classNodes.nextElement();
+			names.add(classNode.getClassName());
+		}
+		String[] nameArray = new String[names.size()];
+		names.toArray(nameArray);
+		return nameArray;
 	}
 }
