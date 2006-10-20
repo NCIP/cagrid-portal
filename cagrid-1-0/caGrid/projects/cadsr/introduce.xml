@@ -267,5 +267,6 @@
  <ns60:ServiceProperties xmlns:ns60="gme://gov.nih.nci.cagrid.introduce/1/Property">
   <ns60:Property key="caCOREServiceURL" value="http://cabio.nci.nih.gov/cacore31/http/remoteService"/>
   <ns60:Property key="threadPoolSize" value="10"/>
+  <ns60:Property isFromETC="false" key="uml2xmlBindingClassname" value="gov.nih.nci.cagrid.cadsr.uml2xml.UML2XMLBindingNamingConventionImpl"/>
  </ns60:ServiceProperties>
 </ns1:ServiceDescription>

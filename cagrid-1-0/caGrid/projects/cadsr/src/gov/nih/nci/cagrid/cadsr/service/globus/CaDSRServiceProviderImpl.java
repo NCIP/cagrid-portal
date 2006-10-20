@@ -19,12 +19,6 @@ public class CaDSRServiceProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectResponse findContextForProject(gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequest params) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-		gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectResponse();
-		boxedResult.setContext(impl.findContextForProject(params.getProject().getProject()));
-		return boxedResult;
-	}
-
 	public gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse findAllProjects(gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsRequest params) throws RemoteException {
 		gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindAllProjectsResponse();
 		boxedResult.setProject(impl.findAllProjects());
@@ -118,6 +112,12 @@ public class CaDSRServiceProviderImpl{
 	public gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataResponse annotateServiceMetadata(gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataRequest params) throws RemoteException {
 		gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataResponse();
 		boxedResult.setServiceMetadata(impl.annotateServiceMetadata(params.getServiceMetadata().getServiceMetadata()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectResponse findContextForProject(gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequest params) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+		gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectResponse boxedResult = new gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectResponse();
+		boxedResult.setContext(impl.findContextForProject(params.getProject().getProject()));
 		return boxedResult;
 	}
 

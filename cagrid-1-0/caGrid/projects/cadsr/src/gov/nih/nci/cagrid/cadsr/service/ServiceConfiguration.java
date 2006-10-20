@@ -12,6 +12,8 @@ public class ServiceConfiguration {
 	
 	private String threadPoolSize;
 	
+	private String uml2xmlBindingClassname;
+	
 
 	
 	public String getCaCOREServiceURL() {
@@ -29,6 +31,15 @@ public class ServiceConfiguration {
 	
 	public void setThreadPoolSize(String threadPoolSize) {
 		this.threadPoolSize = threadPoolSize;
+	}
+
+	
+	public String getUml2xmlBindingClassname() {
+		return uml2xmlBindingClassname;
+	}
+	
+	public void setUml2xmlBindingClassname(String uml2xmlBindingClassname) {
+		this.uml2xmlBindingClassname = uml2xmlBindingClassname;
 	}
 
 	

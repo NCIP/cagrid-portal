@@ -1,15 +1,15 @@
+
+
+FURTURE WORK:
+==================================================
 resource/context for non-blocking domainmodel generation
 
 discovery panel should support "searching" as well
 
-add operation annotateServiceMetadata(ServiceMetadata md) to add UMLClass information to service model
-
 
 caCORE BUGS:
 ==================================================
-caCORE provided XSD's have the wrong namespace (caCORE.cabig instead of caCORE.caBIG), I've corrected them locally... need to rectify
 
-returning too many assocations
 
 
 
@@ -17,6 +17,13 @@ returning too many assocations
 
 
 ==================================================
+
+(DONE -- limited until UML2XML lookup is available in caDSR) add operation annotateServiceMetadata(ServiceMetadata md) to add UMLClass information to service model
+
+(FIXED)  caCORE provided XSD's have the wrong namespace (caCORE.cabig instead of caCORE.caBIG), I've corrected them locally... need to rectify
+
+(WORKED AROUND) caCORE returning too many assocations
+
 (DONE) Pull properties from preferences
 
 (FIXED/WORKAROUND?) returning too many classes when there are package aliases

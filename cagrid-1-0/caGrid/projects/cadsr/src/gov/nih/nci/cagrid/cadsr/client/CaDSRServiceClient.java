@@ -189,17 +189,6 @@ public class CaDSRServiceClient extends ServiceSecurityClient implements CaDSRSe
 		}
 	}
 
-	public gov.nih.nci.cadsr.domain.Context findContextForProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
-      synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"findContextForProject");
-        gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequest();
-        gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequestProject();
-        projectContainer.setProject(project);
-        params.setProject(projectContainer);
-        gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectResponse boxedResult = portType.findContextForProject(params);
-        return boxedResult.getContext();
-      }
-    }
 	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
@@ -397,6 +386,17 @@ public class CaDSRServiceClient extends ServiceSecurityClient implements CaDSRSe
         params.setServiceMetadata(serviceMetadataContainer);
         gov.nih.nci.cagrid.cadsr.stubs.AnnotateServiceMetadataResponse boxedResult = portType.annotateServiceMetadata(params);
         return boxedResult.getServiceMetadata();
+      }
+    }
+	public gov.nih.nci.cadsr.domain.Context findContextForProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"findContextForProject");
+        gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequest params = new gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequest();
+        gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequestProject projectContainer = new gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectRequestProject();
+        projectContainer.setProject(project);
+        params.setProject(projectContainer);
+        gov.nih.nci.cagrid.cadsr.stubs.FindContextForProjectResponse boxedResult = portType.findContextForProject(params);
+        return boxedResult.getContext();
       }
     }
 

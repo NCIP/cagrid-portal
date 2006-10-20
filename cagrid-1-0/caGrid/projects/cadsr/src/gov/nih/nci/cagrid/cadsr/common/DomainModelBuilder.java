@@ -1,19 +1,9 @@
 package gov.nih.nci.cagrid.cadsr.common;
 
-import gov.nih.nci.cadsr.domain.DataElement;
-import gov.nih.nci.cadsr.domain.ValueDomain;
-import gov.nih.nci.cadsr.umlproject.domain.AttributeTypeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
-import gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.TypeEnumerationMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
-import gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cagrid.cadsrservice.UMLAssociationExclude;
-import gov.nih.nci.cagrid.metadata.common.Enumeration;
-import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
-import gov.nih.nci.cagrid.metadata.common.UMLClassUmlAttributeCollection;
-import gov.nih.nci.cagrid.metadata.common.ValueDomainEnumerationCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLAssociationCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLClassCollection;
@@ -473,7 +463,7 @@ public class DomainModelBuilder {
 				ClassConversionWork work = new ClassConversionWork() {
 					public void run() {
 						try {
-							setUmlClass(convertClass(proj.getShortName(), proj.getVersion(), classMD));
+							setUmlClass(CaDSRUtils.convertClassToDataUMLClass(cadsr, proj.getShortName(), proj.getVersion(), classMD));
 						} catch (Exception e) {
 							LOG.error("Error converting class:" + classMD.getFullyQualifiedName(), e);
 						}
@@ -676,155 +666,6 @@ public class DomainModelBuilder {
 		double duration = (System.currentTimeMillis() - start) / 1000.0;
 		LOG.info("Association id fetch took " + duration + " seconds.");
 
-	}
-
-
-	private UMLClass convertClass(String projectShortName, String projectVersion, UMLClassMetadata classMetadata)
-		throws ApplicationException {
-		UMLClass converted = null;
-		if (classMetadata != null) {
-			converted = new UMLClass();
-			converted.setAllowableAsTarget(true);
-			converted.setClassName(classMetadata.getName());
-			converted.setDescription(classMetadata.getDescription());
-			if (converted.getDescription() == null) {
-				converted.setDescription("");
-			}
-			converted.setId(classMetadata.getId());
-			converted.setPackageName(CaDSRUtils.getPackageName(classMetadata));
-			converted.setProjectName(projectShortName);
-			converted.setProjectVersion(projectVersion);
-
-			UMLAttribute[] attributes = createClassAttributes(classMetadata);
-			UMLClassUmlAttributeCollection attCol = new UMLClassUmlAttributeCollection();
-			attCol.setUMLAttribute(attributes);
-			converted.setUmlAttributeCollection(attCol);
-
-			gov.nih.nci.cagrid.metadata.common.SemanticMetadata[] smArray = semanticMetadataCollectionToArray(classMetadata
-				.getSemanticMetadataCollection());
-			converted.setSemanticMetadata(smArray);
-		}
-		return converted;
-	}
-
-
-	private UMLAttribute[] createClassAttributes(UMLClassMetadata classMetadata) throws ApplicationException {
-		long start = System.currentTimeMillis();
-
-		HQLCriteria criteria = new HQLCriteria(
-			"SELECT DISTINCT att, att.dataElement.valueDomain, att.attributeTypeMetadata, att.dataElement FROM UMLAttributeMetadata att "
-				+ "LEFT JOIN FETCH att.semanticMetadataCollection "
-				+ "WHERE att.UMLClassMetadata.id='"
-				+ classMetadata.getId() + "'  ORDER BY att.name");
-
-		List rList = cadsr.query(criteria, UMLAttributeMetadata.class.getName());
-
-		Map attMap = new HashMap();
-		int ind = 0;
-		for (Iterator resultsIterator = rList.iterator(); resultsIterator.hasNext(); ind++) {
-			long attstart = System.currentTimeMillis();
-			Object[] result = (Object[]) resultsIterator.next();
-			UMLAttributeMetadata attMD = (UMLAttributeMetadata) result[0];
-			ValueDomain vd = (ValueDomain) result[1];
-			AttributeTypeMetadata attTypemd = (AttributeTypeMetadata) result[2];
-			DataElement de = (DataElement) result[3];
-
-			// filter out duplicate attributes (caCORE bug in the materialized
-			// view?)
-			if (attMap.containsKey(de.getPublicID())) {
-				continue;
-			}
-
-			// build the attribute
-			UMLAttribute converted = new UMLAttribute();
-			String description = attMD.getDescription();
-			if (description == null) {
-				description = "";
-			}
-			converted.setDescription(description);
-			converted.setName(attMD.getName());
-			if (de.getPublicID() != null) {
-				converted.setPublicID(de.getPublicID().longValue());
-			}
-			if (de.getVersion() != null) {
-				converted.setVersion(de.getVersion().floatValue());
-			}
-			converted.setDataTypeName(attTypemd.getValueDomainDataType());
-
-			// add a value domain
-			gov.nih.nci.cagrid.metadata.common.ValueDomain attVD = new gov.nih.nci.cagrid.metadata.common.ValueDomain();
-			attVD.setLongName(vd.getLongName());
-			attVD.setUnitOfMeasure(vd.getUOMName());
-			converted.setValueDomain(attVD);
-
-			// populate vd semantic md
-			attVD.setSemanticMetadata(semanticMetadataCollectionToArray(attTypemd.getSemanticMetadataCollection()));
-
-			// populate enumeration
-			ValueDomainEnumerationCollection enumCollection = new ValueDomainEnumerationCollection();
-			attVD.setEnumerationCollection(enumCollection);
-
-			HQLCriteria enumcriteria = new HQLCriteria("SELECT DISTINCT enum FROM TypeEnumerationMetadata enum "
-				+ "LEFT JOIN FETCH enum.semanticMetadataCollection "
-				+ "WHERE enum.id in (SELECT e.id FROM TypeEnumerationMetadata e, AttributeTypeMetadata t"
-				+ " WHERE t.typeEnumerationCollection.id=e.id AND t.id='" + attTypemd.getId() + "')");
-
-			List enumRList = cadsr.query(enumcriteria, AttributeTypeMetadata.class.getName());
-
-			Iterator typeEnumIter = enumRList.iterator();
-			Enumeration enumArr[] = new Enumeration[enumRList.size()];
-			int i = 0;
-			while (typeEnumIter.hasNext()) {
-				TypeEnumerationMetadata typeEnum = (TypeEnumerationMetadata) typeEnumIter.next();
-				Enumeration enumer = new Enumeration();
-				enumer.setPermissibleValue(typeEnum.getPermissibleValue());
-				enumer.setValueMeaning(typeEnum.getValueMeaning());
-				enumArr[i++] = enumer;
-				// populate enumeration semantic md
-				enumer.setSemanticMetadata(semanticMetadataCollectionToArray(typeEnum.getSemanticMetadataCollection()));
-			}
-			enumCollection.setEnumeration(enumArr);
-
-			// populate att semantic md
-			gov.nih.nci.cagrid.metadata.common.SemanticMetadata[] metadatas = semanticMetadataCollectionToArray(attMD
-				.getSemanticMetadataCollection());
-			converted.setSemanticMetadata(metadatas);
-
-			attMap.put(de.getPublicID(), converted);
-			LOG.debug("Converted attribute: " + attMD.getName() + " in " + (System.currentTimeMillis() - attstart)
-				/ 1000.0 + " seconds.");
-
-		}
-
-		UMLAttribute[] attArr = new UMLAttribute[attMap.size()];
-		attMap.values().toArray(attArr);
-		double duration = (System.currentTimeMillis() - start) / 1000.0;
-		LOG.info(classMetadata.getFullyQualifiedName() + " attribute conversion took " + duration + " seconds.");
-
-		return attArr;
-	}
-
-
-	private static gov.nih.nci.cagrid.metadata.common.SemanticMetadata[] semanticMetadataCollectionToArray(
-		Collection semanticMetadata) {
-		gov.nih.nci.cagrid.metadata.common.SemanticMetadata[] smArray = new gov.nih.nci.cagrid.metadata.common.SemanticMetadata[semanticMetadata
-			.size()];
-
-		Iterator iter = semanticMetadata.iterator();
-		int i = 0;
-		while (iter.hasNext()) {
-			SemanticMetadata sm = (SemanticMetadata) iter.next();
-			gov.nih.nci.cagrid.metadata.common.SemanticMetadata converted = new gov.nih.nci.cagrid.metadata.common.SemanticMetadata();
-			converted.setConceptCode(sm.getConceptCode());
-			converted.setConceptDefinition(sm.getConceptDefinition());
-			converted.setConceptName(sm.getConceptName());
-			converted.setOrder(sm.getOrder());
-			converted.setOrderLevel(sm.getOrderLevel());
-			smArray[i++] = converted;
-
-		}
-
-		return smArray;
 	}
 
 

@@ -10,8 +10,6 @@ import java.rmi.RemoteException;
  */
 public interface CaDSRServiceI {
 
-    public gov.nih.nci.cadsr.domain.Context findContextForProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException ;
-
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 
     public gov.nih.nci.cadsr.umlproject.domain.Project[] findAllProjects() throws RemoteException ;
@@ -45,5 +43,7 @@ public interface CaDSRServiceI {
     public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] fullClassNames) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException ;
 
     public gov.nih.nci.cagrid.metadata.ServiceMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata) throws RemoteException ;
+
+    public gov.nih.nci.cadsr.domain.Context findContextForProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException ;
 
 }
