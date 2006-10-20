@@ -9,6 +9,7 @@ Possible limitation in Hibernate for querying on attributes of a subclass in an 
 	-- Role names have precidence over class names, which may be a requirement because of the class names of associations
 	
 caCORE SDK Services using CSM
+	-- The application service server side must be configured to use the grid CSM security provider
 
 BUGS:
 CoreQueryProcessor / CQL2DetachedCriteria:
@@ -22,7 +23,8 @@ CoreQueryProcessor / CQL2DetachedCriteria:
 CQL2HQL doesn't properly handle queries begining on the 'many' end of an association (eg Gene's chromosomeCollection).  Valid HQL is generated, but the query will never return true
 	-- Fix In Progress (First cut 2006-10-04)
 	-- http://forum.hibernate.org/viewtopic.php?t=947247&highlight=multiple+joins sums up the issue with using joins to solve the problem.
-		-- If only we used a more recent version of Hibernate... hmmmm
-	
-	
+		-- More recent versions of Hibernate (even 3.0.4...) have fixed this bug
+
 Running multiple instances of a DataService using the SDK query processor in the same container is impossible due to a bug in the caCORE.  Please see http://gforge.nci.nih.gov/tracker/index.php?func=detail&aid=2784&group_id=38&atid=279 for more information.
+
+CSM security is affected by a similar bug in the caCORE API to the previous.  Executing multiple queries in parallel will cause the session for each new query caller to be lost, probably assigning incorrect security permissions.  For cases where CSM security is enabled on the SDK query processor, all calls to process queries are currently synchronized around a static mutex.  Performance for multiple simultanious queries will suffer, but bad performance is not as important as wrong security.
