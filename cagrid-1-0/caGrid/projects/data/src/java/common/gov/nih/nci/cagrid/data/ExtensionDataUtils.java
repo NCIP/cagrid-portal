@@ -2,8 +2,12 @@ package gov.nih.nci.cagrid.data;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -55,5 +59,14 @@ public class ExtensionDataUtils {
 	public static void storeExtensionData(ExtensionTypeExtensionData extData, Data data) throws Exception {
 		MessageElement element = new MessageElement(Data.getTypeDesc().getXmlType(), data);
 		ExtensionTools.updateExtensionDataElement(extData, element);
+	}
+	
+	
+	public static String getQueryProcessorStubClassName(ServiceInformation info) {
+		ServiceType mainService = CommonTools.getService(info.getServices(), 
+			info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+		String basePackage = mainService.getPackageName();
+		basePackage += ".stubs.cql";
+		return basePackage + "." + DataServiceConstants.QUERY_PROCESSOR_STUB_NAME;		
 	}
 }

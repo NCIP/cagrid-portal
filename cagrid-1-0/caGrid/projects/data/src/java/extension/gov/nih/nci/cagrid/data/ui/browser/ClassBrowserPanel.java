@@ -487,9 +487,16 @@ public class ClassBrowserPanel extends JPanel {
 				jarFile.close();
 			}
 			loader = null;
+			// remove all the classes currently in the drop down
 			while (getClassSelectionComboBox().getItemCount() != 0) {
 				getClassSelectionComboBox().removeItemAt(0);
 			}
+			// ensure the query processor stub is available
+			String qpStubName = ExtensionDataUtils.getQueryProcessorStubClassName(serviceInfo);
+			if (!classNames.contains(qpStubName)) {
+				classNames.add(qpStubName);
+			}
+			// populate the drop down
 			Iterator nameIter = classNames.iterator();
 			while (nameIter.hasNext()) {
 				getClassSelectionComboBox().addItem(nameIter.next());

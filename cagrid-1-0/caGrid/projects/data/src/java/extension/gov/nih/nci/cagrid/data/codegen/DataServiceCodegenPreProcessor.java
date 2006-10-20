@@ -260,11 +260,12 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		// verify we've got a query processor class configured
 		String qpClassname = CommonTools.getServicePropertyValue(info.getServiceDescriptor(),
 			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-		if (qpClassname != null && !qpClassname.equals(getQueryProcessorStubClassName(info))) {
+		String stubClassname = ExtensionDataUtils.getQueryProcessorStubClassName(info);
+		if (qpClassname != null && !qpClassname.equals(stubClassname)) {
 			// edit the stub to include a note RE: the stub can be removed
 			String outSrcDir = info.getIntroduceServiceProperties().getProperty(
 				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "src";
-			outSrcDir += File.separator + getQueryProcessorStubClassName(info).replace('.', File.separatorChar);
+			outSrcDir += File.separator + stubClassname.replace('.', File.separatorChar);
 			File outSrcFile = new File(outSrcDir + ".java");
 			if (outSrcFile.exists()) {
 				StringBuffer stubSource = Utils.fileToStringBuffer(outSrcFile);
@@ -307,12 +308,12 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		} else {
 			// no query processor class defined??
 			// add the stub!
-			addQueryProcessorStub(info, getQueryProcessorStubClassName(info));
+			addQueryProcessorStub(info, stubClassname);
 			// edit the query processor service property
 			for (int i = 0; i < keptProperties.size(); i++) {
 				ServicePropertiesProperty prop = (ServicePropertiesProperty) keptProperties.get(i);
 				if (prop.getKey().equals(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
-					prop.setValue(getQueryProcessorStubClassName(info));
+					prop.setValue(stubClassname);
 				}
 			}
 		}
@@ -410,14 +411,5 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		} catch (Exception ex) {
 			throw new CodegenExtensionException("Error providing stub CQL implementation: " + ex.getMessage(), ex);
 		}
-	}
-	
-	
-	private String getQueryProcessorStubClassName(ServiceInformation info) {
-		ServiceType mainService = CommonTools.getService(info.getServices(), 
-			info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
-		String basePackage = mainService.getPackageName();
-		basePackage += ".stubs.cql";
-		return basePackage + "." + DataServiceConstants.QUERY_PROCESSOR_STUB_NAME;		
 	}
 }
