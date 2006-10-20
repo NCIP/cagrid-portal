@@ -12,7 +12,9 @@ import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
 import gov.nih.nci.cagrid.data.utilities.CQLResultsCreationUtil;
 import gov.nih.nci.cagrid.data.utilities.ResultsCreationException;
 import gov.nih.nci.common.util.HQLCriteria;
+import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
+import gov.nih.nci.system.comm.client.ClientSession;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -39,8 +41,11 @@ import org.apache.log4j.Logger;
 public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	public static final String DEFAULT_LOCALHOST_CACORE_URL = "http://localhost:8080/cacore31/server/HTTPServer";
 	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
+	public static final String USE_CSM_FLAG = "useCsmSecurity";
+	public static final String DEFAULT_USE_CSM_FLAG = String.valueOf(false);
 	
 	private static Logger LOG = Logger.getLogger(HQLCoreQueryProcessor.class);
+	private static final Object securityMutex = new Object();
 	
 	private ApplicationService coreService;
 	
@@ -50,6 +55,24 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	
 
 	public CQLQueryResults processQuery(CQLQuery cqlQuery) 
+		throws MalformedQueryException, QueryProcessingException {
+		CQLQueryResults results = null;
+		
+		if (useCsmSecurity()) {
+			synchronized (securityMutex) {
+				applyUserSecurity();
+				results = process(cqlQuery);
+				clearUserSecurity();
+			}
+		} else {
+			results = process(cqlQuery);
+		}
+		
+		return results;
+	}
+	
+	
+	private CQLQueryResults process(CQLQuery cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException {
 		List coreResultsList = queryCoreService(cqlQuery);
 		String targetName = cqlQuery.getTarget().getName();
@@ -213,7 +236,7 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	
 	private ApplicationService getApplicationService() throws QueryProcessingException {
 		if (coreService == null) {
-			String url = getConfiguredParameters().getProperty(APPLICATION_SERVICE_URL);
+			String url = getAppserviceUrl();
 			if (url == null || url.length() == 0) {
 				throw new QueryProcessingException(
 					"Required parameter " + APPLICATION_SERVICE_URL + " was not defined!");
@@ -221,6 +244,26 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 			coreService = ApplicationService.getRemoteInstance(url);
 		}
 		return coreService;
+	}
+	
+	
+	private void applyUserSecurity() throws QueryProcessingException {
+		ClientSession securitySession = ClientSession.getInstance();
+		try {
+			// TODO: what to pass in for password?  Currently using appservice's URL
+			boolean loggedIn = securitySession.startSession(getCallerId(), getAppserviceUrl());
+			if (!loggedIn) {
+				throw new QueryProcessingException("CSM security did not log in user");
+			}
+		} catch (ApplicationException ex) {
+			throw new QueryProcessingException("Error initializing CSM security: " + ex.getMessage(), ex);
+		}
+	}
+	
+	
+	private void clearUserSecurity() {
+		ClientSession securitySession = ClientSession.getInstance();
+		securitySession.terminateSession();
 	}
 	
 	
@@ -232,9 +275,27 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	}
 	
 	
+	private String getAppserviceUrl() {
+		String url = getConfiguredParameters().getProperty(APPLICATION_SERVICE_URL);
+		return url;
+	}
+	
+	
+	private String getCallerId() {
+		String caller = org.globus.wsrf.security.SecurityManager.getManager().getCaller();
+		return caller;
+	}
+	
+	
+	private boolean useCsmSecurity() {
+		return Boolean.valueOf(getConfiguredParameters().getProperty(USE_CSM_FLAG)).booleanValue();
+	}
+	
+	
 	public Properties getRequiredParameters() {
 		Properties params = new Properties();
 		params.setProperty(APPLICATION_SERVICE_URL, DEFAULT_LOCALHOST_CACORE_URL);
+		params.setProperty(USE_CSM_FLAG, DEFAULT_USE_CSM_FLAG);
 		return params;
 	}
 }
