@@ -205,7 +205,8 @@ public class SchemaResolutionDialog extends JDialog {
 		// get the service's schema directory
 		File schemaDir = new File(CacoreWizardUtils.getServiceBaseDir(serviceInfo) 
 			+ File.separator + "schema" + File.separator
-			+ serviceInfo.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+			+ serviceInfo.getIntroduceServiceProperties().getProperty(
+				IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 		NamespaceType[] namespaces = discComponent.createNamespaceType(schemaDir);
 		if (namespaces == null) {
 			ErrorDialog.showErrorDialog("Error getting types from discovery component");

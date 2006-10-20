@@ -31,17 +31,12 @@ import gov.nih.nci.cagrid.data.ui.tree.CheckTreeSelectionListener;
 import gov.nih.nci.cagrid.data.ui.tree.uml.UMLClassTreeNode;
 import gov.nih.nci.cagrid.data.ui.tree.uml.UMLPackageTreeNode;
 import gov.nih.nci.cagrid.data.ui.tree.uml.UMLProjectTree;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
-import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
@@ -52,7 +47,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,10 +69,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.projectmobius.common.GridServiceResolver;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.gme.XMLDataModelService;
-import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 import org.projectmobius.portal.PortalResourceManager;
 
 /** 
@@ -1234,18 +1224,23 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			String namespaceUri = NamespaceUtils.createNamespaceString(project, pack);
 			NamespaceType nsType = NamespaceUtils.getServiceNamespaceType(getServiceInfo(), namespaceUri);
 			if (nsType == null) {
-				// create a new namespace from the package
-				try {
-					nsType = NamespaceUtils.createNamespaceFromUmlPackage(
-						project, pack, getGME(), getSchemaDir());
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					ErrorDialog.showErrorDialog("Error creating namespace type: " + ex.getMessage());
-				}
-				
-				if (nsType != null) {
-					// add the new namespace to the service
-					CommonTools.addNamespace(getServiceInfo().getServiceDescriptor(), nsType);
+				// ask the user to locate the schemas
+				String[] message = {
+					"No namespace is present in the service for the package",
+					pack.getName() + ".",
+					"Please specify a schema."
+				};
+				JOptionPane.showMessageDialog(this, message);
+				CadsrPackage tempPackage = new CadsrPackage();
+				tempPackage.setName(pack.getName());
+				tempPackage.setMappedNamespace(namespaceUri);
+				NamespaceType[] namespaces = SchemaResolutionDialog.resolveSchemas(getServiceInfo(), tempPackage);
+				if (namespaces != null) {
+					nsType = namespaces[0];
+					// add the new namespaces to the service
+					for (int i = 0; i < namespaces.length; i++) {
+						CommonTools.addNamespace(getServiceInfo().getServiceDescriptor(), namespaces[i]);
+					}
 				}
 			}
 			if (nsType != null) {
@@ -1270,36 +1265,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				}				
 			}
 		}
-	}
-	
-	
-	private XMLDataModelService getGME() throws MobiusException {
-		String serviceId = null;
-		// try to find the GME url as configured in the introduce properties
-		List discoveryExtensions = ExtensionsLoader.getInstance().getDiscoveryExtensions();
-		for (int i = 0; i < discoveryExtensions.size(); i++) {
-			DiscoveryExtensionDescriptionType disc = (DiscoveryExtensionDescriptionType) discoveryExtensions.get(i);
-			if (disc.getName().equals("gme_discovery")) {
-				Properties props = disc.getProperties();
-				serviceId = ExtensionTools.getProperty(props, "GME_URL");
-			}				
-		}
-		if (serviceId == null) {
-			// get GME url from properties
-			serviceId = ExtensionTools.getProperty(getExtensionDescription().getProperties(), "GME_URL");
-		}
-		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-		XMLDataModelService gmeHandle = (XMLDataModelService) GridServiceResolver.getInstance()
-			.getGridService(serviceId);
-		return gmeHandle;
-	}
-	
-	
-	private File getSchemaDir() {
-		String dir = getServiceInfo().getBaseDirectory().getAbsolutePath() + File.separator +
-			"schema" + File.separator + getServiceInfo().getIntroduceServiceProperties()
-			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-		return new File(dir);
 	}
 	
 	
