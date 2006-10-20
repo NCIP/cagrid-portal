@@ -44,6 +44,7 @@ TODO:
 34[D]: Add utility features for class name to QName mapping.  Generated at service build time with introduce extension.
 35[D]: Make cql query processor jar file selector not allow you to select a directory as a jar file
 	-- This actually used the ResourceManager from Introduce, which did the wrong thing.  So it's fixed in Introduce, and anyone using that call will get the fix too
+36[ ]: Add unit tests for CQL Results validation
 
 I = In Progress
 D = Done
