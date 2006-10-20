@@ -5,12 +5,12 @@ package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nih.nci.cagrid.evsgridservice.client.EVSGridServiceClient;
 import gov.nih.nci.cagrid.evs.service.*;
-import gov.nih.nci.evs.domain.Source;
-import gov.nih.nci.evs.domain.MetaThesaurusConcept;
-import gov.nih.nci.evs.domain.DescLogicConcept;
-import gov.nih.nci.evs.domain.HistoryRecord;
+import gov.nih.nci.evs.domain.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
 
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -44,20 +44,141 @@ public class EvsCheckServiceStep
 	public void runStep() 
 		throws Exception
 	{
+
+        // There are two main parts for system testing. One is to test the Metathesaurus and other is to
+        // test the NCI Thesaurus.
+        testMetaThesaurus();
+
+
         // Test getMetaSources
         testGetMetaSources();
 
         // Test getVocabularyNames
         testGetVocabularyNames();
 
+        //test searching meta thesaurus
         testSearchMetaThesaurusConcept();
 
+        // test obtaining history record
         testGetHistoryRecords();
 
+        // test searching meta thesaurus using code
         testSearchSourceByCode();
 
 
     }
+
+    /**
+     * This method will use some common search terms that are relevant for cancer and try to navigate the
+     * metathesaurus and in the process test the relevant APIs.
+     * @throws Exception
+     */
+
+    public void testMetaThesaurus()
+    throws Exception
+    {
+        // Search term = Breast
+        String searchTerms[] = new String[]{"Breast"};
+        EVSGridServiceClient client = new EVSGridServiceClient(endpoint);
+
+        // First, get a list of valid metasources
+        Source[] sources = client.getMetaSources();
+        assertNotNull(sources);
+
+        // Get the  list
+        List sourceList = Arrays.asList(sources);
+
+
+        EVSMetaThesaurusSearchParams evsMetaThesaurusSearchParam = new EVSMetaThesaurusSearchParams();
+
+
+        evsMetaThesaurusSearchParam.setLimit(100);
+        evsMetaThesaurusSearchParam.setSource("*");
+        evsMetaThesaurusSearchParam.setCui(false);
+        evsMetaThesaurusSearchParam.setShortResponse(false);
+        evsMetaThesaurusSearchParam.setScore(false);
+
+        for (int i=0; i < searchTerms.length;i++)
+        {
+            // Check for valid Metathesarus concept information for the search term
+            evsMetaThesaurusSearchParam.setSearchTerm(searchTerms[i]);
+            MetaThesaurusConcept metaConcept = testSearchMetaThesaurusConcept(evsMetaThesaurusSearchParam);
+
+            assertNotNull("Meta Thesaurus concept for " + searchTerms[i] + " is null!", metaConcept);
+
+            // Get the source Object and make sure that the source corresponds to the one in the list
+
+            ArrayList sourceArray = metaConcept.getSourceCollection();
+            assertNotNull("MetaThesaurus Source collection is null", sourceArray);
+            for (int j=0; j < sourceArray.size();j++)
+            {
+                Source source = (Source) sourceArray.get(j);
+                // Check and make sure that the Source object is part of the Source collection
+                assertTrue("Source (Abbr): " + source.getAbbreviation() + " is not present in metathesaurus!", sourceList.contains(source));
+            }
+
+            // Get Atom Collection and then use the Atom:code and Source:abbreviation to determine if the Meta Thesaurus concept
+            // is valid
+
+            ArrayList atomArray = metaConcept.getAtomCollection();
+            assertNotNull("MetaThesaurus atom collection is null", atomArray);
+
+            EVSSourceSearchParams evsSourceParam = new EVSSourceSearchParams();
+            for (int j=0; j < atomArray.size();j++)
+            {
+                Atom atom = (Atom) atomArray.get(j);
+
+                assertNotNull("atom is null!", atom);
+                assertNotNull("atom:code is null!", atom.getCode());
+                assertNotNull("atom:lui is null!", atom.getLui());
+                assertNotNull("atom:Name is null!", atom.getName());
+                assertNotNull("atom:Origin is null!", atom.getOrigin());
+                assertNotNull("atom:Source is null!", atom.getSource());
+
+
+                // Get the source name and check if it is valid
+                Source source = atom.getSource();
+                // Check and make sure that the Source object is part of the Source collection
+                assertTrue("Source (Abbr): " + source.getAbbreviation() + " is not present in metathesaurus!", sourceList.contains(source));
+
+                // Atom:code can be empty which is defined by string:NOCODE. In that case, the API will not get the
+                // valid MetaThesaurus concept
+
+                    evsSourceParam.setCode(atom.getCode());
+                    evsSourceParam.setSourceAbbreviation(source.getAbbreviation());
+
+                    // Get Meta Thesaurus concept based on the EVSourceParam
+                    MetaThesaurusConcept metaConcept2 = testSearchSourceByCode(evsSourceParam);
+
+                if ( atom.getCode() != null &&
+                     atom.getCode().length() > 0 &&
+                     !atom.getCode().equalsIgnoreCase("NOCODE"))
+                {
+                    assertNotNull("MetaThesaurusConcept for the give EVS Source abbreviation: "
+                            + source.getAbbreviation() +
+                            " and atom code: "
+                            + atom.getCode() +
+                            " is null", metaConcept2);
+                }
+                else
+                {
+                    // Assert that the value returned is null
+                    assertNull("Meta Thesaurus concept is not null", metaConcept2);
+                }
+            }
+
+
+            // Test the synonymcollection attribute - This is not working!!!
+            /*
+            ArrayList synonymCollection = metaConcept.getSynonymCollection();
+            if (synonymCollection != null && synonymCollection.size() > 0)
+            {
+                System.out.println("Synonym element class name: " + synonymCollection.get(0).getClass().toString());
+            }
+            */
+        }
+    }
+
 
     /**
      * Test the method getMetaSources
@@ -116,6 +237,37 @@ public class EvsCheckServiceStep
         }
 
     }
+
+    /**
+     * Search Meta thesaurus based on Search param provided by class:EVSMetaThesaurusSearchParams
+     * @param metaParams
+     * @throws Exception
+     */
+    public MetaThesaurusConcept testSearchMetaThesaurusConcept(EVSMetaThesaurusSearchParams metaParams)
+    throws Exception
+    {
+        System.out.println("Testing:searchMetaThesaurusConcep based on valid EVSMetaThesaurusSearchParams !");
+
+        EVSGridServiceClient client = new EVSGridServiceClient(endpoint);
+        MetaThesaurusConcept[] metaConcept = client.searchMetaThesaurus(metaParams);
+
+        assertNotNull("searchMetaThesaurus returned Null", metaConcept);
+
+        assertTrue("Result is over the limit specified by the EVSMetaThesaurusSearchParams " +
+                "searc limit attribute: " + metaParams.getLimit(),
+                (metaConcept.length > 0 && metaConcept.length <= metaParams.getLimit()));
+
+        if (metaConcept != null && metaConcept.length > 0)
+        {
+            for (int i=0; i < metaConcept.length; i++)
+            {
+                MetaThesaurusConcept meta = metaConcept[i];
+                assertNotNull("MetaThesaurusConcept object is Null", meta);
+            }
+        }
+        return ((metaConcept != null) ? metaConcept[0] : null);
+    }
+
 
     /**
      *
@@ -244,5 +396,30 @@ public class EvsCheckServiceStep
             }
         }
     }
+
+    /**
+     *
+     * @throws Exception
+     */
+    public MetaThesaurusConcept testSearchSourceByCode(EVSSourceSearchParams evsSourceParams)
+    throws Exception
+    {
+        System.out.println("testing:searchSourceByCode!");
+
+        EVSGridServiceClient client = new EVSGridServiceClient(endpoint);
+        MetaThesaurusConcept[] metaConcept = client.searchSourceByCode(evsSourceParams);
+
+        if (metaConcept != null && metaConcept.length > 0)
+        {
+            for (int i=0; i < metaConcept.length; i++)
+            {
+                MetaThesaurusConcept meta = metaConcept[i];
+                assertNotNull("MetaThesaurusConcept object is Null", meta);
+            }
+        }
+        return ((metaConcept != null) ? metaConcept[0] : null);
+    }
+
+
 
 }
