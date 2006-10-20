@@ -1140,7 +1140,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 						classToElementNames.put(map.getClassName(), map.getElementName());
 						// add the classes for the uml package to the tree
 						UMLClassTreeNode node = getUmlTree().addUmlClass(packageName, map.getClassName());
-						node.getCheckBox().setSelected(map.isSelected());								// TODO: I may have to add the type to the types table here
+						node.getCheckBox().setSelected(map.isSelected());
 					}
 				}
 			}
@@ -1150,16 +1150,14 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	
 	
 	private void saveProcessorClassName(String className) throws Exception {
-		if (className != null) {
-			// store the property
-			CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(), 
-				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false);
-			// blow away the query processor class properties from the extension data
-			Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
-			data.setCQLProcessorConfig(null);
-			ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
-			getQpParamsTable().classChanged();
-		}
+		// store the property
+		CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(), 
+			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false);
+		// blow away the query processor class properties from the extension data
+		Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
+		data.setCQLProcessorConfig(null);
+		ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
+		getQpParamsTable().classChanged();
 	}
 	
 	

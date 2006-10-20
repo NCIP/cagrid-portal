@@ -352,6 +352,7 @@ public class ClassBrowserPanel extends JPanel {
 					fireClassSelectionChanged();
 				}
 			});
+			// add listener for manual changes to the class selection
 			Component c = classSelectionComboBox.getEditor().getEditorComponent();
 			((JTextField) c).getDocument().addDocumentListener(new DocumentListener() {
 				public void insertUpdate(DocumentEvent e) {

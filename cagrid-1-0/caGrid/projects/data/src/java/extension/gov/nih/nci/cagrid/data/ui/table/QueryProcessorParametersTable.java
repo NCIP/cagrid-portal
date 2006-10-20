@@ -131,15 +131,15 @@ public class QueryProcessorParametersTable extends JTable {
 	
 	
 	private Class getQueryProcessorClass() throws Exception {
-		String[] libs = getJarFilenames();
-		URL[] urls = new URL[libs.length];
-		for (int i = 0; i < libs.length; i++) {
-			File libFile = new File(libs[i]);
-			urls[i] = libFile.toURL();
-		}
-		ClassLoader loader = new URLClassLoader(urls, getClass().getClassLoader());
 		String className = getQpClassname();
 		if (className != null && !className.endsWith(DataServiceConstants.QUERY_PROCESSOR_STUB_NAME)) {
+			String[] libs = getJarFilenames();
+			URL[] urls = new URL[libs.length];
+			for (int i = 0; i < libs.length; i++) {
+				File libFile = new File(libs[i]);
+				urls[i] = libFile.toURL();
+			}
+			ClassLoader loader = new URLClassLoader(urls, getClass().getClassLoader());
 			Class qpClass = loader.loadClass(className);
 			return qpClass;
 		}
