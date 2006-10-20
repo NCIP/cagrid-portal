@@ -65,15 +65,15 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 
 	private void modifyMetadata(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
-		String filename = getFilename(info);
-		if (filename == null) {
-			filename = DEFAULT_DOMAIN_MODEL_XML_FILE;
+		String destinationDomainModel = getDestinationDomainModelFilename(info);
+		if (destinationDomainModel == null) {
+			destinationDomainModel = DEFAULT_DOMAIN_MODEL_XML_FILE;
 		}
 
 		// find the service's etc directory, where the domain model goes
 		String domainModelFile = info.getIntroduceServiceProperties().getProperty(
 			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
-			+ File.separator + "etc" + File.separator + filename;
+			+ File.separator + "etc" + File.separator + destinationDomainModel;
 
 		LOG.debug("Looking for user-supplied domain model xml file");
 		String suppliedDomainModel = null;
@@ -96,7 +96,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		}
 
 		// set the domain model file name
-		setDomainModelResourceProperty(info, filename);
+		setDomainModelResourceProperty(info, destinationDomainModel);
 
 		// if the domainModel.xml doesn't exist, don't try to populate the
 		// domain model metadata on service startup
@@ -108,7 +108,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 	}
 
 
-	private String getFilename(ServiceInformation info) {
+	private String getDestinationDomainModelFilename(ServiceInformation info) {
 		ServiceType mainServ = info.getServiceDescriptor().getServices().getService()[0];
 		if (mainServ.getResourcePropertiesList() != null
 			&& mainServ.getResourcePropertiesList().getResourceProperty() != null) {
