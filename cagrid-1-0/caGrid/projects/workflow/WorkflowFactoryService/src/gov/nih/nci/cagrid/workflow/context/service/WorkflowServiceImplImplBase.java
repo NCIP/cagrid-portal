@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.workflow.context.service;
 
-import gov.nih.nci.cagrid.workflow.context.service.globus.resource.BaseResource;
+import gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowResource;
 import gov.nih.nci.cagrid.workflow.service.ServiceConfiguration;
 
 import java.rmi.RemoteException;
@@ -49,17 +49,17 @@ public abstract class WorkflowServiceImplImplBase {
 	}
 	
 	
-	public gov.nih.nci.cagrid.workflow.context.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
+	public gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowServiceHome getResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("home");
-		return (gov.nih.nci.cagrid.workflow.context.service.globus.resource.BaseResourceHome)resource;
+		return (gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowServiceHome)resource;
 	}
 
 	
 	
 	
-	public gov.nih.nci.cagrid.workflow.service.globus.resource.BaseResourceHome getWorkflowFactoryServiceResourceHome() throws Exception {
+	public gov.nih.nci.cagrid.workflow.service.globus.resource.WorkflowFactoryHome getWorkflowFactoryServiceResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("workflowFactoryServiceHome");
-		return (gov.nih.nci.cagrid.workflow.service.globus.resource.BaseResourceHome)resource;
+		return (gov.nih.nci.cagrid.workflow.service.globus.resource.WorkflowFactoryHome)resource;
 	}
 	
 	

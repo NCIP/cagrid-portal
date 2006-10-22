@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.workflow.service.globus.resource;
 import javax.xml.namespace.QName;
 
 
-public interface ResourceConstants {
+public interface WorkflowFactoryConstants {
 	public static final String SERVICE_NS = "http://workflow.cagrid.nci.nih.gov/WorkflowFactoryService";
 	public static final QName RESOURCE_KEY = new QName(SERVICE_NS, "WorkflowFactoryServiceKey");
 	public static final QName RESOURCE_PROPERY_SET = new QName(SERVICE_NS, "WorkflowFactoryServiceResourceProperties");

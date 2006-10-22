@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.workflow.service;
 
-import gov.nih.nci.cagrid.workflow.service.globus.resource.BaseResource;
+import gov.nih.nci.cagrid.workflow.service.globus.resource.WorkflowFactoryResource;
 import gov.nih.nci.cagrid.workflow.service.ServiceConfiguration;
 
 import java.rmi.RemoteException;
@@ -49,17 +49,17 @@ public abstract class WorkflowFactoryServiceImplBase {
 	}
 	
 	
-	public gov.nih.nci.cagrid.workflow.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
+	public gov.nih.nci.cagrid.workflow.service.globus.resource.WorkflowFactoryHome getResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("home");
-		return (gov.nih.nci.cagrid.workflow.service.globus.resource.BaseResourceHome)resource;
+		return (gov.nih.nci.cagrid.workflow.service.globus.resource.WorkflowFactoryHome)resource;
 	}
 
 	
 	
 	
-	public gov.nih.nci.cagrid.workflow.context.service.globus.resource.BaseResourceHome getWorkflowServiceImplResourceHome() throws Exception {
+	public gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowServiceHome getWorkflowServiceImplResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("workflowServiceImplHome");
-		return (gov.nih.nci.cagrid.workflow.context.service.globus.resource.BaseResourceHome)resource;
+		return (gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowServiceHome)resource;
 	}
 	
 	
@@ -85,9 +85,9 @@ public abstract class WorkflowFactoryServiceImplBase {
 	
 	
 	protected Object getMetadata(QName metadataQName) {
-		BaseResource serviceBaseResource = null;
+		WorkflowFactoryResource serviceBaseResource = null;
 		try {
-			serviceBaseResource = (BaseResource) ResourceContext.getResourceContext().getResource();
+			serviceBaseResource = (WorkflowFactoryResource) ResourceContext.getResourceContext().getResource();
 		} catch (ResourceContextException e) {
 			return null;
 		} catch (ResourceException e) {

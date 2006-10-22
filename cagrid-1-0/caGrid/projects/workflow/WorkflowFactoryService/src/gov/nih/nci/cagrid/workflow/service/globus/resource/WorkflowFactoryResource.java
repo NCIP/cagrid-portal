@@ -30,9 +30,9 @@ import commonj.timers.Timer;
 
 import gov.nih.nci.cagrid.common.Utils;
 
-public class BaseResource implements Resource, ResourceProperties {
+public class WorkflowFactoryResource implements Resource, ResourceProperties {
 
-	static final Log logger = LogFactory.getLog(BaseResource.class);
+	static final Log logger = LogFactory.getLog(WorkflowFactoryResource.class);
 
 	/** Stores the ResourceProperties of this service */
 	private ResourcePropertySet propSet;
@@ -52,7 +52,7 @@ public class BaseResource implements Resource, ResourceProperties {
 	// initializes the resource
 	public void initialize() throws Exception {
 		// create the resource property set
-		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);
+		this.propSet = new SimpleResourcePropertySet(WorkflowFactoryConstants.RESOURCE_PROPERY_SET);
 
 		// this loads the metadata from XML files
 		populateResourceProperty();
