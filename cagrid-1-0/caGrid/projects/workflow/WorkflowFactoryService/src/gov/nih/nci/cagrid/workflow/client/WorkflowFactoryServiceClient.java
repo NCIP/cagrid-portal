@@ -1,8 +1,12 @@
 package gov.nih.nci.cagrid.workflow.client;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
+
+import javax.xml.namespace.QName;
 
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.client.AxisClient;
@@ -14,6 +18,8 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.axis.utils.ClassUtils;
 
 import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.encoding.ObjectSerializer;
+import org.globus.wsrf.utils.AddressingUtils;
 
 import gov.nih.nci.cagrid.workflow.stubs.WorkflowFactoryServicePortType;
 import gov.nih.nci.cagrid.workflow.stubs.service.WorkflowFactoryServiceAddressingLocator;
@@ -103,6 +109,7 @@ public class WorkflowFactoryServiceClient extends ServiceSecurityClient implemen
 	}
 	public static void main(String [] args){
 	    System.out.println("Running the Grid Service Client");
+	    FileWriter writer = null;
 		try{
 			String url = null;
 		    String fileName = null;
@@ -125,10 +132,24 @@ public class WorkflowFactoryServiceClient extends ServiceSecurityClient implemen
 				}
 		    WorkflowFactoryServiceClient client = new WorkflowFactoryServiceClient(url);
 		    WMSInputType input = createInput(fileName);
-		    client.createWorkflow(input);
+		    WMSOutputType output = client.createWorkflow(input);
+		    EndpointReferenceType epr = output.getWorkflowEPR();
+		    writer = new FileWriter("workflow_" + input.getWorkflowName() + "_epr");
+            writer.write( 
+					ObjectSerializer.toString(epr, new QName("", "WMS_EPR")));
+            
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
+		} finally {
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 

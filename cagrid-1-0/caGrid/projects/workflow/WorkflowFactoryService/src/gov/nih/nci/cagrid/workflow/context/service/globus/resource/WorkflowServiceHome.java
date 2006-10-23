@@ -48,7 +48,7 @@ public class WorkflowServiceHome extends ResourceHomeImpl {
 	public SimpleResourceKey create(Calendar terminationTime, 
 			WMSInputType input) throws Exception {
 		QName workflowQName =
-			new QName("http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl");
+			new QName("http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl", "WorkflowKey");
 		SimpleResourceKey key = new SimpleResourceKey(workflowQName, input.getWorkflowName());
 		WorkflowResource workflowResource = new WorkflowResource(input, terminationTime);
 		this.add(key, workflowResource);

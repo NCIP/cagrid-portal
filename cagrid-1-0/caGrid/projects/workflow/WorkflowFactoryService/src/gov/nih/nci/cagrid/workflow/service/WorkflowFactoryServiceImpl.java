@@ -1,19 +1,21 @@
 package gov.nih.nci.cagrid.workflow.service;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowServiceHome;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType;
-import gov.nih.nci.cagrid.workflow.stubs.types.WSDLReferences;
 
-import java.io.File;
 import java.rmi.RemoteException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.xml.namespace.QName;
 
+import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.globus.wsrf.Constants;
+import org.globus.wsrf.container.ServiceHost;
+import org.globus.wsrf.encoding.ObjectSerializer;
 import org.globus.wsrf.impl.SimpleResourceKey;
+import org.globus.wsrf.utils.AddressingUtils;
 
 
 /** 
@@ -46,7 +48,16 @@ public class WorkflowFactoryServiceImpl extends WorkflowFactoryServiceImplBase {
 			workflowHome = (WorkflowServiceHome) ctx.lookup(lookupString);
 			
 			key = workflowHome.create(null, wMSInputElement);
+			//Create the EPR here
+			EndpointReferenceType epr = new EndpointReferenceType();
+			epr = AddressingUtils.createEndpointReference(ServiceHost.getBaseURL() +
+					"/cagrid/WorkflowServiceImpl", key);
+			System.out.println("EPR: " + 
+					ObjectSerializer.toString(epr, new QName("", "EPR")));
+			output.setWorkflowEPR(epr);
+			
 		} catch (Exception e){
+			e.printStackTrace();
 			throw new RemoteException ("Exception deploying workflow:" ,e );
 		}
 		return output;
