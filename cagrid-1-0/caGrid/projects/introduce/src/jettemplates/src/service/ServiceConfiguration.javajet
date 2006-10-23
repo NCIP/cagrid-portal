@@ -36,16 +36,27 @@ public class ServiceConfiguration {
 	if(sproperties!=null && sproperties.getProperty()!=null){
 	for (int i = 0; i < sproperties.getProperty().length; i++) {
 		ServicePropertiesProperty prop = sproperties.getProperty(i);
+		if (prop.getIsFromETC().booleanValue()) {
 	%>
 	public File get<%=TemplateUtils.upperCaseFirstCharacter(prop.getKey())%>() {
 		return new File(ContainerConfig.getBaseDirectory() + File.separator + <%=prop.getKey()%>);
 	}
+	<%
+	     } else {
+	%>
+	public String get<%=TemplateUtils.upperCaseFirstCharacter(prop.getKey())%>() {
+		return <%=prop.getKey()%>;
+	}
+	<%
+	     }
+	%>
 	
 	public void set<%=TemplateUtils.upperCaseFirstCharacter(prop.getKey())%>(String <%=prop.getKey()%>) {
 		this.<%=prop.getKey()%> = <%=prop.getKey()%>;
 	}
 
 	<%
+		
 	}
 	}
 	%>
