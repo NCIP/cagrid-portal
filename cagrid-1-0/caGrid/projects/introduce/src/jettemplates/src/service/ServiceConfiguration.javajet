@@ -38,7 +38,7 @@ public class ServiceConfiguration {
 		ServicePropertiesProperty prop = sproperties.getProperty(i);
 	%>
 	public File get<%=TemplateUtils.upperCaseFirstCharacter(prop.getKey())%>() {
-		return new File(ContainerConfig.getBaseDirectory() + File.seperator + <%=prop.getKey()%>);
+		return new File(ContainerConfig.getBaseDirectory() + File.separator + <%=prop.getKey()%>);
 	}
 	
 	public void set<%=TemplateUtils.upperCaseFirstCharacter(prop.getKey())%>(String <%=prop.getKey()%>) {
