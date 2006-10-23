@@ -1,6 +1,9 @@
 package gov.nih.nci.cagrid.introduce.extensions.metadata.codegen;
 
+import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
+import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
@@ -98,6 +101,14 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 		// shell it without UML informaiton
 		populateService(metadata.getServiceDescription().getService(), info);
 
+		// try to annotate the metadata with cadsr extract
+		try {
+			CaDSRServiceI cadsrService = new CaDSRServiceClient(getCaDSRURL());
+			cadsrService.annotateServiceMetadata(metadata);
+		} catch (Exception e) {
+			LOG.error("Problem annotating ServiceMetadata; using unannotated model.", e);
+		}
+
 		// serialize the model
 		try {
 			FileWriter writer = new FileWriter(filename);
@@ -107,6 +118,11 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 			throw new CodegenExtensionException("Error serializing metadata document.", e);
 		}
 
+	}
+
+
+	private String getCaDSRURL() {
+		return ResourceManager.getServiceURLProperty(MetadataConstants.CADSR_URL_PROPERTY);
 	}
 
 
@@ -127,7 +143,6 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 					}
 
 					return rp.getFileLocation();
-
 				}
 			}
 		}

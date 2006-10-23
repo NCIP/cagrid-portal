@@ -4,7 +4,8 @@
 		<ns1:CreationPostProcessor>gov.nih.nci.cagrid.introduce.extensions.metadata.creation.ServiceMetadataCreationPostProcessor</ns1:CreationPostProcessor>
 		<ns1:CodegenPreProcessor>gov.nih.nci.cagrid.introduce.extensions.metadata.codegen.MetadataCodegenPreProcessor</ns1:CodegenPreProcessor>
 		<ns1:CodegenPostProcessor>gov.nih.nci.cagrid.introduce.extensions.metadata.codegen.MetadataCodegenPostProcessor</ns1:CodegenPostProcessor>
-		<!--<ns1:ServiceModificationUIPanel>gov.nih.nci.cagrid.data.ui.types.TargetTypeSelectionPanel</ns1:ServiceModificationUIPanel>-->
-		<ns1:Properties/>
+		<ns1:Properties>
+			<property makeGlobal="true" type="SERVICE_URL" key="CADSR_URL" value="http://cagrid05.bmi.ohio-state.edu:8080/wsrf/services/cagrid/CaDSRService"/> 
+		</ns1:Properties>
 	</ns1:ServiceExtensionDescription>
 </ns1:ExtensionDescription>

@@ -30,4 +30,6 @@ public interface MetadataConstants {
 
 	public static final QName SERVICE_QNAME = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service",
 		"Service");
+	
+	public static final String CADSR_URL_PROPERTY = "CADSR_URL";
 }
