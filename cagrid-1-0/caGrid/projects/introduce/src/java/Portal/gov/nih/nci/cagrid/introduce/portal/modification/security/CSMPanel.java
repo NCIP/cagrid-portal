@@ -27,6 +27,8 @@ import javax.swing.border.TitledBorder;
  */
 
 public class CSMPanel extends JPanel {
+	
+	public final static String CSM_CONFIGURATION_FILE = "csmConfiguration";
 
 	private static final long serialVersionUID = 1L;
 	private JLabel jLabel = null;

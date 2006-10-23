@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.gridca.ui.CertificatePanel;
 import gov.nih.nci.cagrid.gridca.ui.ProxyPanel;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor.GridGrouperExpressionEditor;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.GridMapAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.NoAuthorization;
@@ -23,6 +24,7 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.BorderLayout;
@@ -175,10 +177,13 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private GridGrouperExpressionEditor gridGrouper = null;
 
 	private CSMPanel csmPanel = null;
+	
+	private ServiceDescription description;
 
 
-	public ServiceSecurityPanel(ServiceType service) {
+	public ServiceSecurityPanel(ServiceDescription description, ServiceType service) {
 		super();
+		this.description = description;
 		this.service = service;
 		initialize();
 		try {
@@ -360,7 +365,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				MembershipExpression exp = ((GridGrouperExpressionEditor) getGridGrouper()).getMembershipExpression();
 				sa.setGridGrouperAuthorization(exp);
 			} else if (authType.equals(CSM_AUTHORIZATION)) {
-				//CommonTools.setServiceProperty(desc, key, value, isFromETC);
+				CommonTools.setServiceProperty(this.description, CSMPanel.CSM_CONFIGURATION_FILE, "", false);
 				sa.setCSMAuthorization(getCsmPanel().getAuthorization());
 			} else {
 				sa.setNoAuthorization(new NoAuthorization());

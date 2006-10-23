@@ -213,6 +213,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private JCheckBox propertyIsFromETCCheckBox = null;
 
 	private JPanel resourcesOptionsPanel = null;
+	
 
 
 	/**
@@ -330,6 +331,7 @@ public class ModificationViewer extends GridPortalComponent {
 			ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(this.methodsDirectory
 				.getAbsolutePath()
 				+ File.separator + "introduce.xml", ServiceDescription.class);
+			
 			if (introService.getIntroduceVersion() == null
 				|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
 				throw new Exception(
@@ -954,7 +956,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private ServiceSecurityPanel getSecurityPanel() {
 		if (securityPanel == null) {
 			try {
-				securityPanel = new ServiceSecurityPanel(info.getServices().getService(0));
+				securityPanel = new ServiceSecurityPanel(info.getServiceDescriptor(),info.getServices().getService(0));
 			} catch (Exception e) {
 				e.printStackTrace();
 				ErrorDialog.showErrorDialog(e);

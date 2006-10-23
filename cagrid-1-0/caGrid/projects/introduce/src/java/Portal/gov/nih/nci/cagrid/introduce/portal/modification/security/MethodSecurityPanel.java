@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.security;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.ui.expressioneditor.GridGrouperExpressionEditor;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodAuthorization;
@@ -130,10 +131,13 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private GridGrouperExpressionEditor gridGrouper = null;
 
 	private CSMPanel csmPanel = null;
+	
+	private ServiceDescription description;
 
 
-	public MethodSecurityPanel(ServiceType service, MethodType method) {
+	public MethodSecurityPanel(ServiceDescription description,ServiceType service, MethodType method) {
 		super();
+		this.description = description;
 		this.service = service;
 		this.serviceSecurity = this.service.getServiceSecurity();
 		this.method = method;
@@ -313,7 +317,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 				MembershipExpression exp = ((GridGrouperExpressionEditor) getGridGrouper()).getMembershipExpression();
 				ma.setGridGrouperAuthorization(exp);
 			} else if (authType.equals(CSM_AUTHORIZATION)) {
-				// CommonTools.setServiceProperty(desc, key, value, isFromETC);
+			   CommonTools.setServiceProperty(this.description, CSMPanel.CSM_CONFIGURATION_FILE, "", false);
 				ma.setCSMAuthorization(getCsmPanel().getAuthorization());
 			} else {
 				ma.setNoAuthorization(new NoAuthorization());
