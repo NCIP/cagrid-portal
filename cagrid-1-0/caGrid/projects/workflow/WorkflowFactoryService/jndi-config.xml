@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
   <service name="SERVICE-INSTANCE-PREFIX/WorkflowServiceImpl">
-    <resource name="home" type="gov.nih.nci.cagrid.workflow.context.service.globus.resource.BaseResourceHome">
+    <resource name="home" type="gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowServiceHome">
       <resourceParams>
         <parameter>
           <name>factory</name>
           <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+        <parameter>
+            <name>resourceClass</name>
+            <value>gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowResource</value>
+        </parameter>
+        <parameter>
+            <name>resourceKeyName</name>
+            <value>{http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl}WorkflowKey</value>
+        </parameter>
+        <parameter>
+            <name>sweeperDelay</name>
+            <value>60000</value>
         </parameter>
       </resourceParams>
     </resource>
@@ -39,7 +51,7 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="gov.nih.nci.cagrid.workflow.service.globus.resource.BaseResourceHome">
+    <resource name="home" type="gov.nih.nci.cagrid.workflow.service.globus.resource.WorkflowFactoryHome">
       <resourceParams>
         <parameter>
           <name>factory</name>

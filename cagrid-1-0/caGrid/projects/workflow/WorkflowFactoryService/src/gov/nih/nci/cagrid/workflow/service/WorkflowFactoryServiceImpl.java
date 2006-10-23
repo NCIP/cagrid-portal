@@ -41,7 +41,8 @@ public class WorkflowFactoryServiceImpl extends WorkflowFactoryServiceImplBase {
 		try {
 			Context ctx = new InitialContext();
 			String lookupString = Constants.JNDI_SERVICES_BASE_NAME 
-				+ "WorkflowServiceImpl" + "/home";
+				+ "cagrid/WorkflowServiceImpl" + "/home";
+			System.out.println("Context String : " + lookupString);
 			workflowHome = (WorkflowServiceHome) ctx.lookup(lookupString);
 			
 			key = workflowHome.create(null, wMSInputElement);
