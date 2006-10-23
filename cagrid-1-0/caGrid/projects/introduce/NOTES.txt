@@ -9,8 +9,6 @@ assumption is made that when a method is imported from a wsdl that all the messa
 
 To Do:
 
-fix documentation link in installer and make sure relavent documentation is in there
-
 reload preferences from defaults
 
 (related to above)... when a method isn't found for modification, it should be re-added (in case they deleted it)
@@ -48,6 +46,8 @@ add tests to system tests for (coverage report shows no coverage):
 add a .cvsignore file to generated skeletons that includes the gar.  my right mouse button is slowly wearing out... and i am lazy...
 
 ============================ D O N E ================================================================
+done)fix documentation link in installer and make sure relavent documentation is in there
+
 look at the upper case vs lower case methods issues.....
 
 set package name better in import window....use wsdl namespaces
