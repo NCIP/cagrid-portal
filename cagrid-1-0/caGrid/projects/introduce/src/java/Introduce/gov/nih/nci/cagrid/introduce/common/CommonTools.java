@@ -342,6 +342,10 @@ public class CommonTools {
 			&& (!Utils.equals(ss.getServiceAuthorization().getGridGrouperAuthorization(), ms.getMethodAuthorization()
 				.getGridGrouperAuthorization()))) {
 			return false;
+		} else if ((!Utils.equals(ss.getServiceAuthorization(), ms.getMethodAuthorization()))
+			&& (!Utils.equals(ss.getServiceAuthorization().getCSMAuthorization(), ms.getMethodAuthorization()
+				.getCSMAuthorization()))) {
+			return false;
 		} else {
 			return true;
 		}
@@ -412,13 +416,12 @@ public class CommonTools {
 
 
 	public static String methodTypeToString(MethodType method) {
-		//if it is imported from wsdl just return the name
+		// if it is imported from wsdl just return the name
 		if (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null
 			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
 			return method.getName();
 		}
-		
-		
+
 		// assume its void to start with
 		String output = "void";
 
@@ -478,7 +481,7 @@ public class CommonTools {
 		output += "  " + method.getName() + "(" + input + ")";
 
 		if (method.isIsImported()) {
-			
+
 		}
 
 		return output;
@@ -949,11 +952,12 @@ public class CommonTools {
 					if (exceptions != null) {
 						for (int e = 0; exceptions.getException() != null && e < exceptions.getException().length; e++) {
 							MethodTypeExceptionsException exception = exceptions.getException(e);
-							if(exception.getQname()!=null){
-							usedTypes.add(exception.getQname());
+							if (exception.getQname() != null) {
+								usedTypes.add(exception.getQname());
 							} else {
-								//this is just added int he gui and not in the actual types list yet
-								//it will be after the save
+								// this is just added int he gui and not in the
+								// actual types list yet
+								// it will be after the save
 							}
 						}
 					}

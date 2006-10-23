@@ -51,6 +51,8 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private final static String GRID_GROUPER_AUTHORIZATION = "Grid Grouper";
 
+	private final static String CSM_AUTHORIZATION = "Common Security Module (CSM)";
+
 	private JPanel secureCommunicationPanel = null;
 
 	private ButtonGroup buttonGroup = new ButtonGroup();
@@ -126,6 +128,8 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private MethodType method;
 
 	private GridGrouperExpressionEditor gridGrouper = null;
+
+	private CSMPanel csmPanel = null;
 
 
 	public MethodSecurityPanel(ServiceType service, MethodType method) {
@@ -308,6 +312,9 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 				// TODO: Validate the expression
 				MembershipExpression exp = ((GridGrouperExpressionEditor) getGridGrouper()).getMembershipExpression();
 				ma.setGridGrouperAuthorization(exp);
+			} else if (authType.equals(CSM_AUTHORIZATION)) {
+				// CommonTools.setServiceProperty(desc, key, value, isFromETC);
+				ma.setCSMAuthorization(getCsmPanel().getAuthorization());
 			} else {
 				ma.setNoAuthorization(new NoAuthorization());
 			}
@@ -358,6 +365,9 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 					if (ma.getGridGrouperAuthorization() != null) {
 						this.getGridGrouper().setExpression(ma.getGridGrouperAuthorization());
 						this.authorizationMechanism.setSelectedItem(GRID_GROUPER_AUTHORIZATION);
+					} else if (ma.getCSMAuthorization() != null) {
+						this.getCsmPanel().setAuthorization(ma.getCSMAuthorization());
+						this.authorizationMechanism.setSelectedItem(CSM_AUTHORIZATION);
 					} else {
 						this.authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
 					}
@@ -886,6 +896,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			});
 			authorizationMechanism.addItem(NO_AUTHORIZATION);
 			authorizationMechanism.addItem(GRID_GROUPER_AUTHORIZATION);
+			authorizationMechanism.addItem(CSM_AUTHORIZATION);
 		}
 		return authorizationMechanism;
 	}
@@ -903,6 +914,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			authPanel.setLayout(authLayout);
 			authPanel.add(getNoAuthorizationPanel(), NO_AUTHORIZATION);
 			authPanel.add(getGridGrouper(), getGridGrouper().getName());
+			authPanel.add(getCsmPanel(), getCsmPanel().getName());
 		}
 		return authPanel;
 	}
@@ -929,10 +941,25 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	 */
 	private GridGrouperExpressionEditor getGridGrouper() {
 		if (gridGrouper == null) {
-			gridGrouper = new GridGrouperExpressionEditor(GridGrouperURLManager.getGridGroupers(), GridGrouperURLManager.getLoadOnStartup());
+			gridGrouper = new GridGrouperExpressionEditor(GridGrouperURLManager.getGridGroupers(),
+				GridGrouperURLManager.getLoadOnStartup());
 			gridGrouper.setName(GRID_GROUPER_AUTHORIZATION);
 		}
 		return gridGrouper;
+	}
+
+
+	/**
+	 * This method initializes csmPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private CSMPanel getCsmPanel() {
+		if (csmPanel == null) {
+			csmPanel = new CSMPanel(service.getName(), method.getName());
+			csmPanel.setName(CSM_AUTHORIZATION);
+		}
+		return csmPanel;
 	}
 
 }

@@ -31,6 +31,7 @@
 			<xs:element name="NoAuthorization" minOccurs="1" maxOccurs="1" type="NoAuthorization"/>
 			<xs:element name="GridMapAuthorization" minOccurs="1" maxOccurs="1" type="GridMapAuthorization"/>
 			<xs:element name="GridGrouperAuthorization" minOccurs="1" maxOccurs="1" type="grouper:MembershipExpression"/>
+			<xs:element name="CSMAuthorization" minOccurs="1" maxOccurs="1" type="CSMAuthorization"/>
 		</xs:choice>
 	</xs:complexType>
 	
@@ -38,6 +39,7 @@
 		<xs:choice>
 			<xs:element name="NoAuthorization" minOccurs="1" maxOccurs="1" type="NoAuthorization"/>
 			<xs:element name="GridGrouperAuthorization" minOccurs="1" maxOccurs="1" type="grouper:MembershipExpression"/>
+			<xs:element name="CSMAuthorization" minOccurs="1" maxOccurs="1" type="CSMAuthorization"/>
 		</xs:choice>
 	</xs:complexType>
 	<xs:complexType name="NoAuthorization"/>
@@ -46,6 +48,21 @@
 			<xs:element name="GridMapFileLocation" minOccurs="1" maxOccurs="1" type="xs:string"/>
 		</xs:sequence>
 	</xs:complexType>
+	<xs:complexType name="CSMAuthorization">
+		<xs:sequence>
+			<xs:element name="ProtectionMethod" minOccurs="1" maxOccurs="1" type="ProtectionMethod"/>
+			<xs:element name="Privilege" minOccurs="1" maxOccurs="1" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="ProtectionMethod">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ServiceURI"/>
+			<xs:enumeration value="ServiceType"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	
 	<xs:complexType name="TransportLevelSecurity">
 		<xs:sequence>
 			<xs:element name="CommunicationMethod" minOccurs="1" maxOccurs="1" type="CommunicationMethod"/>
