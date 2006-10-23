@@ -164,6 +164,9 @@
 			<fileset dir="${classes.dir}">
 				<include name="**/*"/>
 			</fileset>
+			<fileset dir="${src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
 		</jar>
 		<jar jarfile="${test.project.jarfile}">
 			<manifest>
@@ -172,6 +175,9 @@
 			</manifest>
 			<fileset dir="${test.classes.dir}">
 				<include name="**/*"/>
+			</fileset>
+			<fileset dir="${test.src.dir}">
+				<include name="**/*.java"/>
 			</fileset>
 		</jar>
 	</target>

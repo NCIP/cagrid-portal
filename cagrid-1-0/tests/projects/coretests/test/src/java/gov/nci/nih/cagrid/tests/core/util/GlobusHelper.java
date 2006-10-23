@@ -3,11 +3,6 @@
  */
 package gov.nci.nih.cagrid.tests.core.util;
 
-import gov.nci.nih.cagrid.tests.core.util.EnvUtils;
-import gov.nci.nih.cagrid.tests.core.util.FileUtils;
-import gov.nci.nih.cagrid.tests.core.util.StdIOThread;
-//import gov.nih.nci.cagrid.tests.client.IntroduceEchoClient;
-
 import java.io.File;
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -63,7 +58,21 @@ public class GlobusHelper
 		this.securityDescriptor = new File(
 			System.getProperty("globus.securitydescriptor", "security-descriptor.xml")
 		);
+		if (secure) {
+//			echoHelper = new ServiceHelper("IntroduceEcho", this);
+			setUseCounterCheck(false);
+		}
 	}
+	
+//	public Vector<ServiceCreateStep> getCreateServiceSteps()
+//	{
+//		if (! this.secure) return new Vector<ServiceCreateStep>(0);
+//		
+//		ServiceCreateStep step = echoHelper.getCreateServiceStep();
+//		Vector<ServiceCreateStep> steps = new Vector<ServiceCreateStep>(1);
+//		steps.add(step);
+//		return steps;
+//	}
 	
 	public void createTempGlobus() 
 		throws IOException

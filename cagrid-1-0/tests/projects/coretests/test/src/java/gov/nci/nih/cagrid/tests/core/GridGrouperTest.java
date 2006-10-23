@@ -32,6 +32,7 @@ import gov.nci.nih.cagrid.tests.core.steps.GrouperRemoveMemberStep;
 import gov.nci.nih.cagrid.tests.core.steps.GrouperRemoveStemStep;
 import gov.nci.nih.cagrid.tests.core.steps.GrouperRevokePrivilegeStep;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
+import gov.nci.nih.cagrid.tests.core.util.ServiceHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 
@@ -106,8 +107,9 @@ public class GridGrouperTest
 	{
 		String idp = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=localhost/OU=IdP [1]/CN=";
 		
-		dorianGlobus = new GlobusHelper(true);
-		dorianGlobus.setUseCounterCheck(false);
+		ServiceHelper dorianHelper = new ServiceHelper("IntroduceEcho"); 
+		dorianGlobus = dorianHelper.getGlobus(); //new GlobusHelper(true);
+		//dorianGlobus.setUseCounterCheck(false);
 		dorianPort = Integer.parseInt(System.getProperty("test.globus.secure.port", "8443"));
 		dorianDir = new File(System.getProperty("dorian.dir",
 			".." + File.separator + ".." + File.separator + ".." + File.separator + 
@@ -118,9 +120,10 @@ public class GridGrouperTest
 			".globus" + File.separator + "certificates" + File.separator + "DorianTest_ca.1"
 		);
 
-		grouperGlobus = new GlobusHelper(true);
-		grouperGlobus.setUseCounterCheck(false);
 		grouperPort = Integer.parseInt(System.getProperty("test.globus.secure.port2", "9443"));
+		ServiceHelper grouperHelper = new ServiceHelper("IntroduceEcho", null, grouperPort);
+		grouperGlobus = grouperHelper.getGlobus(); //new GlobusHelper(true);
+		//grouperGlobus.setUseCounterCheck(false);
 		grouperDir = new File(System.getProperty("grouper.dir",
 			".." + File.separator + ".." + File.separator + ".." + File.separator + 
 			"caGrid" + File.separator + "projects" + File.separator + "gridgrouper"
@@ -135,7 +138,9 @@ public class GridGrouperTest
 		steps.add(new GTSSyncOnceStep(dorianGlobus));
 		steps.add(new GlobusDeployServiceStep(dorianGlobus, dorianDir));
 		steps.add(new DorianConfigureStep(dorianGlobus));
-		steps.add(new GlobusDeployServiceStep(dorianGlobus, new File("..", "echo")));
+		//steps.add(new GlobusDeployServiceStep(dorianGlobus, new File("..", "echo")));
+		steps.add(dorianHelper.getCreateServiceStep());
+		steps.add(new GlobusDeployServiceStep(dorianGlobus, dorianHelper.getCreateServiceStep().getServiceDir()));
 		steps.add(new GlobusStartStep(dorianGlobus, dorianPort));
 		
 		// initialize grouper
@@ -145,7 +150,9 @@ public class GridGrouperTest
 		steps.add(new GlobusCreateStep(grouperGlobus));
 		steps.add(new GTSSyncOnceStep(grouperGlobus));
 		steps.add(new GlobusDeployServiceStep(grouperGlobus, grouperDir));
-		steps.add(new GlobusDeployServiceStep(grouperGlobus, new File("..", "echo")));
+		//steps.add(new GlobusDeployServiceStep(grouperGlobus, new File("..", "echo")));
+		steps.add(grouperHelper.getCreateServiceStep());
+		steps.add(new GlobusDeployServiceStep(grouperGlobus, grouperHelper.getCreateServiceStep().getServiceDir()));
 		steps.add(new GlobusStartStep(grouperGlobus, grouperPort));
 		
 		// test successful authenticate

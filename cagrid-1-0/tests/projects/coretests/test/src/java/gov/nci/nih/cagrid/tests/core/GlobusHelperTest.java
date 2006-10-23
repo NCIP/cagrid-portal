@@ -10,8 +10,8 @@ import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
+import gov.nci.nih.cagrid.tests.core.util.ServiceHelper;
 
-import java.io.File;
 import java.util.Vector;
 
 import junit.framework.TestResult;
@@ -68,7 +68,8 @@ public class GlobusHelperTest
 	{
 		globus = new GlobusHelper();
 		port = Integer.parseInt(System.getProperty("test.globus.port", "8080"));
-		secureGlobus = new GlobusHelper(true);
+		ServiceHelper echoHelper = new ServiceHelper("IntroduceEcho"); 
+		secureGlobus = echoHelper.getGlobus(); //new GlobusHelper(true);
 		securePort = Integer.parseInt(System.getProperty("test.globus.secure.port", "8443"));
 
 		Vector steps = new Vector();
@@ -83,9 +84,11 @@ public class GlobusHelperTest
 		steps.add(new GlobusStopStep(globus, port));
 		steps.add(new GlobusCleanupStep(globus));
 
+		steps.add(echoHelper.getCreateServiceStep());
 		steps.add(new GlobusCreateStep(secureGlobus));
-		secureGlobus.setUseCounterCheck(false);
-		steps.add(new GlobusDeployServiceStep(secureGlobus, new File("..", "echo")));
+		//secureGlobus.setUseCounterCheck(false);
+		steps.add(new GlobusDeployServiceStep(secureGlobus, echoHelper.getCreateServiceStep().getServiceDir()));
+		//steps.add(new GlobusDeployServiceStep(secureGlobus, new File("..", "echo")));
 		steps.add(new GlobusStartStep(secureGlobus, securePort));
 		steps.add(new GlobusStopStep(secureGlobus, securePort));
 		steps.add(new GlobusCleanupStep(secureGlobus));

@@ -42,10 +42,16 @@ public class ServiceHelper
 
 	public ServiceHelper(String serviceName, File serviceDir)
 	{
+		this(serviceName, serviceDir, null);
+	}
+
+	public ServiceHelper(String serviceName, File serviceDir, Integer port)
+	{
 		super();
 		
 		// service name
 		this.serviceName = serviceName;
+		if (serviceDir != null) this.serviceDir = serviceDir;
 		
 		// test dir (home of the service test)
 		testDir = new File("test" + File.separator + "resources" + File.separator + "services" + File.separator + serviceName);
@@ -70,7 +76,9 @@ public class ServiceHelper
 		try {
 			//this.serviceDir = serviceDir;
 			//if (this.serviceDir == null) this.serviceDir =  testDir;
-			serviceInfo = new IntroduceServiceInfo(new File(this.testDir, "introduce.xml"));
+			File introduceXml = new File(this.testDir, "introduce.xml");
+			if (! introduceXml.exists()) introduceXml = new File(serviceDir, "introduce.xml");
+			serviceInfo = new IntroduceServiceInfo(introduceXml);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("could not parse introduce.xml", e);
 		}
@@ -79,17 +87,18 @@ public class ServiceHelper
 		String protocol = "http";
 		globus = new GlobusHelper(serviceInfo.isTransportSecurity(), tempDir);
 		globus.setEchoHelper(this);
+		if (port != null) this.port = port;
 		if (serviceInfo.isTransportSecurity()) {
-			port = Integer.parseInt(System.getProperty("test.globus.secure.port", "8443"));
+			if (port == null) this.port = Integer.parseInt(System.getProperty("test.globus.secure.port", "8443"));
 			protocol = "https";
 			globus.setUseCounterCheck(false);
 		} else {
-			port = Integer.parseInt(System.getProperty("test.globus.port", "8080"));
+			if (port == null) this.port = Integer.parseInt(System.getProperty("test.globus.port", "8080"));
 		}
 
 		// set endpoint
 		try {
-			endpoint = new EndpointReferenceType(new Address(protocol + "://localhost:" + port + "/wsrf/services/cagrid/" + serviceInfo.getServiceName()));
+			endpoint = new EndpointReferenceType(new Address(protocol + "://localhost:" + this.port + "/wsrf/services/cagrid/" + serviceInfo.getServiceName()));
 		} catch (MalformedURIException e) {
 			throw new IllegalArgumentException("endpoint badly formed");
 		}

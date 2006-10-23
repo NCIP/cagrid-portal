@@ -18,6 +18,7 @@ import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 import gov.nci.nih.cagrid.tests.core.steps.GTSSyncOnceStep;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
+import gov.nci.nih.cagrid.tests.core.util.ServiceHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 
@@ -80,8 +81,9 @@ public class DorianTest
 	@SuppressWarnings("unchecked")
 	protected Vector steps()		
 	{
-		globus = new GlobusHelper(true);
-		globus.setUseCounterCheck(false);
+		ServiceHelper echoHelper = new ServiceHelper("IntroduceEcho"); 
+		globus = echoHelper.getGlobus();
+		//globus.setUseCounterCheck(false);
 		port = Integer.parseInt(System.getProperty("test.globus.secure.port", "8443"));
 		serviceDir = new File(System.getProperty("dorian.dir",
 			".." + File.separator + ".." + File.separator + ".." + File.separator + 
@@ -99,7 +101,9 @@ public class DorianTest
 		steps.add(new GTSSyncOnceStep(globus));
 		steps.add(new GlobusDeployServiceStep(globus, serviceDir));
 		steps.add(new DorianConfigureStep(globus));
-		steps.add(new GlobusDeployServiceStep(globus, new File("..", "echo")));
+		//steps.add(new GlobusDeployServiceStep(globus, new File("..", "echo")));
+		steps.add(echoHelper.getCreateServiceStep());
+		steps.add(new GlobusDeployServiceStep(globus, echoHelper.getCreateServiceStep().getServiceDir()));
 		steps.add(new GlobusStartStep(globus, port));
 		
 		// successful authenticate
