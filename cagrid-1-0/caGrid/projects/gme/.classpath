@@ -66,12 +66,10 @@
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-metadata-common.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-metadata-data.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-metadata-security.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="lib" path="lib/GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_common_server-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/mobius_gme_server-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

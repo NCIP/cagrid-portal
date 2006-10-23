@@ -21,8 +21,8 @@
 		<xsd:schema targetNamespace="http://projectmobius.org/1/GlobalModelExchange"
 			attributeFormDefault="qualified" elementFormDefault="qualified"
 			xmlns="http://www.w3.org/2001/XMLSchema"
-			xmlns:comm="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" schemaLocation="./gov.nih.nci.cagrid.metadata.common.xsd"/>
+			xmlns:metadata="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
+			<import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./xsd/cagrid/types/caGridMetadata.xsd"/>
 			<xsd:element name="addNamespace">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -236,7 +236,7 @@
 			<element name="GlobalModelExchangeResourceProperties">
 				<complexType>
 					<sequence>
-						<element ref="comm:CommonServiceMetadata"/></sequence>
+						<element ref="metadata:ServiceMetadata" /></sequence>
 				</complexType>
 			</element>
 		</xsd:schema>
