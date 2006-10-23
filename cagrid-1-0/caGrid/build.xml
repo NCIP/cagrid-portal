@@ -469,9 +469,13 @@
 			<artifact refid="core.jars" />
 			<artifact refid="mds.jars" />
 			<artifact refid="common.test.jars" />
+			<artifact refid="common.metadata.jars"/>
 			<artifact refid="core.resources" />
 			<artifact refid="mobius.jars" />
 		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/gme/schema/GlobalModelExchange">
+			<artifact refid="metadata.schemas"/>
+                </resolveDependencies>
 		<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
