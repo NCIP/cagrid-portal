@@ -81,7 +81,7 @@ need to download IZForge and run the following command (modify paths of course)
             <file src="test" targetdir="$INSTALL_PATH"/>
             <singlefile src="install/run.xml" target="$INSTALL_PATH/build.xml"/>
             <singlefile src="introduce" target="$INSTALL_PATH/introduce"/>
-            <singlefile src="introduce.bat" target="$INSTALL_PATH/introduce.batd"/>
+            <singlefile src="introduce.bat" target="$INSTALL_PATH/introduce.bat"/>
             <file src="doc" targetdir="$INSTALL_PATH"/> 
         </pack>
         <pack name="Docs" required="no">
