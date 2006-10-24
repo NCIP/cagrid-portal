@@ -420,6 +420,7 @@
 			<artifact refid="core.test.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="mobius.jars" />
+			<artifact refid="jet.jars" />
 			<artifact refid="gme.globus.client.jars" />
 			<artifact refid="metadata.schemas" />
 			<artifact refid="gridca.jars" />
@@ -512,6 +513,7 @@
 			<artifact refid="introduce.resources" />
 			<artifact refid="cadsr.jars" />
 			<artifact refid="common.test.jars" />
+			<artifact refid="jet.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="data.metadata.jars" />
 			<artifact refid="metadata.schemas" />
@@ -534,6 +536,7 @@
 			<artifact refid="ws.enum.jars" />
 			<artifact refid="ws.enum.schemas" />
 			<artifact refid="core.jars" />
+			<artifact refid="jet.jars" />
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="security.metadata.jars" />
 			<artifact refid="servicesecurity.jars" />

@@ -22,6 +22,11 @@
 				<include name="*.jar"/>
 			</fileset>
 		</artifact>
+		<artifact track="main" type="jars" id="jet.jars">
+			<fileset dir="${share.dir}/lib/jet">
+				<include name="*.jar"/>
+			</fileset>
+		</artifact>
 		<artifact track="main" type="jars" id="mds.jars">
 			<fileset dir="${share.dir}/lib/mds">
 				<include name="*.jar"/>
