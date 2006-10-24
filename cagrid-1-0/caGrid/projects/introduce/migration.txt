@@ -41,3 +41,12 @@ The client handle return functionality has been changed to use the strongly type
 ImportInformation now has a required attribute called FromIntroduce.  This designates the importe method to come from an
 introduce generated service or not.  This is important because introduce will only "unbox" from introduce generated
 methods and for anything else will use document literal bindings.
+
+
+
+Index service URL was made to be a deployment time descision  
+This caused a change in the registration.xml so that the url was not
+hard coded (replace the URL in you existing file with INDEX_SERVICE_URL or just update introduce and save your service). 
+The deploy.xml file was also updated to support pushing this variable value (look at the differences or do a merge)
+index.service.url was added as a deploy.properties.
+
