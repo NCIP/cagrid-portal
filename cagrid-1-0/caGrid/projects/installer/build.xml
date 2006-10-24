@@ -44,7 +44,7 @@
     <mkdir dir="${dist}/lib"/>
 
     
-    <jar jarfile="${dist}/lib/systemCheck.jar" basedir="${build}"/>
+    <jar jarfile="${dist}/lib/caGrid-1.0-systemCheck.jar" basedir="${build}"/>
   	<copy todir="${dist}/lib">
   		<fileset dir ="${lib.dir}">
   		    		<include name ="**/*.jar"/>
@@ -57,7 +57,7 @@
 	<target name="signjar" depends="generatekey" description="signs the jars">
 	   	<signjar jar="${dist}/lib/ant.jar"
 	   	alias="installer" storepass="installerpassword" keystore="${dist}/lib/installerKeys" />
-		<signjar jar="${dist}/lib/systemCheck.jar"
+		<signjar jar="${dist}/lib/caGrid-1.0-systemCheck.jar"
 			   	alias="installer" storepass="installerpassword" keystore="${dist}/lib/installerKeys" />
 
 	</target>
