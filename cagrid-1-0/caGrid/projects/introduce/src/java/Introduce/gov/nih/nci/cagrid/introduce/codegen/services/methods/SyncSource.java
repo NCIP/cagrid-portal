@@ -1,14 +1,13 @@
 package gov.nih.nci.cagrid.introduce.codegen.services.methods;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
-import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClientUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.security.SyncAuthorization;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
@@ -625,27 +624,6 @@ public class SyncSource {
 	}
 
 
-	private MembershipExpression getGridGrouperAuthorization(MethodType method) {
-		MembershipExpression exp = null;
-		if (method.getMethodSecurity() != null) {
-			if (method.getMethodSecurity().getMethodAuthorization() != null) {
-				if (method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization() != null) {
-					return method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization();
-				}
-			}
-		}
-		if (service.getServiceSecurity() != null) {
-			if (service.getServiceSecurity().getServiceAuthorization() != null) {
-				if (service.getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization() != null) {
-					return service.getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization();
-				}
-			}
-		}
-
-		return null;
-	}
-
-
 	public void addImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
@@ -714,43 +692,9 @@ public class SyncSource {
 			// clientMethod += " throws RemoteException";
 			clientMethod += "{\n";
 
-			// TODO: Add CODE HERE
-			MembershipExpression exp = this.getGridGrouperAuthorization(method);
-			if (exp != null) {
-				String xml = GridGrouperClientUtils.expressionToXML(exp);
-				xml = xml.replaceAll("\"", "\\\\\"");
-				StringBuffer gg = new StringBuffer();
-				gg.append(lineStart + "StringBuffer grouperXML = new StringBuffer();\n");
-				BufferedReader reader = new BufferedReader(new StringReader(xml));
-				String line = reader.readLine();
-				while (line != null) {
-					gg.append(lineStart + "grouperXML.append(\"" + line + "\");\n");
-					line = reader.readLine();
-				}
-				gg.append(lineStart + "\n");
-				gg.append(lineStart + "String gridIdentity = getCallerIdentity();\n");
-				gg.append(lineStart + "\n");
-				gg.append(lineStart + "boolean isMember=false;\n");
-				gg.append(lineStart + "if(gridIdentity!=null){\n");
-				gg.append(lineStart + "\t" + "try{\n");
-				gg
-					.append(lineStart
-						+ "\t\t"
-						+ "isMember=gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClientUtils.isMember(grouperXML.toString(),gridIdentity);\n");
-				gg.append(lineStart + "\t" + "}catch(Exception e){\n");
-				gg.append(lineStart + "\t\t" + "e.printStackTrace();\n");
-				gg
-					.append(lineStart
-						+ "\t\t"
-						+ "throw new java.rmi.RemoteException(\"Error determining if caller is authorized to perform request\");\n");
-				gg.append(lineStart + "\t" + "}\n");
-				gg.append(lineStart + "}\n");
-				gg.append(lineStart + "if(!isMember){\n");
-				gg.append(lineStart + "\t"
-					+ "throw new java.rmi.RemoteException(\"Not authorized to perform request\");\n");
-				gg.append(lineStart + "}\n");
-				clientMethod += gg.toString();
-			}
+			// Authorization 
+			clientMethod += SyncAuthorization.addAuthorizationToProviderImpl(service, method, lineStart);
+			
 
 			methodString = "";
 			MethodTypeOutput returnTypeEl = method.getOutput();

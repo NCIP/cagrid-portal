@@ -1,0 +1,191 @@
+package gov.nih.nci.cagrid.introduce.codegen.security;
+
+import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
+import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClientUtils;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.security.CSMAuthorization;
+import gov.nih.nci.cagrid.introduce.beans.security.ProtectionMethod;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+
+import java.io.BufferedReader;
+import java.io.StringReader;
+
+
+public class SyncAuthorization {
+
+	public static String addAuthorizationToProviderImpl(ServiceType service, MethodType method, String lineStart)
+		throws Exception {
+		// First we filter by method name
+		if (method.getMethodSecurity() != null) {
+			if (method.getMethodSecurity().getMethodAuthorization() != null) {
+				if (method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization() != null) {
+					return generateGridGrouper(method.getMethodSecurity().getMethodAuthorization()
+						.getGridGrouperAuthorization(), lineStart);
+				} else if (method.getMethodSecurity().getMethodAuthorization().getCSMAuthorization() != null) {
+					return generateCSM(service, method, method.getMethodSecurity().getMethodAuthorization()
+						.getCSMAuthorization(), true, lineStart);
+				}
+			}
+		}
+
+		if (service.getServiceSecurity() != null) {
+			if (service.getServiceSecurity().getServiceAuthorization() != null) {
+				if (service.getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization() != null) {
+					return generateGridGrouper(service.getServiceSecurity().getServiceAuthorization()
+						.getGridGrouperAuthorization(), lineStart);
+				} else if (method.getMethodSecurity().getMethodAuthorization().getCSMAuthorization() != null) {
+					return generateCSM(service, method, service.getServiceSecurity().getServiceAuthorization()
+						.getCSMAuthorization(), false, lineStart);
+				}
+			}
+		}
+		return "";
+	}
+
+
+	public static String generateCSM(ServiceType service, MethodType method, CSMAuthorization csm,
+		boolean isMethodLevel, String lineStart) throws Exception {
+		StringBuffer sb = new StringBuffer();
+
+		if (csm != null) {
+			String obj = null;
+			if (csm.getProtectionMethod().equals(ProtectionMethod.ServiceURI)) {
+				org.apache.axis.message.addressing.EndpointReferenceType type = org.globus.wsrf.utils.AddressingUtils
+					.createEndpointReference(null);
+				obj = type.getAddress().toString();
+			} else {
+				obj = service.getNamespace() + "/" + service.getName();
+			}
+			if (isMethodLevel) {
+				obj = obj + ":" + method.getName();
+			}
+
+			// TODO: ADD THIS
+			String application = "testing123";
+
+			sb.append(lineStart + "/******************* Start CSM Authorization *******************/\n");
+			sb.append(lineStart + "\n");
+			sb.append(lineStart + "String gridIdentity = getCallerIdentity();\n");
+			sb.append(lineStart + "String object = \"" + obj + "\";\n");
+			sb.append(lineStart + "String privilege = \"" + csm.getPrivilege() + "\";\n");
+			sb.append(lineStart + "boolean authorized = false;\n");
+			sb
+				.append(lineStart
+					+ "gov.nih.nci.cagrid.authorization.impl.GridAuthorizationManager mgr = new gov.nih.nci.cagrid.authorization.impl.CSMGridAuthorizationManager("
+					+ application + ");\n");
+
+			sb.append(lineStart + "\t" + "try{\n");
+			sb.append(lineStart + "\t\t" + "authorized = mgr.isAuthorized(gridIdentity,object,privilege);\n");
+			sb.append(lineStart + "\t" + "}catch(Exception e){\n");
+			sb.append(lineStart + "\t\t" + "e.printStackTrace();\n");
+			sb
+				.append(lineStart
+					+ "\t\t"
+					+ "throw new java.rmi.RemoteException(\"Error determining if caller is authorized to perform request\");\n");
+			sb.append(lineStart + "\t" + "}\n");
+			sb.append(lineStart + "}\n");
+			sb.append(lineStart + "if(!authorized){\n");
+			sb
+				.append(lineStart + "\t"
+					+ "throw new java.rmi.RemoteException(\"Not authorized to perform request\");\n");
+			sb.append(lineStart + "}\n");
+
+			sb.append(lineStart + "\n");
+			sb.append(lineStart + "/******************** End CSM Authorization ********************/\n");
+
+			// gov.nih.nci.cagrid.authorization.impl.GridAuthorizationManager
+			// mgr = new
+			// gov.nih.nci.cagrid.authorization.impl.CSMGridAuthorizationManager(csm.get);
+			// mgr.isAuthorized(getCallerIdentity(), obj, privilege);
+			// sb.append(lineStart + "\n");
+
+		}
+		return sb.toString();
+	}
+
+
+	public static String generateGridGrouper(MembershipExpression exp, String lineStart) throws Exception {
+		StringBuffer gg = new StringBuffer();
+
+		if (exp != null) {
+			gg.append(lineStart + "/**************** Start Grid Grouper Authorization *****************/\n");
+			String xml = GridGrouperClientUtils.expressionToXML(exp);
+			xml = xml.replaceAll("\"", "\\\\\"");
+
+			gg.append(lineStart + "StringBuffer grouperXML = new StringBuffer();\n");
+			BufferedReader reader = new BufferedReader(new StringReader(xml));
+			String line = reader.readLine();
+			while (line != null) {
+				gg.append(lineStart + "grouperXML.append(\"" + line + "\");\n");
+				line = reader.readLine();
+			}
+
+			gg.append(lineStart + "\n");
+			gg.append(lineStart + "String gridIdentity = getCallerIdentity();\n");
+			gg.append(lineStart + "\n");
+			gg.append(lineStart + "boolean isMember=false;\n");
+			gg.append(lineStart + "if(gridIdentity!=null){\n");
+			gg.append(lineStart + "\t" + "try{\n");
+			gg
+				.append(lineStart
+					+ "\t\t"
+					+ "isMember=gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClientUtils.isMember(grouperXML.toString(),gridIdentity);\n");
+			gg.append(lineStart + "\t" + "}catch(Exception e){\n");
+			gg.append(lineStart + "\t\t" + "e.printStackTrace();\n");
+			gg
+				.append(lineStart
+					+ "\t\t"
+					+ "throw new java.rmi.RemoteException(\"Error determining if caller is authorized to perform request\");\n");
+			gg.append(lineStart + "\t" + "}\n");
+			gg.append(lineStart + "}\n");
+			gg.append(lineStart + "if(!isMember){\n");
+			gg
+				.append(lineStart + "\t"
+					+ "throw new java.rmi.RemoteException(\"Not authorized to perform request\");\n");
+			gg.append(lineStart + "}\n");
+			gg.append(lineStart + "/************** End Grid Grouper Authorization ***************/\n");
+		}
+		return gg.toString();
+	}
+
+
+	private static CSMAuthorization getCSMAuthorization(ServiceType service, MethodType method) {
+		if (method.getMethodSecurity() != null) {
+			if (method.getMethodSecurity().getMethodAuthorization() != null) {
+				if (method.getMethodSecurity().getMethodAuthorization().getCSMAuthorization() != null) {
+					return method.getMethodSecurity().getMethodAuthorization().getCSMAuthorization();
+				}
+			}
+		}
+		if (service.getServiceSecurity() != null) {
+			if (service.getServiceSecurity().getServiceAuthorization() != null) {
+				if (service.getServiceSecurity().getServiceAuthorization().getCSMAuthorization() != null) {
+					return service.getServiceSecurity().getServiceAuthorization().getCSMAuthorization();
+				}
+			}
+		}
+
+		return null;
+	}
+
+
+	private static MembershipExpression getGridGrouperAuthorization(ServiceType service, MethodType method) {
+		if (method.getMethodSecurity() != null) {
+			if (method.getMethodSecurity().getMethodAuthorization() != null) {
+				if (method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization() != null) {
+					return method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization();
+				}
+			}
+		}
+		if (service.getServiceSecurity() != null) {
+			if (service.getServiceSecurity().getServiceAuthorization() != null) {
+				if (service.getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization() != null) {
+					return service.getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization();
+				}
+			}
+		}
+
+		return null;
+	}
+
+}
