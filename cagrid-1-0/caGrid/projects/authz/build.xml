@@ -8,10 +8,11 @@
     <property name="ext.lib.dir" value="ext/lib"/>
     <property name="src.java.dir" value="src/java"/>
     <property name="test.src.java.dir" value="test/src/java"/>
-    <property name="jar.name" value="pdp"/>
+    <property name="jar.name" value="cagrid-1.0-authz-common"/>
     
     <patternset id="globus.jars">
         <include name="*.jar"/>
+        <exclude name="caGrid*.jar"/>
         <exclude name="*test*"/>
         <exclude name="*example*"/>
         <exclude name="*sample*"/>
