@@ -231,8 +231,8 @@
 
 		<ant dir="${projects.dir}/cadsr" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
-	
-	
+
+
 	<!-- =============================================================== -->
 	<!-- EVS:                                                            -->
 	<!-- =============================================================== -->
@@ -429,21 +429,21 @@
 			<artifact refid="gridgrouper.ui.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/introduce/skeleton">
-			<artifact refid="core.jars"/>
-			<artifact refid="mds.jars"/>
-			<artifact refid="security.metadata.jars"/>
-			<artifact refid="servicesecurity.jars"/>
+			<artifact refid="core.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="security.metadata.jars" />
+			<artifact refid="servicesecurity.jars" />
 		</resolveDependencies>
-		
+
 		<resolveDependencies extdir="${projects.dir}/introduce/ext/skeleton/gridgrouper">
 			<artifact refid="gridgrouper.client.jars" />
 		</resolveDependencies>
-	
+
 		<resolveDependencies extdir="${projects.dir}/introduce/ext/skeleton/csm">
-			<artifact refid="authz.jars" />		
+			<artifact refid="authz.jars" />
 		</resolveDependencies>
-		
-		<delete dir="${projects.dir}/introduce/schema/gridgrouper/xsd"/>
+
+		<delete dir="${projects.dir}/introduce/schema/gridgrouper/xsd" />
 		<resolveDependencies extdir="${projects.dir}/introduce/schema/gridgrouper">
 			<artifact refid="gridgrouper.schemas" />
 		</resolveDependencies>
@@ -478,13 +478,13 @@
 			<artifact refid="core.jars" />
 			<artifact refid="mds.jars" />
 			<artifact refid="common.test.jars" />
-			<artifact refid="common.metadata.jars"/>
+			<artifact refid="common.metadata.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="mobius.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/gme/schema/GlobalModelExchange">
-			<artifact refid="metadata.schemas"/>
-                </resolveDependencies>
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
 		<ant dir="${projects.dir}/gme" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
@@ -662,6 +662,12 @@
 	<!-- Cleans up generated stuff                                      -->
 	<!-- ============================================================== -->
 	<target name="clean" depends="prepare" description="Cleans all projects.">
+		<delete failonerror="false">
+			<fileset dir="${junit.results.dir}">
+				<include name="*" />
+			</fileset>
+		</delete>
+
 		<for list="${projects.list}" parallel="true" param="project.name" trim="true">
 			<sequential>
 				<echo message="Cleaning project @{project.name}." />
@@ -669,12 +675,6 @@
 				<ant dir="${projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean" />
 			</sequential>
 		</for>
-
-		<delete failonerror="false">
-			<fileset dir="${junit.results.dir}">
-				<include name="*" />
-			</fileset>
-		</delete>
 	</target>
 
 
