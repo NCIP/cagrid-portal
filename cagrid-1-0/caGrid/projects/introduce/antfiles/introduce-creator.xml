@@ -57,6 +57,9 @@
 	</taskdef>
 	<taskdef name="postCreateSkeleton" classname="gov.nih.nci.cagrid.introduce.creator.SkeletonPostCreator">
 		<classpath>
+			<fileset dir="${build.lib.dir}">
+				<include name="*.jar"/>
+			</fileset>
 			<fileset dir="${lib.dir}">
 				<include name="*.jar"/>
 			</fileset>
@@ -65,11 +68,9 @@
 			</fileset>
 			<fileset dir="${extensions.lib.dir}">
 				<include name="*.jar"/>
+				<exclude name="${jars.prefixname}*.jar"/>
 			</fileset>
 			<fileset dir="${ant.library.dir}">
-				<include name="*.jar"/>
-			</fileset>
-			<fileset dir="${build.lib.dir}">
 				<include name="*.jar"/>
 			</fileset>
 			<fileset dir="${ext.globus.location}/lib">
