@@ -92,7 +92,8 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
 		if (mainService.getMethods() != null && mainService.getMethods().getMethod() != null) {
 			for (int i = 0; i < mainService.getMethods().getMethod().length; i++) {
 				MethodType method = mainService.getMethods().getMethod(i);
-				if (method.getOutput().getIsClientHandle().booleanValue()
+				if (method.getOutput().getIsClientHandle() != null
+					&& method.getOutput().getIsClientHandle().booleanValue()
 					&& method.getOutput().getClientHandleClass()
 						.equals(
 							mainService.getPackageName() + ".bdt.client." + mainService.getName()
