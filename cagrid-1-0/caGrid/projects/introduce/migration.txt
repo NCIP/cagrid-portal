@@ -36,8 +36,6 @@ The client handle return functionality has been changed to use the strongly type
 
 
 
-
-
 ImportInformation now has a required attribute called FromIntroduce.  This designates the importe method to come from an
 introduce generated service or not.  This is important because introduce will only "unbox" from introduce generated
 methods and for anything else will use document literal bindings.
