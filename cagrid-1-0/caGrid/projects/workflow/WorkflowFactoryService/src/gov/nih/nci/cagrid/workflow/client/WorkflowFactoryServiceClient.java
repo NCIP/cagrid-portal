@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.workflow.client;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +13,7 @@ import org.apache.axis.EngineConfiguration;
 import org.apache.axis.client.AxisClient;
 import org.apache.axis.client.Stub;
 import org.apache.axis.configuration.FileProvider;
+import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
 import org.apache.axis.types.URI.MalformedURIException;
@@ -20,14 +22,19 @@ import org.apache.axis.utils.ClassUtils;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.encoding.ObjectSerializer;
 import org.globus.wsrf.utils.AddressingUtils;
+import org.globus.wsrf.utils.AnyHelper;
+import org.globus.wsrf.utils.XmlUtils;
+import org.w3c.dom.Element;
 
 import gov.nih.nci.cagrid.workflow.stubs.WorkflowFactoryServicePortType;
 import gov.nih.nci.cagrid.workflow.stubs.service.WorkflowFactoryServiceAddressingLocator;
+import gov.nih.nci.cagrid.workflow.stubs.types.StartInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WSDLReferences;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowInputType;
 import gov.nih.nci.cagrid.workflow.common.WorkflowFactoryServiceI;
+import gov.nih.nci.cagrid.workflow.context.client.WorkflowServiceImplClient;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 
@@ -93,12 +100,9 @@ public class WorkflowFactoryServiceClient extends ServiceSecurityClient implemen
 	
 	public static WMSInputType createInput(String bpelFile) throws Exception {
 		WMSInputType input = new WMSInputType();
-		
 		String bpelProcess = Utils.fileToStringBuffer(new File(bpelFile)).toString();
-		
-		WorkflowInputType inputArgs = new WorkflowInputType();
 		input.setBpelDoc(bpelProcess);
-		input.setWorkflowName("Test");
+		input.setWorkflowName("Simple");
 		WSDLReferences[] wsdlRefArray = new WSDLReferences[1];
 		wsdlRefArray[0] = new WSDLReferences();
 		wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/SampleService1"));
@@ -137,10 +141,19 @@ public class WorkflowFactoryServiceClient extends ServiceSecurityClient implemen
 		    writer = new FileWriter("workflow_" + input.getWorkflowName() + "_epr");
             writer.write( 
 					ObjectSerializer.toString(epr, new QName("", "WMS_EPR")));
+            WorkflowServiceImplClient wclient = new WorkflowServiceImplClient(epr);
+            StartInputType startInput = new StartInputType();
+            WorkflowInputType inputArgs = new WorkflowInputType();
+            FileInputStream in = new FileInputStream("input1.xml");
+    		Element e2 = XmlUtils.newDocument(in).getDocumentElement();
+    		System.out.println(XmlUtils.toString(e2));
+    		MessageElement anyContent = AnyHelper.toAny(new MessageElement(e2));
+    		inputArgs.set_any(new MessageElement[] {anyContent});
+    		startInput.setInputArgs(inputArgs);
+            wclient.start(startInput);
             
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.exit(1);
 		} finally {
 			if (writer != null) {
 				try {
@@ -150,6 +163,7 @@ public class WorkflowFactoryServiceClient extends ServiceSecurityClient implemen
 					e.printStackTrace();
 				}
 			}
+			System.exit(1);
 		}
 	}
 

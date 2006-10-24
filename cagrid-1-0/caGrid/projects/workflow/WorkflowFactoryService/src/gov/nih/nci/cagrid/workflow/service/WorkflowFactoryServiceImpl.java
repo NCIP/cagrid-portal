@@ -28,7 +28,7 @@ public class WorkflowFactoryServiceImpl extends WorkflowFactoryServiceImplBase {
 
 	public static String BPEL_EXTENSION = ".bpel";
 	
-	protected String abAdminRoot = "http://localhost:8080/active-bpel/services/";
+	public static String abAdminRoot = "http://localhost:8080/active-bpel/services/";
 	
 	public WorkflowFactoryServiceImpl() throws RemoteException {
 		super();
@@ -50,8 +50,11 @@ public class WorkflowFactoryServiceImpl extends WorkflowFactoryServiceImplBase {
 			key = workflowHome.create(null, wMSInputElement);
 			//Create the EPR here
 			EndpointReferenceType epr = new EndpointReferenceType();
-			epr = AddressingUtils.createEndpointReference(ServiceHost.getBaseURL() +
-					"/cagrid/WorkflowServiceImpl", key);
+			System.out.println("Service endpoint: " + ServiceHost.getBaseURL() 
+					+ "cagrid/WorkflowServiceImpl");
+			epr = AddressingUtils.createEndpointReference(
+					ServiceHost.getBaseURL() +
+					"cagrid/WorkflowServiceImpl", key);
 			System.out.println("EPR: " + 
 					ObjectSerializer.toString(epr, new QName("", "EPR")));
 			output.setWorkflowEPR(epr);

@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WSDLReferences;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType;
 
 import java.net.URL;
 
@@ -41,7 +42,8 @@ public class ActiveBPELAdapter {
 	}
 	
 	
-	public static WMSOutputType invokeProcess(String abServiceRoot, String partnerLinkName, StartInputType startInput) throws Exception {
+	public static WorkflowStatusType invokeProcess(String abServiceRoot, 
+			String partnerLinkName, StartInputType startInput) throws Exception {
 		String serviceUrl = abServiceRoot + partnerLinkName;
 		return callService(serviceUrl, startInput);
 	}
@@ -50,7 +52,8 @@ public class ActiveBPELAdapter {
 		return Base64.encodeFromFile(pathToBpr);
 	}
 	
-	public  static WMSOutputType callService(String serviceUrl, StartInputType startInput) throws Exception {
+	public  static WorkflowStatusType callService(String serviceUrl, 
+			StartInputType startInput) throws Exception {
 		SOAPEnvelope env = new SOAPEnvelope();
 		env.getBody().addChildElement(
 				new SOAPBodyElement(startInput.getInputArgs().get_any()[0]));
@@ -63,8 +66,7 @@ public class ActiveBPELAdapter {
 		
 		SOAPEnvelope res = call.invoke(env);
 		System.out.println("Result " + res.getAsString());
-		WMSOutputType output = new WMSOutputType();
-	
+		WorkflowStatusType output = WorkflowStatusType.Active;
 		WorkflowOutputType outputType = new WorkflowOutputType();
 		outputType.set_any(new MessageElement[]{new MessageElement(res.getAsDOM())});
 		//output.setOutputType(outputType);
