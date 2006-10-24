@@ -26,7 +26,7 @@ public class ServiceAnnotationExample {
 
 			ServiceMetadata metadata = MetadataUtils.deserializeServiceMetadata(new FileReader(fc.getSelectedFile()));
 
-			client.annotateServiceMetadata(metadata);
+			metadata=client.annotateServiceMetadata(metadata);
 			FileWriter fw = new FileWriter("annotatedServiceMetadata.xml");
 			MetadataUtils.serializeServiceMetadata(metadata, fw);
 			fw.close();
