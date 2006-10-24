@@ -310,6 +310,9 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 			NamespaceType nsType = CommonTools.createNamespaceType(location.getAbsolutePath());
 			// make the location relative to the schema directory
 			nsType.setLocation("./" + location.getName());
+			// set the package name
+			String packName = CommonTools.getPackageName(storedNs);
+			nsType.setPackageName(packName);
 			// fix the serialization / deserialization on the namespace types
 			for (int i = 0; nsType.getSchemaElement() != null && i < nsType.getSchemaElement().length; i++) {
 				SchemaElementType type = nsType.getSchemaElement(i);

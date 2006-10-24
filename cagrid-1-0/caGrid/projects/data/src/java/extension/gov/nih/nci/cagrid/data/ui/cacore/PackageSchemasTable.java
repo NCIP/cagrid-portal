@@ -120,6 +120,8 @@ public class PackageSchemasTable extends JTable {
 				// set the resolution status on the table
 				setValueAt(pack.getMappedNamespace(), dataRow, 1);
 				setValueAt(STATUS_SCHEMA_FOUND, dataRow, 2);
+				// set the package name
+				resolved[0].setPackageName(pack.getName());
 				// set the serializers / deserializers for the FIRST namespace type's schema elements
 				SchemaElementType[] types = resolved[0].getSchemaElement();
 				for (int i = 0; types != null && i < types.length; i++) {
