@@ -448,13 +448,12 @@
 				<include name="caGrid-1.0-GlobalModelExchange_stubs.jar"/>
 			</fileset>
 		</artifact>
-		<artifact track="main" type="jars" id="authz.common.jars">
-			<antcall target="build-authz"/>
+
+		<artifact track="main" type="jars" id="authz.jars">
+			<antcall target="build-authz"/>	
 			<fileset dir="${projects.dir}/authz/build">
 				<include name="cagrid-1.0-authz-common.jar"/>
-			</fileset>
-		</artifact>
-		<artifact track="main" type="jars" id="authz.csm.jars">
+			</fileset>	
 			<fileset dir="${projects.dir}/authz/lib">
 				<include name="mysql*.jar"/>
 				<include name="log4j*.jar"/>
@@ -470,8 +469,6 @@
 				<include name="asm.jar"/>
 				<include name="antlr*.jar"/>
 			</fileset>
-		</artifact>
-		<artifact track="main" type="jars" id="authz.ext.jars">
 			<fileset dir="${projects.dir}/authz/ext/lib">
 				<include name="**/*.jar"/>
 			</fileset>

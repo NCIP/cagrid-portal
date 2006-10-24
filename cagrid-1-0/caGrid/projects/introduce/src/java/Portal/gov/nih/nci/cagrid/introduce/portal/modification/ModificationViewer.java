@@ -19,6 +19,9 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
+import gov.nih.nci.cagrid.introduce.beans.security.MethodAuthorization;
+import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
+import gov.nih.nci.cagrid.introduce.beans.security.ServiceAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
@@ -213,7 +216,6 @@ public class ModificationViewer extends GridPortalComponent {
 	private JCheckBox propertyIsFromETCCheckBox = null;
 
 	private JPanel resourcesOptionsPanel = null;
-	
 
 
 	/**
@@ -331,7 +333,7 @@ public class ModificationViewer extends GridPortalComponent {
 			ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(this.methodsDirectory
 				.getAbsolutePath()
 				+ File.separator + "introduce.xml", ServiceDescription.class);
-			
+
 			if (introService.getIntroduceVersion() == null
 				|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
 				throw new Exception(
@@ -576,11 +578,9 @@ public class ModificationViewer extends GridPortalComponent {
 						} else {
 							getModifyButton().setEnabled(true);
 						}
-					}  else {
+					} else {
 						getModifyButton().setEnabled(false);
 					}
-					
-					
 
 				}
 
@@ -956,7 +956,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private ServiceSecurityPanel getSecurityPanel() {
 		if (securityPanel == null) {
 			try {
-				securityPanel = new ServiceSecurityPanel(info.getServiceDescriptor(),info.getServices().getService(0));
+				securityPanel = new ServiceSecurityPanel(info.getServiceDescriptor(), info.getServices().getService(0));
 			} catch (Exception e) {
 				e.printStackTrace();
 				ErrorDialog.showErrorDialog(e);
@@ -1383,11 +1383,13 @@ public class ModificationViewer extends GridPortalComponent {
 						if (info.getServices() != null && info.getServices().getService() != null) {
 							for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
 								ServiceType service = info.getServices().getService(serviceI);
+								copyRequiredJars(service.getServiceSecurity());
 								if (service.getMethods() != null && service.getMethods().getMethod() != null) {
 									List methodNames = new ArrayList();
 									if (service.getMethods() != null && service.getMethods().getMethod() != null) {
 										for (int methodI = 0; methodI < service.getMethods().getMethod().length; methodI++) {
 											MethodType method = service.getMethods().getMethod(methodI);
+											copyRequiredJars(method.getMethodSecurity());
 											if (!(methodNames.contains(method.getName()))) {
 												methodNames.add(method.getName());
 											} else {
@@ -1444,6 +1446,48 @@ public class ModificationViewer extends GridPortalComponent {
 			Thread th = new Thread(r);
 			th.start();
 		}
+	}
+
+
+	private void copyRequiredJars(ServiceSecurity sec) throws Exception {
+		if (sec != null) {
+			ServiceAuthorization auth = sec.getServiceAuthorization();
+			if (auth != null) {
+				if (auth.getGridGrouperAuthorization() != null) {
+					copyGridGrouperJars();
+				} else if (auth.getCSMAuthorization() != null) {
+					copyCSMJars();
+				}
+			}
+		}
+	}
+
+
+	private void copyRequiredJars(MethodSecurity sec) throws Exception {
+		if (sec != null) {
+			MethodAuthorization auth = sec.getMethodAuthorization();
+			if (auth != null) {
+				if (auth.getGridGrouperAuthorization() != null) {
+					copyGridGrouperJars();
+				} else if (auth.getCSMAuthorization() != null) {
+					copyCSMJars();
+				}
+			}
+		}
+	}
+
+
+	private void copyGridGrouperJars() throws Exception {
+		File src = new File("ext" + File.separator + "skeleton" + File.separator + "gridgrouper"+File.separator+"lib");
+		File dest = new File(info.getBaseDirectory() + File.separator + "lib");
+		Utils.copyDirectory(src, dest);
+	}
+
+
+	private void copyCSMJars() throws Exception {
+		File src = new File("ext" + File.separator + "skeleton" + File.separator + "csm"+File.separator+"lib");
+		File dest = new File(info.getBaseDirectory() + File.separator + "lib");
+		Utils.copyDirectory(src, dest);
 	}
 
 

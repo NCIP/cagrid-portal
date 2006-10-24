@@ -428,12 +428,20 @@
 			<artifact refid="gridgrouper.ui.jars" />
 		</resolveDependencies>
 		<resolveDependencies extdir="${projects.dir}/introduce/skeleton">
-			<artifact refid="core.jars" />
-			<artifact refid="mds.jars" />
-			<artifact refid="security.metadata.jars" />
-			<artifact refid="servicesecurity.jars" />
+			<artifact refid="core.jars"/>
+			<artifact refid="mds.jars"/>
+			<artifact refid="security.metadata.jars"/>
+			<artifact refid="servicesecurity.jars"/>
+		</resolveDependencies>
+		
+		<resolveDependencies extdir="${projects.dir}/introduce/ext/skeleton/gridgrouper">
 			<artifact refid="gridgrouper.client.jars" />
 		</resolveDependencies>
+	
+		<resolveDependencies extdir="${projects.dir}/introduce/ext/skeleton/csm">
+			<artifact refid="authz.jars" />		
+		</resolveDependencies>
+		
 		<delete dir="${projects.dir}/introduce/schema/gridgrouper/xsd"/>
 		<resolveDependencies extdir="${projects.dir}/introduce/schema/gridgrouper">
 			<artifact refid="gridgrouper.schemas" />
