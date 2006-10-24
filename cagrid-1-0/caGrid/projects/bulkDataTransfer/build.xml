@@ -65,12 +65,6 @@
 	<!-- We want detailed error messages -->
 	<property name="java.debug" value="on" />
 
-	<!--import deployment ant files -->
-	<import file="build-deploy.xml" />
-
-	<!--import run ant files -->
-	<import file="run-tools.xml" />
-
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
 			<pathelement location="${lib.dir}/ant-contrib.jar" />
