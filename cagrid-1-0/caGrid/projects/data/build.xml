@@ -167,6 +167,21 @@
         	</fileset>
         </copy>
         <available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
+    
+        <taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
+            <classpath>
+                <fileset dir="${ext.lib.dir}">
+                    <include name="boot.jar"/>
+                    <include name="osgi.jar"/>
+                    <include name="resources.jar"/>
+                    <include name="runtime.jar"/>
+                    <include name="codegen.jar"/>
+                    <include name="jdtcore.jar"/>
+                    <include name="jetc-task.jar"/>
+                </fileset>
+            </classpath>
+        </taskdef>
+        
     </target>
 
 
@@ -316,20 +331,7 @@
 	<!-- =================================================================== -->
 	<!--  Generate JET template classes                                      -->
 	<!-- =================================================================== -->
-	<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
-		<classpath>
-			<fileset dir="${lib.dir}/jet">
-				<include name="boot.jar"/>
-				<include name="osgi.jar"/>
-				<include name="resources.jar"/>
-				<include name="runtime.jar"/>
-				<include name="codegen.jar"/>
-				<include name="jdtcore.jar"/>
-				<include name="jetc-task.jar"/>
-			</fileset>
-		</classpath>
-	</taskdef>
-	<target name="generateJETClasses">
+	<target name="generateJETClasses" depends="init">
 		<jetc destdir="${extension.src.dir}" template="${src.dir}/jettemplates/CQLResultTypes.xsd.xmljet"/>
 	</target>
 

@@ -36,6 +36,22 @@
 		<mkdir dir="${junit.results.dir}"/>
 		<mkdir dir="${javadoc.dir}"/>
 		<mkdir dir="${test.log.dir}"/>
+		
+		<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
+			<classpath>
+				<pathelement location="${ext.lib.dir}/jetc-task.jar"/>
+				<fileset dir="${ext.lib.dir}">
+					<include name="boot.jar"/>
+					<include name="osgi.jar"/>
+					<include name="resources.jar"/>
+					<include name="runtime.jar"/>
+					<include name="codegen.jar"/>
+					<include name="jdtcore.jar"/>
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</taskdef>
+		
 	</target>
 	<!-- =================================================================== -->
 	<!-- Prints information about the build                                  -->
@@ -82,21 +98,7 @@
 	<!-- =================================================================== -->
 	<!--  Generate JET template classes                                      -->
 	<!-- =================================================================== -->
-	<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
-		<classpath>
-			<pathelement location="${lib.dir}/jet/jetc-task.jar"/>
-			<fileset dir="${lib.dir}/jet">
-				<include name="boot.jar"/>
-				<include name="osgi.jar"/>
-				<include name="resources.jar"/>
-				<include name="runtime.jar"/>
-				<include name="codegen.jar"/>
-				<include name="jdtcore.jar"/>
-				<include name="*.jar"/>
-			</fileset>
-		</classpath>
-	</taskdef>
-	<target name="generateJETClasses">
+	<target name="generateJETClasses" depends="init">
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/run-tools.xmljet"/>
 		<jetc destdir="${src.dir}/Introduce"
 			template="${templates.src.dir}/server-config.wsdd.xmljet"/>
