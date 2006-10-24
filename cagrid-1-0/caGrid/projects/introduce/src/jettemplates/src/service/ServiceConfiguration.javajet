@@ -38,8 +38,8 @@ public class ServiceConfiguration {
 		ServicePropertiesProperty prop = sproperties.getProperty(i);
 		if (prop.getIsFromETC() !=null && prop.getIsFromETC().booleanValue()) {
 	%>
-	public File get<%=TemplateUtils.upperCaseFirstCharacter(prop.getKey())%>() {
-		return new File(ContainerConfig.getBaseDirectory() + File.separator + <%=prop.getKey()%>);
+	public String get<%=TemplateUtils.upperCaseFirstCharacter(prop.getKey())%>() {
+		return ContainerConfig.getBaseDirectory() + File.separator + <%=prop.getKey()%>;
 	}
 	<%
 	     } else {
