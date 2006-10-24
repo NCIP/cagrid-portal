@@ -19,11 +19,12 @@
     <property name="etc.dir" value="etc" />
     <property name="schema.dir" value="schema" />
     <property name="mappings.file" value="${basedir}/namespace2package.mappings" />
-    <property name="common.jar.name" value="${service.name}-common.jar" />
-    <property name="client.jar.name" value="${service.name}-client.jar" />
-    <property name="service.jar.name" value="${service.name}-service.jar" />
-    <property name="stubs.jar.name" value="${service.name}-stubs.jar" />
-	<property name="test.jar.name" value="${service.name}-tests.jar" />
+    <property name="jar.prefix" value="caGrid-1.0-${service.name}"/>
+    <property name="common.jar.name" value="${jar.prefix}-common.jar" />
+    <property name="client.jar.name" value="${jar.prefix}-client.jar" />
+    <property name="service.jar.name" value="${jar.prefix}-service.jar" />
+    <property name="stubs.jar.name" value="${jar.prefix}-stubs.jar" />
+	<property name="test.jar.name" value="${jar.prefix}-tests.jar" />
 
     <!-- Important test directories and files -->
     <property name="test.dir" value="test" />
