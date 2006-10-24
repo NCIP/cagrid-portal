@@ -115,6 +115,11 @@
 			</fileset>
 		</copy>
 		
+		<copy todir="${tomcat.dir}/common/lib">
+			<fileset dir="${lib.dir}">
+				<include name="cog-jglobus.jar" />
+			</fileset>
+		</copy>		
 	</target>
 	
 	<!-- make deployment configured gar -->
@@ -123,9 +128,9 @@
 			<fileset dir="${basedir}/lib">
 				<include name="*.jar" />
 			</fileset>
-<fileset dir="${ext.lib.dir}">
-						<include name="*.jar" />
-					</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
 		</copy>
 		
 		<!-- prepare the server-config file -->
