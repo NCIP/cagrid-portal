@@ -1240,7 +1240,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				tempPackage.setName(pack.getName());
 				tempPackage.setMappedNamespace(namespaceUri);
 				NamespaceType[] namespaces = SchemaResolutionDialog.resolveSchemas(getServiceInfo(), tempPackage);
-				if (namespaces != null) {
+				if (namespaces != null && namespaces.length != 0) {
 					nsType = namespaces[0];
 					// add the new namespaces to the service
 					for (int i = 0; i < namespaces.length; i++) {
@@ -1267,7 +1267,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				} catch (Exception ex) {
 					ex.printStackTrace();
 					ErrorDialog.showErrorDialog("Error getting classes from caDSR", ex);
-				}				
+				}
 			}
 		}
 	}
