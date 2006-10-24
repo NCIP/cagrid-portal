@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.fqp.results.service.globus.resource.FQPResultResource;
 import gov.nih.nci.cagrid.fqp.results.service.globus.resource.FQPResultResourceHome;
 import gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference;
 import gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault;
+import gov.nih.nci.cagrid.fqp.stubs.types.InternalErrorFault;
 
 import java.rmi.RemoteException;
 import java.util.Calendar;
@@ -25,6 +26,7 @@ import org.globus.wsrf.utils.AddressingUtils;
 import commonj.work.Work;
 import commonj.work.WorkManager;
 
+
 /**
  * Federated Query Service
  * 
@@ -38,16 +40,21 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 
 	protected static Log LOG = LogFactory.getLog(FederatedQueryProcessorImpl.class.getName());
 
+
 	public FederatedQueryProcessorImpl() throws RemoteException {
 		super();
 	}
 
-	public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults executeAndAggregateResults(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
+
+	public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults executeAndAggregateResults(
+		gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException,
+		gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
 		FederatedQueryEngine engine = new FederatedQueryEngine();
 		CQLQueryResults results = null;
 		try {
 			results = engine.executeAndAggregateResults(query);
 		} catch (FederatedQueryProcessingException e) {
+			LOG.error("Problem executing query: " + e.getMessage(), e);
 			FederatedQueryProcessingFault fault = new FederatedQueryProcessingFault();
 			fault.setFaultString("Problem executing query: " + e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
@@ -57,12 +64,15 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		return results;
 	}
 
-	public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection execute(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
+
+	public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection execute(gov.nih.nci.cagrid.dcql.DCQLQuery query)
+		throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
 		FederatedQueryEngine engine = new FederatedQueryEngine();
 		DCQLQueryResultsCollection results = null;
 		try {
 			results = engine.execute(query);
 		} catch (FederatedQueryProcessingException e) {
+			LOG.error("Problem executing query: " + e.getMessage());
 			FederatedQueryProcessingFault fault = new FederatedQueryProcessingFault();
 			fault.setFaultString("Problem executing query: " + e.getMessage());
 			FaultHelper helper = new FaultHelper(fault);
@@ -72,16 +82,21 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		return results;
 	}
 
-	public gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference executeAsynchronously(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException {
+
+	public gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference executeAsynchronously(
+		gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException {
 
 		// create a result resource
 		FQPResultResourceHome resultHome = null;
 		try {
 			resultHome = (FQPResultResourceHome) getFederatedQueryResultsResourceHome();
 		} catch (Exception e) {
-			// TODO: change to throw "internal error"
-			e.printStackTrace();
-			throw new RemoteException("Problem locating result home.", e);
+			LOG.error("Problem locating result home: " + e.getMessage(), e);
+			InternalErrorFault fault = new InternalErrorFault();
+			fault.setFaultString("Problem locating result home:" + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			throw helper.getFault();
 		}
 
 		FQPResultResource fqpResultResource = null;
@@ -90,8 +105,12 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 			key = resultHome.createFQPResultResource();
 			fqpResultResource = (FQPResultResource) resultHome.find(key);
 		} catch (Exception e) {
-			// TODO: change to throw "internal error"
-			throw new RemoteException("Creatng and accessing resource.", e);
+			LOG.error("Problem creating and accessing resource:" + e.getMessage(), e);
+			InternalErrorFault fault = new InternalErrorFault();
+			fault.setFaultString("Problem creating and accessing resource:" + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			throw helper.getFault();
 		}
 
 		// set initial status
@@ -108,14 +127,18 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		try {
 			getWorkManager().schedule(work);
 		} catch (Exception e) {
-			e.printStackTrace();
-			// TODO: change to throw "internal error"
-			throw new RemoteException("Problem scheduling processing.", e);
+			LOG.error("Problem scheduling processing:" + e.getMessage(), e);
+			InternalErrorFault fault = new InternalErrorFault();
+			fault.setFaultString("Problem scheduling processing:" + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			throw helper.getFault();
 		}
 
 		// return handle to resource
 		return createEPR(key);
 	}
+
 
 	private gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference createEPR(ResourceKey key)
 		throws RemoteException {
@@ -128,11 +151,15 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 			EndpointReferenceType epr = AddressingUtils.createEndpointReference(transportURL, key);
 			return new FederatedQueryResultsReference(epr);
 		} catch (Exception e) {
-			e.printStackTrace();
-			// TODO: change to throw "internal error"
-			throw new RemoteException("Problem returning reference to result.", e);
+			LOG.error("Problem returning reference to result:" + e.getMessage(), e);
+			InternalErrorFault fault = new InternalErrorFault();
+			fault.setFaultString("Problem returning reference to result:" + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			throw helper.getFault();
 		}
 	}
+
 
 	public int getLeaseDurationInMinutes() {
 		int mins = DEFAULT_RESULT_LEASE_MINS;
@@ -145,6 +172,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		}
 		return mins;
 	}
+
 
 	public synchronized WorkManager getWorkManager() {
 		if (this.workManager == null) {
@@ -162,6 +190,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		return this.workManager;
 	}
 
+
 	public synchronized void setWorkManager(WorkManager workManager) {
 		this.workManager = workManager;
 	}
@@ -170,10 +199,12 @@ class QueryExecutionWork implements Work {
 	FQPResultResource resource;
 	DCQLQuery query;
 
+
 	public QueryExecutionWork(FQPResultResource resource, DCQLQuery query) {
 		this.resource = resource;
 		this.query = query;
 	}
+
 
 	public void run() {
 		FederatedQueryEngine engine = new FederatedQueryEngine();
@@ -193,9 +224,11 @@ class QueryExecutionWork implements Work {
 
 	}
 
+
 	public boolean isDaemon() {
 		return false;
 	}
+
 
 	public void release() {
 		// Do nothing

@@ -74,6 +74,9 @@
   <message name="FederatedQueryProcessingFaultFaultMessage">
     <part name="fault" element="ns5:FederatedQueryProcessingFault" />
   </message>
+  <message name="InternalErrorFaultFaultMessage">
+    <part name="fault" element="ns5:InternalErrorFault" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -85,6 +88,7 @@
       <output message="tns:GetResultsResponse" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedResults/GetResultsResponse" />
       <fault name="ProcessingNotCompleteFault" message="tns:ProcessingNotCompleteFaultFaultMessage" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedResults/ProcessingNotCompleteFaultFaultMessage" />
       <fault name="FederatedQueryProcessingFault" message="tns:FederatedQueryProcessingFaultFaultMessage" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedResults/FederatedQueryProcessingFaultFaultMessage" />
+      <fault name="InternalErrorFault" message="tns:InternalErrorFaultFaultMessage" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedResults/InternalErrorFaultFaultMessage" />
     </operation>
     <operation name="isProcessingComplete">
       <input message="tns:IsProcessingCompleteRequest" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedResults/IsProcessingCompleteRequest" />

@@ -19,7 +19,7 @@ public class FederatedQueryResultsProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.fqp.results.stubs.GetResultsResponse getResults(gov.nih.nci.cagrid.fqp.results.stubs.GetResultsRequest params) throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
+	public gov.nih.nci.cagrid.fqp.results.stubs.GetResultsResponse getResults(gov.nih.nci.cagrid.fqp.results.stubs.GetResultsRequest params) throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault, gov.nih.nci.cagrid.fqp.stubs.types.InternalErrorFault {
 		gov.nih.nci.cagrid.fqp.results.stubs.GetResultsResponse boxedResult = new gov.nih.nci.cagrid.fqp.results.stubs.GetResultsResponse();
 		boxedResult.setDCQLQueryResultsCollection(impl.getResults());
 		return boxedResult;

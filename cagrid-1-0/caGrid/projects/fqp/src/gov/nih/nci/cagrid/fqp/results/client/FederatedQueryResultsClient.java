@@ -112,7 +112,7 @@ public class FederatedQueryResultsClient extends ServiceSecurityClient implement
         return portType.setTerminationTime(params);
       }
     }
-	public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection getResults() throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
+	public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection getResults() throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault, gov.nih.nci.cagrid.fqp.stubs.types.InternalErrorFault {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getResults");
         gov.nih.nci.cagrid.fqp.results.stubs.GetResultsRequest params = new gov.nih.nci.cagrid.fqp.results.stubs.GetResultsRequest();

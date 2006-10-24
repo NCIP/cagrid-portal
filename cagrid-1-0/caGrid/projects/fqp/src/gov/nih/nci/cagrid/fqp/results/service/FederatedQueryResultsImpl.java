@@ -21,7 +21,7 @@ public class FederatedQueryResultsImpl extends FederatedQueryResultsImplBase {
 		super();
 	}
 
-	public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection getResults() throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
+	public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection getResults() throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault, gov.nih.nci.cagrid.fqp.stubs.types.InternalErrorFault {
 		FQPResultResource resource = (FQPResultResource) ResourceContext.getResourceContext().getResource();
 		if (!resource.isComplete()) {
 			ProcessingNotCompleteFault fault = new ProcessingNotCompleteFault();
