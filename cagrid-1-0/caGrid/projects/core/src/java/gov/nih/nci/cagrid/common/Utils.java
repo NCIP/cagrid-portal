@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -108,7 +109,7 @@ public class Utils {
 	}
 
 
-	public static void copyFile(File in, File out) throws Exception {
+	public static void copyFile(File in, File out) throws IOException {
 		FileInputStream fis = new FileInputStream(in);
 		out.getCanonicalFile().getParentFile().mkdirs();
 		FileOutputStream fos = new FileOutputStream(out);
@@ -124,7 +125,7 @@ public class Utils {
 
 	// Copies all files under srcDir to dstDir.
 	// If dstDir does not exist, it will be created.
-	public static void copyDirectory(File srcDir, File dstDir) throws Exception {
+	public static void copyDirectory(File srcDir, File dstDir) throws IOException {
 		if (srcDir.isDirectory()) {
 			if (!dstDir.exists()) {
 				dstDir.mkdir();
@@ -218,7 +219,7 @@ public class Utils {
 	}
 
 
-	public static StringBuffer fileToStringBuffer(File file) throws Exception {
+	public static StringBuffer fileToStringBuffer(File file) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		StringBuffer sb = new StringBuffer();
 		try {
@@ -226,18 +227,15 @@ public class Utils {
 			while ((s = br.readLine()) != null) {
 				sb.append(s + "\n");
 			}
-		} catch (Exception e) {
+		} finally {
 			br.close();
-			throw new Exception("Error reading the buffer: " + e.getMessage(), e);
 		}
-
-		br.close();
 
 		return sb;
 	}
 
 
-	public static StringBuffer inputStreamToStringBuffer(InputStream stream) throws Exception {
+	public static StringBuffer inputStreamToStringBuffer(InputStream stream) throws IOException {
 		InputStreamReader reader = new InputStreamReader(stream);
 		StringBuffer str = new StringBuffer();
 		char[] buff = new char[8192];
@@ -360,7 +358,7 @@ public class Utils {
 	}
 
 
-	public static void stringBufferToFile(StringBuffer string, String fileName) throws Exception {
+	public static void stringBufferToFile(StringBuffer string, String fileName) throws IOException {
 		FileWriter fw = new FileWriter(new File(fileName));
 		fw.write(string.toString());
 		fw.close();
@@ -431,7 +429,7 @@ public class Utils {
 	 * @return The relative path from the source file's directory to the
 	 *         destination file
 	 */
-	public static String getRelativePath(File source, File destination) throws Exception {
+	public static String getRelativePath(File source, File destination) throws IOException {
 		String sourceDir = null;
 		String destDir = null;
 		if (source.isDirectory()) {
