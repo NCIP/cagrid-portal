@@ -18,7 +18,15 @@
 	<!-- Configuration files (security, etc.) to be included in the GAR file -->
 	<property name="garetc.id" value="garetc" />
 	<fileset dir="tmp/etc" id="garetc" />
-	<target name="deployTomcat" description="Deploys to CATALINA_HOME">
+	
+	<target name="prepareDeploy" >
+		<input
+			message="Please enter the hostname of the deployment machine. This must be set to the hostname which will be used by external clients to connect to this service.  [${service.deployment.host.default}]:"
+			addproperty="service.deployment.host"
+			defaultvalue="${service.deployment.host.default}"/>
+	</target>
+	
+	<target name="deployTomcat" depends="prepareDeploy" description="Deploys to CATALINA_HOME">
 		<echo message="Deploying service under Tomcat at ${tomcat.dir}"/>
 		<!-- Configure Tomcat destination for skeletons -->
 		<pathconvert dirsep="_" property="service.deployment.dir.name">
@@ -106,7 +114,7 @@
 		<!--<delete dir="tmp" />-->
 	</target>
 	<!-- make deployment configured gar -->
-	<target name="createDeploymentGar" depends="all">
+	<target name="createDeploymentGar">
 		<property name="service.deployment.dir.name" value="${service.name}"/>
 		<property name="service.deployment.dir"
 			value="${globus.location}/etc/${service.deployment.dir.name}"/>
@@ -165,7 +173,7 @@
 		<delete dir="tmp"/>
 	</target>
 	<!-- deploy a gar to globus -->
-	<target name="deployGlobus" depends="createDeploymentGar"
+	<target name="deployGlobus" depends="prepareDeploy,createDeploymentGar"
 		description="Deploys a gar to GLOBUS_LOCATION (to set the services properties file set the
 		ant command line variable -Dservice.properties.file)">
 		<echo message="Deploying server to Globus Container"/>
