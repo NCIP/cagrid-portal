@@ -447,6 +447,7 @@
             </fileset>
             <fileset dir="${utils.src.dir}">
                 <include name="**/*.java" />
+            	<include name="**/*.xsd.template"/>
             </fileset>
         </jar>
     </target>
