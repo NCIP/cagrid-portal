@@ -37,7 +37,7 @@ public class CSMPanel extends JPanel {
 	private JLabel jLabel1 = null;
 	private JTextField protectionElement = null;
 	private JLabel jLabel2 = null;
-	private JTextField privilege = null;
+	private JComboBox privilege = null;
 	private String serviceType;
 	private String methodName;
 
@@ -189,9 +189,17 @@ public class CSMPanel extends JPanel {
 	 * 
 	 * @return javax.swing.JTextField
 	 */
-	private JTextField getPrivilege() {
+	private JComboBox getPrivilege() {
 		if (privilege == null) {
-			privilege = new JTextField();
+			privilege = new JComboBox();
+			privilege.setEditable(true);
+			privilege.addItem("EXECUTE");
+			privilege.addItem("READ");
+			privilege.addItem("WRITE");
+			privilege.addItem("CREATE");
+			privilege.addItem("ACCESS");
+			privilege.addItem("UPDATE");
+			privilege.addItem("DELETE");
 		}
 		return privilege;
 	}
@@ -199,7 +207,16 @@ public class CSMPanel extends JPanel {
 
 	public void setAuthorization(CSMAuthorization csm) {
 		this.getProtectionType().setSelectedItem(csm.getProtectionMethod());
-		this.getPrivilege().setText(csm.getPrivilege());
+		boolean hasPrivilege = false;
+		for (int i = 0; i < getPrivilege().getItemCount(); i++) {
+			if (getPrivilege().getItemAt(i).equals(csm.getPrivilege())) {
+				hasPrivilege = true;
+			}
+		}
+		if (!hasPrivilege) {
+			getPrivilege().addItem(csm.getPrivilege());
+		}
+		this.getPrivilege().setSelectedItem(csm.getPrivilege());
 		this.getApplicationContext().setText(csm.getApplicationContext());
 	}
 
@@ -207,7 +224,7 @@ public class CSMPanel extends JPanel {
 	public CSMAuthorization getAuthorization() throws Exception {
 		CSMAuthorization csm = new CSMAuthorization();
 		csm.setProtectionMethod((ProtectionMethod) getProtectionType().getSelectedItem());
-		String priv = Utils.clean(getPrivilege().getText());
+		String priv = Utils.clean((String)getPrivilege().getSelectedItem());
 		if (priv == null) {
 			StringBuffer sb = new StringBuffer();
 
