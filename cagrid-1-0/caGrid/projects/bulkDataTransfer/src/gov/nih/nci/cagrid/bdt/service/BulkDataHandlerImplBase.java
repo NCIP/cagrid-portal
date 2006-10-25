@@ -2,8 +2,6 @@ package gov.nih.nci.cagrid.bdt.service;
 
 import java.rmi.RemoteException;
 
-import gov.nih.nci.cagrid.bdt.service.ServiceConfiguration;
-
 import javax.naming.InitialContext;
 
 import org.apache.axis.MessageContext;
@@ -18,29 +16,9 @@ import org.globus.wsrf.ResourceHome;
  * 
  */
 public abstract class BulkDataHandlerImplBase {
-    private ServiceConfiguration configuration;
 	
 	public BulkDataHandlerImplBase() throws RemoteException {
 	
-	}
-	
-	public ServiceConfiguration getConfiguration() throws Exception {
-		if (this.configuration != null) {
-			return this.configuration;
-		}
-		MessageContext ctx = MessageContext.getCurrentContext();
-
-		String servicePath = ctx.getTargetService();
-
-		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
-		try {
-			javax.naming.Context initialContext = new InitialContext();
-			this.configuration = (ServiceConfiguration) initialContext.lookup(jndiName);
-		} catch (Exception e) {
-			throw new Exception("Unable to instantiate service configuration.", e);
-		}
-
-		return this.configuration;
 	}
 	
 	public ResourceHome getResourceHome(String resourceKey) throws Exception {
