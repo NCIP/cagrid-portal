@@ -48,41 +48,52 @@ public class SyncAuthorization {
 		StringBuffer sb = new StringBuffer();
 
 		if (csm != null) {
-			String obj = null;
-			if (csm.getProtectionMethod().equals(ProtectionMethod.ServiceURI)) {
-				org.apache.axis.message.addressing.EndpointReferenceType type = org.globus.wsrf.utils.AddressingUtils
-					.createEndpointReference(null);
-				obj = type.getAddress().toString();
-			} else {
-				obj = service.getNamespace() + "/" + service.getName();
-			}
-			if (isMethodLevel) {
-				obj = obj + ":" + method.getName();
-			}
-
-			// TODO: ADD APPLICATION CONTEXT TO GUI AND FIX GUI SHOWING SERVICE NAME
-			String application = "testing123";
-
+			sb.append(lineStart + "\n");
 			sb.append(lineStart + "/******************* Start CSM Authorization *******************/\n");
 			sb.append(lineStart + "\n");
-			sb.append(lineStart + "String gridIdentity = getCallerIdentity();\n");
-			sb.append(lineStart + "String object = \"" + obj + "\";\n");
-			sb.append(lineStart + "String privilege = \"" + csm.getPrivilege() + "\";\n");
 			sb.append(lineStart + "boolean authorized = false;\n");
+			sb.append(lineStart + "try{\n");
+			if (csm.getProtectionMethod().equals(ProtectionMethod.ServiceURI)) {
+				sb
+					.append(lineStart
+						+ "\t"
+						+ "org.apache.axis.message.addressing.EndpointReferenceType type = org.globus.wsrf.utils.AddressingUtils.createEndpointReference(null);\n");
+				if (isMethodLevel) {
+					sb.append(lineStart + "\t" + "String object = type.getAddress().toString()+\":"
+						+ method.getName() + "\";\n");
+				} else {
+					sb.append(lineStart + "\t" + "String object = type.getAddress().toString();\n");
+				}
+			} else {
+				if (isMethodLevel) {
+					sb.append(lineStart + "\t" + "String object = \"" + service.getName() + ":" + method.getName()
+						+ "\";\n");
+				} else {
+					sb.append(lineStart + "\t" + "String object = \"" + service.getName() + "\";\n");
+				}
+			}
+
+			// TODO: ADD APPLICATION CONTEXT TO GUI
+			// NAME
+			String application = "testing123";
+
+			sb.append(lineStart + "\t" + "String gridIdentity = getCallerIdentity();\n");
+
+			sb.append(lineStart + "\t" + "String privilege = \"" + csm.getPrivilege() + "\";\n");
+
 			sb
 				.append(lineStart
-					+ "gov.nih.nci.cagrid.authorization.impl.GridAuthorizationManager mgr = new gov.nih.nci.cagrid.authorization.impl.CSMGridAuthorizationManager(\""
+					+ "\t"
+					+ "gov.nih.nci.cagrid.authorization.GridAuthorizationManager mgr = new gov.nih.nci.cagrid.authorization.impl.CSMGridAuthorizationManager(\""
 					+ application + "\");\n");
 
-			sb.append(lineStart + "\t" + "try{\n");
-			sb.append(lineStart + "\t\t" + "authorized = mgr.isAuthorized(gridIdentity,object,privilege);\n");
-			sb.append(lineStart + "\t" + "}catch(Exception e){\n");
-			sb.append(lineStart + "\t\t" + "e.printStackTrace();\n");
+			sb.append(lineStart + "\t" + "authorized = mgr.isAuthorized(gridIdentity,object,privilege);\n");
+			sb.append(lineStart + "}catch(Exception e){\n");
+			sb.append(lineStart + "\t" + "e.printStackTrace();\n");
 			sb
 				.append(lineStart
-					+ "\t\t"
+					+ "\t"
 					+ "throw new java.rmi.RemoteException(\"Error determining if caller is authorized to perform request\");\n");
-			sb.append(lineStart + "\t" + "}\n");
 			sb.append(lineStart + "}\n");
 			sb.append(lineStart + "if(!authorized){\n");
 			sb
@@ -92,6 +103,7 @@ public class SyncAuthorization {
 
 			sb.append(lineStart + "\n");
 			sb.append(lineStart + "/******************** End CSM Authorization ********************/\n");
+			sb.append(lineStart + "\n");
 
 			// gov.nih.nci.cagrid.authorization.impl.GridAuthorizationManager
 			// mgr = new
