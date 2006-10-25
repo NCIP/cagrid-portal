@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gov.nih.nci.cagrid.data.utilities.validation;
 
 import gov.nih.nci.cagrid.common.SchemaValidationException;
@@ -49,7 +46,7 @@ public class CQLQueryResultsValidator {
 
 	protected static Log LOG = LogFactory.getLog(CQLQueryResultsValidator.class.getName());
 
-	//	 wsdl sources
+	// wsdl sources
 	private EndpointReferenceType epr = null;
 	private String wsdlFile = null;
 
@@ -180,7 +177,7 @@ public class CQLQueryResultsValidator {
 			URI cqlResultTypesXSDLocationURI = WSDLUtils.determineSchemaLocation(schemas,
 				this.serviceResultTypesNamespace);
 			if (cqlResultTypesXSDLocationURI == null) {
-				throw new SchemaValidationException("Unable to determine remote location of :"
+				throw new SchemaValidationException("Unable to determine remote location of schema "
 					+ this.serviceResultTypesNamespace);
 			}
 			this.serviceResultTypesXSDLocation = cqlResultTypesXSDLocationURI.toString();
@@ -217,7 +214,6 @@ public class CQLQueryResultsValidator {
 
 
 	public static void main(String[] args) {
-
 		try {
 			EndpointReferenceType epr = AddressingUtils.createEndpointReference(args[0], null);
 			CQLQueryResultsValidator validator = new CQLQueryResultsValidator(epr);
@@ -229,5 +225,4 @@ public class CQLQueryResultsValidator {
 			e.printStackTrace();
 		}
 	}
-
 }

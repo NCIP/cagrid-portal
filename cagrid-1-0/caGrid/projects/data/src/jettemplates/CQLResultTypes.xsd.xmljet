@@ -18,13 +18,13 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 				for (int i = 0; i < packages.length; i++) {
 					CadsrPackage pack = packages[i];
 					String psNS = pack.getMappedNamespace();
-					NamespaceType ns=CommonTools.getNamespaceType(serviceInfo.getNamespaces(), psNS);
+					NamespaceType ns = CommonTools.getNamespaceType(serviceInfo.getNamespaces(), psNS);
 					String location ="";
-					if(ns!=null){
-						location=ns.getLocation();
+					if (ns != null){
+						location = ns.getLocation();
 					}
-					stringBuffer
-						.append("\t<xs:import namespace=\"" + psNS + "\" schemaLocation=\"" + location + "\"/>\n");
+					stringBuffer.append("\t<xs:import namespace=\"" + psNS 
+						+ "\" schemaLocation=\"" + location + "\"/>\n");
 				}
 			}
 		}
