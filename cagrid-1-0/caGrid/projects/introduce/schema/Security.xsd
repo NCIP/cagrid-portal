@@ -52,6 +52,7 @@
 		<xs:sequence>
 		    <xs:element name="ApplicationContext" minOccurs="1" maxOccurs="1" type="xs:string"/>
 			<xs:element name="ProtectionMethod" minOccurs="1" maxOccurs="1" type="ProtectionMethod"/>
+			<xs:element name="CustomProtectionMethod" minOccurs="0" maxOccurs="1" type="xs:string"/>
 			<xs:element name="Privilege" minOccurs="1" maxOccurs="1" type="xs:string"/>
 		</xs:sequence>
 	</xs:complexType>
@@ -60,6 +61,7 @@
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="ServiceURI"/>
 			<xs:enumeration value="ServiceType"/>
+			<xs:enumeration value="Custom"/>
 		</xs:restriction>
 	</xs:simpleType>
 	

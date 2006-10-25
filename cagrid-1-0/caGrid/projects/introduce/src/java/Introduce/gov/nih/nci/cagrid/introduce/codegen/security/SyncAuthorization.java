@@ -73,13 +73,15 @@ public class SyncAuthorization {
 				} else {
 					sb.append(lineStart + "\t" + "String object = type.getAddress().toString();\n");
 				}
-			} else {
+			} else if (csm.getProtectionMethod().equals(ProtectionMethod.ServiceType)) {
 				if (isMethodLevel) {
 					sb.append(lineStart + "\t" + "String object = \"" + service.getName() + ":" + method.getName()
 						+ "\";\n");
 				} else {
 					sb.append(lineStart + "\t" + "String object = \"" + service.getName() + "\";\n");
 				}
+			} else {
+				sb.append(lineStart + "\t" + "String object = \"" + csm.getCustomProtectionMethod() + "\";\n");
 			}
 
 			String application = csm.getApplicationContext();

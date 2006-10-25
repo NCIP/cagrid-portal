@@ -153,18 +153,27 @@ public class CSMPanel extends JPanel {
 					StringBuffer pe = new StringBuffer();
 					if (protectionType.getSelectedItem().equals(ProtectionMethod.ServiceType)) {
 						pe.append(serviceType);
-
+						if (methodName != null) {
+							pe.append(":" + methodName);
+						}
+						getProtectionElement().setEditable(false);
+						getProtectionElement().setText(pe.toString());
+					} else if (protectionType.getSelectedItem().equals(ProtectionMethod.ServiceURI)) {
+						pe.append("http://[SERVICE_URL_DETERMINED_AT_RUNTIME]");
+						if (methodName != null) {
+							pe.append(":" + methodName);
+						}
+						getProtectionElement().setEditable(false);
+						getProtectionElement().setText(pe.toString());
 					} else {
-						pe.append("http://some_grid_service_url");
+						getProtectionElement().setEditable(true);
 					}
-					if (methodName != null) {
-						pe.append(":" + methodName);
-					}
-					getProtectionElement().setText(pe.toString());
+
 				}
 			});
 			protectionType.addItem(ProtectionMethod.ServiceType);
 			protectionType.addItem(ProtectionMethod.ServiceURI);
+			protectionType.addItem(ProtectionMethod.Custom);
 		}
 		return protectionType;
 	}
@@ -207,6 +216,9 @@ public class CSMPanel extends JPanel {
 
 	public void setAuthorization(CSMAuthorization csm) {
 		this.getProtectionType().setSelectedItem(csm.getProtectionMethod());
+		if (csm.getProtectionMethod().equals(ProtectionMethod.Custom) && csm.getCustomProtectionMethod() != null) {
+			this.getProtectionElement().setText(csm.getCustomProtectionMethod());
+		}
 		boolean hasPrivilege = false;
 		for (int i = 0; i < getPrivilege().getItemCount(); i++) {
 			if (getPrivilege().getItemAt(i).equals(csm.getPrivilege())) {
@@ -224,7 +236,25 @@ public class CSMPanel extends JPanel {
 	public CSMAuthorization getAuthorization() throws Exception {
 		CSMAuthorization csm = new CSMAuthorization();
 		csm.setProtectionMethod((ProtectionMethod) getProtectionType().getSelectedItem());
-		String priv = Utils.clean((String)getPrivilege().getSelectedItem());
+
+		if (csm.getProtectionMethod().equals(ProtectionMethod.Custom)) {
+			String custom = Utils.clean(this.getProtectionElement().getText());
+			if (custom == null) {
+				StringBuffer sb = new StringBuffer();
+
+				if (methodName != null) {
+					sb.append("You must specify a protection element to protect the method, " + methodName
+						+ " with CSM!!!");
+				} else {
+					sb.append("You must specify a protection element to protect the service, " + serviceType
+						+ " with CSM!!!");
+				}
+				throw new Exception(sb.toString());
+			}
+
+		}
+
+		String priv = Utils.clean((String) getPrivilege().getSelectedItem());
 		if (priv == null) {
 			StringBuffer sb = new StringBuffer();
 
