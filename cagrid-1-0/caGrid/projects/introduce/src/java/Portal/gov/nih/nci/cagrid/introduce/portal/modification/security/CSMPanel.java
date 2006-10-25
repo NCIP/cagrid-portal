@@ -250,6 +250,8 @@ public class CSMPanel extends JPanel {
 						+ " with CSM!!!");
 				}
 				throw new Exception(sb.toString());
+			}else{
+				csm.setCustomProtectionMethod(custom);
 			}
 
 		}
