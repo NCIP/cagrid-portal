@@ -53,6 +53,15 @@ public class SyncAuthorization {
 			sb.append(lineStart + "\n");
 			sb.append(lineStart + "boolean authorized = false;\n");
 			sb.append(lineStart + "try{\n");
+			sb.append(lineStart + "String csmConfig = " + service.getPackageName()
+				+ ".service.ServiceConfiguration.getConfiguration().getCsmConfiguration();\n");
+			sb.append(lineStart + "if((csmConfig == null)||(csmConfig.trim().length()<=0)){\n");
+			sb.append(lineStart + "\t"
+				+ "throw new java.rmi.RemoteException(\"No CSM Configuration file could be found\");\n");
+			sb.append(lineStart + "}else{\n");
+			sb.append(lineStart + "\t" + "System.setProperty(\"gov.nih.nci.security.configFile\", csmConfig);\n");
+			sb.append(lineStart + "}\n");
+
 			if (csm.getProtectionMethod().equals(ProtectionMethod.ServiceURI)) {
 				sb
 					.append(lineStart
