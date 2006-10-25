@@ -33,7 +33,7 @@ public class SyncAuthorization {
 				if (service.getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization() != null) {
 					return generateGridGrouper(service.getServiceSecurity().getServiceAuthorization()
 						.getGridGrouperAuthorization(), lineStart);
-				} else if (method.getMethodSecurity().getMethodAuthorization().getCSMAuthorization() != null) {
+				} else if (service.getServiceSecurity().getServiceAuthorization().getCSMAuthorization() != null) {
 					return generateCSM(service, method, service.getServiceSecurity().getServiceAuthorization()
 						.getCSMAuthorization(), false, lineStart);
 				}
@@ -60,7 +60,7 @@ public class SyncAuthorization {
 				obj = obj + ":" + method.getName();
 			}
 
-			// TODO: ADD THIS
+			// TODO: ADD APPLICATION CONTEXT TO GUI AND FIX GUI SHOWING SERVICE NAME
 			String application = "testing123";
 
 			sb.append(lineStart + "/******************* Start CSM Authorization *******************/\n");
@@ -71,8 +71,8 @@ public class SyncAuthorization {
 			sb.append(lineStart + "boolean authorized = false;\n");
 			sb
 				.append(lineStart
-					+ "gov.nih.nci.cagrid.authorization.impl.GridAuthorizationManager mgr = new gov.nih.nci.cagrid.authorization.impl.CSMGridAuthorizationManager("
-					+ application + ");\n");
+					+ "gov.nih.nci.cagrid.authorization.impl.GridAuthorizationManager mgr = new gov.nih.nci.cagrid.authorization.impl.CSMGridAuthorizationManager(\""
+					+ application + "\");\n");
 
 			sb.append(lineStart + "\t" + "try{\n");
 			sb.append(lineStart + "\t\t" + "authorized = mgr.isAuthorized(gridIdentity,object,privilege);\n");
