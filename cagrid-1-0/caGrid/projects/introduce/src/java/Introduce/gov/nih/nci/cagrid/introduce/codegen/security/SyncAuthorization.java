@@ -59,8 +59,8 @@ public class SyncAuthorization {
 						+ "\t"
 						+ "org.apache.axis.message.addressing.EndpointReferenceType type = org.globus.wsrf.utils.AddressingUtils.createEndpointReference(null);\n");
 				if (isMethodLevel) {
-					sb.append(lineStart + "\t" + "String object = type.getAddress().toString()+\":"
-						+ method.getName() + "\";\n");
+					sb.append(lineStart + "\t" + "String object = type.getAddress().toString()+\":" + method.getName()
+						+ "\";\n");
 				} else {
 					sb.append(lineStart + "\t" + "String object = type.getAddress().toString();\n");
 				}
@@ -73,9 +73,7 @@ public class SyncAuthorization {
 				}
 			}
 
-			// TODO: ADD APPLICATION CONTEXT TO GUI
-			// NAME
-			String application = "testing123";
+			String application = csm.getApplicationContext();
 
 			sb.append(lineStart + "\t" + "String gridIdentity = getCallerIdentity();\n");
 
@@ -159,45 +157,4 @@ public class SyncAuthorization {
 		}
 		return gg.toString();
 	}
-
-
-	private static CSMAuthorization getCSMAuthorization(ServiceType service, MethodType method) {
-		if (method.getMethodSecurity() != null) {
-			if (method.getMethodSecurity().getMethodAuthorization() != null) {
-				if (method.getMethodSecurity().getMethodAuthorization().getCSMAuthorization() != null) {
-					return method.getMethodSecurity().getMethodAuthorization().getCSMAuthorization();
-				}
-			}
-		}
-		if (service.getServiceSecurity() != null) {
-			if (service.getServiceSecurity().getServiceAuthorization() != null) {
-				if (service.getServiceSecurity().getServiceAuthorization().getCSMAuthorization() != null) {
-					return service.getServiceSecurity().getServiceAuthorization().getCSMAuthorization();
-				}
-			}
-		}
-
-		return null;
-	}
-
-
-	private static MembershipExpression getGridGrouperAuthorization(ServiceType service, MethodType method) {
-		if (method.getMethodSecurity() != null) {
-			if (method.getMethodSecurity().getMethodAuthorization() != null) {
-				if (method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization() != null) {
-					return method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization();
-				}
-			}
-		}
-		if (service.getServiceSecurity() != null) {
-			if (service.getServiceSecurity().getServiceAuthorization() != null) {
-				if (service.getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization() != null) {
-					return service.getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization();
-				}
-			}
-		}
-
-		return null;
-	}
-
 }

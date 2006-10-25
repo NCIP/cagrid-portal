@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
@@ -27,7 +28,7 @@ import javax.swing.border.TitledBorder;
  */
 
 public class CSMPanel extends JPanel {
-	
+
 	public final static String CSM_CONFIGURATION_FILE = "csmConfiguration";
 
 	private static final long serialVersionUID = 1L;
@@ -39,6 +40,10 @@ public class CSMPanel extends JPanel {
 	private JTextField privilege = null;
 	private String serviceType;
 	private String methodName;
+
+	private JLabel jLabel3 = null;
+
+	private JTextField applicationContext = null;
 
 
 	/**
@@ -63,9 +68,23 @@ public class CSMPanel extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+		gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints21.gridy = 0;
+		gridBagConstraints21.weightx = 1.0;
+		gridBagConstraints21.anchor = GridBagConstraints.WEST;
+		gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints21.gridx = 1;
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.gridx = 0;
+		gridBagConstraints11.anchor = GridBagConstraints.WEST;
+		gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints11.gridy = 0;
+		jLabel3 = new JLabel();
+		jLabel3.setText("CSM Application Context");
 		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 		gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints5.gridy = 2;
+		gridBagConstraints5.gridy = 3;
 		gridBagConstraints5.weightx = 1.0;
 		gridBagConstraints5.anchor = GridBagConstraints.WEST;
 		gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
@@ -74,12 +93,12 @@ public class CSMPanel extends JPanel {
 		gridBagConstraints4.gridx = 0;
 		gridBagConstraints4.anchor = GridBagConstraints.WEST;
 		gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
-		gridBagConstraints4.gridy = 2;
+		gridBagConstraints4.gridy = 3;
 		jLabel2 = new JLabel();
 		jLabel2.setText("Privilege");
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints3.gridy = 1;
+		gridBagConstraints3.gridy = 2;
 		gridBagConstraints3.weightx = 1.0;
 		gridBagConstraints3.anchor = GridBagConstraints.WEST;
 		gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
@@ -88,20 +107,20 @@ public class CSMPanel extends JPanel {
 		gridBagConstraints2.gridx = 0;
 		gridBagConstraints2.anchor = GridBagConstraints.WEST;
 		gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
-		gridBagConstraints2.gridy = 1;
+		gridBagConstraints2.gridy = 2;
 		jLabel1 = new JLabel();
 		jLabel1.setText("Protection Element");
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.anchor = GridBagConstraints.WEST;
 		gridBagConstraints1.gridx = 0;
-		gridBagConstraints1.gridy = 0;
+		gridBagConstraints1.gridy = 1;
 		gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 		gridBagConstraints.gridx = 1;
-		gridBagConstraints.gridy = 0;
+		gridBagConstraints.gridy = 1;
 		gridBagConstraints.weightx = 1.0;
 		jLabel = new JLabel();
 		jLabel.setText("Protection Method");
@@ -116,7 +135,8 @@ public class CSMPanel extends JPanel {
 		this.add(getProtectionElement(), gridBagConstraints3);
 		this.add(jLabel2, gridBagConstraints4);
 		this.add(getPrivilege(), gridBagConstraints5);
-
+		this.add(jLabel3, gridBagConstraints11);
+		this.add(getApplicationContext(), gridBagConstraints21);
 	}
 
 
@@ -135,7 +155,7 @@ public class CSMPanel extends JPanel {
 						pe.append(serviceType);
 
 					} else {
-						pe.append("[DEPLOYMENT_SERVICE_URL]");
+						pe.append("http://some_grid_service_url");
 					}
 					if (methodName != null) {
 						pe.append(":" + methodName);
@@ -176,10 +196,13 @@ public class CSMPanel extends JPanel {
 		return privilege;
 	}
 
-	public void setAuthorization(CSMAuthorization csm){
+
+	public void setAuthorization(CSMAuthorization csm) {
 		this.getProtectionType().setSelectedItem(csm.getProtectionMethod());
-		this.getPrivilege().setText(csm.getPrivilege());		
+		this.getPrivilege().setText(csm.getPrivilege());
+		this.getApplicationContext().setText(csm.getApplicationContext());
 	}
+
 
 	public CSMAuthorization getAuthorization() throws Exception {
 		CSMAuthorization csm = new CSMAuthorization();
@@ -195,8 +218,36 @@ public class CSMPanel extends JPanel {
 			}
 			throw new Exception(sb.toString());
 		}
+
 		csm.setPrivilege(priv);
+
+		String application = Utils.clean(getApplicationContext().getText());
+		if (application == null) {
+			StringBuffer sb = new StringBuffer();
+			if (methodName != null) {
+				sb.append("You must specify a CSM application context to protect the method, " + methodName
+					+ " with CSM!!!");
+			} else {
+				sb.append("You must specify a CSM application context to protect the service, " + serviceType
+					+ " with CSM!!!");
+			}
+			throw new Exception(sb.toString());
+		}
+		csm.setApplicationContext(application);
 		return csm;
+	}
+
+
+	/**
+	 * This method initializes applicationContext
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getApplicationContext() {
+		if (applicationContext == null) {
+			applicationContext = new JTextField();
+		}
+		return applicationContext;
 	}
 
 }

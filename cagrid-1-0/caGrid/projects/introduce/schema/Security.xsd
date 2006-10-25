@@ -50,6 +50,7 @@
 	</xs:complexType>
 	<xs:complexType name="CSMAuthorization">
 		<xs:sequence>
+		    <xs:element name="ApplicationContext" minOccurs="1" maxOccurs="1" type="xs:string"/>
 			<xs:element name="ProtectionMethod" minOccurs="1" maxOccurs="1" type="ProtectionMethod"/>
 			<xs:element name="Privilege" minOccurs="1" maxOccurs="1" type="xs:string"/>
 		</xs:sequence>
