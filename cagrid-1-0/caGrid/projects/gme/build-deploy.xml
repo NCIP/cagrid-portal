@@ -96,6 +96,8 @@
 			token="SERVICE-INSTANCE-NAME"/>
 		<replace file="tmp/gme-globus-config.xml" value="etc/${service.deployment.dir.name}"
 			token="ETC-PATH"/>
+		<replace file="tmp/etc/gme-globus-config.xml" value="${service.deployment.host}"
+			token="SERVICE-DEPLOY-HOST"/>
 		<copy overwrite="true" toDir="${service.deployment.dir}">
 			<fileset dir="tmp">
 				<include name="gme-globus-config.xml"/>
@@ -146,6 +148,8 @@
 			token="SERVICE-INSTANCE-PATH"/>
 		<replace file="tmp/etc/gme-globus-config.xml" value="${service.deployment.path}"
 			token="SERVICE-INSTANCE-NAME"/>
+		<replace file="tmp/etc/gme-globus-config.xml" value="${service.deployment.host}"
+			token="SERVICE-DEPLOY-HOST"/>
 		<replace file="tmp/etc/gme-globus-config.xml" value="etc/${service.deployment.dir.name}"
 			token="ETC-PATH"/>
 		<!-- make the gar file -->
