@@ -3,10 +3,12 @@ package gov.nih.nci.cagrid.portal.web;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
 import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
+import gov.nih.nci.cagrid.portal.utils.EPRPingService;
 import org.apache.log4j.Category;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,10 @@ public class ServicesList {
     private List list = new ArrayList();
     private RegisteredService navigatedService;
     private GridServiceManager gridServiceManager;
+    private EPRPingService pingService;
     private int listSize;
+
+    private boolean navigatedServiceStatus;
 
     private Category _logger = Category.getInstance(getClass().getName());
 
@@ -51,6 +56,16 @@ public class ServicesList {
         }
     }
 
+
+    public boolean isNavigatedServiceStatus() {
+        try {
+            navigatedServiceStatus = pingService.ping(navigatedService.getHandle());
+        } catch (RemoteException e) {
+            return false;
+        }
+        return navigatedServiceStatus;
+    }
+
     public int getListSize() {
         return list.size();
     }
@@ -73,5 +88,10 @@ public class ServicesList {
 
     public void setNavigatedService(RegisteredService navigatedService) {
         this.navigatedService = navigatedService;
+    }
+
+
+    public void setPingService(EPRPingService pingService) {
+        this.pingService = pingService;
     }
 }

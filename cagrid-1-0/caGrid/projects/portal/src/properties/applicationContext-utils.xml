@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+
+    <bean id="geocoder" class="gov.nih.nci.cagrid.portal.utils.GeoCoderUtility">
+        <property name="baseURL">
+            <value>http://api.local.yahoo.com/MapsService/V1/geocode</value>
+        </property>
+        <property name="geocoderAppID">
+            <value>@geocoder.application.id@</value>
+        </property>
+    </bean>
+
+    <bean id="eprPingService" class="gov.nih.nci.cagrid.portal.utils.EPRPingServiceImpl"/>
+
+</beans>

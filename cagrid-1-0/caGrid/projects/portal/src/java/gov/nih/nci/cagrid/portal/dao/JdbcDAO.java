@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.portal.dao;
 
-import gov.nih.nci.cagrid.portal.domain.GeoCodeValues;
+import gov.nih.nci.cagrid.portal.common.GeoCodeValues;
 import org.springframework.dao.DataAccessException;
 
 /**

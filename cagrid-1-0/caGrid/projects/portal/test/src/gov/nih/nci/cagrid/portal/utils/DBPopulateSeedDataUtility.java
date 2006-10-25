@@ -78,7 +78,7 @@ public class DBPopulateSeedDataUtility extends BaseSpringAbstractTestCase {
         for (int i = 0; i < fname.length(); i++) {
             c = fname.charAt(i);
             switch (c) {
-                case '\\':
+                case'\\':
                     n.append("\\\\");
                     break;
                 default:

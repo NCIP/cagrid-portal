@@ -270,12 +270,12 @@
             </filterset>
         </copy>
 
-        <copyReplaceDBProperties src.filename="${props.src.dir}/applicationContext-data-access.xml"
-                                 dest.filename="${webinf.classes.dir}/applicationContext-data-access.xml"/>
+        <copyReplaceProperties src.filename="${props.src.dir}/applicationContext-data-access.xml"
+                               dest.filename="${webinf.classes.dir}/applicationContext-data-access.xml"/>
 
 
-        <copyReplaceDBProperties src.filename="${props.src.dir}/applicationContext-data-access-mock.xml"
-                                 dest.filename="${webinf.classes.dir}/applicationContext-data-access-mock.xml"/>
+        <copyReplaceProperties src.filename="${props.src.dir}/applicationContext-data-access-mock.xml"
+                               dest.filename="${webinf.classes.dir}/applicationContext-data-access-mock.xml"/>
 
 
         <copy todir="${webinf.classes.dir}"
@@ -285,6 +285,12 @@
                 <filter token="aggregator.frequency" value="${metadata.aggregator.frequncy}"/>
             </filterset>
         </copy>
+
+        <copy todir="${webinf.classes.dir}"
+              file="${props.src.dir}/applicationContext-utils.xml"
+              filtering="false" overwrite="true">
+        </copy>
+
 
         <copy todir="${webinf.classes.dir}">
             <fileset dir="${props.src.dir}">
@@ -300,7 +306,7 @@
     </target>
 
     <!-- Copy and replace DB properties in the Spring config files -->
-    <macrodef name="copyReplaceDBProperties">
+    <macrodef name="copyReplaceProperties">
         <attribute name="src.filename"/>
         <attribute name="dest.filename"/>
         <sequential>
@@ -312,6 +318,7 @@
                     <filter token="jdbc.url" value="${db.connection.url}"/>
                     <filter token="jdbc.username" value="${db.connection.username}"/>
                     <filter token="jdbc.password" value="${db.connection.password}"/>
+                    <filter token="geocoder.application.id" value="${geocoder.application.id}"/>
                 </filterset>
             </copy>
         </sequential>
@@ -400,7 +407,7 @@
     <!-- will create Portal DB and drop seed data -->
     <!-- Read the Readme.txt for more infor -->
     <target name="createDatabase" depends="setClasspath" description="Will drop the Portal Database">
-        <java classname="gov.nih.nci.cagrid.portal.db.ExecutePortalDDL"
+        <java classname="gov.nih.nci.cagrid.portal.db.CreatePortalDatabase"
               failonerror="true" logerror="true">
             <classpath>
                 <path refid="portal.run.classpath"/>
@@ -412,7 +419,7 @@
 
 
     <target name="populateDBWithSeedData" depends="setClasspath">
-        <java classname="gov.nih.nci.cagrid.portal.db.PopulateDBWithSeedData"
+        <java classname="gov.nih.nci.cagrid.portal.db.CreatePortalSeedData"
               failonerror="true" logerror="true">
             <classpath>
                 <path refid="portal.run.classpath"/>

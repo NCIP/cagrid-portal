@@ -4,6 +4,7 @@
 <beans>
     <import resource="classpath:applicationContext-data-access.xml"/>
     <import resource="classpath:applicationContext-aggregators.xml"/>
+    <import resource="classpath:applicationContext-utils.xml"/>
 
 
     <!-- Apply all logging advices to all bean defiinition -->
@@ -25,15 +26,6 @@
 
     <bean name="loggingAdvisor"
           class="gov.nih.nci.cagrid.portal.utils.MethodLoggingAdvisor"/>
-
-
-    <!-- First thing to do is to sync with GTS to establish trust -->
-    <bean id="syncGTSInitBean" class="gov.nih.nci.cagrid.portal.utils.SyncGTSInitUtility">
-        <!--Set the indexes to aggregate from-->
-        <property name="syncGTSDescriptionFile">
-            <value>classpath:sync-description.xml</value>
-        </property>
-    </bean>
 
 
     <!-- Database initi and sync tasks -->

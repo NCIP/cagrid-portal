@@ -36,11 +36,44 @@
         </property>
     </bean>
 
+    <!-- First thing to do is to sync with GTS to establish trust -->
+    <bean id="syncGTSInitBean" class="gov.nih.nci.cagrid.portal.utils.SyncGTSInitUtility">
+        <!--Set the indexes to aggregate from-->
+        <property name="syncGTSDescriptionFile">
+            <value>classpath:sync-description.xml</value>
+        </property>
+    </bean>
+
+    <!-- Also set the syncGTSInitBean as a timer task to sync periodically -->
+    <bean id="syncMethodInvokingTask" class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+        <property name="targetObject">
+            <ref bean="syncGTSInitBean"/>
+        </property>
+        <property name="targetMethod">
+            <value>afterPropertiesSet</value>
+        </property>
+    </bean>
+
+    <!-- Sync every 10 minutes -->
+    <bean id="syncGTSTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+        <property name="delay">
+            <value>60000</value>
+        </property>
+        <property name="period">
+            <value>60000</value>
+        </property>
+        <property name="timerTask">
+            <ref bean="syncMethodInvokingTask"/>
+        </property>
+    </bean>
+
+
     <bean id="timerFactory"
           class="org.springframework.scheduling.timer.TimerFactoryBean">
         <property name="scheduledTimerTasks">
             <list>
                 <ref local="indexAggregatorTask"/>
+                <ref local="syncGTSTask"/>
             </list>
         </property>
     </bean>

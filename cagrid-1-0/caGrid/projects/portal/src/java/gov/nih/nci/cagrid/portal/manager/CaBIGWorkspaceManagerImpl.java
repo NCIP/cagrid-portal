@@ -45,7 +45,7 @@ public class CaBIGWorkspaceManagerImpl extends GeocodingBaseManagerImpl
                 }
             }
         }
-
+        _logger.debug("Saving workspace" + workspace.getShortName() + " with " + workspace.getParticipants().size() + " participants");
         super.save(workspace);
     }
 }

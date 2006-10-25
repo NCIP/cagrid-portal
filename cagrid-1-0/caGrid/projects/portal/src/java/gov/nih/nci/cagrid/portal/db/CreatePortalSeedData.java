@@ -15,15 +15,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Time: 9:26:01 AM
  * To change this template use File | Settings | File Templates.
  */
-public class ExecutePortalDDL {
+public class CreatePortalSeedData {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath*:/**/applicationContext-dbInit.xml");
         PortalDDLExecutor ddlExecutor = (PortalDDLExecutor) ctx.getBean("ddlExecutor");
-        //execut the DLL
-        //ddlExecutor.executePortalDDL();
-        //   ddlExecutor.executePopulateDBWithZipCodes();
+
         ddlExecutor.executePopulateDBWithWorkspaces();
         ddlExecutor.executePopulateDBWithParticipants();
 

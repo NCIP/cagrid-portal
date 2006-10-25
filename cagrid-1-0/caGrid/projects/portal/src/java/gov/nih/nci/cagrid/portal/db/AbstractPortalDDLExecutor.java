@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.portal.db;
 import gov.nih.nci.cagrid.portal.domain.CaBIGParticipant;
 import gov.nih.nci.cagrid.portal.domain.CaBIGWorkspace;
 import gov.nih.nci.cagrid.portal.exception.PortalInitializationException;
+import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
 import gov.nih.nci.cagrid.portal.manager.CaBIGWorkspaceManager;
 import org.apache.log4j.Category;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -116,28 +117,36 @@ public abstract class AbstractPortalDDLExecutor implements PortalDDLExecutor {
                         String phone = getDataCellValue(dataRow.getCell((short) 10));
                         String email = getDataCellValue(dataRow.getCell((short) 11));
 
+                        /** only insert valid participant **/
+                        if (name != null && postalCode != null && postalCode.trim().length() > 4) {
+                            participant.setName(name);
+                            participant.setInstitute(institute);
+                            participant.setHomepageURL(homepage);
+                            participant.setStatus(status);
+                            participant.setStreet1(street1);
+                            participant.setStreet2(street2);
+                            participant.setCity(city);
+                            participant.setState(state);
+                            participant.setCountry(country);
+                            participant.setPostalCode(postalCode);
+                            participant.setPhoneNumber(phone);
+                            participant.setEmail(email);
 
-                        participant.setName(name);
-                        participant.setInstitute(institute);
-                        participant.setHomepageURL(homepage);
-                        participant.setStatus(status);
-                        participant.setStreet1(street1);
-                        participant.setStreet2(street2);
-                        participant.setCity(city);
-                        participant.setState(state);
-                        participant.setCountry(country);
-                        participant.setPostalCode(postalCode);
-                        participant.setPhoneNumber(phone);
-                        participant.setEmail(email);
-
-                        _logger.debug("Adding " + participant.getName() + " to workspace " + workspace.getShortName());
-                        workspace.addParticipant(participant);
+                            workspace.addParticipant(participant);
+                        } else if (name != null)
+                            _logger.warn("In sheet for " + workspace.getShortName() + " Pariticpant " + getDataCellValue(dataRow.getCell((short) 0)) + " has invalid zip code and will not be saved");
                     }
 
                 } else
                     _logger.warn("Sheet for " + workspace.getShortName() + " workspace not found. Please check the excel file.");
 
-                caBIGWorkspaceManager.save(workspace);
+                try {
+                    caBIGWorkspaceManager.save(workspace);
+                } catch (PortalRuntimeException e) {
+                    _logger.error(e.getMessage());
+                    throw new PortalInitializationException(e);
+                    //log and continue
+                }
                 _logger.debug("Workspace saved " + workspace.getShortName());
             }
 

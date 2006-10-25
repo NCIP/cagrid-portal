@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.portal.dao.jdbc;
 
+import gov.nih.nci.cagrid.portal.common.GeoCodeValues;
 import gov.nih.nci.cagrid.portal.dao.JdbcDAO;
-import gov.nih.nci.cagrid.portal.domain.GeoCodeValues;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;

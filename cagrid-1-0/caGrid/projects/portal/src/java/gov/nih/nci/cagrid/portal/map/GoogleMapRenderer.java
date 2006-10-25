@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.portal.map;
 
-import gov.nih.nci.cagrid.portal.domain.RegisteredService;
-import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import org.apache.myfaces.renderkit.html.HTML;
 import org.apache.myfaces.renderkit.html.HtmlRenderer;
 import org.apache.myfaces.renderkit.html.HtmlRendererUtils;
@@ -13,6 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,6 +29,8 @@ public class GoogleMapRenderer extends HtmlRenderer {
     private String GOOGLE_MAP_SCRIPT_RESOURCE_KEY = HtmlRenderer.class.getName() + ".MAP_SCRIPTS_WRITTEN";
 
     private final String _newLine = "\n";
+
+    private HashSet mapNodes = new HashSet();
 
     private String[] MAP_ROOT_ELEMENT_ATTR = {
             HTML.ALIGN_ATTR,
@@ -97,41 +98,37 @@ public class GoogleMapRenderer extends HtmlRenderer {
             if (!data.isRowAvailable()) {
                 break;
             }
-            Object row = data.getRowData();
-            if (row instanceof ResearchCenter) {
-                ResearchCenter rc = (ResearchCenter) row;
+            MapNode node = (MapNode) data.getRowData();
+            boolean addoffset = !mapNodes.add(node);
 
-                String lat = rc.getLatitude().toString();
-                String lng = rc.getLongitude().toString();
+            String lat = GoogleMapRendererUtils.getCoordValue(node.getGeoValues().getLatitude(), addoffset);
+            String lng = GoogleMapRendererUtils.getCoordValue(node.getGeoValues().getLongitude(), addoffset);
 
-                if (lat != null && lng != null) {
-                    out.write("var point = new GLatLng(" + lat + "," + lng + ");");
-                    out.write("var marker" + i + " = new GMarker(point);");
-                    out.write("GEvent.addListener(marker" + i + ", \"click\", function() {");
-                    out.write("marker" + i + ".openInfoWindowHtml(\"" + rc.getShortName() + "<br>" + rc.getDisplayName() + "\");");
-                    out.write("});");
-                    //out.write(mapVar + ".addOverlay(createMarker(point,\"" + rc.getShortName() + "\",\"" + rc.getDisplayName() + "\"))");
-                    out.write("map.addOverlay(marker" + i + ");");
+            if (lat != null && lng != null) {
+                out.write("var point = new GLatLng(" + lat + "," + lng + ");");
+                out.write(_newLine);
+                out.write("var marker" + i + " = new GMarker(point);");
+                out.write(_newLine);
+                out.write("GEvent.addListener(marker" + i + ", \"click\", function() {");
+                out.write(_newLine);
+                out.write("marker" + i + ".openInfoWindowHtml(\"");
+
+                // Display the description text for the node
+                out.write(node.getTitle());
+
+                for (Iterator iter = node.getDisplayText().iterator(); iter.hasNext();) {
+                    out.startElement(HTML.BR_ELEM, null);
+                    out.endElement(HTML.BR_ELEM);
+                    out.write((String) iter.next());
                 }
-            } else if (row instanceof RegisteredService) {
-                RegisteredService service = (RegisteredService) row;
+                out.write("\");");
+                out.write("});");
 
-                if (service.getResearchCenter() != null) {
-                    String lat = service.getResearchCenter().getLatitude().toString();
-                    String lng = service.getResearchCenter().getLongitude().toString();
-
-                    if (lat != null && lng != null) {
-                        out.write("var point = new GLatLng(" + lat + "," + lng + ");");
-                        if (service.getType() == RegisteredService.ANALYTICAL_SERVICE)
-                            out.write("var marker = new GMarker(point, asIcon);");
-                        if (service.getType() == RegisteredService.DATA_SERVICE)
-                            out.write("var marker = new GMarker(point, dsIcon);");
-                        out.write(mapVar + ".addOverlay(marker);");
-                    }
-                }
+                //out.write(mapVar + ".addOverlay(createMarker(point,\"" + rc.getShortName() + "\",\"" + rc.getDisplayName() + "\"))");
+                out.write("map.addOverlay(marker" + i + ");");
             }
-        }
 
+        }//end for loop
     }
 
 

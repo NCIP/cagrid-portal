@@ -47,7 +47,11 @@
     </bean>
 
     <bean id="geocodingManager" class="gov.nih.nci.cagrid.portal.manager.GeocodingBaseManagerImpl"
-          parent="baseManager" abstract="true"/>
+          parent="baseManager" abstract="true">
+        <property name="geocoder">
+            <ref bean="geocoder"/>
+        </property>
+    </bean>
 
     <!-- main Service that participates in transactions-->
     <bean id="gridServiceManager"
@@ -56,7 +60,7 @@
         <property name="target">
             <bean name="gridServiceManagerTarget"
                   class="gov.nih.nci.cagrid.portal.manager.GridServiceManagerImpl"
-                  parent="baseManager"/>
+                  parent="geocodingManager"/>
         </property>
         <property name="transactionAttributes">
             <props>
@@ -86,7 +90,7 @@
 
     <bean name="rcManager"
           class="gov.nih.nci.cagrid.portal.manager.ResearchCenterManagerImpl"
-          parent="geocodingManager">
+          parent="baseManager">
         <property name="rcDAO">
             <ref bean="rcDAO"/>
         </property>

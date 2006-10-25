@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.map;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ResourceBundle;
 
 /**
@@ -30,5 +31,13 @@ public class GoogleMapRendererUtils {
 
         String gMapsURL = googleScriptURL + "&key=" + googleMapKeyValue;
         return gMapsURL;
+    }
+
+    protected static String getCoordValue(Float coord, boolean offset) {
+        BigDecimal big = new BigDecimal(coord.floatValue());
+        if (offset)
+            return big.add(new BigDecimal(Math.random())).toString();
+
+        return big.toString();
     }
 }

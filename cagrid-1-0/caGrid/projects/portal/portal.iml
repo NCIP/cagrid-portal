@@ -2,7 +2,7 @@
 <module version="4" relativePaths="true" type="J2EE_WEB_MODULE" j2ee-integration="Tomcat Server">
   <component name="AppServerSpecificValidatorsManager" />
   <component name="ModuleRootManager" />
-  <component name="NewModuleRootManager">
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/webcontent/WEB-INF/classes" />
     <exploded url="file://$MODULE_DIR$/exploded" />
     <content url="file://$MODULE_DIR$">
@@ -13,10 +13,9 @@
       <sourceFolder url="file://$MODULE_DIR$/test/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/webcontent/resources" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.5 (1)" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Tomcat" level="application_server_libraries" />
-    <orderEntry type="library" name="Globus-4.0" level="application" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -512,10 +511,11 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="globus" level="application" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/resources" />
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-syncgts-common.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -524,12 +524,112 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/src/properties" />
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-syncgts-client.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-ServiceSecurityProvider-common.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-gridca.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-gts-client.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-syncgts-stubs.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/cog-jglobus.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-gts-common.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-gts-stubs.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-ServiceSecurityProvider-service.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-ServiceSecurityProvider-client.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ext/lib/client.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="castor" level="application" />
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
@@ -538,7 +638,8 @@
     <setting name="JAR_URL" value="file://" />
     <setting name="JAR_ENABLED" value="false" />
     <setting name="SYNC_EXPLODED_DIR" value="true" />
-    <setting name="BUILD_ON_FRAME_DEACTIVATION" value="false" />
+    <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
+    <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
     <setting name="RUN_JASPER_VALIDATION" value="false" />
   </component>
   <component name="WebModuleProperties">
@@ -556,6 +657,26 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-discovery.jar" />
       <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-discovery.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-gridca.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-gridca.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-gts-client.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-gts-client.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-gts-common.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-gts-common.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-gts-stubs.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-gts-stubs.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -579,6 +700,41 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-ServiceSecurityProvider-client.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-ServiceSecurityProvider-client.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-ServiceSecurityProvider-common.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-ServiceSecurityProvider-common.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-ServiceSecurityProvider-service.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-ServiceSecurityProvider-service.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-syncgts-client.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-syncgts-client.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-syncgts-common.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-syncgts-common.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/caGrid-1.0-syncgts-stubs.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/caGrid-1.0-syncgts-stubs.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/castor-0.9.9.jar" />
       <url>jar://$MODULE_DIR$/ext/lib/castor-0.9.9.jar!/</url>
     </containerElement>
@@ -586,6 +742,16 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/cglib-nodep-2.1_3.jar" />
       <url>jar://$MODULE_DIR$/ext/lib/cglib-nodep-2.1_3.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/client.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/client.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/cog-jglobus.jar" />
+      <url>jar://$MODULE_DIR$/ext/lib/cog-jglobus.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -753,6 +919,11 @@
       <url>jar://$MODULE_DIR$/lib/mysql-connector-java-3.1.13-bin.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="&lt;N/A&gt;" />
+      <url>jar://$MODULE_DIR$/lib/nocopy/servlet-api.jar!/</url>
+    </containerElement>
+    <containerElement type="library" level="module">
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/poi-2.5.1-final-20040804.jar" />
       <url>jar://$MODULE_DIR$/lib/poi/poi-2.5.1-final-20040804.jar!/</url>
@@ -809,22 +980,20 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/classes" />
-      <url>file://$MODULE_DIR$/resources</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/classes" />
-      <url>file://$MODULE_DIR$/src/properties</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/spring-mock.jar" />
       <url>jar://$MODULE_DIR$/test/lib/spring-mock.jar!/</url>
     </containerElement>
-    <containerElement type="library" level="application" name="Globus-4.0">
+    <containerElement type="library" name="castor" level="application">
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
+    <containerElement type="library" name="globus" level="application">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib" />
+    </containerElement>
+    <containerElement type="library" name="Tomcat" level="application_server_libraries">
+      <attribute name="method" value="0" />
+      <attribute name="URI" value="&lt;N/A&gt;" />
     </containerElement>
     <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/webcontent/WEB-INF/web.xml" optional="false" version="2.3" />
     <deploymentDescriptor name="context.xml" url="file://$MODULE_DIR$/webcontent/META-INF/context-dev.xml" optional="false" version="5.x" />

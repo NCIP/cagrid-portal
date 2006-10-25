@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.portal.domain;
+package gov.nih.nci.cagrid.portal.common;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,5 +33,25 @@ public class GeoCodeValues {
 
     public void setLongitude(Float longitude) {
         this.longitude = longitude;
+    }
+
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GeoCodeValues that = (GeoCodeValues) o;
+
+        if (latitude != null ? !latitude.equals(that.latitude) : that.latitude != null) return false;
+        if (longitude != null ? !longitude.equals(that.longitude) : that.longitude != null) return false;
+
+        return true;
+    }
+
+    public int hashCode() {
+        int result;
+        result = (latitude != null ? latitude.hashCode() : 0);
+        result = 31 * result + (longitude != null ? longitude.hashCode() : 0);
+        return result;
     }
 }

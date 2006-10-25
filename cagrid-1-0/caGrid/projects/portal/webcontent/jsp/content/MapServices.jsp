@@ -18,7 +18,7 @@
         <h:column>
             <!--Custom portal map component. See documentation for details
             <portal:map id="portalMap" styleClass="mapStyle"
-                        var="service" value="#{services.list}"
+                        var="service" value="#{map.nodes}"
                         useGoogle="true">
             </portal:map>
 

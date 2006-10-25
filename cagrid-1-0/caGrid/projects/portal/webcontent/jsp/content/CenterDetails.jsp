@@ -2,6 +2,7 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t" %>
 
+<f:loadBundle basename="Portal-Labels" var="labels"/>
 
 <f:subview id="centerDetails">
 
@@ -90,6 +91,8 @@
                         </h:column>
                     </h:panelGrid>
                 </h:column>
+
+
             </h:panelGrid>
 
         </h:column>

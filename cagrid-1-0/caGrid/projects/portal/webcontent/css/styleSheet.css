@@ -528,7 +528,7 @@ DATA TABLE BEGINS
     line-height: 1.5em;
     vertical-align: top;
     font-weight: bold;
-    width: 19%;
+    width: 25%;
 }
 
 .dataCellNumerical {
@@ -703,7 +703,7 @@ Custom styles for Portal
 }
 
 .contentInnerTable {
-    width: 80%;
+    width: 90%;
     height: 100%;
     vertical-align: top;
     padding: 0.1em;

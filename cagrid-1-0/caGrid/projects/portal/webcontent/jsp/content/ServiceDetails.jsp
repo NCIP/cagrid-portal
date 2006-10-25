@@ -2,6 +2,8 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t" %>
 
+<!--Load message bundle-->
+<f:loadBundle basename="Portal-Labels" var="labels"/>
 
 <f:subview id="serviceDetails">
 
@@ -62,13 +64,13 @@
             <h:outputText value="#{labels.status}"/>
         </h:column>
         <h:column>
-
+            <h:outputText value="active" rendered="#{services.navigatedServiceStatus}"/>
+            <h:outputText value="Inactive" rendered="#{!services.navigatedServiceStatus}"/>
         </h:column>
 
         <h:column>
             <h:outputText value="#{labels.hostingCenter}"/>
         </h:column>
-
         <h:column>
             <h:commandLink action="#{centers.navigateToCenter}">
                 <h:outputText value="#{services.navigatedService.researchCenter.shortName}"/>
@@ -76,6 +78,22 @@
                          value="#{services.navigatedService.researchCenter.pk}"/>
             </h:commandLink>
         </h:column>
+
+        <h:column>
+            <h:outputText value="#{labels.poc}"/>
+        </h:column>
+        <h:column>
+            <t:dataTable var="poc" value="#{services.navigatedService.researchCenter.pocCollection}">
+                <h:column>
+                    <h:commandLink action="#{people.navigateToPOC}">
+                        <h:outputText value="#{poc.firstName} #{poc.lastName}"/>
+                        <f:param name="navigatedPOCPk"
+                                 value="#{poc.pk}"/>
+                    </h:commandLink>
+                </h:column>
+            </t:dataTable>
+        </h:column>
+
 
         <h:column>
             <h:outputText value="#{labels.serviceType}"/>

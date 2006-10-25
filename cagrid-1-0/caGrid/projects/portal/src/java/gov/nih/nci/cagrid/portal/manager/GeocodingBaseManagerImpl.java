@@ -1,10 +1,10 @@
 package gov.nih.nci.cagrid.portal.manager;
 
-import gov.nih.nci.cagrid.portal.domain.GeoCodeValues;
+import gov.nih.nci.cagrid.portal.common.GeoCodeValues;
 import gov.nih.nci.cagrid.portal.domain.GeocodedDomainObject;
 import gov.nih.nci.cagrid.portal.exception.GeoCoderRetreivalException;
 import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
-import gov.nih.nci.cagrid.portal.utils.GeoCoderUtility;
+import gov.nih.nci.cagrid.portal.utils.DomainObjectGeocoder;
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -20,6 +20,8 @@ import org.springframework.dao.DataAccessException;
  */
 public abstract class GeocodingBaseManagerImpl extends BaseManagerImpl {
 
+    private DomainObjectGeocoder geocoder;
+
     /**
      * Will put required geocoding information
      * information into an GeocodedDomainObject
@@ -34,8 +36,7 @@ public abstract class GeocodingBaseManagerImpl extends BaseManagerImpl {
         if (obj.getLatitude() == null) {
             try {
                 //Try the external geocoding service first
-                GeoCoderUtility coder = new GeoCoderUtility();
-                GeoCodeValues result = GeoCoderUtility.geocodeDomainObject(obj);
+                GeoCodeValues result = geocoder.geocodeDomainObject(obj);
                 obj.setLatitude(result.getLatitude());
                 obj.setLongitude(result.getLongitude());
             } catch (GeoCoderRetreivalException e) {
@@ -50,5 +51,10 @@ public abstract class GeocodingBaseManagerImpl extends BaseManagerImpl {
                 }
             }
         }
+    }
+
+
+    public void setGeocoder(DomainObjectGeocoder geocoder) {
+        this.geocoder = geocoder;
     }
 }

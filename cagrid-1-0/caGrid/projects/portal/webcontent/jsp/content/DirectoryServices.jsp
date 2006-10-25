@@ -2,6 +2,8 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t" %>
 
+<!--Load message bundle-->
+<f:loadBundle basename="Portal-Labels" var="labels"/>
 
 <f:subview id="servicesDirectory">
 
