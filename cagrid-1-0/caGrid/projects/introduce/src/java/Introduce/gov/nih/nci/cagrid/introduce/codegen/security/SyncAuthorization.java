@@ -6,27 +6,13 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.security.CSMAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ProtectionMethod;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
-import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
-import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceAuthorizationTemplate;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.StringReader;
 
 
-public class SyncAuthorization extends SyncTool {
-
-	public SyncAuthorization(File baseDirectory, ServiceInformation info) {
-		super(baseDirectory, info);
-		// TODO Auto-generated constructor stub
-	}
-
+public class SyncAuthorization {
 
 	public static String addAuthorizationToProviderImpl(ServiceType service, MethodType method, String lineStart)
 		throws Exception {
@@ -46,7 +32,7 @@ public class SyncAuthorization extends SyncTool {
 		if (service.getServiceSecurity() != null) {
 			if (service.getServiceSecurity().getServiceAuthorization() != null) {
 				if (service.getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization() != null) {
-					return generateGridGrouper(method,service.getServiceSecurity().getServiceAuthorization()
+					return generateGridGrouper(method, service.getServiceSecurity().getServiceAuthorization()
 						.getGridGrouperAuthorization(), lineStart);
 				} else if (service.getServiceSecurity().getServiceAuthorization().getCSMAuthorization() != null) {
 					return generateCSM(service, method, service.getServiceSecurity().getServiceAuthorization()
@@ -152,7 +138,7 @@ public class SyncAuthorization extends SyncTool {
 			while (line != null) {
 				gg.append("\"" + line + "\"");
 				line = reader.readLine();
-				if(line!=null){
+				if (line != null) {
 					gg.append("\n\t\t + ");
 				}
 			}
@@ -160,7 +146,10 @@ public class SyncAuthorization extends SyncTool {
 		}
 		return gg.toString();
 	}
-	public static String generateGridGrouper(MethodType method, MembershipExpression exp, String lineStart) throws Exception {
+
+
+	public static String generateGridGrouper(MethodType method, MembershipExpression exp, String lineStart)
+		throws Exception {
 		StringBuffer gg = new StringBuffer();
 
 		if (exp != null) {
@@ -171,10 +160,9 @@ public class SyncAuthorization extends SyncTool {
 			gg.append(lineStart + "boolean isMember=false;\n");
 			gg.append(lineStart + "if(gridIdentity!=null){\n");
 			gg.append(lineStart + "\t" + "try{\n");
-			gg
-				.append(lineStart
-					+ "\t\t"
-					+ "isMember=gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClientUtils.isMember(gridGrouperAuthorize" + TemplateUtils.upperCaseFirstCharacter(method.getName())+ ",gridIdentity);\n");
+			gg.append(lineStart + "\t\t"
+				+ "isMember=gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClientUtils.isMember(gridGrouperAuthorize"
+				+ TemplateUtils.upperCaseFirstCharacter(method.getName()) + ",gridIdentity);\n");
 			gg.append(lineStart + "\t" + "}catch(Exception e){\n");
 			gg.append(lineStart + "\t\t" + "e.printStackTrace();\n");
 			gg
@@ -193,27 +181,4 @@ public class SyncAuthorization extends SyncTool {
 		return gg.toString();
 	}
 
-
-	public void sync() throws SynchronizationException {
-
-		for (int serviceI = 0; serviceI < getServiceInformation().getServices().getService().length; serviceI++) {
-			ServiceType service = getServiceInformation().getServices().getService(serviceI);
-			ServiceAuthorizationTemplate authorizationT = new ServiceAuthorizationTemplate();
-			String authorizationS = authorizationT.generate(new SpecificServiceInformation(getServiceInformation(),
-				service));
-			File authorizationF = new File(getBaseDirectory().getAbsolutePath() + File.separator + "src"
-				+ File.separator + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator
-				+ "globus" + File.separator + service.getName() + "Authorization.java");
-
-			try {
-				FileWriter authorizationFW = new FileWriter(authorizationF);
-				authorizationFW.write(authorizationS);
-				authorizationFW.close();
-			} catch (Exception e) {
-				System.out.println("ERROR: Unable to write authorization class for service: " + service.getName());
-			}
-
-		}
-
-	}
 }

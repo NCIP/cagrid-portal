@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.etc.SecurityDescTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplBaseTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceAuthorizationTemplate;
 import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
 
 import java.io.File;
@@ -48,11 +49,13 @@ public class SyncServices extends SyncTool {
 
 					SpecificServiceInformation ssi = new SpecificServiceInformation(getServiceInformation(),
 						getServiceInformation().getServices().getService(serviceIndex));
-					
+
 					ServiceImplBaseTemplate implBaseT = new ServiceImplBaseTemplate();
-					String implBaseS = implBaseT.generate(new SpecificServiceInformation(getServiceInformation(), ssi.getService()));
-					File implBaseF = new File(getBaseDirectory() + File.separator + "src" + File.separator + CommonTools.getPackageDir(ssi.getService())
-						+ File.separator + "service" + File.separator + ssi.getService().getName() + "ImplBase.java");
+					String implBaseS = implBaseT.generate(new SpecificServiceInformation(getServiceInformation(), ssi
+						.getService()));
+					File implBaseF = new File(getBaseDirectory() + File.separator + "src" + File.separator
+						+ CommonTools.getPackageDir(ssi.getService()) + File.separator + "service" + File.separator
+						+ ssi.getService().getName() + "ImplBase.java");
 					FileWriter implBaseFW = new FileWriter(implBaseF);
 					implBaseFW.write(implBaseS);
 					implBaseFW.close();
@@ -70,7 +73,8 @@ public class SyncServices extends SyncTool {
 					File meta = new File(getBaseDirectory() + File.separator + "etc" + File.separator
 						+ getServiceInformation().getServices().getService(serviceIndex).getName()
 						+ "-security-metadata.xml");
-					QName qn = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security", "ServiceSecurityMetadata");
+					QName qn = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security",
+						"ServiceSecurityMetadata");
 					Utils.serializeDocument(meta.getAbsolutePath(), metadata, qn);
 
 					SyncMethods methodSync = new SyncMethods(getBaseDirectory(), getServiceInformation(),
@@ -79,6 +83,17 @@ public class SyncServices extends SyncTool {
 					SyncResource resourceSync = new SyncResource(getBaseDirectory(), getServiceInformation(),
 						getServiceInformation().getServices().getService(serviceIndex));
 					resourceSync.sync();
+
+					ServiceAuthorizationTemplate authorizationT = new ServiceAuthorizationTemplate();
+					String authorizationS = authorizationT.generate(new SpecificServiceInformation(
+						getServiceInformation(), ssi.getService()));
+					File authorizationF = new File(getBaseDirectory().getAbsolutePath() + File.separator + "src"
+						+ File.separator + CommonTools.getPackageDir(ssi.getService()) + File.separator + "service"
+						+ File.separator + "globus" + File.separator + ssi.getService().getName() + "Authorization.java");
+
+					FileWriter authorizationFW = new FileWriter(authorizationF);
+					authorizationFW.write(authorizationS);
+					authorizationFW.close();
 
 				} catch (Exception e) {
 					throw new SynchronizationException(e.getMessage(), e);
