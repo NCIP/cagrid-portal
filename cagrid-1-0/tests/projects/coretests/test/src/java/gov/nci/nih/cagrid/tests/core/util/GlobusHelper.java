@@ -105,10 +105,10 @@ public class GlobusHelper
 		}
 		File ant = new File(antHome, "bin" + File.separator + "ant");
 		
-		String[] cmd = new String[] { ant.toString(), "deployGlobus" };
+		String[] cmd = new String[] { ant.toString(), "-Dservice.deployment.host=\"localhost\"", "deployGlobus" };
 		if (System.getProperty("os.name").toLowerCase().contains("win")) {
 			cmd = new String[] {
-				"cmd", "/c", ant + ".bat", target,
+				"cmd", "/c", ant + ".bat", "-Dservice.deployment.host=\"localhost\"", target,
 			};
 		}
 		String[] envp = new String[] {

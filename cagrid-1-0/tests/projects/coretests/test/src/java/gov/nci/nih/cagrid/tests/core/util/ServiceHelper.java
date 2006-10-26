@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.StringTokenizer;
 
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -145,10 +147,22 @@ public class ServiceHelper
 	
 	public static File[] getInvokeDirs(File methodsDir)
 	{
+		// get directory filters
+		final HashSet<String> filterSet = new HashSet<String>();
+		String filterString = System.getProperty("test.methods", "");
+		StringTokenizer st = new StringTokenizer(filterString, ", \t\r\n");
+		while (st.hasMoreTokens()) {
+			filterSet.add(st.nextToken());
+		}
+		
 		// get directories
 		File[] dirs = methodsDir.listFiles(new FileFilter() {
 			public boolean accept(File file) {
-				return file.isDirectory() & file.getName().matches("\\d+_\\w+");
+				if (! file.isDirectory() || ! file.getName().matches("\\d+_\\w+")) {
+					return false;
+				}
+				if (filterSet.size() == 0) return true;
+				return filterSet.contains(String.valueOf(ServiceInvokeStep.parseParamPos(file)));
 			}
 		});
 		
