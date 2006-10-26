@@ -31,7 +31,7 @@ import org.globus.wsrf.ResourceHome;
 import org.globus.wsrf.ResourceProperty;
 import org.globus.wsrf.ResourcePropertySet;
 /** 
- *  TODO:DOCUMENT ME
+ * Provides some simple accessors for the Impl.
  * 
  * @created by Introduce Toolkit version <%=IntroduceConstants.INTRODUCE_VERSION%>
  * 

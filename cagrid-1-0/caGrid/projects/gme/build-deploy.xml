@@ -19,7 +19,7 @@
 	<property name="garetc.id" value="garetc" />
 	<fileset dir="tmp/etc" id="garetc" />
 	
-	<target name="prepareDeploy" >
+	<target name="prepareDeploy" unless="service.deployment.host" >
 		<input
 			message="Please enter the hostname of the deployment machine. This must be set to the hostname which will be used by external clients to connect to this service.  [${service.deployment.host.default}]:"
 			addproperty="service.deployment.host"
