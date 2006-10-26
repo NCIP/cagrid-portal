@@ -249,7 +249,7 @@
 	<!-- =================================================================== -->
 	<!-- Builds the project and the docs for a release                       -->
 	<!-- =================================================================== -->
-	<target name="release" description="Cleans and build the entire application and the docs etc" depends="clean,all,javadoc"/>
+	<target name="release" description="Cleans and build the entire application and the docs etc" depends="clean,all,javadoc,createInstaller"/>
 	
 	<!-- Allows us to use the IzPack Ant task -->
 	<taskdef name="izpack" classpath="${basedir}/install/standalone-compiler.jar"
