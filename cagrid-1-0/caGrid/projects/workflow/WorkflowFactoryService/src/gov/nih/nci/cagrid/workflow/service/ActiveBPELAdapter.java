@@ -1,14 +1,16 @@
 package gov.nih.nci.cagrid.workflow.service;
 
 import gov.nih.nci.cagrid.workflow.stubs.types.StartInputType;
-import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
-import gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WSDLReferences;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.activebpel.rt.bpel.impl.list.AeProcessFilter;
+import org.activebpel.rt.bpel.impl.list.AeProcessListResult;
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.message.MessageElement;
@@ -21,8 +23,28 @@ import org.apache.axis.message.addressing.To;
 import AeAdminServices.BpelEngineAdminLocator;
 import AeAdminServices.RemoteDebugSoapBindingStub;
 
-public class ActiveBPELAdapter {
+public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	
+	private String abAdminRoot = 
+		"http://localhost:8080/active-bpel/services/";
+	private String abAdminUrl = abAdminRoot + "BpelEngineAdmin";
+	
+	private RemoteDebugSoapBindingStub mRemote = null;
+	
+	public ActiveBPELAdapter(String abAdminUrl)  {
+		if (abAdminUrl != null) {
+			this.abAdminUrl = abAdminUrl;
+		} 
+		BpelEngineAdminLocator locator = new BpelEngineAdminLocator();
+		try {
+			URL url = new URL(this.abAdminUrl);
+			this.mRemote = (RemoteDebugSoapBindingStub) locator.getAeActiveWebflowAdminPort(url);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	/** Deploys the ActiveBPEL specific BPEL archive
 	 * @param bpelFileName
 	 * @param workflowName
@@ -30,21 +52,18 @@ public class ActiveBPELAdapter {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String deployBpr(String abAdminUrl, String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws Exception {
+	
+	public String deployBpr(String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws Exception {
 		String returnString = "success";
 		String bprFileName = BPRCreator.makeBpr(bpelFileName,workflowName, wsdlRefArray);
-		BpelEngineAdminLocator locator = new BpelEngineAdminLocator();
-		URL url = new URL(abAdminUrl);
-		RemoteDebugSoapBindingStub mRemote = (RemoteDebugSoapBindingStub) locator
-					.getAeActiveWebflowAdminPort(url);
-		returnString = mRemote.deployBpr(workflowName + ".bpr", getBase64EncodedBpr(bprFileName));
+		returnString = this.mRemote.deployBpr(workflowName + ".bpr", getBase64EncodedBpr(bprFileName));
 		return returnString;
 	}
 	
 	
-	public static WorkflowStatusType invokeProcess(String abServiceRoot, 
+	public  WorkflowStatusType invokeProcess( 
 			String partnerLinkName, StartInputType startInput) throws Exception {
-		String serviceUrl = abServiceRoot + partnerLinkName;
+		String serviceUrl = this.abAdminRoot + partnerLinkName;
 		return callService(serviceUrl, startInput);
 	}
 	
@@ -72,4 +91,77 @@ public class ActiveBPELAdapter {
 		//output.setOutputType(outputType);
 		return output;
 	}
+
+
+	public String deployWorkflow(String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws WorkflowExceptionType {
+		try {
+			return deployBpr(bpelFileName, workflowName, wsdlRefArray);
+		} catch (Exception e) {
+			throw new WorkflowExceptionType();
+		}
+	}
+
+
+	public WorkflowStatusType startWorkflow(String workflowName, 
+			StartInputType startInput) throws WorkflowExceptionType {
+		WorkflowStatusType status = WorkflowStatusType.Pending;
+		String partnerLinkName = workflowName + "Service";
+		try {
+			this.invokeProcess(partnerLinkName, startInput);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			status = WorkflowStatusType.Failed;
+		}
+		return status;
+	}
+
+
+	public WorkflowStatusType getWorkflowStatus(String workflowName) throws WorkflowExceptionType {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public void suspend(String workflowName) throws WorkflowExceptionType {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void resume(String workflowName) throws WorkflowExceptionType {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void cancel(String workflowName) throws WorkflowExceptionType {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/*public int displayProcessList() throws Exception {
+	      AeProcessFilter filter = new AeProcessFilter();
+	      filter.setAdvancedQuery("");
+	      AeProcessListResult list = mRemote.getProcessList( filter );
+	      if ( list.getTotalRowCount() <= 0 )
+	      {
+	         System.out.println( "No process info to display.");
+	         return 0 ;
+	      }
+	      else
+	      {
+	         AeProcessInstanceDetail[] details = list.getRowDetails();
+	         System.out.println( "PID\tState\tName" );
+	         for ( int i = 0 ; i < list.getTotalRowCount() ; i++ )
+	         {
+	            AeProcessInstanceDetail detail = details[i];
+	            System.out.println( detail.getProcessId()   + "\t" +
+	                                detail.getStateReason() + "\t" +
+	                                detail.getName() );
+	         }
+
+	         return list.getTotalRowCount();
+	      }
+	   }*/
+
 }

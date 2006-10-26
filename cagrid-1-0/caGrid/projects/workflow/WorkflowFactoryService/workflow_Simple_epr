@@ -1,0 +1,7 @@
+<WMS_EPR xsi:type="ns1:EndpointReferenceType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://schemas.xmlsoap.org/ws/2004/03/addressing">
+ <ns1:Address xsi:type="xsd:anyURI" xmlns:xsd="http://www.w3.org/2001/XMLSchema">http://140.221.57.243:8080/wsrf/services/cagrid/WorkflowServiceImpl</ns1:Address>
+ <ns1:ReferenceProperties xsi:type="ns1:ReferencePropertiesType">
+  <ns2:WorkflowKey xmlns:ns2="http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl">Simple</ns2:WorkflowKey>
+ </ns1:ReferenceProperties>
+ <ns1:ReferenceParameters xsi:type="ns1:ReferenceParametersType"/>
+</WMS_EPR>

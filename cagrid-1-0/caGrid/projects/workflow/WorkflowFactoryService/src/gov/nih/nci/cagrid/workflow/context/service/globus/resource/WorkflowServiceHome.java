@@ -6,12 +6,6 @@ import java.util.Calendar;
 
 import javax.xml.namespace.QName;
 
-import org.globus.wsrf.InvalidResourceKeyException;
-import org.globus.wsrf.NoSuchResourceException;
-import org.globus.wsrf.RemoveNotSupportedException;
-import org.globus.wsrf.Resource;
-import org.globus.wsrf.ResourceException;
-import org.globus.wsrf.ResourceKey;
 import org.globus.wsrf.impl.ResourceHomeImpl;
 import org.globus.wsrf.impl.SimpleResourceKey;
 
@@ -20,36 +14,21 @@ import org.globus.wsrf.impl.SimpleResourceKey;
  */
 
 public class WorkflowServiceHome extends ResourceHomeImpl {
-
+	public QName workflowQName =
+		new QName("http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl", "WorkflowKey");
 	public Class getKeyTypeClass() {
 		// TODO Auto-generated method stub
-		return null;
+		return String.class;
 	}
-
 
 	public QName getKeyTypeName() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.workflowQName;
 	}
 
-
-	public Resource find(ResourceKey arg0) throws ResourceException, NoSuchResourceException,
-		InvalidResourceKeyException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public void remove(ResourceKey arg0) throws ResourceException, NoSuchResourceException,
-		InvalidResourceKeyException, RemoveNotSupportedException {
-		// TODO Auto-generated method stub
-
-	}
 	public SimpleResourceKey create(Calendar terminationTime, 
 			WMSInputType input) throws Exception {
-		QName workflowQName =
-			new QName("http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl", "WorkflowKey");
-		SimpleResourceKey key = new SimpleResourceKey(workflowQName, input.getWorkflowName());
+		SimpleResourceKey key = new SimpleResourceKey(this.workflowQName, input.getWorkflowName());
 		WorkflowResource workflowResource = new WorkflowResource(input, terminationTime);
 		this.add(key, workflowResource);
 		return key;
