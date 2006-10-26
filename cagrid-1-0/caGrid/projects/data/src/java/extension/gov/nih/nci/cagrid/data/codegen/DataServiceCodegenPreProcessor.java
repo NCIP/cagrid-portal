@@ -159,7 +159,7 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			Set selectedClasses = new HashSet();
 
 			// walk through the selected packages
-			for (int i = 0; i < cadsrInfo.getPackages().length; i++) {
+			for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {
 				CadsrPackage packageInfo = cadsrInfo.getPackages(i);
 				String packName = packageInfo.getName();
 				// get selected classes from the package
