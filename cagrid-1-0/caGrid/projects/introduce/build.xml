@@ -257,11 +257,11 @@
 	<!-- Creates the installer                                               -->
 	<!-- =================================================================== -->
 	<target name="createInstaller" description="Creates the installler" depends="all,javadoc">
-		<izpack input="${basedir}/install/install.xml"
-			output="${basedir}/${jars.prefixname}installer.jar"
+		<izpack input="./install/install.xml"
+			output="${jars.prefixname}installer.jar"
 			installerType="standard"
-			basedir="${basedir}"
-			izPackDir="${basedir}/install"/>
+			basedir="."
+			izPackDir="./install"/>
 	</target>
 	
 </project>

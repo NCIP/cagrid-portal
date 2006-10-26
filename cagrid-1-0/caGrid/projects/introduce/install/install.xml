@@ -69,28 +69,28 @@ need to download IZForge and run the following command (modify paths of course)
     <packs>
         <pack name="Base" required="yes">
             <description>Introduce 1.0 Binary Release</description>
-            <file src="lib" targetdir="$INSTALL_PATH"/> <!-- Reccursive adding -->
-            <file src="build/jars" targetdir="$INSTALL_PATH/build"/>
-            <file src="resources" targetdir="$INSTALL_PATH"/>
-            <file src="antfiles" targetdir="$INSTALL_PATH"/>
-            <file src="extensions" targetdir="$INSTALL_PATH"/>
-            <file src="ext" targetdir="$INSTALL_PATH"/>
-            <file src="conf" targetdir="$INSTALL_PATH"/>
-            <file src="schema" targetdir="$INSTALL_PATH"/>
-            <file src="skeleton" targetdir="$INSTALL_PATH"/>
-            <file src="test" targetdir="$INSTALL_PATH"/>
+            <fileset dir="lib" targetdir="$INSTALL_PATH/lib"/>
+            <fileset dir="build/jars" targetdir="$INSTALL_PATH/build/jars"/>
+            <fileset dir="resources" targetdir="$INSTALL_PATH/resources"/>
+            <fileset dir="antfiles" targetdir="$INSTALL_PATH/antfiles"/>
+            <fileset dir="extensions" targetdir="$INSTALL_PATH/extensions"/>
+            <fileset dir="ext" targetdir="$INSTALL_PATH/ext"/>
+            <fileset dir="conf" targetdir="$INSTALL_PATH/conf"/>
+            <fileset dir="schema" targetdir="$INSTALL_PATH/schema"/>
+            <fileset dir="skeleton" targetdir="$INSTALL_PATH/skeleton"/>
+            <fileset dir="test" targetdir="$INSTALL_PATH/test"/>
             <singlefile src="install/run.xml" target="$INSTALL_PATH/build.xml"/>
             <singlefile src="introduce" target="$INSTALL_PATH/introduce"/>
             <singlefile src="introduce.bat" target="$INSTALL_PATH/introduce.bat"/>
-            <file src="doc" targetdir="$INSTALL_PATH"/> 
+            <fileset dir="doc" targetdir="$INSTALL_PATH/doc"/> 
         </pack>
         <pack name="Docs" required="no">
             <description>API Documentation</description>
-            <file src="build/javadoc" targetdir="$INSTALL_PATH/doc"/>
+            <fileset dir="build/javadoc" targetdir="$INSTALL_PATH/doc/javadoc"/>
         </pack>
         <pack name="Sources" required="no">
             <description>Source Code</description>
-            <file src="src" targetdir="$INSTALL_PATH"/>
+            <fileset dir="src" targetdir="$INSTALL_PATH/src"/>
         </pack>
     </packs>
 
