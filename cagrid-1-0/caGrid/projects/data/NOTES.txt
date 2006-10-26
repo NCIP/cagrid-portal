@@ -45,7 +45,7 @@ TODO:
 35[D]: Make cql query processor jar file selector not allow you to select a directory as a jar file
 	-- This actually used the ResourceManager from Introduce, which did the wrong thing.  So it's fixed in Introduce, and anyone using that call will get the fix too
 36[D]: Add unit tests for CQL Results validation
-37[ ]: Make CQL Object Results iterator perform better by avoiding repeated object creation
+37[D]: Make CQL Object Results iterator perform better by avoiding repeated object creation
 
 I = In Progress
 D = Done

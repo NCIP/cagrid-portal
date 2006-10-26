@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.data.utilities;
 
-import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.ConfigurableObjectDeserializationContext;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 
 import java.io.BufferedInputStream;
@@ -12,8 +12,13 @@ import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.apache.axis.AxisEngine;
+import org.apache.axis.EngineConfiguration;
+import org.apache.axis.MessageContext;
+import org.apache.axis.configuration.FileProvider;
+import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.message.MessageElement;
-import org.globus.wsrf.encoding.ObjectDeserializer;
+import org.apache.axis.server.AxisServer;
 import org.xml.sax.InputSource;
 /** 
  *  CQLObjectResultIterator
@@ -30,7 +35,8 @@ public class CQLObjectResultIterator implements Iterator {
 	private Class objectClass;
 	private boolean xmlOnly;
 	private InputStream wsddInputStream;
-	private byte[] wsddContent;
+	private byte[] wsddBytes;
+	private MessageContext messageContext;
 	
 	CQLObjectResultIterator(CQLObjectResult[] results, String targetName, 
 		boolean xmlOnly, InputStream wsdd) throws ClassNotFoundException {
@@ -59,26 +65,17 @@ public class CQLObjectResultIterator implements Iterator {
 		}
 		MessageElement element = results[currentIndex].get_any()[0];
 		try {
-			StringWriter writer = new StringWriter();
-			InputStream configStream = getConsumableInputStream();
-			if (configStream != null) {
-				Utils.serializeObject(element, element.getQName(), writer, configStream);
-			} else {
-				Utils.serializeObject(element, element.getQName(), writer);
+			if (messageContext == null) {
+				messageContext = createMessageContext(getConsumableInputStream());
 			}
-			String documentString = writer.getBuffer().toString();
+			String documentString = serializeMessageElement(element, messageContext);
 	        if (xmlOnly) {
 				return documentString;
 			}
-	        // since the config stream has been read and closed, it must be recreated
-			configStream = getConsumableInputStream();
-			if (configStream != null) {
-				return Utils.deserializeObject(new StringReader(documentString), objectClass, 
-					getConsumableInputStream());
-			} else {
-				InputSource objectSource = new InputSource(new StringReader(documentString));
-				return ObjectDeserializer.deserialize(objectSource, objectClass);
-			}
+			InputSource objectSource = new InputSource(new StringReader(documentString));
+			ConfigurableObjectDeserializationContext desContext	= 
+				new ConfigurableObjectDeserializationContext(messageContext, objectSource, objectClass);
+			return desContext.getValue();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -88,21 +85,56 @@ public class CQLObjectResultIterator implements Iterator {
 	
 	private InputStream getConsumableInputStream() throws IOException {
 		if (wsddInputStream != null) {
-			if (wsddContent == null) {
-				wsddContent = new byte[0];
+			if (wsddBytes == null) {
+				wsddBytes = new byte[0];
 				byte[] readBytes = new byte[1024];
 				int len = -1;
 				BufferedInputStream buffStream = new BufferedInputStream(wsddInputStream);
 				while ((len = buffStream.read(readBytes)) != -1) {
-					byte[] tmpContent = new byte[wsddContent.length + len];
-					System.arraycopy(wsddContent, 0, tmpContent, 0, wsddContent.length);
-					System.arraycopy(readBytes, 0, tmpContent, wsddContent.length, len);
-					wsddContent = tmpContent;
+					byte[] tmpContent = new byte[wsddBytes.length + len];
+					System.arraycopy(wsddBytes, 0, tmpContent, 0, wsddBytes.length);
+					System.arraycopy(readBytes, 0, tmpContent, wsddBytes.length, len);
+					wsddBytes = tmpContent;
 				}
 				buffStream.close();
 			}
-			return new ByteArrayInputStream(wsddContent);
+			return new ByteArrayInputStream(wsddBytes);
 		}
 		return null;
+	}
+	
+	
+	private String serializeMessageElement(MessageElement element, MessageContext context) throws Exception {
+		StringWriter writer = new StringWriter();
+		// create a serialization context to use the new message context
+		SerializationContext serializationContext = new SerializationContext(writer, context);
+		
+		serializationContext.setPretty(false);
+		
+		element.output(serializationContext);
+		
+		writer.flush();
+		return writer.getBuffer().toString();
+	}
+	
+	
+	private MessageContext createMessageContext(InputStream configStream) {
+		AxisEngine engine = null;
+		if (configStream != null) {
+			// configure the axis engine to use the supplied wsdd file
+			EngineConfiguration engineConfig = new FileProvider(configStream);
+			engine = new AxisServer(engineConfig);
+		} else {
+			engine = new AxisServer();
+		}
+		
+		MessageContext context = new MessageContext(engine);
+		context.setEncodingStyle("");
+		context.setProperty(AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+		// the following two properties prevent xsd types from appearing in
+		// every single element in the serialized XML
+		context.setProperty(AxisEngine.PROP_EMIT_ALL_TYPES, Boolean.FALSE);
+		context.setProperty(AxisEngine.PROP_SEND_XSI, Boolean.FALSE);
+		return context;
 	}
 }
