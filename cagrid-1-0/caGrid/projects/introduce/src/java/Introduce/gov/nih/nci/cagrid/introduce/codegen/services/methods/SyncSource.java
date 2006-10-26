@@ -693,7 +693,8 @@ public class SyncSource {
 			clientMethod += "{\n";
 
 			// Authorization 
-			clientMethod += SyncAuthorization.addAuthorizationToProviderImpl(service, method, lineStart);
+			clientMethod +="\t\t" + TemplateUtils.upperCaseFirstCharacter(service.getName()) + "Authorization.authorize" + TemplateUtils.upperCaseFirstCharacter(method.getName()) + "();\n";
+			//clientMethod += SyncAuthorization.addAuthorizationToProviderImpl(service, method, lineStart);
 			
 
 			methodString = "";

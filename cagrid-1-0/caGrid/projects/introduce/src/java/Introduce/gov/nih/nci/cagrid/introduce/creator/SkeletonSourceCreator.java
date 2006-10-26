@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceITemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceAuthorizationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceProviderImplTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
@@ -111,6 +112,15 @@ public class SkeletonSourceCreator {
 		providerImplFW.write(providerImplS);
 		providerImplFW.close();
 
+		ServiceAuthorizationTemplate authorizationT = new ServiceAuthorizationTemplate();
+		String authorizationS = authorizationT.generate(new SpecificServiceInformation(info, service));
+		File authorizationF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
+			+ File.separator + "service" + File.separator + "globus" + File.separator + service.getName()
+			+ "Authorization.java");
+
+		FileWriter authorizationFW = new FileWriter(authorizationF);
+		authorizationFW.write(authorizationS);
+		authorizationFW.close();
 
 		if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)) {
 			ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
@@ -122,7 +132,7 @@ public class SkeletonSourceCreator {
 			FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
 			resourceContanstsFW.write(resourceContanstsS);
 			resourceContanstsFW.close();
-			
+
 			BaseResourceTemplate baseResourceT = new BaseResourceTemplate();
 			String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(info, service));
 			File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
@@ -153,7 +163,7 @@ public class SkeletonSourceCreator {
 			FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
 			resourceContanstsFW.write(resourceContanstsS);
 			resourceContanstsFW.close();
-			
+
 			SingletonResourceTemplate baseResourceT = new SingletonResourceTemplate();
 			String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(info, service));
 			File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
@@ -195,7 +205,7 @@ public class SkeletonSourceCreator {
 			FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
 			resourceContanstsFW.write(resourceContanstsS);
 			resourceContanstsFW.close();
-			
+
 			ServiceConfigurationTemplate serviceConfT = new ServiceConfigurationTemplate();
 			String serviceConfS = serviceConfT.generate(new SpecificServiceInformation(info, service));
 			File serviceConfF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
