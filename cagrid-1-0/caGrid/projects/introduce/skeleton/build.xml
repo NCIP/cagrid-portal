@@ -45,6 +45,7 @@
     <property name="build.lib.dir" location="${build.dir}/lib" />
     <!-- Directory where stub source and class files are placed -->
     <property name="stubs.dir" location="${build.dir}/stubs-${service.name}" />
+    <property name="javadoc.dir" value="${build.dir}/javadoc" />
     <!-- Stub source files -->
     <property name="stubs.src" location="${stubs.dir}/src" />
     <!-- Compiled stub classes -->
@@ -287,6 +288,27 @@
         <delete dir="tmp" />
         <delete dir="${build.dir}" />
         <delete file="${gar.name}" />
+    </target>
+    
+    <!-- =================================================================== -->
+    <!-- Builds Code Docuementation                                          -->
+    <!-- =================================================================== -->
+    <target name="javadoc" depends="compile" description="Creates the API documentation.">
+        <javadoc packagenames="*" destdir="${javadoc.dir}" author="true" version="true" use="true"
+            windowtitle="${service.name} API">
+            
+            <sourcepath>
+                <pathelement path="${src.dir}"/>
+            </sourcepath>
+            
+            <classpath>
+                <path refid="service.build.classpath"/>
+            </classpath>
+            
+            <tag name="todo" scope="all" description="To do:"/>
+            <tag name="created" scope="all" description="Created On:"/>
+            
+        </javadoc>
     </target>
 
     <!-- Default target "all" builds and jars everything, including test....does not make a GAR-->

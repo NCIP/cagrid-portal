@@ -2,10 +2,8 @@ package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.templates.docs.api.DoxyfileTemplate;
 
 import java.io.File;
-import java.io.FileWriter;
 
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
@@ -25,15 +23,6 @@ public class SkeletonDocsCreator {
 		File docsDir = new File(baseDirectory.getAbsolutePath() + File.separator + "docs");
 		docsDir.mkdir();
 
-		File apiDir = new File(docsDir.getAbsolutePath() + File.separator + "api");
-		apiDir.mkdir();
-
-		DoxyfileTemplate doxyfileT = new DoxyfileTemplate();
-		String doxyfileS = doxyfileT.generate(info);
-		File doxyfileF = new File(apiDir.getAbsolutePath() + File.separator + "Doxyfile");
-		FileWriter doxyfileFW = new FileWriter(doxyfileF);
-		doxyfileFW.write(doxyfileS);
-		doxyfileFW.close();
 	}
 
 }
