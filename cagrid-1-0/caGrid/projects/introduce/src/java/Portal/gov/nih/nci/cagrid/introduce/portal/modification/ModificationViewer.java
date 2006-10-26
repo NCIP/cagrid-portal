@@ -26,7 +26,9 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -1478,16 +1480,37 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	private void copyGridGrouperJars() throws Exception {
-		File src = new File("ext" + File.separator + "skeleton" + File.separator + "gridgrouper"+File.separator+"lib");
-		File dest = new File(info.getBaseDirectory() + File.separator + "lib");
-		Utils.copyDirectory(src, dest);
+		File sourceDir = new File("ext" + File.separator + "skeleton" + File.separator 
+			+ "gridgrouper" + File.separator + "lib");
+		addJarsToService(sourceDir);
 	}
 
 
 	private void copyCSMJars() throws Exception {
-		File src = new File("ext" + File.separator + "skeleton" + File.separator + "csm"+File.separator+"lib");
-		File dest = new File(info.getBaseDirectory() + File.separator + "lib");
-		Utils.copyDirectory(src, dest);
+		File src = new File("ext" + File.separator + "skeleton" + File.separator 
+			+ "csm" + File.separator + "lib");
+		addJarsToService(src);
+	}
+	
+	
+	private void addJarsToService(File sourceDir) throws Exception {
+		Set existingLibs = new HashSet();
+		Set addedLibs = new HashSet();
+		
+		File serviceLibDir = new File(info.getBaseDirectory() + File.separator + "lib");
+		existingLibs.addAll(Utils.recursiveListFiles(serviceLibDir, new FileFilters.JarFileFilter()));		
+		
+		Utils.copyDirectory(sourceDir, serviceLibDir);
+		addedLibs.addAll(Utils.recursiveListFiles(serviceLibDir, new FileFilters.JarFileFilter()));
+		
+		// compute the set difference from before and after library copy
+		addedLibs.removeAll(existingLibs);
+				
+		// add the new jars to the Eclipse .classpath file
+		File[] addedJars = new File[addedLibs.size()];
+		addedLibs.toArray(addedJars);
+		File classpathFile = new File(info.getBaseDirectory().getAbsolutePath() + File.separator + ".classpath");
+		ExtensionUtilities.syncEclipseClasspath(classpathFile, addedJars);
 	}
 
 
@@ -1928,7 +1951,7 @@ public class ModificationViewer extends GridPortalComponent {
 			resourcesOptionsPanel = new JPanel(new CardLayout());
 			resourcesOptionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
 				"Information and Options", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 		}
 		return resourcesOptionsPanel;
 	}

@@ -32,16 +32,16 @@ public class CSMPanel extends JPanel {
 	public final static String CSM_CONFIGURATION_FILE = "csmConfiguration";
 
 	private static final long serialVersionUID = 1L;
-	private JLabel jLabel = null;
+	private JLabel protectionMethodLabel = null;
 	private JComboBox protectionType = null;
-	private JLabel jLabel1 = null;
+	private JLabel protectionElemLabel = null;
 	private JTextField protectionElement = null;
-	private JLabel jLabel2 = null;
+	private JLabel privilegeLabel = null;
 	private JComboBox privilege = null;
 	private String serviceType;
 	private String methodName;
 
-	private JLabel jLabel3 = null;
+	private JLabel appContextLabel = null;
 
 	private JTextField applicationContext = null;
 
@@ -80,8 +80,8 @@ public class CSMPanel extends JPanel {
 		gridBagConstraints11.anchor = GridBagConstraints.WEST;
 		gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
 		gridBagConstraints11.gridy = 0;
-		jLabel3 = new JLabel();
-		jLabel3.setText("CSM Application Context");
+		appContextLabel = new JLabel();
+		appContextLabel.setText("CSM Application Context");
 		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 		gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints5.gridy = 3;
@@ -94,8 +94,8 @@ public class CSMPanel extends JPanel {
 		gridBagConstraints4.anchor = GridBagConstraints.WEST;
 		gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
 		gridBagConstraints4.gridy = 3;
-		jLabel2 = new JLabel();
-		jLabel2.setText("Privilege");
+		privilegeLabel = new JLabel();
+		privilegeLabel.setText("Privilege");
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints3.gridy = 2;
@@ -108,8 +108,8 @@ public class CSMPanel extends JPanel {
 		gridBagConstraints2.anchor = GridBagConstraints.WEST;
 		gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
 		gridBagConstraints2.gridy = 2;
-		jLabel1 = new JLabel();
-		jLabel1.setText("Protection Element");
+		protectionElemLabel = new JLabel();
+		protectionElemLabel.setText("Protection Element");
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.anchor = GridBagConstraints.WEST;
 		gridBagConstraints1.gridx = 0;
@@ -122,20 +122,20 @@ public class CSMPanel extends JPanel {
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 1;
 		gridBagConstraints.weightx = 1.0;
-		jLabel = new JLabel();
-		jLabel.setText("Protection Method");
+		protectionMethodLabel = new JLabel();
+		protectionMethodLabel.setText("Protection Method");
 		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		setBorder(BorderFactory.createTitledBorder(null, "Common Security Module (CSM)",
 			TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
 			new Color(62, 109, 181)));
-		this.add(jLabel, gridBagConstraints1);
+		this.add(protectionMethodLabel, gridBagConstraints1);
 		this.add(getProtectionType(), gridBagConstraints);
-		this.add(jLabel1, gridBagConstraints2);
+		this.add(protectionElemLabel, gridBagConstraints2);
 		this.add(getProtectionElement(), gridBagConstraints3);
-		this.add(jLabel2, gridBagConstraints4);
+		this.add(privilegeLabel, gridBagConstraints4);
 		this.add(getPrivilege(), gridBagConstraints5);
-		this.add(jLabel3, gridBagConstraints11);
+		this.add(appContextLabel, gridBagConstraints11);
 		this.add(getApplicationContext(), gridBagConstraints21);
 	}
 
@@ -168,7 +168,6 @@ public class CSMPanel extends JPanel {
 					} else {
 						getProtectionElement().setEditable(true);
 					}
-
 				}
 			});
 			protectionType.addItem(ProtectionMethod.ServiceType);

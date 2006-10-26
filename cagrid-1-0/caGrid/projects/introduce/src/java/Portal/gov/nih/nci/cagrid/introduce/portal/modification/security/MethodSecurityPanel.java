@@ -72,17 +72,17 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private JPanel commPanel = null;
 
-	private JLabel jLabel1 = null;
+	private JLabel noneLabel = null;
 
-	private JLabel Custom = null;
+	private JLabel customLabel = null;
 
-	private JLabel jLabel2 = null;
+	private JLabel transportLevelSecurityLabel = null;
 
-	private JLabel jLabel3 = null;
+	private JLabel secureConversationLabel = null;
 
 	private JCheckBox secureMessageButton = null;
 
-	private JLabel jLabel4 = null;
+	private JLabel secureMessageLabel = null;
 
 	private SecureConversationPanel secureConversationPanel = null;
 
@@ -100,13 +100,13 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private JPanel generalSecurity = null;
 
-	private JLabel jLabel = null;
+	private JLabel runAsLabel = null;
 
 	private boolean isSyncingRunAs = false;
 
 	private boolean isInited = false;
 
-	private JLabel jLabel6 = null;
+	private JLabel anonClientsLabel = null;
 
 	private JPanel authorizationPanel = null;
 
@@ -314,10 +314,10 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			MethodAuthorization ma = new MethodAuthorization();
 			if (authType.equals(GRID_GROUPER_AUTHORIZATION)) {
 				// TODO: Validate the expression
-				MembershipExpression exp = ((GridGrouperExpressionEditor) getGridGrouper()).getMembershipExpression();
+				MembershipExpression exp = getGridGrouper().getMembershipExpression();
 				ma.setGridGrouperAuthorization(exp);
 			} else if (authType.equals(CSM_AUTHORIZATION)) {
-			   CommonTools.setServiceProperty(this.description, CSMPanel.CSM_CONFIGURATION_FILE, "", false);
+				CommonTools.setServiceProperty(this.description, CSMPanel.CSM_CONFIGURATION_FILE, "", false);
 				ma.setCSMAuthorization(getCsmPanel().getAuthorization());
 			} else {
 				ma.setNoAuthorization(new NoAuthorization());
@@ -380,7 +380,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			}
 		}
 		synchronize();
-
 	}
 
 
@@ -404,7 +403,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			synchRunAsMode();
 			syncAuthorization();
 			syncAnonymousCommunication();
-
 		}
 	}
 
@@ -591,16 +589,16 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	 */
 	private JPanel getChoicePanel() {
 		if (choicePanel == null) {
-			Custom = new JLabel();
-			Custom.setText("Custom");
-			jLabel1 = new JLabel();
-			jLabel1.setText("None");
+			customLabel = new JLabel();
+			customLabel.setText("Custom");
+			noneLabel = new JLabel();
+			noneLabel.setText("None");
 			choicePanel = new JPanel();
 			choicePanel.setLayout(new GridBagLayout());
 			choicePanel.add(getNoneButton());
-			choicePanel.add(jLabel1);
+			choicePanel.add(noneLabel);
 			choicePanel.add(getCustomButton());
-			choicePanel.add(Custom);
+			choicePanel.add(customLabel);
 		}
 		return choicePanel;
 	}
@@ -613,19 +611,19 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	 */
 	private JPanel getCommPanel() {
 		if (commPanel == null) {
-			jLabel4 = new JLabel();
-			jLabel4.setText("Secure Message");
-			jLabel3 = new JLabel();
-			jLabel3.setText("Secure Conversation");
-			jLabel2 = new JLabel();
-			jLabel2.setText("Transport Level Security");
+			secureMessageLabel = new JLabel();
+			secureMessageLabel.setText("Secure Message");
+			secureConversationLabel = new JLabel();
+			secureConversationLabel.setText("Secure Conversation");
+			transportLevelSecurityLabel = new JLabel();
+			transportLevelSecurityLabel.setText("Transport Level Security");
 			commPanel = new JPanel();
 			commPanel.add(getTlsButton(), null);
-			commPanel.add(jLabel2, null);
+			commPanel.add(transportLevelSecurityLabel, null);
 			commPanel.add(getSecureConversationButton(), null);
-			commPanel.add(jLabel3, null);
+			commPanel.add(secureConversationLabel, null);
 			commPanel.add(getSecureMessageButton(), null);
-			commPanel.add(jLabel4, null);
+			commPanel.add(secureMessageLabel, null);
 		}
 		return commPanel;
 	}
@@ -794,8 +792,8 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints.gridy = 0;
-			jLabel6 = new JLabel();
-			jLabel6.setText("Anonymous Clients");
+			anonClientsLabel = new JLabel();
+			anonClientsLabel.setText("Anonymous Clients");
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
@@ -809,13 +807,13 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			gridBagConstraints21.gridy = 1;
 			gridBagConstraints21.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints21.gridx = 0;
-			jLabel = new JLabel();
-			jLabel.setText("Run As");
+			runAsLabel = new JLabel();
+			runAsLabel.setText("Run As");
 			generalSecurity = new JPanel();
 			generalSecurity.setLayout(new GridBagLayout());
-			generalSecurity.add(jLabel, gridBagConstraints21);
+			generalSecurity.add(runAsLabel, gridBagConstraints21);
 			generalSecurity.add(getRunAsMode(), gridBagConstraints12);
-			generalSecurity.add(jLabel6, gridBagConstraints);
+			generalSecurity.add(anonClientsLabel, gridBagConstraints);
 			generalSecurity.add(getAnonymousCommunication(), gridBagConstraints1);
 		}
 		return generalSecurity;
@@ -965,5 +963,4 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return csmPanel;
 	}
-
 }

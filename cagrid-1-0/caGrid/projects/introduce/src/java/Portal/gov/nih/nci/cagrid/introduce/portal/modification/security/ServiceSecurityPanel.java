@@ -362,7 +362,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				sa.setGridMapAuthorization(gma);
 			} else if (authType.equals(GRID_GROUPER_AUTHORIZATION)) {
 				// TODO: Validate the expression
-				MembershipExpression exp = ((GridGrouperExpressionEditor) getGridGrouper()).getMembershipExpression();
+				MembershipExpression exp = getGridGrouper().getMembershipExpression();
 				sa.setGridGrouperAuthorization(exp);
 			} else if (authType.equals(CSM_AUTHORIZATION)) {
 				CommonTools.setServiceProperty(this.description, CSMPanel.CSM_CONFIGURATION_FILE, "", false);
