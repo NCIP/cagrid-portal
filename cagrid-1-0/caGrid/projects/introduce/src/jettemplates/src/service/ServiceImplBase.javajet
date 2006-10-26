@@ -33,7 +33,7 @@ import org.globus.wsrf.ResourcePropertySet;
 /** 
  *  TODO:DOCUMENT ME
  * 
- * @created by Introduce Toolkit version 1.0
+ * @created by Introduce Toolkit version <%=IntroduceConstants.INTRODUCE_VERSION%>
  * 
  */
 public abstract class <%=info.getService().getName()%>ImplBase {
