@@ -12,7 +12,7 @@ import org.apache.axis.types.URI;
  * Time: 12:32:01 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RegisteredServiceDAOLocalTest extends BaseSpringDataAccessAbstractTestCase {
+public class RegisteredServiceDAOLocalTestCase extends BaseSpringDataAccessAbstractTestCase {
 
     private GridServiceBaseDAO gridServiceBaseDAO;
 

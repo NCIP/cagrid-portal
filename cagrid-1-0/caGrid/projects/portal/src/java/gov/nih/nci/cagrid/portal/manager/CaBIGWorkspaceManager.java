@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.portal.manager;
 import gov.nih.nci.cagrid.portal.domain.CaBIGWorkspace;
 import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
 
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * User: kherm
@@ -11,6 +13,8 @@ import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
  * To change this template use File | Settings | File Templates.
  */
 public interface CaBIGWorkspaceManager extends BaseManager {
+
+    public List getUniqueParticipants() throws PortalRuntimeException;
 
     /**
      * Save a caBIG workspace and its participants

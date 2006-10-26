@@ -14,7 +14,7 @@ import java.util.List;
  * Time: 1:57:39 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ResearchCenterDAOLocalTest extends BaseSpringDataAccessAbstractTestCase {
+public class ResearchCenterDAOLocalTestCase extends BaseSpringDataAccessAbstractTestCase {
 
     private ResearchCenterDAO rcDAO;
     private JdbcDAO jdbcDAO;

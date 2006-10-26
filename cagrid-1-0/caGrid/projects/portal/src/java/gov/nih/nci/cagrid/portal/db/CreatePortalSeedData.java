@@ -19,7 +19,9 @@ public class CreatePortalSeedData {
 
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath*:/**/applicationContext-dbInit.xml");
+        ApplicationContext ctx = new ClassPathXmlApplicationContext(
+                new String[]{"applicationContext-dbInit.xml", "applicationContext-utils.xml"});
+
         PortalDDLExecutor ddlExecutor = (PortalDDLExecutor) ctx.getBean("ddlExecutor");
 
         ddlExecutor.executePopulateDBWithWorkspaces();

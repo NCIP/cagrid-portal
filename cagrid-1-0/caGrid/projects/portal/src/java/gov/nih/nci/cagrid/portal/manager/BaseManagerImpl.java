@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.portal.manager;
 
-import gov.nih.nci.cagrid.portal.dao.BaseDAO;
+
 import gov.nih.nci.cagrid.portal.dao.GridServiceBaseDAO;
 import gov.nih.nci.cagrid.portal.dao.JdbcDAO;
 import gov.nih.nci.cagrid.portal.domain.DomainObject;
@@ -30,7 +30,7 @@ import java.util.List;
  *      To change this template use File | Settings | File Templates.
  */
 public abstract class BaseManagerImpl implements BaseManager {
-    protected BaseDAO baseDAO;
+
 
     protected GridServiceBaseDAO gridServiceBaseDAO;
     protected JdbcDAO jdbcDAO;
@@ -51,7 +51,7 @@ public abstract class BaseManagerImpl implements BaseManager {
                 // Do nothing as this is not unexpected
                 _logger.info("Record not found for " + obj.getClass() + ". Creating new one with ORM assigned ID");
             }
-            baseDAO.saveOrUpdate(obj);
+            gridServiceBaseDAO.saveOrUpdate(obj);
         } catch (DataAccessException e) {
             throw new PortalRuntimeException(e);
         }
@@ -59,7 +59,7 @@ public abstract class BaseManagerImpl implements BaseManager {
 
     public Object getObjectByPrimaryKey(Class cls, Integer id) throws PortalRuntimeException {
         try {
-            return baseDAO.getObjectByPrimaryKey(cls, id);
+            return gridServiceBaseDAO.getObjectByPrimaryKey(cls, id);
         } catch (DataAccessException e) {
             throw new PortalRuntimeException(e);
         }
@@ -67,7 +67,7 @@ public abstract class BaseManagerImpl implements BaseManager {
 
     public List loadAll(Class cls) throws PortalRuntimeException {
         try {
-            return baseDAO.loadAll(cls);
+            return gridServiceBaseDAO.loadAll(cls);
         } catch (DataAccessException e) {
             throw new PortalRuntimeException(e);
         }
@@ -77,10 +77,6 @@ public abstract class BaseManagerImpl implements BaseManager {
     /**
      * setters for spring *
      */
-
-    public void setBaseDAO(BaseDAO baseDAO) {
-        this.baseDAO = baseDAO;
-    }
 
     public void set_logger(Category _logger) {
         this._logger = _logger;

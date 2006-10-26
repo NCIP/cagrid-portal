@@ -27,7 +27,7 @@ public class ServicesList {
     private EPRPingService pingService;
     private int listSize;
 
-    private boolean navigatedServiceStatus;
+    private boolean navigatedServiceActive;
 
     private Category _logger = Category.getInstance(getClass().getName());
 
@@ -57,13 +57,13 @@ public class ServicesList {
     }
 
 
-    public boolean isNavigatedServiceStatus() {
+    public boolean isNavigatedServiceActive() {
         try {
-            navigatedServiceStatus = pingService.ping(navigatedService.getHandle());
+            navigatedServiceActive = pingService.ping(navigatedService.getHandle());
         } catch (RemoteException e) {
             return false;
         }
-        return navigatedServiceStatus;
+        return navigatedServiceActive;
     }
 
     public int getListSize() {

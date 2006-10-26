@@ -32,7 +32,7 @@ public class CaBIGParticipant implements GeocodedDomainObject {
     private String status;
     private Float latitude;
     private Float longitude;
-    private Set woskpaceCollection = new HashSet();
+    private Set workspaceCollection = new HashSet();
 
     /**
      * @hibernate.id generator-class="increment"
@@ -205,20 +205,19 @@ public class CaBIGParticipant implements GeocodedDomainObject {
     }
 
     /**
-     * @hibernate.set name="woskpaceCollection"
+     * @hibernate.set name="workspaceCollection"
      * table="CABIG_WORKSPACES_PARTICIPANTS_JOIN"
      * cascade="none"
      * @hibernate.collection-key column="CABIG_PARTICIPANTS_ID_KEY"
      * @hibernate.collection-many-to-many column="CABIG_WORKSPACES_ID_KEY"
      * class="gov.nih.nci.cagrid.portal.domain.CaBIGWorkspace"
      */
-    public Set getWoskpaceCollection() {
-        return woskpaceCollection;
-    }
-
-    public void setWoskpaceCollection(Set woskpaceCollection) {
-        this.woskpaceCollection = woskpaceCollection;
+    public Set getWorkspaceCollection() {
+        return workspaceCollection;
     }
 
 
+    public void setWorkspaceCollection(Set workspaceCollection) {
+        this.workspaceCollection = workspaceCollection;
+    }
 }

@@ -54,6 +54,10 @@
             <property-name>pocManager</property-name>
             <value>#{pocManager}</value>
         </managed-property>
+        <managed-property>
+            <property-name>caBIGManager</property-name>
+            <value>#{caBIGManager}</value>
+        </managed-property>
     </managed-bean>
 
     <managed-bean>
@@ -111,6 +115,14 @@
     </managed-bean>
 
     <managed-bean>
+        <description>Directory List of participants</description>
+        <managed-bean-name>participants</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.portal.web.CaBIGParticipantList</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+
+    <managed-bean>
         <description>Search Utility</description>
         <managed-bean-name>keywordSearch</managed-bean-name>
         <managed-bean-class>gov.nih.nci.cagrid.portal.web.KeywordSearchSetup</managed-bean-class>
@@ -141,6 +153,11 @@
             <from-action>#{directory.navigateToPeopleDirectory}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/pocDirectory.portal</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{directory.navigateToParticipantDirectory}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/participantDirectory.portal</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{map.navigateToRCMap}</from-action>

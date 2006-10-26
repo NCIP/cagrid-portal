@@ -97,7 +97,7 @@ public class CaBIGWorkspace implements DomainObject {
      */
     public void addParticipant(CaBIGParticipant participant) {
         this.participants.add(participant);
-        participant.getWoskpaceCollection().add(this);
+        participant.getWorkspaceCollection().add(this);
     }
 
     /**
@@ -107,7 +107,7 @@ public class CaBIGWorkspace implements DomainObject {
      */
     public void removeParticipant(CaBIGParticipant participant) {
         this.participants.remove(participant);
-        participant.getWoskpaceCollection().remove(this);
+        participant.getWorkspaceCollection().remove(this);
     }
 
     /**

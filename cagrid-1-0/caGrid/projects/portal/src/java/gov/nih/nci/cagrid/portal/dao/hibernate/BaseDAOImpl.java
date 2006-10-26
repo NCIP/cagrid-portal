@@ -18,7 +18,7 @@ import java.util.List;
  * Time: 5:52:22 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BaseDAOImpl extends HibernateDaoSupport implements BaseDAO {
+public abstract class BaseDAOImpl extends HibernateDaoSupport implements BaseDAO {
     Category _logger;
 
     protected void initDao() throws Exception {

@@ -15,6 +15,13 @@ import java.util.Collection;
  * To change this template use File | Settings | File Templates.
  */
 public interface BaseDAO {
+    /**
+     * Will do a free text search.
+     * To be implemented by individual DAO's
+     *
+     * @param keyword
+     */
+    public java.util.List keywordSearch(String keyword) throws DataAccessException;
 
     public Object getObjectByPrimaryKey(Class cls, Integer id) throws DataAccessException;
 

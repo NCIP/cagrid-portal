@@ -19,14 +19,22 @@
 		</layout>
 	</appender>
 
+    <appender name="localFileAppender" class="org.apache.log4j.FileAppender">
+		<param name="File" value="@local.log.dir@/caBIGUploadProcess.log"/>
+		<param name="Append" value="false"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-10r %-5p %-20c{1} %x - %m%n"/>
+		</layout>
+	</appender>
+
 	<category name="gov.nih.nci.cagrid.portal.db" additivity="false">
 		<priority value="WARN"/>
 		<appender-ref ref="consoleAppender"/>
 	</category>
 
     <category name="gov.nih.nci.cagrid.portal.db.PortalMysqlDDLExecutor" additivity="false">
-		<priority value="DEBUG"/>
-		<appender-ref ref="consoleAppender"/>
+		<priority value="WARN"/>
+		<appender-ref ref="localFileAppender"/>
 	</category>
 
 	<category name="gov.nih.nci.cagrid.portal" additivity="false">

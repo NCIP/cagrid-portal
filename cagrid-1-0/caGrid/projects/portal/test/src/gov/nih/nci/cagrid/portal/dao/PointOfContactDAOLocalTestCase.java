@@ -13,7 +13,7 @@ import java.util.List;
  * Time: 1:06:07 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PointOfContactDAOLocalTest extends BaseSpringDataAccessAbstractTestCase {
+public class PointOfContactDAOLocalTestCase extends BaseSpringDataAccessAbstractTestCase {
 
     private PointOfContactDAO pocDAO;
 

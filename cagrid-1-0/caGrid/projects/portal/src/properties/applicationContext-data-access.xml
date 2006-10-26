@@ -35,9 +35,6 @@
     <!--Base Manager-->
     <bean id="baseManager" class="gov.nih.nci.cagrid.portal.manager.BaseManagerImpl"
           abstract="true">
-        <property name="baseDAO">
-            <ref bean="baseDAO"/>
-        </property>
         <property name="gridServiceBaseDAO">
             <ref bean="gridServiceBaseDAO"/>
         </property>
@@ -71,12 +68,15 @@
         </property>
     </bean>
 
-    <bean id="caBIGWorkspaceManager"
+    <bean id="caBIGManager"
           class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager" ref="transactionManager"/>
         <property name="target">
             <bean class="gov.nih.nci.cagrid.portal.manager.CaBIGWorkspaceManagerImpl"
                   parent="geocodingManager">
+                <property name="caBIGDAO">
+                    <ref bean="caBIGDAO"/>
+                </property>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -108,7 +108,7 @@
     <!-- #############   DAO #############                -->
 
     <bean id="baseDAO"
-          class="gov.nih.nci.cagrid.portal.dao.hibernate.BaseDAOImpl">
+          class="gov.nih.nci.cagrid.portal.dao.hibernate.BaseDAOImpl" abstract="true">
         <property name="sessionFactory">
             <ref bean="sessionFactory"/>
         </property>
@@ -116,25 +116,37 @@
 
 
     <bean id="gridServiceBaseDAO"
-          class="gov.nih.nci.cagrid.portal.dao.hibernate.GridServiceBaseDAOImpl">
+          class="gov.nih.nci.cagrid.portal.dao.hibernate.GridServiceBaseDAOImpl"
+          parent="baseDAO">
         <property name="sessionFactory">
             <ref bean="sessionFactory"/>
         </property>
     </bean>
 
     <bean id="rcDAO"
-          class="gov.nih.nci.cagrid.portal.dao.hibernate.ResearchCenterDAOImpl">
+          class="gov.nih.nci.cagrid.portal.dao.hibernate.ResearchCenterDAOImpl"
+          parent="baseDAO">
         <property name="sessionFactory">
             <ref bean="sessionFactory"/>
         </property>
     </bean>
 
     <bean id="pocDAO"
-          class="gov.nih.nci.cagrid.portal.dao.hibernate.PointOfContactDAOImpl">
+          class="gov.nih.nci.cagrid.portal.dao.hibernate.PointOfContactDAOImpl"
+          parent="baseDAO">
         <property name="sessionFactory">
             <ref bean="sessionFactory"/>
         </property>
     </bean>
+
+    <bean id="caBIGDAO"
+          class="gov.nih.nci.cagrid.portal.dao.hibernate.CaBIGParticipantDAOImpl"
+          parent="baseDAO">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+
 
     <bean id="jdbcDAO"
           class="gov.nih.nci.cagrid.portal.dao.jdbc.JdbcDAOImpl">

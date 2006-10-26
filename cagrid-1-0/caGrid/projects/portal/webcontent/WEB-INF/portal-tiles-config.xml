@@ -51,6 +51,10 @@
         <put name="mainContent" value="/jsp/content/DirectoryPointOfContact.jsp"/>
     </definition>
 
+    <definition name="/participantDirectory.tiles" extends="Directory">
+        <put name="mainContent" value="/jsp/content/DirectoryCaBIGParticipants.jsp"/>
+    </definition>
+
     <definition name="/serviceDetails.tiles" extends="Directory">
         <put name="mainContent" value="/jsp/content/ServiceDetails.jsp"/>
     </definition>

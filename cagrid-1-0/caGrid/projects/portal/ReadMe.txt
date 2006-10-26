@@ -131,6 +131,20 @@ You can ignore sections marked (Optional)
      After getting a key, put the new key in the portal-build.properties file
      by replacing the "google.map.key" property
 
+    ===========================================================================
+      2.7 Portal geocoding component
+    ===========================================================================
+
+    Portal does geocoding using the yahoo web service at
+    http://developer.yahoo.com/maps/rest/V1/geocode.html
+
+    Before deploying Portal into production get an application ID from
+    http://api.search.yahoo.com/webservices/register_application
+
+    This application id should then be put in the portal-build.properties
+    file by editing the following property
+
+    geocoder.application.id=
 
 
 ===========================================================================

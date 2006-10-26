@@ -56,6 +56,8 @@
     <property name="tomcat.dir" location="${env.CATALINA_HOME}"/>
     <property name="tomcat.webapps.dir" location="${tomcat.dir}/webapps"/>
 
+    <property name="build.log.dir" value="${basedir}/build/logs"/>
+
     <!--Set logging levels if not defined by ${username}-portal.properties file -->
     <property name="log.level.root" value="WARN"/>
     <property name="log.level.portal" value="WARN"/>
@@ -137,6 +139,8 @@
         <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${webinf.lib.dir}"/>
         <mkdir dir="${webinf.classes.dir}"/>
+        <mkdir dir="${war.build.dir}"/>
+        <mkdir dir="${build.log.dir}"/>
     </target>
 
 
@@ -150,11 +154,12 @@
         <delete dir="${webinf.classes.dir}"/>
         <ant antfile="${basedir}/build-map.xml" dir="${basedir}" inheritall="true" target="cleanMapComponent"/>
 
-        <delete file="${war.build.dir}" failonerror="false"/>
+        <delete dir="${war.build.dir}" failonerror="false"/>
+
     </target>
 
 
-    <target name="buildPortal" description="Will build it locally in the local directory"
+    <target name="buildPortalLocal" description="Will build it locally in the local directory"
             depends="clean,compile,hibernate.xdoclet,copyLibsLocal,copyResourcesLocal"/>
 
 
@@ -162,7 +167,7 @@
     <!-- Deploy Target                                               -->
     <!-- ============================================================== -->
 
-    <target name="deployTomcatPreBuilt" description="Deploys pre-built webapp">
+    <target name="deployTomcatPreBuilt">
         <copy todir="${tomcat.webapps.dir}/${project.name}" overwrite="true">
             <fileset dir="${webcontent.dir}"/>
         </copy>
@@ -182,7 +187,7 @@
     <!-- Create war for deployment                                      -->
     <!-- ============================================================== -->
     <target name="war" depends="clean,compile,hibernate,copyLibsLocal,copyResourcesLocal">
-        <mkdir dir="${war.build.dir}"/>
+
 
         <war basedir="${webcontent.dir}"
              destfile="${war.build.dir}/${project.name}.war"
@@ -253,6 +258,11 @@
             <path location="${tomcat.dir}/logs"/>
         </pathconvert>
 
+        <!--Unix works for all environments -->
+        <pathconvert targetos="unix" property="build.logs.dir">
+            <path location="${basedir}/build/logs"/>
+        </pathconvert>
+
         <copy
                 file="${resources.dir}/log4j.xml.template"
                 tofile='${webinf.classes.dir}/log4j.xml'
@@ -260,6 +270,7 @@
                 overwrite="true">
             <filterset>
                 <filter token='webapp.log.dir' value='${tomcat.log.dir}'/>
+                <filter token="local.log.dir" value="${build.logs.dir}"/>
                 <filter token="webapp.project.name" value="${project.name}"/>
                 <filter token="log.level.root" value="${log.level.root}"/>
                 <filter token="log.level.portal" value="${log.level.portal}"/>
@@ -288,7 +299,10 @@
 
         <copy todir="${webinf.classes.dir}"
               file="${props.src.dir}/applicationContext-utils.xml"
-              filtering="false" overwrite="true">
+              filtering="true" overwrite="true">
+            <filterset>
+                <filter token="geocoder.application.id" value="${geocoder.application.id}"/>
+            </filterset>
         </copy>
 
 
@@ -318,7 +332,6 @@
                     <filter token="jdbc.url" value="${db.connection.url}"/>
                     <filter token="jdbc.username" value="${db.connection.username}"/>
                     <filter token="jdbc.password" value="${db.connection.password}"/>
-                    <filter token="geocoder.application.id" value="${geocoder.application.id}"/>
                 </filterset>
             </copy>
         </sequential>
@@ -418,7 +431,10 @@
     </target>
 
 
-    <target name="populateDBWithSeedData" depends="setClasspath">
+    <target name="populateDBWithSeedData" depends="init" description="Will populate the Database with seed data">
+
+
+        <echo message="Starting upload process. Check ${build.log.dir}/caBIGUploadProcess.log for logs"/>
         <java classname="gov.nih.nci.cagrid.portal.db.CreatePortalSeedData"
               failonerror="true" logerror="true">
             <classpath>
@@ -427,6 +443,27 @@
                 <dirset dir="${props.src.dir}"/>
             </classpath>
         </java>
+
+        <echo message="Testing if the upload process was sucessful. Check your ${build.log.dir} directory for logs"/>
+
+        <junit dir="${build.log.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed"
+               showoutput="true">
+            <classpath refid="test.classpath"/>
+            <classpath>
+                <pathelement path="${test.classes.dir}"/>
+            </classpath>
+            <sysproperty key="build.dir" value="${test.classes.dir}"/>
+            <jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
+            <formatter type="xml"/>
+            <batchtest fork="yes" todir="${build.log.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/CaBIGManagerLocalTestCase.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        <fail message="Tests failed! Check test reports." if="test.failed"/>
+
     </target>
+
 
 </project>

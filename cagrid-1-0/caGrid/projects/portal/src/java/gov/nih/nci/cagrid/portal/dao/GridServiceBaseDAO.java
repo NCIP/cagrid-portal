@@ -35,12 +35,4 @@ public interface GridServiceBaseDAO extends BaseDAO {
      */
     public Integer getSurrogateKey(DomainObject obj) throws DataAccessException, RecordNotFoundException;
 
-    /**
-     * Will do a free text search
-     *
-     * @param keyword
-     * @return List of PointOfContact objects
-     */
-    public java.util.List keywordSearch(String keyword) throws DataAccessException;
-
 }

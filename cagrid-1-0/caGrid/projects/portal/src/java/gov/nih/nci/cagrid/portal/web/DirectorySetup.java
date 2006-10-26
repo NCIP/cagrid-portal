@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.web;
 
 import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
+import gov.nih.nci.cagrid.portal.manager.CaBIGWorkspaceManager;
 import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
 import gov.nih.nci.cagrid.portal.manager.PointOfContactManager;
 import gov.nih.nci.cagrid.portal.manager.ResearchCenterManager;
@@ -26,6 +27,7 @@ public class DirectorySetup {
     private GridServiceManager gridServiceManager;
     private ResearchCenterManager rcManager;
     private PointOfContactManager pocManager;
+    private CaBIGWorkspaceManager caBIGManager;
 
     private Category _logger = Category.getInstance(getClass().getName());
 
@@ -77,6 +79,17 @@ public class DirectorySetup {
         return "success";
     }
 
+    public String navigateToParticipantDirectory() throws FacesException {
+        _logger.debug("Setting up directory of caBIG participants");
+
+        try {
+            CaBIGParticipantList participants = (CaBIGParticipantList) PortalWebUtils.getBean("participants");
+            participants.setList(caBIGManager.getUniqueParticipants());
+        } catch (PortalRuntimeException e) {
+            throw new FacesException(e);
+        }
+        return "success";
+    }
 
     public void setGridServiceManager(GridServiceManager gridServiceManager) {
         this.gridServiceManager = gridServiceManager;
@@ -88,5 +101,10 @@ public class DirectorySetup {
 
     public void setPocManager(PointOfContactManager pocManager) {
         this.pocManager = pocManager;
+    }
+
+
+    public void setCaBIGManager(CaBIGWorkspaceManager caBIGManager) {
+        this.caBIGManager = caBIGManager;
     }
 }

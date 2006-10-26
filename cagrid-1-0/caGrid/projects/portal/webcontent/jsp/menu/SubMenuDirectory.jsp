@@ -3,12 +3,13 @@
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 
+<f:loadBundle basename="Portal-Labels" var="labels"/>
 
 <f:subview id="subMenu">
     <h:panelGrid styleClass="subMenuTable"
-                 columnClasses="mainMenuSubItems,mainMenuSubItemsSpacer,mainMenuSubItems,mainMenuSubItemsSpacer,mainMenuSubItems,mainMenuSubItemsSpacer"
+                 columnClasses="mainMenuSubItems,mainMenuSubItemsSpacer,mainMenuSubItems,mainMenuSubItemsSpacer,mainMenuSubItems,mainMenuSubItemsSpacer,mainMenuSubItems"
                  cellpadding="0" cellspacing="4"
-                 columns="6">
+                 columns="7">
 
         <h:column>
             <h:commandLink styleClass="mainMenuSubLink"
@@ -41,6 +42,13 @@
 
         <h:column>
             <t:graphicImage url="images/mainMenuSeparator.gif" width="1" height="16"/>
+        </h:column>
+
+        <h:column>
+            <h:commandLink styleClass="mainMenuSubLink"
+                           action="#{directory.navigateToParticipantDirectory}">
+                <h:outputText value="#{labels.participants}"/>
+            </h:commandLink>
         </h:column>
 
     </h:panelGrid>

@@ -63,7 +63,7 @@ public class GridServiceManagerImpl extends GeocodingBaseManagerImpl
 
             //save the new service. ORM will create a new ID
             rService.setPk(null);
-            baseDAO.saveOrUpdate(rService);
+            gridServiceBaseDAO.saveOrUpdate(rService);
 
         } catch (Exception e) {
             //log exception and rethrow

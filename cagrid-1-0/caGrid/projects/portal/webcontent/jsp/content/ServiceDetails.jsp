@@ -64,19 +64,95 @@
             <h:outputText value="#{labels.status}"/>
         </h:column>
         <h:column>
-            <h:outputText value="active" rendered="#{services.navigatedServiceStatus}"/>
-            <h:outputText value="Inactive" rendered="#{!services.navigatedServiceStatus}"/>
+            <f:verbatim>&nbsp;</f:verbatim>
+            <h:graphicImage url="/images/activeService.jpg"
+                            alt="Active Service" rendered="#{services.navigatedServiceActive}"/>
+            <h:graphicImage url="/images/inactiveService.jpg" value="Inactive"
+                            alt="Inactive Service" rendered="#{!services.navigatedServiceActive}"/>
+        </h:column>
+
+
+        <h:column>
+            <h:outputText value="#{labels.serviceType}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{services.navigatedService.type}"/>
+        </h:column>
+
+    </h:panelGrid>
+    <f:verbatim><br/><br/></f:verbatim>
+</h:column>
+
+<h:column rendered="#{not empty services.navigatedService.researchCenter}">
+    <t:panelGrid styleClass="contentInnerTable" cellpadding="3"
+                 rowClasses="dataRowLight,dataRowDark"
+                 columnClasses="dataCellTextBold,dataCellText"
+                 headerClass="contentTableHeader" columns="2">
+
+        <f:facet name="header">
+            <h:column>
+                <h:outputText value="#{labels.hostingCenter}"/>
+            </h:column>
+        </f:facet>
+
+        <h:column>
+            <h:outputText value="#{labels.shortName}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{services.navigatedService.researchCenter.shortName}"/>
         </h:column>
 
         <h:column>
-            <h:outputText value="#{labels.hostingCenter}"/>
+            <h:outputText value="#{labels.displayName}"/>
         </h:column>
         <h:column>
-            <h:commandLink action="#{centers.navigateToCenter}">
-                <h:outputText value="#{services.navigatedService.researchCenter.shortName}"/>
-                <f:param name="navigatedCenterPk"
-                         value="#{services.navigatedService.researchCenter.pk}"/>
-            </h:commandLink>
+            <h:outputText value="#{services.navigatedService.researchCenter.displayName}"/>
+        </h:column>
+
+        <h:column>
+            <h:outputText value="#{labels.description}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{services.navigatedService.researchCenter.description}"/>
+        </h:column>
+
+        <h:column>
+            <h:outputText value="#{labels.homepageURL}"/>
+        </h:column>
+        <h:column>
+            <h:outputLink target="new" value="#{services.navigatedService.researchCenter.homepageURL}"/>
+        </h:column>
+
+        <h:column>
+            <h:outputText value="#{labels.rssURL}"/>
+        </h:column>
+        <h:column>
+            <h:outputLink target="new" value="#{services.navigatedService.researchCenter.homepageURL}"/>
+        </h:column>
+
+        <h:column>
+            <h:outputText value="#{labels.address}"/>
+        </h:column>
+        <h:column>
+            <h:panelGrid columnClasses="dataCellText">
+                <h:column rendered="#{not empty services.navigatedService.researchCenter.street1}">
+                    <h:outputText value="#{services.navigatedService.researchCenter.street1}"/>
+                </h:column>
+                <h:column rendered="#{not empty services.navigatedService.researchCenter.street2}">
+                    <h:outputText value="#{services.navigatedService.researchCenter.street2}"/>
+                </h:column>
+                <h:column rendered="#{not empty services.navigatedService.researchCenter.state}">
+                    <h:outputText value="#{services.navigatedService.researchCenter.state}"/>
+                    <h:outputText value=""/>
+                </h:column>
+                <h:column rendered="#{not empty services.navigatedService.researchCenter.postalCode}">
+                    <h:outputText value="#{services.navigatedService.researchCenter.postalCode}"/>
+                </h:column>
+
+                <h:column rendered="#{not empty services.navigatedService.researchCenter.country}">
+                    <h:outputText value="#{services.navigatedService.researchCenter.country}"/>
+                </h:column>
+            </h:panelGrid>
         </h:column>
 
         <h:column>
@@ -94,18 +170,9 @@
             </t:dataTable>
         </h:column>
 
-
-        <h:column>
-            <h:outputText value="#{labels.serviceType}"/>
-        </h:column>
-        <h:column>
-            <h:outputText value="#{services.navigatedService.type}"/>
-        </h:column>
-
-    </h:panelGrid>
+    </t:panelGrid>
     <f:verbatim><br/><br/></f:verbatim>
 </h:column>
-
 
 <%-- Operations List --%>
 <h:column rendered="#{not empty services.navigatedService.operationCollection}">
