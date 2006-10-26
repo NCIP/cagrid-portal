@@ -27,14 +27,5 @@ public class <%=info.getService().getName()%>ProviderImpl{
 		impl = new <%=info.getService().getName()%>Impl();
 	}
 	
-	public String getCallerIdentity() {
-		String caller = org.globus.wsrf.security.SecurityManager.getManager().getCaller();
-		if ((caller == null) || (caller.equals("<anonymous>"))) {
-			return null;
-		} else {
-			return caller;
-		}
-	}
-	
 
 }
