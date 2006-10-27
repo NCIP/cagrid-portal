@@ -2521,6 +2521,9 @@
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
     </field>
+    <field name="synonymCollection" type="string" collection="arraylist">
+      <bind-xml name="evs:synonymCollection" xmlns:evs="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain" evs:QName-prefix="evs" node="element" />
+    </field>
     <field name="definitionCollection" type="gov.nih.nci.evs.domain.Definition" collection="arraylist">
       <bind-xml name="evs:definitionCollection" xmlns:evs="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain" evs:QName-prefix="evs" node="element" />
     </field>
@@ -2584,6 +2587,9 @@
     <field name="inverseRoleCollection" type="gov.nih.nci.evs.domain.Role" collection="vector">
       <bind-xml name="evs:inverseRoleCollection" xmlns:evs="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain" evs:QName-prefix="evs" node="element" />
     </field>
+      <field name="semanticTypeVector" type="string" collection="vector">
+        <bind-xml name="evs:semanticTypeVector" xmlns:evs="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain" evs:QName-prefix="evs" node="element" />
+      </field>
     <field name="inverseAssociationCollection" type="gov.nih.nci.evs.domain.Association" collection="vector">
       <bind-xml name="evs:inverseAssociationCollection" xmlns:evs="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain" evs:QName-prefix="evs" node="element" />
     </field>
