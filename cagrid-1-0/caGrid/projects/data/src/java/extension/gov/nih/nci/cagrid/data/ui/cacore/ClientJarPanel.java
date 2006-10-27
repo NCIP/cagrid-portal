@@ -1,8 +1,10 @@
 package gov.nih.nci.cagrid.data.ui.cacore;
 
+import gov.nih.nci.cagrid.common.JarUtilities;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.data.extension.CQLProcessorConfig;
@@ -22,6 +24,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.jar.JarFile;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -93,6 +96,10 @@ public class ClientJarPanel extends AbstractWizardPanel {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error loading extension data", ex);
 		}
+		// see if the castor mapping file exists
+		File castorMapping = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
+			+ File.separator + DataServiceConstants.CACORE_CASTOR_MAPPING_FILE);
+		setNextEnabled(castorMapping.exists());
 	}
 
 
@@ -147,7 +154,8 @@ public class ClientJarPanel extends AbstractWizardPanel {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					String[] selectedJarNames = null;
 					try {
-						ResourceManager.promptMultiFiles(ClientJarPanel.this, null, FileFilters.JAR_FILTER);
+						selectedJarNames = ResourceManager.promptMultiFiles(
+							ClientJarPanel.this, null, FileFilters.JAR_FILTER);
 					} catch (IOException ex) {
 						ex.printStackTrace();
 						ErrorDialog.showErrorDialog("Error getting filenames", ex);
@@ -163,6 +171,8 @@ public class ClientJarPanel extends AbstractWizardPanel {
 								jarNames[i] = inJarFile.getName();
 								Utils.copyFile(inJarFile, outJarFile);
 							}
+							// attempt to extract a castor mapping file
+							extractCastorMapping(selectedJarNames);
 							Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
 							AdditionalLibraries libs = data.getAdditionalLibraries();
 							if (libs == null) {
@@ -172,7 +182,8 @@ public class ClientJarPanel extends AbstractWizardPanel {
 							if (additionalLibNames == null) {
 								additionalLibNames = jarNames;
 							} else {
-								additionalLibNames = (String[]) Utils.concatenateArrays(String.class, jarNames, additionalLibNames);
+								additionalLibNames = (String[]) Utils.concatenateArrays(
+									String.class, jarNames, additionalLibNames);
 							}
 							libs.setJarName(additionalLibNames);
 							data.setAdditionalLibraries(libs);
@@ -400,6 +411,22 @@ public class ClientJarPanel extends AbstractWizardPanel {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error setting the application service URL: " + ex.getMessage(), ex);
+		}
+	}
+	
+	
+	private void extractCastorMapping(String[] jarNames) throws IOException {
+		for (int i = 0; i < jarNames.length; i++) {
+			JarFile jarFile = new JarFile(jarNames[i]);
+			StringBuffer mappingFile = JarUtilities.getFileContents(
+				jarFile, DataServiceConstants.CACORE_CASTOR_MAPPING_FILE);
+			if (mappingFile != null) {
+				String mappingOut = getServiceInformation().getBaseDirectory().getAbsolutePath() 
+					+ File.separator + DataServiceConstants.CACORE_CASTOR_MAPPING_FILE;
+				Utils.stringBufferToFile(mappingFile, mappingOut);
+				setNextEnabled(true);
+				break;
+			}
 		}
 	}
 }

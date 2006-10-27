@@ -2,7 +2,9 @@ package gov.nih.nci.cagrid.data.codegen;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
+import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -42,7 +44,13 @@ public class DataServiceCodegenPostProcessor extends BaseCodegenPostProcessorExt
 		throws CodegenExtensionException {
 		modifyEclipseClasspath(desc, info);
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-		generateClassToQnameMapping(data, info);
+		Data extensionData = null;
+		try {
+			extensionData = ExtensionDataUtils.getExtensionData(data);
+		} catch (Exception ex) {
+			throw new CodegenExtensionException("Error loading extension data: " + ex.getMessage(), ex);
+		}
+		generateClassToQnameMapping(extensionData, info);
 		// see if the query method has already been implemented
 		// FIXME: this belongs in extension data
 		MessageElement implAddedElement = ExtensionTools.getExtensionDataElement(data, DataServiceConstants.QUERY_IMPLEMENTATION_ADDED);

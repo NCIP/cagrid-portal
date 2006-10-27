@@ -79,12 +79,11 @@ public abstract class BaseCodegenPostProcessorExtension implements CodegenExtens
 	}
 	
 	
-	protected void generateClassToQnameMapping(ExtensionTypeExtensionData extDesc, ServiceInformation info)
+	protected void generateClassToQnameMapping(Data extData, ServiceInformation info)
 		throws CodegenExtensionException {
 		try {
 			// load the caDSR package to namespace mapping information
-			Data data = ExtensionDataUtils.getExtensionData(extDesc);
-			CadsrInformation cadsrInfo = data.getCadsrInformation();
+			CadsrInformation cadsrInfo = extData.getCadsrInformation();
 			if (cadsrInfo != null) {
 				Mappings mappings = new Mappings();
 				List classMappings = new ArrayList();

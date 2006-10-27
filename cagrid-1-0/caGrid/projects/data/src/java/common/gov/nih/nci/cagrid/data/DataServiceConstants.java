@@ -101,6 +101,10 @@ public class DataServiceConstants {
 	public static final String CADSR_SERVICE_URL = "CADSR_URL";
 	public static final String GME_SERVICE_URL = "GME_URL";
 	
+	// castor mapping constants
+	public static final String CACORE_CASTOR_MAPPING_FILE = "xml-mapping.xml";
+	public static final String CASTOR_MAPPING_WSDD_PARAMETER = "castorMapping";
+	
 	private DataServiceConstants() {
 		
 	}
