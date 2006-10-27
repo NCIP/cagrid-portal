@@ -12,13 +12,12 @@ import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
 import gov.nih.nci.cagrid.data.utilities.CQLResultsCreationUtil;
 import gov.nih.nci.cagrid.data.utilities.ResultsCreationException;
 import gov.nih.nci.common.util.HQLCriteria;
-import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
-import gov.nih.nci.system.comm.client.ClientSession;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -43,9 +42,10 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
 	public static final String USE_CSM_FLAG = "useCsmSecurity";
 	public static final String DEFAULT_USE_CSM_FLAG = String.valueOf(false);
+	public static final String CSM_CONFIGURATION_FILENAME = "csmConfigurationFilename";
+	public static final String CSM_CONTEXT_NAME = "csmContextName";
 	
 	private static Logger LOG = Logger.getLogger(HQLCoreQueryProcessor.class);
-	private static final Object securityMutex = new Object();
 	
 	private ApplicationService coreService;
 	
@@ -57,18 +57,35 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	public CQLQueryResults processQuery(CQLQuery cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException {
 		CQLQueryResults results = null;
-		
-		if (useCsmSecurity()) {
-			synchronized (securityMutex) {
-				applyUserSecurity();
-				results = process(cqlQuery);
-				clearUserSecurity();
-			}
-		} else {
-			results = process(cqlQuery);
-		}
+		checkAuthorization(cqlQuery);
+		results = process(cqlQuery);
 		
 		return results;
+	}
+	
+	
+	public Iterator processQueryLazy(CQLQuery cqlQuery) 
+		throws MalformedQueryException, QueryProcessingException {
+		checkAuthorization(cqlQuery);
+		List coreResultsList = queryCoreService(cqlQuery);
+		return coreResultsList.iterator();
+	}
+	
+	
+	private void checkAuthorization(CQLQuery cqlQuery) throws QueryProcessingException {
+		if (useCsmSecurity()) {
+			boolean authorized = false;
+			try {
+				authorized = CsmSecurityCheck.checkAuthorization(
+					getCsmConfigurationFilename(), getCallerId(), getCsmContextName(), cqlQuery);
+			} catch (RemoteException ex) {
+				throw new QueryProcessingException("Error determining authorization status: " + ex.getMessage(), ex);
+			}
+			if (!authorized) {
+				throw new QueryProcessingException("User " + getCallerId() 
+					+ " is not authorized to perform the query");
+			}
+		}
 	}
 	
 	
@@ -114,13 +131,6 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 			}
 		}
 		return results;
-	}
-	
-	
-	public Iterator processQueryLazy(CQLQuery cqlQuery) 
-		throws MalformedQueryException, QueryProcessingException {
-		List coreResultsList = queryCoreService(cqlQuery);
-		return coreResultsList.iterator();
 	}
 	
 	
@@ -247,26 +257,6 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	}
 	
 	
-	private void applyUserSecurity() throws QueryProcessingException {
-		ClientSession securitySession = ClientSession.getInstance();
-		try {
-			// TODO: what to pass in for password?  Currently using appservice's URL
-			boolean loggedIn = securitySession.startSession(getCallerId(), getAppserviceUrl());
-			if (!loggedIn) {
-				throw new QueryProcessingException("CSM security did not log in user");
-			}
-		} catch (ApplicationException ex) {
-			throw new QueryProcessingException("Error initializing CSM security: " + ex.getMessage(), ex);
-		}
-	}
-	
-	
-	private void clearUserSecurity() {
-		ClientSession securitySession = ClientSession.getInstance();
-		securitySession.terminateSession();
-	}
-	
-	
 	private Mappings getClassToQnameMappings() throws Exception {
 		// get the mapping file name
 		String filename = ServiceConfigUtil.getClassToQnameMappingsFile();
@@ -292,10 +282,26 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	}
 	
 	
+	private String getCsmConfigurationFilename() {
+		return getConfiguredParameters().getProperty(CSM_CONFIGURATION_FILENAME);
+	}
+	
+	
+	private String getCsmContextName() {
+		String contextName = getConfiguredParameters().getProperty(CSM_CONTEXT_NAME);
+		if (contextName == null || contextName.trim().length() == 0) {
+			return getAppserviceUrl();
+		}
+		return contextName;
+	}
+	
+	
 	public Properties getRequiredParameters() {
 		Properties params = new Properties();
 		params.setProperty(APPLICATION_SERVICE_URL, DEFAULT_LOCALHOST_CACORE_URL);
 		params.setProperty(USE_CSM_FLAG, DEFAULT_USE_CSM_FLAG);
+		params.setProperty(CSM_CONFIGURATION_FILENAME, null);
+		params.setProperty(CSM_CONTEXT_NAME, null);
 		return params;
 	}
 }

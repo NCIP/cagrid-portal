@@ -25,30 +25,28 @@ public class CsmSecurityCheck {
 	public static final String CSM_CONFIG_PROPERTY = "gov.nih.nci.security.configFile";
 	public static final String CSM_PRIVILEGE = "READ";
 
-	public static synchronized boolean isAuthorized(String csmConfigFile, String callerId, String appserviceUrl, CQLQuery query) 
+	public static synchronized boolean checkAuthorization(
+		String csmConfigFile, String callerId, String csmContextName, CQLQuery query) 
 		throws RemoteException {
-		
-		try {
-			if (csmConfigFile == null || csmConfigFile.trim().length() == 0) {
-				throw new java.rmi.RemoteException("No CSM Configuration file was specified.");
-			} else {
-				// here's why its synchronized...
-				System.setProperty(CSM_CONFIG_PROPERTY, csmConfigFile);
+		if (csmConfigFile == null || csmConfigFile.trim().length() == 0) {
+			throw new java.rmi.RemoteException("No CSM Configuration file was specified.");
+		} else {
+			// here's why its synchronized...
+			System.setProperty(CSM_CONFIG_PROPERTY, csmConfigFile);
+		}
+		// TODO: whats the context??? right now, its the sdk service URL
+		GridAuthorizationManager mgr = new CSMGridAuthorizationManager(csmContextName);
+		List authObjects = new LinkedList();
+		populateObjectsToAuthorize(query.getTarget(), authObjects);
+		Iterator authObjectIter = authObjects.iterator();
+		while (authObjectIter.hasNext()) {
+			String objectName = (String) authObjectIter.next();
+			// TODO: verify I can call this multiple times without problems
+			// also a TODO: Should first object be READ and all others be ACCESS?
+			if (!mgr.isAuthorized(callerId, objectName, CSM_PRIVILEGE)) {
+				return false;
 			}
-			GridAuthorizationManager mgr = new CSMGridAuthorizationManager(appserviceUrl);
-			List authObjects = new LinkedList();
-			populateObjectsToAuthorize(query.getTarget(), authObjects);
-			Iterator authObjectIter = authObjects.iterator();
-			while (authObjectIter.hasNext()) {
-				String objectName = (String) authObjectIter.next();
-				// TODO: verify I can call this multiple times without problems
-				if (!mgr.isAuthorized(callerId, objectName, CSM_PRIVILEGE)) {
-					return false;
-				}
-			}
-		} catch (Exception e) {
-			throw new RemoteException("Error determining if caller is authorized to perform request", e);
-		}		
+		}
 		return true;
 	}
 	
