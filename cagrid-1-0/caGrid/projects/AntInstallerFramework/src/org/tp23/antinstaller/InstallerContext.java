@@ -40,7 +40,7 @@ import org.tp23.antinstaller.runtime.exe.AntLauncherFilter;
  * exist for the duration of the Install screens and the runing of
  * the Ant Script. </p>
  * @author Paul Hinds
- * @version $Id: InstallerContext.java,v 1.3 2006-10-10 02:25:04 kumarvi Exp $
+ * @version $Id: InstallerContext.java,v 1.4 2006-10-27 18:22:11 kumarvi Exp $
  */
 public class InstallerContext {
 
@@ -164,7 +164,7 @@ public class InstallerContext {
 	
 	
 	public  static Properties getCustomProperties(){
-		System.out.println("Inside the method now !!");
+		
 		Properties prosTobeReturned = new Properties();
 		Properties props = new Properties();
 		
@@ -172,19 +172,19 @@ public class InstallerContext {
 		File resourcesFolder = new File(file,"resources");
 		
 		
-		System.out.println("File Path"+resourcesFolder.getAbsolutePath());
+		
 		if(!resourcesFolder.exists()){
 			return prosTobeReturned;
 		}
 		FileFilter ff = new PropertyFileFilter();
 		File[] files = resourcesFolder.listFiles(ff);
-		System.out.println("Size of property files:"+files.length);
+		
 		if((files.length<1)){
-			//System.out.println("Returning without loading the property !");
+			
 			return prosTobeReturned;
 		}
 		File propertyFile = files[0];
-		System.out.println("property file:"+propertyFile.getAbsolutePath());
+		
 		
 		String propertyFileName = propertyFile.getName();
 		
@@ -210,11 +210,11 @@ public class InstallerContext {
 			p1.load(fis_UserHomePropFile);
 			//System.out.println("p1 Size:"+p1.keySet().size());
 			//System.out.println("Frpm p1:");
-			p1.list(System.out);
+			//p1.list(System.out);
 			p2.load(fis_resourcePropFile);
 			//System.out.println("p2 Size:"+p2.keySet().size());
 			//System.out.println("Frpm p2:");
-			p2.list(System.out);
+			//p2.list(System.out);
 			
 			if(p1.keySet().equals(p2.keySet())){
 				//Nothing changed so get the prop from user dir
@@ -260,7 +260,7 @@ public class InstallerContext {
 	public static File getLatestInstallDir(){
 		String tempDirName = System.getProperty("java.io.tmpdir");
 		
-		System.out.println("Using temp dir:"+tempDirName);
+		//System.out.println("Using temp dir:"+tempDirName);
 		File tempDir = new File (tempDirName);
 		FileFilter antFilter = new AntInstallerFileFilter();
 		File[] antinstalls = tempDir.listFiles(antFilter);
@@ -283,7 +283,7 @@ public class InstallerContext {
 		File file = getLatestInstallDir();
 		File resourcesFolder = new File(file,"resources");
 		
-		System.out.println("File Path"+resourcesFolder.getAbsolutePath());
+		//System.out.println("File Path"+resourcesFolder.getAbsolutePath());
 		FileFilter ff = new PropertyFileFilter();
 		File[] files = resourcesFolder.listFiles(ff);
 		if(files.length>0){
@@ -314,7 +314,7 @@ public class InstallerContext {
 			}else{
 				props = initGridEnvProperties();
 			}
-			
+			synchGridProperties(props);
 		return props;
 	}
 	
@@ -337,6 +337,26 @@ public class InstallerContext {
 			//System.out.println("Let us see:"+props.get(key));
 		}
 		return propsToBeReturned;
+	}
+	
+	private static void synchGridProperties(Properties props){
+		String catalina_home = System.getenv("CATALINA_HOME");
+		String globus_location = System.getenv("GLOBUS_LOCATION");
+		
+		if(catalina_home==null){
+			props.put(GRID_ENV_PREFIX+"tomcat.exist", "false");
+		}else{
+			props.put(GRID_ENV_PREFIX+"tomcat.exist","true");
+			//System.out.println("Setting tomcat.exist to:true");
+			props.put(GRID_ENV_PREFIX+"CATALINA_HOME", catalina_home);
+		}
+		
+		if(globus_location==null){
+			props.put(GRID_ENV_PREFIX+"globus.exist", "false");
+		}else{
+			props.put(GRID_ENV_PREFIX+"globus.exist","true");
+			props.put(GRID_ENV_PREFIX+"GLOBUS_LOCATION",globus_location);
+		}
 	}
 	
 	private static Properties initGridEnvProperties(){
