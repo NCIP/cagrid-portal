@@ -30,7 +30,7 @@ import org.tp23.antinstaller.InstallerContext;
  * obtaining default values containing ${prop.name}/blah syntax </p>
  * @todo   Ensure in the validator (and Docs) that developers only add ${refs} for properties set on earlier pages
  * @author Paul Hinds
- * @version $Id: ResultContainer.java,v 1.2 2006-09-11 02:17:46 kumarvi Exp $
+ * @version $Id: ResultContainer.java,v 1.3 2006-10-27 18:20:47 kumarvi Exp $
  */
 public class ResultContainer {
 
@@ -130,7 +130,7 @@ public class ResultContainer {
 			else propertyNameBuffer.append(c);
 		}
 		if(propertyNameBuffer.length()!=0)result.append(propertyNameBuffer.toString());
-		System.out.println("Value check key:"+defaultString+"="+result.toString());
+		//System.out.println("Value check key:"+defaultString+"="+result.toString());
 		return result.toString();
 	}
 	
@@ -166,7 +166,7 @@ public class ResultContainer {
 	private void appendProperty(StringBuffer propertyNameBuffer, StringBuffer result) {
 		String propertyName = propertyNameBuffer.toString();
 		String key = propertyName.substring(2);
-		System.out.println("coming from result container:"+key);
+		//System.out.println("coming from result container:"+key);
 		String value = (String)properties.get(key);
 		if(value == null && key.startsWith(InstallerContext.ENV_PREFIX))
 		{
