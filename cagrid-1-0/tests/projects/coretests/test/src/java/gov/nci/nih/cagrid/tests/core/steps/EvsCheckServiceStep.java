@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Vector;
 
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -49,22 +50,14 @@ public class EvsCheckServiceStep
         // test the NCI Thesaurus.
         testMetaThesaurus();
 
-
-        // Test getMetaSources
-        testGetMetaSources();
-
-        // Test getVocabularyNames
-        testGetVocabularyNames();
-
-        //test searching meta thesaurus
-        testSearchMetaThesaurusConcept();
-
         // test obtaining history record
         testGetHistoryRecords();
 
         // test searching meta thesaurus using code
         testSearchSourceByCode();
 
+        // Test Searching for DescLogicConcept
+        testGetDescriptionLogicConcept();
 
     }
 
@@ -91,7 +84,6 @@ public class EvsCheckServiceStep
 
         EVSMetaThesaurusSearchParams evsMetaThesaurusSearchParam = new EVSMetaThesaurusSearchParams();
 
-
         evsMetaThesaurusSearchParam.setLimit(100);
         evsMetaThesaurusSearchParam.setSource("*");
         evsMetaThesaurusSearchParam.setCui(false);
@@ -103,11 +95,16 @@ public class EvsCheckServiceStep
             // Check for valid Metathesarus concept information for the search term
             evsMetaThesaurusSearchParam.setSearchTerm(searchTerms[i]);
             MetaThesaurusConcept metaConcept = testSearchMetaThesaurusConcept(evsMetaThesaurusSearchParam);
-
             assertNotNull("Meta Thesaurus concept for " + searchTerms[i] + " is null!", metaConcept);
 
-            // Get the source Object and make sure that the source corresponds to the one in the list
+            // Check that the CUI and name is not null
+            assertNotNull("CUI is null", metaConcept.getCui());
 
+            // Check that the name is not null
+            assertNotNull("Name is not null", metaConcept.getName());
+
+
+            // Get the source Object and make sure that the source corresponds to the one in the list
             ArrayList sourceArray = metaConcept.getSourceCollection();
             assertNotNull("MetaThesaurus Source collection is null", sourceArray);
             for (int j=0; j < sourceArray.size();j++)
@@ -119,7 +116,6 @@ public class EvsCheckServiceStep
 
             // Get Atom Collection and then use the Atom:code and Source:abbreviation to determine if the Meta Thesaurus concept
             // is valid
-
             ArrayList atomArray = metaConcept.getAtomCollection();
             assertNotNull("MetaThesaurus atom collection is null", atomArray);
 
@@ -135,7 +131,6 @@ public class EvsCheckServiceStep
                 assertNotNull("atom:Origin is null!", atom.getOrigin());
                 assertNotNull("atom:Source is null!", atom.getSource());
 
-
                 // Get the source name and check if it is valid
                 Source source = atom.getSource();
                 // Check and make sure that the Source object is part of the Source collection
@@ -143,12 +138,11 @@ public class EvsCheckServiceStep
 
                 // Atom:code can be empty which is defined by string:NOCODE. In that case, the API will not get the
                 // valid MetaThesaurus concept
+                evsSourceParam.setCode(atom.getCode());
+                evsSourceParam.setSourceAbbreviation(source.getAbbreviation());
 
-                    evsSourceParam.setCode(atom.getCode());
-                    evsSourceParam.setSourceAbbreviation(source.getAbbreviation());
-
-                    // Get Meta Thesaurus concept based on the EVSourceParam
-                    MetaThesaurusConcept metaConcept2 = testSearchSourceByCode(evsSourceParam);
+                // Get Meta Thesaurus concept based on the EVSourceParam
+                MetaThesaurusConcept metaConcept2 = testSearchSourceByCode(evsSourceParam);
 
                 if ( atom.getCode() != null &&
                      atom.getCode().length() > 0 &&
@@ -167,15 +161,41 @@ public class EvsCheckServiceStep
                 }
             }
 
-
-            // Test the synonymcollection attribute - This is not working!!!
-            /*
+            // Test the synonymcollection attribute
             ArrayList synonymCollection = metaConcept.getSynonymCollection();
-            if (synonymCollection != null && synonymCollection.size() > 0)
+            assertNotNull("Synonym collection is null", synonymCollection);
+
+            for (int l=0; l < synonymCollection.size(); l++)
             {
-                System.out.println("Synonym element class name: " + synonymCollection.get(0).getClass().toString());
+                String synonym = (String) synonymCollection.get(l);
+                assertNotNull("Synonym is  null", synonym );
             }
-            */
+
+            // Test the definition collection
+            ArrayList definitionCollection = metaConcept.getDefinitionCollection();
+            assertNotNull("Definition collection is null", definitionCollection);
+
+            // Definition collection could be empty (i.e. 0 records). So, cannot test for assertion on the size of the
+            // records
+
+            for (int k=0; k < definitionCollection.size();k++)
+            {
+                Definition def = (Definition) definitionCollection.get(k);
+                assertNotNull("Definition is null", def);
+            }
+
+
+            // SemanticTypeCollection
+            ArrayList semanticTypeCollection = metaConcept.getSemanticTypeCollection();
+            assertNotNull("Semantic Type collection is null", semanticTypeCollection);
+
+            for (int m=0; m < semanticTypeCollection.size(); m++)
+            {
+                SemanticType semType = (SemanticType) semanticTypeCollection.get(m);
+                assertNotNull("SemanticType is null", semType);
+            }
+
+
         }
     }
 
@@ -314,8 +334,8 @@ public class EvsCheckServiceStep
 
         EVSDescLogicConceptSearchParams  evsSearchParams = new EVSDescLogicConceptSearchParams();
         evsSearchParams.setVocabularyName("NCI_Thesaurus");
-        evsSearchParams.setSearchTerm("blood*");
-        evsSearchParams.setLimit(10);
+        evsSearchParams.setSearchTerm("Blood*");
+        evsSearchParams.setLimit(100);
 
         EVSGridServiceClient client = new EVSGridServiceClient(endpoint);
         DescLogicConcept[] descLogicConcepts = client.searchDescLogicConcept(evsSearchParams);
@@ -329,6 +349,14 @@ public class EvsCheckServiceStep
                 {
                     DescLogicConcept descConcept = descLogicConcepts[i];
                     assertNotNull("DescLogicConcept object is Null", descConcept);
+
+                    // check attributes - semanticTypeVector
+                    Vector semanticType = descConcept.getSemanticTypeVector();
+
+                    // Check what the vector elements are?
+                    assertNotNull("SemanticTypeVecor is null", semanticType);
+
+
                 }
         }
     }
@@ -351,7 +379,7 @@ public class EvsCheckServiceStep
         assertNotNull("getHistoryRecords returned Null", historys);
         assertTrue( historys.length > 0);
 
-        if ( historys.length > 0)
+        if (historys != null && historys.length > 0)
         {
             for (int i=0; i < historys.length; i++)
             {
