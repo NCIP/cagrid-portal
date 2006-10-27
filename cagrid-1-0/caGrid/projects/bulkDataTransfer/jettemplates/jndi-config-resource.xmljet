@@ -10,7 +10,7 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
    	if(serviceName.endsWith("Service")){
    		modifiedServiceName = serviceName.substring(0,serviceName.length()-7);
    	} 
-%><resource name="home" type="gov.nih.nci.cagrid.bdt.resource.BaseResourceHome">
+%><resource name="home" type="gov.nih.nci.cagrid.bdt.service.globus.resource.BaseResourceHome">
       <resourceParams>
         <parameter>
           <name>resourceClass</name>
