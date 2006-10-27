@@ -602,7 +602,7 @@
 	<!-- =============================================================== -->
 	<!-- Federated Query Processor:                                      -->
 	<!-- =============================================================== -->
-	<target name="build-fqp" if="isJDK1.5" depends="prepare" description="Federated Query Processor">
+	<target name="build-fqp" if="isJDK1.5" depends="prepare" description="Build the caGrid Federated Query Processor">
 		<resolveDependencies extdir="${projects.dir}/fqp/ext">
 			<artifact refid="core.jars" />
 			<artifact refid="core.test.jars" />
