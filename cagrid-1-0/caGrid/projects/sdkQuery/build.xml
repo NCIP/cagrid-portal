@@ -57,6 +57,8 @@
 		</fileset>
 		<fileset dir="${ext.lib.dir}">
 			<include name="**/*.jar" />
+			<!-- this is here until the authz project fixes their build artifacts -->
+			<exclude name="asm.jar"/>
 		</fileset>
 		<fileset dir="${test.lib.dir}">
 			<include name="**/*.jar" />
