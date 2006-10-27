@@ -62,6 +62,7 @@ public class UnvalidatedTextInputRenderer
 	}
 
     private void jbInit() throws Exception {
+    	fieldLabel.setToolTipText(inputField.getExplanatoryText()); // kumarvi (19-oct-2006)
 		fieldLabel.setText(inputField.getDisplayText());
 		jTextField.setText(inputField.getDefaultValue());
 		jTextField.addActionListener(new ActionListener() {
