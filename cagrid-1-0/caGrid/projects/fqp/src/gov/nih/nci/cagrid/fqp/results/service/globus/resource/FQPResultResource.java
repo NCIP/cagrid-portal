@@ -4,7 +4,11 @@ import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 
 import java.util.Calendar;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.globus.wsrf.RemoveCallback;
 import org.globus.wsrf.Resource;
+import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceIdentifier;
 import org.globus.wsrf.ResourceLifetime;
 import org.globus.wsrf.ResourceProperties;
@@ -19,10 +23,13 @@ import org.globus.wsrf.jndi.Initializable;
 public class FQPResultResource
 	implements
 		Resource,
+		RemoveCallback,
 		ResourceIdentifier,
 		ResourceLifetime,
 		ResourceProperties,
 		Initializable {
+
+	protected static Log LOG = LogFactory.getLog(FQPResultResource.class.getName());
 
 	/** the identifier of this resource... should be unique in the service */
 	private Object id;
@@ -144,4 +151,8 @@ public class FQPResultResource
 		this.processingException = e;
 	}
 
+
+	public void remove() throws ResourceException {
+		LOG.info("Resource (" + getID() + ") being removed.");
+	}
 }
