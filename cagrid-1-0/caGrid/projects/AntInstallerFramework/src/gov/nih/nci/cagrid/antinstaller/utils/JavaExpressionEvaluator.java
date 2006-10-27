@@ -27,7 +27,7 @@ public class JavaExpressionEvaluator {
 		try{
 			FileHandler fh = new FileHandler("c:/temp/javaexp.log");
 			logger.addHandler(fh);
-			logger.setLevel(Level.FINEST);
+			logger.setLevel(Level.SEVERE);
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
