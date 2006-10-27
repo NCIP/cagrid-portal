@@ -15,10 +15,15 @@
  */
 package org.tp23.antinstaller;
 
+
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.tp23.antinstaller.input.InputField;
 import org.tp23.antinstaller.input.OutputField;
@@ -31,34 +36,53 @@ import org.tp23.antinstaller.page.Page;
  *
  * <p>Outputs the completed Pages as a java Properties file. </p>
  * @author Paul Hinds
- * @version $Id: DefaultPropertiesFileRenderer.java,v 1.2 2006-09-11 02:16:39 kumarvi Exp $
+ * @version $Id: DefaultPropertiesFileRenderer.java,v 1.3 2006-10-27 18:21:36 kumarvi Exp $
  */
 public class DefaultPropertiesFileRenderer
 	implements PropertiesFileRenderer {
+	private static Logger logger = Logger.getLogger(DefaultPropertiesFileRenderer.class.getName());
 
 	public DefaultPropertiesFileRenderer() {
+		
+		try{
+			FileHandler fh = new FileHandler("c:/temp/DefaultPropertiesFileRenderer.log");
+			logger.addHandler(fh);
+			logger.setLevel(Level.ALL);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 
 	public void renderProperties(Installer installer, File baseDir){
+		logger.info("Calling renderProperties");
 		Page[] completedPages = installer.getPages();
 		Properties props = new Properties();
 		props.put(FILE_ROOT_PROPERTY,baseDir.getAbsolutePath());
+		logger.info("Passed stage 1");
+		logger.info("compted pages length"+completedPages.length );
+		  try{
+				for (int i = 0; i < completedPages.length; i++) {
+					logger.info("Inside big loop");
+					OutputField[] fields = completedPages[i].getOutputField();
+					logger.info("Just before small loop");
+					for (int f = 0; f < fields.length; f++) {
+						logger.info("Got inside");
+						if (fields[f] instanceof SecretPropertyField) {
+							InputField field = (InputField)fields[f];
+							props.put(field.getProperty(), "XXXXXXXX");
+						}
+						else if (fields[f] instanceof InputField) {
+							InputField field = (InputField)fields[f];
+							String result = field.getInputResult();
+							props.put(field.getProperty(), result);
+						}
+					}
+				}
+		  }catch(Exception e){
+			  logger.info("something got messed up here"+e.getMessage());
+		  }
 		
-		for (int i = 0; i < completedPages.length; i++) {
-			OutputField[] fields = completedPages[i].getOutputField();
-
-			for (int f = 0; f < fields.length; f++) {
-				if (fields[f] instanceof SecretPropertyField) {
-					InputField field = (InputField)fields[f];
-					props.put(field.getProperty(), "XXXXXXXX");
-				}
-				else if (fields[f] instanceof InputField) {
-					InputField field = (InputField)fields[f];
-					String result = field.getInputResult();
-					props.put(field.getProperty(), result);
-				}
-			}
-		}
+		logger.info("Passed stage 2");
 		 this.storeCustomProperties(props);
 		 this.storeGridEnvProperties(props);
 		try {
@@ -75,13 +99,17 @@ public class DefaultPropertiesFileRenderer
 		/**
 		 * First check if the custom property file is there
 		 */
+		logger.info("Passed stage 2.1");
 		String fileName = InstallerContext.getCustomPropertyFileName();
+		logger.info("Passed stage 2.2");
 		if(fileName.equalsIgnoreCase(InstallerContext.DOES_NOT_EXIST)){
 			return;
 		}
+		logger.info("Passed stage 2.2");
 		Properties toBeStoredProperties = new Properties();
 		Properties customProperties = InstallerContext.getCustomProperties();
 		System.out.println("Size before storing:"+customProperties.keySet().size());
+		logger.info("Size of custom properties before storing:"+customProperties.keySet().size());
 		Iterator iter = customProperties.keySet().iterator();
 		while (iter.hasNext()) {
 			Object key = (Object)iter.next();
@@ -101,6 +129,7 @@ public class DefaultPropertiesFileRenderer
 		}
 		catch (Throwable ex) {
 			//swallow Exceptions as in contract for this method
+			logger.info("Something went wrong with custom properties:"+ex.getMessage());
 		}
 	}
 	
@@ -113,19 +142,21 @@ public class DefaultPropertiesFileRenderer
 	}
 	
 	private void storeGridEnvProperties(Properties props){
-		
+		logger.info("Calling storeGridEnvProperties");
 		Properties toBeStoredProperties = new Properties();
 		Properties gridEnvProperties = InstallerContext.getGridEnviornementProperties();
-		System.out.println("Size before storing:"+gridEnvProperties.keySet().size());
+		logger.info("Size of the  grid env properties before storing:"+gridEnvProperties.keySet().size());
 		Iterator iter = gridEnvProperties.keySet().iterator();
 		while (iter.hasNext()) {
 			Object key = (Object)iter.next();
 			String keyName = this.getGridKey((String)key);
 			if(props.keySet().contains(keyName)){
 				String value = props.getProperty(keyName);
+				logger.info(" block 1 Key:"+keyName+", value:"+value);
 				toBeStoredProperties.put(keyName, value);
 			}else{
 				toBeStoredProperties.put(keyName, gridEnvProperties.getProperty((String)key));
+				logger.info(" block 2 Key:"+keyName+", value:"+gridEnvProperties.getProperty((String)key));
 			}
 			
 		}
@@ -135,7 +166,7 @@ public class DefaultPropertiesFileRenderer
 			toBeStoredProperties.store(new FileOutputStream(gridPropertiesFile),"caGrid Installer - AutoGenerated properties");
 		}
 		catch (Throwable ex) {
-			//swallow Exceptions as in contract for this method
+			logger.info("Something went wrong with grid env properties:"+ex.getMessage());
 		}
 	}
 	
