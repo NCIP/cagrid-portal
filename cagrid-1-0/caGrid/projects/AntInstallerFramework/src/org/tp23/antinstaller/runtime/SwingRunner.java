@@ -56,7 +56,7 @@ import org.tp23.antinstaller.renderer.swing.plaf.LookAndFeelFactory;
  * <p>Copyright: Copyright (c) 2004</p>
  * <p>Company: tp23</p>
  * @author Paul Hinds
- * @version $Id: SwingRunner.java,v 1.2 2006-09-11 02:18:24 kumarvi Exp $
+ * @version $Id: SwingRunner.java,v 1.3 2006-10-27 18:24:16 kumarvi Exp $
  */
 public class SwingRunner implements Runner,PageCompletionListener{
 
@@ -183,7 +183,7 @@ public class SwingRunner implements Runner,PageCompletionListener{
 	 * @param page Page
 	 */
 	public void pageComplete(Page page){
-		System.out.println("Calling pageComplete!!");
+		//System.out.println("Calling pageComplete!!");
 		try {
 			if(page.isAbort()){
 				abort();

@@ -42,7 +42,7 @@ import gov.nih.nci.cagrid.antinstaller.utils.ClassPathModifier;
  * of the configuration files would be impared.
  * REF: 1145496
  * @author Paul Hinds
- * @version $Id: IfPropertyHelper.java,v 1.4 2006-10-10 02:25:22 kumarvi Exp $
+ * @version $Id: IfPropertyHelper.java,v 1.5 2006-10-27 18:23:46 kumarvi Exp $
  */
 public class IfPropertyHelper {
 	
@@ -58,7 +58,7 @@ public class IfPropertyHelper {
 		 try{
 			 FileHandler fh = new FileHandler("C:/temp/ifpropertyhelper.log");
 			 logger.addHandler(fh);
-			 logger.setLevel(Level.FINEST);
+			 logger.setLevel(Level.OFF);
 		 }catch(Exception ex){
 			 ex.printStackTrace();
 		 }
@@ -90,7 +90,7 @@ public class IfPropertyHelper {
 			SimpleInputPage conditionalPage = (SimpleInputPage) next;
 			String ifProperty = conditionalPage.getIfProperty();
 			logger.info("Value of the ifproperty:"+ifProperty);
-			System.out.println("IFProperty2:"+ifProperty);
+			//System.out.println("IFProperty2:"+ifProperty);
 			if (ifProperty != null) {
 				ArrayList variables = extractVariables(ifProperty);
 				JavaExpressionEvaluator jee = new JavaExpressionEvaluator(ifProperty, variables);
@@ -119,13 +119,13 @@ public class IfPropertyHelper {
 			}else{
 				counter++;
 				String name = currStr.substring(currindex,endPos+1);
-				System.out.println("Name:"+name);
+				//System.out.println("Name:"+name);
 				logger.info("Name:"+name);
 				String propValue = ctx.getInstaller().getResultContainer().getDefaultValue(name);
 				logger.info("propValue:"+propValue);
 				String key = currStr.substring(startPos,endPos);
 				logger.info("Key:"+key);
-				System.out.println(key);
+				//System.out.println(key);
 				ReferenceVariable rf = new ReferenceVariable();
 				rf.setValue(propValue);
 				rf.setKey(key);
