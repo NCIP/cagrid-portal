@@ -262,6 +262,7 @@ public class ModificationViewer extends GridPortalComponent {
 				if (file.exists() && file.canRead()) {
 					try {
 						initialize();
+						ModificationViewer.this.pack();
 						ModificationViewer.this.setMaximum(true);
 					} catch (Exception e) {
 						e.printStackTrace();
