@@ -117,7 +117,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		fqpResultResource.setStatusMessage("Queued for processing");
 		// set to terminate after lease expires
 		Calendar termTime = Calendar.getInstance();
-		termTime.add(Calendar.MINUTE, getLeaseDurationInMinutes());
+		termTime.roll(Calendar.MINUTE, getLeaseDurationInMinutes());
 		fqpResultResource.setTerminationTime(termTime);
 
 		// create a worker thread to execute query

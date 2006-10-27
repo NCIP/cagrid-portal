@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql" xmlns:cql="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"
-	xmlns:dcql="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+<xsd:schema targetNamespace="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:dcql="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql" xmlns:cql="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" elementFormDefault="qualified"
 	attributeFormDefault="unqualified">
 	<xsd:import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" schemaLocation="./xsd/Data/1_gov.nih.nci.cagrid.CQLQuery.xsd"/>
 	<xsd:element name="DCQLQuery">
 		<xsd:annotation>
-			<xsd:documentation>caGrid Distributed CQL Query, the desired result objects are described by the TargetObject, and the CQL query resulting from the
-				processing is sent to each data service identified by the targetServiceURLs</xsd:documentation>
+			<xsd:documentation>caGrid Distributed CQL Query, the desired result objects are described by the TargetObject, and the CQL query resulting from the processing is sent to each data service identified by the targetServiceURLs</xsd:documentation>
 		</xsd:annotation>
 		<xsd:complexType>
 			<xsd:sequence>
@@ -59,8 +58,7 @@
 	</xsd:complexType>
 	<xsd:complexType name="ForeignAssociation">
 		<xsd:annotation>
-			<xsd:documentation>An association or relationship defined between this Object and an Object defined by the ForeignObject, located on the data
-				service located at the targetServiceURL.</xsd:documentation>
+			<xsd:documentation>An association or relationship defined between this Object and an Object defined by the ForeignObject, located on the data service located at the targetServiceURL.</xsd:documentation>
 		</xsd:annotation>
 		<xsd:sequence>
 			<xsd:element name="JoinCondition" type="dcql:JoinCondition"/>
@@ -113,4 +111,4 @@
 			</xsd:enumeration>
 		</xsd:restriction>
 	</xsd:simpleType>
-</xsd:schema>
+</xsd:schema>
