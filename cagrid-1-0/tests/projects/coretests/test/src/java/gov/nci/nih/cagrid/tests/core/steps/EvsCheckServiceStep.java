@@ -81,7 +81,6 @@ public class EvsCheckServiceStep
         // Get the  list
         List sourceList = Arrays.asList(sources);
 
-
         EVSMetaThesaurusSearchParams evsMetaThesaurusSearchParam = new EVSMetaThesaurusSearchParams();
 
         evsMetaThesaurusSearchParam.setLimit(100);
@@ -103,63 +102,15 @@ public class EvsCheckServiceStep
             // Check that the name is not null
             assertNotNull("Name is not null", metaConcept.getName());
 
+            // Test that the meta thesaurus concept based on CUI returns same result!
+            testMetaConceptBasedOnCui(metaConcept);
 
             // Get the source Object and make sure that the source corresponds to the one in the list
-            ArrayList sourceArray = metaConcept.getSourceCollection();
-            assertNotNull("MetaThesaurus Source collection is null", sourceArray);
-            for (int j=0; j < sourceArray.size();j++)
-            {
-                Source source = (Source) sourceArray.get(j);
-                // Check and make sure that the Source object is part of the Source collection
-                assertTrue("Source (Abbr): " + source.getAbbreviation() + " is not present in metathesaurus!", sourceList.contains(source));
-            }
+            testMetaThesaurusSourceInfo(metaConcept, sourceList);
 
             // Get Atom Collection and then use the Atom:code and Source:abbreviation to determine if the Meta Thesaurus concept
             // is valid
-            ArrayList atomArray = metaConcept.getAtomCollection();
-            assertNotNull("MetaThesaurus atom collection is null", atomArray);
-
-            EVSSourceSearchParams evsSourceParam = new EVSSourceSearchParams();
-            for (int j=0; j < atomArray.size();j++)
-            {
-                Atom atom = (Atom) atomArray.get(j);
-
-                assertNotNull("atom is null!", atom);
-                assertNotNull("atom:code is null!", atom.getCode());
-                assertNotNull("atom:lui is null!", atom.getLui());
-                assertNotNull("atom:Name is null!", atom.getName());
-                assertNotNull("atom:Origin is null!", atom.getOrigin());
-                assertNotNull("atom:Source is null!", atom.getSource());
-
-                // Get the source name and check if it is valid
-                Source source = atom.getSource();
-                // Check and make sure that the Source object is part of the Source collection
-                assertTrue("Source (Abbr): " + source.getAbbreviation() + " is not present in metathesaurus!", sourceList.contains(source));
-
-                // Atom:code can be empty which is defined by string:NOCODE. In that case, the API will not get the
-                // valid MetaThesaurus concept
-                evsSourceParam.setCode(atom.getCode());
-                evsSourceParam.setSourceAbbreviation(source.getAbbreviation());
-
-                // Get Meta Thesaurus concept based on the EVSourceParam
-                MetaThesaurusConcept metaConcept2 = testSearchSourceByCode(evsSourceParam);
-
-                if ( atom.getCode() != null &&
-                     atom.getCode().length() > 0 &&
-                     !atom.getCode().equalsIgnoreCase("NOCODE"))
-                {
-                    assertNotNull("MetaThesaurusConcept for the give EVS Source abbreviation: "
-                            + source.getAbbreviation() +
-                            " and atom code: "
-                            + atom.getCode() +
-                            " is null", metaConcept2);
-                }
-                else
-                {
-                    // Assert that the value returned is null
-                    assertNull("Meta Thesaurus concept is not null", metaConcept2);
-                }
-            }
+            testAtomInfo(metaConcept, sourceList);
 
             // Test the synonymcollection attribute
             ArrayList synonymCollection = metaConcept.getSynonymCollection();
@@ -197,6 +148,95 @@ public class EvsCheckServiceStep
 
 
         }
+    }
+
+    private void testAtomInfo(MetaThesaurusConcept metaConcept, List sourceList) throws Exception {
+        ArrayList atomArray = metaConcept.getAtomCollection();
+        assertNotNull("MetaThesaurus atom collection is null", atomArray);
+
+        EVSSourceSearchParams evsSourceParam = new EVSSourceSearchParams();
+        for (int j=0; j < atomArray.size();j++)
+        {
+            Atom atom = (Atom) atomArray.get(j);
+
+            assertNotNull("atom is null!", atom);
+            assertNotNull("atom:code is null!", atom.getCode());
+            assertNotNull("atom:lui is null!", atom.getLui());
+            assertNotNull("atom:Name is null!", atom.getName());
+            assertNotNull("atom:Origin is null!", atom.getOrigin());
+            assertNotNull("atom:Source is null!", atom.getSource());
+
+            // Get the source name and check if it is valid
+            Source source = atom.getSource();
+            // Check and make sure that the Source object is part of the Source collection
+            assertTrue("Source (Abbr): " + source.getAbbreviation() + " is not present in metathesaurus!", sourceList.contains(source));
+
+            // Atom:code can be empty which is defined by string:NOCODE. In that case, the API will not get the
+            // valid MetaThesaurus concept
+            evsSourceParam.setCode(atom.getCode());
+            evsSourceParam.setSourceAbbreviation(source.getAbbreviation());
+
+            // Get Meta Thesaurus concept based on the EVSourceParam
+            MetaThesaurusConcept metaConcept2 = testSearchSourceByCode(evsSourceParam);
+
+            if ( atom.getCode() != null &&
+                 atom.getCode().length() > 0 &&
+                 !atom.getCode().equalsIgnoreCase("NOCODE"))
+            {
+                assertNotNull("MetaThesaurusConcept for the give EVS Source abbreviation: "
+                        + source.getAbbreviation() +
+                        " and atom code: "
+                        + atom.getCode() +
+                        " is null", metaConcept2);
+            }
+            else
+            {
+                // Assert that the value returned is null
+                assertNull("Meta Thesaurus concept is not null", metaConcept2);
+            }
+        }
+    }
+
+    /**
+     * Test that the Source for the Meta Thesaurus Concept is art of the Source collection for EVS Meta Thesaurus
+     * @param metaConcept
+     * @param sourceList
+     */
+
+    private void testMetaThesaurusSourceInfo(MetaThesaurusConcept metaConcept, List sourceList) {
+        ArrayList sourceArray = metaConcept.getSourceCollection();
+        assertNotNull("MetaThesaurus Source collection is null", sourceArray);
+        for (int j=0; j < sourceArray.size();j++)
+        {
+            Source source = (Source) sourceArray.get(j);
+            // Check and make sure that the Source object is part of the Source collection
+            assertTrue("Source (Abbr): " + source.getAbbreviation() + " is not present in metathesaurus!", sourceList.contains(source));
+        }
+    }
+
+    /**
+     * Uses the CUI as the input to obtain EVS Meta Thesaurus concept and then compares it with the
+     * object obtained using the Search term to make sure that they are identical.
+     *
+     * @param metaConcept The <code>MetaThesaurusConcept</code> instance used to compare
+     * @throws Exception
+     */
+    private void testMetaConceptBasedOnCui(MetaThesaurusConcept metaConcept) throws Exception {
+        // Test if the same metathesaurus concept is available via API call using the concept code
+        EVSMetaThesaurusSearchParams evsMetaThesaurusSearchParams2 = new EVSMetaThesaurusSearchParams();
+
+        evsMetaThesaurusSearchParams2.setCui(true);
+        evsMetaThesaurusSearchParams2.setShortResponse(false);
+        evsMetaThesaurusSearchParams2.setScore(false);
+        evsMetaThesaurusSearchParams2.setLimit(100);
+        evsMetaThesaurusSearchParams2.setSource("*");
+
+        evsMetaThesaurusSearchParams2.setSearchTerm(metaConcept.getCui());
+        MetaThesaurusConcept metaConceptFromCUI =  testSearchMetaThesaurusConcept(evsMetaThesaurusSearchParams2);
+
+        assertEquals("EVS metadata APIs using CUI and Search name return different results",
+                metaConcept.getName(),
+                metaConceptFromCUI.getName());
     }
 
 
