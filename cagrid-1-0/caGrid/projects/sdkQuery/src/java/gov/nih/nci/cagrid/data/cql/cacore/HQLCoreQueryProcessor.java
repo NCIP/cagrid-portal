@@ -300,8 +300,8 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 		Properties params = new Properties();
 		params.setProperty(APPLICATION_SERVICE_URL, DEFAULT_LOCALHOST_CACORE_URL);
 		params.setProperty(USE_CSM_FLAG, DEFAULT_USE_CSM_FLAG);
-		params.setProperty(CSM_CONFIGURATION_FILENAME, null);
-		params.setProperty(CSM_CONTEXT_NAME, null);
+		params.setProperty(CSM_CONFIGURATION_FILENAME, "");
+		params.setProperty(CSM_CONTEXT_NAME, "");
 		return params;
 	}
 }
