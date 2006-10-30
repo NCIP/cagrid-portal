@@ -132,6 +132,12 @@ public class PackageSchemasTable extends JTable {
 				// add the types to the service
 				for (int i = 0; i < resolved.length; i++) {
 					CommonTools.addNamespace(info.getServiceDescriptor(), resolved[i]);
+					// namespace excludes
+					String excludes = info.getIntroduceServiceProperties()
+						.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES);
+					excludes += " -x " + resolved[i].getNamespace();
+					info.getIntroduceServiceProperties().setProperty(
+						IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);
 				} 
 			}
 		} else {

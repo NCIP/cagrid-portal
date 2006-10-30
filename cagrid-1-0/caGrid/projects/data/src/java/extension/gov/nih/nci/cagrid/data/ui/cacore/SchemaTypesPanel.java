@@ -321,6 +321,13 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 				type.setClassName(type.getType());
 			}
 			CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
+			// add the namespace to the introduce namespace excludes list so
+			// that beans will not be built for these data types
+			String excludes = getServiceInformation().getIntroduceServiceProperties()
+				.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES);
+			excludes += " -x " + nsType.getNamespace();
+			getServiceInformation().getIntroduceServiceProperties().setProperty(
+				IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);
 		}
 	}
 	
