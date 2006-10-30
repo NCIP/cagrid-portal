@@ -8,6 +8,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="css/styleSheet.css"/>
     <script src="js/script.js" type="text/javascript"></script>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"/>
     <title>caGrid Portal</title>
 </head>
 

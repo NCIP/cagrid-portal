@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t" %>
 
-<!--Load message bundle-->
+<%/*Load message bundle */%>
 <f:loadBundle basename="Portal-Labels" var="labels"/>
 
 <f:subview id="serviceDetails">
@@ -120,7 +120,9 @@
             <h:outputText value="#{labels.homepageURL}"/>
         </h:column>
         <h:column>
-            <h:outputLink target="new" value="#{services.navigatedService.researchCenter.homepageURL}"/>
+            <h:outputLink target="new" value="#{services.navigatedService.researchCenter.homepageURL}">
+                <h:outputText value="#{services.navigatedService.researchCenter.homepageURL}"/>
+            </h:outputLink>
         </h:column>
 
         <h:column>
@@ -174,9 +176,9 @@
     <f:verbatim><br/><br/></f:verbatim>
 </h:column>
 
-<%-- Operations List --%>
+<%/*-- Operations List --*/%>
 <h:column rendered="#{not empty services.navigatedService.operationCollection}">
-    <t:panelGrid styleClass="contentInnerTable" cellpadding="3"
+    <t:panelGrid styleClass="contentInnerTable" cellpadding="1"
                  rowClasses="dataRowLight,dataRowDark"
                  columnClasses="dataCellTextBold,dataCellText"
                  headerClass="contentTableHeader">
@@ -221,7 +223,7 @@
 </h:column>
 
 
-<%-- Domain Model Display --%>
+<%/* Domain Model Display */%>
 <h:column rendered="#{not empty services.navigatedService.domainModel}">
     <h:panelGrid styleClass="contentInnerTable" cellpadding="3"
                  rowClasses="dataRowLight,dataRowDark"

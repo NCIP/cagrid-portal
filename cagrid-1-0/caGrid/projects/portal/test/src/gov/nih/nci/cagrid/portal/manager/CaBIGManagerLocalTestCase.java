@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.portal.manager;
 
 import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
 import gov.nih.nci.cagrid.portal.domain.CaBIGParticipant;
+import gov.nih.nci.cagrid.portal.domain.CaBIGWorkspace;
 
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +38,23 @@ public class CaBIGManagerLocalTestCase extends BaseSpringDataAccessAbstractTestC
             Set workspaces = participant.getWorkspaceCollection();
             assertTrue(workspaces.size() > 0);
         }
+
+
+    }
+
+
+    public void testSpecificParticipant() {
+        CaBIGParticipant participant = (CaBIGParticipant) caBIGManager.getObjectByPrimaryKey(CaBIGParticipant.class, new Integer(2));
+        assertNotNull(participant);
+        assertNotNull(participant.getName());
+        assertNotNull(participant.getWorkspaceCollection());
+        assertTrue(participant.getWorkspaceCollection().size() == 2);
+    }
+
+    public void testWorkspaces() {
+        CaBIGWorkspace workspace = (CaBIGWorkspace) caBIGManager.getObjectByPrimaryKey(CaBIGWorkspace.class, new Integer(2));
+        assertNotNull(workspace);
+        assertNotNull(workspace.getShortName());
 
 
     }

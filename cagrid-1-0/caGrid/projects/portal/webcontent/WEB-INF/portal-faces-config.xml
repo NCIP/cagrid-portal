@@ -119,6 +119,10 @@
         <managed-bean-name>participants</managed-bean-name>
         <managed-bean-class>gov.nih.nci.cagrid.portal.web.CaBIGParticipantList</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <property-name>caBIGManager</property-name>
+            <value>#{caBIGManager}</value>
+        </managed-property>
     </managed-bean>
 
 
@@ -183,6 +187,11 @@
             <from-action>#{centers.navigateToCenter}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/centerDetails.portal</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{participants.navigateToParticipant}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/participantDetails.portal</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{keywordSearch.navigateToKeywordSearchResults}</from-action>

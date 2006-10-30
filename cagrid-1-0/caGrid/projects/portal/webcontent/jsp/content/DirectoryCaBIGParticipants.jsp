@@ -106,7 +106,7 @@
                 </h:column>
                 <h:column>
                     <t:dataTable var="workspace" value="#{participant.workspaceCollection}">
-                        <h:outputText value="#{workspace.shortName}"/>
+                        <h:outputText value="#{workspace.longName}"/>
                     </t:dataTable>
                 </h:column>
 
@@ -119,7 +119,7 @@
                                       onmouseout="changeMenuStyle(this,'txtHighlight'),hideCursor()"
                                       value="#{labels.moreDetails}"/>
                         />
-                        <f:param id="navigateToParticipantPk" name="navigateToParticipantPk" value="#{participant.pk}"/>
+                        <f:param id="navigatedParticipantPk" name="navigatedParticipantPk" value="#{participant.pk}"/>
                     </h:commandLink>
                 </h:column>
 

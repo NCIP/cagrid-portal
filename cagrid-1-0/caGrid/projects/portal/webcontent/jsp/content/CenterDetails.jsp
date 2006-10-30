@@ -57,7 +57,9 @@
                     <h:outputText value="#{labels.homepageURL}"/>
                 </h:column>
                 <h:column>
-                    <h:outputLink target="new" value="#{centers.navigatedCenter.homepageURL}"/>
+                    <h:outputLink target="new" value="#{centers.navigatedCenter.homepageURL}">
+                        <h:outputText value="#{centers.navigatedCenter.homepageURL}"/>
+                    </h:outputLink>
                 </h:column>
 
                 <h:column>

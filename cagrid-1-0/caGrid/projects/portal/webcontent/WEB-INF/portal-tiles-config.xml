@@ -67,6 +67,10 @@
         <put name="mainContent" value="/jsp/content/PointOfContactDetails.jsp"/>
     </definition>
 
+    <definition name="/participantDetails.tiles" extends="Directory">
+        <put name="mainContent" value="/jsp/content/ParticipantDetails.jsp"/>
+    </definition>
+
 
     <!--    Search Section              -->
     <!--Search Section layout-->
