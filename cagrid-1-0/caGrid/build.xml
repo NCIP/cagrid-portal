@@ -634,6 +634,7 @@
 	<!-- =============================================================== -->
 	<target name="build-authz" depends="prepare" description="Builds the authz component">
 		<resolveDependencies extdir="${projects.dir}/authz/ext">
+			<artifact refid="authz.misc.jars" />
 			<artifact refid="core.jars" />
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="servicesecurity.jars" />
