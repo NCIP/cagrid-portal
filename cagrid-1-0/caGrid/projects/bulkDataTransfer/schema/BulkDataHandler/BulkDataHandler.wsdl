@@ -19,7 +19,7 @@
       <import namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" schemaLocation=".\enumeration.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd\security.xsd" />
       <import namespace="http://www.globus.org/transfer" schemaLocation="./transfer.xsd" />
-      <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" schemaLocation="..\wsrf\lifetime\WS-ResourceLifetime.xsd" />
+      <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" schemaLocation="./WS-ResourceLifetime.xsd" />
       <element name="CreateEnumerationRequest">
         <complexType>
           <sequence />
