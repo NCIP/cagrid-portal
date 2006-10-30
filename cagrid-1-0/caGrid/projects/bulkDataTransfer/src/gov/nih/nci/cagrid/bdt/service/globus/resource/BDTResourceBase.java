@@ -2,7 +2,9 @@ package gov.nih.nci.cagrid.bdt.service.globus.resource;
 
 import java.util.Calendar;
 
+import org.globus.wsrf.RemoveCallback;
 import org.globus.wsrf.Resource;
+import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceIdentifier;
 import org.globus.wsrf.ResourceLifetime;
 import org.globus.wsrf.ResourceProperties;
@@ -14,7 +16,7 @@ import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.jndi.Initializable;
 
 
-public abstract class BDTResourceBase implements Resource, ResourceIdentifier, ResourceLifetime, ResourceProperties, Initializable {
+public abstract class BDTResourceBase implements Resource, RemoveCallback, ResourceIdentifier, ResourceLifetime, ResourceProperties, Initializable {
 
 	/** the identifier of this resource... should be unique in the service */
 	private Object id;
@@ -33,7 +35,7 @@ public abstract class BDTResourceBase implements Resource, ResourceIdentifier, R
 	/**
 	 * @see org.globus.wsrf.jndi.Initializable#initialize()
 	 */
-	public void initialize() throws Exception {
+	public final void initialize() throws Exception {
 		// TODO: do any init here if you need to (post creation)
 
 		// TODO: pick some way to get a unique id for this resource (maybe some

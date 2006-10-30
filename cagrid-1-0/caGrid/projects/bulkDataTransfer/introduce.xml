@@ -148,6 +148,16 @@
      <ns4:Output qName="xsd:anyURI" isArray="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      <ns4:Exceptions/>
     </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="Destroy" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns24:DestroyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns24:DestroyResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ImmediateResourceTermination" wsdlFile="WS-ResourceLifetime.wsdl" xmlns:ns24="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="DestroyProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="SetTerminationTime" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns25:SetTerminationTimeRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns25:SetTerminationTimeResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ScheduledResourceTermination" wsdlFile="WS-ResourceLifetime.wsdl" xmlns:ns25="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="SetTerminationTimeProvider"/>
+    </ns4:Method>
    </ns4:Methods>
    <ns22:ResourcePropertiesList xsi:type="ns22:ResourcePropertiesListType" xmlns:ns22="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
   </ns3:Service>

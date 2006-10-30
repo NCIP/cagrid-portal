@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.bdt.service.globus.resource.BDTException;
 
 import org.globus.transfer.AnyXmlType;
 import org.globus.ws.enumeration.EnumIterator;
+import org.globus.wsrf.ResourceException;
 
 /**
 * BDTResource is to represent the backend resource that will be persisted during this 
@@ -39,5 +40,12 @@ public class BDTResource extends BDTResourceBase implements BDTResourceI {
 	  //TODO: Implement me
 	  throw new BDTException("\"get()\" not yet implemented");
     }
+    
+   	//this is the callback to destroy this resource
+   	//if anything needs to be cleaned up when this 
+   	//resource is destroyed is should be done here
+    public void remove() throws ResourceException {
+		// TODO Implement me
+	}
     
 }

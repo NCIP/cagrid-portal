@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 
 import org.globus.transfer.AnyXmlType;
 import org.globus.ws.enumeration.EnumIterator;
+import org.globus.wsrf.ResourceException;
 
 public interface BDTResourceI {
 	
@@ -12,4 +13,6 @@ public interface BDTResourceI {
 	public AnyXmlType get() throws BDTException;
 	
 	public org.apache.axis.types.URI[] getGridFTPURLs() throws BDTException ;
+	
+	public void remove() throws ResourceException ;
 }
