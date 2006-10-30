@@ -457,25 +457,67 @@
 		<artifact track="main" type="jars" id="authz.jars">
 			<antcall target="build-authz"/>	
 			<fileset dir="${projects.dir}/authz/build">
-				<include name="cagrid-1.0-authz-common.jar"/>
+				<include name="caGrid-1.0-authz-common.jar"/>
 			</fileset>	
 			<fileset dir="${projects.dir}/authz/lib">
-				<include name="mysql*.jar"/>
-				<include name="log4j*.jar"/>
-				<include name="jtds*.jar"/>
-				<include name="jta*.jar"/>
-				<include name="jdom*.jar"/>
-				<include name="hibernate3.jar"/>
-				<include name="dom4j*.jar"/>
-				<include name="csmapi.jar"/>
-				<include name="commons*.jar"/>
+				<include name="antlr-2.7.6rc1.jar"/>
+				<include name="c3p0-0.8.5.2.jar"/>
 				<include name="clm.jar"/>
-				<include name="cglib*.jar"/>
-				<include name="asm.jar"/>
-				<include name="antlr*.jar"/>
+				<include name="commons-collections-2.1.1.jar"/>
+				<include name="commons-dbcp-1.2.1.jar"/>
+				<include name="commons-lang-1.0.1.jar"/>
+				<include name="commons-logging-1.0.4.jar"/>
+				<include name="csmapi.jar"/>
+				<include name="dom4j-1.6.1.jar"/>
+				<include name="ehcache-1.1.jar"/>
+				
+				<!-- This is 3.1.3. Not the 3.0.2 that's in share/lib/caCORE-->
+				<include name="hibernate3.jar"/>
+				
+				<include name="jdom.jar"/>
+				<include name="jta.jar"/>
+				<include name="jtds-1.2.jar"/>
+				<include name="log4j-1.2.9.jar"/>
+				<include name="mysql-connector-java-3.1.11.jar"/>
+				<include name="spring-beans.jar"/>
+				<include name="spring-core.jar"/>
 			</fileset>
 			<fileset dir="${projects.dir}/authz/ext/lib">
-				<include name="**/*.jar"/>
+
+				<include name="asm-2.2.1.jar"/>				
+				<include name="cglib-nodep-2.1_3.jar"/>
+				
+				
+				<include name="caGrid-1.0-core.jar"/>
+				<include name="caGrid-1.0-gridca.jar"/>
+				<include name="caGrid-1.0-gridgrouper-client.jar"/>
+				<include name="caGrid-1.0-gridgrouper-common.jar"/>
+				<include name="caGrid-1.0-gridgrouper-stubs.jar"/>
+				<include name="caGrid-1.0-metadata-common.jar"/>
+				<include name="caGrid-1.0-metadata-security.jar"/>
+				<include name="caGrid-1.0-ServiceSecurityProvider-client.jar"/>
+				<include name="caGrid-1.0-ServiceSecurityProvider-common.jar"/>
+				<include name="caGrid-1.0-ServiceSecurityProvider-service.jar"/>
+				<include name="caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
+				<include name="grouper.jar"/>
+				<include name="mobius_common_client.jar"/>
+				<include name="mobius_factories.jar"/>
+				<include name="mobius_gme_client.jar"/>
+				<include name="mobius_mako_client.jar"/>
+				<include name="mobius_tools.jar"/>
+				<include name="subject-0.2.1.jar"/>
+			</fileset>
+		</artifact>
+
+		<!-- Authz uses this as a dependency. If you need to use 
+		Authz in your project, don't use this. Use authz.jars -->		
+		<artifact id="authz.misc.jars" track="main" type="jars">
+			<fileset dir="${share.dir}/lib/caCORE">
+				<include name="cglib-nodep-2.1_3.jar"/>
+			</fileset>
+			<fileset dir="${test.lib.dir}">
+				<include name="cobertura/asm-2.2.1.jar"/>
+				<include name="junit.jar"/>				
 			</fileset>
 		</artifact>
 	</target>
