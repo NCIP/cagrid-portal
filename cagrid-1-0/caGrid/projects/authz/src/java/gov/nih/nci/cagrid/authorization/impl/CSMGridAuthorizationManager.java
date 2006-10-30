@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.gridgrouper.grouper.GrouperI;
 import gov.nih.nci.security.AuthenticationManager;
 import gov.nih.nci.security.AuthorizationManager;
 import gov.nih.nci.security.authentication.CommonAuthenticationManager;
+import gov.nih.nci.security.authorization.domainobjects.Application;
 import gov.nih.nci.security.authorization.domainobjects.ApplicationContext;
 import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
@@ -56,6 +57,14 @@ public class CSMGridAuthorizationManager implements GridAuthorizationManager,
 	
 	public CSMGridAuthorizationManager(String appCtxName){
 		initialize(appCtxName);
+	}
+	
+	public Application getApplicaton(String appCtxName) throws CSObjectNotFoundException {
+		return this.authorizationManager.getApplication(appCtxName);
+	}
+	public void setEncryptionEnabled(boolean enabled){
+		this.authorizationManager.setEncryptionEnabled(enabled);
+		this.authenticationManager.setEncryptionEnabled(enabled);
 	}
 	
 	public AuthenticationManager getAuthenticationManager() {
@@ -391,6 +400,20 @@ public class CSMGridAuthorizationManager implements GridAuthorizationManager,
 
 	public void setApplicationContextName(String arg0) {
 		this.authenticationManager.setApplicationContextName(arg0);
+	}
+	
+	public static void main(String[] args) throws Exception {
+		String url = "https://cbiovdev5037.nci.nih.gov:8443/wsrf/services/cagrid/GridGrouper";
+		String identity = "/CN=test2/ST=MD/C=US/E=me@somewhere.com/O=semanticbits/OU=dev";
+		String groupName = "authztest:readers";
+		GridGrouper g = new GridGrouper(url);
+		boolean isMember = g.isMemberOf(identity, groupName);
+		System.out.println(isMember);
+	}
+
+	public Application getApplication(String arg0) throws CSObjectNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
