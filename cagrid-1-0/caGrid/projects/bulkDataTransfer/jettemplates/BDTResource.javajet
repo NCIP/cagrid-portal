@@ -26,24 +26,37 @@ import org.globus.wsrf.ResourceException;
 */
 public class BDTResource extends BDTResourceBase implements BDTResourceI {
 
+
+	/**
+	* This method will create a WS-Enumeration EnumIterator  Once this Iterator is created
+	* the client will be able to use it to iterate through the results.
+	*/
 	public EnumIterator createEnumeration() throws BDTException {
 	  //TODO: Implement me
 	  throw new BDTException("\"createEnumeration()\" not yet implemented");
 	}
 	
+	/**
+	* This method will return the results as an XMLAnyType.  Essentially an XML blob.
+	*/
 	public AnyXmlType get() throws BDTException {
 	  //TODO: Implement me
 	  throw new BDTException("\"get()\" not yet implemented");
 	}
 	
+	/**
+	* This will return the results as a staged set of GridFTP URLS which can then be
+	* retieved using GridFTP client.
+	*/
 	public org.apache.axis.types.URI[] getGridFTPURLs() throws BDTException {
 	  //TODO: Implement me
 	  throw new BDTException("\"get()\" not yet implemented");
     }
     
-   	//this is the callback to destroy this resource
-   	//if anything needs to be cleaned up when this 
-   	//resource is destroyed is should be done here
+   	/**
+	* Yhis is the callback to destroy this resource. If anything needs to be cleaned up
+	* when this resource is destroyed it should be done here.
+	*/
     public void remove() throws ResourceException {
 		// TODO Implement me
 	}
