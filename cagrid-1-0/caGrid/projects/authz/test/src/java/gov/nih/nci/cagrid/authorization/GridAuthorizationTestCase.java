@@ -10,11 +10,11 @@ import junit.framework.TestSuite;
 
 public class GridAuthorizationTestCase extends TestCase {
 	
-	private String localUsr = "reader";
-	private String localPwd = "reader";
+	private String localUsr = "reader1";
+	private String localPwd = "reader1";
 	private String gridIdentity = "/CN=test2/ST=MD/C=US/E=me@somewhere.com/O=semanticbits/OU=dev";
 	private String serviceUrl = "http://someservice/url";
-	private String app = "sdk";
+	private String app = "SDK";
 	private String objectId = "gov.nih.nci.cabio.domain.Gene";
 	private String privilege = "READ";
 	
