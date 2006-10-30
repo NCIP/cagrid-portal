@@ -49,7 +49,8 @@ public class DataServiceOperationProviderCodegenPostProcessor extends BaseCodege
 		
 		// if the service has a caCORE sdk data source, the namespaces for every
 		// object in the domain model probably need fixed
-		if (extensionData.getServiceFeatures().isUseSdkDataSource()) {
+		if (extensionData.getServiceFeatures() != null 
+			&& extensionData.getServiceFeatures().isUseSdkDataSource()) {
 			rebuildCastorMappings(extensionData, info);
 		}
 	}
