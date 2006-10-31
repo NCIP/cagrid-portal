@@ -276,6 +276,7 @@
 	<target name="build-authentication-service" depends="prepare" description="Builds the Authentication Service project">
 		<resolveDependencies extdir="${projects.dir}/authentication-service/ext">
 			<artifact refid="ant-contrib.jars" />
+			<artifact refid="authz.jars" />
 			<artifact refid="core.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="common.metadata.jars" />
