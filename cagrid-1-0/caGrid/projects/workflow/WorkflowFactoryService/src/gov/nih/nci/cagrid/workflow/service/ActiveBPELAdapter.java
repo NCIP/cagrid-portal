@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.activebpel.rt.bpel.impl.list.AeProcessFilter;
+import org.activebpel.rt.bpel.impl.list.AeProcessInstanceDetail;
 import org.activebpel.rt.bpel.impl.list.AeProcessListResult;
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
@@ -34,7 +35,8 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	public ActiveBPELAdapter(String abAdminUrl)  {
 		if (abAdminUrl != null) {
 			this.abAdminUrl = abAdminUrl;
-		} 
+		}
+
 		BpelEngineAdminLocator locator = new BpelEngineAdminLocator();
 		try {
 			URL url = new URL(this.abAdminUrl);
@@ -105,12 +107,13 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	public WorkflowStatusType startWorkflow(String workflowName, 
 			StartInputType startInput) throws WorkflowExceptionType {
 		WorkflowStatusType status = WorkflowStatusType.Pending;
-		String partnerLinkName = workflowName + "Service";
+		System.out.println("Starting workflow : " + workflowName);
 		try {
-			this.invokeProcess(partnerLinkName, startInput);
+			this.invokeProcess(workflowName, startInput);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			status = WorkflowStatusType.Failed;
+			e.printStackTrace();
 		}
 		return status;
 	}
@@ -139,7 +142,7 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		
 	}
 	
-	/*public int displayProcessList() throws Exception {
+/*	public int displayProcessList() throws Exception {
 	      AeProcessFilter filter = new AeProcessFilter();
 	      filter.setAdvancedQuery("");
 	      AeProcessListResult list = mRemote.getProcessList( filter );

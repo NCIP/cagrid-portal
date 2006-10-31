@@ -303,7 +303,7 @@
 		<echo message="|    Type 'ant -p' for a description of this service's build targets.          |"/>
         <echo message="================================================================================"/>
     </target>
-<target name="runClient" depends="all" description="Execute the client: ant -Dservice.url=[service url] runClient">
+<target name="runClient" depends="compile" description="Execute the client: ant -Dservice.url=[service url] runClient">
         <java classname="gov.nih.nci.cagrid.workflow.client.WorkflowFactoryServiceClient" fork="yes">          
             <arg value="-url"/>
             <arg value="http://localhost:8080/wsrf/services/cagrid/WorkflowFactoryService"/>

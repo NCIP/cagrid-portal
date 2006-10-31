@@ -53,6 +53,7 @@
   </xsd:complexType>
   <xsd:complexType name="WSDLReferences">
     <xsd:sequence>
+      <xsd:element name="partnerLinkType" type="xsd:string"/>
       <xsd:element name="wsdlNamespace" type="xsd:anyURI" />
       <xsd:element name="wsdlLocation" type="xsd:string" />
       <xsd:element name="serviceUrl" type="xsd:anyURI" />
