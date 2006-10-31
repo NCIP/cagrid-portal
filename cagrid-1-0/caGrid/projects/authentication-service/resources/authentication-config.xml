@@ -5,18 +5,18 @@
     
     <bean id="subjectProvider" class="gov.nih.nci.cagrid.authentication.service.DefaultSubjectProvider">
         <property name="authenticationManager">
-            <bean class="gov.nih.nci.security.authentication.ext.GridIDPAuthenticationManager">
+            <bean class="gov.nih.nci.cagrid.authorization.impl.CSMGridAuthorizationManager">
                 <!-- The name of the security policy -->
-                <constructor-arg value="grid"/>
+                <constructor-arg value="SDK"/>
             </bean>
         </property>
     </bean>
     
     <bean id="samlProvider" class="gov.nih.nci.cagrid.authentication.service.DefaultSAMLProvider" 
         init-method="loadCertificates">
-        <property name="certificateFileName" value="/Users/joshua/idp_cert"/>
-        <property name="privateKeyFileName" value="/Users/joshua/idp_key"/>
-        <property name="password" value="idp"/>
+        <property name="certificateFileName" value="/Users/auth_svc/certs/auth_svc_crt.pem"/>
+        <property name="privateKeyFileName" value="/Users/auth_svc/certs/auth_svc_key.pem"/>
+        <property name="password" value="auth_svc"/>
     </bean>
 
     <bean id="authenticationProvider" class="gov.nih.nci.cagrid.authentication.service.DefaultAuthenticationProvider">

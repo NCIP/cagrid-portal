@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="build/stubs-AuthenticationService/src"/>
 	<classpathentry kind="lib" path="ext/endorsed/lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="ext/endorsed/lib/xml-apis.jar"/>
@@ -13,8 +14,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/spring-core.jar"/>
-	<classpathentry kind="lib" path="lib/spring-beans.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
@@ -78,8 +77,6 @@
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
-	<classpathentry kind="lib" path="lib/csmapi.jar"/>
-	<classpathentry kind="lib" path="lib/csm_ext.jar"/>
 	<classpathentry kind="lib" path="lib/commons-httpclient-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/ant-contrib.jar"/>
@@ -92,5 +89,8 @@
 	<classpathentry kind="lib" path="ext/lib/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-opensaml-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca.jar"/>
+	<classpathentry kind="lib" path="ext/lib/csmapi.jar"/>
+	<classpathentry kind="lib" path="ext/lib/spring-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/spring-beans.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

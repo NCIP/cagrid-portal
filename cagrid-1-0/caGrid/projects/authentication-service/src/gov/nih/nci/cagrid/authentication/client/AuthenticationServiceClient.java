@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.authentication.client;
 
+import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
+import gov.nih.nci.cagrid.authentication.bean.Credential;
 import gov.nih.nci.cagrid.authentication.common.AuthenticationServiceI;
 import gov.nih.nci.cagrid.authentication.stubs.AuthenticationServicePortType;
 import gov.nih.nci.cagrid.authentication.stubs.service.AuthenticationServiceAddressingLocator;
@@ -96,18 +98,21 @@ public class AuthenticationServiceClient extends ServiceSecurityClient
 	try {
 	    if (!(args.length < 2)) {
 		if (args[0].equals("-url")) {
-			/*
-		    String dorianUrl = "https://cbiovdev5012.nci.nih.gov:28443/wsrf/services/cagrid/Dorian";
+			
+//		    String dorianUrl = "https://cbiovdev5012.nci.nih.gov:28443/wsrf/services/cagrid/Dorian";
+//			String url = "https://cbiovdev5017.nci.nih.gov:8343/wsrf/services/cagrid/AuthenticationService";
+			String url = "https://localhost:8643/wsrf/services/cagrid/AuthenticationService";
 		    AuthenticationServiceClient client = new AuthenticationServiceClient(
-			    args[1]);
+			    url);
+		    
 		    BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
-		    bac.setUserId("user1");
-		    bac.setPassword("password1");
+		    bac.setUserId("reader1");
+		    bac.setPassword("reader1");
 		    Credential cred = new Credential();
 		    cred.setBasicAuthenticationCredential(bac);
-		    SAMLAssertion saml = client.authenticate(cred);
-		    System.out.println(saml.getXml());
-
+		    String xml = client.authenticate(cred).getXml();
+		    System.out.println(xml);
+		    /*
 		    ProxyLifetime lifetime = new ProxyLifetime();
 		    lifetime.setHours(24);
 		    lifetime.setMinutes(0);

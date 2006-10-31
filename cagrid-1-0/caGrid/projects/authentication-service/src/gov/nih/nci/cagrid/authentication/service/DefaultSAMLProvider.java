@@ -1,5 +1,5 @@
 /**
- * $Id: DefaultSAMLProvider.java,v 1.3 2006-09-29 15:19:18 langella Exp $
+ * $Id: DefaultSAMLProvider.java,v 1.4 2006-10-31 16:03:52 joshua Exp $
  *
  */
 package gov.nih.nci.cagrid.authentication.service;
@@ -13,10 +13,10 @@ import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLNameIdentifier;
 import gov.nih.nci.cagrid.opensaml.SAMLSubject;
-import gov.nih.nci.security.authentication.ext.pricipals.UserIdPrincipal;
-import gov.nih.nci.security.authentication.ext.principals.EmailPrincipal;
-import gov.nih.nci.security.authentication.ext.principals.FirstNamePrincipal;
-import gov.nih.nci.security.authentication.ext.principals.LastNamePrincipal;
+import gov.nih.nci.security.authentication.principal.EmailIdPrincipal;
+import gov.nih.nci.security.authentication.principal.FirstNamePrincipal;
+import gov.nih.nci.security.authentication.principal.LastNamePrincipal;
+import gov.nih.nci.security.authentication.principal.LoginIdPrincipal;
 
 import java.io.File;
 import java.io.FileReader;
@@ -39,7 +39,7 @@ import org.apache.xml.security.signature.XMLSignature;
 
 /**
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  * @author Joshua Phillips
  *
  */
@@ -118,7 +118,7 @@ public class DefaultSAMLProvider implements
 	Iterator it = principals.iterator();
 	while (it.hasNext()) {
 	    Principal p = (Principal) it.next();
-	    if(p instanceof UserIdPrincipal){
+	    if(p instanceof LoginIdPrincipal){
 		uid = p.getName();
 	    }else
 	    if (p instanceof FirstNamePrincipal) {
@@ -127,7 +127,7 @@ public class DefaultSAMLProvider implements
 	    if (p instanceof LastNamePrincipal) {
 		lastName = p.getName();
 	    }else
-	    if (p instanceof EmailPrincipal) {
+	    if (p instanceof EmailIdPrincipal) {
 		email = p.getName();
 	    }
 	}
