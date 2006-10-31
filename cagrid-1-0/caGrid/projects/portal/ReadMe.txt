@@ -22,9 +22,9 @@ You can ignore sections marked (Optional)
 
         Portal needs a Database configured in the following way
 
+        - Create a database called portal in mysql
         - Configure the jdbc connection in portal-build.properties
             or in ${user.home}/.portal-build.properties/
-        - Create a database called portal in mysql
         - Run the "createDatabase" ant target in the portal build
 
 
@@ -61,14 +61,20 @@ You can ignore sections marked (Optional)
 
 
         Here the aggregator task starts 8 seconds after Portal is installed
-        and runs every 10 minutes. You can change these to suit your needs
+        and runs every 10 minutes. You can change these to suit your needs.
+        Values are in milliseconds
 
 
     ===========================================================================
     2.4 Security Settings
     ===========================================================================
         Portal will automatically sync with the caGrid trust fabric to establish
-        trust to other caGrid services/resources. For deployment, copy
+        trust to other caGrid services/resources. This sync process with the trust
+         fabric happens periodically (configurable in applicationContext-aggregators.xml
+         file)
+
+         For deployment, copy
+
         portal/resources/trust-ca-cert.1
         to ~/.globus/certificates directory in Unix
         OR
@@ -115,6 +121,7 @@ You can ignore sections marked (Optional)
 
         For a brief tutorial on this please refer
         http://www.laliluna.de/javaserver-faces-message-resource-bundle-tutorial.html
+
 
     ===========================================================================
       2.6 Portal map component

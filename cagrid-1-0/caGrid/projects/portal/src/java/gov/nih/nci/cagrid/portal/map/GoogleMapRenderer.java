@@ -32,6 +32,8 @@ public class GoogleMapRenderer extends HtmlRenderer {
 
     private HashSet mapNodes = new HashSet();
 
+    private String BOLD_ELEM = "b";
+
     private String[] MAP_ROOT_ELEMENT_ATTR = {
             HTML.ALIGN_ATTR,
             HTML.STYLE_ATTR,
@@ -112,15 +114,25 @@ public class GoogleMapRenderer extends HtmlRenderer {
                 out.write("GEvent.addListener(marker" + i + ", \"click\", function() {");
                 out.write(_newLine);
                 out.write("marker" + i + ".openInfoWindowHtml(\"");
+                out.write("<span style=\\\"font-size: 0.9em;\\\">");
 
-                // Display the description text for the node
+                // Display the Title of the mapNode in bold
+                out.startElement(BOLD_ELEM, null);
                 out.write(node.getTitle());
+                out.endElement(BOLD_ELEM);
 
+                //Write the html description
                 for (Iterator iter = node.getDisplayText().iterator(); iter.hasNext();) {
                     out.startElement(HTML.BR_ELEM, null);
                     out.endElement(HTML.BR_ELEM);
                     out.write((String) iter.next());
+                    //enter break
+                    out.startElement(HTML.BR_ELEM, null);
+                    out.endElement(HTML.BR_ELEM);
                 }
+
+                //end openInfoWindowHtml
+                out.endElement(HTML.SPAN_ELEM);
                 out.write("\");");
                 out.write("});");
 

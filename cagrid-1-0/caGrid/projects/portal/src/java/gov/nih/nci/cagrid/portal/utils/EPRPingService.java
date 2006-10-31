@@ -2,8 +2,6 @@ package gov.nih.nci.cagrid.portal.utils;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
 
-import java.rmi.RemoteException;
-
 /**
  * Created by IntelliJ IDEA.
  * User: kherm
@@ -13,5 +11,12 @@ import java.rmi.RemoteException;
  */
 public interface EPRPingService {
 
-    public boolean ping(EndpointReferenceType epr) throws RemoteException;
+    /**
+     * Will return true if service(epr)
+     * is rechable currently.
+     *
+     * @param epr
+     * @return
+     */
+    public boolean ping(EndpointReferenceType epr);
 }

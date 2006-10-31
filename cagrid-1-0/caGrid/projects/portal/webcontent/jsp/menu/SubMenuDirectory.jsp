@@ -18,16 +18,6 @@
             </h:commandLink>
         </h:column>
 
-        <h:column>
-            <t:graphicImage url="images/mainMenuSeparator.gif" height="16"/>
-        </h:column>
-
-        <h:column>
-            <h:commandLink styleClass="mainMenuSubLink"
-                           action="#{directory.navigateToCenterDirectory}">
-                <h:outputText value="#{labels.hostingCenter}"/>
-            </h:commandLink>
-        </h:column>
 
         <h:column>
             <t:graphicImage url="images/mainMenuSeparator.gif" width="1" height="16"/>

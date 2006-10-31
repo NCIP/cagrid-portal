@@ -75,8 +75,8 @@ public class CaBIGWorkspace implements DomainObject {
     /**
      * @hibernate.set name="participants"
      * table="CABIG_WORKSPACES_PARTICIPANTS_JOIN"
-     * cascade="all-delete-orphan"
-     * inverse="true"
+     * cascade="all"
+     * lazy="false"
      * @hibernate.collection-key column="CABIG_WORKSPACES_ID_KEY"
      * @hibernate.collection-many-to-many column="CABIG_PARTICIPANTS_ID_KEY"
      * class="gov.nih.nci.cagrid.portal.domain.CaBIGParticipant"

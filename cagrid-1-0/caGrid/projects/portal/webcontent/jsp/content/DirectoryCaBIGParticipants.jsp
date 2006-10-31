@@ -63,7 +63,7 @@
                             pageIndexVar="pageIndex"
                     >
                 <h:outputText styleClass="scrollerStyle2"
-                              value="Found #{rowsCount} People. Displaying #{firstRowIndex} to #{lastRowIndex}"/>
+                              value="Found #{rowsCount} Participants. Displaying #{firstRowIndex} to #{lastRowIndex}"/>
             </t:dataScroller>
         </h:column>
     </h:panelGrid>
@@ -102,11 +102,15 @@
 
 
                 <h:column>
-                    <h:outputText value="#{labels.workspace}"/>
+                    <h:outputText value="#{labels.workspaces}"/>
                 </h:column>
                 <h:column>
-                    <t:dataTable var="workspace" value="#{participant.workspaceCollection}">
-                        <h:outputText value="#{workspace.longName}"/>
+                    <t:dataTable var="workspace"
+                                 columnClasses="dataCellText"
+                                 value="#{participant.workspaceCollection}">
+                        <h:column>
+                            <h:outputText value="#{workspace.longName}"/>
+                        </h:column>
                     </t:dataTable>
                 </h:column>
 

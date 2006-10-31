@@ -8,7 +8,6 @@ import org.apache.log4j.Category;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,12 +57,7 @@ public class ServicesList {
 
 
     public boolean isNavigatedServiceActive() {
-        try {
-            navigatedServiceActive = pingService.ping(navigatedService.getHandle());
-        } catch (RemoteException e) {
-            return false;
-        }
-        return navigatedServiceActive;
+        return pingService.ping(navigatedService.getHandle());
     }
 
     public int getListSize() {

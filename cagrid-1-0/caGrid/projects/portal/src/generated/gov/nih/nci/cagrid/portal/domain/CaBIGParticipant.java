@@ -208,6 +208,7 @@ public class CaBIGParticipant implements GeocodedDomainObject {
      * @hibernate.set name="workspaceCollection"
      * table="CABIG_WORKSPACES_PARTICIPANTS_JOIN"
      * cascade="none"
+     * inverse="true"
      * @hibernate.collection-key column="CABIG_PARTICIPANTS_ID_KEY"
      * @hibernate.collection-many-to-many column="CABIG_WORKSPACES_ID_KEY"
      * class="gov.nih.nci.cagrid.portal.domain.CaBIGWorkspace"

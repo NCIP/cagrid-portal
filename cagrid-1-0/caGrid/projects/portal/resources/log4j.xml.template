@@ -33,7 +33,7 @@
 	</category>
 
     <category name="gov.nih.nci.cagrid.portal.db.PortalMysqlDDLExecutor" additivity="false">
-		<priority value="WARN"/>
+		<priority value="INFO"/>
 		<appender-ref ref="localFileAppender"/>
 	</category>
 

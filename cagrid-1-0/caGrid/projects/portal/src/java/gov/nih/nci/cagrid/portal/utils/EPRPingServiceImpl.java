@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.portal.utils;
 
+import gov.nih.nci.cagrid.metadata.MetadataConstants;
 import org.apache.axis.message.addressing.EndpointReferenceType;
-
-import java.rmi.RemoteException;
+import org.oasis.wsrf.properties.WSResourcePropertiesServiceAddressingLocator;
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,7 +14,17 @@ import java.rmi.RemoteException;
 public class EPRPingServiceImpl implements EPRPingService {
 
 
-    public boolean ping(EndpointReferenceType epr) throws RemoteException {
-        return false;
+    public boolean ping(EndpointReferenceType epr) {
+        WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
+
+        try {
+            locator.getGetResourcePropertyPort(epr).getResourceProperty(MetadataConstants.CAGRID_MD_QNAME);
+        } catch (Exception e) {
+            //service is not reachable
+            return false;
+        }
+
+        //if it reaches this point
+        return true;
     }
 }

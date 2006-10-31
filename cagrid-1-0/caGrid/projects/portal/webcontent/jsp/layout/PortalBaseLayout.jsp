@@ -12,7 +12,7 @@
     <title>caGrid Portal</title>
 </head>
 
-<!--Load message bundle-->
+<%/*Load message bundle */%>
 <f:loadBundle basename="Portal-Labels" var="labels"/>
 
 <f:view>
@@ -106,7 +106,7 @@
                                     </f:subview>
 
                                     <f:verbatim><br/></f:verbatim>
-                                    <!--Optional sub section-->
+                                    <%/* Optional subsection */%>
                                     <f:subview id="subMainContent">
                                         <tiles:insert attribute="subMainContent" flush="false" ignore="true"/>
                                     </f:subview>

@@ -1,10 +1,11 @@
 package gov.nih.nci.cagrid.portal.web;
 
 import gov.nih.nci.cagrid.portal.common.GeoCodeValues;
+import gov.nih.nci.cagrid.portal.domain.CaBIGParticipant;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
+import gov.nih.nci.cagrid.portal.manager.CaBIGWorkspaceManager;
 import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
-import gov.nih.nci.cagrid.portal.manager.ResearchCenterManager;
 import gov.nih.nci.cagrid.portal.map.InvalidMapNodeException;
 import gov.nih.nci.cagrid.portal.map.MapNode;
 import org.apache.log4j.Category;
@@ -24,7 +25,9 @@ import java.util.List;
 public class MapSetup {
 
     private GridServiceManager gridServiceManager;
-    private ResearchCenterManager rcManager;
+
+    private CaBIGWorkspaceManager caBIGManager;
+
     private List nodes = new ArrayList();
 
     private Category _logger = Category.getInstance(getClass().getName());
@@ -64,15 +67,28 @@ public class MapSetup {
         return "success";
     }
 
-    public String navigateToRCMap() throws FacesException {
-        _logger.debug("Setting up Map of centers");
+    public String navigateToParticipantMap() throws FacesException {
+        _logger.debug("Setting up Map of caBIG participants");
 
         try {
-
-            List rcCenters = rcManager.getUniqueCenters();
-
-            //clear nodes
+            List participants = caBIGManager.getUniqueParticipants();
             nodes.clear();
+
+
+            for (Iterator iter = participants.iterator(); iter.hasNext();) {
+                CaBIGParticipant participant = (CaBIGParticipant) iter.next();
+
+                GeoCodeValues geoVal = new GeoCodeValues(participant.getLatitude(), participant.getLongitude());
+
+                //form a MapNode object and add it to the list
+                try {
+                    List displayText = new ArrayList();
+                    displayText.add(participant.getHomepageURL());
+                    nodes.add(new MapNode(participant.getName(), geoVal, displayText));
+                } catch (InvalidMapNodeException e) {
+                    //is expected. Continue
+                }
+            }
 
         } catch (PortalRuntimeException e) {
             //log so admin knows
@@ -80,8 +96,9 @@ public class MapSetup {
             //send this to the view for the user
             throw new FacesException(e);
         }
-        _logger.debug("Navigating to centers map");
+        _logger.debug("Navigating to participant map");
         return "success";
+
     }
 
     public void setNodes(List nodes) {
@@ -96,7 +113,7 @@ public class MapSetup {
         this.gridServiceManager = gridServiceManager;
     }
 
-    public void setRcManager(ResearchCenterManager rcManager) {
-        this.rcManager = rcManager;
+    public void setCaBIGManager(CaBIGWorkspaceManager caBIGManager) {
+        this.caBIGManager = caBIGManager;
     }
 }

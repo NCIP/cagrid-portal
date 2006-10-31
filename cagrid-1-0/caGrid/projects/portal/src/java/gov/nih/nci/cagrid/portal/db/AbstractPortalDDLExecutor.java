@@ -141,6 +141,7 @@ public abstract class AbstractPortalDDLExecutor implements PortalDDLExecutor {
                     _logger.warn("Sheet for " + workspace.getShortName() + " workspace not found. Please check the excel file.");
 
                 try {
+                    _logger.info("Saving workspace " + workspace.getShortName() + " with " + workspace.getParticipants().size() + " participants.");
                     caBIGWorkspaceManager.save(workspace);
                 } catch (PortalRuntimeException e) {
                     _logger.error(e.getMessage());

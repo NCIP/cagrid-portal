@@ -70,8 +70,8 @@
             <value>#{gridServiceManager}</value>
         </managed-property>
         <managed-property>
-            <property-name>rcManager</property-name>
-            <value>#{rcManager}</value>
+            <property-name>caBIGManager</property-name>
+            <value>#{caBIGManager}</value>
         </managed-property>
     </managed-bean>
 
@@ -164,14 +164,14 @@
             <to-view-id>/participantDirectory.portal</to-view-id>
         </navigation-case>
         <navigation-case>
-            <from-action>#{map.navigateToRCMap}</from-action>
+            <from-action>#{map.navigateToParticipantMap}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>/rcMap.portal</to-view-id>
+            <to-view-id>/mapDisplay.portal</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{map.navigateToServicesMap}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>/servicesMap.portal</to-view-id>
+            <to-view-id>/mapDisplay.portal</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{services.navigateToService}</from-action>

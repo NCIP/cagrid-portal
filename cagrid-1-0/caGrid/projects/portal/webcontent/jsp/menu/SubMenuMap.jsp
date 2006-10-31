@@ -24,8 +24,8 @@
 
         <h:column>
             <h:commandLink styleClass="mainMenuSubLink"
-                           action="#{map.navigateToRCMap}">
-                <h:outputText value="#{labels.hostingCenter}"/>
+                           action="#{map.navigateToParticipantMap}">
+                <h:outputText value="#{labels.participants}"/>
             </h:commandLink>
         </h:column>
 

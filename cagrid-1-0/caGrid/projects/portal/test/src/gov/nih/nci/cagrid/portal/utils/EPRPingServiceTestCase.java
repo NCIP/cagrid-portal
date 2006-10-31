@@ -4,8 +4,6 @@ import gov.nih.nci.cagrid.portal.BaseSpringAbstractTestCase;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
 
-import java.rmi.RemoteException;
-
 /**
  * Created by IntelliJ IDEA.
  * User: kherm
@@ -16,7 +14,7 @@ import java.rmi.RemoteException;
 public class EPRPingServiceTestCase extends BaseSpringAbstractTestCase {
 
     private EPRPingService eprPingService;
-    private final String fooEPR = "http://foo.bar";
+    private final String fooEPR = "https://59.163.69.32:8443/wsrf/services/cagrid/CaDSRService";
 
     public void testEPR() {
         try {
@@ -24,10 +22,9 @@ public class EPRPingServiceTestCase extends BaseSpringAbstractTestCase {
             assertFalse(eprPingService.ping(epr));
 
             assertTrue(eprPingService.ping(validServiceEPR));
-        } catch (URI.MalformedURIException e) {
+        } catch (Exception e) {
             fail(e.getMessage());
-        } catch (RemoteException e) {
-            fail(e.getMessage());
+
         }
     }
 

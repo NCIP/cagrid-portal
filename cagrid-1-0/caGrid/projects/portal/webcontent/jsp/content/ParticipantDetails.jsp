@@ -99,11 +99,14 @@
             <h:outputText value="#{labels.workspace}"/>
         </h:column>
         <h:column>
-            <t:dataTable var="workspace" value="#{participants.navigatedParticipant.workspaceCollection}">
-                <h:outputText value="#{workspace.shortName}"/>
+            <t:dataTable var="workspace"
+                         columnClasses="dataCellText"
+                         value="#{participants.navigatedParticipant.workspaceCollection}">
+                <h:column>
+                    <h:outputText value="#{workspace.longName}"/>
+                </h:column>
             </t:dataTable>
         </h:column>
-
         <h:column>
             <h:outputText value="#{labels.status}"/>
         </h:column>

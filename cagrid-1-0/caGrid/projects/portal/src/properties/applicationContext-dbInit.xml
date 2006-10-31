@@ -9,7 +9,7 @@
     <bean id="abstractDDLExecutor" class="gov.nih.nci.cagrid.portal.db.AbstractPortalDDLExecutor"
           abstract="true">
         <property name="caBIGWorkspaceManager">
-            <ref bean="caBIGWorkspaceManager"/>
+            <ref bean="caBIGManager"/>
         </property>
 
         <!--Classpath reource. DDL to be excuted -->

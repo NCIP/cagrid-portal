@@ -55,6 +55,7 @@ public class CaBIGManagerLocalTestCase extends BaseSpringDataAccessAbstractTestC
         CaBIGWorkspace workspace = (CaBIGWorkspace) caBIGManager.getObjectByPrimaryKey(CaBIGWorkspace.class, new Integer(2));
         assertNotNull(workspace);
         assertNotNull(workspace.getShortName());
+        assertNotNull(workspace.getParticipants().iterator().next());
 
 
     }
