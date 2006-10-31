@@ -33,7 +33,8 @@ import javax.swing.border.BevelBorder;
  */
 public class CoreDsIntroPanel extends AbstractWizardPanel {
 	
-	public static final String SDK_QUERY_LIB = "../sdkQuery/build/lib/caGrid-1.0-sdkQuery.jar";
+	public static final String SDK_QUERY_LIB = ".." + File.separator + "sdkQuery" + File.separator 
+		+ "build" + File.separator + "lib" + File.separator + "caGrid-1.0-sdkQuery.jar";
 	public static final String SDK_QUERY_PROCESSOR = "gov.nih.nci.cagrid.data.cql.cacore.HQLCoreQueryProcessor";
 
 	/**
