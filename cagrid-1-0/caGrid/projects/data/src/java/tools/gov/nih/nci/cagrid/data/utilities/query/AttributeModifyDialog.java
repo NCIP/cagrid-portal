@@ -4,8 +4,11 @@ import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -77,8 +80,15 @@ public class AttributeModifyDialog extends JDialog {
 	
 	private void initialize() {
         this.setTitle("Attribute: " + attribType.getName());
-        this.setSize(new java.awt.Dimension(310,173));
+        this.setSize(new java.awt.Dimension(310, 173));
         this.setContentPane(getMainPanel());
+        // center the dialog
+		int w = getParent().getSize().width;
+		int h = getParent().getSize().height;
+		int x = getParent().getLocationOnScreen().x;
+		int y = getParent().getLocationOnScreen().y;
+		Dimension dim = getSize();
+		setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);		
         this.setVisible(true);
 	}
 
@@ -179,6 +189,7 @@ public class AttributeModifyDialog extends JDialog {
 		if (typeTextField == null) {
 			typeTextField = new JTextField();
 			typeTextField.setEditable(false);
+			typeTextField.setText(attribType.getDataType());
 		}
 		return typeTextField;
 	}
@@ -192,6 +203,17 @@ public class AttributeModifyDialog extends JDialog {
 	private JComboBox getPredicateComboBox() {
 		if (predicateComboBox == null) {
 			predicateComboBox = new JComboBox();
+			predicateComboBox.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					Predicate pred = (Predicate) predicateComboBox.getSelectedItem();
+					if (pred == Predicate.IS_NULL || pred == Predicate.IS_NOT_NULL) {
+						getValueTextField().setText("");
+						getValueTextField().setEnabled(false);
+					} else {
+						getValueTextField().setEnabled(true);
+					}
+				}
+			});
 			// populate the combo box in alphabetical order
 			List predicates = new ArrayList();
 			try {

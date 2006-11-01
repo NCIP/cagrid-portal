@@ -45,6 +45,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -62,9 +63,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 /** 
@@ -408,6 +411,21 @@ public class QueryBuilder extends JFrame {
 							// rebuild the tree for the new node
 							node.rebuild();
 							getQueryTree().refreshTree();
+							// get the node that was just added
+							AttributeTreeNode attribNode = null;
+							Enumeration nodeChildren = node.children();
+							while (nodeChildren.hasMoreElements()) {
+								IconTreeNode tempNode = (IconTreeNode) nodeChildren.nextElement();
+								if (tempNode instanceof AttributeTreeNode) {
+									if (((AttributeTreeNode) tempNode).getAttribute() == attrib) {
+										attribNode = (AttributeTreeNode) tempNode;
+										break;
+									}
+								}
+							}
+							TreePath path = new TreePath(((DefaultTreeModel) getQueryTree().getModel())
+								.getPathToRoot(attribNode));
+							getQueryTree().expandPath(path);
 						}
 					} else {
 						JOptionPane.showMessageDialog(QueryBuilder.this, "Please select an attribute first!");
@@ -891,7 +909,8 @@ public class QueryBuilder extends JFrame {
 		// see if there's already a query in the works
 		QueryTreeNode node = getQueryTree().getQueryTreeNode();
 		if (node != null) {
-			int choice = JOptionPane.showConfirmDialog(this, "Clear current query?", "Confirm", JOptionPane.YES_NO_OPTION);
+			int choice = JOptionPane.showConfirmDialog(this, "Clear current query?", 
+				"Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if (choice != JOptionPane.YES_OPTION) {
 				return;
 			}
@@ -940,7 +959,8 @@ public class QueryBuilder extends JFrame {
 				getQueryTree().refreshTree();
 			}
 		} else {
-			JOptionPane.showMessageDialog(this, "Please load a domain model first", "No model loaded", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Please load a domain model first", 
+				"No model loaded", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	
@@ -1053,7 +1073,8 @@ public class QueryBuilder extends JFrame {
 				}
 			}
 		} else {
-			JOptionPane.showMessageDialog(this, "Please load a domain model first.", "No domain model", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Please load a domain model first.", 
+				"No domain model", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	
@@ -1081,6 +1102,12 @@ public class QueryBuilder extends JFrame {
 
 
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			System.err.println("Error setting system look and feel.");
+		}
 		JFrame builder = new QueryBuilder();
 		builder.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 	}

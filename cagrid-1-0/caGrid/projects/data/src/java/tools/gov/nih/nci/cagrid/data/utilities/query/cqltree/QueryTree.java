@@ -30,6 +30,8 @@ public class QueryTree extends JTree {
 
 	public QueryTree() {
 		rootNode = new DefaultMutableTreeNode();
+		// cause each row to be queried for its height
+		setRowHeight(-1);
 		setModel(new DefaultTreeModel(rootNode));		
 		setRootVisible(false);
 		setEditable(false);
@@ -70,15 +72,16 @@ public class QueryTree extends JTree {
 				Icon nodeIcon = ((IconTreeNode) value).getIcon();
 				if (currentIcon != null && nodeIcon != null) {
 					// combine the icons
-					BufferedImage image = new BufferedImage(
-						currentIcon.getIconWidth() + nodeIcon.getIconWidth(),
-						Math.max(currentIcon.getIconHeight(), nodeIcon.getIconHeight()),
+					int iconWidth = currentIcon.getIconWidth() + nodeIcon.getIconWidth();
+					int iconHeight = Math.max(currentIcon.getIconHeight(), nodeIcon.getIconHeight());
+					BufferedImage image = new BufferedImage(iconWidth, iconHeight,
 						BufferedImage.TYPE_INT_ARGB);
 					Graphics gfx = image.getGraphics();
 					currentIcon.paintIcon(this, gfx, 0, 0);
 					nodeIcon.paintIcon(this, gfx, currentIcon.getIconWidth(), 0);
 					ImageIcon newIcon = new ImageIcon(image);
 					setIcon(newIcon);
+					setSize(getWidth(), Math.max(getHeight(), iconHeight));
 				}
 			}
 			return this;

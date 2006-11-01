@@ -517,6 +517,7 @@
 			</fileset>
 			<fileset dir="${tools.src.dir}">
 				<include name="**/*.java"/>
+				<include name="**/*.png"/>
 			</fileset>
 		</jar>
 	</target>
@@ -609,6 +610,29 @@
             </fileset>
         </copy>
     </target>
+	
+	
+	<!-- runs the query building tool -->
+	<target name="queryBuilder" depends="all" description="Runs the CQL query builder tool">
+		<java fork="true" classname="gov.nih.nci.cagrid.data.utilities.query.QueryBuilder">
+			<classpath>
+				<fileset dir="${build.jars.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="${globus.dir}/lib">
+					<include name="*.jar"/>
+				</fileset>
+				<pathelement location="ext/resources/portal/introduce"/>
+				<pathelement location="ext/resources/portal/common"/>
+			</classpath>
+		</java>
+	</target>
 
 
     <!-- build and jar everything -->
