@@ -108,11 +108,12 @@ public class SkeletonSecurityOperationProviderCreator {
 				// the message beans are not generated again
 				Properties props = new Properties();
 				props.load(new FileInputStream(new File(info.getBaseDirectory().getAbsolutePath() + File.separator
-					+ "introduce.properties")));
-				props.setProperty("introduce.ns.excludes", props.getProperty("introduce.ns.excludes") + " "
-					+ SERVICE_NS_EXCLUDE);
+					+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE)));
+				props.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES, 
+					props.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES) 
+					+ " " + SERVICE_NS_EXCLUDE);
 				props.store(new FileOutputStream(new File(info.getBaseDirectory().getAbsolutePath() + File.separator
-					+ "introduce.properties")), "Introduce service properties");
+					+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE)), "Introduce service properties");
 			}
 		}
 	}
