@@ -13,7 +13,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class CreatePortalDatabase {
 
     public static void main(String[] args) {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath*:/**/applicationContext-dbInit.xml");
+        ApplicationContext ctx = new ClassPathXmlApplicationContext(
+                new String[]{"applicationContext-dbInit.xml", "applicationContext-utils.xml"});
+
         PortalDDLExecutor ddlExecutor = (PortalDDLExecutor) ctx.getBean("ddlExecutor");
         //execut the DLL
         ddlExecutor.executePortalDDL();
