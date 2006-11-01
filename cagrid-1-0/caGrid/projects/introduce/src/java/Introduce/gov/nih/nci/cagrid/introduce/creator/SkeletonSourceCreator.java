@@ -16,6 +16,9 @@ import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceProviderImpl
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.base.BaseResourceHomeTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.base.BaseResourceTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.lifetime.LifetimeResourceBaseTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.lifetime.LifetimeResourceHomeTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.lifetime.LifetimeResourceTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main.MainConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main.MainResourceHomeTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.main.MainResourceTemplate;
@@ -123,6 +126,51 @@ public class SkeletonSourceCreator {
 		authorizationFW.close();
 
 		if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)) {
+			ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+			String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(info, service));
+			File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+				+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+				+ File.separator + "resource" + File.separator + "ResourceConstants.java");
+
+			FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+			resourceContanstsFW.write(resourceContanstsS);
+			resourceContanstsFW.close();
+			
+			
+			LifetimeResourceBaseTemplate lifetimeResourceBaseT = new LifetimeResourceBaseTemplate();
+			String lifetimeResourceBaseS = lifetimeResourceBaseT.generate(new SpecificServiceInformation(info, service));
+			File lifetimeResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
+				+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+				+ File.separator + "resource" + File.separator + "BaseResourceBase.java");
+
+			FileWriter lifetimeResourceBaseFW = new FileWriter(lifetimeResourceBaseF);
+			lifetimeResourceBaseFW.write(lifetimeResourceBaseS);
+			lifetimeResourceBaseFW.close();
+			
+
+			LifetimeResourceTemplate lifetimeResourceT = new LifetimeResourceTemplate();
+			String lifetimeResourceS = lifetimeResourceT.generate(new SpecificServiceInformation(info, service));
+			File lifetimeResourceF = new File(srcDir.getAbsolutePath() + File.separator
+				+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+				+ File.separator + "resource" + File.separator + "BaseResource.java");
+
+			FileWriter lifetimeResourceFW = new FileWriter(lifetimeResourceF);
+			lifetimeResourceFW.write(lifetimeResourceS);
+			lifetimeResourceFW.close();
+			
+
+
+			LifetimeResourceHomeTemplate lifetimeResourceHomeT = new LifetimeResourceHomeTemplate();
+			String lifetimeResourceHomeS = lifetimeResourceHomeT.generate(new SpecificServiceInformation(info, service));
+			File lifetimeResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
+				+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+				+ File.separator + "resource" + File.separator + "BaseResourceHome.java");
+
+			FileWriter lifetimeResourceHomeFW = new FileWriter(lifetimeResourceHomeF);
+			lifetimeResourceHomeFW.write(lifetimeResourceHomeS);
+			lifetimeResourceHomeFW.close();
+
+		} else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
 			ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
 			String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(info, service));
 			File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator

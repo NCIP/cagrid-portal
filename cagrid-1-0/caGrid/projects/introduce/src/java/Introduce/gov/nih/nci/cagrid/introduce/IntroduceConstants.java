@@ -56,6 +56,8 @@ public class IntroduceConstants {
 
 	public static final String INTRODUCE_BASE_RESOURCE = "base";
 	
+	public static final String INTRODUCE_LIFETIME_RESOURCE = "lifetime";
+	
 	public static final String INTRODUCE_CUSTOM_RESOURCE = "custom";
 
 	// deployment properties

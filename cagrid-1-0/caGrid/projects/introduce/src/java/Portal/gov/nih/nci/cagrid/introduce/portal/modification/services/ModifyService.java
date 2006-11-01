@@ -222,6 +222,8 @@ public class ModifyService extends JDialog {
 					service.getService().setName(serviceNameTextField.getText());
 					service.getService().setNamespace(namespaceTextField.getText());
 					service.getService().setPackageName(servicePackageNameTextField.getText());
+					service.getService().setResourceFrameworkType(
+						(String) resourceFrameworkTypeComboBox.getSelectedItem());
 					try {
 						service.getService().setServiceSecurity(getSecurityPanel().getServiceSecurity(true));
 					} catch (Exception e1) {
@@ -340,6 +342,7 @@ public class ModifyService extends JDialog {
 			resourceFrameworkTypeComboBox.addItem(IntroduceConstants.INTRODUCE_BASE_RESOURCE);
 			resourceFrameworkTypeComboBox.addItem(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE);
 			resourceFrameworkTypeComboBox.addItem(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE);
+			resourceFrameworkTypeComboBox.addItem(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE);
 			if (!isNew) {
 				resourceFrameworkTypeComboBox.setEditable(false);
 				resourceFrameworkTypeComboBox.setEnabled(false);
@@ -390,7 +393,7 @@ public class ModifyService extends JDialog {
 	 */
 	private ServiceSecurityPanel getSecurityPanel() {
 		if (securityPanel == null) {
-			securityPanel = new ServiceSecurityPanel(service.getServiceDescriptor(),service.getService());
+			securityPanel = new ServiceSecurityPanel(service.getServiceDescriptor(), service.getService());
 		}
 		return securityPanel;
 	}

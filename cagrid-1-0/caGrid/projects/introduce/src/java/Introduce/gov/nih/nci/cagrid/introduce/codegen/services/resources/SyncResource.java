@@ -46,7 +46,7 @@ public class SyncResource extends SyncTool {
 	public void sync() throws SynchronizationException {
 		try {
 
-		    if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE)) {
+		    if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE) || service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
 				// not the base service do nothing....
 				ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
 				String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(

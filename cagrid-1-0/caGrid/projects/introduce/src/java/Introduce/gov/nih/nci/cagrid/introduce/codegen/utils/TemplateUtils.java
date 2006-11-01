@@ -21,6 +21,8 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.projectmobius.common.XMLUtilities;
 
+import com.sun.naming.internal.ResourceManager;
+
 
 /**
  * Templating Utility Functions
@@ -83,17 +85,34 @@ public class TemplateUtils {
 	public static void addImportedOperationToService(MethodType method, SpecificServiceInformation serviceInfo)
 		throws Exception {
 
+		String fromDocFile = serviceInfo.getBaseDirectory().getAbsolutePath()
+			+ File.separator
+			+ "schema"
+			+ File.separator
+			+ serviceInfo.getIntroduceServiceProperties().getProperty(
+				IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
+			+ method.getImportInformation().getWsdlFile();
+		if (!(new File(fromDocFile).exists())) {
+			// try From Globus Location
+			fromDocFile = gov.nih.nci.cagrid.introduce.ResourceManager
+				.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION)
+				+ File.separator
+				+ "schema"
+				+ File.separator
+				+ "wsrf"
+				+ File.separator
+				+ method.getImportInformation().getWsdlFile();
+		}
+		if (!(new File(fromDocFile).exists())) {
+			throw new Exception("Cannot locate WSDL file: " + method.getImportInformation().getWsdlFile()
+				+ " to import from for Method: " + method.getName());
+		}
+
 		// parse the wsdl and get the operation text.....
 		Document fromDoc = null;
 		Document toDoc = null;
 		try {
-			fromDoc = XMLUtilities.fileNameToDocument(serviceInfo.getBaseDirectory().getAbsolutePath()
-				+ File.separator
-				+ "schema"
-				+ File.separator
-				+ serviceInfo.getIntroduceServiceProperties().getProperty(
-					IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
-				+ method.getImportInformation().getWsdlFile());
+			fromDoc = XMLUtilities.fileNameToDocument(fromDocFile);
 			toDoc = XMLUtilities.fileNameToDocument(serviceInfo.getBaseDirectory().getAbsolutePath()
 				+ File.separator
 				+ "schema"

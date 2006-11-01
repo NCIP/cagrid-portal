@@ -634,6 +634,32 @@ public class CommonTools {
 	}
 
 
+	public static void addResourcePropety(ServiceType service, ResourcePropertyType resource) {
+		ResourcePropertyType[] resourcesArray = null;
+		int length = 0;
+		if (service.getResourcePropertiesList() != null
+			&& service.getResourcePropertiesList().getResourceProperty() != null) {
+			length = service.getResourcePropertiesList().getResourceProperty().length + 1;
+		} else {
+			length = 1;
+		}
+		resourcesArray = new ResourcePropertyType[length];
+		if (length > 1) {
+			System.arraycopy(service.getResourcePropertiesList().getResourceProperty(), 0, resourcesArray, 0,
+				length - 1);
+		}
+		resourcesArray[length - 1] = resource;
+		ResourcePropertiesListType resources = null;
+		if (service.getResourcePropertiesList() == null) {
+			resources = new ResourcePropertiesListType();
+			service.setResourcePropertiesList(resources);
+		} else {
+			resources = service.getResourcePropertiesList();
+		}
+		resources.setResourceProperty(resourcesArray);
+	}
+
+
 	public static void addMethod(ServiceType service, MethodType method) {
 		MethodType[] methodsArray = null;
 		int length = 0;
