@@ -24,9 +24,8 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
- * FederatedQueryProcessor decomposes the DCQL into individual CQLs Each
- * individual CQL is executed by specified grid service in serviceURL Results
- * obtained from DCQLQueryDocument are joined by Result Aggregator
+ * FederatedQueryProcessor decomposes the DCQL into individual CQLs. Each
+ * individual CQL is executed by specified grid service in serviceURL by the DataServiceQueryExecutor.
  * 
  * @author Srini Akkala
  * @author Scott Oster
