@@ -744,7 +744,7 @@ public class SyncTools {
 		destroyMethod.setIsImported(true);
 		destroyMethod.setImportInformation(ii);
 		MethodTypeProviderInformation pi = new MethodTypeProviderInformation();
-		pi.setProviderClass("SetTerminationTimeProvider");
+		pi.setProviderClass("DestroyProvider");
 		destroyMethod.setIsProvided(true);
 		destroyMethod.setProviderInformation(pi);
 

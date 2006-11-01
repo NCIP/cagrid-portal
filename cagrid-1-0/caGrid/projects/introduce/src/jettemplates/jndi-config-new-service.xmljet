@@ -21,12 +21,30 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 		}  else {
 		%>
 		<resource name="home" type="<%=service.getPackageName()%>.service.globus.resource.BaseResourceHome">
-			<resourceParams>
-				<parameter>
-					<name>factory</name>
-					<value>org.globus.wsrf.jndi.BeanFactory</value>
-				</parameter>
-			</resourceParams>
+		  <resourceParams>
+        	<parameter>
+         		 <name>factory</name>
+         		 <value>org.globus.wsrf.jndi.BeanFactory</value>
+        	</parameter>
+        	<%
+        	if(service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_BASE_RESOURCE) || service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)){
+        	%>
+        	<parameter>
+          		 <name>resourceClass</name>
+         		 <value><%=service.getPackageName()%>.service.globus.resource.BaseResource</value>
+        	</parameter>
+        	<parameter>
+         		 <name>resourceKeyName</name>
+         		 <value>{<%=service.getNamespace()%>}<%=service.getName()%>ResultsKey</value>
+        	</parameter>
+       		 <parameter>
+        		  <name>resourceKeyType</name>
+        		  <value>java.lang.Integer</value>
+        	</parameter>
+        	<%
+        	}
+        	%>
+      	  </resourceParams>		
 		</resource>
 		<%
 		}

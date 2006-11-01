@@ -9,45 +9,59 @@
 %>
 package <%=info.getService().getPackageName()%>.service.globus.resource;
 
-import javax.xml.namespace.QName;
-
-import org.globus.wsrf.InvalidResourceKeyException;
-import org.globus.wsrf.NoSuchResourceException;
-import org.globus.wsrf.RemoveNotSupportedException;
-import org.globus.wsrf.Resource;
 import org.globus.wsrf.ResourceException;
-import org.globus.wsrf.ResourceHome;
 import org.globus.wsrf.ResourceKey;
+import org.globus.wsrf.impl.ResourceHomeImpl;
+import org.globus.wsrf.impl.SimpleResourceKey;
+import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.MessageContext;
+import org.globus.wsrf.utils.AddressingUtils;
 
 /**
  * This class implements a resource home
  */
 
-public class BaseResourceHome implements ResourceHome {
+public class BaseResourceHome extends ResourceHomeImpl {
 
-	public Class getKeyTypeClass() {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+ 	* Creates a new Resource, adds it to the list of resources managed by this resource home,
+ 	* and returns the key to the resource.
+ 	*/
+	public ResourceKey createResource() throws Exception {
+		// Create a resource and initialize it
+		BaseResource resource = (BaseResource) createNewInstance();
+		resource.initialize();
+
+		// Get key
+		ResourceKey key = new SimpleResourceKey(getKeyTypeName(), resource.getID());
+		
+		// Add the resource to the list of resources in this home
+		add(key, resource);
+		return key;
+	}
+	
+	/**
+ 	* Take a resource key managed by this resource, locates the resource, and created a typed EPR for the resource.
+ 	*/
+	public <%=info.getService().getPackageName()%>.stubs.types.<%=info.getService().getName()%>Reference getResourceReference(ResourceKey key) throws Exception {
+		MessageContext ctx = MessageContext.getCurrentContext();
+		String transportURL = (String) ctx.getProperty(org.apache.axis.MessageContext.TRANS_URL);
+		transportURL = transportURL.substring(0,transportURL.lastIndexOf('/') +1 );
+		transportURL += "<%=info.getService().getName()%>";
+		EndpointReferenceType epr = AddressingUtils.createEndpointReference(transportURL,key);
+		<%=info.getService().getPackageName()%>.stubs.types.<%=info.getService().getName()%>Reference ref = new <%=info.getService().getPackageName()%>.stubs.types.<%=info.getService().getName()%>Reference();
+		ref.setEndpointReference(epr);
+		return ref;
 	}
 
-
-	public QName getKeyTypeName() {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+ 	* Given the key of a resource managed by this resource home, a type resource will be returned.
+ 	*/	
+	public BaseResource getResource(ResourceKey key) throws ResourceException {
+		BaseResource thisResource = (BaseResource)find(key);
+		return thisResource;
 	}
-
-
-	public Resource find(ResourceKey arg0) throws ResourceException, NoSuchResourceException,
-		InvalidResourceKeyException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public void remove(ResourceKey arg0) throws ResourceException, NoSuchResourceException,
-		InvalidResourceKeyException, RemoveNotSupportedException {
-		// TODO Auto-generated method stub
-
-	}
-
+	
+	
+	
 }

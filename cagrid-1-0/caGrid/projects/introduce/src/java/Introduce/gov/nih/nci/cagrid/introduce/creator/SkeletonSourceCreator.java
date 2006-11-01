@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceAuthorizatio
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceProviderImplTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceConstantsTemplate;
+import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.base.BaseResourceBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.base.BaseResourceHomeTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.base.BaseResourceTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.lifetime.LifetimeResourceBaseTemplate;
@@ -135,52 +136,17 @@ public class SkeletonSourceCreator {
 			FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
 			resourceContanstsFW.write(resourceContanstsS);
 			resourceContanstsFW.close();
-			
-			
-			LifetimeResourceBaseTemplate lifetimeResourceBaseT = new LifetimeResourceBaseTemplate();
-			String lifetimeResourceBaseS = lifetimeResourceBaseT.generate(new SpecificServiceInformation(info, service));
-			File lifetimeResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
+
+			BaseResourceBaseTemplate baseResourceBaseT = new BaseResourceBaseTemplate();
+			String baseResourceBaseS = baseResourceBaseT.generate(new SpecificServiceInformation(info, service));
+			File baseResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
 				+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
 				+ File.separator + "resource" + File.separator + "BaseResourceBase.java");
 
-			FileWriter lifetimeResourceBaseFW = new FileWriter(lifetimeResourceBaseF);
-			lifetimeResourceBaseFW.write(lifetimeResourceBaseS);
-			lifetimeResourceBaseFW.close();
+			FileWriter baseResourceBaseFW = new FileWriter(baseResourceBaseF);
+			baseResourceBaseFW.write(baseResourceBaseS);
+			baseResourceBaseFW.close();
 			
-
-			LifetimeResourceTemplate lifetimeResourceT = new LifetimeResourceTemplate();
-			String lifetimeResourceS = lifetimeResourceT.generate(new SpecificServiceInformation(info, service));
-			File lifetimeResourceF = new File(srcDir.getAbsolutePath() + File.separator
-				+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-				+ File.separator + "resource" + File.separator + "BaseResource.java");
-
-			FileWriter lifetimeResourceFW = new FileWriter(lifetimeResourceF);
-			lifetimeResourceFW.write(lifetimeResourceS);
-			lifetimeResourceFW.close();
-			
-
-
-			LifetimeResourceHomeTemplate lifetimeResourceHomeT = new LifetimeResourceHomeTemplate();
-			String lifetimeResourceHomeS = lifetimeResourceHomeT.generate(new SpecificServiceInformation(info, service));
-			File lifetimeResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
-				+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-				+ File.separator + "resource" + File.separator + "BaseResourceHome.java");
-
-			FileWriter lifetimeResourceHomeFW = new FileWriter(lifetimeResourceHomeF);
-			lifetimeResourceHomeFW.write(lifetimeResourceHomeS);
-			lifetimeResourceHomeFW.close();
-
-		} else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
-			ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
-			String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(info, service));
-			File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
-				+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
-				+ File.separator + "resource" + File.separator + "ResourceConstants.java");
-
-			FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
-			resourceContanstsFW.write(resourceContanstsS);
-			resourceContanstsFW.close();
-
 			BaseResourceTemplate baseResourceT = new BaseResourceTemplate();
 			String baseResourceS = baseResourceT.generate(new SpecificServiceInformation(info, service));
 			File baseResourceF = new File(srcDir.getAbsolutePath() + File.separator
@@ -200,6 +166,49 @@ public class SkeletonSourceCreator {
 			FileWriter baseResourceHomeFW = new FileWriter(baseResourceHomeF);
 			baseResourceHomeFW.write(baseResourceHomeS);
 			baseResourceHomeFW.close();
+
+		} else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE)) {
+			ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();
+			String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(info, service));
+			File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+				+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+				+ File.separator + "resource" + File.separator + "ResourceConstants.java");
+
+			FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+			resourceContanstsFW.write(resourceContanstsS);
+			resourceContanstsFW.close();
+
+			LifetimeResourceBaseTemplate lifetimeResourceBaseT = new LifetimeResourceBaseTemplate();
+			String lifetimeResourceBaseS = lifetimeResourceBaseT
+				.generate(new SpecificServiceInformation(info, service));
+			File lifetimeResourceBaseF = new File(srcDir.getAbsolutePath() + File.separator
+				+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+				+ File.separator + "resource" + File.separator + "BaseResourceBase.java");
+
+			FileWriter lifetimeResourceBaseFW = new FileWriter(lifetimeResourceBaseF);
+			lifetimeResourceBaseFW.write(lifetimeResourceBaseS);
+			lifetimeResourceBaseFW.close();
+
+			LifetimeResourceTemplate lifetimeResourceT = new LifetimeResourceTemplate();
+			String lifetimeResourceS = lifetimeResourceT.generate(new SpecificServiceInformation(info, service));
+			File lifetimeResourceF = new File(srcDir.getAbsolutePath() + File.separator
+				+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+				+ File.separator + "resource" + File.separator + "BaseResource.java");
+
+			FileWriter lifetimeResourceFW = new FileWriter(lifetimeResourceF);
+			lifetimeResourceFW.write(lifetimeResourceS);
+			lifetimeResourceFW.close();
+
+			LifetimeResourceHomeTemplate lifetimeResourceHomeT = new LifetimeResourceHomeTemplate();
+			String lifetimeResourceHomeS = lifetimeResourceHomeT
+				.generate(new SpecificServiceInformation(info, service));
+			File lifetimeResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
+				+ CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+				+ File.separator + "resource" + File.separator + "BaseResourceHome.java");
+
+			FileWriter lifetimeResourceHomeFW = new FileWriter(lifetimeResourceHomeF);
+			lifetimeResourceHomeFW.write(lifetimeResourceHomeS);
+			lifetimeResourceHomeFW.close();
 
 		} else if (service.getResourceFrameworkType().equals(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE)) {
 			ResourceConstantsTemplate resourceContanstsT = new ResourceConstantsTemplate();

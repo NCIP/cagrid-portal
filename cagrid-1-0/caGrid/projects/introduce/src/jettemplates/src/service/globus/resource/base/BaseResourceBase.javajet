@@ -1,0 +1,45 @@
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus.resource.base" class="BaseResourceBaseTemplate" imports="gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*"%>
+<%  gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
+  	Properties properties = arguments.getIntroduceServiceProperties();
+	ResourcePropertiesListType metadataList = arguments.getService().getResourcePropertiesList();
+	String serviceName = properties.getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+	String modifiedServiceName = serviceName;
+	if(serviceName.endsWith("Service")){
+		modifiedServiceName = serviceName.substring(0,serviceName.length()-"Service".length());
+	}
+%>
+package <%=arguments.getService().getPackageName()%>.service.globus.resource;
+
+import java.util.Calendar;
+
+import org.globus.wsrf.Resource;
+import org.globus.wsrf.ResourceIdentifier;
+import org.globus.wsrf.jndi.Initializable;
+
+public abstract class BaseResourceBase implements Resource, ResourceIdentifier, Initializable {
+
+	/** the identifier of this resource... should be unique in the service */
+	private Object id;
+
+
+	/**
+	 * @see org.globus.wsrf.ResourceIdentifier#getID()
+	 */
+	public Object getID() {
+		return this.id;
+	}
+
+
+	/**
+	 * @see org.globus.wsrf.jndi.Initializable#initialize()
+	 */
+	public final void initialize() throws Exception {
+		// TODO: do any init here if you need to (post creation)
+
+		// TODO: pick some way to get a unique id for this resource (maybe some
+		// db id)
+		this.id = new Integer(hashCode());
+	}
+	
+
+}
