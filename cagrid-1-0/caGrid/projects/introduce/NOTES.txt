@@ -4,10 +4,19 @@ Exceptions will now be in the <serviceNamespace>.stubs.types package and no the 
 
 assumption is made that when a method is imported from a wsdl that all the messages for that method are of that wsdl's namespace....
 
+================================================================================================
+
+wish list:
+
+componentized resource building by selecting features or interfaces to implement. 
+
+new extensions architecture to support callbacks for different areas of editing.
 
 ==============================================================================================================================
 
 To Do:
+
+Test the lifetime resource
 
 if provider is checked then authorrization needs to be disable.
 
