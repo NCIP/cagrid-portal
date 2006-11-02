@@ -284,7 +284,7 @@ public class EVSGridServiceClient extends ServiceSecurityClient implements EVSGr
         return boxedResult.getDescLogicConcept();
       }
     }
-	public gov.nih.nci.evs.domain.MetaThesaurusConcept[] searchMetaThesaurus(gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParams) throws RemoteException {
+	public gov.nih.nci.evs.domain.MetaThesaurusConcept[] searchMetaThesaurus(gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParams) throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"searchMetaThesaurus");
         gov.nih.nci.cagrid.evsgridservice.stubs.SearchMetaThesaurusRequest params = new gov.nih.nci.cagrid.evsgridservice.stubs.SearchMetaThesaurusRequest();

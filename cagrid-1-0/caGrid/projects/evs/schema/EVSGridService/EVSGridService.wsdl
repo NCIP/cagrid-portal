@@ -166,6 +166,9 @@
   <message name="SearchSourceByCodeResponse">
     <part name="parameters" element="tns:SearchSourceByCodeResponse" />
   </message>
+  <message name="InvalidInputExceptionFaultMessage">
+    <part name="fault" element="ns3:InvalidInputException" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -187,6 +190,7 @@
     <operation name="searchMetaThesaurus">
       <input message="tns:SearchMetaThesaurusRequest" wsa:Action="http://cagrid.nci.nih.gov/EVSGridService/SearchMetaThesaurusRequest" />
       <output message="tns:SearchMetaThesaurusResponse" wsa:Action="http://cagrid.nci.nih.gov/EVSGridService/SearchMetaThesaurusResponse" />
+      <fault name="InvalidInputException" message="tns:InvalidInputExceptionFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/EVSGridService/InvalidInputExceptionFaultMessage" />
     </operation>
     <operation name="getHistoryRecords">
       <input message="tns:GetHistoryRecordsRequest" wsa:Action="http://cagrid.nci.nih.gov/EVSGridService/GetHistoryRecordsRequest" />

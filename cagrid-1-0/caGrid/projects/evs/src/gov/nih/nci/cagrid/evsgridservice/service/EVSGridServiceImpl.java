@@ -4,6 +4,7 @@ import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 import gov.nih.nci.evs.query.EVSQuery;
 import gov.nih.nci.evs.query.EVSQueryImpl;
+import gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType;
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -32,12 +33,11 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
      * @throws RemoteException
      */
 
-    public gov.nih.nci.cagrid.evs.service.DescLogicConceptVocabularyName[] getVocabularyNames() throws RemoteException {
+	public gov.nih.nci.cagrid.evs.service.DescLogicConceptVocabularyName[] getVocabularyNames() throws RemoteException {
         try
         {
             LOG.debug("Inside method:getVocabularyNames. Obtaining connection to caCORE remote instance" +
                     EVSConstants.CACORE_31_URL);
-
 
             //Obtain the Application Service
             ApplicationService appService = ApplicationServiceProvider.getRemoteInstance(EVSConstants.CACORE_31_URL);
@@ -55,7 +55,6 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
 
             // Return data
             gov.nih.nci.cagrid.evs.service.DescLogicConceptVocabularyName[] names = null;
-
 
            if ( evsResults != null && evsResults.size() > 0)
            {
@@ -99,7 +98,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
      * @throws RemoteException
      */
 
-    public gov.nih.nci.evs.domain.Source[] getMetaSources() throws RemoteException {
+	public gov.nih.nci.evs.domain.Source[] getMetaSources() throws RemoteException {
 
         try
         {
@@ -166,7 +165,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
      * @throws RemoteException
      */
 
-    public gov.nih.nci.evs.domain.DescLogicConcept[] searchDescLogicConcept(gov.nih.nci.cagrid.evs.service.EVSDescLogicConceptSearchParams eVSDescLogicConceptSearchParams) throws RemoteException {
+	public gov.nih.nci.evs.domain.DescLogicConcept[] searchDescLogicConcept(gov.nih.nci.cagrid.evs.service.EVSDescLogicConceptSearchParams eVSDescLogicConceptSearchParams) throws RemoteException {
         try
         {
 
@@ -179,10 +178,8 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
                 // Or do not catch the exception!
             }
 
-
             LOG.debug("Inside method:getMetaSources. Obtaining connection to caCORE remote instance" +
                     EVSConstants.CACORE_31_URL);
-
 
             //Obtain the Application Service
             ApplicationService appService = ApplicationServiceProvider.getRemoteInstance(EVSConstants.CACORE_31_URL);
@@ -199,7 +196,6 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
                                            eVSDescLogicConceptSearchParams.getSearchTerm(),
                                            eVSDescLogicConceptSearchParams.getLimit()
                                         );
-
 
             List evsResults 	= new ArrayList();
 
@@ -246,18 +242,15 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
      * @throws RemoteException
      */
 
-    public gov.nih.nci.evs.domain.MetaThesaurusConcept[] searchMetaThesaurus(gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParams) throws RemoteException {
+	public gov.nih.nci.evs.domain.MetaThesaurusConcept[] searchMetaThesaurus(gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParams) throws RemoteException,
+            gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType {
         try
         {
 
             LOG.debug("Inside method:searchMetaThesaurus:Testing input");
 
-            if (!isEVSMetaThesaurusSearchParamsValid(eVSMetaThesaurusSearchParams))
-            {
-                return null;
-                // Throw Exception: See if we can throw proper exception indicating what the root cause is?
-                // Or do not catch the exception!
-            }
+            // This will throw Exception if invalid
+            isEVSMetaThesaurusSearchParamsValid(eVSMetaThesaurusSearchParams);
 
             LOG.debug("Inside method:getMetaSources. Obtaining connection to caCORE remote instance" +
                     EVSConstants.CACORE_31_URL);
@@ -314,6 +307,12 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
             throw new ServiceException("Error in connecting to the caCORE Service. Please " +
                     "check that the following URI is working correctly: " + EVSConstants.CACORE_31_URL, re);
         }
+        catch(gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType ie)
+        {
+            // Just throw the exception
+            throw ie;
+
+        }
         catch(Exception e)
         {
             LOG.error("Exception while searching: "+ e.getMessage());
@@ -332,7 +331,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
      * @throws RemoteException
      */
 
-    public gov.nih.nci.evs.domain.HistoryRecord[] getHistoryRecords(gov.nih.nci.cagrid.evs.service.EVSHistoryRecordsSearchParams eVSHistoryRecordsSearchParams) throws RemoteException {
+	public gov.nih.nci.evs.domain.HistoryRecord[] getHistoryRecords(gov.nih.nci.cagrid.evs.service.EVSHistoryRecordsSearchParams eVSHistoryRecordsSearchParams) throws RemoteException {
         try
         {
 
@@ -408,7 +407,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
      * @throws RemoteException
      */
 
-    public gov.nih.nci.evs.domain.MetaThesaurusConcept[] searchSourceByCode(gov.nih.nci.cagrid.evs.service.EVSSourceSearchParams eVSSourceSearchParams) throws RemoteException {
+	public gov.nih.nci.evs.domain.MetaThesaurusConcept[] searchSourceByCode(gov.nih.nci.cagrid.evs.service.EVSSourceSearchParams eVSSourceSearchParams) throws RemoteException {
         try
         {
 
@@ -420,7 +419,6 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
                 // Throw Exception: See if we can throw proper exception indicating what the root cause is?
                 // Or do not catch the exception!
             }
-
 
             LOG.debug("Inside method:searchSourceByCode. Obtaining connection to caCORE remote instance" +
                     EVSConstants.CACORE_31_URL);
@@ -550,25 +548,24 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
 
     }
 
-
-
     /**
      * Test that <code>gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams</code> input used to
      * search for EVS Meta Thesaurus concepts <code></code> from EVS is valid
      * @param eVSMetaThesaurusSearchParams instance of <code>gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams</code> class
-     * @return true if input is valid else False
      */
 
-    public boolean isEVSMetaThesaurusSearchParamsValid(gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParams)
+    public void isEVSMetaThesaurusSearchParamsValid(gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParams)
+            throws gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType
     {
-        boolean bRet = true;
 
         // Check input validity
         if (eVSMetaThesaurusSearchParams == null )
         {
             // Throw appropriate exception; i.e. invalid inputs.
             LOG.warn("Invalid inputs: EVSMetaThesaurusSearchParams object cannot be NULL");
-            bRet = false;
+            InvalidInputExceptionType fault = new InvalidInputExceptionType();
+            fault.setFaultString("Invalid inputs: EVSMetaThesaurusSearchParams object cannot be NULL");
+            throw fault;
         }
 
         // Search Term: cannot be empty
@@ -577,8 +574,9 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
              eVSMetaThesaurusSearchParams.getSearchTerm().length() == 0)
         {
             // Throw  appropriate exception; invalid attribute: search term should be specified
-            LOG.warn("Invalid inputs: EVSMetaThesaurusSearchParams attribute <searchTerm> has to be specified");
-            bRet = false;
+            InvalidInputExceptionType fault = new InvalidInputExceptionType();
+            fault.setFaultString("Invalid inputs: EVSMetaThesaurusSearchParams attribute <searchTerm> has to be specified");
+            throw fault;
         }
         else
         {
@@ -596,7 +594,11 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
                             "<" + eVSMetaThesaurusSearchParams.getSearchTerm() + ">" + " does not follow EVS" +
                             "rules (either starting with C or maximum length of  " + EVSConstants.META_CUI_MAX_LENGTH );
 
-                    bRet = false;
+                    InvalidInputExceptionType fault = new InvalidInputExceptionType();
+                    fault.setFaultString("Invalid inputs<searchTerm>: EVSMetaThesaurusSearchParams attribute " +
+                            "<" + eVSMetaThesaurusSearchParams.getSearchTerm() + ">" + " does not follow EVS" +
+                            "rules (either starting with C or maximum length of  " + EVSConstants.META_CUI_MAX_LENGTH);
+                    throw fault;
                 }
             }
         }
@@ -608,7 +610,12 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
             LOG.warn("Invalid inputs: EVSMetaThesaurusSearchParams attribute <limit> has to be " +
                     "greater than zero");
 
-            bRet = false;
+            InvalidInputExceptionType fault = new InvalidInputExceptionType();
+            fault.setFaultString("Invalid inputs: EVSMetaThesaurusSearchParams attribute <limit> has to be " +
+                    "greater than zero");
+
+            throw fault;
+
         }
 
         //  Check that the  source is correct!
@@ -619,9 +626,16 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
             LOG.warn("Invalid inputs<source>: EVSMetaThesaurusSearchParams  attribute " +
                     "<" + eVSMetaThesaurusSearchParams.getSource() + ">" + " is not supported " +
                     "by EVS API");
-           bRet = false;
+
+            InvalidInputExceptionType fault = new InvalidInputExceptionType();
+            fault.setFaultString("Invalid inputs<source>: EVSMetaThesaurusSearchParams  attribute " +
+                    "<" + eVSMetaThesaurusSearchParams.getSource() + ">" + " is not supported " +
+                    "by EVS API");
+
+            throw fault;
         }
-        return (bRet);
+
+        return;        
     }
 
     /**
@@ -662,7 +676,6 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
                     "<" + eVSSourceSearchParams.getCode() + ">" + " is not valid ");
             bRet = false;
         }
-
 
         return (bRet);
 
@@ -752,11 +765,9 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
            bRet = false;
         }
 
-
         return bRet;
 
     }
-
 
 }
 
