@@ -14,6 +14,7 @@ import org.globus.wsrf.ResourceException;
 
 public class BaseResource extends BaseResourceBase {
 
+
    	/**
 	* This is the callback to destroy this resource. If anything needs to be cleaned up
 	* when this resource is destroyed it should be done here.

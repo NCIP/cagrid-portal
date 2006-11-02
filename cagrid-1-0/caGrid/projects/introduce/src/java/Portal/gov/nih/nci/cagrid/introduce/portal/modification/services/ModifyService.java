@@ -339,10 +339,10 @@ public class ModifyService extends JDialog {
 	private JComboBox getResourceFrameworkTypeComboBox() {
 		if (resourceFrameworkTypeComboBox == null) {
 			resourceFrameworkTypeComboBox = new JComboBox();
+			resourceFrameworkTypeComboBox.addItem(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE);
 			resourceFrameworkTypeComboBox.addItem(IntroduceConstants.INTRODUCE_BASE_RESOURCE);
 			resourceFrameworkTypeComboBox.addItem(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE);
 			resourceFrameworkTypeComboBox.addItem(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE);
-			resourceFrameworkTypeComboBox.addItem(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE);
 			if (!isNew) {
 				resourceFrameworkTypeComboBox.setEditable(false);
 				resourceFrameworkTypeComboBox.setEnabled(false);

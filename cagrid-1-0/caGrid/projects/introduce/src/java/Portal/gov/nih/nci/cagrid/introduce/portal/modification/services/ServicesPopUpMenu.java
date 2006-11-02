@@ -67,7 +67,7 @@ public class ServicesPopUpMenu extends JPopupMenu {
 		ServiceType service = new ServiceType();
 		service.setMethods(new MethodsType());
 		service.setResourcePropertiesList(new ResourcePropertiesListType());
-		service.setResourceFrameworkType(IntroduceConstants.INTRODUCE_BASE_RESOURCE);
+		service.setResourceFrameworkType(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE);
 		// service.setServiceSecurity(new ServiceSecurity());
 		service.setMethods(new MethodsType());
 		ServiceTypeTreeNode newNode = node.addService(service);

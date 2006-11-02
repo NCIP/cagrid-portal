@@ -45,10 +45,6 @@ public abstract class BaseResourceBase implements Resource, RemoveCallback, Reso
 	 * @see org.globus.wsrf.jndi.Initializable#initialize()
 	 */
 	public final void initialize() throws Exception {
-		// TODO: do any init here if you need to (post creation)
-
-		// TODO: pick some way to get a unique id for this resource (maybe some
-		// db id)
 		this.id = new Integer(hashCode());
 
 		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);

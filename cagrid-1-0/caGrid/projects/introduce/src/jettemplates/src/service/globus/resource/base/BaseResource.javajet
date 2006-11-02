@@ -15,4 +15,13 @@ import org.globus.wsrf.jndi.Initializable;
 
 public class BaseResource extends BaseResourceBase {
 
+	
+   	/**
+	* This is the callback to destroy this resource. If anything needs to be cleaned up
+	* when this resource is destroyed it should be done here.
+	*/
+    public void remove() throws ResourceException {
+		// TODO Implement me
+	}
+
 }
