@@ -229,8 +229,8 @@ public class ClassBrowserPanel extends JPanel {
 			addJarButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					browseForJars();
-					populateClassDropdown();
 					fireAdditionalJarsChanged();
+					populateClassDropdown();
 				}
 			});
 		}
