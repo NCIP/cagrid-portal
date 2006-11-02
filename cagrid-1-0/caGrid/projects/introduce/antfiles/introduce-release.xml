@@ -3,6 +3,31 @@
 <!-- ======================================================================= -->
 <project name="introduce_release" basedir="." default="usage">
 	
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="${basedir}/lib/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+	
+	<property name="introduce.extension.projects.list" value="cabigextensions, cadsr, data, bulkDataTransfer" />
+	<property name="introduce.extensions.dir" value="${basedir}/tmp/extensions" />
+	
+	
+	<!-- ============================================================== -->
+	<!-- Installs the Introduce Extensions                              -->
+	<!-- ============================================================== -->
+	<target name="releaseIntroduceExtensions" depends="prepare">
+		<mkdir dir="tmp"/>
+		<for list="${introduce.extension.projects.list}" parallel="true" param="project.name" trim="true">
+			<sequential>
+				<echo message="Installing Introduce Extensions from @{project.name}." />
+				<ant dir="${basedir}/../@{project.name}" inheritAll="false" antfile="build.xml" target="installIntroduceExtensions">
+					<property name="introduce.extensions.dir" value="${introduce.extensions.dir}/@{project.name}" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+	
 	<!-- =================================================================== -->
 	<!-- Builds the project and the docs for a release                       -->
 	<!-- =================================================================== -->
@@ -16,9 +41,11 @@
 	<!-- Creates the installer                                               -->
 	<!-- =================================================================== -->
 	<target name="createInstaller" description="Creates the installler" depends="all,javadoc">
+		<delete dir="tmp/installer"/>
+		<mkdir dir="tmp/installer"/>
 		<izpack input="${basedir}/install/install.xml"
-			output="${jars.prefixname}installer.jar"
-			installerType="standard"
+			output="installer/${jars.prefixname}installer.jar"
+			installerType="web"
 			basedir="."
 			izPackDir="${basedir}/install"/>
 	</target>
