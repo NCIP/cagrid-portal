@@ -50,6 +50,8 @@ public class EvsCheckServiceStep
         // test the NCI Thesaurus.
         testMetaThesaurus();
 
+       testSearchMetaThesaurusConcept();
+
         // test obtaining history record
         testGetHistoryRecords();
 
@@ -337,29 +339,20 @@ public class EvsCheckServiceStep
     {
         System.out.println("Testing:searchMetaThesaurusConcept!");
 
+        // Test passing incorrect inputs.
         EVSMetaThesaurusSearchParams evsMetaThesaurusSearchParam = new EVSMetaThesaurusSearchParams();
         evsMetaThesaurusSearchParam.setSearchTerm("lung");
-        evsMetaThesaurusSearchParam.setLimit(2);
-        evsMetaThesaurusSearchParam.setSource("*");
-        evsMetaThesaurusSearchParam.setCui(false);
+        evsMetaThesaurusSearchParam.setLimit(-100);
+        evsMetaThesaurusSearchParam.setSource("");
+        evsMetaThesaurusSearchParam.setCui(true);
         evsMetaThesaurusSearchParam.setShortResponse(false);
         evsMetaThesaurusSearchParam.setScore(false);
 
-
         EVSGridServiceClient client = new EVSGridServiceClient(endpoint);
         MetaThesaurusConcept[] metaConcept = client.searchMetaThesaurus(evsMetaThesaurusSearchParam);
+        assertNull("searchMetaThesaurus is not Null", metaConcept);
 
-        assertNotNull("searchMetaThesaurus returned Null", metaConcept);
-        assertTrue( metaConcept.length > 0);
 
-        if (metaConcept != null && metaConcept.length > 0)
-        {
-            for (int i=0; i < metaConcept.length; i++)
-            {
-                MetaThesaurusConcept meta = metaConcept[i];
-                assertNotNull("MetaThesaurusConcept object is Null", meta);
-            }
-        }
     }
 
     /**
@@ -428,6 +421,15 @@ public class EvsCheckServiceStep
             }
         }
 
+
+        // Test incorrect values
+        evsHistoryParams.setVocabularyName("nci_Thesaurus");
+        evsHistoryParams.setConceptCode("C16612");
+        historys = client.getHistoryRecords(evsHistoryParams);
+        assertNull("History[] return value is not null!", historys);
+
+
+
     }
 
     /**
@@ -454,7 +456,6 @@ public class EvsCheckServiceStep
         assertNotNull("searchSourceByCode returned Null", metaConcept2);
         assertTrue( metaConcept2.length > 0);
 
-
         if (metaConcept2 != null && metaConcept2.length > 0)
         {
             for (int i=0; i < metaConcept2.length; i++)
@@ -463,6 +464,18 @@ public class EvsCheckServiceStep
                 assertNotNull("MetaThesaurusConcept object is Null", meta);
             }
         }
+
+        // Test invalid inputs
+        evsSourceParam.setCode("NOCODE");
+        evsSourceParam.setSourceAbbreviation("aOD2000");
+        metaConcept2 = client.searchSourceByCode(evsSourceParam);
+
+        assertNull("searchSourceByCode did not return Null", metaConcept2);
+
+
+
+
+
     }
 
     /**
