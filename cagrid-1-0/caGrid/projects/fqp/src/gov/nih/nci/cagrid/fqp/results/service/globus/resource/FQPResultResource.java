@@ -4,6 +4,8 @@ import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 
 import java.util.Calendar;
 
+import org.apache.axis.components.uuid.UUIDGen;
+import org.apache.axis.components.uuid.UUIDGenFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.globus.wsrf.RemoveCallback;
@@ -17,7 +19,9 @@ import org.globus.wsrf.ResourcePropertySet;
 import org.globus.wsrf.impl.ReflectionResourceProperty;
 import org.globus.wsrf.impl.SimpleResourcePropertyMetaData;
 import org.globus.wsrf.impl.SimpleResourcePropertySet;
+import org.globus.wsrf.impl.security.descriptor.ResourceSecurityDescriptor;
 import org.globus.wsrf.jndi.Initializable;
+import org.globus.wsrf.security.SecureResource;
 
 
 public class FQPResultResource
@@ -27,9 +31,14 @@ public class FQPResultResource
 		ResourceIdentifier,
 		ResourceLifetime,
 		ResourceProperties,
+		SecureResource,
 		Initializable {
 
 	protected static Log LOG = LogFactory.getLog(FQPResultResource.class.getName());
+	private static final UUIDGen UUIDGEN = UUIDGenFactory.getUUIDGen();
+
+	// Resource security descriptor for this resouce
+	private ResourceSecurityDescriptor resourceSecDesc;
 
 	/** the identifier of this resource... should be unique in the service */
 	private Object id;
@@ -57,11 +66,8 @@ public class FQPResultResource
 	 * @see org.globus.wsrf.jndi.Initializable#initialize()
 	 */
 	public void initialize() throws Exception {
-		// TODO: do any init here if you need to (post creation)
-
-		// TODO: pick some way to get a unique id for this resource (maybe some
-		// db id)
-		this.id = new Integer(hashCode());
+		// use a new UUID as the unique identifier for this resource
+		this.id = UUIDGEN.nextUUID();
 
 		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);
 
@@ -72,6 +78,8 @@ public class FQPResultResource
 		// system
 		prop = new ReflectionResourceProperty(SimpleResourcePropertyMetaData.CURRENT_TIME, this);
 		this.propSet.add(prop);
+
+		LOG.info("Resource (" + getID() + ") being created.");
 	}
 
 
@@ -109,6 +117,16 @@ public class FQPResultResource
 	 */
 	public ResourcePropertySet getResourcePropertySet() {
 		return propSet;
+	}
+
+
+	public ResourceSecurityDescriptor getSecurityDescriptor() {
+		return this.resourceSecDesc;
+	}
+
+
+	public void setSecurityDescriptor(ResourceSecurityDescriptor desc) {
+		this.resourceSecDesc = desc;
 	}
 
 

@@ -17,7 +17,7 @@
         </parameter>
         <parameter>
           <name>resourceKeyType</name>
-          <value>java.lang.Integer</value>
+          <value>java.lang.String</value>
         </parameter>
       </resourceParams>
     </resource>

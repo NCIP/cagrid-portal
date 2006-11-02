@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
 import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
+import gov.nih.nci.cagrid.fqp.common.SecurityUtils;
 import gov.nih.nci.cagrid.fqp.processor.FederatedQueryEngine;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
 import gov.nih.nci.cagrid.fqp.results.service.globus.resource.FQPResultResource;
@@ -21,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.globus.wsrf.ResourceKey;
 import org.globus.wsrf.impl.work.WorkManagerImpl;
+import org.globus.wsrf.security.SecurityManager;
 import org.globus.wsrf.utils.AddressingUtils;
 
 import commonj.work.Work;
@@ -113,11 +115,27 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 			throw helper.getFault();
 		}
 
+		// configure security on the resource so only the creator of the
+		// resource (whoever is executing this) can operate on it
+		try {
+			//may be null if no current caller
+			fqpResultResource.setSecurityDescriptor(SecurityUtils.createResultsResourceSecurityDescriptor());
+		} catch (Exception e) {
+			LOG.error("Problem configuring security on resource:" + e.getMessage(), e);
+			InternalErrorFault fault = new InternalErrorFault();
+			fault.setFaultString("Problem configuring security on resource:" + e.getMessage());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			throw helper.getFault();
+		}
+
+		LOG.info("Resource created for, and owned by: " + SecurityManager.getManager().getCaller());
+
 		// set initial status
 		fqpResultResource.setStatusMessage("Queued for processing");
 		// set to terminate after lease expires
 		Calendar termTime = Calendar.getInstance();
-		termTime.roll(Calendar.MINUTE, getLeaseDurationInMinutes());
+		termTime.add(Calendar.MINUTE, getLeaseDurationInMinutes());
 		fqpResultResource.setTerminationTime(termTime);
 
 		// create a worker thread to execute query
