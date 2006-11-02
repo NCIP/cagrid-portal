@@ -341,17 +341,28 @@ public class EvsCheckServiceStep
 
         // Test passing incorrect inputs.
         EVSMetaThesaurusSearchParams evsMetaThesaurusSearchParam = new EVSMetaThesaurusSearchParams();
-        evsMetaThesaurusSearchParam.setSearchTerm("lung");
-        evsMetaThesaurusSearchParam.setLimit(-100);
-        evsMetaThesaurusSearchParam.setSource("");
+        evsMetaThesaurusSearchParam.setSearchTerm("");
+        evsMetaThesaurusSearchParam.setLimit(100);
+        evsMetaThesaurusSearchParam.setSource("*");
         evsMetaThesaurusSearchParam.setCui(true);
         evsMetaThesaurusSearchParam.setShortResponse(false);
         evsMetaThesaurusSearchParam.setScore(false);
 
-        EVSGridServiceClient client = new EVSGridServiceClient(endpoint);
-        MetaThesaurusConcept[] metaConcept = client.searchMetaThesaurus(evsMetaThesaurusSearchParam);
-        assertNull("searchMetaThesaurus is not Null", metaConcept);
+        boolean bInvalid = false;
 
+
+        EVSGridServiceClient client = new EVSGridServiceClient(endpoint);
+        try
+        {
+            MetaThesaurusConcept[] metaConcept = client.searchMetaThesaurus(evsMetaThesaurusSearchParam);
+        }
+        catch(Exception e)
+        {
+            //gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType
+            bInvalid = true;
+        }
+
+        assertTrue(bInvalid);
 
     }
 
