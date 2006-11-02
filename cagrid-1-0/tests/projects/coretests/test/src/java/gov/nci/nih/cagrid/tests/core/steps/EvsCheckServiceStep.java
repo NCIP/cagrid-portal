@@ -356,13 +356,14 @@ public class EvsCheckServiceStep
         {
             MetaThesaurusConcept[] metaConcept = client.searchMetaThesaurus(evsMetaThesaurusSearchParam);
         }
-        catch(Exception e)
+        catch(gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType e)
         {
             //gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType
             bInvalid = true;
         }
 
-        assertTrue(bInvalid);
+        assertTrue("Invalid input did not " +
+                "throw <gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType> exception", bInvalid);
 
     }
 
@@ -434,10 +435,22 @@ public class EvsCheckServiceStep
 
 
         // Test incorrect values
-        evsHistoryParams.setVocabularyName("nci_Thesaurus");
-        evsHistoryParams.setConceptCode("C16612");
-        historys = client.getHistoryRecords(evsHistoryParams);
-        assertNull("History[] return value is not null!", historys);
+
+        boolean bInvalid = false;
+
+        try
+        {
+            evsHistoryParams.setVocabularyName("nci_Thesaurus");
+            evsHistoryParams.setConceptCode("C16612");
+            historys = client.getHistoryRecords(evsHistoryParams);
+        }
+        catch(gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType e)
+        {
+            bInvalid = true;
+        }
+
+        assertTrue("Invalid input did not " +
+                "throw <gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType> exception", bInvalid);
 
 
 
@@ -477,14 +490,21 @@ public class EvsCheckServiceStep
         }
 
         // Test invalid inputs
-        evsSourceParam.setCode("NOCODE");
-        evsSourceParam.setSourceAbbreviation("aOD2000");
-        metaConcept2 = client.searchSourceByCode(evsSourceParam);
+            boolean bInvalid = false;
+        try
+        {
+            evsSourceParam.setCode("NOCODE");
+            evsSourceParam.setSourceAbbreviation("aOD2000");
+            metaConcept2 = client.searchSourceByCode(evsSourceParam);
 
-        assertNull("searchSourceByCode did not return Null", metaConcept2);
+        }
+        catch(gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType e)
+        {
+            bInvalid = true;
+        }
 
-
-
+        assertTrue("Invalid input did not " +
+            "throw <gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType> exception", bInvalid);
 
 
     }
@@ -499,17 +519,29 @@ public class EvsCheckServiceStep
         System.out.println("testing:searchSourceByCode!");
 
         EVSGridServiceClient client = new EVSGridServiceClient(endpoint);
-        MetaThesaurusConcept[] metaConcept = client.searchSourceByCode(evsSourceParams);
+        MetaThesaurusConcept[] metaConcept = null;
 
-        if (metaConcept != null && metaConcept.length > 0)
+        try
         {
-            for (int i=0; i < metaConcept.length; i++)
+           metaConcept = client.searchSourceByCode(evsSourceParams);
+
+            if (metaConcept != null && metaConcept.length > 0)
             {
-                MetaThesaurusConcept meta = metaConcept[i];
-                assertNotNull("MetaThesaurusConcept object is Null", meta);
+                for (int i=0; i < metaConcept.length; i++)
+                {
+                    MetaThesaurusConcept meta = metaConcept[i];
+                    assertNotNull("MetaThesaurusConcept object is Null", meta);
+                }
             }
+
+        }
+        catch(Exception e)
+        {
+            System.out.println("Is exception valid: "+ e.getMessage());
         }
         return ((metaConcept != null) ? metaConcept[0] : null);
+
+
     }
 
 
