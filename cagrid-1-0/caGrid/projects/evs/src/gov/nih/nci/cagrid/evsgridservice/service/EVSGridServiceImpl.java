@@ -170,6 +170,16 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
         try
         {
 
+            LOG.debug("Inside method:searchDescLogicConcept:Testing input");
+
+            if (!isEVSDescLogicConceptSearchParamsValid(eVSDescLogicConceptSearchParams))
+            {
+                return null;
+                // Throw Exception: See if we can throw proper exception indicating what the root cause is?
+                // Or do not catch the exception!
+            }
+
+
             LOG.debug("Inside method:getMetaSources. Obtaining connection to caCORE remote instance" +
                     EVSConstants.CACORE_31_URL);
 
@@ -239,6 +249,16 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
     public gov.nih.nci.evs.domain.MetaThesaurusConcept[] searchMetaThesaurus(gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParams) throws RemoteException {
         try
         {
+
+            LOG.debug("Inside method:searchMetaThesaurus:Testing input");
+
+            if (!isEVSMetaThesaurusSearchParamsValid(eVSMetaThesaurusSearchParams))
+            {
+                return null;
+                // Throw Exception: See if we can throw proper exception indicating what the root cause is?
+                // Or do not catch the exception!
+            }
+
             LOG.debug("Inside method:getMetaSources. Obtaining connection to caCORE remote instance" +
                     EVSConstants.CACORE_31_URL);
 
@@ -315,7 +335,17 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
     public gov.nih.nci.evs.domain.HistoryRecord[] getHistoryRecords(gov.nih.nci.cagrid.evs.service.EVSHistoryRecordsSearchParams eVSHistoryRecordsSearchParams) throws RemoteException {
         try
         {
-            LOG.debug("Inside method:getMetaSources. Obtaining connection to caCORE remote instance" +
+
+            LOG.debug("Inside method:getHistoryRecords:Testing input");
+
+            if (!isEVSHistoryRecordsSearchParamsValid(eVSHistoryRecordsSearchParams))
+            {
+                return null;
+                // Throw Exception: See if we can throw proper exception indicating what the root cause is?
+                // Or do not catch the exception!
+            }
+
+            LOG.debug("Inside method:getHistoryRecords. Obtaining connection to caCORE remote instance" +
                     EVSConstants.CACORE_31_URL);
 
             //Obtain the Application Service
@@ -346,15 +376,6 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
                 LOG.debug("Returning Result count: " + evsResults.size());
                 historys = new gov.nih.nci.evs.domain.HistoryRecord[evsResults.size()];
                 System.arraycopy(evsResults.toArray(), 0, historys, 0, evsResults.size());
-
-/*
-                for ( int i=0; i < evsResults.size();i++)
-                {
-                    gov.nih.nci.evs.domain.HistoryRecord history = (gov.nih.nci.evs.domain.HistoryRecord) evsResults.get(i);
-                    historys[i] = history;
-                }
-
-*/
             }
             else
             {
@@ -390,7 +411,18 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
     public gov.nih.nci.evs.domain.MetaThesaurusConcept[] searchSourceByCode(gov.nih.nci.cagrid.evs.service.EVSSourceSearchParams eVSSourceSearchParams) throws RemoteException {
         try
         {
-            LOG.debug("Inside method:getMetaSources. Obtaining connection to caCORE remote instance" +
+
+            LOG.debug("Inside method:searchSourceByCode:Testing input");
+
+            if (!isEVSSourceSearchParamsValid(eVSSourceSearchParams))
+            {
+                return null;
+                // Throw Exception: See if we can throw proper exception indicating what the root cause is?
+                // Or do not catch the exception!
+            }
+
+
+            LOG.debug("Inside method:searchSourceByCode. Obtaining connection to caCORE remote instance" +
                     EVSConstants.CACORE_31_URL);
 
             //Obtain the Application Service
@@ -443,6 +475,288 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
             throw new RemoteException("Catch all exception" + e.getMessage());
         }
     }
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//  helper methods
+//
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Test that the source is supported by Meta Thesaurus
+     */
+
+    private boolean isMetaSourceValid(String sourceAbbreviation)
+    {
+        boolean bRet = false;
+
+        // All Sources abbreviation
+        if ( EVSConstants.META_ALL_SOURCES.equals(sourceAbbreviation))
+                return true;
+
+        // Get list of Meta Sources
+        try
+        {
+            gov.nih.nci.evs.domain.Source[] sources = getMetaSources();
+
+            if (sources != null && sources.length >0 )
+            {
+                // If the source Abbrviation matches the one in the list, return True
+                for (int i=0; i < sources.length; i++)
+                {
+                    if ( sources[i].getAbbreviation().equals(sourceAbbreviation))
+                        return true;
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            LOG.error("Exception while searching: "+ e.getMessage());
+            return  bRet;
+        }
+
+        return (bRet);
+
+    }
+
+    /**
+     * Test that the vocabulary requested by the user is supported by EVS
+     */
+    private boolean isVocabularyValid(String vocabularyName)
+    {
+        boolean bRet = false;
+        // Get list of vocabulary names
+        try
+        {
+            gov.nih.nci.cagrid.evs.service.DescLogicConceptVocabularyName[] vocabs = getVocabularyNames();
+
+            if (vocabs != null && vocabs.length >0 )
+            {
+                // If the source Abbrviation matches the one in the list, return True
+                for (int i=0; i < vocabs.length; i++)
+                {
+                    // Check case sensitivity
+                    if ( vocabs[i].getVocabularyName().equals(vocabularyName))
+                        return true;
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            LOG.error("Exception while searching: "+ e.getMessage());
+            return  bRet;
+        }
+
+        return (bRet);
+
+    }
+
+
+
+    /**
+     * Test that <code>gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams</code> input used to
+     * search for EVS Meta Thesaurus concepts <code></code> from EVS is valid
+     * @param eVSMetaThesaurusSearchParams instance of <code>gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams</code> class
+     * @return true if input is valid else False
+     */
+
+    public boolean isEVSMetaThesaurusSearchParamsValid(gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParams)
+    {
+        boolean bRet = true;
+
+        // Check input validity
+        if (eVSMetaThesaurusSearchParams == null )
+        {
+            // Throw appropriate exception; i.e. invalid inputs.
+            LOG.warn("Invalid inputs: EVSMetaThesaurusSearchParams object cannot be NULL");
+            bRet = false;
+        }
+
+        // Search Term: cannot be empty
+
+        if ( eVSMetaThesaurusSearchParams.getSearchTerm() == null ||
+             eVSMetaThesaurusSearchParams.getSearchTerm().length() == 0)
+        {
+            // Throw  appropriate exception; invalid attribute: search term should be specified
+            LOG.warn("Invalid inputs: EVSMetaThesaurusSearchParams attribute <searchTerm> has to be specified");
+            bRet = false;
+        }
+        else
+        {
+            // Check that the Search term is valid (for CUI only)
+            if (eVSMetaThesaurusSearchParams.isCui())
+            {
+                // Test that the search term is constrained by the rules!
+                if (eVSMetaThesaurusSearchParams.getSearchTerm().length() != EVSConstants.META_CUI_MAX_LENGTH ||
+                    !eVSMetaThesaurusSearchParams.getSearchTerm().startsWith(EVSConstants.META_CUI_PREFIX))
+                {
+                    // Throw appropriate exception: Search Term has to follow rules when it is specified to be CUI.
+                    // Max Length:8
+                    // Starts with:C
+                    LOG.warn("Invalid inputs<searchTerm>: EVSMetaThesaurusSearchParams attribute " +
+                            "<" + eVSMetaThesaurusSearchParams.getSearchTerm() + ">" + " does not follow EVS" +
+                            "rules (either starting with C or maximum length of  " + EVSConstants.META_CUI_MAX_LENGTH );
+
+                    bRet = false;
+                }
+            }
+        }
+
+        // Limit: Should be a positive integer
+        if (eVSMetaThesaurusSearchParams.getLimit() <= 0)
+        {
+            // Throw appropriate exception; i.e. invalid input: limit has to be greater than zero
+            LOG.warn("Invalid inputs: EVSMetaThesaurusSearchParams attribute <limit> has to be " +
+                    "greater than zero");
+
+            bRet = false;
+        }
+
+        //  Check that the  source is correct!
+        if (eVSMetaThesaurusSearchParams.getSource() == null ||
+            !isMetaSourceValid(eVSMetaThesaurusSearchParams.getSource()))
+        {
+            //Throw appropriate exception; i.e. invalid Source Abbreviation used
+            LOG.warn("Invalid inputs<source>: EVSMetaThesaurusSearchParams  attribute " +
+                    "<" + eVSMetaThesaurusSearchParams.getSource() + ">" + " is not supported " +
+                    "by EVS API");
+           bRet = false;
+        }
+        return (bRet);
+    }
+
+    /**
+     *  This method tests the validity of the inputs to the API <code>searchSourceByCode</code>
+     *
+     */
+    private boolean isEVSSourceSearchParamsValid(gov.nih.nci.cagrid.evs.service.EVSSourceSearchParams eVSSourceSearchParams)
+    {
+        boolean bRet = true;
+
+        // Check input validity
+        if (eVSSourceSearchParams == null )
+        {
+            // Throw appropriate exception; i.e. invalid inputs.
+            LOG.warn("Invalid inputs: isEVSSourceSearchParamsValid object cannot be NULL");
+            bRet = false;
+        }
+
+        // The source abbreviation has to be valid Source abbreviation. The "*" All sources may not be valid!
+        if (eVSSourceSearchParams.getSourceAbbreviation() == null ||
+            !isMetaSourceValid(eVSSourceSearchParams.getSourceAbbreviation()))
+        {
+            //Throw appropriate exception; i.e. invalid Source Abbreviation used
+            LOG.warn("Invalid inputs<sourceAbbreviation>: EVSSourceSearchParams  attribute " +
+                    "<" + eVSSourceSearchParams.getSourceAbbreviation() + ">" + " is not supported " +
+                    "by EVS API");
+           bRet = false;
+        }
+
+        // The Atom code cannot be null or "NOCODE"
+        if (eVSSourceSearchParams.getCode() == null ||
+            eVSSourceSearchParams.getCode().length() == 0 ||
+            EVSConstants.ATOM_NOCODE_IDENTIFIER.equals(eVSSourceSearchParams.getCode()))
+        {
+
+            // Throw appropriate exception; i.e. invalid code
+            LOG.warn("Invalid inputs<code>: EVSSourceSearchParams  attribute " +
+                    "<" + eVSSourceSearchParams.getCode() + ">" + " is not valid ");
+            bRet = false;
+        }
+
+
+        return (bRet);
+
+    }
+
+    /**
+     *
+     */
+    private boolean isEVSDescLogicConceptSearchParamsValid(gov.nih.nci.cagrid.evs.service.EVSDescLogicConceptSearchParams eVSDescLogicConceptSearchParams)
+    {
+        boolean bRet = true;
+
+        // Check input validity
+        if (eVSDescLogicConceptSearchParams == null )
+        {
+            // Throw appropriate exception; i.e. invalid inputs.
+            LOG.warn("Invalid inputs: EVSDescLogicConceptSearchParams object cannot be NULL");
+            bRet = false;
+        }
+
+        // The limit has to be greater than zero
+        if (eVSDescLogicConceptSearchParams.getLimit() <= 0)
+        {
+            // Throw appropriate exception; i.e. invalid input: limit has to be greater than zero
+            LOG.warn("Invalid inputs: eVSDescLogicConceptSearchParams attribute <limit> has to be " +
+                    "greater than zero");
+
+            bRet = false;
+        }
+
+        // The vocabulary name has to be valid
+        if ( eVSDescLogicConceptSearchParams.getVocabularyName() == null ||
+             eVSDescLogicConceptSearchParams.getVocabularyName().length() == 0 ||
+             !isVocabularyValid(eVSDescLogicConceptSearchParams.getVocabularyName()))
+        {
+            //Throw appropriate exception; i.e. invalid Source Abbreviation used
+            LOG.warn("Invalid inputs<vocabularyName>: EVSDescLogicConceptSearchParams  attribute " +
+                    "<" + eVSDescLogicConceptSearchParams.getVocabularyName() + ">" + " is not supported " +
+                    "by EVS API");
+           bRet = false;
+        }
+
+        return bRet;
+
+    }
+
+    /**
+     *  This method tests that the inputs  <code>bov.nih.nci.cagrid.evs.service.EVSHistoryRecordsSearchParams</code>
+     * to the API <code>getHistoryRecords</code> are valid
+     *
+     */
+
+    private boolean isEVSHistoryRecordsSearchParamsValid(gov.nih.nci.cagrid.evs.service.EVSHistoryRecordsSearchParams eVSHistoryRecordsSearchParams)
+    {
+        boolean bRet = true;
+
+        // Check input validity
+        if (eVSHistoryRecordsSearchParams == null )
+        {
+            // Throw appropriate exception; i.e. invalid inputs.
+            LOG.warn("Invalid inputs: EVSHistoryRecordsSearchParams object cannot be NULL");
+            bRet = false;
+        }
+
+        // Check that the concept code is valid
+        if (eVSHistoryRecordsSearchParams.getConceptCode() == null||
+            eVSHistoryRecordsSearchParams.getConceptCode().length() == 0 ||
+            !eVSHistoryRecordsSearchParams.getConceptCode().startsWith(EVSConstants.META_CUI_PREFIX))
+        {
+            LOG.warn("Invalid inputs<conceptCode>: EVSHistoryRecordsSearchParams attribute " +
+                    "<" + eVSHistoryRecordsSearchParams.getConceptCode() + ">" + " does not follow EVS" +
+                    "rule of starting with C");
+
+            bRet = false;
+
+        }
+
+        // Check that the vocabulay Name is valid
+        if ( eVSHistoryRecordsSearchParams.getVocabularyName() == null ||
+             eVSHistoryRecordsSearchParams.getVocabularyName().length() == 0 ||
+             !isVocabularyValid(eVSHistoryRecordsSearchParams.getVocabularyName()))
+        {
+            //Throw appropriate exception; i.e. invalid Source Abbreviation used
+            LOG.warn("Invalid inputs<vocabularyName>: EVSHistoryRecordsSearchParams  attribute " +
+                    "<" + eVSHistoryRecordsSearchParams.getVocabularyName() + ">" + " is not supported " +
+                    "by EVS API");
+           bRet = false;
+        }
+
+
+        return bRet;
+
+    }
+
 
 }
 
