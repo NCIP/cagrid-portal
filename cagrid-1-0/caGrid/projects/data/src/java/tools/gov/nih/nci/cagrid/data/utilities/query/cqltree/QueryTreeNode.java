@@ -46,7 +46,7 @@ public class QueryTreeNode extends IconTreeNode {
 			add(targetNode);
 		}
 		if (query.getQueryModifier() != null) {
-			//
+			// TODO: mark the query modifier somehow
 		}
 	}
 }

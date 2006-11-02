@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.utilities.query;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.cqlquery.Association;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
@@ -10,6 +11,7 @@ import gov.nih.nci.cagrid.cqlquery.Group;
 import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
 import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
+import gov.nih.nci.cagrid.cqlquery.QueryModifier;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.client.DataServiceClient;
@@ -33,8 +35,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -51,17 +51,21 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
@@ -105,17 +109,27 @@ public class QueryBuilder extends JFrame {
 	private JButton changePredicateButton = null;
 	private JButton changeLogicButton = null;
 	private JButton changeValueButton = null;
-	private JPanel queryPanel = null;
+	private JPanel queryComponentsPanel = null;
 	private JSplitPane mainSplitPane = null;
 	private TypeDisplayPanel typeDisplayPanel = null;
+	private JPanel modifierConfigurationPanel = null;
+	private JCheckBox countResultsCheckBox = null;
+	private JRadioButton distinctAttributeRadioButton = null;
+	private JRadioButton multipleAttributesRadioButton = null;
+	private JList returnedAttributesList = null;
+	private JScrollPane returnedAttributesScrollPane = null;
+	private JButton selectAttributesButton = null;
+	private JTabbedPane queryBuildingTabbedPane = null;
+	private JPanel attributeSelectionPanel = null;
+	private JPanel queryModsPanel = null;
+	private JCheckBox useQueryModsCheckBox = null;
 	
 	private String lastDirectory = null;
 	private transient CqlDomainValidator domainValidator = null;	
-	private transient DomainModel domainModel = null;	
+	private transient DomainModel domainModel = null;
 	
 	public QueryBuilder() {
 		super();
-		lastDirectory = "c:/caGrid/cagrid-1-0/caGrid/projects/data";
 		setTitle("CQL Query Builder");
 		domainValidator = new DomainModelValidator();
 		ErrorDialog.setOwnerFrame(this);
@@ -191,40 +205,6 @@ public class QueryBuilder extends JFrame {
 						}						
 					} else {
 						enableQueryBuildingButtons(new JButton[] {});
-					}
-				}
-			});
-			
-			queryTree.addMouseListener(new MouseAdapter() {
-				public void mousePressed(MouseEvent e) {
-					if (e.isPopupTrigger()) {
-						maybePopup(e);
-					}
-				}
-				
-				
-				public void mouseReleased(MouseEvent e) {
-					if (e.isPopupTrigger()) {
-						maybePopup(e);
-					}
-				}
-				
-				
-				private void maybePopup(MouseEvent e) {
-					java.lang.Object node = 
-						queryTree.getSelectionPath().getLastPathComponent();
-					if (node instanceof TargetTreeNode) {
-						JPopupMenu pop = new JPopupMenu();
-						JMenuItem modsItem = new JMenuItem("Modifications");
-						modsItem.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent ae) {
-								// see if there are existing query mods
-								QueryModifierDialog.getModifier(
-									queryTree.getQueryTreeNode().getQuery().getTarget(), 
-									getTypeDisplayPanel().getTypeTraverser());
-							}
-						});
-						pop.show(queryTree, e.getX(), e.getY());
 					}
 				}
 			});
@@ -308,6 +288,10 @@ public class QueryBuilder extends JFrame {
 						queryNode.getQuery().setTarget(targetObject);
 						queryNode.rebuild();
 						getQueryTree().refreshTree();
+						// get the just added target node and make it visible
+						TargetTreeNode targetNode = (TargetTreeNode) queryNode.getFirstChild();
+						TreePath path = new TreePath(targetNode.getPath());
+						getQueryTree().makeVisible(path);
 					} else {
 						JOptionPane.showMessageDialog(QueryBuilder.this, "Please select a type to target");
 					}
@@ -359,6 +343,20 @@ public class QueryBuilder extends JFrame {
 						}
 						node.rebuild();
 						getQueryTree().refreshTree();
+						// get the group node and make it visible
+						AssociationTreeNode assocNode = null;
+						Enumeration nodeChildren = node.children();
+						while (nodeChildren.hasMoreElements()) {
+							IconTreeNode childNode = (IconTreeNode) nodeChildren.nextElement();
+							if (childNode instanceof AssociationTreeNode) {
+								if (((AssociationTreeNode) childNode).getAssociation() == association) {
+									assocNode = (AssociationTreeNode) childNode;
+									break;
+								}
+							}
+						}
+						TreePath path = new TreePath(assocNode.getPath());
+						getQueryTree().makeVisible(path);
 					} else {
 						JOptionPane.showMessageDialog(QueryBuilder.this, "Please select an association");
 					}
@@ -411,7 +409,7 @@ public class QueryBuilder extends JFrame {
 							// rebuild the tree for the new node
 							node.rebuild();
 							getQueryTree().refreshTree();
-							// get the node that was just added
+							// make the node just added visible in the tree
 							AttributeTreeNode attribNode = null;
 							Enumeration nodeChildren = node.children();
 							while (nodeChildren.hasMoreElements()) {
@@ -425,7 +423,7 @@ public class QueryBuilder extends JFrame {
 							}
 							TreePath path = new TreePath(((DefaultTreeModel) getQueryTree().getModel())
 								.getPathToRoot(attribNode));
-							getQueryTree().expandPath(path);
+							getQueryTree().makeVisible(path);
 						}
 					} else {
 						JOptionPane.showMessageDialog(QueryBuilder.this, "Please select an attribute first!");
@@ -475,6 +473,20 @@ public class QueryBuilder extends JFrame {
 						}
 						node.rebuild();
 						getQueryTree().refreshTree();
+						// get the group node and make it visible in the tree
+						GroupTreeNode groupNode = null;
+						Enumeration nodeChildren = node.children();
+						while (nodeChildren.hasMoreElements()) {
+							IconTreeNode childNode = (IconTreeNode) nodeChildren.nextElement();
+							if (childNode instanceof GroupTreeNode) {
+								if (((GroupTreeNode) childNode).getGroup() == group) {
+									groupNode = (GroupTreeNode) childNode;
+									break;
+								}
+							}
+						}
+						TreePath path = new TreePath(groupNode.getPath());
+						getQueryTree().makeVisible(path);
 					}
 				}
 			});
@@ -840,7 +852,7 @@ public class QueryBuilder extends JFrame {
 	 * @return javax.swing.JPanel	
 	 */
 	private JPanel getQueryPanel() {
-		if (queryPanel == null) {
+		if (queryComponentsPanel == null) {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
@@ -852,12 +864,12 @@ public class QueryBuilder extends JFrame {
 			gridBagConstraints.weighty = 1.0D;
 			gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints.gridx = 0;
-			queryPanel = new JPanel();
-			queryPanel.setLayout(new GridBagLayout());
-			queryPanel.add(getQueryTreeScrollPane(), gridBagConstraints);
-			queryPanel.add(getContextButtonPanel(), gridBagConstraints2);
+			queryComponentsPanel = new JPanel();
+			queryComponentsPanel.setLayout(new GridBagLayout());
+			queryComponentsPanel.add(getQueryTreeScrollPane(), gridBagConstraints);
+			queryComponentsPanel.add(getQueryBuildingTabbedPane(), gridBagConstraints2);
 		}
-		return queryPanel;
+		return queryComponentsPanel;
 	}
 	
 	
@@ -1046,9 +1058,8 @@ public class QueryBuilder extends JFrame {
 			}
 		}
 		
-		// domain model checked out, add it as the currently loaded one
+		// domain model checked out, set it as the currently loaded one
 		domainModel = tempModel;
-		JOptionPane.showMessageDialog(this, "Domain Model loaded");
 		getTypeDisplayPanel().setTypeTraverser(new DomainModelTypeTraverser(domainModel));
 		getQueryTree().setQuery(new CQLQuery());
 	}
@@ -1098,6 +1109,319 @@ public class QueryBuilder extends JFrame {
 			}
 		}
 		return parentQueryObject;
+	}
+
+
+	/**
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getModifierConfigurationPanel() {
+		if (modifierConfigurationPanel == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.gridx = 1;
+			gridBagConstraints7.gridheight = 3;
+			gridBagConstraints7.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints7.weightx = 1.0D;
+			gridBagConstraints7.weighty = 1.0D;
+			gridBagConstraints7.gridy = 0;
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.gridx = 0;
+			gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints4.anchor = java.awt.GridBagConstraints.NORTH;
+			gridBagConstraints4.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints4.gridy = 2;
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints3.anchor = java.awt.GridBagConstraints.NORTH;
+			gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints3.gridy = 1;
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints1.anchor = java.awt.GridBagConstraints.NORTH;
+			gridBagConstraints1.gridy = 0;
+			modifierConfigurationPanel = new JPanel();
+			modifierConfigurationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Modifiers", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			modifierConfigurationPanel.setLayout(new GridBagLayout());
+			modifierConfigurationPanel.add(getCountResultsCheckBox(), gridBagConstraints1);
+			modifierConfigurationPanel.add(getDistinctAttributeRadioButton(), gridBagConstraints3);
+			modifierConfigurationPanel.add(getMultipleAttributesRadioButton(), gridBagConstraints4);
+			modifierConfigurationPanel.add(getAttributeSelectionPanel(), gridBagConstraints7);
+			PortalUtils.setContainerEnabled(getModifierConfigurationPanel(), 
+				getUseQueryModsCheckBox().isSelected());
+			ButtonGroup group = new ButtonGroup();
+			group.add(getDistinctAttributeRadioButton());
+			group.add(getMultipleAttributesRadioButton());
+			group.setSelected(getDistinctAttributeRadioButton().getModel(), true);
+		}
+		return modifierConfigurationPanel;
+	}
+
+
+	/**
+	 * This method initializes jCheckBox	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getCountResultsCheckBox() {
+		if (countResultsCheckBox == null) {
+			countResultsCheckBox = new JCheckBox();
+			countResultsCheckBox.setText("Count Results Only");
+			countResultsCheckBox.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					QueryTreeNode queryNode = getQueryTree().getQueryTreeNode();
+					queryNode.getQuery().getQueryModifier().setCountOnly(
+						countResultsCheckBox.isSelected());
+				}
+			});
+		}
+		return countResultsCheckBox;
+	}
+
+
+	/**
+	 * This method initializes jRadioButton	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getDistinctAttributeRadioButton() {
+		if (distinctAttributeRadioButton == null) {
+			distinctAttributeRadioButton = new JRadioButton();
+			distinctAttributeRadioButton.setText("Distinct Attribute");
+			distinctAttributeRadioButton.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					QueryTreeNode queryNode = getQueryTree().getQueryTreeNode();
+					if (queryNode != null) {
+						QueryModifier mods = queryNode.getQuery().getQueryModifier();
+						String firstAttribute = null;
+						if (getReturnedAttributesList().getModel().getSize() != 0) {
+							firstAttribute = (String) getReturnedAttributesList().getModel().getElementAt(0);
+							getReturnedAttributesList().setListData(new String[] {firstAttribute});
+						}
+						mods.setDistinctAttribute(firstAttribute);
+						mods.setAttributeNames(null);
+					}
+				}
+			});
+		}
+		return distinctAttributeRadioButton;
+	}
+
+
+	/**
+	 * This method initializes jRadioButton	
+	 * 	
+	 * @return javax.swing.JRadioButton	
+	 */
+	private JRadioButton getMultipleAttributesRadioButton() {
+		if (multipleAttributesRadioButton == null) {
+			multipleAttributesRadioButton = new JRadioButton();
+			multipleAttributesRadioButton.setText("Multiple Attributes");
+			multipleAttributesRadioButton.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					QueryTreeNode queryNode = getQueryTree().getQueryTreeNode();
+					QueryModifier mods = queryNode.getQuery().getQueryModifier();
+					mods.setDistinctAttribute(null);
+					String[] attribNames = null;
+					if (getReturnedAttributesList().getModel().getSize() != 0) {
+						int count = getReturnedAttributesList().getModel().getSize();
+						attribNames = new String[count];
+						for (int i = 0; i < count; i++) {
+							attribNames[i] = (String) getReturnedAttributesList()
+								.getModel().getElementAt(i);
+						}
+					}
+					mods.setAttributeNames(attribNames);
+				}
+			});
+		}
+		return multipleAttributesRadioButton;
+	}
+
+
+	/**
+	 * This method initializes jList	
+	 * 	
+	 * @return javax.swing.JList	
+	 */
+	private JList getReturnedAttributesList() {
+		if (returnedAttributesList == null) {
+			returnedAttributesList = new JList();
+		}
+		return returnedAttributesList;
+	}
+
+
+	/**
+	 * This method initializes jScrollPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getReturnedAttributesScrollPane() {
+		if (returnedAttributesScrollPane == null) {
+			returnedAttributesScrollPane = new JScrollPane();
+			returnedAttributesScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+			returnedAttributesScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
+				null, "Attributes", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			returnedAttributesScrollPane.setViewportView(getReturnedAttributesList());
+		}
+		return returnedAttributesScrollPane;
+	}
+
+
+	/**
+	 * This method initializes jButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getSelectAttributesButton() {
+		if (selectAttributesButton == null) {
+			selectAttributesButton = new JButton();
+			selectAttributesButton.setText("Select Attribute(s)");
+			selectAttributesButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					QueryTreeNode queryNode = getQueryTree().getQueryTreeNode();
+					CQLQuery query = queryNode.getQuery();
+					AttributeType[] availableAttributes = getTypeDisplayPanel().getTypeTraverser()
+						.getAttributes(new BaseType(query.getTarget().getName()));
+					AttributeType[] selection = AttributeSelectionDialog.selectAttributes(
+						QueryBuilder.this, availableAttributes, getDistinctAttributeRadioButton().isSelected());
+					QueryModifier mods = query.getQueryModifier();
+					if (selection != null) {
+						String[] attribNames = new String[selection.length];
+						for (int i = 0; i < selection.length; i++) {
+							attribNames[i] = selection[i].getName();
+						}
+						if (getDistinctAttributeRadioButton().isSelected()) {
+							mods.setDistinctAttribute(attribNames[0]);
+						} else {
+							mods.setAttributeNames(attribNames);
+						}
+						getReturnedAttributesList().setListData(attribNames);
+					} else {
+						// selection canceled / cleared
+						if (getDistinctAttributeRadioButton().isSelected()) {
+							mods.setDistinctAttribute(null);
+						} else {
+							mods.setAttributeNames(null);
+						}
+						getReturnedAttributesList().setListData(new String[] {});
+					}
+				}
+			});
+		}
+		return selectAttributesButton;
+	}
+
+
+	/**
+	 * This method initializes jTabbedPane	
+	 * 	
+	 * @return javax.swing.JTabbedPane	
+	 */
+	private JTabbedPane getQueryBuildingTabbedPane() {
+		if (queryBuildingTabbedPane == null) {
+			queryBuildingTabbedPane = new JTabbedPane();
+			queryBuildingTabbedPane.addTab("Query Components", getContextButtonPanel());
+			queryBuildingTabbedPane.addTab("Query Modifications", getQueryModsPanel());
+		}
+		return queryBuildingTabbedPane;
+	}
+
+
+	/**
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getAttributeSelectionPanel() {
+		if (attributeSelectionPanel == null) {
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.gridx = 0;
+			gridBagConstraints6.gridy = 1;
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints5.gridy = 0;
+			gridBagConstraints5.weightx = 1.0;
+			gridBagConstraints5.weighty = 1.0D;
+			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints5.gridx = 0;
+			attributeSelectionPanel = new JPanel();
+			attributeSelectionPanel.setLayout(new GridBagLayout());
+			attributeSelectionPanel.add(getReturnedAttributesScrollPane(), gridBagConstraints5);
+			attributeSelectionPanel.add(getSelectAttributesButton(), gridBagConstraints6);
+		}
+		return attributeSelectionPanel;
+	}
+
+
+	/**
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getQueryModsPanel() {
+		if (queryModsPanel == null) {
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.gridx = 0;
+			gridBagConstraints9.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints9.weightx = 1.0D;
+			gridBagConstraints9.weighty = 1.0D;
+			gridBagConstraints9.gridy = 1;
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
+			gridBagConstraints8.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints8.gridy = 0;
+			queryModsPanel = new JPanel();
+			queryModsPanel.setLayout(new GridBagLayout());
+			queryModsPanel.setSize(new java.awt.Dimension(292,127));
+			queryModsPanel.add(getUseQueryModsCheckBox(), gridBagConstraints8);
+			queryModsPanel.add(getModifierConfigurationPanel(), gridBagConstraints9);
+		}
+		return queryModsPanel;
+	}
+
+
+	/**
+	 * This method initializes jCheckBox	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getUseQueryModsCheckBox() {
+		if (useQueryModsCheckBox == null) {
+			useQueryModsCheckBox = new JCheckBox();
+			useQueryModsCheckBox.setText("Use Query Modifiers");
+			useQueryModsCheckBox.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					QueryTreeNode queryNode = getQueryTree().getQueryTreeNode();
+					if (queryNode != null) {
+						if (useQueryModsCheckBox.isSelected()) {
+							queryNode.getQuery().setQueryModifier(new QueryModifier());
+						} else {
+							// remove the query mods from the query
+							queryNode.getQuery().setQueryModifier(null);
+							// clear out the GUI
+							getReturnedAttributesList().setListData(new String[] {});
+						}
+						PortalUtils.setContainerEnabled(getModifierConfigurationPanel(), 
+							useQueryModsCheckBox.isSelected());
+					} else {
+						// can't turn this on unless you've got a query
+						JOptionPane.showMessageDialog(QueryBuilder.this, 
+							"Please create a query before enabling modifications!");
+					}
+				}
+			});
+		}
+		return useQueryModsCheckBox;
 	}
 
 

@@ -27,4 +27,9 @@ public class AttributeType {
 	public String getDataType() {
 		return dataType;
 	}
+	
+	
+	public String toString() {
+		return getName() + " : " + getDataType();
+	}
 }
