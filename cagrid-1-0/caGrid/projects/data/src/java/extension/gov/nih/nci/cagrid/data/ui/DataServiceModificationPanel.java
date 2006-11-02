@@ -1119,6 +1119,12 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 					}
 				}
 			}
+		} else {
+			// no caDSR info to load, use default URL from Introduce
+			String cadsrDefaultUrl = ResourceManager.getServiceURLProperty("CADSR_URL");
+			getCadsrBrowserPanel().setDefaultCaDSRURL(cadsrDefaultUrl);
+			getCadsrBrowserPanel().getCadsr().setText(cadsrDefaultUrl);
+			getCadsrBrowserPanel().discoverFromCaDSR();
 		}
 		getUmlTree().setEnabled(true);
 	}
