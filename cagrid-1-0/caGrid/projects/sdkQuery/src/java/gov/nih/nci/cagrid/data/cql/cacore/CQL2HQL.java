@@ -174,7 +174,7 @@ public class CQL2HQL {
 			} else {
 				hql.append(" where ");
 			}
-			processAttribute(hql, target.getAttribute(), true);
+			processAttribute(hql, target.getName(), target.getAttribute(), true);
 		}
 		if (target.getAssociation() != null) {
 			if (eliminateSubclasses) {
@@ -209,7 +209,7 @@ public class CQL2HQL {
 		hql.append("select id From ").append(objName);
 		if (obj.getAttribute() != null) {
 			hql.append(" where ");
-			processAttribute(hql, obj.getAttribute(), false);
+			processAttribute(hql, obj.getName(), obj.getAttribute(), false);
 		}
 		if (obj.getAssociation() != null) {
 			hql.append(" where ");
@@ -227,13 +227,15 @@ public class CQL2HQL {
 	 * 
 	 * @param hql
 	 * 		The existing HQL query fragment
-	 * @param objAlias
-	 * 		The alias of the object to which this attribute belongs
+	 * @param objClassName
+	 * 		The class name of the object to which this attribute belongs
 	 * @param attrib
 	 * 		The attribute to process into HQL
+	 * @param useAlias
+	 * 		If true, the target alias will be used
 	 * @throws QueryProcessingException
 	 */
-	private static void processAttribute(StringBuilder hql, Attribute attrib, boolean useAlias) throws QueryProcessingException {
+	private static void processAttribute(StringBuilder hql, String objClassName, Attribute attrib, boolean useAlias) throws QueryProcessingException {
 		if (useAlias) {
 			hql.append(TARGET_ALIAS).append(".");
 		}
@@ -246,8 +248,16 @@ public class CQL2HQL {
 			hql.append(" is not null");
 		} else {
 			// binary predicates
+			boolean isBoolAttribute = BooleanAttributeCheckCache.isFieldBoolean(objClassName, attrib.getName());
 			String predValue = convertPredicate(predicate);
-			hql.append(" ").append(predValue).append(" '").append(attrib.getValue()).append("'");
+			hql.append(" ").append(predValue).append(" ");
+			if (!isBoolAttribute) {
+				hql.append("'");
+			}
+			hql.append(attrib.getValue());
+			if (!isBoolAttribute) {
+				hql.append("'");
+			}
 		}
 	}
 	
@@ -304,7 +314,7 @@ public class CQL2HQL {
 		if (group.getAttribute() != null) {
 			for (int i = 0; i < group.getAttribute().length; i++) {
 				logicClauseNeeded = true;
-				processAttribute(hql, group.getAttribute(i), useAlias);
+				processAttribute(hql, parentName, group.getAttribute(i), useAlias);
 				if (i + 1 < group.getAttribute().length) {
 					hql.append(" ").append(logic).append(" ");
 				}
