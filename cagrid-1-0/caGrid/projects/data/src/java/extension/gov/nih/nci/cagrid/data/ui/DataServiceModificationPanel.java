@@ -145,39 +145,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	private CaDSRBrowserPanel getCadsrBrowserPanel() {
 		if (cadsrBrowserPanel == null) {
 			cadsrBrowserPanel = new CaDSRBrowserPanel(true, false);
-			String url = null;
-			CadsrInformation cadsrInfo = null;
-			try {
-				cadsrInfo = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData()).getCadsrInformation();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				ErrorDialog.showErrorDialog("Error loading caDSR information from extension data", ex);
-			}
-			// if there's existing caDSR info in the data service, set the browser panel to show it
-			if (cadsrInfo != null) {				
-				// url of the cadsr service
-				url = cadsrInfo.getServiceUrl();
-				
-				// project name and version
-				String projectName = cadsrInfo.getProjectLongName();
-				String projectVersion = cadsrInfo.getProjectVersion();
-				
-				// store the project info as the most recent project
-				mostRecentProject = new Project();
-				mostRecentProject.setLongName(projectName);
-				mostRecentProject.setVersion(projectVersion);
-			} else {
-				// get the caDSR url out of the Introduce property bucket
-				url = ResourceManager.getServiceURLProperty(DataServiceConstants.CADSR_SERVICE_URL);
-				// store the just-loaded URL in the service information
-				storeCadsrServiceUrl();
-			}
-			if (url != null) {
-				// configure selected items in the cadsr panel
-				cadsrBrowserPanel.setDefaultCaDSRURL(url);
-				cadsrBrowserPanel.getCadsr().setText(url);
-				cadsrBrowserPanel.discoverFromCaDSR();
-			}
 			// add listener to the cadsr URL text field
 			// TODO: this is probably really slow; make it better
 			cadsrBrowserPanel.getCadsr().getDocument().addDocumentListener(new DocumentListener() {
@@ -1114,6 +1081,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			if (cadsrInfo.getServiceUrl() != null) {
 				getCadsrBrowserPanel().setDefaultCaDSRURL(cadsrInfo.getServiceUrl());
 				getCadsrBrowserPanel().getCadsr().setText(cadsrInfo.getServiceUrl());
+				getCadsrBrowserPanel().discoverFromCaDSR();
 			}
 			// set the domain model filename if there is one
 			if (cadsrInfo.getSuppliedDomainModel() != null) {
