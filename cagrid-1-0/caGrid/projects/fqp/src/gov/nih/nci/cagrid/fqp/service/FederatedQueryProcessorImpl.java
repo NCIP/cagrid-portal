@@ -118,7 +118,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		// configure security on the resource so only the creator of the
 		// resource (whoever is executing this) can operate on it
 		try {
-			//may be null if no current caller
+			// may be null if no current caller
 			fqpResultResource.setSecurityDescriptor(SecurityUtils.createResultsResourceSecurityDescriptor());
 		} catch (Exception e) {
 			LOG.error("Problem configuring security on resource:" + e.getMessage(), e);
@@ -213,6 +213,15 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 		this.workManager = workManager;
 	}
 }
+
+/**
+ * Work implemenation which uses the federated query engine to execute the query
+ * and store the results in the provided resource.
+ * 
+ * TODO: use delegation to execute queries?
+ * 
+ * @author oster
+ */
 class QueryExecutionWork implements Work {
 	FQPResultResource resource;
 	DCQLQuery query;
