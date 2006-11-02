@@ -84,6 +84,22 @@ need to download IZForge and run the following command (modify paths of course)
             <singlefile src="introduce.bat" target="$INSTALL_PATH/introduce.bat"/>
             <fileset dir="doc" targetdir="$INSTALL_PATH/doc"/> 
         </pack>
+        <pack name="CaBIG General Extensions" required="no">
+            <description>A general set of extensions for use in caGrid service development.</description>
+            <fileset dir="tmp/extensions/cabigextensions" targetdir="$INSTALL_PATH/extensions"/>
+        </pack>
+        <pack name="CaBIG Data Service Extension" required="no">
+            <description>Extension for generating cagrid compliant data services.</description>
+            <fileset dir="tmp/extensions/data" targetdir="$INSTALL_PATH/extensions"/>
+        </pack>
+        <pack name="CaDSR Extension" required="no">
+            <description>Extension for using caDSR for data type discovery.</description>
+            <fileset dir="tmp/extensions/cadsr" targetdir="$INSTALL_PATH/extensions"/>
+        </pack>
+        <pack name="Bulk Data Transfer Extension" required="no">
+            <description>Extension creating services which have the ability to transfer data via third party means.</description>
+            <fileset dir="tmp/extensions/bulkDataTransfer" targetdir="$INSTALL_PATH/extensions"/>
+        </pack>
         <pack name="Docs" required="no">
             <description>API Documentation</description>
             <fileset dir="build/javadoc" targetdir="$INSTALL_PATH/doc/javadoc"/>

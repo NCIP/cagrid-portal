@@ -40,7 +40,7 @@
 	<!-- =================================================================== -->
 	<!-- Creates the installer                                               -->
 	<!-- =================================================================== -->
-	<target name="createInstaller" description="Creates the installler" depends="all,javadoc">
+	<target name="createInstaller" description="Creates the installler" depends="all,javadoc,releaseIntroduceExtensions">
 		<delete dir="tmp/installer"/>
 		<mkdir dir="tmp/installer"/>
 		<izpack input="${basedir}/install/install.xml"
