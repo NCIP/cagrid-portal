@@ -25,28 +25,36 @@
         <ns2:InputParameter qName="ns6:EVSDescLogicConceptSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false" name="eVSDescLogicConceptSearchParams" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns7:DescLogicConcept" dimensionality="1" isArray="true" xmlns:ns7="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
-       <ns2:faultCollection/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="InvalidInputException"/>
+       </ns2:faultCollection>
       </ns2:Operation>
       <ns2:Operation description="" name="searchMetaThesaurus">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns8:EVSMetaThesaurusSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false" name="eVSMetaThesaurusSearchParams" xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns9:MetaThesaurusConcept" dimensionality="1" isArray="true" xmlns:ns9="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
-       <ns2:faultCollection/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="InvalidInputException"/>
+       </ns2:faultCollection>
       </ns2:Operation>
       <ns2:Operation description="" name="getHistoryRecords">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns10:EVSHistoryRecordsSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false" name="eVSHistoryRecordsSearchParams" xmlns:ns10="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns11:HistoryRecord" dimensionality="1" isArray="true" xmlns:ns11="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
-       <ns2:faultCollection/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="InvalidInputException"/>
+       </ns2:faultCollection>
       </ns2:Operation>
       <ns2:Operation description="" name="searchSourceByCode">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns12:EVSSourceSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false" name="eVSSourceSearchParams" xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns13:MetaThesaurusConcept" dimensionality="1" isArray="true" xmlns:ns13="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
-       <ns2:faultCollection/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="InvalidInputException"/>
+       </ns2:faultCollection>
       </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
