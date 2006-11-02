@@ -186,6 +186,7 @@
     <operation name="searchDescLogicConcept">
       <input message="tns:SearchDescLogicConceptRequest" wsa:Action="http://cagrid.nci.nih.gov/EVSGridService/SearchDescLogicConceptRequest" />
       <output message="tns:SearchDescLogicConceptResponse" wsa:Action="http://cagrid.nci.nih.gov/EVSGridService/SearchDescLogicConceptResponse" />
+      <fault name="InvalidInputException" message="tns:InvalidInputExceptionFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/EVSGridService/InvalidInputExceptionFaultMessage" />
     </operation>
     <operation name="searchMetaThesaurus">
       <input message="tns:SearchMetaThesaurusRequest" wsa:Action="http://cagrid.nci.nih.gov/EVSGridService/SearchMetaThesaurusRequest" />
@@ -195,10 +196,12 @@
     <operation name="getHistoryRecords">
       <input message="tns:GetHistoryRecordsRequest" wsa:Action="http://cagrid.nci.nih.gov/EVSGridService/GetHistoryRecordsRequest" />
       <output message="tns:GetHistoryRecordsResponse" wsa:Action="http://cagrid.nci.nih.gov/EVSGridService/GetHistoryRecordsResponse" />
+      <fault name="InvalidInputException" message="tns:InvalidInputExceptionFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/EVSGridService/InvalidInputExceptionFaultMessage" />
     </operation>
     <operation name="searchSourceByCode">
       <input message="tns:SearchSourceByCodeRequest" wsa:Action="http://cagrid.nci.nih.gov/EVSGridService/SearchSourceByCodeRequest" />
       <output message="tns:SearchSourceByCodeResponse" wsa:Action="http://cagrid.nci.nih.gov/EVSGridService/SearchSourceByCodeResponse" />
+      <fault name="InvalidInputException" message="tns:InvalidInputExceptionFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/EVSGridService/InvalidInputExceptionFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />
