@@ -14,7 +14,7 @@ import java.util.Calendar;
 
 import org.globus.wsrf.Resource;
 import org.globus.wsrf.ResourceIdentifier;
-import org.globus.wsrf.ResourceCallback;
+import org.globus.wsrf.RemoveCallback;
 import org.globus.wsrf.jndi.Initializable;
 
 public abstract class BaseResourceBase implements Resource, RemoveCallback, ResourceIdentifier, Initializable {
