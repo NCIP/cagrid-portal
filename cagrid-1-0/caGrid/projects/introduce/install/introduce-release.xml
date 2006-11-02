@@ -44,7 +44,7 @@
 		<delete dir="tmp/installer"/>
 		<mkdir dir="tmp/installer"/>
 		<izpack input="${basedir}/install/install.xml"
-			output="installer/${jars.prefixname}installer.jar"
+			output="tmp/installer/Introduce-RC1.0-installer.jar"
 			installerType="web"
 			basedir="."
 			izPackDir="${basedir}/install"/>

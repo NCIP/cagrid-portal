@@ -1008,10 +1008,10 @@ public class SyncTools {
 		org.jdom.Element faultEl = new org.jdom.Element("element", org.jdom.Namespace
 			.getNamespace(IntroduceConstants.W3CNAMESPACE));
 		faultEl.setAttribute("name", exceptionName);
-		faultEl.setAttribute("type", "tns:" + exceptionName + "Type");
+		faultEl.setAttribute("type", "tns:" + exceptionName);
 		org.jdom.Element faultType = new org.jdom.Element("complexType", org.jdom.Namespace
 			.getNamespace(IntroduceConstants.W3CNAMESPACE));
-		faultType.setAttribute("name", exceptionName + "Type");
+		faultType.setAttribute("name", exceptionName);
 		org.jdom.Element ccEl = new org.jdom.Element("complexContent", org.jdom.Namespace
 			.getNamespace(IntroduceConstants.W3CNAMESPACE));
 		org.jdom.Element extEl = new org.jdom.Element("extension", org.jdom.Namespace
