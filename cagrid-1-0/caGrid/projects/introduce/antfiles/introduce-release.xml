@@ -1,0 +1,26 @@
+<!-- ======================================================================= -->
+<!-- caGrid Analytical Utilities build file                                  -->
+<!-- ======================================================================= -->
+<project name="introduce_release" basedir="." default="usage">
+	
+	<!-- =================================================================== -->
+	<!-- Builds the project and the docs for a release                       -->
+	<!-- =================================================================== -->
+	<target name="release" description="Cleans and build the entire application and the docs etc" depends="clean,all,javadoc,createInstaller"/>
+	
+	<!-- Allows us to use the IzPack Ant task -->
+	<taskdef name="izpack" classpath="${basedir}/install/standalone-compiler.jar"
+		classname="com.izforge.izpack.ant.IzPackTask"/>
+	
+	<!-- =================================================================== -->
+	<!-- Creates the installer                                               -->
+	<!-- =================================================================== -->
+	<target name="createInstaller" description="Creates the installler" depends="all,javadoc">
+		<izpack input="${basedir}/install/install.xml"
+			output="${jars.prefixname}installer.jar"
+			installerType="standard"
+			basedir="."
+			izPackDir="${basedir}/install"/>
+	</target>
+	
+</project>

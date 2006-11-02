@@ -1,5 +1,5 @@
 <!-- ======================================================================= -->
-<!-- caGrid build file                                                       -->
+<!-- Introduce build file                                                    -->
 <!-- ======================================================================= -->
 <project name="introduce" default="introduce" basedir=".">
 	<!-- Load util files -->
@@ -8,6 +8,7 @@
 	<import file="${antfiles.dir}/build-introduce.xml"/>
 	<import file="${antfiles.dir}/build-portal.xml"/>
 	<import file="${antfiles.dir}/introduce-utils.xml"/>
+	<import file="${antfiles.dir}/introduce-release.xml"/>
 	<!-- Load test files -->
 	<import file="test/test.xml"/>
 	<!-- =================================================================== -->
@@ -251,25 +252,5 @@
 	<!-- =================================================================== -->
 	<target name="all" description="Cleans and build the entire application" depends="clean,
 		generateStubs, build"/>
-		
-	<!-- =================================================================== -->
-	<!-- Builds the project and the docs for a release                       -->
-	<!-- =================================================================== -->
-	<target name="release" description="Cleans and build the entire application and the docs etc" depends="clean,all,javadoc,createInstaller"/>
-	
-	<!-- Allows us to use the IzPack Ant task -->
-	<taskdef name="izpack" classpath="${basedir}/install/standalone-compiler.jar"
-		classname="com.izforge.izpack.ant.IzPackTask"/>
-		
-	<!-- =================================================================== -->
-	<!-- Creates the installer                                               -->
-	<!-- =================================================================== -->
-	<target name="createInstaller" description="Creates the installler" depends="all,javadoc">
-		<izpack input="./install/install.xml"
-			output="${jars.prefixname}installer.jar"
-			installerType="standard"
-			basedir="."
-			izPackDir="./install"/>
-	</target>
 	
 </project>
