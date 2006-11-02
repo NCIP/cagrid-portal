@@ -17,10 +17,14 @@ import org.globus.wsrf.ResourceIdentifier;
 import org.globus.wsrf.RemoveCallback;
 import org.globus.wsrf.jndi.Initializable;
 
+import org.apache.axis.components.uuid.UUIDGenFactory;
+import org.apache.axis.components.uuid.UUIDGen;
+
 public abstract class BaseResourceBase implements Resource, RemoveCallback, ResourceIdentifier, Initializable {
 
 	/** the identifier of this resource... should be unique in the service */
 	private Object id;
+	private static final UUIDGen UUIDGEN = UUIDGenFactory.getUUIDGen();
 
 
 	/**
@@ -35,7 +39,7 @@ public abstract class BaseResourceBase implements Resource, RemoveCallback, Reso
 	 * @see org.globus.wsrf.jndi.Initializable#initialize()
 	 */
 	public final void initialize() throws Exception {
-		this.id = new Integer(hashCode());
+		this.id = UUIDGEN.nextUUID();
 	}
 	
 
