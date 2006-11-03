@@ -10,6 +10,9 @@ Possible limitation in Hibernate for querying on attributes of a subclass in an 
 	
 caCORE SDK Services using CSM
 	-- The application service server side must be configured to use the grid CSM security provider
+	
+Using case-insensitive queries (eg. all values to lowercase and tell DB to ignore case)
+	-- maybe convert everything to lowercase?
 
 BUGS:
 CoreQueryProcessor / CQL2DetachedCriteria:
@@ -24,6 +27,9 @@ CQL2HQL doesn't properly handle queries begining on the 'many' end of an associa
 	-- Fix In Progress (First cut 2006-10-04)
 	-- http://forum.hibernate.org/viewtopic.php?t=947247&highlight=multiple+joins sums up the issue with using joins to solve the problem.
 		-- More recent versions of Hibernate (even 3.0.4...) have fixed this bug
+		
+CQL2HQL generates queries for boolean attributes using quotes on the values.
+	-- Fixed (2006-11-02)
 
 Running multiple instances of a DataService using the SDK query processor in the same container is impossible due to a bug in the caCORE.  Please see http://gforge.nci.nih.gov/tracker/index.php?func=detail&aid=2784&group_id=38&atid=279 for more information.
 
