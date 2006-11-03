@@ -22,6 +22,7 @@ import java.util.NoSuchElementException;
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPElement;
 
+import org.globus.axis.utils.DurationUtils;
 import org.globus.ws.enumeration.EnumIterator;
 import org.globus.ws.enumeration.IterationConstraints;
 import org.globus.ws.enumeration.IterationResult;
@@ -180,9 +181,10 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 		synchronized (threadCommunicationBuffer) {
 			threadCommunicationBuffer.put(MUST_STOP_THREAD, Boolean.FALSE);	
 		}
-		Thread nextExec = new Thread(execGroup, new Runnable() {
+		final Thread nextExec = new Thread(execGroup, new Runnable() {
 			public void run() {
-				try {					
+				Thread.yield();
+				try {
 					// check for release
 					if (isReleased) {
 						throw new NoSuchElementException("Enumeration has been released");
@@ -203,7 +205,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 								int elemLength = element.getValue().length();
 								int currentLength = countSoapElementChars(soapElements);
 								if (elemLength + currentLength >= constraints.getMaxCharacters()) {
-									// store the too-big element for later and return
+									// TODO: store the too-big element for later and return
 									break;
 								}
 							}							
@@ -229,18 +231,40 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 				}
 			}
 		});
+		
+		final Thread waiter = new Thread(new Runnable() {
+			public void run() {
+				try {
+					if (constraints.getMaxTime() != null) {
+						long timeout = getWaitMills(constraints);
+						nextExec.join(timeout);
+						synchronized (threadCommunicationBuffer) {
+							if (threadCommunicationBuffer.get(ITERATION_RESULT) == null) {
+								synchronized (threadCommunicationBuffer) {
+									threadCommunicationBuffer.put(MUST_STOP_THREAD, Boolean.TRUE);
+									threadCommunicationBuffer.put(THREAD_EXCEPTION, new TimeoutException());
+								}
+							}
+						}
+					} else {
+						nextExec.join();
+					}
+				} catch (InterruptedException ex) {
+					synchronized (threadCommunicationBuffer) {
+						threadCommunicationBuffer.put(MUST_STOP_THREAD, Boolean.TRUE);
+						threadCommunicationBuffer.put(THREAD_EXCEPTION, ex);
+					}
+				}
+			}
+		});
+		// start the processing threads
 		nextExec.start();
+		waiter.start();
+		// wait on the query monitor thread as long as it needs
 		try {
-			if (constraints.getMaxTime() != null) {
-				nextExec.join(getWaitMills(constraints));
-			} else {
-				nextExec.join();
-			}
+			waiter.join();
 		} catch (InterruptedException ex) {
-			synchronized (threadCommunicationBuffer) {
-				threadCommunicationBuffer.put(MUST_STOP_THREAD, Boolean.TRUE);
-			}
-			throw new TimeoutException();
+			throw new TimeoutException(ex);
 		}
 		
 		synchronized (threadCommunicationBuffer) {
@@ -249,13 +273,14 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 			if (ex != null) {				
 				if (ex instanceof NoSuchElementException) {
 					throw (NoSuchElementException) ex;
-				} else if (ex instanceof InterruptedException) {
+				} else if (ex instanceof InterruptedException || ex instanceof TimeoutException) {
 					throw new TimeoutException(ex);
 				} else {
+					// wish we could throw some sort of processing exception
 					throw new NoSuchElementException(ex.getMessage());
 				}
 			}
-				
+			
 			// check for iteration result
 			IterationResult result = (IterationResult) threadCommunicationBuffer.get(ITERATION_RESULT);
 			if (result != null) {
@@ -268,7 +293,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	
 	
 	private long getWaitMills(IterationConstraints cons) {
-		return cons.getMaxTime().getAsCalendar().getTimeInMillis();
+		return DurationUtils.toMilliseconds(cons.getMaxTime());
 	}
 	
 	
@@ -292,7 +317,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	 * @return
 	 * 		Null if no more XML is found
 	 */
-	private String getNextXmlChunk() throws IOException {
+	protected String getNextXmlChunk() throws IOException {
 		String charCountStr = fileReader.readLine();
 		if (charCountStr != null) {
 			int toRead = Integer.parseInt(charCountStr);
