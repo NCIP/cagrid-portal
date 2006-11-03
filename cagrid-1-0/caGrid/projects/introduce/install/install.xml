@@ -27,15 +27,15 @@ need to download IZForge and run the following command (modify paths of course)
         <webdir>http://bmi.osu.edu/~hastings</webdir>
     </info>
     
-    <guiprefs height="350" resizable="yes" width="640">
-        <laf name="metouia">
-            <os family="unix" />
-        </laf>
-        <laf name="liquid">
-            <os family="windows" />
-            <param name="decorate.dialogs" value="yes" />
-            <param name="decorate.frames" value="yes" />
-        </laf>
+    
+    <guiprefs width="700" height="600" resizable="no">   
+        <modifier key="useFlags" value="no"/>
+        <modifier key="useHeadingPanel" value="yes"/>
+        <modifier key="headingLineCount" value="1"/>
+        <modifier key="headingFontSize" value="1.5"/>
+        <modifier key="headingBackgroundColor" value="0x00ffffff"/>
+        <modifier key="headingPanelCounter" value="text"/>
+        <modifier key="headingPanelCounterPos" value="inHeading"/>
     </guiprefs>
    
     <locale>
@@ -46,9 +46,18 @@ need to download IZForge and run the following command (modify paths of course)
     <resources>
         <res id="LicencePanel.licence" src="Licence.txt"/>
         <res id="InfoPanel.info" src="Readme.txt"/>
-        <res id="Installer.image" src="" />
         <res id="installer.langsel.img" src="resources/portal/introduce/introduceSplash.png" />
         <res id="shortcutSpec.xml" src="install/shortcutSpec.xml"/>
+        <res id="unix_shortcutSpec.xml" src="install/unix-shortcutSpec.xml" /> 
+        <res src="install/border1.png" id="Installer.image.0" /> 
+        <res src="install/border2.png" id="Installer.image.1" /> 
+        <res src="install/border3.png" id="Installer.image.2" /> 
+        <res src="install/border4.png" id="Installer.image.3" /> 
+        <res src="install/border5.png" id="Installer.image.4" /> 
+        <res src="install/border6.png" id="Installer.image.5" /> 
+        <res src="install/border7.png" id="Installer.image.6" /> 
+        <res src="install/border8.png" id="Installer.image.7" />   
+        <res src="install/border8.png" id="Installer.image.8" />   
     </resources>
     
     <panels>
@@ -57,8 +66,8 @@ need to download IZForge and run the following command (modify paths of course)
         <panel classname="LicencePanel"/>
         <panel classname="TargetPanel"/>
         <panel classname="PacksPanel"/>
-        <panel classname="ShortcutPanel"/>
         <panel classname="InstallPanel"/>
+        <panel classname="ShortcutPanel"/>
         <panel classname="FinishPanel"/>
     </panels>
     
@@ -67,7 +76,7 @@ need to download IZForge and run the following command (modify paths of course)
         We specify here our packs.
     -->
     <packs>
-        <pack name="Base" required="yes">
+        <pack name="Core" required="yes">
             <description>Introduce 1.0 Binary Release</description>
             <fileset dir="lib" targetdir="$INSTALL_PATH/lib"/>
             <fileset dir="build/jars" targetdir="$INSTALL_PATH/build/jars"/>
@@ -84,6 +93,14 @@ need to download IZForge and run the following command (modify paths of course)
             <singlefile src="introduce.bat" target="$INSTALL_PATH/introduce.bat"/>
             <fileset dir="doc" targetdir="$INSTALL_PATH/doc"/> 
         </pack>
+        <pack name="Sources" required="no">
+            <description>Source Code</description>
+            <fileset dir="src" targetdir="$INSTALL_PATH/src"/>
+        </pack>
+        <pack name="Docs" required="no">
+            <description>API Documentation</description>
+            <fileset dir="build/javadoc" targetdir="$INSTALL_PATH/doc/javadoc"/>
+        </pack>
         <pack name="CaBIG General Extensions" required="no">
             <description>A general set of extensions for use in caGrid service development.</description>
             <fileset dir="tmp/extensions/cabigextensions" targetdir="$INSTALL_PATH/extensions"/>
@@ -99,14 +116,6 @@ need to download IZForge and run the following command (modify paths of course)
         <pack name="Bulk Data Transfer Extension" required="no">
             <description>Extension creating services which have the ability to transfer data via third party means.</description>
             <fileset dir="tmp/extensions/bulkDataTransfer" targetdir="$INSTALL_PATH/extensions"/>
-        </pack>
-        <pack name="Docs" required="no">
-            <description>API Documentation</description>
-            <fileset dir="build/javadoc" targetdir="$INSTALL_PATH/doc/javadoc"/>
-        </pack>
-        <pack name="Sources" required="no">
-            <description>Source Code</description>
-            <fileset dir="src" targetdir="$INSTALL_PATH/src"/>
         </pack>
     </packs>
 

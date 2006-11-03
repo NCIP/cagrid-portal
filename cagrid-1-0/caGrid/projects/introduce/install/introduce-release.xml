@@ -31,7 +31,7 @@
 	<!-- =================================================================== -->
 	<!-- Builds the project and the docs for a release                       -->
 	<!-- =================================================================== -->
-	<target name="release" description="Cleans and build the entire application and the docs etc" depends="clean,all,javadoc,createInstaller"/>
+	<target name="release" description="Cleans and build the entire application and the docs etc" depends="clean,all,javadoc,releaseIntroduceExtensions,createInstaller"/>
 	
 	<!-- Allows us to use the IzPack Ant task -->
 	<taskdef name="izpack" classpath="${basedir}/install/standalone-compiler.jar"
@@ -40,12 +40,12 @@
 	<!-- =================================================================== -->
 	<!-- Creates the installer                                               -->
 	<!-- =================================================================== -->
-	<target name="createInstaller" description="Creates the installler" depends="all,javadoc,releaseIntroduceExtensions">
+	<target name="createInstaller" description="Creates the installler" depends="">
 		<delete dir="tmp/installer"/>
 		<mkdir dir="tmp/installer"/>
 		<izpack input="${basedir}/install/install.xml"
 			output="tmp/installer/Introduce-RC1.0-installer.jar"
-			installerType="web"
+			installerType="standard"
 			basedir="."
 			izPackDir="${basedir}/install"/>
 	</target>
