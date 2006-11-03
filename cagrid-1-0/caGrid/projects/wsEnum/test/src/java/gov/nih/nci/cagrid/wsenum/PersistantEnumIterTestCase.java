@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.wsenum;
 
 import gov.nih.nci.cabio.domain.Gene;
 import gov.nih.nci.cagrid.common.ConfigurableObjectDeserializationContext;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.wsenum.utils.PersistantSDKObjectIterator;
 
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,7 @@ import org.xml.sax.InputSource;
  */
 public class PersistantEnumIterTestCase extends TestCase {
 	
+	private String wsddFilename;
 	private QName geneQname;
 	private MessageContext messageContext;
 	private List objectList;
@@ -58,7 +61,7 @@ public class PersistantEnumIterTestCase extends TestCase {
 	
 	
 	public void setUp() {
-		String wsddFilename = "test" + File.separator + "resources" + File.separator + "cabio-client-config.wsdd";
+		wsddFilename = "test" + File.separator + "resources" + File.separator + "cabio-client-config.wsdd";
 		// set up the message context
 		try {
 			messageContext = createMessageContext(new FileInputStream(wsddFilename));
@@ -94,14 +97,13 @@ public class PersistantEnumIterTestCase extends TestCase {
 		} catch (Exception ex) {
 			assertTrue("Enumeration released, threw " + NoSuchElementException.class.getName(), 
 				ex instanceof NoSuchElementException);
+			enumIterator = null;
 		}
 	}
 	
 	
 	public void testRetrieveSingleResult() {
-		// this duration (10 sec) should be more than long enough
-		Duration maxWait = new Duration(false, 0, 0, 0, 0, 0, 10);
-		IterationConstraints cons = new IterationConstraints(1, -1, maxWait);
+		IterationConstraints cons = new IterationConstraints(1, -1, null);
 		IterationResult result = enumIterator.next(cons);
 		SOAPElement[] rawElements = result.getItems();
 		assertTrue("Some elements were returned", rawElements != null);
@@ -120,9 +122,7 @@ public class PersistantEnumIterTestCase extends TestCase {
 	
 	
 	public void testRetrieveMultipleResults() {
-		// this duration (10 sec) should be more than long enough
-		Duration maxWait = new Duration(false, 0, 0, 0, 0, 0, 10);
-		IterationConstraints cons = new IterationConstraints(3, -1, maxWait);
+		IterationConstraints cons = new IterationConstraints(3, -1, null);
 		IterationResult result = enumIterator.next(cons);
 		SOAPElement[] rawElements = result.getItems();
 		assertTrue("Some elements were returned", rawElements != null);
@@ -143,10 +143,8 @@ public class PersistantEnumIterTestCase extends TestCase {
 	
 	
 	public void testRetrieveAllResults() {
-		// this duration (10 sec) should be more than long enough
-		Duration maxWait = new Duration(false, 0, 0, 0, 0, 0, 10);
 		// ask for more results than we actually have
-		IterationConstraints cons = new IterationConstraints(objectList.size() + 1, -1, maxWait);
+		IterationConstraints cons = new IterationConstraints(objectList.size() + 1, -1, null);
 		IterationResult result = enumIterator.next(cons);
 		SOAPElement[] rawElements = result.getItems();
 		assertTrue("Some elements were returned", rawElements != null);
@@ -187,6 +185,25 @@ public class PersistantEnumIterTestCase extends TestCase {
 	}
 	
 	
+	public void testCharLimitExceded() {
+		// ask for all the results, but only enough chars for the first element
+		int charCount = -1;
+		StringWriter writer = new StringWriter();
+		try {
+			Utils.serializeObject(objectList.get(0), geneQname, writer, new FileInputStream(wsddFilename));
+			charCount = writer.getBuffer().length();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			fail("Error determining object char count: " + ex.getMessage());
+		}
+		IterationConstraints cons = new IterationConstraints(objectList.size(), charCount, null);
+		IterationResult result = enumIterator.next(cons);
+		SOAPElement[] rawResults = result.getItems();
+		assertTrue("Enumeration returned results", rawResults != null);
+		assertFalse("Enumeration returned all results", rawResults.length == objectList.size());
+	}
+	
+	
 	private boolean geneInOriginalList(Gene g) {
 		// verify the gene is part of the original object list
 		for (int i = 0; i < objectList.size(); i++) {
@@ -223,6 +240,11 @@ public class PersistantEnumIterTestCase extends TestCase {
 	}
 	
 	
+	/**
+	 * "Fixes" the reader for xml data to wait 500ms every time it reads a line
+	 * from disk.  This effectively slows down the calls to next() inside 
+	 * the iterator to the point that timeouts are a real possibility
+	 */
 	private void slowDownIterator() {
 		Class iterClass = enumIterator.getClass();
 		try {

@@ -208,7 +208,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 									// TODO: store the too-big element for later and return
 									break;
 								}
-							}							
+							}
 							soapElements.add(element);
 						} catch (SerializationException ex) {
 							release();
@@ -232,7 +232,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 			}
 		});
 		
-		final Thread waiter = new Thread(new Runnable() {
+		final Thread waiter = new Thread(execGroup, new Runnable() {
 			public void run() {
 				try {
 					if (constraints.getMaxTime() != null) {
@@ -317,7 +317,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	 * @return
 	 * 		Null if no more XML is found
 	 */
-	protected String getNextXmlChunk() throws IOException {
+	private String getNextXmlChunk() throws IOException {
 		String charCountStr = fileReader.readLine();
 		if (charCountStr != null) {
 			int toRead = Integer.parseInt(charCountStr);
