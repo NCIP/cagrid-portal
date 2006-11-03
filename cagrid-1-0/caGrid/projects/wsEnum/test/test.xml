@@ -30,6 +30,7 @@
 			<classpath refid="test.classpath"/>
 			<classpath>
 				<pathelement path="${test.classes.dir}"/>
+				<pathelement path="${test.resources.dir}"/>
 			</classpath>
 			<formatter type="xml"/>
 			<batchtest fork="yes" todir="${junit.results.dir}">

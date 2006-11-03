@@ -56,6 +56,7 @@
     <property name="test.dir" location="${basedir}/test" />
     <property name="test.src.dir" location="${test.dir}/src/java" />
     <property name="test.classes.dir" location="${build.dir}/test/classes" />
+	<property name="test.resources.dir" location="${basedir}/test/resources" />
     <property name="test.lib.dir" location="${test.dir}/lib" />
     <property name="test.logs.dir" location="${test.dir}/logs" />
     <property name="test.project.jar" location="${build.jars.dir}/${project.name}-tests.jar" />
