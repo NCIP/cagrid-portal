@@ -556,6 +556,9 @@
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 		</resolveDependencies>
+		<resolveDependencies extdir="${projects.dir}/wsEnum/ext/test">
+			<artifact refid="caCORE.jars" />
+		</resolveDependencies>
 		<ant dir="${projects.dir}/wsEnum" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
