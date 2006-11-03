@@ -61,6 +61,9 @@ public class EvsCheckServiceStep
         // Test Searching for DescLogicConcept
         testGetDescriptionLogicConcept();
 
+        testGetVocabularyNames();
+
+
     }
 
     /**
@@ -360,6 +363,7 @@ public class EvsCheckServiceStep
         {
             //gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType
             bInvalid = true;
+            System.out.println("Error message: " + e.getFaultString());
         }
 
         assertTrue("Invalid input did not " +
@@ -368,15 +372,14 @@ public class EvsCheckServiceStep
     }
 
     /**
-     * test
+     * test  <code>searchDescLogicConcept</code> api to obtain Description logic Concept
+     * object
      */
 
     public void testGetDescriptionLogicConcept()
     throws Exception
     {
         System.out.println("testing:searchDescLogicConcept!");
-
-
         EVSDescLogicConceptSearchParams  evsSearchParams = new EVSDescLogicConceptSearchParams();
         evsSearchParams.setVocabularyName("NCI_Thesaurus");
         evsSearchParams.setSearchTerm("Blood*");
@@ -401,8 +404,30 @@ public class EvsCheckServiceStep
                     // Check what the vector elements are?
                     assertNotNull("SemanticTypeVecor is null", semanticType);
 
+                    // Check properties
+                    checkProperties(descConcept);
+                    
+
 
                 }
+        }
+    }
+
+    private void checkProperties(DescLogicConcept descConcept) {
+        Vector propCollections = descConcept.getPropertyCollection();
+        for (int j=0; j < propCollections.size(); j++)
+        {
+            // Make sure that they are not null
+            Property prop = (Property) propCollections.get(j);
+            assertNotNull("Property value is null", prop);
+
+            Vector qualCollection = prop.getQualifierCollection();
+            for (int k=0; k < qualCollection.size();k++)
+            {
+                Qualifier qual =  (Qualifier) qualCollection.get(k);
+                assertNotNull("Qualifier is null", qual);
+            }
+
         }
     }
 
@@ -447,6 +472,10 @@ public class EvsCheckServiceStep
         catch(gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType e)
         {
             bInvalid = true;
+
+            System.out.println("Error message: " + e.getFaultString());
+
+
         }
 
         assertTrue("Invalid input did not " +
@@ -501,6 +530,7 @@ public class EvsCheckServiceStep
         catch(gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType e)
         {
             bInvalid = true;
+            System.out.println("Error message: " + e.getFaultString());
         }
 
         assertTrue("Invalid input did not " +
