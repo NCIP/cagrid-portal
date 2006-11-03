@@ -174,7 +174,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
             LOG.debug("Inside method:searchDescLogicConcept:Testing input");
 
             // throws exception if inputs are not valid
-            isEVSDescLogicConceptSearchParamsValid(eVSDescLogicConceptSearchParams);
+            validateEVSDescLogicConceptSearchParams(eVSDescLogicConceptSearchParams);
 
 
             LOG.debug("Inside method:getMetaSources. Obtaining connection to caCORE remote instance" +
@@ -253,7 +253,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
             LOG.debug("Inside method:searchMetaThesaurus:Testing input");
 
             // This will throw Exception if invalid
-            isEVSMetaThesaurusSearchParamsValid(eVSMetaThesaurusSearchParams);
+            validateEVSMetaThesaurusSearchParams(eVSMetaThesaurusSearchParams);
 
             LOG.debug("Inside method:getMetaSources. Obtaining connection to caCORE remote instance" +
                     EVSConstants.CACORE_31_URL);
@@ -342,7 +342,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
 
             LOG.debug("Inside method:getHistoryRecords:Testing input");
 
-            isEVSHistoryRecordsSearchParamsValid(eVSHistoryRecordsSearchParams);
+            validateEVSHistoryRecordsSearchParams(eVSHistoryRecordsSearchParams);
 
 
             LOG.debug("Inside method:getHistoryRecords. Obtaining connection to caCORE remote instance" +
@@ -421,7 +421,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
             LOG.debug("Inside method:searchSourceByCode:Testing input");
 
             // Throws exception if invalid
-            isEVSSourceSearchParamsValid(eVSSourceSearchParams);
+            validateEVSSourceSearchParams(eVSSourceSearchParams);
 
             LOG.debug("Inside method:searchSourceByCode. Obtaining connection to caCORE remote instance" +
                     EVSConstants.CACORE_31_URL);
@@ -562,7 +562,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
      * @param eVSMetaThesaurusSearchParams instance of <code>gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams</code> class
      */
 
-    public void isEVSMetaThesaurusSearchParamsValid(gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParams)
+    public void validateEVSMetaThesaurusSearchParams(gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParams)
             throws gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType
     {
 
@@ -651,7 +651,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
      *  This method tests the validity of the inputs to the API <code>searchSourceByCode</code>
      *
      */
-    private void isEVSSourceSearchParamsValid(gov.nih.nci.cagrid.evs.service.EVSSourceSearchParams eVSSourceSearchParams)
+    private void validateEVSSourceSearchParams(gov.nih.nci.cagrid.evs.service.EVSSourceSearchParams eVSSourceSearchParams)
             throws gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType
     {
 
@@ -659,9 +659,9 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
         if (eVSSourceSearchParams == null )
         {
             // Throw appropriate exception; i.e. invalid inputs.
-            LOG.warn("Invalid inputs: isEVSSourceSearchParamsValid object cannot be NULL");
+            LOG.warn("Invalid inputs: EVSSourceSearchParams object cannot be NULL");
             InvalidInputExceptionType fault = new InvalidInputExceptionType();
-            fault.setFaultString("Invalid inputs: isEVSSourceSearchParamsValid object cannot be NULL");
+            fault.setFaultString("Invalid inputs: EVSSourceSearchParams object cannot be NULL");
             throw fault;
         }
 
@@ -709,7 +709,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
     /**
      *
      */
-    private void isEVSDescLogicConceptSearchParamsValid(gov.nih.nci.cagrid.evs.service.EVSDescLogicConceptSearchParams eVSDescLogicConceptSearchParams)
+    private void validateEVSDescLogicConceptSearchParams(gov.nih.nci.cagrid.evs.service.EVSDescLogicConceptSearchParams eVSDescLogicConceptSearchParams)
             throws gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType
     {
 
@@ -767,7 +767,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
      *
      */
 
-    private void isEVSHistoryRecordsSearchParamsValid(gov.nih.nci.cagrid.evs.service.EVSHistoryRecordsSearchParams eVSHistoryRecordsSearchParams)
+    private void validateEVSHistoryRecordsSearchParams(gov.nih.nci.cagrid.evs.service.EVSHistoryRecordsSearchParams eVSHistoryRecordsSearchParams)
             throws gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType
     {
 
