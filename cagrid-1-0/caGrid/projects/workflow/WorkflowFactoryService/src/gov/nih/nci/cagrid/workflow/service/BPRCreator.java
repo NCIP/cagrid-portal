@@ -16,13 +16,17 @@ import java.util.jar.Manifest;
 public class BPRCreator {
 
 	public static String makeBpr(String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws Exception {
-		String bprName = System.getProperty("java.io.tmpdir")+  File.separator + workflowName + ".bpr";
+		String bprName = 
+			System.getProperty("java.io.tmpdir") + File.separator + workflowName + ".bpr";
+		String wsdlCatalogFileName = 
+			System.getProperty("java.io.tmpdir") + File.separator + "wsdlCatalog.xml";
 		File bprFile = new File(bprName);
+		File wsdlCatalog = new File(wsdlCatalogFileName);
 		bprFile.deleteOnExit();
 		String bprFileName = bprFile.getAbsolutePath();
 		String serviceName = workflowName + "Service";
 		String pddFileName = createPDD(bpelFileName, workflowName, serviceName, wsdlRefArray);
-		String[] fileList = {bpelFileName, pddFileName};
+		String[] fileList = {bpelFileName, pddFileName, wsdlCatalog.getAbsolutePath()};
 		createBPR(fileList, bprFileName);
 		return bprFileName;
 	}

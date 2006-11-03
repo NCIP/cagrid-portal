@@ -9,6 +9,8 @@ import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.xml.namespace.QName;
+
 import org.activebpel.rt.bpel.impl.list.AeProcessFilter;
 import org.activebpel.rt.bpel.impl.list.AeProcessInstanceDetail;
 import org.activebpel.rt.bpel.impl.list.AeProcessListResult;
@@ -120,8 +122,13 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 
 
 	public WorkflowStatusType getWorkflowStatus(String workflowName) throws WorkflowExceptionType {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			QName workflowQName = new QName(workflowName);
+			String statusString = getWorkflowStatus(workflowQName);
+			return getStatusFromString(statusString);
+		} catch (Exception e) {
+			throw new WorkflowExceptionType();
+		}
 	}
 
 
@@ -142,9 +149,25 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		
 	}
 	
-/*	public int displayProcessList() throws Exception {
+	public String getProcessStatus(QName workflowName) throws Exception {
+		AeProcessFilter filter = new AeProcessFilter();
+	      filter.setProcessName(workflowName);
+	      AeProcessListResult list = mRemote.getProcessList( filter );
+	      return list.getRowDetails()[0].getStateString();
+	}
+	
+	public String getWorkflowStatus(QName workflowQName) throws Exception {
+		AeProcessFilter filter = new AeProcessFilter();
+	     filter.setProcessName(workflowQName);
+	     AeProcessListResult list = mRemote.getProcessList( filter );
+	     AeProcessInstanceDetail[] details = list.getRowDetails();
+	     AeProcessInstanceDetail detail = details[0];
+	     return detail.getStateString();
+	}
+	public int displayProcessList(QName workflowName) throws Exception {
 	      AeProcessFilter filter = new AeProcessFilter();
-	      filter.setAdvancedQuery("");
+	      filter.setProcessName(workflowName);
+	      //filter.setAdvancedQuery("");
 	      AeProcessListResult list = mRemote.getProcessList( filter );
 	      if ( list.getTotalRowCount() <= 0 )
 	      {
@@ -159,12 +182,16 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	         {
 	            AeProcessInstanceDetail detail = details[i];
 	            System.out.println( detail.getProcessId()   + "\t" +
-	                                detail.getStateReason() + "\t" +
+	                                detail.getState() + "\t" +
 	                                detail.getName() );
 	         }
 
 	         return list.getTotalRowCount();
 	      }
-	   }*/
+	   }
 
+	public static WorkflowStatusType getStatusFromString(String state) {
+		WorkflowStatusType status = WorkflowStatusType.Pending;
+		return status;
+	}
 }
