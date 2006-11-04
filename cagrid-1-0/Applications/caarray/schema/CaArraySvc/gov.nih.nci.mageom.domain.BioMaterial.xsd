@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioMaterial" xmlns:gov.nih.nci.mageom.domain.AuditAndSecurity="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.AuditAndSecurity" xmlns:gov.nih.nci.mageom.domain.BioEvent="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioEvent" xmlns:gov.nih.nci.mageom.domain.Description="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" xmlns:gov.nih.nci.mageom.domain.Measurement="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Measurement" targetNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioMaterial" elementFormDefault="qualified">
+  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" schemaLocation="gov.nih.nci.mageom.domain.Description.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.AuditAndSecurity" schemaLocation="gov.nih.nci.mageom.domain.AuditAndSecurity.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioEvent" schemaLocation="gov.nih.nci.mageom.domain.BioEvent.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Measurement" schemaLocation="gov.nih.nci.mageom.domain.Measurement.xsd" />
+  <xs:element name="BioMaterialMeasurement" type="BioMaterialMeasurement" />
+  <xs:complexType name="BioMaterialMeasurement">
+    <xs:complexContent>
+      <xs:extension base="gov.nih.nci.mageom.domain:Extendable">
+        <xs:sequence>
+          <xs:element name="bioMaterial" type="BioMaterial" minOccurs="0" maxOccurs="1" />
+          <xs:element name="measurement" type="gov.nih.nci.mageom.domain.Measurement:Measurement" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CompoundMeasurement" type="CompoundMeasurement" />
+  <xs:complexType name="CompoundMeasurement">
+    <xs:complexContent>
+      <xs:extension base="gov.nih.nci.mageom.domain:Extendable">
+        <xs:sequence>
+          <xs:element name="compound" type="Compound" minOccurs="0" maxOccurs="1" />
+          <xs:element name="measurement" type="gov.nih.nci.mageom.domain.Measurement:Measurement" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BioMaterial" type="BioMaterial" />
+  <xs:complexType name="BioMaterial">
+    <xs:complexContent>
+      <xs:extension base="gov.nih.nci.mageom.domain:Identifiable">
+        <xs:sequence>
+          <xs:element name="treatments" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="Treatment" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="characteristics" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="gov.nih.nci.mageom.domain.Description:OntologyEntry" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="qualityControlStatistics" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="gov.nih.nci.mageom.domain:NameValueType" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="materialType" type="gov.nih.nci.mageom.domain.Description:OntologyEntry" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Treatment" type="Treatment" />
+  <xs:complexType name="Treatment">
+    <xs:complexContent>
+      <xs:extension base="gov.nih.nci.mageom.domain.BioEvent:BioEvent">
+        <xs:sequence>
+          <xs:element name="sourceBioMaterialMeasurements" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="BioMaterialMeasurement" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="compoundMeasurements" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="CompoundMeasurement" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="action" type="gov.nih.nci.mageom.domain.Description:OntologyEntry" minOccurs="0" maxOccurs="1" />
+          <xs:element name="actionMeasurement" type="gov.nih.nci.mageom.domain.Measurement:Measurement" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="order" type="xs:int" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Compound" type="Compound" />
+  <xs:complexType name="Compound">
+    <xs:complexContent>
+      <xs:extension base="gov.nih.nci.mageom.domain:Identifiable">
+        <xs:sequence>
+          <xs:element name="componentCompounds" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="CompoundMeasurement" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="externalLIMS" type="gov.nih.nci.mageom.domain.Description:DatabaseEntry" minOccurs="0" maxOccurs="1" />
+          <xs:element name="compoundIndices" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="gov.nih.nci.mageom.domain.Description:OntologyEntry" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="isSolvent" type="xs:boolean" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BioSample" type="BioSample" />
+  <xs:complexType name="BioSample">
+    <xs:complexContent>
+      <xs:extension base="BioMaterial">
+        <xs:sequence>
+          <xs:element name="type" type="gov.nih.nci.mageom.domain.Description:OntologyEntry" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BioSource" type="BioSource" />
+  <xs:complexType name="BioSource">
+    <xs:complexContent>
+      <xs:extension base="BioMaterial">
+        <xs:sequence>
+          <xs:element name="sourceContact" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Contact" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LabeledExtract" type="LabeledExtract" />
+  <xs:complexType name="LabeledExtract">
+    <xs:complexContent>
+      <xs:extension base="BioMaterial">
+        <xs:sequence>
+          <xs:element name="labels" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="Compound" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>
+
