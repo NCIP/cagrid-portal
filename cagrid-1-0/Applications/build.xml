@@ -4,7 +4,7 @@
     
     <import file="${basedir}/build.xml"/>
     
-    <property name="apps.list" value="cabio cagrid-browser"/>
+    <property name="apps.list" value="caarray"/>
     
     <target name="app-all" depends="app-clean" description="Builds the entire application">
         <for list="${apps.list}" parallel="false" param="app.name" trim="true">
@@ -32,7 +32,32 @@
         
     </target>    
     
-    
+    <!-- =============================================================== -->
+    <!-- caArray:                                                        -->
+    <!-- =============================================================== -->
+    <target name="build-caarray" depends="app-prepare" description="Builds the caarray service">
+        
+        <resolveDependencies extdir="${apps.dir}/caarray/ext">
+            <artifact refid="ant-contrib.jars"/>
+            <artifact refid="core.jars"/>
+            <artifact refid="servicesecurity.jars"/>
+            <artifact refid="mds.jars"/>
+            <artifact refid="core.test.jars"/>
+            <artifact refid="common.metadata.jars"/>
+            <artifact refid="data.metadata.jars"/>
+            <artifact refid="introduce.jars"/>
+            <artifact refid="data.jars"/>
+            <artifact refid="sdk.query.jars"/>            
+        </resolveDependencies>
+
+        <ant dir="${apps.dir}/caarray" inheritAll="false" antfile="build.xml" target="all"/>
+        
+        <resolveDependencies extdir="${apps.dir}/caarray/schema/CaArraySvc">
+            <artifact refid="metadata.schemas" />
+            <artifact refid="security.metadata.schemas" />
+            <artifact refid="data.cql.schemas" />
+        </resolveDependencies>
+    </target>    
     
     <!-- =============================================================== -->
     <!-- caBIO:                                                          -->
