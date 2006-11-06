@@ -76,4 +76,20 @@ public class WorkflowResource implements Resource {
 	public WorkflowStatusType getStatus() {
 		return this.workflowStatus;
 	}
+	
+	public WorkflowStatusType pause() throws WorkflowExceptionType {
+		this.abAdapter.suspend(this.workflowName);
+		this.workflowStatus = WorkflowStatusType.Pending;
+		return this.workflowStatus;
+	}
+	
+	public WorkflowStatusType resume() throws WorkflowExceptionType {
+		this.abAdapter.resume(this.workflowName);
+		this.workflowStatus = WorkflowStatusType.Active;
+		return this.workflowStatus;
+	}
+	
+	public void cancel() throws WorkflowExceptionType {
+		this.abAdapter.cancel(this.workflowName);
+	}
 }

@@ -144,7 +144,7 @@ public class WorkflowFactoryServiceClient extends ServiceSecurityClient implemen
             WorkflowServiceImplClient wclient = new WorkflowServiceImplClient(epr);
             StartInputType startInput = new StartInputType();
             WorkflowInputType inputArgs = new WorkflowInputType();
-            FileInputStream in = new FileInputStream("input1.xml");
+            FileInputStream in = new FileInputStream("input.xml");
     		Element e2 = XmlUtils.newDocument(in).getDocumentElement();
     		System.out.println(XmlUtils.toString(e2));
     		MessageElement anyContent = AnyHelper.toAny(new MessageElement(e2));

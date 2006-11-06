@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.xml.namespace.QName;
@@ -133,20 +132,42 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 
 
 	public void suspend(String workflowName) throws WorkflowExceptionType {
-		// TODO Auto-generated method stub
-		
+		try {
+			AeProcessFilter filter = new AeProcessFilter();
+			filter.setProcessName(new QName(workflowName));
+			AeProcessListResult list = mRemote.getProcessList( filter );
+			long processId =  list.getRowDetails()[0].getProcessId();
+			this.mRemote.suspendProcess(processId);
+		} catch (Exception e) {
+			throw new WorkflowExceptionType();
+		}
 	}
 
 
 	public void resume(String workflowName) throws WorkflowExceptionType {
-		// TODO Auto-generated method stub
+		try {
+			AeProcessFilter filter = new AeProcessFilter();
+			filter.setProcessName(new QName(workflowName));
+			AeProcessListResult list = mRemote.getProcessList( filter );
+			long processId =  list.getRowDetails()[0].getProcessId();
+			this.mRemote.resumeProcess(processId);
+		} catch (Exception e) {
+			throw new WorkflowExceptionType();
+		}		
 		
 	}
 
 
 	public void cancel(String workflowName) throws WorkflowExceptionType {
-		// TODO Auto-generated method stub
-		
+		try {
+			AeProcessFilter filter = new AeProcessFilter();
+			filter.setProcessName(new QName(workflowName));
+			AeProcessListResult list = mRemote.getProcessList( filter );
+			long processId =  list.getRowDetails()[0].getProcessId();
+			this.mRemote.terminateProcess(processId);
+		} catch (Exception e) {
+			throw new WorkflowExceptionType();
+		}		
 	}
 	
 	public String getProcessStatus(QName workflowName) throws Exception {
@@ -164,6 +185,7 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	     AeProcessInstanceDetail detail = details[0];
 	     return detail.getStateString();
 	}
+
 	public int displayProcessList(QName workflowName) throws Exception {
 	      AeProcessFilter filter = new AeProcessFilter();
 	      filter.setProcessName(workflowName);
