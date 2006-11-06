@@ -239,11 +239,13 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 						long timeout = getWaitMills(constraints);
 						nextExec.join(timeout);
 						synchronized (threadCommunicationBuffer) {
-							if (threadCommunicationBuffer.get(ITERATION_RESULT) == null) {
-								synchronized (threadCommunicationBuffer) {
-									threadCommunicationBuffer.put(MUST_STOP_THREAD, Boolean.TRUE);
-									threadCommunicationBuffer.put(THREAD_EXCEPTION, new TimeoutException());
-								}
+							// regardless of what the other thread is doing, it should stop
+							threadCommunicationBuffer.put(MUST_STOP_THREAD, Boolean.TRUE);
+							// if there's no result, then some exception must be thrown
+							if (threadCommunicationBuffer.get(ITERATION_RESULT) == null 
+								&& threadCommunicationBuffer.get(THREAD_EXCEPTION) == null) {
+								// no exception from the query thread means a timeout
+								threadCommunicationBuffer.put(THREAD_EXCEPTION, new TimeoutException());
 							}
 						}
 					} else {
