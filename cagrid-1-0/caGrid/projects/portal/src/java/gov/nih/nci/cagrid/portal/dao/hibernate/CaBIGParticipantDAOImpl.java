@@ -17,8 +17,28 @@ public final class CaBIGParticipantDAOImpl extends BaseDAOImpl
 
 
     public List keywordSearch(String keyword) throws DataAccessException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        StringBuffer sb = new StringBuffer("from CaBIGParticipant p where ");
+
+        sb.append("p.name like '%").append(keyword.trim()).append("%'");
+        sb.append(" or p.institute like '%").append(keyword.trim()).append("%'");
+        sb.append(" or p.homepageURL like '%").append(keyword.trim()).append("%'");
+        sb.append(" or p.city like '%").append(keyword.trim()).append("%'");
+        sb.append(" or p.postalCode like '%").append(keyword.trim()).append("%'");
+        sb.append(" or p.phoneNumber like '%").append(keyword.trim()).append("%'");
+        sb.append(" or p.email like '%").append(keyword.trim()).append("%'");
+        sb.append(" group by p.name");
+
+
+        _logger.debug("Finding caBIG Participants for keyword" + keyword);
+        try {
+            return getHibernateTemplate().find(sb.toString());
+        } catch (DataAccessException e) {
+            _logger.error(e);
+            throw e;
+        }
+
     }
+
 
     public List getUniqueParticipants() throws DataAccessException {
         return getHibernateTemplate().find("from CaBIGParticipant participant order by participant.name");

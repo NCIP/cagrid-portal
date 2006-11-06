@@ -36,7 +36,7 @@ public class DirectorySetup {
 
         try {
             ServicesList services = (ServicesList) PortalWebUtils.getBean("services");
-            services.setList(gridServiceManager.getAllServices());
+            services.setList(gridServiceManager.getUniqueServices());
         } catch (PortalRuntimeException e) {
             //log so admin knows
             _logger.error(e);

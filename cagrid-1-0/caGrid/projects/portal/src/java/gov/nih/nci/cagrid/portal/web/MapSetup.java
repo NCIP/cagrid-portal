@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.portal.web;
 
 import gov.nih.nci.cagrid.portal.common.GeoCodeValues;
 import gov.nih.nci.cagrid.portal.domain.CaBIGParticipant;
+import gov.nih.nci.cagrid.portal.domain.CaBIGWorkspace;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
 import gov.nih.nci.cagrid.portal.manager.CaBIGWorkspaceManager;
@@ -36,7 +37,7 @@ public class MapSetup {
         _logger.debug("Setting up map of services");
 
         try {
-            List services = gridServiceManager.getAllServices();
+            List services = gridServiceManager.getUniqueServices();
             //clear nodes
             nodes.clear();
 
@@ -49,7 +50,7 @@ public class MapSetup {
                     //form a MapNode object and add it to the list
                     try {
                         List displayText = new ArrayList();
-                        displayText.add(service.getResearchCenter().getShortName());
+                        displayText.add("Hosting Center:" + service.getResearchCenter().getShortName());
                         nodes.add(new MapNode(service.getName(), geoVal, displayText));
                     } catch (InvalidMapNodeException e) {
                         //is expected. Continue
@@ -84,6 +85,17 @@ public class MapSetup {
                 try {
                     List displayText = new ArrayList();
                     displayText.add(participant.getHomepageURL());
+
+                    /** Add worskspaces if available **/
+                    if (participant.getWorkspaceCollection().size() > 0) {
+                        StringBuffer wsDisplay = new StringBuffer("Worskspace:");
+                        for (Iterator wsIter = participant.getWorkspaceCollection().iterator(); wsIter.hasNext();) {
+                            CaBIGWorkspace workspace = (CaBIGWorkspace) wsIter.next();
+                            wsDisplay.append(workspace.getShortName());
+                            wsDisplay.append(" ");
+                        }
+                        displayText.add(wsDisplay.toString());
+                    }
                     nodes.add(new MapNode(participant.getName(), geoVal, displayText));
                 } catch (InvalidMapNodeException e) {
                     //is expected. Continue

@@ -27,7 +27,7 @@ public interface GridServiceManager extends BaseManager {
      *
      * @throws DataAccessException
      */
-    public List getAllServices() throws PortalRuntimeException;
+    public List getUniqueServices() throws PortalRuntimeException;
 
 
     /**

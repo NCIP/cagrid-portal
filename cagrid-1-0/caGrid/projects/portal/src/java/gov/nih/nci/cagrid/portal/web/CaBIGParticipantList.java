@@ -19,6 +19,8 @@ import java.util.List;
 public class CaBIGParticipantList {
 
     private List list;
+    private int count;
+
     private CaBIGWorkspaceManager caBIGManager;
     private CaBIGParticipant navigatedParticipant;
 
@@ -40,6 +42,21 @@ public class CaBIGParticipantList {
         return "success";
     }
 
+    public void setupKeywordSearch(String keyword) throws FacesException {
+        try {
+            list = caBIGManager.keywordSearch(keyword);
+        } catch (PortalRuntimeException e) {
+            new FacesException(e);
+        }
+    }
+
+    /**
+     * count of all Participants *
+     */
+    public int getCount() {
+        return caBIGManager.getCount(CaBIGParticipant.class);
+    }
+
     public List getList() {
         return list;
     }
@@ -48,6 +65,9 @@ public class CaBIGParticipantList {
         this.list = list;
     }
 
+    public int getListSize() {
+        return list.size();
+    }
 
     public CaBIGWorkspaceManager getCaBIGManager() {
         return caBIGManager;

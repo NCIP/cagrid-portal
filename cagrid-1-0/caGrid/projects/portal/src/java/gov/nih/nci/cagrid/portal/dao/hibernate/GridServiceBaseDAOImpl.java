@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
 import org.springframework.dao.DataAccessException;
 
 import java.util.List;
-import java.util.StringTokenizer;
 
 
 /**
@@ -19,8 +18,34 @@ import java.util.StringTokenizer;
 public final class GridServiceBaseDAOImpl extends BaseDAOImpl
         implements GridServiceBaseDAO {
 
-    public List getAllServices() throws DataAccessException {
-        return getHibernateTemplate().find("from RegisteredService service order by service.name desc");
+    public List getUniqueServices() throws DataAccessException {
+        return getHibernateTemplate().find("from RegisteredService service group by service.EPR order by service.name desc");
+    }
+
+    /**
+     * Will do a free text search
+     *
+     * @param keyword
+     * @return List of PointOfContact objects
+     */
+    public List keywordSearch(String keyword) {
+
+        StringBuffer sb = new StringBuffer("from RegisteredService service where");
+        sb.append(" service.EPR like '%").append(keyword.trim()).append("%'");
+        sb.append(" or service.name like '%").append(keyword.trim()).append("%'");
+        sb.append(" or service.description like '%").append(keyword.trim()).append("%'");
+        sb.append(" or service.rc.displayName like '%").append(keyword.trim()).append("%'");
+        sb.append(" or service.rc.shortName like '%").append(keyword.trim()).append("%'");
+
+
+        _logger.debug("Find Registered Services for keyword" + keyword);
+
+        try {
+            return getHibernateTemplate().find(sb.toString());
+        } catch (DataAccessException e) {
+            _logger.error(e);
+            throw e;
+        }
     }
 
     /**
@@ -88,28 +113,5 @@ public final class GridServiceBaseDAOImpl extends BaseDAOImpl
         return id;
     }
 
-    /**
-     * Will do a free text search
-     *
-     * @param keyword
-     * @return List of PointOfContact objects
-     */
-    public List keywordSearch(String keyword) {
 
-        StringBuffer sb = new StringBuffer("from RegisteredService service where");
-        StringTokenizer st = new StringTokenizer(keyword);
-        while (st.hasMoreTokens()) {
-            String hqlQueryStr = st.nextToken();
-            sb.append(" service.EPR like '%").append(keyword.trim()).append("%'");
-            sb.append(" or service.name like '%").append(keyword.trim()).append("%'");
-            sb.append(" or service.description like '%").append(keyword.trim()).append("%'");
-            _logger.debug("Find Registered Services for keyword" + keyword);
-        }
-        try {
-            return getHibernateTemplate().find(sb.toString());
-        } catch (DataAccessException e) {
-            _logger.error(e);
-            throw e;
-        }
-    }
 }

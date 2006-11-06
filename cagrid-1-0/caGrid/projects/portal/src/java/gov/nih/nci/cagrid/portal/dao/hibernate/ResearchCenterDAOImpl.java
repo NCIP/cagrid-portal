@@ -38,22 +38,22 @@ public final class ResearchCenterDAOImpl extends BaseDAOImpl
         StringTokenizer st = new StringTokenizer(keyword);
         while (st.hasMoreTokens()) {
             String hqlQueryStr = st.nextToken();
-            sb.append(" rc.country like '%").append(keyword.trim()).append("%'");
-            sb.append(" or rc.description like '%").append(keyword.trim()).append("%'");
-            sb.append(" or rc.displayName like '%").append(keyword.trim()).append("%'");
-            sb.append(" or rc.homepageURL like '%").append(keyword.trim()).append("%'");
-            sb.append(" or rc.imageURL like '%").append(keyword.trim()).append("%'");
-            sb.append(" or rc.locality like '%").append(keyword.trim()).append("%'");
-            sb.append(" or rc.postalCode like '%").append(keyword.trim()).append("%'");
-            sb.append(" or rc.street1 like '%").append(keyword.trim()).append("%'");
-            sb.append(" or rc.street2 like '%").append(keyword.trim()).append("%'");
-            sb.append(" or rc.state like '%").append(keyword.trim()).append("%'");
-            sb.append(" or rc.shortName like '%").append(keyword.trim()).append("%'");
-            sb.append(" or rc.rssNewsURL like '%").append(keyword.trim()).append("%'");
+            sb.append(" rc.country like '%").append(hqlQueryStr.trim()).append("%'");
+            sb.append(" or rc.description like '%").append(hqlQueryStr.trim()).append("%'");
+            sb.append(" or rc.displayName like '%").append(hqlQueryStr.trim()).append("%'");
+            sb.append(" or rc.homepageURL like '%").append(hqlQueryStr.trim()).append("%'");
+            sb.append(" or rc.imageURL like '%").append(hqlQueryStr.trim()).append("%'");
+            sb.append(" or rc.locality like '%").append(hqlQueryStr.trim()).append("%'");
+            sb.append(" or rc.postalCode like '%").append(hqlQueryStr.trim()).append("%'");
+            sb.append(" or rc.street1 like '%").append(hqlQueryStr.trim()).append("%'");
+            sb.append(" or rc.street2 like '%").append(hqlQueryStr.trim()).append("%'");
+            sb.append(" or rc.state like '%").append(hqlQueryStr.trim()).append("%'");
+            sb.append(" or rc.shortName like '%").append(hqlQueryStr.trim()).append("%'");
+            sb.append(" or rc.rssNewsURL like '%").append(hqlQueryStr.trim()).append("%'");
             sb.append(" group by rc.shortName");
+            _logger.debug("Find Research Centers for keyword" + hqlQueryStr);
         }
 
-        _logger.debug("Find Research Centers for keyword" + keyword);
         try {
             return getHibernateTemplate().find(sb.toString());
         } catch (DataAccessException e) {

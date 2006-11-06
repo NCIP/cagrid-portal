@@ -73,6 +73,18 @@ public abstract class BaseManagerImpl implements BaseManager {
         }
     }
 
+    /**
+     * Will return the total number of instances in the DB
+     * for a particular class.
+     *
+     * @param cls
+     * @return
+     * @throws gov.nih.nci.cagrid.portal.exception.PortalRuntimeException
+     *
+     */
+    public int getCount(Class cls) throws PortalRuntimeException {
+        return gridServiceBaseDAO.getCount(cls);
+    }
 
     /**
      * setters for spring *

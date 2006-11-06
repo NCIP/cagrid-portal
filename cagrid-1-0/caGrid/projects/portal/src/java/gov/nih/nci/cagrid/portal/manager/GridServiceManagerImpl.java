@@ -27,11 +27,11 @@ public class GridServiceManagerImpl extends GeocodingBaseManagerImpl
     /**
      * @return
      * @throws PortalRuntimeException
-     * @see GridServiceManager#getAllServices()
+     * @see GridServiceManager#getUniqueServices()
      */
-    public List getAllServices() throws PortalRuntimeException {
+    public List getUniqueServices() throws PortalRuntimeException {
         try {
-            return gridServiceBaseDAO.getAllServices();
+            return gridServiceBaseDAO.getUniqueServices();
         } catch (DataAccessException e) {
             throw new PortalRuntimeException(e);
         }

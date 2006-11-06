@@ -2,7 +2,7 @@
 <module version="4" relativePaths="true" type="J2EE_WEB_MODULE" j2ee-integration="Tomcat Server">
   <component name="AppServerSpecificValidatorsManager" />
   <component name="ModuleRootManager" />
-  <component name="NewModuleRootManager" inherit-compiler-output="false">
+  <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/webcontent/WEB-INF/classes" />
     <exploded url="file://$MODULE_DIR$/exploded" />
     <content url="file://$MODULE_DIR$">
@@ -13,7 +13,7 @@
       <sourceFolder url="file://$MODULE_DIR$/test/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/webcontent/resources" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="1.5 (1)" jdkType="JavaSDK" />
+    <orderEntry type="jdk" jdkName="1.5 (1)" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Tomcat" level="application_server_libraries" />
     <orderEntry type="module-library">
@@ -511,7 +511,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="globus" level="application" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -630,6 +629,16 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="castor" level="application" />
+    <orderEntry type="library" name="Globus-4.0" level="application" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/test/resources" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">
@@ -638,8 +647,7 @@
     <setting name="JAR_URL" value="file://" />
     <setting name="JAR_ENABLED" value="false" />
     <setting name="SYNC_EXPLODED_DIR" value="true" />
-    <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
-    <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
+    <setting name="BUILD_ON_FRAME_DEACTIVATION" value="false" />
     <setting name="RUN_JASPER_VALIDATION" value="false" />
   </component>
   <component name="WebModuleProperties">
@@ -919,11 +927,6 @@
       <url>jar://$MODULE_DIR$/lib/mysql-connector-java-3.1.13-bin.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
-      <attribute name="method" value="0" />
-      <attribute name="URI" value="&lt;N/A&gt;" />
-      <url>jar://$MODULE_DIR$/lib/nocopy/servlet-api.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/poi-2.5.1-final-20040804.jar" />
       <url>jar://$MODULE_DIR$/lib/poi/poi-2.5.1-final-20040804.jar!/</url>
@@ -983,17 +986,14 @@
       <attribute name="URI" value="/WEB-INF/lib/spring-mock.jar" />
       <url>jar://$MODULE_DIR$/test/lib/spring-mock.jar!/</url>
     </containerElement>
-    <containerElement type="library" name="castor" level="application">
+    <containerElement type="library" level="module">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/classes" />
+      <url>file://$MODULE_DIR$/test/resources</url>
+    </containerElement>
+    <containerElement type="library" level="application" name="Globus-4.0">
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib" />
-    </containerElement>
-    <containerElement type="library" name="globus" level="application">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib" />
-    </containerElement>
-    <containerElement type="library" name="Tomcat" level="application_server_libraries">
-      <attribute name="method" value="0" />
-      <attribute name="URI" value="&lt;N/A&gt;" />
     </containerElement>
     <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/webcontent/WEB-INF/web.xml" optional="false" version="2.3" />
     <deploymentDescriptor name="context.xml" url="file://$MODULE_DIR$/webcontent/META-INF/context-dev.xml" optional="false" version="5.x" />

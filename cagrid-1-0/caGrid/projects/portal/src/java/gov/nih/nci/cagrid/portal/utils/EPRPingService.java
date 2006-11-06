@@ -1,22 +1,30 @@
 package gov.nih.nci.cagrid.portal.utils;
 
+import gov.nih.nci.cagrid.metadata.MetadataConstants;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.oasis.wsrf.properties.WSResourcePropertiesServiceAddressingLocator;
 
 /**
  * Created by IntelliJ IDEA.
  * User: kherm
  * Date: Oct 25, 2006
- * Time: 5:45:01 PM
+ * Time: 5:50:28 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface EPRPingService {
+public class EPRPingService {
 
-    /**
-     * Will return true if service(epr)
-     * is rechable currently.
-     *
-     * @param epr
-     * @return
-     */
-    public boolean ping(EndpointReferenceType epr);
+
+    public static boolean ping(EndpointReferenceType epr) {
+        WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
+
+        try {
+            locator.getGetResourcePropertyPort(epr).getResourceProperty(MetadataConstants.CAGRID_MD_QNAME);
+        } catch (Exception e) {
+            //service is not reachable
+            return false;
+        }
+
+        //if it reaches this point
+        return true;
+    }
 }

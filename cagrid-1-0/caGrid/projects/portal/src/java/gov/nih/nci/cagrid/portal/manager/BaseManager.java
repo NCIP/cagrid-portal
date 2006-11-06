@@ -48,4 +48,15 @@ public interface BaseManager {
      * @throws PortalRuntimeException
      */
     public java.util.List keywordSearch(String keyword) throws PortalRuntimeException;
+
+    /**
+     * Will return the total number of instances in the DB
+     * for a particular class.
+     *
+     * @param cls
+     * @return
+     * @throws PortalRuntimeException
+     */
+    public int getCount(Class cls) throws PortalRuntimeException;
+
 }

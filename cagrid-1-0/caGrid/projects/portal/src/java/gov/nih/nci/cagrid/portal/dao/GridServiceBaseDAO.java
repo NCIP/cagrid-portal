@@ -22,7 +22,7 @@ public interface GridServiceBaseDAO extends BaseDAO {
      * @return
      * @throws DataAccessException
      */
-    public List getAllServices() throws DataAccessException;
+    public List getUniqueServices() throws DataAccessException;
 
     /**
      * Will return the business key depending

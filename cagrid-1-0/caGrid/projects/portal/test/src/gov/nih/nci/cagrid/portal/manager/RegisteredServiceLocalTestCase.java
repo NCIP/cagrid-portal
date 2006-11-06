@@ -65,10 +65,13 @@ public class RegisteredServiceLocalTestCase extends BaseSpringDataAccessAbstract
                 fail(e.getMessage());
             }
 
+
             gridServiceManager.save(rService);
 
             RegisteredService newService = (RegisteredService) gridServiceManager.getObjectByPrimaryKey(RegisteredService.class, rService.getPk());
             assertEquals(rService.getEPR(), newService.getEPR());
+
+
         } catch (Exception e) {
             fail(e.getMessage());
         }

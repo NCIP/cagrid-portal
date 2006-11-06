@@ -12,6 +12,4 @@
         </property>
     </bean>
 
-    <bean id="eprPingService" class="gov.nih.nci.cagrid.portal.utils.EPRPingServiceImpl"/>
-
 </beans>

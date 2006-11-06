@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.web;
 
+import gov.nih.nci.cagrid.portal.domain.PointOfContact;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
 import gov.nih.nci.cagrid.portal.manager.GridServiceManager;
@@ -21,10 +22,10 @@ import java.util.List;
 public class ServicesList {
 
     private List list = new ArrayList();
+    private int count;
+
     private RegisteredService navigatedService;
     private GridServiceManager gridServiceManager;
-    private EPRPingService pingService;
-    private int listSize;
 
     private boolean navigatedServiceActive;
 
@@ -32,10 +33,12 @@ public class ServicesList {
 
     public String navigateToService() throws FacesException {
         try {
-            Integer pk = new Integer((String) FacesContext.getCurrentInstance().getExternalContext()
-                    .getRequestParameterMap().get("navigatedServicePk"));
+            int index = Integer.parseInt((String) FacesContext.getCurrentInstance().
+                    getExternalContext().getRequestParameterMap().get("navigatedServiceIndex"));
+            navigatedService = (RegisteredService) list.get(index);
 
-            navigatedService = (RegisteredService) gridServiceManager.getObjectByPrimaryKey(RegisteredService.class, pk);
+            setNavigatedServiceActive(EPRPingService.ping(navigatedService.getHandle()));
+
         } catch (NumberFormatException e) {
             _logger.error(e);
             throw new FacesException(e);
@@ -44,6 +47,26 @@ public class ServicesList {
             throw new FacesException(e);
         }
 
+        return "success";
+    }
+
+    public String navigateToPOC() throws FacesException {
+        try {
+            int index = Integer.parseInt((String) FacesContext.getCurrentInstance().getExternalContext()
+                    .getRequestParameterMap().get("navigatedPOCIndex"));
+            PointOfContact poc = (PointOfContact) navigatedService.getResearchCenter().getPocCollection().toArray()[index];
+
+            PeopleList people = (PeopleList) PortalWebUtils.getBean("people");
+            people.setNavigatedPOC(poc);
+
+
+        } catch (NumberFormatException e) {
+            _logger.error(e);
+            throw new FacesException(e);
+        } catch (PortalRuntimeException e) {
+            _logger.error(e);
+            throw new FacesException(e);
+        }
         return "success";
     }
 
@@ -56,8 +79,16 @@ public class ServicesList {
     }
 
 
+    public int getCount() {
+        return gridServiceManager.getCount(RegisteredService.class);
+    }
+
     public boolean isNavigatedServiceActive() {
-        return pingService.ping(navigatedService.getHandle());
+        return navigatedServiceActive;
+    }
+
+    public void setNavigatedServiceActive(boolean navigatedServiceActive) {
+        this.navigatedServiceActive = navigatedServiceActive;
     }
 
     public int getListSize() {
@@ -85,7 +116,4 @@ public class ServicesList {
     }
 
 
-    public void setPingService(EPRPingService pingService) {
-        this.pingService = pingService;
-    }
 }

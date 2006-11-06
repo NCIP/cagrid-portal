@@ -22,6 +22,8 @@
         <put name="nciFooter" value="/jsp/footer/NCIFooter.jsp"/>
     </definition>
 
+    <definition name="navigation" page="/jsp/content/NavigationTile.jsp">
+    </definition>
 
     <definition name="/home.tiles" extends="Home">
         <put name="mainMenu" value="/jsp/menu/MainMenuHome.jsp"/>
@@ -85,7 +87,7 @@
 
     <definition name="SearchResult" page="/jsp/content/SearchResults.jsp">
         <put name="serviceSearchResult" value="/jsp/content/DirectoryServices.jsp"/>
-        <put name="rcSearchResult" value="/jsp/content/DirectoryResearchCenter.jsp"/>
+        <put name="participantsResult" value="/jsp/content/DirectoryCaBIGParticipants.jsp"/>
         <put name="pocSearchResult" value="/jsp/content/DirectoryPointOfContact.jsp"/>
     </definition>
 

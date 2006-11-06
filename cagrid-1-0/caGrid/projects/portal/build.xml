@@ -218,6 +218,8 @@
             <!--Copy Globus libraries-->
             <fileset dir="${globus.lib.dir}">
                 <include name="*.jar"/>
+                <!-- exclude the cog-jglobus jar and used the patched version from caGrid-->
+                <exclude name="cog-jglobus.jar"/>
             </fileset>
         </copy>
 
@@ -419,7 +421,8 @@
 
     <!-- will create Portal DB and drop seed data -->
     <!-- Read the Readme.txt for more infor -->
-    <target name="createDatabase" depends="setClasspath" description="Will drop the Portal Database">
+    <target name="createPortalDatabase" depends="setClasspath"
+            description="Will create the Portal Database with appropriate Seed Data">
         <java classname="gov.nih.nci.cagrid.portal.db.CreatePortalDatabase"
               failonerror="true" logerror="true">
             <classpath>
@@ -431,11 +434,12 @@
     </target>
 
 
-    <target name="populateDBWithSeedData" depends="init" description="Will populate the Database with seed data">
+    <target name="createCaBIGWorkspaceSeedData" depends="init"
+            description="Will populate the Database with caBIG worskpace seed data">
 
 
         <echo message="Starting upload process. Check ${build.log.dir}/caBIGUploadProcess.log for logs"/>
-        <java classname="gov.nih.nci.cagrid.portal.db.CreatePortalSeedData"
+        <java classname="gov.nih.nci.cagrid.portal.db.CreateCaBIGWorskpaceSeedData"
               failonerror="true" logerror="true">
             <classpath>
                 <path refid="portal.run.classpath"/>

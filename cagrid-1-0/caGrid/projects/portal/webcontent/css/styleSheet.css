@@ -437,10 +437,17 @@ SIDEBAR BEGINS
 
 .sidebarContent {
 /* for the areas under the sidebar titles and requires text */
-    font-size: 1em;
+    font-size: 1.1em;
     padding: 0.8em;
     border-left: 1px solid #CCCCCC; /* constant: medium gray */
     vertical-align: top;
+}
+
+.sidebarContentLink {
+    font-size: 1.1em;
+    font-weight: bold;
+    vertical-align: top;
+
 }
 
 .sidebarLogin {
@@ -457,8 +464,8 @@ DATA TABLE BEGINS
     font-family: arial, helvetica, verdana, sans-serif;
     font-size: 0.8em;
     font-weight: bold; /*background-color: #5C5C5C; /* constant: dark gray */
-* / background-color : #797C9C; /* constant: dark purple */
-* / color : #FFFFFF; /* constant: white */
+    background-color: #797C9C; /* constant: dark purple */
+    color: #FFFFFF; /* constant: white */
     border-top: 1px solid #CCCCCC; /* constant: dark gray */
     border-left: 1px solid #CCCCCC; /* constant: dark gray */
     border-right: 1px solid #CCCCCC; /* constant: light gray */
@@ -514,7 +521,7 @@ DATA TABLE BEGINS
 
 .dataCellText {
 /* for text output cells */
-    font-size: 0.8em;
+    font-size: 0.9em;
     padding: 0em;
     line-height: 1.5em;
     vertical-align: middle;
@@ -663,14 +670,14 @@ Custom styles for Portal
 
 .searchButton {
     font-family: arial, helvetica, verdana, sans-serif;
-    font-size: 1.1em;
+    font-size: 0.9em;
     font-weight: bold;
     background-color: #5C5C5C;
     color: #FFFFFF; /* constant: white */
     text-align: center;
     padding: 0.2em;
-    padding-left: 0.3em;
-    padding-right: 0.3em;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
     border: 0px;
 }
 
@@ -752,7 +759,12 @@ Custom styles for Portal
     padding: 1em;
     line-height: 1.5em;
     vertical-align: top;
+}
 
+a.link {
+    font-size: 0.9em;
+    line-height: 1.5em;
+    vertical-align: top;
 }
 
 .scrollerStyle1 {
@@ -883,10 +895,31 @@ div.mapStyle {
 }
 
 .ftrContent {
+/*for the area below the title content of the home page * / font-family : arial, helvetica, verdana, sans-serif;*/
     font-size: 0.8em;
-    padding: 0.4em;
+    padding: 1em;
     line-height: 1.5em;
     vertical-align: top;
+}
 
+.navigationTable {
+    width: 10%;
+    height: 10%;
+    vertical-align: top;
+}
+
+a.navigationBtn {
+    font-family: arial, helvetica, sans-serif;
+    font-size: 0.7em;
+    font-weight: bold;
+    background-color: #5C5C5C; /* darker */
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    color: #FFFFFF; /* constant: white */
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid #CCCCCC; /* constant: medium gray */
 }
 

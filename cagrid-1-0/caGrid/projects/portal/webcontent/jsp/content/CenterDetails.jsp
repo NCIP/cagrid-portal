@@ -1,6 +1,7 @@
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t" %>
+<%@ taglib prefix="tiles" uri="http://struts.apache.org/tags-tiles" %>
 
 <f:loadBundle basename="Portal-Labels" var="labels"/>
 
@@ -15,8 +16,10 @@
             </h:column>
         </f:facet>
 
-        <f:verbatim><br/></f:verbatim>
-        <%/*-- Scroller to scroll through results */%>
+        <%/* Navigation tile */%>
+        <h:column>
+            <tiles:insert definition="navigation" ignore="true" flush="false"/>
+        </h:column>
 
         <h:column>
 

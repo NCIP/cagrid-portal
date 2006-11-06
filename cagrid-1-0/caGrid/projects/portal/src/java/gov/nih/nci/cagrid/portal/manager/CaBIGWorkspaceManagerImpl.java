@@ -40,7 +40,7 @@ public class CaBIGWorkspaceManagerImpl extends GeocodingBaseManagerImpl
      *
      */
     public List keywordSearch(String keyword) throws PortalRuntimeException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return caBIGDAO.keywordSearch(keyword);
     }
 
     public void save(CaBIGWorkspace workspace) throws PortalRuntimeException {

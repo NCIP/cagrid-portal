@@ -85,11 +85,6 @@
             <property-name>gridServiceManager</property-name>
             <value>#{gridServiceManager}</value>
         </managed-property>
-        <managed-property>
-            <property-name>pingService</property-name>
-            <value>#{eprPingService}</value>
-        </managed-property>
-
     </managed-bean>
 
     <managed-bean>
@@ -179,12 +174,17 @@
             <to-view-id>/serviceDetails.portal</to-view-id>
         </navigation-case>
         <navigation-case>
+            <from-action>#{services.navigateToPOC}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/pointOfContactDetails.portal</to-view-id>
+        </navigation-case>
+        <navigation-case>
             <from-action>#{people.navigateToPOC}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/pointOfContactDetails.portal</to-view-id>
         </navigation-case>
         <navigation-case>
-            <from-action>#{centers.navigateToCenter}</from-action>
+            <from-action>#{people.navigateToCenter}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/centerDetails.portal</to-view-id>
         </navigation-case>

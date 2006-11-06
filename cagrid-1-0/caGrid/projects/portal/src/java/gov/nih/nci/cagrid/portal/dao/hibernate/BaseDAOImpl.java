@@ -26,6 +26,21 @@ public abstract class BaseDAOImpl extends HibernateDaoSupport implements BaseDAO
         _logger = Category.getInstance(getClass());
     }
 
+    /**
+     * Will return the total number of objects in the DB(repository)
+     * of a particular class
+     *
+     * @param cls
+     * @return
+     * @throws org.springframework.dao.DataAccessException
+     *
+     */
+    public int getCount(Class cls) throws DataAccessException {
+        String hqlString = "Select count(obj) from " + cls.getName() + " obj";
+        Integer count = (Integer) getHibernateTemplate().find(hqlString).get(0);
+        return count.intValue();
+    }
+
     public Object getObjectByPrimaryKey(Class cls, Integer id) throws DataAccessException {
         return getHibernateTemplate().get(cls, id);
     }

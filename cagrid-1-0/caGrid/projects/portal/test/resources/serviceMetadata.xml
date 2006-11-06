@@ -7,8 +7,8 @@
                                                 xsi:type="ns2:Service"
                                                 xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
             <ns2:pointOfContactCollection>
-                <com:PointOfContact affiliation="OSU" email="oster@bmi.osu.edu" firstName="Scott"
-                                    lastName="Oster" role="Maintainer"
+                <com:PointOfContact affiliation="NCICB" email="kherm@mail.nih.gov" firstName="Manav"
+                                    lastName="Kher" role="Maintainer"
                                     xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
             </ns2:pointOfContactCollection>
             <ns2:serviceContextCollection>
@@ -213,14 +213,14 @@
         </ns2:Service>
     </ns1:serviceDescription>
     <ns1:hostingResearchCenter>
-        <ns36:ResearchCenter displayName="Ohio State University" shortName="OSU"
+        <ns36:ResearchCenter displayName="National Cancer Institute Center For Bioinformantics" shortName="NCICB"
                              xsi:type="ns36:ResearchCenter"
                              xmlns:ns36="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-            <ns36:Address country="US" postalCode="43210" stateProvence="OH" street1="333 W. 10th     Ave."
+            <ns36:Address country="US" postalCode="20852" stateProvence="MD" street1="6116 Executive Blvd."
                           xsi:type="ns36:Address"/>
             <ns36:pointOfContactCollection>
-                <ns36:PointOfContact affiliation="OSU" email="oster@bmi.osu.edu" firstName="Scott"
-                                     lastName="Oster" role="Maintainer" xsi:type="ns36:PointOfContact"/>
+                <ns36:PointOfContact affiliation="NCICB" email="kherm@mail.nih.gov" firstName="Manav"
+                                     lastName="Kher" role="Maintainer" xsi:type="ns36:PointOfContact"/>
             </ns36:pointOfContactCollection>
         </ns36:ResearchCenter>
     </ns1:hostingResearchCenter>

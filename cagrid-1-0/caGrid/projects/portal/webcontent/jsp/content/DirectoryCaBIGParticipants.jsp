@@ -18,13 +18,14 @@
 <h:column>
     <h:panelGrid columns="1" align="right">
         <h:column>
+
             <t:dataScroller id="scroller1"
                             for="participantData"
                             fastStep="3"
                             pageCountVar="pageCount"
                             pageIndexVar="pageIndex"
                             paginator="true"
-                            paginatorMaxPages="9"
+                            paginatorMaxPages="39"
                             paginatorTableClass="paginator"
                             paginatorActiveColumnStyle="font-weight:bold;"
                             paginatorColumnClass="scrollerStyle1"
@@ -52,7 +53,7 @@
         </h:column>
 
         <h:column>
-            <t:dataScroller id="scroller2"
+            <t:dataScroller id="participantScroller2"
                             for="participantData"
                             rowsCountVar="rowsCount"
                             displayedRowsCountVar="displayedRowsCountVar"
@@ -72,7 +73,7 @@
 <h:column>
     <t:dataTable styleClass="contentMainTable" id="participantData" var="participant"
                  value="#{participants.list}"
-                 rows="5">
+                 rows="7">
 
         <h:column>
             <h:panelGrid styleClass="contentInnerTable" border="0"
@@ -104,7 +105,7 @@
                 <h:column>
                     <h:outputText value="#{labels.workspaces}"/>
                 </h:column>
-                <h:column>
+                <h:column rendered="#{not empty participant.workspaceCollection}">
                     <t:dataTable var="workspace"
                                  columnClasses="dataCellText"
                                  value="#{participant.workspaceCollection}">
@@ -114,18 +115,6 @@
                     </t:dataTable>
                 </h:column>
 
-
-                <h:column/>
-                <h:column>
-                    <h:commandLink action="#{participants.navigateToParticipant}">
-                        <h:outputText styleClass="txtHighlight"
-                                      onmouseover="changeMenuStyle(this,'txtHighlightOn'),showCursor()"
-                                      onmouseout="changeMenuStyle(this,'txtHighlight'),hideCursor()"
-                                      value="#{labels.moreDetails}"/>
-                        />
-                        <f:param id="navigatedParticipantPk" name="navigatedParticipantPk" value="#{participant.pk}"/>
-                    </h:commandLink>
-                </h:column>
 
             </h:panelGrid>
             <f:verbatim><br/></f:verbatim>

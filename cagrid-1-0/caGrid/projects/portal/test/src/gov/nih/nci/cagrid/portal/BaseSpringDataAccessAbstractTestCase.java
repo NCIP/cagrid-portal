@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.portal;
 
+import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.types.URI;
 import org.springframework.test.AbstractTransactionalDataSourceSpringContextTests;
 
 import java.util.HashSet;
@@ -19,6 +21,7 @@ import java.util.HashSet;
 public abstract class BaseSpringDataAccessAbstractTestCase
         extends AbstractTransactionalDataSourceSpringContextTests {
     protected HashSet rootIndexSet = new HashSet();
+    public EndpointReferenceType validServiceEPR;
 
 
     protected void onSetUpBeforeTransaction() throws Exception {
@@ -27,6 +30,7 @@ public abstract class BaseSpringDataAccessAbstractTestCase
         //rootIndexSet.add("http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService");
         rootIndexSet.add(
                 "http://cagrid04.bmi.ohio-state.edu:7080/wsrf/services/DefaultIndexService");
+        validServiceEPR = new EndpointReferenceType(new URI("http://cagrid04.bmi.ohio-state.edu:7080/wsrf/services/cagrid/CaDSRService"));
     }
 
     protected String[] getConfigLocations() {

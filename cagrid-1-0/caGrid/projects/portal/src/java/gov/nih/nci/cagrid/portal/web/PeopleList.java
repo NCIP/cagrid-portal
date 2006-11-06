@@ -17,11 +17,11 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class PeopleList {
-
+    /**
+     * list of POC's
+     */
     private List list;
     private PointOfContactManager pocManager;
-    private int listSize;
-
     private PointOfContact navigatedPOC;
 
     private Category _logger = Category.getInstance(getClass().getName());
@@ -44,6 +44,22 @@ public class PeopleList {
             throw new FacesException(e);
         }
 
+        return "success";
+    }
+
+    public String navigateToCenter() throws FacesException {
+        try {
+
+            CenterList centers = (CenterList) PortalWebUtils.getBean("centers");
+            centers.setNavigatedCenter(navigatedPOC.getResearchCenter());
+
+        } catch (NumberFormatException e) {
+            _logger.error(e);
+            throw new FacesException(e);
+        } catch (PortalRuntimeException e) {
+            _logger.error(e);
+            throw new FacesException(e);
+        }
         return "success";
     }
 
@@ -71,5 +87,9 @@ public class PeopleList {
 
     public PointOfContact getNavigatedPOC() {
         return navigatedPOC;
+    }
+
+    public void setNavigatedPOC(PointOfContact navigatedPOC) {
+        this.navigatedPOC = navigatedPOC;
     }
 }

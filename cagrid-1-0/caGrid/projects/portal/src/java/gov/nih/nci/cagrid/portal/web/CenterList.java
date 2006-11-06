@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.portal.manager.ResearchCenterManager;
 import org.apache.log4j.Category;
 
 import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
 import java.util.List;
 
 /**
@@ -21,25 +20,10 @@ public class CenterList {
     private List list;
     private ResearchCenter navigatedCenter;
     private ResearchCenterManager rcManager;
-    private int listSize;
+
 
     private Category _logger = Category.getInstance(getClass().getName());
 
-    public String navigateToCenter() throws FacesException {
-        try {
-            Integer pk = new Integer((String) FacesContext.getCurrentInstance().getExternalContext()
-                    .getRequestParameterMap().get("navigatedCenterPk"));
-
-            navigatedCenter = (ResearchCenter) rcManager.getObjectByPrimaryKey(ResearchCenter.class, pk);
-        } catch (NumberFormatException e) {
-            _logger.error(e);
-            throw new FacesException(e);
-        } catch (PortalRuntimeException e) {
-            _logger.error(e);
-            throw new FacesException(e);
-        }
-        return "success";
-    }
 
     public void setupKeywordSearch(String keyword) throws FacesException {
         try {

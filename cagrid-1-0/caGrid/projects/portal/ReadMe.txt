@@ -25,7 +25,8 @@ You can ignore sections marked (Optional)
         - Create a database called portal in mysql
         - Configure the jdbc connection in portal-build.properties
             or in ${user.home}/.portal-build.properties/
-        - Run the "createDatabase" ant target in the portal build
+        - Run "ant all"
+        - Run "ant creatPortaleDatabase"
 
 
     ===========================================================================
@@ -75,7 +76,7 @@ You can ignore sections marked (Optional)
 
          For deployment, copy
 
-        portal/resources/trust-ca-cert.1
+        portal/resources/certificates/trust-ca-cert.1
         to ~/.globus/certificates directory in Unix
         OR
         C:\Documents and Settings\kherm\.globus or similar in Windows
@@ -138,6 +139,7 @@ You can ignore sections marked (Optional)
      After getting a key, put the new key in the portal-build.properties file
      by replacing the "google.map.key" property
 
+
     ===========================================================================
       2.7 Portal geocoding component
     ===========================================================================
@@ -153,6 +155,7 @@ You can ignore sections marked (Optional)
 
     geocoder.application.id=
 
+                                     
 
 ===========================================================================
 3. Build Instructions

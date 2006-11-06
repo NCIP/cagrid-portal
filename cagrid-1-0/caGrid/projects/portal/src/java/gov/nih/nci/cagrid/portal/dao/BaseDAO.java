@@ -23,6 +23,16 @@ public interface BaseDAO {
      */
     public java.util.List keywordSearch(String keyword) throws DataAccessException;
 
+    /**
+     * Will return the total number of objects in the DB(repository)
+     * of a particular class
+     *
+     * @param cls
+     * @return
+     * @throws DataAccessException
+     */
+    public int getCount(Class cls) throws DataAccessException;
+
     public Object getObjectByPrimaryKey(Class cls, Integer id) throws DataAccessException;
 
     public void saveOrUpdate(Collection objects) throws DataAccessException;
