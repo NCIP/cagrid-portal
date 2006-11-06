@@ -22,8 +22,9 @@
         </t:panelTab>
 
 
-        <t:panelTab id="poc" rendered="#{not empty people.list}" label="People (#{people.listSize})">
-            <tiles:insert attribute="pocSearchResult" flush="false" ignore="true"/>
+        <t:panelTab id="poc" rendered="#{not empty participants.list}"
+                    label="caBIG Participants (#{participants.listSize})">
+            <tiles:insert attribute="participantsResult" flush="false" ignore="true"/>
         </t:panelTab>
 
     </t:panelTabbedPane>

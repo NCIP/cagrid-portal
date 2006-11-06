@@ -77,7 +77,7 @@
 <h:column>
     <t:dataTable styleClass="contentMainTable" id="serviceData"
                  var="service" value="#{services.list}"
-                 rows="5"
+                 rows="5" rowIndexVar="index"
             >
 
         <h:column>
@@ -121,7 +121,7 @@
                                       onmouseover="changeMenuStyle(this,'txtHighlightOn'),showCursor()"
                                       onmouseout="changeMenuStyle(this,'txtHighlight'),hideCursor()"
                                       value="#{labels.moreDetails}"/>
-                        <f:param id="navigatedServicePk" name="navigatedServicePk" value="#{service.pk}"/>
+                        <f:param id="navigatedServiceIndex" name="navigatedServiceIndex" value="#{index}"/>
                     </h:commandLink>
                 </h:column>
 

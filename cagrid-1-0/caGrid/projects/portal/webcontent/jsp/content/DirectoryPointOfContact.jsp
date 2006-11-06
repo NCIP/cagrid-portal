@@ -92,19 +92,6 @@
                     <h:outputText value="#{poc.firstName} #{poc.lastName}"/>
                 </h:column>
 
-                <h:column>
-                    <h:outputText value="#{labels.phNumber}"/>
-                </h:column>
-                <h:column>
-                    <h:outputLink target="new" value="#{poc.phoneNumber}"/>
-                </h:column>
-
-                <h:column>
-                    <h:outputText value="#{labels.email}"/>
-                </h:column>
-                <h:column>
-                    <h:outputText value="#{poc.email}"/>
-                </h:column>
 
                 <h:column>
                     <h:outputText value="#{labels.affiliation}"/>
@@ -120,26 +107,24 @@
                     <h:outputText value="#{poc.role}"/>
                 </h:column>
 
-
+                <h:column/>
                 <h:column>
-                    <h:outputText value="#{labels.hostingCenter}"/>
-                </h:column>
-
-                <h:column>
-                    <h:commandLink action="#{centers.navigateToCenter}">
-                        <h:outputText value="#{poc.researchCenter.shortName}"/>
-                        <f:param id="navigatedCenterPk" name="navigatedCenterPk"
-                                 value="#{poc.researchCenter.pk}"/>
+                    <h:commandLink action="#{people.navigateToPOC}">
+                        <h:outputText styleClass="txtHighlight"
+                                      onmouseover="changeMenuStyle(this,'txtHighlightOn'),showCursor()"
+                                      onmouseout="changeMenuStyle(this,'txtHighlight'),hideCursor()"
+                                      value="#{labels.moreDetails}"/>
+                        <f:param id="navigatedPOCPk" name="navigatedPOCPk" value="#{poc.pk}"/>
                     </h:commandLink>
                 </h:column>
 
             </h:panelGrid>
-            <f:verbatim><br/><br/></f:verbatim>
+
+            <f:verbatim><br/></f:verbatim>
         </h:column>
 
+
     </t:dataTable>
-
-
 </h:column>
 
 

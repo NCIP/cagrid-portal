@@ -102,19 +102,17 @@
                 </h:column>
 
 
+                <h:column/>
                 <h:column>
-                    <h:outputText value="#{labels.workspaces}"/>
+                    <h:commandLink action="#{participants.navigateToParticipant}">
+                        <h:outputText styleClass="txtHighlight"
+                                      onmouseover="changeMenuStyle(this,'txtHighlightOn'),showCursor()"
+                                      onmouseout="changeMenuStyle(this,'txtHighlight'),hideCursor()"
+                                      value="#{labels.moreDetails}"/>
+                        />
+                        <f:param id="navigatedParticipantPk" name="navigatedParticipantPk" value="#{participant.pk}"/>
+                    </h:commandLink>
                 </h:column>
-                <h:column rendered="#{not empty participant.workspaceCollection}">
-                    <t:dataTable var="workspace"
-                                 columnClasses="dataCellText"
-                                 value="#{participant.workspaceCollection}">
-                        <h:column>
-                            <h:outputText value="#{workspace.longName}"/>
-                        </h:column>
-                    </t:dataTable>
-                </h:column>
-
 
             </h:panelGrid>
             <f:verbatim><br/></f:verbatim>

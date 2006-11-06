@@ -20,7 +20,8 @@
             <h:column>
                 <h:panelGrid styleClass="contentInnerTable"
                              rowClasses="dataRowLight,dataRowDark"
-                             columnClasses="dataCellTextBold,dataCellText"
+
+                             cellpadding="2" cellspacing="2"
                              headerClass="contentTableHeader" columns="2">
                     <f:facet name="header">
                         <h:column>
@@ -29,7 +30,7 @@
                     </f:facet>
 
                     <h:column>
-                        <h:outputText value="#{labels.keyword}"/>
+                        <h:outputText value="#{labels.keyword}" styleClass="dataCellTextBold"/>
                     </h:column>
                     <h:column>
                         <h:inputText id="searchKeyword" required="true" value="#{keywordSearch.searchKeyword}"
@@ -38,11 +39,18 @@
                     </h:column>
 
                     <h:column>
-                        <f:verbatim><br/><br/></f:verbatim>
+                        <h:outputText value="search category" styleClass="dataCellText"/>
                     </h:column>
 
                     <h:column>
-                        <f:verbatim>&nbsp;&nbsp;&nbsp;&nbsp</f:verbatim>
+                        <t:selectManyCheckbox value="#{keywordSearch.searchCategorySelected}" styleClass="dataCellText">
+                            <f:selectItems value="#{keywordSearch.searchCategoryItems}"/>
+                        </t:selectManyCheckbox>
+                    </h:column>
+
+
+                    <h:column/>
+                    <h:column>
                         <h:commandButton value="#{labels.search}"
                                          action="#{keywordSearch.navigateToKeywordSearchResults}"
                                          styleClass="searchButton"/>

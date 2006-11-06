@@ -3,7 +3,7 @@
 
 <f:subview id="appSupport">
 
-    <h:panelGrid styleClass="ftrTable" cellpadding="0" cellspacing="0" border="0"
+    <h:panelGrid styleClass="ftrTable"
                  headerClass="ftrHeader" columnClasses="ftrContent">
         <f:facet name="header">
             <h:column>
@@ -39,7 +39,7 @@
         </h:column>
 
         <h:column>
-            <h:outputText value="#{labels.privacyNoticeDescription7}"/>
+            <h:outputText value="#{labels.privacyNoticeDescription7} "/>
 
             <h:outputLink value="mailto:NIHPrivacyActOfficer@od.nih.gov">
                 <h:outputText value="#{labels.privacyNoticeQuestionsLink}"/>

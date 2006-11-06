@@ -1,6 +1,7 @@
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t" %>
+<%@ taglib prefix="tiles" uri="http://struts.apache.org/tags-tiles" %>
 
 <%/*Load message bundle */%>
 <f:loadBundle basename="Portal-Labels" var="labels"/>
@@ -12,12 +13,16 @@
 
 <f:facet name="header">
     <h:column>
-        <h:outputText value="Service Details"/>
+        <h:outputText value="#{labels.serviceDetails}"/>
     </h:column>
 </f:facet>
 
-<f:verbatim><br/></f:verbatim>
-<%/*-- Scroller to scroll through results */%>
+
+<%/* Navigation tile */%>
+<h:column>
+    <tiles:insert definition="navigation" ignore="true" flush="false"/>
+</h:column>
+
 
 <h:column>
 
@@ -80,9 +85,13 @@
         </h:column>
 
     </h:panelGrid>
-    <f:verbatim><br/><br/></f:verbatim>
 </h:column>
 
+<h:column>
+    <f:verbatim><br/></f:verbatim>
+</h:column>
+
+<%/* Research Center information */%>
 <h:column rendered="#{not empty services.navigatedService.researchCenter}">
     <t:panelGrid styleClass="contentInnerTable" cellpadding="3"
                  rowClasses="dataRowLight,dataRowDark"
@@ -161,19 +170,25 @@
             <h:outputText value="#{labels.poc}"/>
         </h:column>
         <h:column>
-            <t:dataTable var="poc" value="#{services.navigatedService.researchCenter.pocCollection}">
+            <t:dataTable var="poc"
+                         value="#{services.navigatedService.researchCenter.pocCollection}"
+                         rowIndexVar="index">
                 <h:column>
-                    <h:commandLink action="#{people.navigateToPOC}">
+                    <h:commandLink action="#{services.navigateToPOC}" styleClass="link">
                         <h:outputText value="#{poc.firstName} #{poc.lastName}"/>
-                        <f:param name="navigatedPOCPk"
-                                 value="#{poc.pk}"/>
+                        <f:param name="navigatedPOCIndex"
+                                 value="#{index}"/>
                     </h:commandLink>
                 </h:column>
             </t:dataTable>
         </h:column>
 
     </t:panelGrid>
-    <f:verbatim><br/><br/></f:verbatim>
+
+</h:column>
+
+<h:column>
+    <f:verbatim><br/></f:verbatim>
 </h:column>
 
 <%/*-- Operations List --*/%>
@@ -288,7 +303,7 @@
 
                 <h:column>
                     <f:facet name="header">
-                        <h:outputText value="{labels.packageName}"/>
+                        <h:outputText value="#{labels.packageName}"/>
                     </f:facet>
 
                     <h:outputText value="#{umlClass.packageName}"/>
@@ -300,6 +315,10 @@
 
     </h:panelGrid>
 
+</h:column>
+
+<h:column>
+    <f:verbatim><br/></f:verbatim>
 </h:column>
 
 </h:panelGrid>

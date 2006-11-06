@@ -3,8 +3,8 @@
 
 <f:subview id="appSupport">
 
-    <h:panelGrid styleClass="contentMainTable" cellpadding="0" cellspacing="0" border="0"
-                 headerClass="contentMainTitle" columnClasses="mainContent">
+    <h:panelGrid styleClass="ftrTable"
+                 headerClass="ftrHeader" columnClasses="ftrContent">
         <f:facet name="header">
             <h:column>
                 <h:outputText value="#{labels.disclaimerTitle}"/>
