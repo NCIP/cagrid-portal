@@ -144,6 +144,19 @@ public class CommonTools {
 		}
 		return true;
 	}
+	
+	public static boolean isValidNoStubPackageName(String packageName) {
+		if (packageName.length() > 0) {
+			StringTokenizer strtok = new StringTokenizer(packageName, ".", false);
+			while (strtok.hasMoreElements()) {
+				String packageItem = strtok.nextToken();
+				if (!packageItem.matches(ALLOWED_EXISTING_JAVA_PACKAGE_REGEX)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 
 	public static boolean isValidServiceName(String serviceName) {

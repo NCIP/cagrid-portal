@@ -1371,10 +1371,17 @@ public class ModificationViewer extends GridPortalComponent {
 							for (int i = 0; i < namespaces.getNamespace().length; i++) {
 								NamespaceType currentNs = namespaces.getNamespace(i);
 								if (currentNs.getPackageName() != null) {
-									if (!CommonTools.isValidPackageName(currentNs.getPackageName())) {
-										setErrorMessage("Error: Invalid package name for namespace "
-											+ currentNs.getNamespace() + " : " + currentNs.getPackageName());
-										return;
+									if (currentNs.getGenerateStubs() != null
+										&& !currentNs.getGenerateStubs().booleanValue()) {
+										if (!CommonTools.isValidNoStubPackageName(currentNs.getPackageName())) {
+											setErrorMessage("Error: Invalid package name for namespace "
+												+ currentNs.getNamespace() + " : " + currentNs.getPackageName());
+											return;
+										} else if (!CommonTools.isValidPackageName(currentNs.getPackageName())) {
+											setErrorMessage("Error: Invalid package name for namespace "
+												+ currentNs.getNamespace() + " : " + currentNs.getPackageName());
+											return;
+										}
 									}
 								}
 							}
@@ -1481,32 +1488,31 @@ public class ModificationViewer extends GridPortalComponent {
 
 
 	private void copyGridGrouperJars() throws Exception {
-		File sourceDir = new File("ext" + File.separator + "skeleton" + File.separator 
-			+ "gridgrouper" + File.separator + "lib");
+		File sourceDir = new File("ext" + File.separator + "skeleton" + File.separator + "gridgrouper" + File.separator
+			+ "lib");
 		addJarsToService(sourceDir);
 	}
 
 
 	private void copyCSMJars() throws Exception {
-		File src = new File("ext" + File.separator + "skeleton" + File.separator 
-			+ "csm" + File.separator + "lib");
+		File src = new File("ext" + File.separator + "skeleton" + File.separator + "csm" + File.separator + "lib");
 		addJarsToService(src);
 	}
-	
-	
+
+
 	private void addJarsToService(File sourceDir) throws Exception {
 		Set existingLibs = new HashSet();
 		Set addedLibs = new HashSet();
-		
+
 		File serviceLibDir = new File(info.getBaseDirectory() + File.separator + "lib");
-		existingLibs.addAll(Utils.recursiveListFiles(serviceLibDir, new FileFilters.JarFileFilter()));		
-		
+		existingLibs.addAll(Utils.recursiveListFiles(serviceLibDir, new FileFilters.JarFileFilter()));
+
 		Utils.copyDirectory(sourceDir, serviceLibDir);
 		addedLibs.addAll(Utils.recursiveListFiles(serviceLibDir, new FileFilters.JarFileFilter()));
-		
+
 		// compute the set difference from before and after library copy
 		addedLibs.removeAll(existingLibs);
-				
+
 		// add the new jars to the Eclipse .classpath file
 		File[] addedJars = new File[addedLibs.size()];
 		addedLibs.toArray(addedJars);
