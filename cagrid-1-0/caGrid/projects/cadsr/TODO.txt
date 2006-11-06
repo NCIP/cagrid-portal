@@ -1,6 +1,6 @@
 
 
-FURTURE WORK:
+FUTURE WORK:
 ==================================================
 resource/context for non-blocking domainmodel generation
 
