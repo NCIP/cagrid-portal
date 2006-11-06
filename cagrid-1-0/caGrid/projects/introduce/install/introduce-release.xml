@@ -45,7 +45,7 @@
 		<mkdir dir="tmp/installer"/>
 		<izpack input="${basedir}/install/install.xml"
 			output="tmp/installer/Introduce-RC1.0-installer.jar"
-			installerType="standard"
+			installerType="web"
 			basedir="."
 			izPackDir="${basedir}/install"/>
 	</target>
