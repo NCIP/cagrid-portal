@@ -30,6 +30,8 @@ public class WorkflowFactoryServiceImpl extends WorkflowFactoryServiceImplBase {
 	
 	public static String abAdminRoot = "http://localhost:8080/active-bpel/services/";
 	
+	private static ActiveBPELAdapter abAdapter = null;
+	
 	public WorkflowFactoryServiceImpl() throws RemoteException {
 		super();
 	}
@@ -65,6 +67,9 @@ public class WorkflowFactoryServiceImpl extends WorkflowFactoryServiceImplBase {
 		}
 		return output;
 	}
-
+	
+	public static ActiveBPELAdapter getActiveBPELAdapter() {
+		return abAdapter;
+	}
 }
 

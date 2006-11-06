@@ -1,0 +1,5 @@
+<ns1:invoke xmlns:ns1="http://workflow.cagrid.nci.nih.gov/SampleService1">
+<ns1:param>
+Test
+</ns1:param>
+</ns1:invoke>

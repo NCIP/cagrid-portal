@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.workflow.context.service.globus.resource;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.workflow.context.stubs.types.StartCalledOnStartedWorkflowFaultType;
 import gov.nih.nci.cagrid.workflow.service.ActiveBPELAdapter;
+import gov.nih.nci.cagrid.workflow.service.ServiceConfiguration;
 import gov.nih.nci.cagrid.workflow.service.WorkflowFactoryServiceImpl;
 import gov.nih.nci.cagrid.workflow.stubs.types.StartInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
@@ -13,6 +14,10 @@ import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType;
 import java.io.File;
 import java.util.Calendar;
 
+import javax.naming.InitialContext;
+
+import org.apache.axis.MessageContext;
+import org.globus.wsrf.Constants;
 import org.globus.wsrf.Resource;
 
 public class WorkflowResource implements Resource {
@@ -31,7 +36,10 @@ public class WorkflowResource implements Resource {
 	
 	private WorkflowStatusType workflowStatus = WorkflowStatusType.Pending;
 	
+	//Discover this from jndi config
 	private static ActiveBPELAdapter abAdapter = new ActiveBPELAdapter(null);
+	
+	private ServiceConfiguration configuration = null;
 	
 	
 	public WorkflowResource(WMSInputType input, Calendar terminationTime)
@@ -39,7 +47,7 @@ public class WorkflowResource implements Resource {
 		File bpelFile = null;
 		this.workflowName = input.getWorkflowName();
 		this.bpelProcess = input.getBpelDoc();
-		// TODO Auto-generated constructor stub
+		System.out.println("abAdmin: " + this.getConfiguration().getAbEndpoint());
 		String bpelFileName = System.getProperty("java.io.tmpdir")
 				+ File.separator + workflowName + BPEL_EXTENSION;
 		bpelFile = new File(bpelFileName);
@@ -91,5 +99,24 @@ public class WorkflowResource implements Resource {
 	
 	public void cancel() throws WorkflowExceptionType {
 		this.abAdapter.cancel(this.workflowName);
+	}
+	
+	public ServiceConfiguration getConfiguration() throws Exception {
+		if (this.configuration != null) {
+			return this.configuration;
+		}
+		MessageContext ctx = MessageContext.getCurrentContext();
+
+		String servicePath = ctx.getTargetService();
+
+		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
+		try {
+			javax.naming.Context initialContext = new InitialContext();
+			this.configuration = (ServiceConfiguration) initialContext.lookup(jndiName);
+		} catch (Exception e) {
+			throw new Exception("Unable to instantiate service configuration.", e);
+		}
+
+		return this.configuration;
 	}
 }

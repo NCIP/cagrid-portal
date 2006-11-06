@@ -49,6 +49,10 @@
           <name>factory</name>
           <value>org.globus.wsrf.jndi.BeanFactory</value>
         </parameter>
+        <parameter>
+            <name>abEndpoint</name>
+            <value>http://localhost:8080/active-bpel/services/</value>
+        </parameter>
       </resourceParams>
     </resource>
     <resource name="home" type="gov.nih.nci.cagrid.workflow.service.globus.resource.WorkflowFactoryHome">
