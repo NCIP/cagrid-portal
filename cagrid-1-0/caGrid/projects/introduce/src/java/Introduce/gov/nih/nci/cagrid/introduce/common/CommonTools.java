@@ -51,6 +51,8 @@ public class CommonTools {
 	public static final String ALLOWED_JAVA_CLASS_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
 
 	public static final String ALLOWED_JAVA_FIELD_REGEX = "[a-z\\_]++[A-Za-z0-9\\_\\$]*";
+	
+	public static final String ALLOWED_JAVA_PACKAGE_REGEX = "[a-z\\_]++[A-Za-z0-9\\_\\$]*";
 
 
 	public static Process createAndOutputProcess(String cmd) throws Exception {
@@ -133,7 +135,7 @@ public class CommonTools {
 			StringTokenizer strtok = new StringTokenizer(packageName, ".", false);
 			while (strtok.hasMoreElements()) {
 				String packageItem = strtok.nextToken();
-				if (!packageItem.matches(ALLOWED_JAVA_FIELD_REGEX)) {
+				if (!packageItem.matches(ALLOWED_JAVA_PACKAGE_REGEX)) {
 					return false;
 				}
 			}
