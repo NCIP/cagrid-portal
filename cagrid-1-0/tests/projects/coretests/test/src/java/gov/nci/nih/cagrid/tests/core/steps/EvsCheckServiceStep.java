@@ -8,10 +8,7 @@ import gov.nih.nci.cagrid.evs.service.*;
 import gov.nih.nci.evs.domain.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
-import java.util.Vector;
+import java.util.*;
 
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -379,37 +376,117 @@ public class EvsCheckServiceStep
     public void testGetDescriptionLogicConcept()
     throws Exception
     {
-        System.out.println("testing:searchDescLogicConcept!");
-        EVSDescLogicConceptSearchParams  evsSearchParams = new EVSDescLogicConceptSearchParams();
-        evsSearchParams.setVocabularyName("NCI_Thesaurus");
-        evsSearchParams.setSearchTerm("Blood*");
-        evsSearchParams.setLimit(100);
 
-        EVSGridServiceClient client = new EVSGridServiceClient(endpoint);
-        DescLogicConcept[] descLogicConcepts = client.searchDescLogicConcept(evsSearchParams);
+        String searchTerms[] = new String[]{"Blood*", "Anatomic*"};
 
-        assertNotNull("searchDescLogicConcept returned Null", descLogicConcepts);
-        assertTrue( descLogicConcepts.length > 0);
 
-        if (descLogicConcepts != null && descLogicConcepts.length > 0)
+        for (int count = 0; count < searchTerms.length; count++)
         {
-                for (int i=0; i < descLogicConcepts.length; i++)
-                {
-                    DescLogicConcept descConcept = descLogicConcepts[i];
-                    assertNotNull("DescLogicConcept object is Null", descConcept);
+            System.out.println("testing:searchDescLogicConcept!");
+            EVSDescLogicConceptSearchParams  evsSearchParams = new EVSDescLogicConceptSearchParams();
+            evsSearchParams.setVocabularyName("NCI_Thesaurus");
+            evsSearchParams.setSearchTerm(searchTerms[count]);
+            evsSearchParams.setLimit(100);
 
-                    // check attributes - semanticTypeVector
-                    Vector semanticType = descConcept.getSemanticTypeVector();
+            EVSGridServiceClient client = new EVSGridServiceClient(endpoint);
+            DescLogicConcept[] descLogicConcepts = client.searchDescLogicConcept(evsSearchParams);
 
-                    // Check what the vector elements are?
-                    assertNotNull("SemanticTypeVecor is null", semanticType);
+            assertNotNull("searchDescLogicConcept returned Null", descLogicConcepts);
+            assertTrue( descLogicConcepts.length > 0);
 
-                    // Check properties
-                    checkProperties(descConcept);
-                    
+            if (descLogicConcepts != null && descLogicConcepts.length > 0)
+            {
+                    for (int i=0; i < descLogicConcepts.length; i++)
+                    {
+                        DescLogicConcept descConcept = descLogicConcepts[i];
+                        assertNotNull("DescLogicConcept object is Null", descConcept);
+
+                        // check attributes - semanticTypeVector
+                        Vector semanticType = descConcept.getSemanticTypeVector();
+
+                        // Check what the vector elements are?
+                        assertNotNull("SemanticTypeVecor is null", semanticType);
+
+                        // Check properties
+                        checkProperties(descConcept);
+
+                        // Check roles
+                        checkRoles(descConcept);
+
+                        // Check Edge Properties - Edge Properties are not populated
+                        // by EVS grid service
+                        //checkEdgeProperties(descConcept);
+
+                        // Check associated collection
+                        checkAssociations(descConcept);
+
+                        // Check inverse assoociation collection
+                        checkInverseAssociations(descConcept);
+
+                        
+
+                    }
+            }
+        }
+    }
+
+    private void checkInverseAssociations(DescLogicConcept descConcept) {
+        Collection inverseAssocCollection = (Collection) descConcept.getInverseAssociationCollection();
+
+        for (Iterator it=inverseAssocCollection.iterator();it.hasNext();)
+        {
+            System.out.println("Inverse Association Collection: " + it.next().getClass().toString());
+        }
+    }
+
+    private void checkAssociations(DescLogicConcept descConcept) {
+        Collection associatedCollection = (Collection) descConcept.getAssociationCollection();
+        for (Iterator it= associatedCollection.iterator(); it.hasNext();)
+        {
+            Association association = (Association)it.next();
+
+            if (association != null)
+            {
+                assertNotNull("Association name is null", association.getName());
+                assertNotNull("Association value is null", association.getValue());
+                // Qualifier will be always null for caCORE 3.1
+            }
+
+        }
+    }
+
+    /**
+     * The <code>EdgeProperties</code> are NOT populated by the API. The class is only used for
+     * navingating the tree and is not needed for by the EVS Grid service
+     *
+     * @param descConcept
+     */
+    private void checkEdgeProperties(DescLogicConcept descConcept) {
+        EdgeProperties edge = (EdgeProperties) descConcept.getEdgeProperties();
+        if (edge != null)
+        {
+            //assertNotNull("Name is null!", edge.getName());
+            if (edge.getLinks() != null)
+            {
+                for (Iterator it= edge.getLinks().iterator(); it.hasNext();)
+                    System.out.println("Link Class : " + it.next().getClass().toString());
+            }
+        }
+    }
 
 
-                }
+    private void checkRoles(DescLogicConcept descConcept) {
+        Collection roleCollection = (Collection) descConcept.getRoleCollection();
+
+        if (roleCollection != null )
+        {
+            for (Iterator it=roleCollection.iterator(); it.hasNext();)
+            {
+                Role role = (Role) it.next();
+                assertNotNull("Role is null", role);
+                assertNotNull("Role Name is null", role.getName());
+                assertNotNull("Role Value is null", role.getValue());
+            }
         }
     }
 
