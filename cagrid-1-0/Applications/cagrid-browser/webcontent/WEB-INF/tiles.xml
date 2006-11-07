@@ -1,0 +1,151 @@
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration//EN"
+        "http://jakarta.apache.org/struts/dtds/tiles-config.dtd">
+
+
+<tiles-definitions>
+
+    <!-- When a user has not logged in -->
+    <definition name="PreLogin" page="/jsp/layout/PreLoginLayout.jsp">
+        <put name="NihHeader" value="/jsp/header/NihHeader.jsp" />
+        <put name="ProjectLogoHeader" value="/jsp/header/ProjectLogoHeader.jsp" />
+        <put name="Content" value="/jsp/content/Login.jsp" />
+
+        <put name="NihFooter" value="/jsp/footer/NihFooter.jsp" />
+        <put name="Title" type="string"	value="caGrid Browser" />
+    </definition>
+
+    <definition name="LoginFailed" extends="PreLogin">
+        <put name="Content" value="/jsp/content/LoginFailed.jsp"/>
+    </definition>
+
+    <definition name="RegisterNewUser_noLogin" extends="PreLogin">
+        <put name="Content" value="/jsp/content/RegisterNewUser.jsp"/>
+    </definition>
+
+    <definition name="RegisterNewUserConfirmation_noLogin" extends="PreLogin">
+        <put name="Content" value="/jsp/content/RegisterNewUserConfirmation.jsp"/>
+    </definition>
+
+    <!-- Base layouts -->
+    <definition name="Base" page="/jsp/layout/BaseLayout.jsp">
+        <put name="NihHeader" value="/jsp/header/NihHeader.jsp" />
+        <put name="ProjectLogoHeader" value="/jsp/header/ProjectLogoHeader.jsp" />
+        <put name="AppMenu" value="/jsp/menu/AppMenu.jsp"/>
+        <put name="AppFooter" value="/jsp/footer/AppFooter.jsp" />
+        <put name="NihFooter" value="/jsp/footer/NihFooter.jsp" />
+        <put name="Title" type="string"	value="caGrid Browser" />
+
+    </definition>
+
+    <!-- Login Pages -->
+    <definition name="HomePage" extends="Base">
+        <put name="Content" value="/jsp/content/Home.jsp" />
+    </definition>
+
+    <definition name="Discovery" extends="Base">
+        <put name="Content" value="/jsp/content/Discovery.jsp"/>
+    </definition>
+
+
+    <definition name="DiscoveryResults" extends="Base">
+        <put name="Content" value="/jsp/content/DiscoveryResults.jsp"/>
+    </definition>
+
+    <definition name="Help" extends="Base">
+        <put name="Content" value="/jsp/content/Help.jsp"/>
+    </definition>
+
+    <definition name="ServiceCart" extends="Base">
+        <put name="Content" value="/jsp/content/ServiceCart.jsp"/>
+    </definition>
+
+    <definition name="GDSF" extends="Base">
+        <put name="Content" value="/jsp/content/GDSF.jsp"/>
+    </definition>
+
+    <definition name="GSH" extends="Base">
+        <put name="Content" value="/jsp/content/GSH.jsp"/>
+    </definition>
+
+    <definition name="DomainObjectDetails" extends="Base">
+        <put name="Content" value="/jsp/content/DomainObjectDetails.jsp"/>
+    </definition>
+
+    <!-- GUI Query Wizard -->
+    <definition name="CQLQueryWizard" extends="Base">
+        <put name="Content" value="/jsp/tree/CQLQueryWizard.jsp"/>
+    </definition>
+
+    <definition name="FQPQueryWizard" extends="Base">
+        <put name="Content" value="/jsp/tree/FQPQueryWizard.jsp"/>
+    </definition>
+
+    <definition name="QueryFQP" extends="Base">
+            <put name="Content" value="/jsp/tree/QueryFQP.jsp"/>
+        </definition>
+
+    <definition name="QueryFQPResult" extends="Base">
+               <put name="Content" value="/jsp/tree/QueryFQPResult.jsp"/>
+           </definition>
+
+
+    <definition name="Configuration" extends="Base">
+        <put name="Content" value="/jsp/content/AppConfiguration.jsp"/>
+    </definition>
+
+    <definition name="QueryGDSF" extends="Base">
+        <put name="Content" value="/jsp/content/QueryGDSF.jsp"/>
+    </definition>
+
+    <definition name="QueryGDSFResults" extends="Base">
+        <put name="Content" value="/jsp/content/QueryGDSFResults.jsp"/>
+    </definition>
+
+    <definition name="GUIQueryGDSF" extends="Base">
+        <put name="Content" value="/jsp/content/GUIQUeryGDSF.jsp"/>
+    </definition>
+
+    <!--Error Pages-->
+    <definition name="Error_RuntimeException" extends="Base">
+        <put name="Content" value="/jsp/content/error/Error_RuntimeException.jsp"/>
+    </definition>
+
+    <definition name="Error_QueryException" extends="Base">
+        <put name="Content" value="/jsp/content/error/Error_QueryException.jsp"/>
+    </definition>
+
+    <definition name="Error_RegistrationException_noLogin" extends="PreLogin">
+        <put name="Content" value="/jsp/content/error/Error_RegistrationException.jsp"/>
+    </definition>
+
+
+    <!--Footer links-->
+    <definition name="Footer_ApplicationSupport" extends="Base">
+        <put name="Content"  value="/jsp/footer/ApplicationSupport.jsp"/>
+    </definition>
+
+    <definition name="Footer_ContactUs" extends="Base">
+        <put name="Content"  value="/jsp/footer/ContactUs.jsp"/>
+    </definition>
+
+    <definition name="Footer_Accessibility" extends="Base">
+        <put name="Content" value="/jsp/footer/Accessibility.jsp"/>
+    </definition>
+
+    <definition name="Footer_Disclaimer" extends="Base">
+        <put name="Content"  value="/jsp/footer/Disclaimer.jsp"/>
+    </definition>
+
+    <definition name="Footer_ContactUs" extends="Base">
+        <put name="Content"  value="/jsp/footer/ContactUs.jsp"/>
+    </definition>
+
+    <definition name="Footer_Privacy" extends="Base">
+        <put name="Content"  value="/jsp/footer/Privacy.jsp"/>
+    </definition>
+
+
+
+
+</tiles-definitions>
