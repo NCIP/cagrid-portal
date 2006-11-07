@@ -28,6 +28,7 @@ public class AssociationManyCheckCache {
 	 * @param parent
 	 * @param target
 	 * @return
+	 * 		True if association starts with many
 	 * @throws QueryProcessingException
 	 */
 	public static boolean isManyAssociation(Object parent, Association target) throws QueryProcessingException {

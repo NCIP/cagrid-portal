@@ -88,6 +88,7 @@ public class ClassAccessUtilities {
 	 * @param typeName
 	 * 		The name of the type to search for
 	 * @return
+	 * 		All Fields from the class of the specified type
 	 */
 	public static Field[] getFieldsOfType(Class clazz, String typeName) {
 		Set allFields = new HashSet();

@@ -38,6 +38,7 @@ public class CQL2HQL {
 	 * 		A flag indicating that the query should be formulated to avoid
 	 * 		returning subclass instances of the targeted class.
 	 * @return
+	 * 		An HQL query
 	 * @throws QueryProcessingException
 	 */
 	public static String translate(CQLQuery query, boolean eliminateSubclasses) throws QueryProcessingException {
@@ -357,6 +358,7 @@ public class CQL2HQL {
 	 * 
 	 * @param p
 	 * @return
+	 * 		The CQL predicate as HQL 
 	 */
 	private static String convertPredicate(Predicate p) {
 		if (predicateValues == null) {
@@ -378,6 +380,7 @@ public class CQL2HQL {
 	 * 
 	 * @param op
 	 * @return
+	 * 		The CQL logical operator as HQL
 	 */
 	private static String convertLogicalOperator(LogicalOperator op) throws QueryProcessingException {
 		if (op.getValue().equals(LogicalOperator._AND)) {
