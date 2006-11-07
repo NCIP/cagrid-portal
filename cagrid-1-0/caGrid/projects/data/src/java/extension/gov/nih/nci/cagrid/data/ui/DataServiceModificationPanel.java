@@ -1048,6 +1048,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	 * @param p1
 	 * @param p2
 	 * @return
+	 * 		True if the projects have the same values for long name and version
 	 */
 	private boolean projectEquals(Project p1, Project p2) {
 		if (p2 != null) {
