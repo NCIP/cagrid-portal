@@ -177,7 +177,14 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
             validateEVSDescLogicConceptSearchParams(eVSDescLogicConceptSearchParams);
 
 
-            LOG.debug("Inside method:getMetaSources. Obtaining connection to caCORE remote instance" +
+            // Check if the user specified search term is really a concept code. This is quite tricky becasuse there
+            // isn't really any specific structure. However, the user should be able to use the same API and get
+            // DescLogicConcept objects either by passing search term or concept code.
+            boolean bIsSearchTermConceptCode = false;
+            bIsSearchTermConceptCode = isSearchTermConceptCode(eVSDescLogicConceptSearchParams.getSearchTerm());
+
+
+            LOG.debug("Inside method:searchDescLogicConcept. Obtaining connection to caCORE remote instance" +
                     EVSConstants.CACORE_31_URL);
 
             //Obtain the Application Service
@@ -191,16 +198,50 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
 
             // Build the EVSQuery object
             EVSQuery evsSearch = new EVSQueryImpl();
-            evsSearch.searchDescLogicConcepts( eVSDescLogicConceptSearchParams.getVocabularyName(),
+            List evsResults 	= new ArrayList();
+
+            if (bIsSearchTermConceptCode == true)
+            {
+
+                // Set the DTSRPC API to query by Concept code
+                evsSearch.getDescLogicConceptNameByCode(eVSDescLogicConceptSearchParams.getVocabularyName(),
+                                                        eVSDescLogicConceptSearchParams.getSearchTerm());
+
+                LOG.debug("calling evsSearch: getDescLogicConceptNameByCode");
+
+                // The return should be 1 record which is a string, corresponding to the name.
+                List nameList = (List) appService.evsSearch(evsSearch);
+                if ( nameList != null && nameList.size() > 0)
+                {
+                    String searchTerm = (String) nameList.get(0);
+
+                    // Actually, the result should be 1; so go ahead and simply pick the first one in the list
+                    LOG.debug("Calling evsSearch: searchDescLogicConcepts for search term <" + searchTerm + ">" );
+
+                    EVSQuery evsSearch2 = new EVSQueryImpl();
+                    evsSearch2.searchDescLogicConcepts( eVSDescLogicConceptSearchParams.getVocabularyName(),
+                                               searchTerm,
+                                               eVSDescLogicConceptSearchParams.getLimit()
+                                            );
+
+                    // Perform query: Assume no data is returned
+                    evsResults = (List)appService.evsSearch(evsSearch2);
+                }
+            }
+            else
+            {
+
+                evsSearch.searchDescLogicConcepts( eVSDescLogicConceptSearchParams.getVocabularyName(),
                                            eVSDescLogicConceptSearchParams.getSearchTerm(),
                                            eVSDescLogicConceptSearchParams.getLimit()
                                         );
 
-            List evsResults 	= new ArrayList();
+                LOG.debug("Calling evsSearch: searchDescLogicConcepts");
 
-            // Perform query: Assume no data is returned
-            LOG.debug("Calling evsSearch");
-            evsResults = (List)appService.evsSearch(evsSearch);
+                // Perform query: Assume no data is returned
+                evsResults = (List)appService.evsSearch(evsSearch);
+            }
+
 
             // Return data
             gov.nih.nci.evs.domain.DescLogicConcept[] concepts = null;
@@ -557,12 +598,61 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
     }
 
     /**
+     * Check if the Search Term passed to <code>gov.nih.nci.cagrid.evs.service.EVSDescLogicConceptSearchParams</code>
+     * refers to concept code or not
+     *
+     *
+     */
+
+    private boolean isSearchTermConceptCode(String searchTerm)
+    {
+        boolean bIsConceptCode = false;
+
+        // Concept code starts with letter "C" and is followed by digits.
+         if (searchTerm.startsWith(EVSConstants.META_CUI_PREFIX))
+         {
+
+             // The search term starts with the correct prefix (C); so now we have to check if it is really a concept code
+             // or not.
+
+            // Since strings are passed by reference, build a new string to do the parssing.
+            String newSearchTerm = new String(searchTerm);
+            String postFix = newSearchTerm.substring(1);
+            LOG.debug("The remaining String (after removing prefix): " + postFix);
+
+             if ( postFix != null && postFix.length() > 0)
+             {
+                 // Check if all the characters are digits.
+                 for (int i=0; i < postFix.length(); i++)
+                 {
+                    char ch = postFix.charAt(i);
+                    if (Character.isDigit(ch))
+                    {
+                        // continue
+                    }
+                    else
+                    {
+                        LOG.debug("The invalid digit in the Search term is: <" + ch + ">");
+                        // Break from the for loop; it is not a concept code!
+                        break;
+                    }
+                 }
+
+                 // IF all the characters are digits, then it is a concept code!
+                 bIsConceptCode = true;
+             }
+         }
+        return (bIsConceptCode);
+    }
+
+
+    /**
      * Test that <code>gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams</code> input used to
      * search for EVS Meta Thesaurus concepts <code></code> from EVS is valid
      * @param eVSMetaThesaurusSearchParams instance of <code>gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams</code> class
      */
 
-    public void validateEVSMetaThesaurusSearchParams(gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParams)
+    private void validateEVSMetaThesaurusSearchParams(gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams eVSMetaThesaurusSearchParams)
             throws gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType
     {
 
