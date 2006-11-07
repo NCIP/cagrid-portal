@@ -389,7 +389,12 @@
     <target name="hibernate.xdoclet" depends="compile">
         <taskdef name="hibernatedoclet"
                  classname="xdoclet.modules.hibernate.HibernateDocletTask">
-            <classpath refid="xdoclet.classpath"/>
+            <classpath>
+                <path refid="portal.classpath"/>
+                <fileset dir="${lib.dir}/xdoclet">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
         </taskdef>
 
         <hibernatedoclet
