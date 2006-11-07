@@ -23,14 +23,14 @@
     <property name="common.jar.name" value="${jar.prefix}-common.jar" />
     <property name="client.jar.name" value="${jar.prefix}-client.jar" />
     <property name="service.jar.name" value="${jar.prefix}-service.jar" />
-    <property name="stubs.jar.name" value="${jar.prefix}_stubs.jar" />
+    <property name="stubs.jar.name" value="${jar.prefix}-stubs.jar" />
 
     <!-- Important test directories and files -->
     <property name="test.dir" value="test" />
     <property name="test.src.dir" value="${test.dir}/src" />
     <property name="test.lib.dir" value="${test.dir}/lib" />
     <property name="test.log.dir" value="test/logs" />
-    <property name="test.jar.name" value="${service.name}-tests.jar" />
+    <property name="test.jar.name" value="${jar.prefix}-tests.jar" />
     <property name="ext.test.lib.dir" value="ext/test/lib" />
     <property name="junit.results.dir" value="${test.log.dir}/junit" />
 
