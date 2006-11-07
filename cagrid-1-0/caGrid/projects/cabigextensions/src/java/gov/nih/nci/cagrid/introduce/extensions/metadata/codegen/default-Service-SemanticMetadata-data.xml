@@ -3,10 +3,10 @@
     <ns1:serviceDescription>
         <serv:Service xmlns:serv="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service"
             xmlns:com="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-            <com:SemanticMetadata conceptCode="???" conceptName="Grid Service" conceptDefinition="A Grid Service."
+            <com:SemanticMetadata conceptCode="C63541" conceptName="Grid Service"
+                conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services."
                 order="0"/>
-            <com:SemanticMetadata conceptCode="???" conceptName="Data Grid Service"
-                conceptDefinition="A Grid Data Service." order="1"/>
+            <com:SemanticMetadata conceptCode="???" conceptName="Data Grid Service" conceptDefinition="A Grid Data Service." order="1"/>
         </serv:Service>
     </ns1:serviceDescription>
 </ns1:ServiceMetadata>
