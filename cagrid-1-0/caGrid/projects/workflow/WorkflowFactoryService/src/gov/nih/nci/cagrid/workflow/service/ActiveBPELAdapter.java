@@ -41,7 +41,6 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		if (abAdminUrl != null) {
 			this.abAdminUrl = abAdminUrl;
 		}
-		System.out.println("here1");
 		BpelEngineAdminLocator locator = new BpelEngineAdminLocator();
 		try {
 			URL url = new URL(this.abAdminUrl);
@@ -58,7 +57,6 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		this(abAdminUrl);
 		this.workflowOutput = output;
 		this.workflowStatus = workflowStatus;
-		System.out.println("here2");
 		
 	}
 	/** Deploys the ActiveBPEL specific BPEL archive
