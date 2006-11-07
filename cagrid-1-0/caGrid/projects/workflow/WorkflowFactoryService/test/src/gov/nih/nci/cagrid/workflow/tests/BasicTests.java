@@ -14,6 +14,8 @@ import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WSDLReferences;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowInputType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType;
 
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.Address;
@@ -28,27 +30,31 @@ import org.w3c.dom.Element;
 public class BasicTests extends GridTestCase {
 
 	public String url = "http://localhost:8080/wsrf/services/cagrid/WorkflowFactoryService";
+	private static WorkflowFactoryServiceClient factoryClient = null;
+	private static WorkflowServiceImplClient serviceClient = null;
+	private static EndpointReferenceType epr = null;
+	
+	
 	public BasicTests(String name) {
 		super(name);
 	}
 	
+	private void setup() {
+		
+	}
 	public void testBasic() throws Exception {
 		String inputFile = "inputTest1.xml";
 		assertTrue(TEST_CONTAINER != null);
-		WSDLReferences[] wsdlRefArray = new WSDLReferences[1];
-		wsdlRefArray[0] = new WSDLReferences();
-		wsdlRefArray[0].setServiceUrl(new URI("http://localhost:9080/wsrf/services/cagrid/SampleService1"));
-		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/SampleService1/SampleService1_flattened.wsdl");
-		wsdlRefArray[0].setWsdlNamespace(new URI("http://workflow.cagrid.nci.nih.gov/SampleService1"));
 		FileWriter writer = null;
-		WorkflowFactoryServiceClient client = new WorkflowFactoryServiceClient(url);
+		this.factoryClient = new WorkflowFactoryServiceClient(url);
 		WMSInputType input = createInput("Simple.bpel");
-		WMSOutputType output = client.createWorkflow(input);
-		EndpointReferenceType epr = output.getWorkflowEPR();
+		WMSOutputType output = this.factoryClient.createWorkflow(input);
+		this.epr = output.getWorkflowEPR();
+		assertTrue(epr != null);
 		writer = new FileWriter("workflow_" + input.getWorkflowName() + "_epr");
 		writer.write( 
 				ObjectSerializer.toString(epr, new QName("", "WMS_EPR")));
-		WorkflowServiceImplClient wclient = new WorkflowServiceImplClient(epr);
+		this.serviceClient = new WorkflowServiceImplClient(this.epr);
 		StartInputType startInput = new StartInputType();
 		WorkflowInputType inputArgs = new WorkflowInputType();
 		FileInputStream in = new FileInputStream("input.xml");
@@ -57,10 +63,35 @@ public class BasicTests extends GridTestCase {
 		MessageElement anyContent = AnyHelper.toAny(new MessageElement(e2));
 		inputArgs.set_any(new MessageElement[] {anyContent});
 		startInput.setInputArgs(inputArgs);
-		wclient.start(startInput);
+		WorkflowStatusType status = this.serviceClient.start(startInput);
+		status = this.serviceClient.getStatus();
+		System.out.println(status.getValue());
+		assertTrue(status !=null);
+		assertTrue(status.getValue().equals("Active"));
+		
 	}
 
-	public static WMSInputType createInput(String bpelFile) throws Exception {
+	public void testStatus() throws Exception {
+		if (this.epr != null) {
+			this.serviceClient = new WorkflowServiceImplClient(this.epr);
+		} else {
+			System.out.println("epr is null");
+		}
+		WorkflowStatusType status = this.serviceClient.getStatus();
+		System.out.println(status.getValue());
+		assertTrue(status != null);
+	}
+	
+	public void testGetOutput() throws Exception {
+		WorkflowOutputType output = this.serviceClient.getWorkflowOutput();
+		System.out.println("result: " + AnyHelper.toSingleString(output.get_any()));
+		assertTrue(output != null);
+		
+	}
+	public void testCancel() throws Exception {
+		
+	}
+	private static WMSInputType createInput(String bpelFile) throws Exception {
 		WMSInputType input = new WMSInputType();
 		String bpelProcess = Utils.fileToStringBuffer(new File(bpelFile)).toString();
 		input.setBpelDoc(bpelProcess);

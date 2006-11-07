@@ -33,11 +33,15 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	
 	private RemoteDebugSoapBindingStub mRemote = null;
 	
+	private WorkflowStatusType workflowStatus = null;
+	
+	private WorkflowOutputType workflowOutput = null;
+	
 	public ActiveBPELAdapter(String abAdminUrl)  {
 		if (abAdminUrl != null) {
 			this.abAdminUrl = abAdminUrl;
 		}
-
+		System.out.println("here1");
 		BpelEngineAdminLocator locator = new BpelEngineAdminLocator();
 		try {
 			URL url = new URL(this.abAdminUrl);
@@ -46,6 +50,15 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+	
+	public ActiveBPELAdapter(String abAdminUrl,
+			WorkflowOutputType output, WorkflowStatusType workflowStatus) {
+		this(abAdminUrl);
+		this.workflowOutput = output;
+		this.workflowStatus = workflowStatus;
+		System.out.println("here2");
 		
 	}
 	/** Deploys the ActiveBPEL specific BPEL archive
@@ -74,7 +87,7 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		return Base64.encodeFromFile(pathToBpr);
 	}
 	
-	public  static WorkflowStatusType callService(String serviceUrl, 
+	public WorkflowStatusType callService(String serviceUrl, 
 			StartInputType startInput) throws Exception {
 		SOAPEnvelope env = new SOAPEnvelope();
 		env.getBody().addChildElement(
@@ -88,11 +101,10 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		
 		SOAPEnvelope res = call.invoke(env);
 		System.out.println("Result " + res.getAsString());
-		WorkflowStatusType output = WorkflowStatusType.Active;
-		WorkflowOutputType outputType = new WorkflowOutputType();
-		outputType.set_any(new MessageElement[]{new MessageElement(res.getAsDOM())});
+	    this.workflowStatus = WorkflowStatusType.Active;
+		this.workflowOutput.set_any(new MessageElement[]{new MessageElement(res.getAsDOM())});
 		//output.setOutputType(outputType);
-		return output;
+		return this.workflowStatus;
 	}
 
 
@@ -123,9 +135,11 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	public WorkflowStatusType getWorkflowStatus(String workflowName) throws WorkflowExceptionType {
 		try {
 			QName workflowQName = new QName(workflowName);
+			System.out.println("API Version: " + mRemote.getAPIVersion());
 			String statusString = getWorkflowStatus(workflowQName);
 			return getStatusFromString(statusString);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new WorkflowExceptionType();
 		}
 	}
@@ -174,7 +188,9 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		AeProcessFilter filter = new AeProcessFilter();
 	      filter.setProcessName(workflowName);
 	      AeProcessListResult list = mRemote.getProcessList( filter );
-	      return list.getRowDetails()[0].getStateString();
+	      System.out.println("State: " + list.getRowDetails()[0].getState());
+	      displayProcessList(workflowName);
+	      return "State: " +list.getRowDetails()[0].getState() ;
 	}
 	
 	public String getWorkflowStatus(QName workflowQName) throws Exception {
@@ -183,7 +199,9 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	     AeProcessListResult list = mRemote.getProcessList( filter );
 	     AeProcessInstanceDetail[] details = list.getRowDetails();
 	     AeProcessInstanceDetail detail = details[0];
-	     return detail.getStateString();
+	     System.out.println("State:" + detail.getState());
+	     displayProcessList(workflowQName);
+	     return " " + detail.getState();
 	}
 
 	public int displayProcessList(QName workflowName) throws Exception {
@@ -215,5 +233,21 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	public static WorkflowStatusType getStatusFromString(String state) {
 		WorkflowStatusType status = WorkflowStatusType.Pending;
 		return status;
+	}
+
+	public WorkflowOutputType getWorkflowOutput() {
+		return workflowOutput;
+	}
+
+	public void setWorkflowOutput(WorkflowOutputType workflowOutput) {
+		this.workflowOutput = workflowOutput;
+	}
+
+	public WorkflowStatusType getWorkflowStatus() {
+		return workflowStatus;
+	}
+
+	public void setWorkflowStatus(WorkflowStatusType workflowStatus) {
+		this.workflowStatus = workflowStatus;
 	}
 }

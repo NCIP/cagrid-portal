@@ -9,14 +9,23 @@ import gov.nih.nci.cagrid.workflow.stubs.types.StartInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WSDLReferences;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Calendar;
 
 import javax.naming.InitialContext;
 
 import org.apache.axis.MessageContext;
+import org.apache.axis.client.Call;
+import org.apache.axis.client.Service;
+import org.apache.axis.message.MessageElement;
+import org.apache.axis.message.SOAPBodyElement;
+import org.apache.axis.message.SOAPEnvelope;
+import org.apache.axis.message.addressing.AddressingHeaders;
+import org.apache.axis.message.addressing.To;
 import org.globus.wsrf.Constants;
 import org.globus.wsrf.Resource;
 
@@ -37,9 +46,11 @@ public class WorkflowResource implements Resource {
 	private WorkflowStatusType workflowStatus = WorkflowStatusType.Pending;
 	
 	//Discover this from jndi config
-	private static ActiveBPELAdapter abAdapter = new ActiveBPELAdapter(null);
+	private  ActiveBPELAdapter abAdapter = null;
 	
 	private ServiceConfiguration configuration = null;
+	
+	private WorkflowOutputType outputType = null;
 	
 	
 	public WorkflowResource(WMSInputType input, Calendar terminationTime)
@@ -54,14 +65,17 @@ public class WorkflowResource implements Resource {
 		bpelFile.deleteOnExit();
 		Utils.stringBufferToFile(new StringBuffer(bpelProcess), bpelFileName);
 		WSDLReferences[] wsdlRefArray = input.getWsdlReferences();
+		this.outputType = new WorkflowOutputType();
+		this.abAdapter = new ActiveBPELAdapter(null, this.outputType, this.workflowStatus);
 		String returnString = deploy(bpelFileName, workflowName, wsdlRefArray);
+		
 		System.out.println("Created a Workflow resource with key:" 
 				+ input.getWorkflowName());
 	}
 
 	private String deploy(String bpelFileName, String workflowName,
 			WSDLReferences[] wsdlRefArray) throws Exception {
-		return abAdapter.deployBpr(bpelFileName,
+		return this.abAdapter.deployBpr(bpelFileName,
 				workflowName, wsdlRefArray);
 	}
 
@@ -81,7 +95,8 @@ public class WorkflowResource implements Resource {
 		return this.workflowStatus;
 	}
 
-	public WorkflowStatusType getStatus() {
+	public WorkflowStatusType getStatus() throws WorkflowExceptionType {
+		this.workflowStatus = this.abAdapter.getWorkflowStatus(this.workflowName);
 		return this.workflowStatus;
 	}
 	
@@ -101,6 +116,9 @@ public class WorkflowResource implements Resource {
 		this.abAdapter.cancel(this.workflowName);
 	}
 	
+	public WorkflowOutputType getWorkflowOutput() {
+		return this.abAdapter.getWorkflowOutput();
+	}
 	public ServiceConfiguration getConfiguration() throws Exception {
 		if (this.configuration != null) {
 			return this.configuration;
@@ -119,4 +137,5 @@ public class WorkflowResource implements Resource {
 
 		return this.configuration;
 	}
+	
 }
