@@ -6,13 +6,15 @@ import gov.nih.nci.cagrid.cqlquery.QueryModifier;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
-import gov.nih.nci.cagrid.data.cql.LazyCQLQueryProcessor;
+import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.mapping.Mappings;
 import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
 import gov.nih.nci.cagrid.data.utilities.CQLResultsCreationUtil;
 import gov.nih.nci.cagrid.data.utilities.ResultsCreationException;
 import gov.nih.nci.common.util.HQLCriteria;
+import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
+import gov.nih.nci.system.comm.client.ClientSession;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -36,17 +38,18 @@ import org.apache.log4j.Logger;
  * @created May 2, 2006 
  * @version $Id$ 
  */
-public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
+public class HQLCoreQueryProcessor extends CQLQueryProcessor {
 	public static final String DEFAULT_LOCALHOST_CACORE_URL = "http://localhost:8080/cacore31/server/HTTPServer";
 	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
 	public static final String USE_CSM_FLAG = "useCsmSecurity";
 	public static final String DEFAULT_USE_CSM_FLAG = String.valueOf(false);
-	public static final String CSM_CONFIGURATION_FILENAME = "csmConfigurationFilename";
 	public static final String CSM_CONTEXT_NAME = "csmContextName";
 	public static final String CASE_INSENSITIVE_QUERYING = "queryCaseInsensitive";
 	public static final String USE_CASE_INSENSITIVE_DEFAULT = String.valueOf(false);
 	
 	private static Logger LOG = Logger.getLogger(HQLCoreQueryProcessor.class);
+	
+	private static Object sessionMutex = new Object(); 
 	
 	private ApplicationService coreService;
 	
@@ -58,18 +61,17 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	public CQLQueryResults processQuery(CQLQuery cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException {
 		CQLQueryResults results = null;
-		// TODO: at this point, synchronize on mutex, and set up CSM session
-		results = process(cqlQuery);
+		if (useCsmSecurity()) {
+			synchronized (sessionMutex) {
+				applyUserSecurity();
+				results = process(cqlQuery);
+				clearUserSecurity();
+			}
+		} else {
+			results = process(cqlQuery);			
+		}
 		
 		return results;
-	}
-	
-	
-	public Iterator processQueryLazy(CQLQuery cqlQuery) 
-		throws MalformedQueryException, QueryProcessingException {
-		// TODO: at this point, synchronize on mutex, and set up CSM session
-		List coreResultsList = queryCoreService(cqlQuery);
-		return coreResultsList.iterator();
 	}
 	
 	
@@ -241,6 +243,25 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	}
 	
 	
+	private void applyUserSecurity() throws QueryProcessingException {
+		ClientSession securitySession = ClientSession.getInstance();
+		try {
+			boolean loggedIn = securitySession.startSession(getCallerId(), getCsmContextName());
+			if (!loggedIn) {
+				throw new QueryProcessingException("CSM security did not log in user");
+			}
+		} catch (ApplicationException ex) {
+			throw new QueryProcessingException("Error initializing CSM security: " + ex.getMessage(), ex);
+		}
+	}
+	
+	
+	private void clearUserSecurity() {
+		ClientSession securitySession = ClientSession.getInstance();
+		securitySession.terminateSession();
+	}
+	
+	
 	private Mappings getClassToQnameMappings() throws Exception {
 		// get the mapping file name
 		String filename = ServiceConfigUtil.getClassToQnameMappingsFile();
@@ -266,11 +287,6 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	}
 	
 	
-	private String getCsmConfigurationFilename() {
-		return getConfiguredParameters().getProperty(CSM_CONFIGURATION_FILENAME);
-	}
-	
-	
 	private String getCsmContextName() {
 		String contextName = getConfiguredParameters().getProperty(CSM_CONTEXT_NAME);
 		if (contextName == null || contextName.trim().length() == 0) {
@@ -290,7 +306,6 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 		Properties params = new Properties();
 		params.setProperty(APPLICATION_SERVICE_URL, DEFAULT_LOCALHOST_CACORE_URL);
 		params.setProperty(USE_CSM_FLAG, DEFAULT_USE_CSM_FLAG);
-		params.setProperty(CSM_CONFIGURATION_FILENAME, "");
 		params.setProperty(CSM_CONTEXT_NAME, "");
 		params.setProperty(CASE_INSENSITIVE_QUERYING, USE_CASE_INSENSITIVE_DEFAULT);
 		return params;
