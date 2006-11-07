@@ -5,7 +5,7 @@
 	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="build/stubs-WorkflowManagementService/src"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
-	<classpathentry sourcepath="/AXIS_HOME" kind="var" path="GT4_LOCATION/lib/axis.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/AXIS_HOME"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>
@@ -50,7 +50,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_samples_mgmt_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_samples_mgmt.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_stubs.jar"/>
-	<classpathentry sourcepath="/globussource" kind="var" path="GT4_LOCATION/lib/wsrf_core.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" sourcepath="/globussource"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_provider_jce.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test_interop_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test_interop.jar"/>
@@ -64,12 +64,11 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="lib/ant-contrib.jar"/>
-	<classpathentry sourcepath="C:/dev/cagrid/cagrid-1-0/caGrid/projects/core" kind="lib" path="lib/caGrid-core-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/caGrid-core-1.0.jar" sourcepath="C:/dev/cagrid/cagrid-1-0/caGrid/projects/core"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/abadmin.jar"/>
-	<classpathentry kind="src" path="/SecureSample"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
