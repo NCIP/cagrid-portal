@@ -60,6 +60,7 @@ public class EvsCheckServiceStep
 
         testGetVocabularyNames();
 
+        testSearchDescLogicConcept();
 
     }
 
@@ -377,7 +378,7 @@ public class EvsCheckServiceStep
     throws Exception
     {
 
-        String searchTerms[] = new String[]{"Blood*", "Anatomic*"};
+        String searchTerms[] = new String[]{"Blood*", "C43723"};
 
 
         for (int count = 0; count < searchTerms.length; count++)
@@ -650,6 +651,80 @@ public class EvsCheckServiceStep
 
 
     }
+
+    /**
+     *
+     */
+
+    public void testSearchDescLogicConcept()
+    {
+        // Test passing different values to the API that retrieves DescLogicConcept objects
+
+
+        try
+        {
+
+            EVSGridServiceClient client = new EVSGridServiceClient(endpoint);
+
+
+            // Case 1: Use Search: Anatomic* to get DesLogicConcept Objects
+            String searchTerm = "Anatomic*";
+            System.out.println("testing:searchDescLogicConcep by Search Term: " + searchTerm);
+
+            EVSDescLogicConceptSearchParams  evsSearchParams = new EVSDescLogicConceptSearchParams();
+            evsSearchParams.setVocabularyName("NCI_Thesaurus");
+            evsSearchParams.setSearchTerm(searchTerm);
+            evsSearchParams.setLimit(100);
+
+
+
+            DescLogicConcept[] descLogicConcepts = client.searchDescLogicConcept(evsSearchParams);
+            DescLogicConcept descLogicConcept1 = descLogicConcepts[0];
+            assertNotNull("Description Logic Concept list is not populated ", descLogicConcept1);
+
+            // Do a search with the same concept code and test that the Description Logic Concept objects are
+            // indeed equal.
+
+            evsSearchParams.setSearchTerm(descLogicConcept1.getCode());
+            DescLogicConcept[] descLogicConcepts2 = client.searchDescLogicConcept(evsSearchParams);
+            DescLogicConcept descLogicConcept2 = descLogicConcepts2[0];
+
+            // The list should contain 1 element
+            assertTrue("Desc Logic Concept query should return exactly one result", (descLogicConcepts2.length == 1));
+
+            // Check equality
+            assertEquals("DescLogicConcepts are not Equal", descLogicConcept1, descLogicConcept2);
+
+            // Pass incorrect Concept codes and see what we get!
+
+            // (a): space
+            String invalidConceptCode1 = "C1229 ";
+            evsSearchParams.setSearchTerm(invalidConceptCode1);
+            DescLogicConcept[] descLogicConcepts3 = client.searchDescLogicConcept(evsSearchParams);
+            assertNull("Desc Logic Concept query should return null", descLogicConcepts3);
+
+            // (b): letter
+            evsSearchParams.setSearchTerm("C1229asj");
+            descLogicConcepts3 = client.searchDescLogicConcept(evsSearchParams);
+            assertNull("Desc Logic Concept query should return null", descLogicConcepts3);
+
+            // (c): Just a wrong concept code
+            evsSearchParams.setSearchTerm("C12299999559");
+            descLogicConcepts3 = client.searchDescLogicConcept(evsSearchParams);
+            assertNull("Desc Logic Concept query should return null", descLogicConcepts3);
+
+
+
+
+        }
+        catch(Exception e)
+        {
+            System.out.println("Is exception valid: "+ e.getMessage());
+        }
+
+
+    }
+
 
 
 
