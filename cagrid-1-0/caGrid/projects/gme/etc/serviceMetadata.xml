@@ -1,13 +1,15 @@
 <ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
  <ns1:serviceDescription>
-  <ns2:Service description="The GlobalModelExchange grid service, created with caGrid Introduce, version:.99999." name="GlobalModelExchange" version=".99999" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+  <ns2:Service description="The GlobalModelExchange grid service, created with caGrid Introduce, version:.99999." name="GlobalModelExchange" version=".99999"
+   xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection/>
    <ns2:serviceContextCollection>
     <ns2:ServiceContext description="" name="GlobalModelExchange">
      <ns2:operationCollection>
       <ns2:Operation description="" name="getServiceSecurityMetadata">
        <ns2:inputParameterCollection/>
-       <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+       <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false"
+        xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
        <ns2:faultCollection/>
       </ns2:Operation>
      </ns2:operationCollection>
@@ -16,8 +18,12 @@
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>
-   <ns4:SemanticMetadata conceptCode="???" conceptDefinition="A Grid Service." conceptName="Grid Service" order="0" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
-   <ns5:SemanticMetadata conceptCode="???" conceptDefinition="An Grid Analytical Service." conceptName="Analytical Grid Service" order="1" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns39:SemanticMetadata conceptCode="C63541"
+    conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services."
+    conceptName="Grid Service" order="0" xmlns:ns39="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns40:SemanticMetadata conceptCode="C63542"
+    conceptDefinition="Services that are needed to maintain the running of a grid, including monitoring and discovery service, security management service (authentication and authorization), identifier naming and resolution service, query and federated query service, and workflow management service."
+    conceptName="Core Grid Service" order="1" xmlns:ns40="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter/>
