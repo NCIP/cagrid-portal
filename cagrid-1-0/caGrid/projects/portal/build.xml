@@ -408,6 +408,7 @@
     <target name="file-list">
         <taskdef name="scriptdef" classname="org.apache.tools.ant.taskdefs.optional.Script">
             <classpath>
+                <path refid="portal.classpath"/>
                 <fileset dir="${lib.dir}/xdoclet">
                     <include name="**/*.jar"/>
                 </fileset>
