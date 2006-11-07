@@ -12,6 +12,8 @@ componentized resource building by selecting features or interfaces to implement
 
 new extensions architecture to support callbacks for different areas of editing.
 
+support registration on resources
+
 ==============================================================================================================================
 
 To Do:
