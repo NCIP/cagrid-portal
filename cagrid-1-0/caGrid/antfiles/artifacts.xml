@@ -22,6 +22,16 @@
 				<include name="*.jar"/>
 			</fileset>
 		</artifact>
+		<artifact track="main" type="jars" id="caCORE.3.2.jars">
+			<fileset dir="${share.dir}/lib/caCORE32">
+				<include name="*.jar"/>
+			</fileset>
+		</artifact>
+		<artifact track="main" type="schemas" id="caCORE.3.2.schemas">
+			<fileset dir="${share.dir}/xsd/caCORE32">
+				<include name="*.xsd"/>
+			</fileset>
+		</artifact>
 		<artifact track="main" type="jars" id="jet.jars">
 			<fileset dir="${share.dir}/lib/jet">
 				<include name="*.jar"/>
