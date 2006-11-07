@@ -38,12 +38,12 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="authz, bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, evs, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service, service-security-provider" />
+	<property name="projects.list" value="authz, bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, evs, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, sdkQuery32, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service, service-security-provider" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects above -->
-	<property name="testable.projects.list" value="dorian, introduce, cabigextensions, core, discovery, cadsr, evs, fqp, gridca, gts, data, sdkQuery, gridgrouper, wsEnum, metadatautils" />
+	<property name="testable.projects.list" value="dorian, introduce, cabigextensions, core, discovery, cadsr, evs, fqp, gridca, gts, data, sdkQuery, sdkQuery32, gridgrouper, wsEnum, metadatautils" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT PROVIDE INTRODUCE EXTENSIONS       -->
 	<!-- ================================================================================ -->
@@ -594,13 +594,29 @@
 			<artifact refid="caCORE.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="data.jars" />
-			<artifact refid="authz.jars" />
-			<artifact refid="gridgrouper.client.jars" />
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="data.cql.testing.docs" />
 		</resolveDependencies>
 		<ant dir="${projects.dir}/sdkQuery" inheritAll="false" antfile="build.xml" target="all" />
+	</target>
+	
+	<!-- =============================================================== -->
+	<!-- CAGRID SDK 3.2 Data Service Query Processor:                    -->
+	<!-- =============================================================== -->
+	<target name="build-sdkQuery32" if="isJDK1.5" depends="prepare" description="Builds caGrid SDK 3.2 Query Processor">
+		<resolveDependencies extdir="${projects.dir}/sdkQuery32/ext">
+			<artifact refid="core.jars"/>
+			<artifact refid="caCORE.3.2.jars"/>
+			<artifact refid="mds.jars" />
+			<artifact refid="core.test.jars"/>
+			<artifact refid="data.jars"/>
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="data.cql.testing.docs" />
+			<artifact refid="authz.jars"/>
+		</resolveDependencies>
+		<ant dir="${projects.dir}/sdkQuery32" inheritall="false" antfile="build.xml" target="all" />
 	</target>
 
 	<!-- =============================================================== -->
