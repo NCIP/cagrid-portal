@@ -12,6 +12,8 @@ You can ignore sections marked (Optional)
 4. mySQL database. Set the db connection details in the portal-build properties
 
 
+
+
 ===========================================================================
 2. Configuration Information
 ===========================================================================
@@ -160,6 +162,11 @@ You can ignore sections marked (Optional)
 ===========================================================================
 3. Build Instructions
 ===========================================================================
+
+VERY IMPORTANT- Its important to first build the main caGrid build before
+                attempting to build the Portal.
+
+                
     -Use the portal-build.properties file to configure the build
     for your environment. This file will be used in absense of the
     ${user.home}/.portal-build.properties file.

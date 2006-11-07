@@ -40,7 +40,7 @@ public abstract class GeocodingBaseManagerImpl extends BaseManagerImpl {
                 obj.setLatitude(result.getLatitude());
                 obj.setLongitude(result.getLongitude());
             } catch (GeoCoderRetreivalException e) {
-                _logger.warn("Could not reach Geocoding web service. Doing local lookup");
+                _logger.warn("Could not reach Geocoding web service. Doing local lookup" + e.getMessage());
                 try {
                     //Do a local lookup
                     GeoCodeValues result = jdbcDAO.getGeoCodes(obj.getPostalCode());

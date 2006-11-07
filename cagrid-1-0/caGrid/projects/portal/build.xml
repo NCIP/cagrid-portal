@@ -118,11 +118,6 @@
             </fileset>
         </path>
 
-        <path id="xdoclet.classpath">
-            <fileset dir="${lib.dir}/xdoclet">
-                <include name="*.jar"/>
-            </fileset>
-        </path>
     </target>
 
     <!-- ============================================================== -->
@@ -167,7 +162,7 @@
     <!-- Deploy Target                                               -->
     <!-- ============================================================== -->
 
-    <target name="deployTomcatPreBuilt">
+    <target name="deployTomcatPreBuilt" depends="buildPortalLocal">
         <copy todir="${tomcat.webapps.dir}/${project.name}" overwrite="true">
             <fileset dir="${webcontent.dir}"/>
         </copy>

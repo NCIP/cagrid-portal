@@ -4,8 +4,12 @@ import gov.nih.nci.cagrid.metadata.MetadataConstants;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.oasis.wsrf.properties.WSResourcePropertiesServiceAddressingLocator;
 
+import javax.xml.rpc.ServiceException;
+import java.rmi.RemoteException;
+
 /**
- * Utility that will ping an EPR to see if the endpoint is "Active" or "Inactive"
+ * Utility that will ping an EPR to see if the endpoint is
+ * "Active" "Inactive" or "INVALID"
  * <p/>
  * Created by IntelliJ IDEA.
  * User: kherm
@@ -15,24 +19,61 @@ import org.oasis.wsrf.properties.WSResourcePropertiesServiceAddressingLocator;
  */
 public class EPRPingService {
 
+    /**
+     * service is active and reachable *
+     */
+    public final static int SERVICE_ACTIVE = 1;
+    /**
+     * service is not reachable or is inactive currently *
+     */
+    public final static int SERVICE_INACTIVE = 0;
+    /**
+     * service is reachable but is not a valid caGrid service *
+     */
+    public final static int SERVICE_INVALID = -1;
 
     /**
      * Utility that will ping an EPR to see if the endpoint is "Active" or "Inactive"
      *
      * @param epr
-     * @return boolean True means EPR is "Alive" or "Active"
+     * @return int 0 means service is inactive or not responding
+     *         1 means service is active and alive at the given EPR
+     *         -1 means service is active but not a valid caGrid service
      */
-    public static boolean ping(EndpointReferenceType epr) {
+    public static int ping(EndpointReferenceType epr) {
         WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
 
+
         try {
-            locator.getGetResourcePropertyPort(epr).getResourceProperty(MetadataConstants.CAGRID_MD_QNAME);
-        } catch (Exception e) {
-            //service is not reachable
-            return false;
+            org.oasis.wsrf.properties.GetResourceProperty props = locator.getGetResourcePropertyPort(epr);
+            props.getResourceProperty(MetadataConstants.CAGRID_MD_QNAME);
+        } catch (RemoteException e) {
+            return SERVICE_INACTIVE;
+        } catch (ServiceException e) {
+            /** no remote exception means service is valid but error getting
+             * cagrid metadata **/
+            return SERVICE_INVALID;
         }
 
         //if it reaches this point
-        return true;
+        return SERVICE_ACTIVE;
+    }
+
+    /**
+     * Will explain the code you get from the ping(EPR epr) method
+     *
+     * @param code
+     * @return
+     */
+    public static String explainCode(int code) {
+        if (code == SERVICE_ACTIVE) {
+            return "Service is active";
+        } else if (code == SERVICE_INACTIVE) {
+            return "Service is not currently active";
+        } else if (code == SERVICE_INVALID) {
+            return "Service is not a valid caGrid service. Not publishing expected metadata";
+        }
+
+        return null;
     }
 }

@@ -27,7 +27,7 @@ public class ServicesList {
     private RegisteredService navigatedService;
     private GridServiceManager gridServiceManager;
 
-    private boolean navigatedServiceActive;
+    private int navigatedServiceStatus;
 
     private Category _logger = Category.getInstance(getClass().getName());
 
@@ -37,7 +37,7 @@ public class ServicesList {
                     getExternalContext().getRequestParameterMap().get("navigatedServiceIndex"));
             navigatedService = (RegisteredService) list.get(index);
 
-            setNavigatedServiceActive(EPRPingService.ping(navigatedService.getHandle()));
+            setNavigatedServiceStatus(EPRPingService.ping(navigatedService.getHandle()));
 
         } catch (NumberFormatException e) {
             _logger.error(e);
@@ -83,12 +83,12 @@ public class ServicesList {
         return gridServiceManager.getCount(RegisteredService.class);
     }
 
-    public boolean isNavigatedServiceActive() {
-        return navigatedServiceActive;
+    public int getNavigatedServiceStatus() {
+        return navigatedServiceStatus;
     }
 
-    public void setNavigatedServiceActive(boolean navigatedServiceActive) {
-        this.navigatedServiceActive = navigatedServiceActive;
+    public void setNavigatedServiceStatus(int navigatedServiceStatus) {
+        this.navigatedServiceStatus = navigatedServiceStatus;
     }
 
     public int getListSize() {

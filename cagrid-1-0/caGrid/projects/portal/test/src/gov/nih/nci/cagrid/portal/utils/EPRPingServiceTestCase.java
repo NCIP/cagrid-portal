@@ -13,22 +13,19 @@ import org.apache.axis.types.URI;
  */
 public class EPRPingServiceTestCase extends BaseSpringAbstractTestCase {
 
-    private EPRPingService eprPingService;
+
     private final String fooEPR = "https://59.163.69.32:8443/wsrf/services/cagrid/CaDSRService";
 
     public void testEPR() {
         try {
             EndpointReferenceType epr = new EndpointReferenceType(new URI(fooEPR));
-            assertFalse(eprPingService.ping(epr));
+            assertTrue(EPRPingService.ping(epr) == EPRPingService.SERVICE_INACTIVE);
 
-            assertTrue(eprPingService.ping(validServiceEPR));
+            assertTrue(EPRPingService.ping(validServiceEPR) == EPRPingService.SERVICE_ACTIVE);
         } catch (Exception e) {
             fail(e.getMessage());
 
         }
     }
 
-    public void setEprPingService(EPRPingService eprPingService) {
-        this.eprPingService = eprPingService;
-    }
 }

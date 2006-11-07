@@ -70,10 +70,25 @@
         </h:column>
         <h:column>
             <f:verbatim>&nbsp;</f:verbatim>
-            <h:graphicImage url="/images/activeService.jpg"
-                            alt="Active Service" rendered="#{services.navigatedServiceActive}"/>
-            <h:graphicImage url="/images/inactiveService.jpg" value="Inactive"
-                            alt="Inactive Service" rendered="#{!services.navigatedServiceActive}"/>
+            <f:subview id="active" rendered="#{services.navigatedServiceStatus==1}">
+                <h:graphicImage url="/images/activeService.jpg"
+                                alt="Active Service"/>
+                <h:outputText value=" Service Active" styleClass="dataCellTextBold"/>
+            </f:subview>
+
+            <f:subview id="inactive"
+                       rendered="#{services.navigatedServiceStatus==0}">
+                <h:graphicImage url="/images/inactiveService.jpg" value="Inactive"
+                                alt="Inactive Service"/>
+                <h:outputText value=" Service Inactive" styleClass="dataCellTextBold"/>
+            </f:subview>
+
+            <f:subview id="invalid"
+                       rendered="#{services.navigatedServiceStatus==-1}">
+                <h:graphicImage url="/images/activeService.jpg" value="Invalid"
+                                alt="Invalid Service"/>
+                <h:outputText value=" Invalid caGrid Service." styleClass="dataCellTextBold"/>
+            </f:subview>
         </h:column>
 
 

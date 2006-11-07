@@ -533,7 +533,7 @@ DATA TABLE BEGINS
     padding: 0em;
     padding-left: 0.1cm;
     line-height: 1.5em;
-    vertical-align: top;
+    vertical-align: middle;
     font-weight: bold;
     width: 25%;
 }
