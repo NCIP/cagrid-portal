@@ -17,7 +17,6 @@ import gov.nih.nci.system.applicationservice.ApplicationService;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -44,6 +43,8 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	public static final String DEFAULT_USE_CSM_FLAG = String.valueOf(false);
 	public static final String CSM_CONFIGURATION_FILENAME = "csmConfigurationFilename";
 	public static final String CSM_CONTEXT_NAME = "csmContextName";
+	public static final String CASE_INSENSITIVE_QUERYING = "queryCaseInsensitive";
+	public static final String USE_CASE_INSENSITIVE_DEFAULT = String.valueOf(false);
 	
 	private static Logger LOG = Logger.getLogger(HQLCoreQueryProcessor.class);
 	
@@ -57,7 +58,7 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	public CQLQueryResults processQuery(CQLQuery cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException {
 		CQLQueryResults results = null;
-		checkAuthorization(cqlQuery);
+		// TODO: at this point, synchronize on mutex, and set up CSM session
 		results = process(cqlQuery);
 		
 		return results;
@@ -66,26 +67,9 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	
 	public Iterator processQueryLazy(CQLQuery cqlQuery) 
 		throws MalformedQueryException, QueryProcessingException {
-		checkAuthorization(cqlQuery);
+		// TODO: at this point, synchronize on mutex, and set up CSM session
 		List coreResultsList = queryCoreService(cqlQuery);
 		return coreResultsList.iterator();
-	}
-	
-	
-	private void checkAuthorization(CQLQuery cqlQuery) throws QueryProcessingException {
-		if (useCsmSecurity()) {
-			boolean authorized = false;
-			try {
-				authorized = CsmSecurityCheck.checkAuthorization(
-					getCsmConfigurationFilename(), getCallerId(), getCsmContextName(), cqlQuery);
-			} catch (RemoteException ex) {
-				throw new QueryProcessingException("Error determining authorization status: " + ex.getMessage(), ex);
-			}
-			if (!authorized) {
-				throw new QueryProcessingException("User " + getCallerId() 
-					+ " is not authorized to perform the query");
-			}
-		}
 	}
 	
 	
@@ -296,12 +280,19 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	}
 	
 	
+	private boolean useCaseInsensitiveQueries() {
+		return Boolean.valueOf(getConfiguredParameters().getProperty(
+			CASE_INSENSITIVE_QUERYING)).booleanValue();
+	}
+	
+	
 	public Properties getRequiredParameters() {
 		Properties params = new Properties();
 		params.setProperty(APPLICATION_SERVICE_URL, DEFAULT_LOCALHOST_CACORE_URL);
 		params.setProperty(USE_CSM_FLAG, DEFAULT_USE_CSM_FLAG);
 		params.setProperty(CSM_CONFIGURATION_FILENAME, "");
 		params.setProperty(CSM_CONTEXT_NAME, "");
+		params.setProperty(CASE_INSENSITIVE_QUERYING, USE_CASE_INSENSITIVE_DEFAULT);
 		return params;
 	}
 }

@@ -81,7 +81,5 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.0-core-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
-	<classpathentry kind="lib" path="ext/lib/csmapi.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authz-common.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
