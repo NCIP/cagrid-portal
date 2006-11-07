@@ -37,19 +37,23 @@ public class CQL2HQL {
 	 * @param eliminateSubclasses
 	 * 		A flag indicating that the query should be formulated to avoid
 	 * 		returning subclass instances of the targeted class.
+	 * @param caseInsensitive
+	 * 		A flag indicating that the query should be made case insensitive
+	 * 		by converting all values to lowercase.
 	 * @return
 	 * 		An HQL query
 	 * @throws QueryProcessingException
 	 */
-	public static String translate(CQLQuery query, boolean eliminateSubclasses) throws QueryProcessingException {
+	public static String translate(CQLQuery query, boolean eliminateSubclasses, boolean caseInsensitive) 
+		throws QueryProcessingException {
 		StringBuilder hql = new StringBuilder();
 		if (query.getQueryModifier() != null) {
 			if (eliminateSubclasses) {
 				throw new QueryProcessingException("HQL cannot use the class property when processing projection queries.");
 			}
-			processModifiedQuery(hql, query.getQueryModifier(), query.getTarget());
+			processModifiedQuery(hql, query.getQueryModifier(), query.getTarget(), caseInsensitive);
 		} else {
-			processTarget(hql, query.getTarget(), eliminateSubclasses);
+			processTarget(hql, query.getTarget(), eliminateSubclasses, caseInsensitive);
 		}
 		return hql.toString();
 	}
@@ -64,13 +68,16 @@ public class CQL2HQL {
 	 * 		The modifications to the query
 	 * @param target
 	 * 		The target object
+	 * @param caseInsensitive
+	 * 		True if the query should be case insensitive
 	 * @throws QueryProcessingException
 	 */
-	private static void processModifiedQuery(StringBuilder hql, QueryModifier mods, Object target) throws QueryProcessingException {
+	private static void processModifiedQuery(StringBuilder hql, QueryModifier mods, Object target, boolean caseInsensitive)
+		throws QueryProcessingException {
 		if (mods.isCountOnly()) {
-			processCountingQuery(hql, mods, target);
+			processCountingQuery(hql, mods, target, caseInsensitive);
 		} else {
-			processAttributeQuery(hql, mods, target);
+			processAttributeQuery(hql, mods, target, caseInsensitive);
 		}
 	}
 	
@@ -84,20 +91,23 @@ public class CQL2HQL {
 	 * 		The modifications to apply to the query
 	 * @param target
 	 * 		The query's target object
+	 * @param caseInsensitive
+	 * 		True if the query should be made case insensitive
 	 * @throws QueryProcessingException
 	 */
-	private static void processCountingQuery(StringBuilder hql, QueryModifier mods, Object target) throws QueryProcessingException {
+	private static void processCountingQuery(StringBuilder hql, QueryModifier mods, Object target, boolean caseInsensitive) 
+		throws QueryProcessingException {
 		hql.append("select count(");
 		if (mods.getDistinctAttribute() != null) {
 			// counting distinct attributes
 			hql.append("distinct ").append(TARGET_ALIAS);
 			hql.append(".").append(mods.getDistinctAttribute()).append(") ");
-			processTarget(hql, target, false);
+			processTarget(hql, target, false, caseInsensitive);
 		} else if (mods.getAttributeNames() != null) {
 			// counting objects where any one of the attribs is not null
 			hql.append("*) ");
 			// process the target object normally
-			processTarget(hql, target, false);
+			processTarget(hql, target, false, caseInsensitive);
 			// only add a where statement if the target has no child restrictions
 			boolean addWhereStatement = target.getAssociation() == null 
 				&& target.getAttribute() == null && target.getGroup()== null;
@@ -124,7 +134,7 @@ public class CQL2HQL {
 			// counting unique objects
 			// need to use an alias in the count clause
 			hql.append(TARGET_ALIAS).append(") ");
-			processTarget(hql, target, false);
+			processTarget(hql, target, false, caseInsensitive);
 		}
 	}
 	
@@ -140,7 +150,8 @@ public class CQL2HQL {
 	 * 		The target object of the query
 	 * @throws QueryProcessingException
 	 */
-	private static void processAttributeQuery(StringBuilder hql, QueryModifier mods, Object target) throws QueryProcessingException {
+	private static void processAttributeQuery(StringBuilder hql, QueryModifier mods, Object target, boolean caseInsensitive)
+		throws QueryProcessingException {
 		if (mods.getDistinctAttribute() != null) {
 			// counting distinct attributes
 			hql.append("select distinct ").append(TARGET_ALIAS).append(".").append(mods.getDistinctAttribute());
@@ -157,11 +168,11 @@ public class CQL2HQL {
 			}
 		}
 		hql.append(" ");
-		processTarget(hql, target, false);
+		processTarget(hql, target, false, caseInsensitive);
 	}
 	
 	
-	private static void processTarget(StringBuilder hql, Object target, boolean eliminateSubclasses) 
+	private static void processTarget(StringBuilder hql, Object target, boolean eliminateSubclasses, boolean caseInsensitive) 
 		throws QueryProcessingException {
 		String objName = target.getName();
 		hql.append("From ").append(objName);
@@ -175,7 +186,7 @@ public class CQL2HQL {
 			} else {
 				hql.append(" where ");
 			}
-			processAttribute(hql, target.getName(), target.getAttribute(), true);
+			processAttribute(hql, target.getName(), target.getAttribute(), true, caseInsensitive);
 		}
 		if (target.getAssociation() != null) {
 			if (eliminateSubclasses) {
@@ -183,7 +194,7 @@ public class CQL2HQL {
 			} else {
 				hql.append(" where ");
 			}
-			processAssociation(hql, objName, target.getAssociation(), true);
+			processAssociation(hql, objName, target.getAssociation(), true, caseInsensitive);
 		}
 		if (target.getGroup() != null) {
 			if (eliminateSubclasses) {
@@ -191,7 +202,7 @@ public class CQL2HQL {
 			} else {
 				hql.append(" where ");
 			}
-			processGroup(hql, objName, target.getGroup(), true);
+			processGroup(hql, objName, target.getGroup(), true, caseInsensitive);
 		}
 	}
 	
@@ -203,22 +214,24 @@ public class CQL2HQL {
 	 * 		The existing HQL query fragment
 	 * @param obj
 	 * 		The object to process into HQL
+	 * @param caseInsensitive
+	 * 		True if the query should be made case insensitive
 	 * @throws QueryProcessingException
 	 */
-	private static void processObject(StringBuilder hql, Object obj) throws QueryProcessingException {
+	private static void processObject(StringBuilder hql, Object obj, boolean caseInsensitive) throws QueryProcessingException {
 		String objName = obj.getName();
 		hql.append("select id From ").append(objName);
 		if (obj.getAttribute() != null) {
 			hql.append(" where ");
-			processAttribute(hql, obj.getName(), obj.getAttribute(), false);
+			processAttribute(hql, obj.getName(), obj.getAttribute(), false, caseInsensitive);
 		}
 		if (obj.getAssociation() != null) {
 			hql.append(" where ");
-			processAssociation(hql, objName, obj.getAssociation(), false);
+			processAssociation(hql, objName, obj.getAssociation(), false, caseInsensitive);
 		}
 		if (obj.getGroup() != null) {
 			hql.append(" where ");
-			processGroup(hql, objName, obj.getGroup(), false);
+			processGroup(hql, objName, obj.getGroup(), false, caseInsensitive);
 		}
 	}
 	
@@ -234,13 +247,25 @@ public class CQL2HQL {
 	 * 		The attribute to process into HQL
 	 * @param useAlias
 	 * 		If true, the target alias will be used
+	 * @param caseInsensitive
+	 * 		If true, attribute values will be made lowercase
 	 * @throws QueryProcessingException
 	 */
-	private static void processAttribute(StringBuilder hql, String objClassName, Attribute attrib, boolean useAlias) throws QueryProcessingException {
+	private static void processAttribute(StringBuilder hql, String objClassName,
+		Attribute attrib, boolean useAlias, boolean caseInsensitive) throws QueryProcessingException {
+		boolean isBoolAttribute = BooleanAttributeCheckCache.isFieldBoolean(objClassName, attrib.getName());
+		
+		if (caseInsensitive && !isBoolAttribute) {
+			hql.append("lower(");
+		}
 		if (useAlias) {
 			hql.append(TARGET_ALIAS).append(".");
 		}
 		hql.append(attrib.getName());
+		if (caseInsensitive && !isBoolAttribute) {
+			hql.append(")");
+		}
+		
 		Predicate predicate = attrib.getPredicate();
 		// unary predicates
 		if (predicate.equals(Predicate.IS_NULL)) {
@@ -249,15 +274,20 @@ public class CQL2HQL {
 			hql.append(" is not null");
 		} else {
 			// binary predicates
-			boolean isBoolAttribute = BooleanAttributeCheckCache.isFieldBoolean(objClassName, attrib.getName());
 			String predValue = convertPredicate(predicate);
 			hql.append(" ").append(predValue).append(" ");
+			if (caseInsensitive && !isBoolAttribute) {
+				hql.append("lower(");
+			}
 			if (!isBoolAttribute) {
 				hql.append("'");
 			}
 			hql.append(attrib.getValue());
 			if (!isBoolAttribute) {
 				hql.append("'");
+			}
+			if (caseInsensitive && !isBoolAttribute) {
+				hql.append(")");
 			}
 		}
 	}
@@ -274,9 +304,12 @@ public class CQL2HQL {
 	 * 		The class name of the parent object
 	 * @param assoc
 	 * 		The association to process into HQL
+	 * @param caseInsensitive
+	 * 		True if the query should be made case insensitive
 	 * @throws QueryProcessingException
 	 */
-	private static void processAssociation(StringBuilder hql, String parentName, Association assoc, boolean useAlias) throws QueryProcessingException {
+	private static void processAssociation(StringBuilder hql, String parentName, 
+		Association assoc, boolean useAlias, boolean caseInsensitive) throws QueryProcessingException {
 		// get the role name of the association
 		String roleName = ClassAccessUtilities.getRoleName(parentName, assoc);
 		if (roleName == null) {
@@ -289,7 +322,7 @@ public class CQL2HQL {
 			hql.append(TARGET_ALIAS).append(".");
 		}
 		hql.append(roleName).append(".id in (");
-		processObject(hql, assoc);
+		processObject(hql, assoc, caseInsensitive);
 		hql.append(")");
 	}
 	
@@ -303,9 +336,14 @@ public class CQL2HQL {
 	 * 		The type name of the parent object
 	 * @param group
 	 * 		The group to process into HQL
+	 * @param useAlias
+	 * 		True if a target alias should be used
+	 * @param caseInsensitive
+	 * 		True if the query should be made case insensitive
 	 * @throws QueryProcessingException
 	 */
-	private static void processGroup(StringBuilder hql, String parentName, Group group, boolean useAlias) throws QueryProcessingException {
+	private static void processGroup(StringBuilder hql, String parentName, Group group, 
+		boolean useAlias, boolean caseInsensitive) throws QueryProcessingException {
 		String logic = convertLogicalOperator(group.getLogicRelation());
 		
 		// flag indicating a logic clause is needed before adding further query parts
@@ -315,7 +353,7 @@ public class CQL2HQL {
 		if (group.getAttribute() != null) {
 			for (int i = 0; i < group.getAttribute().length; i++) {
 				logicClauseNeeded = true;
-				processAttribute(hql, parentName, group.getAttribute(i), useAlias);
+				processAttribute(hql, parentName, group.getAttribute(i), useAlias, caseInsensitive);
 				if (i + 1 < group.getAttribute().length) {
 					hql.append(" ").append(logic).append(" ");
 				}
@@ -329,7 +367,7 @@ public class CQL2HQL {
 			}
 			for (int i = 0; i < group.getAssociation().length; i++) {
 				logicClauseNeeded = true;
-				processAssociation(hql, parentName, group.getAssociation(i), useAlias);
+				processAssociation(hql, parentName, group.getAssociation(i), useAlias, caseInsensitive);
 				if (i + 1 < group.getAssociation().length) {
 					hql.append(" ").append(logic).append(" ");
 				}
@@ -343,7 +381,7 @@ public class CQL2HQL {
 			}
 			for (int i = 0; i < group.getGroup().length; i++) {
 				hql.append("( ");
-				processGroup(hql, parentName, group.getGroup(i), useAlias);
+				processGroup(hql, parentName, group.getGroup(i), useAlias, caseInsensitive);
 				hql.append(" )");
 				if (i + 1 < group.getGroup().length) {
 					hql.append(" ").append(logic).append(" ");

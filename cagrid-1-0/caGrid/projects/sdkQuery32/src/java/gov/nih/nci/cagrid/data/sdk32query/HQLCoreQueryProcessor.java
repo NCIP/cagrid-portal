@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created May 2, 2006 
- * @version $Id: HQLCoreQueryProcessor.java,v 1.1 2006-11-07 17:37:59 dervin Exp $ 
+ * @version $Id: HQLCoreQueryProcessor.java,v 1.2 2006-11-07 18:53:30 dervin Exp $ 
  */
 public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	public static final String DEFAULT_LOCALHOST_CACORE_URL = "http://localhost:8080/cacore31/server/HTTPServer";
@@ -144,15 +144,18 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 		// see if the target has subclasses
 		boolean subclassesDetected = SubclassCheckCache.hasClassProperty(query.getTarget().getName(), service);
 		
+		// see if queries should be made case insensitive
+		boolean caseInsensitive = useCaseInsensitiveQueries();
+		
 		// generate the HQL to perform the query
 		String hql = null;
 		if (subclassesDetected) {
 			// simplify the query by removing modifiers
 			CQLQuery simpleQuery = new CQLQuery();
 			simpleQuery.setTarget(query.getTarget());
-			hql = CQL2HQL.translate(simpleQuery,true);
+			hql = CQL2HQL.translate(simpleQuery, true, caseInsensitive);
 		} else {
-			hql = CQL2HQL.translate(query, false);
+			hql = CQL2HQL.translate(query, false, caseInsensitive);
 		}
 		System.out.println("Executing HQL: " + hql);
 		LOG.debug("Executing HQL:" + hql);

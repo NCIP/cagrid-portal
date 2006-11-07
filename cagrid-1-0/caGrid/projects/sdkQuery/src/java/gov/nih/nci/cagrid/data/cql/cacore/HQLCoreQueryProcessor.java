@@ -128,15 +128,18 @@ public class HQLCoreQueryProcessor extends CQLQueryProcessor {
 		// see if the target has subclasses
 		boolean subclassesDetected = SubclassCheckCache.hasClassProperty(query.getTarget().getName(), service);
 		
+		// should the query be made case insensitive
+		boolean caseInsensitive = useCaseInsensitiveQueries();
+		
 		// generate the HQL to perform the query
 		String hql = null;
 		if (subclassesDetected) {
 			// simplify the query by removing modifiers
 			CQLQuery simpleQuery = new CQLQuery();
 			simpleQuery.setTarget(query.getTarget());
-			hql = CQL2HQL.translate(simpleQuery,true);
+			hql = CQL2HQL.translate(simpleQuery, true, caseInsensitive);
 		} else {
-			hql = CQL2HQL.translate(query, false);
+			hql = CQL2HQL.translate(query, false, caseInsensitive);
 		}
 		System.out.println("Executing HQL: " + hql);
 		LOG.debug("Executing HQL:" + hql);
