@@ -104,7 +104,7 @@
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
 		<mkdir dir="${test.build.dest}" />
-		<mkdir dir="${test.log.dir}" />
+		<!--<mkdir dir="${test.log.dir}" />-->
 		<mkdir dir="${build.lib.dir}" />
 
 		<mkdir dir="${stubs.dir}" />
