@@ -15,11 +15,14 @@ import org.globus.wsrf.impl.SimpleResourcePropertyMetaData;
 import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.jndi.Initializable;
 
+import org.apache.axis.components.uuid.UUIDGenFactory;
+import org.apache.axis.components.uuid.UUIDGen;
 
 public abstract class BDTResourceBase implements Resource, RemoveCallback, ResourceIdentifier, ResourceLifetime, ResourceProperties, Initializable {
 
 	/** the identifier of this resource... should be unique in the service */
 	private Object id;
+	private static final UUIDGen UUIDGEN = UUIDGenFactory.getUUIDGen();
 	private ResourcePropertySet propSet;
 	private Calendar terminationTime;
 
@@ -36,11 +39,7 @@ public abstract class BDTResourceBase implements Resource, RemoveCallback, Resou
 	 * @see org.globus.wsrf.jndi.Initializable#initialize()
 	 */
 	public final void initialize() throws Exception {
-		// TODO: do any init here if you need to (post creation)
-
-		// TODO: pick some way to get a unique id for this resource (maybe some
-		// db id)
-		this.id = new Integer(hashCode());
+		this.id = UUIDGEN.nextUUID();
 
 		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);
 
