@@ -576,8 +576,7 @@ public class EvsCheckServiceStep
         EVSSourceSearchParams evsSourceParam = new EVSSourceSearchParams();
 
         // Atom: code = 10834
-        // Source Abbreviation: LNC213
-
+        // Source Abbreviation:AOD2000
         evsSourceParam.setCode("0000001800");
         evsSourceParam.setSourceAbbreviation("AOD2000");
 
@@ -596,13 +595,16 @@ public class EvsCheckServiceStep
             }
         }
 
+
         // Test invalid inputs
-            boolean bInvalid = false;
+        // Case 1: ALL sources flag (*) is not allowed
+        boolean bInvalid = false;
         try
         {
-            evsSourceParam.setCode("NOCODE");
-            evsSourceParam.setSourceAbbreviation("aOD2000");
-            metaConcept2 = client.searchSourceByCode(evsSourceParam);
+
+            evsSourceParam.setSourceAbbreviation("*");
+            metaConcept2= client.searchSourceByCode(evsSourceParam);
+            assertNull("meta thesaurus concepts are not null!", metaConcept2);
 
         }
         catch(gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType e)
@@ -614,6 +616,45 @@ public class EvsCheckServiceStep
         assertTrue("Invalid input did not " +
             "throw <gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType> exception", bInvalid);
 
+        // Case 2: "NOCODE" is not allowed
+        bInvalid = false;
+        try
+        {
+
+            evsSourceParam.setCode("NOCODE");
+            evsSourceParam.setSourceAbbreviation("AOD2000");
+            metaConcept2 = client.searchSourceByCode(evsSourceParam);
+
+
+        }
+        catch(gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType e)
+        {
+            bInvalid = true;
+            System.out.println("Error message: " + e.getFaultString());
+        }
+
+        assertTrue("Invalid input did not " +
+            "throw <gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType> exception", bInvalid);
+
+        // Case3 : Source abbreviation is case sensitive
+        bInvalid = false;
+        try
+        {
+
+            evsSourceParam.setCode("0000001800");
+            evsSourceParam.setSourceAbbreviation("aod2000");
+            metaConcept2 = client.searchSourceByCode(evsSourceParam);
+
+
+        }
+        catch(gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType e)
+        {
+            bInvalid = true;
+            System.out.println("Error message: " + e.getFaultString());
+        }
+
+        assertTrue("Invalid input did not " +
+            "throw <gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType> exception", bInvalid);
 
     }
 
