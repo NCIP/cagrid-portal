@@ -13,7 +13,7 @@ import java.util.Map;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Nov 2, 2006 
- * @version $Id: BooleanAttributeCheckCache.java,v 1.1 2006-11-07 17:37:59 dervin Exp $ 
+ * @version $Id: BooleanAttributeCheckCache.java,v 1.2 2006-11-08 20:20:14 dervin Exp $ 
  */
 public class BooleanAttributeCheckCache {
 
@@ -25,7 +25,7 @@ public class BooleanAttributeCheckCache {
 		if (isBool == null) {
 			try {
 				Class objClass = Class.forName(objClassName);
-				Field field = objClass.getField(fieldName);
+				Field field = objClass.getDeclaredField(fieldName);
 				isBool = Boolean.valueOf(Boolean.class.equals(field.getType()));
 				booleanFlags.put(key, isBool);
 			} catch (NoSuchFieldException ex) {

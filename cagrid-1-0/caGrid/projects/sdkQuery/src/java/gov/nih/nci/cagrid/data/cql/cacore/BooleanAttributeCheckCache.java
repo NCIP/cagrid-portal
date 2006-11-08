@@ -25,7 +25,7 @@ public class BooleanAttributeCheckCache {
 		if (isBool == null) {
 			try {
 				Class objClass = Class.forName(objClassName);
-				Field field = objClass.getField(fieldName);
+				Field field = objClass.getDeclaredField(fieldName);
 				isBool = Boolean.valueOf(Boolean.class.equals(field.getType()));
 				booleanFlags.put(key, isBool);
 			} catch (NoSuchFieldException ex) {
