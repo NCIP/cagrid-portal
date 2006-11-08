@@ -58,7 +58,7 @@ public class CQLQueryResultsIterator implements Iterator {
 	 * 
 	 * @param results
 	 * 		The results to iterate over
-	 * @param wsddFilename
+	 * @param wsdd
 	 * 		The filename of a wsdd file to use for configuration
 	 */
 	public CQLQueryResultsIterator(CQLQueryResults results, InputStream wsdd) {

@@ -23,7 +23,7 @@ import java.util.Iterator;
  * @created Jun 15, 2006 
  * @version $Id$ 
  */
-public class DataServiceHandle {
+public class DataServiceHandle implements DataServiceIterator {
 
 	private DataServiceI service;
 	private InputStream wsddStream;

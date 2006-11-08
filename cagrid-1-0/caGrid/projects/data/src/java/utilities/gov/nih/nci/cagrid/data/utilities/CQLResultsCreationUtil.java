@@ -33,10 +33,8 @@ public class CQLResultsCreationUtil {
 	 * 		The name of the targeted class which produced these results
 	 * @param classToQname
 	 * 		A Mapping from class name to QName
-	 * @param configStream
-	 * 		An InputStream to configure the message context for discovering the 
-	 * 		serializers for the targeted class
 	 * @return
+	 * 		A CQLQueryResults instance with its object results populated
 	 * 
 	 * @throws ResultsCreationException
 	 */
@@ -66,6 +64,7 @@ public class CQLResultsCreationUtil {
 	 * @param attribNames
 	 * 		The names of the attributes queried for
 	 * @return
+	 * 		A CQLQueryResults instance with its attribute results populated
 	 */
 	public static CQLQueryResults createAttributeResults(List attribArrays, String targetClassname, String[] attribNames) {
 		CQLQueryResults results = new CQLQueryResults();
@@ -92,6 +91,7 @@ public class CQLResultsCreationUtil {
 	 * @param targetClassname
 	 * 		The classname of the query target
 	 * @return
+	 * 		A CQLQueryResults instance with count results populated
 	 */
 	public static CQLQueryResults createCountResults(long count, String targetClassname) {
 		CQLQueryResults results = new CQLQueryResults();
