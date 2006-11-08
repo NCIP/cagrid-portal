@@ -43,7 +43,7 @@ public abstract class CQLQueryProcessor {
 	 * 		by <code>getRequiredParamters()</code>.  The values in the parameters will
 	 *		be either the user defined value or the default value from 
 	 *		<code>getRequiredParameters()</code>.
-	 * @param wsddStream
+	 * @param wsdd
 	 * 		The input stream which contains the wsdd configuration for the data service.
 	 * 		This stream may be important to locating type mappings for serializing and
 	 * 		deserializing beans.
@@ -99,7 +99,7 @@ public abstract class CQLQueryProcessor {
 	/**
 	 * Processes the CQL Query
 	 * @param cqlQuery
-	 * @return
+	 * @return The results of processing a CQL query
 	 * @throws MalformedQueryException
 	 * 		Should be thrown when the query itself does not conform to the
 	 * 		CQL standard or attempts to perform queries outside of 
@@ -121,11 +121,12 @@ public abstract class CQLQueryProcessor {
 	 * 
 	 * The keys are the names of parameters the query processor 
 	 * requires, the values are the defaults for those properties.  The default value
-	 * of a property may be <code>NULL</code> if it is an optional paramter.
+	 * of a property may be an empty string if it is an optional paramter.
 	 * The keys MUST be valid java variable names.  They MUST start with a <i>lowercase</i>
 	 * character, and must NOT contain spaces or punctuation.
 	 * 
 	 * @return
+	 * 		The required properties for the query processor with their default values
 	 */
 	public Properties getRequiredParameters() {
 		return new Properties();
