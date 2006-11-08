@@ -3,26 +3,26 @@
 <project default="all" basedir=".">
     
     <target name="all">
-        <ant dir="WorkflowManagementService" target="all"/>
+        <ant dir="WorkflowFactoryService" target="all"/>
     </target>
 
 
     <target name="deploy">
-        <ant dir="WorkflowManagementService" target="deployTomcat"/>
-        <ant dir="WorkflowManagementService" target="deployGlobusHandler"/>
+        <ant dir="WorkflowFactoryService" target="deployTomcat"/>
+        <ant dir="WorkflowFactoryService" target="deployGlobusHandler"/>
     </target>
 
     <target name="deployGlobus">
-        <ant dir="WorkflowManagementService" target="deployGlobus"/>
-        <ant dir="WorkflowManagementService" target="deployGlobusHandler"/>
+        <ant dir="WorkflowFactoryService" target="deployGlobus"/>
+        <ant dir="WorkflowFactoryService" target="deployGlobusHandler"/>
     </target>
 
     <target name="clean">
-        <ant dir="WorkflowManagementService" target="clean"/>
+        <ant dir="WorkflowFactoryService" target="clean"/>
     </target>
 
     <target name="test">
-        <ant dir="WorkflowManagementService" target="test"/>
+        <ant dir="WorkflowFactoryService" target="test"/>
     </target>
 
 </project>
