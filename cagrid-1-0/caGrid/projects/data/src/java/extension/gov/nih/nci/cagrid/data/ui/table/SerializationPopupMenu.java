@@ -22,7 +22,6 @@ import javax.swing.JPopupMenu;
  * @version $Id$ 
  */
 public class SerializationPopupMenu extends JPopupMenu {
-	private boolean dontShowDialog;
 	private JCheckBoxMenuItem defaultCheckItem = null;
 	private JCheckBoxMenuItem sdkCheckItem = null;
 	private JCheckBoxMenuItem customCheckItem = null;
@@ -45,9 +44,7 @@ public class SerializationPopupMenu extends JPopupMenu {
 		} else if (isSdkSerialization()) {
 			getButtonGroup().setSelected(getSdkCheckItem().getModel(), true);
 		} else {
-			dontShowDialog = true;
 			getButtonGroup().setSelected(getCustomCheckItem().getModel(), true);
-			dontShowDialog = false;
 		}
 		super.show(invoker, x, y);
 	}
@@ -129,13 +126,6 @@ public class SerializationPopupMenu extends JPopupMenu {
 			customCheckItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (customCheckItem.isSelected()) {
-						showCustomSerializationConfig();
-					}
-				}
-			});
-			customCheckItem.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED && !dontShowDialog) {
 						showCustomSerializationConfig();
 					}
 				}
