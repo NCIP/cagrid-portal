@@ -1,6 +1,6 @@
 <ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
  <ns1:serviceDescription>
-  <ns2:Service description="The BasicDataService grid service, created with caGrid Introduce, version:.99999." name="BasicDataService" version=".99999" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+  <ns2:Service description="The BasicDataService grid service, created with caGrid Introduce, version:1.0." name="BasicDataService" version="1.0" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection/>
    <ns2:serviceContextCollection>
     <ns2:ServiceContext description="" name="BasicDataService">
