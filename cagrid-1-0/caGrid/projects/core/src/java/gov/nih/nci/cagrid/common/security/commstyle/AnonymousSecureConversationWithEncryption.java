@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.common.security.commstyle;
 
-
 import org.apache.axis.client.Stub;
+import org.globus.gsi.GSIConstants;
 import org.globus.wsrf.security.Constants;
 
 /**
@@ -19,7 +19,7 @@ public class AnonymousSecureConversationWithEncryption implements
 
 	public void configure(Stub stub) throws CommunicationStyleException {
 		try {
-			stub._setProperty(Constants.GSI_SEC_CONV, Constants.ENCRYPTION);
+			stub._setProperty(Constants.GSI_SEC_CONV, GSIConstants.ENCRYPTION);
 			stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,
 					Boolean.TRUE);
 		} catch (Exception e) {

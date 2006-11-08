@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.common.security.commstyle;
 
 import org.apache.axis.client.Stub;
 import org.globus.axis.util.Util;
+import org.globus.gsi.GSIConstants;
 import org.globus.wsrf.security.Constants;
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -20,9 +21,8 @@ public class AnonymousSecureTransportWithEncryption implements
 	public void configure(Stub stub) throws CommunicationStyleException {
 		try {
 			Util.registerTransport();
-			stub._setProperty(Constants.GSI_TRANSPORT, Constants.ENCRYPTION);
-			stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,
-					Boolean.TRUE);
+			stub._setProperty(GSIConstants.GSI_TRANSPORT, GSIConstants.ENCRYPTION);
+			stub._setProperty(Constants.GSI_ANONYMOUS, Boolean.TRUE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new CommunicationStyleException(e.getMessage());

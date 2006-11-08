@@ -186,6 +186,7 @@ public class Utils {
 	 * @param appendix
 	 *            The object to append to the array
 	 * @return
+	 * 		An array with the new item appended
 	 */
 	public static java.lang.Object appendToArray(java.lang.Object array, java.lang.Object appendix) {
 		Class arrayType = array.getClass().getComponentType();
@@ -202,6 +203,7 @@ public class Utils {
 	 * @param array
 	 * @param removal
 	 * @return
+	 * 		An array with the item removed
 	 */
 	public static java.lang.Object removeFromArray(java.lang.Object array, java.lang.Object removal) {
 		Class arrayType = array.getClass().getComponentType();
@@ -316,12 +318,13 @@ public class Utils {
 	 * Deserializes XML into an object
 	 * 
 	 * @param xmlReader
-	 *            The reader for the XML (eg: FileReader, StringReader, etc)
+	 *      The reader for the XML (eg: FileReader, StringReader, etc)
 	 * @param clazz
-	 *            The class to serialize to
+	 *      The class to serialize to
 	 * @param wsdd
-	 *            A stream containing the WSDD configuration
+	 *      A stream containing the WSDD configuration
 	 * @return
+	 * 		The object deserialized from the XML
 	 * @throws SAXException
 	 * @throws DeserializationException
 	 */
@@ -366,15 +369,10 @@ public class Utils {
 
 
 	public static boolean equals(Object o1, Object o2) {
-		if ((o1 == null) && (o2 == null)) {
-			return true;
-		} else if ((o1 != null) && (o2 == null)) {
-			return false;
-		} else if ((o1 == null) && (o2 != null)) {
-			return false;
-		} else {
-			return o1.equals(o2);
+		if (o1 == null) {
+			return o2 == null;
 		}
+		return o1.equals(o2);
 	}
 
 
@@ -383,6 +381,8 @@ public class Utils {
 	 * 
 	 * @param clazz
 	 * @return
+	 * 		The QName corresponding to the class registered 
+	 * 		in the Axis type mappings
 	 */
 	public static QName getRegisteredQName(Class clazz) {
 		return MessageContext.getCurrentContext().getTypeMapping().getTypeQName(clazz);
@@ -394,6 +394,8 @@ public class Utils {
 	 * 
 	 * @param qname
 	 * @return
+	 * 		The class corresponding to the QName as registered 
+	 * 		in the Axis type mappings
 	 */
 	public static Class getRegisteredClass(QName qname) {
 		return MessageContext.getCurrentContext().getTypeMapping().getClassForQName(qname);

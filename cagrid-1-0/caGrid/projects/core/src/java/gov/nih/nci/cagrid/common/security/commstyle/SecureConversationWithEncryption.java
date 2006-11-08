@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.common.security.commstyle;
 
 
 import org.apache.axis.client.Stub;
+import org.globus.gsi.GSIConstants;
 import org.globus.gsi.GlobusCredential;
 import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
 import org.globus.wsrf.security.Constants;
@@ -26,7 +27,7 @@ public class SecureConversationWithEncryption implements CommunicationStyle{
 	
 	public void configure(Stub stub) throws CommunicationStyleException{
 		try{
-		stub._setProperty(Constants.GSI_SEC_CONV, Constants.ENCRYPTION);
+		stub._setProperty(Constants.GSI_SEC_CONV, GSIConstants.ENCRYPTION);
 		if (credential != null) {
 			GSSCredential gss = new GlobusGSSCredentialImpl(credential, GSSCredential.INITIATE_AND_ACCEPT);
 			stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
