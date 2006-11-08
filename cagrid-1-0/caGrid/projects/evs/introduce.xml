@@ -79,6 +79,7 @@
   </ns2:Namespace>
   <ns2:Namespace location="./EVSGridServiceTypes.xsd" namespace="http://cagrid.nci.nih.gov/EVSGridService/types" packageName="gov.nih.nci.cagrid.evsgridservice.stubs.types" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="EVSGridServiceReference" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="InvalidInputException" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/security/security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
@@ -114,36 +115,44 @@
       <ns4:Input qName="ns8:EVSDescLogicConceptSearchParams" isArray="false" name="eVSDescLogicConceptSearchParams" xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
      </ns4:Inputs>
      <ns4:Output qName="ns9:DescLogicConcept" isArray="true" xmlns:ns9="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidInputException" qname="ns10:InvalidInputException" xmlns:ns10="http://cagrid.nci.nih.gov/EVSGridService/types"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="searchMetaThesaurus" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns10:EVSMetaThesaurusSearchParams" isArray="false" name="eVSMetaThesaurusSearchParams" xmlns:ns10="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
+      <ns4:Input qName="ns11:EVSMetaThesaurusSearchParams" isArray="false" name="eVSMetaThesaurusSearchParams" xmlns:ns11="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns11:MetaThesaurusConcept" isArray="true" xmlns:ns11="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
-     <ns4:Exceptions/>
+     <ns4:Output qName="ns12:MetaThesaurusConcept" isArray="true" xmlns:ns12="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidInputException" qname="ns13:InvalidInputException" xmlns:ns13="http://cagrid.nci.nih.gov/EVSGridService/types"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="getHistoryRecords" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns12:EVSHistoryRecordsSearchParams" isArray="false" name="eVSHistoryRecordsSearchParams" xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
+      <ns4:Input qName="ns14:EVSHistoryRecordsSearchParams" isArray="false" name="eVSHistoryRecordsSearchParams" xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns13:HistoryRecord" isArray="true" xmlns:ns13="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
-     <ns4:Exceptions/>
+     <ns4:Output qName="ns15:HistoryRecord" isArray="true" xmlns:ns15="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidInputException" qname="ns16:InvalidInputException" xmlns:ns16="http://cagrid.nci.nih.gov/EVSGridService/types"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="searchSourceByCode" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns14:EVSSourceSearchParams" isArray="false" name="eVSSourceSearchParams" xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
+      <ns4:Input qName="ns17:EVSSourceSearchParams" isArray="false" name="eVSSourceSearchParams" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns15:MetaThesaurusConcept" isArray="true" xmlns:ns15="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
-     <ns4:Exceptions/>
+     <ns4:Output qName="ns18:MetaThesaurusConcept" isArray="true" xmlns:ns18="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
+     <ns4:Exceptions>
+      <ns4:Exception name="InvalidInputException" qname="ns19:InvalidInputException" xmlns:ns19="http://cagrid.nci.nih.gov/EVSGridService/types"/>
+     </ns4:Exceptions>
     </ns4:Method>
    </ns4:Methods>
-   <ns16:ResourcePropertiesList xsi:type="ns16:ResourcePropertiesListType" xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns16:ResourceProperty qName="ns17:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns16:ResourcePropertyType" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns16:ResourcePropertiesList>
+   <ns20:ResourcePropertiesList xsi:type="ns20:ResourcePropertiesListType" xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns20:ResourceProperty qName="ns21:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns20:ResourcePropertyType" xmlns:ns21="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns20:ResourcePropertiesList>
   </ns3:Service>
  </ns3:Services>
- <ns18:Extensions xsi:type="ns18:ExtensionsType" xmlns:ns18="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns18:Extension name="cagrid_metadata" xsi:type="ns18:ExtensionType"/>
- </ns18:Extensions>
+ <ns22:Extensions xsi:type="ns22:ExtensionsType" xmlns:ns22="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns22:Extension name="cagrid_metadata" xsi:type="ns22:ExtensionType"/>
+ </ns22:Extensions>
 </ns1:ServiceDescription>
