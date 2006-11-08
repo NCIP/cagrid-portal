@@ -408,6 +408,12 @@
 				<exclude name="*tests*.jar"/>
 			</fileset>
 		</artifact>
+		<artifact track="test" type="jars" id="introduce.core.test.jars">
+			<antcall target="build-introduce"/>
+			<fileset dir="${projects.dir}/introduce/build/jars">
+				<include name="*core-tests*.jar"/>
+			</fileset>
+		</artifact>
 		<artifact track="main" type="resources" id="introduce.resources">
 			<fileset dir="${projects.dir}/introduce/resources">
 				<include name="**"/>
