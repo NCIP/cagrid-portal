@@ -755,8 +755,9 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
             throw fault;
         }
 
-        // The source abbreviation has to be valid Source abbreviation. The "*" All sources may not be valid!
+        // The source abbreviation has to be valid Source abbreviation. The "*" All sources is not valid!
         if (eVSSourceSearchParams.getSourceAbbreviation() == null ||
+            EVSConstants.META_ALL_SOURCES.equals(eVSSourceSearchParams.getSourceAbbreviation()) ||
             !isMetaSourceValid(eVSSourceSearchParams.getSourceAbbreviation()))
         {
             //Throw appropriate exception; i.e. invalid Source Abbreviation used
