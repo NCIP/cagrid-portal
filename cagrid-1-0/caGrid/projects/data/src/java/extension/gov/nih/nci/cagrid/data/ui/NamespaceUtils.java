@@ -163,6 +163,7 @@ public class NamespaceUtils {
 	 * @param classes
 	 * @param nsType
 	 * @return
+	 * 		Map from class name to element name
 	 */
 	public static Map mapClassesToElementNames(UMLClassMetadata[] classes, NamespaceType nsType) {
 		Map mapping = new HashMap();
