@@ -187,7 +187,7 @@
 			<echo message="Compiling subproject @{name}"/>
 			<parallel>
 				<javac srcdir="${src.dir}/@{name}" destdir="${classes.dir}/@{name}" debug="on"
-					source="${java.source}" deprecation="off" optimize="off">
+					source="${java.source}" deprecation="off" optimize="off" memoryMaximumSize="512M">
 					<classpath refid="@{name}.classpath"/>
 				</javac>
 				<copy todir="${classes.dir}/@{name}" overwrite="true">
@@ -203,7 +203,7 @@
 		<sequential>
 			<echo message="Compiling subproject tests @{name}"/>
 			<javac srcdir="${test.src.dir}/@{name}" destdir="${test.classes.dir}/@{name}" debug="on"
-				source="${java.source}" deprecation="off" optimize="off">
+				source="${java.source}" deprecation="off" optimize="off" memoryMaximumSize="512M">
 				<classpath refid="@{name}.test.classpath"/>
 			</javac>
 		</sequential>

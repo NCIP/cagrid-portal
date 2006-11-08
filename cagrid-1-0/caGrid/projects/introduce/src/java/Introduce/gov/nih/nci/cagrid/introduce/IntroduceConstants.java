@@ -17,6 +17,9 @@ import javax.xml.namespace.QName;
  */
 public class IntroduceConstants {
 	
+	// introduce specific constants
+	public static final String INTRODUCE_VERSION = "1.0";
+	
 	public static final String GLOBUS_LOCATION = "GLOBUS_LOCATION";
 	
 	public static final String SERVICE_SECURITY_METADATA_METHOD = "getServiceSecurityMetadata";
@@ -62,9 +65,6 @@ public class IntroduceConstants {
 
 	// deployment properties
 	public static final String DEPLOY_PROPERTIES_FILE = "deploy.properties";
-
-	// introduce specific constants
-	public static final String INTRODUCE_VERSION = ".99999";
 
 	public static final String INTRODUCE_XML_FILE = "introduce.xml";
 	public static final String INTRODUCE_XML_XSD_FILE = "ServiceDescription.xsd";
