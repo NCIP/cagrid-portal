@@ -65,6 +65,7 @@
 	<target name="test" depends="compileTests, instrument" description="Runs the tests.">
 		<antcall target="testBase"/>
 		<antcall target="testCreation"/>
+		<antcall target="testSystem"/>
 	</target>
 	
 	<target name="testBase" depends="compileTests" description="Runs the base set of tests for the data service core">
@@ -108,6 +109,26 @@
 			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
 					<include name="**/CreationTests.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." if="test.failed"/>
+	</target>
+	
+	<target name="testSystem" depends="installIntroduceExtensions, compileTests, prepareClasspaths, testCreation" description="Runs the service creation and then system tests">
+		<junit dir="${basedir}">
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
+			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
+			<classpath location="${instrumented.classes.dir}"/>
+			<classpath refid="all.test.classpath"/>
+			<classpath>
+				<pathelement path="${test.classes.dir}"/>
+			</classpath>
+			<formatter type="xml"/>
+			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
+			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/SystemTests.java"/>
 				</fileset>
 			</batchtest>
 		</junit>
