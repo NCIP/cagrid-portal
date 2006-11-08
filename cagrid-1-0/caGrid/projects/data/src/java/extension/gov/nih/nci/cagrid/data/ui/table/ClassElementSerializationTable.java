@@ -18,6 +18,7 @@ import java.util.Vector;
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
@@ -94,7 +95,11 @@ public class ClassElementSerializationTable extends JTable {
 		row.add(pack);
 		row.add(mapping.getClassName());
 		row.add(nsType.getNamespace());
-		row.add(mapping.getElementName());
+		// create a JComboBox for all element names in the namespace
+		JComboBox elementNameCombo = getElementNameCombo(nsType);
+		// set the combo's selection
+		elementNameCombo.setSelectedItem(mapping.getElementName());
+		row.add(elementNameCombo);
 		SchemaElementType schemaType = NamespaceUtils.getElementByName(nsType, mapping.getElementName());
 		row.add(schemaType == null ? null : schemaType.getSerializer());
 		row.add(schemaType == null ? null : schemaType.getDeserializer());
@@ -102,6 +107,16 @@ public class ClassElementSerializationTable extends JTable {
 		check.setSelected(mapping.isTargetable());
 		row.add(check);
 		((DefaultTableModel) getModel()).addRow(row);
+	}
+	
+	
+	private JComboBox getElementNameCombo(NamespaceType nsType) {
+		JComboBox combo = new JComboBox();
+		combo.setEditable(true);
+		for (int i = 0; nsType.getSchemaElement() != null && i < nsType.getSchemaElement().length; i++) {
+			combo.addItem(nsType.getSchemaElement(i).getType());
+		}
+		return combo;
 	}
 	
 	
@@ -193,7 +208,7 @@ public class ClassElementSerializationTable extends JTable {
 		String packName = (String) getValueAt(row, 0);
 		String className = (String) getValueAt(row, 1);
 		String namespace = (String) getValueAt(row, 2);
-		String elemName = (String) getValueAt(row, 3);
+		String elemName = (String) ((JComboBox) getValueAt(row, 3)).getSelectedItem();
 		String serializer = (String) getValueAt(row, 4);
 		String deserializer = (String) getValueAt(row, 5);
 		boolean targetable = ((JCheckBox) getValueAt(row, 6)).isSelected();
@@ -215,7 +230,7 @@ public class ClassElementSerializationTable extends JTable {
 	private static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel() {
 			public Class getColumnClass(int column) {
-				return column == 6 ? Component.class : Object.class;
+				return column == 6 || column == 3 ? Component.class : Object.class;
 			}
 		};
 		model.addColumn("Package Name");
@@ -242,7 +257,7 @@ public class ClassElementSerializationTable extends JTable {
 	
 	
 	private static class ComponentCellEditor extends AbstractCellEditor implements TableCellEditor {
-		private ItemListener checkListener = null;
+		private ItemListener editListener = null;
 		private Object editorValue = null;
 		
 		public ComponentCellEditor() {
@@ -258,20 +273,29 @@ public class ClassElementSerializationTable extends JTable {
 		public Component getTableCellEditorComponent(JTable table, Object value, 
 			boolean isSelected, int row, int column) {
 			editorValue = value;
-			((JCheckBox) value).addItemListener(getCheckListener());
+			if (value instanceof JCheckBox) {
+				((JCheckBox) value).addItemListener(getEditListener());				
+			} else if (value instanceof JComboBox) {
+				((JComboBox) value).addItemListener(getEditListener());
+			}
+			
 			return (Component) value;
 		}
 		
 		
-		private ItemListener getCheckListener() {
-			checkListener = new ItemListener() {
+		private ItemListener getEditListener() {
+			editListener = new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					JCheckBox check = (JCheckBox) e.getSource();
-					check.removeItemListener(this);
+					Object source = e.getSource();
+					if (source instanceof JCheckBox) {
+						((JCheckBox) source).removeItemListener(this);
+					} else if (source instanceof JComboBox) {
+						((JComboBox) source).removeItemListener(this);
+					}
 					fireEditingStopped();
 				}
 			};
-			return checkListener;
+			return editListener;
 		}
 	}
 }
