@@ -31,7 +31,6 @@ import org.globus.wsrf.impl.work.WorkManagerImpl;
 
 import commonj.work.WorkManager;
 
-
 /**
  * gov.nih.nci.cagrid.cadsrI
  * 
@@ -43,11 +42,9 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 	protected static Log LOG = LogFactory.getLog(CaDSRServiceImpl.class.getName());
 	private WorkManager workManager = null;
 
-
 	public CaDSRServiceImpl() throws RemoteException {
 
 	}
-
 
 	public gov.nih.nci.cadsr.umlproject.domain.Project[] findAllProjects() throws RemoteException {
 		ApplicationService appService = getApplicationService();
@@ -70,7 +67,6 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 		}
 
 	}
-
 
 	public gov.nih.nci.cadsr.umlproject.domain.Project[] findProjects(java.lang.String context) throws RemoteException {
 
@@ -101,10 +97,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 		}
 	}
 
-
-	public gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata[] findPackagesInProject(
-		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException,
-		gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+	public gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata[] findPackagesInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
 
 		if (project == null) {
 			InvalidProjectException fault = new InvalidProjectException();
@@ -134,10 +127,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 
 	}
 
-
-	public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInProject(
-		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException,
-		gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+	public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
 
 		if (project == null) {
 			InvalidProjectException fault = new InvalidProjectException();
@@ -166,10 +156,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 		}
 	}
 
-
-	public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInPackage(
-		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String packageName) throws RemoteException,
-		gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+	public gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata[] findClassesInPackage(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String packageName) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
 
 		if (project == null) {
 			InvalidProjectException fault = new InvalidProjectException();
@@ -202,10 +189,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 
 	}
 
-
-	public gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata[] findAttributesInClass(
-		gov.nih.nci.cadsr.umlproject.domain.Project project, gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz)
-		throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+	public gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata[] findAttributesInClass(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
 		if (project == null) {
 			InvalidProjectException fault = new InvalidProjectException();
 			fault.setFaultString("Null project not valid.");
@@ -234,10 +218,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 		}
 	}
 
-
-	public gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata[] findSemanticMetadataForClass(
-		gov.nih.nci.cadsr.umlproject.domain.Project project, gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz)
-		throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+	public gov.nih.nci.cadsr.umlproject.domain.SemanticMetadata[] findSemanticMetadataForClass(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
 
 		if (project == null) {
 			InvalidProjectException fault = new InvalidProjectException();
@@ -266,11 +247,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 		}
 	}
 
-
-	public gov.nih.nci.cadsr.domain.ValueDomain findValueDomainForAttribute(
-		gov.nih.nci.cadsr.umlproject.domain.Project project,
-		gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata attribute) throws RemoteException,
-		gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+	public gov.nih.nci.cadsr.domain.ValueDomain findValueDomainForAttribute(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLAttributeMetadata attribute) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
 
 		if (project == null) {
 			InvalidProjectException fault = new InvalidProjectException();
@@ -306,10 +283,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 
 	}
 
-
-	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForProject(
-		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException,
-		gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
 		ApplicationService cadsrService = getApplicationService();
 
 		DomainModelBuilder builder = new DomainModelBuilder(cadsrService);
@@ -324,10 +298,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 		return model;
 	}
 
-
-	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForPackages(
-		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String[] packageNames) throws RemoteException,
-		gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForPackages(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] packageNames) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
 		ApplicationService cadsrService = getApplicationService();
 
 		DomainModelBuilder builder = new DomainModelBuilder(cadsrService);
@@ -341,10 +312,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 		return model;
 	}
 
-
-	public gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] findAssociationsForClass(
-		gov.nih.nci.cadsr.umlproject.domain.Project project, gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz)
-		throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+	public gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] findAssociationsForClass(gov.nih.nci.cadsr.umlproject.domain.Project project,gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata clazz) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
 
 		if (project == null) {
 			InvalidProjectException fault = new InvalidProjectException();
@@ -379,10 +347,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 
 	}
 
-
-	public gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] findAssociationsInPackage(
-		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String packageName) throws RemoteException,
-		gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+	public gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] findAssociationsInPackage(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String packageName) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
 
 		if (project == null) {
 			InvalidProjectException fault = new InvalidProjectException();
@@ -442,9 +407,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 
 	}
 
-
-	public gov.nih.nci.cagrid.metadata.ServiceMetadata annotateServiceMetadata(
-		gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata) throws RemoteException {
+	public gov.nih.nci.cagrid.metadata.ServiceMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata) throws RemoteException {
 		String uml2xmlBindingClassname = null;
 		try {
 			uml2xmlBindingClassname = getConfiguration().getUml2xmlBindingClassname();
@@ -469,9 +432,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 		return serviceMetadata;
 	}
 
-
-	public gov.nih.nci.cadsr.domain.Context findContextForProject(gov.nih.nci.cadsr.umlproject.domain.Project project)
-		throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+	public gov.nih.nci.cadsr.domain.Context findContextForProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
 		if (project == null) {
 			InvalidProjectException fault = new InvalidProjectException();
 			fault.setFaultString("Null project not valid.");
@@ -491,10 +452,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 		}
 	}
 
-
-	public gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] findAssociationsInProject(
-		gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException,
-		gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+	public gov.nih.nci.cagrid.cadsrservice.UMLAssociation[] findAssociationsInProject(gov.nih.nci.cadsr.umlproject.domain.Project project) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
 
 		if (project == null) {
 			InvalidProjectException fault = new InvalidProjectException();
@@ -525,10 +483,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 		}
 	}
 
-
-	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(
-		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String[] fullClassNames) throws RemoteException,
-		gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] fullClassNames) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
 		ApplicationService cadsrService = getApplicationService();
 
 		DomainModelBuilder builder = new DomainModelBuilder(cadsrService);
@@ -542,11 +497,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 		return model;
 	}
 
-
-	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(
-		gov.nih.nci.cadsr.umlproject.domain.Project project, java.lang.String[] fullClassNames,
-		gov.nih.nci.cagrid.cadsrservice.UMLAssociationExclude[] associationExcludes) throws RemoteException,
-		gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
+	public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(gov.nih.nci.cadsr.umlproject.domain.Project project,java.lang.String[] fullClassNames,gov.nih.nci.cagrid.cadsrservice.UMLAssociationExclude[] associationExcludes) throws RemoteException, gov.nih.nci.cagrid.cadsr.stubs.types.InvalidProjectException {
 
 		ApplicationService cadsrService = getApplicationService();
 
@@ -560,7 +511,6 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 		}
 		return model;
 	}
-
 
 	private ApplicationService getApplicationService() throws RemoteException {
 		ServiceConfiguration conf = null;
@@ -580,7 +530,6 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 
 	}
 
-
 	public WorkManager getWorkManager() {
 		if (this.workManager == null) {
 			int poolSize = DEFAULT_POOL_SIZE;
@@ -595,7 +544,6 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 
 		return this.workManager;
 	}
-
 
 	public void setWorkManager(WorkManager workManager) {
 		this.workManager = workManager;
