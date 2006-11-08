@@ -2,6 +2,15 @@
 <project name="build-deploy file" basedir="." default="deploy">
 	<property file="deploy.properties" />
 	<property name="service.deployment.path" value="${service.deployment.prefix}/${introduce.skeleton.service.name}" />
+	<pathconvert dirsep="_" property="service.deployment.dir.name">
+		<path>
+			<pathelement path="${service.deployment.path}" />
+		</path>
+		<map from="${basedir}\" to="" />
+		<map from="${basedir}/" to="" />
+	</pathconvert>
+	
+	
 	<property name="service.properties.file" value="service.properties"/>
 	
 	<!-- Tomcat Properties -->
@@ -11,7 +20,8 @@
 	<property name="tomcat.deploy.lib.dir" value="${tomcat.deploy.dir}/lib" />
 	<property name="tomcat.wsrf.schema.dir" value="${tomcat.dir}/webapps/wsrf/share/schema" />
 	
-	<property name="gar.name" value="${service.name}.gar" />
+	<property name="gar.name" value="${service.deployment.dir.name}.gar" />
+	
 	<!-- Filesets -->
 	<!-- JARs to be included in the GAR file -->
 	<fileset dir="${build.lib.dir}" id="garjars" />
@@ -25,7 +35,7 @@
 	
 	<!-- Configuration files (security, etc.) to be included in the GAR file -->
 	<property name="garetc.id" value="garetc" />
-	<fileset dir="${etc.dir}" id="garetc" />
+	<fileset dir="tmp/etc" id="garetc" />
 	
 	
 	<!-- ============================================================== -->
@@ -52,17 +62,9 @@
 	</target>
 	
 	<!-- deploy  a gar to tomcat -->
-	<target name="deployTomcat" depends="addFilters" description="Deploys to CATALINA_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
-		<echo message="Deploying service under Tomcat at ${tomcat.dir}" />
-		
-		<!-- Configure Tomcat destination for skeletons -->
-		<pathconvert dirsep="_" property="service.deployment.dir.name">
-			<path>
-				<pathelement path="${service.deployment.path}" />
-			</path>
-			<map from="${basedir}" to="" />
-			<map from="/" to="" />
-		</pathconvert>
+	<target name="deployTomcat" depends="addFilters, all" description="Deploys to CATALINA_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+		<echo message="Deploying service ${service.deployment.path} under Tomcat at ${tomcat.dir}" />
+
 		<property name="service.deployment.dir" value="${tomcat.deploy.dir}/etc/${service.deployment.dir.name}" />
 		<!-- prepare the deployment directory -->
 		<mkdir dir="${service.deployment.dir}" />
@@ -90,28 +92,31 @@
 				<include name="jndi-config.xml" />
 			</fileset>
 		</copy>
-		<delete dir="tmp" />
-		<!-- Copy skeleton files to Tomcat and rename -->
-		<copy overwrite="true" toDir="${service.deployment.dir}">
-			<fileset dir="${basedir}/etc">
-				<include name="*" />
+		<mkdir dir="tmp/etc"/>
+		<copy overwrite="true" toDir="tmp/etc">
+			<fileset dir="etc">
+				<include name="**/*" />
 			</fileset>
 		</copy>
+		<replace file="tmp/etc/registration.xml" value="${index.service.url}" token="INDEX_SERVICE_URL" />
+		<!-- Copy skeleton files to Tomcat and rename -->
+		<copy overwrite="true" toDir="${service.deployment.dir}">
+			<fileset dir="tmp/etc">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<delete dir="tmp" />
 		<!--copy over the jars to the lib -->
 		<copy overwrite="true" toDir="${tomcat.deploy.lib.dir}">
 			<fileset dir="lib">
 				<include name="*" />
-			</fileset>
-			<!-- Post Introduce Edit-->
-			<fileset dir="${ext.lib.dir}">
-				<include name="*.jar" />
 			</fileset>
 			<fileset dir="build/lib">
 				<include name="*" />
 			</fileset>
 		</copy>
 		<!--copy over the schema service files-->
-		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}/${service.deployment.dir.name}">
+		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}/${introduce.skeleton.service.name}">
 			<fileset dir="build/schema/${introduce.skeleton.service.name}">
 				<include name="**\*" />
 			</fileset>
@@ -121,14 +126,14 @@
 	
 	<!-- make deployment configured gar -->
 	<target name="createDeploymentGar" depends="all, addFilters">
+		
+		<echo message="Creating a gar for service ${gar.name}" />
+		
+		
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
 				<include name="*.jar" />
 			</fileset>
-			<!-- Post Introduce Edit-->
-					 <fileset dir="${ext.lib.dir}">
-						<include name="*.jar" />
-					</fileset>
 		</copy>
 		
 		<!-- prepare the server-config file -->
@@ -137,13 +142,20 @@
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/server-config.wsdd" value="${introduce.skeleton.service.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/server-config.wsdd" value="${service.deployment.prefix}" token="SERVICE-INSTANCE-PREFIX" />
-		<replace file="tmp/server-config.wsdd" value="etc/${introduce.skeleton.service.name}" token="ETC-PATH" />
+		<replace file="tmp/server-config.wsdd" value="etc/${service.deployment.dir.name}" token="ETC-PATH" />
 		<!-- prepare the jndi file -->
 		<copy overwrite="true" todir="tmp" filtering="true" file="jndi-config.xml" />
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/jndi-config.xml" value="${introduce.skeleton.service.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.prefix}" token="SERVICE-INSTANCE-PREFIX" />
-		<replace file="tmp/jndi-config.xml" value="etc/${introduce.skeleton.service.name}" token="ETC-PATH" />
+		<replace file="tmp/jndi-config.xml" value="etc/${service.deployment.dir.name}" token="ETC-PATH" />
+		<mkdir dir="tmp/etc"/>
+		<copy overwrite="true" toDir="tmp/etc">
+			<fileset dir="etc">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<replace file="tmp/etc/registration.xml" value="${index.service.url}" token="INDEX_SERVICE_URL" />
 		<!-- make the gar file -->
 		<ant antfile="${build.packages}" target="makeGar">
 			<property name="garserverdeployment.file" value="${basedir}/tmp/server-config.wsdd" />
