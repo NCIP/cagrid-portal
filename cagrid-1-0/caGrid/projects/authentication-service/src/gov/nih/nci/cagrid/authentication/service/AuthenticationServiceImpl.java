@@ -14,7 +14,6 @@ import java.rmi.RemoteException;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 
-
 /**
  * TODO:DOCUMENT ME
  * 
@@ -23,7 +22,6 @@ import org.springframework.core.io.ClassPathResource;
 public class AuthenticationServiceImpl extends AuthenticationServiceImplBase {
 
 	private AuthenticationProvider auth;
-
 
 	public AuthenticationServiceImpl() throws RemoteException {
 		super();
@@ -37,12 +35,7 @@ public class AuthenticationServiceImpl extends AuthenticationServiceImplBase {
 		}
 	}
 
-
-	public gov.nih.nci.cagrid.authentication.bean.SAMLAssertion authenticate(
-		gov.nih.nci.cagrid.authentication.bean.Credential credential) throws RemoteException,
-		gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault,
-		gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault,
-		gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault {
+	public gov.nih.nci.cagrid.authentication.bean.SAMLAssertion authenticate(gov.nih.nci.cagrid.authentication.bean.Credential credential) throws RemoteException, gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault, gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault, gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault {
 
 		gov.nih.nci.cagrid.authentication.bean.SAMLAssertion saml = null;
 		try {

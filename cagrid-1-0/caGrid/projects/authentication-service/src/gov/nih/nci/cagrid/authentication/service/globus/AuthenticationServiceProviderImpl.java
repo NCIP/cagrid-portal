@@ -20,6 +20,7 @@ public class AuthenticationServiceProviderImpl{
 	
 
 	public gov.nih.nci.cagrid.authentication.stubs.AuthenticateResponse authenticate(gov.nih.nci.cagrid.authentication.stubs.AuthenticateRequest params) throws RemoteException, gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault, gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault, gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault {
+		AuthenticationServiceAuthorization.authorizeAuthenticate();
 		gov.nih.nci.cagrid.authentication.stubs.AuthenticateResponse boxedResult = new gov.nih.nci.cagrid.authentication.stubs.AuthenticateResponse();
 		boxedResult.setSAMLAssertion(impl.authenticate(params.getCredential().getCredential()));
 		return boxedResult;
