@@ -81,7 +81,7 @@ public class WorkflowResource implements Resource {
 
 	public WorkflowStatusType start(StartInputType startInput) 
 		throws WorkflowExceptionType, StartCalledOnStartedWorkflowFaultType {
-		this.partnerLinkName = "SimpleService"; 
+		this.partnerLinkName = this.workflowName + "Service"; 
 		if (this.started) {
 			throw new StartCalledOnStartedWorkflowFaultType();
 		}

@@ -88,6 +88,11 @@ public class PDDGenerator {
 				pNode.appendChild(pRoleNode);
 				pRoleNode.appendChild(epRefNode);
 				epRefNode.appendChild(epAddrNode);
+				if(ref == null) {
+					System.out.println("this is null");
+				} else {
+					System.out.println("this is not null");
+				}
 				epAddrNode.appendChild(doc.createTextNode(ref.getServiceUrl().toString()));
 			}
 			if (!"".equals(plink.myRole)) {

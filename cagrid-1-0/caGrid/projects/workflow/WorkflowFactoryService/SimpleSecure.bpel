@@ -13,6 +13,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
       <variable messageType="ns1:invokeOutputMessage" name="invokeOutputMessage"/>
       <variable messageType="ns2:InvokeRequest" name="InvokeRequest"/>
       <variable messageType="ns2:InvokeResponse" name="InvokeResponse"/>
+      <variable name="temp" type="xsd:string"/>
    </variables>
    <sequence>
       <receive createInstance="yes" operation="invoke" partnerLink="Sample1PartnerLinkType" portType="ns1:SampleService1PortType" variable="invokeInputMessage"/>
@@ -20,9 +21,24 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
       <assign>
          <copy>
             <from part="parameters" query="/ns1:invokeResponse/ns1:response" variable="invokeOutputMessage"/>
+            <to variable="temp"/>
+         </copy>
+      </assign>
+    
+    <assign>
+         <copy>
+            <from part="parameters" query="/ns1:invoke/ns1:param" variable="invokeInputMessage"/>
             <to part="parameters" query="/ns2:InvokeRequest/ns2:string" variable="InvokeRequest"/>
          </copy>
       </assign>
+
+      <assign>
+        <copy>
+            <from variable="temp"/>
+            <to part="parameters" query="/ns2:InvokeRequest/ns2:string" variable="InvokeRequest"/>
+        </copy>
+    </assign>
+
       <invoke inputVariable="InvokeRequest" operation="invoke" outputVariable="InvokeResponse" partnerLink="SecureSamplePartnerLinkType" portType="ns2:SecureSamplePortType"/>
       <reply operation="invoke" partnerLink="Sample1PartnerLinkType" portType="ns1:SampleService1PortType" variable="invokeOutputMessage"/>
    </sequence>
