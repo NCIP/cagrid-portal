@@ -165,9 +165,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
      * @throws RemoteException
      */
 
-	public gov.nih.nci.evs.domain.DescLogicConcept[] searchDescLogicConcept(gov.nih.nci.cagrid.evs.service.EVSDescLogicConceptSearchParams eVSDescLogicConceptSearchParams)
-            throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType
-    {
+	public gov.nih.nci.evs.domain.DescLogicConcept[] searchDescLogicConcept(gov.nih.nci.cagrid.evs.service.EVSDescLogicConceptSearchParams eVSDescLogicConceptSearchParams) throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType {
         try
         {
 
@@ -176,13 +174,11 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
             // throws exception if inputs are not valid
             validateEVSDescLogicConceptSearchParams(eVSDescLogicConceptSearchParams);
 
-
             // Check if the user specified search term is really a concept code. This is quite tricky becasuse there
             // isn't really any specific structure. However, the user should be able to use the same API and get
             // DescLogicConcept objects either by passing search term or concept code.
             boolean bIsSearchTermConceptCode = false;
             bIsSearchTermConceptCode = isSearchTermConceptCode(eVSDescLogicConceptSearchParams.getSearchTerm());
-
 
             LOG.debug("Inside method:searchDescLogicConcept. Obtaining connection to caCORE remote instance" +
                     EVSConstants.CACORE_31_URL);
@@ -241,7 +237,6 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
                 // Perform query: Assume no data is returned
                 evsResults = (List)appService.evsSearch(evsSearch);
             }
-
 
             // Return data
             gov.nih.nci.evs.domain.DescLogicConcept[] concepts = null;
@@ -375,16 +370,13 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
      * @throws RemoteException
      */
 
-	public gov.nih.nci.evs.domain.HistoryRecord[] getHistoryRecords(gov.nih.nci.cagrid.evs.service.EVSHistoryRecordsSearchParams eVSHistoryRecordsSearchParams)
-            throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType
-    {
+	public gov.nih.nci.evs.domain.HistoryRecord[] getHistoryRecords(gov.nih.nci.cagrid.evs.service.EVSHistoryRecordsSearchParams eVSHistoryRecordsSearchParams) throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType {
         try
         {
 
             LOG.debug("Inside method:getHistoryRecords:Testing input");
 
             validateEVSHistoryRecordsSearchParams(eVSHistoryRecordsSearchParams);
-
 
             LOG.debug("Inside method:getHistoryRecords. Obtaining connection to caCORE remote instance" +
                     EVSConstants.CACORE_31_URL);
@@ -454,8 +446,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
      * @throws RemoteException
      */
 
-	public gov.nih.nci.evs.domain.MetaThesaurusConcept[] searchSourceByCode(gov.nih.nci.cagrid.evs.service.EVSSourceSearchParams eVSSourceSearchParams)
-            throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType {
+	public gov.nih.nci.evs.domain.MetaThesaurusConcept[] searchSourceByCode(gov.nih.nci.cagrid.evs.service.EVSSourceSearchParams eVSSourceSearchParams) throws RemoteException, gov.nih.nci.cagrid.evsgridservice.stubs.types.InvalidInputExceptionType {
         try
         {
 
@@ -644,7 +635,6 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
          }
         return (bIsConceptCode);
     }
-
 
     /**
      * Test that <code>gov.nih.nci.cagrid.evs.service.EVSMetaThesaurusSearchParams</code> input used to
