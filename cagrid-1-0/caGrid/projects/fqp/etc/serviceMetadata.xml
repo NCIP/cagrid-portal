@@ -3,45 +3,45 @@
   <ns2:Service description="The FederatedQueryProcessor grid service, created with caGrid Introduce, version:.99999." name="FederatedQueryProcessor"
    version=".99999" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection>
-    <PointOfContact xmlns="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" affiliation="OSU" email="oster@bmi.osu.edu" firstName="Scott"
-     lastName="Oster" role="Developer"/>
+    <ns3:PointOfContact affiliation="OSU" email="oster@bmi.osu.edu" firstName="Scott" lastName="Oster" role="Developer"
+     xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    </ns2:pointOfContactCollection>
    <ns2:serviceContextCollection>
     <ns2:ServiceContext description="" name="FederatedQueryProcessor">
      <ns2:operationCollection>
       <ns2:Operation description="" name="getServiceSecurityMetadata">
        <ns2:inputParameterCollection/>
-       <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false"
-        xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+       <ns2:Output qName="ns4:ServiceSecurityMetadata" dimensionality="1" isArray="false"
+        xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
        <ns2:faultCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="executeAndAggregateResults">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns4:DCQLQuery" dimensionality="1" index="0" isArray="false" isRequired="false" name="query"
-         xmlns:ns4="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
+        <ns2:InputParameter qName="ns5:DCQLQuery" dimensionality="1" index="0" isArray="false" isRequired="false" name="query"
+         xmlns:ns5="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
        </ns2:inputParameterCollection>
-       <ns2:Output qName="ns5:CQLQueryResultCollection" dimensionality="1" isArray="false" xmlns:ns5="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
+       <ns2:Output qName="ns6:CQLQueryResultCollection" dimensionality="1" isArray="false" xmlns:ns6="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
        <ns2:faultCollection>
         <ns2:Fault description="" name="FederatedQueryProcessingFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
       <ns2:Operation description="" name="execute">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns6:DCQLQuery" dimensionality="1" index="0" isArray="false" isRequired="false" name="query"
-         xmlns:ns6="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
+        <ns2:InputParameter qName="ns7:DCQLQuery" dimensionality="1" index="0" isArray="false" isRequired="false" name="query"
+         xmlns:ns7="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
        </ns2:inputParameterCollection>
-       <ns2:Output qName="ns7:DCQLQueryResultsCollection" dimensionality="1" isArray="false" xmlns:ns7="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult"/>
+       <ns2:Output qName="ns8:DCQLQueryResultsCollection" dimensionality="1" isArray="false" xmlns:ns8="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult"/>
        <ns2:faultCollection>
         <ns2:Fault description="" name="FederatedQueryProcessingFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
       <ns2:Operation description="" name="executeAsynchronously">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns8:DCQLQuery" dimensionality="1" index="0" isArray="false" isRequired="false" name="query"
-         xmlns:ns8="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
+        <ns2:InputParameter qName="ns9:DCQLQuery" dimensionality="1" index="0" isArray="false" isRequired="false" name="query"
+         xmlns:ns9="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
        </ns2:inputParameterCollection>
-       <ns2:Output qName="ns9:FederatedQueryResultsReference" dimensionality="1" isArray="false"
-        xmlns:ns9="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
+       <ns2:Output qName="ns10:FederatedQueryResultsReference" dimensionality="1" isArray="false"
+        xmlns:ns10="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
        <ns2:faultCollection/>
       </ns2:Operation>
      </ns2:operationCollection>
@@ -53,7 +53,7 @@
      <ns2:operationCollection>
       <ns2:Operation description="" name="getResults">
        <ns2:inputParameterCollection/>
-       <ns2:Output qName="ns10:DCQLQueryResultsCollection" dimensionality="1" isArray="false" xmlns:ns10="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult"/>
+       <ns2:Output qName="ns11:DCQLQueryResultsCollection" dimensionality="1" isArray="false" xmlns:ns11="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult"/>
        <ns2:faultCollection>
         <ns2:Fault description="" name="ProcessingNotCompleteFault"/>
         <ns2:Fault description="" name="FederatedQueryProcessingFault"/>
@@ -62,8 +62,8 @@
       </ns2:Operation>
       <ns2:Operation description="" name="getServiceSecurityMetadata">
        <ns2:inputParameterCollection/>
-       <ns2:Output qName="ns11:ServiceSecurityMetadata" dimensionality="1" isArray="false"
-        xmlns:ns11="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+       <ns2:Output qName="ns12:ServiceSecurityMetadata" dimensionality="1" isArray="false"
+        xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
        <ns2:faultCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="isProcessingComplete">
@@ -86,17 +86,19 @@
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>
-   <ns12:SemanticMetadata conceptCode="???" conceptDefinition="A Grid Service." conceptName="Grid Service" order="0"
-    xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
-   <ns13:SemanticMetadata conceptCode="???" conceptDefinition="An Grid Analytical Service." conceptName="Analytical Grid Service" order="1"
-    xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns13:SemanticMetadata conceptCode="C63541"
+    conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services."
+    conceptName="Grid Service" order="0" xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns40:SemanticMetadata conceptCode="C63542"
+    conceptDefinition="Services that are needed to maintain the running of a grid, including monitoring and discovery service, security management service (authentication and authorization), identifier naming and resolution service, query and federated query service, and workflow management service."
+    conceptName="Core Grid Service" order="1" xmlns:ns40="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter>
-  <ResearchCenter xmlns="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" displayName="The Ohio State University" shortName="OSU">
-   <pointOfContactCollection>
-    <PointOfContact affiliation="OSU" email="oster@bmi.osu.edu" firstName="Scott" lastName="OSU" role="maintainer"/>
-   </pointOfContactCollection>
-  </ResearchCenter>
+  <ns15:ResearchCenter displayName="The Ohio State University" shortName="OSU" xmlns:ns15="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns15:pointOfContactCollection>
+    <ns15:PointOfContact affiliation="OSU" email="oster@bmi.osu.edu" firstName="Scott" lastName="OSU" role="maintainer"/>
+   </ns15:pointOfContactCollection>
+  </ns15:ResearchCenter>
  </ns1:hostingResearchCenter>
 </ns1:ServiceMetadata>

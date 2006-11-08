@@ -93,7 +93,7 @@ public class BaseResource implements Resource, ResourceProperties {
 			try {
 				currentContainerURL = ServiceHost.getBaseURL();
 			} catch (IOException e) {
-				logger.error("Unable to determine container's URL!  Skipping registration.");
+				logger.error("Unable to determine container's URL!  Skipping registration.", e);
 				return;
 			}
 
@@ -137,7 +137,7 @@ public class BaseResource implements Resource, ResourceProperties {
 
 				ctx = ResourceContext.getResourceContext(msgContext);
 			} catch (ResourceContextException e) {
-				logger.error("Could not get ResourceContext: " + e);
+				logger.error("Could not get ResourceContext: " + e, e);
 				return;
 			}
 
@@ -149,7 +149,7 @@ public class BaseResource implements Resource, ResourceProperties {
 				// epr = AddressingUtils.createEndpointReference(ctx, key);
 				epr = AddressingUtils.createEndpointReference(ctx, null);
 			} catch (Exception e) {
-				logger.error("Could not form EPR: " + e);
+				logger.error("Could not form EPR: " + e, e);
 				return;
 			}
 			try {
@@ -173,7 +173,7 @@ public class BaseResource implements Resource, ResourceProperties {
 					logger.error("Unable to read registration file:" + registrationFile);
 				}
 			} catch (Exception e) {
-				logger.error("Exception when trying to register service (" + epr + "): " + e);
+				logger.error("Exception when trying to register service (" + epr + "): " + e, e);
 			}
 		} else {
 			logger.info("Skipping registration.");
@@ -235,7 +235,7 @@ public class BaseResource implements Resource, ResourceProperties {
 			Context initialContext = new InitialContext();
 			this.configuration = (ResourceConfiguration) initialContext.lookup(jndiName);
 		} catch (Exception e) {
-			logger.error("when performing JNDI lookup for " + jndiName + ": " + e);
+			logger.error("when performing JNDI lookup for " + jndiName + ": " + e, e);
 		}
 
 		return this.configuration;
