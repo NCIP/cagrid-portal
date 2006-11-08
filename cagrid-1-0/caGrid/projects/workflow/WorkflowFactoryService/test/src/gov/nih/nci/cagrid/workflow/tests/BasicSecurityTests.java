@@ -1,11 +1,5 @@
 package gov.nih.nci.cagrid.workflow.tests;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-
-import javax.xml.namespace.QName;
-
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.workflow.client.WorkflowFactoryServiceClient;
 import gov.nih.nci.cagrid.workflow.context.client.WorkflowServiceImplClient;
@@ -14,11 +8,15 @@ import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WSDLReferences;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowInputType;
-import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+
+import javax.xml.namespace.QName;
+
 import org.apache.axis.message.MessageElement;
-import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
 import org.globus.wsrf.encoding.ObjectSerializer;
@@ -27,28 +25,23 @@ import org.globus.wsrf.utils.AnyHelper;
 import org.globus.wsrf.utils.XmlUtils;
 import org.w3c.dom.Element;
 
-public class BasicTests extends GridTestCase {
-
+public class BasicSecurityTests extends GridTestCase {
+	
 	public String url = "http://localhost:8080/wsrf/services/cagrid/WorkflowFactoryService";
 	private static WorkflowFactoryServiceClient factoryClient = null;
 	private static WorkflowServiceImplClient serviceClient = null;
 	private static EndpointReferenceType epr = null;
 	
 	
-	public BasicTests(String name) {
+	public BasicSecurityTests(String name) {
 		super(name);
 	}
-	
-	private void setup() {
-	// setup stuff if tests get executed in parallel	
-	}
-	
-	public void testBasic() throws Exception {
+	public void testBasicSecurity() throws Exception {
 		String inputFile = "inputTest1.xml";
 		assertTrue(TEST_CONTAINER != null);
 		FileWriter writer = null;
 		this.factoryClient = new WorkflowFactoryServiceClient(url);
-		WMSInputType input = createInput("Simple.bpel");
+		WMSInputType input = createInput("SimpleSecure.bpel");
 		WMSOutputType output = this.factoryClient.createWorkflow(input);
 		this.epr = output.getWorkflowEPR();
 		assertTrue(epr != null);
@@ -71,50 +64,20 @@ public class BasicTests extends GridTestCase {
 		//assertTrue(status.getValue().equals("Active"));
 		
 	}
-
-	public void testStatus() throws Exception {
-		if (this.epr != null) {
-			this.serviceClient = new WorkflowServiceImplClient(this.epr);
-		} else {
-			System.out.println("epr is null");
-		}
-		WorkflowStatusType status = this.serviceClient.getStatus();
-		System.out.println(status.getValue());
-		assertTrue(status != null);
-	}
-	
-	public void testGetOutput() throws Exception {
-		WorkflowOutputType output = this.serviceClient.getWorkflowOutput();
-		System.out.println("result: " + AnyHelper.toSingleString(output.get_any()));
-		assertTrue(output != null);
-		
-	}
-	public void testPause() throws Exception {
-		WorkflowStatusType status = this.serviceClient.pause();
-		assertTrue(status != null);
-		System.out.println(status.getValue());
-		
-	}
-	
-	public void testResume() throws Exception {
-		WorkflowStatusType status = this.serviceClient.resume();
-		assertTrue(status != null);
-		System.out.println(status.getValue());
-	}
-	public void testCancel() throws Exception {
-		this.serviceClient.cancel();
-	}
-	
-	public  static WMSInputType createInput(String bpelFile) throws Exception {
+	public   WMSInputType createInput(String bpelFile) throws Exception {
 		WMSInputType input = new WMSInputType();
 		String bpelProcess = Utils.fileToStringBuffer(new File(bpelFile)).toString();
 		input.setBpelDoc(bpelProcess);
 		input.setWorkflowName("Simple");
-		WSDLReferences[] wsdlRefArray = new WSDLReferences[1];
+		WSDLReferences[] wsdlRefArray = new WSDLReferences[2];
 		wsdlRefArray[0] = new WSDLReferences();
+		wsdlRefArray[1] = new WSDLReferences();
 		wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/SampleService1"));
 		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/_cagrid_SampleService1/SampleService1_flattened.wsdl");
 		wsdlRefArray[0].setWsdlNamespace(new URI("http://workflow.cagrid.nci.nih.gov/SampleService1"));
+		wsdlRefArray[1].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/SecureSample"));
+		wsdlRefArray[1].setWsdlLocation("http://localhost:8080/wsrf/share/schema/_cagrid_SecureSample/SecureSample_flattened.wsdl");
+		wsdlRefArray[1].setWsdlNamespace(new URI("http://workflow.cagrid.nci.nih.gov/SecureSample"));
 		input.setWsdlReferences(wsdlRefArray);
 		return input;
 	}
