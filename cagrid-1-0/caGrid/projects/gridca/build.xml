@@ -246,10 +246,13 @@ GSBT - Globus Service Build Tools
 	</target>
 	
 	<target name="requestHostCertificate" description="Requests a Host Ceritificate">
+		<input message="Please enter the Hostname [${env.HOST}]:"
+		               addproperty="hostname.input" defaultvalue="${env.HOST}"/>
 		<java classname="gov.nih.nci.cagrid.gridca.common.HostCertificateRequestUtility" fork="yes" newenvironment="true">
 			<arg value="langella@bmi.osu.edu" />
 			<arg value="caGrid 1.0 Development Host Certificate Request" />
 			<arg value="5" />
+			<arg value="${hostname.input}"/>
 			<classpath>
 				<fileset dir="${build.lib.dir}">
 					<include name="**/*.jar" />

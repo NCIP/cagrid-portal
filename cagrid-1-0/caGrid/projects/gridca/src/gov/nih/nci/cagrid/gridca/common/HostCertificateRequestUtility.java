@@ -23,44 +23,22 @@ public class HostCertificateRequestUtility {
 			String caAdminEmail = args[0];
 			String emailSubject = args[1];
 			String days = args[2];
+			String hostname = args[3];
 			boolean manual = true;
-			System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
-			System.out.println("*            GridCA Host Certificate Request Utility          *");
-			System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
-			System.out.println();
-			// Manual Vs Automatic
-			// Directions
+
 			File dir = new File(Utils.getCaGridUserHome().getAbsolutePath() + File.separator + "gridca");
 			dir.mkdirs();
-			String hostname = null;
-			while (true) {
-				hostname = readLine("Enter Hostname");
-				if (!validateHostname(hostname)) {
-					System.err.println("Invalid Hostname!!!");
-				} else {
-					break;
-				}
-			}
+
 			File publicKey = new File(dir.getAbsolutePath() + File.separator + hostname + "-public-key.pem");
 			File privateKey = new File(dir.getAbsolutePath() + File.separator + hostname + "-private-key.pem");
 			File cert = new File(dir.getAbsolutePath() + File.separator + hostname + "-cert.pem");
 			File des = new File(dir.getAbsolutePath() + File.separator + hostname + "-security-descriptor.xml");
 
-			if (publicKey.exists() || privateKey.exists() || cert.exists()) {
-				while (true) {
-					System.out.println("A key pair for the host " + hostname + " already exists!!!");
-					String cmd = readLine("Do you wish to overwite? (Y or N):");
-					if ((cmd != null) && (cmd.equalsIgnoreCase("Y"))) {
-						publicKey.delete();
-						privateKey.delete();
-						cert.delete();
-						des.delete();
-						break;
-					} else if ((cmd != null) && (cmd.equalsIgnoreCase("N"))) {
-						System.exit(0);
-					}
-				}
-			}
+			publicKey.delete();
+			privateKey.delete();
+			cert.delete();
+			des.delete();
+
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			KeyUtil.writePrivateKey(pair.getPrivate(), privateKey);
 			KeyUtil.writePublicKey(pair.getPublic(), publicKey);
@@ -82,16 +60,18 @@ public class HostCertificateRequestUtility {
 				File f = new File(dir.getAbsolutePath() + File.separator + hostname + "-directions.txt");
 				f.delete();
 				String directions = "To request a host certificate, email your CA administrator at "
-					+ caAdminEmail+".\n" +"Please set the subject of the email to: "
+					+ caAdminEmail
+					+ ".\n"
+					+ "Please set the subject of the email to: "
 					+ emailSubject
-					+ "\nand in the body of the email please specify you reason for needing a certificate.\n"+
-					"It is also required that the public key you just generated is attached to the email.\n"+
-					"The public key you need to attach to the email can be found at: \n\n	"
+					+ "\nand in the body of the email please specify you reason for needing a certificate.\n"
+					+ "It is also required that the public key you just generated is attached to the email.\n"
+					+ "The public key you need to attach to the email can be found at: \n\n	"
 					+ publicKey.getAbsolutePath()
 					+ "\n\nYou should receive an email response to your certificate request within\n"
 					+ days
-					+ " business day(s).  If your certificate request is approved, your certificate\n"+
-					"will come attached in the email response.  Please save the attached certificate to:\n\n	"
+					+ " business day(s).  If your certificate request is approved, your certificate\n"
+					+ "will come attached in the email response.  Please save the attached certificate to:\n\n	"
 					+ cert.getAbsolutePath()
 					+ "\n\nTo use these credentials for your globus container, type the following command from your GLOBUS_LOCATION:\n\n bin/globus-start-container -containerDesc "
 					+ des.getAbsolutePath() + "\n\nThese directions have been written to the file:\n "
@@ -107,7 +87,8 @@ public class HostCertificateRequestUtility {
 		}
 
 	}
-	
+
+
 	public static String readLine(String prompt) {
 		String s = null;
 		try {
@@ -122,14 +103,4 @@ public class HostCertificateRequestUtility {
 		return s;
 	}
 
-
-	private static boolean validateHostname(String hostname) {
-		if (Utils.clean(hostname) == null) {
-			return false;
-		} else if (hostname.indexOf(" ") >= 0) {
-			return false;
-		} else {
-			return true;
-		}
-	}
 }
