@@ -1,10 +1,16 @@
 package gov.nih.nci.cagrid.data.system;
 
+import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
+import gov.nih.nci.cagrid.cqlquery.Group;
+import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
 import gov.nih.nci.cagrid.cqlquery.Object;
+import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.client.DataServiceClient;
+import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
+import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 
 import java.util.Iterator;
@@ -20,7 +26,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: InvokeDataServiceStep.java,v 1.1 2006-11-08 18:09:38 dervin Exp $ 
+ * @version $Id: InvokeDataServiceStep.java,v 1.2 2006-11-09 15:27:52 dervin Exp $ 
  */
 public class InvokeDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";
@@ -46,6 +52,10 @@ public class InvokeDataServiceStep extends Step {
 		checkForObjectResults(results);
 		// iterate the results
 		iterateBookResults(results);
+		// run a query for an invalid class
+		queryForInvalidClass(client);
+		// run an invalid syntax query
+		submitMalformedQuery(client);
 	}
 	
 	
@@ -91,6 +101,43 @@ public class InvokeDataServiceStep extends Step {
 				fail("Iterator returned other than book (" + obj.getClass().getName() + ")");
 			}
 		}
+	}
+	
+	
+	private void queryForInvalidClass(DataServiceClient client) throws Exception {
+		CQLQuery query = new CQLQuery();
+		Object target = new Object();
+		target.setName("non.existant.class");
+		query.setTarget(target);
+		
+		try {
+			client.query(query);
+		} catch (QueryProcessingExceptionType ex) {
+			assertTrue("Query Processing Exception Type thrown", true);
+		}
+	}
+	
+	
+	private void submitMalformedQuery(DataServiceClient client) throws Exception {
+		CQLQuery query = new CQLQuery();
+		Object target = new Object();
+		target.setName(Book.class.getName());
+		Attribute attrib1 = new Attribute("name", Predicate.LIKE, "E%");
+		target.setAttribute(attrib1);
+		Group group = new Group();
+		group.setLogicRelation(LogicalOperator.AND);
+		group.setAttribute(new Attribute[] {
+			new Attribute("author", Predicate.IS_NOT_NULL, ""),
+			new Attribute("ISBN", Predicate.IS_NULL, "")
+		});
+		target.setGroup(group);
+		query.setTarget(target);
+		try {
+			client.query(query);
+		} catch (MalformedQueryExceptionType ex) {
+			assertTrue("Malformed Query Exception Type thrown", true);
+		}
+		
 	}
 	
 	

@@ -19,7 +19,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: SystemTests.java,v 1.1 2006-11-08 18:09:38 dervin Exp $ 
+ * @version $Id: SystemTests.java,v 1.2 2006-11-09 15:27:52 dervin Exp $ 
  */
 public class SystemTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -44,20 +44,22 @@ public class SystemTests extends Story {
 		steps.add(new AddBookstoreStep(CreationTests.SERVICE_DIR, CreationTests.SERVICE_NAME));
 		// 2) change out query processor
 		steps.add(new SetQueryProcessorStep(CreationTests.SERVICE_DIR));
-		// 3) Rebuild the service to pick up the bookstore beans
+		// 3) Turn on query validation
+		steps.add(new EnableValidationStep(CreationTests.SERVICE_DIR));
+		// 4) Rebuild the service to pick up the bookstore beans
 		steps.add(new RebuildServiceStep(getIntroduceBaseDir()));
-		// 3) set up a clean, temporary Globus
+		// 5) set up a clean, temporary Globus
 		steps.add(new CreateCleanGlobusStep(globusHelper));
-		// 4) deploy data service
+		// 6) deploy data service
 		steps.add(new DeployDataServiceStep(globusHelper, CreationTests.SERVICE_DIR));
-		// 5) start globus
+		// 7) start globus
 		steps.add(new StartGlobusStep(globusHelper));
-		// 6) test data service
+		// 8) test data service
 		steps.add(new InvokeDataServiceStep(
 			"localhost", IntroduceTestConstants.TEST_PORT, CreationTests.SERVICE_NAME));
-		// 7) stop globus
+		// 9) stop globus
 		steps.add(new StopGlobusStep(globusHelper));
-		// 8) throw away globus
+		// 10) throw away globus
 		steps.add(new DestroyTempGlobusStep(globusHelper));
 		return steps;
 	}
