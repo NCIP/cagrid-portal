@@ -11,7 +11,7 @@
 	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
-	<classpathentry sourcepath="/AXIS_SOURCE" kind="var" path="GT4_LOCATION/lib/axis.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/AXIS_SOURCE"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>
@@ -21,7 +21,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commonj.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-beanutils.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-cli-2.0.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-collections-3.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-digester.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-discovery.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-logging.jar"/>
