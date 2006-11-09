@@ -164,6 +164,28 @@ GSBT - Globus Service Build Tools
 	<!-- Default target "all" generates the GAR file -->
 	<target name="all" depends="jar" />
 	
+	<target name="generateCA" description="Generates a certificate authority.">
+		<java classname="gov.nih.nci.cagrid.gridca.common.GenerateCA" fork="no" newenvironment="true">
+			<classpath>
+				<fileset dir="${build.lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+			    <fileset dir="${globus.location}/lib">
+					<include name="*.jar" />
+					<exclude name="${jar.name}" />
+					<exclude name="xml-apis.jar" />
+					<exclude name="xercesImpl.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+	
 	<target name="requestHostCertificate" description="Requests a Host Ceritificate">
 		<java classname="gov.nih.nci.cagrid.gridca.common.HostCertificateRequestUtility" fork="yes" newenvironment="true">
 			<arg value="langella@bmi.osu.edu" />

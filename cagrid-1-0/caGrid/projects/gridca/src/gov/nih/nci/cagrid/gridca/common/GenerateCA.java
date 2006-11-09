@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.common.Utils;
 
 import java.io.File;
 import java.security.KeyPair;
-import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,12 +22,11 @@ import org.bouncycastle.asn1.x509.X509Name;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class CreateCACertificate {
+public class GenerateCA {
 
 	public static void main(String[] args) {
 		try {
-			Security
-			.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+			SecurityUtil.init();
 			StringBuffer sb = new StringBuffer();
 			String o = null;
 			while ((o == null) || (o.trim().length() == 0)) {
