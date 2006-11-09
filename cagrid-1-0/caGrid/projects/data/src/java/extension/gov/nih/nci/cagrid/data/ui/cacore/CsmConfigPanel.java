@@ -7,30 +7,27 @@ import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.CQLProcessorConfigProperty;
 import gov.nih.nci.cagrid.data.extension.Data;
-import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
 
-import javax.swing.JButton;
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.border.TitledBorder;
 
 /** 
  *  CsmConfigPanel
- *  Panel to configure CSM security for the caCORE service
+ *  Panel to configure CSM security (Using the caCORE SDK ClientSession) for the caCORE service
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
@@ -40,23 +37,23 @@ import javax.swing.event.DocumentListener;
 public class CsmConfigPanel extends AbstractWizardPanel {
 	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
 	public static final String USE_CSM_FLAG = "useCsmSecurity";
-	public static final String CSM_CONFIGURATION_FILENAME = "csmConfigurationFilename";
 	public static final String CSM_CONTEXT_NAME = "csmContextName";
 	
-	/**
-	 * Directory for authz libraries
-	 */
-	public static final String AUTHZ_LIB_DIR = ".." + File.separator + "sdkQuery" + File.separator 
-		+ "ext" + File.separator + "lib";
+	public static final String PERFORMANCE_WARNING = 
+		"NOTE:\n" +
+		"Enabling CSM security for the caCORE SDK data source will cause " + 
+		"significant performance degredation when multiple clients connect " +
+		"to the data service.  Due to a bug in the caCORE SDK API, all calls " +
+		"to the query method when CSM is enabled must be synchronized, and " +
+		"cannot be executed in parallel.";
 	
 	private JCheckBox useCsmCheckBox = null;
-	private JLabel csmConfigFileLabel = null;
-	private JTextField csmConfigFileTextField = null;
-	private JButton csmConfigBrowseButton = null;
 	private JLabel csmContextLabel = null;
 	private JTextField csmContextTextField = null;
 	private JCheckBox useAppserviceUrlCheckBox = null;
 	private JPanel configPanel = null;
+	private JTextArea performanceWarningTextArea = null;
+	private JScrollPane performanceWarningScrollPane = null;
 
 	public CsmConfigPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
 		super(extensionDescription, info);
@@ -65,20 +62,28 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 	
 	
 	private void initialize() {
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.gridx = 0;
         GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
         gridBagConstraints7.gridx = 0;
         gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints7.weightx = 1.0D;
-        gridBagConstraints7.gridy = 1;
+        gridBagConstraints7.gridy = 2;
         GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
         gridBagConstraints6.gridx = 0;
         gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
-        gridBagConstraints6.gridy = 0;
+        gridBagConstraints6.gridy = 1;
         this.setLayout(new GridBagLayout());
         this.setSize(new java.awt.Dimension(622,132));
         this.add(getUseCsmCheckBox(), gridBagConstraints6);
         this.add(getConfigPanel(), gridBagConstraints7);
+        this.add(getPerformanceWarningScrollPane(), gridBagConstraints);
 		
 	}
 	
@@ -93,8 +98,6 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 				if (propName.equals(USE_CSM_FLAG)) {
 					boolean selected = Boolean.valueOf(props[i].getValue()).booleanValue();
 					getUseCsmCheckBox().setSelected(selected);
-				} else if (propName.equals(CSM_CONFIGURATION_FILENAME)) {
-					getCsmConfigFileTextField().setText(props[i].getValue());
 				} else if (propName.equals(CSM_CONTEXT_NAME)) {
 					String contextName = props[i].getValue();
 					getCsmContextTextField().setText(contextName);
@@ -136,12 +139,6 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 			useCsmCheckBox.setText("Use CSM Security");
 			useCsmCheckBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
-					// copy libraries around
-					if (useCsmCheckBox.isSelected()) {
-						copyAuthzJars();
-					} else {
-						deleteAuthzJars();
-					}
 					PortalUtils.setContainerEnabled(getConfigPanel(), useCsmCheckBox.isSelected());
 					// set the use CSM property in the extension data useCsmSecurity
 					try {
@@ -174,80 +171,6 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 			});
 		}
 		return useCsmCheckBox;
-	}
-
-
-	/**
-	 * This method initializes jLabel	
-	 * 	
-	 * @return javax.swing.JLabel	
-	 */
-	private JLabel getCsmConfigFileLabel() {
-		if (csmConfigFileLabel == null) {
-			csmConfigFileLabel = new JLabel();
-			csmConfigFileLabel.setText("CSM Configuration File:");
-		}
-		return csmConfigFileLabel;
-	}
-
-
-	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private JTextField getCsmConfigFileTextField() {
-		if (csmConfigFileTextField == null) {
-			csmConfigFileTextField = new JTextField();
-			csmConfigFileTextField.getDocument().addDocumentListener(new DocumentListener() {
-				public void insertUpdate(DocumentEvent e) {
-					setCsmConfigFile();
-				}
-
-			    
-				public void removeUpdate(DocumentEvent e) {
-					setCsmConfigFile();
-				}
-
-			    
-				public void changedUpdate(DocumentEvent e) {
-					setCsmConfigFile();
-				}
-			});
-		}
-		return csmConfigFileTextField;
-	}
-
-
-	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */
-	private JButton getCsmConfigBrowseButton() {
-		if (csmConfigBrowseButton == null) {
-			csmConfigBrowseButton = new JButton();
-			csmConfigBrowseButton.setText("Browse...");
-			csmConfigBrowseButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// prompt for a file name
-					try {
-						String selection = ResourceManager.promptFile(
-							CsmConfigPanel.this, null, new FileFilters.XMLFileFilter());
-						if (selection != null) {
-							getCsmConfigFileTextField().setText(selection);
-						} else {
-							getCsmConfigFileTextField().setText("");
-						}
-						setCsmConfigFile();
-					} catch (IOException ex) {
-						ex.printStackTrace();
-						ErrorDialog.showErrorDialog("Error selecting a CSM configuration file", ex);
-					}
-				}
-			});
-		}
-		return csmConfigBrowseButton;
 	}
 
 
@@ -325,124 +248,62 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 			gridBagConstraints5.gridx = 2;
 			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints5.gridy = 1;
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.gridx = 2;
-			gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints4.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints4.gridy = 0;
+			gridBagConstraints5.gridy = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints3.gridy = 1;
+			gridBagConstraints3.gridy = 0;
 			gridBagConstraints3.weightx = 1.0;
 			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints3.gridx = 1;
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints2.gridy = 0;
-			gridBagConstraints2.weightx = 1.0;
-			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints2.gridx = 1;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints1.gridy = 1;
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints.gridy = 0;
+			gridBagConstraints1.gridy = 0;
 			configPanel = new JPanel();
 			configPanel.setLayout(new GridBagLayout());
 			configPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
 				null, "Configuration Options", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-			configPanel.add(getCsmConfigFileLabel(), gridBagConstraints);
 			configPanel.add(getCsmContextLabel(), gridBagConstraints1);
-			configPanel.add(getCsmConfigFileTextField(), gridBagConstraints2);
 			configPanel.add(getCsmContextTextField(), gridBagConstraints3);
-			configPanel.add(getCsmConfigBrowseButton(), gridBagConstraints4);
 			configPanel.add(getUseAppserviceUrlCheckBox(), gridBagConstraints5);
 		}
 		return configPanel;
 	}
-	
-	
-	private void setCsmConfigFile() {
-		String filename = getCsmConfigFileTextField().getText();
-		try {
-			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-			CQLProcessorConfigProperty[] props = data.getCQLProcessorConfig().getProperty();
-			boolean propertyFound = false;
-			for (int i = 0; props != null && i < props.length; i++) {
-				if (props[i].getName().equals(CSM_CONFIGURATION_FILENAME)) {
-					props[i].setValue(filename);
-					propertyFound = true;
-					break;
-				}
-			}
-			if (!propertyFound) {
-				CQLProcessorConfigProperty property = 
-					new CQLProcessorConfigProperty(CSM_CONFIGURATION_FILENAME, filename);
-				if (props != null) {
-					props = (CQLProcessorConfigProperty[]) Utils.appendToArray(props, property);
-				} else {
-					props = new CQLProcessorConfigProperty[] {property};
-				}
-				data.getCQLProcessorConfig().setProperty(props);
-			}
-			ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error setting csm config filename", ex);
+
+
+	/**
+	 * This method initializes performanceWarningTextArea	
+	 * 	
+	 * @return javax.swing.JTextArea	
+	 */
+	private JTextArea getPerformanceWarningTextArea() {
+		if (performanceWarningTextArea == null) {
+			performanceWarningTextArea = new JTextArea();
+			performanceWarningTextArea.setLineWrap(true);
+			performanceWarningTextArea.setWrapStyleWord(true);
+			performanceWarningTextArea.setEditable(false);
+			performanceWarningTextArea.setText(PERFORMANCE_WARNING);
 		}
+		return performanceWarningTextArea;
 	}
-	
-	
-	private void copyAuthzJars() {
-		File[] libs = getAuthzLibs();
-		String outLibDir = CacoreWizardUtils.getServiceBaseDir(getServiceInformation())
-			+ File.separator + "lib" + File.separator;
-		for (int i = 0; i < libs.length; i++) {
-			File outLib = new File(outLibDir + libs[i].getName());
-			try {
-				Utils.copyFile(libs[i], outLib);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-				ErrorDialog.showErrorDialog("Error copying " + libs[i].getName(), ex);
-			}
+
+
+	/**
+	 * This method initializes performanceWarningScrollPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getPerformanceWarningScrollPane() {
+		if (performanceWarningScrollPane == null) {
+			performanceWarningScrollPane = new JScrollPane();
+			performanceWarningScrollPane.setBorder(BorderFactory.createTitledBorder(
+				null, "Note", TitledBorder.DEFAULT_JUSTIFICATION, 
+				TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			performanceWarningScrollPane.setViewportView(getPerformanceWarningTextArea());
 		}
-	}
-	
-	
-	private void deleteAuthzJars() {
-		File[] libs = getAuthzLibs();
-		String outLibDir = CacoreWizardUtils.getServiceBaseDir(getServiceInformation())
-			+ File.separator + "lib" + File.separator;
-		for (int i = 0; i < libs.length; i++) {
-			File outLib = new File(outLibDir + libs[i].getName());
-			outLib.delete();
-		}
-	}
-	
-	
-	private File[] getAuthzLibs() {
-		FileFilter authzFileFilter = new FileFilter() {
-			public boolean accept(File pathname) {
-				String filename = pathname.getName();
-				if (filename.endsWith(".jar")) {
-					return (filename.indexOf("authz") != -1)
-						|| (filename.indexOf("grouper") != -1)
-						|| (filename.equals("csmapi.jar"));
-				}
-				return false;
-			}
-		};
-		File fromLibDir = new File(AUTHZ_LIB_DIR);
-		File[] libs = fromLibDir.listFiles(authzFileFilter);
-		return libs;
+		return performanceWarningScrollPane;
 	}
 }
