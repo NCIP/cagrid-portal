@@ -17,8 +17,10 @@ import java.io.IOException;
 public class CQLResultTypesGenerator {
 
 	/**
-	 * @param desc
-	 * @param info
+	 * Generates the XSD for potential CQL Query Result types
+	 * 
+	 * @param typeInfo
+	 * 		The type information
 	 * @throws CodegenExtensionException
 	 */
 	public static void generateCQLResultTypesXSD(ResultTypeGeneratorInformation typeInfo)

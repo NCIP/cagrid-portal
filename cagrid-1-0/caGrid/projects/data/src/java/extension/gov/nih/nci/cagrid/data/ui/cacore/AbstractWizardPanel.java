@@ -56,6 +56,7 @@ public abstract class AbstractWizardPanel extends JPanel {
 	 * in a sequence in a wizard.  This bit bucket is not persistant, so only use it for
 	 * data which doesn't really belong in the service information or extension description.
 	 * @return
+	 * 		A map for storing arbitrary data
 	 */
 	protected Map getBitBucket() {
 		if (bitBucket == null) {
@@ -120,6 +121,7 @@ public abstract class AbstractWizardPanel extends JPanel {
 	/**
 	 * Gets the descriptive title for this panel.
 	 * @return
+	 * 		The long title for the panel
 	 */
 	public abstract String getPanelTitle();
 	
@@ -128,6 +130,7 @@ public abstract class AbstractWizardPanel extends JPanel {
 	 * Gets the short name for this panel.  This name will be shown in the next / back buttons
 	 * of the wizard
 	 * @return
+	 * 		The short title for the panel
 	 */
 	public abstract String getPanelShortName();
 }

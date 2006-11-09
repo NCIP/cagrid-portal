@@ -77,6 +77,7 @@ public class PackageSchemasTable extends JTable {
 	 * Creates a new JButton to handle schema resolution
 	 * @param pack
 	 * @return
+	 * 		A JButton to resolve schemas
 	 */
 	private JButton getResolveButton(
 		final ServiceInformation serviceInfo, final CadsrPackage pack) {
