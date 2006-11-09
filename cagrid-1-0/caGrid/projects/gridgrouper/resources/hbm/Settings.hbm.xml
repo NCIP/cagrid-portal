@@ -20,7 +20,7 @@
   limitations under the License.
 -->
 
-<!-- $Id: Settings.hbm.xml,v 1.1 2006-07-25 19:53:39 langella Exp $ -->
+<!-- $Id: Settings.hbm.xml,v 1.2 2006-11-09 15:55:25 langella Exp $ -->
 
 <hibernate-mapping package="edu.internet2.middleware.grouper">
   <class name="Settings" table="grouper_settings">
@@ -50,10 +50,6 @@
     </property>
     <!-- schema_version -->
 
-    <!-- 
-      TODO Add <map .../> to other properties? 
-           Perhaps even load in settings from runtime configs as well?
-      -->
   </class>
 </hibernate-mapping>
 

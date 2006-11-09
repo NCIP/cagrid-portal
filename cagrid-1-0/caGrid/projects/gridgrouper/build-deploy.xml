@@ -119,6 +119,8 @@
 				<include name="*" />
 			</fileset>
 		</copy>
+		
+		<delete file="${tomcat.deploy.lib.dir}/commons-collections-3.0.jar"/>
 		<!--copy over the schema service files-->
 		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}/${introduce.skeleton.service.name}">
 			<fileset dir="build/schema/${introduce.skeleton.service.name}">
@@ -198,7 +200,7 @@
 				</fileset>
 			</classpath>
 		</java>
-		
+		<delete file="${ext.globus.dir}/lib/commons-collections-3.0.jar"/>
 		<delete dir="${gar.name}" />
 		<!-- deploy the gar -->
 	</target>

@@ -17,7 +17,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commonj.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-beanutils.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-cli-2.0.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-collections-3.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-digester.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-discovery.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-logging.jar"/>
@@ -78,7 +77,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/grouper.jar" sourcepath="/grouper-api-1.0"/>
 	<classpathentry kind="lib" path="lib/hibernate2-2.1.8.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
@@ -89,5 +87,8 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca.jar"/>
+	<classpathentry kind="lib" path="lib/commons-math-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/grouper.jar" sourcepath="/Grouper"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

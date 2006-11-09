@@ -158,10 +158,11 @@
                 <exclude name="${common.jar.name}" />
                 <exclude name="${client.jar.name}" />
                 <exclude name="${service.jar.name}" />
-                
+				<exclude name="${resources.jar.name}" />
             	<!-- Post Introduce Edit-->
+				<exclude name="${service.jar.name}" />
             	<exclude name="${ui.jar.name}" />
-            	<exclude name="${resources.jar.name}" />
+            	<exclude name="commons-collections-3.0.jar" />
             </fileset>
         </path>
         <path id="service.build.classpath">
@@ -191,6 +192,7 @@
         </path>
         <path id="run.classpath">
             <pathelement location="${build.dest}" />
+			<pathelement location="resources/conf" />
             <path refid="service.build.classpath" />
         </path>
     </target>
@@ -498,23 +500,7 @@
 			<arg value="-addAdmin" />
 			<arg value="-userId" />
 			<arg value="${gridId.input}"/>
-			<classpath>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.globus.dir}/lib">
-					<include name="*.jar" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
+			<classpath refid="test.run.classpath" /> 	
 		</java>
 	</target>
 	

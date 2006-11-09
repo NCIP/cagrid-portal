@@ -19,7 +19,6 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MembershipStatus;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.service.tools.GridGrouperBootstrapper;
-import gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupModifyFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.types.MemberAddFault;
 import gov.nih.nci.cagrid.gridgrouper.subject.AnonymousGridUserSubject;
@@ -173,13 +172,12 @@ public class TestGroups extends TestCase {
 			}
 
 			// Updating
-			// TODO: This should throw Insufficient Privilege Fault
 			try {
 				GroupUpdate u = new GroupUpdate();
 				u.setDescription("New Description");
 				grouper.updateGroup(USER_A, gid, u);
 				fail("Should not be able to update!!!");
-			} catch (GroupModifyFault f) {
+			} catch (InsufficientPrivilegeFault f) {
 
 			}
 
@@ -306,7 +304,7 @@ public class TestGroups extends TestCase {
 				assertEquals(des, grouper.getGroup(SUPER_USER, gid)
 						.getDescription());
 				fail("Should not be able to update the group!!!");
-			} catch (GroupModifyFault e) {
+			} catch (InsufficientPrivilegeFault e) {
 
 			}
 

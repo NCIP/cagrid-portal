@@ -20,7 +20,7 @@
   limitations under the License.
 -->
 
-<!-- $Id: Attribute.hbm.xml,v 1.1 2006-07-25 19:53:39 langella Exp $ -->
+<!-- $Id: Attribute.hbm.xml,v 1.2 2006-11-09 15:55:25 langella Exp $ -->
 
 <hibernate-mapping package="edu.internet2.middleware.grouper">
   <class name="Attribute" table="grouper_attributes">

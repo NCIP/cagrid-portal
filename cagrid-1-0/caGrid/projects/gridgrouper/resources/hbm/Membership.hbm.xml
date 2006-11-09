@@ -20,10 +20,10 @@
   limitations under the License.
 -->
 
-<!-- $Id: Membership.hbm.xml,v 1.1 2006-07-25 19:53:39 langella Exp $ -->
+<!-- $Id: Membership.hbm.xml,v 1.2 2006-11-09 15:55:25 langella Exp $ -->
 
 <hibernate-mapping package="edu.internet2.middleware.grouper">
-  <class name="Membership" table="grouper_memberships">
+  <class name="Membership" table="grouper_memberships" batch-size="5">
 
     <meta attribute="class-description">
 A list membership in the Groups Registry.
@@ -43,20 +43,6 @@ A list membership in the Groups Registry.
       <generator class="uuid.hex"/>
     </id>
     <!-- id -->
-
-    <!-- uuid -->
-    <property 
-      name="uuid"
-      type="string"
-      not-null="true"
-      unique="true"
-    >
-      <column name="membership_uuid"
-              unique-key="members_idx"
-              length="128"
-      />
-    </property>
-    <!-- uuid -->
 
     <!-- owner_id -->
     <many-to-one  name="owner_id"
@@ -143,17 +129,33 @@ A list membership in the Groups Registry.
     <!-- depth -->
 
     <!-- parent_membership -->
-    <!-- TODO Don't allow updates? -->
+    <!-- In theory I should be able to disable updates on this mapping but a quick try didn't work. -->
     <many-to-one
       name="parent_membership"
       class="edu.internet2.middleware.grouper.Membership"
       cascade="none"
+      update="true"
+      insert="true"
     >
       <column name="parent_membership"
               index="membership_parent_idx"
       />
     </many-to-one>
     <!-- parent_membership -->
+
+    <!-- uuid -->
+    <property 
+      name="uuid"
+      type="string"
+      not-null="true"
+      unique="true"
+    >
+      <column name="membership_uuid"
+              unique-key="members_idx"
+              length="128"
+      />
+    </property>
+    <!-- uuid -->
 
     <!-- creator_id -->
     <many-to-one  name="creator_id"
