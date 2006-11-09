@@ -1,6 +1,18 @@
 <?xml version="1.0"?>
 <project name="build-deploy file" basedir="." default="deployTomcat">
 	<property file="deploy.properties"/>
+	
+	<pathconvert dirsep="_" property="service.deployment.dir.name">
+		<path>
+			<pathelement path="${service.deployment.path}" />
+		</path>
+		<map from="${basedir}\" to="" />
+		<map from="${basedir}/" to="" />
+	</pathconvert>
+	
+	<property name="gar.name" value="${service.deployment.dir.name}.gar" />
+	
+	
 	<property environment="env"/>
 	<!-- Tomcat Properties -->
 	<property name="tomcat.dir" value="${env.CATALINA_HOME}"/>
@@ -21,21 +33,12 @@
 	
 	<target name="prepareDeploy" unless="service.deployment.host" >
 		<input
-			message="Please enter the hostname of the deployment machine. This must be set to the hostname which will be used by external clients to connect to this service.  [${service.deployment.host.default}]:"
-			addproperty="service.deployment.host"
-			defaultvalue="${service.deployment.host.default}"/>
+			message="Please enter the hostname of the deployment machine. This must be set to the hostname which will be used by external clients to connect to this service.  [${service.deployment.host.default}]:" addproperty="service.deployment.host" defaultvalue="${service.deployment.host.default}"/>
 	</target>
 	
 	<target name="deployTomcat" depends="prepareDeploy" description="Deploys to CATALINA_HOME">
 		<echo message="Deploying service under Tomcat at ${tomcat.dir}"/>
 		<!-- Configure Tomcat destination for skeletons -->
-		<pathconvert dirsep="_" property="service.deployment.dir.name">
-			<path>
-				<pathelement path="${service.deployment.path}"/>
-			</path>
-			<map from="${basedir}" to=""/>
-			<map from="/" to=""/>
-		</pathconvert>
 		<property name="service.deployment.dir"
 			value="${tomcat.deploy.dir}/etc/${service.deployment.dir.name}"/>
 		<!-- prepare the deployment directory -->
@@ -104,7 +107,7 @@
 			token="SERVICE-INSTANCE-NAME"/>
 		<replace file="tmp/gme-globus-config.xml" value="etc/${service.deployment.dir.name}"
 			token="ETC-PATH"/>
-		<replace file="tmp/etc/gme-globus-config.xml" value="${service.deployment.host}"
+		<replace file="tmp/gme-globus-config.xml" value="${service.deployment.host}"
 			token="SERVICE-DEPLOY-HOST"/>
 		<copy overwrite="true" toDir="${service.deployment.dir}">
 			<fileset dir="tmp">
@@ -115,7 +118,6 @@
 	</target>
 	<!-- make deployment configured gar -->
 	<target name="createDeploymentGar">
-		<property name="service.deployment.dir.name" value="${service.name}"/>
 		<property name="service.deployment.dir"
 			value="${globus.location}/etc/${service.deployment.dir.name}"/>
 		<copy todir="${build.lib.dir}">
