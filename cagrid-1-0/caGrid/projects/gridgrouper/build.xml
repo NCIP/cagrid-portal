@@ -456,24 +456,8 @@
 	  
 	   <target name="ui" description="Run the Grid Grouper Admin UI" depends="checkGlobus">
         <java classname="gov.nih.nci.cagrid.gridgrouper.ui.GridGrouperUI" fork="yes">
+	        <classpath refid="run.classpath"/>
             <classpath>
-                <pathelement location="${stubs.dest}" />
-                <fileset dir="${build.lib.dir}">
-                    <include name="**/*.jar" />
-                </fileset>
-                <fileset dir="${ext.lib.dir}">
-                    <include name="*.jar" />
-                </fileset>
-                <fileset dir="${lib.dir}">
-                    <include name="**/*.jar" />
-                </fileset>
-                <fileset dir="${ext.globus.dir}/lib">
-                    <include name="*.jar" />
-                    <exclude name="${stubs.jar.name}" />
-                    <exclude name="${jar.name}" />
-                    <exclude name="xml-apis.jar" />
-                    <exclude name="xercesImpl.jar" />
-                </fileset>
                 <pathelement location="resources/ui/gridgrouper" />
                 <pathelement location="ext/resources/portal/common" />
                 <pathelement location="ext/resources/portal/gridca" />
@@ -500,7 +484,7 @@
 			<arg value="-addAdmin" />
 			<arg value="-userId" />
 			<arg value="${gridId.input}"/>
-			<classpath refid="test.run.classpath" /> 	
+			<classpath refid="run.classpath"/> 	
 		</java>
 	</target>
 	
