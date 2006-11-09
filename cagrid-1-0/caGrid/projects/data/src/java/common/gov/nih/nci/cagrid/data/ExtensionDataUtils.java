@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.data;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.extension.CQLProcessorConfig;
+import gov.nih.nci.cagrid.data.extension.CQLProcessorConfigProperty;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
@@ -68,5 +70,34 @@ public class ExtensionDataUtils {
 		String basePackage = mainService.getPackageName();
 		basePackage += ".stubs.cql";
 		return basePackage + "." + DataServiceConstants.QUERY_PROCESSOR_STUB_NAME;		
+	}
+	
+	
+	public static void setCQLProcessorProperty(Data data, String key, String value) {
+		CQLProcessorConfig config = data.getCQLProcessorConfig();
+		if (config == null) {
+			config = new CQLProcessorConfig();
+			data.setCQLProcessorConfig(config);
+		}
+		CQLProcessorConfigProperty[] props = config.getProperty();
+		if (props == null) {
+			props = new CQLProcessorConfigProperty[] {
+				new CQLProcessorConfigProperty(key, value)
+			};
+		} else {
+			boolean found = false;
+			for (int i = 0; i < props.length; i++) {
+				if (props[i].getName().equals(key)) {
+					props[i].setValue(value);
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				props = (CQLProcessorConfigProperty[]) Utils.appendToArray(
+					props, new CQLProcessorConfigProperty(key, value));
+			}
+		}
+		config.setProperty(props);
 	}
 }

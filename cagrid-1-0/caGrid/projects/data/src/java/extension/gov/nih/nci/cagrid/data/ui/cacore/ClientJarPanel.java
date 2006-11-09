@@ -7,8 +7,6 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
-import gov.nih.nci.cagrid.data.extension.CQLProcessorConfig;
-import gov.nih.nci.cagrid.data.extension.CQLProcessorConfigProperty;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -27,15 +25,11 @@ import java.util.Set;
 import java.util.jar.JarFile;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 /** 
  *  ClientJarPanel
@@ -54,9 +48,6 @@ public class ClientJarPanel extends AbstractWizardPanel {
 	private JButton addJarButton = null;
 	private JButton removeButton = null;
 	private JPanel additionalJarButtonsPanel = null;
-	private JLabel serviceUrlLabel = null;
-	private JTextField serviceUrlTextField = null;
-	private JPanel urlPanel = null;
 	private JPanel requiredJarsPanel = null;
 	
 	public ClientJarPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
@@ -80,7 +71,6 @@ public class ClientJarPanel extends AbstractWizardPanel {
         this.setLayout(new GridBagLayout());
         this.setSize(new java.awt.Dimension(351,220));
         this.add(getRequiredJarsPanel(), gridBagConstraints2);
-        this.add(getUrlPanel(), gridBagConstraints7);			
 	}
 
 
@@ -291,74 +281,6 @@ public class ClientJarPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes jLabel	
-	 * 	
-	 * @return javax.swing.JLabel	
-	 */
-	private JLabel getServiceUrlLabel() {
-		if (serviceUrlLabel == null) {
-			serviceUrlLabel = new JLabel();
-			serviceUrlLabel.setText("Service URL:");
-		}
-		return serviceUrlLabel;
-	}
-
-
-	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private JTextField getServiceUrlTextField() {
-		if (serviceUrlTextField == null) {
-			serviceUrlTextField = new JTextField();
-			serviceUrlTextField.getDocument().addDocumentListener(new DocumentListener() {
-				public void insertUpdate(DocumentEvent e) {
-					changeAppServiceUrl();
-				}
-
-			    
-			    public void removeUpdate(DocumentEvent e) {
-			    	changeAppServiceUrl();
-			    }
-			    
-
-			    public void changedUpdate(DocumentEvent e) {
-			    	changeAppServiceUrl();
-			    }
-			});
-		}
-		return serviceUrlTextField;
-	}
-
-
-	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getUrlPanel() {
-		if (urlPanel == null) {
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints1.gridy = 0;
-			gridBagConstraints1.weightx = 1.0;
-			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints1.gridx = 1;
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
-			gridBagConstraints.gridy = 0;
-			urlPanel = new JPanel();
-			urlPanel.setLayout(new GridBagLayout());
-			urlPanel.add(getServiceUrlLabel(), gridBagConstraints);
-			urlPanel.add(getServiceUrlTextField(), gridBagConstraints1);
-		}
-		return urlPanel;
-	}
-
-
-	/**
 	 * This method initializes jPanel	
 	 * 	
 	 * @return javax.swing.JPanel	
@@ -384,34 +306,6 @@ public class ClientJarPanel extends AbstractWizardPanel {
 			requiredJarsPanel.add(getAdditionalJarButtonsPanel(), gridBagConstraints6);
 		}
 		return requiredJarsPanel;
-	}
-	
-	
-	private void changeAppServiceUrl() {
-		try {
-			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-			CQLProcessorConfig config = data.getCQLProcessorConfig();
-			if (config == null) {
-				config = new CQLProcessorConfig();
-				data.setCQLProcessorConfig(config);
-			}
-			CQLProcessorConfigProperty[] props = config.getProperty();
-			if (props == null || props.length == 0) {
-				props = new CQLProcessorConfigProperty[] {
-					new CQLProcessorConfigProperty("appserviceUrl", getServiceUrlTextField().getText())};
-				config.setProperty(props);
-			} else {
-				for (int i = 0; i < props.length; i++) {
-					if (props[i].getName().equals("appserviceUrl")) {
-						props[i].setValue(getServiceUrlTextField().getText());
-					}
-				}
-			}
-			ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error setting the application service URL: " + ex.getMessage(), ex);
-		}
 	}
 	
 	
