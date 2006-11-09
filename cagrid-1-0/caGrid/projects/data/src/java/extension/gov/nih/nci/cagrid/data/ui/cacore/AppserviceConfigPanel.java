@@ -34,7 +34,7 @@ import javax.swing.event.DocumentListener;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 9, 2006 
- * @version $Id: AppserviceConfigPanel.java,v 1.1 2006-11-09 19:52:00 dervin Exp $ 
+ * @version $Id: AppserviceConfigPanel.java,v 1.2 2006-11-09 19:53:43 dervin Exp $ 
  */
 public class AppserviceConfigPanel extends AbstractWizardPanel {
 	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
@@ -115,6 +115,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 					if (propName.equals(USE_CSM_FLAG)) {
 						boolean selected = Boolean.valueOf(props[i].getValue()).booleanValue();
 						getUseCsmCheckBox().setSelected(selected);
+						PortalUtils.setContainerEnabled(getCsmOptionsPanel(), selected);
 					} else if (propName.equals(CSM_CONTEXT_NAME)) {
 						String contextName = props[i].getValue();
 						getCsmContextTextField().setText(contextName);
