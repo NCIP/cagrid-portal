@@ -165,7 +165,22 @@ GSBT - Globus Service Build Tools
 	<target name="all" depends="jar" />
 	
 	<target name="generateCA" description="Generates a certificate authority.">
-		<java classname="gov.nih.nci.cagrid.gridca.common.GenerateCA" fork="no" newenvironment="true">
+		<input message="Please enter the DN for the new CA (ex. O=osu,OU=bmi,CN=Some CA):"
+		               addproperty="dn.input"/>
+		            <input message="Please enter the number of days the new CA will be valid for:"
+		               addproperty="days.input"/>
+		                <input message="Please enter a password for the new CA:"
+		               addproperty="password.input"/>
+		                  <input message="Please enter a location to write the new CA's private key:"
+		               addproperty="key.input"/>
+		                  <input message="Please enter a location to write the new CA's certificate:"
+		               addproperty="cert.input"/>
+		<java classname="gov.nih.nci.cagrid.gridca.common.AntGenerateCA" fork="true" newenvironment="true">
+			<arg value="${dn.input}"/>
+			<arg value="${days.input}"/>
+			<arg value="${password.input}"/>
+			<arg value="${key.input}"/>
+			<arg value="${cert.input}"/>
 			<classpath>
 				<fileset dir="${build.lib.dir}">
 					<include name="**/*.jar" />
