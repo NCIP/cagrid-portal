@@ -25,11 +25,12 @@ public class BooleanAttributeCheckCache {
 		if (isBool == null) {
 			try {
 				Class objClass = Class.forName(objClassName);
-				Field field = objClass.getDeclaredField(fieldName);
+				Field field = ClassAccessUtilities.getNamedField(objClass, fieldName);
+				if (field == null) {
+					throw new QueryProcessingException("No field " + fieldName + " found for class " + objClassName);
+				}
 				isBool = Boolean.valueOf(Boolean.class.equals(field.getType()));
 				booleanFlags.put(key, isBool);
-			} catch (NoSuchFieldException ex) {
-				throw new QueryProcessingException("No field " + fieldName + " found for class " + objClassName, ex);
 			} catch (ClassNotFoundException ex) {
 				throw new QueryProcessingException(ex.getMessage(), ex);
 			}

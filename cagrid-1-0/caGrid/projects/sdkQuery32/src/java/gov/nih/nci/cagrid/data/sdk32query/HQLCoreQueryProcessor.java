@@ -16,7 +16,6 @@ import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,7 +34,7 @@ import org.apache.log4j.Logger;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created May 2, 2006 
- * @version $Id: HQLCoreQueryProcessor.java,v 1.2 2006-11-07 18:53:30 dervin Exp $ 
+ * @version $Id: HQLCoreQueryProcessor.java,v 1.3 2006-11-09 14:58:12 dervin Exp $ 
  */
 public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	public static final String DEFAULT_LOCALHOST_CACORE_URL = "http://localhost:8080/cacore31/server/HTTPServer";
@@ -220,31 +219,16 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	
 	
 	private Object accessNamedProperty(Object o, String name) throws Exception {
-		Field[] fields = o.getClass().getFields();
-		for (int i = 0; i < fields.length; i++) {
-			if (fields[i].getName().equals(name)
-				&& Modifier.isPublic(fields[i].getModifiers())) {
-				return fields[i].get(o);
-			}
+		Field namedField = ClassAccessUtilities.getNamedField(o.getClass(), name);
+		if (namedField != null) {
+			return namedField.get(o);
 		}
-		// no fields?  check methods for getters
-		Method[] methods = o.getClass().getMethods();
-		for (int i = 0; i < methods.length; i++) {
-			String methodName = methods[i].getName();
-			if (methodName.startsWith("get") && methods[i].getParameterTypes().length == 0) {
-				// strip off the 'get'
-				String fieldName = methodName.substring(3);
-				if (fieldName.length() == 1) {
-					fieldName = String.valueOf(Character.toLowerCase(fieldName.charAt(0)));
-				} else {
-					fieldName = String.valueOf(Character.toLowerCase(fieldName.charAt(0))) 
-						+ fieldName.substring(1);
-				}
-				if (fieldName.equals(name)) {
-					return methods[i].invoke(o, new Object[] {});
-				}
-			}			
+		// no named field?  Check for a getter
+		Method getter = ClassAccessUtilities.getNamedGetterMethod(o.getClass(), name);
+		if (getter != null) {
+			return getter.invoke(o, new Object[] {});
 		}
+		// getting here means the field was not found
 		throw new NoSuchFieldException("No field " + name + " found on " + o.getClass().getName());
 	}
 	

@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,10 +48,24 @@ public class AssociationManyCheckCache {
 				if (roleName == null) {
 					roleName = ClassAccessUtilities.getRoleName(parent.getName(), target);
 				}
+				// find out the type of the parent's field
+				Class targetFieldType = null;
 				// get the field from the parent class
-				Field targetField = parentClass.getDeclaredField(roleName);
-				// if field is array or collection, return true
-				Class targetFieldType = targetField.getType();
+				Field targetField = ClassAccessUtilities.getNamedField(parentClass, roleName);
+				if (targetField != null) {
+					targetFieldType = targetField.getType();
+				} else {
+					Method getterMethod = ClassAccessUtilities.getNamedGetterMethod(parentClass, roleName);
+					if (getterMethod != null) {
+						targetFieldType = getterMethod.getReturnType();
+					}
+				}
+				
+				if (targetFieldType == null) {
+					throw new QueryProcessingException("No field " + roleName 
+						+ " found for class " + parentClass.getName());
+				}
+				
 				isMany = new Boolean(targetFieldType.isArray()
 					|| Collection.class.isAssignableFrom(targetFieldType));
 				manyCache.put(fullAssociationName, isMany);

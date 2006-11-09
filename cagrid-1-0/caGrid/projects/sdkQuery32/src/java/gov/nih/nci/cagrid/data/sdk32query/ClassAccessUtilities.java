@@ -21,7 +21,7 @@ import java.util.Set;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 3, 2006 
- * @version $Id: ClassAccessUtilities.java,v 1.1 2006-11-07 17:37:59 dervin Exp $ 
+ * @version $Id: ClassAccessUtilities.java,v 1.2 2006-11-09 14:58:12 dervin Exp $ 
  */
 public class ClassAccessUtilities {	
 	/**
@@ -112,6 +112,16 @@ public class ClassAccessUtilities {
 	}
 	
 	
+	/**
+	 * Gets the setter methods of a class that take a parameter of a certain type
+	 * 
+	 * @param clazz
+	 * 		The class to find setter methods on
+	 * @param typeName
+	 * 		The name of the type to find setters for
+	 * @return
+	 * 		All setter methods which take a parameter of the named type
+	 */
 	public static Method[] getSettersForType(Class clazz, String typeName) {
 		Set allMethods = new HashSet();
 		Class checkClass = clazz;
@@ -135,5 +145,69 @@ public class ClassAccessUtilities {
 		Method[] methodArray = new Method[allMethods.size()];
 		allMethods.toArray(methodArray);
 		return methodArray;
+	}
+	
+	
+	/**
+	 * Gets the named field from the class or any of its super classes
+	 * 
+	 * @param clazz
+	 * 		The class to retrieve a field from
+	 * @param fieldName
+	 * 		The name of the field to retrieve
+	 * @return
+	 * 		The named field, or <code>null</code> if it was not found
+	 */
+	public static Field getNamedField(Class clazz, String fieldName) {
+		Class checkClass = clazz;
+		while (checkClass != null) {
+			Field[] classFields = checkClass.getDeclaredFields();
+			for (int i = 0; i < classFields.length; i++) {
+				if (classFields[i].getName().equals(fieldName)) {
+					return classFields[i];
+				}
+			}
+			checkClass = checkClass.getSuperclass();
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * Gets the 'getter' method from the class or any of its super 
+	 * classes for a named field.  For example, if a field name
+	 * of 'foo' is given, this method looks for a method named
+	 * <code>getFoo</code> on the class.
+	 * 
+	 * @param clazz
+	 * 		The class to retrieve a getter method from
+	 * @param fieldName
+	 * 		The name of the field
+	 * @return
+	 * 		The getter method for the field, or <code>null</code> if it was not found
+	 */
+	public static Method getNamedGetterMethod(Class clazz, String fieldName) {
+		Class checkClass = clazz;
+		while (checkClass != null) {
+			Method[] methods = checkClass.getDeclaredMethods();
+			for (int i = 0; i < methods.length; i++) {
+				String methodName = methods[i].getName();
+				if (methodName.startsWith("get") && methods[i].getParameterTypes().length == 0) {
+					// strip off the 'get'
+					String getterFieldName = methodName.substring(3);
+					if (getterFieldName.length() == 1) {
+						getterFieldName = String.valueOf(Character.toLowerCase(getterFieldName.charAt(0)));
+					} else {
+						getterFieldName = String.valueOf(Character.toLowerCase(getterFieldName.charAt(0))) 
+							+ getterFieldName.substring(1);
+					}
+					if (getterFieldName.equals(fieldName)) {
+						return methods[i];
+					}
+				}			
+			}
+			checkClass = checkClass.getSuperclass();
+		}
+		return null;
 	}
 }
