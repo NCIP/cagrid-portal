@@ -213,18 +213,22 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			classConfigTable = new ClassElementSerializationTable();
 			classConfigTable.addClassInformatonChangeListener(new ClassInformatonChangeListener() {
 				public void elementNameChanged(ClassChangeEvent e) {
+					// get class to element mapping
+					Map classToElement = (Map) packageToClassMap.get(e.getPackageName());
+					// get the old element name mapping for this class
+					String oldElementName = (String) classToElement.get(e.getClassName());
 					// get the namespace type for the class
 					NamespaceType nsType = CommonTools.getNamespaceType(
 						getServiceInfo().getNamespaces(), e.getNamespace());
 					// find the schema element type
 					SchemaElementType schemaType = NamespaceUtils.getElementByName(
 						nsType, e.getElementName());
-					if (schemaType == null) {
-						// WARNING: You've selected a non-existant element name!
+					if (schemaType == null && 
+						oldElementName != null && oldElementName.length() != 0) {
+						// WARNING: You've selected a non-existant element name,
+						// AND the old element name was NOT non existant as well
 						ErrorDialog.showErrorDialog("No element named " + e.getElementName() + " in namespace " + e.getNamespace());
 					}
-					// get class to element mapping
-					Map classToElement = (Map) packageToClassMap.get(e.getPackageName());
 					// change the element name mapping
 					classToElement.put(e.getClassName(), e.getElementName());
 					// save the mapping info
