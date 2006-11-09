@@ -63,29 +63,32 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="lib/ant-contrib.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-core.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-metadata-common.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-metadata-security.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator_stubs.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="lib/abadmin.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-gridca-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-gridgrouper-1.0-client.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-gridgrouper-1.0-common.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-gridgrouper-1.0-stubs.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-ServiceSecurityProvider-client.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-ServiceSecurityProvider-common.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-ServiceSecurityProvider-service.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
-	<classpathentry kind="lib" path="lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="lib/grouper.jar"/>
-	<classpathentry kind="lib" path="lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/mobius_factories-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/mobius_gme_client-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/mobius_mako_client-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/subject-0.2.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-service.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
+	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/asm-2.2.1.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.0-core-tests.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/cobertura.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/jakarta-oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
+	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

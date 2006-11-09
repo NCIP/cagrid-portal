@@ -1,8 +1,5 @@
 package gov.nih.nci.cagrid.workflow.common;
 
-import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
-import gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType;
-
 import java.rmi.RemoteException;
 
 /** 
@@ -15,7 +12,7 @@ public interface WorkflowFactoryServiceI {
 
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 
-    public WMSOutputType createWorkflow(WMSInputType wMSInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType ;
+    public gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType createWorkflow(gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType wMSInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType ;
 
 }
 

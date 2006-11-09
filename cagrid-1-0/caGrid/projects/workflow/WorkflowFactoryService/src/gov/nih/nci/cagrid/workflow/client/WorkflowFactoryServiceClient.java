@@ -175,7 +175,7 @@ public class WorkflowFactoryServiceClient extends ServiceSecurityClient implemen
         return boxedResult.getServiceSecurityMetadata();
       }
     }
-	public WMSOutputType createWorkflow(WMSInputType wMSInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
+	public gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType createWorkflow(gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType wMSInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"createWorkflow");
         gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowRequest params = new gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowRequest();

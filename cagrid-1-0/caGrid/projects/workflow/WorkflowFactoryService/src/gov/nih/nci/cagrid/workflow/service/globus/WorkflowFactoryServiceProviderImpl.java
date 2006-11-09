@@ -29,6 +29,7 @@ public class WorkflowFactoryServiceProviderImpl{
 	
 
 	public gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowResponse createWorkflow(gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowRequest params) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
+		WorkflowFactoryServiceAuthorization.authorizeCreateWorkflow();
 		gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowResponse boxedResult = new gov.nih.nci.cagrid.workflow.stubs.CreateWorkflowResponse();
 		boxedResult.setWMSOutputElement(impl.createWorkflow(params.getWMSInputElement().getWMSInputElement()));
 		return boxedResult;

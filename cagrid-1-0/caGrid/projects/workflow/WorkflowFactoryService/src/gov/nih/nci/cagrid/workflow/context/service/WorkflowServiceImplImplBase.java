@@ -5,54 +5,38 @@ import gov.nih.nci.cagrid.workflow.service.ServiceConfiguration;
 import java.rmi.RemoteException;
 
 import javax.naming.InitialContext;
+import javax.xml.namespace.QName;
 
 import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
+import org.globus.wsrf.ResourceContext;
+import org.globus.wsrf.ResourceContextException;
+import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceHome;
+import org.globus.wsrf.ResourceProperty;
+import org.globus.wsrf.ResourcePropertySet;
 /** 
- *  TODO:DOCUMENT ME
+ * Provides some simple accessors for the Impl.
  * 
  * @created by Introduce Toolkit version 1.0
  * 
  */
 public abstract class WorkflowServiceImplImplBase {
-    private ServiceConfiguration configuration;
 	
 	public WorkflowServiceImplImplBase() throws RemoteException {
 	
 	}
 	
 	public ServiceConfiguration getConfiguration() throws Exception {
-		if (this.configuration != null) {
-			return this.configuration;
-		}
-		MessageContext ctx = MessageContext.getCurrentContext();
-
-		String servicePath = ctx.getTargetService();
-
-		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
-		try {
-			javax.naming.Context initialContext = new InitialContext();
-			this.configuration = (ServiceConfiguration) initialContext.lookup(jndiName);
-		} catch (Exception e) {
-			throw new Exception("Unable to instantiate service configuration.", e);
-		}
-
-		return this.configuration;
+		return ServiceConfiguration.getConfiguration();
 	}
 	
 	
-	public gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowServiceHome getResourceHome() throws Exception {
-		ResourceHome resource = getResourceHome("home");
-		return (gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowServiceHome)resource;
-	}
-
 	
 	
-	
-	public gov.nih.nci.cagrid.workflow.service.globus.resource.WorkflowFactoryHome getWorkflowFactoryServiceResourceHome() throws Exception {
+	public gov.nih.nci.cagrid.workflow.service.globus.resource.BaseResourceHome getWorkflowFactoryServiceResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("workflowFactoryServiceHome");
-		return (gov.nih.nci.cagrid.workflow.service.globus.resource.WorkflowFactoryHome)resource;
+		return (gov.nih.nci.cagrid.workflow.service.globus.resource.BaseResourceHome)resource;
 	}
 	
 	

@@ -30,9 +30,9 @@ import commonj.timers.Timer;
 
 import gov.nih.nci.cagrid.common.Utils;
 
-public class WorkflowFactoryResource implements Resource, ResourceProperties {
+public class BaseResource implements Resource, ResourceProperties {
 
-	static final Log logger = LogFactory.getLog(WorkflowFactoryResource.class);
+	static final Log logger = LogFactory.getLog(BaseResource.class);
 
 	/** Stores the ResourceProperties of this service */
 	private ResourcePropertySet propSet;
@@ -45,19 +45,27 @@ public class WorkflowFactoryResource implements Resource, ResourceProperties {
 	private URL baseURL;
 
 	//Define the metadata resource properties
-		
+	private ResourceProperty serviceMetadataRP;
+	private gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadataMD;
+	
 
 
 
 	// initializes the resource
 	public void initialize() throws Exception {
 		// create the resource property set
-		this.propSet = new SimpleResourcePropertySet(WorkflowFactoryConstants.RESOURCE_PROPERY_SET);
+		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);
 
 		// this loads the metadata from XML files
 		populateResourceProperty();
 		
-		// now add the metadata as resource properties	
+		// now add the metadata as resource properties		//init the rp
+		this.serviceMetadataRP = new SimpleResourceProperty(ResourceConstants.SERVICEMETADATA_MD_RP);
+		//add the value to the rp
+		this.serviceMetadataRP.add(this.serviceMetadataMD);
+		//add the rp to the prop set
+		this.propSet.add(this.serviceMetadataRP);
+	
 
 
 		// register the service to the index sevice
@@ -85,7 +93,7 @@ public class WorkflowFactoryResource implements Resource, ResourceProperties {
 			try {
 				currentContainerURL = ServiceHost.getBaseURL();
 			} catch (IOException e) {
-				logger.error("Unable to determine container's URL!  Skipping registration.");
+				logger.error("Unable to determine container's URL!  Skipping registration.", e);
 				return;
 			}
 
@@ -94,7 +102,7 @@ public class WorkflowFactoryResource implements Resource, ResourceProperties {
 				// retry)
 				// do a string comparison as we don't want to do DNS lookups
 				// for comparison
-				if (forceRefresh || !this.baseURL.toExternalForm().equals(currentContainerURL.toExternalForm())) {
+				if (forceRefresh || !this.baseURL.equals(currentContainerURL)) {
 					// we've tried to register before, and we have a different
 					// URL now.. so cancel the old registration (if it exists),
 					// and try to redo it.
@@ -129,7 +137,7 @@ public class WorkflowFactoryResource implements Resource, ResourceProperties {
 
 				ctx = ResourceContext.getResourceContext(msgContext);
 			} catch (ResourceContextException e) {
-				logger.error("Could not get ResourceContext: " + e);
+				logger.error("Could not get ResourceContext: " + e, e);
 				return;
 			}
 
@@ -141,7 +149,7 @@ public class WorkflowFactoryResource implements Resource, ResourceProperties {
 				// epr = AddressingUtils.createEndpointReference(ctx, key);
 				epr = AddressingUtils.createEndpointReference(ctx, null);
 			} catch (Exception e) {
-				logger.error("Could not form EPR: " + e);
+				logger.error("Could not form EPR: " + e, e);
 				return;
 			}
 			try {
@@ -155,8 +163,12 @@ public class WorkflowFactoryResource implements Resource, ResourceProperties {
 
 					ServiceGroupRegistrationParameters params = ServiceGroupRegistrationClient
 						.readParams(registrationFile.getAbsolutePath());
-					// set our service's EPR as the registrant
-					params.setRegistrantEPR(epr);
+					
+					// set our service's EPR as the registrant, or use the specified value
+					EndpointReferenceType registrantEpr = params.getRegistrantEPR();
+					if(registrantEpr == null){
+						params.setRegistrantEPR(epr);
+					}
 
 					ServiceGroupRegistrationClient client = new ServiceGroupRegistrationClient();
 					// apply the registration params to the client
@@ -165,7 +177,7 @@ public class WorkflowFactoryResource implements Resource, ResourceProperties {
 					logger.error("Unable to read registration file:" + registrationFile);
 				}
 			} catch (Exception e) {
-				logger.error("Exception when trying to register service (" + epr + "): " + e);
+				logger.error("Exception when trying to register service (" + epr + "): " + e, e);
 			}
 		} else {
 			logger.info("Skipping registration.");
@@ -176,13 +188,41 @@ public class WorkflowFactoryResource implements Resource, ResourceProperties {
 
 	private void populateResourceProperty() {
 	
+		loadServiceMetadataFromFile();
+	
 	}
 
 
-			
+		
+	private void loadServiceMetadataFromFile() {
+		try {
+			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
+					+ getConfiguration().getServiceMetadataFile());
+			this.serviceMetadataMD = (gov.nih.nci.cagrid.metadata.ServiceMetadata) Utils.deserializeDocument(dataFile.getAbsolutePath(),
+				gov.nih.nci.cagrid.metadata.ServiceMetadata.class);
+		} catch (Exception e) {
+			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
+		}
+	}		
+	
+		
 
 
 	//Getters/Setters for ResourceProperties
+	
+	
+	protected ResourceProperty getServiceMetadataRP(){
+		return this.serviceMetadataRP;
+	}
+	
+	public gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadataMD(){
+		return this.serviceMetadataMD;
+	}
+	
+	public void setServiceMetadataMD(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata ){
+		this.serviceMetadataMD=serviceMetadata;
+		getServiceMetadataRP().set(0,serviceMetadata);
+	}
 		
 
 	public ResourceConfiguration getConfiguration() {
@@ -199,7 +239,7 @@ public class WorkflowFactoryResource implements Resource, ResourceProperties {
 			Context initialContext = new InitialContext();
 			this.configuration = (ResourceConfiguration) initialContext.lookup(jndiName);
 		} catch (Exception e) {
-			logger.error("when performing JNDI lookup for " + jndiName + ": " + e);
+			logger.error("when performing JNDI lookup for " + jndiName + ": " + e, e);
 		}
 
 		return this.configuration;

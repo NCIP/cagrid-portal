@@ -38,7 +38,7 @@
 	<!--                          DEFINE THE SUB PROJECTS                                 -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="authz, bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, evs, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, sdkQuery32, syncgts, workflow, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service, service-security-provider" />
+	<property name="projects.list" value="authz, bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, evs, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, sdkQuery32, syncgts, workflow/WorkflowFactoryService, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service, service-security-provider" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
 	<!-- ================================================================================ -->
@@ -646,8 +646,22 @@
 	<!-- =============================================================== -->
 	<!-- CAGRID Workflow:                                               -->
 	<!-- =============================================================== -->
-	<target name="build-workflow" depends="prepare" description="Builds caGrid workflow">
-		<ant dir="${projects.dir}/workflow" inheritAll="false" antfile="build.xml" target="all" />
+	<target name="build-workflow/WorkflowFactoryService" depends="prepare" description="Builds caGrid workflow">
+		<resolveDependencies extdir="${projects.dir}/workflow/WorkflowFactoryService/ext">
+			<artifact refid="core.jars" />
+			<artifact refid="core.test.jars" />
+			<artifact refid="common.test.jars" />
+			<artifact refid="test.coverage.jars" />
+			<artifact refid="mds.jars" />
+			<artifact refid="common.metadata.jars" />
+			<artifact refid="servicesecurity.jars" />
+		</resolveDependencies>
+		<delete dir="${projects.dir}/workflow/WorkflowFactoryService/schema/WorkflowFactoryService/xsd" />
+		<resolveDependencies extdir="${projects.dir}/workflow/WorkflowFactoryService/schema/WorkflowFactoryService">
+			<artifact refid="metadata.schemas" />
+		</resolveDependencies>
+		
+		<ant dir="${projects.dir}/workflow/WorkflowFactoryService" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
 	<!-- =============================================================== -->

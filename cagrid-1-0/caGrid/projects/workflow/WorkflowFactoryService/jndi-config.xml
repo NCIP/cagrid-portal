@@ -8,16 +8,16 @@
           <value>org.globus.wsrf.jndi.BeanFactory</value>
         </parameter>
         <parameter>
-            <name>resourceClass</name>
-            <value>gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowResource</value>
+          <name>resourceClass</name>
+          <value>gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowResource</value>
         </parameter>
         <parameter>
-            <name>resourceKeyName</name>
-            <value>{http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl}WorkflowKey</value>
+          <name>resourceKeyName</name>
+          <value>{http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl}WorkflowKey</value>
         </parameter>
         <parameter>
-            <name>sweeperDelay</name>
-            <value>60000</value>
+          <name>sweeperDelay</name>
+          <value>60000</value>
         </parameter>
       </resourceParams>
     </resource>
@@ -41,6 +41,11 @@
           <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the registration parameters template file (ignored if performRegistration is false) -->
           <value>ETC-PATH/registration.xml</value>
         </parameter>
+        <parameter>
+          <name>serviceMetadataFile</name>
+          <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the serviceMetadata extract -->
+          <value>ETC-PATH/serviceMetadata.xml</value>
+        </parameter>
       </resourceParams>
     </resource>
     <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.workflow.service.ServiceConfiguration">
@@ -50,12 +55,12 @@
           <value>org.globus.wsrf.jndi.BeanFactory</value>
         </parameter>
         <parameter>
-            <name>abEndpoint</name>
-            <value>http://localhost:8080/active-bpel/services/</value>
+          <name>abEndpoint</name>
+          <value>@abEndpoint@</value>
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="gov.nih.nci.cagrid.workflow.service.globus.resource.WorkflowFactoryHome">
+    <resource name="home" type="gov.nih.nci.cagrid.workflow.service.globus.resource.BaseResourceHome">
       <resourceParams>
         <parameter>
           <name>factory</name>

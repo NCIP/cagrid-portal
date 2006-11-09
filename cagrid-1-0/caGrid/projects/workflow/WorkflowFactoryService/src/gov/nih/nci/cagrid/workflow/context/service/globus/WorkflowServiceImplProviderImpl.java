@@ -29,36 +29,42 @@ public class WorkflowServiceImplProviderImpl{
 	
 
 	public gov.nih.nci.cagrid.workflow.context.stubs.StartResponse start(gov.nih.nci.cagrid.workflow.context.stubs.StartRequest params) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.StartCalledOnStartedWorkflowFaultType {
+		WorkflowServiceImplAuthorization.authorizeStart();
 		gov.nih.nci.cagrid.workflow.context.stubs.StartResponse boxedResult = new gov.nih.nci.cagrid.workflow.context.stubs.StartResponse();
 		boxedResult.setWorkflowStatusElement(impl.start(params.getStartInputElement().getStartInputElement()));
 		return boxedResult;
 	}
 
 	public gov.nih.nci.cagrid.workflow.context.stubs.GetStatusResponse getStatus(gov.nih.nci.cagrid.workflow.context.stubs.GetStatusRequest params) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
+		WorkflowServiceImplAuthorization.authorizeGetStatus();
 		gov.nih.nci.cagrid.workflow.context.stubs.GetStatusResponse boxedResult = new gov.nih.nci.cagrid.workflow.context.stubs.GetStatusResponse();
 		boxedResult.setWorkflowStatusElement(impl.getStatus());
 		return boxedResult;
 	}
 
 	public gov.nih.nci.cagrid.workflow.context.stubs.PauseResponse pause(gov.nih.nci.cagrid.workflow.context.stubs.PauseRequest params) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotPauseWorkflowFaultType {
+		WorkflowServiceImplAuthorization.authorizePause();
 		gov.nih.nci.cagrid.workflow.context.stubs.PauseResponse boxedResult = new gov.nih.nci.cagrid.workflow.context.stubs.PauseResponse();
 		boxedResult.setWorkflowStatusElement(impl.pause());
 		return boxedResult;
 	}
 
 	public gov.nih.nci.cagrid.workflow.context.stubs.ResumeResponse resume(gov.nih.nci.cagrid.workflow.context.stubs.ResumeRequest params) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotResumeWorkflowFaultType {
+		WorkflowServiceImplAuthorization.authorizeResume();
 		gov.nih.nci.cagrid.workflow.context.stubs.ResumeResponse boxedResult = new gov.nih.nci.cagrid.workflow.context.stubs.ResumeResponse();
 		boxedResult.setWorkflowStatusElement(impl.resume());
 		return boxedResult;
 	}
 
 	public gov.nih.nci.cagrid.workflow.context.stubs.CancelResponse cancel(gov.nih.nci.cagrid.workflow.context.stubs.CancelRequest params) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotCancelWorkflowFaultType {
+		WorkflowServiceImplAuthorization.authorizeCancel();
 		gov.nih.nci.cagrid.workflow.context.stubs.CancelResponse boxedResult = new gov.nih.nci.cagrid.workflow.context.stubs.CancelResponse();
 		impl.cancel();
 		return boxedResult;
 	}
 
 	public gov.nih.nci.cagrid.workflow.context.stubs.GetWorkflowOutputResponse getWorkflowOutput(gov.nih.nci.cagrid.workflow.context.stubs.GetWorkflowOutputRequest params) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
+		WorkflowServiceImplAuthorization.authorizeGetWorkflowOutput();
 		gov.nih.nci.cagrid.workflow.context.stubs.GetWorkflowOutputResponse boxedResult = new gov.nih.nci.cagrid.workflow.context.stubs.GetWorkflowOutputResponse();
 		boxedResult.setWorkflowOutputElement(impl.getWorkflowOutput());
 		return boxedResult;
