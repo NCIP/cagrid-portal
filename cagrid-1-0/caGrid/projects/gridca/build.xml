@@ -272,5 +272,46 @@ GSBT - Globus Service Build Tools
 			</classpath>
 		</java>
 	</target>
+	
+	<target name="signHostCertificate" description="Create and signs a host certificate.">
+		 <input message="Please enter the location of the CA's private key:"
+		               addproperty="key.input"/>
+		                  <input message="Please enter the CA's password:"
+		               addproperty="password.input"/>
+		                <input message="Please enter the location of the CA's certificate:"
+		               addproperty="ca.input"/>
+		               	<input message="Please enter the location to the host's public key:"
+		               addproperty="public.input"/>
+		               <input message="Please enter the number of days the host certificate will be valid for:"
+		               addproperty="days.input"/>
+		                <input message="Please enter a location to write the host certificate:"
+		               addproperty="cert.input"/>
+		            
+		<java classname="gov.nih.nci.cagrid.gridca.common.AntSignHostCertificate" fork="true" newenvironment="true">
+			<arg value="${key.input}"/>
+			<arg value="${password.input}"/>
+			<arg value="${ca.input}"/>
+			<arg value="${public.input}"/>
+			<arg value="${days.input}"/>
+            <arg value="${cert.input}"/>
+			<classpath>
+				<fileset dir="${build.lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+			    <fileset dir="${globus.location}/lib">
+					<include name="*.jar" />
+					<exclude name="${jar.name}" />
+					<exclude name="xml-apis.jar" />
+					<exclude name="xercesImpl.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
 
 </project>
