@@ -1,7 +1,9 @@
 <ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
  <ns1:serviceDescription>
   <ns2:Service description="The GridGrouper grid service, created with caGrid Introduce, version:.99999." name="GridGrouper" version=".99999" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
-   <ns2:pointOfContactCollection/>
+   <ns2:pointOfContactCollection>
+    <ns3:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Developer" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   </ns2:pointOfContactCollection>
    <ns2:serviceContextCollection>
     <ns2:ServiceContext description="" name="GridGrouper">
      <ns2:operationCollection>
@@ -362,5 +364,11 @@
    <ns78:SemanticMetadata conceptCode="C63543" conceptDefinition="A published API which receives data in the form of objects, performs computations based upon the input data, and returns information to a client via caGrid in the form of one or more objects." conceptName="Analytical Grid Service" order="1" xmlns:ns78="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns2:Service>
  </ns1:serviceDescription>
- <ns1:hostingResearchCenter/>
+ <ns1:hostingResearchCenter>
+  <ns42:ResearchCenter displayName="The Ohio State University" shortName="OSU" xmlns:ns42="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns42:pointOfContactCollection>
+    <ns42:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="maintainer"/>
+   </ns42:pointOfContactCollection>
+  </ns42:ResearchCenter>
+ </ns1:hostingResearchCenter>
 </ns1:ServiceMetadata>
