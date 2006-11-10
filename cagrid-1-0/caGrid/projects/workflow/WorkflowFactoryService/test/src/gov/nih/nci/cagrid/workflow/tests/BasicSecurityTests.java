@@ -72,10 +72,10 @@ public class BasicSecurityTests extends GridTestCase {
 		WSDLReferences[] wsdlRefArray = new WSDLReferences[2];
 		wsdlRefArray[0] = new WSDLReferences();
 		wsdlRefArray[1] = new WSDLReferences();
-		
-		wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/SampleService1"));
-		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/_cagrid_SampleService1/SampleService1_flattened.wsdl");
-		wsdlRefArray[0].setWsdlNamespace(new URI("http://workflow.cagrid.nci.nih.gov/SampleService1"));
+
+        wsdlRefArray[0].setServiceUrl(new URI("http://localhost:8080/wsrf/services/cagrid/WorkflowTestService1"));
+		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/WorkflowTestService1/WorkflowTestService1.wsdl");
+		wsdlRefArray[0].setWsdlNamespace(new URI("http://sample1.tests.workflow.cagrid.nci.nih.gov/WorkflowTestService1"));
 		
 		wsdlRefArray[1].setServiceUrl(new URI("https://localhost:8443/wsrf/services/cagrid/SecureSample"));
 		wsdlRefArray[1].setWsdlLocation("http://localhost:8080/wsrf/share/schema/_cagrid_SecureSample/SecureSample_flattened.wsdl");

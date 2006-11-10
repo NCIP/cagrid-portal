@@ -18,7 +18,7 @@ public class PackageTests extends GridTestSuite {
 	public static Test suite() throws Exception {
 		TestSuite suite = new PackageTests("Workflow Tests");
 		suite.addTestSuite(BasicTests.class);
-		//suite.addTestSuite(BasicSecurityTests.class);
+		suite.addTestSuite(BasicSecurityTests.class);
 		return suite;
 	}
 }
