@@ -1,5 +1,5 @@
 /**
- * $Id: DefaultSubjectProvider.java,v 1.4 2006-11-10 00:01:48 joshua Exp $
+ * $Id: DefaultSubjectProvider.java,v 1.5 2006-11-10 12:14:14 joshua Exp $
  *
  */
 package gov.nih.nci.cagrid.authentication.service;
@@ -15,7 +15,7 @@ import javax.security.auth.Subject;
 
 /**
  * 
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  * @author Joshua Phillips
  * 
  */
@@ -36,7 +36,7 @@ public class DefaultSubjectProvider implements SubjectProvider {
 	try {
 	    BasicAuthenticationCredential bac = credential
 		    .getBasicAuthenticationCredential();
-	    System.out.println("Checking: userId=" + bac.getUserId() + ", password=" + bac.getPassword());
+//	    System.out.println("Checking: userId=" + bac.getUserId() + ", password=" + bac.getPassword());
 	    subject = mgr.authenticate(bac.getUserId(), bac.getPassword());
 
 	} catch (CSException ex) {

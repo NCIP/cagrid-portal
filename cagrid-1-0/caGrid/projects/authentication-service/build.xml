@@ -264,10 +264,16 @@
         </jar>
         
         
-        <copy toDir="${build.dest}">
+        <copy toDir="${build.dest}" overwrite="true">
             <fileset dir="resources">
                 <include name="authentication-config.xml"/>
             </fileset>
+            <filterset>
+                <filter token="CSM_APP_CONTEXT" value="${csm.app.context}"/>
+                <filter token="SAML_PROVIDER_CRT" value="${saml.provider.crt}"/>
+                <filter token="SAML_PROVIDER_KEY" value="${saml.provider.key}"/>
+                <filter token="SAML_PROVIDER_PWD" value="${saml.provider.pwd}"/>
+            </filterset>
         </copy>
         <jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
             <include name="**/service/**" />
