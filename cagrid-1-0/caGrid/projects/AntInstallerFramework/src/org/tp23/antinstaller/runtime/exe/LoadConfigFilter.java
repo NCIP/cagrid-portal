@@ -45,9 +45,11 @@ import org.tp23.antinstaller.input.TargetInput;
 import org.tp23.antinstaller.input.TargetSelectInput;
 import org.tp23.antinstaller.input.UnvalidatedTextInput;
 import org.tp23.antinstaller.input.ValidatedTextInput;
+import org.tp23.antinstaller.page.DeployPropertyPage;
 import org.tp23.antinstaller.page.LicensePage;
 import org.tp23.antinstaller.page.Page;
 import org.tp23.antinstaller.page.ProgressPage;
+import org.tp23.antinstaller.page.ServicePropertyPage;
 import org.tp23.antinstaller.page.SimpleInputPage;
 import org.tp23.antinstaller.page.SplashPage;
 import org.tp23.antinstaller.runtime.ConfigurationException;
@@ -65,7 +67,7 @@ import org.xml.sax.InputSource;
  * Loads the Ant Install configuration and sets the Installer object back
  * into the context.
  * @author Paul Hinds
- * @version $Id: LoadConfigFilter.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: LoadConfigFilter.java,v 1.2 2006-11-10 17:03:27 kumarvi Exp $
  */
 public class LoadConfigFilter implements ExecuteFilter {
 
@@ -256,6 +258,12 @@ public class LoadConfigFilter implements ExecuteFilter {
 		}
 		else if (type.equalsIgnoreCase("splash")) {
 			return new SplashPage();
+		}
+		else if(type.equalsIgnoreCase("serviceproperty")){
+			return new ServicePropertyPage();
+		}
+		else if(type.equalsIgnoreCase("deployproperty")){
+			return new DeployPropertyPage();
 		}
 		throw new ConfigurationException("Unknown Page type:" + type);
 	}

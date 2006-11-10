@@ -40,7 +40,7 @@ import org.tp23.antinstaller.runtime.exe.AntLauncherFilter;
  * exist for the duration of the Install screens and the runing of
  * the Ant Script. </p>
  * @author Paul Hinds
- * @version $Id: InstallerContext.java,v 1.4 2006-10-27 18:22:11 kumarvi Exp $
+ * @version $Id: InstallerContext.java,v 1.5 2006-11-10 16:58:44 kumarvi Exp $
  */
 public class InstallerContext {
 
@@ -388,9 +388,35 @@ public class InstallerContext {
 		props.put(GRID_ENV_PREFIX+"mysql.host", "localhost");
 		props.put(GRID_ENV_PREFIX+"mysql.home","");
 		
+		initServiceMetaDataProperties(props,"authservice");
+		initServiceMetaDataProperties(props,"cadsr");
+		initServiceMetaDataProperties(props,"dorian");
+		initServiceMetaDataProperties(props,"gme");
+		initServiceMetaDataProperties(props,"gts");
+		
+		
 		
 		
 		return props;
+	}
+	
+	private static void initServiceMetaDataProperties(Properties props,String serviceName){
+		props.put(GRID_ENV_PREFIX+serviceName+".service.display.name","Ohio State University");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.short.name","OSU");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.country","US");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.postal.code","43210");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.province","OH");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.street","333 W. 10th     Ave.");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.rc.affiliation","OSU");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.rc.poc.email","langella@bmi.osu.edu");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.rc.poc.first.name","Stephen");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.rc.poc.last.name","Langella");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.rc.poc.role","Maintainer");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.poc.affiliation","OSU");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.poc.email","langella@bmi.osu.edu");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.poc.first.name","Stephen");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.poc.last.name","Langella");
+		props.put(GRID_ENV_PREFIX+serviceName+".service.poc.role","Maintainer");
 	}
 	
 

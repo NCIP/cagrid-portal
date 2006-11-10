@@ -46,7 +46,7 @@ import javax.swing.border.Border;
  * <p>Copyright: Copyright (c) 2004</p>
  * <p>Company: tp23</p>
  * @author Paul Hinds
- * @version $Id: ProgressIndicator.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: ProgressIndicator.java,v 1.2 2006-11-10 17:04:39 kumarvi Exp $
  */
 public class ProgressIndicator
 	extends JFrame {
@@ -66,7 +66,9 @@ public class ProgressIndicator
 	GridBagLayout gridBagLayout1 = new GridBagLayout();
 	private boolean useIcon = true;
 
-
+    public ProgressIndicator(){
+    	
+    }
 
 	public ProgressIndicator(int max) {
 		this.max = max;
