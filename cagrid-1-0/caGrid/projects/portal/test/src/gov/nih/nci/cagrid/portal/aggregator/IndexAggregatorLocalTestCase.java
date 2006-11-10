@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.portal.aggregator;
 
-import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
+import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTest;
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import org.springframework.scheduling.timer.ScheduledTimerTask;
 import org.springframework.scheduling.timer.TimerFactoryBean;
@@ -16,8 +16,8 @@ import java.util.TimerTask;
  * Time: 9:03:08 PM
  * To change this template use File | Settings | File Templates.
  */
-public class IndexAggregatorTestCase
-        extends BaseSpringDataAccessAbstractTestCase {
+public class IndexAggregatorLocalTestCase
+        extends BaseSpringDataAccessAbstractTest {
 
     /**
      * Will test the index aggregator factory

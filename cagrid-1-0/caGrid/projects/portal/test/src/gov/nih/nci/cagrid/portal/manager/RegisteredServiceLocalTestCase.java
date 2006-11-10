@@ -4,7 +4,7 @@ package gov.nih.nci.cagrid.portal.manager;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
-import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
+import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTest;
 import gov.nih.nci.cagrid.portal.domain.DomainModel;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
@@ -24,7 +24,7 @@ import java.io.FileReader;
  * Time: 11:14:31 AM
  * To change this template use File | Settings | File Templates.
  */
-public class RegisteredServiceLocalTestCase extends BaseSpringDataAccessAbstractTestCase {
+public class RegisteredServiceLocalTestCase extends BaseSpringDataAccessAbstractTest {
 
     private GridServiceManager gridServiceManager;
     private BaseManagerImpl baseManager;

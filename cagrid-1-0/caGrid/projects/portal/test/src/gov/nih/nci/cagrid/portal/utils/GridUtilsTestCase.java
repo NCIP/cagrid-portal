@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.portal.utils;
 
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
-import gov.nih.nci.cagrid.portal.BaseSpringAbstractTestCase;
+import gov.nih.nci.cagrid.portal.BaseSpringAbstractTest;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
 
@@ -12,7 +12,7 @@ import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
  * Time: 6:02:32 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GridUtilsTestCase extends BaseSpringAbstractTestCase {
+public class GridUtilsTestCase extends BaseSpringAbstractTest {
 
     public void testMetadataRetreival() {
 

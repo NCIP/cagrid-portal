@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.portal.dao;
 
-import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
+import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTest;
 import gov.nih.nci.cagrid.portal.domain.PointOfContact;
 import org.springframework.dao.DataAccessException;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * Time: 1:06:07 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PointOfContactDAOLocalTestCase extends BaseSpringDataAccessAbstractTestCase {
+public class PointOfContactDAOLocalTestCase extends BaseSpringDataAccessAbstractTest {
 
     private PointOfContactDAO pocDAO;
 

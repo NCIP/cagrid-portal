@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.portal.manager;
 import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.common.ResearchCenter;
-import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
+import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTest;
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.exception.MetadataRetreivalException;
@@ -23,7 +23,7 @@ import java.util.ListIterator;
  * To change this template use File | Settings | File Templates.
  */
 public class IndexServiceManagerLocalTestCase
-        extends BaseSpringDataAccessAbstractTestCase {
+        extends BaseSpringDataAccessAbstractTest {
     GridServiceManager gridServiceManager;
 
     /**

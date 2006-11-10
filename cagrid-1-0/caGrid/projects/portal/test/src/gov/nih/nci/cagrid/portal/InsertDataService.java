@@ -17,7 +17,7 @@ import java.io.FileReader;
  * Time: 10:03:29 AM
  * To change this template use File | Settings | File Templates.
  */
-public class InsertDataService extends BaseSpringDataAccessAbstractTestCase {
+public class InsertDataService extends BaseSpringDataAccessAbstractTest {
     private GridServiceManager gridServiceManager;
 
     private static final String DOMAIN_XML = "domainModel.xml";

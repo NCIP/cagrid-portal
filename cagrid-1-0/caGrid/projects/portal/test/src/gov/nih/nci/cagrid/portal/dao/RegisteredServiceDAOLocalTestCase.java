@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.portal.dao;
 
-import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
+import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTest;
 import gov.nih.nci.cagrid.portal.domain.Operation;
 import gov.nih.nci.cagrid.portal.domain.RegisteredService;
 import gov.nih.nci.cagrid.portal.exception.RecordNotFoundException;
@@ -13,7 +13,7 @@ import org.apache.axis.types.URI;
  * Time: 12:32:01 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RegisteredServiceDAOLocalTestCase extends BaseSpringDataAccessAbstractTestCase {
+public class RegisteredServiceDAOLocalTestCase extends BaseSpringDataAccessAbstractTest {
 
     private GridServiceBaseDAO gridServiceBaseDAO;
 

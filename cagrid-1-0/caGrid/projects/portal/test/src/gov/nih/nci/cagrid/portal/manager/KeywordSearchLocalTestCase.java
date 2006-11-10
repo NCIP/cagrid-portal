@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.portal.manager;
 
-import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
+import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTest;
 import gov.nih.nci.cagrid.portal.exception.PortalRuntimeException;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  * Time: 12:34:22 AM
  * To change this template use File | Settings | File Templates.
  */
-public class KeywordSearchLocalTestCase extends BaseSpringDataAccessAbstractTestCase {
+public class KeywordSearchLocalTestCase extends BaseSpringDataAccessAbstractTest {
 
     private ResearchCenterManager rcManager;
     private PointOfContactManager pocManager;

@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.portal.dao;
 
-import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
+import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTest;
 import gov.nih.nci.cagrid.portal.domain.PointOfContact;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import org.springframework.dao.DataAccessException;
@@ -14,7 +14,7 @@ import java.util.List;
  * Time: 1:57:39 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ResearchCenterDAOLocalTestCase extends BaseSpringDataAccessAbstractTestCase {
+public class ResearchCenterDAOLocalTestCase extends BaseSpringDataAccessAbstractTest {
 
     private ResearchCenterDAO rcDAO;
     private JdbcDAO jdbcDAO;

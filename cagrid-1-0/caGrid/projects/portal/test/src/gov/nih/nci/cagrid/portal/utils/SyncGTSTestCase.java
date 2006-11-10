@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.portal.utils;
 
-import gov.nih.nci.cagrid.portal.BaseSpringAbstractTestCase;
+import gov.nih.nci.cagrid.portal.BaseSpringAbstractTest;
 import gov.nih.nci.cagrid.portal.exception.PortalInitializationException;
 import org.springframework.core.io.ClassPathResource;
 
@@ -12,7 +12,7 @@ import org.springframework.core.io.ClassPathResource;
  * Time: 10:22:45 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SyncGTSTestCase extends BaseSpringAbstractTestCase {
+public class SyncGTSTestCase extends BaseSpringAbstractTest {
     public void testSync() {
         SyncGTSInitUtility syncBean = new SyncGTSInitUtility();
 

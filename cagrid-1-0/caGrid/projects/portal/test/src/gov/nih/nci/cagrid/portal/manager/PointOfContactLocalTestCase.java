@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.portal.manager;
 
-import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
+import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTest;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * Time: 8:51:37 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PointOfContactLocalTestCase extends BaseSpringDataAccessAbstractTestCase {
+public class PointOfContactLocalTestCase extends BaseSpringDataAccessAbstractTest {
 
 
     private PointOfContactManager pocManager;

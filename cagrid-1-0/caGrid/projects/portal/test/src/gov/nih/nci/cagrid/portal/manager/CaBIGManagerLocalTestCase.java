@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.portal.manager;
 
-import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTestCase;
+import gov.nih.nci.cagrid.portal.BaseSpringDataAccessAbstractTest;
 import gov.nih.nci.cagrid.portal.domain.CaBIGParticipant;
 import gov.nih.nci.cagrid.portal.domain.CaBIGWorkspace;
 
@@ -19,7 +19,7 @@ import java.util.Set;
  * Time: 3:52:49 PM
  * To change this template use File | Settings | File Templates.
  */
-public class CaBIGManagerLocalTestCase extends BaseSpringDataAccessAbstractTestCase {
+public class CaBIGManagerLocalTestCase extends BaseSpringDataAccessAbstractTest {
     private CaBIGWorkspaceManager caBIGManager;
 
     public void testManager() {

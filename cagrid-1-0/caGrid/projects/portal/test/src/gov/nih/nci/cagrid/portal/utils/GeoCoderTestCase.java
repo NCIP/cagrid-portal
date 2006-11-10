@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.portal.utils;
 
 
-import gov.nih.nci.cagrid.portal.BaseSpringAbstractTestCase;
+import gov.nih.nci.cagrid.portal.BaseSpringAbstractTest;
 import gov.nih.nci.cagrid.portal.common.GeoCodeValues;
 import gov.nih.nci.cagrid.portal.domain.ResearchCenter;
 import gov.nih.nci.cagrid.portal.exception.GeoCoderRetreivalException;
@@ -14,7 +14,7 @@ import gov.nih.nci.cagrid.portal.exception.GeoCoderRetreivalException;
  * Time: 12:41:02 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GeoCoderTestCase extends BaseSpringAbstractTestCase {
+public class GeoCoderTestCase extends BaseSpringAbstractTest {
 
     private DomainObjectGeocoder geocoder;
 

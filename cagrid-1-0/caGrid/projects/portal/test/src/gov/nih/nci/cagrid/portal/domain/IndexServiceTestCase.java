@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.portal.domain;
 
-import gov.nih.nci.cagrid.portal.BaseSpringAbstractTestCase;
+import gov.nih.nci.cagrid.portal.BaseSpringAbstractTest;
 
 
 /**
@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.portal.BaseSpringAbstractTestCase;
  * Time: 9:26:11 AM
  * To change this template use File | Settings | File Templates.
  */
-public class IndexServiceTestCase extends BaseSpringAbstractTestCase {
+public class IndexServiceTestCase extends BaseSpringAbstractTest {
     public void testIndexService() {
     }
 }
