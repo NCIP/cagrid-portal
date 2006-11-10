@@ -15,9 +15,13 @@
  */
 package org.tp23.antinstaller.renderer.swing;
 
+import gov.nih.nci.cagrid.antinstaller.utils.InsatllerToolTip;
+
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JTextField;
+import javax.swing.JToolTip;
 import javax.swing.text.Document;
 
 
@@ -25,7 +29,7 @@ import javax.swing.text.Document;
  * A JTextField with altered prefered size to facilitate fixing the width
  * but still using a GridBagLayout
  * @author Paul Hinds
- * @version $Id: AITextfield.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: AITextfield.java,v 1.2 2006-11-10 17:02:58 kumarvi Exp $
  */
 public class AITextfield extends JTextField {
 
@@ -65,6 +69,25 @@ public class AITextfield extends JTextField {
 	public Dimension getMaximumSize() {
 		return prefSize;
 	}
+	
+	/**
+	 * Added by kumarvi
+	 * This is to override the method for creating and using custom tooltip
+	 */
+	
+	public JToolTip createToolTip() {
+        //JToolTip tip = super.createToolTip();
+    	InsatllerToolTip jmp = new InsatllerToolTip();
+    	jmp.setFixedWidth(200);
+    	JToolTip tip = jmp;
+    	
+        tip.setBackground(Color.YELLOW);
+        //Rectangle r = new Rectangle(40,40);
+        //tip.setBounds(r);
+        
+        
+        return tip;
+    }
 
 
 }
