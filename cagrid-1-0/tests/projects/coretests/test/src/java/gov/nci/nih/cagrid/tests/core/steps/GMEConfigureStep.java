@@ -41,7 +41,7 @@ public class GMEConfigureStep
 	public void runStep() throws Throwable
 	{
 		File configFile = new File(globus.getTempGlobusLocation(), 
-			"etc" + File.separator + "GlobalModelExchange" + File.separator + "gme-globus-config.xml"
+			"etc" + File.separator + "cagrid_GlobalModelExchange" + File.separator + "gme-globus-config.xml"
 		);
 		SimpleXmlReplacer replacer = new SimpleXmlReplacer();
 		replacer.addReplacement("username", user);
