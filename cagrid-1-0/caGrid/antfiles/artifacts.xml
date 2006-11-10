@@ -356,6 +356,7 @@
 				<include name="*.jar"/>
 			</fileset>
 		</artifact>
+		
 		<artifact track="main" type="schemas" id="data.cql.schemas">
 			<fileset dir="${projects.dir}/data/schema">
 				<include name="**/*.xsd"/>
@@ -524,6 +525,17 @@
 				<include name="subject-0.2.1.jar"/>
 			</fileset>
 		</artifact>
+		
+		<!-- These are the only jars need to do CSM RDBMS authentication. -->
+		<artifact track="main" type="jars" id="csm.auth.jars">
+			<fileset dir="${projects.dir}/authz/lib">
+				<include name="csmapi.jar"/>
+				<include name="mysql-connector-java-3.1.11-bin.jar"/>
+				<include name="jdom.jar"/>
+				<include name="clm.jar"/>				
+			</fileset>
+		</artifact>
+		
 
 		<!-- Authz uses this as a dependency. If you need to use 
 		Authz in your project, don't use this. Use authz.jars -->		
