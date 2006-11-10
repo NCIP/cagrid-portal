@@ -26,7 +26,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test_interop.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test_interop_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_provider_jce.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" sourcepath="/globussource"/>
+	<classpathentry sourcepath="/globussource" kind="var" path="GT4_LOCATION/lib/wsrf_core.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_samples_mgmt.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_samples_mgmt_stubs.jar"/>
@@ -66,11 +66,11 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commonj.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-tomcat.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar" sourcepath="/GT4_LOCATION/cog-1.2-src.zip"/>
+	<classpathentry sourcepath="/GT4_LOCATION/cog-1.2-src.zip" kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/AXIS_HOME"/>
+	<classpathentry sourcepath="/AXIS_HOME" kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
@@ -89,7 +89,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-opensaml-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-gridca.jar"/>
 	<classpathentry kind="lib" path="ext/lib/csmapi.jar"/>
-	<classpathentry kind="lib" path="ext/lib/spring-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/spring-beans.jar"/>
+	<classpathentry kind="lib" path="lib/spring-core.jar"/>
+	<classpathentry kind="lib" path="lib/spring-beans.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
