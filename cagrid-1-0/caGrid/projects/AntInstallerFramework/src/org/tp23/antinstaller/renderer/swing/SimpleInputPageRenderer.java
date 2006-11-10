@@ -51,7 +51,7 @@ import org.tp23.gui.GBCF;
  * <p>Copyright: Copyright (c) 2004</p>
  * <p>Company: tp23</p>
  * @author Paul Hinds
- * @version $Id: SimpleInputPageRenderer.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: SimpleInputPageRenderer.java,v 1.2 2006-11-10 17:02:01 kumarvi Exp $
  */
 public class SimpleInputPageRenderer
 	extends SwingPageRenderer {
@@ -140,13 +140,20 @@ public class SimpleInputPageRenderer
 		int row = 0;
 		for (int i = 0; i < fields.length; i++) {
 			SwingOutputFieldRenderer renderer = RendererFactory.getSwingRenderer(fields[i]);
-			String text = fields[i].getExplanatoryText();
-			if(fields[i].getExplanatoryText()!=null){
-				JTextArea area = new DisplayTextArea(contentPanel.getBackground(),contentPanel.getForeground());
-				area.setIgnoreRepaint(true);
-				area.setText(text);
-				contentPanel.add(area,cf.getSpan(row++));
-			}
+			/**
+			 * Commented out following section by Kumarvi
+			 */
+			//String text = fields[i].getExplanatoryText();
+			//if(fields[i].getExplanatoryText()!=null){
+				//JTextArea area = new DisplayTextArea(contentPanel.getBackground(),contentPanel.getForeground());
+				//area.setIgnoreRepaint(true);
+				//area.setText(text);
+				//contentPanel.add(area,cf.getSpan(row++));
+			//}
+			
+			/**
+			 * End of comments
+			 */
 			renderer.setOutputField(fields[i]);
 			renderer.setInstallerContext(ctx);
 			renderer.initComponent(contentPanel);
@@ -163,7 +170,7 @@ public class SimpleInputPageRenderer
  * A JTextArea taht is not exditable and looks like a JLabel but uses 
  * JTextAreas ability to wrap.  Also has a fixed prefered width; 
  * @author Paul Hinds
- * @version $Id: SimpleInputPageRenderer.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: SimpleInputPageRenderer.java,v 1.2 2006-11-10 17:02:01 kumarvi Exp $
  */
 class DisplayTextArea extends JTextArea{
 	DisplayTextArea(Color back,Color fore){
