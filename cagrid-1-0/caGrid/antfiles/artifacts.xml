@@ -164,13 +164,8 @@
 				<include name="caGrid-*-authentication-service-*client.jar"/>
 				<include name="caGrid-*-authentication-service-*ui.jar"/>
 			</fileset>
-			<fileset dir="${projects.dir}/authentication-service/lib">
-				<include name="*.jar"/>
-				<exclude name="*test*.jar"/>
-			</fileset>
 			<fileset dir="${projects.dir}/authentication-service/ext/lib">
-				<include name="*.jar"/>
-				<exclude name="*test*.jar"/>
+				<include name="caGrid*.jar"/>
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="gridgrouper.client.jars">
@@ -480,31 +475,21 @@
 				<include name="antlr-2.7.6rc1.jar"/>
 				<include name="c3p0-0.8.5.2.jar"/>
 				<include name="clm.jar"/>
-				<include name="commons-collections-2.1.1.jar"/>
 				<include name="commons-dbcp-1.2.1.jar"/>
 				<include name="commons-lang-1.0.1.jar"/>
-				<include name="commons-logging-1.0.4.jar"/>
 				<include name="csmapi.jar"/>
 				<include name="dom4j-1.6.1.jar"/>
 				<include name="ehcache-1.1.jar"/>
-				
-				<!-- This is 3.1.3. Not the 3.0.2 that's in share/lib/caCORE-->
+				<!-- NOTE: This is still Hibernate 3.1.3 -->
 				<include name="hibernate3.jar"/>
-				
 				<include name="jdom.jar"/>
 				<include name="jta.jar"/>
 				<include name="jtds-1.2.jar"/>
-				<include name="log4j-1.2.9.jar"/>
 				<include name="mysql-connector-java-3.1.11-bin.jar"/>
-				<include name="spring-beans.jar"/>
 				<include name="spring-core.jar"/>
+				<include name="spring-beans.jar"/>				
 			</fileset>
 			<fileset dir="${projects.dir}/authz/ext/lib">
-
-				<include name="asm-2.2.1.jar"/>				
-				<include name="cglib-nodep-2.1_3.jar"/>
-				
-				
 				<include name="caGrid-1.0-core.jar"/>
 				<include name="caGrid-1.0-gridca.jar"/>
 				<include name="caGrid-1.0-gridgrouper-client.jar"/>
@@ -516,6 +501,7 @@
 				<include name="caGrid-1.0-ServiceSecurityProvider-common.jar"/>
 				<include name="caGrid-1.0-ServiceSecurityProvider-service.jar"/>
 				<include name="caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
+				<include name="cglib-nodep-2.1_3.jar"/>
 				<include name="grouper.jar"/>
 				<include name="mobius_common_client.jar"/>
 				<include name="mobius_factories.jar"/>
