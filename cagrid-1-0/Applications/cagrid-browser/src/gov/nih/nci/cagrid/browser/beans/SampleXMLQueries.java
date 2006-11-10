@@ -28,13 +28,16 @@ import java.util.List;
  */
 public class SampleXMLQueries {
 
-    /** Contains xml Queries to be used in the JSF page */
-    private List   xmlQueries = new ArrayList();
+    /**
+     * Contains xml Queries to be used in the JSF page
+     */
+    private List xmlQueries = new ArrayList();
     private String queryFilename;
 
     //~--- constructors -------------------------------------------------------
 
-    public SampleXMLQueries() {}
+    public SampleXMLQueries() {
+    }
 
     //~--- get methods --------------------------------------------------------
 
@@ -52,35 +55,35 @@ public class SampleXMLQueries {
         this.queryFilename = queryFilename;
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        NodeList               queryList;
-        Document               document;
+        NodeList queryList;
+        Document document;
 
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
-            InputStream     stream  =
-                ApplicationCtx.loadResourceAsStream(
-                    queryFilename);
+            InputStream stream =
+                    ApplicationCtx.loadResourceAsStream(
+                            queryFilename);
 
-            document  = builder.parse(stream);
+            document = builder.parse(stream);
             queryList = document.getElementsByTagName("caBIGXMLQuery");
 
             for (int i = 0; i < queryList.getLength(); i++) {
-                Element  queryElem = (Element) queryList.item(i);
-                String   name      = queryElem.getAttribute("name")
-                                     + " Sample Query";
-                XMLQuery query     = new XMLQuery(name, queryElem);
+                Element queryElem = (Element) queryList.item(i);
+                String name = queryElem.getAttribute("name")
+                        + " Sample Query";
+                XMLQuery query = new XMLQuery(name, queryElem);
 
                 this.xmlQueries.add(query);
             }
         } catch (ParserConfigurationException e) {
             ApplicationCtx.getAppLogger().severe(
-                "Error parsing example queries file. Please check faces-config.xml");
+                    "Error parsing example queries file. Please check faces-config.xml");
         } catch (SAXException e) {
             ApplicationCtx.getAppLogger().severe(
-                "Error parsing example queries file. Please check faces-config.xml");
+                    "Error parsing example queries file. Please check faces-config.xml");
         } catch (IOException e) {
             ApplicationCtx.getAppLogger().severe(
-                "Error parsing example queries file. Please check faces-config.xml");
+                    "Error parsing example queries file. Please check faces-config.xml");
         }
     }
 
@@ -88,6 +91,5 @@ public class SampleXMLQueries {
         this.xmlQueries = xmlQueries;
     }
 }
-
 
 //~ Formatted by Jindent --- http://www.jindent.com

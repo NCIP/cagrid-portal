@@ -31,10 +31,10 @@ public class AutoCompleteDiscoveryServlet extends HttpServlet {
 
     //~--- fields -------------------------------------------------------------
 
-    private ServletContext      context;
+    private ServletContext context;
     private FacesContextFactory facesContextFactory;
-    private Lifecycle           lifecycle;
-    private ServletConfig       servletConfig;
+    private Lifecycle lifecycle;
+    private ServletConfig servletConfig;
 
     //~--- methods ------------------------------------------------------------
 
@@ -42,9 +42,9 @@ public class AutoCompleteDiscoveryServlet extends HttpServlet {
         super.destroy();
 
         facesContextFactory = null;
-        lifecycle           = null;
-        servletConfig       = null;
-        context             = null;
+        lifecycle = null;
+        servletConfig = null;
+        context = null;
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -52,11 +52,11 @@ public class AutoCompleteDiscoveryServlet extends HttpServlet {
 
         // Acquire the FacesContext instance for this request
         FacesContext context = facesContextFactory.getFacesContext(
-                                   servletConfig.getServletContext(), request,
-                                   response, lifecycle);
+                servletConfig.getServletContext(), request,
+                response, lifecycle);
         DiscoveryCompletetionBean application =
-            (DiscoveryCompletetionBean) getBean(context,
-                "DiscoveryCompletetionBean");
+                (DiscoveryCompletetionBean) getBean(context,
+                        "DiscoveryCompletetionBean");
 
         if (application == null) {
             log("DiscoveryCompletionBean not found!");
@@ -64,14 +64,14 @@ public class AutoCompleteDiscoveryServlet extends HttpServlet {
             return;
         }
 
-        String       action     = request.getParameter("action");
-        String       targetId   = request.getParameter("id");
-        StringBuffer sb         = new StringBuffer();
-        boolean      namesAdded = false;
+        String action = request.getParameter("action");
+        String targetId = request.getParameter("id");
+        StringBuffer sb = new StringBuffer();
+        boolean namesAdded = false;
 
         if ("complete".equals(action)) {
             String[] keywords = application.getKeywords();
-            int      index;
+            int index;
 
             if (targetId.length() > 0) {
                 index = findClosestIndex(keywords, targetId, true);
@@ -122,8 +122,8 @@ public class AutoCompleteDiscoveryServlet extends HttpServlet {
 
     public int findClosestIndex(String[] data, String key,
                                 boolean ignoreCase) {
-        int low    = 0;
-        int high   = data.length - 1;
+        int low = 0;
+        int high = data.length - 1;
         int middle = -1;
 
         while (high > low) {
@@ -153,12 +153,12 @@ public class AutoCompleteDiscoveryServlet extends HttpServlet {
 
     public void init(ServletConfig config) throws ServletException {
         this.servletConfig = config;
-        this.context       = config.getServletContext();
+        this.context = config.getServletContext();
 
         try {
             facesContextFactory =
-                (FacesContextFactory) FactoryFinder.getFactory(
-                    FactoryFinder.FACES_CONTEXT_FACTORY);
+                    (FacesContextFactory) FactoryFinder.getFactory(
+                            FactoryFinder.FACES_CONTEXT_FACTORY);
         } catch (FacesException e) {
             Throwable rootCause = e.getCause();
 
@@ -171,11 +171,11 @@ public class AutoCompleteDiscoveryServlet extends HttpServlet {
 
         try {
             LifecycleFactory lifecycleFactory =
-                (LifecycleFactory) FactoryFinder.getFactory(
-                    FactoryFinder.LIFECYCLE_FACTORY);
+                    (LifecycleFactory) FactoryFinder.getFactory(
+                            FactoryFinder.LIFECYCLE_FACTORY);
             String lifecycleId =
-                servletConfig.getServletContext().getInitParameter(
-                    FacesServlet.LIFECYCLE_ID_ATTR);
+                    servletConfig.getServletContext().getInitParameter(
+                            FacesServlet.LIFECYCLE_ID_ATTR);
 
             if (lifecycleId == null) {
                 lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
@@ -197,9 +197,8 @@ public class AutoCompleteDiscoveryServlet extends HttpServlet {
 
     protected Object getBean(FacesContext context, String name) {
         return context.getApplication().getVariableResolver().resolveVariable(
-            context, name);
+                context, name);
     }
 }
-
 
 //~ Formatted by Jindent --- http://www.jindent.com

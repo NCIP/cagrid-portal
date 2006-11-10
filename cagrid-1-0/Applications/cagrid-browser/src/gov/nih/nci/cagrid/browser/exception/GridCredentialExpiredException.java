@@ -8,7 +8,8 @@ package gov.nih.nci.cagrid.browser.exception;
  * To change this template use File | Settings | File Templates.
  */
 public class GridCredentialExpiredException extends Exception {
-    public GridCredentialExpiredException() {}
+    public GridCredentialExpiredException() {
+    }
 
     public GridCredentialExpiredException(String message) {
         super(message);
@@ -18,6 +19,5 @@ public class GridCredentialExpiredException extends Exception {
         super(message, cause);
     }
 }
-
 
 //~ Formatted by Jindent --- http://www.jindent.com

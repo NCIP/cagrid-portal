@@ -23,11 +23,11 @@ public class DiscoveryCompletetionBean {
     //~--- methods ------------------------------------------------------------
 
     public void initializeDiscoveryKeywords() {
-        keywords = new String[] {
-            "Analytical Service Name", "Data Service Name", "EVS Concept",
-            "Object Attribute", "Object Association", "Object-Class",
-            "Object Model", "Research Center Fax", "Research Center Name",
-            "Research Center POC", "Research Center Type",
+        keywords = new String[]{
+                "Analytical Service Name", "Data Service Name", "EVS Concept",
+                "Object Attribute", "Object Association", "Object-Class",
+                "Object Model", "Research Center Fax", "Research Center Name",
+                "Research Center POC", "Research Center Type",
         };
     }
 
@@ -43,6 +43,5 @@ public class DiscoveryCompletetionBean {
         this.keywords = keywords;
     }
 }
-
 
 //~ Formatted by Jindent --- http://www.jindent.com

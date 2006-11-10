@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN" "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+<!DOCTYPE faces-config PUBLIC
+        "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+        "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+
 <faces-config>
     <application>
         <locale-config>
@@ -26,9 +30,139 @@
         </navigation-case>
     </navigation-rule>
 
-   <!-- Generic Error page forward -->
+
+    <!-- Managed Beans -->
+    <managed-bean>
+        <managed-bean-name>CaGridService</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.CaGridService</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>discoveryResult</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.DiscoveredServices</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <!-- Index Service Bean -->
+    <managed-bean>
+        <managed-bean-name>indexService</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.IndexService</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <!-- Index Services to use. 1st is the default -->
+        <managed-property>
+            <property-name>indexList</property-name>
+            <list-entries>
+                <value>http://cagrid04.bmi.ohio-state.edu:7080/wsrf/services/DefaultIndexService</value>
+                <value>http://cagrid-registry-qa.nci.nih.gov/ogsa/services/cagrid/IndexService</value>
+            </list-entries>
+        </managed-property>
+    </managed-bean>
+
+
+    <managed-bean>
+        <managed-bean-name>keywordDiscoveryBean</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.KeywordSearchCriteria</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <property-name>discoveryResult</property-name>
+            <property-class>gov.nih.nci.cagrid.browser.beans.DiscoveredServices</property-class>
+            <value>#{discoveryResult}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>idxService</property-name>
+            <property-class>gov.nih.nci.cagrid.browser.beans.IndexService</property-class>
+            <value>#{indexService}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>serviceCart</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.ServiceCart</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>
+            browserConfig
+        </managed-bean-name>
+        <managed-bean-class>
+            gov.nih.nci.cagrid.browser.beans.BrowserConfig
+        </managed-bean-class>
+        <managed-bean-scope>
+            session
+        </managed-bean-scope>
+        <managed-property>
+            <property-name>caCOREServiceURL</property-name>
+            <value>http://cabio.nci.nih.gov/cacore30/server/HTTPServer</value>
+        </managed-property>
+        <managed-property>
+            <property-name>indexService</property-name>
+            <property-class>gov.nih.nci.cagrid.browser.beans.IndexService</property-class>
+            <value>#{indexService}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>
+            loginBean
+        </managed-bean-name>
+        <managed-bean-class>
+            gov.nih.nci.cagrid.browser.beans.GridLoginServices
+        </managed-bean-class>
+        <managed-bean-scope>
+            session
+        </managed-bean-scope>
+        <managed-property>
+            <property-name>gumsURL</property-name>
+            <value>http://cagrid-security.nci.nih.gov/ogsa/services/cagrid/gums</value>
+        </managed-property>
+        <!-- This the guest username password a user will use to login as guest
+        on the cagrid-browser application -->
+        <managed-property>
+            <property-name>guestUsername</property-name>
+            <value>guest</value>
+        </managed-property>
+        <managed-property>
+            <property-name>guestPassword</property-name>
+            <value>guest</value>
+        </managed-property>
+        <!-- The guest login will MAP TO this grid username and password -->
+        <managed-property>
+            <property-name>guestUsernameMapsTo</property-name>
+            <value>wuru</value>
+        </managed-property>
+        <managed-property>
+            <property-name>guestPasswordMapsTo</property-name>
+            <value>cagrid</value>
+        </managed-property>
+        <!-- Proxy valid by default for 2 hours. Can be configured to any number of hours (360 days max) -->
+        <managed-property>
+            <property-name>proxyValidTime</property-name>
+            <value>12</value>
+        </managed-property>
+    </managed-bean>
+
+
+    <managed-bean>
+        <managed-bean-name>sampleQueriesBean</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.SampleXMLQueries</managed-bean-class>
+        <managed-property>
+            <property-name>queryFilename</property-name>
+            <value>/examples/queryExamples.xml</value>
+        </managed-property>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>DiscoveryCompletetionBean</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.ajax.DiscoveryCompletetionBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+
+    <!-- Generic Error page forward -->
     <navigation-rule>
-        <from-action>*</from-action>
         <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>failed</from-outcome>
@@ -39,12 +173,13 @@
 
     <navigation-rule>
         <from-view-id>/RegisterNewUser_noLogin.tiles</from-view-id>
-        <from-action>#{loginBean.doRegister}</from-action>
         <navigation-case>
+            <from-action>#{loginBean.doRegister}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/RegisterNewUserConfirmation_noLogin.tiles</to-view-id>
         </navigation-case>
         <navigation-case>
+            <from-action>#{loginBean.doRegister}</from-action>
             <from-outcome>failed</from-outcome>
             <to-view-id>/Error_RegistrationException_noLogin.tiles</to-view-id>
         </navigation-case>
@@ -80,21 +215,6 @@
             <from-action>#{loginBean.doLogout}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/PreLogin.tiles</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-
-
-    <navigation-rule>
-        <from-view-id>/Discovery.tiles</from-view-id>
-        <navigation-case>
-            <from-action>#{keywordDiscoveryBean.doDiscovery}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/DiscoveryResults.tiles</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{keywordDiscoveryBean.doDiscoveryAll}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/DiscoveryResults.tiles</to-view-id>
         </navigation-case>
     </navigation-rule>
 
@@ -203,6 +323,12 @@
 
     <!-- Generic Rule applies to ALL forms -->
     <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-action>navigateToServiceDetails</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/GSH.tiles</to-view-id>
+        </navigation-case>
         <navigation-case>
             <from-outcome>navigateToGDSF</from-outcome>
             <to-view-id>/GDSF.tiles</to-view-id>
@@ -211,182 +337,19 @@
             <from-outcome>navigateToGSH</from-outcome>
             <to-view-id>/GSH.tiles</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-action>#{keywordDiscoveryBean.doDiscovery}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/DiscoveryResults.tiles</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{keywordDiscoveryBean.doDiscoveryAll}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/DiscoveryResults.tiles</to-view-id>
+        </navigation-case>
     </navigation-rule>
 
     <!-- End navigation rules -->
-
-
-    <!-- Managed Beans -->
-
-
-    <managed-bean>
-        <managed-bean-name>discoveredServices</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.DiscoveredServices</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-
-    </managed-bean>
-
-
-
-    <managed-bean>
-        <managed-bean-name>
-            keywordDiscoveryBean
-        </managed-bean-name>
-        <managed-bean-class>
-            gov.nih.nci.cagrid.browser.beans.KeywordSearchCriteria
-        </managed-bean-class>
-        <managed-bean-scope>
-            session
-        </managed-bean-scope>
-        <managed-property>
-            <property-name>browserConfig</property-name>
-            <property-class>gov.nih.nci.cagrid.browser.beans.BrowserConfig</property-class>
-            <value>#{browserConfig}</value>
-        </managed-property>
-        <managed-property>
-            <property-name>services</property-name>
-            <property-class>gov.nih.nci.cagrid.browser.beans.DiscoveredServices</property-class>
-            <value>#{discoveredServices}</value>
-        </managed-property>
-    </managed-bean>
-
-    <managed-bean>
-        <managed-bean-name>
-            serviceCart
-        </managed-bean-name>
-        <managed-bean-class>
-            gov.nih.nci.cagrid.browser.beans.ServiceCart
-        </managed-bean-class>
-        <managed-bean-scope>
-            session
-        </managed-bean-scope>
-    </managed-bean>
-
-
-
-    <managed-bean>
-        <managed-bean-name>
-            browserConfig
-        </managed-bean-name>
-        <managed-bean-class>
-            gov.nih.nci.cagrid.browser.beans.BrowserConfig
-        </managed-bean-class>
-        <managed-bean-scope>
-            session
-        </managed-bean-scope>
-        <managed-property>
-            <property-name>caCOREServiceURL</property-name>
-            <value>http://cabio.nci.nih.gov/cacore30/server/HTTPServer</value>
-        </managed-property>
-        <managed-property>
-            <property-name>indexService</property-name>
-            <property-class>gov.nih.nci.cagrid.browser.beans.IndexService</property-class>
-            <value>#{indexService}</value>
-        </managed-property>
-    </managed-bean>
-
-    <managed-bean>
-        <managed-bean-name>
-            loginBean
-        </managed-bean-name>
-        <managed-bean-class>
-            gov.nih.nci.cagrid.browser.beans.GridLoginServices
-        </managed-bean-class>
-        <managed-bean-scope>
-            session
-        </managed-bean-scope>
-        <managed-property>
-            <property-name>gumsURL</property-name>
-            <value>http://cagrid-security.nci.nih.gov/ogsa/services/cagrid/gums</value>
-        </managed-property>
-        <!-- This the guest username password a user will use to login as guest
-        on the cagrid-browser application -->
-        <managed-property>
-            <property-name>guestUsername</property-name>
-            <value>guest</value>
-        </managed-property>
-        <managed-property>
-            <property-name>guestPassword</property-name>
-            <value>guest</value>
-        </managed-property>
-        <!-- The guest login will MAP TO this grid username and password -->
-        <managed-property>
-            <property-name>guestUsernameMapsTo</property-name>
-            <value>wuru</value>
-        </managed-property>
-        <managed-property>
-            <property-name>guestPasswordMapsTo</property-name>
-            <value>cagrid</value>
-        </managed-property>
-        <!-- Proxy valid by default for 2 hours. Can be configured to any number of hours (360 days max) -->
-        <managed-property>
-            <property-name>proxyValidTime</property-name>
-            <value>12</value>
-        </managed-property>
-    </managed-bean>
-
-
-
-
-    <!-- Index Service Bean -->
-    <managed-bean>
-        <managed-bean-name>
-            indexService
-        </managed-bean-name>
-        <managed-bean-class>
-            gov.nih.nci.cagrid.browser.beans.IndexService
-        </managed-bean-class>
-        <managed-bean-scope>
-            session
-        </managed-bean-scope>
-        <!-- Default index to use -->
-        <managed-property>
-            <property-name>url</property-name>
-            <value>http://cagrid-registry.nci.nih.gov/ogsa/services/cagrid/IndexService</value>
-        </managed-property>
-        <!-- Alternative index services available -->
-        <managed-property>
-            <property-name>indexList</property-name>
-            <list-entries>
-                <value>http://156.40.135.120:8080/ogsa/services/cagrid/IndexService</value>
-                <value>http://cagrid-registry-qa.nci.nih.gov/ogsa/services/cagrid/IndexService</value>
-            </list-entries>
-        </managed-property>
-    </managed-bean>
-
-
-    <managed-bean>
-        <managed-bean-name>sampleQueriesBean</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.SampleXMLQueries</managed-bean-class>
-        <managed-property>
-            <property-name>queryFilename</property-name>
-            <value>/examples/queryExamples.xml</value>
-        </managed-property>
-        <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
-
-    <managed-bean>
-        <managed-bean-name>DiscoveryCompletetionBean</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.browser.ajax.DiscoveryCompletetionBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
-
-    <managed-bean>
-        <managed-bean-name>queryWizard</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.browser.tree.beans.QueryWizardTreeBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-        <managed-property>
-            <property-name>modelLoader</property-name>
-            <property-class>gov.nih.nci.cagrid.browser.tree.util.TreeModelLoader</property-class>
-            <value>#{modelLoader}</value>
-        </managed-property>
-    </managed-bean>
-
-    <managed-bean>
-        <managed-bean-name>modelLoader</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.browser.tree.util.BrowserTreeModelLoader</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
 
 
 </faces-config>

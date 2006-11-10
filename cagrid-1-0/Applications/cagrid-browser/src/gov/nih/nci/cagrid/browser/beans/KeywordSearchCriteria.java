@@ -1,19 +1,14 @@
 package gov.nih.nci.cagrid.browser.beans;
 
-//~--- non-JDK imports --------------------------------------------------------
 
-import gov.nih.nci.cagrid.browser.util.ASDiscoveryUtil;
-import gov.nih.nci.cagrid.browser.util.ApplicationCtx;
-import gov.nih.nci.cagrid.browser.util.DSDiscoveryUtil;
-import gov.nih.nci.cagrid.browser.util.GenericDiscoveryUtil;
-import gov.nih.nci.cagrid.common.client.DiscoveryClient;
+import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
 
+import javax.faces.FacesException;
 import javax.faces.model.SelectItem;
-import java.util.Calendar;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
-//~--- classes ----------------------------------------------------------------
 
 /**
  * Created by the caGrid Team
@@ -23,275 +18,135 @@ import java.util.Set;
  * To change this template use File | Settings | File Templates.
  */
 public class KeywordSearchCriteria {
-    private final static String META_DATA_ITEMS_ALL           = "All";
-    private final static String META_DATA_ITEMS_OBJECT_CLASS  = "Object Class";
-    private final static String META_DATA_ITEMS_EVS_CONCEPT   = "EVS Concept";
-    private final static String META_DATA_ITEMS_RC_INFO       =
-            "Research Center";
-    private final static String SERVICE_TYPE_ITEMS_ALL        = "All";
-    private final static String SERVICE_TYPE_ITEMS_DATA       =
-            "Data Services";
-    private final static String SERVICE_TYPE_ITEMS_ANALYTICAL =
-            "Analytical Services";
-    private static SelectItem[] metaDataItems =
-            new SelectItem[] {
-                    new SelectItem(KeywordSearchCriteria.META_DATA_ITEMS_ALL),
-                    new SelectItem(KeywordSearchCriteria.META_DATA_ITEMS_EVS_CONCEPT),
-                    new SelectItem(KeywordSearchCriteria.META_DATA_ITEMS_OBJECT_CLASS),
-                    new SelectItem(KeywordSearchCriteria.META_DATA_ITEMS_RC_INFO), };
-    private static SelectItem[] serviceTypeItems =
-            new SelectItem[] {
-                    new SelectItem(KeywordSearchCriteria.SERVICE_TYPE_ITEMS_ALL),
-                    new SelectItem(KeywordSearchCriteria.SERVICE_TYPE_ITEMS_DATA),
-                    new SelectItem(
-                            KeywordSearchCriteria.SERVICE_TYPE_ITEMS_ANALYTICAL), };
 
-    //~--- fields -------------------------------------------------------------
+    private String META_DATA_ITEMS_OBJECT_CLASS = "Object Class";
+    private String META_DATA_ITEMS_EVS_CONCEPT = "EVS Concept";
+    private String META_DATA_ITEMS_RC_INFO = "Research Center";
 
-    private String[]           metaDataCategories    = null;
-    private String[]           serviceTypeCategories = null;
-    private BrowserConfig      browserConfig;
-    private String             keyword;
-    private DiscoveredServices services;
 
-    //~--- constructors -------------------------------------------------------
+    private String SERVICE_TYPE_ITEMS_DATA = "Data Services";
+    private String SERVICE_TYPE_ITEMS_ANALYTICAL = "Analytical Services";
 
-    public KeywordSearchCriteria() {}
+    List metaDataCategories = new ArrayList();
+    List metaDataCategoryItems = new ArrayList();
+
+
+    List serviceTypeCategories = new ArrayList();
+    List serviceTypeCategoryItems = new ArrayList();
+
+    private DiscoveredServices discoveryResult;
+    private IndexService idxService;
+
+
+    private String keyword;
+
+    public KeywordSearchCriteria() {
+
+        metaDataCategoryItems.add(new SelectItem(META_DATA_ITEMS_EVS_CONCEPT));
+        metaDataCategoryItems.add(new SelectItem(META_DATA_ITEMS_OBJECT_CLASS));
+        metaDataCategoryItems.add(new SelectItem(META_DATA_ITEMS_RC_INFO));
+        metaDataCategories.add(META_DATA_ITEMS_EVS_CONCEPT);
+        metaDataCategories.add(META_DATA_ITEMS_OBJECT_CLASS);
+        metaDataCategories.add(META_DATA_ITEMS_RC_INFO);
+
+        serviceTypeCategoryItems.add(new SelectItem(SERVICE_TYPE_ITEMS_DATA));
+        serviceTypeCategoryItems.add(new SelectItem(SERVICE_TYPE_ITEMS_ANALYTICAL));
+        serviceTypeCategories.add(SERVICE_TYPE_ITEMS_DATA);
+        serviceTypeCategories.add(SERVICE_TYPE_ITEMS_ANALYTICAL);
+    }
 
     //~--- methods ------------------------------------------------------------
 
     public Set discoverAS4Keyword() {
 
         /* do a new discovery */
-        IndexService    index           = browserConfig.getIndexService();
-        ASDiscoveryUtil analDiscUtil    = new ASDiscoveryUtil(index);
-        LinkedHashSet             discoveryResult = new LinkedHashSet();
 
-        /* If no metadata category selected then do a goodle type search */
-        if (metaDataCategories.length < 1) {
-            discoveryResult.addAll(
-                    analDiscUtil.getServicesFromKeyword(this.keyword));
-        }
-
-        for (int i = 0; i < metaDataCategories.length; i++) {
-            if (metaDataCategories[i].equals(
-                    KeywordSearchCriteria.META_DATA_ITEMS_ALL)) {
-                discoveryResult.addAll(
-                        analDiscUtil.getServicesFromKeyword(this.keyword));
-            } else if (metaDataCategories[i].equals(
-                    KeywordSearchCriteria.META_DATA_ITEMS_OBJECT_CLASS)) {
-                discoveryResult.addAll(
-                        analDiscUtil.getServicesFromObjectClass(this.keyword));
-            } else if (metaDataCategories[i].equals(
-                    KeywordSearchCriteria.META_DATA_ITEMS_EVS_CONCEPT)) {
-                discoveryResult.addAll(
-                        analDiscUtil.getServicesFromEVSConcept(this.keyword));
-            } else if (metaDataCategories[i].equals(
-                    KeywordSearchCriteria.META_DATA_ITEMS_RC_INFO)) {}
-        }    // end for metadata categories
-
-        return discoveryResult;
+        return null;
     }
 
-    private Set discoverAllServices4Keyword() {
+    /**
+     * Discover all services based on a keyboard
+     */
+    private void doDiscovery4Keyword() throws Exception {
 
-        /* do a new discovery */
-        IndexService         index                =
-                browserConfig.getIndexService();
-        GenericDiscoveryUtil genericDiscoveryUtil =
-                new GenericDiscoveryUtil(index);
-        DSDiscoveryUtil dataDiscUtil    = new DSDiscoveryUtil(index);
-        LinkedHashSet             discoveryResult = new LinkedHashSet();
-
-        /* If no metadata category selected then do a goodle type search */
-        if (metaDataCategories.length < 1) {
-            discoveryResult.addAll(
-                    genericDiscoveryUtil.getServicesFromKeyword(this.keyword));
-        }
-
-        for (int i = 0; i < metaDataCategories.length; i++) {
-            if (metaDataCategories[i].equals(
-                    KeywordSearchCriteria.META_DATA_ITEMS_ALL)) {
-                discoveryResult.addAll(
-                        genericDiscoveryUtil.getServicesFromKeyword(this.keyword));
-                        break;
-            } else if (metaDataCategories[i].equals(
-                    KeywordSearchCriteria.META_DATA_ITEMS_OBJECT_CLASS)) {
-                discoveryResult.addAll(
-                        dataDiscUtil.getServicesFromObjectClass(this.keyword));
-            } else if (metaDataCategories[i].equals(
-                    KeywordSearchCriteria.META_DATA_ITEMS_EVS_CONCEPT)) {
-                discoveryResult.addAll(
-                        dataDiscUtil.getServicesFromEVSConcept(this.keyword));
-            } else if (metaDataCategories[i].equals(
-                    KeywordSearchCriteria.META_DATA_ITEMS_RC_INFO)) {
-                discoveryResult.addAll(
-                        genericDiscoveryUtil.getServicesFromRCInfo(this.keyword));
-            }
-        }    // end for metadata categories
-
-        return discoveryResult;
     }
 
-    public Set discoverDS4Keyword() {
 
-        /* do a new discovery */
-        IndexService    index           = browserConfig.getIndexService();
-        DSDiscoveryUtil dataDiscUtil    = new DSDiscoveryUtil(index);
-        LinkedHashSet             discoveryResult = new LinkedHashSet();
-
-        /* If no metadata category selected then do a goodle type search on ALL metadata categories */
-        if (metaDataCategories.length < 1) {
-            discoveryResult.addAll(
-                    dataDiscUtil.getServicesFromKeyword(this.keyword));
-
+    public String doDiscoveryAll() throws FacesException {
+        try {
+            DiscoveryClient discClient = idxService.getDiscClient();
+            discoveryResult.clear();
+            discoveryResult.addDiscoveryResult(discClient.getAllServices(false));
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new FacesException(e);
         }
-
-
-        for (int i = 0; i < metaDataCategories.length; i++) {
-            if (metaDataCategories[i].equals(
-                    KeywordSearchCriteria.META_DATA_ITEMS_ALL)) {
-                discoveryResult.addAll(
-                        dataDiscUtil.getServicesFromKeyword(this.keyword));
-                    break;
-            } else if (metaDataCategories[i].equals(
-                    KeywordSearchCriteria.META_DATA_ITEMS_OBJECT_CLASS)) {
-                discoveryResult.addAll(
-                        dataDiscUtil.getServicesFromObjectClass(this.keyword));
-            } else if (metaDataCategories[i].equals(
-                    KeywordSearchCriteria.META_DATA_ITEMS_EVS_CONCEPT)) {
-                discoveryResult.addAll(
-                        dataDiscUtil.getServicesFromEVSConcept(this.keyword));
-            } else if (metaDataCategories[i].equals(
-                    KeywordSearchCriteria.META_DATA_ITEMS_RC_INFO)) {}
-        }    // end for metadata categories
-
-        return discoveryResult;
-    }
-
-    public String doDiscoveryAll(){
-
-        /* clear the preivous resultset * */
-        services.removeAll();
-
-        LinkedHashSet discoveryResult = new LinkedHashSet();
-
-        IndexService         index                =
-                browserConfig.getIndexService();
-        GenericDiscoveryUtil genericDiscoveryUtil =
-                new GenericDiscoveryUtil(index);
-        DiscoveryClient discClient = genericDiscoveryUtil.getDiscoveryClient();
-
-
-        discoveryResult.addAll(discClient.getAllServices());
-
-        if (discoveryResult == null) {
-            ApplicationCtx.getAppLogger().info(
-                    "Null discovery resultset from "
-                            + browserConfig.getIndexService() + " at "
-                            + Calendar.getInstance().getTime());
-        } else {
-
-            /** Only do this once for entire discovered resultset */
-            services.addAll(GenericDiscoveryUtil.getGSH(discoveryResult));
-        }
-
         return "success";
     }
 
     public String doDiscovery() {
-        LinkedHashSet discoveryResult = new LinkedHashSet();
-
-        /* clear the preivous resultset * */
-        services.removeAll();
-
-        /* Is no specific service type is selected then search ALL */
-        if (serviceTypeCategories.length < 1) {
-            discoveryResult.addAll(discoverAllServices4Keyword());
-        }    // end if service type
-
-        else {
-            for (int j = 0; j < serviceTypeCategories.length; j++) {
-                if (serviceTypeCategories[j].equals(
-                        KeywordSearchCriteria.SERVICE_TYPE_ITEMS_ALL)) {
-                    discoveryResult.addAll(discoverAllServices4Keyword());
-                } else if (serviceTypeCategories[j].equals(
-                        KeywordSearchCriteria.SERVICE_TYPE_ITEMS_DATA)) {
-                    discoveryResult.addAll(discoverDS4Keyword());
-                } else if (serviceTypeCategories[j].equals(
-                        KeywordSearchCriteria.SERVICE_TYPE_ITEMS_ANALYTICAL)) {
-                    discoveryResult.addAll(discoverAS4Keyword());
-                }
-            }    // end for service types
-        }
-
-        if (discoveryResult == null) {
-            ApplicationCtx.getAppLogger().info(
-                    "Null discovery resultset from "
-                            + browserConfig.getIndexService() + " at "
-                            + Calendar.getInstance().getTime());
-        } else {
-
-            /** Only do this once for entire discovered resultset */
-
-            services.addAll(GenericDiscoveryUtil.getGSH(discoveryResult));
-        }
 
         return "success";
     }
 
-    //~--- get methods --------------------------------------------------------
 
-    public BrowserConfig getBrowserConfig() {
-        return browserConfig;
+    public List getMetaDataCategories() {
+        return metaDataCategories;
+    }
+
+    public void setMetaDataCategories(List metaDataCategories) {
+        this.metaDataCategories = metaDataCategories;
+    }
+
+    public List getMetaDataCategoryItems() {
+        return metaDataCategoryItems;
+    }
+
+    public void setMetaDataCategoryItems(List metaDataCategoryItems) {
+        this.metaDataCategoryItems = metaDataCategoryItems;
+    }
+
+    public List getServiceTypeCategories() {
+        return serviceTypeCategories;
+    }
+
+    public void setServiceTypeCategories(List serviceTypeCategories) {
+        this.serviceTypeCategories = serviceTypeCategories;
+    }
+
+    public List getServiceTypeCategoryItems() {
+        return serviceTypeCategoryItems;
+    }
+
+    public void setServiceTypeCategoryItems(List serviceTypeCategoryItems) {
+        this.serviceTypeCategoryItems = serviceTypeCategoryItems;
     }
 
     public String getKeyword() {
         return keyword;
     }
 
-    public String[] getMetaDataCategories() {
-        return metaDataCategories;
+    public IndexService getIdxService() {
+        return idxService;
     }
 
-    public SelectItem[] getMetaDataItems() {
-        return metaDataItems;
+    public void setIdxService(IndexService idxService) {
+        this.idxService = idxService;
     }
 
-    public String[] getServiceTypeCategories() {
-        return serviceTypeCategories;
+    public DiscoveredServices getDiscoveryResult() {
+        return discoveryResult;
     }
 
-    public SelectItem[] getServiceTypeItems() {
-        return serviceTypeItems;
-    }
-
-    public DiscoveredServices getServices() {
-        return services;
-    }
-
-    //~--- set methods --------------------------------------------------------
-
-    public void setBrowserConfig(BrowserConfig browserConfig) {
-        this.browserConfig = browserConfig;
+    public void setDiscoveryResult(DiscoveredServices discoveryResult) {
+        this.discoveryResult = discoveryResult;
     }
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
     }
 
-    public void setMetaDataCategories(String[] metaDataCategories) {
-        this.metaDataCategories = metaDataCategories;
-    }
 
-    public void setServiceTypeCategories(String[] serviceTypeCategories) {
-        this.serviceTypeCategories = serviceTypeCategories;
-    }
-
-    public void setServices(DiscoveredServices services) {
-        this.services = services;
-    }
 }
-
 
 //~ Formatted by Jindent --- http://www.jindent.com

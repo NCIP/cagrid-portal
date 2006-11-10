@@ -18,7 +18,7 @@ import javax.faces.event.PhaseListener;
  */
 public class LoggedInCheck implements PhaseListener {
     public void afterPhase(PhaseEvent phaseEvent) {
-         FacesContext fc = phaseEvent.getFacesContext();
+        FacesContext fc = phaseEvent.getFacesContext();
 
         // Check to see if they are on the login page.
         boolean loginPage = fc.getViewRoot().getViewId().lastIndexOf("Login") > -1;
@@ -28,8 +28,8 @@ public class LoggedInCheck implements PhaseListener {
 
 
         GridLoginServices appLogin =
-                        (GridLoginServices) ApplicationCtx.getBean(
-                                "#{loginBean}");
+                (GridLoginServices) ApplicationCtx.getBean(
+                        "loginBean");
 
         if (!loginPage && !appLogin.isUserLoggedIn() && !jsPage && !gifPage && !cssPage) {
             NavigationHandler nh = fc.getApplication().getNavigationHandler();
@@ -42,7 +42,7 @@ public class LoggedInCheck implements PhaseListener {
     }
 
     public PhaseId getPhaseId() {
-         return PhaseId.RESTORE_VIEW;
+        return PhaseId.RESTORE_VIEW;
     }
 
 

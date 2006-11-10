@@ -11,109 +11,56 @@
 
 <f:loadBundle basename="labels" var="labels"/>
 <f:loadBundle basename="messages" var="messages"/>
-<f:view locale="#{browserConfig.locale}">
+
+<f:subview id="discoveryResults">
+    <h:form id="serviceDetails">
+
+        <h:panelGrid border="1" cellpadding="0" cellspacing="0"
+                     columns="1" headerClass="formHeader">
+            <f:facet name="header">
+                <h:outputText value="#{messages.resultTitle}"/>
+            </f:facet>
 
 
-<h:form>
-    <!-- Discovery Panel begins -->
-    <h:panelGrid columnClasses="formLabel,formField,formLabelWhite,formFieldWhite" columns="2" headerClass="formHeader" width="100%" border="0" cellpadding="3" cellspacing="0">
-        <f:facet name="header">
-            <h:column>
-                <h:outputText value="#{messages.discoveryMenuTitle}"/>
-            </h:column>
-        </f:facet>
+            <h:dataTable cellpadding="3" cellspacing="0" border="0"
+                         styleClass="dataTable"
+                         value="#{discoveryResult.list}" var="service"
+                         rowClasses="dataRowLight,dataRowDark"
+                         columnClasses="dataCellTextBold,dataCellText">
 
-        <h:column>
-            <h:outputText value="#{messages.discoveryKeywordTitle}"/>
-        </h:column>
+                <h:column>
+                    <h:panelGrid>
+                        <h:column>
+                            <h:commandLink
+                                    action="#{service.navigateToServiceDetails}">
+                                <h:outputText value="#{service.url}" styleClass="formTextBold"/>
+                            </h:commandLink>
 
-        <h:column>
-            <h:inputText id="discoveryKeyword" value="#{keywordDiscoveryBean.keyword}" size="58"/>
-        </h:column>
+                        </h:column>
 
-        <h:column>
-            <h:outputText value="#{messages.discoveryMetadataCategory}"/>
-            <h:outputText value="#{messages.optionalKeyword}"/>
-        </h:column>
+                        <h:column>
+                            <h:panelGroup styleClass="formField">
+                                <h:outputText value="#{messages.rcInfoName}"/>
+                            </h:panelGroup>
+                        </h:column>
 
-        <h:column>
-            <h:panelGrid columns="4">
-                <h:selectManyCheckbox value="#{keywordDiscoveryBean.metaDataCategories}" styleClass="formText">
-                    <f:selectItems value="#{keywordDiscoveryBean.metaDataItems}"/>
-                </h:selectManyCheckbox>
-            </h:panelGrid>
-        </h:column>
+                        <h:column>
+                            <h:panelGroup styleClass="formField">
+                                <h:outputText value="#{messages.rcInfoDescription}"/>
+                            </h:panelGroup>
+                        </h:column>
+                    </h:panelGrid>
+                </h:column>
 
-        <h:column>
-            <h:outputText value="#{messages.discoveryServiceTypeCategory}"/>
-            <h:outputText value="#{messages.optionalKeyword}"/>
-        </h:column>
+                <h:column>
+                    <h:commandButton id="cartBtn" type="submit" value="Add to Service Cart"/>
+                </h:column>
 
-        <h:column>
-            <h:panelGrid columns="3">
-                <h:selectManyCheckbox value="#{keywordDiscoveryBean.serviceTypeCategories}"
-                                      styleClass="formText">
-                    <f:selectItems value="#{keywordDiscoveryBean.serviceTypeItems}"/>
-                </h:selectManyCheckbox>
-            </h:panelGrid>
-        </h:column>
+            </h:dataTable>
 
-        <h:column>
-            <h:outputText style="color:#FFFFFF;" value="Invisible"></h:outputText>
-        </h:column>
-
-        <h:column>
-            <h:commandButton id="discoveryBtn" value="#{labels.discoveryBtn}"
-                             action="#{keywordDiscoveryBean.doDiscovery}"/>
-
-            <h:commandButton id="discoveryAllBtn" value="#{labels.discoveryAllBtn}"
-                             action="#{keywordDiscoveryBean.doDiscoveryAll}"/>
-        </h:column>
-
-    </h:panelGrid>
-    <!-- Discovery Panel Ends -->
-
-<br>
-
-<h:panelGrid width="90%" border="1" columns="1" headerClass="formHeader">
-    <f:facet name="header">
-        <h:outputText value="#{messages.resultTitle}"/>
-    </f:facet>
+        </h:panelGrid>
 
 
-    <h:dataTable width="100%" cellpadding="3" cellspacing="3" border="0"
-                 value="#{keywordDiscoveryBean.services.servicesList}" var="gsh" rowClasses="formLabel,formLabelWhite">
+    </h:form>
 
-
-        <h:column>
-
-            <h:panelGrid columns="1" styleClass="formField">
-                <h:commandLink action="#{gsh.doSetNavigatedService}" value="#{gsh.URL}">
-                </h:commandLink>
-
-                <h:panelGroup styleClass="formField">
-                    <h:outputText value="#{messages.rcInfoName}"/>
-                    <h:outputText value="#{gsh.rcInfo.researchCenterName}"/>
-                </h:panelGroup>
-
-                <h:panelGroup styleClass="formField">
-                    <h:outputText value="#{messages.rcInfoDescription}"/>
-                    <h:outputText value="#{gsh.rcInfo.researchCenterDescription}"/>
-                </h:panelGroup>
-            </h:panelGrid>
-
-        </h:column>
-
-        <h:column>
-            <h:commandButton id="cartBtn" type="submit" value="Add to Service Cart" action="#{gsh.doAddToServiceCart}"/>
-        </h:column>
-
-    </h:dataTable>
-
-</h:panelGrid>
-
-
-</h:form>
-
-</f:view>
-      
+</f:subview>

@@ -5,20 +5,25 @@ Date: Jun 22, 2005
 Time: 3:44:44 PM
 To change this template use File | Settings | File Templates.
 --%>
-<%@ page session="false"%>
+<%@ page session="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ taglib uri="http://myfaces.apache.org/tomahawk" prefix="t"%>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-tiles" prefix="tiles" %>
 
 <f:loadBundle basename="labels" var="labels"/>
 <f:loadBundle basename="messages" var="messages"/>
 
 
-<f:view locale="#{browserConfig.locale}">
+<f:view>
+    <f:verbatim><br/></f:verbatim>
     <h:form>
         <!-- Discovery Panel begins -->
-        <h:panelGrid columnClasses="formLabel,formField,formLabelWhite,formFieldWhite" columns="2" headerClass="formHeader" width="100%" border="0" cellpadding="3" cellspacing="0">
+        <h:panelGrid columns="2"
+                     columnClasses="dataCellTextBold,dataCellText"
+                     rowClasses="dataRowLight,dataRowDark"
+                     styleClass="dataTable" headerClass="dataTableHeader"
+                     border="0" cellpadding="3" cellspacing="0">
             <f:facet name="header">
                 <h:column>
                     <h:outputText value="#{messages.discoveryMenuTitle}"/>
@@ -30,7 +35,11 @@ To change this template use File | Settings | File Templates.
             </h:column>
 
             <h:column>
-                <h:inputText id="discoveryKeyword" value="#{keywordDiscoveryBean.keyword}" size="58"/>
+                <h:inputText id="discoveryKeyword" value="#{keywordDiscoveryBean.keyword}"
+                             size="58">
+                    <f:validateLength minimum="1"/>
+                </h:inputText>
+                <h:message for="lastName" styleClass="loginFailed"/>
             </h:column>
 
             <h:column>
@@ -41,7 +50,7 @@ To change this template use File | Settings | File Templates.
             <h:column>
                 <h:panelGrid columns="4">
                     <h:selectManyCheckbox value="#{keywordDiscoveryBean.metaDataCategories}" styleClass="formText">
-                        <f:selectItems value="#{keywordDiscoveryBean.metaDataItems}"/>
+                        <f:selectItems value="#{keywordDiscoveryBean.metaDataCategoryItems}"/>
                     </h:selectManyCheckbox>
                 </h:panelGrid>
             </h:column>
@@ -55,13 +64,13 @@ To change this template use File | Settings | File Templates.
                 <h:panelGrid columns="3">
                     <h:selectManyCheckbox value="#{keywordDiscoveryBean.serviceTypeCategories}"
                                           styleClass="formText">
-                        <f:selectItems value="#{keywordDiscoveryBean.serviceTypeItems}"/>
+                        <f:selectItems value="#{keywordDiscoveryBean.serviceTypeCategoryItems}"/>
                     </h:selectManyCheckbox>
                 </h:panelGrid>
             </h:column>
 
             <h:column>
-                <h:outputText style="color:#FFFFFF;" value="Invisible"></h:outputText>
+                <f:verbatim>&nbsp;</f:verbatim>
             </h:column>
 
             <h:column>
@@ -74,7 +83,13 @@ To change this template use File | Settings | File Templates.
 
         </h:panelGrid>
         <!-- Discovery Panel Ends -->
-
     </h:form>
+
+
+    <tiles:insert attribute="discoveryResults" ignore="true" flush="false"/>
+
+
 </f:view>
+
+
 

@@ -41,7 +41,7 @@
 
                             <!--_____ main content begins _____-->
                             <tr>
-                                <td valign="top" class="contentBorder" height="100%">
+                                <td valign="top" width="100%" height="100%">
 
                                     <tiles:insert attribute="Content" flush="false"/>
 
@@ -50,7 +50,7 @@
 
                             <!--_____ main content ends _____-->
 
-                            
+
                         </table>
                     </td>
                 </tr>

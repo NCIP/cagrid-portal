@@ -7,12 +7,12 @@
 
     <!-- When a user has not logged in -->
     <definition name="PreLogin" page="/jsp/layout/PreLoginLayout.jsp">
-        <put name="NihHeader" value="/jsp/header/NihHeader.jsp" />
-        <put name="ProjectLogoHeader" value="/jsp/header/ProjectLogoHeader.jsp" />
-        <put name="Content" value="/jsp/content/Login.jsp" />
+        <put name="NihHeader" value="/jsp/header/NihHeader.jsp"/>
+        <put name="ProjectLogoHeader" value="/jsp/header/ProjectLogoHeader.jsp"/>
+        <put name="Content" value="/jsp/content/Login.jsp"/>
 
-        <put name="NihFooter" value="/jsp/footer/NihFooter.jsp" />
-        <put name="Title" type="string"	value="caGrid Browser" />
+        <put name="NihFooter" value="/jsp/footer/NihFooter.jsp"/>
+        <put name="Title" type="string" value="caGrid Browser"/>
     </definition>
 
     <definition name="LoginFailed" extends="PreLogin">
@@ -29,18 +29,18 @@
 
     <!-- Base layouts -->
     <definition name="Base" page="/jsp/layout/BaseLayout.jsp">
-        <put name="NihHeader" value="/jsp/header/NihHeader.jsp" />
-        <put name="ProjectLogoHeader" value="/jsp/header/ProjectLogoHeader.jsp" />
+        <put name="NihHeader" value="/jsp/header/NihHeader.jsp"/>
+        <put name="ProjectLogoHeader" value="/jsp/header/ProjectLogoHeader.jsp"/>
         <put name="AppMenu" value="/jsp/menu/AppMenu.jsp"/>
-        <put name="AppFooter" value="/jsp/footer/AppFooter.jsp" />
-        <put name="NihFooter" value="/jsp/footer/NihFooter.jsp" />
-        <put name="Title" type="string"	value="caGrid Browser" />
+        <put name="AppFooter" value="/jsp/footer/AppFooter.jsp"/>
+        <put name="NihFooter" value="/jsp/footer/NihFooter.jsp"/>
+        <put name="Title" type="string" value="caGrid Browser"/>
 
     </definition>
 
     <!-- Login Pages -->
     <definition name="HomePage" extends="Base">
-        <put name="Content" value="/jsp/content/Home.jsp" />
+        <put name="Content" value="/jsp/content/Home.jsp"/>
     </definition>
 
     <definition name="Discovery" extends="Base">
@@ -48,9 +48,14 @@
     </definition>
 
 
-    <definition name="DiscoveryResults" extends="Base">
-        <put name="Content" value="/jsp/content/DiscoveryResults.jsp"/>
+    <definition name="DiscoveryResultsPage" page="/jsp/content/Discovery.jsp">
+        <put name="discoveryResults" value="/jsp/content/DiscoveryResults.jsp"/>
     </definition>
+
+    <definition name="DiscoveryResults" extends="Base">
+        <put name="Content" value="DiscoveryResultsPage"/>
+    </definition>
+
 
     <definition name="Help" extends="Base">
         <put name="Content" value="/jsp/content/Help.jsp"/>
@@ -82,12 +87,12 @@
     </definition>
 
     <definition name="QueryFQP" extends="Base">
-            <put name="Content" value="/jsp/tree/QueryFQP.jsp"/>
-        </definition>
+        <put name="Content" value="/jsp/tree/QueryFQP.jsp"/>
+    </definition>
 
     <definition name="QueryFQPResult" extends="Base">
-               <put name="Content" value="/jsp/tree/QueryFQPResult.jsp"/>
-           </definition>
+        <put name="Content" value="/jsp/tree/QueryFQPResult.jsp"/>
+    </definition>
 
 
     <definition name="Configuration" extends="Base">
@@ -122,11 +127,11 @@
 
     <!--Footer links-->
     <definition name="Footer_ApplicationSupport" extends="Base">
-        <put name="Content"  value="/jsp/footer/ApplicationSupport.jsp"/>
+        <put name="Content" value="/jsp/footer/ApplicationSupport.jsp"/>
     </definition>
 
     <definition name="Footer_ContactUs" extends="Base">
-        <put name="Content"  value="/jsp/footer/ContactUs.jsp"/>
+        <put name="Content" value="/jsp/footer/ContactUs.jsp"/>
     </definition>
 
     <definition name="Footer_Accessibility" extends="Base">
@@ -134,18 +139,16 @@
     </definition>
 
     <definition name="Footer_Disclaimer" extends="Base">
-        <put name="Content"  value="/jsp/footer/Disclaimer.jsp"/>
+        <put name="Content" value="/jsp/footer/Disclaimer.jsp"/>
     </definition>
 
     <definition name="Footer_ContactUs" extends="Base">
-        <put name="Content"  value="/jsp/footer/ContactUs.jsp"/>
+        <put name="Content" value="/jsp/footer/ContactUs.jsp"/>
     </definition>
 
     <definition name="Footer_Privacy" extends="Base">
-        <put name="Content"  value="/jsp/footer/Privacy.jsp"/>
+        <put name="Content" value="/jsp/footer/Privacy.jsp"/>
     </definition>
-
-
 
 
 </tiles-definitions>

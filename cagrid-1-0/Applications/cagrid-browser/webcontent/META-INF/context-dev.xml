@@ -1,0 +1,15 @@
+<!--
+    Use this file for running cagrid-browser
+    from tomcat using a local build. Just copy
+    this file to $CATALINA_HOME/conf/localhost/cagrid-browser.xml
+
+    Context configuration file for the Tomcat Manager Web App
+
+    $Id: context-dev.xml,v 1.1 2006-11-10 00:05:30 kherm Exp $
+
+-->
+
+<Context path="/cagrid-browser"
+         docBase="C:\dev\cvsroot\cagrid-1-0\Applications\cagrid-browser\webcontent"
+         reloadable="true" orverride="true">
+</Context>

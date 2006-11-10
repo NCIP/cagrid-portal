@@ -104,5 +104,4 @@ public class GridUserInformation {
     }
 }
 
-
 //~ Formatted by Jindent --- http://www.jindent.com

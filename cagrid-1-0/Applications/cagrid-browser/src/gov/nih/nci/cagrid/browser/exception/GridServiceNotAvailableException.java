@@ -17,5 +17,4 @@ public class GridServiceNotAvailableException extends RuntimeException {
     }
 }
 
-
 //~ Formatted by Jindent --- http://www.jindent.com

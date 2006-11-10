@@ -1,15 +1,16 @@
-<html>
-
-<%@ page contentType="text/html" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-tiles" prefix="tiles" %>
 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
 
 <head>
-
     <link rel="stylesheet" type="text/css" href="styleSheet.css"/>
-
     <script src="js/script.js" type="text/javascript"></script>
 </head>
+
+<%/*Load message bundle */%>
+
 
 <body>
 
@@ -51,7 +52,7 @@
 
                             <!--_____ main content begins _____-->
                             <tr>
-                                <td valign="top" class="contentBorder" height="100%">
+                                <td valign="top">
 
                                     <tiles:insert attribute="Content" flush="false"/>
 
@@ -87,6 +88,6 @@
 </table>
 
 
-
 </body>
+
 </html>

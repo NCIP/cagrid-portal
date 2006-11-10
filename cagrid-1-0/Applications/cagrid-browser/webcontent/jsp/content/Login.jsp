@@ -4,29 +4,32 @@
 
 <f:loadBundle basename="labels" var="labels"/>
 <f:loadBundle basename="messages" var="messages"/>
-<f:view locale="#{browserConfig.locale}">
 
+<f:view>
+<h:form>
 
 <!-- target of anchor to skip menus -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%" height="100%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage"
+       width="100%" height="100%">
 
 <!-- banner begins -->
 <tr>
-    <td class="bannerHome"><img src="images/bannerHome.gif" height="140"></td>
+    <td class="bannerHome">
+        <img src="images/bannerHome.gif" height="140">
+    </td>
 </tr>
 <!-- banner begins -->
 
-<tr>
-<td height="100%">
+<tr valign="top">
+<td height="100%" valign="top">
 
-<!-- target of anchor to skip menus --><a name="content"/>
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" height="100%">
+<table style="height:100%;" cellpadding="0" cellspacing="0" border="0">
 <tr>
-<td width="70%">
+<td>
 
     <!-- welcome begins -->
-    <table summary="" cellpadding="0" cellspacing="0" border="0" height="100%">
+    <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
         <tr><td class="welcomeTitle" height="20">
             <h:outputText value="#{messages.siteWelcomeTitle}"/>
         </td>
@@ -50,59 +53,59 @@
 
 <!-- login begins -->
 <tr>
-    <td valign="top">
-        <h:form id="loginForm">
-            <table summary="" cellpadding="2" cellspacing="0" border="0" width="100%" class="sidebarSection">
+    <td>
 
-                <tr>
-                    <td class="sidebarTitle" height="20">
-                        <h:outputText value="#{messages.loginTitle}"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="sidebarContent">
-                        <table cellpadding="2" cellspacing="0" border="0">
-                            <tr>
-                                <td class="sidebarLogin" align="right">
-                                    <h:outputText value="#{messages.loginLabel}"/>
-                                </td>
-                                <td class="formFieldLogin">
-                                    <h:inputText id="userName" value="#{loginBean.userLogin}" required="false" size="14"
-                                                 styleClass="formField"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="sidebarLogin" align="right">
-                                    <h:outputText value="#{messages.passwordLabel}"/>
-                                </td>
-                                <td class="formFieldLogin">
-                                    <h:inputSecret id="userPasswd" value="#{loginBean.userPasswd}" required="false"
-                                                   size="14" styleClass="formField"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td>
-                                    <h:commandButton styleClass="actionButton" id="doLogin" value="#{labels.loginBtn}"
-                                                     action="#{loginBean.doLogin}"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    &nbsp;
-                                </td>
-                                <td>
-                                    <h:commandLink action="signUp" styleClass="formText">
-                                        <h:outputText value="#{messages.register}"/>
-                                    </h:commandLink>
+        <table height="100%;width:100%;" cellpadding="0" cellspacing="0" border="0" class="sidebarSection">
 
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </h:form>
+            <tr>
+                <td class="sidebarTitle" height="20">
+                    <h:outputText value="#{messages.loginTitle}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="sidebarContent">
+                    <table cellpadding="2" cellspacing="0" border="0">
+                        <tr>
+                            <td class="sidebarLogin" align="right">
+                                <h:outputText value="#{messages.loginLabel}"/>
+                            </td>
+                            <td class="formFieldLogin">
+                                <h:inputText id="userName" value="#{loginBean.userLogin}" required="false" size="14"
+                                             styleClass="formField"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="sidebarLogin" align="right">
+                                <h:outputText value="#{messages.passwordLabel}"/>
+                            </td>
+                            <td class="formFieldLogin">
+                                <h:inputSecret id="userPasswd" value="#{loginBean.userPasswd}" required="false"
+                                               size="14" styleClass="formField"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>
+                                <h:commandButton styleClass="actionButton" id="doLogin" value="#{labels.loginBtn}"
+                                                 action="#{loginBean.doLogin}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td>
+                                <h:commandLink action="signUp" styleClass="formText">
+                                    <h:outputText value="#{messages.register}"/>
+                                </h:commandLink>
+
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
     </td>
 </tr>
 <!-- login ends -->
@@ -172,5 +175,5 @@
 </td>
 </tr>
 </table>
-
+</h:form>
 </f:view>

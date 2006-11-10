@@ -1,4 +1,3 @@
-
 /**
  * Created by the caGrid Team
  * User: kherm
@@ -10,9 +9,9 @@ package gov.nih.nci.cagrid.browser.util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.faces.application.Application;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.el.PropertyNotFoundException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.logging.Level;
@@ -22,18 +21,19 @@ import java.util.logging.Logger;
 
 public class ApplicationCtx {
     public static final String CABIG_XML_QUERY_ACTIVITY =
-        "caBIGXMLQueryActivity";
+            "caBIGXMLQueryActivity";
     private static ApplicationCtx ourInstance = new ApplicationCtx();
 
     //~--- constructors -------------------------------------------------------
 
-    private ApplicationCtx() {}
+    private ApplicationCtx() {
+    }
 
     //~--- methods ------------------------------------------------------------
 
     public static InputStream loadResourceAsStream(String fileName) {
         ExternalContext cont =
-            FacesContext.getCurrentInstance().getExternalContext();
+                FacesContext.getCurrentInstance().getExternalContext();
         InputStream stream = cont.getResourceAsStream(fileName);
 
         return stream;
@@ -57,20 +57,17 @@ public class ApplicationCtx {
         return Logger.global;
     }
 
-    public static Object getBean(String beanName) {
+    public static Object getBean(String beanName) throws PropertyNotFoundException {
         FacesContext ctx = FacesContext.getCurrentInstance();
-        Application  app = ctx.getApplication();
-
-        return app.createValueBinding(beanName).getValue(ctx);
+        return ctx.getApplication().getVariableResolver().resolveVariable(ctx, beanName);
     }
 
     public static Object getParameter(String paramName) {
         Map reqMap =
-            FacesContext.getCurrentInstance().getExternalContext()
-                .getRequestMap();
+                FacesContext.getCurrentInstance().getExternalContext()
+                        .getRequestMap();
         return reqMap.get(paramName);
     }
 }
-
 
 //~ Formatted by Jindent --- http://www.jindent.com

@@ -13,11 +13,12 @@ package gov.nih.nci.cagrid.browser.exception;
  * thrown when cagrid-browser application
  * throws an exception when communicating with
  * the EVS Service (using caCore API)
- *
+ * <p/>
  * This runtime exception is caught by the webapp container
  */
 public class EVSDiscoveryException extends RuntimeException {
-    public EVSDiscoveryException() {}
+    public EVSDiscoveryException() {
+    }
 
     public EVSDiscoveryException(String message) {
         super(message);
@@ -27,6 +28,5 @@ public class EVSDiscoveryException extends RuntimeException {
         super(message, cause);
     }
 }
-
 
 //~ Formatted by Jindent --- http://www.jindent.com

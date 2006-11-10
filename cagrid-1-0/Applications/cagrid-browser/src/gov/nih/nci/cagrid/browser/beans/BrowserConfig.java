@@ -8,9 +8,9 @@ package gov.nih.nci.cagrid.browser.beans;
  * To change this template use File | Settings | File Templates.
  */
 public class BrowserConfig {
-    private String       caCOREServiceURL;
+    private String caCOREServiceURL;
     private IndexService indexService;
-    private String       locale;
+    private String locale;
 
     //~--- get methods --------------------------------------------------------
 
@@ -44,6 +44,5 @@ public class BrowserConfig {
         this.locale = locale;
     }
 }
-
 
 //~ Formatted by Jindent --- http://www.jindent.com

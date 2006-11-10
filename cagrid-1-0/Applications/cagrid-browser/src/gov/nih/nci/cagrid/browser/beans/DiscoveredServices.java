@@ -2,13 +2,16 @@ package gov.nih.nci.cagrid.browser.beans;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import org.apache.axis.message.addressing.EndpointReferenceType;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 //~--- classes ----------------------------------------------------------------
 
 /**
+ * Represents the
+ * current set of  "discovered services"
  * Created by the caGrid Team
  * User: kherm
  * Date: Jun 15, 2005
@@ -16,54 +19,40 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class DiscoveredServices {
-    private GSH  navigatedService;
-    private List servicesList;
-
-    //~--- constructors -------------------------------------------------------
+    private List list = new ArrayList();
+    private String size;
 
     public DiscoveredServices() {
-        this.servicesList = new ArrayList();
     }
 
-    //~--- methods ------------------------------------------------------------
 
-    public void addAll(Collection c) {
-        this.servicesList.addAll(c);
+    public void addDiscoveryResult(EndpointReferenceType[] eprs) {
+        for (int i = 0; i < eprs.length; i++) {
+            CaGridService discoveredServiceTemp = new CaGridService(eprs[i]);
+            list.add(discoveredServiceTemp);
+        }
     }
 
-    public void addGSH(GSH gshURL) {
-        this.servicesList.add(gshURL);
+    public void clear() {
+        this.list.clear();
     }
 
-    public void removeAll() {
-        this.servicesList.clear();
+
+    public List getList() {
+        return list;
     }
 
-    public void removeGSH(GSH gshURL) {
-        this.servicesList.remove(gshURL);
+    public void setList(List list) {
+        this.list = list;
     }
 
-    //~--- get methods --------------------------------------------------------
-
-    public GSH getNavigatedService() {
-        return navigatedService;
+    public String getSize() {
+        return size;
     }
 
-    public List getServicesList() {
-        return servicesList;
+    public void setSize(String size) {
+        this.size = size;
     }
 
-    //~--- set methods --------------------------------------------------------
-
-    public void setNavigatedService(GSH navigatedService) {
-        this.navigatedService = navigatedService;
-        this.navigatedService.fillInMetadata();
-    }
-
-    public void setServicesList(List servicesList) {
-        this.servicesList = servicesList;
-    }
 }
 
-
-//~ Formatted by Jindent --- http://www.jindent.com

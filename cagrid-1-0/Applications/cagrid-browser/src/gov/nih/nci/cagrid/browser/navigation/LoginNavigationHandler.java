@@ -35,8 +35,8 @@ public class LoginNavigationHandler extends NavigationHandler {
 
         /** Check if use has valid login */
         GridLoginServices loginBean =
-            (GridLoginServices) ApplicationCtx.getBean(
-                "#{loginBean}");
+                (GridLoginServices) ApplicationCtx.getBean(
+                        "#{loginBean}");
 
         /*
          * Make sure user is not trying to login or logout or Register
@@ -44,25 +44,24 @@ public class LoginNavigationHandler extends NavigationHandler {
         if (actionMethod != null) {
             if ((actionMethod
                     .indexOf(GridLoginServices
-                        .GLOBAL_LOGIN_ACTION_NAME) < 0) && (actionMethod
-                            .indexOf(GridLoginServices
-                                .GLOBAL_LOGOUT_ACTION_NAME) < 0) && (actionMethod
-                                    .indexOf(GridLoginServices
-                                        .GLOBAL_USER_REGISTER_ACTION_NAME) < 0)) {
+                            .GLOBAL_LOGIN_ACTION_NAME) < 0) && (actionMethod
+                    .indexOf(GridLoginServices
+                            .GLOBAL_LOGOUT_ACTION_NAME) < 0) && (actionMethod
+                    .indexOf(GridLoginServices
+                            .GLOBAL_USER_REGISTER_ACTION_NAME) < 0)) {
 
                 /** If user is not logged in then redirect to login page */
                 if (!loginBean.isUserLoggedIn()) {
                     //properly logout if user not logged out properly
-                   
-                    actionName   = GridLoginServices.GLOBAL_LOGIN_ACTION_NAME;
+
+                    actionName = GridLoginServices.GLOBAL_LOGIN_ACTION_NAME;
                     actionMethod =
-                        GridLoginServices.GLOBAL_LOGIN_ACTION_FAILED_METHOD;
+                            GridLoginServices.GLOBAL_LOGIN_ACTION_FAILED_METHOD;
                 }
             }
         }
-          _baseHandler.handleNavigation(facesContext, actionMethod, actionName);
+        _baseHandler.handleNavigation(facesContext, actionMethod, actionName);
     }
 }
-
 
 //~ Formatted by Jindent --- http://www.jindent.com

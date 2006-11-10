@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.browser.util;
 //~--- non-JDK imports --------------------------------------------------------
 
 import gov.nih.nci.cagrid.browser.beans.DiscoveredServices;
-import gov.nih.nci.cagrid.browser.beans.GSH;
 import org.jdom.Element;
 import org.jdom.input.DOMBuilder;
 import org.jdom.output.XMLOutputter;
@@ -26,9 +25,9 @@ public class XMLQuery {
     public XMLQuery(String name, org.w3c.dom.Element queryElement) {
         this.name = name;
 
-        DOMBuilder   domBld    = new DOMBuilder();
-        Element      queryElem = domBld.build(queryElement);
-        XMLOutputter xmlOut    = new XMLOutputter();
+        DOMBuilder domBld = new DOMBuilder();
+        Element queryElem = domBld.build(queryElement);
+        XMLOutputter xmlOut = new XMLOutputter();
 
         this.xmlQuery = xmlOut.outputString(queryElem);
     }
@@ -37,11 +36,10 @@ public class XMLQuery {
 
     public void fillInQuery() {
         DiscoveredServices disc =
-            (DiscoveredServices) ApplicationCtx.getBean(
-                "#{discoveredServices}");
-        GSH navigatedService = disc.getNavigatedService();
+                (DiscoveredServices) ApplicationCtx.getBean(
+                        "#{discoveredServices}");
 
-        navigatedService.setCaBIGXMLQuery(this.xmlQuery);
+
     }
 
     //~--- get methods --------------------------------------------------------
@@ -64,6 +62,5 @@ public class XMLQuery {
         this.xmlQuery = xmlQuery;
     }
 }
-
 
 //~ Formatted by Jindent --- http://www.jindent.com
