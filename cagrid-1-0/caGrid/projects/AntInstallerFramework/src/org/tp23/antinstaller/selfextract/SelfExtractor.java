@@ -43,7 +43,7 @@ import org.tp23.antinstaller.runtime.exe.SelfExtractorFilterChain;
 * to a temporary directory </p>
  * <p> </p>
  * @author Paul Hinds
- * @version $Id: SelfExtractor.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: SelfExtractor.java,v 1.2 2006-11-10 17:05:34 kumarvi Exp $
  */
 public class SelfExtractor {
 
@@ -68,6 +68,7 @@ public class SelfExtractor {
 		if(endIdx!=-1){
 			String unescaped = null;
 			String fileNamePart = stringForm.substring("jar:file:".length(), endIdx);
+			System.out.println("FileName:"+fileNamePart);
 			file = new File(fileNamePart);
 			if (!file.exists()) {
 				// try to unescape encase the URL Handler has escaped the " " to %20
@@ -254,7 +255,8 @@ public class SelfExtractor {
 		int fileCount = getFileCount();
 		ProgressIndicator indicator = null;
 		if(isX){
-			indicator = new ProgressIndicator(fileCount);
+			//indicator = new ProgressIndicator(fileCount);
+			indicator = this.getAppropriateProgressIndicator(fileCount);
 			indicator.show();
 		}
 		JarInputStream zis = new JarInputStream(new FileInputStream(archiveFile));
@@ -274,6 +276,28 @@ public class SelfExtractor {
 		}
 		zis.close();
 		return result;
+	}
+	
+	/**
+	 * This methos is introduce custom component flash screens
+	 * @return
+	 */
+	
+	public ProgressIndicator getAppropriateProgressIndicator(int k){
+		ProgressIndicator pi = null;
+		String components = "AuthenticationServiceInstaller,caDSRServiceInstaller,MasterInstaller,DorianInstaller,GTSInstaller";
+		String fileName = archiveFile.getName();
+		String imageName = fileName.substring(0,fileName.length()-4);
+		
+		int i = components.indexOf(imageName);
+		if(i!=-1){
+			pi = new ComponentProgressIndicator(k,imageName); 
+		}else{
+			pi = new ProgressIndicator(k);
+		}
+		
+		
+		return pi;
 	}
 
 
