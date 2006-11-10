@@ -79,7 +79,7 @@ public class CSMGridAuthorizationManager implements GridAuthorizationManager,
 			String privilege) {
 		
 //		logger.debug("identity=" + identity + ", objectId=" + objectId + ", privilege=" + privilege);
-		System.out.println("identity=" + identity + ", objectId=" + objectId + ", privilege=" + privilege);
+//		System.out.println("identity=" + identity + ", objectId=" + objectId + ", privilege=" + privilege);
 
 		boolean isAuthorized = false;
 
@@ -93,15 +93,15 @@ public class CSMGridAuthorizationManager implements GridAuthorizationManager,
 				
 				if (groups != null) {
 					//logger.debug("got " + groups.size() + " groups");
-					System.out.println("got " + groups.size() + " groups");
+//					System.out.println("got " + groups.size() + " groups");
 					for (Iterator i = groups.iterator(); i.hasNext();) {
 						Group group = (Group) i.next();
 						String name = group.getGroupName();
 						//logger.debug("Checking group '" + name + "'");
-						System.out.println("Checking group '" + name + "'");
+//						System.out.println("Checking group '" + name + "'");
 						if (GridGroupName.isGridGroupName(name)) {
 //							logger.debug("is grid group name");
-							System.out.println("is grid group name");
+//							System.out.println("is grid group name");
 							GridGroupName gName = new GridGroupName(name);
 							GrouperI client = getGridGrouper(gName.getUrl());
 							if (client.isMemberOf(identity, gName.getName())) {
@@ -110,15 +110,15 @@ public class CSMGridAuthorizationManager implements GridAuthorizationManager,
 							}
 						}else{
 //							logger.debug("is NOT grid group name");
-							System.out.println("is NOT grid group name");
+//							System.out.println("is NOT grid group name");
 						}
 					}
 				}else{
 //					logger.debug("groups is null");
-					System.out.println("groups is null");
+//					System.out.println("groups is null");
 				}
 //				logger.debug("groupName=" + groupName);
-				System.out.println("groupName=" + groupName);
+//				System.out.println("groupName=" + groupName);
 				if (groupName != null) {
 					isAuthorized = checkPermissionForGroup(groupName, objectId,
 							privilege);
@@ -204,7 +204,7 @@ public class CSMGridAuthorizationManager implements GridAuthorizationManager,
 	public boolean checkPermissionForGroup(String group, String objectId, String privilege)
 			throws CSException {
 //		logger.debug("group=" + group + ", " + objectId + ", " + privilege);
-		System.out.println("group=" + group + ", " + objectId + ", " + privilege);
+//		System.out.println("group=" + group + ", " + objectId + ", " + privilege);
 		return this.authorizationManager.checkPermissionForGroup(group, objectId, privilege);
 	}
 

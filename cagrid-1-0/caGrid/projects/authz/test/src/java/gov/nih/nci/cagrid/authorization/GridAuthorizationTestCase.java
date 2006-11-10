@@ -9,16 +9,22 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 public class GridAuthorizationTestCase extends TestCase {
-	
+
 	private String localUsr = "reader1";
+
 	private String localPwd = "reader1";
+
 	private String gridIdentity = "/CN=test2/ST=MD/C=US/E=me@somewhere.com/O=semanticbits/OU=dev";
+
 	private String serviceUrl = "http://someservice/url";
+
 	private String app = "SDK";
+
 	private String objectId = "gov.nih.nci.cabio.domain.Gene";
+
 	private String privilege = "READ";
-	
-	public GridAuthorizationTestCase(String name){
+
+	public GridAuthorizationTestCase(String name) {
 		super(name);
 	}
 
@@ -30,44 +36,58 @@ public class GridAuthorizationTestCase extends TestCase {
 		TestSuite suite = new TestSuite();
 
 		suite.addTest(new GridAuthorizationTestCase("testCSMAuthorization"));
-		suite.addTest(new GridAuthorizationTestCase("testGridCSMAuthorization"));
+		suite
+				.addTest(new GridAuthorizationTestCase(
+						"testGridCSMAuthorization"));
+
 		return suite;
 	}
-	
-	public void setUp(){
-		
+
+	public void setUp() {
+
 	}
-	
-	public void testCSMAuthorization(){
-		try{
+
+
+	public void testCSMAuthorization() {
+		try {
 			String implementation = "gov.nih.nci.cagrid.authorization.impl.CSMGridAuthorizationManager";
-			
-			AuthenticationManager mgr = SecurityServiceProvider.getAuthenticationManager(app);
+
+			AuthenticationManager mgr = SecurityServiceProvider
+					.getAuthenticationManager(app);
 			String classname = mgr.getClass().getName();
-			assertEquals("wrong implementation of authentication manager '" + classname + "'", implementation, classname);
-			assertTrue("didn't authenticate grid identity", mgr.login(gridIdentity, serviceUrl));
-			assertTrue("didn't authenticate local identity", mgr.login(localUsr, localPwd));
-			
-			AuthorizationManager mgr2 = SecurityServiceProvider.getAuthorizationManager(app);
+			assertEquals("wrong implementation of authentication manager '"
+					+ classname + "'", implementation, classname);
+			assertTrue("didn't authenticate grid identity", mgr.login(
+					gridIdentity, serviceUrl));
+			assertTrue("didn't authenticate local identity", mgr.login(
+					localUsr, localPwd));
+
+			AuthorizationManager mgr2 = SecurityServiceProvider
+					.getAuthorizationManager(app);
 			classname = mgr2.getClass().getName();
-			assertEquals("wrong implementation of authorization manager '" + classname + "'", implementation, classname);
-			assertTrue("didn't authorize grid identity", mgr2.checkPermission(gridIdentity, objectId, privilege));
-			assertTrue("didn't authorize local identity", mgr2.checkPermission(localUsr, objectId, privilege));
-			
-		}catch(Exception ex){
+			assertEquals("wrong implementation of authorization manager '"
+					+ classname + "'", implementation, classname);
+			assertTrue("didn't authorize grid identity", mgr2.checkPermission(
+					gridIdentity, objectId, privilege));
+			assertTrue("didn't authorize local identity", mgr2.checkPermission(
+					localUsr, objectId, privilege));
+
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail("Error testing csm authorization: " + ex.getMessage());
 		}
 	}
-	
-	public void testGridCSMAuthorization(){
-		try{
-			
+
+	public void testGridCSMAuthorization() {
+		try {
+
 			GridAuthorizationManager mgr = new CSMGridAuthorizationManager(app);
-			assertTrue("didn't authorize grid identity", mgr.isAuthorized(gridIdentity, objectId, privilege));
-			assertTrue("didn't authorize local identity", mgr.isAuthorized(localUsr, objectId, privilege));
-			
-		}catch(Exception ex){
+			assertTrue("didn't authorize grid identity", mgr.isAuthorized(
+					gridIdentity, objectId, privilege));
+			assertTrue("didn't authorize local identity", mgr.isAuthorized(
+					localUsr, objectId, privilege));
+
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail("Error testing grid csm authorization: " + ex.getMessage());
 		}
