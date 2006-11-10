@@ -1,28 +1,7 @@
 <ns1:ServiceDescription introduceVersion="1.0" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns2:Namespace location="./caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ServiceMetadata" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./common/common.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" packageName="gov.nih.nci.cagrid.metadata.common" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="Enumeration" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ValueDomain" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SemanticMetadata" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="PointOfContact" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="UMLClass" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="UMLAttribute" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ResearchCenter" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Address" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ResearchCenterDescription" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./service/servicemodel.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" packageName="gov.nih.nci.cagrid.metadata.service" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="Service" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Operation" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Output" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="InputParameter" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Fault" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ServiceContext" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ContextProperty" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CaDSRRegistration" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="./authentication-service.xsd" namespace="http://cagrid.nci.nih.gov/1/authentication-service" packageName="gov.nih.nci.cagrid.authentication.bean" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="SAMLAssertion" xsi:type="ns2:SchemaElementType"/>
@@ -140,5 +119,7 @@
    </ns15:ServiceSecurity>
   </ns3:Service>
  </ns3:Services>
- <ns16:Extensions xsi:type="ns16:ExtensionsType" xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns16:Extensions xsi:type="ns16:ExtensionsType" xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns16:Extension name="cagrid_metadata" xsi:type="ns16:ExtensionType"/>
+ </ns16:Extensions>
 </ns1:ServiceDescription>
