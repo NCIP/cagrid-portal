@@ -1,24 +1,21 @@
 /**
- * $Id: DefaultSubjectProvider.java,v 1.3 2006-10-31 16:03:52 joshua Exp $
+ * $Id: DefaultSubjectProvider.java,v 1.4 2006-11-10 00:01:48 joshua Exp $
  *
  */
 package gov.nih.nci.cagrid.authentication.service;
-
-import java.security.Principal;
-
-import javax.security.auth.Subject;
 
 import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
 import gov.nih.nci.cagrid.authentication.bean.Credential;
 import gov.nih.nci.cagrid.authentication.common.InvalidCredentialException;
 import gov.nih.nci.cagrid.authentication.common.SubjectProvider;
 import gov.nih.nci.security.AuthenticationManager;
-import gov.nih.nci.security.authentication.principal.LoginIdPrincipal;
 import gov.nih.nci.security.exceptions.CSException;
+
+import javax.security.auth.Subject;
 
 /**
  * 
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  * @author Joshua Phillips
  * 
  */

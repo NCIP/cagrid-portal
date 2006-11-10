@@ -130,6 +130,11 @@
 				<include name="**\*" />
 			</fileset>
 		</copy>
+		<copy todir="${tomcat.dir}/common/endorsed">
+			<fileset dir="${ext.endorsed.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>	
 		<delete dir="tmp" />
 	</target>
 	

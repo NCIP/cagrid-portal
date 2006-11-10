@@ -3,6 +3,8 @@ package gov.nih.nci.cagrid.authentication;
 import gov.nih.nci.security.AuthenticationManager;
 import gov.nih.nci.security.SecurityServiceProvider;
 
+import java.security.Principal;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.security.auth.Subject;
@@ -46,7 +48,11 @@ public class GridAuthenticationTestCase extends TestCase {
 
 			Set principals = subject.getPrincipals();
 			assertNotNull("principals is null", principals);
-			assertTrue("should've gottent 4, got " + principals.size(), principals.size() == 4);
+			assertTrue("should've gotten 4, got " + principals.size(), principals.size() == 4);
+			for(Iterator i = principals.iterator(); i.hasNext();){
+				Principal p = (Principal)i.next();
+				System.out.println("principal: " + p.getName());
+			}
 
 		} catch (Exception ex) {
 			ex.printStackTrace();

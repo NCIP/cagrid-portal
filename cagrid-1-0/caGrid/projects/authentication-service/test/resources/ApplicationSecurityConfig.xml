@@ -17,12 +17,16 @@
 				<allowed-attempts>3
 				</allowed-attempts>
 				<authentication-provider-class>
+					<!--
 				gov.nih.nci.cagrid.authorization.impl.CSMGridAuthorizationManager
+				-->
 				</authentication-provider-class>
 			</authentication>
 			<authorization>
 				<authorization-provider-class>
+					<!--
 				gov.nih.nci.cagrid.authorization.impl.CSMGridAuthorizationManager
+				-->
 				</authorization-provider-class>
 				<hibernate-config-file>
 					<!-- Fully qualified file path -->

@@ -5,7 +5,7 @@
     
     <bean id="subjectProvider" class="gov.nih.nci.cagrid.authentication.service.DefaultSubjectProvider">
         <property name="authenticationManager">
-            <bean class="gov.nih.nci.cagrid.authorization.impl.CSMGridAuthorizationManager">
+            <bean class="gov.nih.nci.security.SecurityServiceProvider" factory-method="getAuthenticationManager">
                 <!-- The name of the security policy -->
                 <constructor-arg value="SDK"/>
             </bean>
