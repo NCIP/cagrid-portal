@@ -18,7 +18,7 @@ import java.util.HashSet;
  * Time: 11:06:03 AM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class BaseSpringAbstractTestCase
+public abstract class BaseSpringAbstractTest
         extends AbstractDependencyInjectionSpringContextTests {
     //root index is a collection of indexes that portal aggregates from
     public HashSet rootIndexSet = new HashSet();

@@ -628,8 +628,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="castor" level="application" />
-    <orderEntry type="library" name="Globus-4.0" level="application" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -639,6 +637,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Globus-4.0" level="application" />
     <orderEntryProperties />
   </component>
   <component name="WebModuleBuildComponent">

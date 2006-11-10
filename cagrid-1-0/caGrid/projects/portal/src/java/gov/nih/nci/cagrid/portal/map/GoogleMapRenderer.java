@@ -69,6 +69,8 @@ public class GoogleMapRenderer extends HtmlRenderer {
         out.startElement(HTML.SCRIPT_ELEM, null);
 
         out.writeAttribute(HTML.SCRIPT_TYPE_ATTR, HTML.SCRIPT_TYPE_TEXT_JAVASCRIPT, null);
+        //needs to support google map in IE
+        out.writeAttribute("Defer", "defer", null);
 
         /** Start writing map. Setup all properties herer **/
         out.write("var " + mapVar + " = new GMap2(document.getElementById(\"" + mapCompID + "\"));" + _newLine);
