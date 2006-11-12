@@ -29,6 +29,7 @@
       <xsd:enumeration value="Pending" />
       <xsd:enumeration value="Active" />
       <xsd:enumeration value="Done" />
+      <xsd:enumeration value="Suspended"/>
       <xsd:enumeration value="Failed" />
       <xsd:enumeration value="Cancelled" />
     </xsd:restriction>

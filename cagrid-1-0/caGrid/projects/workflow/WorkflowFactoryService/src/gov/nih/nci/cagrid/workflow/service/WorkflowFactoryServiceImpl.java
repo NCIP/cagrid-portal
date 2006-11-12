@@ -1,19 +1,16 @@
 package gov.nih.nci.cagrid.workflow.service;
 
 import gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowServiceHome;
-import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType;
 
 import java.rmi.RemoteException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.xml.namespace.QName;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.globus.wsrf.Constants;
 import org.globus.wsrf.container.ServiceHost;
-import org.globus.wsrf.encoding.ObjectSerializer;
 import org.globus.wsrf.impl.SimpleResourceKey;
 import org.globus.wsrf.utils.AddressingUtils;
 
@@ -42,16 +39,15 @@ public class WorkflowFactoryServiceImpl extends WorkflowFactoryServiceImplBase {
 		SimpleResourceKey key = null;
 		try {
 			Context ctx = new InitialContext();
-			String lookupString = Constants.JNDI_SERVICES_BASE_NAME + "cagrid/WorkflowServiceImpl" + "/home";
-			System.out.println("Context String : " + lookupString);
+			String lookupString = Constants.JNDI_SERVICES_BASE_NAME 
+			+ "cagrid/WorkflowServiceImpl" + "/home";
 			workflowHome = (WorkflowServiceHome) ctx.lookup(lookupString);
 
 			key = workflowHome.create(null, wMSInputElement);
 			// Create the EPR here
 			EndpointReferenceType epr = new EndpointReferenceType();
-			System.out.println("Service endpoint: " + ServiceHost.getBaseURL() + "cagrid/WorkflowServiceImpl");
-			epr = AddressingUtils.createEndpointReference(ServiceHost.getBaseURL() + "cagrid/WorkflowServiceImpl", key);
-			System.out.println("EPR: " + ObjectSerializer.toString(epr, new QName("", "EPR")));
+			epr = AddressingUtils.createEndpointReference(ServiceHost.getBaseURL() 
+					+ "cagrid/WorkflowServiceImpl", key);
 			output.setWorkflowEPR(epr);
 
 		} catch (Exception e) {

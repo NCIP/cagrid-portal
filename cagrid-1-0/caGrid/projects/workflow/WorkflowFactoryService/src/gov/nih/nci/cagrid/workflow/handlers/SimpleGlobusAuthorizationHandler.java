@@ -18,15 +18,14 @@ public class SimpleGlobusAuthorizationHandler extends BasicHandler {
 	}
 	
 	public void invoke(MessageContext msgContext) throws AxisFault {
-		// TODO Auto-generated method stub
 		 msgContext.setProperty(
                  GSIConstants.GSI_AUTHORIZATION,
                  org.globus.gsi.gssapi.auth.NoAuthorization.getInstance());
-		 msgContext.setProperty(GSIConstants.GSI_TRANSPORT,
-                 GSIConstants.ENCRYPTION);
+		/* msgContext.setProperty(GSIConstants.GSI_TRANSPORT,
+                 GSIConstants.ENCRYPTION);*/
 		/* msgContext.setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV,
 					org.globus.wsrf.security.Constants.ENCRYPTION);*/
-
 	}
-
+	// Query service security metadata and set the message context propterties 
+	// for secure conversation and secure messaging
 }

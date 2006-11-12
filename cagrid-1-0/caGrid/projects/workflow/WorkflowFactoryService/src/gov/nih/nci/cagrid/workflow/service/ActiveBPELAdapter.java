@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType;
 
 import java.net.URL;
+import java.rmi.RemoteException;
 
 import javax.xml.namespace.QName;
 
@@ -21,11 +22,15 @@ import org.apache.axis.message.SOAPEnvelope;
 import org.apache.axis.message.addressing.AddressingHeaders;
 import org.apache.axis.message.addressing.Constants;
 import org.apache.axis.message.addressing.To;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import AeAdminServices.BpelEngineAdminLocator;
 import AeAdminServices.RemoteDebugSoapBindingStub;
 
 public class ActiveBPELAdapter implements WorkflowEngineAdapter {
+	
+	static final Log logger = LogFactory.getLog(ActiveBPELAdapter.class);
 	
 	private String abAdminRoot = 
 		"http://localhost:8080/active-bpel/services/";
@@ -37,9 +42,17 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	
 	private WorkflowOutputType workflowOutput = null;
 	
+	private long processId;
+	
+	private QName workflowQName = null;
+	
+	private String workflowName = null;
+	
+	private String bprFileName = null;
+	
 	public ActiveBPELAdapter(String abAdminUrl)  {
 		if (abAdminUrl != null) {
-			this.abAdminUrl = abAdminUrl;
+			this.abAdminUrl = abAdminUrl + "BpelEngineAdmin";
 		}
 		BpelEngineAdminLocator locator = new BpelEngineAdminLocator();
 		try {
@@ -69,24 +82,18 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	
 	public String deployBpr(String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws Exception {
 		String returnString = "success";
-		String bprFileName = BPRCreator.makeBpr(bpelFileName,workflowName, wsdlRefArray);
-		returnString = this.mRemote.deployBpr(workflowName + ".bpr", getBase64EncodedBpr(bprFileName));
+		this.workflowName = workflowName;
+		this.bprFileName = BPRCreator.makeBpr(bpelFileName,this.workflowName, wsdlRefArray);
+		returnString = this.mRemote.deployBpr(this.workflowName + ".bpr", 
+				getBase64EncodedBpr(this.bprFileName));
+		this.workflowQName = new QName(this.workflowName);
 		return returnString;
 	}
 	
 	
-	public  WorkflowStatusType invokeProcess( 
+	private  WorkflowStatusType invokeProcess( 
 			String partnerLinkName, StartInputType startInput) throws Exception {
 		String serviceUrl = this.abAdminRoot + partnerLinkName;
-		return callService(serviceUrl, startInput);
-	}
-	
-	private static String getBase64EncodedBpr(String pathToBpr) {
-		return Base64.encodeFromFile(pathToBpr);
-	}
-	
-	public WorkflowStatusType callService(String serviceUrl, 
-			StartInputType startInput) throws Exception {
 		SOAPEnvelope env = new SOAPEnvelope();
 		env.getBody().addChildElement(
 				new SOAPBodyElement(startInput.getInputArgs().get_any()[0]));
@@ -102,10 +109,14 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	    this.workflowStatus = WorkflowStatusType.Active;
 		this.workflowOutput.set_any(new MessageElement[]{new MessageElement(res.getAsDOM())});
 		//output.setOutputType(outputType);
+		this.processId = getProcessId();
 		return this.workflowStatus;
 	}
-
-
+	
+	private static String getBase64EncodedBpr(String pathToBpr) {
+		return Base64.encodeFromFile(pathToBpr);
+	}
+	
 	public String deployWorkflow(String bpelFileName, String workflowName, WSDLReferences[] wsdlRefArray) throws WorkflowExceptionType {
 		try {
 			return deployBpr(bpelFileName, workflowName, wsdlRefArray);
@@ -115,14 +126,12 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	}
 
 
-	public WorkflowStatusType startWorkflow(String workflowName, 
-			StartInputType startInput) throws WorkflowExceptionType {
+	public WorkflowStatusType startWorkflow(StartInputType startInput) throws WorkflowExceptionType {
 		WorkflowStatusType status = WorkflowStatusType.Pending;
-		System.out.println("Starting workflow : " + workflowName);
+		System.out.println("Starting workflow : " + this.workflowName);
 		try {
-			this.invokeProcess(workflowName, startInput);
+			this.invokeProcess(this.workflowName + "Service", startInput);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			status = WorkflowStatusType.Failed;
 			e.printStackTrace();
 		}
@@ -130,12 +139,21 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	}
 
 
-	public WorkflowStatusType getWorkflowStatus(String workflowName) throws WorkflowExceptionType {
+	public WorkflowStatusType getWorkflowStatus() throws WorkflowExceptionType {
 		try {
-			QName workflowQName = new QName(workflowName);
-			System.out.println("API Version: " + mRemote.getAPIVersion());
-			String statusString = getWorkflowStatus(workflowQName);
-			return getStatusFromString(statusString);
+			AeProcessInstanceDetail detail = null;
+			AeProcessFilter filter = new AeProcessFilter();
+			filter.setProcessName(this.workflowQName);
+			AeProcessListResult list = mRemote.getProcessList( filter );
+			AeProcessInstanceDetail[] details = list.getRowDetails();
+			for (int i=0; i < details.length; i++) {
+				if (details[i].getProcessId() == this.processId) {
+					detail = details[i];
+				}
+			}
+			logger.info("State:" + detail.getState());
+			int status = detail.getState();
+			return getStatusFromString(status);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new WorkflowExceptionType();
@@ -143,26 +161,18 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	}
 
 
-	public void suspend(String workflowName) throws WorkflowExceptionType {
+	public void suspend() throws WorkflowExceptionType {
 		try {
-			AeProcessFilter filter = new AeProcessFilter();
-			filter.setProcessName(new QName(workflowName));
-			AeProcessListResult list = mRemote.getProcessList( filter );
-			long processId =  list.getRowDetails()[0].getProcessId();
-			this.mRemote.suspendProcess(processId);
+			this.mRemote.suspendProcess(this.processId);
 		} catch (Exception e) {
 			throw new WorkflowExceptionType();
 		}
 	}
 
 
-	public void resume(String workflowName) throws WorkflowExceptionType {
+	public void resume() throws WorkflowExceptionType {
 		try {
-			AeProcessFilter filter = new AeProcessFilter();
-			filter.setProcessName(new QName(workflowName));
-			AeProcessListResult list = mRemote.getProcessList( filter );
-			long processId =  list.getRowDetails()[0].getProcessId();
-			this.mRemote.resumeProcess(processId);
+			this.mRemote.resumeProcess(this.processId);
 		} catch (Exception e) {
 			throw new WorkflowExceptionType();
 		}		
@@ -170,56 +180,33 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	}
 
 
-	public void cancel(String workflowName) throws WorkflowExceptionType {
+	public void cancel() throws WorkflowExceptionType {
 		try {
-			AeProcessFilter filter = new AeProcessFilter();
-			filter.setProcessName(new QName(workflowName));
-			AeProcessListResult list = mRemote.getProcessList( filter );
-			long processId =  list.getRowDetails()[0].getProcessId();
-			this.mRemote.terminateProcess(processId);
+			this.mRemote.terminateProcess(this.processId);
 		} catch (Exception e) {
 			throw new WorkflowExceptionType();
 		}		
 	}
 	
-	public String getProcessStatus(QName workflowName) throws Exception {
-		AeProcessFilter filter = new AeProcessFilter();
-	      filter.setProcessName(workflowName);
-	      AeProcessListResult list = mRemote.getProcessList( filter );
-	      System.out.println("State: " + list.getRowDetails()[0].getState());
-	      displayProcessList(workflowName);
-	      return "State: " +list.getRowDetails()[0].getState() ;
-	}
 	
-	public String getWorkflowStatus(QName workflowQName) throws Exception {
-		AeProcessFilter filter = new AeProcessFilter();
-	     filter.setProcessName(workflowQName);
-	     AeProcessListResult list = mRemote.getProcessList( filter );
-	     AeProcessInstanceDetail[] details = list.getRowDetails();
-	     AeProcessInstanceDetail detail = details[0];
-	     System.out.println("State:" + detail.getState());
-	     displayProcessList(workflowQName);
-	     return " " + detail.getState();
-	}
-
-	public int displayProcessList(QName workflowName) throws Exception {
+	private int displayProcessList(QName workflowName) throws Exception {
 	      AeProcessFilter filter = new AeProcessFilter();
 	      filter.setProcessName(workflowName);
 	      //filter.setAdvancedQuery("");
 	      AeProcessListResult list = mRemote.getProcessList( filter );
 	      if ( list.getTotalRowCount() <= 0 )
 	      {
-	         System.out.println( "No process info to display.");
+	         logger.debug( "No process info to display.");
 	         return 0 ;
 	      }
 	      else
 	      {
 	         AeProcessInstanceDetail[] details = list.getRowDetails();
-	         System.out.println( "PID\tState\tName" );
+	         logger.debug("PID\tState\tName" );
 	         for ( int i = 0 ; i < list.getTotalRowCount() ; i++ )
 	         {
 	            AeProcessInstanceDetail detail = details[i];
-	            System.out.println( detail.getProcessId()   + "\t" +
+	            logger.debug( detail.getProcessId()   + "\t" +
 	                                detail.getState() + "\t" +
 	                                detail.getName() );
 	         }
@@ -228,11 +215,30 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	      }
 	   }
 
-	public static WorkflowStatusType getStatusFromString(String state) {
-		WorkflowStatusType status = WorkflowStatusType.Pending;
-		return status;
+	public static WorkflowStatusType getStatusFromString(int state) {
+		if (state == 0) {
+			return WorkflowStatusType.Pending;
+		} else if (state == 1) {
+			return WorkflowStatusType.Active;
+		} else if (state == 2) {
+			return WorkflowStatusType.Suspended;
+		} else if (state == 3) {
+			return WorkflowStatusType.Done;
+		} else if (state == 4) {
+			return WorkflowStatusType.Failed;
+		} else {
+			return WorkflowStatusType.Pending;
+		}
+		
 	}
-
+	
+	private long getProcessId() throws RemoteException {
+		AeProcessFilter filter = new AeProcessFilter();
+		filter.setProcessName(this.workflowQName);
+		AeProcessListResult list = mRemote.getProcessList( filter );
+		return list.getRowDetails()[0].getProcessId();
+		
+	}
 	public WorkflowOutputType getWorkflowOutput() {
 		return workflowOutput;
 	}
@@ -241,11 +247,12 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		this.workflowOutput = workflowOutput;
 	}
 
-	public WorkflowStatusType getWorkflowStatus() {
-		return workflowStatus;
-	}
-
 	public void setWorkflowStatus(WorkflowStatusType workflowStatus) {
 		this.workflowStatus = workflowStatus;
+	}
+
+	public void remove() throws  RemoteException {
+		this.mRemote.terminateProcess(this.processId);
+		// If activebpel exposes remote interface to remove bpr files
 	}
 }

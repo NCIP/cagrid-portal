@@ -88,11 +88,6 @@ public class PDDGenerator {
 				pNode.appendChild(pRoleNode);
 				pRoleNode.appendChild(epRefNode);
 				epRefNode.appendChild(epAddrNode);
-				if(ref == null) {
-					System.out.println("this is null");
-				} else {
-					System.out.println("this is not null");
-				}
 				epAddrNode.appendChild(doc.createTextNode(ref.getServiceUrl().toString()));
 			}
 			if (!"".equals(plink.myRole)) {
@@ -219,29 +214,4 @@ public class PDDGenerator {
 
 	}
 
-	public static void main(String args[]) throws Exception {
-
-		String workflowName = args[0];
-		File f = new File(args[1]);
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		dbf.setNamespaceAware(true);
-		DocumentBuilder db;
-		try {
-			db = dbf.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			throw e;
-		}
-		Document bpelDoc = db.parse(f);
-		WSDLReferences[] wsdlRefArray = new WSDLReferences[1];
-		wsdlRefArray[0] = new WSDLReferences();
-		wsdlRefArray[0].setServiceUrl(
-				new URI("http://localhost:8080/wsrf/services/CounterService"));
-		wsdlRefArray[0].setWsdlLocation("http://localhost:8080/wsrf/share/schema/core/samples/counter/counter_flattened.wsdl");
-		wsdlRefArray[0].setWsdlNamespace(new URI("http://counter.com"));
-		
-		Document pdd = PDDGenerator.generatePDD(workflowName, 
-				bpelDoc, "TestService", wsdlRefArray);
-		System.out.println(XMLUtils.PrettyDocumentToString(pdd));
-
-	}
 }

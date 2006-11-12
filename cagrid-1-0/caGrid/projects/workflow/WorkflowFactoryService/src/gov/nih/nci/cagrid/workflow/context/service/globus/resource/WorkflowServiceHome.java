@@ -14,7 +14,7 @@ import org.globus.wsrf.impl.SimpleResourceKey;
  */
 
 public class WorkflowServiceHome extends ResourceHomeImpl {
-	public QName workflowQName =
+	public static QName workflowQName =
 		new QName("http://workflow.cagrid.nci.nih.gov/WorkflowServiceImpl", "WorkflowKey");
 	public Class getKeyTypeClass() {
 		// TODO Auto-generated method stub

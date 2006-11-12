@@ -77,6 +77,13 @@ public class WorkflowServiceImplClient extends ServiceSecurityClient implements 
 		return port;
 	}
 
+	public WorkflowServiceImplPortType getPort() {
+		if (this.portType != null) {
+			return this.portType;
+		} else {
+			return null;
+		}
+	}
 	public static void usage() {
 		System.out.println(WorkflowServiceImplClient.class.getName() + " -url <service url>");
 	}

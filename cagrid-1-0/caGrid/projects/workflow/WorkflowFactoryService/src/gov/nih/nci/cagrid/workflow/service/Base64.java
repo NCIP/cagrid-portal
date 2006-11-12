@@ -639,10 +639,6 @@ public class Base64
 
             return 3;
             }catch( Exception e){
-                System.out.println(""+source[srcOffset]+ ": " + ( DECODABET[ source[ srcOffset     ] ]  ) ); //$NON-NLS-1$ //$NON-NLS-2$
-                System.out.println(""+source[srcOffset+1]+  ": " + ( DECODABET[ source[ srcOffset + 1 ] ]  ) ); //$NON-NLS-1$ //$NON-NLS-2$
-                System.out.println(""+source[srcOffset+2]+  ": " + ( DECODABET[ source[ srcOffset + 2 ] ]  ) ); //$NON-NLS-1$ //$NON-NLS-2$
-                System.out.println(""+source[srcOffset+3]+  ": " + ( DECODABET[ source[ srcOffset + 3 ] ]  ) ); //$NON-NLS-1$ //$NON-NLS-2$
                 return -1;
             }   //e nd catch
         }

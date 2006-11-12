@@ -11,14 +11,14 @@ public interface WorkflowEngineAdapter {
 			String workflowName, 
 			WSDLReferences[] wsdlRefArray) throws WorkflowExceptionType;
 	
-	public WorkflowStatusType startWorkflow(String workflowName, StartInputType startInput) throws WorkflowExceptionType;
+	public WorkflowStatusType startWorkflow(StartInputType startInput) throws WorkflowExceptionType;
 	
-	public WorkflowStatusType getWorkflowStatus(String workflowName) throws WorkflowExceptionType;
+	public WorkflowStatusType getWorkflowStatus() throws WorkflowExceptionType;
 	
-	public void suspend(String workflowName) throws WorkflowExceptionType;
+	public void suspend() throws WorkflowExceptionType;
 	
-	public void resume(String workflowName) throws WorkflowExceptionType;
+	public void resume() throws WorkflowExceptionType;
 	
-	public void cancel(String workflowName) throws WorkflowExceptionType;
+	public void cancel() throws WorkflowExceptionType;
 	
 }
