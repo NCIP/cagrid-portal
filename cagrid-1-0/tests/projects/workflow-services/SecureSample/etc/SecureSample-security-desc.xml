@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <securityConfig xmlns="http://www.globus.org">
-  <proxy-file value="/tmp/x509up_u1247" />
+  <proxy-file value="C:\\certificates\\x509up_u_madduri" />
   <authz value="gridmap" />
-  <gridmap value="/autonfs/home/madduri/gridmap" />
+  <gridmap value="C:\\certificates\\gridmap" />
   <auth-method>
     <GSISecureConversation>
       <protection-level>
