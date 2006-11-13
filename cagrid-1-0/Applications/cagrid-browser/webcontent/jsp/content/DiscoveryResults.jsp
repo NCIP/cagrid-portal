@@ -22,7 +22,7 @@
             </f:facet>
 
 
-            <h:dataTable cellpadding="3" cellspacing="0" border="0"
+            <h:dataTable cellpadding="3" cellspacing="1" border="0"
                          styleClass="dataTable"
                          value="#{discoveryResult.list}" var="service"
                          rowClasses="dataRowLight,dataRowDark"
@@ -33,22 +33,25 @@
                         <h:column>
                             <h:commandLink
                                     action="#{service.navigateToServiceDetails}">
-                                <h:outputText value="#{service.url}" styleClass="formTextBold"/>
+                                <h:outputText value="#{service.url}" styleClass="formText"/>
                             </h:commandLink>
-
                         </h:column>
 
                         <h:column>
-                            <h:panelGroup styleClass="formField">
-                                <h:outputText value="#{messages.rcInfoName}"/>
+                            <h:panelGroup>
+                                <h:outputText value="#{messages.serviceName} " styleClass="formTextBold"/>
+                                <h:outputText value="#{service.name}" styleClass="formText"/>
                             </h:panelGroup>
                         </h:column>
 
+
                         <h:column>
                             <h:panelGroup styleClass="formField">
-                                <h:outputText value="#{messages.rcInfoDescription}"/>
+                                <h:outputText value="#{messages.serviceDescription} " styleClass="formTextBold"/>
+                                <h:outputText value="#{service.description}" styleClass="formText"/>
                             </h:panelGroup>
                         </h:column>
+
                     </h:panelGrid>
                 </h:column>
 

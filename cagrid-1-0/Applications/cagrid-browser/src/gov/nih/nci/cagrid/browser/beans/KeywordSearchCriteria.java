@@ -76,7 +76,7 @@ public class KeywordSearchCriteria {
         try {
             DiscoveryClient discClient = idxService.getDiscClient();
             discoveryResult.clear();
-            discoveryResult.addDiscoveryResult(discClient.getAllServices(false));
+            discoveryResult.addDiscoveryResult(discClient.getAllServices(true));
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             throw new FacesException(e);

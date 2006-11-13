@@ -12,67 +12,43 @@ import org.apache.axis.types.URI;
  * Time: 6:38:12 PM
  * To change this template use File | Settings | File Templates.
  */
-public final class GridUtils {
+public final class CaGridServiceUtils {
+
+    private EndpointReferenceType epr;
+    private gov.nih.nci.cagrid.metadata.ServiceMetadata metadata;
+
+    public CaGridServiceUtils(EndpointReferenceType serviceEPR) throws MetadataRetreivalException {
+        this.epr = serviceEPR;
+        try {
+            this.metadata = getServiceMetadata(serviceEPR);
+        } catch (Exception e) {
+            // wrap the generic exception into something more specific
+            throw new MetadataRetreivalException("Error retreiving service metadata for " +
+                    serviceEPR.toString());
+        }
+    }
+
+
     public static EndpointReferenceType getEPR(String epr)
             throws URI.MalformedURIException {
         return new EndpointReferenceType(new URI(epr));
 
     }
 
-    /**
-     * @param serviceEPR
-     * @return Service Description
-     */
-    public static String getServiceDescription(EndpointReferenceType serviceEPR)
+
+    public String getServiceDescription() {
+        return this.metadata.getServiceDescription().getService().getDescription();
+    }
+
+    public String getServiceName() {
+        return this.metadata.getServiceDescription().getService().getName();
+    }
+
+    public String getServiceVersion(EndpointReferenceType serviceEPR)
             throws MetadataRetreivalException {
-        return GridUtils.getService(serviceEPR).getDescription();
+        return this.metadata.getServiceDescription().getService().getVersion();
     }
 
-    /**
-     * @param serviceEPR
-     * @return
-     * @throws MetadataRetreivalException
-     */
-    public static String getServiceName(EndpointReferenceType serviceEPR)
-            throws MetadataRetreivalException {
-        return GridUtils.getService(serviceEPR).getName();
-
-    }
-
-    public static String getServiceVersion(EndpointReferenceType serviceEPR)
-            throws MetadataRetreivalException {
-        return GridUtils.getService(serviceEPR).getVersion();
-    }
-
-    /**
-     * Will return the Service metadata object for a given
-     * grid service EPR.
-     *
-     * @param serviceEPR
-     * @return
-     * @throws MetadataRetreivalException
-     */
-    public static gov.nih.nci.cagrid.metadata.service.Service getService(
-            EndpointReferenceType serviceEPR) throws MetadataRetreivalException {
-        try {
-            return GridUtils.getServiceMetadata(serviceEPR)
-                    .getServiceDescription().getService();
-        } catch (Exception e) {
-            // wrap the generic exception into something more specific
-            throw new MetadataRetreivalException(
-                    "Error retreiving service metadata for " +
-                            serviceEPR.toString());
-        }
-    }
-
-    /**
-     * @param service
-     * @return boolean if service is alive and responding
-     */
-    public static boolean isServiceActive(EndpointReferenceType service) {
-        //ToDo implement
-        return true;
-    }
 
     /**
      * Main method that all other
@@ -84,7 +60,7 @@ public final class GridUtils {
      * @return
      * @throws MetadataRetreivalException
      */
-    public static gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadata(
+    public gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadata(
             EndpointReferenceType serviceEPR) throws MetadataRetreivalException {
         try {
             return MetadataUtils.getServiceMetadata(serviceEPR);

@@ -29,7 +29,7 @@
 <td>
 
     <!-- welcome begins -->
-    <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+    <table style="height:100%;vertical-align:top;" cellpadding="0" cellspacing="0" border="0">
         <tr><td class="welcomeTitle" height="20">
             <h:outputText value="#{messages.siteWelcomeTitle}"/>
         </td>

@@ -688,17 +688,14 @@ img.img {
 
 .formText {
     font-family: arial, helvetica, verdana, sans-serif;
-
-    font-size: 0.87em;
+    font-size: 0.90em;
     color: #000000;
-    font-size: .8em;
 }
 
 .formTextBold {
     font-weight: bold;
     font-family: arial, helvetica, verdana, sans-serif;
-
-    font-size: 0.87em;
+    font-size: 0.9em;
     color: #000000;
 }
 
