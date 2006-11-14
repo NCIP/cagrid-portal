@@ -38,19 +38,35 @@ You can ignore sections marked (Optional)
         When deploying Portal, the only information needed to connect the Portal
         to caGrid are the URI's to the caGrid index services.
 
-        Edit the portal/src/properties/applicationContext-data-access.xml file
-        and look for the line
-            '<bean id="dbInitBean"'
+        Edit the portal/WEB-INF/applicationContext.xml file
+        and look for the section
 
-        Add the index services that you want this portal to extract information
-        from.
+          <!-- Database initi and sync tasks -->
+            <bean id="initBean" class="gov.nih.nci.cagrid.portal.utils.DatabaseInitUtility">
+                <!--Set the indexes to aggregate from-->
+                <property name="indexSet">
+                    <set>
+                        <value>http://cagrid04.bmi.ohio-state.edu:7080/wsrf/services/DefaultIndexService</value>
+                    </set>
+                </property>
+                <property name="manager">
+                    <ref bean="gridServiceManager"/>
+                </property>
+            </bean>
 
-        <property name="indexList">
-         <set>
-          <value>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService</value>
+
+       The list of index services that portal will extract information from are defined in
 
 
-        Replace the current entries in the indexList to your own
+        <property name="indexSet">
+                    <set>
+                        <value>http://cagrid04.bmi.ohio-state.edu:7080/wsrf/services/DefaultIndexService</value>
+                    </set>
+         </property>
+
+        Replace the current entries in the indexList to your own. You can specify one or
+        many index services here.
+
 
     ===========================================================================
     2.3 Metadata Aggregation   (Optional)
@@ -82,6 +98,9 @@ You can ignore sections marked (Optional)
         to ~/.globus/certificates directory in Unix
         OR
         C:\Documents and Settings\kherm\.globus or similar in Windows
+
+
+    Also read section 2.7 for syncGTS
 
 
     ===========================================================================
@@ -127,7 +146,38 @@ You can ignore sections marked (Optional)
 
 
     ===========================================================================
-      2.6 Portal map component
+      2.6 Credential management with syncGTS
+    ===========================================================================
+
+     The portal by default uses a syncGTS client to establish trust with
+    services in caGrid. The configuation file for syncGTS is resources/sync-description.xml
+
+    Please inspect the sync-description.xml file to make sure its pointing to the right
+    syncGTS service.
+
+
+    The syncGTS client is run as a scheduled task in portal. To disable this client
+    edi tthe src/properties/applicationContext-aggregators.xml
+
+     <!-- Sync every 10 minutes -->
+        <bean id="syncGTSTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+            <property name="delay">
+                <value>60000</value>
+            </property>
+            <property name="period">
+                <value>60000</value>
+            </property>
+            <property name="timerTask">
+                <ref bean="syncMethodInvokingTask"/>
+            </property>
+        </bean>
+
+
+    Here a negative "period" value will disable the sync task
+
+
+    ===========================================================================
+      2.7 Portal map component
     ===========================================================================
     There is a custom Map component in Portal. To use it refer to the map JSF
     pages.
@@ -143,7 +193,7 @@ You can ignore sections marked (Optional)
 
 
     ===========================================================================
-      2.7 Portal geocoding component
+      2.8 Portal geocoding component
     ===========================================================================
 
     Portal does geocoding using the yahoo web service at
@@ -229,3 +279,5 @@ VERY IMPORTANT- Its important to first build the main caGrid build before
     The default messages are logged to a
     $CATALINA_HOME/logs/portal.log that is rotated periodically.
     But this be can configured to log to the console (say for debugging)
+
+   
