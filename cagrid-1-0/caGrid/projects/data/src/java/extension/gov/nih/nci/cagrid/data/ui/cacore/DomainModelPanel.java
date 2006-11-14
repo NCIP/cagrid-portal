@@ -28,7 +28,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -162,8 +161,12 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			noDomainModelRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (noDomainModelRadioButton.isSelected()) {
+						// enable / disable panels
 						PortalUtils.setContainerEnabled(getDmFilePanel(), false);
 						PortalUtils.setContainerEnabled(getCaDsrPanel(), false);
+						// clear out the supplied domain model info
+						getFileTextField().setText("");
+						setSelectedDomainModelFilename(null);
 					}
 				}
 			});
@@ -184,6 +187,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			fromFileRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (fromFileRadioButton.isSelected()) {
+						// enable / disable panels
 						PortalUtils.setContainerEnabled(getDmFilePanel(), true);
 						PortalUtils.setContainerEnabled(getCaDsrPanel(), false);
 					}
@@ -206,8 +210,12 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			fromCaDsrRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (fromCaDsrRadioButton.isSelected()) {
+						// enable / disable panels
 						PortalUtils.setContainerEnabled(getDmFilePanel(), false);
 						PortalUtils.setContainerEnabled(getCaDsrPanel(), true);
+						// clear out supplied domain model info
+						getFileTextField().setText("");
+						setSelectedDomainModelFilename(null);
 					}
 				}
 			});
@@ -302,30 +310,31 @@ public class DomainModelPanel extends AbstractWizardPanel {
 						ex.printStackTrace();
 						ErrorDialog.showErrorDialog("Error getting filename", ex);
 					}
-					if (selectedFilename != null);
-					File selectedFile = new File(selectedFilename);
-					String serviceEtcDir = CacoreWizardUtils.getServiceBaseDir(getServiceInformation()) + File.separator + "etc";
-					File outputFile = new File(serviceEtcDir + File.separator + selectedFile.getName());
-					getFileTextField().setText(outputFile.getAbsolutePath());
-					try {
-						Utils.copyFile(selectedFile, outputFile);
-						Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-						CadsrInformation info = data.getCadsrInformation();
-						if (info == null) {
-							info = new CadsrInformation();
-						}
-						info.setSuppliedDomainModel(outputFile.getName());
-						data.setCadsrInformation(info);
-						ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
-						loadDomainModelFile();
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						ErrorDialog.showErrorDialog("Error copying selected file to service", ex);
-					}
+					getFileTextField().setText(selectedFilename == null ? "" : selectedFilename);
+					setSelectedDomainModelFilename(selectedFilename);
 				}
 			});
 		}
 		return browseButton;
+	}
+	
+	
+	private void setSelectedDomainModelFilename(String filename) {
+		// set the selected file on the data extension's info
+		try {
+			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
+			CadsrInformation info = data.getCadsrInformation();
+			if (info == null) {
+				info = new CadsrInformation();
+			}
+			info.setSuppliedDomainModel(filename);
+			data.setCadsrInformation(info);
+			ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
+			loadDomainModelFile();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			ErrorDialog.showErrorDialog("Error copying selected file to service", ex);
+		}
 	}
 
 
@@ -619,71 +628,74 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	
 	
 	private void loadDomainModelFile() {
-		try {
-			// get the domain model
-			DomainModel model = MetadataUtils.deserializeDomainModel(new FileReader(getFileTextField().getText()));
-			// get extension data
-			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-			CadsrInformation info = data.getCadsrInformation();
-			if (info == null) {
-				info = new CadsrInformation();
-				data.setCadsrInformation(info);
-			}
-			// set the most recent project information
-			Project proj = new Project();
-			proj.setDescription(model.getProjectDescription());
-			proj.setLongName(model.getProjectLongName());
-			proj.setShortName(model.getProjectShortName());
-			proj.setVersion(model.getProjectVersion());
-			lastSelectedProject = proj;
-			// set cadsr project information
-			info.setProjectLongName(model.getProjectLongName());
-			info.setProjectVersion(model.getProjectVersion());
-			// walk classes, creating package groupings as needed
-			Map packageClasses = new HashMap();
-			UMLClass[] modelClasses = model.getExposedUMLClassCollection().getUMLClass(); 
-			for (int i = 0; i < modelClasses.length; i++) {
-				String packageName = modelClasses[i].getPackageName();
-				if (packageClasses.containsKey(packageName)) {
-					((List) packageClasses.get(packageName)).add(modelClasses[i].getClassName());
-				} else {
-					List classList = new ArrayList();
-					classList.add(modelClasses[i].getClassName());
-					packageClasses.put(packageName, classList);
+		String domainModelFile = getFileTextField().getText();
+		if (domainModelFile != null && domainModelFile.length() != 0) {
+			try {
+				// get the domain model
+				DomainModel model = MetadataUtils.deserializeDomainModel(new FileReader(domainModelFile));
+				// get extension data
+				Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
+				CadsrInformation info = data.getCadsrInformation();
+				if (info == null) {
+					info = new CadsrInformation();
+					data.setCadsrInformation(info);
 				}
-			}
-			// create cadsr packages
-			CadsrPackage[] packages = new CadsrPackage[packageClasses.keySet().size()];
-			int packIndex = 0;
-			Iterator packageNameIter = packageClasses.keySet().iterator();
-			while (packageNameIter.hasNext()) {
-				String packName = (String) packageNameIter.next();
-				String mappedNamespace = NamespaceUtils.createNamespaceString(
-					model.getProjectShortName(), model.getProjectVersion(), packName);
-				CadsrPackage pack = new CadsrPackage();
-				pack.setName(packName);
-				pack.setMappedNamespace(mappedNamespace);
-				// create ClassMappings for the package's classes
-				List classNameList = (List) packageClasses.get(packName);
-				ClassMapping[] mappings = new ClassMapping[classNameList.size()];
-				for (int i = 0; i < classNameList.size(); i++) {
-					ClassMapping mapping = new ClassMapping();
-					String className = (String) classNameList.get(i);
-					mapping.setClassName(className);
-					mapping.setElementName(className);
-					mapping.setSelected(true);
-					mapping.setTargetable(true);
-					mappings[i] = mapping;
+				// set the most recent project information
+				Project proj = new Project();
+				proj.setDescription(model.getProjectDescription());
+				proj.setLongName(model.getProjectLongName());
+				proj.setShortName(model.getProjectShortName());
+				proj.setVersion(model.getProjectVersion());
+				lastSelectedProject = proj;
+				// set cadsr project information
+				info.setProjectLongName(model.getProjectLongName());
+				info.setProjectVersion(model.getProjectVersion());
+				// walk classes, creating package groupings as needed
+				Map packageClasses = new HashMap();
+				UMLClass[] modelClasses = model.getExposedUMLClassCollection().getUMLClass(); 
+				for (int i = 0; i < modelClasses.length; i++) {
+					String packageName = modelClasses[i].getPackageName();
+					if (packageClasses.containsKey(packageName)) {
+						((List) packageClasses.get(packageName)).add(modelClasses[i].getClassName());
+					} else {
+						List classList = new ArrayList();
+						classList.add(modelClasses[i].getClassName());
+						packageClasses.put(packageName, classList);
+					}
 				}
-				pack.setCadsrClass(mappings);
-				packages[packIndex] = pack;
-				packIndex++;
+				// create cadsr packages
+				CadsrPackage[] packages = new CadsrPackage[packageClasses.keySet().size()];
+				int packIndex = 0;
+				Iterator packageNameIter = packageClasses.keySet().iterator();
+				while (packageNameIter.hasNext()) {
+					String packName = (String) packageNameIter.next();
+					String mappedNamespace = NamespaceUtils.createNamespaceString(
+						model.getProjectShortName(), model.getProjectVersion(), packName);
+					CadsrPackage pack = new CadsrPackage();
+					pack.setName(packName);
+					pack.setMappedNamespace(mappedNamespace);
+					// create ClassMappings for the package's classes
+					List classNameList = (List) packageClasses.get(packName);
+					ClassMapping[] mappings = new ClassMapping[classNameList.size()];
+					for (int i = 0; i < classNameList.size(); i++) {
+						ClassMapping mapping = new ClassMapping();
+						String className = (String) classNameList.get(i);
+						mapping.setClassName(className);
+						mapping.setElementName(className);
+						mapping.setSelected(true);
+						mapping.setTargetable(true);
+						mappings[i] = mapping;
+					}
+					pack.setCadsrClass(mappings);
+					packages[packIndex] = pack;
+					packIndex++;
+				}
+				info.setPackages(packages);
+				ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				ErrorDialog.showErrorDialog("Error loading domain model information", ex);
 			}
-			info.setPackages(packages);
-			ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			ErrorDialog.showErrorDialog("Error loading domain model information", ex);
 		}
 	}
 }
