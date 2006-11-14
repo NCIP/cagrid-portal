@@ -108,7 +108,7 @@ public abstract class <%=info.getService().getName()%>ImplBase {
 	%>
 	
 	
-	protected <%=schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName()%> get<%=TemplateUtils.upperCaseFirstCharacter(name)%>MD(){
+	protected <%=schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()%> get<%=TemplateUtils.upperCaseFirstCharacter(name)%>MD(){
 		BaseResource serviceBaseResource;
 		try {
 			serviceBaseResource = (BaseResource)ResourceContext.getResourceContext().getResource();

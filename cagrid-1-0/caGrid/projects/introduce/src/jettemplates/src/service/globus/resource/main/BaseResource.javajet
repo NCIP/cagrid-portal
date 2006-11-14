@@ -64,7 +64,7 @@ public class BaseResource implements Resource, ResourceProperties {
 			//define the RP
 			stringBuffer.append("private ResourceProperty "+name+"RP;\n");
 			//define the MD bean to hold the value
-			stringBuffer.append("\tprivate "+ schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName()+" "+name+"MD;\n");
+			stringBuffer.append("\tprivate "+ schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()+" "+name+"MD;\n");
 		}
 	}%>	
 
@@ -266,11 +266,11 @@ public class BaseResource implements Resource, ResourceProperties {
 		return this.<%=name%>RP;
 	}
 	
-	public <%=schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName()%> get<%=TemplateUtils.upperCaseFirstCharacter(name)%>MD(){
+	public <%=schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()%> get<%=TemplateUtils.upperCaseFirstCharacter(name)%>MD(){
 		return this.<%=name%>MD;
 	}
 	
-	public void set<%=TemplateUtils.upperCaseFirstCharacter(name)%>MD(<%=schemaInformation.getNamespace().getPackageName() + "." + schemaInformation.getType().getClassName()+" "+name%> ){
+	public void set<%=TemplateUtils.upperCaseFirstCharacter(name)%>MD(<%=schemaInformation.getType().getPackageName() + "." + schemaInformation.getType().getClassName()+" "+name%> ){
 		this.<%=name%>MD=<%=name%>;
 		get<%=TemplateUtils.upperCaseFirstCharacter(name)%>RP().set(0,<%=name%>);
 	}
