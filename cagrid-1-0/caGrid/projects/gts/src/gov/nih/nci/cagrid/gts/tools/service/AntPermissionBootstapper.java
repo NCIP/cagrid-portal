@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gts.tools.service;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.common.IOUtils;
 import gov.nih.nci.cagrid.common.SimpleResourceManager;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.Role;
