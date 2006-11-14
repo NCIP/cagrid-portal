@@ -227,7 +227,10 @@ VERY IMPORTANT- Its important to first build the main caGrid build before
     (During development and source releases the Portal project is to be built
     from main (Master) build (../../caGrid)
         - Build with "ant all"
-        - Optionally run "ant createDatabase" (see section 2.1 Database)
+        - Optionally run "ant createDatabase"  This will be needed
+          for a fresh install of portal (if not done in section 2.1 Database)
+        - Optionally run "ant createCaBIGWorkspaces" This creates caBIG seed data
+          and is recommended for a fresh install of the portal.
 
         - Run "ant deployTomcatExploded" OR "ant deployTomcatWar" to deploy
         into tomcat application server
