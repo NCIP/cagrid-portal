@@ -5,8 +5,6 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
-import gov.nih.nci.cagrid.data.extension.CQLProcessorConfig;
-import gov.nih.nci.cagrid.data.extension.CQLProcessorConfigProperty;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
@@ -23,9 +21,11 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /** 
@@ -40,25 +40,49 @@ import javax.swing.table.DefaultTableModel;
 public class QueryProcessorParametersTable extends JTable {
 	private ExtensionTypeExtensionData extData;
 	private ServiceInformation serviceInfo;
+	private JTextField editorTextField = null;
 
 	public QueryProcessorParametersTable(ExtensionTypeExtensionData extensionData, ServiceInformation serviceInfo) {
 		super(createModel());
 		this.extData = extensionData;
 		this.serviceInfo = serviceInfo;
+		setDefaultEditor(Object.class, new DefaultCellEditor(getEditorTextField()));
 		classChanged();
-		// add table model listener to store changes to properties
-		getModel().addTableModelListener(new TableModelListener() {
-			public void tableChanged(TableModelEvent e) {
-				if (e.getType() == TableModelEvent.UPDATE) {
-					try {
-						storeProperties();
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						ErrorDialog.showErrorDialog("Error storing properties", ex);
-					}
+	}
+	
+	
+	private JTextField getEditorTextField() {
+		if (editorTextField == null) {
+			editorTextField = new JTextField();
+			editorTextField.getDocument().addDocumentListener(new DocumentListener() {
+				public void insertUpdate(DocumentEvent e) {
+					store(editorTextField.getText());
 				}
-			}
-		});		
+
+			    
+				public void removeUpdate(DocumentEvent e) {
+					store(editorTextField.getText());
+				}
+
+
+			    public void changedUpdate(DocumentEvent e) {
+			    	store(editorTextField.getText());
+			    }
+			    
+			    
+			    private void store(String text) {
+			    	setValueAt(text, getSelectedRow(), getSelectedColumn());
+			    	try {
+			    		storeProperties();
+			    	} catch (Exception ex) {
+			    		ex.printStackTrace();
+			    		ErrorDialog.showErrorDialog(
+			    			"Error storing query processor properties!", ex);
+			    	}
+			    }
+			});
+		}
+		return editorTextField;
 	}
 	
 	
@@ -166,27 +190,16 @@ public class QueryProcessorParametersTable extends JTable {
 	
 	
 	private void storeProperties() throws Exception {
+		System.out.println("Storing query processor properties");
 		Data data = ExtensionDataUtils.getExtensionData(extData);
-		CQLProcessorConfig config = data.getCQLProcessorConfig();
-		if (config == null) {
-			config = new CQLProcessorConfig();
-			data.setCQLProcessorConfig(config);
-		}
-		List userProps = new ArrayList();
 		for (int i = 0; i < getRowCount(); i++) {
 			String key = (String) getValueAt(i, 0);
 			String defaultVal = (String) getValueAt(i, 1);
 			String userVal = (String) getValueAt(i, 2);
 			if (!defaultVal.equals(userVal)) {
-				CQLProcessorConfigProperty property = new CQLProcessorConfigProperty();
-				property.setName(key);
-				property.setValue(userVal);
-				userProps.add(property);
+				ExtensionDataUtils.setCQLProcessorProperty(data, key, userVal);
 			}
 		}
-		CQLProcessorConfigProperty[] props = new CQLProcessorConfigProperty[userProps.size()];
-		userProps.toArray(props);
-		config.setProperty(props);
 		ExtensionDataUtils.storeExtensionData(extData, data);
 	}
 	
