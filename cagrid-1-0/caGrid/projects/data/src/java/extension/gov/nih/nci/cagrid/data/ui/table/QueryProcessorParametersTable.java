@@ -190,7 +190,6 @@ public class QueryProcessorParametersTable extends JTable {
 	
 	
 	private void storeProperties() throws Exception {
-		System.out.println("Storing query processor properties");
 		Data data = ExtensionDataUtils.getExtensionData(extData);
 		for (int i = 0; i < getRowCount(); i++) {
 			String key = (String) getValueAt(i, 0);
