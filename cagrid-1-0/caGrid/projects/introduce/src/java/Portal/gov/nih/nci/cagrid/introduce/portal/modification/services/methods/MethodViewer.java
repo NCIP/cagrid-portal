@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
@@ -21,7 +20,6 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.MethodSecurityPanel;
@@ -50,6 +48,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -59,6 +58,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.TableCellEditor;
 import javax.xml.namespace.QName;
 
@@ -1533,7 +1533,13 @@ public class MethodViewer extends GridPortalBaseFrame {
 	}
 
 
+	/**
+	 * Yabba dabba do
+	 * 
+	 * @return
+	 */
 	private JPanel getImportInformationPanel() {
+
 		if (importInformationPanel == null) {
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.gridx = 0;
@@ -2256,20 +2262,17 @@ public class MethodViewer extends GridPortalBaseFrame {
 			introduceServiceLocationBrowseButton.setIcon(IntroduceLookAndFeel.getBrowseIcon());
 			introduceServiceLocationBrowseButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					String serviceDirName = null;
-					try {
-						ResourceManager.promptDir(null);
-					} catch (IOException ex) {
-						ex.printStackTrace();
-						ErrorDialog.showErrorDialog("Error selecting directory", ex);
-					}
-					if (serviceDirName == null) {
+					// chose the introduce directory
+					JFileChooser chooser = new JFileChooser();
+					chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					PortalUtils.centerComponent(chooser);
+					int returnVal = chooser.showOpenDialog(MethodViewer.this);
+					if (returnVal != JFileChooser.APPROVE_OPTION) {
 						return;
 					}
-					File serviceDir = new File(serviceDirName);
 					boolean ok = false;
-					if (serviceDir.isDirectory()) {
-						File[] files = serviceDir.listFiles();
+					if (chooser.getSelectedFile().isDirectory()) {
+						File[] files = chooser.getSelectedFile().listFiles();
 						for (int i = 0; i < files.length; i++) {
 							if (files[i].getName().equals("introduce.xml")) {
 								ok = true;
@@ -2282,11 +2285,11 @@ public class MethodViewer extends GridPortalBaseFrame {
 							"Directory does not appear to contain an introduce generated service.");
 					}
 
-					introduceServiceLocationTextField.setText(serviceDir.getAbsolutePath());
+					introduceServiceLocationTextField.setText(chooser.getSelectedFile().getAbsolutePath());
 
 					// get the filename and deserialize the introduce.xml
 					// document.
-					File introduceFile = new File(serviceDir.getAbsolutePath() + File.separator
+					File introduceFile = new File(chooser.getSelectedFile().getAbsolutePath() + File.separator
 						+ "introduce.xml");
 					ServiceDescription desc = null;
 					try {
@@ -2369,22 +2372,33 @@ public class MethodViewer extends GridPortalBaseFrame {
 			wsdlFileBrowseButton.setIcon(IntroduceLookAndFeel.getBrowseIcon());
 			wsdlFileBrowseButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					String serviceSchemaDir = info.getBaseDirectory().getAbsolutePath() + File.separator
-						+ "schema" + File.separator + info.getServices().getService(0).getName();
-					String wsdlFile = null;
-					try {
-						wsdlFile = ResourceManager.promptFile(serviceSchemaDir, FileFilters.WSDL_FILTER);
-					} catch (IOException ex) {
-						ex.printStackTrace();
-						ErrorDialog.showErrorDialog("Error selecting WSDL file", ex);
-					}
-					if (wsdlFile == null) {
+					JFileChooser chooser = new JFileChooser(info.getBaseDirectory().getAbsolutePath() + File.separator
+						+ "schema" + File.separator + info.getServices().getService(0).getName());
+					chooser.setFileFilter(new FileFilter() {
+
+						public String getDescription() {
+							return "Local WSDL Files";
+						}
+
+
+						public boolean accept(File f) {
+							if (f.getName().endsWith(".wsdl")) {
+								return true;
+							}
+							return false;
+						}
+
+					});
+					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+					PortalUtils.centerComponent(chooser);
+					int returnVal = chooser.showOpenDialog(MethodViewer.this);
+					if (returnVal != JFileChooser.APPROVE_OPTION) {
 						return;
 					}
 
 					Document wsdlDoc = null;
 					try {
-						wsdlDoc = XMLUtilities.fileNameToDocument(wsdlFile);
+						wsdlDoc = XMLUtilities.fileNameToDocument(chooser.getSelectedFile().getAbsolutePath());
 						currentImporWSDL = wsdlDoc;
 					} catch (MobiusException e1) {
 						e1.printStackTrace();
@@ -2421,13 +2435,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 					}
 					String schemaDir = info.getBaseDirectory().getAbsolutePath() + File.separator + "schema"
 						+ File.separator + info.getServices().getService(0).getName();
-					String relativeFile = null;
-					try {
-						relativeFile = Utils.getRelativePath(new File(schemaDir), new File(wsdlFile));
-					} catch (IOException ex) {
-						ex.printStackTrace();
-						ErrorDialog.showErrorDialog("Error finding relative path to wsdl file", ex);
-					}
+					String relativeFile = chooser.getSelectedFile().getAbsolutePath().substring(
+						chooser.getSelectedFile().getAbsolutePath().indexOf(schemaDir) + schemaDir.length() + 1);
 					getWsdlFileNameTextField().setText(relativeFile);
 
 					String namespace = currentImporWSDL.getRootElement().getAttributeValue("targetNamespace");
@@ -2436,7 +2445,8 @@ public class MethodViewer extends GridPortalBaseFrame {
 						wsdlImportPackageNameTextField.setText(type.getPackageName());
 						wsdlImportPackageNameTextField.setEditable(false);
 					} else {
-						// see if the namespace is used by another service, if so
+						// see if the namespace is used by another service, if
+						// so
 						// we can suggest it's package name for these imports
 						boolean isUsedAlready = true;
 						ServiceType service = null;
