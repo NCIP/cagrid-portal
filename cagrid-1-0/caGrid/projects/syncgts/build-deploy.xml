@@ -9,61 +9,43 @@
 		<map from="${basedir}\" to="" />
 		<map from="${basedir}/" to="" />
 	</pathconvert>
-	
-	
-	<property name="service.properties.file" value="service.properties"/>
+
+
+	<property name="service.properties.file" value="service.properties" />
 	<!-- Tomcat Properties -->
 	<property name="tomcat.dir" value="${env.CATALINA_HOME}" />
 	<property name="tomcat.common.lib.dir" value="${tomcat.dir}/common/lib" />
 	<property name="tomcat.deploy.dir" value="${tomcat.dir}/webapps/wsrf/WEB-INF" />
 	<property name="tomcat.deploy.lib.dir" value="${tomcat.deploy.dir}/lib" />
 	<property name="tomcat.wsrf.schema.dir" value="${tomcat.dir}/webapps/wsrf/share/schema" />
-	
+	<available file="${tomcat.deploy.lib.dir}/cog-jglobus.jar" type="file" property="cog-jglobus.tomcat.deploy.present" />
+	<available file="${tomcat.common.lib.dir}/cog-jglobus.jar" type="file" property="cog-jglobus.tomcat.common.present" />
+
 	<property name="gar.name" value="${service.deployment.dir.name}.gar" />
-	
+
 	<!-- Filesets -->
 	<!-- JARs to be included in the GAR file -->
 	<fileset dir="${build.lib.dir}" id="garjars" />
 	<property name="garjars.id" value="garjars" />
-	
+
 	<!-- Schema files (WSDL, XSD, etc.) to be included in the GAR file -->
 	<fileset dir="${schema.dest}" id="garschema">
 		<include name="${schema.path}/**/*" />
 	</fileset>
 	<property name="garschema.id" value="garschema" />
-	
+
 	<!-- Configuration files (security, etc.) to be included in the GAR file -->
 	<property name="garetc.id" value="garetc" />
 	<fileset dir="tmp/etc" id="garetc" />
-	
-	
-	<!-- ============================================================== -->
-	<!-- Tomcat properties                                              -->
-	<!-- ============================================================== -->
-	<target name="checkTomcat" depends="setTomcat">
-		<condition property="tomcat.not.found">
-			<or>
-				<not>
-					<isset property="ext.tomcat.dir" />
-				</not>
-				<equals arg1="${ext.tomcat.dir}" arg2="" />
-			</or>
-		</condition>
-		<fail message="Tomcat directory is not set in either CATALINA_HOME or ext.tomcat.dir" if="tomcat.not.found" />
-		<echo message="Tomcat: ${ext.tomcat.dir}" />
-	</target>
-	<target name="setTomcat" if="env.CATALINA_HOME">
-		<property name="ext.tomcat.dir" value="${env.CATALINA_HOME}" />
-	</target>
-	
+
 	<target name="addFilters" if="service.properties.file">
-		<filter filtersfile="${service.properties.file}"/>
+		<filter filtersfile="${service.properties.file}" />
 	</target>
-	
+
 	<!-- deploy  a gar to tomcat -->
-	<target name="deployTomcat" depends="addFilters, all, deployTrustedCerts" description="Deploys to CATALINA_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+	<target name="deployTomcat" depends="addFilters, all, deployTrustedCerts, deployPatchedCogToTomcat" description="Deploys to CATALINA_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 		<echo message="Deploying service ${service.deployment.path} under Tomcat at ${tomcat.dir}" />
-		
+
 		<property name="service.deployment.dir" value="${tomcat.deploy.dir}/etc/${service.deployment.dir.name}" />
 		<!-- prepare the deployment directory -->
 		<mkdir dir="${service.deployment.dir}" />
@@ -80,8 +62,8 @@
 			</fileset>
 		</copy>
 		<!-- prepare the jndi file -->
-		
-		<copy overwrite="true" todir="tmp" file="jndi-config.xml" filtering="true"/>
+
+		<copy overwrite="true" todir="tmp" file="jndi-config.xml" filtering="true" />
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.dir.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.prefix}" token="SERVICE-INSTANCE-PREFIX" />
@@ -91,7 +73,7 @@
 				<include name="jndi-config.xml" />
 			</fileset>
 		</copy>
-		<mkdir dir="tmp/etc"/>
+		<mkdir dir="tmp/etc" />
 		<copy overwrite="true" toDir="tmp/etc">
 			<fileset dir="etc">
 				<include name="**/*" />
@@ -114,31 +96,46 @@
 			<fileset dir="build/lib">
 				<include name="*" />
 			</fileset>
-            <fileset dir="${ext.lib.dir}">
-						<include name="*.jar" />
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<delete file="${tomcat.deploy.lib.dir}/cog-jglobus.jar"/>
-		<copy overwrite="true" todir="${tomcat.dir}/common/lib">
-				<fileset dir="${lib.dir}">
-					<include name="cog-jglobus.jar" />
-				</fileset>
-			</copy>	
+
 		<!--copy over the schema service files-->
 		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}/${introduce.skeleton.service.name}">
 			<fileset dir="build/schema/${introduce.skeleton.service.name}">
 				<include name="**\*" />
 			</fileset>
-		</copy>	
-	<delete dir="tmp" />	
+		</copy>
+		<delete dir="tmp" />
 	</target>
-	
+
+
+	<!-- Conditionally copy the patched cog to tomcat, only replacing it where its present, as it exists in different places for secure and insecure deployments  -->
+	<target name="deployPatchedCogToTomcat" depends="deployPatchedCogToTomcatCommon,deployPatchedCogToTomcatLib" />
+	<target name="deployPatchedCogToTomcatLib" if="cog-jglobus.tomcat.deploy.present">
+		<echo message="Replacing cog-jglobus.jar in tomcat's service area: ${tomcat.deploy.lib.dir}"/>
+		<copy overwrite="true" toDir="${tomcat.deploy.lib.dir}">
+			<fileset dir="lib">
+				<include name="cog-jglobus.jar" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="deployPatchedCogToTomcatCommon" if="cog-jglobus.tomcat.common.present">
+		<echo message="Replacing cog-jglobus.jar in tomcat's common area: ${tomcat.common.lib.dir}"/>
+		<copy overwrite="true" todir="${tomcat.common.lib.dir}">
+			<fileset dir="${lib.dir}">
+				<include name="cog-jglobus.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+
 	<!-- make deployment configured gar -->
 	<target name="createDeploymentGar" depends="all,addFilters">
-		
+
 		<echo message="Creating a gar for service ${gar.name}" />
-		
-		
+
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
 				<include name="*.jar" />
@@ -147,7 +144,7 @@
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		
+
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
 		<copy overwrite="true" todir="tmp" file="server-config.wsdd" />
@@ -161,7 +158,7 @@
 		<replace file="tmp/jndi-config.xml" value="${introduce.skeleton.service.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.prefix}" token="SERVICE-INSTANCE-PREFIX" />
 		<replace file="tmp/jndi-config.xml" value="etc/${service.deployment.dir.name}" token="ETC-PATH" />
-		<mkdir dir="tmp/etc"/>
+		<mkdir dir="tmp/etc" />
 		<copy overwrite="true" toDir="tmp/etc">
 			<fileset dir="etc">
 				<include name="**/*" />
@@ -180,12 +177,12 @@
 		</ant>
 		<delete dir="tmp" />
 	</target>
-	
-	
+
+
 	<!-- deploy a gar to globus -->
-	<target name="deployGlobus" depends="addFilters,checkGlobus, checkTomcat, createDeploymentGar,deployTrustedCerts" description="Deploys a gar to GLOBUS_LOCATION (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+	<target name="deployGlobus" depends="addFilters, checkGlobus, createDeploymentGar,deployTrustedCerts" description="Deploys a gar to GLOBUS_LOCATION (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 		<echo message="Deploying server to Globus Container" />
-		
+
 		<java classname="org.globus.bootstrap.AntBootstrap" fork="yes" failonerror="true">
 			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
 			<jvmarg value="-Djava.endorsed.dirs=${ext.globus.dir}/endorsed" />
@@ -202,7 +199,7 @@
 				</fileset>
 			</classpath>
 		</java>
-		
+
 		<delete dir="${gar.name}" />
 		<!-- deploy the gar -->
 	</target>
