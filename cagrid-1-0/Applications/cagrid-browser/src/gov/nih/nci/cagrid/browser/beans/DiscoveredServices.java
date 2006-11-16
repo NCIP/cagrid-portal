@@ -21,6 +21,7 @@ import java.util.List;
 public class DiscoveredServices {
     private List list = new ArrayList();
     private String size;
+    private CaGridService navigatedService;
 
     public DiscoveredServices() {
     }
@@ -40,6 +41,16 @@ public class DiscoveredServices {
 
     public List getList() {
         return list;
+    }
+
+    public CaGridService getNavigatedService() {
+        return navigatedService;
+    }
+
+    public void setNavigatedService(CaGridService navigatedService) {
+        this.navigatedService = navigatedService;
+        //load the service with all metadata
+        navigatedService.fillMetadata();
     }
 
     public void setList(List list) {

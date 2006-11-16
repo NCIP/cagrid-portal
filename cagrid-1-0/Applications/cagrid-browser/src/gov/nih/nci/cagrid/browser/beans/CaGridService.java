@@ -1,7 +1,13 @@
 package gov.nih.nci.cagrid.browser.beans;
 
-import gov.nih.nci.cagrid.browser.exception.MetadataRetreivalException;
-import gov.nih.nci.cagrid.browser.util.CaGridServiceUtils;
+
+import gov.nih.nci.cagrid.browser.util.ApplicationCtx;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
+import gov.nih.nci.cagrid.metadata.common.PointOfContact;
+import gov.nih.nci.cagrid.metadata.common.ResearchCenter;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
+import gov.nih.nci.cagrid.metadata.service.CaDSRRegistration;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.log4j.Logger;
 
@@ -19,9 +25,13 @@ public class CaGridService {
     private static Logger logger = Logger.getLogger(CaGridService.class);
     private EndpointReferenceType epr;
 
-    private String url;
     private String name;
     private String description;
+    private String version;
+    private ResearchCenter rcInfo;
+    private PointOfContact[] pocList;
+    private DomainModel domainModel;
+    private CaDSRRegistration caDSRRegistration;
 
 
     public CaGridService(EndpointReferenceType epr) {
@@ -31,16 +41,22 @@ public class CaGridService {
 
     public void loadLightMetadata() {
         try {
-            CaGridServiceUtils metadataUtils = new CaGridServiceUtils(this.epr);
-            this.description = metadataUtils.getServiceDescription();
-            this.name = metadataUtils.getServiceName();
-        } catch (MetadataRetreivalException e) {
+            gov.nih.nci.cagrid.metadata.ServiceMetadata metadata = MetadataUtils.getServiceMetadata(this.epr);
+
+            this.description = metadata.getServiceDescription().getService().getDescription();
+            this.name = metadata.getServiceDescription().getService().getName();
+            this.version = metadata.getServiceDescription().getService().getVersion();
+
+        } catch (ResourcePropertyRetrievalException e) {
             logger.warn("Error retrieving research info: " + e.getMessage());
         }
 
     }
 
     public String navigateToServiceDetails() {
+        DiscoveredServices disc = (DiscoveredServices) ApplicationCtx.getBean("discoveryResult");
+        disc.setNavigatedService(this);
+
         return "success";
     }
 
@@ -49,7 +65,16 @@ public class CaGridService {
      * with metadata
      */
     public void fillMetadata() {
+        try {
+            gov.nih.nci.cagrid.metadata.ServiceMetadata metadata = MetadataUtils.getServiceMetadata(this.epr);
+            rcInfo = metadata.getHostingResearchCenter().getResearchCenter();
+            pocList = metadata.getServiceDescription().getService().getPointOfContactCollection().getPointOfContact();
+            domainModel = MetadataUtils.getDomainModel(this.epr);
+            caDSRRegistration = metadata.getServiceDescription().getService().getCaDSRRegistration();
+        } catch (ResourcePropertyRetrievalException e) {
+            logger.warn("Error retrieving metadata for: " + e.getMessage());
 
+        }
 
     }
 
@@ -75,5 +100,24 @@ public class CaGridService {
         return description;
     }
 
+    public String getVersion() {
+        return version;
+    }
+
+    public ResearchCenter getRcInfo() {
+        return rcInfo;
+    }
+
+    public PointOfContact[] getPocList() {
+        return pocList;
+    }
+
+    public DomainModel getDomainModel() {
+        return domainModel;
+    }
+
+    public CaDSRRegistration getCaDSRRegistration() {
+        return caDSRRegistration;
+    }
 
 }

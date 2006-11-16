@@ -69,8 +69,8 @@
         <put name="Content" value="/jsp/content/GDSF.jsp"/>
     </definition>
 
-    <definition name="GSH" extends="Base">
-        <put name="Content" value="/jsp/content/GSH.jsp"/>
+    <definition name="ServiceDetails" extends="Base">
+        <put name="Content" value="/jsp/content/ServiceDetails.jsp"/>
     </definition>
 
     <definition name="DomainObjectDetails" extends="Base">

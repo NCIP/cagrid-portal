@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.browser.beans;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import gov.nih.nci.cagrid.browser.util.CaGridServiceUtils;
+import gov.nih.nci.cagrid.browser.util.GridUtils;
 import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
@@ -54,7 +54,7 @@ public class IndexService {
 
     public EndpointReferenceType getDefaultEPR() throws URI.MalformedURIException {
         if (defaultEPR == null) {
-            defaultEPR = CaGridServiceUtils.getEPR((String) indexList.get(0));
+            defaultEPR = GridUtils.getEPR((String) indexList.get(0));
         }
         return defaultEPR;
     }

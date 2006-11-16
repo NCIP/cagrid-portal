@@ -16,7 +16,8 @@
     <h:form id="serviceDetails">
 
         <h:panelGrid border="1" cellpadding="0" cellspacing="0"
-                     columns="1" headerClass="formHeader">
+                     columns="1" headerClass="formHeader"
+                     width="100%">
             <f:facet name="header">
                 <h:outputText value="#{messages.resultTitle}"/>
             </f:facet>

@@ -319,6 +319,9 @@ FORM BEGINS
     border-right: 1px solid #5C5C5C;
     background-image: url( images/tableheader-bg.gif );
     background-color: #FFFFFF;
+    text-align: left;
+    height: 22;
+    vertical-align: middle;
 }
 
 .formTitle {
@@ -337,6 +340,9 @@ FORM BEGINS
     border-bottom-color: #666666;
     border-bottom-style: solid;
     border-bottom-width: 1px;
+    height: 20;
+    text-align: left;
+    vertical-align: middle;
 }
 
 .formTitleFirstColumns {
@@ -533,10 +539,25 @@ DATA TABLE BEGINS
     border-bottom: 1px solid #5C5C5C; /* constant: dark gray */
     text-align: left;
     font-weight: bold;
-
 }
 
 .dataCellText {
+/* for text output cells */
+    border-right: 1px solid #5C5C5C; /* constant: dark gray */
+    border-bottom: 1px solid #5C5C5C; /* constant: dark gray */
+    text-align: left;
+}
+
+.detailsCellKey {
+    border-left: 1px solid #5C5C5C; /* constant: dark gray */
+    border-right: 1px solid #5C5C5C; /* constant: dark gray */
+    border-bottom: 1px solid #5C5C5C; /* constant: dark gray */
+    text-align: left;
+    font-weight: bold;
+    width: 40%;
+}
+
+.detailsCellValue {
 /* for text output cells */
     border-right: 1px solid #5C5C5C; /* constant: dark gray */
     border-bottom: 1px solid #5C5C5C; /* constant: dark gray */

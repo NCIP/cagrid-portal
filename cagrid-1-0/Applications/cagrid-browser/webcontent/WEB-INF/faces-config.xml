@@ -33,7 +33,7 @@
 
     <!-- Managed Beans -->
     <managed-bean>
-        <managed-bean-name>CaGridService</managed-bean-name>
+        <managed-bean-name>caGridService</managed-bean-name>
         <managed-bean-class>gov.nih.nci.cagrid.browser.beans.CaGridService</managed-bean-class>
         <managed-bean-scope>none</managed-bean-scope>
     </managed-bean>
@@ -197,9 +197,7 @@
             <from-outcome>failed</from-outcome>
             <to-view-id>/LoginFailed.tiles</to-view-id>
         </navigation-case>
-
     </navigation-rule>
-
     <navigation-rule>
         <from-view-id>/PreLogin.tiles</from-view-id>
         <navigation-case>
@@ -207,8 +205,6 @@
             <to-view-id>/RegisterNewUser_noLogin.tiles</to-view-id>
         </navigation-case>
     </navigation-rule>
-
-
     <navigation-rule>
         <from-view-id>/HomePage.tiles</from-view-id>
         <navigation-case>
@@ -218,20 +214,6 @@
         </navigation-case>
     </navigation-rule>
 
-
-    <navigation-rule>
-        <from-view-id>/DiscoveryResults.tiles</from-view-id>
-        <navigation-case>
-            <from-action>#{keywordDiscoveryBean.doDiscovery}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/DiscoveryResults.tiles</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{keywordDiscoveryBean.doDiscoveryAll}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/DiscoveryResults.tiles</to-view-id>
-        </navigation-case>
-    </navigation-rule>
 
     <!-- GUI query Builder -->
     <navigation-rule>
@@ -247,7 +229,6 @@
             <to-view-id>/FQPQueryWizard.tiles</to-view-id>
         </navigation-case>
     </navigation-rule>
-
     <navigation-rule>
         <navigation-case>
             <from-action>#{queryWizard.createQuery}</from-action>
@@ -255,8 +236,6 @@
             <to-view-id>/QueryGDSF.tiles</to-view-id>
         </navigation-case>
     </navigation-rule>
-
-
     <navigation-rule>
         <navigation-case>
             <from-action>#{queryWizard.createFQP}</from-action>
@@ -264,8 +243,6 @@
             <to-view-id>/QueryFQP.tiles</to-view-id>
         </navigation-case>
     </navigation-rule>
-
-
     <navigation-rule>
         <navigation-case>
             <from-action>#{queryWizard.submitFQPD}</from-action>
@@ -287,55 +264,14 @@
         </navigation-case>
     </navigation-rule>
 
-    <!-- Data service details page -->
-    <navigation-rule>
-        <from-view-id>/GDSF.tiles</from-view-id>
-        <navigation-case>
-            <from-action>#{discoveredServices.navigatedService.doActivity}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/QueryGDSF.tiles</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{discoveredServices.navigatedService.doSetNavigatedObject}</from-action>
-            <from-outcome>navigateToObject</from-outcome>
-            <to-view-id>/DomainObjectDetails.tiles</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-
-    <navigation-rule>
-        <from-view-id>/QueryGDSF.tiles</from-view-id>
-        <navigation-case>
-            <from-action>#{discoveredServices.navigatedService.doSetNavigatedService}</from-action>
-            <from-outcome>success</from-outcome>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{discoveredServices.navigatedService.doQueryGDSF}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/QueryGDSFResults.tiles</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{discoveredServices.navigatedService.doQueryGDSF}</from-action>
-            <from-outcome>failed</from-outcome>
-            <to-view-id>/Error_QueryException.tiles</to-view-id>
-        </navigation-case>
-
-    </navigation-rule>
 
     <!-- Generic Rule applies to ALL forms -->
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <navigation-case>
-            <from-action>navigateToServiceDetails</from-action>
+            <from-action>#{service.navigateToServiceDetails}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>/GSH.tiles</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>navigateToGDSF</from-outcome>
-            <to-view-id>/GDSF.tiles</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>navigateToGSH</from-outcome>
-            <to-view-id>/GSH.tiles</to-view-id>
+            <to-view-id>/ServiceDetails.tiles</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-action>#{keywordDiscoveryBean.doDiscovery}</from-action>
