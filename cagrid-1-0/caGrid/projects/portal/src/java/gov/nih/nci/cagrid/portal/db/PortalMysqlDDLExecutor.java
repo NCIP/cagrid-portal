@@ -61,7 +61,6 @@ public final class PortalMysqlDDLExecutor extends AbstractPortalDDLExecutor {
                     + "FIELDS"
                     + " TERMINATED BY ','"
                     + " ENCLOSED BY '\"'"
-                    + " LINES TERMINATED BY '\\r\\n' STARTING BY ''"
                     + " (ZIP, LATITUDE, LONGITUDE, CITY, STATE, COUNTY, ZIP_CLASS);";
 
             jdbcDAO.executeUpdate(query);
