@@ -131,7 +131,7 @@ public class TrustedAuthoritiesWindow extends GridPortalBaseFrame implements Tru
 	private void initialize() {
 		this.setSize(500, 500);
 		this.setContentPane(getJContentPane());
-		this.setTitle("Find Trusted Authority(s)");
+		this.setTitle("Trusted Certificate Authority Management");
 		updateTrustLevels();
 
 	}
