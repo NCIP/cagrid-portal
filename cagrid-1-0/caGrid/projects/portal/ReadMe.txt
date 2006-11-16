@@ -29,6 +29,8 @@ You can ignore sections marked (Optional)
             or in ${user.home}/.portal-build.properties/
         - Run "ant all"
         - Run "ant creatPortaleDatabase"
+        - Run "ant createPortalZipCodeSeedData" to put in zipcodes seed data (only
+            (needs to be done once)
 
 
     ===========================================================================
@@ -283,4 +285,16 @@ VERY IMPORTANT- Its important to first build the main caGrid build before
     $CATALINA_HOME/logs/portal.log that is rotated periodically.
     But this be can configured to log to the console (say for debugging)
 
-   
+
+===========================================================================
+6. caBIG Participant information    (Optional)
+===========================================================================
+
+    caBIG Participants data is mantianed in the resources/ caBIG_Workspaces_participants.xls
+    excel sheet. Participants can be added/editied in the excel sheet.
+
+    They can then be uploaded by calling the ant target "ant createCaBIGWorkspaces"
+
+    Portal does not need to be rebuilt/redeployed for this. 
+
+

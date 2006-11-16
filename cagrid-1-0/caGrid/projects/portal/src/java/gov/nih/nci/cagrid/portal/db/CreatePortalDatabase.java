@@ -19,7 +19,6 @@ public class CreatePortalDatabase {
         PortalDDLExecutor ddlExecutor = (PortalDDLExecutor) ctx.getBean("ddlExecutor");
         //execut the DLL
         ddlExecutor.executePortalDDL();
-        ddlExecutor.executePopulateDBWithZipCodes();
     }
 
 

@@ -118,6 +118,13 @@
             </fileset>
         </path>
 
+        <path id="portal.xdoclet.classpath">
+            <path refid="portal.classpath"/>
+            <fileset dir="${lib.dir}/xdoclet">
+                <include name="**/*.jar"/>
+            </fileset>
+        </path>
+
     </target>
 
     <!-- ============================================================== -->
@@ -155,7 +162,7 @@
 
 
     <target name="buildPortalLocal" description="Will build it locally in the local directory"
-            depends="clean,compile,hibernate.xdoclet,copyLibsLocal,copyResourcesLocal"/>
+            depends="clean,compile,hibernate,copyLibsLocal,copyResourcesLocal"/>
 
 
     <!-- ============================================================== -->
@@ -181,8 +188,7 @@
     <!-- ============================================================== -->
     <!-- Create war for deployment                                      -->
     <!-- ============================================================== -->
-    <target name="war" depends="clean,compile,hibernate,copyLibsLocal,copyResourcesLocal">
-
+    <target name="war" depends="buildPortalLocal">
 
         <war basedir="${webcontent.dir}"
              destfile="${war.build.dir}/${project.name}.war"
@@ -384,12 +390,7 @@
     <target name="hibernate.xdoclet" depends="compile">
         <taskdef name="hibernatedoclet"
                  classname="xdoclet.modules.hibernate.HibernateDocletTask">
-            <classpath>
-                <path refid="portal.classpath"/>
-                <fileset dir="${lib.dir}/xdoclet">
-                    <include name="**/*.jar"/>
-                </fileset>
-            </classpath>
+            <classpath refid="portal.xdoclet.classpath"/>
         </taskdef>
 
         <hibernatedoclet
@@ -407,12 +408,7 @@
 
     <target name="file-list">
         <taskdef name="scriptdef" classname="org.apache.tools.ant.taskdefs.optional.Script">
-            <classpath>
-                <path refid="portal.classpath"/>
-                <fileset dir="${lib.dir}/xdoclet">
-                    <include name="**/*.jar"/>
-                </fileset>
-            </classpath>
+            <classpath refid="portal.xdoclet.classpath"/>
         </taskdef>
 
         <property name="generated.dir" location="${build.classes.dir}"/>
@@ -420,7 +416,7 @@
         <scriptdef language="beanshell" src="${scripts.src.dir}/create_hbnfile.sh"/>
     </target>
 
-    <!-- will create Portal DB and drop seed data -->
+    <!-- will create Portal DB -->
     <!-- Read the Readme.txt for more infor -->
     <target name="createPortalDatabase" depends="setClasspath"
             description="Will create the Portal Database with appropriate Seed Data">
@@ -434,6 +430,19 @@
         </java>
     </target>
 
+
+    <!-- will zipcode drop seed data needed for goecoding lookup-->
+    <target name="createPortalZipCodeSeedData" depends="setClasspath"
+            description="Will create the Portal Database with appropriate Seed Data">
+        <java classname="gov.nih.nci.cagrid.portal.db.CreatePortalZipCodeSeedData"
+              failonerror="true" logerror="true">
+            <classpath>
+                <path refid="portal.run.classpath"/>
+                <dirset dir="${resources.dir}"/>
+                <dirset dir="${props.src.dir}"/>
+            </classpath>
+        </java>
+    </target>
 
     <target name="createCaBIGWorkspaceSeedData" depends="init"
             description="Will populate the Database with caBIG worskpace seed data">

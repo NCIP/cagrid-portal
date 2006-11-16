@@ -17,12 +17,12 @@
             <tiles:insert attribute="serviceSearchResult" flush="false" ignore="true"/>
         </t:panelTab>
 
-        <t:panelTab id="rc" rendered="#{not empty centers.list}" label="Research Center (#{centers.listSize})">
-            <tiles:insert attribute="rcSearchResult" flush="false" ignore="true"/>
+        <t:panelTab id="people" rendered="#{not empty people.list}" label="People (#{people.listSize})">
+            <tiles:insert attribute="pocSearchResult" flush="false" ignore="true"/>
         </t:panelTab>
 
 
-        <t:panelTab id="poc" rendered="#{not empty participants.list}"
+        <t:panelTab id="participants" rendered="#{not empty participants.list}"
                     label="caBIG Participants (#{participants.listSize})">
             <tiles:insert attribute="participantsResult" flush="false" ignore="true"/>
         </t:panelTab>

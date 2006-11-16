@@ -87,8 +87,8 @@
 
     <definition name="SearchResult" page="/jsp/content/SearchResults.jsp">
         <put name="serviceSearchResult" value="/jsp/content/DirectoryServices.jsp"/>
-        <put name="participantsResult" value="/jsp/content/DirectoryCaBIGParticipants.jsp"/>
         <put name="pocSearchResult" value="/jsp/content/DirectoryPointOfContact.jsp"/>
+        <put name="participantsResult" value="/jsp/content/DirectoryCaBIGParticipants.jsp"/>
     </definition>
 
     <definition name="/keywordSearchResults.tiles" extends="Search">

@@ -58,8 +58,13 @@ public class GridServiceManagerImpl extends GeocodingBaseManagerImpl
                 // Do nothing as this is not unexpected
             }
 
-            if (rService.getResearchCenter() != null)
-                geocodeDomainObject(rService.getResearchCenter());
+            try {
+                if (rService.getResearchCenter() != null)
+                    geocodeDomainObject(rService.getResearchCenter());
+            } catch (PortalRuntimeException e) {
+                //can happen if geocoding service is unreachable.
+                _logger.error("Problem Goecoding Research Center" + e.getMessage());
+            }
 
             //save the new service. ORM will create a new ID
             rService.setPk(null);
@@ -67,7 +72,7 @@ public class GridServiceManagerImpl extends GeocodingBaseManagerImpl
 
         } catch (Exception e) {
             //log exception and rethrow
-            _logger.error("Problem saving Registered Service", e);
+            _logger.error("Problem saving Registered Service" + rService.getEPR(), e);
             throw new PortalRuntimeException(e);
         }
     }

@@ -51,11 +51,13 @@ public class MetadataAggregator extends AbstractAggregator {
                         aggrUtil.loadOperations(service, mData);
                     } catch (ResourcePropertyRetrievalException e1) {
                         _logger.warn("Service " + service.getEPR() + " has no domain model or operations.");
+                        _logger.warn(e);
                     }
                 }
 
             } catch (MetadataRetreivalException e) {
-                _logger.warn("Error loading research center for " + service.getEPR());
+                _logger.warn("Error loading metadata for " + service.getEPR());
+                _logger.warn(e);
             }
 
             gridServiceMgr.save(service);

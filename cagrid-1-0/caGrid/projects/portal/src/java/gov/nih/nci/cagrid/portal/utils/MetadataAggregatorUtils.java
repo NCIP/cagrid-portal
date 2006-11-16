@@ -26,15 +26,20 @@ public class MetadataAggregatorUtils {
      * @throws MetadataRetreivalException
      */
     public final ResearchCenter loadRC(ServiceMetadata mData) throws MetadataRetreivalException {
-        ResearchCenter domainRC = new ResearchCenter();
+        ResearchCenter domainRC = null;
+        try {
+            domainRC = new ResearchCenter();
 
-        gov.nih.nci.cagrid.metadata.common.ResearchCenter rc = mData.getHostingResearchCenter().getResearchCenter();
-        domainRC.setDisplayName(rc.getDisplayName());
-        domainRC.setShortName(rc.getShortName());
+            gov.nih.nci.cagrid.metadata.common.ResearchCenter rc = mData.getHostingResearchCenter().getResearchCenter();
+            domainRC.setDisplayName(rc.getDisplayName());
+            domainRC.setShortName(rc.getShortName());
 
-        loadDescription(domainRC, rc);
-        loadAddress(domainRC, rc);
-        loadPOC(domainRC, rc);
+            loadDescription(domainRC, rc);
+            loadAddress(domainRC, rc);
+            loadPOC(domainRC, rc);
+        } catch (NullPointerException e) {
+            //can happen. Ignore
+        }
 
         return domainRC;
     }
@@ -46,20 +51,25 @@ public class MetadataAggregatorUtils {
      */
     public final DomainModel loadDomainModel(gov.nih.nci.cagrid.metadata.dataservice.DomainModel dModel) throws MetadataRetreivalException {
 
+        DomainModel modelDomain = null;
+        try {
+            modelDomain = new DomainModel();
+            modelDomain.setLongName(dModel.getProjectLongName());
+            modelDomain.setProjectShortName(dModel.getProjectShortName());
+            modelDomain.setProjectDescription(dModel.getProjectDescription());
+            modelDomain.setProjectVersion(dModel.getProjectVersion());
+            gov.nih.nci.cagrid.metadata.common.UMLClass classes[] = dModel.getExposedUMLClassCollection().getUMLClass();
 
-        DomainModel modelDomain = new DomainModel();
-        modelDomain.setLongName(dModel.getProjectLongName());
-        modelDomain.setProjectShortName(dModel.getProjectShortName());
-        modelDomain.setProjectDescription(dModel.getProjectDescription());
-        modelDomain.setProjectVersion(dModel.getProjectVersion());
-        gov.nih.nci.cagrid.metadata.common.UMLClass classes[] = dModel.getExposedUMLClassCollection().getUMLClass();
-
-        for (int i = 0; i < classes.length; i++) {
-            UMLClass dClass = translateUMLClass(classes[i]);
-            modelDomain.getUmlClassCollection().add(dClass);
+            for (int i = 0; i < classes.length; i++) {
+                UMLClass dClass = translateUMLClass(classes[i]);
+                modelDomain.getUmlClassCollection().add(dClass);
+            }
+        } catch (Exception e) {
+            //can happen. Ignore
         }
         return modelDomain;
     }
+
 
     public final void loadOperations(RegisteredService rService, gov.nih.nci.cagrid.metadata.ServiceMetadata sMetadata) throws ResourcePropertyRetrievalException {
         try {

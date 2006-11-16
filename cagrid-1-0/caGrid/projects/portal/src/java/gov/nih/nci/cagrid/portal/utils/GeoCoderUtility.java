@@ -49,7 +49,7 @@ public class GeoCoderUtility implements DomainObjectGeocoder {
 
             return geoCode;
         } catch (Exception e) {
-            _logger.error("GeoCoderUtility: Error doinga remote geocode lookup" + e.getMessage());
+            _logger.error("GeoCoderUtility: Error doing a remote geocode lookup" + e.getMessage());
             throw new GeoCoderRetreivalException(e);
         }
     }

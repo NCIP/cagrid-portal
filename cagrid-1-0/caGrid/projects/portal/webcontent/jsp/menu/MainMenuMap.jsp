@@ -21,11 +21,7 @@
             onmouseout="changeMenuStyle(this,'mainMenuItemOn    '),hideCursor()">
             <a class="mainMenuLink" href="mapHome.portal">MAP VIEW</a>
         </td>
-        <td class="mainMenuSpacer">&nbsp;</td>
-        <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
-            onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()">
-            <a class="mainMenuLink" href="help.portal">HELP</a>
-        </td>
+
 
         <td width="99%" class="mainMenuSpacer">&nbsp;</td>
     </tr>
