@@ -402,6 +402,14 @@ public class EvsCheckServiceStep
                         DescLogicConcept descConcept = descLogicConcepts[i];
                         assertNotNull("DescLogicConcept object is Null", descConcept);
 
+                        // name
+                        assertNotNull("Name is null", descConcept.getName());
+                        // namespaceid
+                        assertNotNull("NamespaceID is null", descConcept.getNamespaceId());
+                        // code
+                        assertNotNull("Code is null",descConcept.getCode());
+
+
                         // check attributes - semanticTypeVector
                         Vector semanticType = descConcept.getSemanticTypeVector();
 
@@ -413,6 +421,9 @@ public class EvsCheckServiceStep
 
                         // Check roles
                         checkRoles(descConcept);
+
+                        // Check inverse roles
+                        checkInverseRoles(descConcept);
 
                         // Check Edge Properties - Edge Properties are not populated
                         // by EVS grid service
@@ -490,6 +501,22 @@ public class EvsCheckServiceStep
             }
         }
     }
+
+    private void checkInverseRoles(DescLogicConcept descConcept) {
+        Collection roleCollection = (Collection) descConcept.getInverseRoleCollection();
+
+        if (roleCollection != null )
+        {
+            for (Iterator it=roleCollection.iterator(); it.hasNext();)
+            {
+                Role role = (Role) it.next();
+                assertNotNull("Role is null", role);
+                assertNotNull("Role Name is null", role.getName());
+                assertNotNull("Role Value is null", role.getValue());
+            }
+        }
+    }
+
 
     private void checkProperties(DescLogicConcept descConcept) {
         Vector propCollections = descConcept.getPropertyCollection();
