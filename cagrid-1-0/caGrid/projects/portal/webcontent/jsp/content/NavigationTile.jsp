@@ -10,9 +10,14 @@
                  cellspacing="4" cellpadding="4">
 
         <h:column>
-            <h:outputLink onclick="people.history.back()" styleClass="navigationBtn">
-                <h:outputText value="<<Back"/>
-            </h:outputLink>
+
+            <%
+                /* Back button does not work so commented out
+                    h:outputLink onclick="people.history.back()" styleClass="navigationBtn">
+                    <h:outputText value="<<Back"/>
+                </h:outputLink*/
+            %>
+
         </h:column>
     </h:panelGrid>
 
