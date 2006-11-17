@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="src" path="test/src/java"/>
+	<classpathentry kind="src" path="build/stubs/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
@@ -79,7 +80,7 @@
 	<classpathentry kind="lib" path="ext/lib/gef_modified.jar"/>
 	<classpathentry kind="lib" path="ext/lib/argouml-layout.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-graph.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-core.jar" sourcepath="/caGrid-1.0-introduce"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-Introduce-portal.jar" sourcepath="/caGrid-1.0-introduce"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/ant-contrib.jar"/>

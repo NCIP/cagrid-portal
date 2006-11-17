@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.introduce.extensions.wsenum.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
@@ -23,107 +22,140 @@ import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.List;
-import java.util.Properties;
+import java.io.IOException;
 
 import javax.xml.namespace.QName;
 
 import org.globus.ws.enumeration.EnumProvider;
 import org.projectmobius.common.MobiusException;
 
-
-/**
- * WsEnumCreationPostProcessor Creation extension for Introduce to add
- * WS-Enumeration support
+/** 
+ *  WsEnumCreationPostProcessor
+ *  Post-creation extension to Introduce to add WS-Enumeration support to a Grid Service
  * 
- * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
- * @created Aug 1, 2006
- * @version $Id$
+ * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
+ * @created Nov 16, 2006 
+ * @version $Id$ 
  */
 public class WsEnumCreationPostProcessor implements CreationExtensionPostProcessor {
-
-	public void postCreate(ServiceExtensionDescriptionType extnDesc, ServiceInformation info)
-		throws CreationExtensionException {
-		Properties props = info.getIntroduceServiceProperties();
-		ServiceDescription desc = info.getServiceDescriptor();
-
-		// get the service directory
-		File serviceDir = new File(props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR));
-		// add the namespace and schemas for WS-Enumeration
-		addEnumerationNamespace(serviceDir, desc, props);
-		// get the service type
-		String serviceName = props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-		ServiceType service = CommonTools.getService(desc.getServices(), serviceName);
-		// add the methods for WS-Enumeration
-		addEnumerationMethods(service);
-		// add the modified Globus WsCore 4.0.2 jars to the service
-		addWsEnumLibraries(serviceDir);
+	
+	public WsEnumCreationPostProcessor() {
+		
 	}
+	
 
-
-	/**
-	 * Copies the ws-enumeration schema into the service and adds the namespace
-	 * type for it
-	 * 
-	 * @param serviceDir
-	 * @param desc
-	 * @param props
-	 * @throws CreationExtensionException
-	 */
-	private static void addEnumerationNamespace(File serviceDir, ServiceDescription desc, Properties props)
+	public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CreationExtensionException {
-		String serviceName = props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-		// copy the schemas
-		File schemaBaseDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "cagrid_wsEnum"
-			+ File.separator + "schema" + File.separator);
-		List schemas = Utils.recursiveListFiles(schemaBaseDir, new FileFilters.XSDFileFilter());
-		for (int i = 0; i < schemas.size(); i++) {
-			File schemaFile = (File) schemas.get(i);
-			File schemaOutFile = new File(serviceDir.getAbsolutePath() + File.separator + "schema" + File.separator
-				+ serviceName + File.separator + schemaFile.getName());
+		// execute steps to add ws-enumeration to the grid service
+		copySchemasToService(desc, info);
+		copyWsdlToService(desc, info);
+		copyLibrariesToService(info);
+		addEnumerationNamespaces(info);
+		addEnumerationMethods(info);
+	}
+	
+	
+	private void copySchemasToService(ServiceExtensionDescriptionType desc, ServiceInformation info)
+		throws CreationExtensionException {
+		File extensionSchemaDir = getExtensionSchemaDir(desc);
+		File[] sourceSchemas = extensionSchemaDir.listFiles(new FileFilters.XSDFileFilter());
+		File serviceSchemasDir = new File(info.getBaseDirectory().getAbsolutePath() + File.separator
+			+ "schema" + File.separator + info.getServices().getService()[0].getName());
+		for (int i = 0; i < sourceSchemas.length; i++) {
+			File outFile = new File(serviceSchemasDir.getAbsolutePath() 
+				+ File.separator + sourceSchemas[i].getName());
 			try {
-				Utils.copyFile(schemaFile, schemaOutFile);
-			} catch (Exception ex) {
-				throw new CreationExtensionException("Error copying enumeration schema file: " + ex.getMessage(), ex);
+				Utils.copyFile(sourceSchemas[i], outFile);
+			} catch (IOException ex) {
+				throw new CreationExtensionException("Error copying schema file " 
+					+ sourceSchemas[i].getAbsolutePath(), ex);
 			}
 		}
-
-		// copy the wsdl
-		File enumWsdlFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "cagrid_wsEnum"
-			+ File.separator + "schema" + File.separator + "enumeration.wsdl");
-		File enumWsdlOut = new File(serviceDir.getAbsolutePath() + File.separator + "schema" + File.separator
-			+ serviceName + File.separator + "enumeration.wsdl");
-		try {
-			Utils.copyFile(enumWsdlFile, enumWsdlOut);
-		} catch (Exception ex) {
-			throw new CreationExtensionException("Error copying enumeration wsdl file: " + ex.getMessage(), ex);
-		}
-
-		// add the namespace type for the enumeration schema
-		NamespaceType nsType = null;
-		try {
-			File enumSchema = new File(serviceDir.getAbsolutePath() + File.separator + "schema" + File.separator
-				+ serviceName + File.separator + "enumeration.xsd");
-			nsType = CommonTools.createNamespaceType(enumSchema.getAbsolutePath());
-			// fix the schema location on the namespace type
-			nsType.setLocation("./" + "enumeration.xsd");
-			// change the package mapping
-			nsType.setPackageName(WsEnumConstants.ENUMERATION_PACKAGE_NAME);
-		} catch (MobiusException ex) {
-			throw new CreationExtensionException("Error creating namespace type from schema: " + ex.getMessage(), ex);
-		}
-		CommonTools.addNamespace(desc, nsType);
 	}
-
-
-	/**
-	 * Adds the methods to the service required for WS-Enumeration
-	 * 
-	 * @param service
-	 * @throws CreationExtensionException
-	 */
-	private static void addEnumerationMethods(ServiceType service) throws CreationExtensionException {
+	
+	
+	private void copyWsdlToService(ServiceExtensionDescriptionType desc, ServiceInformation info) 
+		throws CreationExtensionException {
+		File extensionSchemaDir = getExtensionSchemaDir(desc);
+		File sourceWsdl = new File(extensionSchemaDir.getAbsolutePath() + File.separator + "enumeration.wsdl");
+		File serviceSchemasDir = new File(info.getBaseDirectory().getAbsolutePath() + File.separator
+			+ "schema" + File.separator + info.getServices().getService()[0].getName());
+		File outWsdl = new File(serviceSchemasDir.getAbsolutePath() + File.separator + sourceWsdl.getName());
+		try {
+			Utils.copyFile(sourceWsdl, outWsdl);
+		} catch (IOException ex) {
+			throw new CreationExtensionException("Error copying enumeration wsdl file", ex);
+		}
+	}
+	
+	
+	private void copyLibrariesToService(ServiceInformation info) 
+		throws CreationExtensionException {
+		File libDir = getExtensionLibDir();
+		File[] sourceLibs = libDir.listFiles(new FileFilter() {
+			public boolean accept(File pathname) {
+				String name = pathname.getName();
+				if (name.endsWith(".jar")) {
+					return name.endsWith("_enum.jar") || name.indexOf("wsEnum") != -1
+						|| name.indexOf("cabigextensions-stubs") != -1;
+				}
+				return false;
+			}
+		});
+		File serviceLibDir = new File(info.getBaseDirectory().getAbsolutePath() 
+			+ File.separator + "lib");
+		File[] outputLibs = new File[sourceLibs.length];
+		for (int i = 0; i < sourceLibs.length; i++) {
+			File outFile = new File(serviceLibDir.getAbsolutePath() 
+				+ File.separator + sourceLibs[i].getName());
+			outputLibs[i] = outFile;
+			try {
+				Utils.copyFile(sourceLibs[i], outFile);
+			} catch (IOException ex) {
+				throw new CreationExtensionException("Error copying library " + sourceLibs[i].getAbsolutePath(), ex);
+			}
+		}
+		File classpathFile = new File(
+			info.getBaseDirectory().getAbsolutePath() + File.separator + ".classpath");
+		try {
+			ExtensionUtilities.syncEclipseClasspath(classpathFile, outputLibs);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new CreationExtensionException("Error synchronizing Eclipse .classpath file", ex);
+		}
+	}
+	
+	
+	private void addEnumerationNamespaces(ServiceInformation info) throws CreationExtensionException {
+		File serviceSchemasDir = new File(info.getBaseDirectory().getAbsolutePath() + File.separator
+			+ "schema" + File.separator + info.getServices().getService()[0].getName());
+		try {
+			// enumeration.xsd
+			NamespaceType enumNsType = CommonTools.createNamespaceType(serviceSchemasDir.getAbsolutePath() 
+				+ File.separator + WsEnumConstants.ENUMERATION_XSD_NAME);
+			enumNsType.setLocation("./" + WsEnumConstants.ENUMERATION_XSD_NAME);
+			enumNsType.setGenerateStubs(Boolean.FALSE);
+			enumNsType.setPackageName(WsEnumConstants.ENUMERATION_PACKAGE_NAME);
+			CommonTools.addNamespace(info.getServiceDescriptor(), enumNsType);
+			// addressing.xsd
+			NamespaceType addyNsType = CommonTools.createNamespaceType(serviceSchemasDir.getAbsolutePath()
+				+ File.separator + WsEnumConstants.ADDRESSING_XSD_NAME);
+			addyNsType.setLocation("./" + WsEnumConstants.ADDRESSING_XSD_NAME);
+			addyNsType.setGenerateStubs(Boolean.FALSE);
+			addyNsType.setPackageName(WsEnumConstants.ADDRESSING_PACKAGE_NAME);
+			CommonTools.addNamespace(info.getServiceDescriptor(), addyNsType);
+		} catch (MobiusException ex) {
+			throw new CreationExtensionException("Error creating namespace types", ex);
+		}
+	}
+	
+	
+	private void addEnumerationMethods(ServiceInformation info) {
+		// get the main service
+		String serviceName = info.getIntroduceServiceProperties()
+			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+		ServiceType service = CommonTools.getService(info.getServices(), serviceName);
+		
 		// Pull method
 		MethodType pullMethod = new MethodType();
 		pullMethod.setName("PullOp");
@@ -195,15 +227,15 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 	}
 
 
-	private static void setMethodImportInformation(MethodType method, String inputName, String outputName) {
+	private void setMethodImportInformation(MethodType method, String inputName, String outputName) {
 		method.setIsImported(true);
 		method.setIsProvided(true);
 		MethodTypeImportInformation info = new MethodTypeImportInformation();
 		info.setNamespace(WsEnumConstants.WS_ENUMERATION_URI);
-		info.setWsdlFile("enumeration.wsdl");
-		String packName = EnumProvider.class.getPackage().getName();
-		info.setPackageName(packName);
-		info.setPortTypeName(WsEnumConstants.PORT_TYPE_NAME); // FIXME: ???
+		info.setWsdlFile(WsEnumConstants.ENUMERATION_WSDL_NAME);
+		info.setPackageName("org.globus.ws.enumeration");
+		info.setPortTypeName(WsEnumConstants.PORT_TYPE_NAME);
+		info.setFromIntroduce(Boolean.FALSE);
 		// input and output message types
 		QName inputQname = new QName(WsEnumConstants.WS_ENUMERATION_URI, inputName);
 		info.setInputMessage(inputQname);
@@ -214,31 +246,19 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
 		method.setImportInformation(info);
 		method.setProviderInformation(provider);
 	}
-
-
-	private static void addWsEnumLibraries(File serviceDir) throws CreationExtensionException {
-		File libDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "lib");
-		List enumLibs = Utils.recursiveListFiles(libDir, new FileFilter() {
-			public boolean accept(File pathname) {
-				return pathname.getName().endsWith("_enum.jar") || pathname.getName().equals("caGrid-1.0-wsEnum.jar");
-			}
-		});
-		File[] copiedLibs = new File[enumLibs.size()];
-		for (int i = 0; i < enumLibs.size(); i++) {
-			File lib = (File) enumLibs.get(i);
-			File out = new File(serviceDir.getAbsolutePath() + File.separator + "lib" + File.separator + lib.getName());
-			copiedLibs[i] = out;
-			try {
-				Utils.copyFile(lib, out);
-			} catch (Exception ex) {
-				throw new CreationExtensionException(ex.getMessage(), ex);
-			}
-		}
-		File classpathFile = new File(serviceDir.getAbsolutePath() + File.separator + ".classpath");
-		try {
-			ExtensionUtilities.syncEclipseClasspath(classpathFile, copiedLibs);
-		} catch (Exception ex) {
-			throw new CreationExtensionException(ex.getMessage(), ex);
-		}
+	
+	
+	private File getExtensionSchemaDir(ServiceExtensionDescriptionType desc) {
+		// find the extension's schema directory
+		File extensionsDir = ExtensionsLoader.getInstance().getExtensionsDir();
+		String enumExtensionDir = extensionsDir + File.separator + desc.getName();
+		String enumSchemasDir = enumExtensionDir + File.separator + "schema";
+		return new File(enumSchemasDir);
+	}
+	
+	
+	private File getExtensionLibDir() {
+		return new File(ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath() 
+			+ File.separator + "lib");
 	}
 }

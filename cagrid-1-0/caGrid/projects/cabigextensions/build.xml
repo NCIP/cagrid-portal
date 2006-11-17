@@ -16,14 +16,18 @@
 
 	<property name="src.dir" value="${basedir}/src/java" />
 	<property name="build.dir" value="${basedir}/build" />
+	<property name="stubs.src" value="${build.dir}/stubs/src"/>
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
 	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="stubs.classes.dir" value="${build.dir}/stubs/classes"/>
 	<property name="jar.dir" value="${build.dir}/jars" />
 	<property name="project.jarfile" value="${jar.dir}/${project.name}.jar" />
+	<property name="stubs.jarfile" value="${jar.dir}/${project.name}-stubs.jar"/>
 	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="ext.lib.dir" value="${basedir}/ext/lib" />
 	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
 	<property name="ext.schema.dir" location="${basedir}/ext/xsd" />
+	<property name="mappings.file" location="${basedir}/namespace2package.mappings"/>
 
 	<!-- testing stuff -->
 	<property name="test.dir" location="${basedir}/test" />
@@ -77,8 +81,14 @@
 		<fail message="Globus installation is not set in either GLOBUS_LOCATION or ext.globus.dir" if="globus.not.found" />
 		<echo message="Globus: ${ext.globus.dir}" />
 	</target>
+	
 	<target name="setGlobus" if="env.GLOBUS_LOCATION">
 		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
+		<property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+		<property name="schema.src" location="${ext.globus.dir}/share/schema" />
+		<property name="build.packages" location="${ext.globus.dir}/share/globus_wsrf_common/build-packages.xml" />
+		<!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
+		<property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd -x http://schemas.xmlsoap.org/ws/2004/09/enumeration" />
 	</target>
 
 	<!-- =============================================================== -->
@@ -137,9 +147,32 @@
 	<!-- =============================================================== -->
 	<!-- Prepares the build directory                                    -->
 	<!-- =============================================================== -->
-	<target name="prepare">
+	<target name="prepare" depends="checkGlobus">
 		<tstamp />
 		<mkdir dir="${build.dir}" />
+	</target>
+	
+	
+	<target name="merge" depends="prepare">
+		<!-- Merge our namespace mappings file with the GT4 mappins file -->
+		<ant antfile="${build.stubs}" target="mergePackageMapping" inheritall="false">
+			<property name="mapping.src" location="${mappings.file}" />
+			<property name="mapping.dst" location="${build.dir}/namespace2package.mappings" />
+		</ant>
+	</target>
+	
+	
+	<!-- Generate the stub source files -->
+	<!-- This is done with a GT4 tool -->
+	<target name="serviceStubs" depends="merge">
+		<!-- Invoke the stub generator -->
+		<ant antfile="${build.stubs}" target="generateStubs" inheritall="false">
+			<property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
+			<property name="source.stubs.dir" location="${ext.schema.dir}" />
+			<property name="target.stubs.dir" location="${stubs.src}" />
+			<property name="wsdl.file" value="enumeration.wsdl" />
+			<property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
+		</ant>
 	</target>
 
 
@@ -156,6 +189,17 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
+	</target>
+	
+	
+	<!-- =============================================================== -->
+	<!-- Compiles the source code                                        -->
+	<!-- =============================================================== -->
+	<target name="compileStubs" depends="serviceStubs">
+		<mkdir dir="${stubs.classes.dir}"/>
+		<javac srcdir="${stubs.src}" destdir="${stubs.classes.dir}" source="1.4" debug="on">
+			<classpath refid="build.classpath"/>
+		</javac>
 	</target>
 
 	<!-- =============================================================== -->
@@ -189,6 +233,20 @@
 			</manifest>
 		</jar>
 	</target>
+	
+	
+	<!-- ============================================================== -->
+	<!-- Creates the stubs jar files                                    -->
+	<!-- ============================================================== -->
+	<target name="jarStubs" depends="compileStubs" description="Builds the Stubs Jar Files">
+		<mkdir dir="${jar.dir}" />
+		<jar jarfile="${stubs.jarfile}" basedir="${stubs.classes.dir}">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+			</manifest>
+		</jar>
+	</target>
+	
 
 	<!-- ============================================================== -->
 	<!-- Creates the test jar files                                     -->
@@ -277,5 +335,5 @@
 	<!-- ============================================================== -->
 	<!-- Builds from scratch                                                -->
 	<!-- ============================================================== -->
-	<target name="all" description="Builds the entire application" depends="jar,jar-tests" />
+	<target name="all" description="Builds the entire application" depends="jar, jarStubs, jar-tests" />
 </project>
