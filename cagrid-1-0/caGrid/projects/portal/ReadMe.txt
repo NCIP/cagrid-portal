@@ -27,14 +27,10 @@ You can ignore sections marked (Optional)
         - Create a database called portal in mysql
         - Configure the jdbc connection in portal-build.properties
             or in ${user.home}/.portal-build.properties/
-        - Run "ant all"
-        - Run "ant creatPortaleDatabase"
-        - Run "ant createPortalZipCodeSeedData" to put in zipcodes seed data (only
-            (needs to be done once)
 
 
     ===========================================================================
-    2.2 Index Service Configuration  (Optional)
+    2.2 Index Service Configuration
     ===========================================================================
 
         When deploying Portal, the only information needed to connect the Portal
@@ -102,53 +98,11 @@ You can ignore sections marked (Optional)
         C:\Documents and Settings\kherm\.globus or similar in Windows
 
 
-    Also read section 2.7 for syncGTS
+    Also read section 2.5 for syncGTS
 
 
     ===========================================================================
-      2.5 Portal Localization and Internationalization  (Optional)
-    ===========================================================================
-        Portal is a I9 compliant application. All the text that is displayed in
-        the portal is externalized into a message bundle. This is configured
-         in the portal-faces-config.xml file.
-
-         <message-bundle>
-            Portal-Labels
-        </message-bundle>
-
-         By editing this message bundle file
-        file (located portal/webcontent/resources/Portal-Labels_en.properties
-        you can changet the text in the portal
-
-        You can also localizae the portal by adding your own Portal-Labels message
-        bundle. Look at the following section in faces-config.xml
-
-          <locale-config>
-        		<default-locale>en</default-locale>
-        		<supported-locale>en</supported-locale>
-          </locale-config>
-
-
-        You can add other supported locale and provide an appropriate Portal-Labels
-
-        For eg.
-
-          <locale-config>
-        		<default-locale>fr</default-locale>
-        		<supported-locale>en</supported-locale>
-        		<supported-locale>fr</supported-locale>
-          </locale-config>
-
-          This means Portal will look for a Portal_Labels_fr.propeerties
-          file in the classpath to display its text.
-          This way you can translate the portal into french or other languages
-
-        For a brief tutorial on this please refer
-        http://www.laliluna.de/javaserver-faces-message-resource-bundle-tutorial.html
-
-
-    ===========================================================================
-      2.6 Credential management with syncGTS
+      2.5 Credential management with syncGTS
     ===========================================================================
 
      The portal by default uses a syncGTS client to establish trust with
@@ -179,7 +133,7 @@ You can ignore sections marked (Optional)
 
 
     ===========================================================================
-      2.7 Portal map component
+      2.6 Portal map component
     ===========================================================================
     There is a custom Map component in Portal. To use it refer to the map JSF
     pages.
@@ -195,8 +149,9 @@ You can ignore sections marked (Optional)
 
 
     ===========================================================================
-      2.8 Portal geocoding component
+      2.7 Portal geocoding component   (Optional)
     ===========================================================================
+    You can leave the default value for this property
 
     Portal does geocoding using the yahoo web service at
     http://developer.yahoo.com/maps/rest/V1/geocode.html
@@ -231,6 +186,8 @@ VERY IMPORTANT- Its important to first build the main caGrid build before
         - Build with "ant all"
         - Optionally run "ant createDatabase"  This will be needed
           for a fresh install of portal (if not done in section 2.1 Database)
+        - Run "ant createPortalZipCodeSeedData" to put in zipcodes seed data (only
+         (needs to be done once)
         - Optionally run "ant createCaBIGWorkspaces" This creates caBIG seed data
           and is recommended for a fresh install of the portal.
 
@@ -286,15 +243,59 @@ VERY IMPORTANT- Its important to first build the main caGrid build before
     But this be can configured to log to the console (say for debugging)
 
 
+
 ===========================================================================
 6. caBIG Participant information    (Optional)
 ===========================================================================
 
-    caBIG Participants data is mantianed in the resources/ caBIG_Workspaces_participants.xls
+    caBIG Participants data is mantianed in the
+    resources/ caBIG_Workspaces_participants.xls
     excel sheet. Participants can be added/editied in the excel sheet.
 
     They can then be uploaded by calling the ant target "ant createCaBIGWorkspaces"
 
     Portal does not need to be rebuilt/redeployed for this. 
 
+
+
+===========================================================================
+7 Portal Localization and Internationalization  (Optional)
+===========================================================================
+        Portal is a I9 compliant application. All the text that is displayed in
+        the portal is externalized into a message bundle. This is configured
+         in the portal-faces-config.xml file.
+
+         <message-bundle>
+            Portal-Labels
+        </message-bundle>
+
+         By editing this message bundle file
+        file (located portal/webcontent/resources/Portal-Labels_en.properties
+        you can changet the text in the portal
+
+        You can also localizae the portal by adding your own Portal-Labels message
+        bundle. Look at the following section in faces-config.xml
+
+          <locale-config>
+        		<default-locale>en</default-locale>
+        		<supported-locale>en</supported-locale>
+          </locale-config>
+
+
+        You can add other supported locale and provide an appropriate Portal-Labels
+
+        For eg.
+
+          <locale-config>
+        		<default-locale>fr</default-locale>
+        		<supported-locale>en</supported-locale>
+        		<supported-locale>fr</supported-locale>
+          </locale-config>
+
+          This means Portal will look for a Portal_Labels_fr.propeerties
+          file in the classpath to display its text.
+          This way you can translate the portal into french or other languages
+
+        For a brief tutorial on this please refer
+        http://www.laliluna.de/javaserver-faces-message-resource-bundle-tutorial.html
 
