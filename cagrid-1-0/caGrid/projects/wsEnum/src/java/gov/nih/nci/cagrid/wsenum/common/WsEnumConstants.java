@@ -17,6 +17,9 @@ public class WsEnumConstants {
 
 	// package name for generated beans of WS-Enumeration
 	public static final String ENUMERATION_PACKAGE_NAME = "org.xmlsoap.schemas.ws._2004._09.enumeration";
+
+	// package name for beans from addressing namespace used by WS-Enumeration
+	public static final String ADDRESSING_PACKAGE_NAME = "org.globus.addressing";
 	
 	// schema names
 	public static final String ENUMERATION_WSDL_NAME = "enumeration.wsdl";
