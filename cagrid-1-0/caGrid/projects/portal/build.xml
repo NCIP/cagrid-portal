@@ -385,7 +385,7 @@
     </target>
 
     <target name="hibernate"
-            depends="hibernate.xdoclet,file-list"/>
+            depends="hibernate.xdoclet"/>
 
     <target name="hibernate.xdoclet" depends="compile">
         <taskdef name="hibernatedoclet"
