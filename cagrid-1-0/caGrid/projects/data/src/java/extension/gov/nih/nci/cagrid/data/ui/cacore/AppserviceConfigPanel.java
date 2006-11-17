@@ -34,7 +34,7 @@ import javax.swing.event.DocumentListener;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 9, 2006 
- * @version $Id: AppserviceConfigPanel.java,v 1.2 2006-11-09 19:53:43 dervin Exp $ 
+ * @version $Id: AppserviceConfigPanel.java,v 1.3 2006-11-17 15:30:25 dervin Exp $ 
  */
 public class AppserviceConfigPanel extends AbstractWizardPanel {
 	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
@@ -108,11 +108,13 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 		try {
 			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
 			CQLProcessorConfig config = data.getCQLProcessorConfig();
+			boolean csmFound = false;
 			if (config != null) {
 				CQLProcessorConfigProperty[] props = config.getProperty();
 				for (int i = 0; props != null && i < props.length; i++) {
 					String propName = props[i].getName();
 					if (propName.equals(USE_CSM_FLAG)) {
+						csmFound = true;
 						boolean selected = Boolean.valueOf(props[i].getValue()).booleanValue();
 						getUseCsmCheckBox().setSelected(selected);
 						PortalUtils.setContainerEnabled(getCsmOptionsPanel(), selected);
@@ -135,6 +137,11 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 						getCaseInsensitiveCheckBox().setSelected(selected);
 					}
 				}
+			}
+			// default for USE CSM flag
+			if (!csmFound) {
+				getUseCsmCheckBox().setSelected(false);
+				PortalUtils.setContainerEnabled(getCsmOptionsPanel(), false);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
