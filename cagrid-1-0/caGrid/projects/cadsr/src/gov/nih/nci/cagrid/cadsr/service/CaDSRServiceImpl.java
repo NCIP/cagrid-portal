@@ -530,7 +530,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 
 	}
 
-	public WorkManager getWorkManager() {
+	public synchronized WorkManager getWorkManager() {
 		if (this.workManager == null) {
 			int poolSize = DEFAULT_POOL_SIZE;
 			try {
@@ -545,7 +545,7 @@ public class CaDSRServiceImpl extends CaDSRServiceImplBase {
 		return this.workManager;
 	}
 
-	public void setWorkManager(WorkManager workManager) {
+	public synchronized void setWorkManager(WorkManager workManager) {
 		this.workManager = workManager;
 	}
 }

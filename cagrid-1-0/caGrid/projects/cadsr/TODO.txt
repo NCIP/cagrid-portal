@@ -6,6 +6,7 @@ resource/context for non-blocking domainmodel generation
 
 discovery panel should support "searching" as well
 
+missing findSemanticMetadataForAttribute operation
 
 caCORE BUGS:
 ==================================================
