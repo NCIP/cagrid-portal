@@ -4,8 +4,8 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
 	xmlns:sync="http://cagrid.nci.nih.gov/12/SyncGTS"
 	xmlns:gts="http://cagrid.nci.nih.gov/8/gts">    
-	
-	   <xsd:element name="SyncDescription" minOccurs="0" maxOccurs="1" type="sync:SyncDescription"/>
+	<xsd:import namespace="http://cagrid.nci.nih.gov/8/gts" schemaLocation="./gts.xsd"/>
+	   <xsd:element name="SyncDescription" type="sync:SyncDescription"/>
 	
 	   <xsd:complexType name="SyncDescription">
 			<xsd:sequence>
@@ -13,8 +13,6 @@
 				<xsd:element name="ExcludedCAs" minOccurs="1" maxOccurs="1" type="sync:ExcludedCAs"/>
 				<xsd:element name="DeleteInvalidFiles" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
 				<xsd:element name="NextSync" minOccurs="1" maxOccurs="1" type="xsd:integer"/>
-				<xsd:element name="PerformAuthorization" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
-				<xsd:element name="HostIdentity" minOccurs="0" maxOccurs="1" type="xsd:string"/>
 			</xsd:sequence>
 		</xsd:complexType>
 		
@@ -24,10 +22,12 @@
 			    <xsd:element name="gtsServiceURI" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 			    <xsd:element name="Expiration" minOccurs="1" maxOccurs="1" type="sync:Expiration"/>
 			    <xsd:element name="TrustedAuthorityFilter" minOccurs="0" maxOccurs="unbounded" type="gts:TrustedAuthorityFilter"/>
+				<xsd:element name="PerformAuthorization" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
+				<xsd:element name="GTSIdentity" minOccurs="0" maxOccurs="1" type="xsd:string"/>
 			</xsd:sequence>
 		</xsd:complexType>
 		
-		<xsd:element name="SyncReport" minOccurs="0" maxOccurs="1" type="sync:SyncReport"/>
+		<xsd:element name="SyncReport" type="sync:SyncReport"/>
 		
 		<xsd:complexType name="SyncReport">
 			<xsd:sequence>
@@ -40,7 +40,7 @@
 		</xsd:complexType>
 		
 		
-		<xsd:element name="TrustedCA" minOccurs="0" maxOccurs="1" type="sync:TrustedCA"/>
+		<xsd:element name="TrustedCA" type="sync:TrustedCA"/>
 		
 		<xsd:complexType name="TrustedCA">
 			<xsd:sequence>
@@ -89,7 +89,7 @@
   			</xsd:restriction>
  		 </xsd:simpleType>
  		 
- 		 <xsd:element name="DateFilter" minOccurs="0" maxOccurs="1" type="sync:DateFilter"/>
+ 		 <xsd:element name="DateFilter" type="sync:DateFilter"/>
  		 
  		<xsd:complexType name="DateFilter">
 			<xsd:sequence>

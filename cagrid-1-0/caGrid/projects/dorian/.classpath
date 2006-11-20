@@ -88,12 +88,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-ServiceSecurityProvider-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="ext/lib/commons-httpclient-3.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/csmapi.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mysql-connector-java-3.1.11-bin.jar"/>
-	<classpathentry kind="lib" path="ext/lib/spring-beans.jar"/>
-	<classpathentry kind="lib" path="ext/lib/spring-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-stubs.jar"/>

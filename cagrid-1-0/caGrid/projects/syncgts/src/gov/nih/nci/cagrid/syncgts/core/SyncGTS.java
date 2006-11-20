@@ -186,8 +186,8 @@ public class SyncGTS {
 						endpoint.setAddress(new Address(des[i].getGtsServiceURI()));
 						GTSClient client = new GTSClient(endpoint);
 
-						if (description.isPerformAuthorization()) {
-							IdentityAuthorization ia = new IdentityAuthorization(description.getHostIdentity());
+						if (des[i].isPerformAuthorization()) {
+							IdentityAuthorization ia = new IdentityAuthorization(des[i].getGTSIdentity());
 							client.setAuthorization(ia);
 						}
 
