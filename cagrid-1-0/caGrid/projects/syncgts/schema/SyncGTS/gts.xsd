@@ -4,7 +4,7 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
 	xmlns:gts="http://cagrid.nci.nih.gov/8/gts">    
 	
-	   <xsd:element name="Permission" minOccurs="0" maxOccurs="1" type="gts:Permission"/>
+	   <xsd:element name="Permission" type="gts:Permission"/>
 	
 	   <xsd:complexType name="Permission">
 			<xsd:sequence>
@@ -14,7 +14,7 @@
 			</xsd:sequence>
 		</xsd:complexType>
 		
-		<xsd:element name="AuthorityGTS" minOccurs="0" maxOccurs="1" type="gts:AuthorityGTS"/>
+		<xsd:element name="AuthorityGTS" type="gts:AuthorityGTS"/>
 		
 		<xsd:complexType name="AuthorityGTS">
 			<xsd:sequence>
@@ -27,7 +27,7 @@
 			</xsd:sequence>
 		</xsd:complexType>
 		
-		<xsd:element name="AuthorityPriorityUpdate" minOccurs="0" maxOccurs="1" type="gts:AuthorityPriorityUpdate"/>
+		<xsd:element name="AuthorityPriorityUpdate" type="gts:AuthorityPriorityUpdate"/>
 		
 		<xsd:complexType name="AuthorityPriorityUpdate">
 			<xsd:sequence>
@@ -51,7 +51,7 @@
 			</xsd:sequence>
 	    </xsd:complexType>
 		
-		  <xsd:element name="PermissionFilter" minOccurs="0" maxOccurs="1" type="gts:PermissionFilter"/>
+		  <xsd:element name="PermissionFilter" type="gts:PermissionFilter"/>
 		
 		   <xsd:complexType name="PermissionFilter">
 			<xsd:sequence>
@@ -61,7 +61,7 @@
 			</xsd:sequence>
 		</xsd:complexType>
 		
-		 <xsd:element name="TrustedAuthorityFilter" minOccurs="0" maxOccurs="1" type="gts:TrustedAuthorityFilter"/>
+		 <xsd:element name="TrustedAuthorityFilter" type="gts:TrustedAuthorityFilter"/>
 	
 		<xsd:complexType name="TrustedAuthorityFilter">
 			<xsd:sequence>
@@ -76,7 +76,7 @@
 			</xsd:sequence>
 		</xsd:complexType>
 		
-		<xsd:element name="TrustedAuthority" minOccurs="0" maxOccurs="1" type="gts:TrustedAuthority"/>
+		<xsd:element name="TrustedAuthority" type="gts:TrustedAuthority"/>
 
 		<xsd:complexType name="TrustedAuthority">
 			<xsd:sequence>
@@ -122,7 +122,7 @@
  		</xsd:simpleType>
  
  		 
- 		 <xsd:element name="TrustLevel" minOccurs="0" maxOccurs="1" type="gts:TrustLevel"/>
+ 		 <xsd:element name="TrustLevel" type="gts:TrustLevel"/>
  		 
  		 <xsd:complexType name="TrustLevel">
 			<xsd:sequence>
@@ -135,7 +135,7 @@
 			</xsd:sequence>
 		</xsd:complexType>
 		
-		<xsd:element name="X509Certificate" minOccurs="0" maxOccurs="1" type="gts:X509Certificate"/>
+		<xsd:element name="X509Certificate" type="gts:X509Certificate"/>
  		 
  		<xsd:complexType name="X509Certificate">
 			<xsd:sequence>
@@ -143,7 +143,7 @@
 			</xsd:sequence>
 		</xsd:complexType>
 		
-		<xsd:element name="X509CRL" minOccurs="0" maxOccurs="1" type="gts:X509CRL"/>
+		<xsd:element name="X509CRL" type="gts:X509CRL"/>
 		
 		<xsd:complexType name="X509CRL">
 			<xsd:sequence>
