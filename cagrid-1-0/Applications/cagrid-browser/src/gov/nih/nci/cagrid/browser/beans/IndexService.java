@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.browser.beans;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import gov.nih.nci.cagrid.browser.exception.BrowserRuntimeException;
 import gov.nih.nci.cagrid.browser.util.GridUtils;
 import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -63,9 +64,13 @@ public class IndexService {
         this.defaultEPR = defaultEPR;
     }
 
-    public DiscoveryClient getDiscClient() throws Exception {
-        if (discClient == null) {
-            discClient = new DiscoveryClient(getDefaultEPR());
+    public DiscoveryClient getDiscClient() throws BrowserRuntimeException {
+        try {
+            if (discClient == null) {
+                discClient = new DiscoveryClient(getDefaultEPR());
+            }
+        } catch (URI.MalformedURIException e) {
+            throw new BrowserRuntimeException(e);
         }
         return discClient;
     }

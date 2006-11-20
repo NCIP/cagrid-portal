@@ -49,14 +49,15 @@ To change this template use File | Settings | File Templates.
 
             <h:column>
                 <h:panelGrid columns="4">
-                    <h:selectManyCheckbox value="#{keywordDiscoveryBean.metaDataCategories}" styleClass="formText">
+                    <h:selectManyCheckbox value="#{keywordDiscoveryBean.metaDataCategoriesSelected}"
+                                          styleClass="formText">
                         <f:selectItems value="#{keywordDiscoveryBean.metaDataCategoryItems}"/>
                     </h:selectManyCheckbox>
                 </h:panelGrid>
             </h:column>
 
             <h:column>
-                <h:outputText value="#{messages.discoveryServiceTypeCategory}"/>
+                <h:outputText value="#{messages.discoveryServiceTypeCategorySelected}"/>
                 <h:outputText value="#{messages.optionalKeyword}"/>
             </h:column>
 

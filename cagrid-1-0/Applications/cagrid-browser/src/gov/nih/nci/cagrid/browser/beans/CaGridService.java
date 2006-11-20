@@ -8,8 +8,12 @@ import gov.nih.nci.cagrid.metadata.common.ResearchCenter;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
 import gov.nih.nci.cagrid.metadata.service.CaDSRRegistration;
+import gov.nih.nci.cagrid.metadata.service.ServiceContext;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represent a caGrid Service
@@ -32,7 +36,7 @@ public class CaGridService {
     private PointOfContact[] pocList;
     private DomainModel domainModel;
     private CaDSRRegistration caDSRRegistration;
-
+    private List opersCollection = new ArrayList();
 
     public CaGridService(EndpointReferenceType epr) {
         this.epr = epr;
@@ -70,6 +74,10 @@ public class CaGridService {
             rcInfo = metadata.getHostingResearchCenter().getResearchCenter();
             pocList = metadata.getServiceDescription().getService().getPointOfContactCollection().getPointOfContact();
             domainModel = MetadataUtils.getDomainModel(this.epr);
+
+            //try getting operations if no data model
+            loadOperations(metadata);
+
             caDSRRegistration = metadata.getServiceDescription().getService().getCaDSRRegistration();
         } catch (ResourcePropertyRetrievalException e) {
             logger.warn("Error retrieving metadata for: " + e.getMessage());
@@ -78,6 +86,27 @@ public class CaGridService {
 
     }
 
+    public final void loadOperations(gov.nih.nci.cagrid.metadata.ServiceMetadata sMetadata) throws ResourcePropertyRetrievalException {
+        opersCollection.clear();
+        try {
+            ServiceContext[] contexts = sMetadata.getServiceDescription().getService().getServiceContextCollection().getServiceContext();
+            for (int i = 0; i < contexts.length; i++) {
+                //load operations from multiple contexts within the service
+                gov.nih.nci.cagrid.metadata.service.Operation opers[] = contexts[i].getOperationCollection().getOperation();
+                if (opers != null) {
+                    for (int j = 0; j < opers.length; j++) {
+                        opersCollection.add(opers[j]);
+                    }
+                }
+            }
+        } catch (NullPointerException e) {
+            //expected. Ignore
+        }
+    }
+
+    public List getOpersCollection() {
+        return opersCollection;
+    }
 
     public EndpointReferenceType getEpr() {
         return epr;

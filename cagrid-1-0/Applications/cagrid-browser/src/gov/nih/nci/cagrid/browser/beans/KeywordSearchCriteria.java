@@ -27,11 +27,12 @@ public class KeywordSearchCriteria {
     private String SERVICE_TYPE_ITEMS_DATA = "Data Services";
     private String SERVICE_TYPE_ITEMS_ANALYTICAL = "Analytical Services";
 
-    List metaDataCategories = new ArrayList();
+    List metaDataCategoriesSelected = new ArrayList();
     List metaDataCategoryItems = new ArrayList();
 
-
-    List serviceTypeCategories = new ArrayList();
+    //user sercted categories in view
+    List serviceTypeCategoriesSelected = new ArrayList();
+    //all categories
     List serviceTypeCategoryItems = new ArrayList();
 
     private DiscoveredServices discoveryResult;
@@ -45,14 +46,14 @@ public class KeywordSearchCriteria {
         metaDataCategoryItems.add(new SelectItem(META_DATA_ITEMS_EVS_CONCEPT));
         metaDataCategoryItems.add(new SelectItem(META_DATA_ITEMS_OBJECT_CLASS));
         metaDataCategoryItems.add(new SelectItem(META_DATA_ITEMS_RC_INFO));
-        metaDataCategories.add(META_DATA_ITEMS_EVS_CONCEPT);
-        metaDataCategories.add(META_DATA_ITEMS_OBJECT_CLASS);
-        metaDataCategories.add(META_DATA_ITEMS_RC_INFO);
+        metaDataCategoriesSelected.add(META_DATA_ITEMS_EVS_CONCEPT);
+        metaDataCategoriesSelected.add(META_DATA_ITEMS_OBJECT_CLASS);
+        metaDataCategoriesSelected.add(META_DATA_ITEMS_RC_INFO);
 
         serviceTypeCategoryItems.add(new SelectItem(SERVICE_TYPE_ITEMS_DATA));
         serviceTypeCategoryItems.add(new SelectItem(SERVICE_TYPE_ITEMS_ANALYTICAL));
-        serviceTypeCategories.add(SERVICE_TYPE_ITEMS_DATA);
-        serviceTypeCategories.add(SERVICE_TYPE_ITEMS_ANALYTICAL);
+        serviceTypeCategoriesSelected.add(SERVICE_TYPE_ITEMS_DATA);
+        serviceTypeCategoriesSelected.add(SERVICE_TYPE_ITEMS_ANALYTICAL);
     }
 
     //~--- methods ------------------------------------------------------------
@@ -74,6 +75,7 @@ public class KeywordSearchCriteria {
 
     public String doDiscoveryAll() throws FacesException {
         try {
+            //have to do this everytime to keep discovery and index selection in sync
             DiscoveryClient discClient = idxService.getDiscClient();
             discoveryResult.clear();
             discoveryResult.addDiscoveryResult(discClient.getAllServices(true));
@@ -85,17 +87,25 @@ public class KeywordSearchCriteria {
     }
 
     public String doDiscovery() {
+        try {
+            if (metaDataCategoriesSelected.contains(META_DATA_ITEMS_OBJECT_CLASS)) {
+                DiscoveryClient discClient = idxService.getDiscClient();
+                discClient.discoverServicesByConceptCode(this.keyword);
+            }
+        } catch (Exception e) {
+            throw new FacesException(e);
+        }
 
         return "success";
     }
 
 
-    public List getMetaDataCategories() {
-        return metaDataCategories;
+    public List getMetaDataCategoriesSelected() {
+        return metaDataCategoriesSelected;
     }
 
-    public void setMetaDataCategories(List metaDataCategories) {
-        this.metaDataCategories = metaDataCategories;
+    public void setMetaDataCategoriesSelected(List metaDataCategoriesSelected) {
+        this.metaDataCategoriesSelected = metaDataCategoriesSelected;
     }
 
     public List getMetaDataCategoryItems() {
@@ -106,12 +116,12 @@ public class KeywordSearchCriteria {
         this.metaDataCategoryItems = metaDataCategoryItems;
     }
 
-    public List getServiceTypeCategories() {
-        return serviceTypeCategories;
+    public List getServiceTypeCategoriesSelected() {
+        return serviceTypeCategoriesSelected;
     }
 
-    public void setServiceTypeCategories(List serviceTypeCategories) {
-        this.serviceTypeCategories = serviceTypeCategories;
+    public void setServiceTypeCategoriesSelected(List serviceTypeCategoriesSelected) {
+        this.serviceTypeCategoriesSelected = serviceTypeCategoriesSelected;
     }
 
     public List getServiceTypeCategoryItems() {

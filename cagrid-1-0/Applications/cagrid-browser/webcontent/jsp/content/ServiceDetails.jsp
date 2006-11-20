@@ -169,6 +169,52 @@ To change this template use File | Settings | File Templates.
         </h:panelGrid>
     </h:column>
 
+    <!--domain model info-->
+
+    <h:column rendered="#{not empty discoveryResult.navigatedService.domainModel}">
+        <h:dataTable var="umlclass"
+                     value="#{discoveryResult.navigatedService.domainModel.exposedUMLAssociationCollection}"
+                     headerClass="formTitle"
+                     columnClasses="detailsCellKey,detailsCellValue"
+                     width="100%" cellpadding="3" cellspacing="0">
+            <f:facet name="header">
+                <h:column>
+                    <h:outputText value="#{messages.domainModelTitle}"/>
+                </h:column>
+            </f:facet>
+
+            <h:column>
+                <h:outputText value="#{umlclass.className}"/>
+            </h:column>
+            <h:column>
+                <h:outputText value="#{umlclass.packageName}"/>
+
+            </h:column>
+        </h:dataTable>
+    </h:column>
+
+    <!--Operations Collection-->
+    <h:column rendered="#{not empty discoveryResult.navigatedService.opersCollection}">
+        <h:dataTable var="oper" value="#{discoveryResult.navigatedService.opersCollection}"
+                     headerClass="formTitle"
+                     columnClasses="detailsCellKey,detailsCellValue"
+                     width="100%" cellpadding="3" cellspacing="0">
+            <f:facet name="header">
+                <h:column>
+                    <h:outputText value="#{messages.operationTitle}"/>
+                </h:column>
+            </f:facet>
+
+
+            <h:column>
+                <h:outputText value="#{oper.name}"/>
+            </h:column>
+            <h:column>
+                <h:outputText value="#{oper.description}"/>
+            </h:column>
+        </h:dataTable>
+    </h:column>
+
 </h:panelGrid>
 
 <f:verbatim><br/></f:verbatim>
