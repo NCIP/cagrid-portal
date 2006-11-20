@@ -1,4 +1,4 @@
-<project name="cagrid-browser" default="buildLocal" basedir=".">
+<project name="cagrid-browser" default="all" basedir=".">
 
     <property environment="env"/>
 
@@ -62,14 +62,9 @@
     </target>
 
 
-    <target name="cleanLocal" description="Clean the current build">
+    <target name="clean" description="Clean the current build">
         <delete dir="${build.classes.dir}"/>
         <delete dir="${build.lib.dir}"/>
-    </target>
-
-    <target name="cleanDeployment" description="Clean the current build from tomcat"
-            depends="checkTomcat">
-        <delete dir="${tomcat.webapp.dir}"/>
     </target>
 
 
@@ -115,14 +110,14 @@
         </copy>
     </target>
 
-    <target name="buildLocal" depends="cleanLocal,compile,copyResources"
+    <target name="buildLocal" depends="clean,compile,copyResources"
             description="Will build portal locally and not deploy to tomcat">
         <echo message="Building ${project-name} locally."/>
         <echo message="Use deploy target to deploy the webapp to Tomcat"/>
     </target>
 
     <!-- default target will deploy app in $CATALINA_HOME/webapps/${project.name} -->
-    <target name="deployWebapp" depends="cleanDeployment,buildLocal,copywebapp" description="Deploy cagrid-browser">
+    <target name="deployWebapp" depends="unDeploy,buildLocal,copywebapp" description="Deploy cagrid-browser">
     </target>
 
 
@@ -130,5 +125,9 @@
         <delete dir="${tomcat.webapp.dir}"/>
     </target>
 
+    <target name="all" depends="buildLocal" description="Default target. WIll build locally">
+        <echo message="Not to be called Directltly."/>
+        <echo message="Please use the deployWebapp targets to deploy app or buildLocal to do a local build"/>
+    </target>
 
 </project>

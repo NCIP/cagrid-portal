@@ -1,11 +1,11 @@
 <project name="Applications" default="app-all" basedir="../caGrid">
-    
+
     <property name="apps.dir" value="${basedir}/../Applications"/>
-    
+
     <import file="${basedir}/build.xml"/>
-    
+
     <property name="apps.list" value="caarray"/>
-    
+
     <target name="app-all" depends="app-clean" description="Builds the entire application">
         <for list="${apps.list}" parallel="false" param="app.name" trim="true">
             <sequential>
@@ -17,7 +17,7 @@
             </sequential>
         </for>
     </target>
-    
+
     <target name="app-clean" depends="app-prepare" description="Cleans all apps.">
         <for list="${apps.list}" parallel="true" param="app.name" trim="true">
             <sequential>
@@ -27,16 +27,16 @@
             </sequential>
         </for>
     </target>
-    
+
     <target name="app-prepare" depends="prepare">
-        
-    </target>    
-    
+
+    </target>
+
     <!-- =============================================================== -->
     <!-- caArray:                                                        -->
     <!-- =============================================================== -->
     <target name="build-caarray" depends="app-prepare" description="Builds the caarray service">
-        
+
         <resolveDependencies extdir="${apps.dir}/caarray/ext">
             <artifact refid="ant-contrib.jars"/>
             <artifact refid="core.jars"/>
@@ -47,18 +47,18 @@
             <artifact refid="data.metadata.jars"/>
             <artifact refid="introduce.jars"/>
             <artifact refid="data.jars"/>
-            <artifact refid="sdk.query.jars"/>            
+            <artifact refid="sdk.query.jars"/>
         </resolveDependencies>
 
         <ant dir="${apps.dir}/caarray" inheritAll="false" antfile="build.xml" target="all"/>
-        
+
         <resolveDependencies extdir="${apps.dir}/caarray/schema/CaArraySvc">
-            <artifact refid="metadata.schemas" />
-            <artifact refid="security.metadata.schemas" />
-            <artifact refid="data.cql.schemas" />
+            <artifact refid="metadata.schemas"/>
+            <artifact refid="security.metadata.schemas"/>
+            <artifact refid="data.cql.schemas"/>
         </resolveDependencies>
-    </target>    
-    
+    </target>
+
     <!-- =============================================================== -->
     <!-- caBIO:                                                          -->
     <!-- =============================================================== -->
@@ -74,7 +74,7 @@
             <artifact refid="caCORE.jars"/>
             <artifact refid="introduce.jars"/>
             <artifact refid="data.jars"/>
-            <artifact refid="sdk.query.jars"/>            
+            <artifact refid="sdk.query.jars"/>
         </resolveDependencies>
         <!--
         <resolveDependencies extdir="${apps.dir}/cabio/exp/CaBIO/schema">
@@ -90,13 +90,15 @@
     <!-- =============================================================== -->
     <target name="build-cagrid-browser" depends="app-prepare" description="Builds the cagrid-browser application">
         <resolveDependencies extdir="${apps.dir}/cagrid-browser/ext">
-        	<artifact refid="ant-contrib.jars"/>
-        	<artifact refid="common.test.jars"/>
-        	<artifact refid="common.metadata.jars"/>
-        	<artifact refid="discovery.jars"/>
-        	<artifact refid="metadatautils.jars"/>
+            <artifact refid="core.jars"/>
+            <artifact refid="common.metadata.jars"/>
+            <artifact refid="data.jars"/>
+            <artifact refid="data.metadata.jars"/>
+            <artifact refid="discovery.jars"/>
+            <artifact refid="fqp.jars"/>
+            <artifact refid="metadatautils.jars"/>
         </resolveDependencies>
         <ant dir="${apps.dir}/cagrid-browser" inheritAll="false" antfile="build.xml" target="all"/>
-    </target>	
-    
+    </target>
+
 </project>
