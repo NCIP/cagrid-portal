@@ -9,19 +9,25 @@
         <xs:sequence>
           <xs:element name="auditTrail" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Audit" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Audit" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
           <xs:element name="descriptions" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.Description:Description" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.Description:Description" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
-          <xs:element name="security" type="gov.nih.nci.mageom.domain.AuditAndSecurity:Security" minOccurs="0" maxOccurs="1" />
+          <xs:element name="security" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Security" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -31,9 +37,9 @@
     <xs:sequence>
       <xs:element name="NameValueType" minOccurs="0" maxOccurs="1">
         <xs:complexType>
-          <xs:sequence>
-            <xs:element ref="NameValueType" minOccurs="0" maxOccurs="unbounded" />
-          </xs:sequence>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="NameValueType" />
+          </xs:choice>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -56,9 +62,9 @@
     <xs:sequence>
       <xs:element name="propertySets" minOccurs="0" maxOccurs="1">
         <xs:complexType>
-          <xs:sequence>
-            <xs:element ref="NameValueType" minOccurs="0" maxOccurs="unbounded" />
-          </xs:sequence>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="NameValueType" />
+          </xs:choice>
         </xs:complexType>
       </xs:element>
     </xs:sequence>

@@ -114,6 +114,9 @@
 			<fileset dir="build/lib">
 				<include name="*" />
 			</fileset>
+			<fileset dir="ext/lib">
+				<include name="*" />
+			</fileset>
 		</copy>
 		<!--copy over the schema service files-->
 		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}/${introduce.skeleton.service.name}">

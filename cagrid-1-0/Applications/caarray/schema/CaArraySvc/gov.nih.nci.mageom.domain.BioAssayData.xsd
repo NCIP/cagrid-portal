@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssayData" xmlns:gov.nih.nci.mageom.domain.BioEvent="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioEvent" xmlns:gov.nih.nci.mageom.domain.BioAssay="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssay" xmlns:gov.nih.nci.mageom.domain.QuantitationType="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.QuantitationType" xmlns:gov.nih.nci.mageom.domain.DesignElement="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.DesignElement" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" targetNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssayData" elementFormDefault="qualified">
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioEvent" schemaLocation="gov.nih.nci.mageom.domain.BioEvent.xsd" />
   <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.QuantitationType" schemaLocation="gov.nih.nci.mageom.domain.QuantitationType.xsd" />
   <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssay" schemaLocation="gov.nih.nci.mageom.domain.BioAssay.xsd" />
   <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioEvent" schemaLocation="gov.nih.nci.mageom.domain.BioEvent.xsd" />
   <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.DesignElement" schemaLocation="gov.nih.nci.mageom.domain.DesignElement.xsd" />
   <xs:element name="DesignElementMap" type="DesignElementMap" />
   <xs:complexType name="DesignElementMap">
@@ -41,9 +41,9 @@
         <xs:sequence>
           <xs:element name="containedFeatures" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.DesignElement:Feature" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.DesignElement:Feature" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -57,9 +57,11 @@
         <xs:sequence>
           <xs:element name="quantitationTypes" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.QuantitationType:QuantitationType" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.QuantitationType:StandardQuantitationType" />
+                <xs:element ref="gov.nih.nci.mageom.domain.QuantitationType:SpecializedQuantitationType" />
+                <xs:element ref="gov.nih.nci.mageom.domain.QuantitationType:QuantitationType" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -81,9 +83,9 @@
         <xs:sequence>
           <xs:element name="compositeSequences" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.DesignElement:CompositeSequence" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.DesignElement:CompositeSequence" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -103,9 +105,35 @@
     <xs:complexContent>
       <xs:extension base="gov.nih.nci.mageom.domain:Extendable">
         <xs:sequence>
-          <xs:element name="bioAssay" type="gov.nih.nci.mageom.domain.BioAssay:BioAssay" minOccurs="0" maxOccurs="1" />
-          <xs:element name="quantitationType" type="gov.nih.nci.mageom.domain.QuantitationType:QuantitationType" minOccurs="0" maxOccurs="1" />
-          <xs:element name="designElement" type="gov.nih.nci.mageom.domain.DesignElement:DesignElement" minOccurs="0" maxOccurs="1" />
+          <xs:element name="bioAssay" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:MeasuredBioAssay" />
+                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:PhysicalBioAssay" />
+                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:DerivedBioAssay" />
+                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:BioAssay" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="quantitationType" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="gov.nih.nci.mageom.domain.QuantitationType:StandardQuantitationType" />
+                <xs:element ref="gov.nih.nci.mageom.domain.QuantitationType:SpecializedQuantitationType" />
+                <xs:element ref="gov.nih.nci.mageom.domain.QuantitationType:QuantitationType" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="designElement" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="gov.nih.nci.mageom.domain.DesignElement:Feature" />
+                <xs:element ref="gov.nih.nci.mageom.domain.DesignElement:CompositeSequence" />
+                <xs:element ref="gov.nih.nci.mageom.domain.DesignElement:Reporter" />
+                <xs:element ref="gov.nih.nci.mageom.domain.DesignElement:DesignElement" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
         <xs:attribute name="value" type="xs:string" />
       </xs:extension>
@@ -116,12 +144,22 @@
     <xs:complexContent>
       <xs:extension base="gov.nih.nci.mageom.domain.BioEvent:Map">
         <xs:sequence>
-          <xs:element name="targetQuantitationType" type="gov.nih.nci.mageom.domain.QuantitationType:QuantitationType" minOccurs="0" maxOccurs="1" />
+          <xs:element name="targetQuantitationType" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="gov.nih.nci.mageom.domain.QuantitationType:StandardQuantitationType" />
+                <xs:element ref="gov.nih.nci.mageom.domain.QuantitationType:SpecializedQuantitationType" />
+                <xs:element ref="gov.nih.nci.mageom.domain.QuantitationType:QuantitationType" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
           <xs:element name="sourcesQuantitationType" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.QuantitationType:QuantitationType" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.QuantitationType:StandardQuantitationType" />
+                <xs:element ref="gov.nih.nci.mageom.domain.QuantitationType:SpecializedQuantitationType" />
+                <xs:element ref="gov.nih.nci.mageom.domain.QuantitationType:QuantitationType" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -133,7 +171,13 @@
     <xs:complexContent>
       <xs:extension base="BioAssayData">
         <xs:sequence>
-          <xs:element name="producerTransformation" type="Transformation" minOccurs="0" maxOccurs="1" />
+          <xs:element name="producerTransformation" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="Transformation" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -143,17 +187,46 @@
     <xs:complexContent>
       <xs:extension base="gov.nih.nci.mageom.domain:Identifiable">
         <xs:sequence>
-          <xs:element name="quantitationTypeDimension" type="QuantitationTypeDimension" minOccurs="0" maxOccurs="1" />
-          <xs:element name="summaryStatistics" minOccurs="0" maxOccurs="1">
+          <xs:element name="quantitationTypeDimension" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain:NameValueType" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="QuantitationTypeDimension" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
-          <xs:element name="bioAssayDimension" type="BioAssayDimension" minOccurs="0" maxOccurs="1" />
-          <xs:element name="designElementDimension" type="DesignElementDimension" minOccurs="0" maxOccurs="1" />
-          <xs:element name="bioDataValues" type="BioDataValues" minOccurs="0" maxOccurs="1" />
+          <xs:element name="summaryStatistics" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain:NameValueType" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="bioAssayDimension" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="BioAssayDimension" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="designElementDimension" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="FeatureDimension" />
+                <xs:element ref="CompositeSequenceDimension" />
+                <xs:element ref="ReporterDimension" />
+                <xs:element ref="DesignElementDimension" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="bioDataValues" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="BioDataCube" />
+                <xs:element ref="BioDataTuples" />
+                <xs:element ref="BioDataValues" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -165,9 +238,9 @@
         <xs:sequence>
           <xs:element name="quantitationTypeMaps" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="QuantitationTypeMap" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="QuantitationTypeMap" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -181,9 +254,12 @@
         <xs:sequence>
           <xs:element name="bioAssays" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:BioAssay" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:MeasuredBioAssay" />
+                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:PhysicalBioAssay" />
+                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:DerivedBioAssay" />
+                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:BioAssay" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -197,9 +273,9 @@
         <xs:sequence>
           <xs:element name="bioAssayMaps" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="BioAssayMap" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="BioAssayMap" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -213,9 +289,9 @@
         <xs:sequence>
           <xs:element name="bioAssayTupleData" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="BioAssayDatum" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="BioAssayDatum" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -229,9 +305,9 @@
         <xs:sequence>
           <xs:element name="reporters" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.DesignElement:Reporter" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.DesignElement:Reporter" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -243,15 +319,41 @@
     <xs:complexContent>
       <xs:extension base="gov.nih.nci.mageom.domain.BioEvent:BioEvent">
         <xs:sequence>
-          <xs:element name="quantitationTypeMapping" type="QuantitationTypeMapping" minOccurs="0" maxOccurs="1" />
-          <xs:element name="designElementMapping" type="DesignElementMapping" minOccurs="0" maxOccurs="1" />
-          <xs:element name="bioAssayMapping" type="BioAssayMapping" minOccurs="0" maxOccurs="1" />
-          <xs:element name="derivedBioAssayDataTarget" type="DerivedBioAssayData" minOccurs="0" maxOccurs="1" />
+          <xs:element name="quantitationTypeMapping" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="QuantitationTypeMapping" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="designElementMapping" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="DesignElementMapping" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="bioAssayMapping" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="BioAssayMapping" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="derivedBioAssayDataTarget" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="DerivedBioAssayData" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
           <xs:element name="bioAssayDataSources" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="BioAssayData" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="MeasuredBioAssayData" />
+                <xs:element ref="DerivedBioAssayData" />
+                <xs:element ref="BioAssayData" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -271,12 +373,21 @@
     <xs:complexContent>
       <xs:extension base="gov.nih.nci.mageom.domain.BioEvent:Map">
         <xs:sequence>
-          <xs:element name="bioAssayMapTarget" type="gov.nih.nci.mageom.domain.BioAssay:DerivedBioAssay" minOccurs="0" maxOccurs="1" />
+          <xs:element name="bioAssayMapTarget" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:DerivedBioAssay" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
           <xs:element name="sourceBioAssays" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:BioAssay" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:MeasuredBioAssay" />
+                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:PhysicalBioAssay" />
+                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:DerivedBioAssay" />
+                <xs:element ref="gov.nih.nci.mageom.domain.BioAssay:BioAssay" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -288,9 +399,12 @@
     <xs:sequence>
       <xs:element name="designElementMaps" minOccurs="0" maxOccurs="1">
         <xs:complexType>
-          <xs:sequence>
-            <xs:element ref="DesignElementMap" minOccurs="0" maxOccurs="unbounded" />
-          </xs:sequence>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="gov.nih.nci.mageom.domain.DesignElement:CompositeCompositeMap" />
+            <xs:element ref="gov.nih.nci.mageom.domain.DesignElement:FeatureReporterMap" />
+            <xs:element ref="gov.nih.nci.mageom.domain.DesignElement:ReporterCompositeMap" />
+            <xs:element ref="DesignElementMap" />
+          </xs:choice>
         </xs:complexType>
       </xs:element>
     </xs:sequence>

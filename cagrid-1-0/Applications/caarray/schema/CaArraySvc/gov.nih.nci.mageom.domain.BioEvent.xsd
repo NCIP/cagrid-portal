@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioEvent" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" xmlns:gov.nih.nci.mageom.domain.Protocol="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Protocol" targetNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioEvent" elementFormDefault="qualified">
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Protocol" schemaLocation="gov.nih.nci.mageom.domain.Protocol.xsd" />
   <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Protocol" schemaLocation="gov.nih.nci.mageom.domain.Protocol.xsd" />
   <xs:element name="Map" type="Map" />
   <xs:complexType name="Map">
     <xs:complexContent>
@@ -17,9 +17,9 @@
         <xs:sequence>
           <xs:element name="protocolApplications" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.Protocol:ProtocolApplication" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.Protocol:ProtocolApplication" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>

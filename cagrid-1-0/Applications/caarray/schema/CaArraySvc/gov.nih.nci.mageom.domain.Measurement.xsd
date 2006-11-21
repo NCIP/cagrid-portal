@@ -147,7 +147,20 @@
   <xs:element name="Measurement" type="Measurement" />
   <xs:complexType name="Measurement">
     <xs:sequence>
-      <xs:element name="unit" type="Unit" minOccurs="0" maxOccurs="1" />
+      <xs:element name="unit" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="1">
+            <xs:element ref="TimeUnit" />
+            <xs:element ref="VolumeUnit" />
+            <xs:element ref="DistanceUnit" />
+            <xs:element ref="MassUnit" />
+            <xs:element ref="TemperatureUnit" />
+            <xs:element ref="ConcentrationUnit" />
+            <xs:element ref="QuantityUnit" />
+            <xs:element ref="Unit" />
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
     </xs:sequence>
     <xs:attribute name="kindCV">
       <xs:simpleType>

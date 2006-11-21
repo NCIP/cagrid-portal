@@ -10,7 +10,20 @@
     <parameter name="providers" value="GetRPProvider GetMRPProvider QueryRPProvider gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl gov.nih.nci.cagrid.data.service.globus.DataServiceProviderImpl" />
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/CaArraySvc-security-metadata.xml" />
+    <parameter name="castorMapping" value="/gov/nih/nci/cagrid/caarray/common/caarray-xml-mapping.xml"/>
   </service>
   <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent" type="java:org.globus.mds.aggregator.types.AggregatorContent" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
+  
+  
+  <ns3:typeMapping 
+  	encodingStyle="" 
+  	serializer="gov.nih.nci.cagrid.caarray.encoding.CaArraySerializerFactory" 
+  	deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" 
+  	type="ns1:gov.nih.nci.mageom.domain.Experiment.impl.ExperimentImpl" 
+  	qname="ns2:Experiment" 
+  	xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" 
+  	xmlns:ns2="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Experiment" 
+  	xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
+  	
 </deployment>
 

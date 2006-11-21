@@ -9,9 +9,11 @@
         <xs:sequence>
           <xs:element name="members" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Contact" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="Person" />
+                <xs:element ref="Organization" />
+                <xs:element ref="Contact" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -23,7 +25,15 @@
     <xs:complexContent>
       <xs:extension base="gov.nih.nci.mageom.domain:Describable">
         <xs:sequence>
-          <xs:element name="performer" type="Contact" minOccurs="0" maxOccurs="1" />
+          <xs:element name="performer" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="Person" />
+                <xs:element ref="Organization" />
+                <xs:element ref="Contact" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
         <xs:attribute name="action">
           <xs:simpleType>
@@ -42,7 +52,13 @@
     <xs:complexContent>
       <xs:extension base="Contact">
         <xs:sequence>
-          <xs:element name="affiliation" type="Organization" minOccurs="0" maxOccurs="1" />
+          <xs:element name="affiliation" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="Organization" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
         <xs:attribute name="firstName" type="xs:string" />
         <xs:attribute name="lastName" type="xs:string" />
@@ -55,7 +71,13 @@
     <xs:complexContent>
       <xs:extension base="Contact">
         <xs:sequence>
-          <xs:element name="parent" type="Organization" minOccurs="0" maxOccurs="1" />
+          <xs:element name="parent" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="Organization" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -67,9 +89,9 @@
         <xs:sequence>
           <xs:element name="roles" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.Description:OntologyEntry" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.Description:OntologyEntry" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -89,16 +111,18 @@
         <xs:sequence>
           <xs:element name="securityGroups" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="SecurityGroup" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="SecurityGroup" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
           <xs:element name="owner" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Contact" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="Person" />
+                <xs:element ref="Organization" />
+                <xs:element ref="Contact" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>

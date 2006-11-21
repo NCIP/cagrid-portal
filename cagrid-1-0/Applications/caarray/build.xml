@@ -15,6 +15,7 @@
 
     <!-- Important directories and files -->
     <property name="src.dir" value="src" />
+    <property name="processor.src.dir" value="processor/src" />
     <property name="lib.dir" value="lib" />
     <property name="ext.lib.dir" value="ext/lib" />
     <property name="etc.dir" value="etc" />
@@ -24,7 +25,8 @@
     <property name="client.jar.name" value="${service.name}-client.jar" />
     <property name="service.jar.name" value="${service.name}-service.jar" />
     <property name="stubs.jar.name" value="${service.name}-stubs.jar" />
-	<property name="test.jar.name" value="${service.name}-tests.jar" />
+    <property name="test.jar.name" value="${service.name}-tests.jar" />
+    <property name="processor.jar.name" value="${service.name}-processor.jar" />
 
     <!-- Important test directories and files -->
     <property name="test.dir" value="test" />
@@ -38,8 +40,10 @@
 
     <!-- Auxiliary directory where all the intermediate files will be placed -->
     <property name="build.dir" location="build" />
+    <property name="processor.build.dir" location="processor/build" />
     <!-- Directory for compiled service classes -->
     <property name="build.dest" location="${build.dir}/classes" />
+    <property name="processor.build.dest" location="${processor.build.dir}/classes" />
     <property name="test.build.dest" value="${build.dir}/test/classes" />
     <!-- Directory for compiled JAR files (additional library files required by
 	     the service will also be placed here) -->
@@ -196,6 +200,9 @@
             <property name="wsdl.file" value="${interface.name}_service.wsdl" />
             <property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
         </ant>
+		<replace dir="${stubs.src}" token="ManufactureLIMSBiomaterial" value="ManufactureLIMSBioMaterial">
+			<include name="**/*.java"/>
+		</replace>
     </target>
 
     <!-- Generate the stub source files -->
@@ -237,6 +244,12 @@
     <target name="compileTests" depends="compile">
         <javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
     </target>
+    
+    <!-- Compile the processor -->
+    <target name="compileProcessor" depends="compile" description="Compiles the service.">
+        <mkdir dir="${processor.build.dest}"/>
+        <javac srcdir="${processor.src.dir}" classpathref="base.classpath" includes="**" destdir="${processor.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
+    </target>
 
 
     <!-- Create a JAR file with the implementation classes -->
@@ -265,10 +278,19 @@
     <target name="jarStubs" depends="compileStubs">
         <jar destfile="${build.lib.dir}/${stubs.jar.name}" basedir="${stubs.dest}" />
     </target>
+    
+    <target name="jarProcessor" depends="compileProcessor">
+        <jar destfile="${build.lib.dir}/${processor.jar.name}" basedir="${processor.build.dest}" />
+        <copy toDir="${lib.dir}">
+            <fileset dir="${build.lib.dir}">
+                <include name="${processor.jar.name}"/>
+            </fileset>
+        </copy>
+    </target>
 
 
     <!-- Empty target, in case we simply want to generate the JAR files -->
-    <target name="jars" depends="jarStubs, jar, jarTests" />
+    <target name="jars" depends="jarProcessor, jarStubs, jar, jarTests" />
 
 
     <!-- call the test target for each project and aggregates the log resutls  -->

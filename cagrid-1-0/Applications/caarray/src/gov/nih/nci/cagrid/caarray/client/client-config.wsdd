@@ -7,6 +7,7 @@
   <parameter name="sendXsiTypes" value="true"/>
   <parameter name="sendMultiRefs" value="true"/>
   <parameter name="sendXMLDeclaration" value="true"/>
+  <parameter name="castorMapping" value="/gov/nih/nci/cagrid/caarray/common/caarray-xml-mapping.xml"/>
   <requestFlow>
    <handler type="java:org.globus.wsrf.handlers.AddressingHandler"/>
    <handler type="java:org.globus.wsrf.impl.security.authorization.ClientPropertiesHandler"/>
@@ -64,4 +65,17 @@
  <typeMapping deserializer="org.globus.wsrf.encoding.AnyListDeserializerFactory" encodingStyle="" qname="ns10:&gt;SetResourceProperties" serializer="org.globus.wsrf.encoding.AnyListSerializerFactory" type="java:org.oasis.wsrf.properties.SetResourceProperties_Element" xmlns:ns10="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"/>
  <typeMapping deserializer="org.apache.axis.encoding.ser.SimpleDeserializerFactory" encodingStyle="" qname="ns11:QueryExpressionDialect" serializer="org.apache.axis.encoding.ser.SimpleSerializerFactory" type="java:java.lang.String" xmlns:ns11="http://www.globus.org/foobar"/>
  <typeMapping deserializer="org.globus.wsrf.encoding.QueryExpressionDeserializerFactory" encodingStyle="" qname="ns12:QueryExpressionType" serializer="org.globus.wsrf.encoding.QueryExpressionSerializerFactory" type="java:org.oasis.wsrf.properties.QueryExpressionType" xmlns:ns12="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd"/>
+ 
+ <ns3:typeMapping 
+  	encodingStyle="" 
+  	serializer="gov.nih.nci.cagrid.caarray.encoding.CaArraySerializerFactory" 
+  	deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" 
+  	type="ns1:gov.nih.nci.mageom.domain.Experiment.impl.ExperimentImpl" 
+  	qname="ns2:Experiment" 
+  	xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" 
+  	xmlns:ns2="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Experiment" 
+  	xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
+ 
+ 
+ 
 </deployment>

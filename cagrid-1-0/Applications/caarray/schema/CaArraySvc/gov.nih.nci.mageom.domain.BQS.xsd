@@ -9,16 +9,16 @@
         <xs:sequence>
           <xs:element name="accessions" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.Description:DatabaseEntry" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.Description:DatabaseEntry" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
           <xs:element name="parameters" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.Description:OntologyEntry" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.Description:OntologyEntry" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>

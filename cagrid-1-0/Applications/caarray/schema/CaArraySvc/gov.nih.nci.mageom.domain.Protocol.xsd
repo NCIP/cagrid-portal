@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Protocol" xmlns:gov.nih.nci.mageom.domain.AuditAndSecurity="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.AuditAndSecurity" xmlns:gov.nih.nci.mageom.domain.Description="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" xmlns:gov.nih.nci.mageom.domain.Measurement="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Measurement" targetNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Protocol" elementFormDefault="qualified">
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.AuditAndSecurity" schemaLocation="gov.nih.nci.mageom.domain.AuditAndSecurity.xsd" />
   <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" schemaLocation="gov.nih.nci.mageom.domain.Description.xsd" />
   <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.AuditAndSecurity" schemaLocation="gov.nih.nci.mageom.domain.AuditAndSecurity.xsd" />
   <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Measurement" schemaLocation="gov.nih.nci.mageom.domain.Measurement.xsd" />
   <xs:element name="Parameterizable" type="Parameterizable" />
   <xs:complexType name="Parameterizable">
@@ -11,9 +11,9 @@
         <xs:sequence>
           <xs:element name="parameterTypes" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Parameter" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="Parameter" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -26,8 +26,20 @@
     <xs:complexContent>
       <xs:extension base="gov.nih.nci.mageom.domain:Identifiable">
         <xs:sequence>
-          <xs:element name="defaultValue" type="gov.nih.nci.mageom.domain.Measurement:Measurement" minOccurs="0" maxOccurs="1" />
-          <xs:element name="dataType" type="gov.nih.nci.mageom.domain.Description:OntologyEntry" minOccurs="0" maxOccurs="1" />
+          <xs:element name="defaultValue" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="gov.nih.nci.mageom.domain.Measurement:Measurement" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="dataType" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="gov.nih.nci.mageom.domain.Description:OntologyEntry" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -39,19 +51,25 @@
         <xs:sequence>
           <xs:element name="softwares" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Software" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="Software" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
           <xs:element name="hardwares" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Hardware" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="Hardware" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
-          <xs:element name="type" type="gov.nih.nci.mageom.domain.Description:OntologyEntry" minOccurs="0" maxOccurs="1" />
+          <xs:element name="type" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="gov.nih.nci.mageom.domain.Description:OntologyEntry" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
         <xs:attribute name="text" type="xs:string" />
         <xs:attribute name="title" type="xs:string" />
@@ -65,24 +83,30 @@
         <xs:sequence>
           <xs:element name="hardwareApplications" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="HardwareApplication" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="HardwareApplication" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
           <xs:element name="softwareApplications" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="SoftwareApplication" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="SoftwareApplication" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
-          <xs:element name="protocol" type="Protocol" minOccurs="0" maxOccurs="1" />
+          <xs:element name="protocol" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="Protocol" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
           <xs:element name="performers" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Person" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Person" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -97,19 +121,27 @@
         <xs:sequence>
           <xs:element name="hardwareManufacturers" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Contact" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Person" />
+                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Organization" />
+                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Contact" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
           <xs:element name="softwares" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Software" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="Software" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
-          <xs:element name="type" type="gov.nih.nci.mageom.domain.Description:OntologyEntry" minOccurs="0" maxOccurs="1" />
+          <xs:element name="type" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="gov.nih.nci.mageom.domain.Description:OntologyEntry" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
         <xs:attribute name="make" type="xs:string" />
         <xs:attribute name="model" type="xs:string" />
@@ -121,7 +153,13 @@
     <xs:complexContent>
       <xs:extension base="ParameterizableApplication">
         <xs:sequence>
-          <xs:element name="hardware" type="Hardware" minOccurs="0" maxOccurs="1" />
+          <xs:element name="hardware" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="Hardware" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
         <xs:attribute name="serialNumber" type="xs:string" />
       </xs:extension>
@@ -132,7 +170,13 @@
     <xs:complexContent>
       <xs:extension base="ParameterizableApplication">
         <xs:sequence>
-          <xs:element name="software" type="Software" minOccurs="0" maxOccurs="1" />
+          <xs:element name="software" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="Software" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
         <xs:attribute name="releaseDate" type="xs:dateTime" />
         <xs:attribute name="version" type="xs:string" />
@@ -144,7 +188,13 @@
     <xs:complexContent>
       <xs:extension base="gov.nih.nci.mageom.domain:Extendable">
         <xs:sequence>
-          <xs:element name="parameterType" type="Parameter" minOccurs="0" maxOccurs="1" />
+          <xs:element name="parameterType" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="Parameter" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
         <xs:attribute name="value" type="xs:string" />
       </xs:extension>
@@ -157,9 +207,9 @@
         <xs:sequence>
           <xs:element name="parameterValues" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="ParameterValue" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="ParameterValue" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -171,22 +221,36 @@
     <xs:complexContent>
       <xs:extension base="Parameterizable">
         <xs:sequence>
-          <xs:element name="hardware" type="Hardware" minOccurs="0" maxOccurs="1" />
+          <xs:element name="hardware" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="Hardware" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
           <xs:element name="softwares" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Software" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="Software" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
           <xs:element name="softwareManufacturers" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Contact" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Person" />
+                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Organization" />
+                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Contact" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
-          <xs:element name="type" type="gov.nih.nci.mageom.domain.Description:OntologyEntry" minOccurs="0" maxOccurs="1" />
+          <xs:element name="type" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="gov.nih.nci.mageom.domain.Description:OntologyEntry" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

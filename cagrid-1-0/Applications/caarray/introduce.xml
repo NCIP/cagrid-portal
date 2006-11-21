@@ -1,15 +1,22 @@
 <ns1:ServiceDescription introduceVersion=".99999" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" packageName="gov.nih.nci.mageom.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" packageName="gov.nih.nci.cagrid.mageom.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Describable" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="NameValueType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Identifiable" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Extendable" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.BQS.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BQS" packageName="gov.nih.nci.mageom.domain.BQS" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.BQS.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BQS" packageName="gov.nih.nci.cagrid.mageom.domain.bqs" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="BibliographicReference" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.AuditAndSecurity.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.AuditAndSecurity" packageName="gov.nih.nci.mageom.domain.AuditAndSecurity" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.Description.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" packageName="gov.nih.nci.cagrid.mageom.domain.description" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="DatabaseEntry" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="OntologyEntry" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Database" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ExternalReference" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Description" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.AuditAndSecurity.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.AuditAndSecurity" packageName="gov.nih.nci.cagrid.mageom.domain.auditandsecurity" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="SecurityGroup" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Audit" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Person" xsi:type="ns2:SchemaElementType"/>
@@ -17,14 +24,7 @@
    <ns2:SchemaElement type="Contact" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Security" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.Description.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" packageName="gov.nih.nci.mageom.domain.Description" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="DatabaseEntry" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="OntologyEntry" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Database" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ExternalReference" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Description" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.QuantitationType.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.QuantitationType" packageName="gov.nih.nci.mageom.domain.QuantitationType" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.QuantitationType.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.QuantitationType" packageName="gov.nih.nci.cagrid.mageom.domain.quantitationtype" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="StandardQuantitationType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SpecializedQuantitationType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ExpectedValue" xsi:type="ns2:SchemaElementType"/>
@@ -38,7 +38,68 @@
    <ns2:SchemaElement type="PValue" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="PresentAbsent" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.DesignElement.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.DesignElement" packageName="gov.nih.nci.mageom.domain.DesignElement" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.BioMaterial.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioMaterial" packageName="gov.nih.nci.cagrid.mageom.domain.biomaterial" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="BioMaterialMeasurement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="CompoundMeasurement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BioMaterial" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Treatment" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Compound" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BioSample" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BioSource" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="LabeledExtract" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.Experiment.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Experiment" packageName="gov.nih.nci.cagrid.mageom.domain.experiment" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="FactorValue" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ExperimentalFactor" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Experiment" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ExperimentDesign" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.BioSequence.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioSequence" packageName="gov.nih.nci.cagrid.mageom.domain.biosequence" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="SeqFeatureLocation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BioSequence" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SequencePosition" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SeqFeature" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.ArrayDesign.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.ArrayDesign" packageName="gov.nih.nci.cagrid.mageom.domain.arraydesign" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="ReporterGroup" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ZoneLayout" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ZoneGroup" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DesignElementGroup" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="FeatureGroup" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ArrayDesign" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="CompositeGroup" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Zone" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="PhysicalArrayDesign" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.Protocol.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Protocol" packageName="gov.nih.nci.cagrid.mageom.domain.protocol" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="Parameterizable" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Parameter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Protocol" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ProtocolApplication" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Hardware" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="HardwareApplication" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SoftwareApplication" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ParameterValue" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ParameterizableApplication" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Software" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.BioEvent.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioEvent" packageName="gov.nih.nci.cagrid.mageom.domain.bioevent" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="Map" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BioEvent" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.Array.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Array" packageName="gov.nih.nci.cagrid.mageom.domain.array" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="PositionDelta" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ZoneDefect" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ArrayManufacture" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ArrayManufactureDeviation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Fiducial" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ManufactureLIMSBiomaterial" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ArrayGroup" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Array" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ManufactureLIMS" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="FeatureDefect" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.DesignElement.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.DesignElement" packageName="gov.nih.nci.cagrid.mageom.domain.designelement" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="FeatureInformation" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CompositeCompositeMap" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CompositePosition" xsi:type="ns2:SchemaElementType"/>
@@ -53,51 +114,7 @@
    <ns2:SchemaElement type="CompositeSequence" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="FeatureLocation" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.BioMaterial.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioMaterial" packageName="gov.nih.nci.mageom.domain.BioMaterial" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="BioMaterialMeasurement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CompoundMeasurement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="BioMaterial" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Treatment" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Compound" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="BioSample" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="BioSource" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="LabeledExtract" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.BioSequence.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioSequence" packageName="gov.nih.nci.mageom.domain.BioSequence" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="SeqFeatureLocation" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="BioSequence" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SequencePosition" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SeqFeature" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.BioAssay.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssay" packageName="gov.nih.nci.mageom.domain.BioAssay" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="BioAssay" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="DerivedBioAssay" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="BioAssayTreatment" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="PhysicalBioAssay" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="MeasuredBioAssay" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="FeatureExtraction" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Channel" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ImageAcquisition" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="BioAssayCreation" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Image" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Hybridization" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.BioEvent.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioEvent" packageName="gov.nih.nci.mageom.domain.BioEvent" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="Map" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="BioEvent" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.ArrayDesign.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.ArrayDesign" packageName="gov.nih.nci.mageom.domain.ArrayDesign" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="ReporterGroup" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ZoneLayout" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ZoneGroup" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="DesignElementGroup" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="FeatureGroup" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ArrayDesign" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CompositeGroup" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Zone" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="PhysicalArrayDesign" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.BioAssayData.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssayData" packageName="gov.nih.nci.mageom.domain.BioAssayData" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.BioAssayData.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssayData" packageName="gov.nih.nci.cagrid.mageom.domain.bioassaydata" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="DesignElementMap" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="BioDataCube" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="FeatureDimension" xsi:type="ns2:SchemaElementType"/>
@@ -119,25 +136,7 @@
    <ns2:SchemaElement type="BioAssayMap" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DesignElementMapping" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.Array.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Array" packageName="gov.nih.nci.mageom.domain.Array" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="PositionDelta" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ZoneDefect" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ArrayManufacture" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ArrayManufactureDeviation" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Fiducial" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ManufactureLIMSBiomaterial" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ArrayGroup" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Array" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ManufactureLIMS" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="FeatureDefect" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.HigherLevelAnalysis.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.HigherLevelAnalysis" packageName="gov.nih.nci.mageom.domain.HigherLevelAnalysis" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="NodeContents" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="BioAssayDataCluster" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="NodeValue" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Node" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.Measurement.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Measurement" packageName="gov.nih.nci.mageom.domain.Measurement" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.Measurement.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Measurement" packageName="gov.nih.nci.cagrid.mageom.domain.measurement" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="TimeUnit" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="VolumeUnit" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DistanceUnit" xsi:type="ns2:SchemaElementType"/>
@@ -148,23 +147,24 @@
    <ns2:SchemaElement type="Measurement" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="QuantityUnit" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.Experiment.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Experiment" packageName="gov.nih.nci.mageom.domain.Experiment" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="FactorValue" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ExperimentalFactor" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Experiment" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ExperimentDesign" xsi:type="ns2:SchemaElementType"/>
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.BioAssay.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssay" packageName="gov.nih.nci.cagrid.mageom.domain.bioassay" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="BioAssay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DerivedBioAssay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BioAssayTreatment" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="PhysicalBioAssay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="MeasuredBioAssay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="FeatureExtraction" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Channel" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ImageAcquisition" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BioAssayCreation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Image" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Hybridization" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.mageom.domain.Protocol.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Protocol" packageName="gov.nih.nci.mageom.domain.Protocol" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="Parameterizable" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Parameter" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Protocol" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ProtocolApplication" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Hardware" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="HardwareApplication" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SoftwareApplication" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ParameterValue" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ParameterizableApplication" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Software" xsi:type="ns2:SchemaElementType"/>
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.HigherLevelAnalysis.xsd" namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.HigherLevelAnalysis" packageName="gov.nih.nci.cagrid.mageom.domain.higherlevelanalysis" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="NodeContents" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BioAssayDataCluster" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NodeValue" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Node" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
@@ -227,10 +227,10 @@
    <ns2:SchemaElement type="GSITransport" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="None" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./1_gov.nih.nci.cagrid.CQLQuery.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" packageName="gov.nih.nci.cagrid.cqlquery" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./xsd/Data/1_gov.nih.nci.cagrid.CQLQuery.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" packageName="gov.nih.nci.cagrid.cqlquery" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="CQLQuery" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./1_gov.nih.nci.cagrid.CQLResultSet.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" packageName="gov.nih.nci.cagrid.cqlresultset" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./xsd/Data/1_gov.nih.nci.cagrid.CQLResultSet.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" packageName="gov.nih.nci.cagrid.cqlresultset" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="CQLQueryResultCollection" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="./CaArraySvc_CQLResultTypes.xsd" namespace="http://caarray.cagrid.nci.nih.gov/CaArraySvc/CQLResultTypes" packageName="gov.nih.nci.cagrid.caarray.cqlresulttypes" xsi:type="ns2:NamespaceType"/>
@@ -242,7 +242,7 @@
    <ns2:SchemaElement type="UMLAssociation" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="UMLClassReference" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace generateStubs="false" location="./DataServiceExceptions.xsd" namespace="http://gov.nih.nci.cagrid.data/DataServiceExceptions" packageName="gov.nih.nci.cagrid.data.faults" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace generateStubs="false" location="./xsd/Data/DataServiceExceptions.xsd" namespace="http://gov.nih.nci.cagrid.data/DataServiceExceptions" packageName="gov.nih.nci.cagrid.data.faults" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="MalformedQueryException" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="QueryProcessingException" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
@@ -280,336 +280,139 @@
   <ns13:Extension name="data" xsi:type="ns13:ExtensionType">
    <ns13:ExtensionData>
     <ns14:Data xsi:type="ns14:Data" xmlns:ns14="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension">
-         <ns14:CadsrInformation projectLongName="caArray" projectVersion="1.4/MAGEOM" suppliedDomainModel="/Users/joshua/dev/ew_cacore/cacoresdk_32_QA_10252006_V1/demo/codegen-demo/models/mageom_v1_1_rv8_model.xml" xsi:type="ns14:CadsrInformation">
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssayData" name="gov.nih.nci.mageom.domain.BioAssayData" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="DesignElementMap" elementName="DesignElementMap" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
+                                 <ns14:AdditionalLibraries xsi:type="ns14:AdditionalLibraries">
+                                  <ns14:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">CaArraySvc-processor.jar</ns14:JarName>
 
-           <ns14:CadsrClass className="BioDataCube" elementName="BioDataCube" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="FeatureDimension" elementName="FeatureDimension" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="QuantitationTypeDimension" elementName="QuantitationTypeDimension" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="BioDataValues" elementName="BioDataValues" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="CompositeSequenceDimension" elementName="CompositeSequenceDimension" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="MeasuredBioAssayData" elementName="MeasuredBioAssayData" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="BioAssayDatum" elementName="BioAssayDatum" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
+                                  <ns14:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">mageom-client.jar</ns14:JarName>
 
-           <ns14:CadsrClass className="QuantitationTypeMap" elementName="QuantitationTypeMap" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="DerivedBioAssayData" elementName="DerivedBioAssayData" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="BioAssayData" elementName="BioAssayData" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="QuantitationTypeMapping" elementName="QuantitationTypeMapping" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="BioAssayDimension" elementName="BioAssayDimension" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="BioAssayMapping" elementName="BioAssayMapping" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="BioDataTuples" elementName="BioDataTuples" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
+                                  <ns14:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">netcdfapi.jar</ns14:JarName>
 
-           <ns14:CadsrClass className="ReporterDimension" elementName="ReporterDimension" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Transformation" elementName="Transformation" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="DesignElementDimension" elementName="DesignElementDimension" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="BioAssayMap" elementName="BioAssayMap" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="DesignElementMapping" elementName="DesignElementMapping" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-      </ns14:Packages>
 
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioSequence" name="gov.nih.nci.mageom.domain.BioSequence" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="SeqFeatureLocation" elementName="SeqFeatureLocation" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
+                                  <ns14:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">netcdfAll.jar</ns14:JarName>
 
-           <ns14:CadsrClass className="BioSequence" elementName="BioSequence" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="SequencePosition" elementName="SequencePosition" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="SeqFeature" elementName="SeqFeature" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-      </ns14:Packages>
 
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioEvent" name="gov.nih.nci.mageom.domain.BioEvent" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="Map" elementName="Map" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="BioEvent" elementName="BioEvent" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-      </ns14:Packages>
+                                  <ns14:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">nciData.jar</ns14:JarName>
 
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" name="gov.nih.nci.mageom.domain.Description" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="DatabaseEntry" elementName="DatabaseEntry" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="OntologyEntry" elementName="OntologyEntry" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Database" elementName="Database" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="ExternalReference" elementName="ExternalReference" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Description" elementName="Description" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-      </ns14:Packages>
 
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.QuantitationType" name="gov.nih.nci.mageom.domain.QuantitationType" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="StandardQuantitationType" elementName="StandardQuantitationType" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
+                                  <ns14:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">jakarta-oro-2.0.2-dev-2.jar</ns14:JarName>
 
-           <ns14:CadsrClass className="SpecializedQuantitationType" elementName="SpecializedQuantitationType" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="ExpectedValue" elementName="ExpectedValue" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Failed" elementName="Failed" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="QuantitationType" elementName="QuantitationType" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="ConfidenceIndicator" elementName="ConfidenceIndicator" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="DerivedSignal" elementName="DerivedSignal" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Ratio" elementName="Ratio" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
+                                  <ns14:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">castor-1.0.4.jar</ns14:JarName>
 
-           <ns14:CadsrClass className="Error" elementName="Error" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="MeasuredSignal" elementName="MeasuredSignal" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="PValue" elementName="PValue" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="PresentAbsent" elementName="PresentAbsent" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-      </ns14:Packages>
 
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Experiment" name="gov.nih.nci.mageom.domain.Experiment" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="FactorValue" elementName="FactorValue" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="ExperimentalFactor" elementName="ExperimentalFactor" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
+                                  <ns14:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caCOREClasses.jar</ns14:JarName>
 
-           <ns14:CadsrClass className="Experiment" elementName="Experiment" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="ExperimentDesign" elementName="ExperimentDesign" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-      </ns14:Packages>
 
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" name="gov.nih.nci.mageom.domain" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="Describable" elementName="Describable" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="NameValueType" elementName="NameValueType" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Identifiable" elementName="Identifiable" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Extendable" elementName="Extendable" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
+                                  <ns14:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caarray-client.jar</ns14:JarName>
 
-      </ns14:Packages>
 
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Measurement" name="gov.nih.nci.mageom.domain.Measurement" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="TimeUnit" elementName="TimeUnit" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="VolumeUnit" elementName="VolumeUnit" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="DistanceUnit" elementName="DistanceUnit" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Unit" elementName="Unit" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="TemperatureUnit" elementName="TemperatureUnit" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="MassUnit" elementName="MassUnit" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
+                                  <ns14:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">aspectjrt.jar</ns14:JarName>
 
-           <ns14:CadsrClass className="ConcentrationUnit" elementName="ConcentrationUnit" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Measurement" elementName="Measurement" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="QuantityUnit" elementName="QuantityUnit" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-      </ns14:Packages>
 
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Protocol" name="gov.nih.nci.mageom.domain.Protocol" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="Parameterizable" elementName="Parameterizable" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Parameter" elementName="Parameter" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Protocol" elementName="Protocol" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
+                                  <ns14:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">sdk-marshaller.jar</ns14:JarName>
 
-           <ns14:CadsrClass className="ProtocolApplication" elementName="ProtocolApplication" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Hardware" elementName="Hardware" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="HardwareApplication" elementName="HardwareApplication" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="SoftwareApplication" elementName="SoftwareApplication" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="ParameterValue" elementName="ParameterValue" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="ParameterizableApplication" elementName="ParameterizableApplication" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Software" elementName="Software" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
+     </ns14:AdditionalLibraries>
 
-      </ns14:Packages>
 
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Array" name="gov.nih.nci.mageom.domain.Array" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="PositionDelta" elementName="PositionDelta" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="ZoneDefect" elementName="ZoneDefect" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="ArrayManufacture" elementName="ArrayManufacture" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="ArrayManufactureDeviation" elementName="ArrayManufactureDeviation" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Fiducial" elementName="Fiducial" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="ManufactureLIMSBiomaterial" elementName="ManufactureLIMSBiomaterial" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
+                                 <ns14:ServiceFeatures useGridIdeitifiers="false" useSdkDataSource="false" useWsEnumeration="false" xsi:type="ns14:ServiceFeatures"/>
 
-           <ns14:CadsrClass className="ArrayGroup" elementName="ArrayGroup" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Array" elementName="Array" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="ManufactureLIMS" elementName="ManufactureLIMS" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="FeatureDefect" elementName="FeatureDefect" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-      </ns14:Packages>
 
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.AuditAndSecurity" name="gov.nih.nci.mageom.domain.AuditAndSecurity" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="SecurityGroup" elementName="SecurityGroup" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Audit" elementName="Audit" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
+                                 <ns14:CQLProcessorConfig xsi:type="ns14:CQLProcessorConfig">
+                                  <ns14:Property name="castorMappingFile" value="caarray-xml-mapping.xml"/>
 
-           <ns14:CadsrClass className="Person" elementName="Person" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Organization" elementName="Organization" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Contact" elementName="Contact" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="Security" elementName="Security" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-      </ns14:Packages>
 
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BQS" name="gov.nih.nci.mageom.domain.BQS" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="BibliographicReference" elementName="BibliographicReference" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-      </ns14:Packages>
+     </ns14:CQLProcessorConfig>
 
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssay" name="gov.nih.nci.mageom.domain.BioAssay" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="BioAssay" elementName="BioAssay" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="DerivedBioAssay" elementName="DerivedBioAssay" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="BioAssayTreatment" elementName="BioAssayTreatment" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="PhysicalBioAssay" elementName="PhysicalBioAssay" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="MeasuredBioAssay" elementName="MeasuredBioAssay" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
 
-           <ns14:CadsrClass className="FeatureExtraction" elementName="FeatureExtraction" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="Channel" elementName="Channel" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="ImageAcquisition" elementName="ImageAcquisition" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="BioAssayCreation" elementName="BioAssayCreation" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="Image" elementName="Image" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="Hybridization" elementName="Hybridization" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-      </ns14:Packages>
-
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.HigherLevelAnalysis" name="gov.nih.nci.mageom.domain.HigherLevelAnalysis" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="NodeContents" elementName="NodeContents" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="BioAssayDataCluster" elementName="BioAssayDataCluster" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="NodeValue" elementName="NodeValue" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="Node" elementName="Node" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-      </ns14:Packages>
-
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.ArrayDesign" name="gov.nih.nci.mageom.domain.ArrayDesign" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="ReporterGroup" elementName="ReporterGroup" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="ZoneLayout" elementName="ZoneLayout" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="ZoneGroup" elementName="ZoneGroup" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="DesignElementGroup" elementName="DesignElementGroup" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="FeatureGroup" elementName="FeatureGroup" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="ArrayDesign" elementName="ArrayDesign" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="CompositeGroup" elementName="CompositeGroup" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="Zone" elementName="Zone" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="PhysicalArrayDesign" elementName="PhysicalArrayDesign" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-      </ns14:Packages>
-
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.DesignElement" name="gov.nih.nci.mageom.domain.DesignElement" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="FeatureInformation" elementName="FeatureInformation" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="CompositeCompositeMap" elementName="CompositeCompositeMap" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="CompositePosition" elementName="CompositePosition" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="Feature" elementName="Feature" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="Position" elementName="Position" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="ReporterCompositeMap" elementName="ReporterCompositeMap" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="ReporterPosition" elementName="ReporterPosition" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="FeatureReporterMap" elementName="FeatureReporterMap" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="DesignElement" elementName="DesignElement" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="Reporter" elementName="Reporter" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="MismatchInformation" elementName="MismatchInformation" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="CompositeSequence" elementName="CompositeSequence" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="FeatureLocation" elementName="FeatureLocation" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-      </ns14:Packages>
-
-          <ns14:Packages mappedNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioMaterial" name="gov.nih.nci.mageom.domain.BioMaterial" xsi:type="ns14:CadsrPackage">
-           <ns14:CadsrClass className="BioMaterialMeasurement" elementName="BioMaterialMeasurement" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="CompoundMeasurement" elementName="CompoundMeasurement" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="BioMaterial" elementName="BioMaterial" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="Treatment" elementName="Treatment" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="Compound" elementName="Compound" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="BioSample" elementName="BioSample" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="BioSource" elementName="BioSource" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-           <ns14:CadsrClass className="LabeledExtract" elementName="LabeledExtract" selected="true" targetable="true" xsi:type="ns14:ClassMapping"/>
-
-      </ns14:Packages>
-
-     </ns14:CadsrInformation>
-
-         <ns14:ServiceFeatures useGridIdeitifiers="false" useSdkDataSource="false" useWsEnumeration="false" xsi:type="ns14:ServiceFeatures"/>
 
     </ns14:Data>
    </ns13:ExtensionData>
   </ns13:Extension>
  </ns13:Extensions>
  <ns14:ServiceProperties xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns14:Property isFromETC="false" key="queryProcessorClass" value="gov.nih.nci.cagrid.caarray.stubs.cql.StubCQLQueryProcessor"/>
+  <ns14:Property isFromETC="false" key="queryProcessorClass" value="gov.nih.nci.cagrid.caarray.cql.CaArrayCQLQueryProcessor"/>
   <ns14:Property isFromETC="false" key="dataService_cqlValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator"/>
   <ns14:Property isFromETC="false" key="dataService_domainModelValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator"/>
   <ns14:Property isFromETC="false" key="dataService_validateCqlFlag" value="false"/>
   <ns14:Property isFromETC="false" key="dataService_validateDomainModelFlag" value="false"/>
   <ns14:Property isFromETC="true" key="dataService_classMappingsFilename" value="classToQname.xml"/>
+  <ns14:Property isFromETC="false" key="cqlQueryProcessorConfig_castorMappingFile" value="caarray-xml-mapping.xml"/>
  </ns14:ServiceProperties>
 </ns1:ServiceDescription>

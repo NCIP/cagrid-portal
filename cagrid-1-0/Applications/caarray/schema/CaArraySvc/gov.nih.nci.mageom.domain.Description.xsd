@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" xmlns:gov.nih.nci.mageom.domain.AuditAndSecurity="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.AuditAndSecurity" xmlns:gov.nih.nci.mageom.domain.BQS="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BQS" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" targetNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" elementFormDefault="qualified">
+  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BQS" schemaLocation="gov.nih.nci.mageom.domain.BQS.xsd" />
   <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.AuditAndSecurity" schemaLocation="gov.nih.nci.mageom.domain.AuditAndSecurity.xsd" />
   <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BQS" schemaLocation="gov.nih.nci.mageom.domain.BQS.xsd" />
   <xs:element name="DatabaseEntry" type="DatabaseEntry" />
   <xs:complexType name="DatabaseEntry">
     <xs:complexContent>
       <xs:extension base="gov.nih.nci.mageom.domain:Extendable">
         <xs:sequence>
-          <xs:element name="type" type="OntologyEntry" minOccurs="0" maxOccurs="1" />
-          <xs:element name="database" type="Database" minOccurs="0" maxOccurs="1" />
+          <xs:element name="type" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="OntologyEntry" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="database" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="Database" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
         <xs:attribute name="accession" type="xs:string" />
         <xs:attribute name="accessionVersion" type="xs:string" />
@@ -24,12 +36,18 @@
         <xs:sequence>
           <xs:element name="associations" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="OntologyEntry" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="OntologyEntry" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
-          <xs:element name="ontologyReference" type="DatabaseEntry" minOccurs="0" maxOccurs="1" />
+          <xs:element name="ontologyReference" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="DatabaseEntry" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
         <xs:attribute name="category" type="xs:string" />
         <xs:attribute name="description" type="xs:string" />
@@ -44,9 +62,11 @@
         <xs:sequence>
           <xs:element name="contacts" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Contact" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Person" />
+                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Organization" />
+                <xs:element ref="gov.nih.nci.mageom.domain.AuditAndSecurity:Contact" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
@@ -72,26 +92,32 @@
     <xs:complexContent>
       <xs:extension base="gov.nih.nci.mageom.domain:Describable">
         <xs:sequence>
-          <xs:element name="externalReference" type="ExternalReference" minOccurs="0" maxOccurs="1" />
+          <xs:element name="externalReference" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element ref="ExternalReference" />
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
           <xs:element name="annotations" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="OntologyEntry" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="OntologyEntry" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
           <xs:element name="bibliographicReferences" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="gov.nih.nci.mageom.domain.BQS:BibliographicReference" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="gov.nih.nci.mageom.domain.BQS:BibliographicReference" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
           <xs:element name="databaseReferences" minOccurs="0" maxOccurs="1">
             <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="DatabaseEntry" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="DatabaseEntry" />
+              </xs:choice>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
