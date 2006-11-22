@@ -8,7 +8,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.axis.message.MessageElement;
 import org.exolab.castor.mapping.Mapping;
-import org.exolab.castor.xml.SDKMarshaller;
+import org.exolab.castor.xml.Marshaller2;
 import org.globus.wsrf.utils.XmlUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
@@ -72,12 +72,12 @@ public class TestClient {
 		mapping.setEntityResolver(resolver);
 		mapping.loadMapping(mappIS);
 
-		SDKMarshaller marshaller = null;
-		SDKMarshaller.enableDebug = true;
+		Marshaller2 marshaller = null;
+		Marshaller2.enableDebug = true;
 		
 		
 		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-		marshaller = new SDKMarshaller(doc);
+		marshaller = new Marshaller2(doc);
 		marshaller.getXpaths().add("\\/\\w+\\/\\w+");
 		marshaller.getXpaths().add("\\/\\w+\\/\\w+\\/\\w+\\/@.*");
 		marshaller.getXpaths().add("\\/\\w+\\/@.*");

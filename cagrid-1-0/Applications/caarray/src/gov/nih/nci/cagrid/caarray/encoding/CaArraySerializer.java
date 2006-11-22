@@ -16,7 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
 import org.exolab.castor.xml.MarshalException;
-import org.exolab.castor.xml.SDKMarshaller;
+import org.exolab.castor.xml.Marshaller2;
 import org.exolab.castor.xml.ValidationException;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
@@ -35,9 +35,9 @@ public class CaArraySerializer implements Serializer {
 //		LOG.debug("Starting serialization of " + value);
 		
 		AxisContentHandler hand = new AxisContentHandler(context);
-		SDKMarshaller marshaller = null;
+		Marshaller2 marshaller = null;
 		try{
-			marshaller = new SDKMarshaller(hand);
+			marshaller = new Marshaller2(hand);
 			String regex = (String) context.getMessageContext().getProperty(MARSHALLER_XPATH_REGEX);
 			if(regex == null){
 				regex = DEFAULT_MARSHALLER_XPATH_REGEX;
