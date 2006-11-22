@@ -12,59 +12,27 @@ import gov.nih.nci.cagrid.data.mapping.Mappings;
 import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
 import gov.nih.nci.cagrid.data.utilities.CQLResultsCreationUtil;
 import gov.nih.nci.cagrid.data.utilities.ResultsCreationException;
-import gov.nih.nci.common.search.SearchException;
+import gov.nih.nci.common.search.SearchCriteria;
 import gov.nih.nci.common.search.SearchResult;
 import gov.nih.nci.common.search.session.SecureSession;
 import gov.nih.nci.common.search.session.SecureSessionFactory;
 import gov.nih.nci.mageom.domain.Experiment.Experiment;
-import gov.nih.nci.mageom.search.SearchCriteriaFactory;
-import gov.nih.nci.mageom.search.Experiment.ExperimentSearchCriteria;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.axis.message.MessageElement;
-import org.exolab.castor.mapping.Mapping;
-import org.exolab.castor.xml.SDKMarshaller;
-import org.globus.wsrf.config.ContainerConfig;
-import org.globus.wsrf.encoding.ObjectDeserializer;
-import org.globus.wsrf.utils.XmlUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 public class CaArrayCQLQueryProcessor extends CQLQueryProcessor {
-
-	private static final String CASTOR_MAPPING_FILE = "castorMappingFile";
-
-	private Mapping mapping;
-
-	private DocumentBuilder builder;
-
+	
+	public static final String CASE_INSENSITIVE_QUERYING = "queryCaseInsensitive";
+	
 	public CaArrayCQLQueryProcessor() {
-		try {
-			this.builder = DocumentBuilderFactory.newInstance()
-					.newDocumentBuilder();
-		} catch (ParserConfigurationException ex) {
-			throw new RuntimeException("Error creating document builder: "
-					+ ex.getMessage(), ex);
-		}
+
 	}
 
 	public CQLQueryResults processQuery(CQLQuery cqlQuery)
@@ -163,81 +131,6 @@ public class CaArrayCQLQueryProcessor extends CQLQueryProcessor {
 
 	}
 
-	private Element serializeObject(Object obj) {
-
-		String sampleFile = ContainerConfig.getBaseDirectory() + File.separator
-				+ "etc/cagrid_CaArraySvc/sample.xml";
-		Document doc = null;
-		try {
-			doc = this.builder.parse(new File(sampleFile));
-		} catch (Exception ex) {
-			throw new RuntimeException("Error serializing object: "
-					+ ex.getMessage(), ex);
-		}
-
-		// Document doc = this.builder.newDocument();
-		// SDKMarshaller marshaller = getMarshaller(doc);
-		//
-		// try {
-		// marshaller.marshal(obj);
-		// } catch (Exception ex) {
-		// throw new RuntimeException("Error error marshalling object: "
-		// + ex.getMessage(), ex);
-		// }
-		//
-		return doc.getDocumentElement();
-	}
-
-	private SDKMarshaller getMarshaller(Document doc) {
-
-		if (this.mapping == null) {
-			String castorMappingFile = ContainerConfig.getBaseDirectory()
-					+ File.separator
-					+ getConfiguredParameters()
-							.getProperty(CASTOR_MAPPING_FILE);
-			try {
-				EntityResolver resolver = new EntityResolver() {
-					public InputSource resolveEntity(String publicId,
-							String systemId) {
-						if (publicId
-								.equals("-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN")) {
-							InputStream in = Thread.currentThread()
-									.getContextClassLoader()
-									.getResourceAsStream("mapping.dtd");
-							return new InputSource(in);
-						}
-						return null;
-					}
-				};
-				InputSource mappIS = new InputSource(new FileInputStream(
-						castorMappingFile));
-				this.mapping = new Mapping();
-				this.mapping.setEntityResolver(resolver);
-				this.mapping.loadMapping(mappIS);
-
-			} catch (Exception ex) {
-				throw new RuntimeException("Error creating mapping from file '"
-						+ castorMappingFile + "': " + ex.getMessage(), ex);
-			}
-		}
-
-		SDKMarshaller marshaller = null;
-		try {
-			marshaller = new SDKMarshaller(doc);
-			marshaller.getXpaths().add("\\/\\w+\\/\\w+");
-			marshaller.getXpaths().add("\\/\\w+\\/\\w+\\/\\w+\\/@.*");
-			marshaller.getXpaths().add("\\/\\w+\\/@.*");
-			marshaller.getXpaths().add("\\/\\w+\\/descriptions.*");
-			marshaller.setMapping(this.mapping);
-			marshaller.setMarshalAsDocument(false);
-			marshaller.setValidation(false);
-		} catch (Exception ex) {
-			throw new RuntimeException("Error creating marshaller: "
-					+ ex.getMessage(), ex);
-		}
-		return marshaller;
-	}
-
 	private static QName getQname(String className, Mappings classMappings) {
 		for (int i = 0; classMappings.getMapping() != null
 				&& i < classMappings.getMapping().length; i++) {
@@ -247,26 +140,36 @@ public class CaArrayCQLQueryProcessor extends CQLQueryProcessor {
 		}
 		return null;
 	}
+	
+	private boolean useCaseInsensitiveQueries() {
+		return Boolean.valueOf(getConfiguredParameters().getProperty(
+			CASE_INSENSITIVE_QUERYING)).booleanValue();
+	}
 
-	private List queryCaArrayService(CQLQuery cqlQuery) {
+	private List queryCaArrayService(CQLQuery cqlQuery) throws QueryProcessingException {
 		List resultsList = new ArrayList();
 		String usr = "PUBLIC";
 		String pwd = "";
 		SecureSession sess = SecureSessionFactory.defaultSecureSession();
 		sess.start(usr, pwd);
 		String sessId = sess.getSessionId();
-		System.out.println("sessId=" + sessId);
+//		System.out.println("sessId=" + sessId);
 
-		ExperimentSearchCriteria sc = SearchCriteriaFactory
-				.new_EXPERIMENT_EXPERIMENT_SC();
+//		ExperimentSearchCriteria sc = SearchCriteriaFactory
+//				.new_EXPERIMENT_EXPERIMENT_SC();
+//		sc.setSessionId(sessId);
+//		sc
+//				.setIdentifier("gov.nih.nci.ncicb.caarray:Experiment:1015897558050098:1");
+		
+		
+		SearchCriteria sc = CQL2SC.translate(cqlQuery, useCaseInsensitiveQueries());
 		sc.setSessionId(sessId);
-		sc
-				.setIdentifier("gov.nih.nci.ncicb.caarray:Experiment:1015897558050098:1");
+		
 		SearchResult sr;
 		try {
 			sr = sc.search();
-		} catch (SearchException ex) {
-			throw new RuntimeException("Error searching: " + ex.getMessage(),
+		} catch (Exception ex) {
+			throw new QueryProcessingException("Error searching: " + ex.getMessage(),
 					ex);
 		}
 
@@ -285,10 +188,11 @@ public class CaArrayCQLQueryProcessor extends CQLQueryProcessor {
 				Mappings.class);
 		return mappings;
 	}
-
-	public Properties getRequiredParameters() {
-		Properties props = new Properties();
-		props.setProperty(CASTOR_MAPPING_FILE, "");
+	
+	public Properties getRequiredParameters(){
+		Properties props = super.getRequiredParameters();
+		props.setProperty(CASE_INSENSITIVE_QUERYING, "true");
 		return props;
 	}
+
 }
