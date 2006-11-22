@@ -28,6 +28,8 @@ import javax.swing.border.TitledBorder;
 /** 
  *  CsmConfigPanel
  *  Panel to configure CSM security (Using the caCORE SDK ClientSession) for the caCORE service
+ *  NOTE: this class is presently unused, but will have a place when support for 
+ *  caCORE SDK version 3.2 is pushed through caGrid Data Services
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
