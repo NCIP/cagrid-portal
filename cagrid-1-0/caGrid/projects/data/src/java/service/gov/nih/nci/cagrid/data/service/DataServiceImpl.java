@@ -3,13 +3,11 @@ package gov.nih.nci.cagrid.data.service;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 
-import java.io.InputStream;
 import java.rmi.RemoteException;
 
 import javax.naming.InitialContext;
 
 import org.apache.axis.MessageContext;
-import org.apache.axis.utils.ClassUtils;
 import org.globus.wsrf.Constants;
 import org.globus.wsrf.ResourceHome;
 
@@ -35,9 +33,6 @@ public class DataServiceImpl extends BaseServiceImpl {
 		gov.nih.nci.cagrid.data.cql.CQLQueryProcessor processor = null;
 		try {
 			processor = getCqlQueryProcessorInstance();
-			InputStream configStream = ClassUtils.getResourceAsStream(
-				getClass(), "server-config.wsdd");
-			processor.initialize(getCqlQueryProcessorConfig(), configStream);
 		} catch (Exception ex) {
 			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 		}

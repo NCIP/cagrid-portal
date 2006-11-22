@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.service;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.cql.LazyCQLQueryProcessor;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
@@ -12,8 +13,10 @@ import gov.nih.nci.cagrid.wsenum.utils.EnumerateResponseFactory;
 import gov.nih.nci.cagrid.wsenum.utils.EnumerationCreationException;
 import gov.nih.nci.cagrid.wsenum.utils.SimplePersistantSDKObjectIterator;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -21,7 +24,6 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
-import org.apache.axis.utils.ClassUtils;
 import org.globus.ws.enumeration.EnumIterator;
 
 /** 
@@ -79,15 +81,16 @@ public class EnumerationQueryImpl extends BaseServiceImpl {
 		CQLQueryResults results = processor.processQuery(query);
 		// pump the results into a list
 		List resultList = new LinkedList();
-		Iterator resIter = new CQLQueryResultsIterator(results);
-		while (resIter.hasNext()) {
-			resultList.add(resIter);
-		}
 		
 		try {
-			// set the config stream on the SDK Object Iterator
-			SimplePersistantSDKObjectIterator.loadWsddStream(ClassUtils.getResourceAsStream(
-				getClass(), "server-config.wsdd"));
+			String serverConfigLocation = ServiceConfigUtil.getConfigProperty(
+				DataServiceConstants.SERVER_CONFIG_LOCATION);
+			InputStream configStream = new FileInputStream(serverConfigLocation);
+			Iterator resIter = new CQLQueryResultsIterator(results, configStream);
+			while (resIter.hasNext()) {
+				resultList.add(resIter.next());
+			}
+			SimplePersistantSDKObjectIterator.loadWsddStream(new FileInputStream(serverConfigLocation));
 			// create the EnumIterator from the objects
 			QName name = Utils.getRegisteredQName(resultList.get(0).getClass());
 			EnumIterator enumIter = SimplePersistantSDKObjectIterator.createIterator(resultList, name);

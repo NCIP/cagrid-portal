@@ -240,5 +240,9 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 			System.out.println(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY 
 				+ " property is already defined as " + value);
 		}
+		// does the server config location property exist?
+		if (!CommonTools.servicePropertyExists(desc, DataServiceConstants.SERVER_CONFIG_LOCATION)) {
+			CommonTools.setServiceProperty(desc, DataServiceConstants.SERVER_CONFIG_LOCATION, "server-config.wsdd", true);
+		}
 	}
 }

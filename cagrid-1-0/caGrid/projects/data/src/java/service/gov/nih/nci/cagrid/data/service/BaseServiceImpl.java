@@ -10,6 +10,8 @@ import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Properties;
@@ -60,17 +62,6 @@ public abstract class BaseServiceImpl {
 		if (shouldValidateDomainModel()) {
 			CqlDomainValidator validator = getCqlDomainValidator();			
 			try {
-				// get the domain model from resource properties
-				/*
-				String domainModelFileName = getResourceProperties().getProperty("DomainModelFile");
-				if (domainModelFileName == null) {
-					FileNotFoundException ex = new FileNotFoundException("Serialized domain model file " + domainModelFileName + " not found for validation!");
-					throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
-				}
-				FileReader domainModelReader = new FileReader(domainModelFileName);
-				DomainModel model = MetadataUtils.deserializeDomainModel(domainModelReader);
-				domainModelReader.close();
-				*/
 				DomainModel model = getDomainModel();
 				validator.validateDomainModel(cqlQuery, model);
 			} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
@@ -140,7 +131,9 @@ public abstract class BaseServiceImpl {
 		if (cqlQueryProcessorConfig == null) {
 			try {
 				Properties configuredProps = ServiceConfigUtil.getQueryProcessorConfigurationParameters();
-				Properties requiredProps = getCqlQueryProcessorInstance().getRequiredParameters();
+				CQLQueryProcessor processor = (gov.nih.nci.cagrid.data.cql.CQLQueryProcessor) 
+					getCqlQueryProcessorClass().newInstance();
+				Properties requiredProps = processor.getRequiredParameters();
 				Iterator configKeysIter = configuredProps.keySet().iterator();
 				while (configKeysIter.hasNext()) {
 					String key = (String) configKeysIter.next();
@@ -168,7 +161,7 @@ public abstract class BaseServiceImpl {
 	}
 	
 	
-	protected CQLQueryProcessor getCqlQueryProcessorInstance() throws QueryProcessingExceptionType {
+	private Class getCqlQueryProcessorClass() throws QueryProcessingExceptionType {
 		if (cqlQueryProcessorClass == null) {
 			try {
 				String qpClassName = ServiceConfigUtil.getCqlQueryProcessorClassName();
@@ -177,9 +170,18 @@ public abstract class BaseServiceImpl {
 				throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());
 			}
 		}
+		return cqlQueryProcessorClass;
+	}
+	
+	
+	protected CQLQueryProcessor getCqlQueryProcessorInstance() throws QueryProcessingExceptionType {
 		try {
 			CQLQueryProcessor processor = (gov.nih.nci.cagrid.data.cql.CQLQueryProcessor) 
-				cqlQueryProcessorClass.newInstance();
+				getCqlQueryProcessorClass().newInstance();
+			String serverConfigLocation = ServiceConfigUtil.getConfigProperty(
+				DataServiceConstants.SERVER_CONFIG_LOCATION);
+			InputStream configStream = new FileInputStream(serverConfigLocation);
+			processor.initialize(getCqlQueryProcessorConfig(), configStream);
 			return processor;
 		} catch (Exception ex) {
 			throw (QueryProcessingExceptionType) getTypedException(ex, new QueryProcessingExceptionType());

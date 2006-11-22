@@ -124,14 +124,16 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 	private void copySchemas() throws CreationExtensionException {		
 		// copy over the EnumerationQuery.wsdl file
 		String schemaDir = getServiceSchemaDir();
-		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
-			+ File.separator + "schema");
-		File wsdlFile = new File(extensionSchemaDir.getAbsolutePath() 
+		File dataExtensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator 
+			+ "data" + File.separator + "schema");
+		File wsEnumExtensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator
+			+ WS_ENUM_EXTENSION_NAME + File.separator + "schema");
+		File wsdlFile = new File(dataExtensionSchemaDir.getAbsolutePath() 
 			+ File.separator + "Data" + File.separator + "EnumerationQuery.wsdl");
-		File enumXsdFile = new File(extensionSchemaDir.getAbsolutePath()
-			+ File.separator + "Data" + File.separator + WsEnumConstants.ENUMERATION_XSD_NAME);
-		File addressingXsdFile = new File(extensionSchemaDir.getAbsolutePath()
-			+ File.separator + "Data" + File.separator + WsEnumConstants.ADDRESSING_XSD_NAME);
+		File enumXsdFile = new File(wsEnumExtensionSchemaDir.getAbsolutePath()
+			+ File.separator + WsEnumConstants.ENUMERATION_XSD_NAME);
+		File addressingXsdFile = new File(wsEnumExtensionSchemaDir.getAbsolutePath()
+			+ File.separator + WsEnumConstants.ADDRESSING_XSD_NAME);
 		File wsdlOutFile = new File(schemaDir + File.separator + wsdlFile.getName());
 		File enumXsdOutFile = new File(schemaDir + File.separator + enumXsdFile.getName());
 		File addressingXsdOutFile = new File(schemaDir + File.separator + addressingXsdFile.getName());

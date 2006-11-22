@@ -14,7 +14,7 @@
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
       <import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" schemaLocation="./1_gov.nih.nci.cagrid.CQLQuery.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/security.xsd" />
-      <import namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" schemaLocation="./xsd/enumeration.xsd" />
+      <import namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" schemaLocation="./enumeration.xsd" />
       <element name="EnumerationQueryRequest">
         <complexType>
           <sequence>
@@ -62,7 +62,7 @@
   ============================================================-->
   <portType name="EnumerationQueryPortType" wsrp:ResourceProperties="tns:EnumerationQueryResourceProperties">
     <operation name="enumerationQuery">
-      <input message="tns:EnumerationQueryRequest" wsa:Action="/EnumerationQueryRequest" />
+      <input message="tns:EnumerationQueryRequest" wsa:Action="http://gov.nih.nci.cagrid.data.enumeration/EnumerationDataService/EnumerationQueryRequest" />
       <output message="tns:EnumerationQueryResponse" wsa:Action="http://gov.nih.nci.cagrid.data.enumeration/EnumerationDataService/EnumerationQueryResponse" />
       <fault name="QueryProcessingException" message="tns:QueryProcessingExceptionFaultMessage" wsa:Action="http://gov.nih.nci.cagrid.data/DataService/QueryProcessingExceptionFaultMessage" />
       <fault name="MalformedQueryException" message="tns:MalformedQueryExceptionFaultMessage" wsa:Action="http://gov.nih.nci.cagrid.data/DataService/MalformedQueryExceptionFaultMessage" />

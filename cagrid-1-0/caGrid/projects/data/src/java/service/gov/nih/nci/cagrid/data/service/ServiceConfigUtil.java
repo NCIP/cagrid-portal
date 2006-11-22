@@ -128,6 +128,20 @@ public class ServiceConfigUtil {
 	}
 	
 	
+	public static String getConfigProperty(String propertyName) throws Exception {
+		String getterName = "get" + Character.toUpperCase(propertyName.charAt(0)) 
+			+ propertyName.substring(1);
+		try {
+			Object serviceConfig = getServiceConfigObject();
+			Class configClass = serviceConfig.getClass();
+			Method getter = configClass.getMethod(getterName, new Class[] {});
+			return (String) getter.invoke(serviceConfig, new Object[] {});
+		} catch (Exception ex) {
+			throw new Exception("Unable to resolve property " + propertyName + ": " + ex.getMessage(), ex);
+		}
+	}
+	
+	
 	private static Object getServiceConfigObject() throws NamingException {
 		MessageContext context = MessageContext.getCurrentContext();
 		String servicePath = context.getTargetService();

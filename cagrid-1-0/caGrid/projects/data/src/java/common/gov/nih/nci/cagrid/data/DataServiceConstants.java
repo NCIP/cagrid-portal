@@ -56,6 +56,9 @@ public class DataServiceConstants {
 	public static final String DATA_SERVICE_NAMESPACE = "http://" + DATA_SERVICE_PACKAGE + "/" + DATA_SERVICE_SERVICE_NAME;
 	public static final String DATA_SERVICE_PORT_TYPE_NAME = DATA_SERVICE_SERVICE_NAME + "PortType";
 	
+	// the server-config.wsdd location
+	public static final String SERVER_CONFIG_LOCATION = "serverConfigLocation";
+	
 	// query processor constants
 	public static final String QUERY_PROCESSOR_CLASS_PROPERTY = "queryProcessorClass";
 	public static final String QUERY_PROCESSOR_STUB_NAME = "StubCQLQueryProcessor";

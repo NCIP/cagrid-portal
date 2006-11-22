@@ -174,8 +174,18 @@
         <copy todir="${schema.dest}/Data">
         	<fileset dir="ext">
         		<include name="xsd/**/*.xsd"/>
+        		<exclude name="xsd/**/enumeration.xsd"/>
+				<exclude name="xsd/**/enumeration.wsdl"/>
+				<exclude name="xsd/**/addressing.xsd"/>
         	</fileset>
         </copy>
+		<copy todir="${schema.dest}/Data">
+			<fileset dir="${ext.schema.dir}">
+				<include name="enumeration.xsd"/>
+				<include name="enumeration.wsdl"/>
+				<include name="addressing.xsd"/>
+			</fileset>
+		</copy>
         <available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
     
         <taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
