@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssay" xmlns:gov.nih.nci.mageom.domain.BioAssayData="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssayData" xmlns:gov.nih.nci.mageom.domain.BioEvent="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioEvent" xmlns:gov.nih.nci.mageom.domain.Description="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" xmlns:gov.nih.nci.mageom.domain.BioMaterial="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioMaterial" xmlns:gov.nih.nci.mageom.domain.Experiment="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Experiment" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" xmlns:gov.nih.nci.mageom.domain.Array="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Array" targetNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssay" elementFormDefault="qualified">
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Array" schemaLocation="gov.nih.nci.mageom.domain.Array.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Experiment" schemaLocation="gov.nih.nci.mageom.domain.Experiment.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioMaterial" schemaLocation="gov.nih.nci.mageom.domain.BioMaterial.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioEvent" schemaLocation="gov.nih.nci.mageom.domain.BioEvent.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" schemaLocation="gov.nih.nci.mageom.domain.Description.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssayData" schemaLocation="gov.nih.nci.mageom.domain.BioAssayData.xsd" />
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssay" xmlns:gov.nih.nci.mageom.domain.BioAssayData="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssayData" xmlns:gov.nih.nci.mageom.domain.BioEvent="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioEvent" xmlns:gov.nih.nci.mageom.domain.Description="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Description" xmlns:gov.nih.nci.mageom.domain.BioMaterial="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioMaterial" xmlns:gov.nih.nci.mageom.domain.Experiment="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Experiment" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain" xmlns:gov.nih.nci.mageom.domain.Array="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Array" targetNamespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssay" elementFormDefault="qualified">
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Array" schemaLocation="gov.nih.nci.mageom.domain.Array.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Experiment" schemaLocation="gov.nih.nci.mageom.domain.Experiment.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioMaterial" schemaLocation="gov.nih.nci.mageom.domain.BioMaterial.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioEvent" schemaLocation="gov.nih.nci.mageom.domain.BioEvent.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Description" schemaLocation="gov.nih.nci.mageom.domain.Description.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssayData" schemaLocation="gov.nih.nci.mageom.domain.BioAssayData.xsd" />
   <xs:element name="BioAssay" type="BioAssay" />
   <xs:complexType name="BioAssay">
     <xs:complexContent>

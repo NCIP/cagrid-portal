@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
  * authorization requirements placed on each method call.  Each method will either simple return
  * apon a successful authorization or will throw an exception apon a failed authorization.
  * 
- * @created by Introduce Toolkit version .99999
+ * @created by Introduce Toolkit version 1.0
  * 
  */
 public class CaArraySvcAuthorization{

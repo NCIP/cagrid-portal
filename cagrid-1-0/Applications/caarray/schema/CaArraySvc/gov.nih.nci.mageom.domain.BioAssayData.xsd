@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssayData" xmlns:gov.nih.nci.mageom.domain.BioEvent="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioEvent" xmlns:gov.nih.nci.mageom.domain.BioAssay="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssay" xmlns:gov.nih.nci.mageom.domain.QuantitationType="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.QuantitationType" xmlns:gov.nih.nci.mageom.domain.DesignElement="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.DesignElement" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" targetNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssayData" elementFormDefault="qualified">
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.QuantitationType" schemaLocation="gov.nih.nci.mageom.domain.QuantitationType.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssay" schemaLocation="gov.nih.nci.mageom.domain.BioAssay.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioEvent" schemaLocation="gov.nih.nci.mageom.domain.BioEvent.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.DesignElement" schemaLocation="gov.nih.nci.mageom.domain.DesignElement.xsd" />
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssayData" xmlns:gov.nih.nci.mageom.domain.BioEvent="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioEvent" xmlns:gov.nih.nci.mageom.domain.BioAssay="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssay" xmlns:gov.nih.nci.mageom.domain.QuantitationType="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.QuantitationType" xmlns:gov.nih.nci.mageom.domain.DesignElement="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.DesignElement" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain" targetNamespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssayData" elementFormDefault="qualified">
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.QuantitationType" schemaLocation="gov.nih.nci.mageom.domain.QuantitationType.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssay" schemaLocation="gov.nih.nci.mageom.domain.BioAssay.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioEvent" schemaLocation="gov.nih.nci.mageom.domain.BioEvent.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.DesignElement" schemaLocation="gov.nih.nci.mageom.domain.DesignElement.xsd" />
   <xs:element name="DesignElementMap" type="DesignElementMap" />
   <xs:complexType name="DesignElementMap">
     <xs:complexContent>

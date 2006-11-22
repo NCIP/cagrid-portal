@@ -73,7 +73,7 @@
   	type="ns1:gov.nih.nci.mageom.domain.Experiment.impl.ExperimentImpl" 
   	qname="ns2:Experiment" 
   	xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" 
-  	xmlns:ns2="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Experiment" 
+  	xmlns:ns2="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Experiment" 
   	xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
  
  

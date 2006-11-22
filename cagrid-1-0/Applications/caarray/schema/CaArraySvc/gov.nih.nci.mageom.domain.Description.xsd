@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" xmlns:gov.nih.nci.mageom.domain.AuditAndSecurity="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.AuditAndSecurity" xmlns:gov.nih.nci.mageom.domain.BQS="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BQS" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" targetNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" elementFormDefault="qualified">
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BQS" schemaLocation="gov.nih.nci.mageom.domain.BQS.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.AuditAndSecurity" schemaLocation="gov.nih.nci.mageom.domain.AuditAndSecurity.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Description" xmlns:gov.nih.nci.mageom.domain.AuditAndSecurity="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.AuditAndSecurity" xmlns:gov.nih.nci.mageom.domain.BQS="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BQS" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain" targetNamespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Description" elementFormDefault="qualified">
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BQS" schemaLocation="gov.nih.nci.mageom.domain.BQS.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.AuditAndSecurity" schemaLocation="gov.nih.nci.mageom.domain.AuditAndSecurity.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
   <xs:element name="DatabaseEntry" type="DatabaseEntry" />
   <xs:complexType name="DatabaseEntry">
     <xs:complexContent>

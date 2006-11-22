@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Protocol" xmlns:gov.nih.nci.mageom.domain.AuditAndSecurity="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.AuditAndSecurity" xmlns:gov.nih.nci.mageom.domain.Description="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" xmlns:gov.nih.nci.mageom.domain.Measurement="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Measurement" targetNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Protocol" elementFormDefault="qualified">
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" schemaLocation="gov.nih.nci.mageom.domain.Description.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.AuditAndSecurity" schemaLocation="gov.nih.nci.mageom.domain.AuditAndSecurity.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Measurement" schemaLocation="gov.nih.nci.mageom.domain.Measurement.xsd" />
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Protocol" xmlns:gov.nih.nci.mageom.domain.AuditAndSecurity="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.AuditAndSecurity" xmlns:gov.nih.nci.mageom.domain.Description="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Description" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain" xmlns:gov.nih.nci.mageom.domain.Measurement="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Measurement" targetNamespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Protocol" elementFormDefault="qualified">
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Description" schemaLocation="gov.nih.nci.mageom.domain.Description.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.AuditAndSecurity" schemaLocation="gov.nih.nci.mageom.domain.AuditAndSecurity.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Measurement" schemaLocation="gov.nih.nci.mageom.domain.Measurement.xsd" />
   <xs:element name="Parameterizable" type="Parameterizable" />
   <xs:complexType name="Parameterizable">
     <xs:complexContent>

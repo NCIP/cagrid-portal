@@ -14,7 +14,7 @@ import org.globus.wsrf.Constants;
  * This class holds all service properties which were defined for the service to have
  * access to.
  * 
- * @created by Introduce Toolkit version .99999
+ * @created by Introduce Toolkit version 1.0
  * 
  */
 public class ServiceConfiguration {
@@ -52,6 +52,8 @@ public class ServiceConfiguration {
 	private String dataService_validateDomainModelFlag;
 	
 	private String dataService_classMappingsFilename;
+	
+	private String cqlQueryProcessorConfig_castorMappingFile;
 	
 
 	
@@ -112,6 +114,16 @@ public class ServiceConfiguration {
 	
 	public void setDataService_classMappingsFilename(String dataService_classMappingsFilename) {
 		this.dataService_classMappingsFilename = dataService_classMappingsFilename;
+	}
+
+	
+	public String getCqlQueryProcessorConfig_castorMappingFile() {
+		return cqlQueryProcessorConfig_castorMappingFile;
+	}
+	
+	
+	public void setCqlQueryProcessorConfig_castorMappingFile(String cqlQueryProcessorConfig_castorMappingFile) {
+		this.cqlQueryProcessorConfig_castorMappingFile = cqlQueryProcessorConfig_castorMappingFile;
 	}
 
 	

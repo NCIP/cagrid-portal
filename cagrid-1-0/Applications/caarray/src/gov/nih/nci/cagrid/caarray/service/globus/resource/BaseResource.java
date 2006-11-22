@@ -163,8 +163,12 @@ public class BaseResource implements Resource, ResourceProperties {
 
 					ServiceGroupRegistrationParameters params = ServiceGroupRegistrationClient
 						.readParams(registrationFile.getAbsolutePath());
-					// set our service's EPR as the registrant
-					params.setRegistrantEPR(epr);
+					
+					// set our service's EPR as the registrant, or use the specified value
+					EndpointReferenceType registrantEpr = params.getRegistrantEPR();
+					if(registrantEpr == null){
+						params.setRegistrantEPR(epr);
+					}
 
 					ServiceGroupRegistrationClient client = new ServiceGroupRegistrationClient();
 					// apply the registration params to the client

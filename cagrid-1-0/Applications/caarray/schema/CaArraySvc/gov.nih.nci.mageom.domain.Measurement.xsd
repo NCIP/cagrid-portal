@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Measurement" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" targetNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Measurement" elementFormDefault="qualified">
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Measurement" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain" targetNamespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Measurement" elementFormDefault="qualified">
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
   <xs:element name="TimeUnit" type="TimeUnit" />
   <xs:complexType name="TimeUnit">
     <xs:complexContent>

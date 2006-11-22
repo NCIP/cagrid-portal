@@ -54,6 +54,10 @@
           <name>dataService_classMappingsFilename</name>
           <value>ETC-PATH/@dataService_classMappingsFilename@</value>
         </parameter>
+        <parameter>
+          <name>cqlQueryProcessorConfig_castorMappingFile</name>
+          <value>@cqlQueryProcessorConfig_castorMappingFile@</value>
+        </parameter>
       </resourceParams>
     </resource>
     <resource name="home" type="gov.nih.nci.cagrid.caarray.service.globus.resource.BaseResourceHome">

@@ -200,7 +200,7 @@
             <property name="wsdl.file" value="${interface.name}_service.wsdl" />
             <property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
         </ant>
-		<replace dir="${stubs.src}" token="ManufactureLIMSBiomaterial" value="ManufactureLIMSBioMaterial">
+		<replace dir="${stubs.src}" token="ManufactureLIMSBioMaterial" value="ManufactureLIMSBiomaterial">
 			<include name="**/*.java"/>
 		</replace>
     </target>

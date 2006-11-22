@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.DesignElement" xmlns:gov.nih.nci.mageom.domain.BioSequence="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioSequence" xmlns:gov.nih.nci.mageom.domain.BioAssayData="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssayData" xmlns:gov.nih.nci.mageom.domain.Description="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" xmlns:gov.nih.nci.mageom.domain.ArrayDesign="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.ArrayDesign" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" xmlns:gov.nih.nci.mageom.domain.Measurement="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Measurement" targetNamespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.DesignElement" elementFormDefault="qualified">
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Description" schemaLocation="gov.nih.nci.mageom.domain.Description.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioSequence" schemaLocation="gov.nih.nci.mageom.domain.BioSequence.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.BioAssayData" schemaLocation="gov.nih.nci.mageom.domain.BioAssayData.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.Measurement" schemaLocation="gov.nih.nci.mageom.domain.Measurement.xsd" />
-  <xs:import namespace="gme://caArray.caBIG/1.4/MAGEOM/gov.nih.nci.mageom.domain.ArrayDesign" schemaLocation="gov.nih.nci.mageom.domain.ArrayDesign.xsd" />
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.DesignElement" xmlns:gov.nih.nci.mageom.domain.BioSequence="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioSequence" xmlns:gov.nih.nci.mageom.domain.BioAssayData="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssayData" xmlns:gov.nih.nci.mageom.domain.Description="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Description" xmlns:gov.nih.nci.mageom.domain.ArrayDesign="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.ArrayDesign" xmlns:gov.nih.nci.mageom.domain="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain" xmlns:gov.nih.nci.mageom.domain.Measurement="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Measurement" targetNamespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.DesignElement" elementFormDefault="qualified">
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain" schemaLocation="gov.nih.nci.mageom.domain.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Description" schemaLocation="gov.nih.nci.mageom.domain.Description.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioSequence" schemaLocation="gov.nih.nci.mageom.domain.BioSequence.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssayData" schemaLocation="gov.nih.nci.mageom.domain.BioAssayData.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Measurement" schemaLocation="gov.nih.nci.mageom.domain.Measurement.xsd" />
+  <xs:import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.ArrayDesign" schemaLocation="gov.nih.nci.mageom.domain.ArrayDesign.xsd" />
   <xs:element name="FeatureInformation" type="FeatureInformation" />
   <xs:complexType name="FeatureInformation">
     <xs:complexContent>
