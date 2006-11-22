@@ -270,7 +270,11 @@ public class HQLCoreQueryProcessor extends CQLQueryProcessor {
 	
 	
 	private boolean useCsmSecurity() {
-		return Boolean.valueOf(getConfiguredParameters().getProperty(USE_CSM_FLAG)).booleanValue();
+		String useCsmValue = getConfiguredParameters().getProperty(USE_CSM_FLAG);
+		if (useCsmValue == null) {
+			useCsmValue = DEFAULT_USE_CSM_FLAG;
+		}
+		return Boolean.valueOf(useCsmValue).booleanValue();
 	}
 	
 	
@@ -284,8 +288,12 @@ public class HQLCoreQueryProcessor extends CQLQueryProcessor {
 	
 	
 	private boolean useCaseInsensitiveQueries() {
-		return Boolean.valueOf(getConfiguredParameters().getProperty(
-			CASE_INSENSITIVE_QUERYING)).booleanValue();
+		String caseInsensitiveValue = getConfiguredParameters().getProperty(
+			CASE_INSENSITIVE_QUERYING);
+		if (caseInsensitiveValue == null) {
+			caseInsensitiveValue = USE_CASE_INSENSITIVE_DEFAULT;
+		}
+		return Boolean.valueOf(caseInsensitiveValue).booleanValue();
 	}
 	
 	
