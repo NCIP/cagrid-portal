@@ -326,6 +326,10 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 				// ?
 			}
 		}
+		// does the server config location property exist?
+		if (!CommonTools.servicePropertyExists(desc, DataServiceConstants.SERVER_CONFIG_LOCATION)) {
+			CommonTools.setServiceProperty(desc, DataServiceConstants.SERVER_CONFIG_LOCATION, "server-config.wsdd", true);
+		}
 		CommonTools.setServiceProperty(desc, DataServiceConstants.CQL_VALIDATOR_CLASS, 
 			DEFAULT_CQL_VALIDATOR_CLASS, false);
 		CommonTools.setServiceProperty(desc, DataServiceConstants.DOMAIN_MODEL_VALIDATOR_CLASS,
