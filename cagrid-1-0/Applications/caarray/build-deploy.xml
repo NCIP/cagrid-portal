@@ -116,6 +116,7 @@
 			</fileset>
 			<fileset dir="ext/lib">
 				<include name="*" />
+				<exclude name="castor*.jar" />
 			</fileset>
 		</copy>
 		<!--copy over the schema service files-->

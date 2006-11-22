@@ -118,7 +118,7 @@ public class CaArraySvcClient extends ServiceSecurityClient implements
 					CaArraySvcClient client = new CaArraySvcClient(args[1]);
 
 					CQLQuery query = (CQLQuery) Utils.deserializeDocument(
-							"test/resources/query_1.xml", CQLQuery.class);
+							"test/resources/experiment_object_1.xml", CQLQuery.class);
 					CQLQueryResults results = client.query(query);
 					StringWriter w = new StringWriter();
 					Utils

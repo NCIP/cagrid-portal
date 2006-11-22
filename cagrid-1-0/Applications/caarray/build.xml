@@ -302,7 +302,6 @@
             <formatter type="xml" />
             <batchtest fork="yes" todir="${junit.results.dir}">
                 <fileset dir="${test.src.dir}">
-                    <include name="**/Test*.java" />
                     <include name="**/*TestCase.java" />
                 </fileset>
             </batchtest>
@@ -350,5 +349,31 @@
 		<echo message="|    Type 'ant -p' for a description of this service's build targets.          |"/>
         <echo message="================================================================================"/>
     </target>
+<!--	
+	<target name="gen-beans" depends="defineClasspaths">
+		<java classname="org.exolab.castor.builder.SourceGeneratorMain">
+			<arg value="-i"/>
+			<arg value="schema/CaArraySvc/gov.nih.nci.mageom.domain.Experiment.xsd"/>
+			<arg value="-package"/>
+			<arg value="gov.nih.nci.cagrid.mageom.bean.experiment"/>
+			<arg value="-dest"/>
+			<arg value="gen_output"/>
+	
+			<classpath>
+				<fileset dir="lib">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="ext/lib">
+					<include name="*.jar"/>
+					<exclude name="castor*.jar"/>
+				</fileset>
+				<fileset dir="${env.GLOBUS_LOCATION}/lib">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+	
+		</java>
+	</target>
+	-->
 
 </project>

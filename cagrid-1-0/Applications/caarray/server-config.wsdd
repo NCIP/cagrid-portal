@@ -11,6 +11,7 @@
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/CaArraySvc-security-metadata.xml" />
     <parameter name="castorMapping" value="/gov/nih/nci/cagrid/caarray/common/caarray-xml-mapping.xml"/>
+    <parameter name="marshallerXpathRegex" value="\/\w+\/@.*"/>
   </service>
   <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent" type="java:org.globus.mds.aggregator.types.AggregatorContent" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
   

@@ -24,37 +24,53 @@ import org.xml.sax.Attributes;
 public class CaArraySerializer implements Serializer {
 
 
+	private static final String DEFAULT_MARSHALLER_XPATH_REGEX = "\\/\\w+\\/@.*";
+	private static final String MARSHALLER_XPATH_REGEX = "marshallerXpathRegex";
 	protected static Log LOG = LogFactory.getLog(CaArraySerializer.class.getName());
 
 
 	public void serialize(QName name, Attributes attributes, Object value, SerializationContext context)
 		throws IOException {
 		long startTime = System.currentTimeMillis();
-
+//		LOG.debug("Starting serialization of " + value);
+		
 		AxisContentHandler hand = new AxisContentHandler(context);
-		SDKMarshaller marshaller = new SDKMarshaller(hand);
-		marshaller.getXpaths().add("\\/\\w+\\/@.*");
+		SDKMarshaller marshaller = null;
+		try{
+			marshaller = new SDKMarshaller(hand);
+			String regex = (String) context.getMessageContext().getProperty(MARSHALLER_XPATH_REGEX);
+			if(regex == null){
+				regex = DEFAULT_MARSHALLER_XPATH_REGEX;
+				
+			}
+			marshaller.getXpaths().add(regex);
+		}catch(Exception ex){
+			ex.printStackTrace();
+			throw new IOException("Error creating marshaller: " + ex.getMessage());
+		}
+		
 		try {
 			Mapping mapping = EncodingUtils.getMapping(context.getMessageContext());
 			marshaller.setMapping(mapping);
 			marshaller.setValidation(true);
-		} catch (MappingException e) {
-			LOG.error("Problem establishing castor mapping!  Using default mapping.", e);
+		} catch (MappingException ex) {
+			ex.printStackTrace();
+			throw new IOException("Problem establishing castor mapping:" + ex.getMessage());
 		}
 		try {
 			marshaller.marshal(value);
-		} catch (MarshalException e) {
-			LOG.error("Problem using castor marshalling.", e);
-			throw new IOException("Problem using castor marshalling." + e.getMessage());
-		} catch (ValidationException e) {
+		} catch (ValidationException ex) {
 			LOG.error("Problem validating castor marshalling; message doesn't comply with the associated XML schema.",
-				e);
+				ex);
 			throw new IOException(
 				"Problem validating castor marshalling; message doesn't comply with the associated XML schema."
-					+ e.getMessage());
+					+ ex.getMessage());
+		}catch(Exception ex){
+			ex.printStackTrace();
+			throw new IOException("Problem using castor marshalling: " + ex.getMessage());
 		}
 		long duration = System.currentTimeMillis() - startTime;
-		LOG.debug("Total time to serialize(" + name.getLocalPart() + "):" + duration + " ms.");
+//		LOG.debug("Total time to serialize(" + name.getLocalPart() + "):" + duration + " ms.");
 	}
 
 
