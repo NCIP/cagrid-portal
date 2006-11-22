@@ -82,7 +82,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		addDataServiceNamespaces(serviceInfo.getServiceDescriptor(), serviceProperties);
 		modifyServiceProperties(serviceInfo.getServiceDescriptor());
 		addQueryMethod(serviceInfo.getServiceDescriptor(), mainService);
-		processFeatures(serviceInfo.getServiceDescriptor(), mainService, serviceProperties);
+		processFeatures(serviceInfo, mainService, serviceProperties);
 	}
 
 
@@ -354,20 +354,19 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 	}
 
 
-	private void processFeatures(ServiceDescription desc, ServiceType service, Properties serviceProps)
+	private void processFeatures(ServiceInformation info, ServiceType service, Properties serviceProps)
 		throws CreationExtensionException {
-		ExtensionTypeExtensionData extensionData = getExtensionData(desc);
+		ExtensionTypeExtensionData extensionData = getExtensionData(info.getServiceDescriptor());
 		ServiceFeatures features = null;
 		try {
 			features = ExtensionDataUtils.getExtensionData(extensionData).getServiceFeatures();
 		} catch (Exception ex) {
-			ex.printStackTrace(); // TODO: remove me
 			throw new CreationExtensionException("Error getting service features: " + ex.getMessage(), ex);
 		}
 		if (features != null) {
 			// ws-enumeration
 			if (features.isUseWsEnumeration()) {
-				FeatureCreator wsEnumCreator = new WsEnumerationFeatureCreator(desc, service, serviceProps);
+				FeatureCreator wsEnumCreator = new WsEnumerationFeatureCreator(info, service, serviceProps);
 				wsEnumCreator.addFeature();
 			}
 		} else {

@@ -1,8 +1,8 @@
 package gov.nih.nci.cagrid.data.creation;
 
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.util.Properties;
 
@@ -17,19 +17,19 @@ import java.util.Properties;
  */
 public abstract class FeatureCreator {
 	
-	private ServiceDescription serviceDescription;
+	private ServiceInformation serviceInformation;
 	private ServiceType mainService;
 	private Properties serviceProperties;
 
-	public FeatureCreator(ServiceDescription desc, ServiceType mainService, Properties serviceProps) {
-		this.serviceDescription = desc;
+	public FeatureCreator(ServiceInformation info, ServiceType mainService, Properties serviceProps) {
+		this.serviceInformation = info;
 		this.mainService = mainService;
 		this.serviceProperties = serviceProps;
 	}
 	
 	
-	protected ServiceDescription getServiceDescription() {
-		return serviceDescription;
+	protected ServiceInformation getServiceInformation() {
+		return serviceInformation;
 	}
 	
 	

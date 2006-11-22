@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.creation;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.creation.templates.EnumerationServiceClientTemplate;
 import gov.nih.nci.cagrid.data.service.globus.EnumerationQueryProviderImpl;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -21,9 +22,12 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
@@ -42,8 +46,8 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 	public static final String ENUMERATION_DATA_SERVICE_NAMESPACE = "http://gov.nih.nci.cagrid.data.enumeration/EnumerationDataService";
 	public static final String WS_ENUM_EXTENSION_NAME = "cagrid_wsEnum";
 
-	public WsEnumerationFeatureCreator(ServiceDescription desc, ServiceType mainService, Properties serviceProps) {
-		super(desc, mainService, serviceProps);
+	public WsEnumerationFeatureCreator(ServiceInformation info, ServiceType mainService, Properties serviceProps) {
+		super(info, mainService, serviceProps);
 	}
 	
 	
@@ -51,10 +55,12 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 		installWsEnumExtension();
 		copySchemas();
 		addEnumerationQueryMethod();
+		createDataSourceClient();
 	}
 	
 	
 	private void installWsEnumExtension() throws CreationExtensionException {
+		ServiceDescription description = getServiceInformation().getServiceDescriptor();
 		// verify the ws-enum extension is installed
 		if (!wsEnumExtensionInstalled()) {
 			throw new CreationExtensionException("The required extension " + WS_ENUM_EXTENSION_NAME 
@@ -67,11 +73,11 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 			ExtensionType extType = new ExtensionType();
 			extType.setName(ext.getServiceExtensionDescription().getName());
 			extType.setExtensionType(ext.getExtensionType());
-			ExtensionType[] serviceExtensions = getServiceDescription().getExtensions().getExtension();
+			ExtensionType[] serviceExtensions = description.getExtensions().getExtension();
 			ExtensionType[] allExtensions = new ExtensionType[serviceExtensions.length + 1];
 			System.arraycopy(serviceExtensions, 0, allExtensions, 0, serviceExtensions.length);
 			allExtensions[allExtensions.length - 1] = extType;
-			getServiceDescription().getExtensions().setExtension(allExtensions);
+			description.getExtensions().setExtension(allExtensions);
 			// wsEnum extension copies libraries into the service on its own
 		}
 	}
@@ -147,6 +153,35 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 	}
 	
 	
+	private void createDataSourceClient() throws CreationExtensionException {
+		EnumerationServiceClientTemplate template = new EnumerationServiceClientTemplate();
+		String clientClassContents = template.generate(getServiceInformation());
+		// figgure out the class name
+		String classStart = "public class ";
+		int nameStart = clientClassContents.indexOf(classStart) + classStart.length();
+		int nameEnd = clientClassContents.indexOf(" ", nameStart);
+		String clientClassName = clientClassContents.substring(nameStart, nameEnd);
+		// and the package name
+		String pack = "package ";
+		int packNameStart = clientClassContents.indexOf(pack) + pack.length();
+		int packNameEnd = clientClassContents.indexOf(';', packNameStart);
+		String clientPackage = clientClassContents.substring(packNameStart, packNameEnd);
+		// write it out to disk
+		File clientClassFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath()
+			+ File.separator + "src" + File.separator + clientPackage.replace('.', File.separatorChar)
+			+ File.separator + clientClassName + ".java");
+		try {
+			FileWriter classWriter = new FileWriter(clientClassFile);
+			classWriter.write(clientClassContents);
+			classWriter.flush();
+			classWriter.close();
+		} catch (IOException ex) {
+			throw new CreationExtensionException("Error creating Data Source enumeration client class: " 
+				+ ex.getMessage(), ex);
+		}		
+	}
+	
+	
 	private boolean wsEnumExtensionInstalled() {
 		List extensionDescriptors = ExtensionsLoader.getInstance().getServiceExtensions();
 		for (int i = 0; i < extensionDescriptors.size(); i++) {
@@ -160,7 +195,7 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 	
 	
 	private boolean wsEnumExtensionUsed() {
-		ServiceDescription desc = getServiceDescription();
+		ServiceDescription desc = getServiceInformation().getServiceDescriptor();
 		if (desc.getExtensions() != null && desc.getExtensions().getExtension() != null) {
 			for (int i = 0; i < desc.getExtensions().getExtension().length; i++) {
 				if (desc.getExtensions().getExtension(i).getName().equals(WS_ENUM_EXTENSION_NAME)) {
