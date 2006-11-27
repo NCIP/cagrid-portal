@@ -21,7 +21,7 @@ import gov.nih.nci.mageom.domain.Experiment.Experiment;
 import gov.nih.nci.mageom.search.SearchCriteriaFactory;
 import gov.nih.nci.mageom.search.Experiment.ExperimentSearchCriteria;
 
-public class TestClient {
+public class TestMAGEOMClient {
 	public static void main(String[] args) throws Exception {
 		try{
 		
