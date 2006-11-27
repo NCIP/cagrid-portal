@@ -16,6 +16,8 @@ import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceKey;
 import org.globus.wsrf.impl.SingletonResourceHome;
 import org.globus.wsrf.jndi.Initializable;
+import org.globus.wsrf.ResourceContext;
+import org.globus.wsrf.ResourceContextException;
 
 
 /**
@@ -37,6 +39,18 @@ public class BaseResourceHome extends SingletonResourceHome implements Initializ
 			logger.error("Exception when creating the resource: " + e);
 			return null;
 		}
+	}
+	
+	public BaseResource getResource(){
+		BaseResource serviceBaseResource;
+		try {
+			serviceBaseResource = (BaseResource)ResourceContext.getResourceContext().getResource();
+		} catch (ResourceContextException e) {
+			return null;
+		} catch (ResourceException e) {
+			return null;
+		}
+		return serviceBaseResource;
 	}
 
 

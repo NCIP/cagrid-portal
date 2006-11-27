@@ -99,6 +99,8 @@
 			</fileset>
 		</copy>
 		<replace file="tmp/etc/registration.xml" value="${index.service.url}" token="INDEX_SERVICE_URL" />
+		<replace file="tmp/etc/registration.xml" value="${index.service.registration.refresh_seconds}" token="REGISTRATION_REFRESH" />
+		<replace file="tmp/etc/registration.xml" value="${index.service.index.refresh_milliseconds}" token="INDEX_REFRESH" />
 		<!-- Copy skeleton files to Tomcat and rename -->
 		<copy overwrite="true" toDir="${service.deployment.dir}">
 			<fileset dir="tmp/etc">
@@ -156,6 +158,8 @@
 			</fileset>
 		</copy>
 		<replace file="tmp/etc/registration.xml" value="${index.service.url}" token="INDEX_SERVICE_URL" />
+		<replace file="tmp/etc/registration.xml" value="${index.service.registration.refresh_seconds}" token="REGISTRATION_REFRESH" />
+		<replace file="tmp/etc/registration.xml" value="${index.service.index.refresh_milliseconds}" token="INDEX_REFRESH" />
 		<!-- make the gar file -->
 		<ant antfile="${build.packages}" target="makeGar">
 			<property name="garserverdeployment.file" value="${basedir}/tmp/server-config.wsdd" />
