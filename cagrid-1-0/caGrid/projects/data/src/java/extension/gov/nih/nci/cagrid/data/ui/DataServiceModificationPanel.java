@@ -45,8 +45,6 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +52,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -121,6 +119,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		packageToClassMap = new HashMap();
 		// if there's existing cadsr configuration, apply it
 		loadUmlTreeInformation();
+		groupRadioButtons();
 		initialize();
 	}
 	
@@ -139,6 +138,60 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 
 	protected void resetGUI() {
 		// TODO Auto-generated method stub
+	}
+	
+	
+	private void groupRadioButtons() {
+		NotifyingButtonGroup group = new NotifyingButtonGroup();
+		group.add(getNoDomainModelRadioButton());
+		group.add(getSuppliedDomainModelRadioButton());
+		group.add(getCadsrDomainModelRadioButton());
+		group.addGroupSelectionListener(new GroupSelectionListener() {
+			public void selectionChanged(ButtonModel previous, ButtonModel current) {
+				if (previous != null && previous != current) {
+					if (current == getNoDomainModelRadioButton().getModel()) {
+						removeStoredCadsrInformation();
+						PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), false);
+						PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), false);
+						cleanOutGui();
+					} else if (current == getSuppliedDomainModelRadioButton().getModel()) {
+						removeStoredCadsrInformation();
+						PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), true);
+						PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), false);
+					} else if (current == getCadsrDomainModelRadioButton().getModel()) {
+						storeCadsrServiceUrl();
+						PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), false);
+						PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), true);
+						getDomainModelNameTextField().setText("");
+					}
+				}
+			}
+			
+			
+			private void cleanOutGui() {
+				getDomainModelNameTextField().setText("");
+				getUmlTree().clearTree();
+				getClassConfigTable().clearTable();
+			}
+		});
+		
+		// decide which domain model mode to auto-select
+		try {
+			Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
+			CadsrInformation info = data.getCadsrInformation();
+			if (info != null) {
+				if (info.getSuppliedDomainModel() != null) {
+					group.setSelected(getSuppliedDomainModelRadioButton().getModel(), true);
+				} else {
+					group.setSelected(getCadsrDomainModelRadioButton().getModel(), true);
+				}
+			} else {
+				group.setSelected(getNoDomainModelRadioButton().getModel(), true);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			ErrorDialog.showErrorDialog(ex);
+		}
 	}
 	
 	
@@ -456,21 +509,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			domainModelNameTextField = new JTextField();
 			domainModelNameTextField.setToolTipText("Optional xml file name of an existing domain model");
 			domainModelNameTextField.setEditable(false);
-			domainModelNameTextField.getDocument().addDocumentListener(new DocumentListener() {
-				public void insertUpdate(DocumentEvent e) {
-					setDomainModelFile();
-				}
-
-				
-			    public void removeUpdate(DocumentEvent e) {
-			    	setDomainModelFile();
-			    }
-
-			    
-			    public void changedUpdate(DocumentEvent e) {
-			    	setDomainModelFile();
-			    }
-			});
 		}
 		return domainModelNameTextField;
 	}
@@ -771,16 +809,21 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		if (noDomainModelRadioButton == null) {
 			noDomainModelRadioButton = new JRadioButton();
 			noDomainModelRadioButton.setText("No Domain Model");
+			/*
 			noDomainModelRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (noDomainModelRadioButton.isSelected()) {
 						removeStoredCadsrInformation();
 						PortalUtils.setContainerEnabled(getDomainModelSelectionPanel(), false);
 						PortalUtils.setContainerEnabled(getCadsrDomainModelPanel(), false);
+						// clear up the GUI
 						getDomainModelNameTextField().setText("");
+						getUmlTree().clearTree();
+						getClassConfigTable().clearTable();
 					}
 				}
 			});
+			*/
 		}
 		return noDomainModelRadioButton;
 	}
@@ -795,6 +838,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		if (cadsrDomainModelRadioButton == null) {
 			cadsrDomainModelRadioButton = new JRadioButton();
 			cadsrDomainModelRadioButton.setText("caDSR Domain Model");
+			/*
 			cadsrDomainModelRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (cadsrDomainModelRadioButton.isSelected()) {
@@ -805,6 +849,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 					}
 				}
 			});
+			*/
 		}
 		return cadsrDomainModelRadioButton;
 	}
@@ -819,6 +864,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		if (suppliedDomainModelRadioButton == null) {
 			suppliedDomainModelRadioButton = new JRadioButton();
 			suppliedDomainModelRadioButton.setText("Supplied Domain Model");
+			/*
 			suppliedDomainModelRadioButton.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					if (suppliedDomainModelRadioButton.isSelected()) {
@@ -828,6 +874,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 					}
 				}
 			});
+			*/
 		}
 		return suppliedDomainModelRadioButton;
 	}
@@ -866,27 +913,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			domainModelSourcePanel.add(getNoDomainModelRadioButton(), gridBagConstraints5);
 			domainModelSourcePanel.add(getCadsrDomainModelRadioButton(), gridBagConstraints8);
 			domainModelSourcePanel.add(getSuppliedDomainModelRadioButton(), gridBagConstraints9);
-			ButtonGroup group = new ButtonGroup();
-			group.add(getNoDomainModelRadioButton());
-			group.add(getCadsrDomainModelRadioButton());
-			group.add(getSuppliedDomainModelRadioButton());
-			// decide which domain model mode to auto-select
-			try {
-				Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
-				CadsrInformation info = data.getCadsrInformation();
-				if (info != null) {
-					if (info.getSuppliedDomainModel() != null) {
-						group.setSelected(getSuppliedDomainModelRadioButton().getModel(), true);
-					} else {
-						group.setSelected(getCadsrDomainModelRadioButton().getModel(), true);
-					}
-				} else {
-					group.setSelected(getNoDomainModelRadioButton().getModel(), true);
-				}
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				ErrorDialog.showErrorDialog(ex);
-			}
 		}
 		return domainModelSourcePanel;
 	}
@@ -1087,10 +1113,12 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				getCadsrBrowserPanel().setDefaultCaDSRURL(cadsrInfo.getServiceUrl());
 				getCadsrBrowserPanel().getCadsr().setText(cadsrInfo.getServiceUrl());
 				getCadsrBrowserPanel().discoverFromCaDSR();
+				getUmlTree().setEnabled(true);				
 			}
 			// set the domain model filename if there is one
 			if (cadsrInfo.getSuppliedDomainModel() != null) {
 				getDomainModelNameTextField().setText(cadsrInfo.getSuppliedDomainModel());
+				getUmlTree().setEnabled(false);
 			}
 			// walk through packages, adding them to the UML tree
 			for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {
@@ -1131,7 +1159,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			getCadsrBrowserPanel().getCadsr().setText(cadsrDefaultUrl);
 			getCadsrBrowserPanel().discoverFromCaDSR();
 		}
-		getUmlTree().setEnabled(true);
 	}
 	
 	
