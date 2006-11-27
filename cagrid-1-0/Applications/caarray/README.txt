@@ -1,3 +1,23 @@
+#############
+# TO DEPLOY #
+#############
+
+ 1.) Type: and deployTomcat
+ 2.) Edit CATALINA_HOME/bin/catalina.sh to set the java.security.policy
+     system property like so:
+     
+     -Djava.security.policy=/path/to/policy.file
+     
+     That file should look like this:
+     
+     grant {
+		permission java.security.AllPermission;
+	 };
+
+#########
+# NOTES #
+#########
+
 This project uses a patched version of Castor 1.0.4. 
 The patch is described here: http://jira.codehaus.org/browse/CASTOR-1660
 
