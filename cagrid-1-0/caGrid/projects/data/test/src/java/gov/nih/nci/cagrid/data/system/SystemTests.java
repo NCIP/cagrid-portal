@@ -20,7 +20,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: SystemTests.java,v 1.7 2006-11-27 21:22:30 dervin Exp $ 
+ * @version $Id: SystemTests.java,v 1.8 2006-11-27 21:27:00 dervin Exp $ 
  */
 public class SystemTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -40,6 +40,7 @@ public class SystemTests extends Story {
 	
 	
 	protected boolean storySetUp() {
+		assertFalse("Globus should NOT be running yet", globusHelper.isGlobusRunning());
 		return true;
 	}
 

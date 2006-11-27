@@ -10,7 +10,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: StartGlobusStep.java,v 1.1 2006-11-08 18:09:38 dervin Exp $ 
+ * @version $Id: StartGlobusStep.java,v 1.2 2006-11-27 21:22:31 dervin Exp $ 
  */
 public class StartGlobusStep extends Step {
 	
@@ -22,6 +22,8 @@ public class StartGlobusStep extends Step {
 
 	public void runStep() throws Throwable {
 		System.out.println("Running step: " + getClass().getName());
+		assertFalse("Globus should not be running yet", helper.isGlobusRunning());
 		helper.startGlobus();
+		assertTrue("Globus should be running at this point", helper.isGlobusRunning());
 	}
 }
