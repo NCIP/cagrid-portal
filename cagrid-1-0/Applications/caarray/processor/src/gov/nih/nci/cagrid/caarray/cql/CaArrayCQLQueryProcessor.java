@@ -14,13 +14,18 @@ import gov.nih.nci.cagrid.data.mapping.Mappings;
 import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
 import gov.nih.nci.cagrid.data.utilities.CQLResultsCreationUtil;
 import gov.nih.nci.cagrid.data.utilities.ResultsCreationException;
+import gov.nih.nci.common.remote.rmi.RMISearchCriteriaHandlerProxy;
+import gov.nih.nci.common.remote.rmi.RMISearchCriteriaHandlerRemoteIF;
+import gov.nih.nci.common.search.Directable;
 import gov.nih.nci.common.search.SearchCriteria;
 import gov.nih.nci.common.search.SearchResult;
 import gov.nih.nci.common.search.session.SecureSession;
 import gov.nih.nci.common.search.session.SecureSessionFactory;
 import gov.nih.nci.mageom.domain.Experiment.Experiment;
+import gov.nih.nci.mageom.search.impl.MAGEOMSearchCriteria;
 
 import java.lang.reflect.Method;
+import java.rmi.Naming;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +44,14 @@ public class CaArrayCQLQueryProcessor extends CQLQueryProcessor {
 
 	public static final String CASE_INSENSITIVE_QUERYING = "queryCaseInsensitive";
 
+	private static final String USERNAME = "usr";
+
+	private static final String PASSWORD = "pwd";
+
+	private static final String RMI_SERVER_URL = "RMIServerURL";
+
+	private static final String SECURE_SESSION_MGR_URL = "SecureSessionManagerURL";
+
 	public CaArrayCQLQueryProcessor() {
 
 	}
@@ -47,60 +60,65 @@ public class CaArrayCQLQueryProcessor extends CQLQueryProcessor {
 			throws MalformedQueryException, QueryProcessingException {
 
 		LOG.debug("Processing query...");
-
-		List coreResultsList = queryCaArrayService(cqlQuery);
-		String targetName = cqlQuery.getTarget().getName();
-		Mappings mappings = null;
-		try {
-			mappings = getClassToQnameMappings();
-		} catch (Exception ex) {
-			throw new QueryProcessingException(
-					"Error getting class to qname mappings: " + ex.getMessage(),
-					ex);
-		}
 		CQLQueryResults results = null;
-
-		// decide on type of results
-		QueryModifier mod = cqlQuery.getQueryModifier();
-		boolean objectResults = mod == null
-				|| (!mod.isCountOnly() && mod.getAttributeNames() == null && mod
-						.getDistinctAttribute() == null);
-
-		if (objectResults) {
+		try {
+			List coreResultsList = queryCaArrayService(cqlQuery);
+			String targetName = cqlQuery.getTarget().getName();
+			Mappings mappings = null;
 			try {
-				results = createObjectResults(coreResultsList, targetName,
-						mappings);
+				mappings = getClassToQnameMappings();
 			} catch (Exception ex) {
 				throw new QueryProcessingException(
-						"Error creating object results: " + ex.getMessage(), ex);
+						"Error getting class to qname mappings: "
+								+ ex.getMessage(), ex);
 			}
-		} else {
 
-			if (mod.isCountOnly()) {
+			// decide on type of results
+			QueryModifier mod = cqlQuery.getQueryModifier();
+			boolean objectResults = mod == null
+					|| (!mod.isCountOnly() && mod.getAttributeNames() == null && mod
+							.getDistinctAttribute() == null);
 
-				Long val = Long.valueOf(coreResultsList.get(0).toString());
-				results = CQLResultsCreationUtil.createCountResults(val
-						.longValue(), targetName);
+			if (objectResults) {
+				try {
+					results = createObjectResults(coreResultsList, targetName,
+							mappings);
+				} catch (Exception ex) {
+					throw new QueryProcessingException(
+							"Error creating object results: " + ex.getMessage(),
+							ex);
+				}
 			} else {
 
-				// attributes distinct or otherwise
-				String[] names = null;
-				if (mod.getDistinctAttribute() != null) {
-					names = new String[] { mod.getDistinctAttribute() };
+				if (mod.isCountOnly()) {
+
+					Long val = Long.valueOf(coreResultsList.get(0).toString());
+					results = CQLResultsCreationUtil.createCountResults(val
+							.longValue(), targetName);
 				} else {
-					names = mod.getAttributeNames();
-				}
-				try {
-					results = createAttributeResults(coreResultsList,
-							targetName, names);
-				} catch (Exception ex) {
-					throw new RuntimeException(
-							"Error creating attribute results: "
-									+ ex.getMessage(), ex);
+
+					// attributes distinct or otherwise
+					String[] names = null;
+					if (mod.getDistinctAttribute() != null) {
+						names = new String[] { mod.getDistinctAttribute() };
+					} else {
+						names = mod.getAttributeNames();
+					}
+					try {
+						results = createAttributeResults(coreResultsList,
+								targetName, names);
+					} catch (Exception ex) {
+						throw new RuntimeException(
+								"Error creating attribute results: "
+										+ ex.getMessage(), ex);
+					}
 				}
 			}
+		} catch (Exception ex) {
+			String msg = "Error processing query: " + ex.getMessage();
+			LOG.error(msg, ex);
+			throw new QueryProcessingException(msg, ex);
 		}
-
 		LOG.debug("...done.");
 
 		return results;
@@ -201,19 +219,24 @@ public class CaArrayCQLQueryProcessor extends CQLQueryProcessor {
 	private List queryCaArrayService(CQLQuery cqlQuery)
 			throws QueryProcessingException {
 		List resultsList = new ArrayList();
-		String usr = "PUBLIC";
-		String pwd = "";
+		String usr = getConfiguredParameters().getProperty(USERNAME);
+		String pwd = getConfiguredParameters().getProperty(PASSWORD);
 		SecureSession sess = SecureSessionFactory.defaultSecureSession();
+		((Directable)sess).direct(getConfiguredParameters().getProperty(SECURE_SESSION_MGR_URL));
 		sess.start(usr, pwd);
 		String sessId = sess.getSessionId();
 
 		SearchCriteria sc = CQL2SC.translate(cqlQuery,
 				useCaseInsensitiveQueries());
+//		((Directable)sc).direct(getConfiguredParameters().getProperty(RMI_SERVER_URL));
 		sc.setSessionId(sessId);
 
 		SearchResult sr;
 		try {
-			sr = sc.search();
+//			sr = sc.search();
+			RMISearchCriteriaHandlerRemoteIF rmiServer = 
+				(RMISearchCriteriaHandlerRemoteIF)Naming.lookup(getConfiguredParameters().getProperty(RMI_SERVER_URL));
+			sr = rmiServer.search(sc);
 		} catch (Exception ex) {
 			throw new QueryProcessingException("Error searching: "
 					+ ex.getMessage(), ex);
@@ -242,6 +265,10 @@ public class CaArrayCQLQueryProcessor extends CQLQueryProcessor {
 	public Properties getRequiredParameters() {
 		Properties props = super.getRequiredParameters();
 		props.setProperty(CASE_INSENSITIVE_QUERYING, "true");
+		props.setProperty(USERNAME, "PUBLIC");
+		props.setProperty(PASSWORD, "");
+		props.setProperty(RMI_SERVER_URL, "//caarray-mageom-server.nci.nih.gov:8080/SearchCriteriaHandler");
+		props.setProperty(SECURE_SESSION_MGR_URL, "//caarray-mageom-server.nci.nih.gov:8080/SecureSessionManager");
 		return props;
 	}
 

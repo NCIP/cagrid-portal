@@ -58,6 +58,22 @@
           <name>cqlQueryProcessorConfig_castorMappingFile</name>
           <value>@cqlQueryProcessorConfig_castorMappingFile@</value>
         </parameter>
+        <parameter>
+          <name>cqlQueryProcessorConfig_usr</name>
+          <value>@cqlQueryProcessorConfig_usr@</value>
+        </parameter>
+        <parameter>
+          <name>cqlQueryProcessorConfig_pwd</name>
+          <value>@cqlQueryProcessorConfig_pwd@</value>
+        </parameter>
+        <parameter>
+          <name>cqlQueryProcessorConfig_RMIServerURL</name>
+          <value>@cqlQueryProcessorConfig_RMIServerURL@</value>
+        </parameter>
+        <parameter>
+          <name>cqlQueryProcessorConfig_SecureSessionManagerURL</name>
+          <value>@cqlQueryProcessorConfig_SecureSessionManagerURL@</value>
+        </parameter>
       </resourceParams>
     </resource>
     <resource name="home" type="gov.nih.nci.cagrid.caarray.service.globus.resource.BaseResourceHome">

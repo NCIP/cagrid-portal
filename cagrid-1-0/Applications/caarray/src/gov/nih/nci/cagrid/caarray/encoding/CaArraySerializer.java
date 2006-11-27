@@ -31,8 +31,6 @@ public class CaArraySerializer implements Serializer {
 
 	public void serialize(QName name, Attributes attributes, Object value, SerializationContext context)
 		throws IOException {
-		long startTime = System.currentTimeMillis();
-//		LOG.debug("Starting serialization of " + value);
 		
 		AxisContentHandler hand = new AxisContentHandler(context);
 		Marshaller2 marshaller = null;
@@ -45,8 +43,9 @@ public class CaArraySerializer implements Serializer {
 			}
 			marshaller.getXpaths().add(regex);
 		}catch(Exception ex){
-			ex.printStackTrace();
-			throw new IOException("Error creating marshaller: " + ex.getMessage());
+			String msg = "Error creating marshaller: " + ex.getMessage();
+			LOG.error(msg, ex);
+			throw new IOException(msg);
 		}
 		
 		try {
@@ -54,8 +53,9 @@ public class CaArraySerializer implements Serializer {
 			marshaller.setMapping(mapping);
 			marshaller.setValidation(true);
 		} catch (MappingException ex) {
-			ex.printStackTrace();
-			throw new IOException("Problem establishing castor mapping:" + ex.getMessage());
+			String msg = "Problem establishing castor mapping:" + ex.getMessage();
+			LOG.error(msg, ex);
+			throw new IOException(msg);
 		}
 		try {
 			marshaller.marshal(value);
@@ -69,8 +69,7 @@ public class CaArraySerializer implements Serializer {
 			ex.printStackTrace();
 			throw new IOException("Problem using castor marshalling: " + ex.getMessage());
 		}
-		long duration = System.currentTimeMillis() - startTime;
-//		LOG.debug("Total time to serialize(" + name.getLocalPart() + "):" + duration + " ms.");
+
 	}
 
 

@@ -54,6 +54,14 @@ public class ServiceConfiguration {
 	private String dataService_classMappingsFilename;
 	
 	private String cqlQueryProcessorConfig_castorMappingFile;
+
+	private String cqlQueryProcessorConfig_usr;
+
+	private String cqlQueryProcessorConfig_pwd;
+
+	private String cqlQueryProcessorConfig_RMIServerURL;
+
+	private String cqlQueryProcessorConfig_SecureSessionManagerURL;
 	
 
 	
@@ -124,6 +132,42 @@ public class ServiceConfiguration {
 	
 	public void setCqlQueryProcessorConfig_castorMappingFile(String cqlQueryProcessorConfig_castorMappingFile) {
 		this.cqlQueryProcessorConfig_castorMappingFile = cqlQueryProcessorConfig_castorMappingFile;
+	}
+	
+	public String getCqlQueryProcessorConfig_usr() {
+		return cqlQueryProcessorConfig_usr;
+	}
+	
+	
+	public void setCqlQueryProcessorConfig_usr(String cqlQueryProcessorConfig_usr) {
+		this.cqlQueryProcessorConfig_usr = cqlQueryProcessorConfig_usr;
+	}
+	
+	public String getCqlQueryProcessorConfig_RMIServerURL() {
+		return cqlQueryProcessorConfig_RMIServerURL;
+	}
+	
+	
+	public void setCqlQueryProcessorConfig_RMIServerURL(String cqlQueryProcessorConfig_RMIServerURL) {
+		this.cqlQueryProcessorConfig_RMIServerURL = cqlQueryProcessorConfig_RMIServerURL;
+	}
+	
+	public String getCqlQueryProcessorConfig_SecureSessionManagerURL() {
+		return cqlQueryProcessorConfig_SecureSessionManagerURL;
+	}
+	
+	
+	public void setCqlQueryProcessorConfig_SecureSessionManagerURL(String cqlQueryProcessorConfig_SecureSessionManagerURL) {
+		this.cqlQueryProcessorConfig_SecureSessionManagerURL = cqlQueryProcessorConfig_SecureSessionManagerURL;
+	}
+	
+	public String getCqlQueryProcessorConfig_pwd() {
+		return cqlQueryProcessorConfig_pwd;
+	}
+	
+	
+	public void setCqlQueryProcessorConfig_pwd(String cqlQueryProcessorConfig_pwd) {
+		this.cqlQueryProcessorConfig_pwd = cqlQueryProcessorConfig_pwd;
 	}
 
 	

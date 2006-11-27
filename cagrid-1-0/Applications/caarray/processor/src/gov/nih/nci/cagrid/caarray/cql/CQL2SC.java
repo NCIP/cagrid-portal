@@ -38,6 +38,11 @@ public class CQL2SC {
 			throws QueryProcessingException {
 		SearchCriteria sc = (SearchCriteria) SearchCriteriaFactory
 				.newSearchCriteria(object.getName());
+		
+		if(sc == null){
+			throw new QueryProcessingException("Unknown type: " + object.getName());
+		}
+		
 		if (object.getAttribute() != null) {
 			AttributeCriterion attCrit = processAttribute(
 					object.getAttribute(), caseInsensitive);

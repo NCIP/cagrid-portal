@@ -23,7 +23,7 @@ import gov.nih.nci.mageom.search.Experiment.ExperimentSearchCriteria;
 
 public class TestClient {
 	public static void main(String[] args) throws Exception {
-		
+		try{
 		
 		String usr = "PUBLIC";
 		String pwd = "";
@@ -41,12 +41,15 @@ public class TestClient {
 		Experiment[] results = (Experiment[]) sr.getResultSet();
 		System.out.println("results.length=" + results.length);
 		
-		FileWriter w = new FileWriter("out2.xml");
+		FileWriter w = new FileWriter("experiment-1015897558050098-1.xml");
 		String xml = toXML(results[0]);
 		w.write(xml);
 		w.flush();
 		w.close();
 		sess.end();
+		}catch(Exception ex){
+			throw new RuntimeException("Error: " + ex.getMessage(), ex);
+		}
 	}
 
 	public static String toXML(Object beanObject) throws Exception {
@@ -89,8 +92,6 @@ public class TestClient {
 		marshaller.marshal(beanObject);
 		
 		MessageElement me = new MessageElement(doc.getDocumentElement());
-
-//		return w.getBuffer().toString();
 
 		return XmlUtils.toString(me);
 		

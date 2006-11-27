@@ -1,20 +1,11 @@
-Analytical Service Skeleton:
-======================================
-To use this skeleton you should have had it generated from the core
-build file by running "ant createAnalyticalSkeleton" from the top level
-of the caGrid core.  This should have created you this skeleton.  The instructions
-below will help you in configuring, building, and deploying this analytical
-service.
+This project uses a patched version of Castor 1.0.4. 
+The patch is described here: http://jira.codehaus.org/browse/CASTOR-1660
 
-All that is needed for this service at this point is to populate the analytical
-service provider class in the src/ directory.
+Also, this project uses a custom implementation of 
+the Castor Marshaller, the class is located at 
+src/org/exolab/castor/xml/Marshaller2.java. 
+Basically, this implementation keeps track of the XPath location
+in the document being generated. Before invoking any FieldHandler,
+it checks if the XPath expression for that axis matches a supplied
+regular expression.
 
-Prerequisits:
-=======================================
-Globus 4.0 installed and GLOBUS_LOCATION env defined
-Tomcat > 4.0 installed and "CATALINA_HOME" env defined
-
-To Build:
-=======================================
-"ant all" will build 
-"ant deployTomcat" will deploy to "CATALINA_HOME"

@@ -297,7 +297,8 @@
     <target name="test" depends="checkGlobus" description="Runs the service's tests.">
         <echo message="Test results dir: ${junit.results.dir}" />
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${basedir}" printsummary="yes" showoutput="true">
+        <junit dir="${basedir}" printsummary="yes" showoutput="true" fork="true">
+			<jvmarg value="-Djava.security.policy=test/resources/java.policy" />
             <classpath refid="test.run.classpath" />
             <formatter type="xml" />
             <batchtest fork="yes" todir="${junit.results.dir}">

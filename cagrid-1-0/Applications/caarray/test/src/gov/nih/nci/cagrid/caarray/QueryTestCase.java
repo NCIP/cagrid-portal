@@ -1,13 +1,27 @@
 package gov.nih.nci.cagrid.caarray;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.StringWriter;
 
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.exolab.castor.mapping.Mapping;
+import org.exolab.castor.xml.Unmarshaller;
+import org.w3c.dom.Element;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 
 import gov.nih.nci.cagrid.caarray.client.CaArraySvcClient;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
+import gov.nih.nci.mageom.domain.Description.Description;
+import gov.nih.nci.mageom.domain.Experiment.Experiment;
+import gov.nih.nci.mageom.domain.Experiment.impl.ExperimentImpl;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -36,6 +50,9 @@ public class QueryTestCase extends TestCase {
 		suite.addTest(new QueryTestCase("testExperimentAttsQuery"));
 		suite.addTest(new QueryTestCase("testExperimentObjectQuery"));
 		suite.addTest(new QueryTestCase("testExperimentDistinctAttQuery"));
+		suite.addTest(new QueryTestCase("testExperimentObjectNestedQuery"));
+		suite.addTest(new QueryTestCase("testExperimentObjectGroupingQuery"));
+		suite.addTest(new QueryTestCase("testUnmarshall"));
 		return suite;
 	}
 
@@ -84,6 +101,51 @@ public class QueryTestCase extends TestCase {
 			fail("Error querying experiment atts: " + ex.getMessage());
 		}
 	}
+	
+	public void testExperimentObjectNestedQuery() {
+		String queryFileName = "test/resources/experiment_object_1_nested.xml";
+		try {
+			CQLQueryResults results = runQuery(queryFileName);
+			results.setTargetClassname("gov.nih.nci.mageom.domain.Experiment.impl.ExperimentImpl");
+			printResults(results);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			fail("Error querying experiment atts: " + ex.getMessage());
+		}
+	}
+	
+	public void testExperimentObjectGroupingQuery() {
+		String queryFileName = "test/resources/experiment_object_1_grouping.xml";
+		try {
+			CQLQueryResults results = runQuery(queryFileName);
+			results.setTargetClassname("gov.nih.nci.mageom.domain.Experiment.impl.ExperimentImpl");
+			printResults(results);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			fail("Error querying experiment atts: " + ex.getMessage());
+		}
+	}
+	
+	public void testUnmarshall(){
+		try{
+			String xmlFile = "test/resources/experiment-1015897558050098-1.xml";
+			String mappingFile = "src/gov/nih/nci/cagrid/caarray/common/caarray-xml-mapping.xml";
+			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			Element el = builder.parse(new File(xmlFile)).getDocumentElement();
+			Mapping mapping = getMapping(mappingFile);
+			Unmarshaller u = new Unmarshaller(ExperimentImpl.class);
+			u.setMapping(mapping);
+			Experiment exp = (Experiment)u.unmarshal(el);
+			Description[] descs = exp.getDescriptions();
+			System.out.println("identifier=" + exp.getIdentifier());
+			for(int i = 0; i < descs.length; i++){
+				System.out.println(descs[i].getText());
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			fail("Error unmarshalling: " + ex.getMessage());
+		}
+	}
 
 	private void printResults(CQLQueryResults results) {
 		try {
@@ -109,6 +171,28 @@ public class QueryTestCase extends TestCase {
 					+ ex.getMessage(), ex);
 		}
 		return results;
+	}
+	
+	
+	
+	private Mapping getMapping(String fileName) throws Exception {
+		EntityResolver resolver = new EntityResolver() {
+			public InputSource resolveEntity(String publicId, String systemId) {
+				if (publicId
+						.equals("-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN")) {
+					InputStream in = Thread.currentThread()
+							.getContextClassLoader().getResourceAsStream(
+									"mapping.dtd");
+					return new InputSource(in);
+				}
+				return null;
+			}
+		};
+		org.xml.sax.InputSource mappIS = new org.xml.sax.InputSource(new FileInputStream(fileName));
+		Mapping mapping = new Mapping();
+		mapping.setEntityResolver(resolver);
+		mapping.loadMapping(mappIS);
+		return mapping;
 	}
 
 }
