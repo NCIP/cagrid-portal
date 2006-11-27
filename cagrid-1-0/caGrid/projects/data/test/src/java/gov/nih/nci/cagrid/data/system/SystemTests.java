@@ -20,17 +20,13 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: SystemTests.java,v 1.3 2006-11-27 16:56:22 dervin Exp $ 
+ * @version $Id: SystemTests.java,v 1.4 2006-11-27 17:18:31 dervin Exp $ 
  */
 public class SystemTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
 	
-	GlobusHelper globusHelper = null;
-	
 	public SystemTests() {
 		this.setName("Data Service System Tests");
-		this.globusHelper = new GlobusHelper(
-			false, new File(IntroduceTestConstants.TEST_TEMP), IntroduceTestConstants.TEST_PORT);
 	}
 	
 
@@ -43,6 +39,8 @@ public class SystemTests extends Story {
 		Vector steps = new Vector();
 		// data service presumed to have been created 
 		// by the data service creation tests
+		GlobusHelper globusHelper = new GlobusHelper(
+			false, new File(IntroduceTestConstants.TEST_TEMP), IntroduceTestConstants.TEST_PORT);
 		// 1) Add the bookstore schema to the data service
 		steps.add(new AddBookstoreStep(CreationTests.SERVICE_DIR, CreationTests.SERVICE_NAME));
 		// 2) change out query processor
@@ -66,14 +64,14 @@ public class SystemTests extends Story {
 	
 	
 	protected void storyTearDown() throws Throwable {
-		Throwable err = null;
+		GlobusHelper globusHelper = new GlobusHelper(
+			false, new File(IntroduceTestConstants.TEST_TEMP), IntroduceTestConstants.TEST_PORT);
 		// 9) stop globus
 		Step stopStep = new StopGlobusStep(globusHelper);
 		try {
 			stopStep.runStep();
 		} catch (Throwable ex) {
 			ex.printStackTrace();
-			err = ex;
 		}
 		// 10) throw away globus
 		Step destroyStep = new DestroyTempGlobusStep(globusHelper);
@@ -81,11 +79,6 @@ public class SystemTests extends Story {
 			destroyStep.runStep();
 		} catch (Throwable ex) {
 			ex.printStackTrace();
-			err = ex;
-		}
-		
-		if (err != null) {
-			throw err;
 		}
 	}
 	
