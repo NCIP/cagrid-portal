@@ -10,7 +10,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: StopGlobusStep.java,v 1.1 2006-11-08 18:09:38 dervin Exp $ 
+ * @version $Id: StopGlobusStep.java,v 1.2 2006-11-27 19:38:22 dervin Exp $ 
  */
 public class StopGlobusStep extends Step {
 	
@@ -23,6 +23,10 @@ public class StopGlobusStep extends Step {
 
 	public void runStep() throws Throwable {
 		System.out.println("Running step: " + getClass().getName());
+		System.out.println("stopping temporary globus");
+
 		helper.stopGlobus();
+
+		assertFalse(helper.isGlobusRunning());
 	}
 }

@@ -10,7 +10,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: DestroyTempGlobusStep.java,v 1.2 2006-11-27 17:18:31 dervin Exp $ 
+ * @version $Id: DestroyTempGlobusStep.java,v 1.3 2006-11-27 19:38:22 dervin Exp $ 
  */
 public class DestroyTempGlobusStep extends Step {
 	
@@ -24,8 +24,5 @@ public class DestroyTempGlobusStep extends Step {
 	public void runStep() throws Throwable {
 		System.out.println("Running step: " + getClass().getName());
 		helper.cleanupTempGlobus();
-		if (helper.getTempGlobusLocation() != null && helper.getTempGlobusLocation().exists()) {
-			helper.getTempGlobusLocation().deleteOnExit();
-		}
 	}
 }

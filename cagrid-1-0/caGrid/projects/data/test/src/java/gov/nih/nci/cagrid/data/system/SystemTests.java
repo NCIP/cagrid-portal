@@ -20,10 +20,12 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: SystemTests.java,v 1.4 2006-11-27 17:18:31 dervin Exp $ 
+ * @version $Id: SystemTests.java,v 1.5 2006-11-27 19:38:21 dervin Exp $ 
  */
 public class SystemTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
+	
+	private GlobusHelper globusHelper;
 	
 	public SystemTests() {
 		this.setName("Data Service System Tests");
@@ -39,7 +41,7 @@ public class SystemTests extends Story {
 		Vector steps = new Vector();
 		// data service presumed to have been created 
 		// by the data service creation tests
-		GlobusHelper globusHelper = new GlobusHelper(
+		globusHelper = new GlobusHelper(
 			false, new File(IntroduceTestConstants.TEST_TEMP), IntroduceTestConstants.TEST_PORT);
 		// 1) Add the bookstore schema to the data service
 		steps.add(new AddBookstoreStep(CreationTests.SERVICE_DIR, CreationTests.SERVICE_NAME));
@@ -64,8 +66,7 @@ public class SystemTests extends Story {
 	
 	
 	protected void storyTearDown() throws Throwable {
-		GlobusHelper globusHelper = new GlobusHelper(
-			false, new File(IntroduceTestConstants.TEST_TEMP), IntroduceTestConstants.TEST_PORT);
+		super.storyTearDown();
 		// 9) stop globus
 		Step stopStep = new StopGlobusStep(globusHelper);
 		try {
