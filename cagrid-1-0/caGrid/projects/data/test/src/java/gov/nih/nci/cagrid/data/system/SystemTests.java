@@ -20,7 +20,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: SystemTests.java,v 1.5 2006-11-27 19:38:21 dervin Exp $ 
+ * @version $Id: SystemTests.java,v 1.6 2006-11-27 20:17:54 dervin Exp $ 
  */
 public class SystemTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -42,7 +42,7 @@ public class SystemTests extends Story {
 		// data service presumed to have been created 
 		// by the data service creation tests
 		globusHelper = new GlobusHelper(
-			false, new File(IntroduceTestConstants.TEST_TEMP), IntroduceTestConstants.TEST_PORT);
+			false, new File(IntroduceTestConstants.TEST_TEMP), IntroduceTestConstants.TEST_PORT + 1);
 		// 1) Add the bookstore schema to the data service
 		steps.add(new AddBookstoreStep(CreationTests.SERVICE_DIR, CreationTests.SERVICE_NAME));
 		// 2) change out query processor
