@@ -1,5 +1,5 @@
 /**
- * $Id: CaBIOClientTestCase.java,v 1.3 2006-11-28 12:19:13 joshua Exp $
+ * $Id: CaBIOClientTestCase.java,v 1.4 2006-11-28 12:34:18 joshua Exp $
  *
  */
 package gov.nih.nci.cagrid.cabio.test;
@@ -43,7 +43,7 @@ import junit.framework.TestSuite;
 
 /**
  * 
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  * @author Joshua Phillips
  * 
  */
@@ -65,7 +65,7 @@ public class CaBIOClientTestCase extends TestCase {
 		String appSvcUrl = System.getProperty("appSvcUrl",
 				"http://cabio.nci.nih.gov/cacore31/http/remoteService");
 		String gridSvcUrl = System.getProperty("gridSvcUrl",
-				"http://localhost:8080/wsrf/services/cagrid/CaBIO");
+				"http://localhost:8080/wsrf/services/cagrid/CaBIOSvc");
 		try {
 			gridSvcClient = new CaBIOSvcClient(gridSvcUrl);
 		} catch (Exception ex) {
@@ -210,7 +210,7 @@ public class CaBIOClientTestCase extends TestCase {
 						.serializeObject(
 								ref,
 								new QName(
-										"gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain",
+										"gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain",
 										"DatabaseCrossReference"),
 								w2,
 								new FileInputStream(
@@ -222,7 +222,7 @@ public class CaBIOClientTestCase extends TestCase {
 				SchemaFactory factory = SchemaFactory
 						.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 				Source schemaFile = new StreamSource(new File(
-						"schema/CaBIO/gov.nih.nci.cabio.domain.xsd"));
+						"schema/CaBIOSvc/gov.nih.nci.common.domain.xsd"));
 				Schema schema = factory.newSchema(schemaFile);
 				Validator validator = schema.newValidator();
 				validator.validate(new DOMSource(document));
@@ -239,8 +239,8 @@ public class CaBIOClientTestCase extends TestCase {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
-		// suite.addTest(new CaBIOClientTestCase("testGetGenesByDBXRef"));
-		// suite.addTest(new CaBIOClientTestCase("testGetDBXRefsByGene"));
+		 suite.addTest(new CaBIOClientTestCase("testGetGenesByDBXRef"));
+		 suite.addTest(new CaBIOClientTestCase("testGetDBXRefsByGene"));
 		suite.addTest(new CaBIOClientTestCase("testValidXml"));
 		return suite;
 	}
