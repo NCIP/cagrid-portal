@@ -138,6 +138,9 @@
 			<fileset dir="${basedir}/lib">
 				<include name="*.jar" />
 			</fileset>
+			<fileset dir="${basedir}/ext/lib">
+				<include name="*.jar" />
+			</fileset>
 		</copy>
 		
 		<!-- prepare the server-config file -->

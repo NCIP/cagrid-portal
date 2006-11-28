@@ -45,9 +45,7 @@ public class BaseResource implements Resource, ResourceProperties {
 	private URL baseURL;
 
 	//Define the metadata resource properties
-	private ResourceProperty serviceMetadataRP;
-	private gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadataMD;
-private ResourceProperty domainModelRP;
+	private ResourceProperty domainModelRP;
 	private gov.nih.nci.cagrid.metadata.dataservice.DomainModel domainModelMD;
 	
 
@@ -62,12 +60,6 @@ private ResourceProperty domainModelRP;
 		populateResourceProperty();
 		
 		// now add the metadata as resource properties		//init the rp
-		this.serviceMetadataRP = new SimpleResourceProperty(ResourceConstants.SERVICEMETADATA_MD_RP);
-		//add the value to the rp
-		this.serviceMetadataRP.add(this.serviceMetadataMD);
-		//add the rp to the prop set
-		this.propSet.add(this.serviceMetadataRP);
-		//init the rp
 		this.domainModelRP = new SimpleResourceProperty(ResourceConstants.DOMAINMODEL_MD_RP);
 		//add the value to the rp
 		this.domainModelRP.add(this.domainModelMD);
@@ -101,7 +93,7 @@ private ResourceProperty domainModelRP;
 			try {
 				currentContainerURL = ServiceHost.getBaseURL();
 			} catch (IOException e) {
-				logger.error("Unable to determine container's URL!  Skipping registration.");
+				logger.error("Unable to determine container's URL!  Skipping registration.", e);
 				return;
 			}
 
@@ -110,7 +102,7 @@ private ResourceProperty domainModelRP;
 				// retry)
 				// do a string comparison as we don't want to do DNS lookups
 				// for comparison
-				if (forceRefresh || !this.baseURL.toExternalForm().equals(currentContainerURL.toExternalForm())) {
+				if (forceRefresh || !this.baseURL.equals(currentContainerURL)) {
 					// we've tried to register before, and we have a different
 					// URL now.. so cancel the old registration (if it exists),
 					// and try to redo it.
@@ -145,7 +137,7 @@ private ResourceProperty domainModelRP;
 
 				ctx = ResourceContext.getResourceContext(msgContext);
 			} catch (ResourceContextException e) {
-				logger.error("Could not get ResourceContext: " + e);
+				logger.error("Could not get ResourceContext: " + e, e);
 				return;
 			}
 
@@ -157,7 +149,7 @@ private ResourceProperty domainModelRP;
 				// epr = AddressingUtils.createEndpointReference(ctx, key);
 				epr = AddressingUtils.createEndpointReference(ctx, null);
 			} catch (Exception e) {
-				logger.error("Could not form EPR: " + e);
+				logger.error("Could not form EPR: " + e, e);
 				return;
 			}
 			try {
@@ -171,8 +163,12 @@ private ResourceProperty domainModelRP;
 
 					ServiceGroupRegistrationParameters params = ServiceGroupRegistrationClient
 						.readParams(registrationFile.getAbsolutePath());
-					// set our service's EPR as the registrant
-					params.setRegistrantEPR(epr);
+					
+					// set our service's EPR as the registrant, or use the specified value
+					EndpointReferenceType registrantEpr = params.getRegistrantEPR();
+					if(registrantEpr == null){
+						params.setRegistrantEPR(epr);
+					}
 
 					ServiceGroupRegistrationClient client = new ServiceGroupRegistrationClient();
 					// apply the registration params to the client
@@ -181,7 +177,7 @@ private ResourceProperty domainModelRP;
 					logger.error("Unable to read registration file:" + registrationFile);
 				}
 			} catch (Exception e) {
-				logger.error("Exception when trying to register service (" + epr + "): " + e);
+				logger.error("Exception when trying to register service (" + epr + "): " + e, e);
 			}
 		} else {
 			logger.info("Skipping registration.");
@@ -192,26 +188,12 @@ private ResourceProperty domainModelRP;
 
 	private void populateResourceProperty() {
 	
-		loadServiceMetadataFromFile();
-	
 		loadDomainModelFromFile();
 	
 	}
 
 
 		
-	private void loadServiceMetadataFromFile() {
-		try {
-			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
-					+ getConfiguration().getServiceMetadataFile());
-			this.serviceMetadataMD = (gov.nih.nci.cagrid.metadata.ServiceMetadata) Utils.deserializeDocument(dataFile.getAbsolutePath(),
-				gov.nih.nci.cagrid.metadata.ServiceMetadata.class);
-		} catch (Exception e) {
-			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
-		}
-	}		
-	
-	
 	private void loadDomainModelFromFile() {
 		try {
 			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
@@ -227,20 +209,6 @@ private ResourceProperty domainModelRP;
 
 
 	//Getters/Setters for ResourceProperties
-	
-	
-	protected ResourceProperty getServiceMetadataRP(){
-		return this.serviceMetadataRP;
-	}
-	
-	public gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadataMD(){
-		return this.serviceMetadataMD;
-	}
-	
-	public void setServiceMetadataMD(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata ){
-		this.serviceMetadataMD=serviceMetadata;
-		getServiceMetadataRP().set(0,serviceMetadata);
-	}
 	
 	
 	protected ResourceProperty getDomainModelRP(){
@@ -271,7 +239,7 @@ private ResourceProperty domainModelRP;
 			Context initialContext = new InitialContext();
 			this.configuration = (ResourceConfiguration) initialContext.lookup(jndiName);
 		} catch (Exception e) {
-			logger.error("when performing JNDI lookup for " + jndiName + ": " + e);
+			logger.error("when performing JNDI lookup for " + jndiName + ": " + e, e);
 		}
 
 		return this.configuration;

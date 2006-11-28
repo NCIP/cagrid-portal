@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
-  <service name="SERVICE-INSTANCE-PREFIX/CaBIO">
+  <service name="SERVICE-INSTANCE-PREFIX/CaBIOSvc">
     <resource name="configuration" type="gov.nih.nci.cagrid.cabio.service.globus.resource.ResourceConfiguration">
       <resourceParams>
         <parameter>
@@ -16,11 +16,6 @@
           <name>registrationTemplateFile</name>
           <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the registration parameters template file (ignored if performRegistration is false) -->
           <value>ETC-PATH/registration.xml</value>
-        </parameter>
-        <parameter>
-          <name>serviceMetadataFile</name>
-          <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the serviceMetadata extract -->
-          <value>ETC-PATH/serviceMetadata.xml</value>
         </parameter>
         <parameter>
           <name>domainModelFile</name>
@@ -54,6 +49,14 @@
         <parameter>
           <name>dataService_validateDomainModelFlag</name>
           <value>@dataService_validateDomainModelFlag@</value>
+        </parameter>
+        <parameter>
+          <name>dataService_classMappingsFilename</name>
+          <value>ETC-PATH/@dataService_classMappingsFilename@</value>
+        </parameter>
+        <parameter>
+          <name>cqlQueryProcessorConfig_queryCaseInsensitive</name>
+          <value>@cqlQueryProcessorConfig_queryCaseInsensitive@</value>
         </parameter>
         <parameter>
           <name>cqlQueryProcessorConfig_appserviceUrl</name>

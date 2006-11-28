@@ -5,9 +5,6 @@
     <!-- Define the environment variable -->
     <property environment="env" />
 
-
-    <property name="cabio.domain.ns.exclude" value="-x gme://caCORE.caBIG/3.0/gov.nih.nci.cabio.domain"/>
-
     <!-- 
 		Properties in these files will override the properties defined in this file.
     -->
@@ -34,7 +31,6 @@
     <property name="test.src.dir" value="${test.dir}/src" />
     <property name="test.lib.dir" value="${test.dir}/lib" />
     <property name="test.log.dir" value="test/logs" />
-    <property name="ext.test.lib.dir" value="ext/test/lib" />
     <property name="junit.results.dir" value="${test.log.dir}/junit" />
 
 
@@ -50,6 +46,7 @@
     <property name="build.lib.dir" location="${build.dir}/lib" />
     <!-- Directory where stub source and class files are placed -->
     <property name="stubs.dir" location="${build.dir}/stubs-${service.name}" />
+    <property name="javadoc.dir" value="${build.dir}/javadoc" />
     <!-- Stub source files -->
     <property name="stubs.src" location="${stubs.dir}/src" />
     <!-- Compiled stub classes -->
@@ -70,7 +67,7 @@
 
     <taskdef resource="net/sf/antcontrib/antlib.xml">
         <classpath>
-            <pathelement location="${ext.lib.dir}/ant-contrib.jar" />
+            <pathelement location="${lib.dir}/ant-contrib.jar" />
         </classpath>
     </taskdef>
 
@@ -133,15 +130,15 @@
             <fileset dir="${lib.dir}">
                 <include name="*.jar" />
             </fileset>
+			<fileset dir="${ext.lib.dir}">
+	            <include name="*.jar" />
+	        </fileset>
             <fileset dir="${ext.globus.dir}/lib">
                 <include name="*.jar" />
                 <exclude name="${stubs.jar.name}" />
                 <exclude name="${common.jar.name}" />
                 <exclude name="${client.jar.name}" />
                 <exclude name="${service.jar.name}" />
-            </fileset>
-            <fileset dir="${ext.lib.dir}">
-                <include name="*.jar"/>
             </fileset>
         </path>
         <path id="service.build.classpath">
@@ -153,7 +150,6 @@
             <path refid="service.build.classpath" />
         </path>
         <path id="test.build.classpath">
-            <pathelement location="${ext.lib.dir}/client.jar"/>
             <fileset dir="${test.lib.dir}">
                 <include name="*.jar" />
             </fileset>
@@ -161,8 +157,8 @@
             <path refid="service.build.classpath" />
         </path>
         <path id="test.run.classpath">
-            <path refid="test.build.classpath" />
             <pathelement location="${test.build.dest}" />
+            <path refid="test.build.classpath" />
         </path>
         <path id="run.classpath">
             <pathelement location="${build.dest}" />
@@ -192,22 +188,14 @@
     <!-- Generate the stub source files -->
     <!-- This is done with a GT4 tool -->
     <target name="serviceStubs" depends="serviceGenerateBindings,merge">
-        <echo message="Excludes: ${introduce.ns.excludes}"></echo>
         <!-- Invoke the stub generator -->
         <ant antfile="${build.stubs}" target="generateStubs" inheritall="false">
             <property name="mapping.file" location="${build.dir}/namespace2package.mappings" />
             <property name="source.stubs.dir" location="${schema.dest}/${schema.path}" />
             <property name="target.stubs.dir" location="${stubs.src}" />
             <property name="wsdl.file" value="${interface.name}_service.wsdl" />
-            <property name="ns.excludes" value="${cabio.domain.ns.exclude} ${GT4.ns.excludes} ${introduce.ns.excludes}" />
+            <property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
         </ant>
-        <!--
-        <delete>
-            <fileset dir="${stubs.src}">
-                <include name="gov/nih/nci/cabio/domain/*.java"/>
-            </fileset>
-        </delete>
-        -->
     </target>
 
     <!-- Generate the stub source files -->
@@ -275,9 +263,7 @@
 
     <!-- Create a JAR file with the stub classes -->
     <target name="jarStubs" depends="compileStubs">
-        <jar destfile="${build.lib.dir}/${stubs.jar.name}" basedir="${stubs.dest}" >
-           <exclude name="**/cabio/domain/**"/>
-        </jar>
+        <jar destfile="${build.lib.dir}/${stubs.jar.name}" basedir="${stubs.dest}" />
     </target>
 
 
@@ -306,6 +292,27 @@
         <delete dir="tmp" />
         <delete dir="${build.dir}" />
         <delete file="${gar.name}" />
+    </target>
+    
+    <!-- =================================================================== -->
+    <!-- Builds Code Docuementation                                          -->
+    <!-- =================================================================== -->
+    <target name="javadoc" depends="compile" description="Creates the API documentation.">
+        <javadoc packagenames="*" destdir="${javadoc.dir}" author="true" version="true" use="true"
+            windowtitle="${service.name} API">
+            
+            <sourcepath>
+                <pathelement path="${src.dir}"/>
+            </sourcepath>
+            
+            <classpath>
+                <path refid="service.build.classpath"/>
+            </classpath>
+            
+            <tag name="todo" scope="all" description="To do:"/>
+            <tag name="created" scope="all" description="Created On:"/>
+            
+        </javadoc>
     </target>
 
     <!-- Default target "all" builds and jars everything, including test....does not make a GAR-->

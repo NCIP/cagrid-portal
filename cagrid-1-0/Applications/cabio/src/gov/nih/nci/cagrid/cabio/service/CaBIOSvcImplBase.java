@@ -17,38 +17,32 @@ import org.globus.wsrf.ResourceHome;
 import org.globus.wsrf.ResourceProperty;
 import org.globus.wsrf.ResourcePropertySet;
 /** 
- *  TODO:DOCUMENT ME
+ * Provides some simple accessors for the Impl.
  * 
  * @created by Introduce Toolkit version 1.0
  * 
  */
-public abstract class CaBIOImplBase {
-    private ServiceConfiguration configuration;
+public abstract class CaBIOSvcImplBase {
 	
-	public CaBIOImplBase() throws RemoteException {
+	public CaBIOSvcImplBase() throws RemoteException {
 	
 	}
 	
 	public ServiceConfiguration getConfiguration() throws Exception {
-		if (this.configuration != null) {
-			return this.configuration;
-		}
-		MessageContext ctx = MessageContext.getCurrentContext();
-
-		String servicePath = ctx.getTargetService();
-
-		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
-		try {
-			javax.naming.Context initialContext = new InitialContext();
-			this.configuration = (ServiceConfiguration) initialContext.lookup(jndiName);
-		} catch (Exception e) {
-			throw new Exception("Unable to instantiate service configuration.", e);
-		}
-
-		return this.configuration;
+		return ServiceConfiguration.getConfiguration();
 	}
 	
-	public ResourceHome getResourceHome(String resourceKey) throws Exception {
+	
+	public gov.nih.nci.cagrid.cabio.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
+		ResourceHome resource = getResourceHome("home");
+		return (gov.nih.nci.cagrid.cabio.service.globus.resource.BaseResourceHome)resource;
+	}
+
+	
+	
+	
+	
+	protected ResourceHome getResourceHome(String resourceKey) throws Exception {
 		MessageContext ctx = MessageContext.getCurrentContext();
 
 		ResourceHome resourceHome = null;
@@ -66,21 +60,6 @@ public abstract class CaBIOImplBase {
 		return resourceHome;
 	}
 	
-	
-	
-	
-	protected gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadataMD(){
-		BaseResource serviceBaseResource;
-		try {
-			serviceBaseResource = (BaseResource)ResourceContext.getResourceContext().getResource();
-		} catch (ResourceContextException e) {
-			return null;
-		} catch (ResourceException e) {
-			return null;
-		}
-		return serviceBaseResource.getServiceMetadataMD();
-	}
-
 	
 	
 	

@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.cabio.service.globus.resource;
 public class ResourceConfiguration {
 	private String registrationTemplateFile;
 	private boolean performRegistration;
-	private String serviceMetadataFile;
 	private String domainModelFile;
 
 
@@ -25,17 +24,6 @@ public class ResourceConfiguration {
 
 	public void setRegistrationTemplateFile(String registrationTemplateFile) {
 		this.registrationTemplateFile = registrationTemplateFile;
-	}
-	
-	
-	
-	public String getServiceMetadataFile() {
-		return serviceMetadataFile;
-	}
-	
-	
-	public void setServiceMetadataFile(String serviceMetadataFile) {
-		this.serviceMetadataFile = serviceMetadataFile;
 	}
 	
 	
