@@ -56,7 +56,7 @@ import org.tp23.antinstaller.renderer.swing.plaf.LookAndFeelFactory;
  * <p>Copyright: Copyright (c) 2004</p>
  * <p>Company: tp23</p>
  * @author Paul Hinds
- * @version $Id: SwingRunner.java,v 1.3 2006-10-27 18:24:16 kumarvi Exp $
+ * @version $Id: SwingRunner.java,v 1.4 2006-11-28 23:30:08 kumarvi Exp $
  */
 public class SwingRunner implements Runner,PageCompletionListener{
 
@@ -251,7 +251,17 @@ public class SwingRunner implements Runner,PageCompletionListener{
 			}
 		}
 		catch (Throwable e) {
+			e.printStackTrace();
 			ctx.log("Throwable during page completion:"+e.getMessage());
+			StackTraceElement[] ste = e.getStackTrace();
+		       
+	        int numLines = 5;
+	        String msg = e.toString();
+	        for (int i = 0; i < (ste.length >numLines ? numLines : 
+	        	ste.length) ; i++) {
+	            msg = msg + "\n\tat " + ste[i].toString();
+	        }
+	        ctx.log("Deatiled Message:"+msg);
 			if(ctx.getInstaller().isVerbose())ctx.log(e);
 		}
 	}

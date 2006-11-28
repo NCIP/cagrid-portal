@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2005 Paul Hinds
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package org.tp23.antinstaller.selfextract;
+
+import gov.nih.nci.cagrid.antinstaller.utils.StringUtilities;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -43,7 +45,7 @@ import org.tp23.antinstaller.runtime.exe.SelfExtractorFilterChain;
 * to a temporary directory </p>
  * <p> </p>
  * @author Paul Hinds
- * @version $Id: SelfExtractor.java,v 1.2 2006-11-10 17:05:34 kumarvi Exp $
+ * @version $Id: SelfExtractor.java,v 1.3 2006-11-28 23:31:07 kumarvi Exp $
  */
 public class SelfExtractor {
 
@@ -68,7 +70,7 @@ public class SelfExtractor {
 		if(endIdx!=-1){
 			String unescaped = null;
 			String fileNamePart = stringForm.substring("jar:file:".length(), endIdx);
-			System.out.println("FileName:"+fileNamePart);
+			//System.out.println("FileName:"+fileNamePart);
 			file = new File(fileNamePart);
 			if (!file.exists()) {
 				// try to unescape encase the URL Handler has escaped the " " to %20
@@ -111,16 +113,16 @@ public class SelfExtractor {
 			// not concerned about Look and Feel
 		}
 	}
-	
+
 	protected File makeTempDir(){
 		String tempDir = System.getProperty("java.io.tmpdir");
-		System.out.println("Temp dir:"+tempDir);
+		//System.out.println("Temp dir:"+tempDir);
 		extractDir = new File(tempDir, "antinstall");
 		int idx = 0;
 		while (extractDir.exists()) extractDir = new File(tempDir, "antinstall" + (idx++));
 		extractDir.mkdirs();
-		
-		System.out.println("Extract Dir:"+ extractDir.getAbsolutePath());
+
+		//System.out.println("Extract Dir:"+ extractDir.getAbsolutePath());
 		extractDir.deleteOnExit();
 		return extractDir;
 	}
@@ -277,26 +279,34 @@ public class SelfExtractor {
 		zis.close();
 		return result;
 	}
-	
+
 	/**
 	 * This methos is introduce custom component flash screens
 	 * @return
 	 */
-	
+
 	public ProgressIndicator getAppropriateProgressIndicator(int k){
-		ProgressIndicator pi = null;
-		String components = "AuthenticationServiceInstaller,caDSRServiceInstaller,MasterInstaller,DorianInstaller,GTSInstaller";
+		String is_master_installer = System.getProperty("is.master.installer");
+		boolean isblank = StringUtilities.isBlank(is_master_installer);
+		String imageName;
 		String fileName = archiveFile.getName();
-		String imageName = fileName.substring(0,fileName.length()-4);
+		if(isblank){
+		
+		imageName = fileName.substring(0,fileName.length()-4);
+		}else{
+			imageName="MasterInstaller";
+		}
+		ProgressIndicator pi = null;
+		String components = "AuthenticationServiceInstaller,ClientInstaller,GMEServiceInstaller,GridGrouperServiceInstaller,EVSServiceInstaller,caDSRServiceInstaller,IndexServiceInstaller,MasterInstaller,DorianInstaller,GTSServiceInstaller,CoreInstaller,DeveloperInstaller,SystemCheckInstaller,WorkflowInstaller";
 		
 		int i = components.indexOf(imageName);
 		if(i!=-1){
-			pi = new ComponentProgressIndicator(k,imageName); 
+			pi = new ComponentProgressIndicator(k,imageName);
 		}else{
 			pi = new ProgressIndicator(k);
 		}
-		
-		
+
+
 		return pi;
 	}
 
@@ -359,7 +369,7 @@ public class SelfExtractor {
 
 
     /**
-	 * Run method to use from the command line. This is fired via an entry in the 
+	 * Run method to use from the command line. This is fired via an entry in the
 	 * MANIFEST.MF in the Jar
 	 *@param  args  The command line arguments
 	 */
@@ -379,15 +389,15 @@ public class SelfExtractor {
 			String warning = "Could not extract Jar file to directory:"+tempDir;
 			printXorTextWarning(warning);
 		}
-		
+
 		try {
-			FilterChain chain = FilterFactory.factory("/org/tp23/antinstaller/runtime/exe/selfextractor.fconfig");		
+			FilterChain chain = FilterFactory.factory("/org/tp23/antinstaller/runtime/exe/selfextractor.fconfig");
 			ExecInstall installExec = new ExecInstall(new SelfExtractorFilterChain());
 			installExec.setInstallRoot(extractor.getExtractDir());
 			// removes files on exit
 			installExec.setTempRoot(extractor.getExtractDir());
 			if(args.length>0)installExec.setUIOverride(args[0]);
-			
+
 			installExec.exec();
 		}
 		catch (InstallException e1) {

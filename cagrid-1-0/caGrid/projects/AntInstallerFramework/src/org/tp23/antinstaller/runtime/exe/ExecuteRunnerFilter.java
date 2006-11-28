@@ -22,7 +22,7 @@ import org.tp23.antinstaller.InstallerContext;
 /**
  * Executes the Ant build part of the install
  * @author Paul Hinds
- * @version $Id: ExecuteRunnerFilter.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: ExecuteRunnerFilter.java,v 1.2 2006-11-28 23:30:25 kumarvi Exp $
  */
 public class ExecuteRunnerFilter implements ExecuteFilter {
 
@@ -32,7 +32,7 @@ public class ExecuteRunnerFilter implements ExecuteFilter {
 	public void exec(InstallerContext ctx) throws InstallException {
 		if(ctx.getInstaller().isVerbose())ctx.log("Starting UI Screens");
 		boolean ok = ctx.getRunner().runInstaller();
-		if(!ok)throw new AbortException("Install Aborted");
+		if(!ok)throw new AbortException("Installation Aborted");
 		ctx.log("Install screens rendered");
 	}
 
