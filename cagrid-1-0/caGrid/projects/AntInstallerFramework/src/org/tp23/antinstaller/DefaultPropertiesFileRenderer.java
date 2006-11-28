@@ -36,7 +36,7 @@ import org.tp23.antinstaller.page.Page;
  *
  * <p>Outputs the completed Pages as a java Properties file. </p>
  * @author Paul Hinds
- * @version $Id: DefaultPropertiesFileRenderer.java,v 1.3 2006-10-27 18:21:36 kumarvi Exp $
+ * @version $Id: DefaultPropertiesFileRenderer.java,v 1.4 2006-11-28 23:16:29 kumarvi Exp $
  */
 public class DefaultPropertiesFileRenderer
 	implements PropertiesFileRenderer {
@@ -58,15 +58,15 @@ public class DefaultPropertiesFileRenderer
 		Page[] completedPages = installer.getPages();
 		Properties props = new Properties();
 		props.put(FILE_ROOT_PROPERTY,baseDir.getAbsolutePath());
-		logger.info("Passed stage 1");
-		logger.info("compted pages length"+completedPages.length );
+		//logger.info("Passed stage 1");
+		//logger.info("compted pages length"+completedPages.length );
 		  try{
 				for (int i = 0; i < completedPages.length; i++) {
-					logger.info("Inside big loop");
+					//logger.info("Inside big loop");
 					OutputField[] fields = completedPages[i].getOutputField();
-					logger.info("Just before small loop");
+					//logger.info("Just before small loop");
 					for (int f = 0; f < fields.length; f++) {
-						logger.info("Got inside");
+						//logger.info("Got inside");
 						if (fields[f] instanceof SecretPropertyField) {
 							InputField field = (InputField)fields[f];
 							props.put(field.getProperty(), "XXXXXXXX");
@@ -79,10 +79,10 @@ public class DefaultPropertiesFileRenderer
 					}
 				}
 		  }catch(Exception e){
-			  logger.info("something got messed up here"+e.getMessage());
+			  //logger.info("something got messed up here"+e.getMessage());
 		  }
 		
-		logger.info("Passed stage 2");
+		//logger.info("Passed stage 2");
 		 this.storeCustomProperties(props);
 		 this.storeGridEnvProperties(props);
 		try {
@@ -99,17 +99,17 @@ public class DefaultPropertiesFileRenderer
 		/**
 		 * First check if the custom property file is there
 		 */
-		logger.info("Passed stage 2.1");
+		//logger.info("Passed stage 2.1");
 		String fileName = InstallerContext.getCustomPropertyFileName();
-		logger.info("Passed stage 2.2");
+		//logger.info("Passed stage 2.2");
 		if(fileName.equalsIgnoreCase(InstallerContext.DOES_NOT_EXIST)){
 			return;
 		}
-		logger.info("Passed stage 2.2");
+		//logger.info("Passed stage 2.2");
 		Properties toBeStoredProperties = new Properties();
 		Properties customProperties = InstallerContext.getCustomProperties();
-		System.out.println("Size before storing:"+customProperties.keySet().size());
-		logger.info("Size of custom properties before storing:"+customProperties.keySet().size());
+		//System.out.println("Size before storing:"+customProperties.keySet().size());
+		//logger.info("Size of custom properties before storing:"+customProperties.keySet().size());
 		Iterator iter = customProperties.keySet().iterator();
 		while (iter.hasNext()) {
 			Object key = (Object)iter.next();
@@ -142,21 +142,21 @@ public class DefaultPropertiesFileRenderer
 	}
 	
 	private void storeGridEnvProperties(Properties props){
-		logger.info("Calling storeGridEnvProperties");
+		//logger.info("Calling storeGridEnvProperties");
 		Properties toBeStoredProperties = new Properties();
 		Properties gridEnvProperties = InstallerContext.getGridEnviornementProperties();
-		logger.info("Size of the  grid env properties before storing:"+gridEnvProperties.keySet().size());
+		//logger.info("Size of the  grid env properties before storing:"+gridEnvProperties.keySet().size());
 		Iterator iter = gridEnvProperties.keySet().iterator();
 		while (iter.hasNext()) {
 			Object key = (Object)iter.next();
 			String keyName = this.getGridKey((String)key);
 			if(props.keySet().contains(keyName)){
 				String value = props.getProperty(keyName);
-				logger.info(" block 1 Key:"+keyName+", value:"+value);
+				//logger.info(" block 1 Key:"+keyName+", value:"+value);
 				toBeStoredProperties.put(keyName, value);
 			}else{
 				toBeStoredProperties.put(keyName, gridEnvProperties.getProperty((String)key));
-				logger.info(" block 2 Key:"+keyName+", value:"+gridEnvProperties.getProperty((String)key));
+				//logger.info(" block 2 Key:"+keyName+", value:"+gridEnvProperties.getProperty((String)key));
 			}
 			
 		}
