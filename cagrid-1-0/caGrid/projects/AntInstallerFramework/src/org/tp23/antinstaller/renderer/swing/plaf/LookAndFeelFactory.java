@@ -11,11 +11,13 @@ import org.tp23.antinstaller.input.OutputField;
 
 /**
  * @author Paul Hinds
- * @version $Id: LookAndFeelFactory.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: LookAndFeelFactory.java,v 1.2 2006-11-28 23:22:56 kumarvi Exp $
  */
 public class LookAndFeelFactory {
 
-	public static final String DEFAULT_LAF = "org.tp23.jgoodies.plaf.plastic.PlasticXPLookAndFeel";
+	//public static final String DEFAULT_LAF = "org.tp23.jgoodies.plaf.plastic.PlasticXPLookAndFeel";
+	public static final String DEFAULT_LAF = "org.jvnet.substance.skin.SubstanceFieldOfWheatLookAndFeel";
+
 	private final String specifiedLAF;
 	private final InstallerContext ctx;
 	/**
