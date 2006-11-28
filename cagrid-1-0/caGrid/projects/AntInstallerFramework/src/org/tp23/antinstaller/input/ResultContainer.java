@@ -30,7 +30,7 @@ import org.tp23.antinstaller.InstallerContext;
  * obtaining default values containing ${prop.name}/blah syntax </p>
  * @todo   Ensure in the validator (and Docs) that developers only add ${refs} for properties set on earlier pages
  * @author Paul Hinds
- * @version $Id: ResultContainer.java,v 1.3 2006-10-27 18:20:47 kumarvi Exp $
+ * @version $Id: ResultContainer.java,v 1.4 2006-11-28 23:18:12 kumarvi Exp $
  */
 public class ResultContainer {
 
@@ -47,8 +47,8 @@ public class ResultContainer {
 		customEnviornment = InstallerContext.getCustomProperties();
 		gridEnviornment = InstallerContext.getGridEnviornementProperties();
 		
-		System.out.println("Grid Properties:$$$$$$$$$$$$$$$$");
-		gridEnviornment.list(System.out);
+		//System.out.println("Grid Properties:$$$$$$$$$$$$$$$$");
+		//gridEnviornment.list(System.out);
 	}
 
 	/**

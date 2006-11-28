@@ -15,10 +15,13 @@
  */
 package org.tp23.antinstaller;
 
+import gov.nih.nci.cagrid.antinstaller.utils.StringUtilities;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
@@ -40,7 +43,7 @@ import org.tp23.antinstaller.runtime.exe.AntLauncherFilter;
  * exist for the duration of the Install screens and the runing of
  * the Ant Script. </p>
  * @author Paul Hinds
- * @version $Id: InstallerContext.java,v 1.5 2006-11-10 16:58:44 kumarvi Exp $
+ * @version $Id: InstallerContext.java,v 1.6 2006-11-28 23:15:38 kumarvi Exp $
  */
 public class InstallerContext {
 
@@ -340,23 +343,109 @@ public class InstallerContext {
 	}
 	
 	private static void synchGridProperties(Properties props){
+		//System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+		//System.out.println("Calling Synch Properties");
+		//System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 		String catalina_home = System.getenv("CATALINA_HOME");
-		String globus_location = System.getenv("GLOBUS_LOCATION");
+		String grid_catalina_home=(String) props.get(GRID_ENV_PREFIX+"CATALINA_HOME");
 		
-		if(catalina_home==null){
+		
+		if((StringUtilities.isBlank(catalina_home))&&(StringUtilities.isBlank(grid_catalina_home))){
 			props.put(GRID_ENV_PREFIX+"tomcat.exist", "false");
 		}else{
-			props.put(GRID_ENV_PREFIX+"tomcat.exist","true");
-			//System.out.println("Setting tomcat.exist to:true");
-			props.put(GRID_ENV_PREFIX+"CATALINA_HOME", catalina_home);
+			   if(!StringUtilities.isBlank(catalina_home)){
+				props.put(GRID_ENV_PREFIX+"tomcat.exist","true");
+				props.put(GRID_ENV_PREFIX+"CATALINA_HOME", catalina_home);
+			   }else{
+				   props.put(GRID_ENV_PREFIX+"tomcat.exist","true");
+				   props.put(GRID_ENV_PREFIX+"CATALINA_HOME", grid_catalina_home);
+			   }
 		}
 		
-		if(globus_location==null){
+		String globus_location = System.getenv("GLOBUS_LOCATION");
+		//System.out.println("Globus location from system:"+globus_location);
+		String grid_globus_location = (String)props.get(GRID_ENV_PREFIX+"GLOBUS_LOCATION");
+		if((StringUtilities.isBlank(globus_location))&&(StringUtilities.isBlank(grid_globus_location))){
 			props.put(GRID_ENV_PREFIX+"globus.exist", "false");
 		}else{
-			props.put(GRID_ENV_PREFIX+"globus.exist","true");
-			props.put(GRID_ENV_PREFIX+"GLOBUS_LOCATION",globus_location);
+				if(!StringUtilities.isBlank(globus_location)){
+					props.put(GRID_ENV_PREFIX+"globus.exist","true");
+					props.put(GRID_ENV_PREFIX+"GLOBUS_LOCATION",globus_location);
+				}else{
+					props.put(GRID_ENV_PREFIX+"globus.exist","true");
+					props.put(GRID_ENV_PREFIX+"GLOBUS_LOCATION",grid_globus_location);
+				}
 		}
+		
+		String ant_home = System.getenv("ANT_HOME");
+		String grid_ant_home = (String)props.get(GRID_ENV_PREFIX+"ANT_HOME");
+		if((StringUtilities.isBlank(ant_home))&&(StringUtilities.isBlank(grid_ant_home))){
+			props.put(GRID_ENV_PREFIX+"ant.exist", "false");
+		}else{
+				if(!StringUtilities.isBlank(ant_home)){
+					props.put(GRID_ENV_PREFIX+"ant.exist","true");
+					props.put(GRID_ENV_PREFIX+"ANT_HOME",ant_home);
+				}else{
+					props.put(GRID_ENV_PREFIX+"ant.exist","true");
+					props.put(GRID_ENV_PREFIX+"ANT_LOCATION",grid_ant_home);
+				}
+		}
+		
+		/**
+		 * Check the system for globus installation on globus
+		 */
+		
+		String tomcat_present = (String)props.getProperty(GRID_ENV_PREFIX+"tomcat.exist");
+		
+		//System.out.println("Tomcat Present:"+tomcat_present);
+		String globus_on_tomcat = "false";
+		String non_sec_globus_on_tomcat = "false";
+		String sec_globus_on_tomcat="false";
+		if(tomcat_present.equalsIgnoreCase("true")){
+			String tomcat_home = (String)props.get(GRID_ENV_PREFIX+"CATALINA_HOME");
+			//System.out.println("Tomcat Home:"+tomcat_home);
+			File tomcat_home_dir = new File(tomcat_home);
+			File webappdir = new File(tomcat_home_dir,"webapps");
+			File wsrf = new File(webappdir,"wsrf");
+			
+			if(wsrf.exists()){
+				//System.out.println("WSRF Found:"+"YES");
+				globus_on_tomcat="true";
+				non_sec_globus_on_tomcat = "true";
+				File common = new File(tomcat_home,"common");
+				File lib = new File(common,"lib");
+				if(lib.exists()){
+					//System.out.println("LIB Found:"+"YES");
+					File jglobus = new File(lib,"cog-jglobus.jar");
+					File jgss = new File(lib,"jgss.jar");
+					  if(jglobus.exists()&&jgss.exists()){
+						  //System.out.println("Jglobus and jgss found");
+						  sec_globus_on_tomcat="true";
+						  non_sec_globus_on_tomcat = "false";
+					  }
+				}
+			}
+		}
+		//System.out.println("Now setting up properties");
+		props.put(GRID_ENV_PREFIX+"globus.on.tomcat", globus_on_tomcat);
+		
+		props.put(GRID_ENV_PREFIX+"non.sec.globus.on.tomcat", non_sec_globus_on_tomcat);
+		props.put(GRID_ENV_PREFIX+"sec.globus.on.tomcat", sec_globus_on_tomcat);
+		
+		String installer_web_root = System.getProperty("installer.web.root");
+		boolean isblank = StringUtilities.isBlank(installer_web_root);
+		if(!isblank){
+			props.put(GRID_ENV_PREFIX+"installer.web.root",installer_web_root);
+		}
+		
+		
+		
+		String user_home = System.getProperty("user.home");
+		props.put(GRID_ENV_PREFIX+"user.local.home",user_home);
+		storeGridEnvProperties(props);
+		
+		
+		
 	}
 	
 	private static Properties initGridEnvProperties(){
@@ -367,6 +456,7 @@ public class InstallerContext {
 		
 		String catalina_home = System.getenv("CATALINA_HOME");
 		String globus_location = System.getenv("GLOBUS_LOCATION");
+		String ant_home = System.getenv("ANT_HOME");
 		
 		if(catalina_home==null){
 			props.put(GRID_ENV_PREFIX+"tomcat.exist", "false");
@@ -380,6 +470,13 @@ public class InstallerContext {
 		}else{
 			props.put(GRID_ENV_PREFIX+"globus.exist","true");
 			props.put(GRID_ENV_PREFIX+"GLOBUS_LOCATION",globus_location);
+		}
+		
+		if(ant_home==null){
+			props.put(GRID_ENV_PREFIX+"ant.exist", "false");
+		}else{
+			props.put(GRID_ENV_PREFIX+"ant.exist","true");
+			props.put(GRID_ENV_PREFIX+"ANT_HOME",ant_home);
 		}
 		
 		props.put(GRID_ENV_PREFIX+"mysql.exist", "");
@@ -417,6 +514,39 @@ public class InstallerContext {
 		props.put(GRID_ENV_PREFIX+serviceName+".service.poc.first.name","Stephen");
 		props.put(GRID_ENV_PREFIX+serviceName+".service.poc.last.name","Langella");
 		props.put(GRID_ENV_PREFIX+serviceName+".service.poc.role","Maintainer");
+	}
+	
+	
+	
+	private static void  storeGridEnvProperties(Properties props){
+		//logger.info("Calling storeGridEnvProperties");
+		Properties toBeStoredProperties = new Properties();
+		
+		//logger.info("Size of the  grid env properties before storing:"+gridEnvProperties.keySet().size());
+		Iterator iter = props.keySet().iterator();
+		while (iter.hasNext()) {
+			Object key = (Object)iter.next();
+			String keyName = getGridKey((String)key);
+			String value = props.getProperty((String)key);
+			toBeStoredProperties.put(keyName, value);
+			
+		}
+		
+		try {
+			File gridPropertiesFile = new File(System.getProperty("user.home"), GRID_ENV_PROPERTIES_FILE_NAME);
+			toBeStoredProperties.store(new FileOutputStream(gridPropertiesFile),"caGrid Installer - AutoGenerated properties");
+		}
+		catch (Throwable ex) {
+			//logger.info("Something went wrong with grid env properties:"+ex.getMessage());
+		}
+	}
+	
+	private static String getGridKey(String key){
+		String str = key;
+		if(key.startsWith(GRID_ENV_PREFIX)){
+			str = key.substring(8);
+		}
+		return str;
 	}
 	
 
