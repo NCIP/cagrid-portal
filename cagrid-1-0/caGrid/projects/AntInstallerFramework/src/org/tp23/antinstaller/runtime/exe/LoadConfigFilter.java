@@ -45,7 +45,10 @@ import org.tp23.antinstaller.input.TargetInput;
 import org.tp23.antinstaller.input.TargetSelectInput;
 import org.tp23.antinstaller.input.UnvalidatedTextInput;
 import org.tp23.antinstaller.input.ValidatedTextInput;
+import org.tp23.antinstaller.page.CaAbsentPage;
+import org.tp23.antinstaller.page.CaExistPage;
 import org.tp23.antinstaller.page.DeployPropertyPage;
+import org.tp23.antinstaller.page.HostCertPage;
 import org.tp23.antinstaller.page.LicensePage;
 import org.tp23.antinstaller.page.Page;
 import org.tp23.antinstaller.page.ProgressPage;
@@ -67,7 +70,7 @@ import org.xml.sax.InputSource;
  * Loads the Ant Install configuration and sets the Installer object back
  * into the context.
  * @author Paul Hinds
- * @version $Id: LoadConfigFilter.java,v 1.2 2006-11-10 17:03:27 kumarvi Exp $
+ * @version $Id: LoadConfigFilter.java,v 1.3 2006-11-28 23:30:50 kumarvi Exp $
  */
 public class LoadConfigFilter implements ExecuteFilter {
 
@@ -264,6 +267,15 @@ public class LoadConfigFilter implements ExecuteFilter {
 		}
 		else if(type.equalsIgnoreCase("deployproperty")){
 			return new DeployPropertyPage();
+		}
+		else if(type.equalsIgnoreCase("caabsentpage")){
+			return new CaAbsentPage();
+		}
+		else if(type.equalsIgnoreCase("caexistpage")){
+			return new CaExistPage();
+		}
+		else if(type.equalsIgnoreCase("hostcertpage")){
+			return new HostCertPage();
 		}
 		throw new ConfigurationException("Unknown Page type:" + type);
 	}
