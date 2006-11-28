@@ -16,6 +16,8 @@
  */
 package org.tp23.antinstaller.antmod;
 
+import gov.nih.nci.cagrid.antinstaller.utils.ClassPathModifier;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -40,7 +42,7 @@ import org.tp23.antinstaller.InstallerContext;
  * as the one delivered with Ant 1.6
  *
  * @since Ant 1.6
- * @version $Id: Launcher.java,v 1.1 2006-08-19 15:35:36 kumarvi Exp $
+ * @version $Id: Launcher.java,v 1.2 2006-11-28 23:17:49 kumarvi Exp $
  */
 public class Launcher {
 	/** The Ant Home property */
@@ -207,6 +209,40 @@ public class Launcher {
 			System.setProperty("java.class.path", baseClassPath.toString());
 			
 			System.out.println("Using classpath: "+baseClassPath.toString());
+			
+			/**
+			 * This is added to do away with the dependecy on jdk
+			 * Added by Kumarvi 15 NOV 2006
+			 */
+			
+			try{
+			 	File installRoot = InstallerContext.getLatestInstallDir();
+				File resources = new File(installRoot,"resources");
+				File custom_libs = new File(resources,"custom_libs");
+				File tools_jar = new File(custom_libs,"tools.jar");
+				File lib = new File(resources,"lib");
+				File cert_task_jar = new File(lib,"certificate_tasks.jar");
+				File ext = new File(lib,"ext");
+				File core_jar = new File(ext,"caGrid-1.0-core.jar");
+				File grid_ca_jar = new File(ext,"caGrid-1.0-gridca-1.0.jar");
+				File jglobus_jar = new File(ext,"cog-jglobus.jar");
+				File jce_jar = new File(ext,"jce-jdk13-125.jar");
+				ClassPathModifier.addFile(tools_jar);
+				ClassPathModifier.addFile(cert_task_jar);
+				ClassPathModifier.addFile(core_jar);
+				ClassPathModifier.addFile(grid_ca_jar);
+				ClassPathModifier.addFile(jglobus_jar);
+				ClassPathModifier.addFile(jce_jar);
+			 
+		 }catch(Exception e){
+			 
+			 e.printStackTrace();
+		 }
+           
+		 /**
+		  * End of addition
+		  */
+			
 
 			URLClassLoader loader = new URLClassLoader(jars);
 			Thread.currentThread().setContextClassLoader(loader);
