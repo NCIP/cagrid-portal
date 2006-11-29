@@ -10,8 +10,13 @@ import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.cqlquery.QueryModifier;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 
 /** 
  *  CQL2HQL
@@ -253,41 +258,50 @@ public class CQL2HQL {
 	 */
 	private static void processAttribute(StringBuilder hql, String objClassName,
 		Attribute attrib, boolean useAlias, boolean caseInsensitive) throws QueryProcessingException {
+		// data type flags
 		boolean isBoolAttribute = BooleanAttributeCheckCache.isFieldBoolean(objClassName, attrib.getName());
+		boolean isDateAttribute = DateAttributeCheckCache.isFieldDate(objClassName, attrib.getName());
 		
-		if (caseInsensitive && !isBoolAttribute) {
-			hql.append("lower(");
-		}
+		boolean useLowercase = caseInsensitive && !isBoolAttribute && !isDateAttribute; 
+		
+		String fullAttribName = null;
 		if (useAlias) {
-			hql.append(TARGET_ALIAS).append(".");
-		}
-		hql.append(attrib.getName());
-		if (caseInsensitive && !isBoolAttribute) {
-			hql.append(")");
+			fullAttribName = TARGET_ALIAS + "." + attrib.getName();
 		}
 		
 		Predicate predicate = attrib.getPredicate();
-		// unary predicates
-		if (predicate.equals(Predicate.IS_NULL)) {
-			hql.append(" is null");
-		} else if (predicate.equals(Predicate.IS_NOT_NULL)) {
-			hql.append(" is not null");
+		boolean nullCheck = predicate.equals(Predicate.IS_NULL) || predicate.equals(Predicate.IS_NOT_NULL);
+				
+		if (isDateAttribute && !nullCheck) {
+			String dateQueryString = createDateQuery(fullAttribName, attrib.getValue(), predicate);
+			hql.append(dateQueryString);
 		} else {
-			// binary predicates
-			String predValue = convertPredicate(predicate);
-			hql.append(" ").append(predValue).append(" ");
-			if (caseInsensitive && !isBoolAttribute) {
+			String predicateString = convertPredicate(predicate);
+			if (useLowercase) {
 				hql.append("lower(");
 			}
-			if (!isBoolAttribute) {
-				hql.append("'");
-			}
-			hql.append(attrib.getValue());
-			if (!isBoolAttribute) {
-				hql.append("'");
-			}
-			if (caseInsensitive && !isBoolAttribute) {
+			hql.append(fullAttribName);
+			if (useLowercase) {
 				hql.append(")");
+			}	
+
+			hql.append(" ").append(predicateString).append(" ");
+			// unary predicates
+			if (!nullCheck) {
+				// binary predicates
+				if (caseInsensitive && !isBoolAttribute) {
+					hql.append("lower(");
+				}
+				if (!isBoolAttribute) {
+					hql.append("'");
+				}
+				hql.append(attrib.getValue());
+				if (!isBoolAttribute) {
+					hql.append("'");
+				}
+				if (caseInsensitive && !isBoolAttribute) {
+					hql.append(")");
+				}
 			}
 		}
 	}
@@ -401,6 +415,8 @@ public class CQL2HQL {
 	private static String convertPredicate(Predicate p) {
 		if (predicateValues == null) {
 			predicateValues = new HashMap();
+			predicateValues.put(Predicate.IS_NULL, "is null");
+			predicateValues.put(Predicate.IS_NOT_NULL, "is not null");
 			predicateValues.put(Predicate.EQUAL_TO, "=");
 			predicateValues.put(Predicate.GREATER_THAN, ">");
 			predicateValues.put(Predicate.GREATER_THAN_EQUAL_TO, ">=");
@@ -427,5 +443,46 @@ public class CQL2HQL {
 			return "OR";
 		}
 		throw new QueryProcessingException("Logical operator '" + op.getValue() + "' is not recognized.");
+	}
+	
+	
+	private static String createDateQuery(String fullAttributeName, String dateValue, Predicate predicate) throws QueryProcessingException {
+		if (predicate.equals(Predicate.LIKE)) {
+			throw new QueryProcessingException("Predicate " + Predicate.LIKE.toString() + " is not valid for Date attribute types!");
+		}
+		String highPredicate = null;
+		String lowPredicate = null;
+		if (predicate.equals(Predicate.GREATER_THAN)) {
+			highPredicate = convertPredicate(Predicate.GREATER_THAN_EQUAL_TO);
+			lowPredicate = convertPredicate(predicate);
+		} else if (predicate.equals(Predicate.LESS_THAN)) {
+			highPredicate = convertPredicate(Predicate.LESS_THAN_EQUAL_TO);
+			lowPredicate = convertPredicate(predicate);
+		} else {
+			highPredicate = convertPredicate(predicate);
+			lowPredicate = highPredicate;
+		}
+		StringBuilder dateQuery = new StringBuilder();
+		// parse the date value into a Java Date object
+		Date date = null;
+		Calendar cal = null;
+		try {
+			date = DateFormat.getDateInstance().parse(dateValue);
+		} catch (ParseException ex) {
+			throw new QueryProcessingException("Date Value " + dateValue 
+				+ " could not be parsed as a date: " + ex.getMessage(), ex);
+		}
+		
+		cal = Calendar.getInstance();
+		cal.setTime(date);
+		
+		// break down each part of the date and query for it with the prefix
+		dateQuery.append("year(").append(fullAttributeName).append(") ").append(highPredicate)
+			.append(" '").append(cal.get(Calendar.YEAR)).append("' AND ");
+		dateQuery.append("month(").append(fullAttributeName).append(") ").append(highPredicate)
+			.append(" '").append(cal.get(Calendar.MONTH)).append("' AND ");
+		dateQuery.append("day(").append(fullAttributeName).append(") ").append(lowPredicate)
+			.append(" '").append(cal.get(Calendar.DAY_OF_MONTH)).append("'");
+		return dateQuery.toString();
 	}
 }
