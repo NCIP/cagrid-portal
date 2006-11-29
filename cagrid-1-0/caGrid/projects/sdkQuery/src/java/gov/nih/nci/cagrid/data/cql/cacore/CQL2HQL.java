@@ -475,7 +475,7 @@ public class CQL2HQL {
 		
 		cal = Calendar.getInstance();
 		cal.setTime(date);
-		
+		dateQuery.append("(");
 		// break down each part of the date and query for it with the prefix
 		dateQuery.append("year(").append(fullAttributeName).append(") ").append(highPredicate)
 			.append(" '").append(cal.get(Calendar.YEAR)).append("' AND ");
@@ -483,6 +483,7 @@ public class CQL2HQL {
 			.append(" '").append(cal.get(Calendar.MONTH)).append("' AND ");
 		dateQuery.append("day(").append(fullAttributeName).append(") ").append(lowPredicate)
 			.append(" '").append(cal.get(Calendar.DAY_OF_MONTH)).append("'");
+		dateQuery.append(")");
 		return dateQuery.toString();
 	}
 }
