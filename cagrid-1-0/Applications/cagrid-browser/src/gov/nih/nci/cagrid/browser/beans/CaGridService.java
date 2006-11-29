@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.browser.beans;
 
 
-import gov.nih.nci.cagrid.browser.util.ApplicationCtx;
+import gov.nih.nci.cagrid.browser.util.AppUtils;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.metadata.common.ResearchCenter;
@@ -58,7 +58,7 @@ public class CaGridService {
     }
 
     public String navigateToServiceDetails() {
-        DiscoveredServices disc = (DiscoveredServices) ApplicationCtx.getBean("discoveryResult");
+        DiscoveredServices disc = (DiscoveredServices) AppUtils.getBean("discoveryResult");
         disc.setNavigatedService(this);
 
         return "success";

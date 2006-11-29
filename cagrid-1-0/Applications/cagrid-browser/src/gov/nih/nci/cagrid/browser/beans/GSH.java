@@ -3,7 +3,8 @@ package gov.nih.nci.cagrid.browser.beans;
 //~--- non-JDK imports --------------------------------------------------------
 
 import gov.nih.nci.cagrid.browser.exception.GridServiceNotAvailableException;
-import gov.nih.nci.cagrid.browser.util.ApplicationCtx;
+import gov.nih.nci.cagrid.browser.util.AppUtils;
+
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.common.ResearchCenter;
@@ -107,7 +108,7 @@ public class GSH {
     public String doActivity() {
 
         /* Default action */
-        String activityName = ApplicationCtx.getParameter("activity")
+        String activityName = AppUtils.getParameter("activity")
                 .toString();
 
         /* Set the query textbox empty */
@@ -141,7 +142,7 @@ public class GSH {
 
     public String doRemoveFromserviceCart() {
 
-        ServiceCart cart = (ServiceCart) ApplicationCtx
+        ServiceCart cart = (ServiceCart) AppUtils
                 .getBean("#{serviceCart}");
 
         cart.removeGSH(this);
@@ -151,7 +152,7 @@ public class GSH {
 
     public String doSetNavigatedService() {
 
-        DiscoveredServices disc = (DiscoveredServices) ApplicationCtx
+        DiscoveredServices disc = (DiscoveredServices) AppUtils
                 .getBean("#{discoveredServices}");
 
 
@@ -164,7 +165,7 @@ public class GSH {
 
     public String doSetNavigatedObject() {
 
-        navigatedObject = (UMLClass) ApplicationCtx
+        navigatedObject = (UMLClass) AppUtils
                 .getParameter("domainObject");
 
         return "navigateToObject";

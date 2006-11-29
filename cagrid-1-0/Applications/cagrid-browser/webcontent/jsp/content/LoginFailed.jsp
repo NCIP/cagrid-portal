@@ -61,7 +61,7 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <h:outputText styleClass="loginFailed" value="#{messages.loginFailed}"/>
+                        <h:outputText styleClass="loginFailed" value="#{loginBean.loginFailureMessage}"/>
                     </td>
                 </tr>
                 <tr>
@@ -72,7 +72,7 @@
                                     <h:outputText value="#{messages.loginLabel}"/>
                                 </td>
                                 <td class="formFieldLogin">
-                                    <h:inputText id="userName" value="#{loginBean.userLogin}" required="true" size="14"
+                                    <h:inputText id="userName" value="#{loginBean.username}" required="true" size="14"
                                                  styleClass="formField"/>
                                 </td>
                             </tr>
@@ -81,7 +81,7 @@
                                     <h:outputText value="#{messages.passwordLabel}"/>
                                 </td>
                                 <td class="formFieldLogin">
-                                    <h:inputSecret id="userPasswd" value="#{loginBean.userPasswd}" required="false"
+                                    <h:inputSecret id="userPasswd" value="#{loginBean.password}" required="false"
                                                    size="14" styleClass="formField"/>
                                 </td>
                             </tr>

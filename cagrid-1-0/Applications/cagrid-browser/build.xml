@@ -22,6 +22,47 @@
 
     <!-- Properties directory -->
     <property name="props.dir" value="${basedir}/properties"/>
+	
+    <patternset id="globus.jars">
+    	
+    	<include name="*.jar"/>
+    	<!--
+        <include name="addressing-1.0.jar"/>
+        <include name="axis.jar"/>
+        <include name="bootstrap.jar"/>
+        <include name="cog-axis.jar"/>
+        <include name="cog-jglobus.jar"/>
+        <include name="commonj.jar"/>
+    	<include name="commons-beanutils.jar"/>
+    	<include name="commons-collections-3.0.jar"/>
+    	<include name="commons-digester.jar"/>
+    	<include name="commons-discovery.jar"/>
+        <include name="commons-logging.jar"/>
+        <include name="concurrent.jar"/>
+        <include name="cryptix-asn1.jar"/>
+        <include name="cryptix.jar"/>
+        <include name="cryptix32.jar"/>
+        <include name="jaxrpc.jar"/>
+        <include name="jce-jdk13-125.jar"/>
+        <include name="jgss.jar"/>
+        <include name="log4j-1.2.8.jar"/>
+        <include name="naming-common.jar"/>
+        <include name="naming-factory.jar"/>
+        <include name="naming-java.jar"/>
+        <include name="puretls.jar"/>
+        <include name="resolver.jar"/>
+        <include name="saaj.jar"/>
+        <include name="wsdl4j.jar"/>
+        <include name="wsrf_common.jar"/>
+        <include name="wsrf_core_stubs.jar"/>
+        <include name="wsrf_core.jar"/>
+        <include name="wss4j.jar"/>
+        <include name="xercesImpl.jar"/>
+        <include name="xmlsec.jar"/>
+        <include name="xml-apis.jar"/>
+        -->
+        
+    </patternset>
 
 
     <target name="setClasspath">
@@ -84,7 +125,7 @@
 
     <target name="copyResources">
         <!--copy required library files-->
-        <copy todir="${build.lib.dir}">
+        <copy todir="${build.lib.dir}" overwrite="true">
             <fileset dir="${lib.dir}">
                 <include name="**/*.jar"></include>
             </fileset>
@@ -92,11 +133,11 @@
                 <include name="**/*.jar"></include>
             </fileset>
             <fileset dir="${globus.lib.dir}">
-                <include name="**/*.jar"/>
+            	<patternset refid="globus.jars"/>
             </fileset>
         </copy>
 
-        <copy todir="${build.classes.dir}">
+        <copy todir="${build.classes.dir}" overwrite="true">
             <fileset dir="${props.dir}">
                 <include name="*.properties"/>
                 <include name="*.wsdd"/>

@@ -77,6 +77,20 @@
         <h:message for="lastName" styleClass="loginFailed"/>
     </td>
 </tr>
+
+<tr>
+    <td class="formLabelWhite"><div align="left">
+        <h:outputText value="#{messages.regOrganization}"></h:outputText>
+    </div></td>
+    <td class="formFieldWhite">
+        <h:inputText id="organization" value="#{loginBean.newUserInfo.organization}" required="true" size="40">
+            <f:validateLength minimum="1"/>
+        </h:inputText>
+        <h:outputText value="*"></h:outputText>
+        <h:message for="organization" styleClass="loginFailed"/>
+    </td>
+</tr>
+
 <tr>
     <td class="formLabel"><div align="left">
         <h:outputText value="#{messages.regEmail}"></h:outputText>
@@ -95,7 +109,20 @@
         <h:outputText value="#{messages.regStreet}"></h:outputText>
     </div></td>
     <td class="formFieldWhite">
-        <h:inputText value="#{loginBean.newUserInfo.street}" required="false" size="40"/>
+        <h:inputText id="address" value="#{loginBean.newUserInfo.address}" required="true" size="40">
+        	<f:validateLength minimum="1"/>
+        </h:inputText>
+        <h:outputText value="*"></h:outputText>
+        <h:message for="address" styleClass="loginFailed"/>
+    </td>
+</tr>
+
+<tr>
+    <td class="formLabelWhite"><div align="left">
+        <h:outputText value="#{messages.regStreet2}"></h:outputText>
+    </div></td>
+    <td class="formFieldWhite">
+        <h:inputText id="address2" value="#{loginBean.newUserInfo.address2}" required="false" size="40"/>
     </td>
 </tr>
 
@@ -104,7 +131,11 @@
         <h:outputText value="#{messages.regCity}"></h:outputText>
     </div></td>
     <td class="formField">
-        <h:inputText value="#{loginBean.newUserInfo.city}" required="false" size="40"/>
+        <h:inputText id="city" value="#{loginBean.newUserInfo.city}" required="city" size="40">
+        	<f:validateLength minimum="1"/>
+        </h:inputText>
+        <h:outputText value="*"></h:outputText>
+        <h:message for="city" styleClass="loginFailed"/>
     </td>
 </tr>
 
@@ -113,7 +144,10 @@
         <h:outputText value="#{messages.regState}"></h:outputText>
     </div></td>
     <td class="formFieldWhite">
-        <h:inputText value="#{loginBean.newUserInfo.state}" required="false" maxlength="2" size="2"/>
+        <h:inputText id="stateCode" value="#{loginBean.newUserInfo.state}" required="false" maxlength="2" size="2"
+        	converter="StateCodeConverter"/>
+
+        <h:message for="stateCode" styleClass="loginFailed"/>
     </td>
 </tr>
 
@@ -122,7 +156,23 @@
         <h:outputText value="#{messages.regZIP}"></h:outputText>
     </div></td>
     <td class="formField">
-        <h:inputText value="#{loginBean.newUserInfo.zip}" required="false" maxlength="5" size="5"/>
+        <h:inputText id="zip" value="#{loginBean.newUserInfo.zipcode}" required="true" maxlength="5" size="5">
+        	<f:validateLength minimum="1"/>
+        </h:inputText>
+        <h:outputText value="*"></h:outputText>
+        <h:message for="zip" styleClass="loginFailed"/>
+    </td>
+</tr>
+
+<tr>
+    <td class="formLabelWhite"><div align="left">
+        <h:outputText value="#{messages.regCountry}"></h:outputText>
+    </div></td>
+    <td class="formFieldWhite">
+        <h:inputText id="countryCode" value="#{loginBean.newUserInfo.country}" required="false" maxlength="2" size="2"
+        	converter="CountryCodeConverter"/>
+
+        <h:message for="countryCode" styleClass="loginFailed"/>
     </td>
 </tr>
 
@@ -131,7 +181,7 @@
         <h:outputText value="#{messages.regPhone}"></h:outputText>
     </div></td>
     <td class="formFieldWhite">
-        <h:inputText value="#{loginBean.newUserInfo.phone}" required="false" maxlength="10" size="10"/>
+        <h:inputText value="#{loginBean.newUserInfo.phoneNumber}" required="false" maxlength="10" size="10"/>
     </td>
 </tr>
 
@@ -145,7 +195,7 @@
         <h:outputText value="#{messages.regUsername}"></h:outputText>
     </div></td>
     <td class="formField">
-        <h:inputText id="username" value="#{loginBean.newUserInfo.username}" required="true" maxlength="20" size="20">
+        <h:inputText id="username" value="#{loginBean.newUserInfo.userId}" required="true" maxlength="20" size="20">
             <f:validateLength minimum="4" maximum="10"/>
         </h:inputText>
         <h:outputText value="* [min 4 chars]"></h:outputText>
@@ -193,6 +243,11 @@
 <tr>
     <td>
         * Fields are Required
+    </td>
+</tr>
+<tr>
+    <td>
+        <h:messages/>
     </td>
 </tr>
 </table>

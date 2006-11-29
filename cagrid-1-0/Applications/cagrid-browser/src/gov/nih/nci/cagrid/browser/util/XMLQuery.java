@@ -36,7 +36,7 @@ public class XMLQuery {
 
     public void fillInQuery() {
         DiscoveredServices disc =
-                (DiscoveredServices) ApplicationCtx.getBean(
+                (DiscoveredServices) AppUtils.getBean(
                         "#{discoveredServices}");
 
 

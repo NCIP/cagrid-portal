@@ -41,7 +41,7 @@
 
             <h:column>
                 <h:outputText styleClass="formText"
-                              value="There was an error in your application. Please check the form for accuracy."/>
+                              value="#{loginBean.registrationFailureMessage}"/>
 
 
             </h:column>

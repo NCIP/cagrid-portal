@@ -38,7 +38,7 @@
 
             <h:column>
                 <h:outputText styleClass="formText"
-                              value="Your request for registration has been sent to a caGrid administrator. You will receive an email with your new account infromation in the next 48 hours"/>
+                              value="#{loginBean.registrationSuccessMessage}"/>
 
 
             </h:column>

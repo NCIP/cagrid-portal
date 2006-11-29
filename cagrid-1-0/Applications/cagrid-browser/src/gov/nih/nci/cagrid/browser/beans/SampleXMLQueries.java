@@ -2,8 +2,11 @@ package gov.nih.nci.cagrid.browser.beans;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import gov.nih.nci.cagrid.browser.util.ApplicationCtx;
+
+import gov.nih.nci.cagrid.browser.util.AppUtils;
 import gov.nih.nci.cagrid.browser.util.XMLQuery;
+
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -27,6 +30,8 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class SampleXMLQueries {
+	
+	private static Logger logger = Logger.getLogger(SampleXMLQueries.class);
 
     /**
      * Contains xml Queries to be used in the JSF page
@@ -61,7 +66,7 @@ public class SampleXMLQueries {
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
             InputStream stream =
-                    ApplicationCtx.loadResourceAsStream(
+                    AppUtils.loadResourceAsStream(
                             queryFilename);
 
             document = builder.parse(stream);
@@ -76,13 +81,13 @@ public class SampleXMLQueries {
                 this.xmlQueries.add(query);
             }
         } catch (ParserConfigurationException e) {
-            ApplicationCtx.getAppLogger().severe(
+            logger.error(
                     "Error parsing example queries file. Please check faces-config.xml");
         } catch (SAXException e) {
-            ApplicationCtx.getAppLogger().severe(
+            logger.error(
                     "Error parsing example queries file. Please check faces-config.xml");
         } catch (IOException e) {
-            ApplicationCtx.getAppLogger().severe(
+            logger.error(
                     "Error parsing example queries file. Please check faces-config.xml");
         }
     }
