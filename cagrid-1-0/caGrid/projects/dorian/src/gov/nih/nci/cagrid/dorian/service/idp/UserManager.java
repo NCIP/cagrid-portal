@@ -396,7 +396,7 @@ public class UserManager extends LoggingObject {
 						+ "LAST_NAME VARCHAR(255) NOT NULL,"
 						+ "ORGANIZATION VARCHAR(255) NOT NULL,"
 						+ "ADDRESS VARCHAR(255) NOT NULL,"
-						+ "ADDRESS2 VARCHAR(255) NOT NULL,"
+						+ "ADDRESS2 VARCHAR(255),"
 						+ "CITY VARCHAR(255) NOT NULL,"
 						+ "STATE VARCHAR(20) NOT NULL,"
 						+ "ZIP_CODE VARCHAR(20) NOT NULL,"
