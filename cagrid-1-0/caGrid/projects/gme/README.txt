@@ -5,7 +5,8 @@ outside world would see it.
 
 The default GME configuration is set to connect to a MySQL database on hte localhost with
 no password and username root.  If you need to change this be sure to edit the gme config
-file in the etc directory.
+file in the etc directory.  The GME also dynamically creates its databases and tables.
+Make sure that the database priviliges are set correctly to enable this.
 
 GME installations should run a backup script to make sure the integrity of the database
 can be restored apon any failures.  A general purpose script for this is provided in the
