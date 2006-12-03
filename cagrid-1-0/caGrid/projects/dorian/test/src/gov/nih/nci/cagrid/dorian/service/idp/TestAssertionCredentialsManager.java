@@ -172,7 +172,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 					.generateCertficateRequest(subject, pair);
 			GregorianCalendar cal = new GregorianCalendar();
 			Date start = cal.getTime();
-			cal.add(Calendar.SECOND, 2);
+			cal.add(Calendar.SECOND, 6);
 			Date end = cal.getTime();
 
 			X509Certificate shortCert = ca.requestCertificate(req, start, end);
@@ -184,7 +184,7 @@ public class TestAssertionCredentialsManager extends TestCase {
 				assertTrue(false);
 			}
 
-			Thread.sleep(2500);
+			Thread.sleep(6500);
 			assertTrue(CertUtil.isExpired(idpShortCert));
 			X509Certificate renewedCert = cm.getIdPCertificate();
 			assertNotNull(renewedCert);

@@ -63,7 +63,7 @@ public class TestIFS extends TestCase {
 
 	private static final int SHORT_PROXY_VALID = 2;
 
-	private static final int SHORT_CREDENTIALS_VALID = 7;
+	private static final int SHORT_CREDENTIALS_VALID = 10;
 
 	private static final int DELEGATION_LENGTH = 5;
 
