@@ -32,7 +32,9 @@ public class CreationTests extends Story {
 
 	protected Vector steps() {
 		Vector steps = new Vector();
+		// delete any existing service
 		steps.add(new DeleteOldServiceStep());
+		// create a new enumeration supporting data service
 		steps.add(new CreationStep(getIntroduceBaseDir()));
 		return steps;
 	}

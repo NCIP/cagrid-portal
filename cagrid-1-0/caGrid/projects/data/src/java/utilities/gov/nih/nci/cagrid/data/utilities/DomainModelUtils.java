@@ -63,6 +63,7 @@ public class DomainModelUtils {
 	 * @param umlClass
 	 * 		The class to retrieve superclasses of
 	 * @return
+	 * 		All superclasses of the specified UMLClass
 	 */	
 	public static UMLClass[] getAllSuperclasses(DomainModel model, UMLClass umlClass) {
 		return getAllSuperclasses(model, umlClass.getPackageName() + "." + umlClass.getClassName());
@@ -77,6 +78,7 @@ public class DomainModelUtils {
 	 * @param className
 	 * 		The name of the class to retrieve superclasses of
 	 * @return
+	 * 		All superclasses of the named class
 	 */
 	public static UMLClass[] getAllSuperclasses(DomainModel model, String className) {
 		Set supers = getSuperclasses(model, className);

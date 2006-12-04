@@ -17,6 +17,17 @@ import org.projectmobius.common.XMLUtilities;
  */
 public class WsddUtil {
 
+	/**
+	 * Sets a global parameter on the client side wsdd file
+	 * 
+	 * @param clientWsddFile
+	 * 		The filename of the wsdd file to edit
+	 * @param key
+	 * 		The key of the parameter
+	 * @param value
+	 * 		The value to assign to the parameter
+	 * @throws Exception
+	 */
 	public static void setGlobalClientParameter(String clientWsddFile, String key, String value) throws Exception {
 		Element wsddRoot = XMLUtilities.fileNameToDocument(clientWsddFile).getRootElement();
 		Element configElement = wsddRoot.getChild("globalConfiguration", wsddRoot.getNamespace());
@@ -29,6 +40,19 @@ public class WsddUtil {
 	}
 	
 	
+	/**
+	 * Sets a parameter on the service configuration stored in a server side wsdd file
+	 * 
+	 * @param serverWsddFile
+	 * 		The filename of the server side wsdd to edit
+	 * @param serviceName
+	 * 		The name of the service to set the parameter for
+	 * @param key
+	 * 		The key of the parameter
+	 * @param value
+	 * 		The value of the parameter
+	 * @throws Exception
+	 */
 	public static void setServiceParameter(String serverWsddFile, String serviceName, String key, String value) throws Exception {
 		Element wsddRoot = XMLUtilities.fileNameToDocument(serverWsddFile).getRootElement();
 		Iterator serviceElemIter = wsddRoot.getChildren("service", wsddRoot.getNamespace()).iterator();

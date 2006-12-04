@@ -17,6 +17,19 @@ import org.projectmobius.common.XMLUtilities;
  */
 public class CastorMappingUtil {
 
+	/**
+	 * Edits a castor mapping XML file to change the namespace of all classes in a package
+	 * 
+	 * @param mapping
+	 * 		The text of the castor mapping file
+	 * @param packageName
+	 * 		The name of the package to change the namespace mapping of
+	 * @param namespace
+	 * 		The namespace to remap the package's classes to
+	 * @return
+	 * 		The modified text of the castor mapping file
+	 * @throws Exception
+	 */
 	public static String changeNamespaceOfPackage(String mapping, String packageName, String namespace) throws Exception {
 		Element mappingRoot = XMLUtilities.stringToDocument(mapping).getRootElement();
 		// get class elements
