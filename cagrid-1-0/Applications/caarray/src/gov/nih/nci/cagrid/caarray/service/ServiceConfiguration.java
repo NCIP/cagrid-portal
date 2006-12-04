@@ -40,6 +40,8 @@ public class ServiceConfiguration {
 		return ServiceConfiguration.configuration;
 	}
 	
+	private String serverConfigLocation;
+	
 	
 	private String queryProcessorClass;
 	
@@ -62,6 +64,16 @@ public class ServiceConfiguration {
 	private String cqlQueryProcessorConfig_RMIServerURL;
 
 	private String cqlQueryProcessorConfig_SecureSessionManagerURL;
+	
+	
+	public String getServerConfigLocation() {
+		return ContainerConfig.getBaseDirectory() + File.separator + serverConfigLocation;
+	}
+	
+	
+	public void setServerConfigLocation(String serverConfigLocation) {
+		this.serverConfigLocation = serverConfigLocation;
+	}
 	
 
 	

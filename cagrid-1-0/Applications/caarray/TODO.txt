@@ -1,2 +1,0 @@
-1. The MAGEOM API doesn't process nested sub groups correctly. 
-2. The MAGEOM API doesn't support IS_NULL and IS_NOT_NULL predicates.

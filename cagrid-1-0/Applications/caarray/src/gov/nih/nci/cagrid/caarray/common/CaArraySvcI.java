@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
  * 
  * This interface represents the API which is accessable on the grid service from the client. 
  * 
- * @created by Introduce Toolkit version .99999
+ * @created by Introduce Toolkit version 1.0
  * 
  */
 public interface CaArraySvcI {

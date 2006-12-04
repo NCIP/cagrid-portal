@@ -1,3 +1,8 @@
+############
+# TO BUILD #
+############
+From cagrid-1-0/Applications, type "ant build-caarray".
+
 #############
 # TO DEPLOY #
 #############

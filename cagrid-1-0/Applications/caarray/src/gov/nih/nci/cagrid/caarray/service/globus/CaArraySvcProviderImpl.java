@@ -14,7 +14,7 @@ import java.rmi.RemoteException;
  * has implemented.  Authorization callbacks are automatically made for each method based
  * on each methods authorization requirements.
  * 
- * @created by Introduce Toolkit version .99999
+ * @created by Introduce Toolkit version 1.0
  * 
  */
 public class CaArraySvcProviderImpl{
