@@ -255,6 +255,9 @@ public class TestIFS extends TestCase {
 	public void testCreateProxyAutoApproval() {
 		IFS ifs = null;
 		try {
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			ProxyLifetime lifetime = getProxyLifetimeShort();
+			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 			String username = "user";
 			IdPContainer idp = this.getTrustedIdpAutoApprove("My IdP");
 			IFSConfiguration conf = getExpiringCredentialsConf();
@@ -262,8 +265,7 @@ public class TestIFS extends TestCase {
 			ifs = new IFS(conf, db, ca);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
 				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			ProxyLifetime lifetime = getProxyLifetimeShort();
+			
 			// give a chance for others to run right before we enter timing
 			// sensitive code
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
@@ -275,7 +277,7 @@ public class TestIFS extends TestCase {
 
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			try {
-				KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
+				
 				PublicKey publicKey2 = pair2.getPublic();
 				ifs
 					.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort(),
@@ -301,6 +303,8 @@ public class TestIFS extends TestCase {
 	public void testCreateProxyManualApproval() {
 		IFS ifs = null;
 		try {
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			ProxyLifetime lifetime = getProxyLifetimeShort();
 			String username = "user";
 			IdPContainer idp = this.getTrustedIdpManualApprove("My IdP");
 			IFSConfiguration conf = getExpiringCredentialsConf();
@@ -308,8 +312,7 @@ public class TestIFS extends TestCase {
 			ifs = new IFS(conf, db, ca);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
 				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			ProxyLifetime lifetime = getProxyLifetimeShort();
+		
 			try {
 				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
 				fail("Should have thrown exception attempting to create proxy.");
@@ -334,6 +337,10 @@ public class TestIFS extends TestCase {
 	public void testCreateProxyAutoApprovalAutoRenewal() {
 		IFS ifs = null;
 		try {
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			ProxyLifetime lifetime = getProxyLifetimeShort();
+			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
+			
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			String username = "user";
 			IFSConfiguration conf = getExpiringCredentialsConf();
@@ -341,8 +348,8 @@ public class TestIFS extends TestCase {
 			ifs = new IFS(conf, db, ca);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
 				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-			ProxyLifetime lifetime = getProxyLifetimeShort();
+		
+			PublicKey publicKey2 = pair2.getPublic();
 			// give a chance for others to run right before we enter timing
 			// sensitive code
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
@@ -353,8 +360,7 @@ public class TestIFS extends TestCase {
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
 			IFSUser before = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
-			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
-			PublicKey publicKey2 = pair2.getPublic();
+			
 			certs = ifs.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort(),
 				DELEGATION_LENGTH);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
@@ -380,6 +386,9 @@ public class TestIFS extends TestCase {
 	public void testCreateProxyManualApprovalAutoRenewal() {
 		IFS ifs = null;
 		try {
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			ProxyLifetime lifetime = getProxyLifetimeShort();
+			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 			String username = "user";
 			IdPContainer idp = this.getTrustedIdpManualApproveAutoRenew("My IdP");
 			IFSConfiguration conf = getExpiringCredentialsConf();
@@ -387,7 +396,6 @@ public class TestIFS extends TestCase {
 			ifs = new IFS(conf, db, ca);
 			String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(ca.getCACertificate()
 				.getSubjectDN().getName(), idp.getIdp().getId(), conf.getInitialUser().getUID()));
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 
 			try {
 				ifs.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),
@@ -399,7 +407,6 @@ public class TestIFS extends TestCase {
 			IFSUser usr = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			usr.setUserStatus(IFSUserStatus.Active);
 			ifs.updateUser(gridId, usr);
-			ProxyLifetime lifetime = getProxyLifetimeShort();
 			// give a chance for others to run right before we enter timing
 			// sensitive code
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
@@ -410,7 +417,6 @@ public class TestIFS extends TestCase {
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), IFSUserStatus.Active);
 			IFSUser before = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
-			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey2 = pair2.getPublic();
 			certs = ifs.createProxy(getSAMLAssertion(username, idp), publicKey2, getProxyLifetimeShort(),
 				DELEGATION_LENGTH);
