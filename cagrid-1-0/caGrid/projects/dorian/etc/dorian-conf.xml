@@ -26,7 +26,7 @@
 	<resource name="IFSConfiguration" class="gov.nih.nci.cagrid.dorian.service.ifs.IFSConfiguration">
 		<ifs-config>
 			<idp-name-length min="4" max="255"/>
-			<credentials-valid years="12" months="0" days="0" hours="0" minutes="0" seconds="0"/>
+			<credentials-valid years="1" months="0" days="0" hours="0" minutes="0" seconds="0"/>
 			<max-proxy-lifetime hours="12" minutes="0" seconds="0"/>
 			<policies>
 				<policy name="Manual Approval / Manual Renewal"
