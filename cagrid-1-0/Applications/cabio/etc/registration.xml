@@ -13,27 +13,29 @@
   <Content xsi:type="agg:AggregatorContent" xmlns:agg="http://mds.globus.org/aggregator/types">
     <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
       <agg:GetMultipleResourcePropertiesPollType
-			xmlns:ns6="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain"
-			xmlns:ns9="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"
-			xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
+			xmlns:ns8="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain"
+			xmlns:ns10="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"
 			xmlns:ns4="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain"
-			xmlns:ns13="http://gov.nih.nci.cagrid.data/DataServiceExceptions"
-			xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"
+			xmlns:ns9="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
+			xmlns:ns14="http://gov.nih.nci.cagrid.data/DataServiceExceptions"
+			xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"
 			xmlns:ns2="gme://caCORE.caBIG/3.1/gov.nih.nci.evs.domain"
-			xmlns:ns5="gme://caCORE.caBIG/3.1/gov.nih.nci.common.provenance.domain"
+			xmlns:ns7="gme://caCORE.caBIG/3.1/gov.nih.nci.common.provenance.domain"
 			xmlns:xs="http://www.w3.org/2001/XMLSchema"
 			xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"
 			xmlns:ns0="http://cabio.cagrid.nci.nih.gov/CaBIOSvc/types"
 			xmlns:ns3="gme://caCORE.caBIG/3.1/gov.nih.nci.common.domain"
-			xmlns:ns10="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"
-			xmlns:ns8="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain"
-			xmlns:ns7="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain"
-			xmlns:ns11="http://cabio.cagrid.nci.nih.gov/CaBIOSvc/CQLResultTypes">
+			xmlns:ns11="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"
+			xmlns:ns5="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain"
+			xmlns:ns6="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain"
+			xmlns:ns12="http://cabio.cagrid.nci.nih.gov/CaBIOSvc/CQLResultTypes">
         <!-- Specifies that the index should refresh information
             every 300000 milliseconds (once every 5 minutes) -->
         <agg:PollIntervalMillis>300000</agg:PollIntervalMillis>
         <!-- specifies all Resource Properties that should be retrieved from the service -->
-		<agg:ResourcePropertyNames>ns12:DomainModel</agg:ResourcePropertyNames>
+		<agg:ResourcePropertyNames>ns9:ServiceMetadata</agg:ResourcePropertyNames>
+	
+		<agg:ResourcePropertyNames>ns13:DomainModel</agg:ResourcePropertyNames>
 	
       </agg:GetMultipleResourcePropertiesPollType>
     </agg:AggregatorConfig>

@@ -43,6 +43,8 @@ public class ServiceConfiguration {
 	
 	private String queryProcessorClass;
 	
+	private String serverConfigLocation;
+	
 	private String dataService_cqlValidatorClass;
 	
 	private String dataService_domainModelValidatorClass;
@@ -66,6 +68,16 @@ public class ServiceConfiguration {
 	
 	public void setQueryProcessorClass(String queryProcessorClass) {
 		this.queryProcessorClass = queryProcessorClass;
+	}
+
+	
+	public String getServerConfigLocation() {
+		return ContainerConfig.getBaseDirectory() + File.separator + serverConfigLocation;
+	}
+	
+	
+	public void setServerConfigLocation(String serverConfigLocation) {
+		this.serverConfigLocation = serverConfigLocation;
 	}
 
 	

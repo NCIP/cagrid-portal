@@ -6,8 +6,8 @@ http\://gov.nih.nci.cagrid.data/DataService=gov.nih.nci.cagrid.data
 
 gme\://caCORE.caBIG/3.1/gov.nih.nci.camod.domain=gov.nih.nci.cagrid.cabio.stubs.camod.domain
 http\://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery=gov.nih.nci.cagrid.cqlquery
-gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata=gov.nih.nci.cagrid.metadata
 gme\://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain=gov.nih.nci.cagrid.cabio.stubs.cadsr.umlproject.domain
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata=gov.nih.nci.cagrid.metadata
 http\://gov.nih.nci.cagrid.data/DataServiceExceptions=gov.nih.nci.cagrid.data.faults
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice=gov.nih.nci.cagrid.metadata.dataservice
 gme\://caCORE.caBIG/3.1/gov.nih.nci.evs.domain=gov.nih.nci.cagrid.cabio.stubs.evs.domain

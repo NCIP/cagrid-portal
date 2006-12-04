@@ -63,6 +63,21 @@ public abstract class CaBIOSvcImplBase {
 	
 	
 	
+	protected gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadataMD(){
+		BaseResource serviceBaseResource;
+		try {
+			serviceBaseResource = (BaseResource)ResourceContext.getResourceContext().getResource();
+		} catch (ResourceContextException e) {
+			return null;
+		} catch (ResourceException e) {
+			return null;
+		}
+		return serviceBaseResource.getServiceMetadataMD();
+	}
+
+	
+	
+	
 	protected gov.nih.nci.cagrid.metadata.dataservice.DomainModel getDomainModelMD(){
 		BaseResource serviceBaseResource;
 		try {
