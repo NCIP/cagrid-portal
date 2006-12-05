@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.log4j.Logger;
 
 import gov.nih.nci.cagrid.discovery.client.DiscoveryClient;
 import gov.nih.nci.cagrid.metadata.exceptions.QueryInvalidException;
@@ -19,6 +20,8 @@ import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException
  */
 public class ServiceTypeSearch extends AbstractSearch {
 
+	public static Logger logger = Logger.getLogger(ServiceTypeSearch.class);
+	
 	public static final String DATA = "data";
 
 	public static final String ANALYTICAL = "analytical";
@@ -35,14 +38,16 @@ public class ServiceTypeSearch extends AbstractSearch {
 		setType(null);
 	}
 
-
-	public EndpointReferenceType[] doRun(DiscoveryClient client) throws Exception {
+	public EndpointReferenceType[] doRun(DiscoveryClient client)
+			throws Exception {
 		return search(client, getType());
 	}
 
-	public static EndpointReferenceType[] search(DiscoveryClient client, String type) throws RemoteResourcePropertyRetrievalException, QueryInvalidException, ResourcePropertyRetrievalException {
+	public static EndpointReferenceType[] search(DiscoveryClient client,
+			String type) throws RemoteResourcePropertyRetrievalException,
+			QueryInvalidException, ResourcePropertyRetrievalException {
 		EndpointReferenceType[] results = null;
-		
+
 		if (DATA.equals(type)) {
 			results = client.getAllDataServices();
 		} else {
@@ -53,12 +58,20 @@ public class ServiceTypeSearch extends AbstractSearch {
 					allSet.add(all[i]);
 				}
 				EndpointReferenceType[] data = client.getAllDataServices();
-				for(int i = 0; i < data.length; i++){
-					allSet.remove(data[i]);
+				if (data == null) {
+					data = client.getAllDataServices();
 				}
-				results = (EndpointReferenceType[]) allSet.toArray(new EndpointReferenceType[allSet.size()]);
-				
-			}else{
+				if (data == null) {
+					logger.error("############### data is still null ###############");
+				} else {
+					for (int i = 0; i < data.length; i++) {
+						allSet.remove(data[i]);
+					}
+				}
+				results = (EndpointReferenceType[]) allSet
+						.toArray(new EndpointReferenceType[allSet.size()]);
+
+			} else {
 				results = all;
 			}
 		}

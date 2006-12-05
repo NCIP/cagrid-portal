@@ -768,7 +768,11 @@
         <managed-bean-class> gov.nih.nci.cagrid.browser.beans.LoginBean </managed-bean-class>
         <managed-bean-scope> session </managed-bean-scope>
         <managed-property>
-            <property-name>idpUrl</property-name>
+            <property-name>idpUrl1</property-name>
+            <value>https://cbiovdev5017.nci.nih.gov:8343/wsrf/services/cagrid/AuthenticationService</value>
+        </managed-property>
+        <managed-property>
+            <property-name>idpUrl2</property-name>
             <value>https://cbiovdev5017.nci.nih.gov:8441/wsrf/services/cagrid/Dorian</value>
         </managed-property>
         <managed-property>

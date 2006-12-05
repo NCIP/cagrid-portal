@@ -85,7 +85,9 @@ public class LoginBean {
 
 	private int delegationPathLength;
 
-	private String idpUrl;
+	private String idpUrl1;
+
+	private String idpUrl2;
 
 	private String ifsUrl;
 
@@ -104,7 +106,15 @@ public class LoginBean {
 		GlobusCredential proxy = null;
 
 		try {
-			saml = authenticate(getIdpUrl(), getUsername(), getPassword());
+			try {
+				saml = authenticate(getIdpUrl1(), getUsername(), getPassword());
+			} catch (Exception ex) {
+				logger.debug("First authenticate attempt failed: "
+						+ ex.getMessage());
+			}
+			if (saml == null) {
+				saml = authenticate(getIdpUrl2(), getUsername(), getPassword());
+			}
 		} catch (MalformedURIException ex) {
 			setLoginFailureMessage(AppUtils
 					.getMessage(LOGIN_FAILURE_BAD_IDP_URL));
@@ -188,8 +198,6 @@ public class LoginBean {
 
 		return result;
 	}
-	
-	
 
 	public boolean isUserLoggedIn() {
 		return this.credentials != null;
@@ -265,12 +273,12 @@ public class LoginBean {
 		setRegistrationSuccessMessage(null);
 	}
 
-	public String getIdpUrl() {
-		return idpUrl;
+	public String getIdpUrl1() {
+		return idpUrl1;
 	}
 
-	public void setIdpUrl(String idpUrl) {
-		this.idpUrl = idpUrl;
+	public void setIdpUrl1(String idpUrl) {
+		this.idpUrl1 = idpUrl;
 	}
 
 	public String getIfsUrl() {
@@ -375,6 +383,14 @@ public class LoginBean {
 
 	public void setRegistrationSuccessMessage(String registrationSuccessMessage) {
 		this.registrationSuccessMessage = registrationSuccessMessage;
+	}
+
+	public String getIdpUrl2() {
+		return idpUrl2;
+	}
+
+	public void setIdpUrl2(String idpUrl2) {
+		this.idpUrl2 = idpUrl2;
 	}
 
 }
