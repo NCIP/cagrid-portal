@@ -13,6 +13,7 @@
 <f:loadBundle basename="messages" var="messages"/>
 
 <f:subview id="discoveryResults">
+
     <h:form id="serviceDetails">
 
         <h:panelGrid border="1" cellpadding="0" cellspacing="0"
@@ -34,14 +35,14 @@
                         <h:column>
                             <h:commandLink
                                     action="#{service.navigateToServiceDetails}">
-                                <h:outputText value="#{service.url}" styleClass="formText"/>
+                                <h:outputText value="#{service.epr.address}" styleClass="formText"/>
                             </h:commandLink>
                         </h:column>
 
                         <h:column>
                             <h:panelGroup>
                                 <h:outputText value="#{messages.serviceName} " styleClass="formTextBold"/>
-                                <h:outputText value="#{service.name}" styleClass="formText"/>
+                                <h:outputText value="#{service.serviceMetadata.serviceDescription.service.name}" styleClass="formText"/>
                             </h:panelGroup>
                         </h:column>
 
@@ -49,7 +50,7 @@
                         <h:column>
                             <h:panelGroup styleClass="formField">
                                 <h:outputText value="#{messages.serviceDescription} " styleClass="formTextBold"/>
-                                <h:outputText value="#{service.description}" styleClass="formText"/>
+                                <h:outputText value="#{service.serviceMetadata.serviceDescription.service.description}" styleClass="formText"/>
                             </h:panelGroup>
                         </h:column>
 
@@ -57,7 +58,8 @@
                 </h:column>
 
                 <h:column>
-                    <h:commandButton id="cartBtn" type="submit" value="Add to Service Cart"/>
+                    <h:commandButton id="cartBtn" type="submit" value="#{labels.addServiceCart}"
+                    	action="#{service.addToServiceCart}"/>
                 </h:column>
 
             </h:dataTable>

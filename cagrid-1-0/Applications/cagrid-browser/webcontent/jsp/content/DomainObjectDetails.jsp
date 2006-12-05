@@ -13,16 +13,14 @@ To change this template use File | Settings | File Templates.
 
 <f:loadBundle basename="labels" var="labels"/>
 <f:loadBundle basename="messages" var="messages"/>
-<f:view locale="#{browserConfig.locale}">
 
-
+<f:view>
 <h:form>
 
- <div id="main">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td width="48%">&lt;&lt;
-            <h:outputLink value="GDSF.tiles" styleClass="formText">
+            <h:outputLink value="ServiceDetails.tiles" styleClass="formText">
                 <h:outputText value="#{messages.backToService}"></h:outputText>
             </h:outputLink>
         </td>
@@ -33,7 +31,9 @@ To change this template use File | Settings | File Templates.
 
 
 
-<h:panelGrid headerClass="formHeader" columns="2" rowClasses="formLabel,formLabelWhite" width="100%" border="1" cellpadding="3" cellspacing="0">
+<h:panelGrid headerClass="formHeader" 
+	columns="2" 
+	rowClasses="formLabel,formLabelWhite" width="100%" border="1" cellpadding="3" cellspacing="0">
 
 <f:facet name="header">
     <h:column>
@@ -45,47 +45,31 @@ To change this template use File | Settings | File Templates.
     <h:outputText value="#{messages.id}"/>
 </h:column>
 <h:column>
-    <h:outputText value="#{discoveredServices.navigatedService.navigatedObject.id}"/>
+    <h:outputText value="#{discoveryResult.navigatedService.navigatedClass.umlClass.id}"/>
 </h:column>
-
 
 
 <h:column>
     <h:outputText value="#{messages.className}"/>
 </h:column>
 <h:column>
-    <h:outputText value="#{discoveredServices.navigatedService.navigatedObject.fullName.className}"/>
+    <h:outputText value="#{discoveryResult.navigatedService.navigatedClass.umlClass.className}"/>
 </h:column>
+
 
 <h:column>
     <h:outputText value="#{messages.packageName}"/>
 </h:column>
 <h:column>
-    <h:outputText value="#{discoveredServices.navigatedService.navigatedObject.fullName.packageName}"/>
+    <h:outputText value="#{discoveryResult.navigatedService.navigatedClass.umlClass.packageName}"/>
 </h:column>
 
 
 <h:column>
-    <h:outputText value="#{messages.version}"/>
+    <h:outputText value="#{messages.description}"/>
 </h:column>
 <h:column>
-    <h:outputText value="#{discoveredServices.navigatedService.navigatedObject.version}"/>
-</h:column>
-
-
-<h:column>
-    <h:outputText value="#{messages.shortName}"/>
-</h:column>
-<h:column>
-    <h:outputText value="#{discoveredServices.navigatedService.navigatedObject.shortName}"/>
-</h:column>
-
-
-<h:column>
-    <h:outputText value="#{messages.longName}"/>
-</h:column>
-<h:column>
-    <h:outputText value="#{discoveredServices.navigatedService.navigatedObject.longName}"/>
+    <h:outputText value="#{discoveryResult.navigatedService.navigatedClass.umlClass.description}"/>
 </h:column>
 
 
@@ -94,57 +78,57 @@ To change this template use File | Settings | File Templates.
 </h:column>
 <h:column>
     <!-- attribute table -->
-    <h:dataTable width="100%"  rowClasses="formLabel" border="1" cellpadding="3" cellspacing="0" headerClass="formTitle"  value="#{discoveredServices.navigatedService.navigatedObject.attributesList.attribute}" var="attribute">
+    <h:dataTable width="100%"  rowClasses="formLabel" border="1" 
+    	cellpadding="3" cellspacing="0" headerClass="formTitle"  
+    	value="#{discoveryResult.navigatedService.navigatedClass.umlClass.umlAttributeCollection.UMLAttribute}" var="attribute">
         <h:column>
             <f:facet name="header">
                 <h:outputText value="#{messages.attributeName}"/>
             </f:facet>
             <h:column>
                 <h:outputText value="#{attribute.name}"/>
+                <f:verbatim>&nbsp;</f:verbatim>
             </h:column>
         </h:column>
 
         <h:column>
             <f:facet name="header">
-                <h:outputText value="#{messages.attributeLongName}"/>
+                <h:outputText value="#{messages.attributeType}"/>
             </f:facet>
             <h:column>
-                <h:outputText value="#{attribute.longName}"/>
+                <h:outputText value="#{attribute.dataTypeName}"/>
+                <f:verbatim>&nbsp;</f:verbatim>
             </h:column>
         </h:column>
 
         <h:column>
             <f:facet name="header">
-                <h:outputText value="#{messages.attributeVersion}"/>
+                <h:outputText value="#{messages.description}"/>
             </f:facet>
             <h:column>
-                <h:outputText value="#{attribute.version}"/>
+                <h:outputText value="#{attribute.description}"/>
+                <f:verbatim>&nbsp;</f:verbatim>
             </h:column>
         </h:column>
     </h:dataTable>
 </h:column>
 
 
-<h:column>
-    <h:outputText value="#{messages.description}"/>
-</h:column>
-<h:column>
-    <h:outputText value="#{discoveredServices.navigatedService.navigatedObject.description}"/>
-</h:column>
-
-<h:column>
+<h:column rendered="#{not empty discoveryResult.navigatedService.navigatedClass.associationBeans}">
     <h:outputText value="#{messages.associations}"/>
 </h:column>
 
-<h:column>
+<h:column rendered="#{not empty discoveryResult.navigatedService.navigatedClass.associationBeans}">
     <!--association table-->
-    <h:dataTable width="100%" rowClasses="formLabel" border="1" cellpadding="3" cellspacing="0" headerClass="formTitle"  value="#{discoveredServices.navigatedService.navigatedObject.associationsList.associationElement}" var="association">
+    <h:dataTable width="100%" rowClasses="formLabel" border="1" cellpadding="3" cellspacing="0" 
+    	headerClass="formTitle"  
+    	value="#{discoveryResult.navigatedService.navigatedClass.associationBeans}" var="association">
         <h:column>
             <f:facet name="header">
                 <h:outputText value="#{messages.associationRoleName}"/>
             </f:facet>
             <h:column>
-                <h:outputText value="#{association.target.roleName}"/>
+                <h:outputText value="#{association.umlAssociation.targetUMLAssociationEdge.UMLAssociationEdge.roleName}"/>
             </h:column>
         </h:column>
 
@@ -153,93 +137,24 @@ To change this template use File | Settings | File Templates.
                 <h:outputText value="#{messages.associationMultiplicity}"/>
             </f:facet>
             <h:column>
-                <h:outputText value="#{association.source.lowMultiplicity}"/>
+                <h:outputText value="#{association.umlAssociation.targetUMLAssociationEdge.UMLAssociationEdge.minCardinality}"/>
                 <h:outputText value="..."/>
-                <h:outputText value="#{association.source.highMultiplicity}"/>
+                <h:outputText value="#{association.umlAssociation.targetUMLAssociationEdge.UMLAssociationEdge.maxCardinality}"/>
+            </h:column>
+        </h:column>
+        
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="#{messages.associationType}"/>
+            </f:facet>
+            <h:column>
+                <h:outputText value="#{association.umlClass.className}"/>
             </h:column>
         </h:column>
 
     </h:dataTable>
 </h:column>
-
-
-<h:column>
-    <h:outputText value="#{messages.evsConcepts}"/>
-</h:column>
-<h:column>
-    <!--concept code table-->
-    <h:dataTable width="100%" rowClasses="formLabelWhite" border="1" cellpadding="3" cellspacing="0" headerClass="formTitle"  value="#{discoveredServices.navigatedService.navigatedObject.conceptCodesList.conceptElement}" var="concept">
-        <h:column>
-            <f:facet name="header">
-                <h:outputText value="#{messages.conceptName}"/>
-            </f:facet>
-            <h:column>
-                <h:outputText value="#{concept.conceptCode}"/>
-            </h:column>
-        </h:column>
-
-        <h:column>
-            <f:facet name="header">
-                <h:outputText value="#{messages.conceptPreferredName}"/>
-            </f:facet>
-            <h:column>
-                <h:outputText value="#{concept.conceptPreferredName}"/>
-            </h:column>
-
-        </h:column>
-
-        <h:column>
-            <f:facet name="header">
-                <h:outputText value="#{messages.conceptDefinition}"/>
-            </f:facet>
-            <h:column>
-                <h:outputText value="#{concept.conceptDefinition}"/>
-            </h:column>
-
-        </h:column>
-
-        <h:column>
-            <f:facet name="header">
-                <h:outputText value="#{messages.conceptOrder}"/>
-            </f:facet>
-            <h:column>
-                <h:outputText value="#{concept.order}"/>
-            </h:column>
-
-        </h:column>
-
-
-    </h:dataTable>
-</h:column>
-
-
-
 </h:panelGrid>
 
-&nbsp;&nbsp;
-
-<div align="center">
-    <h:panelGrid columns="1">
-        <h:column>
-            <h:commandButton onclick="wait()"  value="Query Object" action="#{queryWizard.createCQLQueryWizard}"></h:commandButton>
-        </h:column>
-
-
-    </h:panelGrid>
-</div>
-
-
-
-</div>
-
-<div id="wait" style="height:300px;visibility:hidden; position: absolute; top: 300; left: 0">
-       <table width="100%" height ="300px">
-         <tr>
-           <td align="center" valign="bottom">
-          <img src="images/loading_query_wizard.gif">
-           </td>
-         </tr>
-       </table>
-    </div>
 </h:form>
 </f:view>

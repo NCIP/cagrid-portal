@@ -17,6 +17,8 @@ To change this template use File | Settings | File Templates.
 
 <f:view>
     <f:verbatim><br/></f:verbatim>
+    <h:messages/>
+    <f:verbatim><br/></f:verbatim>
     <h:form>
         <!-- Discovery Panel begins -->
         <h:panelGrid columns="2"
@@ -27,48 +29,64 @@ To change this template use File | Settings | File Templates.
             <f:facet name="header">
                 <h:column>
                     <h:outputText value="#{messages.discoveryMenuTitle}"/>
+                    <f:verbatim><br/></f:verbatim>
+                    <h:outputText styleClass="loginFailed" value="#{discoveryBean.discoveryFailureMessage}"/>
                 </h:column>
             </f:facet>
 
             <h:column>
-                <h:outputText value="#{messages.discoveryKeywordTitle}"/>
+                <h:outputText value="#{messages.discoverySemanticKeywordTitle}"/>
             </h:column>
 
             <h:column>
-                <h:inputText id="discoveryKeyword" value="#{keywordDiscoveryBean.keyword}"
-                             size="58">
-                    <f:validateLength minimum="1"/>
-                </h:inputText>
-                <h:message for="lastName" styleClass="loginFailed"/>
+                <h:inputText id="discoveryKeywords" value="#{discoveryBean.keywords}" 
+                size="58"/>
             </h:column>
 
             <h:column>
-                <h:outputText value="#{messages.discoveryMetadataCategory}"/>
+                <h:outputText value="#{messages.discoverySemanticMetadataCategory}"/>
                 <h:outputText value="#{messages.optionalKeyword}"/>
             </h:column>
 
             <h:column>
                 <h:panelGrid columns="4">
-                    <h:selectManyCheckbox value="#{keywordDiscoveryBean.metaDataCategoriesSelected}"
+                    <h:selectManyCheckbox value="#{discoveryBean.semanticMetadataCategoriesSelected}"
                                           styleClass="formText">
-                        <f:selectItems value="#{keywordDiscoveryBean.metaDataCategoryItems}"/>
+                        <f:selectItems value="#{discoveryBean.semanticMetadataCategories}"/>
                     </h:selectManyCheckbox>
                 </h:panelGrid>
             </h:column>
-
-            <h:column>
-                <h:outputText value="#{messages.discoveryServiceTypeCategorySelected}"/>
+            
+			<h:column>
+                <h:outputText value="#{messages.discoveryServiceMetadataCategory}"/>
                 <h:outputText value="#{messages.optionalKeyword}"/>
             </h:column>
 
             <h:column>
-                <h:panelGrid columns="3">
-                    <h:selectManyCheckbox value="#{keywordDiscoveryBean.serviceTypeCategories}"
+                <h:panelGrid columns="4">
+                    <h:selectManyCheckbox value="#{discoveryBean.serviceMetadataCategoriesSelected}"
                                           styleClass="formText">
-                        <f:selectItems value="#{keywordDiscoveryBean.serviceTypeCategoryItems}"/>
+                        <f:selectItems value="#{discoveryBean.serviceMetadataCategories}"/>
                     </h:selectManyCheckbox>
                 </h:panelGrid>
             </h:column>
+            
+            <h:column>
+                <h:outputText value="#{messages.discoveryServiceTypeCategory}"/>
+                <h:outputText value="#{messages.optionalKeyword}"/>
+            </h:column>
+
+            <h:column>
+                <h:panelGrid columns="4">
+                    <h:selectManyCheckbox value="#{discoveryBean.serviceTypeSelected}"
+                                          styleClass="formText">
+                        <f:selectItem itemLabel="All" itemValue="any"/>
+                        <f:selectItem itemLabel="Data" itemValue="data"/>
+                        <f:selectItem itemLabel="Analytical" itemValue="analytical"/>
+                    </h:selectManyCheckbox>
+                </h:panelGrid>
+            </h:column>
+            
 
             <h:column>
                 <f:verbatim>&nbsp;</f:verbatim>
@@ -76,19 +94,15 @@ To change this template use File | Settings | File Templates.
 
             <h:column>
                 <h:commandButton id="discoveryBtn" value="#{labels.discoveryBtn}"
-                                 action="#{keywordDiscoveryBean.doDiscovery}"/>
-
-                <h:commandButton id="discoveryAllBtn" value="#{labels.discoveryAllBtn}"
-                                 action="#{keywordDiscoveryBean.doDiscoveryAll}"/>
+                                 action="#{discoveryBean.doDiscovery}"/>
             </h:column>
+
 
         </h:panelGrid>
         <!-- Discovery Panel Ends -->
     </h:form>
-
-
+    
     <tiles:insert attribute="discoveryResults" ignore="true" flush="false"/>
-
 
 </f:view>
 

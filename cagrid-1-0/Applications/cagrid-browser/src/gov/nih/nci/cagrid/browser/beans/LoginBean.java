@@ -43,10 +43,6 @@ public class LoginBean {
 
 	private static Logger logger = Logger.getLogger(LoginBean.class);
 
-	public static final String SUCCESS_METHOD = "success";
-
-	public static final String FAILED_METHOD = "failed";
-
 	private static final String LOGIN_FAILURE_BAD_IDP_URL = "loginFailed.badIdpUrl";
 
 	private static final String LOGIN_FAILURE_INVALID_CREDENTIALS = "loginFailed.invalidCredentials";
@@ -103,7 +99,7 @@ public class LoginBean {
 
 		logger.debug("Logging in.");
 
-		String result = FAILED_METHOD;
+		String result = AppUtils.FAILED_METHOD;
 		SAMLAssertion saml = null;
 		GlobusCredential proxy = null;
 
@@ -152,7 +148,7 @@ public class LoginBean {
 			}
 		}
 		if (proxy != null) {
-			result = SUCCESS_METHOD;
+			result = AppUtils.SUCCESS_METHOD;
 			setCredentials(proxy);
 		}
 
@@ -164,18 +160,18 @@ public class LoginBean {
 		logger.debug("Logging out.");
 
 		clearUserInfo();
-		return SUCCESS_METHOD;
+		return AppUtils.SUCCESS_METHOD;
 	}
 
 	public String doRegister() {
 		logger.debug("Registering.");
 
-		String result = FAILED_METHOD;
+		String result = AppUtils.FAILED_METHOD;
 
 		try {
 			setRegistrationSuccessMessage(register(getIfsUrl(),
 					getNewUserInfo()));
-			result = SUCCESS_METHOD;
+			result = AppUtils.SUCCESS_METHOD;
 		} catch (MalformedURIException ex) {
 			setRegistrationFailureMessage(AppUtils
 					.getMessage(REGISTRATION_FAILURE_BAD_IDP_URL));

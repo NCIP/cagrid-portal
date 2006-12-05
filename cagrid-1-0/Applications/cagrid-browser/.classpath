@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/xbean.jar"/>
 	<classpathentry kind="lib" path="lib/xbean_xpath.jar"/>
@@ -111,5 +112,14 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/junit-addons-1.4.jar"/>
+	<classpathentry kind="lib" path="ext/lib/junit.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-evs-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-evs-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-evs-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/spring.jar"/>
+	<classpathentry kind="lib" path="ext/lib/hibernate3.jar"/>
+	<classpathentry kind="lib" path="ext/lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -9,138 +9,764 @@
         <locale-config>
             <default-locale>en</default-locale>
         </locale-config>
-        <message-bundle>
-            labels
-        </message-bundle>
-        <message-bundle>
-            messages
-        </message-bundle>
+        <message-bundle> labels </message-bundle>
+        <message-bundle> messages </message-bundle>
     </application>
+
+    <converter>
+        <description>Converts between String and CountryCode objects. </description>
+        <converter-id>CountryCodeConverter</converter-id>
+        <converter-class> gov.nih.nci.cagrid.browser.converters.CountryCodeConverter
+        </converter-class>
+    </converter>
+
+    <converter>
+        <description>Converts between String and StateCode objects. </description>
+        <converter-id>StateCodeConverter</converter-id>
+        <converter-class> gov.nih.nci.cagrid.browser.converters.StateCodeConverter
+        </converter-class>
+    </converter>
     
-	<converter>
-	  <description>Converts between String and CountryCode objects.
-	  </description>
-	  <converter-id>CountryCodeConverter</converter-id>
-	  <converter-class>
-	    gov.nih.nci.cagrid.browser.converters.CountryCodeConverter
-	  </converter-class>
-	</converter>
-	
-	<converter>
-	  <description>Converts between String and StateCode objects.
-	  </description>
-	  <converter-id>StateCodeConverter</converter-id>
-	  <converter-class>
-	    gov.nih.nci.cagrid.browser.converters.StateCodeConverter
-	  </converter-class>
-	</converter>
+    <converter>
+        <description>Converts between String and EndpointReference objects. </description>
+        <converter-id>eprConverter</converter-id>
+        <converter-class> gov.nih.nci.cagrid.browser.converters.EPRConverter
+        </converter-class>
+    </converter>
 
     <!-- To check if user is logged in -->
     <lifecycle>
         <phase-listener>gov.nih.nci.cagrid.browser.navigation.LoggedInCheck</phase-listener>
     </lifecycle>
 
-    <navigation-rule>
-        <from-view-id>*</from-view-id>
-        <navigation-case>
-            <from-outcome>logout</from-outcome>
-            <to-view-id>/LoginFailed.tiles</to-view-id>
-        </navigation-case>
-    </navigation-rule>
+
 
 
     <!-- Managed Beans -->
-    <!--
-    <managed-bean>
-        <managed-bean-name>caGridService</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.CaGridService</managed-bean-class>
-        <managed-bean-scope>none</managed-bean-scope>
-    </managed-bean>
-    -->
 
-	<!--
     <managed-bean>
-        <managed-bean-name>discoveryResult</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.DiscoveredServices</managed-bean-class>
+        <managed-bean-name>discoveryBean</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.ServiceDiscoveryBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
-    -->
 
-    <!-- Index Service Bean -->
-    <!--
-    <managed-bean>
-        <managed-bean-name>indexService</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.IndexService</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
         <managed-property>
-            <property-name>indexList</property-name>
+            <property-name>timeout</property-name>
+            <value>60000</value>
+        </managed-property>
+
+
+        <managed-property>
+            <property-name>indexServiceUrls</property-name>
             <list-entries>
-                <value>http://cagrid04.bmi.ohio-state.edu:7080/wsrf/services/DefaultIndexService</value>
-                <value>http://cagrid-registry-qa.nci.nih.gov/ogsa/services/cagrid/IndexService</value>
+                <value>#{indexService1}</value>
+                <value>#{indexService2}</value>
             </list-entries>
         </managed-property>
-    </managed-bean>
-    -->
+        
+        <managed-property>
+            <property-name>indexServiceUrlsSelected</property-name>
+            <list-entries>
+                <value>#{indexService1.value}</value>
+                <value>#{indexService2.value}</value>
+            </list-entries>
+        </managed-property>
 
-	<!--
-    <managed-bean>
-        <managed-bean-name>keywordDiscoveryBean</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.KeywordSearchCriteria</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <property-name>semanticMetadataCategories</property-name>
+            <value>#{semanticMetadataCategories}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>semanticMetadataCategoriesMap</property-name>
+            <value>#{semanticMetadataCategoriesMap}</value>
+        </managed-property>
+        
+        <managed-property>
+            <property-name>serviceMetadataCategories</property-name>
+            <value>#{serviceMetadataCategories}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>serviceMetadataCategoriesMap</property-name>
+            <value>#{serviceMetadataCategoriesMap}</value>
+        </managed-property>
+
+        
         <managed-property>
             <property-name>discoveryResult</property-name>
             <property-class>gov.nih.nci.cagrid.browser.beans.DiscoveredServices</property-class>
             <value>#{discoveryResult}</value>
         </managed-property>
+
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>indexService1</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
         <managed-property>
-            <property-name>idxService</property-name>
-            <property-class>gov.nih.nci.cagrid.browser.beans.IndexService</property-class>
-            <value>#{indexService}</value>
+            <property-name>label</property-name>
+            <value>http://cbiovdev5017.nci.nih.gov:28080/wsrf/services/DefaultIndexService</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>http://cbiovdev5017.nci.nih.gov:28080/wsrf/services/DefaultIndexService</value>
+        </managed-property>
+    </managed-bean>    
+    
+    <managed-bean>
+        <managed-bean-name>indexService2</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService    </value>
         </managed-property>
     </managed-bean>
-    -->
+    
+    <managed-bean>
+        <managed-bean-name>discoveryResult</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.DiscoveredServices</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>sampleQueries</managed-bean-name>
+        <managed-bean-class>java.util.HashMap</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+        <map-entries>
+            <key-class>java.lang.String</key-class>
+            <value-class>java.util.ArrayList</value-class>
+            <map-entry>
+                <key>http://cbiovdev5017.nci.nih.gov:48080/wsrf/services/cagrid/CaBIOSvc</key>
+                <value>#{CaBIOSvcSampleQueries}</value>
+            </map-entry>
+            
+        </map-entries>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>CaBIOSvcSampleQueries</managed-bean-name>
+        <managed-bean-class>java.util.ArrayList</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <list-entries>
+            <value-class>gov.nih.nci.cagrid.browser.beans.SampleQuery</value-class>
+            <value>#{CaBIOSvcSampleQueries1}</value>
+            <value>#{CaBIOSvcSampleQueries2}</value>
+        </list-entries>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>CaBIOSvcSampleQueries1</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.SampleQuery</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>name</property-name>
+            <value>Gene Query 1</value>
+        </managed-property>
+        <managed-property>
+            <property-name>query</property-name>
+            <value>
+                <![CDATA[
+                
+<CQLQuery 
+    xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+	<Target name="gov.nih.nci.cabio.domain.Gene">
+		<Attribute name="fullName" value="BRCA%" predicate="LIKE"/>
+	</Target>
+</CQLQuery>
+                
+                ]]>
+            </value>
+        </managed-property>
+        
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>CaBIOSvcSampleQueries2</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.SampleQuery</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>name</property-name>
+            <value>Gene Query 2</value>
+        </managed-property>
+        <managed-property>
+            <property-name>query</property-name>
+            <value>
+                <![CDATA[
+                
+<CQLQuery 
+    xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+	<Target name="gov.nih.nci.cabio.domain.Gene">
+		
+	    <Association
+	        name="gov.nih.nci.common.domain.DatabaseCrossReference" 
+	        roleName="databaseCrossReferenceCollection">
+	        <Group logicRelation="AND">
+	            <Attribute name="dataSourceName" value="OMIM_ID" predicate="EQUAL_TO"/>
+	            <Attribute name="crossReferenceId" value="243400" predicate="EQUAL_TO"/>
+	        </Group>
+	    </Association>
+		
+	</Target>
+</CQLQuery>
+                
+                ]]>
+            </value>
+        </managed-property>
+        
+    </managed-bean>
+    
+    
+    
+    
 
-	<!--
+    <!-- BEGIN: Semantic Medatadata Categories -->
+
+
+    <managed-bean>
+        <managed-bean-name>semanticSearchConfig</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.SemanticSearchConfig</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>vocabulary</property-name>
+            <value>NCI_Thesaurus</value>
+        </managed-property>
+        <managed-property>
+            <property-name>limit</property-name>
+            <value>10</value>
+        </managed-property>
+        <managed-property>
+            <property-name>evsGridServiceUrl</property-name>
+            <value>http://cbiovdev5017.nci.nih.gov:48080/wsrf/services/cagrid/EVSGridService</value>
+        </managed-property>
+    </managed-bean>
+
+
+    <managed-bean>
+        <managed-bean-name>semanticMetadataCategoriesMap</managed-bean-name>
+        <managed-bean-class>java.util.HashMap</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+        <map-entries>
+            <map-entry>
+                <key>service</key>
+                <value>#{semanticMetadataSearchService}</value>
+            </map-entry>
+            <map-entry>
+                <key>operation</key>
+                <value>#{semanticMetadataSearchOperation}</value>
+            </map-entry>
+            <map-entry>
+                <key>data</key>
+                <value>#{semanticMetadataSearchData}</value>
+            </map-entry>
+            <map-entry>
+                <key>model</key>
+                <value>#{semanticMetadataSearchModel}</value>
+            </map-entry>
+        </map-entries>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>semanticMetadataCategories</managed-bean-name>
+        <managed-bean-class>java.util.ArrayList</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+        <list-entries>
+            <value-class>javax.faces.model.SelectItem</value-class>
+            <value>#{semanticMetadataCategoryAll}</value>
+            <value>#{semanticMetadataCategoryService}</value>
+            <value>#{semanticMetadataCategoryOperation}</value>
+            <value>#{semanticMetadataCategoryData}</value>
+            <value>#{semanticMetadataCategoryModel}</value>
+        </list-entries>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>semanticMetadataCategoryAll</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>All</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>all</value>
+        </managed-property>
+    </managed-bean>
+
+
+    <managed-bean>
+        <managed-bean-name>semanticMetadataCategoryService</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>Service</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>service</value>
+        </managed-property>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>semanticMetadataSearchService</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.search.SemanticKeywordSearch</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>category</property-name>
+            <value>service</value>
+        </managed-property>
+        <managed-property>
+            <property-name>vocabulary</property-name>
+            <value>#{semanticSearchConfig.vocabulary}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>limit</property-name>
+            <value>#{semanticSearchConfig.limit}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>evsGridServiceUrl</property-name>
+            <value>#{semanticSearchConfig.evsGridServiceUrl}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>semanticMetadataCategoryOperation</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>Operation</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>operation</value>
+        </managed-property>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>semanticMetadataSearchOperation</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.search.SemanticKeywordSearch</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>category</property-name>
+            <value>operation</value>
+        </managed-property>
+        <managed-property>
+            <property-name>vocabulary</property-name>
+            <value>#{semanticSearchConfig.vocabulary}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>limit</property-name>
+            <value>#{semanticSearchConfig.limit}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>evsGridServiceUrl</property-name>
+            <value>#{semanticSearchConfig.evsGridServiceUrl}</value>
+        </managed-property>
+    </managed-bean>
+
+
+    <managed-bean>
+        <managed-bean-name>semanticMetadataCategoryData</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>Operation Input/Output</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>data</value>
+        </managed-property>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>semanticMetadataSearchData</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.search.SemanticKeywordSearch</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>category</property-name>
+            <value>date</value>
+        </managed-property>
+        <managed-property>
+            <property-name>vocabulary</property-name>
+            <value>#{semanticSearchConfig.vocabulary}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>limit</property-name>
+            <value>#{semanticSearchConfig.limit}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>evsGridServiceUrl</property-name>
+            <value>#{semanticSearchConfig.evsGridServiceUrl}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>semanticMetadataCategoryModel</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>Domain Model</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>model</value>
+        </managed-property>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>semanticMetadataSearchModel</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.search.SemanticKeywordSearch</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>category</property-name>
+            <value>model</value>
+        </managed-property>
+        <managed-property>
+            <property-name>vocabulary</property-name>
+            <value>#{semanticSearchConfig.vocabulary}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>limit</property-name>
+            <value>#{semanticSearchConfig.limit}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>evsGridServiceUrl</property-name>
+            <value>#{semanticSearchConfig.evsGridServiceUrl}</value>
+        </managed-property>
+    </managed-bean>
+    <!-- END: Semantic Medatadata Categories -->
+
+    <!-- BEGIN: Service Metadata Categories -->
+    
+    <managed-bean>
+        <managed-bean-name>serviceMetadataCategoriesMap</managed-bean-name>
+        <managed-bean-class>java.util.HashMap</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+        <map-entries>
+            <map-entry>
+                <key>text</key>
+                <value>#{serviceMetadataSearchText}</value>
+            </map-entry>
+            <map-entry>
+                <key>researchCenter</key>
+                <value>#{serviceMetadataSearchResearchCenter}</value>
+            </map-entry>
+            <map-entry>
+                <key>pointOfContact</key>
+                <value>#{serviceMetadataSearchPointOfContact}</value>
+            </map-entry>
+            <map-entry>
+                <key>serviceName</key>
+                <value>#{serviceMetadataSearchServiceName}</value>
+            </map-entry>
+            <map-entry>
+                <key>operationName</key>
+                <value>#{serviceMetadataSearchOperationName}</value>
+            </map-entry>
+            <map-entry>
+                <key>operationInput</key>
+                <value>#{serviceMetadataSearchOperationInput}</value>
+            </map-entry>
+            <map-entry>
+                <key>operationOutput</key>
+                <value>#{serviceMetadataSearchOperationOutput}</value>
+            </map-entry>
+            <map-entry>
+                <key>permissibleValue</key>
+                <value>#{serviceMetadataSearchPermissibleValue}</value>
+            </map-entry>
+            <map-entry>
+                <key>domainModelName</key>
+                <value>#{serviceMetadataSearchDomainModelName}</value>
+            </map-entry>
+            <map-entry>
+                <key>className</key>
+                <value>#{serviceMetadataSearchClassName}</value>
+            </map-entry>
+        </map-entries>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>serviceMetadataCategories</managed-bean-name>
+        <managed-bean-class>java.util.ArrayList</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+        <list-entries>
+            <value-class>javax.faces.model.SelectItem</value-class>
+            <value>#{serviceMetadataCategoryAll}</value>
+            <value>#{serviceMetadataCategoryText}</value>
+            <value>#{serviceMetadataCategoryResearchCenter}</value>
+            <value>#{serviceMetadataCategoryPointOfContact}</value>
+            <value>#{serviceMetadataCategoryServiceName}</value>
+            <value>#{serviceMetadataCategoryOperationName}</value>
+            <value>#{serviceMetadataCategoryOperationInput}</value>
+            <value>#{serviceMetadataCategoryOperationOutput}</value>
+            <value>#{serviceMetadataCategoryPermissibleValue}</value>
+            <value>#{serviceMetadataCategoryDomainModelName}</value>
+            <value>#{serviceMetadataCategoryClassName}</value>
+        </list-entries>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>serviceMetadataCategoryAll</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>All</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>all</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>serviceMetadataCategoryText</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>Text</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>text</value>
+        </managed-property>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>serviceMetadataSearchText</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.search.ServiceKeywordSearch</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>category</property-name>
+            <value>text</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>serviceMetadataCategoryResearchCenter</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>Research Center</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>researchCenter</value>
+        </managed-property>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>serviceMetadataSearchResearchCenter</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.search.ServiceKeywordSearch</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>category</property-name>
+            <value>researchCenter</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>serviceMetadataCategoryPointOfContact</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>Point Of Contact</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>pointOfContact</value>
+        </managed-property>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>serviceMetadataSearchPointOfContact</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.search.ServiceKeywordSearch</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>category</property-name>
+            <value>pointOfContact</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>serviceMetadataCategoryServiceName</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>Service Name</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>serviceName</value>
+        </managed-property>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>serviceMetadataSearchServiceName</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.search.ServiceKeywordSearch</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>category</property-name>
+            <value>serviceName</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>serviceMetadataCategoryOperationName</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>Operation Name</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>operationName</value>
+        </managed-property>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>serviceMetadataSearchOperationName</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.search.ServiceKeywordSearch</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>category</property-name>
+            <value>operationName</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>serviceMetadataCategoryOperationInput</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>Operation Input</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>operationInput</value>
+        </managed-property>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>serviceMetadataSearchOperationInput</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.search.ServiceKeywordSearch</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>category</property-name>
+            <value>operationInput</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>serviceMetadataCategoryOperationOutput</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>Operation Output</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>operationOutput</value>
+        </managed-property>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>serviceMetadataSearchOperationOutput</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.search.ServiceKeywordSearch</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>category</property-name>
+            <value>operationOutput</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>serviceMetadataCategoryPermissibleValue</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>Permissible Value</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>permissibleValue</value>
+        </managed-property>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>serviceMetadataSearchPermissibleValue</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.search.ServiceKeywordSearch</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>category</property-name>
+            <value>permissibleValue</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>serviceMetadataCategoryDomainModelName</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>Domain Model Name</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>domainModelName</value>
+        </managed-property>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>serviceMetadataSearchDomainModelName</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.search.ServiceKeywordSearch</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>category</property-name>
+            <value>domainModelName</value>
+        </managed-property>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>serviceMetadataCategoryClassName</managed-bean-name>
+        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>label</property-name>
+            <value>Class Name</value>
+        </managed-property>
+        <managed-property>
+            <property-name>value</property-name>
+            <value>className</value>
+        </managed-property>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>serviceMetadataSearchClassName</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.cagrid.browser.search.ServiceKeywordSearch</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <managed-property>
+            <property-name>category</property-name>
+            <value>className</value>
+        </managed-property>
+    </managed-bean>
+
+    <!-- END: Service Metadata Categories -->
+
     <managed-bean>
         <managed-bean-name>serviceCart</managed-bean-name>
         <managed-bean-class>gov.nih.nci.cagrid.browser.beans.ServiceCart</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
-	-->
-	<!--
-    <managed-bean>
-        <managed-bean-name>
-            browserConfig
-        </managed-bean-name>
-        <managed-bean-class>
-            gov.nih.nci.cagrid.browser.beans.BrowserConfig
-        </managed-bean-class>
-        <managed-bean-scope>
-            session
-        </managed-bean-scope>
-        <managed-property>
-            <property-name>caCOREServiceURL</property-name>
-            <value>http://cabio.nci.nih.gov/cacore30/server/HTTPServer</value>
-        </managed-property>
-        <managed-property>
-            <property-name>indexService</property-name>
-            <property-class>gov.nih.nci.cagrid.browser.beans.IndexService</property-class>
-            <value>#{indexService}</value>
-        </managed-property>
-    </managed-bean>
-    -->
 
-	
+
     <managed-bean>
-        <managed-bean-name>
-            loginBean
-        </managed-bean-name>
-        <managed-bean-class>
-            gov.nih.nci.cagrid.browser.beans.LoginBean
-        </managed-bean-class>
-        <managed-bean-scope>
-            session
-        </managed-bean-scope>
+        <managed-bean-name> loginBean </managed-bean-name>
+        <managed-bean-class> gov.nih.nci.cagrid.browser.beans.LoginBean </managed-bean-class>
+        <managed-bean-scope> session </managed-bean-scope>
         <managed-property>
             <property-name>idpUrl</property-name>
             <value>https://cbiovdev5017.nci.nih.gov:8441/wsrf/services/cagrid/Dorian</value>
@@ -174,16 +800,8 @@
             <value>0</value>
         </managed-property>
     </managed-bean>
-    
-    <!--
-    <managed-bean>
-        <managed-bean-name>appUtils</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.browser.util.AppUtils</managed-bean-class>
-        <managed-bean-scope>application</managed-bean-scope>
-    </managed-bean>
-    -->
 
-	<!--
+    <!--
     <managed-bean>
         <managed-bean-name>sampleQueriesBean</managed-bean-name>
         <managed-bean-class>gov.nih.nci.cagrid.browser.beans.SampleXMLQueries</managed-bean-class>
@@ -195,7 +813,7 @@
     </managed-bean>
     -->
 
-	<!--
+    <!--
     <managed-bean>
         <managed-bean-name>DiscoveryCompletetionBean</managed-bean-name>
         <managed-bean-class>gov.nih.nci.cagrid.browser.ajax.DiscoveryCompletetionBean</managed-bean-class>
@@ -204,21 +822,17 @@
     -->
 
 
-    <!-- Generic Error page forward -->
-    <!--
+    <!-- Generic Navigation Rules -->
     <navigation-rule>
-        <from-view-id>*</from-view-id>
         <navigation-case>
-            <from-outcome>failed</from-outcome>
-            <to-view-id>/Error_RuntimeException.tiles</to-view-id>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>/LoginFailed.tiles</to-view-id>
         </navigation-case>
     </navigation-rule>
-    -->
 
-
+    <!-- Registration -->
     <navigation-rule>
         <from-view-id>/RegisterNewUser_noLogin.tiles</from-view-id>
-
         <navigation-case>
             <from-action>#{loginBean.doRegister}</from-action>
             <from-outcome>success</from-outcome>
@@ -260,82 +874,70 @@
         </navigation-case>
     </navigation-rule>
 
-
-    <!-- GUI query Builder -->
-    <!--
+    <!-- Service Discovery -->
     <navigation-rule>
-        <from-view-id>/DomainObjectDetails.tiles</from-view-id>
         <navigation-case>
-            <from-action>#{queryWizard.createCQLQueryWizard}</from-action>
+            <from-action>#{discoveryBean.doDiscovery}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>/CQLQueryWizard.tiles</to-view-id>
+            <to-view-id>/DiscoveryResults.tiles</to-view-id>
         </navigation-case>
-        <navigation-case>
-            <from-action>#{queryWizard.createFQPQueryWizard}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/FQPQueryWizard.tiles</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <navigation-case>
-            <from-action>#{queryWizard.createQuery}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/QueryGDSF.tiles</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <navigation-case>
-            <from-action>#{queryWizard.createFQP}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/QueryFQP.tiles</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <navigation-case>
-            <from-action>#{queryWizard.submitFQPD}</from-action>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/QueryFQPResult.tiles</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    -->
-
-
-    <!-- Service cart generic definition -->
-    <!--
-    <navigation-rule>
-        <navigation-case>
-            <from-outcome>serviceAddedToCart</from-outcome>
-            <to-view-id>/ServiceCart.tiles</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>serviceRemovedFromCart</from-outcome>
-            <to-view-id>/ServiceCart.tiles</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    -->
-
-
-    <!-- Generic Rule applies to ALL forms -->
-    <!--
-    <navigation-rule>
-        <from-view-id>*</from-view-id>
         <navigation-case>
             <from-action>#{service.navigateToServiceDetails}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/ServiceDetails.tiles</to-view-id>
         </navigation-case>
         <navigation-case>
-            <from-action>#{keywordDiscoveryBean.doDiscovery}</from-action>
+            <from-action>#{discoveryResult.navigatedService.navigateToUMLClassDetails}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>/DiscoveryResults.tiles</to-view-id>
+            <to-view-id>/DomainObjectDetails.tiles</to-view-id>
         </navigation-case>
         <navigation-case>
-            <from-action>#{keywordDiscoveryBean.doDiscoveryAll}</from-action>
+            <from-action>#{discoveryBean.changeIndexServiceUrls}</from-action>
             <from-outcome>success</from-outcome>
-            <to-view-id>/DiscoveryResults.tiles</to-view-id>
+            <to-view-id>/Configuration.tiles</to-view-id>
         </navigation-case>
     </navigation-rule>
-    -->
+
+
+    <!-- Data Service Query -->
+    <navigation-rule>
+        <navigation-case>
+            <from-action>#{discoveryResult.navigatedService.navigateToQuery}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/QueryDataService.tiles</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{discoveryResult.navigatedService.fillInQuery}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/QueryDataService.tiles</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{discoveryResult.navigatedService.executeQuery}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/QueryDataServiceResult.tiles</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <!-- Service cart generic definition -->
+    <navigation-rule>
+        <navigation-case>
+            <from-action>#{discoveryResult.navigatedService.addToServiceCart}</from-action>
+            <to-view-id>/ServiceCart.tiles</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{service.addToServiceCart}</from-action>
+            <to-view-id>/ServiceCart.tiles</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{service.removeFromServiceCart}</from-action>
+            <to-view-id>/ServiceCart.tiles</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{service.navigateToService}</from-action>
+            <to-view-id>/ServiceDetails.tiles</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+ 
 
     <!-- End navigation rules -->
 

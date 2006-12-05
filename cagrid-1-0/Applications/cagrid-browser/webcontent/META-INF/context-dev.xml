@@ -5,11 +5,11 @@
 
     Context configuration file for the Tomcat Manager Web App
 
-    $Id: context-dev.xml,v 1.1 2006-11-10 00:05:30 kherm Exp $
+    $Id: context-dev.xml,v 1.2 2006-12-05 04:21:38 joshua Exp $
 
 -->
 
 <Context path="/cagrid-browser"
-         docBase="C:\dev\cvsroot\cagrid-1-0\Applications\cagrid-browser\webcontent"
+         docBase="/Users/joshua/dev/ew_cagrid3/cagrid-1-0/Applications/cagrid-browser/webcontent"
          reloadable="true" orverride="true">
 </Context>

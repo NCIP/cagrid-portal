@@ -3,7 +3,9 @@ package gov.nih.nci.cagrid.browser.beans;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 //~--- classes ----------------------------------------------------------------
 
@@ -15,17 +17,23 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class ServiceCart {
-    List shoppedServices;
+    public static final String SERVICE_CART_BEAN = "serviceCart";
+	public static final String SERVICE_CART_FAILED_NOT_FOUND = "serviceCartFailed.notFound";
+	
+	private String serviceCartFailureMessage;
+	
+	
+	Set shoppedServices;
 
     //~--- constructors -------------------------------------------------------
 
     public ServiceCart() {
-        shoppedServices = new ArrayList();
+        shoppedServices = new HashSet();
     }
 
     //~--- methods ------------------------------------------------------------
 
-    public void addGSH(GSH gsh) {
+    public void addService(CaGridService gsh) {
         shoppedServices.add(gsh);
     }
 
@@ -33,21 +41,29 @@ public class ServiceCart {
         shoppedServices.clear();
     }
 
-    public void removeGSH(GSH gsh) {
+    public void removeService(CaGridService gsh) {
         shoppedServices.remove(gsh);
     }
 
     //~--- get methods --------------------------------------------------------
 
     public List getShoppedServices() {
-        return shoppedServices;
+        return new ArrayList(shoppedServices);
     }
 
     //~--- set methods --------------------------------------------------------
 
     public void setShoppedServices(List shoppedServices) {
-        this.shoppedServices = shoppedServices;
+        this.shoppedServices = new HashSet(shoppedServices);
     }
+
+	public String getServiceCartFailureMessage() {
+		return serviceCartFailureMessage;
+	}
+
+	public void setServiceCartFailureMessage(String serviceCartFailureMessage) {
+		this.serviceCartFailureMessage = serviceCartFailureMessage;
+	}
 }
 
 //~ Formatted by Jindent --- http://www.jindent.com

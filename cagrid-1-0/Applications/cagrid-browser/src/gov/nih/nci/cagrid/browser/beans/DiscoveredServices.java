@@ -2,10 +2,11 @@ package gov.nih.nci.cagrid.browser.beans;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import org.apache.axis.message.addressing.EndpointReferenceType;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.log4j.Logger;
 
 //~--- classes ----------------------------------------------------------------
 
@@ -19,18 +20,28 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class DiscoveredServices {
+	
+	
+	private static Logger logger = Logger.getLogger(DiscoveredServices.class);
+	
     private List list = new ArrayList();
     private String size;
     private CaGridService navigatedService;
+    
 
-    public DiscoveredServices() {
+	public DiscoveredServices() {
     }
 
 
     public void addDiscoveryResult(EndpointReferenceType[] eprs) {
         for (int i = 0; i < eprs.length; i++) {
-            CaGridService discoveredServiceTemp = new CaGridService(eprs[i]);
-            list.add(discoveredServiceTemp);
+            CaGridService svc = new CaGridService(eprs[i]);
+            try{
+            	svc.loadMetadata();
+            	this.list.add(svc);
+            }catch(Exception ex){
+            	logger.error("Error loading basic metadata for '" + eprs[i] + "': " + ex.getMessage(), ex);
+            }
         }
     }
 
@@ -49,8 +60,6 @@ public class DiscoveredServices {
 
     public void setNavigatedService(CaGridService navigatedService) {
         this.navigatedService = navigatedService;
-        //load the service with all metadata
-        navigatedService.fillMetadata();
     }
 
     public void setList(List list) {

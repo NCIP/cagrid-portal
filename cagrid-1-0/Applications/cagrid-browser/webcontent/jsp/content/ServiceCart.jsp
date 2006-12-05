@@ -12,7 +12,7 @@ To change this template use File | Settings | File Templates.
 
 <f:loadBundle basename="labels" var="labels"/>
 <f:loadBundle basename="messages" var="messages"/>
-<f:view locale="#{browserConfig.locale}">
+<f:view>
 
 
     <h:form>
@@ -40,29 +40,32 @@ To change this template use File | Settings | File Templates.
                                 <h:outputText value="#{messages.cartMainTitle}"/>
                             </td>
                         </tr>
-
-
+                        
                         <tr>
                             <td class="formTitle">
                                 <h:outputText value="#{messages.cartSubTitle}"/>
+                                <br/>
+                                <h:outputText styleClass="loginFailed" value="#{serviceCart.serviceCartFailureMessage}"/>
                             </td>
                         </tr>
+
+
                         <tr>
                             <td class="formLabel">
 
 
                                 <h:dataTable rowClasses="formLabel,formLabelWhite"
-                                             value="#{serviceCart.shoppedServices}" var="gsh">
+                                             value="#{serviceCart.shoppedServices}" var="service">
 
                                     <h:column>
-                                        <h:commandLink action="#{gsh.doSetNavigatedService}" value="#{gsh.URL}">
+                                        <h:commandLink action="#{service.navigateToServiceDetails}" value="#{service.epr.address}">
 
                                         </h:commandLink>
                                     </h:column>
 
                                     <h:column>
-                                        <h:commandButton value="Remove"
-                                                         action="#{gsh.doRemoveFromserviceCart}"></h:commandButton>
+                                        <h:commandButton value="#{labels.removeServiceCart}"
+                                                         action="#{service.removeFromServiceCart}"></h:commandButton>
                                     </h:column>
                                 </h:dataTable>
 

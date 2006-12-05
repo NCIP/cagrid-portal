@@ -65,10 +65,6 @@
         <put name="Content" value="/jsp/content/ServiceCart.jsp"/>
     </definition>
 
-    <definition name="GDSF" extends="Base">
-        <put name="Content" value="/jsp/content/GDSF.jsp"/>
-    </definition>
-
     <definition name="ServiceDetails" extends="Base">
         <put name="Content" value="/jsp/content/ServiceDetails.jsp"/>
     </definition>
@@ -77,38 +73,16 @@
         <put name="Content" value="/jsp/content/DomainObjectDetails.jsp"/>
     </definition>
 
-    <!-- GUI Query Wizard -->
-    <definition name="CQLQueryWizard" extends="Base">
-        <put name="Content" value="/jsp/tree/CQLQueryWizard.jsp"/>
-    </definition>
-
-    <definition name="FQPQueryWizard" extends="Base">
-        <put name="Content" value="/jsp/tree/FQPQueryWizard.jsp"/>
-    </definition>
-
-    <definition name="QueryFQP" extends="Base">
-        <put name="Content" value="/jsp/tree/QueryFQP.jsp"/>
-    </definition>
-
-    <definition name="QueryFQPResult" extends="Base">
-        <put name="Content" value="/jsp/tree/QueryFQPResult.jsp"/>
-    </definition>
-
-
     <definition name="Configuration" extends="Base">
         <put name="Content" value="/jsp/content/AppConfiguration.jsp"/>
     </definition>
 
-    <definition name="QueryGDSF" extends="Base">
-        <put name="Content" value="/jsp/content/QueryGDSF.jsp"/>
+    <definition name="QueryDataService" extends="Base">
+        <put name="Content" value="/jsp/content/QueryDataService.jsp"/>
     </definition>
 
-    <definition name="QueryGDSFResults" extends="Base">
-        <put name="Content" value="/jsp/content/QueryGDSFResults.jsp"/>
-    </definition>
-
-    <definition name="GUIQueryGDSF" extends="Base">
-        <put name="Content" value="/jsp/content/GUIQUeryGDSF.jsp"/>
+    <definition name="QueryDataServiceResult" extends="Base">
+        <put name="Content" value="/jsp/content/QueryDataServiceResult.jsp"/>
     </definition>
 
     <!--Error Pages-->
