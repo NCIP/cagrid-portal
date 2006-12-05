@@ -18,8 +18,10 @@ import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -70,10 +72,26 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 			if (info != null && info.getPackages() != null) {
 				CadsrPackage[] packs = info.getPackages();
 				if (packs != null && packs.length != 0) {
+					Set validPackageNames = new HashSet();
+					// add any new packages to the table
 					for (int i = 0; i < packs.length; i++) {
 						if (!getPackageNamespaceTable().isPackageInTable(packs[i])) {
 							getPackageNamespaceTable().addNewCadsrPackage(getServiceInformation(), packs[i]);
 						}
+						validPackageNames.add(packs[i].getName());
+					}
+					// remove any packages in the table that are no longer in the model
+					Set invalidPackageNames = new HashSet();
+					for (int i = 0; i < getPackageNamespaceTable().getRowCount(); i++) {
+						String packageName = (String) getPackageNamespaceTable().getValueAt(i, 0);
+						if (!validPackageNames.contains(packageName)) {
+							invalidPackageNames.add(packageName);
+						}
+					}
+					Iterator invalidNameIter = invalidPackageNames.iterator();
+					while (invalidNameIter.hasNext()) {
+						String name = (String) invalidNameIter.next();
+						getPackageNamespaceTable().removeCadsrPackage(name);
 					}
 				}
 			}

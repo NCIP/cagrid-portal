@@ -73,6 +73,16 @@ public class PackageSchemasTable extends JTable {
 	}
 	
 	
+	public void removeCadsrPackage(String packName) {
+		for (int i = 0; i < getRowCount(); i++) {
+			if (getValueAt(i, 0).equals(packName)) {
+				((DefaultTableModel) getModel()).removeRow(i);
+				break;
+			}
+		}
+	}
+	
+	
 	/**
 	 * Creates a new JButton to handle schema resolution
 	 * @param pack
