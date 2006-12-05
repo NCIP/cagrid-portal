@@ -110,9 +110,9 @@ public class GroupPrivilegeWindow extends GridPortalComponent {
 		this.setSize(500, 175);
 		this.setContentPane(getJContentPane());
 		if (isUpdate) {
-			this.setTitle("Update Stem Privilege(s)");
+			this.setTitle("Update Group Privilege(s)");
 		} else {
-			this.setTitle("Add Stem Privilege(s)");
+			this.setTitle("Add Group Privilege(s)");
 		}
 		this.setFrameIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
 	}
