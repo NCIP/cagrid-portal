@@ -165,6 +165,10 @@
     <target name="unDeploy" description="Delete current webapp" depends="checkTomcat">
         <delete dir="${tomcat.webapp.dir}"/>
     </target>
+	
+	<target name="war" depends="buildLocal">
+		<jar destfile="cagrid-browser.war" basedir="${webcontent.root}"/>
+	</target>
 
     <target name="all" depends="buildLocal" description="Default target. WIll build locally">
         <echo message="Not to be called Directltly."/>
