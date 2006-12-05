@@ -451,7 +451,9 @@ public class DomainModelPanel extends AbstractWizardPanel {
 					}
 					lastSelectedProject = proj;
 					UMLPackageMetadata pack = getCaDsrBrowser().getSelectedPackage();
-					addUmlPackage(pack);
+					if (pack != null) {
+						addUmlPackage(pack);
+					}
 				}
 			});
 		}
@@ -471,11 +473,13 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			removePackageButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Object[] selection = getSelectedPackagesList().getSelectedValues();
-					String[] names = new String[selection.length];
-					for (int i = 0; i < selection.length; i++) {
-						names[i] = selection[i].toString();
+					if (selection != null && selection.length != 0) {
+						String[] names = new String[selection.length];
+						for (int i = 0; i < selection.length; i++) {
+							names[i] = selection[i].toString();
+						}
+						removeUmlPackages(names);
 					}
-					removeUmlPackages(names);
 				}
 			});
 		}
@@ -593,14 +597,17 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	private ClassMapping[] getClassMappings(Project proj, UMLPackageMetadata pack) throws Exception {
 		CaDSRServiceClient client = new CaDSRServiceClient(getCaDsrBrowser().getCadsr().getText());
 		UMLClassMetadata[] classMdArray = client.findClassesInPackage(proj, pack.getName());
-		ClassMapping[] mappings = new ClassMapping[classMdArray.length];
-		for (int i = 0; i < classMdArray.length; i++) {
-			ClassMapping map = new ClassMapping();
-			map.setClassName(classMdArray[i].getName());
-			map.setElementName(classMdArray[i].getName());
-			map.setSelected(true);
-			map.setTargetable(true);
-			mappings[i] = map;
+		ClassMapping[] mappings = new ClassMapping[] {};
+		if (classMdArray != null) {
+			mappings = new ClassMapping[classMdArray.length];
+			for (int i = 0; i < classMdArray.length; i++) {
+				ClassMapping map = new ClassMapping();
+				map.setClassName(classMdArray[i].getName());
+				map.setElementName(classMdArray[i].getName());
+				map.setSelected(true);
+				map.setTargetable(true);
+				mappings[i] = map;
+			}
 		}
 		return mappings;
 	}
