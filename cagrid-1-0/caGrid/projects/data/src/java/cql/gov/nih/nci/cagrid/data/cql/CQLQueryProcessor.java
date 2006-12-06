@@ -33,10 +33,9 @@ public abstract class CQLQueryProcessor {
 	
 	/**
 	 * Initialize the query processor with the properties it requires as specified
-	 * in the map provided by getRequiredParameters().  Additionally, the parameter
-	 * <code>AXIS_WSDD_CONFIG_STREAM</code> will be defined and mapped to
-	 * an <code>InputStream</code> object containing the configuration of the
-	 * current axis engine.
+	 * in the Properties instance provided by getRequiredParameters(), and values
+	 * populated by the user's custom entries, if any.
+	 * 
 	 * @param parameters
 	 * 		The parameters as configured by the user.  The set of keys must contain all
 	 * 		of the keys contained in the Properties object returned 
