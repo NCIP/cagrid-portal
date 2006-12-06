@@ -119,6 +119,13 @@ public class CQLQueryResultsValidator {
 	}
 
 
+	/**
+	 * Saves the XSD defining the restricted result set to a file
+	 * 
+	 * @param fileLocation
+	 * 		The file in which to store the XSD
+	 * @throws SchemaValidationException
+	 */
 	public void saveRestrictedCQLResultSetXSD(File fileLocation) throws SchemaValidationException {
 		initializeRestrictedXSD();
 		try {
@@ -188,6 +195,12 @@ public class CQLQueryResultsValidator {
 	}
 
 
+	/**
+	 * Validates a CQL result set's contents against the restricted result set schema
+	 * 
+	 * @param resultSet
+	 * @throws SchemaValidationException
+	 */
 	public void validateCQLResultSet(CQLQueryResults resultSet) throws SchemaValidationException {
 		// make sure we are ready to go
 		initializeRestrictedXSD();

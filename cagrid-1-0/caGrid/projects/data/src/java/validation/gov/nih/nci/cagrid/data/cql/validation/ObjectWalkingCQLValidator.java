@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.cql.validation;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlquery.Group;
@@ -155,6 +156,30 @@ public class ObjectWalkingCQLValidator implements CqlStructureValidator {
 		if (group.getGroup() != null) {
 			for (int i = 0; i < group.getGroup().length; i++) {
 				validateGroupStructure(group.getGroup(i));
+			}
+		}
+	}
+	
+	
+	public static void main(String[] args) {
+		ObjectWalkingCQLValidator validator = new ObjectWalkingCQLValidator();
+		for (int i = 0; i < args.length; i++) {
+			// deserialize a CQL Query
+			CQLQuery query = null;
+			try {
+				query = (CQLQuery) Utils.deserializeDocument(args[i], CQLQuery.class);
+			} catch (Exception ex) {
+				System.err.println("Errro deserializing CQL query file " + args[i]);
+				ex.printStackTrace();
+				System.exit(1);
+			}
+			try {
+				validator.validateCqlStructure(query);
+			} catch (MalformedQueryException ex) {
+				System.err.println("Query " + args[i] + " is not valid CQL:");
+				System.err.println(ex.getMessage());
+				ex.printStackTrace();
+				System.exit(1);
 			}
 		}
 	}

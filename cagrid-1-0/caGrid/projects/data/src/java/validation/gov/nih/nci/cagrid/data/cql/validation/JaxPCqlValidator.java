@@ -11,8 +11,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringWriter;
 
-import javax.xml.namespace.QName;
-
 
 /** 
  *  CQLValidator
@@ -26,11 +24,9 @@ import javax.xml.namespace.QName;
 public class JaxPCqlValidator implements CqlStructureValidator {
 	
 	private SchemaValidator validator;
-	private QName queryQname;
-	
+		
 	public JaxPCqlValidator(String xsdFilename) throws SchemaValidationException {
 		validator = new SchemaValidator(xsdFilename);
-		queryQname = new QName(DataServiceConstants.CQL_QUERY_URI, "CQLQuery");
 	}
 	
 	
@@ -39,7 +35,7 @@ public class JaxPCqlValidator implements CqlStructureValidator {
 		StringWriter objectWriter = new StringWriter();
 		try {
 			FileInputStream configStream = new FileInputStream(new File("client-config.wsdd"));
-			Utils.serializeObject(query, queryQname, objectWriter, configStream);
+			Utils.serializeObject(query, DataServiceConstants.CQL_QUERY_QNAME, objectWriter, configStream);
 		} catch (Exception ex) {
 			throw new MalformedQueryException("Error serializing the query: " + ex.getMessage(), ex);
 		}

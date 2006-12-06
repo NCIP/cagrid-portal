@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.utilities.DomainModelUtils;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.common.Enumeration;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
@@ -16,6 +17,7 @@ import gov.nih.nci.cagrid.metadata.common.ValueDomainEnumerationCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation;
 
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -262,5 +264,38 @@ public class DomainModelValidator implements CqlDomainValidator {
 		UMLAssociation[] array = new UMLAssociation[associations.size()];
 		associations.toArray(array);
 		return array;
+	}
+	
+	
+	public static void main(String[] args) {
+		DomainModelValidator validator = new DomainModelValidator();
+		if (args.length < 2) {
+			System.err.println("USAGE: domainModel.xml cqlQuery1.xml [cqlQuery2.xml .. cqlQueryN.xml]");
+			System.exit(1);
+		}
+		DomainModel model = null;
+		try {
+			model = MetadataUtils.deserializeDomainModel(new FileReader(args[0]));
+		} catch (Exception ex) {
+			System.err.println("Error deserializing domain model file: " + args[0]);
+			System.exit(1);
+		}
+		for (int i = 1; i < args.length; i++) {
+			CQLQuery query = null;
+			try {
+				
+			} catch (Exception ex) {
+				System.err.println("Error deserializign CQL query file: " + args[i]);
+				ex.printStackTrace();
+				System.exit(1);
+			}
+			try {
+				validator.validateDomainModel(query, model);
+			} catch (MalformedQueryException ex) {
+				System.err.println("Query " + args[i] + " is not valid");
+				ex.printStackTrace();
+				System.exit(1);
+			}
+		}
 	}
 }
