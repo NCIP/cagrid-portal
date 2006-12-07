@@ -103,7 +103,7 @@
   <ns15:ResearchCenter displayName="The Ohio State University" shortName="OSU" xmlns:ns15="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
    <ns15:Address country="US" postalCode="43210" stateProvince="OH" street1="333 W. 10th Ave"/>
    <ns15:pointOfContactCollection>
-    <ns15:PointOfContact affiliation="OSU" email="oster@bmi.osu.edu" firstName="Scott" lastName="OSU" role="maintainer"/>
+    <ns15:PointOfContact affiliation="OSU" email="oster@bmi.osu.edu" firstName="Scott" lastName="Oster" role="maintainer"/>
    </ns15:pointOfContactCollection>
   </ns15:ResearchCenter>
  </ns1:hostingResearchCenter>

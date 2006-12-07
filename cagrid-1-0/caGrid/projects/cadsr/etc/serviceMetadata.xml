@@ -1872,7 +1872,7 @@
       </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
-      <ns2:ContextProperty description="caGrid Standard Service Metadata" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
+      <ns2:ContextProperty description="caGrid standard Service Metadata" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>
@@ -1888,7 +1888,7 @@
   <ns69:ResearchCenter displayName="The Ohio State University" shortName="OSU" xmlns:ns69="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
    <ns69:Address country="US" postalCode="43210" stateProvince="OH" street1="333 W. 10th Ave"/>
    <ns69:pointOfContactCollection>
-    <ns69:PointOfContact affiliation="OSU" email="oster@bmi.osu.edu" firstName="Scott" lastName="OSU" role="maintainer"/>
+    <ns69:PointOfContact affiliation="OSU" email="oster@bmi.osu.edu" firstName="Scott" lastName="Oster" role="maintainer"/>
    </ns69:pointOfContactCollection>
   </ns69:ResearchCenter>
  </ns1:hostingResearchCenter>
