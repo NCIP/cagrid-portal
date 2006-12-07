@@ -1,35 +1,36 @@
 <ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
  <ns1:serviceDescription>
-  <ns2:Service description="The AuthenticationService grid service, created with caGrid Introduce, version:.99999." name="AuthenticationService" version="1.0"
-   xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+  <ns2:Service 
+  	description="The AuthenticationService serves as an integration point between local identity management and caGrid identity federation. This implementation exposes the NCICB's Common Securty Module (CSM) as an Identity Provider (IdP) that may be used in conjuction with the dorian Identity federation service." 
+  	name="AuthenticationService" version="1.0" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection>
-    <ns3:PointOfContact affiliation="" email="" firstName="" lastName="" role="Developer" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
-    />
+    <ns3:PointOfContact affiliation="SemanticBits" email="joshua.phillips@semanticbits.com" 
+     firstName="Joshua" lastName="Phillips" role="Developer"
+     xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    </ns2:pointOfContactCollection>
    <ns2:serviceContextCollection>
-    <ns2:ServiceContext description="" name="AuthenticationService">
+    <ns2:ServiceContext description="The main service context" name="AuthenticationService">
      <ns2:operationCollection>
-      <ns2:Operation description="" name="getServiceSecurityMetadata">
+      <ns2:Operation description="Returns a description of the security requirements for interacting with this service." 
+      	name="getServiceSecurityMetadata">
        <ns2:inputParameterCollection/>
-       <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false"
-        xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+       <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
        <ns2:faultCollection/>
       </ns2:Operation>
-      <ns2:Operation description="" name="authenticate">
+      <ns2:Operation description="Returns a SAMLAssertion about the identity of the caller." name="authenticate">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns4:Credential" dimensionality="1" index="0" isArray="false" isRequired="false" name="credential"
-         xmlns:ns4="http://cagrid.nci.nih.gov/1/authentication-service"/>
+        <ns2:InputParameter qName="ns4:Credential" dimensionality="1" index="0" isArray="false" isRequired="false" name="credential" xmlns:ns4="http://cagrid.nci.nih.gov/1/authentication-service"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns5:SAMLAssertion" dimensionality="1" isArray="false" xmlns:ns5="http://cagrid.nci.nih.gov/1/authentication-service"/>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="InvalidCredentialFault"/>
-        <ns2:Fault description="" name="InsufficientAttributeFault"/>
-        <ns2:Fault description="" name="AuthenticationProviderFault"/>
+        <ns2:Fault description="Returned if the supplied credentials are invalid." name="InvalidCredentialFault"/>
+        <ns2:Fault description="Returned if the attributes returned by the underlying IdP are insufficient for identity federation." name="InsufficientAttributeFault"/>
+        <ns2:Fault description="Returned if an internal error occurs during this operation." name="AuthenticationProviderFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
-      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
+      <ns2:ContextProperty description="caGrid standard service metadata" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>
@@ -38,14 +39,15 @@
     conceptName="Grid Service" order="0" xmlns:ns39="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns40:SemanticMetadata conceptCode="C63542"
     conceptDefinition="Services that are needed to maintain the running of a grid, including monitoring and discovery service, security management service (authentication and authorization), identifier naming and resolution service, query and federated query service, and workflow management service."
-    conceptName="Core Grid Service" order="1" xmlns:ns40="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
-  </ns2:Service>
+    conceptName="Core Grid Service" order="1" xmlns:ns40="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>  </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter>
-  <ns69:ResearchCenter displayName="" shortName="" xmlns:ns69="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-   <ns69:Address country="" postalCode="" stateProvince="" street1=""/>
+  <ns69:ResearchCenter displayName="NCI Center for Bioinformatics" shortName="NCICB" 
+   xmlns:ns69="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns69:Address country="US" postalCode="20852" stateProvince="MD" street1="6116 Executive Blvd."/>
    <ns69:pointOfContactCollection>
-    <ns69:PointOfContact affiliation="" email="" firstName="" lastName="" role="maintainer"/>
+    <ns69:PointOfContact affiliation="NCICB" email="shanbhak@mail.nih.gov" firstName="Krishnakant" 
+     lastName="Shanbhag" role="maintainer"/>
    </ns69:pointOfContactCollection>
   </ns69:ResearchCenter>
  </ns1:hostingResearchCenter>
