@@ -2,66 +2,66 @@
  <ns1:serviceDescription>
   <ns2:Service description="A grid service for the provisioning and management of grid users accounts.  Dorian provides an integration point between external security domains and the grid, allowing accounts managed in external domains to be federated and managed in the grid.   Dorian allows users to use their existing credentials to authenticate to the grid."  name="Dorian" version="1.0" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection>
-    <ns3:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Developer" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+    <ns3:PointOfContact affiliation="Ohio State University" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Developer" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    </ns2:pointOfContactCollection>
    <ns2:serviceContextCollection>
-    <ns2:ServiceContext description="" name="Dorian">
+    <ns2:ServiceContext description="Dorian Grid Service" name="Dorian">
      <ns2:operationCollection>
-      <ns2:Operation description="" name="getServiceSecurityMetadata">
+      <ns2:Operation description="Gets the Service Security Metadata" name="getServiceSecurityMetadata">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
        <ns2:faultCollection/>
       </ns2:Operation>
-      <ns2:Operation description="" name="registerWithIdP">
+      <ns2:Operation description="Submits an application for an account with a the Dorian Identity Provider." name="registerWithIdP">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns4:Application" dimensionality="1" index="0" isArray="false" isRequired="false" name="application" xmlns:ns4="http://cagrid.nci.nih.gov/1/dorian-idp"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="xsd:string" dimensionality="1" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="InvalidUserPropertyFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Invalid application submitted." name="InvalidUserPropertyFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="findIdPUsers">
+      <ns2:Operation description="Obtain a list of users accounts within the Dorian IdP, meeting a specified search criteria." name="findIdPUsers">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns5:IdPUserFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="filter" xmlns:ns5="http://cagrid.nci.nih.gov/1/dorian-idp"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns6:IdPUser" dimensionality="1" isArray="true" xmlns:ns6="http://cagrid.nci.nih.gov/1/dorian-idp"/>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="updateIdPUser">
+      <ns2:Operation description="Update the account information for a Dorian IdP user." name="updateIdPUser">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns7:IdPUser" dimensionality="1" index="0" isArray="false" isRequired="false" name="user" xmlns:ns7="http://cagrid.nci.nih.gov/1/dorian-idp"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="NoSuchUserFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="The user specified does not exist." name="NoSuchUserFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="removeIdPUser">
+      <ns2:Operation description="Remove an IdP user account." name="removeIdPUser">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="userId" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="authenticateWithIdP">
+      <ns2:Operation description="Authenticate with the Dorian IdP." name="authenticateWithIdP">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns8:BasicAuthCredential" dimensionality="1" index="0" isArray="false" isRequired="false" name="cred" xmlns:ns8="http://cagrid.nci.nih.gov/1/dorian-idp"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns9:SAMLAssertion" dimensionality="1" isArray="false" xmlns:ns9="http://cagrid.nci.nih.gov/1/dorian-common"/>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="createProxy">
+      <ns2:Operation description="Create a proxy certificate." name="createProxy">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns10:SAMLAssertion" dimensionality="1" index="0" isArray="false" isRequired="false" name="saml" xmlns:ns10="http://cagrid.nci.nih.gov/1/dorian-common"/>
         <ns2:InputParameter qName="ns11:PublicKey" dimensionality="1" index="1" isArray="false" isRequired="false" name="publicKey" xmlns:ns11="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
@@ -70,67 +70,67 @@
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns14:X509Certificate" dimensionality="1" isArray="true" xmlns:ns14="http://cagrid.nci.nih.gov/1/dorian-common"/>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="InvalidAssertionFault"/>
-        <ns2:Fault description="" name="InvalidProxyFault"/>
-        <ns2:Fault description="" name="UserPolicyFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Invalid SAML Assertions provided." name="InvalidAssertionFault"/>
+        <ns2:Fault description="Invalid proxy error." name="InvalidProxyFault"/>
+        <ns2:Fault description="The IdP's user policy reported an error." name="UserPolicyFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="getCACertificate">
+      <ns2:Operation description="Obtains the Dorian CA certificate." name="getCACertificate">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns15:X509Certificate" dimensionality="1" isArray="false" xmlns:ns15="http://cagrid.nci.nih.gov/1/dorian-common"/>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="getTrustedIdPs">
+      <ns2:Operation description="Gets a list of the IdPs trusted by Dorian." name="getTrustedIdPs">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns16:TrustedIdP" dimensionality="1" isArray="true" xmlns:ns16="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="addTrustedIdP">
+      <ns2:Operation description="Add a Trusted Identity Provider to Dorian." name="addTrustedIdP">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns17:TrustedIdP" dimensionality="1" index="0" isArray="false" isRequired="false" name="idp" xmlns:ns17="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns18:TrustedIdP" dimensionality="1" isArray="false" xmlns:ns18="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="InvalidTrustedIdPFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Invalid Trusted Identity Provider specified." name="InvalidTrustedIdPFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="updateTrustedIdP">
+      <ns2:Operation description="Update the information for a Trusted IdP." name="updateTrustedIdP">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns19:TrustedIdP" dimensionality="1" index="0" isArray="false" isRequired="false" name="trustedIdP" xmlns:ns19="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="InvalidTrustedIdPFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Invalid Trusted Identity Provider specified." name="InvalidTrustedIdPFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="removeTrustedIdP">
+      <ns2:Operation description="Remove a TrustedIdP." name="removeTrustedIdP">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns20:TrustedIdP" dimensionality="1" index="0" isArray="false" isRequired="false" name="trustedIdP" xmlns:ns20="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="InvalidTrustedIdPFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Invalid Trusted Identity Provider specified." name="InvalidTrustedIdPFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="findIFSUsers">
+      <ns2:Operation description="Obtain a list of grid users accounts within the Dorian, meeting a specified search criteria." name="findIFSUsers">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns21:IFSUserFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="filter" xmlns:ns21="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns22:IFSUser" dimensionality="1" isArray="true" xmlns:ns22="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
       <ns2:Operation description="" name="updateIFSUser">
@@ -138,49 +138,49 @@
         <ns2:InputParameter qName="ns23:IFSUser" dimensionality="1" index="0" isArray="false" isRequired="false" name="user" xmlns:ns23="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="InvalidUserFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Invalid user specified." name="InvalidUserFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="removeIFSUser">
+      <ns2:Operation description="Removes a grid user account." name="removeIFSUser">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns24:IFSUser" dimensionality="1" index="0" isArray="false" isRequired="false" name="user" xmlns:ns24="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="InvalidUserFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Invalid user specified." name="InvalidUserFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="renewIFSUserCredentials">
+      <ns2:Operation description="Renews a grid user's long term credentials." name="renewIFSUserCredentials">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns25:IFSUser" dimensionality="1" index="0" isArray="false" isRequired="false" name="user" xmlns:ns25="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns26:IFSUser" dimensionality="1" isArray="false" xmlns:ns26="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="InvalidUserFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Invalid user specified." name="InvalidUserFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="getIFSUserPolicies">
+      <ns2:Operation description="Get a list of the Trusted IdP user policies supported by Dorian." name="getIFSUserPolicies">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns27:IFSUserPolicy" dimensionality="1" isArray="true" xmlns:ns27="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="DorianInternalFault"/>
-        <ns2:Fault description="" name="PermissionDeniedFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="authenticate">
+      <ns2:Operation description="Authentication Service interface for authenticating with the Dorian IdP." name="authenticate">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns28:Credential" dimensionality="1" index="0" isArray="false" isRequired="false" name="credential" xmlns:ns28="http://cagrid.nci.nih.gov/1/authentication-service"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns29:SAMLAssertion" dimensionality="1" isArray="false" xmlns:ns29="http://cagrid.nci.nih.gov/1/authentication-service"/>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="InvalidCredentialFault"/>
-        <ns2:Fault description="" name="InsufficientAttributeFault"/>
-        <ns2:Fault description="" name="AuthenticationProviderFault"/>
+        <ns2:Fault description="An unexpected internal Dorian error." name="InvalidCredentialFault"/>
+        <ns2:Fault description="The DorianIdP could obtain the attributes needed to issue a valid SAML assertion." name="InsufficientAttributeFault"/>
+        <ns2:Fault description="An error occurred in authenticating." name="AuthenticationProviderFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
      </ns2:operationCollection>
@@ -194,7 +194,7 @@
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter>
-  <ns42:ResearchCenter displayName="The Ohio State University" shortName="OSU" xmlns:ns42="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+  <ns42:ResearchCenter displayName="Ohio State University" shortName="OSU" xmlns:ns42="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
    <ns42:Address country="US" postalCode="43210" stateProvince="OH" street1="333 W. 10th Ave"/>
    <ns42:pointOfContactCollection>
     <ns42:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="maintainer"/>
