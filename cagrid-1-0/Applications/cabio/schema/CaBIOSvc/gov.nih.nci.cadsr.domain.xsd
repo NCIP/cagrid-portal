@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain" xmlns:gov.nih.nci.common.provenance.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.common.provenance.domain" xmlns:gov.nih.nci.common.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.common.domain" xmlns:gov.nih.nci.cadsr.umlproject.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain" xmlns:gov.nih.nci.camod.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" xmlns:gov.nih.nci.cabio.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" targetNamespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain" elementFormDefault="qualified">
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="gov.nih.nci.cadsr.umlproject.domain.xsd" />
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.provenance.domain" schemaLocation="gov.nih.nci.common.provenance.domain.xsd" />
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" schemaLocation="gov.nih.nci.camod.domain.xsd" />
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" schemaLocation="gov.nih.nci.cabio.domain.xsd" />
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.domain" schemaLocation="gov.nih.nci.common.domain.xsd" />
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain"  targetNamespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain" elementFormDefault="qualified">
+  
   <xs:element name="AdministeredComponent" type="AdministeredComponent" />
   <xs:complexType name="AdministeredComponent">
     <xs:sequence>

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" xmlns:gov.nih.nci.common.provenance.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.common.provenance.domain" xmlns:gov.nih.nci.common.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.common.domain" xmlns:gov.nih.nci.cadsr.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain" xmlns:gov.nih.nci.cadsr.umlproject.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain" xmlns:gov.nih.nci.cabio.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" targetNamespace="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" elementFormDefault="qualified">
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.domain" schemaLocation="gov.nih.nci.common.domain.xsd" />
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain" schemaLocation="gov.nih.nci.cadsr.domain.xsd" />
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="gov.nih.nci.cadsr.umlproject.domain.xsd" />
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" xmlns:gov.nih.nci.cabio.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" targetNamespace="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" elementFormDefault="qualified">
+
   <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" schemaLocation="gov.nih.nci.cabio.domain.xsd" />
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.provenance.domain" schemaLocation="gov.nih.nci.common.provenance.domain.xsd" />
+
   <xs:element name="Xenograft" type="Xenograft" />
   <xs:complexType name="Xenograft">
     <xs:complexContent>
@@ -287,7 +285,9 @@
   <xs:element name="EngineeredGene" type="EngineeredGene" />
   <xs:complexType name="EngineeredGene">
     <xs:sequence>
+      <!--
       <xs:element name="databaseCrossReferenceCollection" type="gov.nih.nci.common.domain:DatabaseCrossReference" minOccurs="0" maxOccurs="unbounded" />
+      -->
       <xs:element name="conditionality" type="Conditionality" minOccurs="0" maxOccurs="1" />
       <xs:element name="image" type="Image" minOccurs="0" maxOccurs="1" />
       <xs:element name="geneCollection" type="gov.nih.nci.cabio.domain:Gene" minOccurs="0" maxOccurs="unbounded" />

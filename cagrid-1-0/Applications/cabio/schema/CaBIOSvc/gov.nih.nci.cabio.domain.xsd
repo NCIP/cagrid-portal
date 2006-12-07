@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" xmlns:gov.nih.nci.common.provenance.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.common.provenance.domain" xmlns:gov.nih.nci.common.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.common.domain" xmlns:gov.nih.nci.cadsr.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain" xmlns:gov.nih.nci.cadsr.umlproject.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain" xmlns:gov.nih.nci.camod.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" targetNamespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" elementFormDefault="qualified">
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" schemaLocation="gov.nih.nci.camod.domain.xsd" />
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain" schemaLocation="gov.nih.nci.cadsr.umlproject.domain.xsd" />
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.provenance.domain" schemaLocation="gov.nih.nci.common.provenance.domain.xsd" />
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.domain" schemaLocation="gov.nih.nci.common.domain.xsd" />
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain" schemaLocation="gov.nih.nci.cadsr.domain.xsd" />
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain"  targetNamespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" elementFormDefault="qualified">
+
   <xs:element name="Vocabulary" type="Vocabulary" />
   <xs:complexType name="Vocabulary">
     <xs:sequence>
@@ -36,7 +32,9 @@
   <xs:element name="SNP" type="SNP" />
   <xs:complexType name="SNP">
     <xs:sequence>
+      <!--
       <xs:element name="databaseCrossReferenceCollection" type="gov.nih.nci.common.domain:DatabaseCrossReference" minOccurs="0" maxOccurs="unbounded" />
+      -->
       <xs:element name="populationFrequencyCollection" type="PopulationFrequency" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="locationCollection" type="Location" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="geneRelativeLocationCollection" type="GeneRelativeLocation" minOccurs="0" maxOccurs="unbounded" />
@@ -109,7 +107,9 @@
   <xs:element name="NucleicAcidSequence" type="NucleicAcidSequence" />
   <xs:complexType name="NucleicAcidSequence">
     <xs:sequence>
+      <!--
       <xs:element name="databaseCrossReferenceCollection" type="gov.nih.nci.common.domain:DatabaseCrossReference" minOccurs="0" maxOccurs="unbounded" />
+      -->
       <xs:element name="cloneRelativeLocation" type="CloneRelativeLocation" minOccurs="0" maxOccurs="1" />
       <xs:element name="geneCollection" type="Gene" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="locationCollection" type="Location" minOccurs="0" maxOccurs="unbounded" />
@@ -174,7 +174,9 @@
       <xs:element name="parentOrganOntologyRelationshipCollection" type="OrganOntologyRelationship" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="geneCollection" type="Gene" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="histopathologyCollection" type="Histopathology" minOccurs="0" maxOccurs="unbounded" />
+      <!--
       <xs:element name="expressionFeatureCollection" type="gov.nih.nci.camod.domain:ExpressionFeature" minOccurs="0" maxOccurs="unbounded" />
+      -->
     </xs:sequence>
     <xs:attribute name="id" type="xs:long" />
     <xs:attribute name="name" type="xs:string" />
@@ -229,13 +231,17 @@
     <xs:sequence>
       <xs:element name="taxon" type="Taxon" minOccurs="0" maxOccurs="1" />
       <xs:element name="pathwayCollection" type="Pathway" minOccurs="0" maxOccurs="unbounded" />
+      <!--
       <xs:element name="expressionFeatureCollection" type="gov.nih.nci.camod.domain:ExpressionFeature" minOccurs="0" maxOccurs="unbounded" />
+      -->
       <xs:element name="nucleicAcidSequenceCollection" type="NucleicAcidSequence" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="locationCollection" type="Location" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="homologousAssociationCollection" type="HomologousAssociation" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="geneRelativeLocationCollection" type="GeneRelativeLocation" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="genericReporterCollection" type="GenericReporter" minOccurs="0" maxOccurs="unbounded" />
+      <!--
       <xs:element name="databaseCrossReferenceCollection" type="gov.nih.nci.common.domain:DatabaseCrossReference" minOccurs="0" maxOccurs="unbounded" />
+      -->
       <xs:element name="libraryCollection" type="Library" minOccurs="0" maxOccurs="unbounded" />
       <xs:element name="chromosome" type="Chromosome" minOccurs="0" maxOccurs="1" />
       <xs:element name="histopathologyCollection" type="Histopathology" minOccurs="0" maxOccurs="unbounded" />
