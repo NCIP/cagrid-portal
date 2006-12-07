@@ -1,12 +1,13 @@
 <ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
  <ns1:serviceDescription>
-  <ns2:Service description="The GlobalModelExchange grid service, created with caGrid Introduce, version:.99999." name="GlobalModelExchange" version=".99999"
-   xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+  <ns2:Service
+   description="The GlobalModelExchange grid service, provides a DNS-like distributed registry for XML Schemas, providing an authortative source for the syntactic representation of all data transmitted in the grid."
+   name="GlobalModelExchange" version="1.0" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection/>
    <ns2:serviceContextCollection>
-    <ns2:ServiceContext description="" name="GlobalModelExchange">
+    <ns2:ServiceContext description="The Global Model Exchange Service." name="GlobalModelExchange">
      <ns2:operationCollection>
-      <ns2:Operation description="" name="getServiceSecurityMetadata">
+      <ns2:Operation description="Returns the service security metadata." name="getServiceSecurityMetadata">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false"
         xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
@@ -14,7 +15,7 @@
       </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
-      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
+      <ns2:ContextProperty description="caGrid standard service metadata" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>
