@@ -32,6 +32,7 @@ import org.xml.sax.InputSource;
 public class CQLObjectResultIterator implements Iterator {
 	private CQLObjectResult[] results;
 	private int currentIndex;
+	private String targetClassName;
 	private Class objectClass;
 	private boolean xmlOnly;
 	private InputStream wsddInputStream;
@@ -40,7 +41,7 @@ public class CQLObjectResultIterator implements Iterator {
 	
 	CQLObjectResultIterator(CQLObjectResult[] results, String targetName, 
 		boolean xmlOnly, InputStream wsdd) throws ClassNotFoundException {
-		this.objectClass = Class.forName(targetName);
+		this.targetClassName = targetName;
 		this.results = results;
 		this.currentIndex = -1;
 		this.xmlOnly = xmlOnly;
@@ -74,7 +75,7 @@ public class CQLObjectResultIterator implements Iterator {
 			}
 			InputSource objectSource = new InputSource(new StringReader(documentString));
 			ConfigurableObjectDeserializationContext desContext	= 
-				new ConfigurableObjectDeserializationContext(messageContext, objectSource, objectClass);
+				new ConfigurableObjectDeserializationContext(messageContext, objectSource, getTargetClass());
 			return desContext.getValue();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -101,6 +102,20 @@ public class CQLObjectResultIterator implements Iterator {
 			return new ByteArrayInputStream(wsddBytes);
 		}
 		return null;
+	}
+	
+	
+	private Class getTargetClass() {
+		if (objectClass == null) {
+			try {
+				objectClass = Class.forName(targetClassName);
+			} catch (ClassNotFoundException ex) {
+				NoSuchElementException nse = new NoSuchElementException(ex.getMessage());
+				nse.setStackTrace(ex.getStackTrace());
+				throw nse;
+			}
+		}
+		return objectClass;
 	}
 	
 	
