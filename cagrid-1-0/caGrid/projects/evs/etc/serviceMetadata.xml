@@ -536,10 +536,10 @@
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter>
-  <ns69:ResearchCenter displayName="" shortName="" xmlns:ns69="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-   <ns69:Address country="US" postalCode="" stateProvince="" street1=""/>
+  <ns69:ResearchCenter displayName="National Cancer Institute Center for Bioinformatics" shortName="NCICB" xmlns:ns69="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns69:Address country="US" postalCode="20852" stateProvince="MD" street1="6116 Executive Blvd, Suite 403"/>
    <ns69:pointOfContactCollection>
-    <ns69:PointOfContact affiliation="" email="" firstName="" lastName="" role="maintainer"/>
+    <ns69:PointOfContact affiliation="NCICB Application Support" email="ncicbmb@mail.nih.gov" firstName="" lastName="" role="maintainer"/>
    </ns69:pointOfContactCollection>
   </ns69:ResearchCenter>
  </ns1:hostingResearchCenter>
