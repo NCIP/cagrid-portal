@@ -1,18 +1,22 @@
 <ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
  <ns1:serviceDescription>
-  <ns2:Service description="The EVSGridService grid service, created with caGrid Introduce, version:.99999." name="EVSGridService" version=".99999"
-   xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
-   <ns2:pointOfContactCollection/>
+  <ns2:Service
+   description="The EVS grid service provides access to data semantics and controlled terminology as managed by the NCI Enterprise Vocabulary Service."
+   name="EVSGridService" version="1.0" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+   <ns2:pointOfContactCollection>
+    <ns3:PointOfContact affiliation="" email="" firstName="" lastName="" role="Developer" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
+    />
+   </ns2:pointOfContactCollection>
    <ns2:serviceContextCollection>
-    <ns2:ServiceContext description="" name="EVSGridService">
+    <ns2:ServiceContext description="The main EVS grid service." name="EVSGridService">
      <ns2:operationCollection>
-      <ns2:Operation description="" name="getServiceSecurityMetadata">
+      <ns2:Operation description="Returns the service's security metadata." name="getServiceSecurityMetadata">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false"
         xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
        <ns2:faultCollection/>
       </ns2:Operation>
-      <ns2:Operation description="" name="getVocabularyNames">
+      <ns2:Operation description="Returns all the vocabularies present in the Description Logic in caCORE 3.1 EVS service." name="getVocabularyNames">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns4:DescLogicConceptVocabularyName" dimensionality="1" isArray="true"
         xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service">
@@ -38,7 +42,7 @@
        </ns2:Output>
        <ns2:faultCollection/>
       </ns2:Operation>
-      <ns2:Operation description="" name="getMetaSources">
+      <ns2:Operation description="Returns all Metathesaurus Sources contained in the EVS." name="getMetaSources">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns6:Source" dimensionality="1" isArray="true" xmlns:ns6="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain">
         <ns7:UMLClass className="Source" description="The source is a knowledge base." id="23E974EB-1397-5040-E044-0003BA3F9857"
@@ -78,7 +82,8 @@
        </ns2:Output>
        <ns2:faultCollection/>
       </ns2:Operation>
-      <ns2:Operation description="" name="searchDescLogicConcept">
+      <ns2:Operation description="Searches a valid Vocabulary such as NCI Thesaurus and returns Description Logic concepts that meet the search criteria."
+       name="searchDescLogicConcept">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns8:EVSDescLogicConceptSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false"
          name="eVSDescLogicConceptSearchParams" xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service">
@@ -233,10 +238,10 @@
         </ns11:UMLClass>
        </ns2:Output>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="InvalidInputException"/>
+        <ns2:Fault description="Thrown if invalid inputs are used, such as null or empty concepts or sources." name="InvalidInputException"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="searchMetaThesaurus">
+      <ns2:Operation description="Searches NCI meta thesaurus and returns Meta Thesaurus information that meet the search criteria." name="searchMetaThesaurus">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns12:EVSMetaThesaurusSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false"
          name="eVSMetaThesaurusSearchParams" xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service">
@@ -364,10 +369,10 @@
         </ns15:UMLClass>
        </ns2:Output>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="InvalidInputException"/>
+        <ns2:Fault description="Thrown if invalid inputs are used, such as null or empty concepts or sources." name="InvalidInputException"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="getHistoryRecords">
+      <ns2:Operation description="Searches a valid vocabulary in NCI thesaurus for history information." name="getHistoryRecords">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns16:EVSHistoryRecordsSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false"
          name="eVSHistoryRecordsSearchParams" xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service">
@@ -435,10 +440,10 @@
         </ns19:UMLClass>
        </ns2:Output>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="InvalidInputException"/>
+        <ns2:Fault description="Thrown if invalid inputs are used, such as null or empty concepts or sources." name="InvalidInputException"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="searchSourceByCode">
+      <ns2:Operation description="Searches the Meta Thesaurus based on Source code." name="searchSourceByCode">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns20:EVSSourceSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false" name="eVSSourceSearchParams"
          xmlns:ns20="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service">
@@ -513,12 +518,12 @@
         </ns23:UMLClass>
        </ns2:Output>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="InvalidInputException"/>
+        <ns2:Fault description="Thrown if invalid inputs are used, such as null or empty concepts or sources." name="InvalidInputException"/>
        </ns2:faultCollection>
       </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
-      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
+      <ns2:ContextProperty description="caGrid standard service metadata" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>
