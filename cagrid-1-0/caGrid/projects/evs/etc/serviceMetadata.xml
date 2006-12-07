@@ -12,46 +12,353 @@
       </ns2:Operation>
       <ns2:Operation description="" name="getVocabularyNames">
        <ns2:inputParameterCollection/>
-       <ns2:Output qName="ns4:DescLogicConceptVocabularyName" dimensionality="1" isArray="true" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
+       <ns2:Output qName="ns4:DescLogicConceptVocabularyName" dimensionality="1" isArray="true" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service">
+        <ns5:UMLClass className="DescLogicConceptVocabularyName" description="This class will contain the input parameters used by caCORE EVS API to retrieve Description Logic vocabulary names" id="23E974EB-14A7-5040-E044-0003BA3F9857" packageName="gov.nih.nci.cagrid.evs.service" projectName="caGrid" projectVersion="1" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+         <ns5:umlAttributeCollection>
+          <ns5:UMLAttribute dataTypeName="java.lang.String" description="Vocabulary Name for the Description Logic Concept" name="vocabularyName" publicID="2538697" version="1.0">
+           <ns5:SemanticMetadata conceptCode="C42614" conceptDefinition="The words or language units by which a thing is known." conceptName="Name" order="0"/>
+           <ns5:SemanticMetadata conceptCode="C43528" conceptDefinition="The object describes the vocabulary." conceptName="Vocabulary Object" order="1"/>
+           <ns5:ValueDomain longName="java.lang.String">
+            <ns5:enumerationCollection/>
+           </ns5:ValueDomain>
+          </ns5:UMLAttribute>
+         </ns5:umlAttributeCollection>
+         <ns5:SemanticMetadata conceptCode="C42614" conceptDefinition="The words or language units by which a thing is known." conceptName="Name" order="0"/>
+         <ns5:SemanticMetadata conceptCode="C42717" conceptDefinition="This class encapsulates the attributes of EVS DescLogicConcept object." conceptName="Description Logic Concept" order="2"/>
+         <ns5:SemanticMetadata conceptCode="C43528" conceptDefinition="The object describes the vocabulary." conceptName="Vocabulary Object" order="1"/>
+        </ns5:UMLClass>
+       </ns2:Output>
        <ns2:faultCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="getMetaSources">
        <ns2:inputParameterCollection/>
-       <ns2:Output qName="ns5:Source" dimensionality="1" isArray="true" xmlns:ns5="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
+       <ns2:Output qName="ns6:Source" dimensionality="1" isArray="true" xmlns:ns6="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain">
+        <ns7:UMLClass className="Source" description="The source is a knowledge base." id="23E974EB-1397-5040-E044-0003BA3F9857" packageName="gov.nih.nci.evs.domain" projectName="caCORE" projectVersion="3.1" xmlns:ns7="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+         <ns7:umlAttributeCollection>
+          <ns7:UMLAttribute dataTypeName="java.lang.String" description="Specifies the source abbreviation" name="abbreviation" publicID="2222908" version="3.0">
+           <ns7:SemanticMetadata conceptCode="C42610" conceptDefinition="A shortened form of a word or phrase." conceptName="Abbreviation" order="0"/>
+           <ns7:ValueDomain longName="java.lang.String">
+            <ns7:enumerationCollection/>
+           </ns7:ValueDomain>
+          </ns7:UMLAttribute>
+          <ns7:UMLAttribute dataTypeName="java.lang.String" description="The name of the source." name="name" publicID="2228415" version="3.0">
+           <ns7:SemanticMetadata conceptCode="C42614" conceptDefinition="The words or language units by which a thing is known." conceptName="Name" order="0"/>
+           <ns7:ValueDomain longName="java.lang.String">
+            <ns7:enumerationCollection/>
+           </ns7:ValueDomain>
+          </ns7:UMLAttribute>
+          <ns7:UMLAttribute dataTypeName="java.lang.String" description="Textual description of the source" name="description" publicID="2222907" version="3.0">
+           <ns7:SemanticMetadata conceptCode="C25365" conceptDefinition="Description; a statement that represents something in words." conceptName="Description " order="0"/>
+           <ns7:ValueDomain longName="java.lang.String">
+            <ns7:enumerationCollection/>
+           </ns7:ValueDomain>
+          </ns7:UMLAttribute>
+          <ns7:UMLAttribute dataTypeName="java.lang.Long" description="An integer value in the database to uniquely identify the particular source entry." name="id" publicID="2228414" version="3.0">
+           <ns7:SemanticMetadata conceptCode="C25364" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." conceptName="Identifier" order="0"/>
+           <ns7:ValueDomain longName="java.lang.Long">
+            <ns7:enumerationCollection/>
+           </ns7:ValueDomain>
+          </ns7:UMLAttribute>
+         </ns7:umlAttributeCollection>
+         <ns7:SemanticMetadata conceptCode="C25683" conceptDefinition="Source; where something is available." conceptName="Source" order="0"/>
+        </ns7:UMLClass>
+       </ns2:Output>
        <ns2:faultCollection/>
       </ns2:Operation>
       <ns2:Operation description="" name="searchDescLogicConcept">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns6:EVSDescLogicConceptSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false" name="eVSDescLogicConceptSearchParams" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
+        <ns2:InputParameter qName="ns8:EVSDescLogicConceptSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false" name="eVSDescLogicConceptSearchParams" xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service">
+         <ns9:UMLClass className="EVSDescLogicConceptSearchParams" description="This class will contain the input parameters used by caCORE EVS API to retrieve Description Logic Concept data" id="23E974EB-14A3-5040-E044-0003BA3F9857" packageName="gov.nih.nci.cagrid.evs.service" projectName="caGrid" projectVersion="1" xmlns:ns9="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+          <ns9:umlAttributeCollection>
+           <ns9:UMLAttribute dataTypeName="java.lang.String" description="Any string value used for searching" name="searchTerm" publicID="2538685" version="1.0">
+            <ns9:SemanticMetadata conceptCode="C54117" conceptDefinition="The activity of looking thoroughly in order to find something or someone; an operation that determines whether one or more of a set of items has a specified property." conceptName="Search" order="1"/>
+            <ns9:SemanticMetadata conceptCode="C45559" conceptDefinition="A word or expression used for some particular thing." conceptName="Term" order="0"/>
+            <ns9:ValueDomain longName="java.lang.String">
+             <ns9:enumerationCollection/>
+            </ns9:ValueDomain>
+           </ns9:UMLAttribute>
+           <ns9:UMLAttribute dataTypeName="java.lang.String" description="A valid Description Logic vocabulary name such as NCI_Thesaurus, GO, HL7 etc" name="vocabularyName" publicID="2538684" version="1.0">
+            <ns9:SemanticMetadata conceptCode="C43528" conceptDefinition="The object describes the vocabulary." conceptName="Vocabulary Object" order="1"/>
+            <ns9:SemanticMetadata conceptCode="C42614" conceptDefinition="The words or language units by which a thing is known." conceptName="Name" order="0"/>
+            <ns9:ValueDomain longName="java.lang.String">
+             <ns9:enumerationCollection/>
+            </ns9:ValueDomain>
+           </ns9:UMLAttribute>
+           <ns9:UMLAttribute dataTypeName="java.lang.Integer" description="Maximum number of records" name="limit" publicID="2538686" version="1.0">
+            <ns9:SemanticMetadata conceptCode="C54115" conceptDefinition="A positive return on a search in a database or by way of a search engine on the Internet; the request for and delivery of a file (such as a Web page) on a server." conceptName="Hit" order="2"/>
+            <ns9:SemanticMetadata conceptCode="C25337" conceptDefinition="Number; a concept of quantity derived from zero and units; a numeral or string of numerals that is used for identification." conceptName="Number" order="0"/>
+            <ns9:SemanticMetadata conceptCode="C25564" conceptDefinition="the largest possible quantity or degree." conceptName="Maximum" order="1"/>
+            <ns9:ValueDomain longName="java.lang.Integer">
+             <ns9:enumerationCollection/>
+            </ns9:ValueDomain>
+           </ns9:UMLAttribute>
+          </ns9:umlAttributeCollection>
+          <ns9:SemanticMetadata conceptCode="C42717" conceptDefinition="This class encapsulates the attributes of EVS DescLogicConcept object." conceptName="Description Logic Concept" order="2"/>
+          <ns9:SemanticMetadata conceptCode="C48913" conceptDefinition="A value that is passed to a routine." conceptName="Programming Parameter" order="0"/>
+          <ns9:SemanticMetadata conceptCode="C43515" conceptDefinition="The NCI EVS is set of services and resources that address NCI's needs for controlled vocabulary. The EVS Project is a collaborative effort of the Center for Bioinformatics and the NCI Office of Communications. The NCI Thesaurus, which is a biomedical thesaurus created specifically to meet the needs of the NCI, is produced by the NCI EVS project. The NCI Thesaurus is provided under an open content license.  The EVS Project also produces the NCI Metathesaurus, which is based on NLM's Unified Medical Language System Metathesaurus supplemented with additional cancer-centric vocabulary. In addition the EVS Project provides NCI with licenses for MedDRA, SNOMED, ICD-O-3, and other proprietary vocabularies. (http://ncicb.nci.nih.gov/core/EVS)" conceptName="NCI Enterprise Vocabulary Services" order="3"/>
+          <ns9:SemanticMetadata conceptCode="C54117" conceptDefinition="The activity of looking thoroughly in order to find something or someone; an operation that determines whether one or more of a set of items has a specified property." conceptName="Search" order="1"/>
+         </ns9:UMLClass>
+        </ns2:InputParameter>
        </ns2:inputParameterCollection>
-       <ns2:Output qName="ns7:DescLogicConcept" dimensionality="1" isArray="true" xmlns:ns7="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
+       <ns2:Output qName="ns10:DescLogicConcept" dimensionality="1" isArray="true" xmlns:ns10="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain">
+        <ns11:UMLClass className="DescLogicConcept" description="The DescLogicConcept class represents the fundamental vocabulary entity in the NCI Thesaurus. " id="23E974EB-1395-5040-E044-0003BA3F9857" packageName="gov.nih.nci.evs.domain" projectName="caCORE" projectVersion="3.1" xmlns:ns11="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+         <ns11:umlAttributeCollection>
+          <ns11:UMLAttribute dataTypeName="java.util.Vector" description="This attribute holds association information between concepts" name="inverseAssociationCollection" publicID="2533342" version="1.0">
+           <ns11:SemanticMetadata conceptCode="C54170" conceptDefinition="An inverse association has the same basic meaning of an association but is expressed in the opposite direction." conceptName="Inverse Association" order="1"/>
+           <ns11:SemanticMetadata conceptCode="C43446" conceptDefinition="An object that holds the values or locations of other objects." conceptName="Container Object" order="0"/>
+           <ns11:ValueDomain longName="java.util.Vector">
+            <ns11:enumerationCollection/>
+           </ns11:ValueDomain>
+          </ns11:UMLAttribute>
+          <ns11:UMLAttribute dataTypeName="java.util.Vector" description="Stores the inverse relationship between two concepts" name="inverseRoleCollection" publicID="2533340" version="1.0">
+           <ns11:SemanticMetadata conceptCode="C43446" conceptDefinition="An object that holds the values or locations of other objects." conceptName="Container Object" order="0"/>
+           <ns11:SemanticMetadata conceptCode="C43275" conceptDefinition="An inverse role has the same basic meaning of a role entity but is expressed in the opposite direction.  For computational reasons these can't be directly modeled in the NCI Thesaurus but are computed after the fact." conceptName="Inverse Role" order="1"/>
+           <ns11:ValueDomain longName="java.util.Vector">
+            <ns11:enumerationCollection/>
+           </ns11:ValueDomain>
+          </ns11:UMLAttribute>
+          <ns11:UMLAttribute dataTypeName="java.lang.Integer" description="The namespaceId is used to identify a set of concepts within a terminology such as the NCI Thesaurus." name="namespaceId" publicID="2222928" version="3.0">
+           <ns11:SemanticMetadata conceptCode="C25364" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." conceptName="Identifier" order="0"/>
+           <ns11:SemanticMetadata conceptCode="C42699" conceptDefinition="In general, a namespace is an abstract container, which is or could be filled by names, or technical terms, or words, and these represent or stand for real-world things.  A description logic terminology namespace is a collection of Kind, Role, Property and Concept definitions. As in the programming, context namespaces are intended to allow multiple knowledge bases to reside in the same physical database. (from Wikipedia and Apelon)" conceptName="Namespace Entity" order="1"/>
+           <ns11:ValueDomain longName="java.lang.Integer">
+            <ns11:enumerationCollection/>
+           </ns11:ValueDomain>
+          </ns11:UMLAttribute>
+          <ns11:UMLAttribute dataTypeName="java.lang.Boolean" description="Sets this value to 'true'  if a concept is retired. " name="isRetired" publicID="2533337" version="1.0">
+           <ns11:SemanticMetadata conceptCode="C28428" conceptDefinition="Indicates that a concept is no longer an active concept in the NCI Thesaurus. (caBIO)" conceptName="Retired Concept" order="1"/>
+           <ns11:SemanticMetadata conceptCode="C43578" conceptDefinition="An indicator that can be set or unset in order to signal whether a particular condition is true. The indicator usually takes the form of a single binary digit, or bit (either 0 or 1). (from Dictionary of Computers)" conceptName="Flag" order="0"/>
+           <ns11:ValueDomain longName="java.lang.Boolean">
+            <ns11:enumerationCollection/>
+           </ns11:ValueDomain>
+          </ns11:UMLAttribute>
+          <ns11:UMLAttribute dataTypeName="java.lang.Boolean" description="Sets this value to 'true' if a concept has children" name="hasChildren" publicID="2533339" version="1.0">
+           <ns11:SemanticMetadata conceptCode="C43821" conceptDefinition="A concept is the basic unit of information contained in the Thesaurus. They describe sets of individuals in a given domain. A concept has a name, belongs to a Namespace and exists in relation to other concepts. The vertical relationships consist of &quot;isa&quot; statements that form a logical hierarchy (taxonomy or subsumption graph). In general, concepts above a given concept are referred to as superconcepts or parents and those below as subconcepts or children. In addition, there are horizontal named realationships between concepts called Roles, binary relations between concepts that provide a machine-interpretable definition of a concept and the means for discrimination of sibling concepts. A concept may also include Properties, named slots that allow attachment of external information to concepts." conceptName="Concept" order="0"/>
+           <ns11:SemanticMetadata conceptCode="C16423" conceptDefinition="A son or daughter of any age, including biological offspring and sometimes including unborn children, adopted children, stepchildren, foster children and children born outside of marriage; person under an age specified by law." conceptName="Child" order="1"/>
+           <ns11:ValueDomain longName="java.lang.Boolean">
+            <ns11:enumerationCollection/>
+           </ns11:ValueDomain>
+          </ns11:UMLAttribute>
+          <ns11:UMLAttribute dataTypeName="java.lang.String" description="This is an unique code associated with a concept within the specified vocabulary. " name="code" publicID="2222925" version="3.0">
+           <ns11:SemanticMetadata conceptCode="C25162" conceptDefinition="A system of numbered categories for representation of data." conceptName="Code" order="0"/>
+           <ns11:ValueDomain longName="java.lang.String">
+            <ns11:enumerationCollection/>
+           </ns11:ValueDomain>
+          </ns11:UMLAttribute>
+          <ns11:UMLAttribute dataTypeName="java.util.Vector" description="Stores the Semantic_Type property value for this DescLogicConcept" name="semanticTypeVector" publicID="2533341" version="1.0">
+           <ns11:SemanticMetadata conceptCode="C54169" conceptDefinition="A single dimensional array." conceptName="Vector" order="0"/>
+           <ns11:SemanticMetadata conceptCode="C42732" conceptDefinition="The Semantic Type is the basic category or categories that describe a Concept.  In general, applying semantic types aids in allowing users (or computer programs) to draw conclusions about concepts by virtue of the categories to which they have been assigned.  We use a set of Semantic types developed for the UMLS Metathesaurus. There are currently 134 Semantic types in the UMLS." conceptName="Semantic Type" order="1"/>
+           <ns11:ValueDomain longName="java.util.Vector">
+            <ns11:enumerationCollection/>
+           </ns11:ValueDomain>
+          </ns11:UMLAttribute>
+          <ns11:UMLAttribute dataTypeName="java.lang.String" description="Specifies the name of the concept. " name="name" publicID="2222927" version="3.0">
+           <ns11:SemanticMetadata conceptCode="C42614" conceptDefinition="The words or language units by which a thing is known." conceptName="Name" order="0"/>
+           <ns11:ValueDomain longName="java.lang.String">
+            <ns11:enumerationCollection/>
+           </ns11:ValueDomain>
+          </ns11:UMLAttribute>
+          <ns11:UMLAttribute dataTypeName="java.lang.Boolean" description="This value is set to 'true' if a concept has a parent" name="hasParents" publicID="2533338" version="1.0">
+           <ns11:SemanticMetadata conceptCode="C43821" conceptDefinition="A concept is the basic unit of information contained in the Thesaurus. They describe sets of individuals in a given domain. A concept has a name, belongs to a Namespace and exists in relation to other concepts. The vertical relationships consist of &quot;isa&quot; statements that form a logical hierarchy (taxonomy or subsumption graph). In general, concepts above a given concept are referred to as superconcepts or parents and those below as subconcepts or children. In addition, there are horizontal named realationships between concepts called Roles, binary relations between concepts that provide a machine-interpretable definition of a concept and the means for discrimination of sibling concepts. A concept may also include Properties, named slots that allow attachment of external information to concepts." conceptName="Concept" order="0"/>
+           <ns11:SemanticMetadata conceptCode="C42709" conceptDefinition="A mother or a father; the immediate progenitor." conceptName="Parent" order="1"/>
+           <ns11:ValueDomain longName="java.lang.Boolean">
+            <ns11:enumerationCollection/>
+           </ns11:ValueDomain>
+          </ns11:UMLAttribute>
+         </ns11:umlAttributeCollection>
+         <ns11:SemanticMetadata conceptCode="C42717" conceptDefinition="This class encapsulates the attributes of EVS DescLogicConcept object." conceptName="Description Logic Concept" order="0"/>
+        </ns11:UMLClass>
+       </ns2:Output>
        <ns2:faultCollection>
         <ns2:Fault description="" name="InvalidInputException"/>
        </ns2:faultCollection>
       </ns2:Operation>
       <ns2:Operation description="" name="searchMetaThesaurus">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns8:EVSMetaThesaurusSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false" name="eVSMetaThesaurusSearchParams" xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
+        <ns2:InputParameter qName="ns12:EVSMetaThesaurusSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false" name="eVSMetaThesaurusSearchParams" xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service">
+         <ns13:UMLClass className="EVSMetaThesaurusSearchParams" description="This class will contain the input parameters used by caCORE EVS API to retrieve Meta Thesaurus Concepts" id="23E974EB-14A4-5040-E044-0003BA3F9857" packageName="gov.nih.nci.cagrid.evs.service" projectName="caGrid" projectVersion="1" xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+          <ns13:umlAttributeCollection>
+           <ns13:UMLAttribute dataTypeName="java.lang.Boolean" description="Set to true for score" name="score" publicID="2538692" version="1.0">
+            <ns13:SemanticMetadata conceptCode="C62803" conceptDefinition="An operation that segregates items into groups according to a specified criterion." conceptName="Sorting" order="2"/>
+            <ns13:SemanticMetadata conceptCode="C25338" conceptDefinition="A number or range of numeric values measuring performance, function, quality, or ability." conceptName="Score" order="1"/>
+            <ns13:SemanticMetadata conceptCode="C45254" conceptDefinition="The type of an expression with two possible values, &quot;true&quot; and &quot;false&quot;. Also, a variable of Boolean type or a function with Boolean arguments or result. The most common Boolean functions are AND, OR and NOT. (http://foldoc.doc.ic.ac.uk/foldoc/foldoc.cgi?Boolean)" conceptName="Boolean" order="0"/>
+            <ns13:ValueDomain longName="java.lang.Boolean">
+             <ns13:enumerationCollection/>
+            </ns13:ValueDomain>
+           </ns13:UMLAttribute>
+           <ns13:UMLAttribute dataTypeName="java.lang.Integer" description="Maximum Number of records" name="limit" publicID="2538688" version="1.0">
+            <ns13:SemanticMetadata conceptCode="C25337" conceptDefinition="Number; a concept of quantity derived from zero and units; a numeral or string of numerals that is used for identification." conceptName="Number" order="0"/>
+            <ns13:SemanticMetadata conceptCode="C25564" conceptDefinition="the largest possible quantity or degree." conceptName="Maximum" order="1"/>
+            <ns13:SemanticMetadata conceptCode="C54115" conceptDefinition="A positive return on a search in a database or by way of a search engine on the Internet; the request for and delivery of a file (such as a Web page) on a server." conceptName="Hit" order="2"/>
+            <ns13:ValueDomain longName="java.lang.Integer">
+             <ns13:enumerationCollection/>
+            </ns13:ValueDomain>
+           </ns13:UMLAttribute>
+           <ns13:UMLAttribute dataTypeName="java.lang.String" description="Source abbreviation. Each source has a abbreviation that can uniquely identify a source" name="source" publicID="2538689" version="1.0">
+            <ns13:SemanticMetadata conceptCode="C42610" conceptDefinition="A shortened form of a word or phrase." conceptName="Abbreviation" order="0"/>
+            <ns13:SemanticMetadata conceptCode="C43822" conceptDefinition="An indicator of the particular group or agency that supplied a specific term." conceptName="Term Source" order="1"/>
+            <ns13:ValueDomain longName="java.lang.String">
+             <ns13:enumerationCollection/>
+            </ns13:ValueDomain>
+           </ns13:UMLAttribute>
+           <ns13:UMLAttribute dataTypeName="java.lang.String" description="Any String value or a valid concept unique identifier. A concept unique identifier is used to uniquely identify concepts in the MetaThesaurus" name="searchTerm" publicID="2538687" version="1.0">
+            <ns13:SemanticMetadata conceptCode="C54117" conceptDefinition="The activity of looking thoroughly in order to find something or someone; an operation that determines whether one or more of a set of items has a specified property." conceptName="Search" order="1"/>
+            <ns13:SemanticMetadata conceptCode="C45559" conceptDefinition="A word or expression used for some particular thing." conceptName="Term" order="0"/>
+            <ns13:ValueDomain longName="java.lang.String">
+             <ns13:enumerationCollection/>
+            </ns13:ValueDomain>
+           </ns13:UMLAttribute>
+           <ns13:UMLAttribute dataTypeName="java.lang.Boolean" description="Set to true for short response" name="shortResponse" publicID="2538691" version="1.0">
+            <ns13:SemanticMetadata conceptCode="C49149" conceptDefinition="A statement (either spoken or written) that is made in reply to a question or request or criticism or accusation; a statement that solves a problem or explains how to solve the problem." conceptName="Answer" order="1"/>
+            <ns13:SemanticMetadata conceptCode="C45254" conceptDefinition="The type of an expression with two possible values, &quot;true&quot; and &quot;false&quot;. Also, a variable of Boolean type or a function with Boolean arguments or result. The most common Boolean functions are AND, OR and NOT. (http://foldoc.doc.ic.ac.uk/foldoc/foldoc.cgi?Boolean)" conceptName="Boolean" order="0"/>
+            <ns13:SemanticMetadata conceptCode="C25249" conceptDefinition="Having little (physical) length or seeming to be limited in (temporal) duration." conceptName="Short" order="2"/>
+            <ns13:ValueDomain longName="java.lang.Boolean">
+             <ns13:enumerationCollection/>
+            </ns13:ValueDomain>
+           </ns13:UMLAttribute>
+           <ns13:UMLAttribute dataTypeName="java.lang.Boolean" description="This value is set to true if a concept unique identifier is used as a search term" name="cui" publicID="2538690" version="1.0">
+            <ns13:SemanticMetadata conceptCode="C45254" conceptDefinition="The type of an expression with two possible values, &quot;true&quot; and &quot;false&quot;. Also, a variable of Boolean type or a function with Boolean arguments or result. The most common Boolean functions are AND, OR and NOT. (http://foldoc.doc.ic.ac.uk/foldoc/foldoc.cgi?Boolean)" conceptName="Boolean" order="0"/>
+            <ns13:SemanticMetadata conceptCode="C45972" conceptDefinition="A concept unique identifier within the NCI Enterprise Vocabulary Service's NCI Metathesaurus." conceptName="NCI Metathesaurus Code" order="1"/>
+            <ns13:ValueDomain longName="java.lang.Boolean">
+             <ns13:enumerationCollection/>
+            </ns13:ValueDomain>
+           </ns13:UMLAttribute>
+          </ns13:umlAttributeCollection>
+          <ns13:SemanticMetadata conceptCode="C42695" conceptDefinition="This class encapsulates the attributes of EVS MetaThesaurus Concept object." conceptName="Meta Thesaurus Concept" order="2"/>
+          <ns13:SemanticMetadata conceptCode="C48913" conceptDefinition="A value that is passed to a routine." conceptName="Programming Parameter" order="0"/>
+          <ns13:SemanticMetadata conceptCode="C43515" conceptDefinition="The NCI EVS is set of services and resources that address NCI's needs for controlled vocabulary. The EVS Project is a collaborative effort of the Center for Bioinformatics and the NCI Office of Communications. The NCI Thesaurus, which is a biomedical thesaurus created specifically to meet the needs of the NCI, is produced by the NCI EVS project. The NCI Thesaurus is provided under an open content license.  The EVS Project also produces the NCI Metathesaurus, which is based on NLM's Unified Medical Language System Metathesaurus supplemented with additional cancer-centric vocabulary. In addition the EVS Project provides NCI with licenses for MedDRA, SNOMED, ICD-O-3, and other proprietary vocabularies. (http://ncicb.nci.nih.gov/core/EVS)" conceptName="NCI Enterprise Vocabulary Services" order="3"/>
+          <ns13:SemanticMetadata conceptCode="C54117" conceptDefinition="The activity of looking thoroughly in order to find something or someone; an operation that determines whether one or more of a set of items has a specified property." conceptName="Search" order="1"/>
+         </ns13:UMLClass>
+        </ns2:InputParameter>
        </ns2:inputParameterCollection>
-       <ns2:Output qName="ns9:MetaThesaurusConcept" dimensionality="1" isArray="true" xmlns:ns9="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
+       <ns2:Output qName="ns14:MetaThesaurusConcept" dimensionality="1" isArray="true" xmlns:ns14="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain">
+        <ns15:UMLClass className="MetaThesaurusConcept" description="MetaThesaurusConcept is the fundamental vocabulary entity in the NCI MetaThesaurus." id="23E974EB-1396-5040-E044-0003BA3F9857" packageName="gov.nih.nci.evs.domain" projectName="caCORE" projectVersion="3.1" xmlns:ns15="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+         <ns15:umlAttributeCollection>
+          <ns15:UMLAttribute dataTypeName="java.lang.String" description="Specifies the concept name" name="name" publicID="2222918" version="3.0">
+           <ns15:SemanticMetadata conceptCode="C42614" conceptDefinition="The words or language units by which a thing is known." conceptName="Name" order="0"/>
+           <ns15:ValueDomain longName="java.lang.String">
+            <ns15:enumerationCollection/>
+           </ns15:ValueDomain>
+          </ns15:UMLAttribute>
+          <ns15:UMLAttribute dataTypeName="java.lang.String" description="CUI is the Concept Unique Identifier within the MetaThesaurus." name="cui" publicID="2222917" version="3.0">
+           <ns15:SemanticMetadata conceptCode="C42718" conceptDefinition="In the Unified Medical Language System (UMLS) of the National Library of Medicine (NLM) the concept unique identifier (CUI) is an 8-character identifier beginning with the letter &quot;C&quot; and followed by 7 digits.  Each concept is assigned such a CUI.  The CUI has no intrinsic meaning but remains constant through time and across versions." conceptName="Concept Unique Identifier" order="0"/>
+           <ns15:ValueDomain longName="java.lang.String">
+            <ns15:enumerationCollection/>
+           </ns15:ValueDomain>
+          </ns15:UMLAttribute>
+          <ns15:UMLAttribute dataTypeName="java.util.ArrayList" description="Specifies sysnonyms for the concept" name="synonymCollection" publicID="2533343" version="1.0">
+           <ns15:SemanticMetadata conceptCode="C43713" conceptDefinition="Synonyms are ways of referring to a concept that are valid alternatives to the preferred name that NCI uses to refer to the concept." conceptName="Synonym" order="1"/>
+           <ns15:SemanticMetadata conceptCode="C25453" conceptDefinition="The act of gathering something together." conceptName="Collection" order="0"/>
+           <ns15:ValueDomain longName="java.util.ArrayList">
+            <ns15:enumerationCollection/>
+           </ns15:ValueDomain>
+          </ns15:UMLAttribute>
+         </ns15:umlAttributeCollection>
+         <ns15:SemanticMetadata conceptCode="C42695" conceptDefinition="This class encapsulates the attributes of EVS MetaThesaurus Concept object." conceptName="Meta Thesaurus Concept" order="0"/>
+        </ns15:UMLClass>
+       </ns2:Output>
        <ns2:faultCollection>
         <ns2:Fault description="" name="InvalidInputException"/>
        </ns2:faultCollection>
       </ns2:Operation>
       <ns2:Operation description="" name="getHistoryRecords">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns10:EVSHistoryRecordsSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false" name="eVSHistoryRecordsSearchParams" xmlns:ns10="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
+        <ns2:InputParameter qName="ns16:EVSHistoryRecordsSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false" name="eVSHistoryRecordsSearchParams" xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service">
+         <ns17:UMLClass className="EVSHistoryRecordsSearchParams" description="This class will contain the input parameters used by caCORE EVS API to retrieve History data" id="23E974EB-14A5-5040-E044-0003BA3F9857" packageName="gov.nih.nci.cagrid.evs.service" projectName="caGrid" projectVersion="1" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+          <ns17:umlAttributeCollection>
+           <ns17:UMLAttribute dataTypeName="java.lang.String" description="A valid Description Logic vocabulary Name such as NCI_Thesaurus, GO, HL7, etc" name="vocabularyName" publicID="2538693" version="1.0">
+            <ns17:SemanticMetadata conceptCode="C43528" conceptDefinition="The object describes the vocabulary." conceptName="Vocabulary Object" order="1"/>
+            <ns17:SemanticMetadata conceptCode="C42614" conceptDefinition="The words or language units by which a thing is known." conceptName="Name" order="0"/>
+            <ns17:ValueDomain longName="java.lang.String">
+             <ns17:enumerationCollection/>
+            </ns17:ValueDomain>
+           </ns17:UMLAttribute>
+           <ns17:UMLAttribute dataTypeName="java.lang.String" description="A valid code of a DescLogicConcept" name="conceptCode" publicID="2538694" version="1.0">
+            <ns17:SemanticMetadata conceptCode="C43516" conceptDefinition="A concept unique identifier within the NCI Enterprise Vocabulary Service's NCI Thesaurus." conceptName="NCI Concept Code" order="0"/>
+            <ns17:ValueDomain longName="java.lang.String">
+             <ns17:enumerationCollection/>
+            </ns17:ValueDomain>
+           </ns17:UMLAttribute>
+          </ns17:umlAttributeCollection>
+          <ns17:SemanticMetadata conceptCode="C25198" conceptDefinition="Record; anything, e.g. a document, providing permanent evidence of or information about past events." conceptName="Record" order="2"/>
+          <ns17:SemanticMetadata conceptCode="C48913" conceptDefinition="A value that is passed to a routine." conceptName="Programming Parameter" order="0"/>
+          <ns17:SemanticMetadata conceptCode="C43515" conceptDefinition="The NCI EVS is set of services and resources that address NCI's needs for controlled vocabulary. The EVS Project is a collaborative effort of the Center for Bioinformatics and the NCI Office of Communications. The NCI Thesaurus, which is a biomedical thesaurus created specifically to meet the needs of the NCI, is produced by the NCI EVS project. The NCI Thesaurus is provided under an open content license.  The EVS Project also produces the NCI Metathesaurus, which is based on NLM's Unified Medical Language System Metathesaurus supplemented with additional cancer-centric vocabulary. In addition the EVS Project provides NCI with licenses for MedDRA, SNOMED, ICD-O-3, and other proprietary vocabularies. (http://ncicb.nci.nih.gov/core/EVS)" conceptName="NCI Enterprise Vocabulary Services" order="4"/>
+          <ns17:SemanticMetadata conceptCode="C54117" conceptDefinition="The activity of looking thoroughly in order to find something or someone; an operation that determines whether one or more of a set of items has a specified property." conceptName="Search" order="1"/>
+          <ns17:SemanticMetadata conceptCode="C42687" conceptDefinition="The tracking of concept evolution over the lifetime of a vocabulary, includes concept creation, modification, merges, splits, and retirements." conceptName="Concept History" order="3"/>
+         </ns17:UMLClass>
+        </ns2:InputParameter>
        </ns2:inputParameterCollection>
-       <ns2:Output qName="ns11:HistoryRecord" dimensionality="1" isArray="true" xmlns:ns11="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
+       <ns2:Output qName="ns18:HistoryRecord" dimensionality="1" isArray="true" xmlns:ns18="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain">
+        <ns19:UMLClass className="HistoryRecord" description="The HistoryRecord holds history information for the specified concept" id="23E974EB-139E-5040-E044-0003BA3F9857" packageName="gov.nih.nci.evs.domain" projectName="caCORE" projectVersion="3.1" xmlns:ns19="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+         <ns19:umlAttributeCollection>
+          <ns19:UMLAttribute dataTypeName="java.lang.String" description="This is an unique code associated with a concept within the specified vocabulary. " name="descLogicConceptCode" publicID="2533355" version="1.0">
+           <ns19:SemanticMetadata conceptCode="C25162" conceptDefinition="A system of numbered categories for representation of data." conceptName="Code" order="0"/>
+           <ns19:SemanticMetadata conceptCode="C42717" conceptDefinition="This class encapsulates the attributes of EVS DescLogicConcept object." conceptName="Description Logic Concept" order="1"/>
+           <ns19:ValueDomain longName="java.lang.String">
+            <ns19:enumerationCollection/>
+           </ns19:ValueDomain>
+          </ns19:UMLAttribute>
+         </ns19:umlAttributeCollection>
+         <ns19:SemanticMetadata conceptCode="C25198" conceptDefinition="Record; anything, e.g. a document, providing permanent evidence of or information about past events." conceptName="Record" order="0"/>
+         <ns19:SemanticMetadata conceptCode="C42687" conceptDefinition="The tracking of concept evolution over the lifetime of a vocabulary, includes concept creation, modification, merges, splits, and retirements." conceptName="Concept History" order="1"/>
+        </ns19:UMLClass>
+       </ns2:Output>
        <ns2:faultCollection>
         <ns2:Fault description="" name="InvalidInputException"/>
        </ns2:faultCollection>
       </ns2:Operation>
       <ns2:Operation description="" name="searchSourceByCode">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns12:EVSSourceSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false" name="eVSSourceSearchParams" xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service"/>
+        <ns2:InputParameter qName="ns20:EVSSourceSearchParams" dimensionality="1" index="0" isArray="false" isRequired="false" name="eVSSourceSearchParams" xmlns:ns20="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.evs.service">
+         <ns21:UMLClass className="EVSSourceSearchParams" description="This class will contain the input parameters used by caCORE EVS API to retrieve Meta Thesaurus Concepts." id="23E974EB-14A6-5040-E044-0003BA3F9857" packageName="gov.nih.nci.cagrid.evs.service" projectName="caGrid" projectVersion="1" xmlns:ns21="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+          <ns21:umlAttributeCollection>
+           <ns21:UMLAttribute dataTypeName="java.lang.String" description="A valid Atom code" name="code" publicID="2538695" version="1.0">
+            <ns21:SemanticMetadata conceptCode="C42757" conceptDefinition="In the NCI Thesaurus an atom consists of a term string, a term type, a term source, and an optional term code.  They can be thought of as synonyms or alternative valid forms of a particular concept. This information resides in the property FULL_SYN." conceptName="NCI Concept Atom" order="1"/>
+            <ns21:SemanticMetadata conceptCode="C25162" conceptDefinition="A system of numbered categories for representation of data." conceptName="Code" order="0"/>
+            <ns21:ValueDomain longName="java.lang.String">
+             <ns21:enumerationCollection/>
+            </ns21:ValueDomain>
+           </ns21:UMLAttribute>
+           <ns21:UMLAttribute dataTypeName="java.lang.String" description="A valid source abbreviation" name="sourceAbbreviation" publicID="2538696" version="1.0">
+            <ns21:SemanticMetadata conceptCode="C25683" conceptDefinition="Source; where something is available." conceptName="Source" order="1"/>
+            <ns21:SemanticMetadata conceptCode="C42610" conceptDefinition="A shortened form of a word or phrase." conceptName="Abbreviation" order="0"/>
+            <ns21:ValueDomain longName="java.lang.String">
+             <ns21:enumerationCollection/>
+            </ns21:ValueDomain>
+           </ns21:UMLAttribute>
+          </ns21:umlAttributeCollection>
+          <ns21:SemanticMetadata conceptCode="C25683" conceptDefinition="Source; where something is available." conceptName="Source" order="2"/>
+          <ns21:SemanticMetadata conceptCode="C48913" conceptDefinition="A value that is passed to a routine." conceptName="Programming Parameter" order="0"/>
+          <ns21:SemanticMetadata conceptCode="C43515" conceptDefinition="The NCI EVS is set of services and resources that address NCI's needs for controlled vocabulary. The EVS Project is a collaborative effort of the Center for Bioinformatics and the NCI Office of Communications. The NCI Thesaurus, which is a biomedical thesaurus created specifically to meet the needs of the NCI, is produced by the NCI EVS project. The NCI Thesaurus is provided under an open content license.  The EVS Project also produces the NCI Metathesaurus, which is based on NLM's Unified Medical Language System Metathesaurus supplemented with additional cancer-centric vocabulary. In addition the EVS Project provides NCI with licenses for MedDRA, SNOMED, ICD-O-3, and other proprietary vocabularies. (http://ncicb.nci.nih.gov/core/EVS)" conceptName="NCI Enterprise Vocabulary Services" order="3"/>
+          <ns21:SemanticMetadata conceptCode="C54117" conceptDefinition="The activity of looking thoroughly in order to find something or someone; an operation that determines whether one or more of a set of items has a specified property." conceptName="Search" order="1"/>
+         </ns21:UMLClass>
+        </ns2:InputParameter>
        </ns2:inputParameterCollection>
-       <ns2:Output qName="ns13:MetaThesaurusConcept" dimensionality="1" isArray="true" xmlns:ns13="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"/>
+       <ns2:Output qName="ns22:MetaThesaurusConcept" dimensionality="1" isArray="true" xmlns:ns22="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain">
+        <ns23:UMLClass className="MetaThesaurusConcept" description="MetaThesaurusConcept is the fundamental vocabulary entity in the NCI MetaThesaurus." id="23E974EB-1396-5040-E044-0003BA3F9857" packageName="gov.nih.nci.evs.domain" projectName="caCORE" projectVersion="3.1" xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+         <ns23:umlAttributeCollection>
+          <ns23:UMLAttribute dataTypeName="java.lang.String" description="Specifies the concept name" name="name" publicID="2222918" version="3.0">
+           <ns23:SemanticMetadata conceptCode="C42614" conceptDefinition="The words or language units by which a thing is known." conceptName="Name" order="0"/>
+           <ns23:ValueDomain longName="java.lang.String">
+            <ns23:enumerationCollection/>
+           </ns23:ValueDomain>
+          </ns23:UMLAttribute>
+          <ns23:UMLAttribute dataTypeName="java.lang.String" description="CUI is the Concept Unique Identifier within the MetaThesaurus." name="cui" publicID="2222917" version="3.0">
+           <ns23:SemanticMetadata conceptCode="C42718" conceptDefinition="In the Unified Medical Language System (UMLS) of the National Library of Medicine (NLM) the concept unique identifier (CUI) is an 8-character identifier beginning with the letter &quot;C&quot; and followed by 7 digits.  Each concept is assigned such a CUI.  The CUI has no intrinsic meaning but remains constant through time and across versions." conceptName="Concept Unique Identifier" order="0"/>
+           <ns23:ValueDomain longName="java.lang.String">
+            <ns23:enumerationCollection/>
+           </ns23:ValueDomain>
+          </ns23:UMLAttribute>
+          <ns23:UMLAttribute dataTypeName="java.util.ArrayList" description="Specifies sysnonyms for the concept" name="synonymCollection" publicID="2533343" version="1.0">
+           <ns23:SemanticMetadata conceptCode="C43713" conceptDefinition="Synonyms are ways of referring to a concept that are valid alternatives to the preferred name that NCI uses to refer to the concept." conceptName="Synonym" order="1"/>
+           <ns23:SemanticMetadata conceptCode="C25453" conceptDefinition="The act of gathering something together." conceptName="Collection" order="0"/>
+           <ns23:ValueDomain longName="java.util.ArrayList">
+            <ns23:enumerationCollection/>
+           </ns23:ValueDomain>
+          </ns23:UMLAttribute>
+         </ns23:umlAttributeCollection>
+         <ns23:SemanticMetadata conceptCode="C42695" conceptDefinition="This class encapsulates the attributes of EVS MetaThesaurus Concept object." conceptName="Meta Thesaurus Concept" order="0"/>
+        </ns23:UMLClass>
+       </ns2:Output>
        <ns2:faultCollection>
         <ns2:Fault description="" name="InvalidInputException"/>
        </ns2:faultCollection>
@@ -62,12 +369,8 @@
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>
-   <ns39:SemanticMetadata conceptCode="C63541"
-    conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services."
-    conceptName="Grid Service" order="0" xmlns:ns39="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
-   <ns40:SemanticMetadata conceptCode="C63542"
-    conceptDefinition="Services that are needed to maintain the running of a grid, including monitoring and discovery service, security management service (authentication and authorization), identifier naming and resolution service, query and federated query service, and workflow management service."
-    conceptName="Core Grid Service" order="1" xmlns:ns40="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns24:SemanticMetadata conceptCode="C63541" conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services." conceptName="Grid Service" order="0" xmlns:ns24="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns25:SemanticMetadata conceptCode="C63542" conceptDefinition="Services that are needed to maintain the running of a grid, including monitoring and discovery service, security management service (authentication and authorization), identifier naming and resolution service, query and federated query service, and workflow management service." conceptName="Core Grid Service" order="1" xmlns:ns25="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter/>
