@@ -195,6 +195,7 @@
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter>
   <ns42:ResearchCenter displayName="The Ohio State University" shortName="OSU" xmlns:ns42="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns42:Address country="US" postalCode="43210" stateProvince="OH" street1="333 W. 10th Ave"/>
    <ns42:pointOfContactCollection>
     <ns42:PointOfContact affiliation="OSU" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="maintainer"/>
    </ns42:pointOfContactCollection>
