@@ -1,20 +1,25 @@
 <ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
  <ns1:serviceDescription>
-  <ns2:Service description="The Grid Trust Service (GTS) is a grid-wide mechanism for maintaining and provisioning a federated trust fabric consisting of trusted certificate authorities, such that grid services may make authentication decisions against the most up to date information." name="GTS" version="1.0" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+  <ns2:Service
+   description="The Grid Trust Service (GTS) is a grid-wide mechanism for maintaining and provisioning a federated trust fabric consisting of trusted certificate authorities, such that grid services may make authentication decisions against the most up to date information."
+   name="GTS" version="1.0" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection>
-    <ns3:PointOfContact affiliation="Ohio State University" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Developer" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+    <ns3:PointOfContact affiliation="Ohio State University" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Developer"
+     xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    </ns2:pointOfContactCollection>
    <ns2:serviceContextCollection>
     <ns2:ServiceContext description="Grid Trust Service (GTS)" name="GTS">
      <ns2:operationCollection>
       <ns2:Operation description="Provides the security metadata." name="getServiceSecurityMetadata">
        <ns2:inputParameterCollection/>
-       <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+       <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false"
+        xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
        <ns2:faultCollection/>
       </ns2:Operation>
       <ns2:Operation description="Publish a Certificate Authority to the trust fabric." name="addTrustedAuthority">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns4:TrustedAuthority" dimensionality="1" index="0" isArray="false" isRequired="false" name="ta" xmlns:ns4="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="ns4:TrustedAuthority" dimensionality="1" index="0" isArray="false" isRequired="false" name="ta"
+         xmlns:ns4="http://cagrid.nci.nih.gov/8/gts"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns5:TrustedAuthority" dimensionality="1" isArray="false" xmlns:ns5="http://cagrid.nci.nih.gov/8/gts"/>
        <ns2:faultCollection>
@@ -25,14 +30,16 @@
       </ns2:Operation>
       <ns2:Operation description="Discover a list of trusted authorities that meets a specified trust criteria." name="findTrustedAuthorities">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns6:TrustedAuthorityFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="filter" xmlns:ns6="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="ns6:TrustedAuthorityFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="filter"
+         xmlns:ns6="http://cagrid.nci.nih.gov/8/gts"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns7:TrustedAuthority" dimensionality="1" isArray="true" xmlns:ns7="http://cagrid.nci.nih.gov/8/gts"/>
        <ns2:faultCollection/>
       </ns2:Operation>
       <ns2:Operation description="Remove a certficate authority from the trust fabric." name="removeTrustedAuthority">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="trustedAuthorityName" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+        <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="trustedAuthorityName"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal GTS error." name="GTSInternalFault"/>
@@ -42,7 +49,8 @@
       </ns2:Operation>
       <ns2:Operation description="Grant a permission to a user or service." name="addPermission">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns8:Permission" dimensionality="1" index="0" isArray="false" isRequired="false" name="permission" xmlns:ns8="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="ns8:Permission" dimensionality="1" index="0" isArray="false" isRequired="false" name="permission"
+         xmlns:ns8="http://cagrid.nci.nih.gov/8/gts"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal GTS error." name="GTSInternalFault"/>
@@ -52,7 +60,8 @@
       </ns2:Operation>
       <ns2:Operation description="List the permissions granted on the GTS." name="findPermissions">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns9:PermissionFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="filter" xmlns:ns9="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="ns9:PermissionFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="filter"
+         xmlns:ns9="http://cagrid.nci.nih.gov/8/gts"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns10:Permission" dimensionality="1" isArray="true" xmlns:ns10="http://cagrid.nci.nih.gov/8/gts"/>
        <ns2:faultCollection>
@@ -62,7 +71,8 @@
       </ns2:Operation>
       <ns2:Operation description="Revoke a permission that was granted to a user or service." name="revokePermission">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns11:Permission" dimensionality="1" index="0" isArray="false" isRequired="false" name="permission" xmlns:ns11="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="ns11:Permission" dimensionality="1" index="0" isArray="false" isRequired="false" name="permission"
+         xmlns:ns11="http://cagrid.nci.nih.gov/8/gts"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal GTS error." name="GTSInternalFault"/>
@@ -72,7 +82,8 @@
       </ns2:Operation>
       <ns2:Operation description="Update a certificate authority's information." name="updateTrustedAuthority">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns12:TrustedAuthority" dimensionality="1" index="0" isArray="false" isRequired="false" name="ta" xmlns:ns12="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="ns12:TrustedAuthority" dimensionality="1" index="0" isArray="false" isRequired="false" name="ta"
+         xmlns:ns12="http://cagrid.nci.nih.gov/8/gts"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal GTS error." name="GTSInternalFault"/>
@@ -83,7 +94,8 @@
       </ns2:Operation>
       <ns2:Operation description="Create a trust level." name="addTrustLevel">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns13:TrustLevel" dimensionality="1" index="0" isArray="false" isRequired="false" name="trustLevel" xmlns:ns13="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="ns13:TrustLevel" dimensionality="1" index="0" isArray="false" isRequired="false" name="trustLevel"
+         xmlns:ns13="http://cagrid.nci.nih.gov/8/gts"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal GTS error." name="GTSInternalFault"/>
@@ -93,7 +105,8 @@
       </ns2:Operation>
       <ns2:Operation description="Update a trust level's information." name="updateTrustLevel">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns14:TrustLevel" dimensionality="1" index="0" isArray="false" isRequired="false" name="trustLevel" xmlns:ns14="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="ns14:TrustLevel" dimensionality="1" index="0" isArray="false" isRequired="false" name="trustLevel"
+         xmlns:ns14="http://cagrid.nci.nih.gov/8/gts"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal GTS error." name="GTSInternalFault"/>
@@ -111,7 +124,8 @@
       </ns2:Operation>
       <ns2:Operation description="Remove a trust level from a GTS." name="removeTrustLevel">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="trustLevelName" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+        <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="trustLevelName"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal GTS error." name="GTSInternalFault"/>
@@ -122,7 +136,8 @@
       </ns2:Operation>
       <ns2:Operation description="Add an Authority GTS to a GTS." name="addAuthority">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns16:AuthorityGTS" dimensionality="1" index="0" isArray="false" isRequired="false" name="authorityGTS" xmlns:ns16="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="ns16:AuthorityGTS" dimensionality="1" index="0" isArray="false" isRequired="false" name="authorityGTS"
+         xmlns:ns16="http://cagrid.nci.nih.gov/8/gts"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal GTS error." name="GTSInternalFault"/>
@@ -132,7 +147,8 @@
       </ns2:Operation>
       <ns2:Operation description="Update the information for an Authority GTS." name="updateAuthority">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns17:AuthorityGTS" dimensionality="1" index="0" isArray="false" isRequired="false" name="authorityGTS" xmlns:ns17="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="ns17:AuthorityGTS" dimensionality="1" index="0" isArray="false" isRequired="false" name="authorityGTS"
+         xmlns:ns17="http://cagrid.nci.nih.gov/8/gts"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal GTS error." name="GTSInternalFault"/>
@@ -143,7 +159,8 @@
       </ns2:Operation>
       <ns2:Operation description="Update the priorities of a GTS's authorities." name="updateAuthorityPriorities">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns18:AuthorityPriorityUpdate" dimensionality="1" index="0" isArray="false" isRequired="false" name="authorityPriorityUpdate" xmlns:ns18="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="ns18:AuthorityPriorityUpdate" dimensionality="1" index="0" isArray="false" isRequired="false" name="authorityPriorityUpdate"
+         xmlns:ns18="http://cagrid.nci.nih.gov/8/gts"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal GTS error." name="GTSInternalFault"/>
@@ -160,7 +177,8 @@
       </ns2:Operation>
       <ns2:Operation description="Remove one of a GTS's authorities." name="removeAuthority">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="serviceURI" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+        <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="serviceURI"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal GTS error." name="GTSInternalFault"/>
@@ -170,8 +188,10 @@
       </ns2:Operation>
       <ns2:Operation description="Publish an updated CRL for a certificate authority." name="updateCRL">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="trustedAuthorityName" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-        <ns2:InputParameter qName="ns20:X509CRL" dimensionality="1" index="1" isArray="false" isRequired="false" name="crl" xmlns:ns20="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="trustedAuthorityName"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+        <ns2:InputParameter qName="ns20:X509CRL" dimensionality="1" index="1" isArray="false" isRequired="false" name="crl"
+         xmlns:ns20="http://cagrid.nci.nih.gov/8/gts"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal GTS error." name="GTSInternalFault"/>
@@ -182,8 +202,10 @@
       </ns2:Operation>
       <ns2:Operation description="Validate a certificate against the trust fabric. " name="validate">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns21:X509Certificate" dimensionality="1" index="0" isArray="true" isRequired="false" name="chain" xmlns:ns21="http://cagrid.nci.nih.gov/8/gts"/>
-        <ns2:InputParameter qName="ns22:TrustedAuthorityFilter" dimensionality="1" index="1" isArray="false" isRequired="false" name="filter" xmlns:ns22="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="ns21:X509Certificate" dimensionality="1" index="0" isArray="true" isRequired="false" name="chain"
+         xmlns:ns21="http://cagrid.nci.nih.gov/8/gts"/>
+        <ns2:InputParameter qName="ns22:TrustedAuthorityFilter" dimensionality="1" index="1" isArray="false" isRequired="false" name="filter"
+         xmlns:ns22="http://cagrid.nci.nih.gov/8/gts"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="xsd:boolean" dimensionality="1" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        <ns2:faultCollection>
@@ -197,8 +219,12 @@
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>
-   <ns23:SemanticMetadata conceptCode="C63541" conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services." conceptName="Grid Service" order="0" xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
-   <ns24:SemanticMetadata conceptCode="C63543" conceptDefinition="A published API which receives data in the form of objects, performs computations based upon the input data, and returns information to a client via caGrid in the form of one or more objects." conceptName="Analytical Grid Service" order="1" xmlns:ns24="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns23:SemanticMetadata conceptCode="C63541"
+    conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services."
+    conceptName="Grid Service" order="0" xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns24:SemanticMetadata conceptCode="C63543"
+    conceptDefinition="A published API which receives data in the form of objects, performs computations based upon the input data, and returns information to a client via caGrid in the form of one or more objects."
+    conceptName="Analytical Grid Service" order="1" xmlns:ns24="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter>
