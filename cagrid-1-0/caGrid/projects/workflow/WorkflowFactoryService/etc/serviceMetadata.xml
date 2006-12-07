@@ -1,18 +1,18 @@
 <ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
  <ns1:serviceDescription>
-  <ns2:Service description="The WorkflowFactoryService grid service, created with caGrid Introduce, version:1.0." name="WorkflowFactoryService" version="1.0"
+  <ns2:Service description="The WorkflowFactoryService grid service, created with caGrid Introduce, version:1.0. This service is used to execute BPEL workflows that orchestrate caGrid Analytical and Data Services." name="WorkflowFactoryService" version="1.0"
    xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection/>
    <ns2:serviceContextCollection>
-    <ns2:ServiceContext description="" name="WorkflowFactoryService">
+    <ns2:ServiceContext description="Workflow Factory Service to create workflow resources" name="WorkflowFactoryService">
      <ns2:operationCollection>
-      <ns2:Operation description="" name="getServiceSecurityMetadata">
+      <ns2:Operation description="Get the service security metadata for the Worfkflow factory service" name="getServiceSecurityMetadata">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns3:ServiceSecurityMetadata" dimensionality="1" isArray="false"
         xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
        <ns2:faultCollection/>
       </ns2:Operation>
-      <ns2:Operation description="" name="createWorkflow">
+      <ns2:Operation description="creating workflow resources" name="createWorkflow">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns4:WMSInputElement" dimensionality="1" index="0" isArray="false" isRequired="false" name="wMSInputElement"
          xmlns:ns4="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
@@ -20,23 +20,23 @@
        <ns2:Output qName="ns5:WMSOutputElement" dimensionality="1" isArray="false"
         xmlns:ns5="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="WorkflowException"/>
+        <ns2:Fault description="Workflow Exception" name="WorkflowException"/>
        </ns2:faultCollection>
       </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
-      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
+      <ns2:ContextProperty description="Service Metadata" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
-    <ns2:ServiceContext description="" name="WorkflowServiceImpl">
+    <ns2:ServiceContext description="Workflow Service that will let users start workflows, get status, pause, resume and get intermediate results" name="WorkflowServiceImpl">
      <ns2:operationCollection>
-      <ns2:Operation description="" name="getServiceSecurityMetadata">
+      <ns2:Operation description="Get Security Metadata of the Workflow Service" name="getServiceSecurityMetadata">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns6:ServiceSecurityMetadata" dimensionality="1" isArray="false"
         xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
        <ns2:faultCollection/>
       </ns2:Operation>
-      <ns2:Operation description="" name="start">
+      <ns2:Operation description="Start the workflows with the input data" name="start">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns7:StartInputElement" dimensionality="1" index="0" isArray="false" isRequired="false" name="startInputElement"
          xmlns:ns7="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
@@ -44,11 +44,11 @@
        <ns2:Output qName="ns8:WorkflowStatusElement" dimensionality="1" isArray="false"
         xmlns:ns8="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
        <ns2:faultCollection>
-        <ns2:Fault description="" name="WorkflowException"/>
-        <ns2:Fault description="" name="StartCalledOnStartedWorkflowFault"/>
+        <ns2:Fault description="Workflow Exception" name="WorkflowException"/>
+        <ns2:Fault description="This Exception is thrown when start is called on already started workflows" name="StartCalledOnStartedWorkflowFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="getStatus">
+      <ns2:Operation description="Get Status of the workflows" name="getStatus">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns9:WorkflowStatusElement" dimensionality="1" isArray="false"
         xmlns:ns9="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
@@ -56,32 +56,32 @@
         <ns2:Fault description="" name="WorkflowException"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="pause">
+      <ns2:Operation description="Pause the active workflows" name="pause">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns10:WorkflowStatusElement" dimensionality="1" isArray="false"
         xmlns:ns10="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
        <ns2:faultCollection>
         <ns2:Fault description="" name="WorkflowException"/>
-        <ns2:Fault description="" name="CannotPauseWorkflowFault"/>
+        <ns2:Fault description="This is thrown when Workflow cannot be paused" name="CannotPauseWorkflowFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="resume">
+      <ns2:Operation description="Resumes paused Workflows" name="resume">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns11:WorkflowStatusElement" dimensionality="1" isArray="false"
         xmlns:ns11="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
        <ns2:faultCollection>
         <ns2:Fault description="" name="WorkflowException"/>
-        <ns2:Fault description="" name="CannotResumeWorkflowFault"/>
+        <ns2:Fault description="This exception is thrown when a workflow cannot resumed" name="CannotResumeWorkflowFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="cancel">
+      <ns2:Operation description="Cancel the workflow" name="cancel">
        <ns2:inputParameterCollection/>
        <ns2:faultCollection>
         <ns2:Fault description="" name="WorkflowException"/>
-        <ns2:Fault description="" name="CannotCancelWorkflowFault"/>
+        <ns2:Fault description="This exception is thrown when a workflow cannot be cancelled" name="CannotCancelWorkflowFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="getWorkflowOutput">
+      <ns2:Operation description="This operation is used to get intermediate output from the workflows" name="getWorkflowOutput">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns12:WorkflowOutputElement" dimensionality="1" isArray="false"
         xmlns:ns12="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
@@ -91,7 +91,7 @@
       </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
-      <ns2:ContextProperty description="" name="{http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService}WorkflowStatusElement"/>
+      <ns2:ContextProperty description="Workflow Status type" name="{http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService}WorkflowStatusElement"/>
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>
