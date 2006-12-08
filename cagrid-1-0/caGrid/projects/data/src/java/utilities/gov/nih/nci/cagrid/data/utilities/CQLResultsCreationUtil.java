@@ -7,6 +7,8 @@ import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.cqlresultset.TargetAttribute;
 import gov.nih.nci.cagrid.data.mapping.Mappings;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -56,7 +58,7 @@ public class CQLResultsCreationUtil {
 	 * Creates a CQL Query Results instance containing attribute results
 	 * 
 	 * @param attribArrays
-	 * 		A List of Object[], which are the values of the attributes.
+	 * 		A List of String[], which are the values of the attributes.
 	 * 		These values must correspond both in number and in order of the
 	 * 		attribute names
 	 * @param targetClassname
@@ -72,9 +74,21 @@ public class CQLResultsCreationUtil {
 		CQLAttributeResult[] attribResults = new CQLAttributeResult[attribArrays.size()];
 		for (int i = 0; i < attribArrays.size(); i++) {
 			TargetAttribute[] attribs = new TargetAttribute[attribNames.length];
-			Object[] attribValues = (Object[]) attribArrays.get(i);
+			Object valueArray = attribArrays.get(i);
+			String[] attribValues = new String[attribNames.length];
+			if (valueArray == null) {
+				Arrays.fill(attribValues, null);
+			} else if (valueArray.getClass().isArray()) {
+				for (int j = 0; j < Array.getLength(valueArray); j++) {
+					Object singleValue = Array.get(valueArray, j); 
+					attribValues[j] = singleValue == null ? null : singleValue.toString();
+				}
+			} else {
+				attribValues = new String[] {valueArray == null ? null : valueArray.toString()};
+			}
+			
 			for (int j = 0; j < attribNames.length; j++) {
-				attribs[j] = new TargetAttribute(attribNames[j], attribValues[j].toString());
+				attribs[j] = new TargetAttribute(attribNames[j], attribValues[j]);
 			}
 			attribResults[i] = new CQLAttributeResult(attribs);
 		}
