@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain" xmlns:gov.nih.nci.cadsr.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain"  targetNamespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.umlproject.domain" xmlns:gov.nih.nci.cadsr.domain="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.domain"  targetNamespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.umlproject.domain" elementFormDefault="qualified">
 
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain" schemaLocation="gov.nih.nci.cadsr.domain.xsd" />
+  <xs:import namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.domain" schemaLocation="gov.nih.nci.cadsr.domain.xsd" />
 
   <xs:element name="Project" type="Project" />
   <xs:complexType name="Project">

@@ -13,21 +13,21 @@
   <Content xsi:type="agg:AggregatorContent" xmlns:agg="http://mds.globus.org/aggregator/types">
     <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
       <agg:GetMultipleResourcePropertiesPollType
-			xmlns:ns8="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain"
+			xmlns:ns8="gme://caCORE.caCORE/3.1/gov.nih.nci.camod.domain"
 			xmlns:ns10="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"
-			xmlns:ns4="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain"
+			xmlns:ns4="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.umlproject.domain"
 			xmlns:ns9="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
 			xmlns:ns14="http://gov.nih.nci.cagrid.data/DataServiceExceptions"
 			xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"
-			xmlns:ns2="gme://caCORE.caBIG/3.1/gov.nih.nci.evs.domain"
-			xmlns:ns7="gme://caCORE.caBIG/3.1/gov.nih.nci.common.provenance.domain"
+			xmlns:ns2="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain"
+			xmlns:ns7="gme://caCORE.caCORE/3.1/gov.nih.nci.common.provenance.domain"
 			xmlns:xs="http://www.w3.org/2001/XMLSchema"
 			xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"
 			xmlns:ns0="http://cabio.cagrid.nci.nih.gov/CaBIOSvc/types"
-			xmlns:ns3="gme://caCORE.caBIG/3.1/gov.nih.nci.common.domain"
+			xmlns:ns3="gme://caCORE.caCORE/3.1/gov.nih.nci.common.domain"
 			xmlns:ns11="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"
-			xmlns:ns5="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain"
-			xmlns:ns6="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain"
+			xmlns:ns5="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain"
+			xmlns:ns6="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.domain"
 			xmlns:ns12="http://cabio.cagrid.nci.nih.gov/CaBIOSvc/CQLResultTypes">
         <!-- Specifies that the index should refresh information
             every 300000 milliseconds (once every 5 minutes) -->

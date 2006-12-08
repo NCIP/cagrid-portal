@@ -1,5 +1,5 @@
 /**
- * $Id: CaBIOClientTestCase.java,v 1.4 2006-11-28 12:34:18 joshua Exp $
+ * $Id: CaBIOClientTestCase.java,v 1.5 2006-12-08 12:48:42 joshua Exp $
  *
  */
 package gov.nih.nci.cagrid.cabio.test;
@@ -35,15 +35,15 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-import org.w3c.dom.Document;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.w3c.dom.Document;
+
 /**
  * 
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  * @author Joshua Phillips
  * 
  */
@@ -196,22 +196,22 @@ public class CaBIOClientTestCase extends TestCase {
 	public void testValidXml() {
 		try {
 			CQLQuery query = (CQLQuery) Utils.deserializeDocument(
-					"test/resources/query_2.xml", CQLQuery.class);
+					"test/resources/query_1.xml", CQLQuery.class);
 			CQLQueryResults results = this.gridSvcClient.query(query);
 			CQLQueryResultsIterator iterator = new CQLQueryResultsIterator(
 					results,
 					new FileInputStream(
 							"src/gov/nih/nci/cagrid/cabio/client/client-config.wsdd"));
 			while (iterator.hasNext()) {
-				DatabaseCrossReference ref = (DatabaseCrossReference) iterator
+				Gene gene = (Gene) iterator
 						.next();
 				StringWriter w2 = new StringWriter();
 				Utils
 						.serializeObject(
-								ref,
+								gene,
 								new QName(
-										"gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain",
-										"DatabaseCrossReference"),
+										"gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain",
+										"Gene"),
 								w2,
 								new FileInputStream(
 										"src/gov/nih/nci/cagrid/cabio/client/client-config.wsdd"));
@@ -219,14 +219,18 @@ public class CaBIOClientTestCase extends TestCase {
 						.newDocumentBuilder();
 				Document document = parser.parse(new ByteArrayInputStream(w2
 						.getBuffer().toString().getBytes()));
+				document.getDocumentElement().setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+				document.getDocumentElement().setAttribute("xsi:schemaLocation", "gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain file:/Users/joshua/dev/ew_cagrid3/cagrid-1-0/Applications/cabio/schema/CaBIOSvc/gov.nih.nci.cabio.domain.xsd");
+				
 				SchemaFactory factory = SchemaFactory
 						.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 				Source schemaFile = new StreamSource(new File(
-						"schema/CaBIOSvc/gov.nih.nci.common.domain.xsd"));
+						"schema/CaBIOSvc/gov.nih.nci.cabio.domain.xsd"));
 				Schema schema = factory.newSchema(schemaFile);
 				Validator validator = schema.newValidator();
 				validator.validate(new DOMSource(document));
 			}
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail("Error encountered: " + ex.getMessage());

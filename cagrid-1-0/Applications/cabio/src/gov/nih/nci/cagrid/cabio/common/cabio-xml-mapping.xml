@@ -110,6 +110,7 @@
       <bind-xml name="sourceURI" node="attribute" />
     </field>
   </class>
+  
   <class name="gov.nih.nci.common.domain.DatabaseCrossReference">
     <map-to xml="DatabaseCrossReference" ns-uri="gme://caCORE.caCORE/3.1/gov.nih.nci.common.domain" ns-prefix="common" />
     <field name="id" type="long">
@@ -131,6 +132,7 @@
       <bind-xml name="type" node="attribute" />
     </field>
   </class>
+  
   <class name="gov.nih.nci.cadsr.domain.AdministeredComponent">
     <map-to xml="AdministeredComponent" ns-uri="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.domain" ns-prefix="cadsr" />
     <field name="id" type="string">

@@ -61,7 +61,7 @@
    <ns2:SchemaElement type="GSITransport" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="None" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.evs.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.evs.domain" packageName="gov.nih.nci.cagrid.cabio.stubs.evs.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.evs.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.evs.domain" packageName="gov.nih.nci.cagrid.cabio.stubs.evs.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement className="DescLogicConcept" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="DescLogicConcept" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="MetaThesaurusConcept" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="MetaThesaurusConcept" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="Source" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Source" xsi:type="ns2:SchemaElementType"/>
@@ -80,10 +80,10 @@
    <ns2:SchemaElement className="EditActionDate" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="EditActionDate" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="Silo" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Silo" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.common.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.domain" packageName="gov.nih.nci.cagrid.cabio.stubs.common.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.common.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.common.domain" packageName="gov.nih.nci.cagrid.cabio.stubs.common.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement className="DatabaseCrossReference" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="DatabaseCrossReference" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cagrid.cabio.stubs.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cagrid.cabio.stubs.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Project" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="SubProject" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="UMLPackageMetadata" xsi:type="ns2:SchemaElementType"/>
@@ -95,7 +95,7 @@
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="AttributeTypeMetadata" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="TypeEnumerationMetadata" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cabio.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" packageName="gov.nih.nci.cagrid.cabio.stubs.cabio.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cabio.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain" packageName="gov.nih.nci.cagrid.cabio.stubs.cabio.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Vocabulary" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Tissue" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="SNP" xsi:type="ns2:SchemaElementType"/>
@@ -134,7 +134,7 @@
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="GenericReporter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="GenericArray" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cadsr.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain" packageName="gov.nih.nci.cagrid.cabio.stubs.cadsr.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cadsr.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.domain" packageName="gov.nih.nci.cagrid.cabio.stubs.cadsr.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="AdministeredComponent" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="ConceptualDomain" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DataElementConcept" xsi:type="ns2:SchemaElementType"/>
@@ -186,7 +186,7 @@
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Function" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="ComponentLevel" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.common.provenance.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.provenance.domain" packageName="gov.nih.nci.cagrid.cabio.stubs.common.provenance.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.common.provenance.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.common.provenance.domain" packageName="gov.nih.nci.cagrid.cabio.stubs.common.provenance.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Provenance" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Source" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="SourceReference" xsi:type="ns2:SchemaElementType"/>
@@ -196,7 +196,7 @@
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="WebServicesSourceReference" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="InternetSource" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.camod.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" packageName="gov.nih.nci.cagrid.cabio.stubs.camod.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.camod.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.camod.domain" packageName="gov.nih.nci.cagrid.cabio.stubs.camod.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Xenograft" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TreatmentSchedule" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Transgene" xsi:type="ns2:SchemaElementType"/>
@@ -246,7 +246,7 @@
    <ns2:SchemaElement type="ExpressionFeature" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CancerModel" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cadsr.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain" packageName="gov.nih.nci.cadsr.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cadsr.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.domain" packageName="gov.nih.nci.cadsr.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement className="AdministeredComponent" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="AdministeredComponent" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="ConceptualDomain" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="ConceptualDomain" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="DataElementConcept" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="DataElementConcept" xsi:type="ns2:SchemaElementType"/>
@@ -298,7 +298,7 @@
    <ns2:SchemaElement className="Function" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Function" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="ComponentLevel" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="ComponentLevel" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Project" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SubProject" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="UMLPackageMetadata" xsi:type="ns2:SchemaElementType"/>
@@ -310,7 +310,7 @@
    <ns2:SchemaElement type="AttributeTypeMetadata" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TypeEnumerationMetadata" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cabio.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" packageName="gov.nih.nci.cabio.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cabio.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain" packageName="gov.nih.nci.cabio.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Vocabulary" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Tissue" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SNP" xsi:type="ns2:SchemaElementType"/>
@@ -349,7 +349,7 @@
    <ns2:SchemaElement type="GenericReporter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GenericArray" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.common.provenance.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.provenance.domain" packageName="gov.nih.nci.common.provenance.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.common.provenance.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.common.provenance.domain" packageName="gov.nih.nci.common.provenance.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Provenance" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Source" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SourceReference" xsi:type="ns2:SchemaElementType"/>
@@ -359,7 +359,7 @@
    <ns2:SchemaElement type="WebServicesSourceReference" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="InternetSource" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.camod.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" packageName="gov.nih.nci.camod.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.camod.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.camod.domain" packageName="gov.nih.nci.camod.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Xenograft" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TreatmentSchedule" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Transgene" xsi:type="ns2:SchemaElementType"/>
@@ -409,10 +409,10 @@
    <ns2:SchemaElement type="ExpressionFeature" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CancerModel" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.common.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.domain" packageName="gov.nih.nci.common.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.common.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.common.domain" packageName="gov.nih.nci.common.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="DatabaseCrossReference" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.common.provenance.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.provenance.domain" packageName="gov.nih.nci.common.provenance.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.common.provenance.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.common.provenance.domain" packageName="gov.nih.nci.common.provenance.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement className="Provenance" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Provenance" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="Source" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Source" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="SourceReference" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="SourceReference" xsi:type="ns2:SchemaElementType"/>
@@ -422,7 +422,7 @@
    <ns2:SchemaElement className="WebServicesSourceReference" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="WebServicesSourceReference" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="InternetSource" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="InternetSource" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Project" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SubProject" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="UMLPackageMetadata" xsi:type="ns2:SchemaElementType"/>
@@ -434,7 +434,7 @@
    <ns2:SchemaElement type="AttributeTypeMetadata" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TypeEnumerationMetadata" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cabio.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" packageName="gov.nih.nci.cabio.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cabio.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain" packageName="gov.nih.nci.cabio.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Vocabulary" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Tissue" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SNP" xsi:type="ns2:SchemaElementType"/>
@@ -473,7 +473,7 @@
    <ns2:SchemaElement type="GenericReporter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GenericArray" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cadsr.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain" packageName="gov.nih.nci.cadsr.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cadsr.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.domain" packageName="gov.nih.nci.cadsr.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="AdministeredComponent" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ConceptualDomain" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DataElementConcept" xsi:type="ns2:SchemaElementType"/>
@@ -525,7 +525,7 @@
    <ns2:SchemaElement type="Function" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ComponentLevel" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.camod.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" packageName="gov.nih.nci.camod.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.camod.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.camod.domain" packageName="gov.nih.nci.camod.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Xenograft" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TreatmentSchedule" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Transgene" xsi:type="ns2:SchemaElementType"/>
@@ -575,10 +575,10 @@
    <ns2:SchemaElement type="ExpressionFeature" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CancerModel" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.common.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.domain" packageName="gov.nih.nci.common.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.common.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.common.domain" packageName="gov.nih.nci.common.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="DatabaseCrossReference" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cabio.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" packageName="gov.nih.nci.cabio.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cabio.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain" packageName="gov.nih.nci.cabio.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement className="Vocabulary" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Vocabulary" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="Tissue" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Tissue" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="SNP" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="SNP" xsi:type="ns2:SchemaElementType"/>
@@ -617,7 +617,7 @@
    <ns2:SchemaElement className="GenericReporter" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="GenericReporter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="GenericArray" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="GenericArray" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Project" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SubProject" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="UMLPackageMetadata" xsi:type="ns2:SchemaElementType"/>
@@ -629,7 +629,7 @@
    <ns2:SchemaElement type="AttributeTypeMetadata" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TypeEnumerationMetadata" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cadsr.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain" packageName="gov.nih.nci.cadsr.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cadsr.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.domain" packageName="gov.nih.nci.cadsr.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="AdministeredComponent" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ConceptualDomain" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DataElementConcept" xsi:type="ns2:SchemaElementType"/>
@@ -681,7 +681,7 @@
    <ns2:SchemaElement type="Function" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ComponentLevel" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.common.provenance.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.provenance.domain" packageName="gov.nih.nci.common.provenance.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.common.provenance.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.common.provenance.domain" packageName="gov.nih.nci.common.provenance.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Provenance" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Source" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SourceReference" xsi:type="ns2:SchemaElementType"/>
@@ -691,7 +691,7 @@
    <ns2:SchemaElement type="WebServicesSourceReference" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="InternetSource" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.camod.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" packageName="gov.nih.nci.camod.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.camod.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.camod.domain" packageName="gov.nih.nci.camod.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Xenograft" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TreatmentSchedule" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Transgene" xsi:type="ns2:SchemaElementType"/>
@@ -741,10 +741,10 @@
    <ns2:SchemaElement type="ExpressionFeature" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CancerModel" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.common.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.domain" packageName="gov.nih.nci.common.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.common.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.common.domain" packageName="gov.nih.nci.common.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="DatabaseCrossReference" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cadsr.umlproject.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.umlproject.domain" packageName="gov.nih.nci.cadsr.umlproject.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement className="Project" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="Project" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="SubProject" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="SubProject" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="UMLPackageMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="UMLPackageMetadata" xsi:type="ns2:SchemaElementType"/>
@@ -756,7 +756,7 @@
    <ns2:SchemaElement className="AttributeTypeMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="AttributeTypeMetadata" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="TypeEnumerationMetadata" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="TypeEnumerationMetadata" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cadsr.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cadsr.domain" packageName="gov.nih.nci.cadsr.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cadsr.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cadsr.domain" packageName="gov.nih.nci.cadsr.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="AdministeredComponent" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ConceptualDomain" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DataElementConcept" xsi:type="ns2:SchemaElementType"/>
@@ -808,7 +808,7 @@
    <ns2:SchemaElement type="Function" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ComponentLevel" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.cabio.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" packageName="gov.nih.nci.cabio.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.cabio.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain" packageName="gov.nih.nci.cabio.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Vocabulary" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Tissue" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SNP" xsi:type="ns2:SchemaElementType"/>
@@ -847,7 +847,7 @@
    <ns2:SchemaElement type="GenericReporter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GenericArray" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.common.provenance.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.provenance.domain" packageName="gov.nih.nci.common.provenance.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.common.provenance.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.common.provenance.domain" packageName="gov.nih.nci.common.provenance.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Provenance" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Source" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SourceReference" xsi:type="ns2:SchemaElementType"/>
@@ -857,7 +857,7 @@
    <ns2:SchemaElement type="WebServicesSourceReference" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="InternetSource" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.camod.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" packageName="gov.nih.nci.camod.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.camod.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.camod.domain" packageName="gov.nih.nci.camod.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Xenograft" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TreatmentSchedule" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Transgene" xsi:type="ns2:SchemaElementType"/>
@@ -907,7 +907,7 @@
    <ns2:SchemaElement type="ExpressionFeature" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CancerModel" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./gov.nih.nci.common.domain.xsd" namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.common.domain" packageName="gov.nih.nci.common.domain" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./gov.nih.nci.common.domain.xsd" namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.common.domain" packageName="gov.nih.nci.common.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="DatabaseCrossReference" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">

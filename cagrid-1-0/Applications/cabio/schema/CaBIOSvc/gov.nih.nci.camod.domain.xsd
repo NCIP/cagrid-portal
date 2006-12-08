@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" xmlns:gov.nih.nci.cabio.domain="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" targetNamespace="gme://caCORE.caBIG/3.1/gov.nih.nci.camod.domain" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caCORE/3.1/gov.nih.nci.camod.domain" xmlns:gov.nih.nci.cabio.domain="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain" targetNamespace="gme://caCORE.caCORE/3.1/gov.nih.nci.camod.domain" elementFormDefault="qualified">
 
-  <xs:import namespace="gme://caCORE.caBIG/3.1/gov.nih.nci.cabio.domain" schemaLocation="gov.nih.nci.cabio.domain.xsd" />
+  <xs:import namespace="gme://caCORE.caCORE/3.1/gov.nih.nci.cabio.domain" schemaLocation="gov.nih.nci.cabio.domain.xsd" />
 
   <xs:element name="Xenograft" type="Xenograft" />
   <xs:complexType name="Xenograft">
