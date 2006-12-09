@@ -15,7 +15,7 @@ public class ApplicationServiceExample {
 			List rList = appService.search(Project.class, new Project());
 			for (Iterator resultsIterator = rList.iterator(); resultsIterator.hasNext();) {
 				Project project = (Project) resultsIterator.next();
-				System.out.println(project.getLongName());
+				System.out.println(project.getShortName());
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

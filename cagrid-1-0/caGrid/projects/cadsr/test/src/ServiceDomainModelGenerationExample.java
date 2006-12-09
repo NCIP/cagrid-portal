@@ -23,7 +23,7 @@ public class ServiceDomainModelGenerationExample {
 			CaDSRServiceClient cadsr = new CaDSRServiceClient(url);
 
 			Project project = new Project();
-			project.setVersion("3");
+			project.setVersion("3.1");
 			project.setShortName("caCORE");
 			System.out.println("Creating domain model for project: " + project.getShortName() + " (version:"
 				+ project.getVersion() + ")");
@@ -56,8 +56,9 @@ public class ServiceDomainModelGenerationExample {
 			DomainModel domainModel = cadsr.generateDomainModelForClassesWithExcludes(project, classNames,
 				associationExcludes);
 
-			MetadataUtils.serializeDomainModel(domainModel, new FileWriter(project.getShortName() + "_"
-				+ project.getVersion() + "_DomainModel.xml"));
+			FileWriter fw = new FileWriter(project.getShortName() + "_" + project.getVersion() + "_DomainModel.xml");
+			MetadataUtils.serializeDomainModel(domainModel, fw);
+			fw.close();
 
 			double duration = (System.currentTimeMillis() - start) / 1000.0;
 			System.out.println("Domain Model generation took:" + duration + " seconds.");
