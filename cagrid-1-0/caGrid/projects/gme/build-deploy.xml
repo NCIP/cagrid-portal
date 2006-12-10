@@ -62,7 +62,7 @@
 			</fileset>
 		</copy>
 		<!--copy over the schema service files-->
-		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}/${service.deployment.dir.name}">
+		<copy overwrite="true" toDir="${tomcat.wsrf.schema.dir}/GlobalModelExchange">
 			<fileset dir="build/schema/${service.name}">
 				<include name="**\*"/>
 			</fileset>
