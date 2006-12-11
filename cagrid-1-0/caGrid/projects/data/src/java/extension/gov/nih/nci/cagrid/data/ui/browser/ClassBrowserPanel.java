@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.browser;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
@@ -18,11 +19,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
@@ -432,17 +429,9 @@ public class ClassBrowserPanel extends JPanel {
 		String libDir = serviceInfo.getIntroduceServiceProperties().getProperty(
 			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
 		try {
-			BufferedInputStream input = new BufferedInputStream(new FileInputStream(jarFile));
-			BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(
-				libDir + File.separator	+ shortJarName));
-			int len = -1;
-			byte[] buff = new byte[4096];
-			while ((len = input.read(buff)) != -1) {
-				output.write(buff, 0, len);
-			}
-			input.close();
-			output.flush();
-			output.close();
+			File inJarFile = new File(jarFile);
+			File outJarFile = new File(libDir + File.separator + shortJarName);
+			Utils.copyFile(inJarFile, outJarFile);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error copying the jar " + jarFile, ex);
