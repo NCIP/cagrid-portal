@@ -97,13 +97,17 @@
     <!-- =============================================================== -->
     <target name="build-cagrid-browser" depends="app-prepare" description="Builds the cagrid-browser application">
         <resolveDependencies extdir="${apps.dir}/cagrid-browser/ext">
+        	<artifact refid="caCORE.jars"/>
             <artifact refid="core.jars"/>
             <artifact refid="common.metadata.jars"/>
+            <artifact refid="common.test.jars"/>
             <artifact refid="data.jars"/>
             <artifact refid="data.metadata.jars"/>
-            <artifact refid="discovery.jars"/>
-            <artifact refid="fqp.jars"/>
+			<artifact refid="discovery.jars"/>
+			<artifact refid="dorian.client.jars"/>
+			<artifact refid="evs.jars"/>
             <artifact refid="metadatautils.jars"/>
+            <artifact refid="authentication.service.client.jars"/>
         </resolveDependencies>
         <ant dir="${apps.dir}/cagrid-browser" inheritAll="false" antfile="build.xml" target="all"/>
     </target>
