@@ -104,9 +104,32 @@ public class UtilsTestCase extends TestCase {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			fail(ex.getMessage());
-		}		
+		}
 	}
 	
+	
+	public void testCopyToSelf() {
+		String garbageText = generateGarbageText();
+		try {
+			File f1 = File.createTempFile("test", "garbage");
+			FileWriter writer = new FileWriter(f1);
+			writer.write(garbageText);
+			writer.close();
+			assertTrue("Test file exists", f1.exists());
+			String f1Text = Utils.fileToStringBuffer(f1).toString().trim();
+			assertTrue("Test file contains test text", garbageText.equals(f1Text));
+			File f2 = new File(f1.getAbsolutePath());
+			Utils.copyFile(f1, f2);
+			String f2Text = Utils.fileToStringBuffer(f2).toString().trim();
+			assertTrue("Copied file contents match original", garbageText.equals(f2Text));
+			f1.delete();
+			f2.delete();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			fail(ex.getMessage());
+		}
+	}
+
 	
 	private String generateGarbageText() {
 		int start = 'a';
