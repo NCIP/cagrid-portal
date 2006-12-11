@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.common;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -110,15 +112,28 @@ public class Utils {
 
 
 	public static void copyFile(File in, File out) throws IOException {
-		FileInputStream fis = new FileInputStream(in);
-		out.getCanonicalFile().getParentFile().mkdirs();
-		FileOutputStream fos = new FileOutputStream(out);
-		byte[] buf = new byte[1024];
-		int i = 0;
-		while ((i = fis.read(buf)) != -1) {
-			fos.write(buf, 0, i);
+		BufferedInputStream fis = new BufferedInputStream(new FileInputStream(in));
+		// set up an output stream to hold the bytes
+		ByteArrayOutputStream ostream = 
+			new ByteArrayOutputStream(Long.valueOf(in.length()).intValue());
+		// a temporary buffer to read into
+		byte[] tmpBuffer = new byte[8096];
+		int len = 0;
+		while ((len = fis.read(tmpBuffer)) != -1) {
+			// add the temp data to the output
+			ostream.write(tmpBuffer, 0, len);
 		}
+		// close the input stream
 		fis.close();
+		
+		// ensure the output file location exists
+		out.getCanonicalFile().getParentFile().mkdirs();
+		
+		// write out the bytes of the file
+		FileOutputStream fos = new FileOutputStream(out);
+		byte[] fileBytes = ostream.toByteArray();
+		fos.write(fileBytes);
+		fos.flush();
 		fos.close();
 	}
 
