@@ -11,9 +11,20 @@
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/CaArraySvc-security-metadata.xml" />
     <parameter name="castorMapping" value="/gov/nih/nci/cagrid/caarray/common/caarray-xml-mapping.xml" />
-    <parameter name="marshallerXpathRegex" value="\/\w+\/@.*|\/\w+\/\w+|\/\w+\/\w+\/\w+\/@.*|\/\w+\/descriptions.*" />
+    <parameter name="marshallerXpathRegex" value="\/\w+\/@.*|\/\w+\/\w+|\/\w+\/\w+\/\w+\/@.*|\/\w+\/descriptions.*|.*cube" />
   </service>
   <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent" type="java:org.globus.mds.aggregator.types.AggregatorContent" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
+
+  <ns3:typeMapping 
+    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" 
+    serializer="org.apache.axis.encoding.ser.ArraySerializerFactory" 
+    deserializer="org.apache.axis.encoding.ser.ArrayDeserializerFactory" 
+    type="java:java.lang.Object[][][]" 
+    qname="ns2:cube" 
+    xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" 
+    xmlns:ns2="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssayData" 
+    xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>  
+  
   <!-- START INTRODUCE TYPEMAPPINGS -->
 <ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.caarray.encoding.CaArraySerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:gov.nih.nci.mageom.domain.BioAssayData.impl.DesignElementMapImpl" qname="ns2:DesignElementMap" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.impl.BioAssayDataImpl" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
 

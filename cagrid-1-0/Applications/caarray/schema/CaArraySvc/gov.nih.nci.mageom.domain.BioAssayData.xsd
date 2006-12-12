@@ -17,17 +17,18 @@
   <xs:complexType name="BioDataCube">
     <xs:complexContent>
       <xs:extension base="BioDataValues">
-        <xs:sequence />
-        <xs:attribute name="cube" type="xs:string" />
+        <xs:sequence >
+          <xs:element name="cube" type="xs:string"/>
+        </xs:sequence>
         <xs:attribute name="order">
           <xs:simpleType>
             <xs:restriction base="xs:string">
-              <xs:enumeration value="bdq" />
-              <xs:enumeration value="bqd" />
-              <xs:enumeration value="dbq" />
-              <xs:enumeration value="dqb" />
-              <xs:enumeration value="qbd" />
-              <xs:enumeration value="qdb" />
+              <xs:enumeration value="BDQ" />
+              <xs:enumeration value="BQD" />
+              <xs:enumeration value="DBQ" />
+              <xs:enumeration value="DQB" />
+              <xs:enumeration value="QBD" />
+              <xs:enumeration value="QDB" />
             </xs:restriction>
           </xs:simpleType>
         </xs:attribute>

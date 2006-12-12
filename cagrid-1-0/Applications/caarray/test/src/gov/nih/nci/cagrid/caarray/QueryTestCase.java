@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.caarray;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.StringWriter;
 
@@ -47,12 +48,13 @@ public class QueryTestCase extends TestCase {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
-		suite.addTest(new QueryTestCase("testExperimentAttsQuery"));
-		suite.addTest(new QueryTestCase("testExperimentObjectQuery"));
-		suite.addTest(new QueryTestCase("testExperimentDistinctAttQuery"));
-		suite.addTest(new QueryTestCase("testExperimentObjectNestedQuery"));
-		suite.addTest(new QueryTestCase("testExperimentObjectGroupingQuery"));
-		suite.addTest(new QueryTestCase("testUnmarshall"));
+//		suite.addTest(new QueryTestCase("testExperimentAttsQuery"));
+//		suite.addTest(new QueryTestCase("testExperimentObjectQuery"));
+//		suite.addTest(new QueryTestCase("testExperimentDistinctAttQuery"));
+//		suite.addTest(new QueryTestCase("testExperimentObjectNestedQuery"));
+//		suite.addTest(new QueryTestCase("testExperimentObjectGroupingQuery"));
+//		suite.addTest(new QueryTestCase("testUnmarshall"));
+		suite.addTest(new QueryTestCase("testMeasuredBioAssayDataObjectQuery"));
 		return suite;
 	}
 
@@ -146,14 +148,31 @@ public class QueryTestCase extends TestCase {
 			fail("Error unmarshalling: " + ex.getMessage());
 		}
 	}
+	
+	public void testMeasuredBioAssayDataObjectQuery() {
+		String queryFileName = "test/resources/bioassaydata_object_1.xml";
+		try {
+			System.out.println("Querying....");
+			CQLQueryResults results = runQuery(queryFileName);
+			System.out.println("...done");
+			results.setTargetClassname("gov.nih.nci.mageom.domain.BioAssayData.impl.MeasuredBioAssayDataImpl");
+			printResults(results);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			fail("Error querying experiment atts: " + ex.getMessage());
+		}
+	}
 
 	private void printResults(CQLQueryResults results) {
 		try {
-			StringWriter w = new StringWriter();
+//			StringWriter w = new StringWriter();
+			FileWriter w = new FileWriter("out.xml");
 			Utils.serializeObject(results, new QName(
 					"http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet",
 					"CQLResultSet"), w);
-			System.out.println(w.getBuffer());
+			w.flush();
+			w.close();
+//			System.out.println(w.getBuffer());
 		} catch (Exception ex) {
 			throw new RuntimeException("Error printing results: "
 					+ ex.getMessage(), ex);

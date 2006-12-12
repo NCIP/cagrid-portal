@@ -245,7 +245,7 @@ public class CaArrayCQLQueryProcessor extends CQLQueryProcessor {
 		if (mod != null && mod.isCountOnly()) {
 			resultsList.add(sr.getCount());
 		} else {
-			Experiment[] results = (Experiment[]) sr.getResultSet();
+			Object[] results = sr.getResultSet();
 			LOG.debug("results.length = " + results.length);
 			for (int i = 0; i < results.length; i++) {
 				resultsList.add(results[i]);
