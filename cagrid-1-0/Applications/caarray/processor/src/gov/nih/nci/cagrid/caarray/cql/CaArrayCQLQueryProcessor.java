@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.caarray.cql;
 
+import gov.nih.nci.cagrid.caarray.encoding.MGEDCubeHandler;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlquery.QueryModifier;
@@ -156,6 +157,12 @@ public class CaArrayCQLQueryProcessor extends CQLQueryProcessor {
 			TargetAttribute[] attValues = new TargetAttribute[attNames.length];
 			for (int j = 0; j < attNames.length; j++) {
 				Object attValue = getAttributeValue(obj, attNames[j]);
+				if (attValue instanceof Object[][][]) {
+					attValue = MGEDCubeHandler.getCubeAsString(
+							(Object[][][]) attValue,
+							MGEDCubeHandler.LINE_DELIMITER,
+							MGEDCubeHandler.VALUE_DELIMITER);
+				}
 				attValues[j] = new TargetAttribute(attNames[j], attValue
 						.toString());
 			}
@@ -222,20 +229,22 @@ public class CaArrayCQLQueryProcessor extends CQLQueryProcessor {
 		String usr = getConfiguredParameters().getProperty(USERNAME);
 		String pwd = getConfiguredParameters().getProperty(PASSWORD);
 		SecureSession sess = SecureSessionFactory.defaultSecureSession();
-		((Directable)sess).direct(getConfiguredParameters().getProperty(SECURE_SESSION_MGR_URL));
+		((Directable) sess).direct(getConfiguredParameters().getProperty(
+				SECURE_SESSION_MGR_URL));
 		sess.start(usr, pwd);
 		String sessId = sess.getSessionId();
 
 		SearchCriteria sc = CQL2SC.translate(cqlQuery,
 				useCaseInsensitiveQueries());
-//		((Directable)sc).direct(getConfiguredParameters().getProperty(RMI_SERVER_URL));
+		// ((Directable)sc).direct(getConfiguredParameters().getProperty(RMI_SERVER_URL));
 		sc.setSessionId(sessId);
 
 		SearchResult sr;
 		try {
-//			sr = sc.search();
-			RMISearchCriteriaHandlerRemoteIF rmiServer = 
-				(RMISearchCriteriaHandlerRemoteIF)Naming.lookup(getConfiguredParameters().getProperty(RMI_SERVER_URL));
+			// sr = sc.search();
+			RMISearchCriteriaHandlerRemoteIF rmiServer = (RMISearchCriteriaHandlerRemoteIF) Naming
+					.lookup(getConfiguredParameters().getProperty(
+							RMI_SERVER_URL));
 			sr = rmiServer.search(sc);
 		} catch (Exception ex) {
 			throw new QueryProcessingException("Error searching: "
@@ -267,8 +276,12 @@ public class CaArrayCQLQueryProcessor extends CQLQueryProcessor {
 		props.setProperty(CASE_INSENSITIVE_QUERYING, "true");
 		props.setProperty(USERNAME, "PUBLIC");
 		props.setProperty(PASSWORD, "");
-		props.setProperty(RMI_SERVER_URL, "//caarray-mageom-server.nci.nih.gov:8080/SearchCriteriaHandler");
-		props.setProperty(SECURE_SESSION_MGR_URL, "//caarray-mageom-server.nci.nih.gov:8080/SecureSessionManager");
+		props
+				.setProperty(RMI_SERVER_URL,
+						"//caarray-mageom-server.nci.nih.gov:8080/SearchCriteriaHandler");
+		props
+				.setProperty(SECURE_SESSION_MGR_URL,
+						"//caarray-mageom-server.nci.nih.gov:8080/SecureSessionManager");
 		return props;
 	}
 
