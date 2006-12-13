@@ -22,11 +22,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-data.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-fqp-tests.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-fqp-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-fqp-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-fqp-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-fqp-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-discovery.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-validation.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-data-utils.jar"/>
@@ -112,8 +107,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-authentication-service-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/junit-addons-1.4.jar"/>
-	<classpathentry kind="lib" path="ext/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-evs-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-evs-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-evs-client.jar"/>
