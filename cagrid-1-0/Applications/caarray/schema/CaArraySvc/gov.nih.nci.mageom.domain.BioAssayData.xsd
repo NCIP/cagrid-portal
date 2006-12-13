@@ -17,9 +17,13 @@
   <xs:complexType name="BioDataCube">
     <xs:complexContent>
       <xs:extension base="BioDataValues">
+        <!--
         <xs:sequence >
           <xs:element name="cube" type="xs:string"/>
         </xs:sequence>
+        -->
+        <xs:sequence/>
+        <xs:attribute name="cube" type="xs:string"/>
         <xs:attribute name="order">
           <xs:simpleType>
             <xs:restriction base="xs:string">

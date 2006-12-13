@@ -1,5 +1,13 @@
 package gov.nih.nci.cagrid.caarray;
 
+import java.io.StringReader;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+
 import gov.nih.nci.cagrid.caarray.encoding.MGEDCubeHandler;
 import gov.nih.nci.cagrid.caarray.encoding.Utils;
 import gov.nih.nci.mageom.domain.BioAssayData.BioDataCube;
@@ -8,18 +16,30 @@ import gov.nih.nci.mageom.domain.BioAssayData.impl.BioDataCubeImpl;
 public class TestSerialization {
 
 	public static void main(String[] args) throws Exception {
+
+//		System.setProperty("gov.nih.nci.cagrid.caarray.encoding.lineDelimiter", "yadda");
+//		System.setProperty("gov.nih.nci.cagrid.caarray.encoding.lineDelimiterPattern", "yadda");
 		
 		BioDataCube bdc = getBioDataCube();
 		String xml = Utils.toXML(bdc);
-		System.out.println(xml);
-		bdc = (BioDataCube) Utils.fromXML(xml);
-		String str = MGEDCubeHandler.getCubeAsString(bdc.getCube(), "\n", "\t");
-		System.out.println(str);
+		System.out.println("XML:\n" + xml);
+
+		DocumentBuilder builder = DocumentBuilderFactory.newInstance()
+				.newDocumentBuilder();
+		Element el = builder.parse(new InputSource(new StringReader(xml)))
+				.getDocumentElement();
+		bdc = (BioDataCube) Utils.fromXML(el);
+
+		// bdc = (BioDataCube) Utils.fromXML(xml);
+		String str = MGEDCubeHandler.getCubeAsString(bdc.getCube(),
+				"\n",
+				"\t");
+		System.out.println("Cube:\n" + str);
 	}
-	
-	public static BioDataCube getBioDataCube(){
+
+	public static BioDataCube getBioDataCube() {
 		BioDataCubeImpl bdc = null;
-		
+
 		int dim1 = 3;
 		int dim2 = 3;
 		int dim3 = 3;
@@ -36,8 +56,8 @@ public class TestSerialization {
 		bdc = new BioDataCubeImpl();
 		bdc.setCube(cube);
 		bdc.setOrder("bdq");
-		
+
 		return bdc;
 	}
-	
+
 }

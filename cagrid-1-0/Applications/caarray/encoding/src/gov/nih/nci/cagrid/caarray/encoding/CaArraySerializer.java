@@ -32,6 +32,7 @@ public class CaArraySerializer implements Serializer {
 	public void serialize(QName name, Attributes attributes, Object value, SerializationContext context)
 		throws IOException {
 		
+		
 		AxisContentHandler hand = new AxisContentHandler(context);
 		Marshaller2 marshaller = null;
 		try{
@@ -51,7 +52,8 @@ public class CaArraySerializer implements Serializer {
 		try {
 			Mapping mapping = EncodingUtils.getMapping(context.getMessageContext());
 			marshaller.setMapping(mapping);
-			marshaller.setValidation(true);
+			marshaller.setMarshalAsDocument(true);
+			marshaller.setValidation(false);
 		} catch (MappingException ex) {
 			String msg = "Problem establishing castor mapping:" + ex.getMessage();
 			LOG.error(msg, ex);
@@ -59,15 +61,11 @@ public class CaArraySerializer implements Serializer {
 		}
 		try {
 			marshaller.marshal(value);
-		} catch (ValidationException ex) {
-			LOG.error("Problem validating castor marshalling; message doesn't comply with the associated XML schema.",
-				ex);
-			throw new IOException(
-				"Problem validating castor marshalling; message doesn't comply with the associated XML schema."
-					+ ex.getMessage());
 		}catch(Exception ex){
+			String msg = "Error marshalling: " + ex.getMessage(); 
+			LOG.error(msg, ex);
 			ex.printStackTrace();
-			throw new IOException("Problem using castor marshalling: " + ex.getMessage());
+			throw new IOException(msg);
 		}
 
 	}

@@ -45,7 +45,7 @@
  * All portions of this file developed by Keith Visco after Jan 19 2005 are
  * Copyright (C) 2005 Keith Visco. All Rights Reserved.
  *
- * $Id: Marshaller2.java,v 1.1 2006-11-22 23:48:33 joshua Exp $
+ * $Id: Marshaller2.java,v 1.1 2006-12-13 18:37:54 joshua Exp $
  */
 
 package org.exolab.castor.xml;
@@ -102,7 +102,7 @@ import java.util.Set;
  * is to be used in a multithreaded environment.
  *
  * @author <a href="mailto:keith AT kvisco DOT com">Keith Visco</a>
- * @version $Revision: 1.1 $ $Date: 2006-11-22 23:48:33 $
+ * @version $Revision: 1.1 $ $Date: 2006-12-13 18:37:54 $
  */
 public class Marshaller2 extends MarshalFramework {
 

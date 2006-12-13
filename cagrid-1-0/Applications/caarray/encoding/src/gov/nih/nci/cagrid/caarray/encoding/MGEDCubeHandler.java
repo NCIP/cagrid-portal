@@ -6,19 +6,89 @@ import java.util.List;
 
 import gov.nih.nci.mageom.domain.BioAssayData.impl.BioDataCubeImpl;
 
+import org.apache.axis.MessageContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exolab.castor.mapping.FieldHandler;
 import org.exolab.castor.mapping.ValidityException;
 
 public class MGEDCubeHandler implements FieldHandler {
-	
+
 	private static Log LOG = LogFactory.getLog(MGEDCubeHandler.class);
-	
+
 	public static final String LINE_DELIMITER = "\\";
+
 	public static final String LINE_DELIMITER_PATTERN = "\\\\";
+
 	public static final String VALUE_DELIMITER = "|";
+
 	public static final String VALUE_DELIMITER_PATTERN = "\\|";
+
+	private static final String LINE_DELIMITER_PROP = "gov.nih.nci.cagrid.caarray.encoding.lineDelimiter";
+
+	private static final String LINE_DELIMITER_PATTERN_PROP = "gov.nih.nci.cagrid.caarray.encoding.lineDelimiterPattern";
+
+	private static final String VALUE_DELIMITER_PROP = "gov.nih.nci.cagrid.caarray.encoding.valueDelimiter";
+
+	private static final String VALUE_DELIMITER_PATTERN_PROP = "gov.nih.nci.cagrid.caarray.encoding.valueDelimiterPattern";
+
+	private static final String NAN = "NaN";
+
+	private String lineDelimiter;
+
+	private String lineDelimiterPattern;
+
+	private String valueDelimiter;
+
+	private String valueDelimiterPattern;
+
+	public String getLineDelimiter() {
+		return lineDelimiter;
+	}
+
+	public void setLineDelimiter(String lineDelimiter) {
+		this.lineDelimiter = lineDelimiter;
+	}
+
+	public String getLineDelimiterPattern() {
+		return lineDelimiterPattern;
+	}
+
+	public void setLineDelimiterPattern(String lineDelimiterPattern) {
+		this.lineDelimiterPattern = lineDelimiterPattern;
+	}
+
+	public String getValueDelimiter() {
+		return valueDelimiter;
+	}
+
+	public void setValueDelimiter(String valueDelimiter) {
+		this.valueDelimiter = valueDelimiter;
+	}
+
+	public String getValueDelimiterPattern() {
+		return valueDelimiterPattern;
+	}
+
+	public void setValueDelimiterPattern(String valueDelimiterPattern) {
+		this.valueDelimiterPattern = valueDelimiterPattern;
+	}
+
+	public MGEDCubeHandler() {
+		try {
+			setLineDelimiter(System.getProperty(LINE_DELIMITER_PROP,
+					LINE_DELIMITER));
+			setLineDelimiterPattern(System.getProperty(
+					LINE_DELIMITER_PATTERN_PROP, LINE_DELIMITER_PATTERN));
+			setValueDelimiter(System.getProperty(VALUE_DELIMITER_PROP,
+					VALUE_DELIMITER));
+			setValueDelimiterPattern(System.getProperty(
+					VALUE_DELIMITER_PATTERN_PROP, VALUE_DELIMITER_PATTERN));
+		} catch (Exception ex) {
+			String msg = "Error getting property: " + ex.getMessage();
+			LOG.error(msg, ex);
+		}
+	}
 
 	public void checkValidity(Object arg0) throws ValidityException,
 			IllegalStateException {
@@ -38,11 +108,13 @@ public class MGEDCubeHandler implements FieldHandler {
 					try {
 
 						LOG.debug("Beginning encoding...");
-						value = getCubeAsString(cube, LINE_DELIMITER, VALUE_DELIMITER);
+						value = getCubeAsString(cube, getLineDelimiter(),
+								getValueDelimiter());
 						LOG.debug("...done encoding.");
 
 					} catch (Exception ex) {
-						LOG.error("Error enconding cube: " + ex.getMessage(), ex); 
+						LOG.error("Error enconding cube: " + ex.getMessage(),
+								ex);
 						throw new RuntimeException("Error encoding cube: "
 								+ ex.getMessage(), ex);
 					}
@@ -72,7 +144,6 @@ public class MGEDCubeHandler implements FieldHandler {
 	public void setValue(Object obj, Object value)
 			throws IllegalStateException, IllegalArgumentException {
 
-
 		if (obj != null) {
 
 			BioDataCubeImpl bdc = null;
@@ -94,10 +165,12 @@ public class MGEDCubeHandler implements FieldHandler {
 				}
 				Object[][][] cube = null;
 				try {
-					
-					cube = getCubeFromString((String)value, LINE_DELIMITER_PATTERN, VALUE_DELIMITER_PATTERN);
+
+					cube = getCubeFromString((String) value,
+							getLineDelimiterPattern(),
+							getValueDelimiterPattern());
 					bdc.setCube(cube);
-					
+
 				} catch (Exception ex) {
 					throw new RuntimeException("Error decoding cube: "
 							+ ex.getMessage(), ex);
@@ -107,8 +180,13 @@ public class MGEDCubeHandler implements FieldHandler {
 
 		}
 	}
-	
-	public static String getCubeAsString(Object[][][] cube, String lineDelim, String valueDelim) {
+
+	public String getCubeAsString(Object[][][] cube) {
+		return getCubeAsString(cube, getLineDelimiter(), getValueDelimiter());
+	}
+
+	public static String getCubeAsString(Object[][][] cube, String lineDelim,
+			String valueDelim) {
 		StringBuffer sb = new StringBuffer();
 		Object value = null;
 		for (int i = 0; i < cube.length; i++) {
@@ -118,20 +196,22 @@ public class MGEDCubeHandler implements FieldHandler {
 					if (value == null
 							|| (value instanceof Double && ((Double) value)
 									.isInfinite())) {
-						sb.append("NaN");
+						sb.append(NAN);
 					} else {
 						sb.append(value);
 					}
 					sb.append(valueDelim);
 				}
-				sb.setLength(sb.length() - 1); // Remove the last tab
+				if (sb.length() > 0) {
+					sb.setLength(sb.length() - 1); // Remove the last tab
+				}
 				sb.append(lineDelim);
 			}
 			sb.append(lineDelim);
 		}
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Ripped from MAGEstk
 	 * 
@@ -143,6 +223,9 @@ public class MGEDCubeHandler implements FieldHandler {
 	 */
 	public static Object[][][] getCubeFromString(int dim1, int dim2, int dim3,
 			String str, String lineDelimPatt, String valueDelimPatt) {
+		
+		LOG.debug("dim1 = " + dim1 + ", dim2 = " + dim2 + ", dim3 = " + dim3);
+		
 		Object[][][] cube = new Object[dim1][dim2][dim3];
 
 		List lines = Arrays.asList(str.split(lineDelimPatt));
@@ -160,10 +243,11 @@ public class MGEDCubeHandler implements FieldHandler {
 
 				// Assume tab is the delimiter.
 				String[] tmp = line.split(valueDelimPatt);
+				// System.out.println("Got " + tmp.length + " values.");
 				Double[] dtmp = new Double[tmp.length];
 
 				for (int k = 0; k < tmp.length; k++) {
-					if (tmp[k].trim().equalsIgnoreCase("NaN")) {
+					if (tmp[k].trim().equalsIgnoreCase(NAN)) {
 						dtmp[k] = null;
 					} else {
 						dtmp[k] = new Double(tmp[k]);
@@ -193,7 +277,8 @@ public class MGEDCubeHandler implements FieldHandler {
 		return cube;
 	}
 
-	public static Object[][][] getCubeFromString(String str, String lineDelimPatt, String valueDelimPatt) {
+	public static Object[][][] getCubeFromString(String str,
+			String lineDelimPatt, String valueDelimPatt) {
 		Object[][][] cube = null;
 
 		int dim1 = 1;
@@ -202,16 +287,17 @@ public class MGEDCubeHandler implements FieldHandler {
 		int tempDim2 = 0;
 		int tempDim3 = 0;
 		List lines = Arrays.asList(str.split(lineDelimPatt));
+		// System.out.println("Got " + lines.size() + " lines.");
 		for (Iterator linesIt = lines.iterator(); linesIt.hasNext();) {
 			String line = (String) linesIt.next();
 			if (line.length() == 0) {
 				dim1++;
-				if (tempDim2 > dim2) {
-					dim2 = tempDim2;
-				}
 				tempDim2 = 0;
 			} else {
 				tempDim2++;
+				if (tempDim2 > dim2) {
+					dim2 = tempDim2;
+				}
 				tempDim3 = line.split(valueDelimPatt).length;
 				if (tempDim3 > dim3) {
 					dim3 = tempDim3;
@@ -219,7 +305,8 @@ public class MGEDCubeHandler implements FieldHandler {
 			}
 		}
 
-		cube = getCubeFromString(dim1, dim2, dim3, str, lineDelimPatt, valueDelimPatt);
+		cube = getCubeFromString(dim1, dim2, dim3, str, lineDelimPatt,
+				valueDelimPatt);
 
 		return cube;
 	}

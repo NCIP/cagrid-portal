@@ -547,8 +547,11 @@
       <field name="cube" type="[[[Ljava.lang.Object;" handler="gov.nih.nci.cagrid.caarray.encoding.MGEDCubeHandler" >    
         <!--
     <field name="cube" type="[[[Ljava.lang.Object;" handler="gov.nih.nci.cagrid.caarray.encoding.Base64CubeHandler" >
-    -->
+        -->
+        <!--
       <bind-xml name="ns68:cube" node="element" xmlns:ns68="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssayData"/>
+        -->
+        <bind-xml name="cube" node="attribute"></bind-xml>
       
     </field>
     <field name="order" type="string">

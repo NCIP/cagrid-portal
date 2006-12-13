@@ -6,6 +6,7 @@ import java.io.StringWriter;
 
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.xml.Unmarshaller;
+import org.w3c.dom.Element;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
@@ -35,10 +36,21 @@ public class Utils {
 	}
 
 	public static Object fromXML(String xml) throws Exception {
+		
 		Mapping mapping = getMapping("gov/nih/nci/cagrid/caarray/common/caarray-xml-mapping.xml");
 		Unmarshaller unmarshaller = new Unmarshaller();
 		unmarshaller.setMapping(mapping);
+		unmarshaller.setWhitespacePreserve(true);
 		return unmarshaller.unmarshal(new InputSource(new StringReader(xml)));
+	}
+	
+	public static Object fromXML(Element el) throws Exception {
+		
+		Mapping mapping = getMapping("gov/nih/nci/cagrid/caarray/common/caarray-xml-mapping.xml");
+		Unmarshaller unmarshaller = new Unmarshaller();
+		unmarshaller.setMapping(mapping);
+		unmarshaller.setWhitespacePreserve(true);
+		return unmarshaller.unmarshal(el);
 	}
 
 	public static Mapping getMapping(String resource) {

@@ -15,15 +15,15 @@ import gov.nih.nci.cagrid.data.mapping.Mappings;
 import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
 import gov.nih.nci.cagrid.data.utilities.CQLResultsCreationUtil;
 import gov.nih.nci.cagrid.data.utilities.ResultsCreationException;
-import gov.nih.nci.common.remote.rmi.RMISearchCriteriaHandlerProxy;
 import gov.nih.nci.common.remote.rmi.RMISearchCriteriaHandlerRemoteIF;
 import gov.nih.nci.common.search.Directable;
 import gov.nih.nci.common.search.SearchCriteria;
 import gov.nih.nci.common.search.SearchResult;
 import gov.nih.nci.common.search.session.SecureSession;
 import gov.nih.nci.common.search.session.SecureSessionFactory;
-import gov.nih.nci.mageom.domain.Experiment.Experiment;
-import gov.nih.nci.mageom.search.impl.MAGEOMSearchCriteria;
+import gov.nih.nci.mageom.domain.BioAssayData.MeasuredBioAssayData;
+import gov.nih.nci.mageom.domain.BioAssayData.impl.BioDataCubeImpl;
+import gov.nih.nci.mageom.domain.BioAssayData.impl.MeasuredBioAssayDataImpl;
 
 import java.lang.reflect.Method;
 import java.rmi.Naming;
@@ -158,10 +158,9 @@ public class CaArrayCQLQueryProcessor extends CQLQueryProcessor {
 			for (int j = 0; j < attNames.length; j++) {
 				Object attValue = getAttributeValue(obj, attNames[j]);
 				if (attValue instanceof Object[][][]) {
-					attValue = MGEDCubeHandler.getCubeAsString(
-							(Object[][][]) attValue,
-							MGEDCubeHandler.LINE_DELIMITER,
-							MGEDCubeHandler.VALUE_DELIMITER);
+					attValue = new MGEDCubeHandler()
+							.getCubeAsString((Object[][][]) attValue);
+
 				}
 				attValues[j] = new TargetAttribute(attNames[j], attValue
 						.toString());
@@ -236,12 +235,10 @@ public class CaArrayCQLQueryProcessor extends CQLQueryProcessor {
 
 		SearchCriteria sc = CQL2SC.translate(cqlQuery,
 				useCaseInsensitiveQueries());
-		// ((Directable)sc).direct(getConfiguredParameters().getProperty(RMI_SERVER_URL));
 		sc.setSessionId(sessId);
 
 		SearchResult sr;
 		try {
-			// sr = sc.search();
 			RMISearchCriteriaHandlerRemoteIF rmiServer = (RMISearchCriteriaHandlerRemoteIF) Naming
 					.lookup(getConfiguredParameters().getProperty(
 							RMI_SERVER_URL));
