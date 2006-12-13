@@ -91,7 +91,6 @@
 	<classpathentry kind="lib" path="lib/aspectjrt.jar"/>
 	<classpathentry kind="lib" path="lib/mageom-client.jar"/>
 	<classpathentry kind="lib" path="lib/CaArraySvc-processor.jar"/>
-	<classpathentry kind="lib" path="ext/lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/castor-1.0.4-patched.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
