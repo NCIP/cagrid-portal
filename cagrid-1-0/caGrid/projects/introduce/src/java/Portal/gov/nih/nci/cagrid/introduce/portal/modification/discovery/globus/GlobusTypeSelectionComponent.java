@@ -98,6 +98,7 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 					+ File.separator
 					+ currentSchemaFile.getAbsolutePath().substring(index + 1,
 						currentSchemaFile.getAbsolutePath().length());
+				location = location.replace('\\','/');
 				input.setLocation(location);
 				gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(input, XMLUtilities
 					.fileNameToDocument(currentSchemaFile.getAbsolutePath()));
