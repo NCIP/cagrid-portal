@@ -3,8 +3,6 @@ package gov.nih.nci.cagrid.data;
 import gov.nih.nci.cagrid.encoding.SDKDeserializerFactory;
 import gov.nih.nci.cagrid.encoding.SDKSerializerFactory;
 
-import java.io.File;
-
 import javax.xml.namespace.QName;
 
 
@@ -18,14 +16,17 @@ import javax.xml.namespace.QName;
  * @version $Id$ 
  */
 public class DataServiceConstants {
+	// some platforms have problems with backslashes in xsd locations
+	public static final String FILE_SEPARATOR = "/";
+	
 	// metadata schema constants
-	public static final String METADATA_SCHEMA_LOCATION = "xsd" + File.separator + "cagrid" + File.separator + "types";
-	public static final String CADSR_METADATA_SCHEMA_LOCATION = METADATA_SCHEMA_LOCATION + File.separator + "cadsr";
-	public static final String CADSR_DOMAIN_SCHEMA = CADSR_METADATA_SCHEMA_LOCATION + File.separator + "3.0_gov.nih.nci.cadsr.domain.xsd";
-	public static final String CADSR_UMLPROJECT_SCHEMA = CADSR_METADATA_SCHEMA_LOCATION + File.separator + "3.0_gov.nih.nci.cadsr.umlproject.domain.xsd";
-	public static final String DATA_METADATA_SCHEMA = METADATA_SCHEMA_LOCATION + File.separator + "data" + File.separator + "data.xsd";
-	public static final String COMMON_METADATA_SCHEMA = METADATA_SCHEMA_LOCATION + File.separator + "common" + File.separator + "common.xsd";
-	public static final String CAGRID_METADATA_SCHEMA = METADATA_SCHEMA_LOCATION + File.separator + "caGridMetadata.xsd";
+	public static final String METADATA_SCHEMA_LOCATION = "xsd" + FILE_SEPARATOR + "cagrid" + FILE_SEPARATOR + "types";
+	public static final String CADSR_METADATA_SCHEMA_LOCATION = METADATA_SCHEMA_LOCATION + FILE_SEPARATOR + "cadsr";
+	public static final String CADSR_DOMAIN_SCHEMA = CADSR_METADATA_SCHEMA_LOCATION + FILE_SEPARATOR + "3.0_gov.nih.nci.cadsr.domain.xsd";
+	public static final String CADSR_UMLPROJECT_SCHEMA = CADSR_METADATA_SCHEMA_LOCATION + FILE_SEPARATOR + "3.0_gov.nih.nci.cadsr.umlproject.domain.xsd";
+	public static final String DATA_METADATA_SCHEMA = METADATA_SCHEMA_LOCATION + FILE_SEPARATOR + "data" + FILE_SEPARATOR + "data.xsd";
+	public static final String COMMON_METADATA_SCHEMA = METADATA_SCHEMA_LOCATION + FILE_SEPARATOR + "common" + FILE_SEPARATOR + "common.xsd";
+	public static final String CAGRID_METADATA_SCHEMA = METADATA_SCHEMA_LOCATION + FILE_SEPARATOR + "caGridMetadata.xsd";
 	public static final String DATA_METADATA_URI = "gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice";
 	
 	// sdk serializer constants
@@ -52,6 +53,7 @@ public class DataServiceConstants {
 	
 	// data service naming constants
 	public static final String DATA_SERVICE_PACKAGE = "gov.nih.nci.cagrid.data";
+	public static final String ENUMERATION_DATA_SERVICE_PACKAGE = DATA_SERVICE_PACKAGE + ".enumeration";
 	public static final String DATA_SERVICE_SERVICE_NAME = "DataService";
 	public static final String DATA_SERVICE_NAMESPACE = "http://" + DATA_SERVICE_PACKAGE + "/" + DATA_SERVICE_SERVICE_NAME;
 	public static final String DATA_SERVICE_PORT_TYPE_NAME = DATA_SERVICE_SERVICE_NAME + "PortType";
