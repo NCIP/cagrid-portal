@@ -76,7 +76,7 @@ public class UserManager extends LoggingObject {
 				|| (conf.getMaximumUIDLength() < uid.length())) {
 			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
 			fault
-					.setFaultString("Unacceptable User ID, the length of the password must be between "
+					.setFaultString("Unacceptable User ID, the length of the user id must be between "
 							+ conf.getMinimumUIDLength()
 							+ " and "
 							+ conf.getMaximumUIDLength());
