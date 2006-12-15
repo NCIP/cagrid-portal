@@ -21,8 +21,6 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.projectmobius.common.XMLUtilities;
 
-import com.sun.naming.internal.ResourceManager;
-
 
 /**
  * Templating Utility Functions
