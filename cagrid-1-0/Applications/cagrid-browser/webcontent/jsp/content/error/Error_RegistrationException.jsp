@@ -23,10 +23,6 @@
                     <h:outputLink value="PreLogin.tiles" styleClass="formText">
                         <h:outputText value="#{messages.MenuItem1}"></h:outputText>
                     </h:outputLink>
-                    |
-                    <h:outputLink value="RegisterNewUser.tiles" styleClass="formText">
-                        <h:outputText value="#{messages.backLink}"></h:outputText>
-                    </h:outputLink>
                 </td>
             </tr>
         </table>

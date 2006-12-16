@@ -21,7 +21,7 @@ import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException
 public class ServiceTypeSearch extends AbstractSearch {
 
 	public static Logger logger = Logger.getLogger(ServiceTypeSearch.class);
-	
+
 	public static final String DATA = "data";
 
 	public static final String ANALYTICAL = "analytical";
@@ -52,27 +52,27 @@ public class ServiceTypeSearch extends AbstractSearch {
 			results = client.getAllDataServices();
 		} else {
 			EndpointReferenceType[] all = client.getAllServices(true);
-			if (ANALYTICAL.equals(type)) {
-				Set allSet = new HashSet();
-				for (int i = 0; i < all.length; i++) {
-					allSet.add(all[i]);
-				}
-				EndpointReferenceType[] data = client.getAllDataServices();
-				if (data == null) {
-					data = client.getAllDataServices();
-				}
-				if (data == null) {
-					logger.error("############### data is still null ###############");
-				} else {
-					for (int i = 0; i < data.length; i++) {
-						allSet.remove(data[i]);
+			if (all != null) {
+				if (ANALYTICAL.equals(type)) {
+					Set allSet = new HashSet();
+					for (int i = 0; i < all.length; i++) {
+						allSet.add(all[i]);
 					}
-				}
-				results = (EndpointReferenceType[]) allSet
-						.toArray(new EndpointReferenceType[allSet.size()]);
+					EndpointReferenceType[] data = client.getAllDataServices();
+					if (data == null) {
+						logger.error("No data services retrieved!!!!");
+					} else {
+						for (int i = 0; i < data.length; i++) {
+							allSet.remove(data[i]);
+						}
+					}
+					results = (EndpointReferenceType[]) allSet
+							.toArray(new EndpointReferenceType[allSet.size()]);
 
-			} else {
-				results = all;
+				} else {
+					results = all;
+				}
+
 			}
 		}
 		return results;

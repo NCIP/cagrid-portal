@@ -59,7 +59,9 @@
             <property-name>indexServiceUrls</property-name>
             <list-entries>
                 <value>#{indexService1}</value>
+                <!--
                 <value>#{indexService2}</value>
+                -->
             </list-entries>
         </managed-property>
         
@@ -67,7 +69,9 @@
             <property-name>indexServiceUrlsSelected</property-name>
             <list-entries>
                 <value>#{indexService1.value}</value>
+                <!--
                 <value>#{indexService2.value}</value>
+                -->
             </list-entries>
         </managed-property>
 
@@ -104,14 +108,14 @@
         <managed-bean-scope>none</managed-bean-scope>
         <managed-property>
             <property-name>label</property-name>
-            <value>http://cbiovdev5017.nci.nih.gov:28080/wsrf/services/DefaultIndexService</value>
+            <value>http://cagrid-index.nci.nih.gov:8080/wsrf/services/DefaultIndexService</value>
         </managed-property>
         <managed-property>
             <property-name>value</property-name>
-            <value>http://cbiovdev5017.nci.nih.gov:28080/wsrf/services/DefaultIndexService</value>
+            <value>http://cagrid-index.nci.nih.gov:8080/wsrf/services/DefaultIndexService</value>
         </managed-property>
     </managed-bean>    
-    
+    <!--
     <managed-bean>
         <managed-bean-name>indexService2</managed-bean-name>
         <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
@@ -125,7 +129,7 @@
             <value>http://cagrid01.bmi.ohio-state.edu:8080/wsrf/services/DefaultIndexService    </value>
         </managed-property>
     </managed-bean>
-    
+    -->
     <managed-bean>
         <managed-bean-name>discoveryResult</managed-bean-name>
         <managed-bean-class>gov.nih.nci.cagrid.browser.beans.DiscoveredServices</managed-bean-class>
@@ -140,8 +144,12 @@
             <key-class>java.lang.String</key-class>
             <value-class>java.util.ArrayList</value-class>
             <map-entry>
-                <key>http://cbiovdev5017.nci.nih.gov:48080/wsrf/services/cagrid/CaBIOSvc</key>
+                <key>http://cagrid-portal.nci.nih.gov:8080/wsrf/services/cagrid/CaBIOSvc</key>
                 <value>#{CaBIOSvcSampleQueries}</value>
+            </map-entry>
+            <map-entry>
+                <key>http://cagrid-portal.nci.nih.gov:8080/wsrf/services/cagrid/CaArraySvc</key>
+                <value>#{CaArraySvcSampleQueries}</value>
             </map-entry>
             
         </map-entries>
@@ -154,7 +162,6 @@
         <list-entries>
             <value-class>gov.nih.nci.cagrid.browser.beans.SampleQuery</value-class>
             <value>#{CaBIOSvcSampleQueries1}</value>
-            <value>#{CaBIOSvcSampleQueries2}</value>
         </list-entries>
     </managed-bean>
     
@@ -164,7 +171,7 @@
         <managed-bean-scope>none</managed-bean-scope>
         <managed-property>
             <property-name>name</property-name>
-            <value>Gene Query 1</value>
+            <value>Gene Query</value>
         </managed-property>
         <managed-property>
             <property-name>query</property-name>
@@ -185,12 +192,22 @@
     </managed-bean>
     
     <managed-bean>
-        <managed-bean-name>CaBIOSvcSampleQueries2</managed-bean-name>
+        <managed-bean-name>CaArraySvcSampleQueries</managed-bean-name>
+        <managed-bean-class>java.util.ArrayList</managed-bean-class>
+        <managed-bean-scope>none</managed-bean-scope>
+        <list-entries>
+            <value-class>gov.nih.nci.cagrid.browser.beans.SampleQuery</value-class>
+            <value>#{CaArraySvcSampleQueries1}</value>
+        </list-entries>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>CaArraySvcSampleQueries1</managed-bean-name>
         <managed-bean-class>gov.nih.nci.cagrid.browser.beans.SampleQuery</managed-bean-class>
         <managed-bean-scope>none</managed-bean-scope>
         <managed-property>
             <property-name>name</property-name>
-            <value>Gene Query 2</value>
+            <value>Experiment Query</value>
         </managed-property>
         <managed-property>
             <property-name>query</property-name>
@@ -199,17 +216,8 @@
                 
 <CQLQuery 
     xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
-	<Target name="gov.nih.nci.cabio.domain.Gene">
-		
-	    <Association
-	        name="gov.nih.nci.common.domain.DatabaseCrossReference" 
-	        roleName="databaseCrossReferenceCollection">
-	        <Group logicRelation="AND">
-	            <Attribute name="dataSourceName" value="OMIM_ID" predicate="EQUAL_TO"/>
-	            <Attribute name="crossReferenceId" value="243400" predicate="EQUAL_TO"/>
-	        </Group>
-	    </Association>
-		
+	<Target name="gov.nih.nci.mageom.domain.Experiment.Experiment">
+	    <Attribute name="identifier" value="gov.nih.nci.ncicb.caarray:Experiment:1015897558050098:1" predicate="EQUAL_TO"/>
 	</Target>
 </CQLQuery>
                 
@@ -218,7 +226,6 @@
         </managed-property>
         
     </managed-bean>
-    
     
     
     
@@ -240,7 +247,7 @@
         </managed-property>
         <managed-property>
             <property-name>evsGridServiceUrl</property-name>
-            <value>http://cbiovdev5017.nci.nih.gov:48080/wsrf/services/cagrid/EVSGridService</value>
+            <value>http://cagrid-service.nci.nih.gov:8080/wsrf/services/cagrid/EVSGridService</value>
         </managed-property>
     </managed-bean>
 
@@ -388,7 +395,7 @@
         <managed-bean-scope>none</managed-bean-scope>
         <managed-property>
             <property-name>category</property-name>
-            <value>date</value>
+            <value>data</value>
         </managed-property>
         <managed-property>
             <property-name>vocabulary</property-name>
@@ -769,31 +776,15 @@
         <managed-bean-scope> session </managed-bean-scope>
         <managed-property>
             <property-name>idpUrl1</property-name>
-            <value>https://cbiovdev5017.nci.nih.gov:8343/wsrf/services/cagrid/AuthenticationService</value>
+            <value>https://cagrid-auth.nci.nih.gov:8443/wsrf/services/cagrid/AuthenticationService</value>
         </managed-property>
         <managed-property>
             <property-name>idpUrl2</property-name>
-            <value>https://cbiovdev5017.nci.nih.gov:8441/wsrf/services/cagrid/Dorian</value>
+            <value>https://cagrid-dorian.nci.nih.gov:8443/wsrf/services/cagrid/Dorian</value>
         </managed-property>
         <managed-property>
             <property-name>ifsUrl</property-name>
-            <value>https://cbiovdev5017.nci.nih.gov:8441/wsrf/services/cagrid/Dorian</value>
-        </managed-property>
-        <managed-property>
-            <property-name>guestUsername</property-name>
-            <value>guest</value>
-        </managed-property>
-        <managed-property>
-            <property-name>guestPassword</property-name>
-            <value>guest</value>
-        </managed-property>
-        <managed-property>
-            <property-name>guestUsernameMapsTo</property-name>
-            <value>guest</value>
-        </managed-property>
-        <managed-property>
-            <property-name>guestPasswordMapsTo</property-name>
-            <value>guest</value>
+            <value>https://cagrid-dorian.nci.nih.gov:8443/wsrf/services/cagrid/Dorian</value>
         </managed-property>
         <managed-property>
             <property-name>proxyValidTime</property-name>
@@ -804,26 +795,6 @@
             <value>0</value>
         </managed-property>
     </managed-bean>
-
-    <!--
-    <managed-bean>
-        <managed-bean-name>sampleQueriesBean</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.browser.beans.SampleXMLQueries</managed-bean-class>
-        <managed-property>
-            <property-name>queryFilename</property-name>
-            <value>/examples/queryExamples.xml</value>
-        </managed-property>
-        <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
-    -->
-
-    <!--
-    <managed-bean>
-        <managed-bean-name>DiscoveryCompletetionBean</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.cagrid.browser.ajax.DiscoveryCompletetionBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
-    -->
 
 
     <!-- Generic Navigation Rules -->

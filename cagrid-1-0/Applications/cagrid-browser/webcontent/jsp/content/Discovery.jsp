@@ -45,7 +45,6 @@ To change this template use File | Settings | File Templates.
 
             <h:column>
                 <h:outputText value="#{messages.discoverySemanticMetadataCategory}"/>
-                <h:outputText value="#{messages.optionalKeyword}"/>
             </h:column>
 
             <h:column>
@@ -59,7 +58,6 @@ To change this template use File | Settings | File Templates.
             
 			<h:column>
                 <h:outputText value="#{messages.discoveryServiceMetadataCategory}"/>
-                <h:outputText value="#{messages.optionalKeyword}"/>
             </h:column>
 
             <h:column>
@@ -73,7 +71,6 @@ To change this template use File | Settings | File Templates.
             
             <h:column>
                 <h:outputText value="#{messages.discoveryServiceTypeCategory}"/>
-                <h:outputText value="#{messages.optionalKeyword}"/>
             </h:column>
 
             <h:column>

@@ -70,7 +70,7 @@ To change this template use File | Settings | File Templates.
 </tr>
 
 <tr>
-    <td align="center">
+    <td colspan="2" class="formTitle">
          <h:outputText styleClass="loginFailed" value="#{discoveryResult.navigatedService.queryFailureMessage}"/>
     </td>
 </tr>

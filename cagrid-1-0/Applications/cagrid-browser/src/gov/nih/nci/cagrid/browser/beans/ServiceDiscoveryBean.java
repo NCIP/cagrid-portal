@@ -145,8 +145,15 @@ public class ServiceDiscoveryBean {
 			List threads = new ArrayList();
 			List searches = new ArrayList();
 			
-			String[] terms = getKeywords().split(AppUtils.KEYWORD_DELIMITER);
+			String[] terms = new String[0];
+			String keywordsStr = getKeywords();
+			if(keywordsStr != null){
+				terms = getKeywords().split(AppUtils.KEYWORD_DELIMITER);
+			}
 			
+			/**
+			 * Set up the semantic searches.
+			 */
 			Map semanticCategoriesMap = getSemanticMetadataCategoriesMap();
 			List semanticCategories = getSemanticMetadataCategoriesSelected();
 			if(semanticCategories.contains(ALL)){
@@ -165,9 +172,26 @@ public class ServiceDiscoveryBean {
 				searches.add(search);
 				threads.add(new Thread(search));
 			}
+
+			
+			/**
+			 * Set up the service type searches.
+			 */
+			List serviceTypeCategories = getServiceTypeSelected();
+			setUpTypeSearch(serviceTypeCategories, searches, threads);
+			
+			
+			
+			/**
+			 * Set up the service metadata searches.
+			 */
 			Map serviceCategoriesMap = getServiceMetadataCategoriesMap();
 			List serviceCategories = getServiceMetadataCategoriesSelected();
-			if(serviceCategories.contains(ALL)){
+			if(serviceCategories.size() == 0 && serviceTypeCategories.size() == 0 && semanticCategories.size() == 0 || serviceCategories.contains(ALL)){
+				/**
+				 * This means the user hasn't specified any categories.
+				 * So, just search all the service metadata.
+				 */
 				serviceCategories = new ArrayList(serviceCategoriesMap.keySet());
 			}
 			logger.debug("Selected " + serviceCategories.size() + " service metadata categories.");
@@ -183,19 +207,14 @@ public class ServiceDiscoveryBean {
 				searches.add(search);
 				threads.add(new Thread(search));
 			}
-			List serviceTypeCategories = getServiceTypeSelected();
-			if(serviceTypeCategories.contains(ALL)){
-				serviceTypeCategories.clear();
-				serviceTypeCategories.add(ServiceTypeSearch.DATA);
-				serviceTypeCategories.add(ServiceTypeSearch.ANALYTICAL);
-			}
-			for(Iterator i = serviceTypeCategories.iterator(); i.hasNext();){
-				String category = (String)i.next();
-				ServiceTypeSearch sts = new ServiceTypeSearch();
-				sts.setType(category);
-				sts.setIndexServiceURLs(getIndexServiceUrlsSelected());
-				searches.add(sts);
-				threads.add(new Thread(sts));
+			
+			if(searches.size() == 0){
+				/**
+				 * This means the user hasn't selected any of the categories AND
+				 * hasn't specified any keywords. So, just return all services.
+				 */
+				serviceTypeCategories.add(ALL);
+				setUpTypeSearch(serviceTypeCategories, searches, threads);
 			}
 
 			boolean errorEncountered = false;
@@ -238,6 +257,23 @@ public class ServiceDiscoveryBean {
 		}
 
 		return result;
+	}
+
+	private void setUpTypeSearch(List serviceTypeCategories, List searches, List threads) {
+		if(serviceTypeCategories.contains(ALL)){
+			serviceTypeCategories.clear();
+			serviceTypeCategories.add(ServiceTypeSearch.DATA);
+			serviceTypeCategories.add(ServiceTypeSearch.ANALYTICAL);
+		}
+		for(Iterator i = serviceTypeCategories.iterator(); i.hasNext();){
+			String category = (String)i.next();
+			ServiceTypeSearch sts = new ServiceTypeSearch();
+			sts.setType(category);
+			sts.setIndexServiceURLs(getIndexServiceUrlsSelected());
+			searches.add(sts);
+			threads.add(new Thread(sts));
+		}
+
 	}
 
 	private void runThreads(List threads, int timeout) {

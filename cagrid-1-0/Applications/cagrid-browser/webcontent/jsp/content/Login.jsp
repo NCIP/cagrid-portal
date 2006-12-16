@@ -125,9 +125,11 @@
                     <ul>
                         <li><h:outputText value="#{messages.refImpl1}"/></li>
                         <li><h:outputText value="#{messages.refImpl2}"/></li>
+                        <%--
                         <li><h:outputText value="#{messages.refImpl3}"/></li>
                         <li><h:outputText value="#{messages.refImpl4}"/></li>
                         <li><h:outputText value="#{messages.refImpl5}"/></li>
+                        --%>
 
                     </ul>
                 </td>

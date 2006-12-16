@@ -131,7 +131,7 @@
         <h:outputText value="#{messages.regCity}"></h:outputText>
     </div></td>
     <td class="formField">
-        <h:inputText id="city" value="#{loginBean.newUserInfo.city}" required="city" size="40">
+        <h:inputText id="city" value="#{loginBean.newUserInfo.city}" required="true" size="40">
         	<f:validateLength minimum="1"/>
         </h:inputText>
         <h:outputText value="*"></h:outputText>
@@ -169,8 +169,11 @@
         <h:outputText value="#{messages.regCountry}"></h:outputText>
     </div></td>
     <td class="formFieldWhite">
-        <h:inputText id="countryCode" value="#{loginBean.newUserInfo.country}" required="false" maxlength="2" size="2"
-        	converter="CountryCodeConverter"/>
+        <h:inputText id="countryCode" value="#{loginBean.newUserInfo.country}" required="true" maxlength="2" size="2"
+        	converter="CountryCodeConverter">
+        	<f:validateLength minimum="1"/>
+        </h:inputText>
+        <h:outputText value="*"></h:outputText>
 
         <h:message for="countryCode" styleClass="loginFailed"/>
     </td>
@@ -181,7 +184,10 @@
         <h:outputText value="#{messages.regPhone}"></h:outputText>
     </div></td>
     <td class="formFieldWhite">
-        <h:inputText value="#{loginBean.newUserInfo.phoneNumber}" required="false" maxlength="10" size="10"/>
+        <h:inputText value="#{loginBean.newUserInfo.phoneNumber}" required="true" maxlength="10" size="10">
+        	<f:validateLength minimum="1"/>
+        </h:inputText>
+        <h:outputText value="*"></h:outputText>
     </td>
 </tr>
 

@@ -71,14 +71,6 @@ public class LoginBean {
 
 	private String password;
 
-	private String guestUsername;
-
-	private String guestUsernameMapsTo;
-
-	private String guestPassword;
-
-	private String guestPasswordMapsTo;
-
 	private Application newUserInfo = new Application();
 
 	private int proxyValidTime;
@@ -206,6 +198,10 @@ public class LoginBean {
 	public static String register(String ifsUrl, Application newUserInfo)
 			throws MalformedURIException, DorianInternalFault, RemoteException {
 
+		StateCode state = newUserInfo.getState();
+		if(state == null){
+			newUserInfo.setState(StateCode.fromValue("Outside_US"));
+		}
 		DorianClient client = new DorianClient(ifsUrl);
 		return client.registerWithIdP(newUserInfo);
 	}
@@ -303,38 +299,6 @@ public class LoginBean {
 
 	public void setDelegationPathLength(int delegationPathLength) {
 		this.delegationPathLength = delegationPathLength;
-	}
-
-	public String getGuestPassword() {
-		return guestPassword;
-	}
-
-	public void setGuestPassword(String guestPassword) {
-		this.guestPassword = guestPassword;
-	}
-
-	public String getGuestPasswordMapsTo() {
-		return guestPasswordMapsTo;
-	}
-
-	public void setGuestPasswordMapsTo(String guestPasswordMapsTo) {
-		this.guestPasswordMapsTo = guestPasswordMapsTo;
-	}
-
-	public String getGuestUsername() {
-		return guestUsername;
-	}
-
-	public void setGuestUsername(String guestUsername) {
-		this.guestUsername = guestUsername;
-	}
-
-	public String getGuestUsernameMapsTo() {
-		return guestUsernameMapsTo;
-	}
-
-	public void setGuestUsernameMapsTo(String guestUsernameMapsTo) {
-		this.guestUsernameMapsTo = guestUsernameMapsTo;
 	}
 
 	public Application getNewUserInfo() {

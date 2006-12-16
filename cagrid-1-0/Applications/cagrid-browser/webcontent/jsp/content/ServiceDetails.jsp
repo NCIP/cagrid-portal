@@ -22,7 +22,7 @@ To change this template use File | Settings | File Templates.
 <f:verbatim><br></f:verbatim>
 
 <h:panelGrid width="100%" border="0" cellspacing="0" cellpadding="0">
-    <h:column>
+    <h:column><f:verbatim>&lt;&lt;</f:verbatim>
         <h:outputLink value="DiscoveryResults.tiles" styleClass="formText">
             <h:outputText value="#{messages.backToSearchResults}"></h:outputText>
         </h:outputLink>
