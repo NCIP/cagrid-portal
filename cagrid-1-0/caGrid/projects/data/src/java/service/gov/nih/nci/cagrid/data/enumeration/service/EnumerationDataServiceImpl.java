@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.service;
+package gov.nih.nci.cagrid.data.enumeration.service;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
@@ -8,6 +8,8 @@ import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.cql.LazyCQLQueryProcessor;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
+import gov.nih.nci.cagrid.data.service.BaseServiceImpl;
+import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.wsenum.utils.EnumerateResponseFactory;
 import gov.nih.nci.cagrid.wsenum.utils.EnumerationCreationException;
@@ -27,24 +29,21 @@ import javax.xml.namespace.QName;
 import org.globus.ws.enumeration.EnumIterator;
 
 /** 
- *  EnumerationQueryImpl
- *  Implementation of the EnumerationQuery
+ * TODO:I am the service side implementation class.  IMPLEMENT AND DOCUMENT ME
  * 
  * @created by Introduce Toolkit version 1.0
  * 
  */
-public class EnumerationQueryImpl extends BaseServiceImpl {
+public class EnumerationDataServiceImpl extends BaseServiceImpl {
 
 	
-	public EnumerationQueryImpl() throws RemoteException {
+	public EnumerationDataServiceImpl() throws RemoteException {
 		super();
 	}
 	
-	
-	public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse enumerationQuery(
-		gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) throws RemoteException, 
-		gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType, 
-		gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType {
+	public org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse enumerationQuery(gov.nih.nci.cagrid.cqlquery.CQLQuery cqlQuery) throws RemoteException, 
+		gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType, 
+		gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
 		preProcess(cqlQuery);
 		
 		CQLQueryProcessor processor = getCqlQueryProcessorInstance();

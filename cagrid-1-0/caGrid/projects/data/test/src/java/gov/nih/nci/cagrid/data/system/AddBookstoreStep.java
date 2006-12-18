@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.data.system;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.data.creation.CreationTests;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -17,7 +16,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: AddBookstoreStep.java,v 1.1 2006-11-08 18:09:38 dervin Exp $ 
+ * @version $Id: AddBookstoreStep.java,v 1.2 2006-12-18 14:48:47 dervin Exp $ 
  */
 public class AddBookstoreStep extends Step {
 	
@@ -33,7 +32,7 @@ public class AddBookstoreStep extends Step {
 
 	public void runStep() throws Throwable {
 		System.out.println("Running step: " + getClass().getName());
-		String serviceModelFile = CreationTests.SERVICE_DIR 
+		String serviceModelFile = serviceBaseDir 
 			+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
 		ServiceDescription desc = null;
 		try {

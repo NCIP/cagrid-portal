@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.data.system;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
-import gov.nih.nci.cagrid.data.creation.CreationTests;
 import gov.nih.nci.cagrid.data.extension.CQLProcessorConfig;
 import gov.nih.nci.cagrid.data.extension.CQLProcessorConfigProperty;
 import gov.nih.nci.cagrid.data.extension.Data;
@@ -26,7 +25,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: SetQueryProcessorStep.java,v 1.1 2006-11-08 18:09:38 dervin Exp $ 
+ * @version $Id: SetQueryProcessorStep.java,v 1.2 2006-12-18 14:48:47 dervin Exp $ 
  */
 public class SetQueryProcessorStep extends Step {
 	
@@ -39,7 +38,7 @@ public class SetQueryProcessorStep extends Step {
 
 	public void runStep() throws Throwable {
 		System.out.println("Running step: " + getClass().getName());
-		String serviceModelFile = CreationTests.SERVICE_DIR 
+		String serviceModelFile = serviceDir 
 			+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
 		ServiceDescription desc = null;
 		try {

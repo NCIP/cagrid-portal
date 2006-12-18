@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.data.utilities;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
-import gov.nih.nci.cagrid.data.common.EnumerationQueryI;
+import gov.nih.nci.cagrid.data.enumeration.common.EnumerationDataServiceI;
 import gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 
@@ -11,7 +11,6 @@ import java.util.Iterator;
 
 import org.globus.ws.enumeration.ClientEnumIterator;
 import org.globus.ws.enumeration.IterationConstraints;
-import org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse;
 
 /** 
@@ -21,22 +20,20 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerateResponse;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: EnumDataServiceHandle.java,v 1.1 2006-11-08 19:08:14 dervin Exp $ 
+ * @version $Id: EnumDataServiceHandle.java,v 1.2 2006-12-18 14:48:47 dervin Exp $ 
  */
 public class EnumDataServiceHandle implements DataServiceIterator {
 
-	private EnumerationQueryI queryService;
-	private DataSource dataSource;
+	private EnumerationDataServiceI queryService;
 	private IterationConstraints constraints;
 	
-	public EnumDataServiceHandle(EnumerationQueryI enumQueryService, DataSource dataSource) {
-		this(enumQueryService, dataSource, new IterationConstraints());
+	public EnumDataServiceHandle(EnumerationDataServiceI enumQueryService) {
+		this(enumQueryService, new IterationConstraints());
 	}
 	
 	
-	public EnumDataServiceHandle(EnumerationQueryI enumQueryService, DataSource dataSource, IterationConstraints iterationConstraints) {
+	public EnumDataServiceHandle(EnumerationDataServiceI enumQueryService, IterationConstraints iterationConstraints) {
 		this.queryService = enumQueryService;
-		this.dataSource = dataSource;
 		this.constraints = iterationConstraints;
 	}
 	
@@ -53,7 +50,7 @@ public class EnumDataServiceHandle implements DataServiceIterator {
 		}
 		EnumerateResponse response = queryService.enumerationQuery(query);
 		ClientEnumIterator iter = new ClientEnumIterator(
-			dataSource, response.getEnumerationContext());
+			queryService, response.getEnumerationContext());
 		iter.setIterationConstraints(constraints);
 		iter.setItemType(targetClass);
 		return new IterationWraper(iter);

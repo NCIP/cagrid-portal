@@ -66,6 +66,8 @@
 		<antcall target="testBase"/>
 		<antcall target="testCreation"/>
 		<antcall target="testSystem"/>
+		<antcall target="testEnumerationCreation"/>
+		<antcall target="testEnumerationSystem"/>
 	</target>
 	
 	<target name="testBase" depends="compileTests" description="Runs the base set of tests for the data service core">
@@ -129,6 +131,49 @@
 			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
 					<include name="**/SystemTests.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." if="test.failed"/>
+	</target>
+	
+	<target name="testEnumerationCreation" depends="installIntroduceExtensions, compileTests, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration">
+		<mkdir dir="${junit.results.dir}"/>
+		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
+			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
+			<jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
+			<jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples"/>
+			<classpath location="${instrumented.classes.dir}"/>
+			<classpath refid="all.test.classpath"/>
+			<classpath>
+				<pathelement path="${test.classes.dir}"/>
+			</classpath>
+			<formatter type="xml"/>
+			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
+			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/CreateEnumerationTests.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." if="test.failed"/>
+	</target>
+	
+	<target name="testEnumerationSystem" depends="testEnumerationCreation" description="Tests the enumeration data service system">
+		<junit dir="${basedir}">
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
+			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
+			<classpath location="${instrumented.classes.dir}"/>
+			<classpath refid="all.test.classpath"/>
+			<classpath>
+				<pathelement path="${test.classes.dir}"/>
+			</classpath>
+			<formatter type="xml"/>
+			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
+			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/EnumerationSystemTests.java"/>
 				</fileset>
 			</batchtest>
 		</junit>

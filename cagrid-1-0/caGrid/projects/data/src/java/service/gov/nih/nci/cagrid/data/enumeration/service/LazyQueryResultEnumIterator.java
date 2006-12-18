@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.service;
+package gov.nih.nci.cagrid.data.enumeration.service;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,7 +20,7 @@ import org.globus.wsrf.utils.AnyHelper;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 7, 2006 
- * @version $Id$ 
+ * @version $Id: LazyQueryResultEnumIterator.java,v 1.1 2006-12-18 14:48:47 dervin Exp $ 
  */
 public class LazyQueryResultEnumIterator implements EnumIterator {
 	private boolean hasBeenReleased = false;
@@ -76,7 +76,7 @@ public class LazyQueryResultEnumIterator implements EnumIterator {
 			// chars
 			charsOk = currentChars < constraints.getMaxCharacters();
 		}
-		if (!constraints.getMaxTime().isNegative()) {
+		if (constraints.getMaxTime() != null && !constraints.getMaxTime().isNegative()) {
 			// time
 			timeOk = currentTime < constraints.getMaxTime().getAsCalendar().getTimeInMillis();
 		}

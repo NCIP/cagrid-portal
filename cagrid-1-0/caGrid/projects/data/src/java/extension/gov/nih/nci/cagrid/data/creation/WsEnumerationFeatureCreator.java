@@ -4,7 +4,8 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.creation.templates.EnumerationServiceClientTemplate;
-import gov.nih.nci.cagrid.data.service.globus.EnumerationQueryProviderImpl;
+import gov.nih.nci.cagrid.data.enumeration.service.globus.EnumerationDataServiceProviderImpl;
+import gov.nih.nci.cagrid.data.enumeration.stubs.EnumerationDataServicePortType;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
@@ -60,24 +61,26 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 	
 	
 	private void installWsEnumExtension() throws CreationExtensionException {
-		ServiceDescription description = getServiceInformation().getServiceDescriptor();
 		// verify the ws-enum extension is installed
 		if (!wsEnumExtensionInstalled()) {
 			throw new CreationExtensionException("The required extension " + WS_ENUM_EXTENSION_NAME 
 				+ " was not found to be installed.  Please install it and try creating your service again");
 		}
+		
 		if (!wsEnumExtensionUsed()) {
+			System.out.println("Adding the WS-Enumeration extension to the service");
 			// add the ws Enumeration extension
-			ExtensionDescription ext = 
-				ExtensionsLoader.getInstance().getExtension(WS_ENUM_EXTENSION_NAME);
+			ExtensionDescription ext = ExtensionsLoader.getInstance()
+				.getExtension(WsEnumerationFeatureCreator.WS_ENUM_EXTENSION_NAME);
 			ExtensionType extType = new ExtensionType();
 			extType.setName(ext.getServiceExtensionDescription().getName());
 			extType.setExtensionType(ext.getExtensionType());
-			ExtensionType[] serviceExtensions = description.getExtensions().getExtension();
+			ExtensionType[] serviceExtensions = getServiceInformation()
+				.getServiceDescriptor().getExtensions().getExtension();
 			ExtensionType[] allExtensions = new ExtensionType[serviceExtensions.length + 1];
 			System.arraycopy(serviceExtensions, 0, allExtensions, 0, serviceExtensions.length);
 			allExtensions[allExtensions.length - 1] = extType;
-			description.getExtensions().setExtension(allExtensions);
+			getServiceInformation().getServiceDescriptor().getExtensions().setExtension(allExtensions);
 			// wsEnum extension copies libraries into the service on its own
 		}
 	}
@@ -103,16 +106,16 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 		enumerateMethod.setOutput(enumOutput);
 		// import info
 		MethodTypeImportInformation enumImport = new MethodTypeImportInformation();
-		enumImport.setPortTypeName("EnumerationQueryPortType");
-		enumImport.setWsdlFile("EnumerationQuery.wsdl");
+		enumImport.setPortTypeName(EnumerationDataServicePortType.class.getSimpleName());
+		enumImport.setWsdlFile("EnumerationDataService.wsdl");
 		enumImport.setInputMessage(new QName(ENUMERATION_DATA_SERVICE_NAMESPACE, "EnumerationQueryRequest"));
 		enumImport.setOutputMessage(new QName(ENUMERATION_DATA_SERVICE_NAMESPACE, "EnumerationQueryResponse"));
 		enumImport.setNamespace(ENUMERATION_DATA_SERVICE_NAMESPACE);
-		enumImport.setPackageName(DataServiceConstants.DATA_SERVICE_PACKAGE);
+		enumImport.setPackageName(DataServiceConstants.ENUMERATION_DATA_SERVICE_PACKAGE);
 		enumerateMethod.setImportInformation(enumImport);
 		// provider info
 		MethodTypeProviderInformation enumProvider = new MethodTypeProviderInformation();
-		enumProvider.setProviderClass(EnumerationQueryProviderImpl.class.getName());
+		enumProvider.setProviderClass(EnumerationDataServiceProviderImpl.class.getName());
 		enumerateMethod.setProviderInformation(enumProvider);
 		// exceptions
 		MethodTypeExceptions methodExceptions = new MethodTypeExceptions();
@@ -135,16 +138,20 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 		File wsEnumExtensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator
 			+ WS_ENUM_EXTENSION_NAME + File.separator + "schema");
 		File wsdlFile = new File(dataExtensionSchemaDir.getAbsolutePath() 
-			+ File.separator + "Data" + File.separator + "EnumerationQuery.wsdl");
+			+ File.separator + "Data" + File.separator + "EnumerationDataService.wsdl");
+		File enumWsdlFile = new File(wsEnumExtensionSchemaDir.getAbsolutePath()
+			+ File.separator + WsEnumConstants.ENUMERATION_WSDL_NAME);
 		File enumXsdFile = new File(wsEnumExtensionSchemaDir.getAbsolutePath()
 			+ File.separator + WsEnumConstants.ENUMERATION_XSD_NAME);
 		File addressingXsdFile = new File(wsEnumExtensionSchemaDir.getAbsolutePath()
 			+ File.separator + WsEnumConstants.ADDRESSING_XSD_NAME);
 		File wsdlOutFile = new File(schemaDir + File.separator + wsdlFile.getName());
+		File enumWsdlOutFile = new File(schemaDir + File.separator + enumWsdlFile.getName());
 		File enumXsdOutFile = new File(schemaDir + File.separator + enumXsdFile.getName());
 		File addressingXsdOutFile = new File(schemaDir + File.separator + addressingXsdFile.getName());
 		try {
 			Utils.copyFile(wsdlFile, wsdlOutFile);
+			Utils.copyFile(enumWsdlFile, enumWsdlOutFile);
 			Utils.copyFile(enumXsdFile, enumXsdOutFile);
 			Utils.copyFile(addressingXsdFile, addressingXsdOutFile);
 		} catch (Exception ex) {

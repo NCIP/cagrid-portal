@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.data.system;
 
-import gov.nih.nci.cagrid.data.creation.CreationTests;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import com.atomicobject.haste.framework.Step;
@@ -12,15 +11,24 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: RebuildServiceStep.java,v 1.1 2006-11-08 18:09:38 dervin Exp $ 
+ * @version $Id: RebuildServiceStep.java,v 1.2 2006-12-18 14:48:47 dervin Exp $ 
  */
 public class RebuildServiceStep extends Step {
 	
 	private String introduceDir;
+	private String serviceBaseDir;
+	private String serviceName;
+	private String packageName;
+	private String namespace;
 	
-	public RebuildServiceStep(String introduceDir) {
+	public RebuildServiceStep(String introduceDir, String serviceBaseDir, 
+		String serviceName, String packageName, String namespace) {
 		super();
 		this.introduceDir = introduceDir;
+		this.serviceBaseDir = serviceBaseDir;
+		this.serviceName = serviceName;
+		this.packageName = packageName;
+		this.namespace = namespace;
 	}
 	
 
@@ -28,14 +36,14 @@ public class RebuildServiceStep extends Step {
 		System.out.println("Running step: " + getClass().getName());
 		
 		System.out.println("Invoking post creation processes...");
-		String cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, CreationTests.SERVICE_NAME,
-			CreationTests.SERVICE_DIR, CreationTests.PACKAGE_NAME, CreationTests.SERVICE_NAMESPACE, "data");
+		String cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, serviceName,
+			serviceBaseDir, packageName, namespace, "data");
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		assertTrue("Service post creations completed successfully", p.exitValue() == 0);
 
 		System.out.println("Building created service...");
-		cmd = CommonTools.getAntAllCommand(CreationTests.SERVICE_DIR);
+		cmd = CommonTools.getAntAllCommand(serviceBaseDir);
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		assertTrue("Build process completed successfully", p.exitValue() == 0);
