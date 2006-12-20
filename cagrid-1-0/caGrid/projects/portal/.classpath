@@ -75,13 +75,9 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadataUtils.jar"/>
 	<classpathentry kind="lib" path="test/lib/spring-mock.jar"/>
-	<classpathentry kind="lib" path="lib/myfaces/commons-beanutils.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/commons-codec.jar"/>
-	<classpathentry kind="lib" path="lib/myfaces/commons-collections.jar"/>
-	<classpathentry kind="lib" path="lib/myfaces/commons-digester.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/commons-el.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/commons-fileupload.jar"/>
-	<classpathentry kind="lib" path="lib/myfaces/commons-logging.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/commons-validator.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/jakarta-oro.jar"/>
 	<classpathentry kind="lib" path="lib/myfaces/myfaces-api.jar"/>
