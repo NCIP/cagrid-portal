@@ -39,7 +39,7 @@ import org.apache.log4j.Logger;
  * @version $Id$ 
  */
 public abstract class BaseCodegenPostProcessorExtension implements CodegenExtensionPostProcessor {
-	private static Logger logger = Logger.getLogger(DataServiceOperationProviderCodegenPostProcessor.class);
+	private static final Logger logger = Logger.getLogger(DataServiceOperationProviderCodegenPostProcessor.class);
 
 	protected void modifyEclipseClasspath(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
 		String serviceDir = info.getIntroduceServiceProperties().getProperty(

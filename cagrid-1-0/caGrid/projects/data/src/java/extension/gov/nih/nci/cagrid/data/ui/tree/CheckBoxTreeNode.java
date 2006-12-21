@@ -27,7 +27,7 @@ public abstract class CheckBoxTreeNode extends DefaultMutableTreeNode {
 	
 	public CheckBoxTreeNode(CheckBoxTree parentTree, String nodeText) {
 		super();
-		this.parentTree = parentTree;;
+		this.parentTree = parentTree;
 		setUserObject(nodeText);
 	}
 	
@@ -73,10 +73,8 @@ public abstract class CheckBoxTreeNode extends DefaultMutableTreeNode {
 		Enumeration childEnum = children();
 		while (childEnum.hasMoreElements()) {
 			Object node = childEnum.nextElement();
-			if (node instanceof CheckBoxTreeNode) {
-				if (((CheckBoxTreeNode) node).isChecked()) {
-					checked.add(node);
-				}
+			if (node instanceof CheckBoxTreeNode && ((CheckBoxTreeNode) node).isChecked()) {
+				checked.add(node);
 			}
 		}
 		CheckBoxTreeNode[] checkedNodes = new CheckBoxTreeNode[checked.size()];

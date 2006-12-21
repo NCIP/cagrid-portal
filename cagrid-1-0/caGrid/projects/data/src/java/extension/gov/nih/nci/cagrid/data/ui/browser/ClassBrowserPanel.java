@@ -63,11 +63,11 @@ public class ClassBrowserPanel extends JPanel {
 	private JPanel classSelectionPanel = null;
 	private JLabel classSelectionLabel = null;
 	
-	private List classSelectionListeners = null;
-	private List additionalJarsListeners = null;
+	private transient List classSelectionListeners = null;
+	private transient List additionalJarsListeners = null;
 	
-	private ExtensionTypeExtensionData extensionData = null;
-	private ServiceInformation serviceInfo = null;
+	private transient ExtensionTypeExtensionData extensionData = null;
+	private transient ServiceInformation serviceInfo = null;
 
 	public ClassBrowserPanel(ExtensionTypeExtensionData extensionData, ServiceInformation serviceInfo) {
 		this.extensionData = extensionData;

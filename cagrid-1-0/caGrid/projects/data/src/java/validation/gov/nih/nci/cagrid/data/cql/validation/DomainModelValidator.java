@@ -211,7 +211,7 @@ public class DomainModelValidator implements CqlDomainValidator {
 		for (int i = 0; attribs != null && i < attribs.length; i++) {
 			UMLAttribute attrib = attribs[i];
 			String fullAttribName = attrib.getName();
-			int shortIndex = fullAttribName.indexOf(":");
+			int shortIndex = fullAttribName.indexOf(':');
 			String shortAttribName = fullAttribName.substring(shortIndex + 1);
 			if (shortAttribName.equals(attribName)) {
 				return attrib;

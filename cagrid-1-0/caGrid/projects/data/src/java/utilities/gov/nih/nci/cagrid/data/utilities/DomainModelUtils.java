@@ -98,7 +98,7 @@ public class DomainModelUtils {
 			UMLClassReference superClassRef = generalization[i].getSuperClassReference();
 			if (subClassRef != null && superClassRef != null) {
 				UMLClass subclass = getReferencedUMLClass(model, subClassRef);
-				if (className.equals(subclass.getPackageName() + "." + subclass.getClassName())) {
+				if ((subclass.getPackageName() + "." + subclass.getClassName()).equals(className)) {
 					UMLClass superclass = getReferencedUMLClass(model, superClassRef);
 					superclasses.add(superclass);
 					// get superclasses of the superclass

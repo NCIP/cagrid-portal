@@ -35,6 +35,7 @@ import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -661,9 +662,9 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			// set the check box selection
 			if (CommonTools.servicePropertyExists(getServiceInfo().getServiceDescriptor(), DataServiceConstants.VALIDATE_CQL_FLAG)) {
 				try {
-					cqlSyntaxValidationCheckBox.setSelected(Boolean.valueOf(
+					cqlSyntaxValidationCheckBox.setSelected(Boolean.parseBoolean(
 						CommonTools.getServicePropertyValue(
-							getServiceInfo().getServiceDescriptor(), DataServiceConstants.VALIDATE_CQL_FLAG)).booleanValue());
+							getServiceInfo().getServiceDescriptor(), DataServiceConstants.VALIDATE_CQL_FLAG)));
 				} catch (Exception ex) {
 					System.err.println("Error getting service property value for " + DataServiceConstants.VALIDATE_CQL_FLAG);
 					ex.printStackTrace();
@@ -696,9 +697,9 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			if (CommonTools.servicePropertyExists(getServiceInfo().getServiceDescriptor(), 
 				DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)) {
 				try {
-					domainModelValidationCheckBox.setSelected(Boolean.valueOf(
+					domainModelValidationCheckBox.setSelected(Boolean.parseBoolean(
 						CommonTools.getServicePropertyValue(getServiceInfo().getServiceDescriptor(), 
-							DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)).booleanValue());
+							DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)));
 				} catch (Exception ex) {
 					System.err.println("Error getting service property value for " + DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG);
 					ex.printStackTrace();
@@ -1166,10 +1167,18 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		// store the property
 		CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(), 
 			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false);
-		// blow away the query processor class properties from the extension data
-		Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
-		data.setCQLProcessorConfig(null);
-		ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
+		// remove all query processor config properties from the service properties
+		ServicePropertiesProperty[] oldProperties = getServiceInfo().getServiceProperties().getProperty();
+		List keptProperties = new ArrayList();
+		for (int i = 0; i < oldProperties.length; i++) {
+			if (!oldProperties[i].getKey().startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
+				keptProperties.add(oldProperties[i]);
+			}
+		}
+		ServicePropertiesProperty[] properties = new ServicePropertiesProperty[keptProperties.size()];
+		keptProperties.toArray(properties);
+		getServiceInfo().getServiceDescriptor().getServiceProperties().setProperty(properties);
+		// inform the parameters table that the class name is different
 		getQpParamsTable().classChanged();
 	}
 	

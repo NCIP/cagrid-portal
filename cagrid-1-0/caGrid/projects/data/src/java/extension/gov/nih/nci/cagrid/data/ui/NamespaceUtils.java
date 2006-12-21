@@ -52,10 +52,11 @@ public class NamespaceUtils {
 	
 	
 	public static String createNamespaceString(String projectShortName, String projectVersion, String packName) {
-		if (projectVersion.indexOf(".") == -1) {
-			projectVersion += ".0";
+		String modVersion = projectVersion;
+		if (modVersion.indexOf('.') == -1) {
+			modVersion += ".0";
 		}
-		return "gme://" + projectShortName + ".caBIG/" + projectVersion + "/" + packName;
+		return "gme://" + projectShortName + ".caBIG/" + modVersion + "/" + packName;
 	}
 	
 	

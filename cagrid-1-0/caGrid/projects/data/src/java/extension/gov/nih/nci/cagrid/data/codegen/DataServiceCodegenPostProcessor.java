@@ -38,7 +38,7 @@ public class DataServiceCodegenPostProcessor extends BaseCodegenPostProcessorExt
 		+ DataServiceConstants.QUERY_METHOD_NAME + "(" + DataServiceConstants.QUERY_METHOD_PARAMETER_TYPE + " "
 		+ DataServiceConstants.QUERY_METHOD_PARAMETER_NAME + ")";
 	
-	private static Logger logger = Logger.getLogger(DataServiceCodegenPostProcessor.class);
+	private static final Logger logger = Logger.getLogger(DataServiceCodegenPostProcessor.class);
 
 	public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {

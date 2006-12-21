@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -60,7 +61,7 @@ public abstract class AbstractWizardPanel extends JPanel {
 	 */
 	protected Map getBitBucket() {
 		if (bitBucket == null) {
-			bitBucket = new HashMap();
+			bitBucket = Collections.synchronizedMap(new HashMap());
 		}
 		return bitBucket;
 	}

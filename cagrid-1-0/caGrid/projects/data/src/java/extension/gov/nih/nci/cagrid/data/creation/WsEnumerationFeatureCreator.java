@@ -166,7 +166,7 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 		// figgure out the class name
 		String classStart = "public class ";
 		int nameStart = clientClassContents.indexOf(classStart) + classStart.length();
-		int nameEnd = clientClassContents.indexOf(" ", nameStart);
+		int nameEnd = clientClassContents.indexOf(' ', nameStart);
 		String clientClassName = clientClassContents.substring(nameStart, nameEnd);
 		// and the package name
 		String pack = "package ";
