@@ -11,7 +11,6 @@
 			<xsd:element name="AdditionalLibraries" type="ext:AdditionalLibraries" nillable="false" minOccurs="0"/>
 			<xsd:element name="CadsrInformation" type="ext:CadsrInformation" nillable="false" minOccurs="0"/>
 			<xsd:element name="ServiceFeatures" type="ext:ServiceFeatures" nillable="false" minOccurs="0"/>
-			<xsd:element name="CQLProcessorConfig" type="ext:CQLProcessorConfig" nillable="false" minOccurs="0"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="AdditionalLibraries">
@@ -33,6 +32,7 @@
 		<xsd:attribute name="projectVersion" type="xsd:string" use="required"/>
 		<xsd:attribute name="suppliedDomainModel" type="xsd:string" use="optional"/>
 		<xsd:attribute name="serviceUrl" type="xsd:string" use="required"/>
+		<xsd:attribute name="noDomainModel" type="xsd:boolean" use="required"/>
 	</xsd:complexType>
 	<xsd:complexType name="CadsrPackage">
 		<xsd:annotation>
@@ -51,19 +51,6 @@
 		<xsd:attribute name="useWsEnumeration" type="xsd:boolean" use="required"/>
 		<xsd:attribute name="useGridIdeitifiers" type="xsd:boolean" use="required"/>
 		<xsd:attribute name="useSdkDataSource" type="xsd:boolean" use="required"/>
-	</xsd:complexType>
-	<xsd:complexType name="CQLProcessorConfig">
-		<xsd:annotation>
-			<xsd:documentation>Configuration for the CQL Query Processor used by the data service</xsd:documentation>
-		</xsd:annotation>
-		<xsd:sequence>
-			<xsd:element name="Property" minOccurs="0" maxOccurs="unbounded">
-				<xsd:complexType>
-					<xsd:attribute name="name" type="xsd:string" use="required"/>
-					<xsd:attribute name="value" type="xsd:string" use="required"/>
-				</xsd:complexType>
-			</xsd:element>
-		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="ClassMapping">
 		<xsd:annotation>

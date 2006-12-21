@@ -3,11 +3,11 @@ package gov.nih.nci.cagrid.data.ui.cacore;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.data.ExtensionDataUtils;
-import gov.nih.nci.cagrid.data.extension.CQLProcessorConfig;
-import gov.nih.nci.cagrid.data.extension.CQLProcessorConfigProperty;
-import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
+import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.awt.Dimension;
@@ -34,7 +34,7 @@ import javax.swing.event.DocumentListener;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 9, 2006 
- * @version $Id: AppserviceConfigPanel.java,v 1.3 2006-11-17 15:30:25 dervin Exp $ 
+ * @version $Id: AppserviceConfigPanel.java,v 1.4 2006-12-21 15:02:28 dervin Exp $ 
  */
 public class AppserviceConfigPanel extends AbstractWizardPanel {
 	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
@@ -106,38 +106,40 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 	public void update() {
 		try {
-			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-			CQLProcessorConfig config = data.getCQLProcessorConfig();
+			ServiceProperties serviceProps = getServiceInformation().getServiceDescriptor().getServiceProperties();
+			ServicePropertiesProperty[] props = serviceProps.getProperty();
 			boolean csmFound = false;
-			if (config != null) {
-				CQLProcessorConfigProperty[] props = config.getProperty();
-				for (int i = 0; props != null && i < props.length; i++) {
-					String propName = props[i].getName();
+			for (int i = 0; i < props.length; i++) {
+				String prefixedPropName = props[i].getKey();
+				if (prefixedPropName.startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
+					String propName = prefixedPropName.substring(
+						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.length());
+					String propValue = props[i].getValue();
 					if (propName.equals(USE_CSM_FLAG)) {
 						csmFound = true;
-						boolean selected = Boolean.valueOf(props[i].getValue()).booleanValue();
+						boolean selected = Boolean.parseBoolean(propValue);
 						getUseCsmCheckBox().setSelected(selected);
 						PortalUtils.setContainerEnabled(getCsmOptionsPanel(), selected);
 					} else if (propName.equals(CSM_CONTEXT_NAME)) {
-						String contextName = props[i].getValue();
-						getCsmContextTextField().setText(contextName);
+						getCsmContextTextField().setText(propValue);
+						// find the appservice URL for comparison
 						String appserviceUrl = null;
 						for (int j = 0; j < props.length; j++) {
-							if (props[j].getName().equals(APPLICATION_SERVICE_URL)) {
+							if (props[j].getKey().equals(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY + APPLICATION_SERVICE_URL)) {
 								appserviceUrl = props[j].getValue();
 								break;
 							}
 						}
-						getUseAppserviceUrlCheckBox().setSelected(contextName.equals(appserviceUrl));
+						getUseAppserviceUrlCheckBox().setSelected(propValue.equals(appserviceUrl));
 					} else if (propName.equals(APPLICATION_SERVICE_URL)) {
-						String serviceUrl = props[i].getValue();
-						getServiceUrlTextField().setText(serviceUrl);
+						getServiceUrlTextField().setText(propValue);
 					} else if (propName.equals(CASE_INSENSITIVE_QUERYING)) {
-						boolean selected = Boolean.valueOf(props[i].getValue()).booleanValue();
+						boolean selected = Boolean.parseBoolean(propValue);
 						getCaseInsensitiveCheckBox().setSelected(selected);
 					}
 				}
 			}
+			
 			// default for USE CSM flag
 			if (!csmFound) {
 				getUseCsmCheckBox().setSelected(false);
@@ -204,12 +206,12 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 			useCsmCheckBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					PortalUtils.setContainerEnabled(getCsmOptionsPanel(), useCsmCheckBox.isSelected());
-					// set the use CSM property in the extension data useCsmSecurity
+					// set the use CSM property in the service properties
 					try {
-						Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-						ExtensionDataUtils.setCQLProcessorProperty(data, USE_CSM_FLAG, 
-							String.valueOf(useCsmCheckBox.isSelected()));
-						ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
+						CommonTools.setServiceProperty(
+							getServiceInformation().getServiceDescriptor(), 
+							DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_CSM_FLAG, 
+							String.valueOf(useCsmCheckBox.isSelected()), false);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						ErrorDialog.showErrorDialog("Error storing use CSM property", ex);
@@ -279,14 +281,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 					getCsmContextTextField().setEditable(!selected);
 					if (selected) {
 						try {
-							Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-							CQLProcessorConfigProperty[] props = data.getCQLProcessorConfig().getProperty();
-							for (int i = 0; props != null && i < props.length; i++) {
-								if (props[i].getName().equals(APPLICATION_SERVICE_URL)) {
-									getCsmContextTextField().setText(props[i].getValue());
-									break;
-								}
-							}
+							String appserviceUrl = CommonTools.getServicePropertyValue(getServiceInformation().getServiceDescriptor(),
+								DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + APPLICATION_SERVICE_URL);
+							getCsmContextTextField().setText(appserviceUrl);
 						} catch (Exception ex) {
 							ex.printStackTrace();
 							ErrorDialog.showErrorDialog("Error getting application service URL", ex);
@@ -372,10 +369,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 	
 	private void changeAppServiceUrl() {
 		try {
-			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-			ExtensionDataUtils.setCQLProcessorProperty(data, APPLICATION_SERVICE_URL, 
-				getServiceUrlTextField().getText());
-			ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
+			CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
+				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + APPLICATION_SERVICE_URL,
+				getServiceUrlTextField().getText(), false);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error setting the application service URL: " + ex.getMessage(), ex);
@@ -385,10 +381,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 	
 	private void changeCsmContext() {
 		try {
-			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-			ExtensionDataUtils.setCQLProcessorProperty(data, CSM_CONTEXT_NAME, 
-				getCsmContextTextField().getText());
-			ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
+			CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
+				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONTEXT_NAME,
+				getCsmContextTextField().getText(), false);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error setting CSM context: " + ex.getMessage(), ex);
@@ -408,10 +403,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 			caseInsensitiveCheckBox.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					try {
-						Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-						ExtensionDataUtils.setCQLProcessorProperty(data, CASE_INSENSITIVE_QUERYING, 
-							String.valueOf(caseInsensitiveCheckBox.isSelected()));
-						ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
+						CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
+							DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CASE_INSENSITIVE_QUERYING,
+							String.valueOf(caseInsensitiveCheckBox.isSelected()), false);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						ErrorDialog.showErrorDialog("Error setting the case insensitive flag: " + ex.getMessage(), ex);

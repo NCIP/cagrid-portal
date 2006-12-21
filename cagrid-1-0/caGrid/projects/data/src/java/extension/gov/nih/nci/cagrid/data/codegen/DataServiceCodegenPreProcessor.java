@@ -5,16 +5,11 @@ import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
-import gov.nih.nci.cagrid.data.extension.CQLProcessorConfig;
-import gov.nih.nci.cagrid.data.extension.CQLProcessorConfigProperty;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
-import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
-import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
@@ -30,9 +25,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -49,17 +42,30 @@ import org.apache.log4j.Logger;
 public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProcessor {
 
 	private static final String DEFAULT_DOMAIN_MODEL_XML_FILE = "domainModel.xml";
-	private static Logger LOG = Logger.getLogger(DataServiceCodegenPreProcessor.class);
+	private static final Logger LOG = Logger.getLogger(DataServiceCodegenPreProcessor.class);
 
 
 	public void preCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
-		try {
-			modifyServiceProperties(desc, info);
-		} catch (Exception ex) {
-			throw new CodegenExtensionException("Error modifying deployment properties: " + ex.getMessage(), ex);
+		if (stubQueryProcessorSelected(info)) {
+			addQueryProcessorStub(info, ExtensionDataUtils.getQueryProcessorStubClassName(info));
 		}
 		modifyMetadata(desc, info);
+	}
+	
+	
+	private boolean stubQueryProcessorSelected(ServiceInformation info) throws CodegenExtensionException {
+		try {
+			String selectedQpClassName = CommonTools.getServicePropertyValue(info.getServiceDescriptor(), 
+				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+			if (selectedQpClassName != null) {
+				String stubName = ExtensionDataUtils.getQueryProcessorStubClassName(info);
+				return stubName.equals(selectedQpClassName);
+			}
+			return true;
+		} catch (Exception ex) {
+			throw new CodegenExtensionException(ex.getMessage(), ex);
+		}
 	}
 
 
@@ -240,91 +246,6 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 	}
 
 
-	private void modifyServiceProperties(ServiceExtensionDescriptionType desc, ServiceInformation info)
-		throws Exception {
-		ServiceProperties props = info.getServiceProperties();
-		if (props == null) {
-			props = new ServiceProperties();
-		}
-		if (props.getProperty() == null) {
-			props.setProperty(new ServicePropertiesProperty[]{});
-		}
-		// delete any old query processor parameters from service properties
-		List keptProperties = new ArrayList();
-		for (int i = 0; i < props.getProperty().length; i++) {
-			if (!props.getProperty(i).getKey().startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
-				keptProperties.add(props.getProperty(i));
-			}
-		}
-
-		// verify we've got a query processor class configured
-		String qpClassname = CommonTools.getServicePropertyValue(info.getServiceDescriptor(),
-			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-		String stubClassname = ExtensionDataUtils.getQueryProcessorStubClassName(info);
-		if (qpClassname != null && !qpClassname.equals(stubClassname)) {
-			// edit the stub to include a note RE: the stub can be removed
-			String outSrcDir = info.getIntroduceServiceProperties().getProperty(
-				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "src";
-			outSrcDir += File.separator + stubClassname.replace('.', File.separatorChar);
-			File outSrcFile = new File(outSrcDir + ".java");
-			if (outSrcFile.exists()) {
-				StringBuffer stubSource = Utils.fileToStringBuffer(outSrcFile);
-				if (!stubSource.toString().startsWith(DataServiceConstants.QUERY_PROCESSOR_STUB_DEPRICATED_MESSAGE)) {
-					stubSource.insert(0, DataServiceConstants.QUERY_PROCESSOR_STUB_DEPRICATED_MESSAGE);
-					FileWriter outFileWriter = new FileWriter(outSrcFile);
-					outFileWriter.write(stubSource.toString());
-					outFileWriter.flush();
-					outFileWriter.close();
-				}
-			}
-		}
-		
-		if (qpClassname != null && qpClassname.length() != 0) {
-			// get the query processor parameters
-			ExtensionTypeExtensionData extensionData = ExtensionTools.getExtensionData(desc, info);
-			Data data = ExtensionDataUtils.getExtensionData(extensionData);
-			CQLProcessorConfig config = data.getCQLProcessorConfig();
-			if (config != null && config.getProperty() != null) {
-				for (int i = 0; i < config.getProperty().length; i++) {
-					CQLProcessorConfigProperty prop = config.getProperty(i);
-					String name = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + prop.getName();
-					if (!CommonTools.isValidJavaField(name)) {
-						throw new CodegenExtensionException("The query processor class's required config parameter "
-							+ prop.getName() + " converted to " + name + " which is NOT a valid Java field name!");						
-					}
-					keptProperties.add(new ServicePropertiesProperty(new Boolean(false), name, prop.getValue()));
-				}
-				// add the query processor class name to the properties
-				for (int i = 0; i < keptProperties.size(); i++) {
-					ServicePropertiesProperty prop = (ServicePropertiesProperty) keptProperties.get(i);
-					if (prop.getKey().equals(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
-						prop.setValue(qpClassname);
-						break;
-					}
-				}
-			} else {
-				LOG.warn("CQL Query Processor class " + qpClassname + " has not been configured.  Only default config parameters will be used");
-			}
-		} else {
-			// no query processor class defined??
-			// add the stub!
-			addQueryProcessorStub(info, stubClassname);
-			// edit the query processor service property
-			for (int i = 0; i < keptProperties.size(); i++) {
-				ServicePropertiesProperty prop = (ServicePropertiesProperty) keptProperties.get(i);
-				if (prop.getKey().equals(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
-					prop.setValue(stubClassname);
-				}
-			}
-		}
-		// write the properties back to the service info
-		ServicePropertiesProperty[] allProperties = new ServicePropertiesProperty[keptProperties.size()];
-		keptProperties.toArray(allProperties);
-		props.setProperty(allProperties);
-		info.setServiceProperties(props);
-	}
-
-
 	private void setDomainModelResourceProperty(ServiceInformation info, String fileLocation) {
 		ResourcePropertyType domainMetadata = null;
 		// try to find the existing property in the service informaton
@@ -359,6 +280,14 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 	}
 
 
+	/**
+	 * Gets the resource property (metadata reference) for the Domain Model
+	 * 
+	 * @param info
+	 * 		The service's model
+	 * @return
+	 * 		The appropriate resource property, or null if it is not found
+	 */
 	private ResourcePropertyType getDomainModelResourceProperty(ServiceInformation info) {
 		ResourcePropertiesListType propsList = info.getServices().getService(0).getResourcePropertiesList();
 		if (propsList != null) {
@@ -375,6 +304,18 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 	}
 	
 	
+	/**
+	 * Gets the filename of the supplied domain model
+	 * 
+	 * @param desc
+	 * 		The extension description
+	 * @param info
+	 * 		The service's information
+	 * @return
+	 * 		The filename of the supplied domain model, or null if none was supplied
+	 * 
+	 * @throws Exception
+	 */
 	private String getSuppliedDomainModelFilename(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
 		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
 		CadsrInformation cadsrInfo = ExtensionDataUtils.getExtensionData(data).getCadsrInformation();
@@ -385,6 +326,15 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 	}
 	
 	
+	/**
+	 * Adds the CQL Query processor stub to the service
+	 * 
+	 * @param info
+	 * 		The service model
+	 * @param className
+	 * 		The name to give to the stub class
+	 * @throws CodegenExtensionException
+	 */
 	private void addQueryProcessorStub(ServiceInformation info, String className) throws CodegenExtensionException {
 		try {
 			// find / create the output directory

@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
-import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
@@ -156,14 +155,15 @@ public class QueryProcessorParametersTable extends JTable {
 	
 	private Class getQueryProcessorClass() throws Exception {
 		String className = getQpClassname();
-		if (className != null && !className.endsWith(DataServiceConstants.QUERY_PROCESSOR_STUB_NAME)) {
+		if (className != null && className.length() != 0 
+			&& !className.endsWith(DataServiceConstants.QUERY_PROCESSOR_STUB_NAME)) {
 			String[] libs = getJarFilenames();
 			URL[] urls = new URL[libs.length];
 			for (int i = 0; i < libs.length; i++) {
 				File libFile = new File(libs[i]);
 				urls[i] = libFile.toURL();
 			}
-			ClassLoader loader = new URLClassLoader(urls, getClass().getClassLoader());
+			ClassLoader loader = new URLClassLoader(urls, Thread.currentThread().getContextClassLoader());
 			Class qpClass = loader.loadClass(className);
 			return qpClass;
 		}
@@ -190,16 +190,14 @@ public class QueryProcessorParametersTable extends JTable {
 	
 	
 	private void storeProperties() throws Exception {
-		Data data = ExtensionDataUtils.getExtensionData(extData);
+		// set / add service properties to match the information in this table
 		for (int i = 0; i < getRowCount(); i++) {
 			String key = (String) getValueAt(i, 0);
-			String defaultVal = (String) getValueAt(i, 1);
 			String userVal = (String) getValueAt(i, 2);
-			if (!defaultVal.equals(userVal)) {
-				ExtensionDataUtils.setCQLProcessorProperty(data, key, userVal);
-			}
+			String prefixedKey = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + key;
+			CommonTools.setServiceProperty(
+				serviceInfo.getServiceDescriptor(), prefixedKey, userVal, false);
 		}
-		ExtensionDataUtils.storeExtensionData(extData, data);
 	}
 	
 	

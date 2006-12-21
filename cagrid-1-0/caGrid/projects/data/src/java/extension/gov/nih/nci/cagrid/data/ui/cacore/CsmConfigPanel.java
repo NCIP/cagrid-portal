@@ -1,13 +1,11 @@
 package gov.nih.nci.cagrid.data.ui.cacore;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
-import gov.nih.nci.cagrid.data.ExtensionDataUtils;
-import gov.nih.nci.cagrid.data.extension.CQLProcessorConfigProperty;
-import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.awt.GridBagConstraints;
@@ -93,26 +91,19 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 	public void update() {
 		// load data into gui
 		try {
-			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-			CQLProcessorConfigProperty[] props = data.getCQLProcessorConfig().getProperty();
-			for (int i = 0; props != null && i < props.length; i++) {
-				String propName = props[i].getName();
-				if (propName.equals(USE_CSM_FLAG)) {
-					boolean selected = Boolean.valueOf(props[i].getValue()).booleanValue();
-					getUseCsmCheckBox().setSelected(selected);
-				} else if (propName.equals(CSM_CONTEXT_NAME)) {
-					String contextName = props[i].getValue();
-					getCsmContextTextField().setText(contextName);
-					String appserviceUrl = null;
-					for (int j = 0; j < props.length; j++) {
-						if (props[j].getName().equals(APPLICATION_SERVICE_URL)) {
-							appserviceUrl = props[j].getValue();
-							break;
-						}
-					}
-					getUseAppserviceUrlCheckBox().setSelected(contextName.equals(appserviceUrl));
-				}
-			}
+			String useCsmValue = CommonTools.getServicePropertyValue(
+				getServiceInformation().getServiceDescriptor(),
+				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_CSM_FLAG);
+			getUseCsmCheckBox().setSelected(Boolean.parseBoolean(useCsmValue));
+			
+			String csmContextName = CommonTools.getServicePropertyValue(
+				getServiceInformation().getServiceDescriptor(),
+				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONTEXT_NAME);
+			getCsmContextTextField().setText(csmContextName);
+			String appserviceUrl = CommonTools.getServicePropertyValue(
+				getServiceInformation().getServiceDescriptor(),
+				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + APPLICATION_SERVICE_URL);
+			getUseAppserviceUrlCheckBox().setSelected(csmContextName.equals(appserviceUrl));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error loading data for CSM", ex);
@@ -142,33 +133,10 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 			useCsmCheckBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					PortalUtils.setContainerEnabled(getConfigPanel(), useCsmCheckBox.isSelected());
-					// set the use CSM property in the extension data useCsmSecurity
-					try {
-						Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-						CQLProcessorConfigProperty[] props = data.getCQLProcessorConfig().getProperty();
-						boolean propertyFound = false;
-						for (int i = 0; props != null && i < props.length; i++) {
-							if (props[i].getName().equals(USE_CSM_FLAG)) {
-								props[i].setValue(String.valueOf(useCsmCheckBox.isSelected()));
-								propertyFound = true;
-								break;
-							}
-						}
-						if (!propertyFound) {
-							CQLProcessorConfigProperty csmProp = new CQLProcessorConfigProperty(
-								USE_CSM_FLAG, String.valueOf(useCsmCheckBox.isSelected()));
-							if (props == null) {
-								props = new CQLProcessorConfigProperty[] {csmProp};
-							} else {
-								props = (CQLProcessorConfigProperty[]) Utils.appendToArray(props, csmProp);
-							}
-						}
-						data.getCQLProcessorConfig().setProperty(props);
-						ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						ErrorDialog.showErrorDialog("Error storing use CSM property", ex);
-					}
+					// set the use CSM property in the service properties
+					CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
+						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_CSM_FLAG,
+						String.valueOf(getUseCsmCheckBox().isSelected()), false);
 				}
 			});
 		}
@@ -219,14 +187,10 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 					getCsmContextTextField().setEditable(!selected);
 					if (selected) {
 						try {
-							Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-							CQLProcessorConfigProperty[] props = data.getCQLProcessorConfig().getProperty();
-							for (int i = 0; props != null && i < props.length; i++) {
-								if (props[i].getName().equals(APPLICATION_SERVICE_URL)) {
-									getCsmContextTextField().setText(props[i].getValue());
-									break;
-								}
-							}
+							String appserviceUrl = CommonTools.getServicePropertyValue(
+								getServiceInformation().getServiceDescriptor(),
+								DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + APPLICATION_SERVICE_URL);
+							getCsmContextTextField().setText(appserviceUrl);
 						} catch (Exception ex) {
 							ex.printStackTrace();
 							ErrorDialog.showErrorDialog("Error getting application service URL", ex);
