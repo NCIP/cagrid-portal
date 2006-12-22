@@ -35,7 +35,7 @@ public class MySQLDatabase extends Database {
 			if (!dbBuilt) {
 				if (!databaseExists(getDatabaseName())) {
 					Query.update(this.root, "create database "
-							+ getDatabaseName()+" COLLATE ascii_bin");
+							+ getDatabaseName());
 				}
 				dbBuilt = true;
 			}
