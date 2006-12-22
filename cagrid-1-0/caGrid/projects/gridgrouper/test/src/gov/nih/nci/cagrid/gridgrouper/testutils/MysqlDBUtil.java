@@ -20,7 +20,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: MysqlDBUtil.java,v 1.3 2006-09-12 20:33:30 langella Exp $
+ * @version $Id: MysqlDBUtil.java,v 1.4 2006-12-22 21:21:47 langella Exp $
  */
 public class MysqlDBUtil {
 
@@ -43,7 +43,7 @@ public class MysqlDBUtil {
 		try {
 			if (!dbBuilt) {
 				if (!databaseExists(DB)) {
-					Query.update(this.root, "create database " + DB);
+					Query.update(this.root, "create database " + DB+" COLLATE ascii_bin");
 				}
 				if (core == null) {
 					core = new ConnectionManager(DB, root.getUrlPrefix(), root

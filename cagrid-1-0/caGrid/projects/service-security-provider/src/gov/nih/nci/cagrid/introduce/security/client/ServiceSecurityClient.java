@@ -176,7 +176,6 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 		
 		if(this.securityMetadata == null){
 			operations = new HashMap();
-			this.authorization = NoAuthorization.getInstance();
 			this.securityMetadata = getServiceSecurityMetadata();
 			ServiceSecurityMetadataOperations ssmo = securityMetadata.getOperations();
 			if (ssmo != null) {

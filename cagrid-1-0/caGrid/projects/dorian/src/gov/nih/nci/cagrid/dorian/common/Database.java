@@ -17,7 +17,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Database.java,v 1.17 2006-09-12 23:37:29 langella Exp $
+ * @version $Id: Database.java,v 1.18 2006-12-22 21:21:40 langella Exp $
  */
 public class Database extends LoggingObject {
 
@@ -39,7 +39,7 @@ public class Database extends LoggingObject {
 		try {
 			if (!dbBuilt) {
 				if (!databaseExists(database)) {
-					Query.update(this.root, "create database " + database);
+					Query.update(this.root, "create database " + database+" COLLATE ascii_bin");
 				}
 				if (dorian == null) {
 					dorian = new ConnectionManager(database, root
