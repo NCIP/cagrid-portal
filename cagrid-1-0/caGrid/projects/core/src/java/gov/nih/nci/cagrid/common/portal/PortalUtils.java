@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.common.portal;
 
+import gov.nih.nci.cagrid.common.Utils;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Window;
-
-import gov.nih.nci.cagrid.common.Utils;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -31,16 +31,25 @@ public class PortalUtils {
 	}
 
 	public static void showConfigurationErrorMessage(String msg) {
-		showErrorMessage("Portal Configuration Error", msg);
+		showErrorMessage("Portal Configuration Error", new String[] {msg});
 	}
 
 	public static void showMessage(String msg) {
+		showMessage(new String[] {msg});
+	}
+	
+	
+	public static void showMessage(String[] msg) {
 		showMessage("Information", msg);
 	}
 
 	public static void showMessage(String title, String msg) {
+		showMessage(title, new String[] {msg});
+	}	
+	
+	public static void showMessage(String title, String[] msg) {
 		JOptionPane.showMessageDialog(PortalResourceManager.getInstance()
-				.getGridPortal(), msg, title, JOptionPane.INFORMATION_MESSAGE);
+			.getGridPortal(), msg, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public static void showErrorMessage(String title, Exception e) {
@@ -50,8 +59,12 @@ public class PortalUtils {
 	}
 
 	public static void showErrorMessage(String title, String msg) {
+		showErrorMessage(title, new String[] {msg});
+	}	
+	
+	public static void showErrorMessage(String title, String[] msg) {
 		JOptionPane.showMessageDialog(PortalResourceManager.getInstance()
-				.getGridPortal(), msg, title, JOptionPane.ERROR_MESSAGE);
+			.getGridPortal(), msg, title, JOptionPane.ERROR_MESSAGE);		
 	}
 
 	public final static void centerComponent(JComponent comp) {
