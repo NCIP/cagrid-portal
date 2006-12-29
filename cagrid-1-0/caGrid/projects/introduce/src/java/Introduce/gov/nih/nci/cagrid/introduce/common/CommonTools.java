@@ -297,7 +297,7 @@ public class CommonTools {
 		return cmd;
 	}
 
-
+	
 	static String getAntLauncherJarLocation(String path, boolean isWindows) {
 		String separator = isWindows ? ";" : ":";
 		StringTokenizer pathTokenizer = new StringTokenizer(path, separator);
@@ -311,6 +311,14 @@ public class CommonTools {
 	}
 
 
+	/**
+	 * Gets a package name for a namespace using a namespace to package mapper utility
+	 * 
+	 * @param namespace
+	 * 		The namespace to derive a package name for
+	 * @return
+	 * 		The package name
+	 */
 	public static String getPackageName(Namespace namespace) {
 		try {
 			// TODO: where should this mapperClassname preference be set
@@ -325,8 +333,17 @@ public class CommonTools {
 	}
 
 
+	/**
+	 * Gets a package name for a namespace
+	 * 
+	 * @param namespace
+	 * 		The namespace to get a package name for
+	 * @param namespaceTypes
+	 * 		The namespace types of a service
+	 * @return
+	 * 		The package name
+	 */
 	public static String getPackageName(Namespace namespace, NamespacesType namespaceTypes) {
-
 		// first check to see if this namespace is already in use....
 		NamespaceType nsType = CommonTools.getNamespaceType(namespaceTypes, namespace.getRaw());
 		if (nsType != null) {
@@ -334,7 +351,6 @@ public class CommonTools {
 		} else {
 			return getPackageName(namespace);
 		}
-
 	}
 
 
@@ -375,9 +391,10 @@ public class CommonTools {
 	 * name i.e. "./filename" Be sure to change the location if this file is not
 	 * going to be in the toplevel schema/Servicename directory of your service.
 	 * 
-	 * @param relativeFromDirectory
-	 * @param xsdFilenameFromRelativeDirectory
+	 * @param xsdFilename
+	 * 		The file name of the XSD schema
 	 * @return
+	 * 		The NamespaceType representation of the schema
 	 * @throws MobiusException
 	 */
 	public static NamespaceType createNamespaceType(String xsdFilename) throws MobiusException {
@@ -406,6 +423,16 @@ public class CommonTools {
 	}
 
 
+	/**
+	 * Gets a service by name from the services container type
+	 * 
+	 * @param services
+	 * 		The services container type
+	 * @param name
+	 * 		The name of the service
+	 * @return
+	 * 		The named service or null if not found
+	 */
 	public static ServiceType getService(ServicesType services, String name) {
 		if (services != null && services.getService() != null) {
 			for (int i = 0; i < services.getService().length; i++) {
@@ -419,6 +446,16 @@ public class CommonTools {
 	}
 
 
+	/**
+	 * Gets a method by its name
+	 * 
+	 * @param methods
+	 * 		The methods container type
+	 * @param name
+	 * 		The name of the method
+	 * @return
+	 * 		The named method, or null if not found
+	 */
 	public static MethodType getMethod(MethodsType methods, String name) {
 		if (methods != null && methods.getMethod() != null) {
 			for (int i = 0; i < methods.getMethod().length; i++) {
@@ -440,7 +477,8 @@ public class CommonTools {
 		}
 
 		// assume its void to start with
-		String output = "void";
+		StringBuilder output = new StringBuilder();
+		output.append("void");
 
 		MethodTypeOutput outputType = method.getOutput();
 		if (outputType != null) {
@@ -452,16 +490,16 @@ public class CommonTools {
 				if (name.indexOf("_") == 0) {
 					name = name.substring(1);
 				}
-				output = name;
+				output.replace(0, output.length(), name);
 			}
 
 			// add array notation if its an array
 			if (outputType.isIsArray()) {
-				output += "[]";
+				output.append("[]");
 			}
 		}
 
-		String input = "";
+		StringBuilder input = new StringBuilder();
 		MethodTypeInputs inputs = method.getInputs();
 		if (inputs != null) {
 			MethodTypeInputsInput[] inputarr = inputs.getInput();
@@ -471,15 +509,15 @@ public class CommonTools {
 					// use classname if set, else use schema type
 					if (inputType.getQName() != null && inputType.getQName().getLocalPart() != null
 						&& !inputType.getQName().getLocalPart().trim().equals("")) {
-						if (!input.equals("")) {
-							input += ", ";
+						if (input.length() != 0) {
+							input.append(", ");
 						}
-						String name = org.apache.axis.wsdl.toJava.Utils.xmlNameToJavaClass(inputType.getQName()
-							.getLocalPart());
+						String name = org.apache.axis.wsdl.toJava.Utils.xmlNameToJavaClass(
+							inputType.getQName().getLocalPart());
 						if (name.indexOf("_") == 0) {
 							name = name.substring(1);
 						}
-						input += name;
+						input.append(name);
 					} else {
 						// why would this be the case?
 						continue;
@@ -487,22 +525,17 @@ public class CommonTools {
 
 					// add array notation if its an array
 					if (inputType.isIsArray()) {
-						input += "[]";
+						input.append("[]");
 					}
 
-					input += " " + inputType.getName();
+					input.append(" ").append(inputType.getName());
 				}
 			}
 		}
+		
+		output.append("  ").append(method.getName()).append("(").append(input.toString()).append(")");
 
-		output += "  " + method.getName() + "(" + input + ")";
-
-		if (method.isIsImported()) {
-
-		}
-
-		return output;
-
+		return output.toString();
 	}
 
 
@@ -606,10 +639,17 @@ public class CommonTools {
 
 		Utils.serializeDocument(toDir.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
 			introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
-
 	}
 
 
+	/**
+	 * Gets the directory which corresponds to a Java package name
+	 * 
+	 * @param service
+	 * 		The service
+	 * @return
+	 * 		The service's package name changed to a relative directory
+	 */
 	public static String getPackageDir(ServiceType service) {
 		return service.getPackageName().replace('.', File.separatorChar);
 	}
@@ -651,6 +691,13 @@ public class CommonTools {
 	}
 
 
+	/**
+	 * Adds a resource property to a service
+	 * @param service
+	 * 		The service to add a resource property to
+	 * @param resource
+	 * 		The resource property to be added
+	 */
 	public static void addResourcePropety(ServiceType service, ResourcePropertyType resource) {
 		ResourcePropertyType[] resourcesArray = null;
 		int length = 0;
@@ -675,8 +722,45 @@ public class CommonTools {
 		}
 		resources.setResourceProperty(resourcesArray);
 	}
+	
+	
+	/**
+	 * Gets all resource properties from a service which have a specified QName
+	 * 
+	 * @param service
+	 * 		The service to find resource properties of
+	 * @param type
+	 * 		The type of resource properties to locate
+	 * @return
+	 * 		An Array of ResourcePropertyTypes which have the specified QName
+	 */
+	public static ResourcePropertyType[] getResourcePropertiesOfType(ServiceType service, QName type) {
+		ResourcePropertiesListType propsList = service.getResourcePropertiesList();
+		List typedProperties = new ArrayList();
+		if (propsList != null) {
+			ResourcePropertyType[] allProperties = propsList.getResourceProperty();
+			if (allProperties != null) {
+				for (int i = 0; i < allProperties.length; i++) {
+					if (allProperties[i].getQName().equals(type)) {
+						typedProperties.add(allProperties[i]);
+					}
+				}
+			}
+		}
+		ResourcePropertyType[] propArray = new ResourcePropertyType[typedProperties.size()];
+		typedProperties.toArray(propArray);
+		return propArray;
+	}
 
 
+	/**
+	 * Adds a method to a service
+	 * 
+	 * @param service
+	 * 		The service to add a new method to
+	 * @param method
+	 * 		The method to be added
+	 */
 	public static void addMethod(ServiceType service, MethodType method) {
 		MethodType[] methodsArray = null;
 		int length = 0;
@@ -701,6 +785,14 @@ public class CommonTools {
 	}
 
 
+	/**
+	 * Removes a method from a MethodsType container object
+	 * 
+	 * @param methodsType
+	 * 		The container object to remove a method from
+	 * @param method
+	 * 		The method to be removed
+	 */
 	public static void removeMethod(MethodsType methodsType, MethodType method) {
 		MethodType[] newMethods = new MethodType[methodsType.getMethod().length - 1];
 		int newMethodsI = 0;
@@ -715,6 +807,14 @@ public class CommonTools {
 	}
 
 
+	/**
+	 * Adds a namespace type to a service description
+	 * 
+	 * @param serviceD
+	 * 		The service description
+	 * @param nsType
+	 * 		The namespace type to add
+	 */
 	public static void addNamespace(ServiceDescription serviceD, NamespaceType nsType) {
 		NamespaceType[] namespacesArray = null;
 		int length = 0;
@@ -815,8 +915,8 @@ public class CommonTools {
 	 * Determines if a service information object contains the specified service
 	 * property
 	 * 
-	 * @param info
-	 *            The service information
+	 * @param desc
+	 *            The service description
 	 * @param key
 	 *            The property to check for
 	 * @return True if a property with the key name is found, false otherwise
@@ -891,8 +991,9 @@ public class CommonTools {
 	 * in other parts of the service (ie Methods, Exceptions)
 	 * 
 	 * @param nsType
-	 * @param info
+	 * @param desc
 	 * @return
+	 * 		True if the namespace typs is in use in the service, false otherwise
 	 */
 	public static boolean isNamespaceTypeInUse(NamespaceType nsType, ServiceDescription desc) {
 		String namespace = nsType.getNamespace();
@@ -953,12 +1054,23 @@ public class CommonTools {
 	 * 
 	 * @param desc
 	 * @return
+	 * 		True if all of the types referenced by a service are still
+	 * 		present in the service description
 	 */
 	public static boolean usedTypesAvailable(ServiceDescription desc) {
 		return getUnavailableUsedTypes(desc).size() == 0;
 	}
 
 
+	/**
+	 * Gets the types from a service description which are referenced
+	 * in the service but not available in the namespace types of it
+	 * 
+	 * @param desc
+	 * 		The service description
+	 * @return
+	 * 		The set of unavailable types
+	 */
 	public static Set getUnavailableUsedTypes(ServiceDescription desc) {
 		// build up a set of used types
 		Set usedTypes = new HashSet();
@@ -1023,5 +1135,4 @@ public class CommonTools {
 		}
 		return usedTypes;
 	}
-
 }
