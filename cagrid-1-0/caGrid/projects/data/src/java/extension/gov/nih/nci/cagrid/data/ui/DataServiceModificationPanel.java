@@ -36,6 +36,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -46,6 +47,7 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -166,6 +168,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 						getDomainModelNameTextField().setText("");
 					}
 				}
+				// always record this state
+				storeNoDomainModelInfo();
 			}
 			
 			
@@ -181,7 +185,9 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 			Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
 			CadsrInformation info = data.getCadsrInformation();
 			if (info != null) {
-				if (info.getSuppliedDomainModel() != null) {
+				if (info.isNoDomainModel()) {
+					group.setSelected(getNoDomainModelRadioButton().getModel(), true);
+				} else if (info.isUseSuppliedModel()) {
 					group.setSelected(getSuppliedDomainModelRadioButton().getModel(), true);
 				} else {
 					group.setSelected(getCadsrDomainModelRadioButton().getModel(), true);
@@ -487,8 +493,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
 						String filename = ResourceManager.promptFile(null, FileFilters.XML_FILTER);
-						getDomainModelNameTextField().setText(filename);
-						setDomainModelFile();
+						setDomainModelFile(filename);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						ErrorDialog.showErrorDialog("Error selecting file: " + ex.getMessage());
@@ -544,18 +549,18 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	}
 	
 	
-	private void setDomainModelFile() {
+	private void setDomainModelFile(String filename) {
 		try {
-			String filename = getDomainModelNameTextField().getText();
 			Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
 			CadsrInformation cadsrInfo = data.getCadsrInformation();
 			if (cadsrInfo == null) {
 				cadsrInfo = new CadsrInformation();
 				data.setCadsrInformation(cadsrInfo);
 			}
-			// set the domain model file name
-			cadsrInfo.setSuppliedDomainModel(filename);
-			// get the domain model
+			// set the info to use the supplied domain model
+			cadsrInfo.setUseSuppliedModel(true);
+			
+			// load up the domain model
 			DomainModel model = MetadataUtils.deserializeDomainModel(new FileReader(filename));
 			// set the most recent project information
 			Project proj = new Project();
@@ -636,9 +641,34 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				packIndex++;
 			}
 			cadsrInfo.setPackages(packages);
-			ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
+			
 			// store the changed information
 			ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
+			
+			// copy the selected file into the service's etc directory
+			File originalFile = new File(filename);
+			File localFile = new File(getServiceInfo().getBaseDirectory().getAbsolutePath()
+				+ File.separator + "etc" + File.separator + originalFile.getName());
+			Utils.copyFile(originalFile, localFile);
+			
+			// get the domain model resource property
+			ResourcePropertyType dmResourceProp = CommonTools.getResourcePropertiesOfType(
+				getServiceInfo().getServices().getService(0), 
+				DataServiceConstants.DOMAIN_MODEL_QNAME)[0];
+			dmResourceProp.setFileLocation(localFile.getName());
+			dmResourceProp.setPopulateFromFile(true);
+			
+			// set the text of the selected domain model file to reflect the
+			// local location of the domain model
+			getDomainModelNameTextField().setText(localFile.getAbsolutePath());
+			
+			// the file has been copied to a new location and its name changed
+			// inform the service developer of what just happened
+			String[] message = {
+				"The selected domain model was copied into the service's",
+				"directory structure for future use and deployment."
+			};
+			PortalUtils.showMessage(message);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error loading existing caDSR information: " + ex.getMessage(), ex);
@@ -1117,8 +1147,14 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				getUmlTree().setEnabled(true);				
 			}
 			// set the domain model filename if there is one
-			if (cadsrInfo.getSuppliedDomainModel() != null) {
-				getDomainModelNameTextField().setText(cadsrInfo.getSuppliedDomainModel());
+			if (cadsrInfo.isUseSuppliedModel()) {
+				// get the supplied domain model filename
+				ResourcePropertyType dmResourceProp = CommonTools.getResourcePropertiesOfType(
+					getServiceInfo().getServices().getService(0), 
+					DataServiceConstants.DOMAIN_MODEL_QNAME)[0];
+				File domainModelFile = new File(getServiceInfo().getBaseDirectory().getAbsolutePath()
+					+ File.separator + "etc" + File.separator + dmResourceProp.getFileLocation());
+				getDomainModelNameTextField().setText(domainModelFile.getAbsolutePath());
 				getUmlTree().setEnabled(false);
 			}
 			// walk through packages, adding them to the UML tree
@@ -1330,6 +1366,23 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error storing cadsr service URL", ex);
+		}
+	}
+	
+	
+	private void storeNoDomainModelInfo() {
+		try {
+			Data data = ExtensionDataUtils.getExtensionData(getExtensionTypeExtensionData());
+			CadsrInformation info = data.getCadsrInformation();
+			if (info == null) {
+				info = new CadsrInformation();
+				data.setCadsrInformation(info);
+			}
+			info.setNoDomainModel(getNoDomainModelRadioButton().isSelected());
+			ExtensionDataUtils.storeExtensionData(getExtensionTypeExtensionData(), data);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			ErrorDialog.showErrorDialog("Error storing domain model use information", ex);
 		}
 	}
 	

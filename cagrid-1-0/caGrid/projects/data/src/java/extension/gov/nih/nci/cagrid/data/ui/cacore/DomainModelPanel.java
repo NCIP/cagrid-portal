@@ -18,6 +18,8 @@ import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.ui.NamespaceUtils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
@@ -28,6 +30,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -88,29 +91,36 @@ public class DomainModelPanel extends AbstractWizardPanel {
 
 	public void update() {
 		try {
-			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-			CadsrInformation info = data.getCadsrInformation();
-			if (info != null) {
-				if (info.getServiceUrl() != null) {
-					getCaDsrBrowser().setDefaultCaDSRURL(info.getServiceUrl());
-					getCaDsrBrowser().getCadsr().setText(info.getServiceUrl());
-				}
-				if (info.getSuppliedDomainModel() != null) {
-					getFileTextField().setText(info.getSuppliedDomainModel());
-				}
-				if (info.getProjectLongName() != null && info.getProjectVersion() != null) {
-					lastSelectedProject = new Project();
-					lastSelectedProject.setLongName(info.getProjectLongName());
-					lastSelectedProject.setVersion(info.getProjectVersion());
-				}
-				if (info.getPackages() != null) {
-					String[] names = new String[info.getPackages().length];
-					for (int i = 0; i < info.getPackages().length; i++) {
-						names[i] = info.getPackages(i).getName();
-					}
-					getSelectedPackagesList().setListData(names);
-				}
+			CadsrInformation info = getCadsrInformation();
+			if (info.isNoDomainModel()) {
+				getNoDomainModelRadioButton().setSelected(true);
 			}
+			if (info.getServiceUrl() != null) {
+				getCaDsrBrowser().setDefaultCaDSRURL(info.getServiceUrl());
+				getCaDsrBrowser().getCadsr().setText(info.getServiceUrl());
+			}
+			if (info.isUseSuppliedModel()) {
+				ResourcePropertyType dmResourceProperty = CommonTools.getResourcePropertiesOfType(
+					getServiceInformation().getServices().getService(0), 
+					DataServiceConstants.DOMAIN_MODEL_QNAME)[0];
+				String filename = getServiceInformation().getBaseDirectory().getAbsolutePath() 
+				+ File.separator + "etc" + File.separator + dmResourceProperty.getFileLocation();
+				getFileTextField().setText(filename);
+				getFromFileRadioButton().setSelected(true);
+			}
+			if (info.getProjectLongName() != null && info.getProjectVersion() != null) {
+				lastSelectedProject = new Project();
+				lastSelectedProject.setLongName(info.getProjectLongName());
+				lastSelectedProject.setVersion(info.getProjectVersion());
+			}
+			if (info.getPackages() != null) {
+				String[] names = new String[info.getPackages().length];
+				for (int i = 0; i < info.getPackages().length; i++) {
+					names[i] = info.getPackages(i).getName();
+				}
+				getSelectedPackagesList().setListData(names);
+			}
+			storeCadsrInformation(info);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error loading extension data", ex);
@@ -216,7 +226,8 @@ public class DomainModelPanel extends AbstractWizardPanel {
 						PortalUtils.setContainerEnabled(getCaDsrPanel(), true);
 						// clear out supplied domain model info
 						getFileTextField().setText("");
-						setSelectedDomainModelFilename(null);
+						ResourcePropertyType dmResourceProp = getDomainModelResourceProperty();
+						dmResourceProp.setPopulateFromFile(false);
 					}
 				}
 			});
@@ -323,14 +334,21 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	private void setSelectedDomainModelFilename(String filename) {
 		// set the selected file on the data extension's info
 		try {
-			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-			CadsrInformation info = data.getCadsrInformation();
-			if (info == null) {
-				info = new CadsrInformation();
-			}
-			info.setSuppliedDomainModel(filename);
-			data.setCadsrInformation(info);
-			ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
+			CadsrInformation info = getCadsrInformation();
+			File selectedFile = new File(filename);
+			File localDomainFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
+				+ File.separator + "etc" + File.separator + selectedFile.getName());
+			Utils.copyFile(selectedFile, localDomainFile);
+			
+			ResourcePropertyType dmResourceProp = CommonTools.getResourcePropertiesOfType(
+				getServiceInformation().getServices().getService(0),
+				DataServiceConstants.DOMAIN_MODEL_QNAME)[0];
+			dmResourceProp.setPopulateFromFile(true);
+			dmResourceProp.setFileLocation(localDomainFile.getName());
+			info.setUseSuppliedModel(true);
+			
+			storeCadsrInformation(info);
+			
 			loadDomainModelFile();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -564,12 +582,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			getSelectedPackagesList().setListData(names);
 			// add the package to the cadsr information in extension data
 			try {
-				Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-				CadsrInformation info = data.getCadsrInformation();
-				if (info == null) {
-					info = new CadsrInformation();
-					data.setCadsrInformation(info);
-				}
+				CadsrInformation info = getCadsrInformation();
 				// create cadsr package for the new metadata package
 				CadsrPackage newPackage = new CadsrPackage();
 				newPackage.setName(pack.getName());
@@ -585,7 +598,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 				info.setServiceUrl(getCaDsrBrowser().getCadsr().getText());
 				info.setProjectLongName(lastSelectedProject.getLongName());
 				info.setProjectVersion(lastSelectedProject.getVersion());
-				ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
+				storeCadsrInformation(info);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				ErrorDialog.showErrorDialog("Error storing the new package information", ex);
@@ -631,8 +644,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 		}
 		// change the data model
 		try {
-			Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-			CadsrInformation information = data.getCadsrInformation();
+			CadsrInformation information = getCadsrInformation();
 			CadsrPackage[] packages = information.getPackages();
 			List remainingPackages = new ArrayList();
 			for (int i = 0; i < packages.length; i++) {
@@ -643,7 +655,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			CadsrPackage[] remainingPackagesArray = new CadsrPackage[remainingPackages.size()];
 			remainingPackages.toArray(remainingPackagesArray);
 			information.setPackages(remainingPackagesArray);
-			ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
+			storeCadsrInformation(information);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error removing the selected packages from the model", ex);
@@ -658,12 +670,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 				// get the domain model
 				DomainModel model = MetadataUtils.deserializeDomainModel(new FileReader(domainModelFile));
 				// get extension data
-				Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-				CadsrInformation info = data.getCadsrInformation();
-				if (info == null) {
-					info = new CadsrInformation();
-					data.setCadsrInformation(info);
-				}
+				CadsrInformation info = getCadsrInformation();
 				// set the most recent project information
 				Project proj = new Project();
 				proj.setDescription(model.getProjectDescription());
@@ -715,11 +722,37 @@ public class DomainModelPanel extends AbstractWizardPanel {
 					packIndex++;
 				}
 				info.setPackages(packages);
-				ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
+				storeCadsrInformation(info);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				ErrorDialog.showErrorDialog("Error loading domain model information", ex);
 			}
 		}
+	}
+	
+	
+	private ResourcePropertyType getDomainModelResourceProperty() {
+		return CommonTools.getResourcePropertiesOfType(
+			getServiceInformation().getServices().getService(0), 
+			DataServiceConstants.DOMAIN_MODEL_QNAME)[0];
+	}
+	
+	
+	private CadsrInformation getCadsrInformation() throws Exception {
+		Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
+		CadsrInformation info = data.getCadsrInformation();
+		if (info == null) {
+			info = new CadsrInformation();
+			data.setCadsrInformation(info);
+			ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
+		}
+		return info;
+	}
+	
+	
+	private void storeCadsrInformation(CadsrInformation info) throws Exception {
+		Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
+		data.setCadsrInformation(info);
+		ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
 	}
 }

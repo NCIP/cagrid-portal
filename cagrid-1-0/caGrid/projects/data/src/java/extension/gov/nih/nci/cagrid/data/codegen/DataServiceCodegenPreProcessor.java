@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -67,53 +68,75 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			throw new CodegenExtensionException(ex.getMessage(), ex);
 		}
 	}
+	
+	
+	private CadsrInformation getCadsrInformation(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
+		ExtensionTypeExtensionData extData = ExtensionTools.getExtensionData(desc, info);
+		Data data = ExtensionDataUtils.getExtensionData(extData);
+		CadsrInformation cadsrInfo = data.getCadsrInformation();
+		if (cadsrInfo == null) {
+			System.out.println("NO CADSR INFORMATION FOUND, USING DEFAULTS");
+			cadsrInfo = new CadsrInformation();
+			cadsrInfo.setNoDomainModel(true);
+			data.setCadsrInformation(cadsrInfo);
+			ExtensionDataUtils.storeExtensionData(extData, data);
+		}
+		return cadsrInfo;
+	}
 
 
 	private void modifyMetadata(ServiceExtensionDescriptionType desc, ServiceInformation info)
 		throws CodegenExtensionException {
-		String destinationDomainModel = getDestinationDomainModelFilename(info);
-		if (destinationDomainModel == null) {
-			destinationDomainModel = DEFAULT_DOMAIN_MODEL_XML_FILE;
-		}
+		String localDomainModelFilename = getDestinationDomainModelFilename(info);
 
 		// find the service's etc directory, where the domain model goes
 		String domainModelFile = info.getIntroduceServiceProperties().getProperty(
 			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
-			+ File.separator + "etc" + File.separator + destinationDomainModel;
+			+ File.separator + "etc" + File.separator + localDomainModelFilename;
 
-		LOG.debug("Looking for user-supplied domain model xml file");
-		String suppliedDomainModel = null;
+		// get the caDSR information
+		CadsrInformation cadsrInfo = null;
 		try {
-			suppliedDomainModel = getSuppliedDomainModelFilename(desc, info);
+			cadsrInfo = getCadsrInformation(desc, info);
 		} catch (Exception ex) {
-			throw new CodegenExtensionException("Error getting cadsr information: " + ex.getMessage(), ex);
+			throw new CodegenExtensionException("Error loading Cadsr Information from extension data", ex);
 		}
-		if (suppliedDomainModel != null) {
-			LOG.debug("User-supplied domain model is " + suppliedDomainModel);
-			LOG.info("Copying domain model from " + suppliedDomainModel + " to " + domainModelFile);
-			try {
-				Utils.copyFile(new File(suppliedDomainModel), new File(domainModelFile));
-			} catch (Exception ex) {
-				throw new CodegenExtensionException("Error copying domain model file: " + ex.getMessage(), ex);
-			}
-		} else {
+		
+		// get the resource property for the domain model
+		ResourcePropertyType dmResourceProp = getDomainModelResourceProp(info);
+		
+		if (cadsrInfo.isUseSuppliedModel()) {
+			// the model is already in the service's etc dir with the name specified
+			// in the resource property.  Make sure the resource property has
+			// the populate from file flag set, and we're done
+			dmResourceProp.setPopulateFromFile(true);
+		} else if (!cadsrInfo.isNoDomainModel()) {
+			// the domain model is to be generated from the caDSR
 			LOG.info("No domain model supplied, generating from caDSR");
-			generateDomainModel(desc, info, domainModelFile);
+			generateDomainModel(cadsrInfo, info, domainModelFile);
+			// set the domain model file name
+			dmResourceProp.setFileLocation(localDomainModelFilename);
 		}
-
-		// set the domain model file name
-		setDomainModelResourceProperty(info, destinationDomainModel);
 
 		// if the domainModel.xml doesn't exist, don't try to populate the
 		// domain model metadata on service startup
 		File dmFile = new File(domainModelFile);
-		ResourcePropertyType property = getDomainModelResourceProperty(info);
-		if (property != null) {
-			property.setPopulateFromFile(dmFile.exists());
-		}
+		dmResourceProp.setPopulateFromFile(dmFile.exists());
 	}
 
 
+	/**
+	 * Gets the local part of the filename from which the Domain Model resource
+	 * property (metadata) will be populated at runtime.  This value is configured
+	 * by the user when selecting a pre-built domain model in the data service
+	 * creation GUI in Introduce, or the default (domainModel.xml) value
+	 * if a domain model is to be generated from the caDSR
+	 * 
+	 * @param info
+	 * 		The service information
+	 * @return
+	 * 		The local domain model xml file name
+	 */
 	private String getDestinationDomainModelFilename(ServiceInformation info) {
 		ServiceType mainServ = info.getServiceDescriptor().getServices().getService()[0];
 		if (mainServ.getResourcePropertiesList() != null
@@ -134,195 +157,104 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 	}
 
 
-	private void generateDomainModel(ServiceExtensionDescriptionType desc, ServiceInformation info,
-		String domainModelFile) throws CodegenExtensionException {
-		LOG.debug("Looking for caDSR element in extension data");
-		// verify there's a caDSR element in the extension data bucket
-		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-		CadsrInformation cadsrInfo = null;
+	private void generateDomainModel(CadsrInformation cadsrInfo, ServiceInformation info, String domainModelFile) throws CodegenExtensionException {		
+		// init the cadsr service client
+		String cadsrUrl = cadsrInfo.getServiceUrl();
+		LOG.info("Initializing caDSR client (URL = " + cadsrUrl + ")");
+		System.out.println("Initializing caDSR client (URL = " + cadsrUrl + ")");
+		CaDSRServiceClient cadsrClient = null;
 		try {
-			cadsrInfo = ExtensionDataUtils.getExtensionData(data).getCadsrInformation();
+			cadsrClient = new CaDSRServiceClient(cadsrUrl);
 		} catch (Exception ex) {
-			throw new CodegenExtensionException("Error getting extension data: " + ex.getMessage());
+			throw new CodegenExtensionException("Error initializing caDSR client: " + ex.getMessage(), ex);
 		}
-		if (cadsrInfo != null) {
-			// init the cadsr service client
-			String cadsrUrl = cadsrInfo.getServiceUrl();
-			LOG.info("Initializing caDSR client (URL = " + cadsrUrl + ")");
-			CaDSRServiceClient cadsrClient = null;
-			try {
-				cadsrClient = new CaDSRServiceClient(cadsrUrl);
-			} catch (Exception ex) {
-				throw new CodegenExtensionException("Error initializing caDSR client: " + ex.getMessage(), ex);
-			}
 
-			// create the prototype project
-			Project proj = new Project();
-			proj.setLongName(cadsrInfo.getProjectLongName());
-			proj.setVersion(cadsrInfo.getProjectVersion());
+		// create the prototype project
+		Project proj = new Project();
+		proj.setLongName(cadsrInfo.getProjectLongName());
+		proj.setVersion(cadsrInfo.getProjectVersion());
 
-			// sets for holding all selected classes and associations
-			Set selectedClasses = new HashSet();
+		// sets for holding all selected classes and associations
+		Set selectedClasses = new HashSet();
 
-			// walk through the selected packages
-			for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {
-				CadsrPackage packageInfo = cadsrInfo.getPackages(i);
-				String packName = packageInfo.getName();
-				// get selected classes from the package
-				if (packageInfo.getCadsrClass() != null) {
-					for (int j = 0; j < packageInfo.getCadsrClass().length; j++) {
-						selectedClasses.add(packName + "." + packageInfo.getCadsrClass(j).getClassName());
-					}
+		// walk through the selected packages
+		for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {
+			CadsrPackage packageInfo = cadsrInfo.getPackages(i);
+			String packName = packageInfo.getName();
+			// get selected classes from the package
+			if (packageInfo.getCadsrClass() != null) {
+				for (int j = 0; j < packageInfo.getCadsrClass().length; j++) {
+					selectedClasses.add(packName + "." + packageInfo.getCadsrClass(j).getClassName());
 				}
 			}
-			
-			// get the data service's description
-			ServiceType dataService = null;
-			String serviceName = info.getIntroduceServiceProperties().getProperty(
-				IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-			ServiceType[] services = info.getServices().getService();
-			for (int i = 0; i < services.length; i++) {
-				if (services[i].getName().equals(serviceName)) {
-					dataService = services[i];
-					break;
-				}
-			}
-			if (dataService == null) {
-				// this REALLY should never happen...
-				throw new CodegenExtensionException("No data service found in service information");
-			}
-
-			// build the domain model
-			LOG.info("Contacting caDSR to build domain model.  This might take a while...");
-			System.out.println("Contacting caDSR to build domain model.  This might take a while...");
-			DomainModel model = null;
-			try {
-				// TODO; change this to use EXCLUDED associations
-				String classNames[] = new String[selectedClasses.size()];
-				selectedClasses.toArray(classNames);
-				model = cadsrClient.generateDomainModelForClasses(proj, classNames);
-				if (model == null) {
-					throw new CodegenExtensionException("caDSR returned a null domain model.");
-				}
-				System.out.println("Created data service Domain Model!");
-				LOG.info("Created data service Domain Model!");
-			} catch (Exception ex) {
-				throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(), ex);
-			}
-
-			LOG.debug("Serializing domain model to file " + domainModelFile);
-			try {
-				FileWriter domainModelFileWriter = new FileWriter(domainModelFile);
-				MetadataUtils.serializeDomainModel(model, domainModelFileWriter);
-				domainModelFileWriter.flush();
-				domainModelFileWriter.close();
-				LOG.debug("Serialized domain model");
-			} catch (Exception ex) {
-				throw new CodegenExtensionException("Error serializing the domain model to disk: " 
-					+ ex.getMessage(), ex);
-			}
-
-			// add the metadata to the service information as a resource property
-			ResourcePropertyType domainModelResourceProperty = new ResourcePropertyType();
-			domainModelResourceProperty.setPopulateFromFile(true);
-			domainModelResourceProperty.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
-			domainModelResourceProperty.setRegister(true);
-			ResourcePropertiesListType propertyList = dataService.getResourcePropertiesList();
-			if (propertyList == null) {
-				propertyList = new ResourcePropertiesListType();
-			}
-			ResourcePropertyType[] propertyArray = propertyList.getResourceProperty();
-			if (propertyArray == null) {
-				propertyArray = new ResourcePropertyType[]{domainModelResourceProperty};
-			} else {
-				ResourcePropertyType[] newProperties = new ResourcePropertyType[propertyArray.length];
-				System.arraycopy(propertyArray, 0, newProperties, 0, propertyArray.length);
-				propertyArray = newProperties;
-			}
-			// start packing up the resource property info
-			propertyList.setResourceProperty(propertyArray);
-			dataService.setResourcePropertiesList(propertyList);
 		}
-	}
 
-
-	private void setDomainModelResourceProperty(ServiceInformation info, String fileLocation) {
-		ResourcePropertyType domainMetadata = null;
-		// try to find the existing property in the service informaton
-		ResourcePropertiesListType propsList = info.getServices().getService(0).getResourcePropertiesList();
-		if (propsList == null) {
-			propsList = new ResourcePropertiesListType();
-			info.getServices().getService(0).setResourcePropertiesList(propsList);
-		}
-		ResourcePropertyType[] metadataArray = propsList.getResourceProperty();
-		for (int i = 0; metadataArray != null && i < metadataArray.length; i++) {
-			if (metadataArray[i].getQName().equals(DataServiceConstants.DOMAIN_MODEL_QNAME)) {
-				domainMetadata = metadataArray[i];
+		// get the data service's description
+		ServiceType dataService = null;
+		String serviceName = info.getIntroduceServiceProperties().getProperty(
+			IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+		ServiceType[] services = info.getServices().getService();
+		for (int i = 0; i < services.length; i++) {
+			if (services[i].getName().equals(serviceName)) {
+				dataService = services[i];
 				break;
 			}
 		}
-		if (domainMetadata == null) {
-			// no metadata found, create a new one
-			domainMetadata = new ResourcePropertyType();
-			domainMetadata.setPopulateFromFile(true);
-			domainMetadata.setRegister(true);
-			domainMetadata.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
-			// add the domain metadata back to the resouce properties list
-			if (metadataArray != null) {
-				metadataArray = (ResourcePropertyType[]) Utils.appendToArray(metadataArray, domainMetadata);
-			} else {
-				metadataArray = new ResourcePropertyType[] {domainMetadata};
-			}
-			propsList.setResourceProperty(metadataArray);
+		if (dataService == null) {
+			// this REALLY should never happen...
+			throw new CodegenExtensionException("No data service found in service information");
 		}
-		// set the file location of the metadata
-		domainMetadata.setFileLocation(fileLocation);
-	}
 
-
-	/**
-	 * Gets the resource property (metadata reference) for the Domain Model
-	 * 
-	 * @param info
-	 * 		The service's model
-	 * @return
-	 * 		The appropriate resource property, or null if it is not found
-	 */
-	private ResourcePropertyType getDomainModelResourceProperty(ServiceInformation info) {
-		ResourcePropertiesListType propsList = info.getServices().getService(0).getResourcePropertiesList();
-		if (propsList != null) {
-			ResourcePropertyType[] metadataArray = propsList.getResourceProperty();
-			if (metadataArray != null) {
-				for (int i = 0; i < metadataArray.length; i++) {
-					if (metadataArray[i].getQName().equals(DataServiceConstants.DOMAIN_MODEL_QNAME)) {
-						return metadataArray[i];
-					}
-				}
+		// build the domain model
+		LOG.info("Contacting caDSR to build domain model.  This might take a while...");
+		System.out.println("Contacting caDSR to build domain model.  This might take a while...");
+		DomainModel model = null;
+		try {
+			// TODO; change this to use EXCLUDED associations
+			String classNames[] = new String[selectedClasses.size()];
+			selectedClasses.toArray(classNames);
+			model = cadsrClient.generateDomainModelForClasses(proj, classNames);
+			if (model == null) {
+				throw new CodegenExtensionException("caDSR returned a null domain model.");
 			}
+			System.out.println("Created data service Domain Model!");
+			LOG.info("Created data service Domain Model!");
+		} catch (Exception ex) {
+			throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(), ex);
 		}
-		return null;
-	}
-	
-	
-	/**
-	 * Gets the filename of the supplied domain model
-	 * 
-	 * @param desc
-	 * 		The extension description
-	 * @param info
-	 * 		The service's information
-	 * @return
-	 * 		The filename of the supplied domain model, or null if none was supplied
-	 * 
-	 * @throws Exception
-	 */
-	private String getSuppliedDomainModelFilename(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
-		ExtensionTypeExtensionData data = ExtensionTools.getExtensionData(desc, info);
-		CadsrInformation cadsrInfo = ExtensionDataUtils.getExtensionData(data).getCadsrInformation();
-		if (cadsrInfo != null) {
-			return cadsrInfo.getSuppliedDomainModel();
+
+		LOG.debug("Serializing domain model to file " + domainModelFile);
+		try {
+			FileWriter domainModelFileWriter = new FileWriter(domainModelFile);
+			MetadataUtils.serializeDomainModel(model, domainModelFileWriter);
+			domainModelFileWriter.flush();
+			domainModelFileWriter.close();
+			LOG.debug("Serialized domain model");
+		} catch (Exception ex) {
+			throw new CodegenExtensionException("Error serializing the domain model to disk: " 
+				+ ex.getMessage(), ex);
 		}
-		return null;
+
+		// add the metadata to the service information as a resource property
+		ResourcePropertyType domainModelResourceProperty = new ResourcePropertyType();
+		domainModelResourceProperty.setPopulateFromFile(true);
+		domainModelResourceProperty.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
+		domainModelResourceProperty.setRegister(true);
+		ResourcePropertiesListType propertyList = dataService.getResourcePropertiesList();
+		if (propertyList == null) {
+			propertyList = new ResourcePropertiesListType();
+		}
+		ResourcePropertyType[] propertyArray = propertyList.getResourceProperty();
+		if (propertyArray == null) {
+			propertyArray = new ResourcePropertyType[]{domainModelResourceProperty};
+		} else {
+			ResourcePropertyType[] newProperties = new ResourcePropertyType[propertyArray.length];
+			System.arraycopy(propertyArray, 0, newProperties, 0, propertyArray.length);
+			propertyArray = newProperties;
+		}
+		// start packing up the resource property info
+		propertyList.setResourceProperty(propertyArray);
+		dataService.setResourcePropertiesList(propertyList);
 	}
 	
 	
@@ -360,6 +292,23 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 			writer.close();		
 		} catch (Exception ex) {
 			throw new CodegenExtensionException("Error providing stub CQL implementation: " + ex.getMessage(), ex);
+		}
+	}
+	
+	
+	private ResourcePropertyType getDomainModelResourceProp(ServiceInformation info) {
+		ServiceType baseService = info.getServices().getService(0);
+		
+		ResourcePropertyType[] typedProps = CommonTools.getResourcePropertiesOfType(
+			info.getServices().getService(0), DataServiceConstants.DOMAIN_MODEL_QNAME);
+		if (typedProps == null || typedProps.length == 0) {
+			ResourcePropertyType dmProp = new ResourcePropertyType();
+			dmProp.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
+			dmProp.setRegister(true);
+			CommonTools.addResourcePropety(baseService, dmProp);
+			return dmProp;
+		} else {
+			return typedProps[0];
 		}
 	}
 }

@@ -30,9 +30,9 @@
 		</xsd:sequence>
 		<xsd:attribute name="projectLongName" type="xsd:string" use="required"/>
 		<xsd:attribute name="projectVersion" type="xsd:string" use="required"/>
-		<xsd:attribute name="suppliedDomainModel" type="xsd:string" use="optional"/>
 		<xsd:attribute name="serviceUrl" type="xsd:string" use="required"/>
 		<xsd:attribute name="noDomainModel" type="xsd:boolean" use="required"/>
+		<xsd:attribute name="useSuppliedModel" type="xsd:boolean" use="require"/>
 	</xsd:complexType>
 	<xsd:complexType name="CadsrPackage">
 		<xsd:annotation>
