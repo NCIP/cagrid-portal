@@ -19,6 +19,7 @@ import gov.nih.nci.cagrid.data.ui.NamespaceUtils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -335,21 +336,27 @@ public class DomainModelPanel extends AbstractWizardPanel {
 		// set the selected file on the data extension's info
 		try {
 			CadsrInformation info = getCadsrInformation();
-			File selectedFile = new File(filename);
-			File localDomainFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
-				+ File.separator + "etc" + File.separator + selectedFile.getName());
-			Utils.copyFile(selectedFile, localDomainFile);
 			
-			ResourcePropertyType dmResourceProp = CommonTools.getResourcePropertiesOfType(
-				getServiceInformation().getServices().getService(0),
-				DataServiceConstants.DOMAIN_MODEL_QNAME)[0];
-			dmResourceProp.setPopulateFromFile(true);
-			dmResourceProp.setFileLocation(localDomainFile.getName());
-			info.setUseSuppliedModel(true);
+			ResourcePropertyType dmResourceProp = getDomainModelResourceProperty();
 			
-			storeCadsrInformation(info);
-			
-			loadDomainModelFile();
+			if (filename != null) {
+				File selectedFile = new File(filename);
+				File localDomainFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
+					+ File.separator + "etc" + File.separator + selectedFile.getName());
+				Utils.copyFile(selectedFile, localDomainFile);
+				
+				dmResourceProp.setPopulateFromFile(true);
+				dmResourceProp.setFileLocation(localDomainFile.getName());
+				info.setUseSuppliedModel(true);
+
+				storeCadsrInformation(info);
+
+				loadDomainModelFile();
+			} else {
+				info.setUseSuppliedModel(false);
+				dmResourceProp.setPopulateFromFile(false);
+				dmResourceProp.setFileLocation("");
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error copying selected file to service", ex);
@@ -732,9 +739,19 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	
 	
 	private ResourcePropertyType getDomainModelResourceProperty() {
-		return CommonTools.getResourcePropertiesOfType(
-			getServiceInformation().getServices().getService(0), 
-			DataServiceConstants.DOMAIN_MODEL_QNAME)[0];
+		ServiceType baseService = getServiceInformation().getServices().getService(0);
+
+		ResourcePropertyType[] typedProps = CommonTools.getResourcePropertiesOfType(
+			getServiceInformation().getServices().getService(0), DataServiceConstants.DOMAIN_MODEL_QNAME);
+		if (typedProps == null || typedProps.length == 0) {
+			ResourcePropertyType dmProp = new ResourcePropertyType();
+			dmProp.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
+			dmProp.setRegister(true);
+			CommonTools.addResourcePropety(baseService, dmProp);
+			return dmProp;
+		} else {
+			return typedProps[0];
+		}
 	}
 	
 	
