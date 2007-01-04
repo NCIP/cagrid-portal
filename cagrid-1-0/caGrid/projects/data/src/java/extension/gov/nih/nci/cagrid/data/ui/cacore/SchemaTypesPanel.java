@@ -361,6 +361,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 		CadsrInformation info = data.getCadsrInformation();
 		if (info == null) {
 			info = new CadsrInformation();
+			info.setNoDomainModel(true);
 			data.setCadsrInformation(info);
 		}
 		for (int i = 0; info.getPackages() != null && i < info.getPackages().length; i++) {

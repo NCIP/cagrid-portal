@@ -760,6 +760,8 @@ public class DomainModelPanel extends AbstractWizardPanel {
 		CadsrInformation info = data.getCadsrInformation();
 		if (info == null) {
 			info = new CadsrInformation();
+			info.setNoDomainModel(getNoDomainModelRadioButton().isSelected());
+			info.setUseSuppliedModel(getFromFileRadioButton().isSelected());
 			data.setCadsrInformation(info);
 			ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
 		}
