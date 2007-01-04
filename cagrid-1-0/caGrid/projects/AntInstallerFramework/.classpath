@@ -37,5 +37,6 @@
 	<classpathentry kind="lib" path="lib/antlib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/antlib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/bsh-2.0b4.jar"/>
+	<classpathentry kind="lib" path="lib/certificate_tasks.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
