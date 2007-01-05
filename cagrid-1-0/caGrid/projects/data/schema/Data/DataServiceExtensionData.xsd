@@ -32,7 +32,7 @@
 		<xsd:attribute name="projectVersion" type="xsd:string" use="required"/>
 		<xsd:attribute name="serviceUrl" type="xsd:string" use="required"/>
 		<xsd:attribute name="noDomainModel" type="xsd:boolean" use="required"/>
-		<xsd:attribute name="useSuppliedModel" type="xsd:boolean" use="require"/>
+		<xsd:attribute name="useSuppliedModel" type="xsd:boolean" use="required"/>
 	</xsd:complexType>
 	<xsd:complexType name="CadsrPackage">
 		<xsd:annotation>
