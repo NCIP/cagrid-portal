@@ -1,5 +1,9 @@
 package gov.nih.nci.cagrid.data.utilities;
 
+import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
+
+import java.io.File;
 import java.util.Iterator;
 
 import org.jdom.Element;
@@ -77,5 +81,22 @@ public class CastorMappingUtil {
 			}
 		}
 		return XMLUtilities.elementToString(mappingRoot);
+	}
+	
+	
+	public static String getCustomCastorMappingFileName(ServiceInformation serviceInfo) {
+		String mappingOut = serviceInfo.getBaseDirectory().getAbsolutePath() 
+			+ File.separator + "src" + File.separator 
+			+ getCustomCastorMappingName(serviceInfo);
+		return mappingOut;
+	}
+	
+	
+	public static String getCustomCastorMappingName(ServiceInformation serviceInfo) {
+		String mappingName = serviceInfo.getServices().getService(0)
+				.getPackageName().replace('.', '/')
+			+ File.separator + serviceInfo.getServices().getService(0).getName() 
+			+ "-" + DataServiceConstants.CACORE_CASTOR_MAPPING_FILE;
+		return mappingName;
 	}
 }
