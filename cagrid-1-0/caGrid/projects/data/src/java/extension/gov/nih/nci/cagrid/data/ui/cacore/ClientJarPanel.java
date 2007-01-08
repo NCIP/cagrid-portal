@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.utilities.CastorMappingUtil;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
@@ -87,8 +88,7 @@ public class ClientJarPanel extends AbstractWizardPanel {
 			ErrorDialog.showErrorDialog("Error loading extension data", ex);
 		}
 		// see if the castor mapping file exists
-		File castorMapping = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
-			+ File.separator + DataServiceConstants.CACORE_CASTOR_MAPPING_FILE);
+		File castorMapping = new File(CastorMappingUtil.getCustomCastorMappingFileName(getServiceInformation()));
 		setNextEnabled(castorMapping.exists());
 	}
 
@@ -163,6 +163,7 @@ public class ClientJarPanel extends AbstractWizardPanel {
 							}
 							// attempt to extract a castor mapping file
 							extractCastorMapping(selectedJarNames);
+							// add the new libraries to the service extension data
 							Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
 							AdditionalLibraries libs = data.getAdditionalLibraries();
 							if (libs == null) {
@@ -315,8 +316,8 @@ public class ClientJarPanel extends AbstractWizardPanel {
 			StringBuffer mappingFile = JarUtilities.getFileContents(
 				jarFile, DataServiceConstants.CACORE_CASTOR_MAPPING_FILE);
 			if (mappingFile != null) {
-				String mappingOut = getServiceInformation().getBaseDirectory().getAbsolutePath() 
-					+ File.separator + DataServiceConstants.CACORE_CASTOR_MAPPING_FILE;
+				// copy the mapping file to the service's source dir + base package name
+				String mappingOut = CastorMappingUtil.getCustomCastorMappingFileName(getServiceInformation());
 				Utils.stringBufferToFile(mappingFile, mappingOut);
 				setNextEnabled(true);
 				break;

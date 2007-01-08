@@ -72,7 +72,7 @@ public class DataServiceOperationProviderCodegenPostProcessor extends BaseCodege
 	private void rebuildCastorMappings(Data extensionData, ServiceInformation info) throws CodegenExtensionException {
 		// ensure the original castor mapping file from the client.jar
 		// has been extracted to the service's base directory
-		File mappingFile = new File(info.getBaseDirectory() + File.separator + DataServiceConstants.CACORE_CASTOR_MAPPING_FILE);
+		File mappingFile = new File(CastorMappingUtil.getCustomCastorMappingFileName(info));
 		if (!mappingFile.exists()) {
 			throw new CodegenExtensionException("Castor mapping file " + mappingFile.getAbsolutePath() + " not found");
 		}
@@ -103,23 +103,40 @@ public class DataServiceOperationProviderCodegenPostProcessor extends BaseCodege
 			throw new CodegenExtensionException("Error saving castor mapping to disk: " + ex.getMessage(), ex);
 		}
 		
-		// change the castor mapping property in the client-config.wsdd
-		// find the client source directory, where the config will be located
+		// change the castor mapping property in the client-config.wsdd and
+		// the server-config.wsdd files.
 		String mainServiceName = info.getIntroduceServiceProperties().getProperty(
 			IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
 		ServiceType mainService = CommonTools.getService(info.getServices(), mainServiceName);
 		String servicePackageName = mainService.getPackageName();
 		String packageDir = servicePackageName.replace('.', File.separatorChar);
+		// find the client source directory, where the client-config will be located
 		File clientConfigFile = new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "src" 
 			+ File.separator + packageDir + File.separator + "client" + File.separator + "client-config.wsdd");
 		if (!clientConfigFile.exists()) {
 			throw new CodegenExtensionException("Client config file " + clientConfigFile.getAbsolutePath() + " not found!");
 		}
+		// fine the server-config.wsdd, located in the service's root directory
+		File serverConfigFile = new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "server-config.wsdd");
+		if (!serverConfigFile.exists()) {
+			throw new CodegenExtensionException("Server config file " + serverConfigFile.getAbsolutePath() + " not found!");
+		}
+		
+		// edit the client file
 		try {
 			WsddUtil.setGlobalClientParameter(clientConfigFile.getAbsolutePath(), 
-				DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, DataServiceConstants.CACORE_CASTOR_MAPPING_FILE);
+				DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, 
+				CastorMappingUtil.getCustomCastorMappingName(info));
 		} catch (Exception ex) {
 			throw new CodegenExtensionException("Error setting castor mapping parameter in client-config.wsdd: " + ex.getMessage(), ex);
+		}
+		// edit the server file
+		try {
+			WsddUtil.setServiceParameter(serverConfigFile.getAbsolutePath(),
+				info.getServices().getService(0).getName(), DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER,
+				CastorMappingUtil.getCustomCastorMappingName(info));
+		} catch (Exception ex) {
+			throw new CodegenExtensionException("Error setting castor mapping parameter in server-config.wsdd: " + ex.getMessage(), ex);
 		}
 	}
 }
