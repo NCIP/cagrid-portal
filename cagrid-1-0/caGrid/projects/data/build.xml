@@ -347,7 +347,7 @@
 
 
     <!-- compiles the extension source code -->
-    <target name="compileExtension" depends="compileStubs, compileCommon, compileService, compileCql, compileValidation, compileUtils, generateJETClasses">
+    <target name="compileExtension" depends="generateJETClasses, compileStubs, compileCommon, compileService, compileCql, compileValidation, compileUtils">
         <javac srcdir="${extension.src.dir}" destdir="${build.extension.dest}" debug="${java.debug}" source="${java.source}">
             <classpath>
             	<path refid="base.classpath"/>
@@ -363,6 +363,7 @@
             </classpath>
         </javac>
     </target>
+	
 	
 	<!-- =================================================================== -->
 	<!--  Generate JET template classes                                      -->
