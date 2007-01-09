@@ -6,7 +6,7 @@ import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.extension.ServiceFeatures;
 import gov.nih.nci.cagrid.data.ui.cacore.AppserviceConfigPanel;
-import gov.nih.nci.cagrid.data.ui.cacore.ClientJarPanel;
+import gov.nih.nci.cagrid.data.ui.cacore.ClientJarSelectionPanel;
 import gov.nih.nci.cagrid.data.ui.cacore.CoreDsIntroPanel;
 import gov.nih.nci.cagrid.data.ui.cacore.DomainModelPanel;
 import gov.nih.nci.cagrid.data.ui.cacore.SchemaTypesPanel;
@@ -178,7 +178,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 						ServiceWizard wiz = new ServiceWizard(
 							PortalResourceManager.getInstance().getGridPortal(), "caCORE Data Source");
 						wiz.addWizardPanel(new CoreDsIntroPanel(getExtensionDescription(), getServiceInfo()));
-						wiz.addWizardPanel(new ClientJarPanel(getExtensionDescription(), getServiceInfo()));
+						wiz.addWizardPanel(new ClientJarSelectionPanel(getExtensionDescription(), getServiceInfo()));
 						wiz.addWizardPanel(new AppserviceConfigPanel(getExtensionDescription(), getServiceInfo()));
 						wiz.addWizardPanel(new DomainModelPanel(getExtensionDescription(), getServiceInfo()));
 						wiz.addWizardPanel(new SchemaTypesPanel(getExtensionDescription(), getServiceInfo()));
