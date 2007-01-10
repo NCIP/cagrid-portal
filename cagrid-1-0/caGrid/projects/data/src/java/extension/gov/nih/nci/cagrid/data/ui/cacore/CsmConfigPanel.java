@@ -1,20 +1,27 @@
 package gov.nih.nci.cagrid.data.ui.cacore;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,6 +45,8 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
 	public static final String USE_CSM_FLAG = "useCsmSecurity";
 	public static final String CSM_CONTEXT_NAME = "csmContextName";
+	// sdk 3.2 only
+	public static final String CSM_CONFIGURATION_FILENAME = "csmConfigurationFilename";
 	
 	public static final String PERFORMANCE_WARNING = 
 		"NOTE:\n" +
@@ -54,6 +63,11 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 	private JPanel configPanel = null;
 	private JTextArea performanceWarningTextArea = null;
 	private JScrollPane performanceWarningScrollPane = null;
+	private JLabel csmConfigLabel = null;
+	private JTextField csmConfigTextField = null;
+	private JButton csmConfigBrowseButton = null;
+	private JButton csmClearButtonButton = null;
+	private JPanel buttonPanel = null;
 
 	public CsmConfigPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
 		super(extensionDescription, info);
@@ -83,8 +97,7 @@ public class CsmConfigPanel extends AbstractWizardPanel {
         this.setSize(new java.awt.Dimension(622,132));
         this.add(getUseCsmCheckBox(), gridBagConstraints6);
         this.add(getConfigPanel(), gridBagConstraints7);
-        this.add(getPerformanceWarningScrollPane(), gridBagConstraints);
-		
+        this.add(getPerformanceWarningScrollPane(), gridBagConstraints);		
 	}
 	
 
@@ -104,6 +117,14 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 				getServiceInformation().getServiceDescriptor(),
 				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + APPLICATION_SERVICE_URL);
 			getUseAppserviceUrlCheckBox().setSelected(csmContextName.equals(appserviceUrl));
+			
+			// enable / disable the CSM config file based on SDK version (must be 3.2)
+			String sdkVersion = (String) getBitBucket().get(CoreDsIntroPanel.CACORE_VERSION_PROPERTY);
+			boolean isSdk32 = sdkVersion != null && sdkVersion.equals(CoreDsIntroPanel.CACORE_32_VERSION);
+			getCsmConfigLabel().setEnabled(isSdk32);
+			getCsmConfigTextField().setEnabled(isSdk32);
+			getCsmConfigBrowseButton().setEnabled(isSdk32);
+			getCsmClearButtonButton().setEnabled(isSdk32);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error loading data for CSM", ex);
@@ -210,6 +231,23 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 	 */
 	private JPanel getConfigPanel() {
 		if (configPanel == null) {
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 2;
+			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints8.gridy = 1;
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints4.gridy = 1;
+			gridBagConstraints4.weightx = 1.0;
+			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints4.gridx = 1;
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.gridx = 0;
+			gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints2.anchor = GridBagConstraints.WEST;
+			gridBagConstraints2.gridy = 1;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 2;
 			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -235,6 +273,9 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 			configPanel.add(getCsmContextLabel(), gridBagConstraints1);
 			configPanel.add(getCsmContextTextField(), gridBagConstraints3);
 			configPanel.add(getUseAppserviceUrlCheckBox(), gridBagConstraints5);
+			configPanel.add(getCsmConfigLabel(), gridBagConstraints2);
+			configPanel.add(getCsmConfigTextField(), gridBagConstraints4);
+			configPanel.add(getButtonPanel(), gridBagConstraints8);
 		}
 		return configPanel;
 	}
@@ -271,5 +312,117 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 			performanceWarningScrollPane.setViewportView(getPerformanceWarningTextArea());
 		}
 		return performanceWarningScrollPane;
+	}
+
+
+	/**
+	 * This method initializes csmConfigLabel	
+	 * 	
+	 * @return javax.swing.JLabel	
+	 */
+	private JLabel getCsmConfigLabel() {
+		if (csmConfigLabel == null) {
+			csmConfigLabel = new JLabel();
+			csmConfigLabel.setText("CSM Configuration File:");
+		}
+		return csmConfigLabel;
+	}
+
+
+	/**
+	 * This method initializes csmConfigTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCsmConfigTextField() {
+		if (csmConfigTextField == null) {
+			csmConfigTextField = new JTextField();
+			csmConfigTextField.setEditable(false);
+		}
+		return csmConfigTextField;
+	}
+
+
+	/**
+	 * This method initializes csmConfigBrowseButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getCsmConfigBrowseButton() {
+		if (csmConfigBrowseButton == null) {
+			csmConfigBrowseButton = new JButton();
+			csmConfigBrowseButton.setText("Browse");
+			csmConfigBrowseButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						String selection = ResourceManager.promptFile(null, FileFilters.XML_FILTER);
+						if (selection != null) {
+							// copy the file into the service
+							File inFile = new File(selection);
+							File outFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath()
+								+ File.separator + "etc" + File.separator + inFile.getName());
+							Utils.copyFile(inFile, outFile);
+							// set the CQL configuration property
+							CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
+								DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, 
+								inFile.getName(), true);
+							getCsmConfigTextField().setText(inFile.getName());
+						}
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						ErrorDialog.showErrorDialog("Error selecting configuration file", ex);
+					}
+				}
+			});
+		}
+		return csmConfigBrowseButton;
+	}
+
+
+	/**
+	 * This method initializes csmClearButtonButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getCsmClearButtonButton() {
+		if (csmClearButtonButton == null) {
+			csmClearButtonButton = new JButton();
+			csmClearButtonButton.setText("Clear");
+			csmClearButtonButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// delete the copy of the config file
+					File configFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath()
+						+ File.separator + "etc" + File.separator + getCsmConfigTextField().getText());
+					configFile.delete();
+					// "unset" the configuration property
+					CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
+						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, 
+						"", false);
+					// clean up the GUI
+					getCsmConfigTextField().setText("");					
+				}
+			});
+		}
+		return csmClearButtonButton;
+	}
+
+
+	/**
+	 * This method initializes buttonPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getButtonPanel() {
+		if (buttonPanel == null) {
+			GridLayout gridLayout = new GridLayout();
+			gridLayout.setRows(1);
+			gridLayout.setHgap(2);
+			gridLayout.setColumns(2);
+			buttonPanel = new JPanel();
+			buttonPanel.setLayout(gridLayout);
+			buttonPanel.add(getCsmConfigBrowseButton(), null);
+			buttonPanel.add(getCsmClearButtonButton(), null);
+		}
+		return buttonPanel;
 	}
 }

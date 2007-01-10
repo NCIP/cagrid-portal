@@ -1,13 +1,16 @@
 package gov.nih.nci.cagrid.data.ui.cacore;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.property.ServiceProperties;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 import java.awt.Dimension;
@@ -27,6 +30,10 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.JButton;
+import java.awt.GridLayout;
+import java.io.File;
+import java.io.IOException;
 
 /** 
  *  AppserviceConfigPanel
@@ -34,13 +41,15 @@ import javax.swing.event.DocumentListener;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 9, 2006 
- * @version $Id: AppserviceConfigPanel.java,v 1.4 2006-12-21 15:02:28 dervin Exp $ 
+ * @version $Id: AppserviceConfigPanel.java,v 1.5 2007-01-10 21:55:57 dervin Exp $ 
  */
 public class AppserviceConfigPanel extends AbstractWizardPanel {
 	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
 	public static final String CASE_INSENSITIVE_QUERYING = "queryCaseInsensitive";
 	public static final String USE_CSM_FLAG = "useCsmSecurity";
 	public static final String CSM_CONTEXT_NAME = "csmContextName";
+	// sdk 3.2 only
+	public static final String CSM_CONFIGURATION_FILENAME = "csmConfigurationFilename";
 	
 	public static final String PERFORMANCE_WARNING = 
 		"NOTE:\n" +
@@ -62,6 +71,11 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 	private JCheckBox caseInsensitiveCheckBox = null;
 	private JPanel appserviceConfigPanel = null;
 	private JPanel csmInfoPanel = null;
+	private JLabel csmConfigFileLabel = null;
+	private JTextField csmConfigurationFileTextField = null;
+	private JButton csmConfigurationBrowseButton = null;
+	private JButton csmConfigurationClearButton = null;
+	private JPanel configButtonPanel = null;
 
 	public AppserviceConfigPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
 		super(extensionDescription, info);
@@ -144,6 +158,16 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 			if (!csmFound) {
 				getUseCsmCheckBox().setSelected(false);
 				PortalUtils.setContainerEnabled(getCsmOptionsPanel(), false);
+			}
+			
+			if (getUseCsmCheckBox().isSelected()) {
+				// enable / disable the CSM config file based on SDK version (must be 3.2)
+				String sdkVersion = (String) getBitBucket().get(CoreDsIntroPanel.CACORE_VERSION_PROPERTY);
+				boolean isSdk32 = sdkVersion != null && sdkVersion.equals(CoreDsIntroPanel.CACORE_32_VERSION);
+				getCsmConfigFileLabel().setEnabled(isSdk32);
+				getCsmConfigurationFileTextField().setEnabled(isSdk32);
+				getCsmConfigurationBrowseButton().setEnabled(isSdk32);
+				getCsmConfigurationClearButton().setEnabled(isSdk32);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -303,6 +327,21 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 	 */
 	private JPanel getCsmOptionsPanel() {
 		if (csmOptionsPanel == null) {
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 2;
+			gridBagConstraints13.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints13.gridy = 1;
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints12.gridy = 1;
+			gridBagConstraints12.weightx = 1.0;
+			gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints12.gridx = 1;
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 0;
+			gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.gridy = 1;
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 2;
 			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -328,6 +367,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 			csmOptionsPanel.add(getCsmContextLabel(), gridBagConstraints1);
 			csmOptionsPanel.add(getCsmContextTextField(), gridBagConstraints3);
 			csmOptionsPanel.add(getUseAppserviceUrlCheckBox(), gridBagConstraints5);
+			csmOptionsPanel.add(getCsmConfigFileLabel(), gridBagConstraints11);
+			csmOptionsPanel.add(getCsmConfigurationFileTextField(), gridBagConstraints12);
+			csmOptionsPanel.add(getConfigButtonPanel(), gridBagConstraints13);
 		}
 		return csmOptionsPanel;
 	}
@@ -479,5 +521,115 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 			csmInfoPanel.add(getPerformanceWarningScrollPane(), gridBagConstraints8);
 		}
 		return csmInfoPanel;
+	}
+
+
+	/**
+	 * This method initializes csmConfigFileLabel	
+	 * 	
+	 * @return javax.swing.JLabel	
+	 */
+	private JLabel getCsmConfigFileLabel() {
+		if (csmConfigFileLabel == null) {
+			csmConfigFileLabel = new JLabel();
+			csmConfigFileLabel.setText("CSM Configuration File:");
+		}
+		return csmConfigFileLabel;
+	}
+
+
+	/**
+	 * This method initializes csmConfigurationFileTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getCsmConfigurationFileTextField() {
+		if (csmConfigurationFileTextField == null) {
+			csmConfigurationFileTextField = new JTextField();
+		}
+		return csmConfigurationFileTextField;
+	}
+
+
+	/**
+	 * This method initializes csmConfigurationBrowseButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getCsmConfigurationBrowseButton() {
+		if (csmConfigurationBrowseButton == null) {
+			csmConfigurationBrowseButton = new JButton();
+			csmConfigurationBrowseButton.setText("Browse");
+			csmConfigurationBrowseButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						String selection = ResourceManager.promptFile(null, FileFilters.XML_FILTER);
+						if (selection != null) {
+							// copy the file into the service
+							File inFile = new File(selection);
+							File outFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath()
+								+ File.separator + "etc" + File.separator + inFile.getName());
+							Utils.copyFile(inFile, outFile);
+							// set the CQL configuration property
+							CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
+								DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, 
+								inFile.getName(), true);
+							getCsmConfigurationFileTextField().setText(inFile.getName());
+						}
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						ErrorDialog.showErrorDialog("Error selecting configuration file", ex);
+					}
+				}
+			});
+		}
+		return csmConfigurationBrowseButton;
+	}
+
+
+	/**
+	 * This method initializes csmConfigurationClearButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getCsmConfigurationClearButton() {
+		if (csmConfigurationClearButton == null) {
+			csmConfigurationClearButton = new JButton();
+			csmConfigurationClearButton.setText("Clear");
+			csmConfigurationClearButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// delete the copy of the config file
+					File configFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath()
+						+ File.separator + "etc" + File.separator + getCsmConfigurationFileTextField().getText());
+					configFile.delete();
+					// "unset" the configuration property
+					CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
+						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, 
+						"", false);
+					// clean up the GUI
+					getCsmConfigurationFileTextField().setText("");
+				}
+			});
+		}
+		return csmConfigurationClearButton;
+	}
+
+
+	/**
+	 * This method initializes configButtonPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getConfigButtonPanel() {
+		if (configButtonPanel == null) {
+			GridLayout gridLayout = new GridLayout();
+			gridLayout.setRows(1);
+			gridLayout.setHgap(2);
+			configButtonPanel = new JPanel();
+			configButtonPanel.setLayout(gridLayout);
+			configButtonPanel.add(getCsmConfigurationBrowseButton(), null);
+			configButtonPanel.add(getCsmConfigurationClearButton(), null);
+		}
+		return configButtonPanel;
 	}
 }
