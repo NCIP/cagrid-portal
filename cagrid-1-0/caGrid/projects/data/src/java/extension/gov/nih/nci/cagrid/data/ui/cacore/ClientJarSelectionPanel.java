@@ -39,7 +39,7 @@ import javax.swing.ScrollPaneConstants;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Jan 8, 2007 
- * @version $Id: ClientJarSelectionPanel.java,v 1.1 2007-01-09 19:21:51 dervin Exp $ 
+ * @version $Id: ClientJarSelectionPanel.java,v 1.2 2007-01-10 17:58:54 dervin Exp $ 
  */
 public class ClientJarSelectionPanel extends AbstractWizardPanel {
 	
@@ -146,10 +146,22 @@ public class ClientJarSelectionPanel extends AbstractWizardPanel {
 		String clientJarName = getClientJarTextField().getText(); 
 		setNextEnabled(clientJarName != null && clientJarName.length() != 0);
 		// verify the sdk query library has been copied into the service
-		String sdkQueryLibName = new File(CoreDsIntroPanel.SDK_QUERY_LIB).getName();
-		File sdkQueryLib = new File(getServiceLibDir() + File.separator + sdkQueryLibName);
+		File sdkQueryLib = null;
+		String sdkVersion = (String) getBitBucket().get(CoreDsIntroPanel.CACORE_VERSION_PROPERTY);
+		if (sdkVersion != null) {
+			if (sdkVersion.equals(CoreDsIntroPanel.CACORE_31_VERSION)) {
+				String sdkQueryLibName = new File(CoreDsIntroPanel.SDK_31_QUERY_LIB).getName();
+				sdkQueryLib = new File(getServiceLibDir() + File.separator + sdkQueryLibName);
+			} else if (sdkVersion.equals(CoreDsIntroPanel.CACORE_32_VERSION)) {
+				String sdkQueryLibName = new File(CoreDsIntroPanel.SDK_32_QUERY_LIB).getName();
+				sdkQueryLib = new File(getServiceLibDir() + File.separator + sdkQueryLibName);
+			} else {
+				ErrorDialog.showErrorDialog("No SDK version could be determined!");
+			}
+		}
+		
 		if (sdkQueryLib.exists()) {
-			getQpJarTextField().setText(sdkQueryLibName);
+			getQpJarTextField().setText(sdkQueryLib.getName());
 		} else {
 			getQpJarTextField().setText("ERROR: LIBRARY NOT FOUND");
 		}
@@ -161,7 +173,7 @@ public class ClientJarSelectionPanel extends AbstractWizardPanel {
 				String[] jarNames = additionalLibs.getJarName();
 				Vector dependJars = new Vector();
 				for (int i = 0; i < jarNames.length; i++) {
-					if (!jarNames[i].equals(sdkQueryLibName) 
+					if (!jarNames[i].equals(sdkQueryLib.getName()) 
 						&& !jarNames[i].equals(getClientJarTextField().getText())) {
 						dependJars.add(jarNames[i]);
 					}
@@ -177,7 +189,7 @@ public class ClientJarSelectionPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes qpJarLabel	
+	 * This method initializes qpJarLabel
 	 * 	
 	 * @return javax.swing.JLabel	
 	 */
