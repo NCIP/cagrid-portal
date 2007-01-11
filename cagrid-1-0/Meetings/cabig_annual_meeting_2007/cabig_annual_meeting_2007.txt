@@ -21,7 +21,7 @@ Workflow Poster
 Testing Poster
 
 	Who: Patrick, TerpSys?, SemanticBits?
-	Draft: Yes
+	Draft: cagrid_testing_framework.ppt
 	Final: No
 
 caGrid 1.0 - Reference Implications - How we got on the Grid
