@@ -12,6 +12,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hibernate.QueryException;
+
 /** 
  *  SubclassCheckCache
  *  Checks that a given class has or does not have a class property in the
@@ -21,12 +23,15 @@ import java.util.Map;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 19, 2006 
- * @version $Id: SubclassCheckCache.java,v 1.1 2006-11-07 17:37:59 dervin Exp $ 
+ * @version $Id: SubclassCheckCache.java,v 1.2 2007-01-12 16:29:37 dervin Exp $ 
  */
 public class SubclassCheckCache {
-	public static final String CABIO_URL = "http://cabio.nci.nih.gov/cacore31/http/remoteService";
+	public static final String CABIO_URL = "http://cabio.nci.nih.gov/cacore32/http/remoteService";
+	public static final String KRAMER_URL = "http://kramer:8080/example/http/remoteService";
 	
-	public static final String CLASS_PROPERTY_NOT_FOUND_ERROR = "Exception Hibernate problem org.hibernate.QueryException: could not resolve property: class of";
+	public static final String CLASS_PROPERTY_NOT_FOUND_ERROR = "could not resolve property: class of: ";
+	
+	public static final int MAX_EXCEPTION_UNROLL = 7;// levels, causes to follow
 
 	private static Map cache = null;
 	
@@ -54,15 +59,14 @@ public class SubclassCheckCache {
 		}
 		Boolean flag = (Boolean) cache.get(className);
 		if (flag == null) {
-			String testHql = "From " + className + " as c where c.class = " + className + ")";
+			String testHql = "From " + className + " as c where c.class = " + className;
 			// try the query and catch application exceptions
 			try {
 				queryService.query(new HQLCriteria(testHql), className);
 				flag = Boolean.TRUE;
 			} catch (ApplicationException ex) {
 				// check the exception message for the magical words from Hibernate...
-				String message = ex.getMessage();
-				if (message.startsWith(CLASS_PROPERTY_NOT_FOUND_ERROR)) {
+				if (isClassPropertyNotFound(ex)) {
 					flag = Boolean.FALSE;
 				} else {
 					// uh oh... some other exception happened
@@ -72,6 +76,23 @@ public class SubclassCheckCache {
 			cache.put(className, flag);
 		}
 		return flag.booleanValue();
+	}
+	
+	
+	private static boolean isClassPropertyNotFound(ApplicationException ex) {
+		int currentLevel = 0;
+		Throwable exception = ex;
+		while (currentLevel < MAX_EXCEPTION_UNROLL && exception != null) {
+			if (exception instanceof QueryException) {
+				String message = exception.getMessage();
+				if (message.startsWith(CLASS_PROPERTY_NOT_FOUND_ERROR)) {
+					return true;
+				}
+			}
+			exception = exception.getCause();
+			currentLevel++;
+		}
+		return false;
 	}
 	
 	
