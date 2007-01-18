@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
@@ -21,6 +22,7 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -158,103 +160,120 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 
 
 	private void generateDomainModel(CadsrInformation cadsrInfo, ServiceInformation info, String domainModelFile) throws CodegenExtensionException {		
-		// init the cadsr service client
-		String cadsrUrl = cadsrInfo.getServiceUrl();
-		LOG.info("Initializing caDSR client (URL = " + cadsrUrl + ")");
-		System.out.println("Initializing caDSR client (URL = " + cadsrUrl + ")");
-		CaDSRServiceClient cadsrClient = null;
-		try {
-			cadsrClient = new CaDSRServiceClient(cadsrUrl);
-		} catch (Exception ex) {
-			throw new CodegenExtensionException("Error initializing caDSR client: " + ex.getMessage(), ex);
-		}
+		if (cadsrInfo != null) {
+			// init the cadsr service client
+			String cadsrUrl = cadsrInfo.getServiceUrl();
+			LOG.info("Initializing caDSR client (URL = " + cadsrUrl + ")");
+			CaDSRServiceClient cadsrClient = null;
+			try {
+				cadsrClient = new CaDSRServiceClient(cadsrUrl);
+			} catch (Exception ex) {
+				throw new CodegenExtensionException("Error initializing caDSR client: " + ex.getMessage(), ex);
+			}
 
-		// create the prototype project
-		Project proj = new Project();
-		proj.setLongName(cadsrInfo.getProjectLongName());
-		proj.setVersion(cadsrInfo.getProjectVersion());
+			// create the prototype project
+			Project proj = new Project();
+			proj.setLongName(cadsrInfo.getProjectLongName());
+			proj.setVersion(cadsrInfo.getProjectVersion());
 
-		// sets for holding all selected classes and associations
-		Set selectedClasses = new HashSet();
+			// Set of selected (fully qualified) class names
+			Set selectedClasses = new HashSet();
 
-		// walk through the selected packages
-		for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {
-			CadsrPackage packageInfo = cadsrInfo.getPackages(i);
-			String packName = packageInfo.getName();
-			// get selected classes from the package
-			if (packageInfo.getCadsrClass() != null) {
-				for (int j = 0; j < packageInfo.getCadsrClass().length; j++) {
-					selectedClasses.add(packName + "." + packageInfo.getCadsrClass(j).getClassName());
+			// Set of targetable class names
+			Set targetableClasses = new HashSet();
+
+			// walk through the selected packages
+			for (int i = 0; cadsrInfo.getPackages() != null && i < cadsrInfo.getPackages().length; i++) {
+				CadsrPackage packageInfo = cadsrInfo.getPackages(i);
+				String packName = packageInfo.getName();
+				// get selected classes from the package
+				if (packageInfo.getCadsrClass() != null) {
+					for (int j = 0; j < packageInfo.getCadsrClass().length; j++) {
+						ClassMapping currentClass = packageInfo.getCadsrClass(j);
+						if (currentClass.isSelected()) {
+							String fullClassName = packName + "." + currentClass.getClassName();
+							selectedClasses.add(fullClassName);
+							if (currentClass.isTargetable()) {
+								targetableClasses.add(fullClassName);
+							}
+						}
+					}
 				}
 			}
-		}
 
-		// get the data service's description
-		ServiceType dataService = null;
-		String serviceName = info.getIntroduceServiceProperties().getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-		ServiceType[] services = info.getServices().getService();
-		for (int i = 0; i < services.length; i++) {
-			if (services[i].getName().equals(serviceName)) {
-				dataService = services[i];
-				break;
+			// get the data service's description
+			ServiceType dataService = null;
+			String serviceName = info.getIntroduceServiceProperties().getProperty(
+				IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+			ServiceType[] services = info.getServices().getService();
+			for (int i = 0; i < services.length; i++) {
+				if (services[i].getName().equals(serviceName)) {
+					dataService = services[i];
+					break;
+				}
 			}
-		}
-		if (dataService == null) {
-			// this REALLY should never happen...
-			throw new CodegenExtensionException("No data service found in service information");
-		}
-
-		// build the domain model
-		LOG.info("Contacting caDSR to build domain model.  This might take a while...");
-		System.out.println("Contacting caDSR to build domain model.  This might take a while...");
-		DomainModel model = null;
-		try {
-			// TODO; change this to use EXCLUDED associations
-			String classNames[] = new String[selectedClasses.size()];
-			selectedClasses.toArray(classNames);
-			model = cadsrClient.generateDomainModelForClasses(proj, classNames);
-			if (model == null) {
-				throw new CodegenExtensionException("caDSR returned a null domain model.");
+			if (dataService == null) {
+				// this REALLY should never happen...
+				throw new CodegenExtensionException("No data service found in service information");
 			}
-			System.out.println("Created data service Domain Model!");
-			LOG.info("Created data service Domain Model!");
-		} catch (Exception ex) {
-			throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(), ex);
-		}
 
-		LOG.debug("Serializing domain model to file " + domainModelFile);
-		try {
-			FileWriter domainModelFileWriter = new FileWriter(domainModelFile);
-			MetadataUtils.serializeDomainModel(model, domainModelFileWriter);
-			domainModelFileWriter.flush();
-			domainModelFileWriter.close();
-			LOG.debug("Serialized domain model");
-		} catch (Exception ex) {
-			throw new CodegenExtensionException("Error serializing the domain model to disk: " 
-				+ ex.getMessage(), ex);
-		}
+			// build the domain model
+			LOG.info("Contacting caDSR to build domain model.  This might take a while...");
+			System.out.println("Contacting caDSR to build domain model.  This might take a while...");
+			DomainModel model = null;
+			try {
+				String classNames[] = new String[selectedClasses.size()];
+				selectedClasses.toArray(classNames);
+				model = cadsrClient.generateDomainModelForClasses(proj, classNames);
+				if (model == null) {
+					throw new CodegenExtensionException("caDSR returned a null domain model.");
+				}
+				LOG.info("Setting targetability in the domain model");
+				System.out.println("Setting targetability in the domain model");
+				UMLClass[] exposedClasses = model.getExposedUMLClassCollection().getUMLClass();
+				for (int i = 0; exposedClasses != null && i < exposedClasses.length; i++) {
+					String fullClassName = exposedClasses[i].getPackageName() + "." + exposedClasses[i].getClassName();
+					exposedClasses[i].setAllowableAsTarget(targetableClasses.contains(fullClassName));
+				}
+				System.out.println("Created data service Domain Model!");
+				LOG.info("Created data service Domain Model!");
+			} catch (Exception ex) {
+				throw new CodegenExtensionException("Error connecting to caDSR for metadata: " + ex.getMessage(), ex);
+			}
 
-		// add the metadata to the service information as a resource property
-		ResourcePropertyType domainModelResourceProperty = new ResourcePropertyType();
-		domainModelResourceProperty.setPopulateFromFile(true);
-		domainModelResourceProperty.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
-		domainModelResourceProperty.setRegister(true);
-		ResourcePropertiesListType propertyList = dataService.getResourcePropertiesList();
-		if (propertyList == null) {
-			propertyList = new ResourcePropertiesListType();
+			LOG.debug("Serializing domain model to file " + domainModelFile);
+			try {
+				FileWriter domainModelFileWriter = new FileWriter(domainModelFile);
+				MetadataUtils.serializeDomainModel(model, domainModelFileWriter);
+				domainModelFileWriter.flush();
+				domainModelFileWriter.close();
+				LOG.debug("Serialized domain model");
+			} catch (Exception ex) {
+				throw new CodegenExtensionException("Error serializing the domain model to disk: " 
+					+ ex.getMessage(), ex);
+			}
+
+			// add the metadata to the service information as a resource property
+			ResourcePropertyType domainModelResourceProperty = new ResourcePropertyType();
+			domainModelResourceProperty.setPopulateFromFile(true);
+			domainModelResourceProperty.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
+			domainModelResourceProperty.setRegister(true);
+			ResourcePropertiesListType propertyList = dataService.getResourcePropertiesList();
+			if (propertyList == null) {
+				propertyList = new ResourcePropertiesListType();
+			}
+			ResourcePropertyType[] propertyArray = propertyList.getResourceProperty();
+			if (propertyArray == null) {
+				propertyArray = new ResourcePropertyType[]{domainModelResourceProperty};
+			} else {
+				ResourcePropertyType[] newProperties = new ResourcePropertyType[propertyArray.length];
+				System.arraycopy(propertyArray, 0, newProperties, 0, propertyArray.length);
+				propertyArray = newProperties;
+			}
+			// start packing up the resource property info
+			propertyList.setResourceProperty(propertyArray);
+			dataService.setResourcePropertiesList(propertyList);
 		}
-		ResourcePropertyType[] propertyArray = propertyList.getResourceProperty();
-		if (propertyArray == null) {
-			propertyArray = new ResourcePropertyType[]{domainModelResourceProperty};
-		} else {
-			ResourcePropertyType[] newProperties = new ResourcePropertyType[propertyArray.length];
-			System.arraycopy(propertyArray, 0, newProperties, 0, propertyArray.length);
-			propertyArray = newProperties;
-		}
-		// start packing up the resource property info
-		propertyList.setResourceProperty(propertyArray);
-		dataService.setResourcePropertiesList(propertyList);
 	}
 	
 	
