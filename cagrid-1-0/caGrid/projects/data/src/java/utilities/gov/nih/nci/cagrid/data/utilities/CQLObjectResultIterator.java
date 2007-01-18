@@ -40,7 +40,7 @@ public class CQLObjectResultIterator implements Iterator {
 	private MessageContext messageContext;
 	
 	CQLObjectResultIterator(CQLObjectResult[] results, String targetName, 
-		boolean xmlOnly, InputStream wsdd) throws ClassNotFoundException {
+		boolean xmlOnly, InputStream wsdd) {
 		this.targetClassName = targetName;
 		this.results = results;
 		this.currentIndex = -1;
@@ -79,8 +79,8 @@ public class CQLObjectResultIterator implements Iterator {
 			return desContext.getValue();
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			throw new RuntimeException(ex);
 		}
-		return null;
 	}
 	
 	

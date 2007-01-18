@@ -97,14 +97,9 @@ public class CQLQueryResultsIterator implements Iterator {
 	private Iterator getIterator() {
 		if (resultIterator == null) {
 			if (results.getObjectResult() != null && results.getObjectResult().length != 0) {
-				try {
-					resultIterator = new CQLObjectResultIterator(
-						results.getObjectResult(), results.getTargetClassname(), 
-						xmlOnly, findConfigWsdd());
-				} catch (ClassNotFoundException ex) {
-					resultIterator = new NullIterator(ex.getMessage());
-					ex.printStackTrace();
-				}
+				resultIterator = new CQLObjectResultIterator(
+					results.getObjectResult(), results.getTargetClassname(), 
+					xmlOnly, findConfigWsdd());
 			} else if (results.getAttributeResult() != null && results.getAttributeResult().length != 0) {
 				resultIterator = new CQLAttributeResultIterator(results.getAttributeResult());
 			} else if (results.getIdentifierResult() != null && results.getIdentifierResult().length != 0) {
