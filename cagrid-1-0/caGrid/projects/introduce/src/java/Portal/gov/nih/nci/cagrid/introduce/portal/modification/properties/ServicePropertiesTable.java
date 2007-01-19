@@ -96,7 +96,6 @@ public class ServicePropertiesTable extends PortalBaseTable {
 				setSelectedRow(i);
 			}
 		}
-
 	}
 
 
@@ -124,7 +123,7 @@ public class ServicePropertiesTable extends PortalBaseTable {
 		}
 		int oldSelectedRow = getSelectedRow();
 		// remove the row from the model
-		String removeKey = info.getServiceProperties().getProperty(oldSelectedRow).getKey();
+		String removeKey = (String) getValueAt(oldSelectedRow, 0);
 		CommonTools.removeServiceProperty(info.getServiceDescriptor(), removeKey);
 
 		// update GUI
