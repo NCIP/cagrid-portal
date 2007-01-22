@@ -95,7 +95,7 @@ public class CastorMappingUtil {
 	public static String getCustomCastorMappingName(ServiceInformation serviceInfo) {
 		String mappingName = serviceInfo.getServices().getService(0)
 				.getPackageName().replace('.', '/')
-			+ File.separator + serviceInfo.getServices().getService(0).getName() 
+			+ '/' + serviceInfo.getServices().getService(0).getName() 
 			+ "-" + DataServiceConstants.CACORE_CASTOR_MAPPING_FILE;
 		return mappingName;
 	}
