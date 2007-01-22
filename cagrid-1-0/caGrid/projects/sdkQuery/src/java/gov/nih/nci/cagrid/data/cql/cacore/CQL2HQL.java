@@ -10,8 +10,7 @@ import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.cqlquery.QueryModifier;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 
-import java.text.DateFormat;
-import java.text.ParseException;
+import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -258,13 +257,25 @@ public class CQL2HQL {
 	 */
 	private static void processAttribute(StringBuilder hql, String objClassName,
 		Attribute attrib, boolean useAlias, boolean caseInsensitive) throws QueryProcessingException {
+		// get the field for the attribute
+		Field attribField = null;
+		try {
+			Class objClass = Class.forName(objClassName);
+			attribField = ClassAccessUtilities.getNamedField(objClass, attrib.getName());
+		} catch (ClassNotFoundException ex) {
+			throw new QueryProcessingException("Object class " + objClassName + "was not found", ex);
+		}
 		// data type flags
-		boolean isBoolAttribute = BooleanAttributeCheckCache.isFieldBoolean(objClassName, attrib.getName());
-		boolean isDateAttribute = DateAttributeCheckCache.isFieldDate(objClassName, attrib.getName());
+		int typeFlag = AttributeTypeDetector.determineType(attribField);
+		if (typeFlag == AttributeTypeDetector.UNKNOWN_TYPE) {
+			throw new QueryProcessingException("Unable to determine type of attribute " + attrib.getName() + " of class " + objClassName);
+		}
 		
-		boolean useLowercase = caseInsensitive && !isBoolAttribute && !isDateAttribute; 
+		boolean useLowercase = caseInsensitive 
+			&& typeFlag != AttributeTypeDetector.BOOLEAN_TYPE 
+			&& typeFlag != AttributeTypeDetector.DATE_TYPE; 
 		
-		String fullAttribName = null;
+		String fullAttribName = attrib.getName();
 		if (useAlias) {
 			fullAttribName = TARGET_ALIAS + "." + attrib.getName();
 		}
@@ -272,8 +283,8 @@ public class CQL2HQL {
 		Predicate predicate = attrib.getPredicate();
 		boolean nullCheck = predicate.equals(Predicate.IS_NULL) || predicate.equals(Predicate.IS_NOT_NULL);
 				
-		if (isDateAttribute && !nullCheck) {
-			String dateQueryString = createDateQuery(fullAttribName, attrib.getValue(), predicate);
+		if (typeFlag == AttributeTypeDetector.DATE_TYPE && !nullCheck) {
+			String dateQueryString = createDateQuery(fullAttribName, attrib.getValue().toString(), predicate);
 			hql.append(dateQueryString);
 		} else {
 			String predicateString = convertPredicate(predicate);
@@ -289,17 +300,17 @@ public class CQL2HQL {
 			// unary predicates
 			if (!nullCheck) {
 				// binary predicates
-				if (caseInsensitive && !isBoolAttribute) {
+				if (caseInsensitive && typeFlag != AttributeTypeDetector.BOOLEAN_TYPE) {
 					hql.append("lower(");
 				}
-				if (!isBoolAttribute) {
+				if (typeFlag != AttributeTypeDetector.BOOLEAN_TYPE) {
 					hql.append("'");
 				}
 				hql.append(attrib.getValue());
-				if (!isBoolAttribute) {
+				if (typeFlag != AttributeTypeDetector.BOOLEAN_TYPE) {
 					hql.append("'");
 				}
-				if (caseInsensitive && !isBoolAttribute) {
+				if (caseInsensitive && typeFlag != AttributeTypeDetector.BOOLEAN_TYPE) {
 					hql.append(")");
 				}
 			}
@@ -446,7 +457,13 @@ public class CQL2HQL {
 	}
 	
 	
-	private static String createDateQuery(String fullAttributeName, String dateValue, Predicate predicate) throws QueryProcessingException {
+	private static String createDateQuery(String fullAttributeName, String dateString, Predicate predicate) throws QueryProcessingException {
+		Date dateValue = null;
+		try {
+			dateValue = java.text.DateFormat.getDateTimeInstance().parse(dateString);
+		} catch (Exception ex) {
+			throw new QueryProcessingException("Error parsing date " + dateString + ": " + ex.getMessage(), ex);
+		}
 		if (predicate.equals(Predicate.LIKE)) {
 			throw new QueryProcessingException("Predicate " + Predicate.LIKE.toString() + " is not valid for Date attribute types!");
 		}
@@ -464,17 +481,8 @@ public class CQL2HQL {
 		}
 		StringBuilder dateQuery = new StringBuilder();
 		// parse the date value into a Java Date object
-		Date date = null;
-		Calendar cal = null;
-		try {
-			date = DateFormat.getDateInstance().parse(dateValue);
-		} catch (ParseException ex) {
-			throw new QueryProcessingException("Date Value " + dateValue 
-				+ " could not be parsed as a date: " + ex.getMessage(), ex);
-		}
-		
-		cal = Calendar.getInstance();
-		cal.setTime(date);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dateValue);
 		dateQuery.append("(");
 		// break down each part of the date and query for it with the prefix
 		dateQuery.append("year(").append(fullAttributeName).append(") ").append(highPredicate)
