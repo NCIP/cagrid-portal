@@ -1,8 +1,5 @@
 package gov.nih.nci.cagrid.data.cql.cacore;
 
-import gov.nih.nci.cabio.domain.Gene;
-import gov.nih.nci.cadsr.domain.Address;
-import gov.nih.nci.cadsr.domain.ValueDomain;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationException;
@@ -72,17 +69,5 @@ public class SubclassCheckCache {
 			cache.put(className, flag);
 		}
 		return flag.booleanValue();
-	}
-	
-	
-	public static void main(String[] args) {
-		ApplicationService service = ApplicationService.getRemoteInstance(CABIO_URL);
-		try {
-			System.out.println(Gene.class.getName() + ": " + hasClassProperty(Gene.class.getName(), service));
-			System.out.println(ValueDomain.class.getName() + ": " + hasClassProperty(ValueDomain.class.getName(), service));
-			System.out.println(Address.class.getName() + ": " + hasClassProperty(Address.class.getName(), service));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
 	}
 }
