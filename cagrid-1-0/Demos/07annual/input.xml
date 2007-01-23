@@ -6,7 +6,7 @@
    xsi:schemaLocation="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery
 http://cagrid-portal.nci.nih.gov:8080/wsrf/share/schema/CaArraySvc/xsd/Data/1_gov.nih.nci.cagrid.CQLQuery.xsd">
  <ns2:Target name="gov.nih.nci.mageom.domain.Experiment.Experiment">
- <ns2:Attribute name="identifier" value="gov.nih.nci.ncicb.caarray:Experiment:1015897558050098:1" predicate="EQUAL_TO"/>
+ <ns2:Attribute name="identifier" value="gov.nih.nci.ncicb.caarray:Experiment:1015897536136716:1" predicate="EQUAL_TO"/>
 </ns2:Target>
 
 </ns2:CQLQuery>

@@ -41,7 +41,7 @@ public class AnnualDemoClient {
 		input.setWorkflowName("AnnualDemo07");
 		WSDLReferences[] wsdlRefArray = new WSDLReferences[3];
 		wsdlRefArray[0] = new WSDLReferences();
-		wsdlRefArray[0].setServiceUrl(new URI("http://annualdemo.cagrid.nci.nih.gov/bpel"));
+		wsdlRefArray[0].setServiceUrl(new URI("http://cagrid-portal.nci.nih.gov:8080/wsrf/services/cagrid/CaArraySvc"));
 		wsdlRefArray[0].setWsdlLocation("http://spirulina.ci.uchicago.edu:8080/wsrf/AnnualDemo07.wsdl");
 		wsdlRefArray[0].setWsdlNamespace(new URI("http://annualdemo.cagrid.nci.nih.gov/bpel"));
 		wsdlRefArray[1] = new WSDLReferences();
@@ -75,7 +75,7 @@ public class AnnualDemoClient {
 		inputArgs.set_any(new MessageElement[] {anyContent});
 		startInput.setInputArgs(inputArgs);
 		WorkflowStatusType status = this.serviceClient.start(startInput);
-		status = this.serviceClient.getStatus();
+		//status = this.serviceClient.getStatus();
 		System.out.println(status.getValue());
 	}
 	/**
