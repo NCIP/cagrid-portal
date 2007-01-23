@@ -65,7 +65,7 @@ public class UserManager extends LoggingObject {
 					.setFaultString("Unacceptable password, the length of the password must be between "
 							+ conf.getMinimumPasswordLength()
 							+ " and "
-							+ conf.getMaximumPasswordLength());
+							+ conf.getMaximumPasswordLength()+" characters.");
 			throw fault;
 		}
 	}
@@ -79,7 +79,7 @@ public class UserManager extends LoggingObject {
 					.setFaultString("Unacceptable User ID, the length of the user id must be between "
 							+ conf.getMinimumUIDLength()
 							+ " and "
-							+ conf.getMaximumUIDLength());
+							+ conf.getMaximumUIDLength()+" characters.");
 			throw fault;
 		}
 	}
