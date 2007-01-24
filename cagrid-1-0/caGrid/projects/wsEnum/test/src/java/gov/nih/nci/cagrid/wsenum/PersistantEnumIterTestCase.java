@@ -95,7 +95,7 @@ public class PersistantEnumIterTestCase extends TestCase {
 			enumIterator.next(new IterationConstraints());
 			fail("Enumeration released, but did not throw exception on next() call");
 		} catch (Exception ex) {
-			assertTrue("Enumeration released, threw " + NoSuchElementException.class.getName(), 
+			assertTrue("Enumeration released, threw " + NoSuchElementException.class.getName() + " on next()", 
 				ex instanceof NoSuchElementException);
 			enumIterator = null;
 		}
@@ -201,6 +201,7 @@ public class PersistantEnumIterTestCase extends TestCase {
 		SOAPElement[] rawResults = result.getItems();
 		assertTrue("Enumeration returned results", rawResults != null);
 		assertFalse("Enumeration returned all results", rawResults.length == objectList.size());
+		assertTrue("Enumeration returned only one result", rawResults.length == 1);
 	}
 	
 	

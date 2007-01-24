@@ -88,7 +88,7 @@ public class SimpleEnumIterTestCase extends TestCase {
 			enumIterator.next(new IterationConstraints());
 			fail("Enumeration released, but did not throw exception on next() call");
 		} catch (Exception ex) {
-			assertTrue("Enumeration released, threw " + NoSuchElementException.class.getName(), 
+			assertTrue("Enumeration released, threw " + NoSuchElementException.class.getName() + " on next()", 
 				ex instanceof NoSuchElementException);
 		}
 	}
