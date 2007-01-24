@@ -39,7 +39,7 @@ public class AnnualDemoClient {
 		String bpelProcess = Utils.fileToStringBuffer(new File(bpelFile)).toString();
 		input.setBpelDoc(bpelProcess);
 		input.setWorkflowName("AnnualDemo07");
-		WSDLReferences[] wsdlRefArray = new WSDLReferences[3];
+		WSDLReferences[] wsdlRefArray = new WSDLReferences[4];
 		wsdlRefArray[0] = new WSDLReferences();
 		wsdlRefArray[0].setServiceUrl(new URI("http://cagrid-portal.nci.nih.gov:8080/wsrf/services/cagrid/CaArraySvc"));
 		wsdlRefArray[0].setWsdlLocation("http://spirulina.ci.uchicago.edu:8080/wsrf/AnnualDemo07.wsdl");
@@ -52,6 +52,10 @@ public class AnnualDemoClient {
 		wsdlRefArray[2].setServiceUrl(new URI("http://cagrid-portal.nci.nih.gov:8080/wsrf/services/cagrid/CaArraySvc"));
 		wsdlRefArray[2].setWsdlLocation("http://cagrid-portal.nci.nih.gov:8080/wsrf/share/schema/CaArraySvc/DataService.wsdl");
 		wsdlRefArray[2].setWsdlNamespace(new URI("http://gov.nih.nci.cagrid.data/DataService"));
+		wsdlRefArray[3] = new WSDLReferences();
+		wsdlRefArray[3].setServiceUrl(new URI("http://spirulina.ci.uchicago.edu:8080/wsrf/services/cagrid/MageTranslationServices"));
+		wsdlRefArray[3].setWsdlLocation("http://spirulina.ci.uchicago.edu:8080/wsrf/share/schema/MageTranslationServices/MageTranslationServices.wsdl");
+		wsdlRefArray[3].setWsdlNamespace(new URI("http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices"));
 		input.setWsdlReferences(wsdlRefArray);
 		return input;
 	}
