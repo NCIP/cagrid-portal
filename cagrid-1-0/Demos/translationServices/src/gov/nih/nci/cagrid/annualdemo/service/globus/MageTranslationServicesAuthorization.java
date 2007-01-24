@@ -30,17 +30,12 @@ public class MageTranslationServicesAuthorization{
 	}
 	
 					
-	public static void authorizeMageToStatML() throws RemoteException {
-		
-		
-	}
-					
 	public static void authorizeMageToMicroArray() throws RemoteException {
 		
 		
 	}
 					
-	public static void authorizeMageToMage() throws RemoteException {
+	public static void authorizeMageToStatML() throws RemoteException {
 		
 		
 	}

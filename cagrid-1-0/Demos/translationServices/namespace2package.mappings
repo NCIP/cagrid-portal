@@ -3,5 +3,10 @@ http\://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/bindings=gov.nih.n
 http\://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/service=gov.nih.nci.cagrid.annualdemo.stubs.service
 http\://security.introduce.cagrid.nci.nih.gov/ServiceSecurity=gov.nih.nci.cagrid.introduce.security.stubs
 
+http\://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery=gov.nih.nci.cagrid.cqlquery
+gme\://GenePattern.caBIG/1/gridExtensions=gridextensions
+gme\://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray=edu.columbia.geworkbench.cagrid.microarray
+http\://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet=gov.nih.nci.cagrid.cqlresultset
 http\://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/types=gov.nih.nci.cagrid.annualdemo.stubs.types
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.metadata.security
+gme\://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.som=edu.columbia.geworkbench.cagrid.cluster.som

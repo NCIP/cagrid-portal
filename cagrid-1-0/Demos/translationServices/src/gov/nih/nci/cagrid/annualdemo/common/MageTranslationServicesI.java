@@ -14,11 +14,9 @@ public interface MageTranslationServicesI {
 
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 
-    public void mageToStatML() throws RemoteException ;
+    public edu.columbia.geworkbench.cagrid.microarray.MicroarraySet mageToMicroArray(gov.nih.nci.cagrid.cqlresultset.CQLQueryResults cQLQueryResultCollection) throws RemoteException ;
 
-    public void mageToMicroArray() throws RemoteException ;
-
-    public void mageToMage() throws RemoteException ;
+    public gridextensions.Data mageToStatML(gov.nih.nci.cagrid.cqlresultset.CQLQueryResults cQLQueryResultCollection) throws RemoteException ;
 
 }
 

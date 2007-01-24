@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns0="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/types" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" name="MageTranslationServices" targetNamespace="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns3="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" xmlns:ns2="gme://GenePattern.caBIG/1/gridExtensions" xmlns:ns1="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray" xmlns:ns4="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" xmlns:ns5="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/types" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns0="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.som" name="MageTranslationServices" targetNamespace="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <import namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" location="./ServiceSecurity.wsdl" />
@@ -11,36 +11,51 @@
   <types>
     <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
+      <import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" schemaLocation="./CQL.caBIG-1_gov.nih.nci.cagrid.CQLQuery.xsd" />
+      <import namespace="gme://GenePattern.caBIG/1/gridExtensions" schemaLocation="./GenePattern.caBIG-1_gridExtensions.xsd" />
+      <import namespace="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray" schemaLocation="./cagrid.geworkbench.columbia.edu-1_edu.columbia.geworkbench.cagrid.microarray.xsd" />
+      <import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" schemaLocation="./CQL.caBIG-1_gov.nih.nci.cagrid.CQLResultSet.xsd" />
       <import namespace="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/types" schemaLocation="./MageTranslationServicesTypes.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/security.xsd" />
-      <element name="MageToStatMLRequest">
-        <complexType>
-          <sequence />
-        </complexType>
-      </element>
-      <element name="MageToStatMLResponse">
-        <complexType>
-          <sequence />
-        </complexType>
-      </element>
+      <import namespace="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.som" schemaLocation="./cagrid.geworkbench.columbia.edu-1_edu.columbia.geworkbench.cagrid.cluster.som.xsd" />
       <element name="MageToMicroArrayRequest">
         <complexType>
-          <sequence />
+          <sequence>
+            <element name="cQLQueryResultCollection">
+              <complexType>
+                <sequence>
+                  <element ref="ns4:CQLQueryResultCollection" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
         </complexType>
       </element>
       <element name="MageToMicroArrayResponse">
         <complexType>
-          <sequence />
+          <sequence>
+            <element ref="ns1:MicroarraySet" minOccurs="1" maxOccurs="1" />
+          </sequence>
         </complexType>
       </element>
-      <element name="MageToMageRequest">
+      <element name="MageToStatMLRequest">
         <complexType>
-          <sequence />
+          <sequence>
+            <element name="cQLQueryResultCollection">
+              <complexType>
+                <sequence>
+                  <element ref="ns4:CQLQueryResultCollection" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
         </complexType>
       </element>
-      <element name="MageToMageResponse">
+      <element name="MageToStatMLResponse">
         <complexType>
-          <sequence />
+          <sequence>
+            <element ref="ns2:Data" minOccurs="1" maxOccurs="1" />
+          </sequence>
         </complexType>
       </element>
       <element name="MageTranslationServicesResourceProperties">
@@ -51,23 +66,17 @@
     </schema>
   </types>
   <!--  place service messages here -->
-  <message name="MageToStatMLRequest">
-    <part name="parameters" element="tns:MageToStatMLRequest" />
-  </message>
-  <message name="MageToStatMLResponse">
-    <part name="parameters" element="tns:MageToStatMLResponse" />
-  </message>
   <message name="MageToMicroArrayRequest">
     <part name="parameters" element="tns:MageToMicroArrayRequest" />
   </message>
   <message name="MageToMicroArrayResponse">
     <part name="parameters" element="tns:MageToMicroArrayResponse" />
   </message>
-  <message name="MageToMageRequest">
-    <part name="parameters" element="tns:MageToMageRequest" />
+  <message name="MageToStatMLRequest">
+    <part name="parameters" element="tns:MageToStatMLRequest" />
   </message>
-  <message name="MageToMageResponse">
-    <part name="parameters" element="tns:MageToMageResponse" />
+  <message name="MageToStatMLResponse">
+    <part name="parameters" element="tns:MageToStatMLResponse" />
   </message>
   <!--============================================================
 
@@ -75,17 +84,13 @@
                       
   ============================================================-->
   <portType name="MageTranslationServicesPortType" wsrp:ResourceProperties="tns:MageTranslationServicesResourceProperties">
-    <operation name="mageToStatML">
-      <input message="tns:MageToStatMLRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToStatMLRequest" />
-      <output message="tns:MageToStatMLResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToStatMLResponse" />
-    </operation>
     <operation name="mageToMicroArray">
       <input message="tns:MageToMicroArrayRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToMicroArrayRequest" />
       <output message="tns:MageToMicroArrayResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToMicroArrayResponse" />
     </operation>
-    <operation name="mageToMage">
-      <input message="tns:MageToMageRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToMageRequest" />
-      <output message="tns:MageToMageResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToMageResponse" />
+    <operation name="mageToStatML">
+      <input message="tns:MageToStatMLRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToStatMLRequest" />
+      <output message="tns:MageToStatMLResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToStatMLResponse" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

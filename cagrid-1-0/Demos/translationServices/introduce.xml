@@ -1,5 +1,57 @@
 <ns1:ServiceDescription introduceVersion="1.0" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace location="./cagrid.geworkbench.columbia.edu-1_edu.columbia.geworkbench.cagrid.cluster.som.xsd" namespace="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.som" packageName="edu.columbia.geworkbench.cagrid.cluster.som" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="SomClusteringParameter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SomCluster" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./cagrid.geworkbench.columbia.edu-1_edu.columbia.geworkbench.cagrid.microarray.xsd" namespace="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray" packageName="edu.columbia.geworkbench.cagrid.microarray" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="MicroarraySet" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Microarray" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Marker" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./GenePattern.caBIG-1_gridExtensions.xsd" namespace="gme://GenePattern.caBIG/1/gridExtensions" packageName="gridextensions" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="ClassMembership" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ConsensusMatrix" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ComparativeMarkerSelectionResultCollection" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ComparativeMarkerSelectionService" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ConsensusClusteringParameterSet" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Cluster" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="PreprocessDatasetParameterSet" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ConsensusClusterResultCollection" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="MarkerResult" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ConsensusMatrixRow" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ComparativeMarkerSelectionParameterSet" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Describable" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Identifiable" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Extendable" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BioAssay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DerivedBioAssay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="PhysicalBioAssay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="MeasuredBioAssay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BioDataCube" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="QuantitationTypeDimension" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BioDataValues" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="MeasuredBioAssayData" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DerivedBioAssayData" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BioAssayData" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BioAssayDimension" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ReporterDimension" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DesignElementDimension" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DesignElement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Reporter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="QuantitationType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Array" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Null" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="List" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Data" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Scalar" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./CQL.caBIG-1_gov.nih.nci.cagrid.CQLQuery.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" packageName="gov.nih.nci.cagrid.cqlquery" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="CQLQuery" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./CQL.caBIG-1_gov.nih.nci.cagrid.CQLResultSet.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" packageName="gov.nih.nci.cagrid.cqlresultset" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="CQLQueryResultCollection" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
@@ -70,24 +122,23 @@
      <ns4:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
      <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
     </ns4:Method>
-    <ns4:Method isImported="false" isProvided="false" name="mageToStatML" xsi:type="ns4:MethodType">
-     <ns4:Inputs/>
-     <ns4:Output qName="void" isArray="false"/>
-     <ns4:Exceptions/>
-    </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="mageToMicroArray" xsi:type="ns4:MethodType">
-     <ns4:Inputs/>
-     <ns4:Output qName="void" isArray="false"/>
+     <ns4:Inputs>
+      <ns4:Input qName="ns6:CQLQueryResultCollection" isArray="false" name="cQLQueryResultCollection" xmlns:ns6="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns7:MicroarraySet" isArray="false" xmlns:ns7="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray"/>
      <ns4:Exceptions/>
     </ns4:Method>
-    <ns4:Method isImported="false" isProvided="false" name="mageToMage" xsi:type="ns4:MethodType">
-     <ns4:Inputs/>
-     <ns4:Output qName="void" isArray="false"/>
+    <ns4:Method isImported="false" isProvided="false" name="mageToStatML" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns8:CQLQueryResultCollection" isArray="false" name="cQLQueryResultCollection" xmlns:ns8="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns9:Data" isArray="false" xmlns:ns9="gme://GenePattern.caBIG/1/gridExtensions"/>
      <ns4:Exceptions/>
     </ns4:Method>
    </ns4:Methods>
-   <ns6:ResourcePropertiesList xsi:type="ns6:ResourcePropertiesListType" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns10:ResourcePropertiesList xsi:type="ns10:ResourcePropertiesListType" xmlns:ns10="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
   </ns3:Service>
  </ns3:Services>
- <ns7:Extensions xsi:type="ns7:ExtensionsType" xmlns:ns7="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns11:Extensions xsi:type="ns11:ExtensionsType" xmlns:ns11="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
 </ns1:ServiceDescription>

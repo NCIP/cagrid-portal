@@ -26,24 +26,17 @@ public class MageTranslationServicesProviderImpl{
 	}
 	
 
-	public gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLResponse mageToStatML(gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLRequest params) throws RemoteException {
-		MageTranslationServicesAuthorization.authorizeMageToStatML();
-		gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLResponse();
-		impl.mageToStatML();
-		return boxedResult;
-	}
-
 	public gov.nih.nci.cagrid.annualdemo.stubs.MageToMicroArrayResponse mageToMicroArray(gov.nih.nci.cagrid.annualdemo.stubs.MageToMicroArrayRequest params) throws RemoteException {
 		MageTranslationServicesAuthorization.authorizeMageToMicroArray();
 		gov.nih.nci.cagrid.annualdemo.stubs.MageToMicroArrayResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.MageToMicroArrayResponse();
-		impl.mageToMicroArray();
+		boxedResult.setMicroarraySet(impl.mageToMicroArray(params.getCQLQueryResultCollection().getCQLQueryResultCollection()));
 		return boxedResult;
 	}
 
-	public gov.nih.nci.cagrid.annualdemo.stubs.MageToMageResponse mageToMage(gov.nih.nci.cagrid.annualdemo.stubs.MageToMageRequest params) throws RemoteException {
-		MageTranslationServicesAuthorization.authorizeMageToMage();
-		gov.nih.nci.cagrid.annualdemo.stubs.MageToMageResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.MageToMageResponse();
-		impl.mageToMage();
+	public gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLResponse mageToStatML(gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLRequest params) throws RemoteException {
+		MageTranslationServicesAuthorization.authorizeMageToStatML();
+		gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLResponse();
+		boxedResult.setData(impl.mageToStatML(params.getCQLQueryResultCollection().getCQLQueryResultCollection()));
 		return boxedResult;
 	}
 
