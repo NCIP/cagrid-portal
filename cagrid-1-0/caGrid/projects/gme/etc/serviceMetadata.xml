@@ -1,7 +1,7 @@
 <ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
  <ns1:serviceDescription>
   <ns2:Service
-   description="The GlobalModelExchange grid service, provides a DNS-like distributed registry for XML Schemas, providing an authortative source for the syntactic representation of all data transmitted in the grid."
+   description="The GlobalModelExchange grid service, provides a DNS-like distributed registry for XML Schemas, providing an authoritative source for the syntactic representation of all data transmitted in the grid."
    name="GlobalModelExchange" version="1.0" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection>
     <ns3:PointOfContact affiliation="OSU" email="hastings@bmi.osu.edu" firstName="Shannon" lastName="Hastings" role="Developer"
