@@ -86,6 +86,7 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 	 * @param objectQName
 	 * 		The QName of the objects
 	 * @return
+	 * 		An enum iterator instance for the given objects
 	 * @throws Exception
 	 */
 	public static EnumIterator createIterator(List objects, QName objectQName) throws Exception {
@@ -113,6 +114,7 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 	 * 		<b><i>NOTE:</b></i> For security reasons, access to this location 
 	 * 		must be controlled in a production data environment. 
 	 * @return
+	 * 		An enum iterator instance for the given objects
 	 * @throws Exception
 	 */
 	public static EnumIterator createIterator(List objects, QName objectQName, String filename) throws Exception {
@@ -197,6 +199,7 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 	 * @param soapElements
 	 * @param end
 	 * @return
+	 * 		Wraps the list of soap elements in an iteration result
 	 */
 	private IterationResult wrapUpElements(List soapElements, boolean end) {
 		SOAPElement[] elements = new SOAPElement[soapElements.size()];

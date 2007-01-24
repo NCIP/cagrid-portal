@@ -96,6 +96,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	 * @param objectQName
 	 * 		The QName of the objects
 	 * @return
+	 * 		An enum iterator instance to iterate the given objects
 	 * @throws Exception
 	 */
 	public static EnumIterator createIterator(List objects, QName objectQName) throws Exception {
@@ -123,6 +124,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	 * 		<b><i>NOTE:</b></i> For security reasons, access to this location 
 	 * 		must be controlled in a production data environment. 
 	 * @return
+	 * 		An enum iterator instance to iterate the given objects
 	 * @throws Exception
 	 */
 	public static EnumIterator createIterator(List objects, QName objectQName, String filename) throws Exception {
@@ -305,6 +307,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	 * @param soapElements
 	 * @param end
 	 * @return
+	 * 		An iteration result wrapping the result list
 	 */
 	private IterationResult wrapUpElements(List soapElements, boolean end) {
 		SOAPElement[] elements = new SOAPElement[soapElements.size()];
@@ -337,6 +340,13 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	}
 	
 	
+	/**
+	 * Counts all the characters in a list of soap elements
+	 * 
+	 * @param soapElements
+	 * @return
+	 * 		The total character count
+	 */
 	private int countSoapElementChars(List soapElements) {
 		int count = 0;
 		for (int i = 0; i < soapElements.size(); i++) {
@@ -347,6 +357,13 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	}
 	
 	
+	/**
+	 * Raises an interrupted exception if a flag in the param map
+	 * specifies that the query processing thread must be stopped
+	 * 
+	 * @param params
+	 * @throws InterruptedException
+	 */
 	private void checkForStop(final Map params) throws InterruptedException {
 		synchronized (params) {
 			if (((Boolean) params.get(MUST_STOP_THREAD)).booleanValue()) {

@@ -40,6 +40,7 @@ public class EnumerateResponseFactory {
 	 * @param objectQName
 	 * 		The QName of the objects
 	 * @return
+	 * 		An enumerate response instance
 	 * @throws EnumerationCreationException
 	 */
 	public static EnumerateResponse createInMemoryResponse(List enumObjects, QName objectQName) 
@@ -59,6 +60,7 @@ public class EnumerateResponseFactory {
 	 * @param expiration
 	 * 		The expiration information for the newly created resource
 	 * @return
+	 * 		An enumerate response instance
 	 * @throws EnumerationCreationException
 	 */
 	public static EnumerateResponse createInMemoryResponse(List enumObjects, QName objectQName, ExpirationType expiration) 
@@ -79,6 +81,7 @@ public class EnumerateResponseFactory {
 	 * @param objectQName
 	 * 		The QName of the objects
 	 * @return
+	 * 		An enumerate response instance
 	 * @throws EnumerationCreationException
 	 */
 	public static EnumerateResponse createPersistantResponse(List enumObjects, QName objectQName) 
@@ -100,6 +103,7 @@ public class EnumerateResponseFactory {
 	 * @param expiration
 	 * 		The expiration information for the enumeration
 	 * @return
+	 * 		An enumerate response instance
 	 * @throws EnumerationCreationException
 	 */
 	public static EnumerateResponse createPersistantResponse(List enumObjects, QName objectQName, ExpirationType expiration) 
@@ -126,6 +130,7 @@ public class EnumerateResponseFactory {
 	 * 		serialized to disk.  This requires the objects returned by
 	 * 		the iterator implement <code>java.io.Serializable</code>
 	 * @return
+	 * 		An enumerate response instance
 	 * @throws EnumerationCreationException
 	 */
 	public static EnumerateResponse createCustomResponse(EnumIterator iter, boolean persist)
@@ -147,6 +152,7 @@ public class EnumerateResponseFactory {
 	 * @param expiration
 	 * 		The expiration information to use for the enumeration's lifetime.
 	 * @return
+	 * 		An enumerate response instance
 	 * @throws EnumerationCreationException
 	 */
 	public static EnumerateResponse createCustomResponse(EnumIterator iter, boolean persist, ExpirationType expiration)
@@ -155,6 +161,19 @@ public class EnumerateResponseFactory {
 	}
 	
 	
+	/**
+	 * Private method to create the enumeration resource in the enum resource home
+	 * 
+	 * @param iter
+	 * 		The enum iter instance to use
+	 * @param persist
+	 * 		True to use the enumeration impl's persistance (mostly broken)
+	 * @param expiration
+	 * 		Resource expiration information
+	 * @return
+	 * 		The enumerate response
+	 * @throws EnumerationCreationException
+	 */
 	private static EnumerateResponse getResponse(EnumIterator iter, boolean persist, ExpirationType expiration) 
 		throws EnumerationCreationException {
 		try {
