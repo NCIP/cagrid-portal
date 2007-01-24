@@ -90,7 +90,6 @@
 	<classpathentry kind="lib" path="ext/lib/csmapi.jar"/>
 	<classpathentry kind="lib" path="ext/lib/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/ehcache-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/example-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
