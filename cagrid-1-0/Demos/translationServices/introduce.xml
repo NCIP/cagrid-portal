@@ -1,5 +1,17 @@
 <ns1:ServiceDescription introduceVersion="1.0" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace location="./gov.nih.nci.mageom.domain.Array.xsd" namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Array" packageName="gov.nih.nci.mageom.domain.array" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="PositionDelta" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ZoneDefect" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ArrayManufacture" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ArrayManufactureDeviation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Fiducial" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ManufactureLIMSBiomaterial" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ArrayGroup" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Array" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ManufactureLIMS" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="FeatureDefect" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace location="./gov.nih.nci.mageom.domain.BioSequence.xsd" namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioSequence" packageName="gov.nih.nci.mageom.domain.biosequence" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="SeqFeatureLocation" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="BioSequence" xsi:type="ns2:SchemaElementType"/>

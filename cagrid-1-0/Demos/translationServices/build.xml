@@ -205,6 +205,10 @@
                 </antcall>
             </sequential>
         </for>
+        <replace dir="${stubs.src}" token="ManufactureLIMSBioMaterial" value="ManufactureLIMSBiomaterial">
+        <include name="**/*.java" />
+            </replace>
+                            
     </target>
 
 
