@@ -93,7 +93,7 @@ public class DomainModelUtils {
 		Set superclasses = new HashSet();
 		// find all generalizations where subclass is the class in question,
 		// then get the superclasses from each
-		for (int i = 0; i < generalization.length; i++) {
+		for (int i = 0; generalization != null && i < generalization.length; i++) {
 			UMLClassReference subClassRef = generalization[i].getSubClassReference();
 			UMLClassReference superClassRef = generalization[i].getSuperClassReference();
 			if (subClassRef != null && superClassRef != null) {
