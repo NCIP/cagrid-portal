@@ -42,7 +42,7 @@ public class ServiceConfigUtil {
 					String value = (String) current.invoke(serviceConfig, new Object[] {});
 					String key = current.getName().substring(getterPrefix.length());
 					// lowercase first character
-					key = String.valueOf(Character.toLowerCase(key.charAt(0))) + key.substring(1); 
+					// key = String.valueOf(Character.toLowerCase(key.charAt(0))) + key.substring(1); 
 					configParams.setProperty(key, value);
 				}
 			}

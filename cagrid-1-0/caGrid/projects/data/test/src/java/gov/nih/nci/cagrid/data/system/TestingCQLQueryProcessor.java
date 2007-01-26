@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.system;
 
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
+import gov.nih.nci.cagrid.data.InitializationException;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.LazyCQLQueryProcessor;
@@ -10,14 +11,16 @@ import gov.nih.nci.cagrid.data.mapping.Mappings;
 import gov.nih.nci.cagrid.data.utilities.CQLResultsCreationUtil;
 import gov.nih.nci.cagrid.data.utilities.ResultsCreationException;
 
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
+
+import javax.xml.namespace.QName;
 
 import org.projectmobius.bookstore.Book;
 import org.projectmobius.bookstore.BookStore;
-
-import javax.xml.namespace.QName;
 
 /** 
  *  TestingCQLQueryProcessor
@@ -25,9 +28,14 @@ import javax.xml.namespace.QName;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> 
  * @created Nov 7, 2006 
- * @version $Id: TestingCQLQueryProcessor.java,v 1.1 2006-11-08 18:09:38 dervin Exp $ 
+ * @version $Id: TestingCQLQueryProcessor.java,v 1.2 2007-01-26 21:26:29 dervin Exp $ 
  */
 public class TestingCQLQueryProcessor extends LazyCQLQueryProcessor {
+	public static final String PROPERTY_STARTS_WITH_LOWERCASE = "thisPropertyStartsWithLowercase";
+	public static final String PROPERTY_STARTS_WITH_UPPERCASE = "ThisPropertyStartsWithUppercase";
+	public static final String LC_DEFAULT_VALUE = "lowercase";
+	public static final String UC_DEFAULT_VALUE = "UPPERCASE";
+	
 	public static int BOOK_COUNT = 4;
 	
 	public static String[] BOOK_TITLES = {
@@ -37,6 +45,22 @@ public class TestingCQLQueryProcessor extends LazyCQLQueryProcessor {
 		"Jim D'Anjou, et al", "Eric van der Vlist", 
 		"Christian Bauer, Gavin King", "Patrick Peak, Nick, Heudecker"
 	};
+	
+	
+	public void initialize(Properties props, InputStream wsddStream) throws InitializationException {
+		// verify the values for each required property are NOT the defaults
+		// if the defaults are found, that means the service properties aren't
+		// getting correctly transfered into the initialization properties
+		String lcPropValue = props.getProperty(PROPERTY_STARTS_WITH_LOWERCASE);
+		if (lcPropValue.equals(LC_DEFAULT_VALUE)) {
+			throw new InitializationException("Default value found for property " + PROPERTY_STARTS_WITH_LOWERCASE + ", service properties incorrectly transfered");
+		}
+		String ucPropString = props.getProperty(PROPERTY_STARTS_WITH_UPPERCASE);
+		if (ucPropString.equals(UC_DEFAULT_VALUE)) {
+			throw new InitializationException("Default value found for property " + PROPERTY_STARTS_WITH_UPPERCASE + ", service properties incorrectly transfered");
+		}
+	}
+	
 
 	public Iterator processQueryLazy(CQLQuery cqlQuery) throws MalformedQueryException, QueryProcessingException {
 		List results = getResultsList(cqlQuery);
@@ -79,5 +103,13 @@ public class TestingCQLQueryProcessor extends LazyCQLQueryProcessor {
 			throw new QueryProcessingException("Target " + query.getTarget().getName() + " is not valid!");
 		}
 		return results;
+	}
+	
+	
+	public Properties getRequiredParameters() {
+		Properties props = new Properties();
+		props.setProperty(PROPERTY_STARTS_WITH_LOWERCASE, LC_DEFAULT_VALUE);
+		props.setProperty(PROPERTY_STARTS_WITH_UPPERCASE, UC_DEFAULT_VALUE);
+		return props;
 	}
 }

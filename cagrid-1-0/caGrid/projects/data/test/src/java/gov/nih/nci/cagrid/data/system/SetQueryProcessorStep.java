@@ -23,7 +23,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: SetQueryProcessorStep.java,v 1.3 2006-12-21 15:02:28 dervin Exp $ 
+ * @version $Id: SetQueryProcessorStep.java,v 1.4 2007-01-26 21:26:29 dervin Exp $ 
  */
 public class SetQueryProcessorStep extends Step {
 	
@@ -79,7 +79,8 @@ public class SetQueryProcessorStep extends Step {
 			String key = (String) testPropKeys.nextElement();
 			String prefixedKey = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + key;
 			String defaultValue = testProperties.getProperty(key);
-			ServicePropertiesProperty testProp = new ServicePropertiesProperty(Boolean.FALSE, prefixedKey, defaultValue);
+			String changedValue = defaultValue + "_CHANGED";
+			ServicePropertiesProperty testProp = new ServicePropertiesProperty(Boolean.FALSE, prefixedKey, changedValue);
 			retainedPropereties.add(testProp);
 		}
 		
