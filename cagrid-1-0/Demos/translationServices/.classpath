@@ -103,5 +103,15 @@
 	<classpathentry kind="lib" path="lib/metadata/caGrid-1.0-metadata-common.jar"/>
 	<classpathentry kind="lib" path="lib/metadata/caGrid-1.0-metadata-data.jar"/>
 	<classpathentry kind="lib" path="lib/metadata/caGrid-1.0-metadata-security.jar"/>
+	<classpathentry kind="lib" path="lib/caarray/aspectjrt.jar"/>
+	<classpathentry kind="lib" path="lib/caarray/caarray-client.jar"/>
+	<classpathentry kind="lib" path="lib/caarray/CaArraySvc-processor.jar"/>
+	<classpathentry kind="lib" path="lib/caarray/caCOREClasses.jar"/>
+	<classpathentry kind="lib" path="lib/caarray/castor-1.0.4-patched.jar"/>
+	<classpathentry kind="lib" path="lib/caarray/jakarta-oro-2.0.2-dev-2.jar"/>
+	<classpathentry kind="lib" path="lib/caarray/mageom-client.jar"/>
+	<classpathentry kind="lib" path="lib/caarray/nciData.jar"/>
+	<classpathentry kind="lib" path="lib/caarray/netcdfAll.jar"/>
+	<classpathentry kind="lib" path="lib/caarray/netcdfapi.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
