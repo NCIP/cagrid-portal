@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.annualdemo.service;
 
+import gov.nih.nci.cagrid.annualdemo.util.MageToStatml;
 import gov.nih.nci.cagrid.data.utilities.CQLObjectResultIterator;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gridextensions.Data;
@@ -23,12 +24,21 @@ public class MageTranslationServicesImpl extends MageTranslationServicesImplBase
 	public gridextensions.Data mageToStatML(gov.nih.nci.cagrid.cqlresultset.CQLQueryResults cQLQueryResultCollection) throws RemoteException {
 		int count = cQLQueryResultCollection.getObjectResult().length;
 		System.out.println("Got " + count + " Results from caArray");
-		Data data = new Data();
 		
-		CQLQueryResultsIterator iter = new CQLQueryResultsIterator(cQLQueryResultCollection);
-		iter.next();
+		// hack - Dave: fix this
+		cQLQueryResultCollection.setTargetClassname("java.lang.Object");
 		
-		return data;
+		// get mage
+		CQLQueryResultsIterator iter = new CQLQueryResultsIterator(cQLQueryResultCollection, true);
+		String mage = (String) iter.next();
+		
+		//System.out.println(mage);
+		try {
+			return new MageToStatml().translate(mage);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RemoteException(e.getMessage());
+		}
 	}
 
 	public edu.columbia.geworkbench.cagrid.microarray.MicroarraySet mageToMicroArray(gov.nih.nci.cagrid.cqlresultset.CQLQueryResults cQLQueryResultCollection) throws RemoteException {

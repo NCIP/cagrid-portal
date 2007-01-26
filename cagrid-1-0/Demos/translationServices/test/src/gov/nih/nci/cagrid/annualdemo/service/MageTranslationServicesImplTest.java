@@ -3,15 +3,12 @@
  */
 package gov.nih.nci.cagrid.annualdemo.service;
 
-import java.io.File;
-
-import org.apache.axis.message.MessageElement;
-import org.apache.xerces.parsers.DOMParser;
-
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gridextensions.Data;
+
+import java.io.File;
+
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;

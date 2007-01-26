@@ -86,6 +86,22 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="lib/caGrid-1.0-core.jar"/>
 	<classpathentry kind="src" path="test/src"/>
-	<classpathentry kind="lib" path="lib/data/caGrid-1.0-data-utils.jar"/>
+	<classpathentry kind="lib" path="lib/data/caGrid-1.0-data-common.jar"/>
+	<classpathentry kind="lib" path="lib/caGrid-1.0-data-utils.jar"/>
+	<classpathentry kind="lib" path="lib/data/caGrid-1.0-data-cql.jar"/>
+	<classpathentry kind="lib" path="lib/data/caGrid-1.0-data-extension.jar"/>
+	<classpathentry kind="lib" path="lib/data/caGrid-1.0-data-service.jar"/>
+	<classpathentry kind="lib" path="lib/data/caGrid-1.0-data-stubs.jar"/>
+	<classpathentry kind="lib" path="lib/data/caGrid-1.0-data-tests.jar"/>
+	<classpathentry kind="lib" path="lib/data/caGrid-1.0-data-tools.jar"/>
+	<classpathentry kind="lib" path="lib/data/caGrid-1.0-data-validation.jar"/>
+	<classpathentry kind="lib" path="lib/rproteomics-1.0-oss-java-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/CaArraySvc-client.jar"/>
+	<classpathentry kind="lib" path="lib/CaArraySvc-common.jar"/>
+	<classpathentry kind="lib" path="lib/CaArraySvc-encoding.jar"/>
+	<classpathentry kind="lib" path="lib/CaArraySvc-stubs.jar"/>
+	<classpathentry kind="lib" path="lib/metadata/caGrid-1.0-metadata-common.jar"/>
+	<classpathentry kind="lib" path="lib/metadata/caGrid-1.0-metadata-data.jar"/>
+	<classpathentry kind="lib" path="lib/metadata/caGrid-1.0-metadata-security.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
