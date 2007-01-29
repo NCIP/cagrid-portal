@@ -10,7 +10,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.bouncycastle.asn1.x509.X509Name;
 
 public class ConvertCAFileNameToHash {
 
