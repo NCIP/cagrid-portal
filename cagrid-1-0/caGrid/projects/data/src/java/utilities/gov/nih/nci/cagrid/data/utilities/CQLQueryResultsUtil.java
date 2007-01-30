@@ -24,6 +24,7 @@ import org.apache.axis.message.MessageElement;
 
 /** 
  *  CQLQueryResultsUtil
+ *  @deprecated  Use {@link CQLResultsCreationUtil}
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
@@ -48,6 +49,7 @@ public class CQLQueryResultsUtil {
 	 * @param targetClassname
 	 * 		The classname of the objects in the list
 	 * @return
+	 * 		CQLQueryResults containing a list of object results
 	 */
 	public static CQLQueryResults createQueryResults(List rawObjects, String targetClassname) {
 		return createQueryResults(rawObjects, targetClassname, (InputStream) null);
@@ -66,6 +68,7 @@ public class CQLQueryResultsUtil {
 	 * @param configStream
 	 * 		The client or server-config.wsdd to use
 	 * @return
+	 * 		CQLQueryResults containing a list of object results
 	 */
 	public static CQLQueryResults createQueryResults(List rawObjects, String targetClassname, InputStream configStream) {
 		typeQNames.clear();
@@ -102,6 +105,7 @@ public class CQLQueryResultsUtil {
 	 * @param qname
 	 * 		The QName of the target data type
 	 * @return
+	 * 		CQLQueryResults containing a list of object results
 	 */
 	public static CQLQueryResults createQueryResults(List rawObjects, String targetClassname, QName qname) {
 		CQLQueryResults results = new CQLQueryResults();
@@ -134,6 +138,7 @@ public class CQLQueryResultsUtil {
 	 * @param attribNames
 	 * 		The names of the query attributes
 	 * @return
+	 * 		CQLQueryResults containing attribute results
 	 */
 	public static CQLQueryResults createAttributeQueryResults(
 		List rawAttribs, String targetName, String[] attribNames) {
@@ -175,6 +180,7 @@ public class CQLQueryResultsUtil {
 	 * @param targetName
 	 * 		The classname of the target object from the query
 	 * @return
+	 * 		CQLQueryResults containing a single count result
 	 */
 	public static CQLQueryResults createCountQueryResults(long count, String targetName) {
 		CQLQueryResults results = new CQLQueryResults();
