@@ -19,3 +19,4 @@ CVS TAGS
 caGrid_Annual_Meeting_06 = Code used to demonstrate at caBIG Annual Meeting April 10th
 caGrid-1_0_beta_final = Code released for Beta release
 caGrid-1_0_release_final = (not yet used) Code released for 1.0
+caGrid-1_0_release_pointrelease_portal_r1 = First point release of 1.0 branch for portal updates
