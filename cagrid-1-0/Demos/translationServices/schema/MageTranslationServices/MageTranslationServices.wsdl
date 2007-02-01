@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns12="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BQS" xmlns:ns19="gme://GenePattern.caBIG/1/gridExtensions" xmlns:ns7="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.AuditAndSecurity" xmlns:ns22="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/types" xmlns:ns16="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Measurement" xmlns:ns17="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.som" xmlns:ns1="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioSequence" xmlns:ns8="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain" xmlns:ns14="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssayData" xmlns:ns21="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" xmlns:ns6="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.HigherLevelAnalysis" xmlns:ns2="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.QuantitationType" xmlns:ns13="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Protocol" xmlns:ns5="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Experiment" xmlns:ns10="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.DesignElement" xmlns:ns9="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioMaterial" xmlns:ns15="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Description" xmlns:ns20="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" xmlns:ns18="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray" xmlns:ns3="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.ArrayDesign" xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns0="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Array" xmlns:ns4="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioEvent" xmlns:ns11="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssay" name="MageTranslationServices" targetNamespace="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns14="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BQS" xmlns:ns21="gme://GenePattern.caBIG/1/gridExtensions" xmlns:ns9="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.AuditAndSecurity" xmlns:ns24="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/types" xmlns:ns18="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Measurement" xmlns:ns19="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.som" xmlns:ns3="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioSequence" xmlns:ns10="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain" xmlns:ns16="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssayData" xmlns:ns23="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" xmlns:ns8="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.HigherLevelAnalysis" xmlns:ns4="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.QuantitationType" xmlns:ns15="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Protocol" xmlns:ns7="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Experiment" xmlns:ns12="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.DesignElement" xmlns:ns11="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioMaterial" xmlns:ns17="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Description" xmlns:ns22="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" xmlns:ns20="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray" xmlns:ns0="http://gov.nih.nci.cagrid.data/DataServiceExceptions" xmlns:ns5="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.ArrayDesign" xmlns:ns25="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns2="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Array" xmlns:ns6="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioEvent" xmlns:ns1="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical" xmlns:ns13="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssay" name="MageTranslationServices" targetNamespace="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <import namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" location="./ServiceSecurity.wsdl" />
@@ -30,10 +30,12 @@
       <import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Description" schemaLocation="./gov.nih.nci.mageom.domain.Description.xsd" />
       <import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" schemaLocation="./CQL.caBIG-1_gov.nih.nci.cagrid.CQLQuery.xsd" />
       <import namespace="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray" schemaLocation="./cagrid.geworkbench.columbia.edu-1_edu.columbia.geworkbench.cagrid.microarray.xsd" />
+      <import namespace="http://gov.nih.nci.cagrid.data/DataServiceExceptions" schemaLocation="./DataServiceExceptions.xsd" />
       <import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.ArrayDesign" schemaLocation="./gov.nih.nci.mageom.domain.ArrayDesign.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/security.xsd" />
       <import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Array" schemaLocation="./gov.nih.nci.mageom.domain.Array.xsd" />
       <import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioEvent" schemaLocation="./gov.nih.nci.mageom.domain.BioEvent.xsd" />
+      <import namespace="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical" schemaLocation="./hierarchicalCluster.xsd" />
       <import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssay" schemaLocation="./gov.nih.nci.mageom.domain.BioAssay.xsd" />
       <element name="MageToMicroArrayRequest">
         <complexType>
@@ -41,7 +43,7 @@
             <element name="cQLQueryResultCollection">
               <complexType>
                 <sequence>
-                  <element ref="ns21:CQLQueryResultCollection" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns23:CQLQueryResultCollection" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -51,7 +53,7 @@
       <element name="MageToMicroArrayResponse">
         <complexType>
           <sequence>
-            <element ref="ns18:MicroarraySet" minOccurs="1" maxOccurs="1" />
+            <element ref="ns20:MicroarraySet" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -61,7 +63,7 @@
             <element name="cQLQueryResultCollection">
               <complexType>
                 <sequence>
-                  <element ref="ns21:CQLQueryResultCollection" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns23:CQLQueryResultCollection" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -71,7 +73,34 @@
       <element name="MageToStatMLResponse">
         <complexType>
           <sequence>
-            <element ref="ns19:Data" minOccurs="1" maxOccurs="1" />
+            <element ref="ns21:Data" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="ClusterToTreeViewRequest">
+        <complexType>
+          <sequence>
+            <element name="hierarchicalClusteringParameter">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:HierarchicalClusteringParameter" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="microarraySet">
+              <complexType>
+                <sequence>
+                  <element ref="ns20:MicroarraySet" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="ClusterToTreeViewResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns1:TreeViewInputElement" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -95,6 +124,12 @@
   <message name="MageToStatMLResponse">
     <part name="parameters" element="tns:MageToStatMLResponse" />
   </message>
+  <message name="ClusterToTreeViewRequest">
+    <part name="parameters" element="tns:ClusterToTreeViewRequest" />
+  </message>
+  <message name="ClusterToTreeViewResponse">
+    <part name="parameters" element="tns:ClusterToTreeViewResponse" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -108,6 +143,10 @@
     <operation name="mageToStatML">
       <input message="tns:MageToStatMLRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToStatMLRequest" />
       <output message="tns:MageToStatMLResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToStatMLResponse" />
+    </operation>
+    <operation name="clusterToTreeView">
+      <input message="tns:ClusterToTreeViewRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/ClusterToTreeViewRequest" />
+      <output message="tns:ClusterToTreeViewResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/ClusterToTreeViewResponse" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

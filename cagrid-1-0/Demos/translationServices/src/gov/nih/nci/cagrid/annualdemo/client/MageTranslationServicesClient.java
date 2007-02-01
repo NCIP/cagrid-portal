@@ -143,5 +143,19 @@ public class MageTranslationServicesClient extends ServiceSecurityClient impleme
         return boxedResult.getData();
       }
     }
+	public edu.columbia.geworkbench.cagrid.cluster.hierarchical.TreeViewInput clusterToTreeView(edu.columbia.geworkbench.cagrid.cluster.hierarchical.HierarchicalClusteringParameter hierarchicalClusteringParameter,edu.columbia.geworkbench.cagrid.microarray.MicroarraySet microarraySet) throws RemoteException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"clusterToTreeView");
+        gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequest params = new gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequest();
+        gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequestHierarchicalClusteringParameter hierarchicalClusteringParameterContainer = new gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequestHierarchicalClusteringParameter();
+        hierarchicalClusteringParameterContainer.setHierarchicalClusteringParameter(hierarchicalClusteringParameter);
+        params.setHierarchicalClusteringParameter(hierarchicalClusteringParameterContainer);
+        gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequestMicroarraySet microarraySetContainer = new gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequestMicroarraySet();
+        microarraySetContainer.setMicroarraySet(microarraySet);
+        params.setMicroarraySet(microarraySetContainer);
+        gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewResponse boxedResult = portType.clusterToTreeView(params);
+        return boxedResult.getTreeViewInputElement();
+      }
+    }
 
 }

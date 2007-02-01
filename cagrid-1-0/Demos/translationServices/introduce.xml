@@ -1,5 +1,15 @@
 <ns1:ServiceDescription introduceVersion="1.0" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace location="./DataServiceExceptions.xsd" namespace="http://gov.nih.nci.cagrid.data/DataServiceExceptions" packageName="dataserviceexceptions" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="MalformedQueryException" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="QueryProcessingException" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./hierarchicalCluster.xsd" namespace="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical" packageName="edu.columbia.geworkbench.cagrid.cluster.hierarchical" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="HierarchicalClusteringParameter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="HierarchicalClusterNode" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="HierarchicalCluster" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="TreeViewInputElement" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace location="./gov.nih.nci.mageom.domain.Array.xsd" namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Array" packageName="gov.nih.nci.mageom.domain.array" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="PositionDelta" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ZoneDefect" xsi:type="ns2:SchemaElementType"/>
@@ -302,9 +312,17 @@
      <ns4:Output qName="ns9:Data" isArray="false" xmlns:ns9="gme://GenePattern.caBIG/1/gridExtensions"/>
      <ns4:Exceptions/>
     </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="clusterToTreeView" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns10:HierarchicalClusteringParameter" isArray="false" name="hierarchicalClusteringParameter" xmlns:ns10="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical"/>
+      <ns4:Input qName="ns11:MicroarraySet" isArray="false" name="microarraySet" xmlns:ns11="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns12:TreeViewInputElement" isArray="false" xmlns:ns12="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
    </ns4:Methods>
-   <ns10:ResourcePropertiesList xsi:type="ns10:ResourcePropertiesListType" xmlns:ns10="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns13:ResourcePropertiesList xsi:type="ns13:ResourcePropertiesListType" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
   </ns3:Service>
  </ns3:Services>
- <ns11:Extensions xsi:type="ns11:ExtensionsType" xmlns:ns11="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns14:Extensions xsi:type="ns14:ExtensionsType" xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
 </ns1:ServiceDescription>

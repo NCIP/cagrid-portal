@@ -40,4 +40,11 @@ public class MageTranslationServicesProviderImpl{
 		return boxedResult;
 	}
 
+	public gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewResponse clusterToTreeView(gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequest params) throws RemoteException {
+		MageTranslationServicesAuthorization.authorizeClusterToTreeView();
+		gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewResponse();
+		boxedResult.setTreeViewInputElement(impl.clusterToTreeView(params.getHierarchicalClusteringParameter().getHierarchicalClusteringParameter(),params.getMicroarraySet().getMicroarraySet()));
+		return boxedResult;
+	}
+
 }

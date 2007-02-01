@@ -22,10 +22,12 @@ gme\://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioMaterial=gov.nih.nci.mageo
 gme\://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Description=gov.nih.nci.mageom.domain.description
 http\://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery=gov.nih.nci.cagrid.cqlquery
 gme\://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray=edu.columbia.geworkbench.cagrid.microarray
+http\://gov.nih.nci.cagrid.data/DataServiceExceptions=dataserviceexceptions
 gme\://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.ArrayDesign=gov.nih.nci.mageom.domain.arraydesign
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.metadata.security
 gme\://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.Array=gov.nih.nci.mageom.domain.array
 gme\://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioEvent=gov.nih.nci.mageom.domain.bioevent
+gme\://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical=edu.columbia.geworkbench.cagrid.cluster.hierarchical
 gme\://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssay=gov.nih.nci.mageom.domain.bioassay
 
 

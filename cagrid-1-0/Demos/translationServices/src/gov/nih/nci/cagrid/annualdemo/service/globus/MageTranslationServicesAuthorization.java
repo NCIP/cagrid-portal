@@ -39,6 +39,11 @@ public class MageTranslationServicesAuthorization{
 		
 		
 	}
+					
+	public static void authorizeClusterToTreeView() throws RemoteException {
+		
+		
+	}
 	
 	
 }
