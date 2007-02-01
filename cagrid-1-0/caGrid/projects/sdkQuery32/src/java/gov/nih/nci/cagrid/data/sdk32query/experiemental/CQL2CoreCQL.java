@@ -14,16 +14,29 @@ import java.util.Map;
 
 /** 
  *  CQL2CoreCQL
- *  TODO:DOCUMENT ME
+ *  Utility to convert caGrid's authoritative CQL (schema based, registered, widely used, documented)
+ *  to the caCORE version of CQL.
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Jan 22, 2007 
- * @version $Id: CQL2CoreCQL.java,v 1.1 2007-01-24 19:21:03 dervin Exp $ 
+ * @version $Id: CQL2CoreCQL.java,v 1.2 2007-02-01 16:39:45 dervin Exp $ 
  */
 public class CQL2CoreCQL {
 	
 	private static Map predicateMap;
 
+	/**
+	 * Converts caGrid CQL to caCORE CQL.  Since the caCORE CQL is based on an outdated and unreleased
+	 * version of the caGrid CQL schema, query modifiers are not directly supported and will cause
+	 * a QueryProcessingException to be thrown.  QueryModifiers may be implemented with post-processing
+	 * of the query result list.
+	 * 
+	 * @param query
+	 * 		The query to convert
+	 * @return
+	 * 		The converted query
+	 * @throws QueryProcessingException
+	 */
 	public static CQLQuery convert(gov.nih.nci.cagrid.cqlquery.CQLQuery query) throws QueryProcessingException {
 		CQLQuery convertedQuery = new CQLQuery();
 		convertedQuery.setTarget(convertObject(query.getTarget()));
@@ -59,6 +72,14 @@ public class CQL2CoreCQL {
 	}
 	
 	
+	/**
+	 * Converts caGrid CQL predicates to caCORE CQL predicates.  This implementation will instantiate
+	 * a static hash map on the first call in to it, which allows subsequent calls to be performed
+	 * in constant time (at most log(9) operations to find a value) instead of linear time. 
+	 * @param predicate
+	 * @return
+	 * 		The converted CQL predicate
+	 */
 	private static CQLPredicate convertPredicate(gov.nih.nci.cagrid.cqlquery.Predicate predicate) {
 		if (predicateMap == null) {
 			predicateMap = new HashMap();
