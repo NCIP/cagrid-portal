@@ -157,5 +157,27 @@ public class MageTranslationServicesClient extends ServiceSecurityClient impleme
         return boxedResult.getTreeViewInputElement();
       }
     }
+	public edu.columbia.geworkbench.cagrid.cluster.hierarchical.HierarchicalCluster gwClusterToGpCluster(gridextensions.Cluster cluster) throws RemoteException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"gwClusterToGpCluster");
+        gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterRequest params = new gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterRequest();
+        gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterRequestCluster clusterContainer = new gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterRequestCluster();
+        clusterContainer.setCluster(cluster);
+        params.setCluster(clusterContainer);
+        gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterResponse boxedResult = portType.gwClusterToGpCluster(params);
+        return boxedResult.getHierarchicalCluster();
+      }
+    }
+	public edu.columbia.geworkbench.cagrid.microarray.MicroarraySet statmlToMicroarraySet(gridextensions.Data data) throws RemoteException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"statmlToMicroarraySet");
+        gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetRequest params = new gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetRequest();
+        gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetRequestData dataContainer = new gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetRequestData();
+        dataContainer.setData(data);
+        params.setData(dataContainer);
+        gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetResponse boxedResult = portType.statmlToMicroarraySet(params);
+        return boxedResult.getMicroarraySet();
+      }
+    }
 
 }

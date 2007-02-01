@@ -47,4 +47,18 @@ public class MageTranslationServicesProviderImpl{
 		return boxedResult;
 	}
 
+	public gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterResponse gwClusterToGpCluster(gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterRequest params) throws RemoteException {
+		MageTranslationServicesAuthorization.authorizeGwClusterToGpCluster();
+		gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterResponse();
+		boxedResult.setHierarchicalCluster(impl.gwClusterToGpCluster(params.getCluster().getCluster()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetResponse statmlToMicroarraySet(gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetRequest params) throws RemoteException {
+		MageTranslationServicesAuthorization.authorizeStatmlToMicroarraySet();
+		gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetResponse();
+		boxedResult.setMicroarraySet(impl.statmlToMicroarraySet(params.getData().getData()));
+		return boxedResult;
+	}
+
 }

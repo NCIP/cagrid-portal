@@ -44,6 +44,16 @@ public class MageTranslationServicesAuthorization{
 		
 		
 	}
+					
+	public static void authorizeGwClusterToGpCluster() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeStatmlToMicroarraySet() throws RemoteException {
+		
+		
+	}
 	
 	
 }
