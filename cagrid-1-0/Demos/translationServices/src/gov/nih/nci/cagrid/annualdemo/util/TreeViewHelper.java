@@ -73,16 +73,37 @@ public class TreeViewHelper
 		}
 	}
 	
+	public void writeTreeView(PrintWriter cdt, PrintWriter atr, PrintWriter gtr) 
+		throws IOException
+	{
+		writeCdt(cdt);
+		writeAtr(atr);
+		writeGtr(gtr);		
+	}
+	
 	public void writeTreeViewFiles(File cdtFile, File atrFile, File gtrFile) 
 		throws IOException
 	{
-		writeCdt(cdtFile);
+		PrintWriter cdtOut = new PrintWriter(new BufferedWriter(new FileWriter(cdtFile)));
+		PrintWriter atrOut = new PrintWriter(new BufferedWriter(new FileWriter(atrFile)));
+		PrintWriter gtrOut = new PrintWriter(new BufferedWriter(new FileWriter(gtrFile)));
+		try {
+			writeCdt(cdtOut);
+			writeAtr(atrOut);
+			writeGtr(gtrOut);
+		} finally {
+			cdtOut.flush();
+			cdtOut.close();
+			atrOut.flush();
+			atrOut.close();
+			gtrOut.flush();
+			gtrOut.close();
+		}
 	}
 	
-	public void writeCdt(File outFile)
+	public void writeCdt(PrintWriter out)
 		throws IOException
 	{
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outFile)));
 		
 		// print column headers
 		out.print("GID\tNAME\tGWEIGHT");
@@ -122,31 +143,24 @@ public class TreeViewHelper
 		}
 		
 		out.flush(); 
-		out.close();		
 	}
 	
-	public void writeGtr(File outFile)
+	public void writeGtr(PrintWriter out)
 		throws IOException
 	{
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outFile)));
-		
 		weightCount = 0;
 		writeCluster(clusterData.geneCluster, geneTable, geneNameTable, out, 1.0 / clusterData.genes.size() / 3.0);
 		
 		out.flush(); 
-		out.close();		
 	}
 	
-	public void writeAtr(File outFile)
+	public void writeAtr(PrintWriter out)
 		throws IOException
 	{
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outFile)));
-		
 		weightCount = 0;
 		writeCluster(clusterData.arrayCluster, arrayTable, arrayNameTable, out, 1.0 / clusterData.arrays.size() / 3.0);
 		
 		out.flush(); 
-		out.close();		
 	}
 	
 	protected void writeCluster(
