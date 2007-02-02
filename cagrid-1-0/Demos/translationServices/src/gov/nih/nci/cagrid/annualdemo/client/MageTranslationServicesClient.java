@@ -143,13 +143,13 @@ public class MageTranslationServicesClient extends ServiceSecurityClient impleme
         return boxedResult.getData();
       }
     }
-	public edu.columbia.geworkbench.cagrid.cluster.hierarchical.TreeViewInput clusterToTreeView(edu.columbia.geworkbench.cagrid.cluster.hierarchical.HierarchicalClusteringParameter hierarchicalClusteringParameter,edu.columbia.geworkbench.cagrid.microarray.MicroarraySet microarraySet) throws RemoteException {
+	public edu.columbia.geworkbench.cagrid.cluster.hierarchical.TreeViewInput clusterToTreeView(edu.columbia.geworkbench.cagrid.cluster.hierarchical.HierarchicalCluster hierarchicalCluster,edu.columbia.geworkbench.cagrid.microarray.MicroarraySet microarraySet) throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"clusterToTreeView");
         gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequest params = new gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequest();
-        gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequestHierarchicalClusteringParameter hierarchicalClusteringParameterContainer = new gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequestHierarchicalClusteringParameter();
-        hierarchicalClusteringParameterContainer.setHierarchicalClusteringParameter(hierarchicalClusteringParameter);
-        params.setHierarchicalClusteringParameter(hierarchicalClusteringParameterContainer);
+        gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequestHierarchicalCluster hierarchicalClusterContainer = new gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequestHierarchicalCluster();
+        hierarchicalClusterContainer.setHierarchicalCluster(hierarchicalCluster);
+        params.setHierarchicalCluster(hierarchicalClusterContainer);
         gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequestMicroarraySet microarraySetContainer = new gov.nih.nci.cagrid.annualdemo.stubs.ClusterToTreeViewRequestMicroarraySet();
         microarraySetContainer.setMicroarraySet(microarraySet);
         params.setMicroarraySet(microarraySetContainer);
@@ -157,13 +157,13 @@ public class MageTranslationServicesClient extends ServiceSecurityClient impleme
         return boxedResult.getTreeViewInputElement();
       }
     }
-	public edu.columbia.geworkbench.cagrid.cluster.hierarchical.HierarchicalCluster gwClusterToGpCluster(gridextensions.Cluster cluster) throws RemoteException {
+	public edu.columbia.geworkbench.cagrid.cluster.hierarchical.HierarchicalCluster gwClusterToGpCluster(gridextensions.ConsensusClusterResultCollection consensusClusterResultCollection) throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"gwClusterToGpCluster");
         gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterRequest params = new gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterRequest();
-        gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterRequestCluster clusterContainer = new gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterRequestCluster();
-        clusterContainer.setCluster(cluster);
-        params.setCluster(clusterContainer);
+        gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterRequestConsensusClusterResultCollection consensusClusterResultCollectionContainer = new gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterRequestConsensusClusterResultCollection();
+        consensusClusterResultCollectionContainer.setConsensusClusterResultCollection(consensusClusterResultCollection);
+        params.setConsensusClusterResultCollection(consensusClusterResultCollectionContainer);
         gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToGpClusterResponse boxedResult = portType.gwClusterToGpCluster(params);
         return boxedResult.getHierarchicalCluster();
       }

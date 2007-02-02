@@ -314,7 +314,7 @@
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="clusterToTreeView" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns10:HierarchicalClusteringParameter" isArray="false" name="hierarchicalClusteringParameter" xmlns:ns10="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical"/>
+      <ns4:Input qName="ns10:HierarchicalCluster" isArray="false" name="hierarchicalCluster" xmlns:ns10="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical"/>
       <ns4:Input qName="ns11:MicroarraySet" isArray="false" name="microarraySet" xmlns:ns11="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray"/>
      </ns4:Inputs>
      <ns4:Output qName="ns12:TreeViewInputElement" isArray="false" xmlns:ns12="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical"/>
@@ -322,7 +322,7 @@
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="gwClusterToGpCluster" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns13:Cluster" isArray="false" name="cluster" xmlns:ns13="gme://GenePattern.caBIG/1/gridExtensions"/>
+      <ns4:Input qName="ns13:ConsensusClusterResultCollection" isArray="false" name="consensusClusterResultCollection" xmlns:ns13="gme://GenePattern.caBIG/1/gridExtensions"/>
      </ns4:Inputs>
      <ns4:Output qName="ns14:HierarchicalCluster" isArray="false" xmlns:ns14="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical"/>
      <ns4:Exceptions/>

@@ -80,10 +80,10 @@
       <element name="ClusterToTreeViewRequest">
         <complexType>
           <sequence>
-            <element name="hierarchicalClusteringParameter">
+            <element name="hierarchicalCluster">
               <complexType>
                 <sequence>
-                  <element ref="ns1:HierarchicalClusteringParameter" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns1:HierarchicalCluster" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -107,10 +107,10 @@
       <element name="GwClusterToGpClusterRequest">
         <complexType>
           <sequence>
-            <element name="cluster">
+            <element name="consensusClusterResultCollection">
               <complexType>
                 <sequence>
-                  <element ref="ns21:Cluster" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns21:ConsensusClusterResultCollection" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>

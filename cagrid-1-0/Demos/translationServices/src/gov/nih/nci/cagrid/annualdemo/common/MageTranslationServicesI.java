@@ -18,9 +18,9 @@ public interface MageTranslationServicesI {
 
     public gridextensions.Data mageToStatML(gov.nih.nci.cagrid.cqlresultset.CQLQueryResults cQLQueryResultCollection) throws RemoteException ;
 
-    public edu.columbia.geworkbench.cagrid.cluster.hierarchical.TreeViewInput clusterToTreeView(edu.columbia.geworkbench.cagrid.cluster.hierarchical.HierarchicalClusteringParameter hierarchicalClusteringParameter,edu.columbia.geworkbench.cagrid.microarray.MicroarraySet microarraySet) throws RemoteException ;
+    public edu.columbia.geworkbench.cagrid.cluster.hierarchical.TreeViewInput clusterToTreeView(edu.columbia.geworkbench.cagrid.cluster.hierarchical.HierarchicalCluster hierarchicalCluster,edu.columbia.geworkbench.cagrid.microarray.MicroarraySet microarraySet) throws RemoteException ;
 
-    public edu.columbia.geworkbench.cagrid.cluster.hierarchical.HierarchicalCluster gwClusterToGpCluster(gridextensions.Cluster cluster) throws RemoteException ;
+    public edu.columbia.geworkbench.cagrid.cluster.hierarchical.HierarchicalCluster gwClusterToGpCluster(gridextensions.ConsensusClusterResultCollection consensusClusterResultCollection) throws RemoteException ;
 
     public edu.columbia.geworkbench.cagrid.microarray.MicroarraySet statmlToMicroarraySet(gridextensions.Data data) throws RemoteException ;
 
