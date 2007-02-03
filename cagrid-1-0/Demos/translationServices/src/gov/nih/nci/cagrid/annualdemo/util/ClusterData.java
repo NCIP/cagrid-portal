@@ -16,16 +16,21 @@ public class ClusterData
 	
 	public static class Cluster
 	{
-		Cluster cluster1;
-		Cluster cluster2;
-		Cluster parent;
-		String name;
+		public Cluster cluster1;
+		public Cluster cluster2;
+		public Cluster parent;
+		public String name;
 		boolean isLeaf = false;
 		
 		public Cluster(Cluster parent)
 		{
 			super();
 			
+			setParent(parent);
+		}
+		
+		public void setParent(Cluster parent)
+		{
 			this.parent = parent;
 			if (parent != null) {
 				if (parent.cluster1 == null) parent.cluster1 = this;

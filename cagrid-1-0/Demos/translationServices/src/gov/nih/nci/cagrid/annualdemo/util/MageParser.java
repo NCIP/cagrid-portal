@@ -1,7 +1,9 @@
 /*
- * Created on Jan 25, 2007
+ * Created on Feb 3, 2007
  */
 package gov.nih.nci.cagrid.annualdemo.util;
+
+import gridextensions.Data;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,27 +16,23 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import edu.duke.cabig.javar.io.StatMLSerializationException;
-import edu.duke.cabig.javar.io.StatMLSerializer;
-
-import gridextensions.*;
-
-public class MageToStatml
+public class MageParser
 {
-	public MageToStatml()
+	private MicroarrayData microarrayData = new MicroarrayData();
+
+	public MageParser()
 	{
 		super();
 	}
 	
-	public Data translate(String mage) 
+	public void parseMicroarray(String xml) 
 		throws ParserConfigurationException, SAXException, IOException
 	{
 		SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
 		MageHandler handler = new MageHandler();
-		parser.parse(new ByteArrayInputStream(mage.getBytes()), handler);
-		return handler.data;
+		parser.parse(new ByteArrayInputStream(xml.getBytes()), handler);
 	}
-		
+	
 	private class MageHandler
 		extends DefaultHandler
 	{
@@ -79,4 +77,14 @@ public class MageToStatml
 		{
 		}
 	}		 
+
+	public MicroarrayData getMicroarrayData()
+	{
+		return microarrayData;
+	}
+
+	public void setMicroarrayData(MicroarrayData microarrayData)
+	{
+		this.microarrayData = microarrayData;
+	}
 }

@@ -3,7 +3,10 @@
  */
 package gov.nih.nci.cagrid.annualdemo.util;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 import junit.framework.TestCase;
 import junit.framework.TestResult;
@@ -40,9 +43,22 @@ extends TestCase
 		File atrFile = new File(dir, "geworkbench_test.atr");
 		File gtrFile = new File(dir, "geworkbench_test.gtr");
 
-		helper.writeCdt(cdtFile);
-		helper.writeAtr(atrFile);
-		helper.writeGtr(gtrFile);
+		PrintWriter cdtOut = new PrintWriter(new BufferedWriter(new FileWriter(cdtFile)));
+		PrintWriter atrOut = new PrintWriter(new BufferedWriter(new FileWriter(atrFile)));
+		PrintWriter gtrOut = new PrintWriter(new BufferedWriter(new FileWriter(gtrFile)));
+		
+		try {
+			helper.writeCdt(cdtOut);
+			helper.writeAtr(atrOut);
+			helper.writeGtr(gtrOut);
+		} finally {
+			cdtOut.flush();
+			cdtOut.close();
+			atrOut.flush();
+			atrOut.close();
+			gtrOut.flush();
+			gtrOut.close();
+		}
 	}
 	
 	public static void main(String[] args) throws Exception

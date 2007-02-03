@@ -12,6 +12,64 @@ import gridextensions.Data;
 
 public class StatmlHelper
 {
+	public static MicroarrayData extractArrayInfo(Data data)
+		throws IOException, StatMLSerializationException 
+	{
+		Array[] arrays = data.getArray();
+		String[] rowNames = null;
+		String[] rowDescriptions = null;
+		String[] colNames = null;
+		Double[][] values = null;
+		
+		StatMLSerializer serializer = new StatMLSerializer();
+		
+		Array namesArray = arrays[0];
+		Object[] rowNamesObj = serializer.deserialize(namesArray.getBase64Value());
+		int numRows = rowNamesObj.length;
+		int numCols = arrays.length - 2;
+		
+		rowNames = new String[numRows];
+		System.arraycopy(rowNamesObj, 0, rowNames, 0, numRows);
+		
+		Array descriptionArray = arrays[1];
+		Object[] rowDescriptionsObj = serializer.deserialize(descriptionArray.getBase64Value());
+		rowDescriptions = new String[numRows];
+		System.arraycopy(rowDescriptionsObj, 0, rowDescriptions, 0, numRows);
+		
+//		for (int i = 0; i < numRows; i++) {
+//			System.out.println("i=[" + i + "] rowName=[" + rowNames[i] + 
+//				"] rowDescription=[" + rowDescriptions[i] + "]");
+//		}
+		
+		values = new Double[numRows][numCols];
+		colNames = new String[numCols];
+		
+		for (int i = 2; i < arrays.length; i++) {
+			Array array = arrays[i];
+			int index = i - 2;
+			colNames[index] = array.getName();
+//			System.out.println("i=[" + i + "] index=[" + index + "]");
+			Object[] objs = serializer.deserialize(array.getBase64Value());
+			for (int row = 0; row < objs.length; row++) {
+				Double value = (Double) objs[row];
+//				System.out.println("row=[" + row + "] index=[" + index + "] value=[" +
+//					value + "]");
+				values[row][index] = (Double) objs[row];
+			}
+		}
+		
+		MicroarrayData microarray = new MicroarrayData();
+		for (String rowName : rowNames) microarray.geneNames.add(rowName);
+		for (String colName : colNames) microarray.arrayNames.add(colName);
+		for (Double[] rowVals : values) {
+			double[] drowVals = new double[rowVals.length];
+			for (int i = 0; i < rowVals.length; i++) {
+				drowVals[i] = rowVals[i].doubleValue();
+			}  
+			microarray.data.add(drowVals);
+		}
+		return microarray;
+	}		 
 	
 	/**
 	 * Creates a Data object.

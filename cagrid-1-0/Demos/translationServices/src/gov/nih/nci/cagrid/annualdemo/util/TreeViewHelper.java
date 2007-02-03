@@ -134,9 +134,13 @@ public class TreeViewHelper
 			out.print(microarrayData.geneNames.get(geneIndex));
 			out.print("\t1");
 			
-			for (double[] d : microarrayData.data) {
+//			for (double[] d : microarrayData.data) {
+//				out.print("\t");
+//				out.print(d[i]);
+//			}
+			for (double d : microarrayData.data.get(i)) {
 				out.print("\t");
-				out.print(d[i]);
+				out.print(d);
 			}
 			
 			out.println();

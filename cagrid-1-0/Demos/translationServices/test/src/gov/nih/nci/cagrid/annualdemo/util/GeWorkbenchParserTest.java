@@ -3,10 +3,14 @@
  */
 package gov.nih.nci.cagrid.annualdemo.util;
 
+import edu.columbia.geworkbench.cagrid.microarray.MicroarraySet;
+import gov.nih.nci.cagrid.common.Utils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 
 import junit.framework.TestCase;
 import junit.framework.TestResult;
@@ -43,8 +47,39 @@ public class GeWorkbenchParserTest
 		MicroarrayData data = parser.getMicroarrayData();
 		assertEquals(200, data.arrayNames.size());
 		assertEquals(30, data.geneNames.size());
-		assertEquals(200, data.data.size());
-		assertEquals(30, data.data.get(0).length);
+		assertEquals(30, data.data.size());
+		assertEquals(200, data.data.get(0).length);
+	}
+	
+	public void testParseMicroarray2()
+		throws Exception
+	{
+		GeWorkbenchParser parser = new GeWorkbenchParser();
+		parser.parseMicroarray(
+			readText(new File("test", "resources" + File.separator + "geworkbench_microarrayset2.xml"))
+		);
+		MicroarrayData data = parser.getMicroarrayData();
+		assertEquals(200, data.arrayNames.size());
+		assertEquals(30, data.geneNames.size());
+		assertEquals(30, data.data.size());
+		assertEquals(200, data.data.get(0).length);
+	}
+	
+	public void testRoundTrip()
+		throws Exception
+	{
+		String xml = readText(new File("test", "resources" + File.separator + "geworkbench_microarrayset2.xml"));
+		MicroarraySet ms = (MicroarraySet) Utils.deserializeObject(new StringReader(xml), MicroarraySet.class);
+
+		GeWorkbenchParser parser = new GeWorkbenchParser();
+		parser.parseMicroarray(xml);
+		MicroarraySet ms2 = parser.convertToMicroarraySet();
+		
+		assertEquals(ms.getMarker().length, ms2.getMarker().length);
+		assertEquals(ms.getMicroarray().length, ms2.getMicroarray().length);
+		assertEquals(ms.getMarker()[0].getMarkerName(), ms2.getMarker()[0].getMarkerName());
+		assertEquals(ms.getMarker()[0].getMarkerData().length, ms2.getMarker()[0].getMarkerData().length);
+		assertEquals(ms.getMarker()[0].getMarkerData()[0], ms2.getMarker()[0].getMarkerData()[0]);
 	}
 	
 	protected static String readText(File file) 
