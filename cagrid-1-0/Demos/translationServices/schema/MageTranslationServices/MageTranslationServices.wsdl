@@ -37,7 +37,7 @@
       <import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioEvent" schemaLocation="./gov.nih.nci.mageom.domain.BioEvent.xsd" />
       <import namespace="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical" schemaLocation="./hierarchicalCluster.xsd" />
       <import namespace="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssay" schemaLocation="./gov.nih.nci.mageom.domain.BioAssay.xsd" />
-      <element name="MageToMicroArrayRequest">
+      <element name="MageToMicroArraySetRequest">
         <complexType>
           <sequence>
             <element name="cQLQueryResultCollection">
@@ -50,7 +50,7 @@
           </sequence>
         </complexType>
       </element>
-      <element name="MageToMicroArrayResponse">
+      <element name="MageToMicroArraySetResponse">
         <complexType>
           <sequence>
             <element ref="ns20:MicroarraySet" minOccurs="1" maxOccurs="1" />
@@ -77,7 +77,7 @@
           </sequence>
         </complexType>
       </element>
-      <element name="ClusterToTreeViewRequest">
+      <element name="GwClusterToTreeViewRequest">
         <complexType>
           <sequence>
             <element name="hierarchicalCluster">
@@ -97,30 +97,10 @@
           </sequence>
         </complexType>
       </element>
-      <element name="ClusterToTreeViewResponse">
+      <element name="GwClusterToTreeViewResponse">
         <complexType>
           <sequence>
             <element ref="ns1:TreeViewInputElement" minOccurs="1" maxOccurs="1" />
-          </sequence>
-        </complexType>
-      </element>
-      <element name="GwClusterToGpClusterRequest">
-        <complexType>
-          <sequence>
-            <element name="consensusClusterResultCollection">
-              <complexType>
-                <sequence>
-                  <element ref="ns21:ConsensusClusterResultCollection" minOccurs="1" maxOccurs="1" />
-                </sequence>
-              </complexType>
-            </element>
-          </sequence>
-        </complexType>
-      </element>
-      <element name="GwClusterToGpClusterResponse">
-        <complexType>
-          <sequence>
-            <element ref="ns1:HierarchicalCluster" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -144,6 +124,53 @@
           </sequence>
         </complexType>
       </element>
+      <element name="GpClusterToTreeViewRequest">
+        <complexType>
+          <sequence>
+            <element name="consensusClusterResultCollection">
+              <complexType>
+                <sequence>
+                  <element ref="ns21:ConsensusClusterResultCollection" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="data">
+              <complexType>
+                <sequence>
+                  <element ref="ns21:Data" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GpClusterToTreeViewResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns1:TreeViewInputElement" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="MicroarraySetToStatmlRequest">
+        <complexType>
+          <sequence>
+            <element name="microarraySet">
+              <complexType>
+                <sequence>
+                  <element ref="ns20:MicroarraySet" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="MicroarraySetToStatmlResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns21:Data" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="MageTranslationServicesResourceProperties">
         <complexType>
           <sequence />
@@ -152,11 +179,11 @@
     </schema>
   </types>
   <!--  place service messages here -->
-  <message name="MageToMicroArrayRequest">
-    <part name="parameters" element="tns:MageToMicroArrayRequest" />
+  <message name="MageToMicroArraySetRequest">
+    <part name="parameters" element="tns:MageToMicroArraySetRequest" />
   </message>
-  <message name="MageToMicroArrayResponse">
-    <part name="parameters" element="tns:MageToMicroArrayResponse" />
+  <message name="MageToMicroArraySetResponse">
+    <part name="parameters" element="tns:MageToMicroArraySetResponse" />
   </message>
   <message name="MageToStatMLRequest">
     <part name="parameters" element="tns:MageToStatMLRequest" />
@@ -164,17 +191,11 @@
   <message name="MageToStatMLResponse">
     <part name="parameters" element="tns:MageToStatMLResponse" />
   </message>
-  <message name="ClusterToTreeViewRequest">
-    <part name="parameters" element="tns:ClusterToTreeViewRequest" />
+  <message name="GwClusterToTreeViewRequest">
+    <part name="parameters" element="tns:GwClusterToTreeViewRequest" />
   </message>
-  <message name="ClusterToTreeViewResponse">
-    <part name="parameters" element="tns:ClusterToTreeViewResponse" />
-  </message>
-  <message name="GwClusterToGpClusterRequest">
-    <part name="parameters" element="tns:GwClusterToGpClusterRequest" />
-  </message>
-  <message name="GwClusterToGpClusterResponse">
-    <part name="parameters" element="tns:GwClusterToGpClusterResponse" />
+  <message name="GwClusterToTreeViewResponse">
+    <part name="parameters" element="tns:GwClusterToTreeViewResponse" />
   </message>
   <message name="StatmlToMicroarraySetRequest">
     <part name="parameters" element="tns:StatmlToMicroarraySetRequest" />
@@ -182,31 +203,47 @@
   <message name="StatmlToMicroarraySetResponse">
     <part name="parameters" element="tns:StatmlToMicroarraySetResponse" />
   </message>
+  <message name="GpClusterToTreeViewRequest">
+    <part name="parameters" element="tns:GpClusterToTreeViewRequest" />
+  </message>
+  <message name="GpClusterToTreeViewResponse">
+    <part name="parameters" element="tns:GpClusterToTreeViewResponse" />
+  </message>
+  <message name="MicroarraySetToStatmlRequest">
+    <part name="parameters" element="tns:MicroarraySetToStatmlRequest" />
+  </message>
+  <message name="MicroarraySetToStatmlResponse">
+    <part name="parameters" element="tns:MicroarraySetToStatmlResponse" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
                       
   ============================================================-->
   <portType name="MageTranslationServicesPortType" wsrp:ResourceProperties="tns:MageTranslationServicesResourceProperties">
-    <operation name="mageToMicroArray">
-      <input message="tns:MageToMicroArrayRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToMicroArrayRequest" />
-      <output message="tns:MageToMicroArrayResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToMicroArrayResponse" />
+    <operation name="mageToMicroArraySet">
+      <input message="tns:MageToMicroArraySetRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToMicroArraySetRequest" />
+      <output message="tns:MageToMicroArraySetResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToMicroArraySetResponse" />
     </operation>
     <operation name="mageToStatML">
       <input message="tns:MageToStatMLRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToStatMLRequest" />
       <output message="tns:MageToStatMLResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MageToStatMLResponse" />
     </operation>
-    <operation name="clusterToTreeView">
-      <input message="tns:ClusterToTreeViewRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/ClusterToTreeViewRequest" />
-      <output message="tns:ClusterToTreeViewResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/ClusterToTreeViewResponse" />
-    </operation>
-    <operation name="gwClusterToGpCluster">
-      <input message="tns:GwClusterToGpClusterRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/GwClusterToGpClusterRequest" />
-      <output message="tns:GwClusterToGpClusterResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/GwClusterToGpClusterResponse" />
+    <operation name="gwClusterToTreeView">
+      <input message="tns:GwClusterToTreeViewRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/GwClusterToTreeViewRequest" />
+      <output message="tns:GwClusterToTreeViewResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/GwClusterToTreeViewResponse" />
     </operation>
     <operation name="statmlToMicroarraySet">
       <input message="tns:StatmlToMicroarraySetRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/StatmlToMicroarraySetRequest" />
       <output message="tns:StatmlToMicroarraySetResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/StatmlToMicroarraySetResponse" />
+    </operation>
+    <operation name="gpClusterToTreeView">
+      <input message="tns:GpClusterToTreeViewRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/GpClusterToTreeViewRequest" />
+      <output message="tns:GpClusterToTreeViewResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/GpClusterToTreeViewResponse" />
+    </operation>
+    <operation name="microarraySetToStatml">
+      <input message="tns:MicroarraySetToStatmlRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MicroarraySetToStatmlRequest" />
+      <output message="tns:MicroarraySetToStatmlResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MicroarraySetToStatmlResponse" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

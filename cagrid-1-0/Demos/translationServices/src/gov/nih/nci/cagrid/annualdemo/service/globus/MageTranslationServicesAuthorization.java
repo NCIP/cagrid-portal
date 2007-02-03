@@ -30,7 +30,7 @@ public class MageTranslationServicesAuthorization{
 	}
 	
 					
-	public static void authorizeMageToMicroArray() throws RemoteException {
+	public static void authorizeMageToMicroArraySet() throws RemoteException {
 		
 		
 	}
@@ -40,17 +40,22 @@ public class MageTranslationServicesAuthorization{
 		
 	}
 					
-	public static void authorizeClusterToTreeView() throws RemoteException {
-		
-		
-	}
-					
-	public static void authorizeGwClusterToGpCluster() throws RemoteException {
+	public static void authorizeGwClusterToTreeView() throws RemoteException {
 		
 		
 	}
 					
 	public static void authorizeStatmlToMicroarraySet() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeGpClusterToTreeView() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeMicroarraySetToStatml() throws RemoteException {
 		
 		
 	}

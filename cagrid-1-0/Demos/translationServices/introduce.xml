@@ -298,7 +298,7 @@
      <ns4:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
      <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
     </ns4:Method>
-    <ns4:Method isImported="false" isProvided="false" name="mageToMicroArray" xsi:type="ns4:MethodType">
+    <ns4:Method isImported="false" isProvided="false" name="mageToMicroArraySet" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="ns6:CQLQueryResultCollection" isArray="false" name="cQLQueryResultCollection" xmlns:ns6="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
      </ns4:Inputs>
@@ -312,7 +312,7 @@
      <ns4:Output qName="ns9:Data" isArray="false" xmlns:ns9="gme://GenePattern.caBIG/1/gridExtensions"/>
      <ns4:Exceptions/>
     </ns4:Method>
-    <ns4:Method isImported="false" isProvided="false" name="clusterToTreeView" xsi:type="ns4:MethodType">
+    <ns4:Method isImported="false" isProvided="false" name="gwClusterToTreeView" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="ns10:HierarchicalCluster" isArray="false" name="hierarchicalCluster" xmlns:ns10="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical"/>
       <ns4:Input qName="ns11:MicroarraySet" isArray="false" name="microarraySet" xmlns:ns11="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray"/>
@@ -320,23 +320,31 @@
      <ns4:Output qName="ns12:TreeViewInputElement" isArray="false" xmlns:ns12="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical"/>
      <ns4:Exceptions/>
     </ns4:Method>
-    <ns4:Method isImported="false" isProvided="false" name="gwClusterToGpCluster" xsi:type="ns4:MethodType">
-     <ns4:Inputs>
-      <ns4:Input qName="ns13:ConsensusClusterResultCollection" isArray="false" name="consensusClusterResultCollection" xmlns:ns13="gme://GenePattern.caBIG/1/gridExtensions"/>
-     </ns4:Inputs>
-     <ns4:Output qName="ns14:HierarchicalCluster" isArray="false" xmlns:ns14="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical"/>
-     <ns4:Exceptions/>
-    </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="statmlToMicroarraySet" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns15:Data" isArray="false" name="data" xmlns:ns15="gme://GenePattern.caBIG/1/gridExtensions"/>
+      <ns4:Input qName="ns13:Data" isArray="false" name="data" xmlns:ns13="gme://GenePattern.caBIG/1/gridExtensions"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns16:MicroarraySet" isArray="false" xmlns:ns16="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray"/>
+     <ns4:Output qName="ns14:MicroarraySet" isArray="false" xmlns:ns14="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="gpClusterToTreeView" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns15:ConsensusClusterResultCollection" isArray="false" name="consensusClusterResultCollection" xmlns:ns15="gme://GenePattern.caBIG/1/gridExtensions"/>
+      <ns4:Input qName="ns16:Data" isArray="false" name="data" xmlns:ns16="gme://GenePattern.caBIG/1/gridExtensions"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns17:TreeViewInputElement" isArray="false" xmlns:ns17="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.cluster.hierarchical"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="microarraySetToStatml" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns18:MicroarraySet" isArray="false" name="microarraySet" xmlns:ns18="gme://cagrid.geworkbench.columbia.edu/1/edu.columbia.geworkbench.cagrid.microarray"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns19:Data" isArray="false" xmlns:ns19="gme://GenePattern.caBIG/1/gridExtensions"/>
      <ns4:Exceptions/>
     </ns4:Method>
    </ns4:Methods>
-   <ns17:ResourcePropertiesList xsi:type="ns17:ResourcePropertiesListType" xmlns:ns17="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns20:ResourcePropertiesList xsi:type="ns20:ResourcePropertiesListType" xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
   </ns3:Service>
  </ns3:Services>
- <ns18:Extensions xsi:type="ns18:ExtensionsType" xmlns:ns18="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns21:Extensions xsi:type="ns21:ExtensionsType" xmlns:ns21="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
 </ns1:ServiceDescription>
