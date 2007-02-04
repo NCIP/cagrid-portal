@@ -112,5 +112,11 @@
 	<classpathentry kind="lib" path="lib/caarray/nciData.jar"/>
 	<classpathentry kind="lib" path="lib/caarray/netcdfAll.jar"/>
 	<classpathentry kind="lib" path="lib/caarray/netcdfapi.jar"/>
+	<classpathentry kind="lib" path="lib/PreprocessDatasetSTATMLService-client.jar"/>
+	<classpathentry kind="lib" path="lib/PreprocessDatasetSTATMLService-common.jar"/>
+	<classpathentry kind="lib" path="lib/PreprocessDatasetSTATMLService-service.jar"/>
+	<classpathentry kind="lib" path="lib/PreprocessDatasetSTATMLService-stubs.jar"/>
+	<classpathentry kind="lib" path="lib/PreprocessDatasetSTATMLService-tests.jar"/>
+	<classpathentry kind="lib" path="lib/gpCabigUtil.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
