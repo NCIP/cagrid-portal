@@ -12,19 +12,21 @@ import java.rmi.RemoteException;
  */
 public interface MageTranslationServicesI {
 
+    public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
+
     public edu.columbia.geworkbench.cagrid.microarray.MicroarraySet mageToMicroArraySet(gov.nih.nci.cagrid.cqlresultset.CQLQueryResults cQLQueryResultCollection) throws RemoteException ;
 
+    public gridextensions.Data mageToStatML(gov.nih.nci.cagrid.cqlresultset.CQLQueryResults cQLQueryResultCollection) throws RemoteException ;
+
     public edu.columbia.geworkbench.cagrid.cluster.hierarchical.TreeViewInput gwClusterToTreeView(edu.columbia.geworkbench.cagrid.cluster.hierarchical.HierarchicalCluster hierarchicalCluster,edu.columbia.geworkbench.cagrid.microarray.MicroarraySet microarraySet) throws RemoteException ;
+
+    public edu.columbia.geworkbench.cagrid.microarray.MicroarraySet statmlToMicroarraySet(gridextensions.Data data) throws RemoteException ;
 
     public edu.columbia.geworkbench.cagrid.cluster.hierarchical.TreeViewInput gpClusterToTreeView(gridextensions.ConsensusClusterResultCollection consensusClusterResultCollection,gridextensions.Data data) throws RemoteException ;
 
     public gridextensions.Data microarraySetToStatml(edu.columbia.geworkbench.cagrid.microarray.MicroarraySet microarraySet) throws RemoteException ;
 
-    public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
-
-    public gridextensions.Data mageToStatML(gov.nih.nci.cagrid.cqlresultset.CQLQueryResults cQLQueryResultCollection) throws RemoteException ;
-
-    public edu.columbia.geworkbench.cagrid.microarray.MicroarraySet statmlToMicroarraySet(gridextensions.Data data) throws RemoteException ;
+    public gridextensions.Data performAnalysis(gridextensions.Data data,gridextensions.PreprocessDatasetParameterSet preprocessDatasetParameterSet) throws RemoteException ;
 
 }
 

@@ -171,6 +171,33 @@
           </sequence>
         </complexType>
       </element>
+      <element name="PerformAnalysisRequest">
+        <complexType>
+          <sequence>
+            <element name="data">
+              <complexType>
+                <sequence>
+                  <element ref="ns21:Data" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="preprocessDatasetParameterSet">
+              <complexType>
+                <sequence>
+                  <element ref="ns21:PreprocessDatasetParameterSet" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="PerformAnalysisResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns21:Data" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="MageTranslationServicesResourceProperties">
         <complexType>
           <sequence />
@@ -215,6 +242,12 @@
   <message name="MicroarraySetToStatmlResponse">
     <part name="parameters" element="tns:MicroarraySetToStatmlResponse" />
   </message>
+  <message name="PerformAnalysisRequest">
+    <part name="parameters" element="tns:PerformAnalysisRequest" />
+  </message>
+  <message name="PerformAnalysisResponse">
+    <part name="parameters" element="tns:PerformAnalysisResponse" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -244,6 +277,10 @@
     <operation name="microarraySetToStatml">
       <input message="tns:MicroarraySetToStatmlRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MicroarraySetToStatmlRequest" />
       <output message="tns:MicroarraySetToStatmlResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/MicroarraySetToStatmlResponse" />
+    </operation>
+    <operation name="performAnalysis">
+      <input message="tns:PerformAnalysisRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/PerformAnalysisRequest" />
+      <output message="tns:PerformAnalysisResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/PerformAnalysisResponse" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

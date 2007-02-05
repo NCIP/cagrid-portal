@@ -33,10 +33,24 @@ public class MageTranslationServicesProviderImpl{
 		return boxedResult;
 	}
 
+	public gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLResponse mageToStatML(gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLRequest params) throws RemoteException {
+		MageTranslationServicesAuthorization.authorizeMageToStatML();
+		gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLResponse();
+		boxedResult.setData(impl.mageToStatML(params.getCQLQueryResultCollection().getCQLQueryResultCollection()));
+		return boxedResult;
+	}
+
 	public gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToTreeViewResponse gwClusterToTreeView(gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToTreeViewRequest params) throws RemoteException {
 		MageTranslationServicesAuthorization.authorizeGwClusterToTreeView();
 		gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToTreeViewResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.GwClusterToTreeViewResponse();
 		boxedResult.setTreeViewInputElement(impl.gwClusterToTreeView(params.getHierarchicalCluster().getHierarchicalCluster(),params.getMicroarraySet().getMicroarraySet()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetResponse statmlToMicroarraySet(gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetRequest params) throws RemoteException {
+		MageTranslationServicesAuthorization.authorizeStatmlToMicroarraySet();
+		gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetResponse();
+		boxedResult.setMicroarraySet(impl.statmlToMicroarraySet(params.getData().getData()));
 		return boxedResult;
 	}
 
@@ -54,17 +68,10 @@ public class MageTranslationServicesProviderImpl{
 		return boxedResult;
 	}
 
-	public gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLResponse mageToStatML(gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLRequest params) throws RemoteException {
-		MageTranslationServicesAuthorization.authorizeMageToStatML();
-		gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.MageToStatMLResponse();
-		boxedResult.setData(impl.mageToStatML(params.getCQLQueryResultCollection().getCQLQueryResultCollection()));
-		return boxedResult;
-	}
-
-	public gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetResponse statmlToMicroarraySet(gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetRequest params) throws RemoteException {
-		MageTranslationServicesAuthorization.authorizeStatmlToMicroarraySet();
-		gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.StatmlToMicroarraySetResponse();
-		boxedResult.setMicroarraySet(impl.statmlToMicroarraySet(params.getData().getData()));
+	public gov.nih.nci.cagrid.annualdemo.stubs.PerformAnalysisResponse performAnalysis(gov.nih.nci.cagrid.annualdemo.stubs.PerformAnalysisRequest params) throws RemoteException {
+		MageTranslationServicesAuthorization.authorizePerformAnalysis();
+		gov.nih.nci.cagrid.annualdemo.stubs.PerformAnalysisResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.PerformAnalysisResponse();
+		boxedResult.setData(impl.performAnalysis(params.getData().getData(),params.getPreprocessDatasetParameterSet().getPreprocessDatasetParameterSet()));
 		return boxedResult;
 	}
 

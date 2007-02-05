@@ -118,5 +118,6 @@
 	<classpathentry kind="lib" path="lib/PreprocessDatasetSTATMLService-stubs.jar"/>
 	<classpathentry kind="lib" path="lib/PreprocessDatasetSTATMLService-tests.jar"/>
 	<classpathentry kind="lib" path="lib/gpCabigUtil.jar"/>
+	<classpathentry kind="lib" path="lib/gp-modules.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

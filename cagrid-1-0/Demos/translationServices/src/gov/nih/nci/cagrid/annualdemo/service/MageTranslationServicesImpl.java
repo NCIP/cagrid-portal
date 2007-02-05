@@ -14,6 +14,8 @@ import java.rmi.RemoteException;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.types.URI.MalformedURIException;
+
 /** 
  * TODO:I am the service side implementation class.  IMPLEMENT AND DOCUMENT ME
  * 
@@ -51,7 +53,6 @@ public class MageTranslationServicesImpl extends MageTranslationServicesImplBase
 			throw new RemoteException(e.getMessage());
 		}
 	}
-
 
 	public edu.columbia.geworkbench.cagrid.microarray.MicroarraySet statmlToMicroarraySet(gridextensions.Data data) throws RemoteException {
 		try {
@@ -116,7 +117,6 @@ public class MageTranslationServicesImpl extends MageTranslationServicesImplBase
 //		}
 //
 //	}
-
 
 	public edu.columbia.geworkbench.cagrid.cluster.hierarchical.TreeViewInput gwClusterToTreeView(edu.columbia.geworkbench.cagrid.cluster.hierarchical.HierarchicalCluster hierarchicalCluster,edu.columbia.geworkbench.cagrid.microarray.MicroarraySet microarraySet) throws RemoteException {
 		GeWorkbenchParser parser = new GeWorkbenchParser();
@@ -228,5 +228,21 @@ public class MageTranslationServicesImpl extends MageTranslationServicesImplBase
 			throw new RemoteException(e.getMessage());
 		}
 	}
+
+	public gridextensions.Data performAnalysis(gridextensions.Data data,gridextensions.PreprocessDatasetParameterSet preprocessDatasetParameterSet) throws RemoteException {
+		PreprocessDatasetSTATMLServiceClient client;
+		try {
+			client = new PreprocessDatasetSTATMLServiceClient("http://node255.broad.mit.edu:6060/wsrf/services/cagrid/PreprocessDatasetSTATMLService");
+			return client.performAnalysis(data, preprocessDatasetParameterSet);
+		} catch (MalformedURIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }
 

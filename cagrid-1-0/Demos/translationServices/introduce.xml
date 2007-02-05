@@ -342,9 +342,17 @@
      <ns4:Output qName="ns19:Data" isArray="false" xmlns:ns19="gme://GenePattern.caBIG/1/gridExtensions"/>
      <ns4:Exceptions/>
     </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="performAnalysis" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns20:Data" isArray="false" name="data" xmlns:ns20="gme://GenePattern.caBIG/1/gridExtensions"/>
+      <ns4:Input qName="ns21:PreprocessDatasetParameterSet" isArray="false" name="preprocessDatasetParameterSet" xmlns:ns21="gme://GenePattern.caBIG/1/gridExtensions"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns22:Data" isArray="false" xmlns:ns22="gme://GenePattern.caBIG/1/gridExtensions"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
    </ns4:Methods>
-   <ns20:ResourcePropertiesList xsi:type="ns20:ResourcePropertiesListType" xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns23:ResourcePropertiesList xsi:type="ns23:ResourcePropertiesListType" xmlns:ns23="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
   </ns3:Service>
  </ns3:Services>
- <ns21:Extensions xsi:type="ns21:ExtensionsType" xmlns:ns21="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns24:Extensions xsi:type="ns24:ExtensionsType" xmlns:ns24="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
 </ns1:ServiceDescription>

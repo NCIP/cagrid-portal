@@ -59,6 +59,11 @@ public class MageTranslationServicesAuthorization{
 		
 		
 	}
+					
+	public static void authorizePerformAnalysis() throws RemoteException {
+		
+		
+	}
 	
 	
 }
