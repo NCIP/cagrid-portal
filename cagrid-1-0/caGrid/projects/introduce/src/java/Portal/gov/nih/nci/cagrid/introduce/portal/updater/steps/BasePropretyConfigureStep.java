@@ -128,7 +128,6 @@ public abstract class BasePropretyConfigureStep extends PanelWizardStep {
 		return optionsPanel;
 	}
 
-	@Override
 	public void applyState() throws InvalidStateException {
 		super.applyState();
 		for (int i = 0; i < myOptionsKeys.size(); i++) {
