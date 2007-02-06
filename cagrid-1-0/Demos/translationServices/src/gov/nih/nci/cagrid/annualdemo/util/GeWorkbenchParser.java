@@ -51,6 +51,12 @@ public class GeWorkbenchParser
 		for (int i = 0; i < microarray.length; i++) {
 			microarray[i] = new Microarray();
 			microarray[i].setArrayName(microarrayData.arrayNames.get(i));
+			
+			float[] fdata = new float[microarrayData.geneNames.size()];
+			for (int j = 0; j < fdata.length; j++) {
+				fdata[j] = (float) microarrayData.data.get(j)[i];
+			}
+			microarray[i].setArrayData(fdata);
 		}
 		ms.setMicroarray(microarray);
 		
