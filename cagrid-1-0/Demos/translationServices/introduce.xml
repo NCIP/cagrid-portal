@@ -350,9 +350,23 @@
      <ns4:Output qName="ns22:Data" isArray="false" xmlns:ns22="gme://GenePattern.caBIG/1/gridExtensions"/>
      <ns4:Exceptions/>
     </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="bioAssayToStatML" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns23:MeasuredBioAssay" isArray="true" name="measuredBioAssay" xmlns:ns23="gme://caArray.caBIG/1.1/gov.nih.nci.mageom.domain.BioAssay"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns24:Data" isArray="false" xmlns:ns24="gme://GenePattern.caBIG/1/gridExtensions"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
+    <ns4:Method isImported="false" isProvided="false" name="bioAssayToMicroArraySet" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns25:MeasuredBioAssay" isArray="true" name="measuredBioAssay" xmlns:ns25="gme://GenePattern.caBIG/1/gridExtensions"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns26:Data" isArray="false" xmlns:ns26="gme://GenePattern.caBIG/1/gridExtensions"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
    </ns4:Methods>
-   <ns23:ResourcePropertiesList xsi:type="ns23:ResourcePropertiesListType" xmlns:ns23="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns27:ResourcePropertiesList xsi:type="ns27:ResourcePropertiesListType" xmlns:ns27="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
   </ns3:Service>
  </ns3:Services>
- <ns24:Extensions xsi:type="ns24:ExtensionsType" xmlns:ns24="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns28:Extensions xsi:type="ns28:ExtensionsType" xmlns:ns28="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
 </ns1:ServiceDescription>

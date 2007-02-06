@@ -113,6 +113,28 @@ public class MageTranslationServicesClient extends ServiceSecurityClient impleme
 		}
 	}
 
+	public gridextensions.Data bioAssayToStatML(gov.nih.nci.mageom.domain.bioassay.MeasuredBioAssay[] measuredBioAssay) throws RemoteException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"bioAssayToStatML");
+        gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToStatMLRequest params = new gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToStatMLRequest();
+        gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToStatMLRequestMeasuredBioAssay measuredBioAssayContainer = new gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToStatMLRequestMeasuredBioAssay();
+        measuredBioAssayContainer.setMeasuredBioAssay(measuredBioAssay);
+        params.setMeasuredBioAssay(measuredBioAssayContainer);
+        gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToStatMLResponse boxedResult = portType.bioAssayToStatML(params);
+        return boxedResult.getData();
+      }
+    }
+	public gridextensions.Data bioAssayToMicroArraySet(gridextensions.MeasuredBioAssay[] measuredBioAssay) throws RemoteException {
+      synchronized(portTypeMutex){
+        configureStubSecurity((Stub)portType,"bioAssayToMicroArraySet");
+        gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToMicroArraySetRequest params = new gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToMicroArraySetRequest();
+        gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToMicroArraySetRequestMeasuredBioAssay measuredBioAssayContainer = new gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToMicroArraySetRequestMeasuredBioAssay();
+        measuredBioAssayContainer.setMeasuredBioAssay(measuredBioAssay);
+        params.setMeasuredBioAssay(measuredBioAssayContainer);
+        gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToMicroArraySetResponse boxedResult = portType.bioAssayToMicroArraySet(params);
+        return boxedResult.getData();
+      }
+    }
 	public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
       synchronized(portTypeMutex){
         configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");

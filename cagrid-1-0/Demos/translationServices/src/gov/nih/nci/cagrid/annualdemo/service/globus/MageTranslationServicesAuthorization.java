@@ -64,6 +64,16 @@ public class MageTranslationServicesAuthorization{
 		
 		
 	}
+					
+	public static void authorizeBioAssayToStatML() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeBioAssayToMicroArraySet() throws RemoteException {
+		
+		
+	}
 	
 	
 }

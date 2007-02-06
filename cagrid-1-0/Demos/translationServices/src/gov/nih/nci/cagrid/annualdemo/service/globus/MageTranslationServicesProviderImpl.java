@@ -26,6 +26,20 @@ public class MageTranslationServicesProviderImpl{
 	}
 	
 
+	public gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToStatMLResponse bioAssayToStatML(gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToStatMLRequest params) throws RemoteException {
+		MageTranslationServicesAuthorization.authorizeBioAssayToStatML();
+		gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToStatMLResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToStatMLResponse();
+		boxedResult.setData(impl.bioAssayToStatML(params.getMeasuredBioAssay().getMeasuredBioAssay()));
+		return boxedResult;
+	}
+
+	public gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToMicroArraySetResponse bioAssayToMicroArraySet(gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToMicroArraySetRequest params) throws RemoteException {
+		MageTranslationServicesAuthorization.authorizeBioAssayToMicroArraySet();
+		gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToMicroArraySetResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.BioAssayToMicroArraySetResponse();
+		boxedResult.setData(impl.bioAssayToMicroArraySet(params.getMeasuredBioAssay().getMeasuredBioAssay()));
+		return boxedResult;
+	}
+
 	public gov.nih.nci.cagrid.annualdemo.stubs.MageToMicroArraySetResponse mageToMicroArraySet(gov.nih.nci.cagrid.annualdemo.stubs.MageToMicroArraySetRequest params) throws RemoteException {
 		MageTranslationServicesAuthorization.authorizeMageToMicroArraySet();
 		gov.nih.nci.cagrid.annualdemo.stubs.MageToMicroArraySetResponse boxedResult = new gov.nih.nci.cagrid.annualdemo.stubs.MageToMicroArraySetResponse();

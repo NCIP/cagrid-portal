@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.annualdemo.service;
 
 import edu.duke.cabig.javar.io.StatMLSerializer;
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
+import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
 import gridextensions.Array;
 import gridextensions.Data;
 import gridextensions.PreprocessDatasetParameterSet;
@@ -190,7 +191,7 @@ public class PreprocessDatasetSTATMLServiceClient extends ServiceSecurityClient 
     }
     public gridextensions.Data performAnalysis(gridextensions.Data data,gridextensions.PreprocessDatasetParameterSet preprocessDatasetParameterSet) throws RemoteException, org.genepattern.cagrid.service.preprocessdataset.statml.stubs.InvalidParameterException {
       synchronized(portTypeMutex){
-        configureStubSecurity((Stub)portType,"performAnalysis");
+       // configureStubSecurity((Stub)portType,"performAnalysis");
         org.genepattern.cagrid.service.preprocessdataset.statml.stubs.PerformAnalysisRequest params = new org.genepattern.cagrid.service.preprocessdataset.statml.stubs.PerformAnalysisRequest();
         org.genepattern.cagrid.service.preprocessdataset.statml.stubs.PerformAnalysisRequestData dataContainer = new org.genepattern.cagrid.service.preprocessdataset.statml.stubs.PerformAnalysisRequestData();
         dataContainer.setData(data);

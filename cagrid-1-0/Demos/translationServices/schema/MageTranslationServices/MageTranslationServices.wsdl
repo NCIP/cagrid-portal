@@ -198,6 +198,46 @@
           </sequence>
         </complexType>
       </element>
+      <element name="BioAssayToStatMLRequest">
+        <complexType>
+          <sequence>
+            <element name="measuredBioAssay">
+              <complexType>
+                <sequence>
+                  <element ref="ns13:MeasuredBioAssay" minOccurs="1" maxOccurs="unbounded" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="BioAssayToStatMLResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns21:Data" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="BioAssayToMicroArraySetRequest">
+        <complexType>
+          <sequence>
+            <element name="measuredBioAssay">
+              <complexType>
+                <sequence>
+                  <element ref="ns21:MeasuredBioAssay" minOccurs="1" maxOccurs="unbounded" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="BioAssayToMicroArraySetResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns21:Data" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="MageTranslationServicesResourceProperties">
         <complexType>
           <sequence />
@@ -248,6 +288,18 @@
   <message name="PerformAnalysisResponse">
     <part name="parameters" element="tns:PerformAnalysisResponse" />
   </message>
+  <message name="BioAssayToStatMLRequest">
+    <part name="parameters" element="tns:BioAssayToStatMLRequest" />
+  </message>
+  <message name="BioAssayToStatMLResponse">
+    <part name="parameters" element="tns:BioAssayToStatMLResponse" />
+  </message>
+  <message name="BioAssayToMicroArraySetRequest">
+    <part name="parameters" element="tns:BioAssayToMicroArraySetRequest" />
+  </message>
+  <message name="BioAssayToMicroArraySetResponse">
+    <part name="parameters" element="tns:BioAssayToMicroArraySetResponse" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -281,6 +333,14 @@
     <operation name="performAnalysis">
       <input message="tns:PerformAnalysisRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/PerformAnalysisRequest" />
       <output message="tns:PerformAnalysisResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/PerformAnalysisResponse" />
+    </operation>
+    <operation name="bioAssayToStatML">
+      <input message="tns:BioAssayToStatMLRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/BioAssayToStatMLRequest" />
+      <output message="tns:BioAssayToStatMLResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/BioAssayToStatMLResponse" />
+    </operation>
+    <operation name="bioAssayToMicroArraySet">
+      <input message="tns:BioAssayToMicroArraySetRequest" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/BioAssayToMicroArraySetRequest" />
+      <output message="tns:BioAssayToMicroArraySetResponse" wsa:Action="http://annualdemo.cagrid.nci.nih.gov/MageTranslationServices/BioAssayToMicroArraySetResponse" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

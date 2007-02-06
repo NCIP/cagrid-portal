@@ -12,6 +12,10 @@ import java.rmi.RemoteException;
  */
 public interface MageTranslationServicesI {
 
+    public gridextensions.Data bioAssayToStatML(gov.nih.nci.mageom.domain.bioassay.MeasuredBioAssay[] measuredBioAssay) throws RemoteException ;
+
+    public gridextensions.Data bioAssayToMicroArraySet(gridextensions.MeasuredBioAssay[] measuredBioAssay) throws RemoteException ;
+
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 
     public edu.columbia.geworkbench.cagrid.microarray.MicroarraySet mageToMicroArraySet(gov.nih.nci.cagrid.cqlresultset.CQLQueryResults cQLQueryResultCollection) throws RemoteException ;
