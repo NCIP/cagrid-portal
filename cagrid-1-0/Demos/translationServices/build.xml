@@ -192,6 +192,10 @@
             <property name="wsdl.file" value="${interface.name}_service.wsdl" />
             <property name="ns.excludes" value="${GT4.ns.excludes} ${introduce.ns.excludes}" />
         </ant>
+        <replace dir="${stubs.src}" token="ManufactureLIMSBioMaterial" value="ManufactureLIMSBiomaterial">
+            <include name="**/*.java" />
+        </replace>
+
     </target>
 
     <!-- Generate the stub source files -->
@@ -206,14 +210,18 @@
             </sequential>
         </for>
         <replace dir="${stubs.src}" token="ManufactureLIMSBioMaterial" value="ManufactureLIMSBiomaterial">
-        <include name="**/*.java" />
-            </replace>
+            <include name="**/*.java" />
+        </replace>
                             
     </target>
 
 
     <!-- Compile the stubs generated in the previous step -->
     <target name="compileStubs" depends="stubs">
+        <replace dir="${stubs.src}" token="ManufactureLIMSBioMaterial" value="ManufactureLIMSBiomaterial">
+            <include name="**/*.java" />
+        </replace>
+        <delete file="build/stubs-MageTranslationServices/src/gov/nih/nci/mageom/domain/array/ManufactureLIMSBioMaterial.java"/>
         <javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}" classpathref="base.classpath">
             <include name="**/*.java" />
         </javac>
