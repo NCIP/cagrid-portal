@@ -5,12 +5,15 @@ package gov.nih.nci.cagrid.annualdemo.util;
 
 import edu.columbia.geworkbench.cagrid.microarray.MicroarraySet;
 import gov.nih.nci.cagrid.common.Utils;
+import gridextensions.Data;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
+
+import javax.xml.namespace.QName;
 
 import junit.framework.TestCase;
 import junit.framework.TestResult;
@@ -80,6 +83,24 @@ public class GeWorkbenchParserTest
 		assertEquals(ms.getMarker()[0].getMarkerName(), ms2.getMarker()[0].getMarkerName());
 		assertEquals(ms.getMarker()[0].getMarkerData().length, ms2.getMarker()[0].getMarkerData().length);
 		assertEquals(ms.getMarker()[0].getMarkerData()[0], ms2.getMarker()[0].getMarkerData()[0]);
+	}
+	
+	public void testConvertStatml()
+		throws Exception
+	{
+		GeWorkbenchParser parser = new GeWorkbenchParser();
+		parser.parseMicroarray(
+			readText(new File("test", "resources" + File.separator + "geworkbench_microarrayset.xml"))
+		);
+		MicroarrayData data = parser.getMicroarrayData();
+
+		GenePatternParser gpParser = new GenePatternParser();
+		gpParser.setMicroarrayData(parser.getMicroarrayData());
+		Data statml = gpParser.convertToStatml();
+		Utils.serializeDocument(
+			"test" + File.separator + "resources" + File.separator + "geworkbench_statml.xml", 
+			statml, new QName("MicroarraySet")
+		);
 	}
 	
 	protected static String readText(File file) 

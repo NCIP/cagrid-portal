@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.annualdemo.util.TreeViewHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.rmi.RemoteException;
@@ -24,6 +25,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  */
 public class MageTranslationServicesImpl extends MageTranslationServicesImplBase {
 
+	private File treeViewDir = new File("c:\\");
 	
 	public MageTranslationServicesImpl() throws RemoteException {
 		super();
@@ -158,11 +160,31 @@ public class MageTranslationServicesImpl extends MageTranslationServicesImplBase
 		atrOut.flush();
 		gtrOut.flush();
 		
+		String cdt = cdtSw.toString();
+		String atr = atrSw.toString();
+		String gtr = gtrSw.toString();
+		
+		// write to file
+		try {
+			Utils.stringBufferToFile(new StringBuffer(cdt),
+				new File(treeViewDir, "workflow.cdt").toString()
+			);
+			Utils.stringBufferToFile(new StringBuffer(atr),
+				new File(treeViewDir, "workflow.atr").toString()
+			);
+			Utils.stringBufferToFile(new StringBuffer(gtr),
+				new File(treeViewDir, "workflow.gtr").toString()
+			);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RemoteException(e.getMessage());
+		}
+		
 		// return
 		TreeViewInput ret = new TreeViewInput(); 
-		ret.setCdt(cdtSw.toString());
-		ret.setAtr(atrSw.toString());
-		ret.setGtr(gtrSw.toString());
+		ret.setCdt(cdt);
+		ret.setAtr(atr);
+		ret.setGtr(gtr);
 		
 		return ret;
 	}
@@ -201,11 +223,31 @@ public class MageTranslationServicesImpl extends MageTranslationServicesImplBase
 		atrOut.flush();
 		gtrOut.flush();
 		
+		String cdt = cdtSw.toString();
+		String atr = atrSw.toString();
+		String gtr = gtrSw.toString();
+		
+		// write to file
+		try {
+			Utils.stringBufferToFile(new StringBuffer(cdt),
+				new File(treeViewDir, "workflow.cdt").toString()
+			);
+			Utils.stringBufferToFile(new StringBuffer(atr),
+				new File(treeViewDir, "workflow.atr").toString()
+			);
+			Utils.stringBufferToFile(new StringBuffer(gtr),
+				new File(treeViewDir, "workflow.gtr").toString()
+			);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RemoteException(e.getMessage());
+		}
+		
 		// return
 		TreeViewInput ret = new TreeViewInput(); 
-		ret.setCdt(cdtSw.toString());
-		ret.setAtr(atrSw.toString());
-		ret.setGtr(gtrSw.toString());
+		ret.setCdt(cdt);
+		ret.setAtr(atr);
+		ret.setGtr(gtr);
 		
 		return ret;
 	}
