@@ -149,14 +149,7 @@ public class GeWorkbenchParser
 		{
 			// invert
 			if (arrayData != null) {
-				double[][] inverted = new double[microarrayData.data.get(0).length][microarrayData.data.size()];
-				for (int i = 0; i < inverted.length; i++) {
-					for (int j = 0; j < inverted[i].length; j++) {
-						inverted[i][j] = microarrayData.data.get(j)[i];
-					}
-				}
-				microarrayData.data = new ArrayList<double[]>(inverted.length);
-				for (double[] d : inverted) microarrayData.data.add(d);
+				microarrayData.invert();
 			}
 		}
 	}
