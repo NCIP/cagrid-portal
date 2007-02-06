@@ -338,10 +338,10 @@ public class ModificationViewer extends GridPortalComponent {
 				+ File.separator + "introduce.xml", ServiceDescription.class);
 
 			if (introService.getIntroduceVersion() == null
-				|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
+				|| !introService.getIntroduceVersion().equals(CommonTools.getIntroduceVersion())) {
 				throw new Exception(
 					"Introduce version in project does not match version provided by Introduce Toolkit ( "
-						+ IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
+						+ CommonTools.getIntroduceVersion() + " ): " + introService.getIntroduceVersion());
 			}
 			loadServiceProps();
 
@@ -1128,7 +1128,8 @@ public class ModificationViewer extends GridPortalComponent {
 						for (int i = 0; i < types.length; i++) {
 							NamespaceType currentType = types[i];
 							if (CommonTools.getNamespaceType(info.getNamespaces(), currentType.getNamespace()) != null) {
-								// namespace type already exists in service
+								// namespace type already exists in
+								// service
 								messages.add("The namespace " + types[i].getNamespace()
 									+ " already exists, it was reloaded");
 							}
@@ -1194,7 +1195,8 @@ public class ModificationViewer extends GridPortalComponent {
 							}
 						}
 					} catch (Exception ex) {
-						// TODO: there has to be a better check for namespace
+						// TODO: there has to be a better check for
+						// namespace
 						// selection than this!!
 						JOptionPane.showMessageDialog(ModificationViewer.this, "Please select namespace to Remove");
 					}

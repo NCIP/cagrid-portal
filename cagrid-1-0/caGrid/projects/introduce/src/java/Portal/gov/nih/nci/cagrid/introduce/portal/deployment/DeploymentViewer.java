@@ -141,9 +141,9 @@ public class DeploymentViewer extends GridPortalBaseFrame {
 		this.introService = (ServiceDescription) Utils.deserializeDocument(this.serviceDirectory.getAbsolutePath()
 			+ File.separator + "introduce.xml", ServiceDescription.class);
 		if (introService.getIntroduceVersion() == null
-			|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
+			|| !introService.getIntroduceVersion().equals(CommonTools.getIntroduceVersion())) {
 			throw new Exception("Introduce version in project does not match version provided by Introduce Toolkit ( "
-				+ IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
+				+ CommonTools.getIntroduceVersion() + " ): " + introService.getIntroduceVersion());
 		}
 
 		// load up the deploy properties;

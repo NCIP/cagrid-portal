@@ -521,5 +521,12 @@ FUTURE WORK PROPOSED:
 6) Add Service Side Support for Rejecting Limited Proxies.
 
 
+===========================================================
+Updater Stuff
+===========================================================
+Overall flow:
+1. Either update existing pieces or install new extensions
+
+
 icons from here: http://www.famfamfam.com/lab/icons/
 and http://tango-project.org/Tango_Icon_Gallery

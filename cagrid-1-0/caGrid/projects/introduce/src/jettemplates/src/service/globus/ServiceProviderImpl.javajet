@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus" class="ServiceProviderImplTemplate" imports="gov.nih.nci.cagrid.introduce.*"%>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus" class="ServiceProviderImplTemplate" imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.common.*"%>
 <% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
    String serviceName = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
@@ -23,7 +23,7 @@ import java.rmi.RemoteException;
  * has implemented.  Authorization callbacks are automatically made for each method based
  * on each methods authorization requirements.
  * 
- * @created by Introduce Toolkit version <%=IntroduceConstants.INTRODUCE_VERSION%>
+ * @created by Introduce Toolkit version <%=CommonTools.getIntroduceVersion()%>
  * 
  */
 public class <%=info.getService().getName()%>ProviderImpl{

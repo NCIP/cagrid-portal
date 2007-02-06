@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus" class="ServiceConfigurationTemplate" imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.property.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.*" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus" class="ServiceConfigurationTemplate" imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.property.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.common.*" %>
 <%  gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation arguments = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
   	Properties properties = arguments.getIntroduceServiceProperties();
     ServiceProperties sproperties = arguments.getServiceProperties();
@@ -24,7 +24,7 @@ import org.globus.wsrf.Constants;
  * This class holds all service properties which were defined for the service to have
  * access to.
  * 
- * @created by Introduce Toolkit version <%=IntroduceConstants.INTRODUCE_VERSION%>
+ * @created by Introduce Toolkit version <%=CommonTools.getIntroduceVersion()%>
  * 
  */
 public class ServiceConfiguration {

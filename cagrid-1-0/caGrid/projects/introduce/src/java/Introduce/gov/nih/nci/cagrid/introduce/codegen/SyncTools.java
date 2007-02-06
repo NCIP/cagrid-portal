@@ -248,9 +248,9 @@ public class SyncTools {
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(introduceXML,
 			ServiceDescription.class);
 		if (introService.getIntroduceVersion() == null
-			|| !introService.getIntroduceVersion().equals(IntroduceConstants.INTRODUCE_VERSION)) {
+			|| !introService.getIntroduceVersion().equals(CommonTools.getIntroduceVersion())) {
 			throw new Exception("Introduce version in project does not match version provided by Introduce Toolkit ( "
-				+ IntroduceConstants.INTRODUCE_VERSION + " ): " + introService.getIntroduceVersion());
+				+ CommonTools.getIntroduceVersion() + " ): " + introService.getIntroduceVersion());
 		}
 		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator
 			+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE);

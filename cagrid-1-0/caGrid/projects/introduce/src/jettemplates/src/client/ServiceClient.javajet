@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.client" class="ServiceClientTemplate" imports="gov.nih.nci.cagrid.introduce.*"%>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.client" class="ServiceClientTemplate" imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.common.*"%>
 <% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
    String mainServiceName = info.getIntroduceServiceProperties().getProperty("introduce.skeleton.service.name");
    String serviceName = info.getService().getName();
@@ -46,7 +46,7 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
  * On construction the class instance will contact the remote service and retrieve it's security
  * metadata description which it will use to configure the Stub specifically for each method call.
  * 
- * @created by Introduce Toolkit version <%=IntroduceConstants.INTRODUCE_VERSION%>
+ * @created by Introduce Toolkit version <%=CommonTools.getIntroduceVersion()%>
  */
 public class <%=info.getService().getName()%>Client extends ServiceSecurityClient implements <%=serviceName%>I {	
 	protected <%=info.getService().getName()%>PortType portType;

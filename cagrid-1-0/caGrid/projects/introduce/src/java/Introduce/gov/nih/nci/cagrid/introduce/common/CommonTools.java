@@ -26,9 +26,12 @@ import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -51,9 +54,9 @@ public class CommonTools {
 	public static final String ALLOWED_JAVA_CLASS_REGEX = "[A-Z]++[A-Za-z0-9\\_\\$]*";
 
 	public static final String ALLOWED_JAVA_FIELD_REGEX = "[a-z\\_]++[A-Za-z0-9\\_\\$]*";
-	
+
 	public static final String ALLOWED_JAVA_PACKAGE_REGEX = "[a-z\\_]++[A-Za-z0-9\\_\\$]*";
-	
+
 	public static final String ALLOWED_EXISTING_JAVA_PACKAGE_REGEX = "[a-zA-Z\\_]++[A-Za-z0-9\\_\\$]*";
 
 
@@ -144,7 +147,8 @@ public class CommonTools {
 		}
 		return true;
 	}
-	
+
+
 	public static boolean isValidNoStubPackageName(String packageName) {
 		if (packageName.length() > 0) {
 			StringTokenizer strtok = new StringTokenizer(packageName, ".", false);
@@ -297,7 +301,7 @@ public class CommonTools {
 		return cmd;
 	}
 
-	
+
 	static String getAntLauncherJarLocation(String path, boolean isWindows) {
 		String separator = isWindows ? ";" : ":";
 		StringTokenizer pathTokenizer = new StringTokenizer(path, separator);
@@ -312,12 +316,12 @@ public class CommonTools {
 
 
 	/**
-	 * Gets a package name for a namespace using a namespace to package mapper utility
+	 * Gets a package name for a namespace using a namespace to package mapper
+	 * utility
 	 * 
 	 * @param namespace
-	 * 		The namespace to derive a package name for
-	 * @return
-	 * 		The package name
+	 *            The namespace to derive a package name for
+	 * @return The package name
 	 */
 	public static String getPackageName(Namespace namespace) {
 		try {
@@ -337,11 +341,10 @@ public class CommonTools {
 	 * Gets a package name for a namespace
 	 * 
 	 * @param namespace
-	 * 		The namespace to get a package name for
+	 *            The namespace to get a package name for
 	 * @param namespaceTypes
-	 * 		The namespace types of a service
-	 * @return
-	 * 		The package name
+	 *            The namespace types of a service
+	 * @return The package name
 	 */
 	public static String getPackageName(Namespace namespace, NamespacesType namespaceTypes) {
 		// first check to see if this namespace is already in use....
@@ -392,9 +395,8 @@ public class CommonTools {
 	 * going to be in the toplevel schema/Servicename directory of your service.
 	 * 
 	 * @param xsdFilename
-	 * 		The file name of the XSD schema
-	 * @return
-	 * 		The NamespaceType representation of the schema
+	 *            The file name of the XSD schema
+	 * @return The NamespaceType representation of the schema
 	 * @throws MobiusException
 	 */
 	public static NamespaceType createNamespaceType(String xsdFilename) throws MobiusException {
@@ -427,11 +429,10 @@ public class CommonTools {
 	 * Gets a service by name from the services container type
 	 * 
 	 * @param services
-	 * 		The services container type
+	 *            The services container type
 	 * @param name
-	 * 		The name of the service
-	 * @return
-	 * 		The named service or null if not found
+	 *            The name of the service
+	 * @return The named service or null if not found
 	 */
 	public static ServiceType getService(ServicesType services, String name) {
 		if (services != null && services.getService() != null) {
@@ -450,11 +451,10 @@ public class CommonTools {
 	 * Gets a method by its name
 	 * 
 	 * @param methods
-	 * 		The methods container type
+	 *            The methods container type
 	 * @param name
-	 * 		The name of the method
-	 * @return
-	 * 		The named method, or null if not found
+	 *            The name of the method
+	 * @return The named method, or null if not found
 	 */
 	public static MethodType getMethod(MethodsType methods, String name) {
 		if (methods != null && methods.getMethod() != null) {
@@ -512,8 +512,8 @@ public class CommonTools {
 						if (input.length() != 0) {
 							input.append(", ");
 						}
-						String name = org.apache.axis.wsdl.toJava.Utils.xmlNameToJavaClass(
-							inputType.getQName().getLocalPart());
+						String name = org.apache.axis.wsdl.toJava.Utils.xmlNameToJavaClass(inputType.getQName()
+							.getLocalPart());
 						if (name.indexOf("_") == 0) {
 							name = name.substring(1);
 						}
@@ -532,7 +532,7 @@ public class CommonTools {
 				}
 			}
 		}
-		
+
 		output.append("  ").append(method.getName()).append("(").append(input.toString()).append(")");
 
 		return output.toString();
@@ -646,9 +646,8 @@ public class CommonTools {
 	 * Gets the directory which corresponds to a Java package name
 	 * 
 	 * @param service
-	 * 		The service
-	 * @return
-	 * 		The service's package name changed to a relative directory
+	 *            The service
+	 * @return The service's package name changed to a relative directory
 	 */
 	public static String getPackageDir(ServiceType service) {
 		return service.getPackageName().replace('.', File.separatorChar);
@@ -693,10 +692,11 @@ public class CommonTools {
 
 	/**
 	 * Adds a resource property to a service
+	 * 
 	 * @param service
-	 * 		The service to add a resource property to
+	 *            The service to add a resource property to
 	 * @param resource
-	 * 		The resource property to be added
+	 *            The resource property to be added
 	 */
 	public static void addResourcePropety(ServiceType service, ResourcePropertyType resource) {
 		ResourcePropertyType[] resourcesArray = null;
@@ -722,17 +722,16 @@ public class CommonTools {
 		}
 		resources.setResourceProperty(resourcesArray);
 	}
-	
-	
+
+
 	/**
 	 * Gets all resource properties from a service which have a specified QName
 	 * 
 	 * @param service
-	 * 		The service to find resource properties of
+	 *            The service to find resource properties of
 	 * @param type
-	 * 		The type of resource properties to locate
-	 * @return
-	 * 		An Array of ResourcePropertyTypes which have the specified QName
+	 *            The type of resource properties to locate
+	 * @return An Array of ResourcePropertyTypes which have the specified QName
 	 */
 	public static ResourcePropertyType[] getResourcePropertiesOfType(ServiceType service, QName type) {
 		ResourcePropertiesListType propsList = service.getResourcePropertiesList();
@@ -757,9 +756,9 @@ public class CommonTools {
 	 * Adds a method to a service
 	 * 
 	 * @param service
-	 * 		The service to add a new method to
+	 *            The service to add a new method to
 	 * @param method
-	 * 		The method to be added
+	 *            The method to be added
 	 */
 	public static void addMethod(ServiceType service, MethodType method) {
 		MethodType[] methodsArray = null;
@@ -789,9 +788,9 @@ public class CommonTools {
 	 * Removes a method from a MethodsType container object
 	 * 
 	 * @param methodsType
-	 * 		The container object to remove a method from
+	 *            The container object to remove a method from
 	 * @param method
-	 * 		The method to be removed
+	 *            The method to be removed
 	 */
 	public static void removeMethod(MethodsType methodsType, MethodType method) {
 		MethodType[] newMethods = new MethodType[methodsType.getMethod().length - 1];
@@ -811,9 +810,9 @@ public class CommonTools {
 	 * Adds a namespace type to a service description
 	 * 
 	 * @param serviceD
-	 * 		The service description
+	 *            The service description
 	 * @param nsType
-	 * 		The namespace type to add
+	 *            The namespace type to add
 	 */
 	public static void addNamespace(ServiceDescription serviceD, NamespaceType nsType) {
 		NamespaceType[] namespacesArray = null;
@@ -992,8 +991,8 @@ public class CommonTools {
 	 * 
 	 * @param nsType
 	 * @param desc
-	 * @return
-	 * 		True if the namespace typs is in use in the service, false otherwise
+	 * @return True if the namespace typs is in use in the service, false
+	 *         otherwise
 	 */
 	public static boolean isNamespaceTypeInUse(NamespaceType nsType, ServiceDescription desc) {
 		String namespace = nsType.getNamespace();
@@ -1053,9 +1052,8 @@ public class CommonTools {
 	 * available in the service's namespace types.
 	 * 
 	 * @param desc
-	 * @return
-	 * 		True if all of the types referenced by a service are still
-	 * 		present in the service description
+	 * @return True if all of the types referenced by a service are still
+	 *         present in the service description
 	 */
 	public static boolean usedTypesAvailable(ServiceDescription desc) {
 		return getUnavailableUsedTypes(desc).size() == 0;
@@ -1063,13 +1061,12 @@ public class CommonTools {
 
 
 	/**
-	 * Gets the types from a service description which are referenced
-	 * in the service but not available in the namespace types of it
+	 * Gets the types from a service description which are referenced in the
+	 * service but not available in the namespace types of it
 	 * 
 	 * @param desc
-	 * 		The service description
-	 * @return
-	 * 		The set of unavailable types
+	 *            The service description
+	 * @return The set of unavailable types
 	 */
 	public static Set getUnavailableUsedTypes(ServiceDescription desc) {
 		// build up a set of used types
@@ -1134,5 +1131,17 @@ public class CommonTools {
 			}
 		}
 		return usedTypes;
+	}
+
+
+	public static String getIntroduceVersion() {
+		Properties engineProps = new Properties();
+		try {
+			engineProps.load(new FileInputStream(IntroduceConstants.INTRODUCE_ENGINE_PROPERTIES));
+			return (String) engineProps.get(IntroduceConstants.INTRODUCE_VERSION_PROPERTY);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

@@ -18,7 +18,9 @@ import javax.xml.namespace.QName;
 public class IntroduceConstants {
 	
 	// introduce specific constants
-	public static final String INTRODUCE_VERSION = "1.0";
+	public static final String INTRODUCE_VERSION_PROPERTY = "introduce.version";
+	
+	public static final String INTRODUCE_ENGINE_PROPERTIES = "conf/introduce/introduce.engine.properties";
 	
 	public static final String GLOBUS_LOCATION = "GLOBUS_LOCATION";
 	

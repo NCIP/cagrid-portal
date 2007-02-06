@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.help.IntroduceHelp;
 import gov.nih.nci.cagrid.introduce.portal.preferences.PreferencesDialog;
+import gov.nih.nci.cagrid.introduce.portal.updater.IntroduceUpdateWizard;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,9 +33,17 @@ public class IntroducePortalInitializer implements GridPortalInitializer {
 		helpMenuItem.setMnemonic(KeyEvent.VK_F1);
 		helpMenuItem.addActionListener(help.getFDisplayHelp());
 		helpMenu.insert(helpMenuItem, 0);
+		JMenuItem updateMenuItem = new JMenuItem("Check for Updates",IntroduceLookAndFeel.getUpdateIcon());
+		updateMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				IntroduceUpdateWizard.showUpdateWizard();
+			}
+		});
+		helpMenu.insert(updateMenuItem,1);
 
 		JMenu configMenu = PortalResourceManager.getInstance().getGridPortal().getJMenuBar().getMenu(CONFIG_MENU);
 		JMenuItem configMenuItem = new JMenuItem("Preferences");
+		
 		
 		
 		configMenuItem.addActionListener(new ActionListener() {
