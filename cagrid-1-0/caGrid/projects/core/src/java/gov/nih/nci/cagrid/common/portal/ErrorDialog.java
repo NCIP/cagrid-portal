@@ -4,12 +4,16 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -38,14 +42,16 @@ public class ErrorDialog extends JDialog {
 	private static Frame ownerFrame = null;
 	private static Vector errors = null;
 	private static ErrorDialog dialog = null;
+	private static String lastFileLocation = null;
 	
 	private JList errorList = null;
 	private JScrollPane errorScrollPane = null;
 	private JTextArea detailTextArea = null;
 	private JScrollPane detailScrollPane = null;
-	private JButton okButton = null;
+	private JButton clearButton = null;
 	private JPanel mainPanel = null;
-	private JButton dismissButton = null;
+	private JButton hideDialogButton = null;
+	private JButton logErrorsButton = null;
 	private JPanel buttonPanel = null;
 	private JSplitPane errorsSplitPane = null;
 
@@ -225,19 +231,19 @@ public class ErrorDialog extends JDialog {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
-	private JButton getOkButton() {
-		if (okButton == null) {
-			okButton = new JButton();
-			okButton.setText("OK");
-			okButton.setToolTipText("Clears the dialog of any errors and dismisses it");
-			okButton.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getClearButton() {
+		if (clearButton == null) {
+			clearButton = new JButton();
+			clearButton.setText("Clear");
+			clearButton.setToolTipText("Clears the dialog of any errors and closes it");
+			clearButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					errors.clear();
 					dispose();
 				}
 			});
 		}
-		return okButton;
+		return clearButton;
 	}
 	
 	
@@ -250,7 +256,7 @@ public class ErrorDialog extends JDialog {
 		if (mainPanel == null) {
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.anchor = java.awt.GridBagConstraints.EAST;
+			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints1.gridy = 1;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -273,18 +279,33 @@ public class ErrorDialog extends JDialog {
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
-	private JButton getDismissButton() {
-		if (dismissButton == null) {
-			dismissButton = new JButton();
-			dismissButton.setToolTipText("Simply hides the dialog, preserving errors");
-			dismissButton.setText("Dismiss");
-			dismissButton.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getHideDialogButton() {
+		if (hideDialogButton == null) {
+			hideDialogButton = new JButton();
+			hideDialogButton.setToolTipText("Simply hides the dialog, preserving all displayed errors");
+			hideDialogButton.setText("Hide");
+			hideDialogButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
 				}
 			});
 		}
-		return dismissButton;
+		return hideDialogButton;
+	}
+	
+	
+	private JButton getLogErrorsButton() {
+		if (logErrorsButton == null) {
+			logErrorsButton = new JButton();
+			logErrorsButton.setText("Log Errors");
+			logErrorsButton.setToolTipText("Allows saving the error dialog's contents to disk");
+			logErrorsButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					saveLogFile();
+				}
+			});
+		}
+		return logErrorsButton;
 	}
 
 
@@ -296,17 +317,24 @@ public class ErrorDialog extends JDialog {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 1;
+			gridBagConstraints3.gridx = 2;
 			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints3.gridy = 0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.gridx = 0;
+			gridBagConstraints2.gridx = 1;
 			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints2.gridy = 0;
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints1.anchor = GridBagConstraints.WEST;
+			gridBagConstraints1.weightx = 1.0D;
+			gridBagConstraints1.gridy = 0;
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new GridBagLayout());
-			buttonPanel.add(getDismissButton(), gridBagConstraints2);
-			buttonPanel.add(getOkButton(), gridBagConstraints3);
+			buttonPanel.add(getLogErrorsButton(), gridBagConstraints1);
+			buttonPanel.add(getHideDialogButton(), gridBagConstraints2);
+			buttonPanel.add(getClearButton(), gridBagConstraints3);
 		}
 		return buttonPanel;
 	}
@@ -340,6 +368,41 @@ public class ErrorDialog extends JDialog {
 			int y = owner.getLocationOnScreen().y;
 			Dimension dim = dialog.getSize();
 			dialog.setLocation(w / 2 + x - dim.width / 2, h / 2 + y - dim.height / 2);			
+		}
+	}
+	
+	
+	private void saveLogFile() {
+		String nl = System.getProperty("line.separator");
+		JFileChooser chooser = new JFileChooser(lastFileLocation);
+		int choice = chooser.showSaveDialog(dialog);
+		if (choice == JFileChooser.APPROVE_OPTION) {
+			File file = chooser.getSelectedFile();
+			lastFileLocation = file.getAbsolutePath();
+			StringBuilder text = new StringBuilder();
+			synchronized (getErrorList()) {
+				for (int i = 0; i < getErrorList().getModel().getSize(); i++) {
+					ErrorContainer err = (ErrorContainer) getErrorList().getModel().getElementAt(i);
+					text.append(err.getMessage()).append(nl);
+					if (err.getDetail() != null) {
+						String[] details = err.getDetail().split("\n");
+						for (int j = 0; j < details.length; j++) {
+							text.append("\t").append(details[j]).append(nl);
+						}
+					}
+					if (i + 1 < getErrorList().getModel().getSize());
+					text.append("---- ---- ---- ----").append(nl);
+				}
+			}
+			try {
+				FileWriter writer = new FileWriter(file);
+				writer.write(text.toString());
+				writer.flush();
+				writer.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+				showErrorDialog(ex);
+			}
 		}
 	}
 
