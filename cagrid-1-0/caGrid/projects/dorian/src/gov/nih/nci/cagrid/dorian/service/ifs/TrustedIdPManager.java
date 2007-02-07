@@ -23,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.projectmobius.db.Query;
@@ -184,35 +185,6 @@ public class TrustedIdPManager extends LoggingObject {
 		}
 	}
 
-	private boolean authMethodsEqual(TrustedIdP idp1, TrustedIdP idp2) {
-		SAMLAuthenticationMethod[] m1 = idp1.getAuthenticationMethod();
-		SAMLAuthenticationMethod[] m2 = idp1.getAuthenticationMethod();
-		if ((m1 == null) && (m2 == null)) {
-			return true;
-		} else if ((m1 != null) && (m2 == null)) {
-			return false;
-		} else if ((m1 == null) && (m2 != null)) {
-			return false;
-		} else {
-			if (m1.length == m2.length) {
-				for (int i = 0; i < m1.length; i++) {
-					boolean found = false;
-					for (int j = 0; j < m2.length; j++) {
-						if (m1[i].equals(m2[j])) {
-							found = true;
-							break;
-						}
-					}
-					if (!found) {
-						return false;
-					}
-				}
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
 
 	public synchronized void updateIdP(TrustedIdP idp)
 			throws DorianInternalFault, InvalidTrustedIdPFault {
@@ -342,7 +314,9 @@ public class TrustedIdPManager extends LoggingObject {
 				s.execute();
 				s.close();
 			}
-			if (authMethodsEqual(curr, idp)) {
+
+			if (!Arrays.equals(curr.getAuthenticationMethod(), idp
+					.getAuthenticationMethod())) {
 				removeAuthenticationMethodsForTrustedIdP(idp.getId());
 				for (int i = 0; i < idp.getAuthenticationMethod().length; i++) {
 					this.addAuthenticationMethod(idp.getId(), idp
