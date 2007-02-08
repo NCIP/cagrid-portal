@@ -146,6 +146,7 @@
 				<exclude name="${common.jar.name}" />
 				<exclude name="${client.jar.name}" />
 				<exclude name="${service.jar.name}" />
+	            <exclude name="${ui.jar.name}" />
 			</fileset>
 		</path>
 		<path id="service.build.classpath">
@@ -354,29 +355,41 @@
 	<target name="ui" description="Run the dorian ui" depends="checkGlobus">
 		<java classname="gov.nih.nci.cagrid.dorian.ui.DorianUI" fork="yes">
 			<jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
-			<classpath>
-				<pathelement location="${stubs.dest}" />
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.endorsed.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${ext.globus.dir}/lib">
-					<include name="*.jar" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-					<exclude name="caGrid*" />
-				</fileset>
-			</classpath>
+	        <classpath refid="service.run.classpath"/>
+	 		<classpath>
+	                <pathelement location="resources/ui/dorian" />
+	                <pathelement location="ext/resources/portal/common" />
+	        </classpath>
 		</java>
 	</target>
+	
+	<target name="createProxy" description="Create a Grid User Proxy." depends="checkGlobus">
+				<input message="Please enter the Authentication Service URL [https://cagrid05.bmi.ohio-state.edu:8443/wsrf/services/cagrid/Dorian]:"
+				               addproperty="auth.input" defaultvalue="https://cagrid05.bmi.ohio-state.edu:8443/wsrf/services/cagrid/Dorian"/>
+	<input message="Please enter the Dorian Service URL [https://cagrid05.bmi.ohio-state.edu:8443/wsrf/services/cagrid/Dorian]:"
+					               addproperty="dorian.input" defaultvalue="https://cagrid05.bmi.ohio-state.edu:8443/wsrf/services/cagrid/Dorian"/>
+				
+	<input message="Please enter your username:"
+							               addproperty="username.input"/>
+	<input message="Please enter your password:"
+						               addproperty="password.input"/>
+	<input message="Please enter the number of hours the proxy should be valid for [12]:" 
+						               addproperty="hours.input" defaultvalue="12"/>
+				<java classname="gov.nih.nci.cagrid.dorian.tools.GridProxyInit" fork="yes" newenvironment="true">
+	                <jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
+					<arg value="-a" />
+					<arg value="${auth.input}" />
+					<arg value="-d" />
+					<arg value="${dorian.input}"/>
+					<arg value="-u" />
+					<arg value="${username.input}"/>
+					<arg value="-p" />
+					<arg value="${password.input}"/>
+					<arg value="-h" />
+					<arg value="${hours.input}"/>
+					<classpath refid="service.run.classpath"/>
+				</java>
+			</target>
 	
 	<target name="importCA" description="Imports an external CA, for Dorian to use as its CA." depends="checkGlobus">
 			<input message="Please enter the location to the CA's certificate (PEM Format):"
@@ -394,24 +407,7 @@
 				<arg value="${cakey.input}"/>
 				<arg value="-password" />
 				<arg value="${password.input}"/>
-				<classpath>
-					<fileset dir="${build.lib.dir}">
-						<include name="**/*.jar" />
-					</fileset>
-					<fileset dir="${ext.lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-					<fileset dir="${lib.dir}">
-						<include name="**/*.jar" />
-					</fileset>
-					<fileset dir="${ext.globus.dir}/lib">
-						<include name="*.jar" />
-						<exclude name="${jar.name}" />
-						<exclude name="xml-apis.jar" />
-						<exclude name="xercesImpl.jar" />
-						<exclude name="caGrid*" />
-					</fileset>
-				</classpath>
+				<classpath refid="service.run.classpath"/>
 			</java>
 		</target>
 
