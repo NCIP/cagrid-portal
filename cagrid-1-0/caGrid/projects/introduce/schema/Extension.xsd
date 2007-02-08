@@ -23,6 +23,7 @@
 				<xs:element ref="ResourcePropertyEditorExtensionDescription"/>
 				<xs:element ref="AuthorizationExtensionDescription"/>
 			</xs:choice>
+			<xs:attribute name="version" type="xs:string"/>
 			<xs:attribute name="extensionType" type="xs:string"/>
 			<xs:attribute name="extensionPreferencesPanel" type="xs:string"/>
 		</xs:complexType>

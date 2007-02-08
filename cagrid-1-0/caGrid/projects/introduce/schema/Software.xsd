@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Software"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Software"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="Software" type="SoftwareType" />
+
+	<xs:complexType name="SoftwareType">
+		<xs:sequence>
+			<xs:element ref="Introduce" minOccurs="0"
+				maxOccurs="unbounded" />
+			<xs:element ref="Extension" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="Introduce" type="IntroduceType"></xs:element>
+	<xs:complexType name="IntroduceType">
+		<xs:attribute name="version" type="xs:string"></xs:attribute>
+		<xs:attribute name="zipFileURL" type="xs:anyURI"></xs:attribute>
+		<xs:attribute name="installJarFile" type="xs:string"
+			use="optional">
+		</xs:attribute>
+		<xs:attribute name="installClass" type="xs:string"
+			use="optional">
+		</xs:attribute>
+	</xs:complexType>
+
+	<xs:element name="Extension" type="ExtensionType"></xs:element>
+	<xs:complexType name="ExtensionType">
+	    <xs:attribute name="name"
+			type="xs:string"/>
+		<xs:attribute name="displayName"
+			type="xs:string"/>
+		<xs:attribute name="version" type="xs:string"></xs:attribute>
+		<xs:attribute name="compatibleIntroduceVersions"
+			type="xs:string">
+		</xs:attribute>
+		<xs:attribute name="zipFileURL" type="xs:anyURI"></xs:attribute>
+		<xs:attribute name="installJarFile" type="xs:string"
+			use="optional">
+		</xs:attribute>
+		<xs:attribute name="installClass" type="xs:string"
+			use="optional">
+		</xs:attribute>
+	</xs:complexType>
+</xs:schema>

@@ -1,10 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.updater;
 
 import gov.nih.nci.cagrid.introduce.portal.updater.steps.CheckForUpdatesStep;
-import gov.nih.nci.cagrid.introduce.portal.updater.steps.ConfigureDeploymentStep;
-import gov.nih.nci.cagrid.introduce.portal.updater.steps.ConfigurePACSStep;
-import gov.nih.nci.cagrid.introduce.portal.updater.steps.DeployDicomDataServiceStep;
-import gov.nih.nci.cagrid.introduce.portal.updater.steps.DeployImageDataServiceStep;
 import gov.nih.nci.cagrid.introduce.portal.updater.steps.FinishedStep;
 import gov.nih.nci.cagrid.introduce.portal.updater.steps.InstallOrUpdateChoiceStep;
 import gov.nih.nci.cagrid.introduce.portal.updater.steps.IntroductionStep;

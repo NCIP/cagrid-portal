@@ -51,7 +51,7 @@ public class InstallOrUpdateChoiceStep extends PanelWizardStep {
 	private JRadioButton getCheckForUpdatesButton() {
 		if (checkForUpdatesButton == null) {
 			checkForUpdatesButton = new JRadioButton();
-			checkForUpdatesButton.setText("Check for updates to existing software.");
+			checkForUpdatesButton.setText("Check for upgrades to current extensions or load new extensions");
 			checkForUpdatesButton.setSelected(true);
 			checkForUpdatesButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -76,7 +76,7 @@ public class InstallOrUpdateChoiceStep extends PanelWizardStep {
 	private JRadioButton getFindNewFeaturesButton() {
 		if (findNewFeaturesButton == null) {
 			findNewFeaturesButton = new JRadioButton();
-			findNewFeaturesButton.setText("Find new features to install.");
+			findNewFeaturesButton.setText("Upgrade Introduce");
 			findNewFeaturesButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if(findNewFeaturesButton.isSelected()){

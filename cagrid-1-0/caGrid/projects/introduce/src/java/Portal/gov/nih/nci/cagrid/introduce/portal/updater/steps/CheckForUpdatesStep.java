@@ -1,5 +1,9 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps;
 
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
+import gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree.UpdateTree;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -7,6 +11,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -16,14 +21,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
+import org.apache.axis.utils.XMLUtils;
+import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.jdom.Document;
+import org.pietschy.wizard.InvalidStateException;
 import org.pietschy.wizard.PanelWizardStep;
 import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
-
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
 
 public class CheckForUpdatesStep extends PanelWizardStep {
+	
+	private SoftwareType software = null;
 
 	private JPanel descriptionPanel = null;
 
@@ -41,41 +53,47 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 
 	private JLabel statusLabel = null;
 
+	private JPanel updatesPanel = null;
+
+	private JScrollPane updatesScrollPane = null;
+
+	private UpdateTree updatesTree = null;
 
 	/**
 	 * This method initializes
 	 */
 	public CheckForUpdatesStep() {
-		super();
+		super("Check For Updates",
+				"Looking for update on the Introduce project server.");
 		initialize();
 	}
 
+	public void applyState() throws InvalidStateException {
 
-	protected void checkForUpdates() throws MalformedURLException, IOException, MobiusException, Exception {
+	}
+
+	protected void checkForUpdates() throws MalformedURLException, IOException,
+			MobiusException, Exception {
 		URL url = null;
 		url = new URL(getUpdateSiteTextField().getText());
 		URLConnection connection = url.openConnection();
 		InputStream stream = connection.getInputStream();
-		Document doc = null;
-		doc = XMLUtilities.streamToDocument(stream);
+		org.w3c.dom.Document doc = XMLUtils.newDocument(stream);
+		this.software = (SoftwareType)ObjectDeserializer.toObject(doc.getDocumentElement(), SoftwareType.class);
+		stream.close();
+		this.getUpdatesTree().update(software);
 	}
-
 
 	/**
 	 * This method initializes this
 	 */
 	private void initialize() {
-		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-		gridBagConstraints2.fill = GridBagConstraints.BOTH;
-		gridBagConstraints2.gridy = 1;
-		gridBagConstraints2.weightx = 1.0D;
-		gridBagConstraints2.weighty = 0.2D;
-		gridBagConstraints2.gridx = 0;
 		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 		gridBagConstraints1.gridx = 0;
 		gridBagConstraints1.weightx = 1.0D;
 		gridBagConstraints1.weighty = 1.0D;
 		gridBagConstraints1.fill = GridBagConstraints.BOTH;
+		gridBagConstraints1.gridheight = 2;
 		gridBagConstraints1.gridy = 0;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
@@ -84,12 +102,9 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 		gridBagConstraints.weighty = 0.0D;
 		gridBagConstraints.gridy = 1;
 		this.setLayout(new GridBagLayout());
-		this.setSize(new Dimension(263, 161));
+		this.setSize(new Dimension(342, 270));
 		this.add(getDescriptionPanel(), gridBagConstraints1);
-
-		this.add(getBusyPanel(), gridBagConstraints2);
 	}
-
 
 	/**
 	 * This method initializes descriptionPanel
@@ -98,6 +113,21 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 	 */
 	private JPanel getDescriptionPanel() {
 		if (descriptionPanel == null) {
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.fill = GridBagConstraints.BOTH;
+			gridBagConstraints2.gridy = 1;
+			gridBagConstraints2.weightx = 1.0D;
+			gridBagConstraints2.weighty = 0.2D;
+			gridBagConstraints2.gridwidth = 2;
+			gridBagConstraints2.gridx = 0;
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.fill = GridBagConstraints.BOTH;
+			gridBagConstraints8.weightx = 1.0D;
+			gridBagConstraints8.weighty = 1.0D;
+			gridBagConstraints8.gridwidth = 2;
+			gridBagConstraints8.gridheight = 2;
+			gridBagConstraints8.gridy = 2;
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.gridx = 1;
 			gridBagConstraints7.insets = new Insets(20, 20, 20, 20);
@@ -121,10 +151,11 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 			descriptionPanel.add(getUpdateSiteTextField(), gridBagConstraints3);
 			descriptionPanel.add(updateSiteLabel, gridBagConstraints6);
 			descriptionPanel.add(statusLabel, gridBagConstraints7);
+			descriptionPanel.add(getUpdatesPanel(), gridBagConstraints8);
+			descriptionPanel.add(getBusyPanel(), gridBagConstraints2);
 		}
 		return descriptionPanel;
 	}
-
 
 	/**
 	 * This method initializes busyPanel
@@ -148,7 +179,6 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 		return busyPanel;
 	}
 
-
 	/**
 	 * This method initializes busyProgressBar
 	 * 
@@ -161,7 +191,6 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 		}
 		return busyProgressBar;
 	}
-
 
 	/**
 	 * This method initializes startButton
@@ -182,23 +211,27 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 						public void run() {
 							getBusyProgressBar().setIndeterminate(true);
 							setComplete(true);
-							statusLabel.setText("Updates found.  Press Next to view and select updates.");
+							statusLabel
+									.setText("Updates found.  Press Next to view and select updates.");
 							try {
 								checkForUpdates();
 							} catch (MalformedURLException e) {
-								statusLabel.setText("ERROR: Malformed update site URL!");
+								statusLabel
+										.setText("ERROR: Malformed update site URL!");
 								e.printStackTrace();
 							} catch (IOException e) {
-								statusLabel.setText("ERROR: Unable to connect or read from update site!");
+								statusLabel
+										.setText("ERROR: Unable to connect or read from update site!");
 								e.printStackTrace();
 							} catch (MobiusException e) {
-								statusLabel.setText("ERROR: Update site information is corupt");
+								statusLabel
+										.setText("ERROR: Update site information is corupt");
 								e.printStackTrace();
 							} catch (Exception e) {
-								statusLabel.setText("ERROR: Undetermined Exception");
+								statusLabel
+										.setText("ERROR: Undetermined Exception");
 								e.printStackTrace();
 							}
-							setComplete(false);
 							getBusyProgressBar().setIndeterminate(false);
 						}
 
@@ -210,7 +243,6 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 		return startButton;
 	}
 
-
 	/**
 	 * This method initializes updateSiteTextField
 	 * 
@@ -219,8 +251,54 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 	private JTextField getUpdateSiteTextField() {
 		if (updateSiteTextField == null) {
 			updateSiteTextField = new JTextField();
-			updateSiteTextField.setText("http://bmi.osu.edu/~hastings/updates/updates.xml");
+			updateSiteTextField
+					.setText("http://bmi.osu.edu/~hastings/introduce/software/software.xml");
 		}
 		return updateSiteTextField;
 	}
-}
+
+	/**
+	 * This method initializes updatesPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getUpdatesPanel() {
+		if (updatesPanel == null) {
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.fill = GridBagConstraints.BOTH;
+			gridBagConstraints9.gridy = 0;
+			gridBagConstraints9.weightx = 1.0;
+			gridBagConstraints9.weighty = 1.0;
+			gridBagConstraints9.gridx = 0;
+			updatesPanel = new JPanel();
+			updatesPanel.setLayout(new GridBagLayout());
+			updatesPanel.add(getUpdatesScrollPane(), gridBagConstraints9);
+		}
+		return updatesPanel;
+	}
+
+	/**
+	 * This method initializes updatesScrollPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getUpdatesScrollPane() {
+		if (updatesScrollPane == null) {
+			updatesScrollPane = new JScrollPane();
+			updatesScrollPane.setViewportView(getUpdatesTree());
+		}
+		return updatesScrollPane;
+	}
+
+	/**
+	 * This method initializes updatesTree	
+	 * 	
+	 * @return javax.swing.JTree	
+	 */
+	private UpdateTree getUpdatesTree() {
+		if (updatesTree == null) {
+			updatesTree = new UpdateTree();
+		}
+		return updatesTree;
+	}
+}  //  @jve:decl-index=0:visual-constraint="10,10"

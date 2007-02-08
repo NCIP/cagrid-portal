@@ -18,8 +18,8 @@ public class UpdateOverviewPanel extends JPanel {
 	 * 
 	 */
 	private void initialize() {
-        jLabel = new JLabel(new ImageIcon("./resources/image.jpg"));
-        this.add(jLabel, null);
+       // jLabel = new JLabel(new ImageIcon("./resources/image.jpg"));
+       // this.add(jLabel, null);
 			
 	}
 
