@@ -244,6 +244,7 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 			reader.close();
 
 			// set the codes
+			//TODO: should only insert of nothing is there?
 			service.setSemanticMetadata(metadata.getServiceDescription().getService().getSemanticMetadata());
 		} catch (Exception e) {
 			LOG.error("Problem setting service semantic metdata; skipping!", e);
