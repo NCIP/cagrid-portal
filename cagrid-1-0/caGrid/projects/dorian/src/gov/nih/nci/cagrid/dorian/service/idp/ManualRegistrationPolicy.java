@@ -31,8 +31,7 @@ public class ManualRegistrationPolicy implements IdPRegistrationPolicy {
 		ar.setStatus(IdPUserStatus.Pending);
 		ar.setRole(IdPUserRole.Non_Administrator);
 		ar
-				.setMessage("Your application will be reviewed by an administrator and you will be contacted at "
-						+ a.getEmail() + " upon a decision.");
+				.setMessage("Your application will be reviewed by an administrator.");
 		return ar;
 	}
 
