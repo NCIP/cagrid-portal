@@ -83,8 +83,8 @@ public class GridProxyInit {
 	public static final String DELEGATION_PATH_LENGTH_VERBOSE = "delegationPathLength";
 
 	public static final String DELEGATION_PATH_LENGTH_DESCRIPTION = "The delegation path length allowed by the proxy, if this option is not specified a delegation path lenght of  ";
-	
-	public static final String OUT = "l";
+
+	public static final String OUT = "o";
 
 	public static final String OUT_VERBOSE = "out";
 
@@ -156,10 +156,8 @@ public class GridProxyInit {
 				DELEGATION_PATH_LENGTH_DESCRIPTION);
 		olength.setRequired(false);
 		options.addOption(olength);
-		
-		Option out = new Option(OUT,
-				OUT_VERBOSE, true,
-				OUT_DESCRIPTION);
+
+		Option out = new Option(OUT, OUT_VERBOSE, true, OUT_DESCRIPTION);
 		out.setRequired(false);
 		options.addOption(out);
 		try {
@@ -254,14 +252,13 @@ public class GridProxyInit {
 			System.out.println("Expires: " + c.getTime().toString());
 			System.out.println("Strength: " + proxy.getStrength() + " bits.");
 			System.out.println();
-			if(out.getValue() == null){
-			ProxyUtil.saveProxyAsDefault(proxy);
-			System.out.println("Proxy written to "
-					+ ConfigUtil.discoverProxyLocation());
-			}else{
-				ProxyUtil.saveProxy(proxy, out.getValue());
+			if (out.getValue() == null) {
+				ProxyUtil.saveProxyAsDefault(proxy);
 				System.out.println("Proxy written to "
-						+ out.getValue());
+						+ ConfigUtil.discoverProxyLocation());
+			} else {
+				ProxyUtil.saveProxy(proxy, out.getValue());
+				System.out.println("Proxy written to " + out.getValue());
 			}
 		} catch (ParseException exp) {
 			HelpFormatter formatter = new HelpFormatter();
