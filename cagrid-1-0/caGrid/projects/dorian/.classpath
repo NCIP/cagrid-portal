@@ -76,7 +76,7 @@
 	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-core.jar" sourcepath="/caGrid-1.0-core"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.0-metadata-security.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.0-core-tests.jar"/>

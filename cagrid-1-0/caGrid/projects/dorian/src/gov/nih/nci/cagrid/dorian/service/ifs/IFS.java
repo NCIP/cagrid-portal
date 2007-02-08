@@ -322,8 +322,6 @@ public class IFS extends LoggingObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
-//		TODO: Remove Next Line
-        long start = System.currentTimeMillis();
 		policy.applyPolicy(usr);
         
 		// Check to see if authorized
@@ -347,8 +345,7 @@ public class IFS extends LoggingObject {
 		}
 
 		if (CertUtil.isExpired(cert)) {
-			//TODO: Remove Next Line
-			long end = System.currentTimeMillis();
+
 			usr.setUserStatus(IFSUserStatus.Expired);
 			try {
 				um.updateUser(usr);
@@ -359,8 +356,7 @@ public class IFS extends LoggingObject {
 				helper.addFaultCause(e);
 				fault = (DorianInternalFault) helper.getFault();
 			}
-//			TODO: Remove Next Line
-			System.err.println("Time: "+(end-start));
+
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("The credentials for this account have expired.");
 			throw fault;

@@ -16,7 +16,6 @@ import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
-import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
@@ -39,7 +38,7 @@ public class IFSUserClient{
 		DorianInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {
 
 		try {
-			KeyPair pair = KeyUtil.generateRSAKeyPair512();
+			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 
 			gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey key = new gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey(KeyUtil
 				.writePublicKey(pair.getPublic()));
