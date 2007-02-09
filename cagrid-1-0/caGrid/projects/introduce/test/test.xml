@@ -69,7 +69,7 @@
 			<jvmarg value="-Dawt.toolkit=sun.awt.windows.WToolkit"/>-->
 			<!--<sysproperty key="java.awt.headless" value="true"/>
 			<jvmarg value="-Djava.awt.headless=true"/>-->
-			<classpath refid="Portal.test.classpath" />
+			<classpath refid="Portal.run.test.classpath" />
 			<formatter type="xml" />
 			<batchtest fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}/Portal">
