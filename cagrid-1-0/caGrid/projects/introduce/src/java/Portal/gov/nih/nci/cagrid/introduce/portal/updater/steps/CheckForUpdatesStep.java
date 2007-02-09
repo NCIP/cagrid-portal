@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
 import gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree.UpdateTree;
 
@@ -11,7 +10,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -20,22 +18,21 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import org.apache.axis.utils.XMLUtils;
 import org.globus.wsrf.encoding.ObjectDeserializer;
-import org.jdom.Document;
 import org.pietschy.wizard.InvalidStateException;
 import org.pietschy.wizard.PanelWizardStep;
 import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
-import javax.swing.JScrollPane;
-import javax.swing.JTree;
 
 public class CheckForUpdatesStep extends PanelWizardStep {
 	
 	private SoftwareType software = null;
+	
+	private SoftwareType requestedUpdates = null;
 
 	private JPanel descriptionPanel = null;
 
@@ -69,7 +66,11 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 	}
 
 	public void applyState() throws InvalidStateException {
-
+		//need to validate the updates.....
+		//pop up a busy dialog
+		//go to download step afterwords....
+		//JUST FOR TESTING NOW
+		this.requestedUpdates = this.software;
 	}
 
 	protected void checkForUpdates() throws MalformedURLException, IOException,
@@ -82,6 +83,10 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 		this.software = (SoftwareType)ObjectDeserializer.toObject(doc.getDocumentElement(), SoftwareType.class);
 		stream.close();
 		this.getUpdatesTree().update(software);
+	}
+	
+	public SoftwareType getRequestedDownloads(){
+		return requestedUpdates;
 	}
 
 	/**
@@ -211,7 +216,12 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 					Thread th = new Thread(new Runnable() {
 
 						public void run() {
-							getBusyProgressBar().setIndeterminate(true);
+							SwingUtilities.invokeLater(new Runnable() {
+								public void run() {
+									getBusyProgressBar().setIndeterminate(true);
+								}
+							});
+							
 							setComplete(true);
 							statusLabel
 									.setText("Updates found.  Press Next to view and select updates.");
@@ -234,7 +244,11 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 										.setText("ERROR: Undetermined Exception");
 								e.printStackTrace();
 							}
-							getBusyProgressBar().setIndeterminate(false);
+							SwingUtilities.invokeLater(new Runnable() {
+								public void run() {
+									getBusyProgressBar().setIndeterminate(false);
+								}
+							});
 						}
 
 					});

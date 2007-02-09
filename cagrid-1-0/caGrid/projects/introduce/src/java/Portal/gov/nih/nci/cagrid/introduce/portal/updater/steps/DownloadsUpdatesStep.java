@@ -1,0 +1,322 @@
+package gov.nih.nci.cagrid.introduce.portal.updater.steps;
+
+import gov.nih.nci.cagrid.introduce.beans.software.ExtensionType;
+import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
+import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
+
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTextArea;
+
+import org.pietschy.wizard.InvalidStateException;
+import org.pietschy.wizard.PanelWizardStep;
+
+public class DownloadsUpdatesStep extends PanelWizardStep {
+
+	private SoftwareType softwareUpdates;
+
+	private JPanel descriptionPanel = null;
+
+	private JPanel busyPanel = null;
+
+	private JProgressBar busyProgressBar = null;
+
+	private JPanel updatesPanel = null;
+
+	private JTextArea statusTextArea = null;
+
+	private CheckForUpdatesStep updatesStep = null;
+
+	/**
+	 * This method initializes
+	 */
+	public DownloadsUpdatesStep(CheckForUpdatesStep updatesStep) {
+		super("Downloading Updates",
+				"Retrieving update files from remote site.");
+		initialize();
+		this.updatesStep = updatesStep;
+	}
+
+	public void applyState() throws InvalidStateException {
+	}
+
+	public void downloadUpdates() {
+		Thread th = new Thread(new Runnable() {
+
+			public void run() {
+				// TODO Auto-generated method stub
+				getBusyProgressBar().setIndeterminate(true);
+				// get the selected set of software chosen in the previous step
+				softwareUpdates = updatesStep.getRequestedDownloads();
+				File updatesDir = new File("." + File.separator + "updates");
+				updatesDir.mkdirs();
+				try {
+					IntroduceType[] introduceTypes = softwareUpdates
+							.getIntroduce();
+					if (introduceTypes != null) {
+						for (int i = 0; i < introduceTypes.length; i++) {
+							URL url = null;
+							try {
+								url = new URL(introduceTypes[i].getZipFileURL()
+										.toString());
+							} catch (MalformedURLException e) {
+								e.printStackTrace();
+								break;
+							}
+							URLConnection connection = null;
+							try {
+								connection = url.openConnection();
+								addStatusLine("Downloading Introduce "
+										+ introduceTypes[i].getVersion() + " ("
+										+ connection.getContentLength()
+										+ " bytes)");
+								getBusyProgressBar().setMinimum(0);
+								getBusyProgressBar().setMaximum(
+										connection.getContentLength());
+								getBusyProgressBar().setValue(0);
+							} catch (IOException e) {
+								e.printStackTrace();
+								break;
+							}
+							try {
+								InputStream stream = connection
+										.getInputStream();
+								FileOutputStream fos = new FileOutputStream(
+										new File(updatesDir.getAbsolutePath()
+												+ File.separator
+												+ "introduce"
+												+ introduceTypes[i]
+														.getVersion() + ".zip"));
+								getBusyProgressBar().setIndeterminate(false);
+								byte[] bytes = new byte[1024];
+								int read = stream.read(bytes);
+								while (read > 0) {
+									getBusyProgressBar().setValue(
+											getBusyProgressBar().getValue()
+													+ read);
+									fos.write(bytes, 0, read);
+									read = stream.read(bytes);
+								}
+								fos.close();
+								stream.close();
+							} catch (IOException e) {
+								e.printStackTrace();
+								break;
+							}
+						}
+					}
+
+					ExtensionType[] extensionTypes = softwareUpdates
+							.getExtension();
+					if (extensionTypes != null) {
+						for (int i = 0; i < extensionTypes.length; i++) {
+							URL url = null;
+							try {
+								url = new URL(extensionTypes[i].getZipFileURL()
+										.toString());
+							} catch (MalformedURLException e) {
+								e.printStackTrace();
+								break;
+							}
+							URLConnection connection = null;
+							try {
+								connection = url.openConnection();
+								addStatusLine("Downloading  "
+										+ extensionTypes[i].getDisplayName()
+										+ extensionTypes[i].getVersion() + " ("
+										+ connection.getContentLength()
+										+ " bytes)");
+								getBusyProgressBar().setMinimum(0);
+								getBusyProgressBar().setMaximum(
+										connection.getContentLength());
+								getBusyProgressBar().setValue(0);
+							} catch (IOException e) {
+								e.printStackTrace();
+								break;
+							}
+							try {
+								InputStream stream = connection
+										.getInputStream();
+								FileOutputStream fos = new FileOutputStream(
+										new File(updatesDir.getAbsolutePath()
+												+ File.separator
+												+ extensionTypes[i].getName()
+												+ extensionTypes[i]
+														.getVersion() + ".zip"));
+								getBusyProgressBar().setIndeterminate(false);
+								byte[] bytes = new byte[1024];
+								int read = stream.read(bytes);
+								while (read > 0) {
+									getBusyProgressBar().setValue(
+											getBusyProgressBar().getValue()
+													+ read);
+									fos.write(bytes, 0, read);
+									read = stream.read(bytes);
+								}
+								fos.close();
+								stream.close();
+							} catch (IOException e) {
+								e.printStackTrace();
+								break;
+							}
+						}
+					}
+
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				getBusyProgressBar().setIndeterminate(false);
+				setComplete(true);
+			}
+
+		});
+		th.start();
+	}
+
+	public void prepare() {
+		addStatusLine("Preparing to download updates...\n");
+		downloadUpdates();
+	}
+
+	private void addStatusLine(String statusLine) {
+		getStatusTextArea().setText(
+				getStatusTextArea().getText() + statusLine + "\n");
+	}
+
+	private void addStatusString(String statusLine) {
+		getStatusTextArea().setText(getStatusTextArea().getText() + statusLine);
+	}
+
+	/**
+	 * This method initializes this
+	 */
+	private void initialize() {
+		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+		gridBagConstraints1.gridx = 0;
+		gridBagConstraints1.weightx = 1.0D;
+		gridBagConstraints1.weighty = 1.0D;
+		gridBagConstraints1.fill = GridBagConstraints.BOTH;
+		gridBagConstraints1.gridheight = 2;
+		gridBagConstraints1.gridy = 0;
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.weightx = 1.0D;
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
+		gridBagConstraints.weighty = 0.0D;
+		gridBagConstraints.gridy = 1;
+		this.setLayout(new GridBagLayout());
+		this.setSize(new Dimension(342, 270));
+		this.add(getDescriptionPanel(), gridBagConstraints1);
+	}
+
+	/**
+	 * This method initializes descriptionPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getDescriptionPanel() {
+		if (descriptionPanel == null) {
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.fill = GridBagConstraints.BOTH;
+			gridBagConstraints2.gridy = 1;
+			gridBagConstraints2.weightx = 1.0D;
+			gridBagConstraints2.weighty = 0.2D;
+			gridBagConstraints2.gridwidth = 1;
+			gridBagConstraints2.gridx = 0;
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.fill = GridBagConstraints.BOTH;
+			gridBagConstraints8.weightx = 1.0D;
+			gridBagConstraints8.weighty = 1.0D;
+			gridBagConstraints8.gridwidth = 1;
+			gridBagConstraints8.gridheight = 1;
+			gridBagConstraints8.gridy = 0;
+			descriptionPanel = new JPanel();
+			descriptionPanel.setLayout(new GridBagLayout());
+			descriptionPanel.setFont(new Font("Dialog", Font.PLAIN, 12));
+			descriptionPanel.add(getUpdatesPanel(), gridBagConstraints8);
+			descriptionPanel.add(getBusyPanel(), gridBagConstraints2);
+		}
+		return descriptionPanel;
+	}
+
+	/**
+	 * This method initializes busyPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getBusyPanel() {
+		if (busyPanel == null) {
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.gridx = 0;
+			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints4.weightx = 1.0D;
+			gridBagConstraints4.gridy = 0;
+			busyPanel = new JPanel();
+			busyPanel.setLayout(new GridBagLayout());
+			busyPanel.add(getBusyProgressBar(), gridBagConstraints4);
+		}
+		return busyPanel;
+	}
+
+	/**
+	 * This method initializes busyProgressBar
+	 * 
+	 * @return javax.swing.JProgressBar
+	 */
+	private JProgressBar getBusyProgressBar() {
+		if (busyProgressBar == null) {
+			busyProgressBar = new JProgressBar();
+			busyProgressBar.setPreferredSize(new Dimension(148, 16));
+		}
+		return busyProgressBar;
+	}
+
+	/**
+	 * This method initializes updatesPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getUpdatesPanel() {
+		if (updatesPanel == null) {
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.fill = GridBagConstraints.BOTH;
+			gridBagConstraints3.gridy = 0;
+			gridBagConstraints3.weightx = 1.0;
+			gridBagConstraints3.weighty = 1.0;
+			gridBagConstraints3.gridx = 0;
+			updatesPanel = new JPanel();
+			updatesPanel.setLayout(new GridBagLayout());
+			updatesPanel.add(getStatusTextArea(), gridBagConstraints3);
+		}
+		return updatesPanel;
+	}
+
+	/**
+	 * This method initializes statusTextArea
+	 * 
+	 * @return javax.swing.JTextArea
+	 */
+	private JTextArea getStatusTextArea() {
+		if (statusTextArea == null) {
+			statusTextArea = new JTextArea();
+		}
+		return statusTextArea;
+	}
+} // @jve:decl-index=0:visual-constraint="10,10"
