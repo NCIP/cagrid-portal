@@ -117,8 +117,8 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
 									fos.write(bytes, 0, read);
 									read = stream.read(bytes);
 								}
-								fos.write(bytes, 0, read);
-								read = stream.read(bytes);
+								fos.close();
+								stream.close();
 
 							} catch (IOException e) {
 								e.printStackTrace();
@@ -142,7 +142,7 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
 							URLConnection connection = null;
 							try {
 								connection = url.openConnection();
-								addStatusLine("Downloading  "
+								addStatusLine("Downloading "
 										+ extensionTypes[i].getDisplayName()
 										+ extensionTypes[i].getVersion() + " ("
 										+ connection.getContentLength()
