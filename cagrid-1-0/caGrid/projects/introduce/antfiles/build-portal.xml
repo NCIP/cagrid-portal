@@ -5,6 +5,7 @@
 	<!-- put stuff in here needed for building introduce-->
 	<target name="preparePortal">
 		<path id="Portal.classpath">
+			<pathelement location="${introduce.classes.dir}"/>
 			<fileset dir="${lib.dir}">
 				<include name="*.jar"/>
 			</fileset>
@@ -25,6 +26,8 @@
 			<pathelement location="${basedir}/doc/help"/>
 		</path>
 		<path id="Portal.test.classpath">
+			<pathelement location="${introduce.classes.dir}"/>
+			<pathelement location="${introduce.test.classes.dir}"/>
 			<fileset dir="${lib.dir}">
 				<include name="*.jar"/>
 			</fileset>
@@ -55,6 +58,8 @@
 			<pathelement location="${basedir}/doc/help"/>
 		</path>
 		<path id="Portal.run.classpath">
+			<pathelement location="${introduce.classes.dir}"/>
+			<pathelement location="${introduce.test.classes.dir}"/>
 			<fileset dir="${lib.dir}">
 				<include name="*.jar"/>
 			</fileset>
