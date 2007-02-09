@@ -20,6 +20,7 @@ import java.net.URLConnection;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 import org.pietschy.wizard.InvalidStateException;
 import org.pietschy.wizard.PanelWizardStep;
@@ -103,15 +104,22 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
 								getBusyProgressBar().setIndeterminate(false);
 								byte[] bytes = new byte[1024];
 								int read = stream.read(bytes);
+								final int length = read;
 								while (read > 0) {
-									getBusyProgressBar().setValue(
-											getBusyProgressBar().getValue()
-													+ read);
+									SwingUtilities.invokeLater(new Runnable() {
+										public void run() {
+											getBusyProgressBar().setValue(
+													getBusyProgressBar()
+															.getValue()
+															+ length);
+										}
+									});
 									fos.write(bytes, 0, read);
 									read = stream.read(bytes);
 								}
-								fos.close();
-								stream.close();
+								fos.write(bytes, 0, read);
+								read = stream.read(bytes);
+
 							} catch (IOException e) {
 								e.printStackTrace();
 								break;
@@ -159,10 +167,16 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
 								getBusyProgressBar().setIndeterminate(false);
 								byte[] bytes = new byte[1024];
 								int read = stream.read(bytes);
+								final int length = read;
 								while (read > 0) {
-									getBusyProgressBar().setValue(
-											getBusyProgressBar().getValue()
-													+ read);
+									SwingUtilities.invokeLater(new Runnable() {
+										public void run() {
+											getBusyProgressBar().setValue(
+													getBusyProgressBar()
+															.getValue()
+															+ length);
+										}
+									});
 									fos.write(bytes, 0, read);
 									read = stream.read(bytes);
 								}
@@ -189,6 +203,7 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
 	}
 
 	public void prepare() {
+		getStatusTextArea().setText("");
 		addStatusLine("Preparing to download updates...\n");
 		downloadUpdates();
 	}
@@ -196,10 +211,6 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
 	private void addStatusLine(String statusLine) {
 		getStatusTextArea().setText(
 				getStatusTextArea().getText() + statusLine + "\n");
-	}
-
-	private void addStatusString(String statusLine) {
-		getStatusTextArea().setText(getStatusTextArea().getText() + statusLine);
 	}
 
 	/**
