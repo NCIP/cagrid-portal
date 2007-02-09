@@ -33,7 +33,7 @@ import org.projectmobius.common.XMLUtilities;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 
-public class CheckForUpdatesStep extends PanelWizardStep {
+public class ValidateAndDownloadsUpdatesStep extends PanelWizardStep {
 	
 	private SoftwareType software = null;
 
@@ -62,7 +62,7 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 	/**
 	 * This method initializes
 	 */
-	public CheckForUpdatesStep() {
+	public ValidateAndDownloadsUpdatesStep() {
 		super("Check For Updates",
 				"Looking for update on the Introduce project server.");
 		initialize();

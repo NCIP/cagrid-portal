@@ -13,37 +13,14 @@ import org.pietschy.wizard.models.BranchingPath;
 import org.pietschy.wizard.models.Condition;
 import org.pietschy.wizard.models.SimplePath;
 
-public class UpdatePath extends BranchingPath {
+public class UpdatePath extends SimplePath {
 
 	public UpdatePath(){
 		Map globalPropertiesMap = new HashMap();
-		SimplePath finishPath = new SimplePath();
-		finishPath.addStep(new FinishedStep());
+
+		this.addStep(new CheckForUpdatesStep());
+		this.addStep(new FinishedStep());
 		
-		//path for searching for new features.....
-		SimplePath findNewFeaturesPath = new SimplePath();
-		findNewFeaturesPath.setNextPath(finishPath);
-		
-		//path for updating.....
-		SimplePath checkForUpdatesPath = new SimplePath();
-		checkForUpdatesPath.addStep(new CheckForUpdatesStep());
-		checkForUpdatesPath.setNextPath(finishPath);
-		
-		this.addStep(new IntroductionStep());
-		final InstallOrUpdateChoiceStep updateTypeSelector = new InstallOrUpdateChoiceStep();
-		this.addStep(updateTypeSelector);
-		
-		this.addBranch(checkForUpdatesPath, new Condition() {
-			public boolean evaluate(WizardModel arg0) {
-				return updateTypeSelector.isCheckForUpdateOption();
-			}
-		});
-		
-		this.addBranch(findNewFeaturesPath, new Condition() {
-			public boolean evaluate(WizardModel arg0) {
-				return updateTypeSelector.isFindNewFeaturesOption();
-			}
-		});
 	}
 
 }

@@ -1,10 +1,12 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree;
 
+import java.awt.Font;
 import java.util.StringTokenizer;
 
 import gov.nih.nci.cagrid.introduce.beans.software.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import javax.swing.JCheckBox;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -17,6 +19,8 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
 	private IntroduceType introduce;
 	
 	private JCheckBox checkBox;
+	
+	private boolean installed = false;
 
 	public IntroduceUpdateTreeNode(String displayName, DefaultTreeModel model,
 			IntroduceType introduce, SoftwareType software) {
@@ -24,9 +28,20 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
 		this.software = software;
 		this.introduce = introduce;
 		checkBox = new JCheckBox(displayName);
+		if(introduce.getVersion().equals(CommonTools.getIntroduceVersion())){
+			checkBox.setEnabled(false);
+			checkBox.setSelected(true);
+			installed = true;
+			checkBox.setText(checkBox.getText() + " installed");
+			checkBox.setFont(checkBox.getFont().deriveFont(Font.ITALIC));
+		}
 		if (model != null) {
 			initialize();
 		}
+	}
+	
+	public boolean isInstalled(){
+		return installed;
 	}
 	
 	public Object getUserObject(){

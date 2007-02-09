@@ -24,11 +24,11 @@ public class FinishedStep extends PanelWizardStep {
 	}
 
 	public String getName() {
-		return "Complete";
+		return "Downloads Complete";
 	}
 
 	public String getSummary() {
-		return "IVI Service Installation Complete";
+		return "Introduce Downloads Complete";
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class FinishedStep extends PanelWizardStep {
 		if (IntroTextPane == null) {
 			IntroTextPane = new JTextPane();
 			IntroTextPane
-					.setText("Service is now deployed.  For the changes to take place the container may need to be restarted.");
+					.setText("Introduce needs to restart to complete the installation.  Click Finish to proceed.");
 		}
 		return IntroTextPane;
 	}
