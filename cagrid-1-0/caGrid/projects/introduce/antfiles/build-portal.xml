@@ -88,8 +88,6 @@
 			<pathelement location="${basedir}/doc/help"/>
 		</path>
 		<path id="Portal.run.classpath">
-			<pathelement location="${introduce.classes.dir}"/>
-			<pathelement location="${introduce.test.classes.dir}"/>
 			<fileset dir="${lib.dir}">
 				<include name="*.jar"/>
 			</fileset>

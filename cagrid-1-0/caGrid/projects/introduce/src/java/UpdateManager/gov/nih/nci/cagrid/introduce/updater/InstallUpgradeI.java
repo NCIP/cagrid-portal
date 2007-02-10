@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.updater;
+package gov.nih.nci.cagrid.introduce.updater;
 
 public interface InstallUpgradeI {
 	

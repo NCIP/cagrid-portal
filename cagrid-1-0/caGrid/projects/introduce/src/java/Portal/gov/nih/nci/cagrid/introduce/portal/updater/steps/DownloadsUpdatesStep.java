@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.software.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
@@ -9,18 +10,24 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.xml.namespace.QName;
 
 import org.pietschy.wizard.InvalidStateException;
 import org.pietschy.wizard.PanelWizardStep;
@@ -64,143 +71,158 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
 				softwareUpdates = updatesStep.getRequestedDownloads();
 				File updatesDir = new File("." + File.separator + "updates");
 				updatesDir.mkdirs();
+
+				IntroduceType[] introduceTypes = softwareUpdates.getIntroduce();
+				if (introduceTypes != null) {
+					for (int i = 0; i < introduceTypes.length; i++) {
+						URL url = null;
+						try {
+							url = new URL(introduceTypes[i].getZipFileURL()
+									.toString());
+						} catch (MalformedURLException e) {
+							e.printStackTrace();
+							break;
+						}
+						URLConnection connection = null;
+						try {
+							connection = url.openConnection();
+							addStatusLine("Downloading Introduce "
+									+ introduceTypes[i].getVersion() + " ("
+									+ connection.getContentLength() + " bytes)");
+							getBusyProgressBar().setMinimum(0);
+							getBusyProgressBar().setMaximum(
+									connection.getContentLength());
+							getBusyProgressBar().setValue(0);
+						} catch (IOException e) {
+							e.printStackTrace();
+							break;
+						}
+						try {
+							InputStream stream = connection.getInputStream();
+							FileOutputStream fos = new FileOutputStream(
+									new File(updatesDir.getAbsolutePath()
+											+ File.separator + "introduce"
+											+ introduceTypes[i].getVersion()
+											+ ".zip"));
+							getBusyProgressBar().setIndeterminate(false);
+							byte[] bytes = new byte[1024];
+							int read = stream.read(bytes);
+							final int length = read;
+							while (read > 0) {
+								SwingUtilities.invokeLater(new Runnable() {
+									public void run() {
+										getBusyProgressBar().setValue(
+												getBusyProgressBar().getValue()
+														+ length);
+									}
+								});
+								fos.write(bytes, 0, read);
+								read = stream.read(bytes);
+							}
+							fos.close();
+							stream.close();
+
+						} catch (IOException e) {
+							e.printStackTrace();
+							break;
+						}
+					}
+				}
+
+				ExtensionType[] extensionTypes = softwareUpdates.getExtension();
+				if (extensionTypes != null) {
+					for (int i = 0; i < extensionTypes.length; i++) {
+						URL url = null;
+						try {
+							url = new URL(extensionTypes[i].getZipFileURL()
+									.toString());
+						} catch (MalformedURLException e) {
+							e.printStackTrace();
+							break;
+						}
+						URLConnection connection = null;
+						try {
+							connection = url.openConnection();
+							addStatusLine("Downloading "
+									+ extensionTypes[i].getDisplayName()
+									+ extensionTypes[i].getVersion() + " ("
+									+ connection.getContentLength() + " bytes)");
+							getBusyProgressBar().setMinimum(0);
+							getBusyProgressBar().setMaximum(
+									connection.getContentLength());
+							getBusyProgressBar().setValue(0);
+						} catch (IOException e) {
+							e.printStackTrace();
+							break;
+						}
+						try {
+							InputStream stream = connection.getInputStream();
+							FileOutputStream fos = new FileOutputStream(
+									new File(updatesDir.getAbsolutePath()
+											+ File.separator
+											+ extensionTypes[i].getName()
+											+ extensionTypes[i].getVersion()
+											+ ".zip"));
+							getBusyProgressBar().setIndeterminate(false);
+							byte[] bytes = new byte[1024];
+							int read = stream.read(bytes);
+							final int length = read;
+							while (read > 0) {
+								SwingUtilities.invokeLater(new Runnable() {
+									public void run() {
+										getBusyProgressBar().setValue(
+												getBusyProgressBar().getValue()
+														+ length);
+									}
+								});
+								fos.write(bytes, 0, read);
+								read = stream.read(bytes);
+							}
+							fos.close();
+							stream.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+							break;
+						}
+					}
+				}
+
+				SwingUtilities.invokeLater(new Runnable() {
+
+					public void run() {
+						getBusyProgressBar().setIndeterminate(true);
+					}
+				});
+
+				addStatusLine("");
+				addStatusLine("Writting out software updates description...");
+
 				try {
-					IntroduceType[] introduceTypes = softwareUpdates
-							.getIntroduce();
-					if (introduceTypes != null) {
-						for (int i = 0; i < introduceTypes.length; i++) {
-							URL url = null;
-							try {
-								url = new URL(introduceTypes[i].getZipFileURL()
-										.toString());
-							} catch (MalformedURLException e) {
-								e.printStackTrace();
-								break;
-							}
-							URLConnection connection = null;
-							try {
-								connection = url.openConnection();
-								addStatusLine("Downloading Introduce "
-										+ introduceTypes[i].getVersion() + " ("
-										+ connection.getContentLength()
-										+ " bytes)");
-								getBusyProgressBar().setMinimum(0);
-								getBusyProgressBar().setMaximum(
-										connection.getContentLength());
-								getBusyProgressBar().setValue(0);
-							} catch (IOException e) {
-								e.printStackTrace();
-								break;
-							}
-							try {
-								InputStream stream = connection
-										.getInputStream();
-								FileOutputStream fos = new FileOutputStream(
-										new File(updatesDir.getAbsolutePath()
-												+ File.separator
-												+ "introduce"
-												+ introduceTypes[i]
-														.getVersion() + ".zip"));
-								getBusyProgressBar().setIndeterminate(false);
-								byte[] bytes = new byte[1024];
-								int read = stream.read(bytes);
-								final int length = read;
-								while (read > 0) {
-									SwingUtilities.invokeLater(new Runnable() {
-										public void run() {
-											getBusyProgressBar().setValue(
-													getBusyProgressBar()
-															.getValue()
-															+ length);
-										}
-									});
-									fos.write(bytes, 0, read);
-									read = stream.read(bytes);
-								}
-								fos.close();
-								stream.close();
-
-							} catch (IOException e) {
-								e.printStackTrace();
-								break;
-							}
-						}
-					}
-
-					ExtensionType[] extensionTypes = softwareUpdates
-							.getExtension();
-					if (extensionTypes != null) {
-						for (int i = 0; i < extensionTypes.length; i++) {
-							URL url = null;
-							try {
-								url = new URL(extensionTypes[i].getZipFileURL()
-										.toString());
-							} catch (MalformedURLException e) {
-								e.printStackTrace();
-								break;
-							}
-							URLConnection connection = null;
-							try {
-								connection = url.openConnection();
-								addStatusLine("Downloading "
-										+ extensionTypes[i].getDisplayName()
-										+ extensionTypes[i].getVersion() + " ("
-										+ connection.getContentLength()
-										+ " bytes)");
-								getBusyProgressBar().setMinimum(0);
-								getBusyProgressBar().setMaximum(
-										connection.getContentLength());
-								getBusyProgressBar().setValue(0);
-							} catch (IOException e) {
-								e.printStackTrace();
-								break;
-							}
-							try {
-								InputStream stream = connection
-										.getInputStream();
-								FileOutputStream fos = new FileOutputStream(
-										new File(updatesDir.getAbsolutePath()
-												+ File.separator
-												+ extensionTypes[i].getName()
-												+ extensionTypes[i]
-														.getVersion() + ".zip"));
-								getBusyProgressBar().setIndeterminate(false);
-								byte[] bytes = new byte[1024];
-								int read = stream.read(bytes);
-								final int length = read;
-								while (read > 0) {
-									SwingUtilities.invokeLater(new Runnable() {
-										public void run() {
-											getBusyProgressBar().setValue(
-													getBusyProgressBar()
-															.getValue()
-															+ length);
-										}
-									});
-									fos.write(bytes, 0, read);
-									read = stream.read(bytes);
-								}
-								fos.close();
-								stream.close();
-							} catch (IOException e) {
-								e.printStackTrace();
-								break;
-							}
-						}
-					}
-
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					Utils.serializeObject(softwareUpdates, new QName("gme://gov.nih.nci.cagrid.introduce/1/Software","Software"), new FileWriter(new File("."+ File.separator + "updates" + File.separator + "software.xml")));
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				getBusyProgressBar().setIndeterminate(false);
+				
+				
+				addStatusLine("");
+				addStatusLine("Finished.");
+
+				SwingUtilities.invokeLater(new Runnable() {
+
+					public void run() {
+						getBusyProgressBar().setIndeterminate(false);
+					}
+				});
+
 				setComplete(true);
 			}
 
 		});
 		th.start();
 	}
+
 
 	public void prepare() {
 		getStatusTextArea().setText("");

@@ -27,6 +27,7 @@
 	
 	<target name="introduce" depends="checkGlobus" description="Execute the Introduce GDE">
 		<runPortal/>
+		<runUpdater/>
 	</target>
 	<macrodef name="runPortal">
 		
@@ -34,6 +35,18 @@
 			<echo message="Running portal"/>
 			<java classname="gov.nih.nci.cagrid.introduce.portal.Introduce" fork="yes">
 				<classpath refid="Portal.run.classpath"/>
+			</java>
+		</sequential>
+	</macrodef>
+	
+	<target name="update" depends="checkGlobus">
+		<runUpdater/>
+	</target>
+	<macrodef name="runUpdater">
+		<sequential>
+			<echo message="Running Softare Updater"/>
+			<java classname="gov.nih.nci.cagrid.introduce.updater.UpdateManager" fork="yes">
+				<classpath refid="UpdateManager.run.classpath"/>
 			</java>
 		</sequential>
 	</macrodef>

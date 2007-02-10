@@ -25,6 +25,8 @@
 	<property name="ext.resources.dir" location="${ext.dir}/resources" />
 	<property name="sde.schema.dir" location="${schema.dir}/types" />
 	<property name="resources.dir" location="${basedir}/resources" />
+	<property name="updates.dir" location="${basedir}/updates" />
+	<property name="updates.lib.dir" location="${basedir}/updates/lib" />
 	
 	<!-- Generated stuff -->
 	<property name="build.dir" location="${basedir}/build" />
@@ -32,6 +34,7 @@
 	<property name="classes.dir" location="${build.dir}/classes" />
 	<property name="introduce.classes.dir" location="${classes.dir}/Introduce" />
 	<property name="portal.classes.dir" location="${classes.dir}/Portal" />
+	<property name="updater.classes.dir" location="${classes.dir}/UpdateManager" />
 	<property name="jars.dir" location="${build.dir}/jars" />
 	<property name="jars.prefixname" value="caGrid-1.0-${project.name}-" />
 	<property name="jars.prefix" value="${jars.dir}/${jars.prefixname}" />
@@ -47,6 +50,7 @@
 	<property name="test.classes.dir" location="${build.dir}/test_classes" />
 	<property name="introduce.test.classes.dir" location="${test.classes.dir}/Introduce" />
 	<property name="portal.test.classes.dir" location="${test.classes.dir}/Portal" />
+	<property name="updater.test.classes.dir" location="${test.classes.dir}/UpdateManager" />
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="ext.test.lib.dir" location="${ext.dir}/test/lib" />
 	<property name="test.log.dir" location="${test.dir}/logs" />
