@@ -18,6 +18,7 @@
 	<!-- ============================================================== -->
 	<target name="releaseIntroduceExtensions" depends="prepare">
 		<mkdir dir="tmp"/>
+		<mkdir dir="${introduce.extensions.dir}"/>
 		<for list="${introduce.extension.projects.list}" parallel="true" param="project.name" trim="true">
 			<sequential>
 				<echo message="Installing Introduce Extensions from @{project.name}." />
@@ -44,7 +45,7 @@
 		<delete dir="tmp/installer"/>
 		<mkdir dir="tmp/installer"/>
 		<izpack input="${basedir}/install/install.xml"
-			output="tmp/installer/Introduce-RC1.0-installer.jar"
+			output="tmp/installer/Introduce-1.1-installer.jar"
 			installerType="web"
 			basedir="."
 			izPackDir="${basedir}/install"/>

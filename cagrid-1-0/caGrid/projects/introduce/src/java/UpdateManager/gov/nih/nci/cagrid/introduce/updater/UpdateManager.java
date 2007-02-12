@@ -17,6 +17,7 @@ import java.util.zip.ZipInputStream;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.axis.utils.XMLUtils;
+import org.apache.bcel.verifier.exc.StaticCodeConstraintException;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.xml.sax.InputSource;
@@ -39,6 +40,21 @@ public class UpdateManager {
 		if (introduceTypes != null) {
 			for (int i = 0; i < introduceTypes.length; i++) {
 				IntroduceType update = introduceTypes[i];
+				//if it is an introduce update i need to delete all files and 
+				//and directories before unzipping
+				File baseDir = new File(".");
+				File[] files = baseDir.listFiles();
+				System.out.println("Removing old version of Introduce.");
+				for(int fileI = 0; fileI < files.length; fileI++){
+					File f = files[fileI];
+					if(f.isDirectory() && !f.getName().equals("updates")){
+						deleteDir(f);
+					} else {
+						f.delete();
+					}
+				}
+				
+				System.out.println("Installing new version of Introduce.");
 				File updateFile = new File("." + File.separator
 						+ "updates" + File.separator + "introduce"
 						+ update.getVersion() + ".zip");
@@ -70,6 +86,19 @@ public class UpdateManager {
 
 	}
 	
+	public static boolean deleteDir(File dir) {
+		if (dir.isDirectory()) {
+			String[] children = dir.list();
+			for (int i = 0; i < children.length; i++) {
+				boolean success = deleteDir(new File(dir, children[i]));
+				if (!success) {
+					System.err.println("could not remove directory: " + dir.getAbsolutePath());
+					return false;
+				}
+			}
+		}
+		return dir.delete();
+	}
 
 	private void unzipUpdate(File cachedFile) throws IOException {
 
@@ -85,7 +114,6 @@ public class UpdateManager {
 			}
 		}
 		zin.close();
-
 	}
 
 	private static void unzip(String baseDir, ZipInputStream zin, String s)
