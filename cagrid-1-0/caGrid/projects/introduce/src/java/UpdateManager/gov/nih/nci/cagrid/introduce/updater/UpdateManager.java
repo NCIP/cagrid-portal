@@ -44,6 +44,7 @@ public class UpdateManager {
 						+ update.getVersion() + ".zip");
 				try {
 					unzipUpdate(updateFile);
+					updateFile.delete();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -59,6 +60,7 @@ public class UpdateManager {
 						+ update.getVersion() + ".zip");
 				try {
 					unzipUpdate(updateFile);
+					updateFile.delete();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -79,7 +81,7 @@ public class UpdateManager {
 			if (e.isDirectory()) {
 				new File(e.getName()).mkdirs();
 			} else {
-				unzip("updates", zin, e.getName());
+				unzip(".", zin, e.getName());
 			}
 		}
 		zin.close();
@@ -106,7 +108,7 @@ public class UpdateManager {
 		File updateFile = new File("updates" + File.separator + "software.xml");
 		if(!updateFile.exists()){
 			System.out.println("No updates to process");
-			return;
+			System.exit(0);
 		}
 		
 		org.w3c.dom.Document doc = null;
@@ -136,6 +138,8 @@ public class UpdateManager {
 		}
 		UpdateManager manager = new UpdateManager(software);
 		manager.execute();
+		updateFile.delete();
+		System.exit(1);
 	}
 
 }

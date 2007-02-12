@@ -234,6 +234,21 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
 		getStatusTextArea().setText(
 				getStatusTextArea().getText() + statusLine + "\n");
 	}
+	
+	public static boolean deleteDir(File dir) {
+		if (dir.isDirectory()) {
+			String[] children = dir.list();
+			for (int i = 0; i < children.length; i++) {
+				boolean success = deleteDir(new File(dir, children[i]));
+				if (!success) {
+					System.err.println("could not remove directory: " + dir.getAbsolutePath());
+					return false;
+				}
+			}
+		}
+		return dir.delete();
+	}
+
 
 	/**
 	 * This method initializes this

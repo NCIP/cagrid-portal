@@ -28,7 +28,13 @@
 	<target name="introduce" depends="checkGlobus" description="Execute the Introduce GDE">
 		<runPortal/>
 		<runUpdater/>
+		<antcall target="reRunIntroduce" />
 	</target>
+
+	<target name="reRunIntroduce" if="introduce.restart">
+		<ant antfile="./build.xml" target="introduce" inheritAll="false" />
+	</target>
+	
 	<macrodef name="runPortal">
 		
 		<sequential>
@@ -45,9 +51,12 @@
 	<macrodef name="runUpdater">
 		<sequential>
 			<echo message="Running Softare Updater"/>
-			<java classname="gov.nih.nci.cagrid.introduce.updater.UpdateManager" fork="yes">
+			<java classname="gov.nih.nci.cagrid.introduce.updater.UpdateManager" resultproperty="updater.ran" fork="yes">
 				<classpath refid="UpdateManager.run.classpath"/>
 			</java>
+			<condition property="introduce.restart">
+				<equals arg1="${updater.ran}" arg2="1" />
+			</condition>
 		</sequential>
 	</macrodef>
 	
