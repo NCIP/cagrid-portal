@@ -7,6 +7,7 @@ import java.awt.Insets;
 
 import javax.swing.JTextPane;
 
+import org.pietschy.wizard.InvalidStateException;
 import org.pietschy.wizard.PanelWizardStep;
 
 public class FinishedStep extends PanelWizardStep {
@@ -62,5 +63,13 @@ public class FinishedStep extends PanelWizardStep {
 		}
 		return IntroTextPane;
 	}
+
+
+	public void applyState() throws InvalidStateException {
+		super.applyState();
+		System.exit(0);
+	}
+	
+	
 
 } // @jve:decl-index=0:visual-constraint="10,10"
