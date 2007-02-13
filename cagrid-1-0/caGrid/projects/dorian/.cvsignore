@@ -7,3 +7,4 @@ ext
 *.gar
 cacert.pem
 temp-cakey.pem
+junit*.properties
