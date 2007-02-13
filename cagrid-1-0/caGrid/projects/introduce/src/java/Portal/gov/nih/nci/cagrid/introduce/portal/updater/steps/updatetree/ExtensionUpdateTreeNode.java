@@ -34,6 +34,10 @@ public class ExtensionUpdateTreeNode extends UpdateTypeTreeNode {
 		}
 	}
 	
+	public void setInstalled(boolean installed){
+		this.installed = installed;
+	}
+	
 	public boolean isInstalled(){
 		return installed;
 	}

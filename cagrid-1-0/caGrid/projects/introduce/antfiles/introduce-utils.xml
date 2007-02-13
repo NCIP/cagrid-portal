@@ -27,7 +27,6 @@
 	
 	<target name="introduce" depends="checkGlobus" description="Execute the Introduce GDE">
 		<runPortal/>
-		<sleep seconds="10"/>
 		<runUpdater/>
 		<antcall target="reRunIntroduce" />
 	</target>

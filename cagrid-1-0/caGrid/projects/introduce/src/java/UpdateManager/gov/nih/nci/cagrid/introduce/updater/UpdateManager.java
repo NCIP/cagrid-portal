@@ -59,7 +59,7 @@ public class UpdateManager {
 						+ "updates" + File.separator + "introduce"
 						+ update.getVersion() + ".zip");
 				try {
-					unzipUpdate(updateFile);
+					unzipIntroduce(updateFile);
 					updateFile.delete();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -75,7 +75,7 @@ public class UpdateManager {
 						+ "updates" + File.separator + update.getName()
 						+ update.getVersion() + ".zip");
 				try {
-					unzipUpdate(updateFile);
+					unzipExtension(updateFile);
 					updateFile.delete();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -100,7 +100,7 @@ public class UpdateManager {
 		return dir.delete();
 	}
 
-	private void unzipUpdate(File cachedFile) throws IOException {
+	private void unzipIntroduce(File cachedFile) throws IOException {
 
 		InputStream in = new BufferedInputStream(
 				new FileInputStream(cachedFile));
@@ -111,6 +111,22 @@ public class UpdateManager {
 				new File(e.getName()).mkdirs();
 			} else {
 				unzip(".", zin, e.getName());
+			}
+		}
+		zin.close();
+	}
+	
+	private void unzipExtension(File cachedFile) throws IOException {
+
+		InputStream in = new BufferedInputStream(
+				new FileInputStream(cachedFile));
+		ZipInputStream zin = new ZipInputStream(in);
+		ZipEntry e;
+		while ((e = zin.getNextEntry()) != null) {
+			if (e.isDirectory()) {
+				new File(e.getName()).mkdirs();
+			} else {
+				unzip("." + File.separator + "extensions", zin, e.getName());
 			}
 		}
 		zin.close();

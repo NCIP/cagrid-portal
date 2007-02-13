@@ -48,18 +48,19 @@ public class UpdateTree extends JTree {
 
 				if (obj != null && obj instanceof JCheckBox) {
 					JCheckBox box = (JCheckBox) obj;
-					//return if this software is already installed
-					if (node instanceof IntroduceUpdateTreeNode){
-						if(((IntroduceUpdateTreeNode)node).isInstalled()){
+					// return if this software is already installed
+					if (node instanceof IntroduceUpdateTreeNode) {
+						if (((IntroduceUpdateTreeNode) node).isInstalled()) {
 							return;
 						}
-					} else if(node instanceof ExtensionUpdateTreeNode){
-						if(((ExtensionUpdateTreeNode)node).isInstalled()){
+					} else if (node instanceof ExtensionUpdateTreeNode) {
+						if (((ExtensionUpdateTreeNode) node).isInstalled()) {
 							return;
 						}
 					}
 					box.setSelected(!box.isSelected());
-					if (node instanceof IntroduceUpdateTreeNode && !box.isSelected()) {
+					if (node instanceof IntroduceUpdateTreeNode
+							&& !box.isSelected()) {
 						// need to select or deselect all of it's children
 						int children = node.getChildCount();
 						for (int i = 0; i < children; i++) {
@@ -68,8 +69,24 @@ public class UpdateTree extends JTree {
 									.setSelected(box.isSelected());
 						}
 					}
-					if (node instanceof IntroduceUpdateTreeNode && box.isSelected()) {
+					if (node instanceof IntroduceUpdateTreeNode
+							&& box.isSelected()) {
 						// need to unselect anything else not in this branch
+						int introduceNodeCount = root.getChildCount();
+						for (int i = 0; i < introduceNodeCount; i++) {
+							DefaultMutableTreeNode treenode = (DefaultMutableTreeNode) root
+									.getChildAt(i);
+							if (!treenode.equals(node)) {
+								IntroduceUpdateTreeNode introducenode = (IntroduceUpdateTreeNode) treenode;
+								introducenode.getCheckBox().setSelected(false);
+								int children = introducenode.getChildCount();
+								for (int j = 0; j < children; j++) {
+									((ExtensionUpdateTreeNode) introducenode
+											.getChildAt(j)).getCheckBox()
+											.setSelected(false);
+								}
+							}
+						}
 					}
 					UpdateTree.this.paintAll(UpdateTree.this.getGraphics());
 				} else {

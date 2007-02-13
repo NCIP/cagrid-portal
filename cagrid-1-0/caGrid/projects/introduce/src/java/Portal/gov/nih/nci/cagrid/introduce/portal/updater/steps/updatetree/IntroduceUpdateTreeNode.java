@@ -28,16 +28,17 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
 		this.software = software;
 		this.introduce = introduce;
 		checkBox = new JCheckBox(displayName);
-		if(introduce.getVersion().equals(CommonTools.getIntroduceVersion())){
-			checkBox.setEnabled(false);
-			checkBox.setSelected(true);
-			installed = true;
-			checkBox.setText(checkBox.getText() + " installed");
-			checkBox.setFont(checkBox.getFont().deriveFont(Font.ITALIC));
-		}
 		if (model != null) {
 			initialize();
 		}
+	}
+	
+	public JCheckBox getCheckBox(){
+		return checkBox;
+	}
+	
+	public void setInstalled(boolean installed){
+		this.installed = installed;
 	}
 	
 	public boolean isInstalled(){

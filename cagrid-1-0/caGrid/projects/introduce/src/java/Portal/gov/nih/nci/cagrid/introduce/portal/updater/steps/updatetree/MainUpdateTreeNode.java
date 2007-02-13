@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree;
 
+import java.awt.Font;
 import java.util.StringTokenizer;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -38,6 +39,25 @@ public class MainUpdateTreeNode extends UpdateTypeTreeNode {
 								this.getModel(), introduce, software);
 						getModel().insertNodeInto(introduceNode, this,
 								this.getChildCount());
+
+					} else if (CommonTools.getIntroduceVersion().equals(
+							introduce.getVersion())) {
+						// need to add this introduce version
+						IntroduceUpdateTreeNode introduceNode = new IntroduceUpdateTreeNode(
+								"Introduce (" + introduce.getVersion() + ")",
+								this.getModel(), introduce, software);
+						introduceNode.getCheckBox().setEnabled(false);
+						introduceNode.getCheckBox().setSelected(true);
+						introduceNode.setInstalled(true);
+						introduceNode.getCheckBox().setText(
+								introduceNode.getCheckBox().getText()
+										+ " installed");
+						introduceNode.getCheckBox().setFont(
+								introduceNode.getCheckBox().getFont()
+										.deriveFont(Font.ITALIC));
+						getModel().insertNodeInto(introduceNode, this,
+								this.getChildCount());
+
 					}
 				}
 			}
