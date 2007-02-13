@@ -1,9 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.idp;
 
-
-
-
-
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
 
 import java.awt.GridBagConstraints;
@@ -22,7 +19,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IdPMenu.java,v 1.1 2006-09-08 19:22:18 langella Exp $
+ * @version $Id: IdPMenu.java,v 1.2 2007-02-13 14:56:24 dervin Exp $
  */
 public class IdPMenu extends GridPortalComponent {
 
@@ -43,10 +40,11 @@ public class IdPMenu extends GridPortalComponent {
 		super();
 		initialize();
 	}
+	
+	
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -128,7 +126,7 @@ public class IdPMenu extends GridPortalComponent {
 			menuPanel.add(userManagementLabel, gridBagConstraints4);
 			menuPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Identity Provider Options",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));	
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));	
 			
 		}
 		return menuPanel;
@@ -175,7 +173,7 @@ public class IdPMenu extends GridPortalComponent {
 		if (perform == null) {
 			perform = new JButton();
 			perform.setText("Select");
-			perform.setIcon(DorianLookAndFeel.getSelectIcon());
+			perform.setIcon(PortalLookAndFeel.getSelectIcon());
 			perform.addActionListener(new java.awt.event.ActionListener() { 
 				public void actionPerformed(java.awt.event.ActionEvent e) {    
 					perform();
@@ -206,7 +204,7 @@ public class IdPMenu extends GridPortalComponent {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Close");
-			close.setIcon(DorianLookAndFeel.getCloseIcon());
+			close.setIcon(PortalLookAndFeel.getCloseIcon());
 			close.addActionListener(new java.awt.event.ActionListener() { 
 				public void actionPerformed(java.awt.event.ActionEvent e) {    
 					dispose();

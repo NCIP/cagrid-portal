@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
@@ -38,7 +39,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.2 2006-09-12 23:37:29 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.3 2007-02-13 15:00:08 dervin Exp $
  */
 public class UserManagerWindow extends GridPortalBaseFrame {
 
@@ -136,7 +137,6 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -227,7 +227,8 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			contentPanel.setLayout(new GridBagLayout());
 			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Users",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+				PortalLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.weighty = 1.0;
 			gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
@@ -262,7 +263,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Close");
-			cancel.setIcon(DorianLookAndFeel.getCloseIcon());
+			cancel.setIcon(PortalLookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -327,11 +328,10 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		MobiusRunnable runner = new MobiusRunnable() {
 			public void execute() {
 				try {
-					IFSUser user = (IFSUser) getUsersTable().getSelectedUser();
-					String service = ((DorianServiceListComboBox) getService()).getSelectedService();
-
-					GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-					IFSAdministrationClient client = new IFSAdministrationClient(service, proxy);
+					IFSUser user = getUsersTable().getSelectedUser();
+					String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
+					GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
+					IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, proxyCred);
 					TrustedIdP[] idps = client.getTrustedIdPs();
 					TrustedIdP tidp = null;
 					for (int i = 0; i < idps.length; i++) {
@@ -341,7 +341,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 						}
 					}
 					PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-						new UserWindow(service, proxy, user, tidp));
+						new UserWindow(serviceUrl, proxyCred, user, tidp));
 				} catch (Exception e) {
 					PortalUtils.showErrorMessage(e);
 				}
@@ -414,8 +414,8 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null,
+				PortalLookAndFeel.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
 			jPanel2.add(proxyLabel, gridBagConstraints29);
@@ -448,7 +448,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Users");
-			query.setIcon(DorianLookAndFeel.getQueryIcon());
+			query.setIcon(PortalLookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
@@ -485,7 +485,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 		this.updateProgress(true, "Querying...");
 
 		try {
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			IFSUserFilter f = new IFSUserFilter();
 
 			Object o = getIdp().getSelectedItem();
@@ -502,8 +502,8 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			f.setUserRole(((UserRolesComboBox) this.getUserRole()).getSelectedUserRole());
 			f.setUserStatus(((UserStatusComboBox) this.getUserStatus()).getSelectedUserStatus());
 
-			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, proxy);
+			String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
+			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, proxyCred);
 			IFSUser[] users = client.findUsers(f);
 			if (users != null) {
 				for (int i = 0; i < users.length; i++) {
@@ -594,7 +594,7 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			progress.setForeground(DorianLookAndFeel.getPanelLabelColor());
+			progress.setForeground(PortalLookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}
@@ -736,8 +736,8 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 			filterPanel = new JPanel();
 			filterPanel.setLayout(new GridBagLayout());
 			filterPanel.setBorder(BorderFactory.createTitledBorder(null, "Search Criteria",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+				PortalLookAndFeel.getPanelLabelColor()));
 			filterPanel.add(getUserRole(), gridBagConstraints11);
 			filterPanel.add(idpLabel, gridBagConstraints3);
 			filterPanel.add(getIdp(), gridBagConstraints5);
@@ -784,11 +784,11 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 	}
 
 
-	private void updateIdPs(String service, GlobusCredential cred) {
+	private void updateIdPs(String serviceUrl, GlobusCredential cred) {
 		try {
 			this.updateProgress(true, "Seaching for Trusted IdPs");
 			this.getIdp().removeAllItems();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, cred);
+			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, cred);
 			TrustedIdP[] idps = client.getTrustedIdPs();
 			this.getIdp().removeAllItems();
 			for (int i = 0; i < idps.length; i++) {
@@ -806,18 +806,18 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 
 	private void checkUpdateIdPs() {
 		getIdp().hidePopup();
-		final String service = ((DorianServiceListComboBox) getService()).getSelectedService();
+		final String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
 		final ProxyCaddy caddy = ((ProxyComboBox) getProxy()).getSelectedProxyCaddy();
-		if ((service.equals(this.lastService)) && (caddy.getIdentity().equals(this.lastGridIdentity))) {
+		if ((serviceUrl.equals(this.lastService)) && (caddy.getIdentity().equals(this.lastGridIdentity))) {
 			getIdp().showPopup();
 			return;
 		} else {
-			this.lastService = service;
+			this.lastService = serviceUrl;
 			this.lastGridIdentity = caddy.getIdentity();
 
 			MobiusRunnable runner = new MobiusRunnable() {
 				public void execute() {
-					updateIdPs(service, caddy.getProxy());
+					updateIdPs(serviceUrl, caddy.getProxy());
 				}
 			};
 			try {
@@ -883,21 +883,21 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 
 
 	public class TrustedIdPCaddy {
-		private TrustedIdP idp;
+		private TrustedIdP trustedIdp;
 
 
 		public TrustedIdPCaddy(TrustedIdP idp) {
-			this.idp = idp;
+			this.trustedIdp = idp;
 		}
 
 
 		public TrustedIdP getTrustedIdP() {
-			return idp;
+			return trustedIdp;
 		}
 
 
 		public String toString() {
-			return "[IdP Id: " + idp.getId() + "] " + idp.getName();
+			return "[IdP Id: " + trustedIdp.getId() + "] " + trustedIdp.getName();
 		}
 
 	}
@@ -946,10 +946,10 @@ public class UserManagerWindow extends GridPortalBaseFrame {
 
 
 	private void removeUser() {
-		String service = ((DorianServiceListComboBox) getService()).getSelectedService();
+		String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
 		try {
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, proxy);
+			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, proxyCred);
 			IFSUser usr = this.getUsersTable().getSelectedUser();
 			client.removeUser(usr);
 			this.getUsersTable().removeSelectedUser();

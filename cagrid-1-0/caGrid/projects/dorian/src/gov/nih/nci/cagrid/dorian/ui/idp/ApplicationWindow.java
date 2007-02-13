@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.idp;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IdPRegistrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
@@ -120,7 +121,6 @@ public class ApplicationWindow extends GridPortalComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -250,7 +250,7 @@ public class ApplicationWindow extends GridPortalComponent {
 			authPanel.setLayout(new GridBagLayout());
 			authPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Login Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			authPanel.add(serviceLabel, gridBagConstraints3);
 			authPanel.add(getService(), gridBagConstraints4);
 			authPanel.add(usernameLabel, gridBagConstraints5);
@@ -426,7 +426,7 @@ public class ApplicationWindow extends GridPortalComponent {
 
 			infoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Personal Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			infoPanel.add(firstNameLabel, gridBagConstraints11);
 			infoPanel.add(getFirstName(), gridBagConstraints12);
 			infoPanel.add(lastNameLabel, gridBagConstraints13);
@@ -666,7 +666,7 @@ public class ApplicationWindow extends GridPortalComponent {
 
 				}
 			});
-			apply.setIcon(DorianLookAndFeel.getSelectIcon());
+			apply.setIcon(PortalLookAndFeel.getSelectIcon());
 		}
 		return apply;
 	}
@@ -686,7 +686,7 @@ public class ApplicationWindow extends GridPortalComponent {
 					dispose();
 				}
 			});
-			cancel.setIcon(DorianLookAndFeel.getCloseIcon());
+			cancel.setIcon(PortalLookAndFeel.getCloseIcon());
 		}
 		return cancel;
 	}
@@ -729,12 +729,12 @@ public class ApplicationWindow extends GridPortalComponent {
 			a.setCountry(((CountryListComboBox) this.getCountry()).getSelectedCountry());
 			a.setPhoneNumber(this.getPhoneNumber().getText());
 			a.setEmail(this.getEmail().getText());
-			final String service = ((DorianServiceListComboBox) this.getService()).getSelectedService();
+			final String serviceUrl = ((DorianServiceListComboBox) this.getService()).getSelectedService();
 
 			MobiusRunnable runner = new MobiusRunnable() {
 				public void execute() {
 					try {
-						IdPRegistrationClient client = new IdPRegistrationClient(service);
+						IdPRegistrationClient client = new IdPRegistrationClient(serviceUrl);
 						PortalUtils.showMessage(client.register(a));
 						dispose();
 					} catch (Exception e) {

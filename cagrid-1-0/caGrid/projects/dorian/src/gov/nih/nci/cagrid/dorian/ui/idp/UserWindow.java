@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.idp;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
@@ -31,7 +32,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.2 2006-09-12 23:37:29 langella Exp $
+ * @version $Id: UserWindow.java,v 1.3 2007-02-13 14:56:24 dervin Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -154,7 +155,6 @@ public class UserWindow extends GridPortalBaseFrame {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -237,7 +237,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Close");
-			cancel.setIcon(DorianLookAndFeel.getCloseIcon());
+			cancel.setIcon(PortalLookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -322,9 +322,9 @@ public class UserWindow extends GridPortalBaseFrame {
 		user.setEmail(getEmail().getText());
 
 		try {
-			String service = getService().getText();
+			String serviceName = getService().getText();
 
-			IdPAdministrationClient client = new IdPAdministrationClient(service, proxy);
+			IdPAdministrationClient client = new IdPAdministrationClient(serviceName, proxy);
 			client.updateUser(user);
 
 			PortalUtils.showMessage("User " + user.getUserId() + " update successfully.");
@@ -347,8 +347,8 @@ public class UserWindow extends GridPortalBaseFrame {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+				PortalLookAndFeel.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, null, getInfoPanel(), null);
 			jTabbedPane.addTab(ACCOUNT_PANEL, null, getAccountPanel(), null);
 			jTabbedPane.addTab(PASSWORD_PANEL, null, getPasswordPanel(), null);
@@ -412,7 +412,7 @@ public class UserWindow extends GridPortalBaseFrame {
 			jLabel9.setText("Email");
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
 			gridBagConstraints20.anchor = GridBagConstraints.WEST;
-			gridBagConstraints20.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints20.insets = new Insets(1, 1, 1, 1);
 			gridBagConstraints20.gridx = 1;
 			gridBagConstraints20.gridy = 4;
 			gridBagConstraints20.weightx = 1.0D;
@@ -502,7 +502,7 @@ public class UserWindow extends GridPortalBaseFrame {
 			jLabel3.setText("Address");
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.anchor = GridBagConstraints.WEST;
-			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints8.insets = new Insets(1, 1, 1, 1);
 			gridBagConstraints8.gridwidth = 1;
 			gridBagConstraints8.gridx = 1;
 			gridBagConstraints8.gridy = 3;
@@ -762,8 +762,8 @@ public class UserWindow extends GridPortalBaseFrame {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null,
+				PortalLookAndFeel.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints27);
 		}
@@ -946,4 +946,4 @@ public class UserWindow extends GridPortalBaseFrame {
 		return verifyPassword;
 	}
 
-}
+}  //  @jve:decl-index=0:visual-constraint="10,10"

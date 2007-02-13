@@ -8,9 +8,6 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
-import org.globus.gsi.GSIConstants;
-import org.globus.gsi.X509ExtensionSet;
-
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

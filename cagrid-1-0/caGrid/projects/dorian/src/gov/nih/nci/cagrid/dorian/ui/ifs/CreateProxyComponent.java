@@ -1,11 +1,12 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
-import gov.nih.nci.cagrid.dorian.ui.DorianUIConf;
 import gov.nih.nci.cagrid.dorian.ui.DorianServiceListComboBox;
+import gov.nih.nci.cagrid.dorian.ui.DorianUIConf;
 import gov.nih.nci.cagrid.dorian.ui.IdPConf;
 import gov.nih.nci.cagrid.gridca.ui.ProxyManager;
 import gov.nih.nci.cagrid.gridca.ui.ProxyManagerComponent;
@@ -100,7 +101,6 @@ public class CreateProxyComponent extends GridPortalComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -236,7 +236,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 			idpPanel.setLayout(new GridBagLayout());
 			idpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Proxy",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			idpPanel.add(getProgressPanel(), gridBagConstraints15);
 			idpPanel.add(idpLabel, gridBagConstraints1);
 			idpPanel.add(getIdentityProvider(), gridBagConstraints2);
@@ -301,7 +301,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 			cardPanel.setLayout(new CardLayout());
 			cardPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "IdP Authentication Information",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 		}
 		return cardPanel;
 	}
@@ -400,7 +400,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Close");
-			close.setIcon(DorianLookAndFeel.getCloseIcon());
+			close.setIcon(PortalLookAndFeel.getCloseIcon());
 			close.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -551,7 +551,7 @@ public class CreateProxyComponent extends GridPortalComponent {
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			progress.setForeground(DorianLookAndFeel.getPanelLabelColor());
+			progress.setForeground(PortalLookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}

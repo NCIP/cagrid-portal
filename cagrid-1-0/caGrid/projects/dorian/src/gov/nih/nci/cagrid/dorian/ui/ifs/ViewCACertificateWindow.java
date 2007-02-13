@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.DorianCertifcateAuthorityClient;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
@@ -46,7 +47,6 @@ public class ViewCACertificateWindow extends GridPortalComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -124,7 +124,8 @@ public class ViewCACertificateWindow extends GridPortalComponent {
 			servicePanel.setLayout(new GridBagLayout());
 			servicePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "View Dorian CA Certifcate",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, 
+				PortalLookAndFeel.getPanelLabelColor()));
 			servicePanel.add(ifsLabel, gridBagConstraints5);
 			servicePanel.add(getIfs(), gridBagConstraints6);
 		}
@@ -209,7 +210,7 @@ public class ViewCACertificateWindow extends GridPortalComponent {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Close");
-			close.setIcon(DorianLookAndFeel.getCloseIcon());
+			close.setIcon(PortalLookAndFeel.getCloseIcon());
 			close.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();

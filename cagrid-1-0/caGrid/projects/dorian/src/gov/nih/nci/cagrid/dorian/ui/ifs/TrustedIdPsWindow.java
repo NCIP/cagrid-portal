@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
@@ -33,7 +34,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.2 2006-09-12 23:37:29 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.3 2007-02-13 15:00:08 dervin Exp $
  */
 public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
@@ -93,7 +94,6 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -177,7 +177,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 			contentPanel.setLayout(new GridBagLayout());
 			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trusted IdPs",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel.getPanelLabelColor()));
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.gridy = 0;
 			gridBagConstraints4.gridx = 0;
@@ -270,10 +270,10 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 	public void showTrustedIdP() {
 		try {
-			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new TrustedIdPWindow(service, proxy, getTrustedIdPTable().getSelectedTrustedIdP(), getUserPolicies()));
+				new TrustedIdPWindow(serviceUrl, proxyCred, getTrustedIdPTable().getSelectedTrustedIdP(), getUserPolicies()));
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
@@ -282,10 +282,10 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 	public void addTrustedIdP() {
 		try {
-			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
 			PortalResourceManager.getInstance().getGridPortal().addGridPortalComponent(
-				new TrustedIdPWindow(this, service, proxy, getUserPolicies()));
+				new TrustedIdPWindow(this, serviceUrl, proxyCred, getUserPolicies()));
 		} catch (Exception e) {
 			PortalUtils.showErrorMessage(e);
 		}
@@ -351,8 +351,8 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+				PortalLookAndFeel.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints28);
 			jPanel2.add(proxyLabel, gridBagConstraints29);
@@ -385,7 +385,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Trusted Identity Providers");
-			query.setIcon(DorianLookAndFeel.getQueryIcon());
+			query.setIcon(PortalLookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					MobiusRunnable runner = new MobiusRunnable() {
@@ -422,9 +422,9 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 		this.updateProgress(true, "Finding Trusted IdPs...");
 
 		try {
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, proxy);
+			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
+			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, proxyCred);
 			TrustedIdP[] idps = client.getTrustedIdPs();
 
 			int length = 0;
@@ -450,9 +450,9 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 
 	private IFSUserPolicy[] getUserPolicies() throws Exception {
-		GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-		String service = ((DorianServiceListComboBox) getService()).getSelectedService();
-		IFSAdministrationClient client = new IFSAdministrationClient(service, proxy);
+		GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
+		String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
+		IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, proxyCred);
 		return client.getUserPolicies();
 	}
 
@@ -512,7 +512,7 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 	private JProgressBar getProgress() {
 		if (progress == null) {
 			progress = new JProgressBar();
-			progress.setForeground(DorianLookAndFeel.getPanelLabelColor());
+			progress.setForeground(PortalLookAndFeel.getPanelLabelColor());
 			progress.setString("");
 			progress.setStringPainted(true);
 		}
@@ -562,9 +562,9 @@ public class TrustedIdPsWindow extends GridPortalBaseFrame {
 
 	private void removeTrustedIdP() {
 		try {
-			String service = ((DorianServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential proxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, proxy);
+			String serviceUrl = ((DorianServiceListComboBox) getService()).getSelectedService();
+			GlobusCredential proxyCred = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, proxyCred);
 			client.removeTrustedIdP(getTrustedIdPTable().getSelectedTrustedIdP());
 			getTrustedIdPTable().removeSelectedTrustedIdP();
 		} catch (Exception e) {

@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
@@ -42,7 +43,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.2 2006-09-12 23:37:29 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.3 2007-02-13 15:00:08 dervin Exp $
  */
 public class TrustedIdPWindow extends GridPortalBaseFrame {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
@@ -225,7 +226,6 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -417,9 +417,9 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 			emailDes.setName(Utils.clean(this.getEmail().getText()));
 			idp.setEmailAttributeDescriptor(emailDes);
 
-			String service = getService().getText();
+			String serviceUrl = getService().getText();
 			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, c);
+			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, c);
 			if (newTrustedIdP) {
 				window.addTrustedIdP(client.addTrustedIdP(idp));
 				dispose();
@@ -446,8 +446,8 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Trusted Identity Provider",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+				PortalLookAndFeel.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, DorianLookAndFeel.getTrustedIdPIcon(), getInfoPanel(), null);
 			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
 			jTabbedPane.addTab(ATTRIBUTES_PANEL, DorianLookAndFeel.getAttributesIcon(), getAttributesPanel(), null);
@@ -589,8 +589,8 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null,
+				PortalLookAndFeel.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints27);
 			jPanel2.add(credentialLabel, gridBagConstraints);
@@ -933,8 +933,8 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 			authPanel.add(getUnspecifiedMethod(), gridBagConstraints38);
 			authPanel.add(unspecifiedLabel, gridBagConstraints39);
 			authPanel.setBorder(BorderFactory.createTitledBorder(null, "Accepted Authentication Methods",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+				PortalLookAndFeel.getPanelLabelColor()));
 			authPanel.add(passwordLabel, gridBagConstraints15);
 			authPanel.add(getPasswordMethod(), gridBagConstraints14);
 
@@ -1274,8 +1274,8 @@ public class TrustedIdPWindow extends GridPortalBaseFrame {
 			jPanel.add(getEmailNamespace(), gridBagConstraints55);
 			jPanel.add(getEmail(), gridBagConstraints56);
 			jPanel.setBorder(BorderFactory.createTitledBorder(null, "SAML Attribute Descriptions",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null,
+				PortalLookAndFeel.getPanelLabelColor()));
 		}
 		return jPanel;
 	}

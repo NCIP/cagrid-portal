@@ -104,8 +104,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 
 	/**
 	 * This method initializes this
-	 * 
-	 * @return void
+	 *
 	 */
 	private void initialize() {
 		this.setContentPane(getMainPanel());

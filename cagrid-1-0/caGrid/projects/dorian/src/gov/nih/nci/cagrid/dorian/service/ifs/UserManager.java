@@ -881,8 +881,8 @@ public class UserManager extends LoggingObject {
 			MobiusRunnable runner = new MobiusRunnable() {
 				public void execute() {
 					synchronized (mutex) {
-						List services = conf.getGTSServices();
-						if ((services != null) && (services.size() > 0)) {
+						List serviceList = conf.getGTSServices();
+						if ((serviceList != null) && (serviceList.size() > 0)) {
 							try {
 								X509CRL crl = getCRL();
 								gov.nih.nci.cagrid.gts.bean.X509CRL x509 = new gov.nih.nci.cagrid.gts.bean.X509CRL();
@@ -891,8 +891,8 @@ public class UserManager extends LoggingObject {
 												.writeCRL(crl));
 								String authName = ca.getCACertificate()
 										.getSubjectDN().getName();
-								for (int i = 0; i < services.size(); i++) {
-									String uri = (String) services.get(i);
+								for (int i = 0; i < serviceList.size(); i++) {
+									String uri = (String) serviceList.get(i);
 									try {
 										debug("Publishing CRL to the GTS "
 												+ uri);

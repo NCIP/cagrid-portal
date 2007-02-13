@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
@@ -36,7 +37,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.2 2006-09-12 23:37:29 langella Exp $
+ * @version $Id: UserWindow.java,v 1.3 2007-02-13 15:00:08 dervin Exp $
  */
 public class UserWindow extends GridPortalBaseFrame {
 
@@ -134,7 +135,6 @@ public class UserWindow extends GridPortalBaseFrame {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -218,7 +218,7 @@ public class UserWindow extends GridPortalBaseFrame {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Close");
-			cancel.setIcon(DorianLookAndFeel.getCloseIcon());
+			cancel.setIcon(PortalLookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -265,9 +265,9 @@ public class UserWindow extends GridPortalBaseFrame {
 		user.setUserStatus(((UserStatusComboBox) this.getUserStatus()).getSelectedUserStatus());
 
 		try {
-			String service = getService().getText();
+			String serviceUrl = getService().getText();
 			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, c);
+			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, c);
 			client.updateUser(user);
 
 			PortalUtils.showMessage("User " + user.getGridId() + " update successfully.");
@@ -284,9 +284,9 @@ public class UserWindow extends GridPortalBaseFrame {
 
 	private void renewCredentials() {
 		try {
-			String service = getService().getText();
+			String serviceUrl = getService().getText();
 			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(service, c);
+			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, c);
 			user = client.renewUserCredentials(user);
 			X509Certificate cert = CertUtil.loadCertificate(user.getCertificate().getCertificateAsString());
 			this.getCredPanel().setCertificate(cert);
@@ -310,8 +310,8 @@ public class UserWindow extends GridPortalBaseFrame {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Grid User",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
+				PortalLookAndFeel.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, DorianLookAndFeel.getUserIcon(), getInfoPanel(), null);
 			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
 		}
@@ -502,8 +502,8 @@ public class UserWindow extends GridPortalBaseFrame {
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, DorianLookAndFeel
-					.getPanelLabelColor()));
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null,
+				PortalLookAndFeel.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints27);
 			jPanel2.add(credentialLabel, gridBagConstraints);

@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.dorian.ui.ifs;
 
+import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.dorian.ui.DorianLookAndFeel;
 import gov.nih.nci.cagrid.gridca.ui.ProxyManagerComponent;
 
@@ -19,7 +20,7 @@ import org.projectmobius.portal.PortalResourceManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IFSMenu.java,v 1.4 2006-10-17 16:13:40 langella Exp $
+ * @version $Id: IFSMenu.java,v 1.5 2007-02-13 15:00:08 dervin Exp $
  */
 public class IFSMenu extends GridPortalComponent {
 
@@ -65,7 +66,6 @@ public class IFSMenu extends GridPortalComponent {
 	/**
 	 * This method initializes this
 	 * 
-	 * @return void
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
@@ -185,7 +185,7 @@ public class IFSMenu extends GridPortalComponent {
 					null, "Identity Federation Options",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					DorianLookAndFeel.getPanelLabelColor()));
+					PortalLookAndFeel.getPanelLabelColor()));
 			menuPanel.add(getManageProxies(), gridBagConstraints);
 
 			menuPanel.add(manageProxiesLabel, gridBagConstraints11);
@@ -230,7 +230,7 @@ public class IFSMenu extends GridPortalComponent {
 		if (perform == null) {
 			perform = new JButton();
 			perform.setText("Select");
-			perform.setIcon(DorianLookAndFeel.getSelectIcon());
+			perform.setIcon(PortalLookAndFeel.getSelectIcon());
 			perform.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					perform();
@@ -271,7 +271,7 @@ public class IFSMenu extends GridPortalComponent {
 		if (close == null) {
 			close = new JButton();
 			close.setText("Close");
-			close.setIcon(DorianLookAndFeel.getCloseIcon());
+			close.setIcon(PortalLookAndFeel.getCloseIcon());
 			close.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();

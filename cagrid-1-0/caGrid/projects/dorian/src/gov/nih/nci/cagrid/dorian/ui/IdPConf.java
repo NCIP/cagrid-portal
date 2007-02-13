@@ -89,8 +89,8 @@ public class IdPConf {
 		}
 	}
 
-	public String getParameter(String name) {
-		return (String) this.parameters.get(name);
+	public String getParameter(String paramName) {
+		return (String) this.parameters.get(paramName);
 	}
 
 	public String getAuthenticationPanelClass() {
