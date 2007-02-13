@@ -10,6 +10,7 @@ gme\://caCORE.caCORE/3.1/gov.nih.nci.cadsr.domain=gov.nih.nci.cadsr.domain
 gme\://caCORE.caCORE/3.1/gov.nih.nci.cadsr.umlproject.domain=gov.nih.nci.cadsr.umlproject.domain
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.metadata.security
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsrservice=gov.nih.nci.cagrid.cadsrservice
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsr.uml2xml.file.configuration=gov.nih.nci.cagrid.cadsr.uml2xml.file.configuration
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service
 
 

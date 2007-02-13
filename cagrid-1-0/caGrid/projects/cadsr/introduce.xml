@@ -1,5 +1,8 @@
 <ns1:ServiceDescription introduceVersion="1.0" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace location="./UML2XMLBindingConfiguration.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.cadsr.uml2xml.file.configuration" packageName="gov.nih.nci.cagrid.cadsr.uml2xml.file.configuration" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="UML2XMLBindingConfiguration" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="integer" xsi:type="ns2:SchemaElementType"/>

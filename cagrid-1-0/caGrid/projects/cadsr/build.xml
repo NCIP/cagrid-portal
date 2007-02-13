@@ -262,6 +262,13 @@
 	<!-- Compile the test implementation classes (service, resource, etc.) -->
 	<target name="compileTests" depends="compile">
 		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" source="${java.source}" deprecation="${deprecation}" />
+
+		<!-- Copy the source code, wsdd, properties, etc to the build dir for include in the jar -->
+		<copy toDir="${test.build.dest}">
+			<fileset dir="${test.src.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- Compile the portal implementation classes  -->
@@ -305,7 +312,9 @@
 
 	<!-- Create a JAR file with the test implementation classes -->
 	<target name="jarTests" depends="jar,compileTests">
-		<jar jarfile="${build.lib.dir}/${test.jar.name}" basedir="${test.build.dest}" />
+		<jar jarfile="${build.lib.dir}/${test.jar.name}" basedir="${test.build.dest}">
+			<include name="**" />
+		</jar>
 	</target>
 
 	<!-- Create a JAR file with the test implementation classes -->
@@ -340,7 +349,7 @@
 				</fileset>
 			</batchtest>
 		</junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />   
+		<fail message="Tests failed! Check test reports." if="test.failed" />
 	</target>
 
 	<!-- Clean up all the intermediate files -->
@@ -366,6 +375,7 @@
 		</java>
 	</target>
 	
+
 	<!-- =================================================================== -->
 	<!-- Builds Code Docuementation                                          -->
 	<!-- =================================================================== -->
