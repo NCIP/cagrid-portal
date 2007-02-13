@@ -102,12 +102,15 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 			browseButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						currentFile = new File(ResourceManager.promptFile(null,
-							FileFilters.XSD_FILTER)).getAbsolutePath();
-						getFilenameText().setText(currentFile);
-						Document doc = XMLUtilities.fileNameToDocument(currentFile);
-						currentNamespace = new Namespace(doc.getRootElement().getAttributeValue("targetNamespace"));
-						getNamespaceText().setText(currentNamespace.getRaw());
+						String selectedFilename = ResourceManager.promptFile(null,
+							FileFilters.XSD_FILTER);
+						if (selectedFilename != null) {
+							currentFile = new File(selectedFilename).getAbsolutePath();
+							getFilenameText().setText(currentFile);
+							Document doc = XMLUtilities.fileNameToDocument(currentFile);
+							currentNamespace = new Namespace(doc.getRootElement().getAttributeValue("targetNamespace"));
+							getNamespaceText().setText(currentNamespace.getRaw());
+						}
 					} catch (Exception ex) {
 						ErrorDialog.showErrorDialog("Please make sure the file is a valid XML Schema", ex);
 					}
