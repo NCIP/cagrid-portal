@@ -120,19 +120,10 @@ public class FixSoapBindingStub {
 			e.printStackTrace();
 			return;
 		}
-		String excludeArgs = (String) props.get("introduce.ns.excludes");
-		StringTokenizer strtok = new StringTokenizer(excludeArgs, " ", false);
-		String excludes = "";
-		while (strtok.hasMoreElements()) {
-			String token = strtok.nextToken();
-			if (!token.equals("-x")) {
-				excludes += token;
-				System.out.println("ADDING EXCLUDE TO FIX STUB: " + token);
-				if (strtok.hasMoreElements()) {
-					excludes += " ";
-				}
-			}
-		}
+		
+		String excludeArgs = (String) props
+				.get("introduce.soap.binding.excludes");
+		
 
 		ServiceType[] services = introService.getServices().getService();
 		String mainServiceName = services[0].getName();
@@ -145,7 +136,7 @@ public class FixSoapBindingStub {
 					+ File.separator + services[i].getName()
 					+ "PortTypeSOAPBindingStub.java";
 			FixSoapBindingStub stubFixer = new FixSoapBindingStub(stubFileName,
-					excludes);
+					excludeArgs);
 			stubFixer.execute();
 		}
 

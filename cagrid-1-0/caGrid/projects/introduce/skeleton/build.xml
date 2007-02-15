@@ -205,11 +205,11 @@
                 </antcall>
             </sequential>
         </for>
-		<antcall target="fixStubs">
+		<antcall target="stubGenerationPostProcesser">
 		</antcall>
     </target>
 	
-    <target name="fixStubs">
+    <target name="stubGenerationPostProcesser">
        <java classname="gov.nih.nci.cagrid.introduce.axis.FixSoapBindingStub" classpathref="run.classpath" fork="no">
           <arg value="${basedir}"/>
 	   </java>

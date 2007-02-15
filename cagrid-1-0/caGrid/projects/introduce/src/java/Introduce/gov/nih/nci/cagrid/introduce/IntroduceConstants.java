@@ -50,6 +50,8 @@ public class IntroduceConstants {
 	public static final String INTRODUCE_SERVICE_PROPERTIES = "service.properties";
 
 	public static final String INTRODUCE_NS_EXCLUDES = "introduce.ns.excludes";
+	
+	public static final String INTRODUCE_SB_EXCLUDES = "introduce.soap.binding.excludes";
 
 	public static final QName INTRODUCE_SKELETON_QNAME = new QName(
 			"gme://gov.nih.nci.cagrid/1/Introduce", "ServiceDescription");
