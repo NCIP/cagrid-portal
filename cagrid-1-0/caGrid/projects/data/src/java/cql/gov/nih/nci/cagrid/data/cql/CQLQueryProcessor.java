@@ -121,8 +121,8 @@ public abstract class CQLQueryProcessor {
 	 * The keys are the names of parameters the query processor 
 	 * requires, the values are the defaults for those properties.  The default value
 	 * of a property may be an empty string if it is an optional paramter.
-	 * The keys MUST be valid java variable names.  They MUST start with a <i>lowercase</i>
-	 * character, and must NOT contain spaces or punctuation.
+	 * The keys MUST be valid java variable names.  They MUST NOT contain spaces 
+	 * or punctuation.  They may begin with an uppercase character.
 	 * 
 	 * @return
 	 * 		The required properties for the query processor with their default values
