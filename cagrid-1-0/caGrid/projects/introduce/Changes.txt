@@ -1,3 +1,5 @@
 1.0 - 1.1
 -- Added a new target in build file which enables fixing the soap bindings to work with custom serialization.
--- Added two new properties in the service.properties enabling the metadata pub/sub timing to be controlled.
+-- Added two new properties in the deploy.properties enabling the metadata pub/sub timing to be controlled.
+	--index.service.registration.refresh_seconds=600
+	--index.service.index.refresh_milliseconds=30000
