@@ -18,12 +18,13 @@ TODO:
 	-- Prompt for client.jar from the SDK data source, extract and rename the castor xml mapping file appropriatly.
 14[D]: Type serialization table need to enable multi-select for setting serialization option
 15[D]: Data GUI needs a way to select a whole project, multiple packages, and classes from them
-16[I]: Query Results Iterator / WS-Enumeration support (wsEnum project)
+16[D/E]: Query Results Iterator / WS-Enumeration support (wsEnum project)
 17[E]: Identifier Resolution Support (Possibly through an operation provider)
 18[D]: Pull GME url from introduce properties
 19[D]: Block caDSR refresh on modification viewer open should only happen when a data model has already been selected. (e.g. when creating a new data service, the call to cadsr should be threaded and not prevent the modification viewer from opening) 
 20[D]: Addition to CQL of queries to return attributes and addition to CQLResult to handle them
-21[I]: Change associations in domain model creation to be EXCLUDED associations
+21[W]: Change associations in domain model creation to be EXCLUDED associations
+	-- No longer relevant
 22[D]: Feature / usability request: On service sync, if NO CQL Query Processor impl is specified, create a stub impl in the service's dir.
 23[D]: Remove package button on DS extension GUI
 24[D]: Add Project (all packages in said project) button on DS extension GUI
