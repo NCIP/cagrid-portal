@@ -190,6 +190,7 @@ public class SchemaResolutionDialog extends JDialog {
 						}
 					} catch (Exception ex) {
 						ex.printStackTrace();
+						ErrorDialog.showErrorDialog("Error adding type discovery component to dialog", ex);
 					}
 				}
 			}

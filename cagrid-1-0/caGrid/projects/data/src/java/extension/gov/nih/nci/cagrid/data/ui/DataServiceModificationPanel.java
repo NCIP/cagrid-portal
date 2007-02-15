@@ -696,8 +696,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 						CommonTools.getServicePropertyValue(
 							getServiceInfo().getServiceDescriptor(), DataServiceConstants.VALIDATE_CQL_FLAG)));
 				} catch (Exception ex) {
-					System.err.println("Error getting service property value for " + DataServiceConstants.VALIDATE_CQL_FLAG);
 					ex.printStackTrace();
+					ErrorDialog.showErrorDialog("Error getting service property value for " + DataServiceConstants.VALIDATE_CQL_FLAG, ex);
 				}
 			}
 		}
@@ -731,8 +731,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 						CommonTools.getServicePropertyValue(getServiceInfo().getServiceDescriptor(), 
 							DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG)));
 				} catch (Exception ex) {
-					System.err.println("Error getting service property value for " + DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG);
 					ex.printStackTrace();
+					ErrorDialog.showErrorDialog("Error getting service property value for " + DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, ex);
 				}
 			}
 		}

@@ -101,6 +101,7 @@ public class ClassBrowserPanel extends JPanel {
 				getClassSelectionComboBox().setSelectedItem(qpClassname);
 			} catch (Exception ex) {
 				ex.printStackTrace();
+				ErrorDialog.showErrorDialog("Error getting query processor class name from properties", ex);
 			}
 		}
 	}
