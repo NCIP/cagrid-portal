@@ -28,6 +28,7 @@
     <property name="build.common.dest" location="${build.dir}/common/classes" />
     <property name="build.cql.dest" location="${build.dir}/cql/classes" />
 	<property name="build.tools.dest" location="${build.dir}/tools/classes" />
+	<property name="build.upgrades.dest" location="${build.dir}/upgrades/classes" />
 	<property name="build.jars.dir" location="build/lib" />
 
     <!-- jar names -->
@@ -38,6 +39,7 @@
     <property name="common.jar.name" value="${project.name}-common.jar" />
     <property name="cql.jar.name" value="${project.name}-cql.jar" />
 	<property name="tools.jar.name" value="${project.name}-tools.jar" />
+	<property name="upgrades.jar.name" value="${project.name}-upgrades.jar" />
 	<property name="tests.jar.name" value="${project.name}-tests.jar" />
 
     <!-- jar files -->
@@ -48,6 +50,7 @@
     <property name="common.jar.file" value="${build.jars.dir}/${common.jar.name}" />
     <property name="cql.jar.file" value="${build.jars.dir}/${cql.jar.name}" />
 	<property name="tools.jar.file" value="${build.jars.dir}/${tools.jar.name}" />
+	<property name="upgrades.jar.file" value="${build.jars.dir}/${upgrades.jar.name}" />
 	<property name="tests.jar.file" value="${build.jars.dir}/${tests.jar.name}" />
 
     <!-- extension -->
@@ -81,6 +84,7 @@
     <property name="validation.src.dir" location="${java.src.dir}/validation" />
     <property name="common.src.dir" location="${java.src.dir}/common" />
     <property name="cql.src.dir" location="${java.src.dir}/cql" />
+	<property name="upgrades.src.dir" location="${java.src.dir}/upgrades" />
 	<property name="tools.src.dir" location="${java.src.dir}/tools" />
 
     <!-- libraries -->
@@ -95,7 +99,6 @@
     <property name="test.classes.dir" location="${build.dir}/test/classes" />
     <property name="test.lib.dir" location="${test.dir}/lib" />
     <property name="test.logs.dir" location="${test.dir}/logs" />
-    <property name="test.project.jar" location="${build.jars.dir}/${project.name}-tests.jar" />
     <import file="test/test.xml" />
 
 	
@@ -155,6 +158,7 @@
         <mkdir dir="${build.validation.dest}" />
         <mkdir dir="${build.cql.dest}" />
     	<mkdir dir="${build.tools.dest}" />
+    	<mkdir dir="${build.upgrades.dest}"/>
         <mkdir dir="${build.jars.dir}" />
         <mkdir dir="${test.classes.dir}" />
         <mkdir dir="${stubs.dir}" />
@@ -365,6 +369,18 @@
     </target>
 	
 	
+	<!-- compiles the upgrade source code -->
+	<target name="compileUpgrades" depends="compileExtension, compileUtils">
+		<javac srcdir="${upgrades.src.dir}" destdir="${build.upgrades.dest}" debug="${java.debug}" source="${java.source}">
+			<classpath>
+				<path refid="base.classpath"/>
+				<pathelement location="${build.extension.dest}"/>
+				<pathelement location="${build.utils.dest}" />
+			</classpath>
+		</javac>
+	</target>
+	
+	
 	<!-- =================================================================== -->
 	<!--  Generate JET template classes                                      -->
 	<!-- =================================================================== -->
@@ -560,6 +576,19 @@
 	</target>
 	
 	
+	<!-- jars the upgrades -->
+	<target name="jarUpgrades" depends="compileUpgrades" description="Jars the upgrades">
+		<jar destfile="${upgrades.jar.file}">
+			<fileset dir="${build.upgrades.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${upgrades.src.dir}">
+				<include name="**/*"/>
+			</fileset>
+		</jar>
+	</target>
+	
+	
 	<!-- jars the tests -->
 	<target name="jarTests" depends="compileTests" description="Jars the testing code and resources">
 		<jar destfile="${tests.jar.file}">
@@ -692,5 +721,5 @@
 
 
     <!-- build and jar everything -->
-    <target name="all" depends="jarStubs, jarCommon, jarUtils, jarExtension, jarService, jarValidation, jarCql, jarTools, jarTests" description="Builds and jars all the classes in the project" />
+    <target name="all" depends="jarStubs, jarCommon, jarUtils, jarExtension, jarService, jarValidation, jarCql, jarTools, jarUpgrades, jarTests" description="Builds and jars all the classes in the project" />
 </project>
