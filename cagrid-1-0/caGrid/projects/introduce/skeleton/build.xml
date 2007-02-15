@@ -205,7 +205,15 @@
                 </antcall>
             </sequential>
         </for>
+		<antcall target="fixStubs">
+		</antcall>
     </target>
+	
+    <target name="fixStubs">
+       <java classname="gov.nih.nci.cagrid.introduce.axis.FixSoapBindingStub" classpathref="run.classpath" fork="no">
+          <arg value="${basedir}"/>
+	   </java>
+   	</target>
 
 
     <!-- Compile the stubs generated in the previous step -->

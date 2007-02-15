@@ -195,6 +195,11 @@
 				<attribute name="Created-By" value="${user.name}" />
 			</manifest>
 		</jar>
+		<jar jarfile="./skeleton/lib/soapFix.jar" basedir="${introduce.classes.dir}" includes="gov/nih/nci/cagrid/introduce/beans/** gov/nih/nci/cagrid/introduce/axis/*" defaultExcludes="false" update="no">
+			<manifest>
+				<attribute name="Created-By" value="${user.name}" />
+			</manifest>
+		</jar>
 		<copy todir="${updater.classes.dir}">
 			<fileset dir="${introduce.classes.dir}" includes="gov/nih/nci/cagrid/introduce/beans/software/*.class" />
 		</copy>
