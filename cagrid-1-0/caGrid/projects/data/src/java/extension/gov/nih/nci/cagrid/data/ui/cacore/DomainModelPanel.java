@@ -180,6 +180,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 						getFileTextField().setText("");
 						setSelectedDomainModelFilename(null);
 					}
+					storeNoDomainModelState();
 				}
 			});
 		}
@@ -667,6 +668,18 @@ public class DomainModelPanel extends AbstractWizardPanel {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error removing the selected packages from the model", ex);
 		}
+	}
+	
+	
+	private void storeNoDomainModelState() {
+		try {
+			CadsrInformation info = getCadsrInformation();
+			info.setNoDomainModel(getNoDomainModelRadioButton().isSelected());
+			storeCadsrInformation(info);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			ErrorDialog.showErrorDialog("Error storing 'no domain model' flag state", ex);
+		}		
 	}
 	
 	
