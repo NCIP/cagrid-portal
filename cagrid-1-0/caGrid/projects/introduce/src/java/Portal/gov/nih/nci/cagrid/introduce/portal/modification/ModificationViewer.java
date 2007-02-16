@@ -345,22 +345,30 @@ public class ModificationViewer extends GridPortalComponent {
 			if (introService.getIntroduceVersion() == null
 					|| !introService.getIntroduceVersion().equals(
 							CommonTools.getIntroduceVersion())) {
-				UpgradeManager upgrader = new UpgradeManager(introService);
-				if (upgrader.canBeUpgraded()) {
+				int answer = JOptionPane
+						.showConfirmDialog(
+								this,
+								"This service is from an older of version of Introduce.  Would you like to try to upgrade this service to work with the current version of Introduce?  Otherwise Introduce will attempt to work with this service.");
+				if (answer == JOptionPane.OK_OPTION) {
+					UpgradeManager upgrader = new UpgradeManager(introService);
+
 					try {
 						upgrader.upgrade();
+						// reload the service description after the upgrade
+						introService = (ServiceDescription) Utils
+								.deserializeDocument(this.methodsDirectory
+										.getAbsolutePath()
+										+ File.separator + "introduce.xml",
+										ServiceDescription.class);
+
 					} catch (Exception e) {
+						e.printStackTrace();
 						throw new Exception(
-								"Service upgrader failed.  This service does not appear to be upgradable possible due to modification of Introduce managed files.");
+								"Service upgrader failed.  This service does not appear to be upgradable possibly due to modification of Introduce managed files.");
 					}
-				} else {
-					throw new Exception(
-							"Introduce version in project does not match version provided by Introduce Toolkit ( "
-									+ CommonTools.getIntroduceVersion()
-									+ " ): "
-									+ introService.getIntroduceVersion());
-				}
+				} 
 			}
+
 			loadServiceProps();
 
 			this.info = new ServiceInformation(introService, serviceProperties,
