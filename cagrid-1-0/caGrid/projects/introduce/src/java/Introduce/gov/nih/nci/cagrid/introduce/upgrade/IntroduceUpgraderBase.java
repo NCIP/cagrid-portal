@@ -9,4 +9,10 @@ public abstract class IntroduceUpgraderBase extends UpgraderBase {
 		super(serviceDescription, fromVersion, toVersion);
 	}
 
+	public void execute() throws Exception {
+		// TODO Auto-generated method stub
+		super.execute();
+		getServiceDescription().setIntroduceVersion(getToVersion());
+	}
+
 }
