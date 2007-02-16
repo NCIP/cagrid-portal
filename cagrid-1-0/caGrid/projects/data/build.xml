@@ -370,12 +370,13 @@
 	
 	
 	<!-- compiles the upgrade source code -->
-	<target name="compileUpgrades" depends="compileExtension, compileUtils">
+	<target name="compileUpgrades" depends="compileExtension, compileUtils, compileCql">
 		<javac srcdir="${upgrades.src.dir}" destdir="${build.upgrades.dest}" debug="${java.debug}" source="${java.source}">
 			<classpath>
 				<path refid="base.classpath"/>
 				<pathelement location="${build.extension.dest}"/>
 				<pathelement location="${build.utils.dest}" />
+				<pathelement location="${build.cql.dest}"/>
 			</classpath>
 		</javac>
 	</target>
