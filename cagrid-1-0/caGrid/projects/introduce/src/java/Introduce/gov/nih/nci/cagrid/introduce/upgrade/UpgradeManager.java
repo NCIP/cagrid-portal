@@ -1,18 +1,24 @@
 package gov.nih.nci.cagrid.introduce.upgrade;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
 
 import org.apache.axis.description.ServiceDesc;
 
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 
 public class UpgradeManager {
 	private ServiceDescription service;
+	private String pathToService;
 	
-	public UpgradeManager(ServiceDescription service){
+	public UpgradeManager(ServiceDescription service, String pathToService){
 		this.service = service;
+		this.pathToService = pathToService;
 	}
 	
 
@@ -80,6 +86,12 @@ public class UpgradeManager {
             	
                 vers = newVersion;
 			}
+			
+			Utils.serializeDocument(pathToService
+					+ File.separator + "introduce.xml", service,
+					IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+			
+			
 		} else {
 			System.err.println("ERROR: The service"
 				+ " is not upgradable because it's version cannot be determined or is corupt");
