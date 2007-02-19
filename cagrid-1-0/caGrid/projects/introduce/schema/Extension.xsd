@@ -41,7 +41,7 @@
 	<xs:complexType name="UpgradeDescriptionType">
 	  <xs:attribute name="fromVersion" type="xs:string" use="optional"/>
 	  <xs:attribute name="toVersion" type="xs:string" use="required"/>
-	  <xs:attribute name="UpgradeeClass" type="xs:string" use="required"/>
+	  <xs:attribute name="upgradeClass" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:element name="ResourcePropertyEditorExtensionDescription"
 		type="ResourcePropertyEditorExtensionDescriptionType"/>
