@@ -8,6 +8,7 @@
 	<classpathentry kind="src" path="src/java/service"/>
 	<classpathentry kind="src" path="src/java/utilities"/>
 	<classpathentry kind="src" path="build/stubs/test/src"/>
+	<classpathentry kind="src" path="src/java/upgrades"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
