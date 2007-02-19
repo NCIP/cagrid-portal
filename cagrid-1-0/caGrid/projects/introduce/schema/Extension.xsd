@@ -24,24 +24,24 @@
 				  <xs:element ref="ResourcePropertyEditorExtensionDescription"/>
 				  <xs:element ref="AuthorizationExtensionDescription"/>
 			  </xs:choice>
-			  <xs:element ref="UpgradsDescription" minOccurs="0" maxOccurs="1"/>
+			  <xs:element ref="UpgradesDescription" minOccurs="0" maxOccurs="1"/>
 			</xs:sequence>
 			<xs:attribute name="version" type="xs:string"/>
 			<xs:attribute name="extensionType" type="xs:string"/>
 			<xs:attribute name="extensionPreferencesPanel" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="UpgradsDescription" type="UpgradDescriptionType"/>
-	<xs:complexType name="UpgradsDescriptionType">
+	<xs:element name="UpgradesDescription" type="UpgradeDescriptionType"/>
+	<xs:complexType name="UpgradesDescriptionType">
 	  <xs:sequence>
-	     <xs:element ref="UpgradDescription" minOccurs="0" maxOccurs="unbounded"/>
+	     <xs:element ref="UpgradeDescription" minOccurs="0" maxOccurs="unbounded"/>
 	  </xs:sequence>
 	</xs:complexType>
-	<xs:element name="UpgradDescription" type="UpgradDescriptionType"/>
-	<xs:complexType name="UpgradDescriptionType">
+	<xs:element name="UpgradeDescription" type="UpgradeDescriptionType"/>
+	<xs:complexType name="UpgradeDescriptionType">
 	  <xs:attribute name="fromVersion" type="xs:string" use="optional"/>
 	  <xs:attribute name="toVersion" type="xs:string" use="required"/>
-	  <xs:attribute name="upgradeClass" type="xs:string" use="required"/>
+	  <xs:attribute name="UpgradeeClass" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:element name="ResourcePropertyEditorExtensionDescription"
 		type="ResourcePropertyEditorExtensionDescriptionType"/>
