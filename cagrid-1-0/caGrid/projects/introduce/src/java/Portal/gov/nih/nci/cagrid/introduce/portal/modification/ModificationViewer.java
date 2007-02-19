@@ -50,6 +50,7 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeN
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.upgrade.ExtensionsUpgradeManager;
 import gov.nih.nci.cagrid.introduce.upgrade.IntroduceUpgradeManager;
 
 import java.awt.CardLayout;
@@ -224,7 +225,7 @@ public class ModificationViewer extends GridPortalComponent {
 	 */
 	public ModificationViewer() {
 		super();
-		this.extensionPanels = new ArrayList();
+		extensionPanels = new ArrayList();
 		// throw a thread out so that i can make sure that if the chooser is
 		// canceled i can dispose of this frame
 		Thread th = createChooserThread();
@@ -233,7 +234,7 @@ public class ModificationViewer extends GridPortalComponent {
 
 	public ModificationViewer(File methodsDirectory) {
 		super();
-		this.extensionPanels = new ArrayList();
+		extensionPanels = new ArrayList();
 		this.methodsDirectory = methodsDirectory;
 		try {
 			initialize();
@@ -285,7 +286,7 @@ public class ModificationViewer extends GridPortalComponent {
 	private void loadServiceProps() {
 		try {
 			serviceProperties = new Properties();
-			serviceProperties.load(new FileInputStream(this.methodsDirectory
+			serviceProperties.load(new FileInputStream(methodsDirectory
 					.getAbsolutePath()
 					+ File.separator
 					+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE));
@@ -302,12 +303,12 @@ public class ModificationViewer extends GridPortalComponent {
 	private void chooseService() throws Exception {
 		String dir = ResourceManager.promptDir(null);
 		if (dir != null) {
-			this.methodsDirectory = new File(dir);
+			methodsDirectory = new File(dir);
 		}
 	}
 
 	public void reInitialize(File serviceDir) throws Exception {
-		this.methodsDirectory = serviceDir;
+		methodsDirectory = serviceDir;
 		this.initialize();
 		this.reInitializeGUI();
 	}
@@ -322,10 +323,10 @@ public class ModificationViewer extends GridPortalComponent {
 				info.getNamespaces());
 		getServicePropertiesTable().setServiceInformation(info);
 		this.resetMethodSecurityIfServiceSecurityChanged();
-		for (int i = 0; i < this.extensionPanels.size(); i++) {
+		for (int i = 0; i < extensionPanels.size(); i++) {
 			ServiceModificationUIPanel panel = (ServiceModificationUIPanel) extensionPanels
 					.get(i);
-			panel.setServiceInfo(this.info);
+			panel.setServiceInfo(info);
 		}
 	}
 
@@ -335,14 +336,13 @@ public class ModificationViewer extends GridPortalComponent {
 	 * @return void
 	 */
 	private void initialize() throws Exception {
-		if (this.methodsDirectory != null) {
+		if (methodsDirectory != null) {
 			ServiceDescription introService = (ServiceDescription) Utils
-					.deserializeDocument(this.methodsDirectory
-							.getAbsolutePath()
+					.deserializeDocument(methodsDirectory.getAbsolutePath()
 							+ File.separator + "introduce.xml",
 							ServiceDescription.class);
 
-			if (introService.getIntroduceVersion() == null
+			if ((introService.getIntroduceVersion() == null)
 					|| !introService.getIntroduceVersion().equals(
 							CommonTools.getIntroduceVersion())) {
 				int answer = JOptionPane
@@ -350,18 +350,29 @@ public class ModificationViewer extends GridPortalComponent {
 								this,
 								"This service is from an older of version of Introduce.  Would you like to try to upgrade this service to work with the current version of Introduce?  Otherwise Introduce will attempt to work with this service.");
 				if (answer == JOptionPane.OK_OPTION) {
-					IntroduceUpgradeManager upgrader = new IntroduceUpgradeManager(introService,
-							this.methodsDirectory.getAbsolutePath());
+					IntroduceUpgradeManager upgrader = new IntroduceUpgradeManager(
+							introService, methodsDirectory.getAbsolutePath());
 
 					try {
 						upgrader.upgrade();
 						// reload the service description after the upgrade
 						introService = (ServiceDescription) Utils
-								.deserializeDocument(this.methodsDirectory
+								.deserializeDocument(methodsDirectory
 										.getAbsolutePath()
 										+ File.separator + "introduce.xml",
 										ServiceDescription.class);
-
+						try {
+							ExtensionsUpgradeManager extUpgrader = new ExtensionsUpgradeManager(
+									introService, methodsDirectory
+											.getAbsolutePath());
+							if (extUpgrader.needsUpgrading()) {
+								extUpgrader.upgrade();
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+							throw new Exception(
+									"Extensions Upgrader Failed.  This service does not appear to be upgradable.");
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						throw new Exception(
@@ -370,9 +381,31 @@ public class ModificationViewer extends GridPortalComponent {
 				}
 			}
 
+			ExtensionsUpgradeManager extUpgrader = new ExtensionsUpgradeManager(
+					introService, methodsDirectory.getAbsolutePath());
+			if (extUpgrader.needsUpgrading()) {
+				int answer = JOptionPane
+						.showConfirmDialog(
+								this,
+								"This service contains uses older versions of Introduce extensions.  Would you like to try to upgrade this service to work with the current version of Introduce extensions that are currently installed?");
+				if (answer == JOptionPane.OK_OPTION) {
+					IntroduceUpgradeManager upgrader = new IntroduceUpgradeManager(
+							introService, methodsDirectory.getAbsolutePath());
+					try {
+						extUpgrader.upgrade();
+					} catch (Exception e) {
+						e.printStackTrace();
+						throw new Exception(
+								"Extensions Upgrader Failed.  This service does not appear to be upgradable.");
+					}
+
+				}
+
+			}
+
 			loadServiceProps();
 
-			this.info = new ServiceInformation(introService, serviceProperties,
+			info = new ServiceInformation(introService, serviceProperties,
 					methodsDirectory);
 			this.setContentPane(getMainPanel());
 			this.setTitle("Modify Service Interface");
@@ -596,15 +629,15 @@ public class ModificationViewer extends GridPortalComponent {
 	private MethodsTable getMethodsTable() {
 		if (methodsTable == null) {
 			methodsTable = new MethodsTable(info.getServices().getService(0),
-					this.methodsDirectory, this.serviceProperties);
+					methodsDirectory, serviceProperties);
 			methodsTable.getSelectionModel().addListSelectionListener(
 					new ListSelectionListener() {
 
 						public void valueChanged(ListSelectionEvent e) {
 
 							int row = getMethodsTable().getSelectedRow();
-							if (row >= 0
-									&& row < getMethodsTable().getRowCount()) {
+							if ((row >= 0)
+									&& (row < getMethodsTable().getRowCount())) {
 								MethodType type = getMethodsTable()
 										.getMethodType(
 												getMethodsTable()
@@ -626,7 +659,8 @@ public class ModificationViewer extends GridPortalComponent {
 					if (e.getClickCount() == 2) {
 						dirty = true;
 						int row = getMethodsTable().getSelectedRow();
-						if (row >= 0 && row < getMethodsTable().getRowCount()) {
+						if ((row >= 0)
+								&& (row < getMethodsTable().getRowCount())) {
 							MethodType type = getMethodsTable().getMethodType(
 									getMethodsTable().getSelectedRow());
 							if (!type.isIsImported()) {
@@ -759,7 +793,7 @@ public class ModificationViewer extends GridPortalComponent {
 			update = true;
 		}
 		if (update) {
-			MethodsType mt = this.info.getServices().getService(0).getMethods();
+			MethodsType mt = info.getServices().getService(0).getMethods();
 			List changes = new ArrayList();
 			if (mt != null) {
 				info.getServices().getService(0).setServiceSecurity(curr);
@@ -963,14 +997,14 @@ public class ModificationViewer extends GridPortalComponent {
 					.addTab("Security", null, getSecurityPanel(), null);
 			// add a tab for each extension...
 			ExtensionsType exts = info.getExtensions();
-			if (exts != null && exts.getExtension() != null) {
+			if ((exts != null) && (exts.getExtension() != null)) {
 				ExtensionType[] extsTypes = exts.getExtension();
 				for (int i = 0; i < extsTypes.length; i++) {
 					ServiceExtensionDescriptionType extDtype = ExtensionsLoader
 							.getInstance().getServiceExtension(
 									extsTypes[i].getName());
 					try {
-						if (extDtype.getServiceModificationUIPanel() != null
+						if ((extDtype.getServiceModificationUIPanel() != null)
 								&& !extDtype.getServiceModificationUIPanel()
 										.equals("")) {
 							ServiceModificationUIPanel extPanel = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
@@ -1487,13 +1521,13 @@ public class ModificationViewer extends GridPortalComponent {
 						// walk the namespaces and make sure they are valid
 						setProgressText("validating namespaces");
 						NamespacesType namespaces = info.getNamespaces();
-						if (namespaces != null
-								&& namespaces.getNamespace() != null) {
+						if ((namespaces != null)
+								&& (namespaces.getNamespace() != null)) {
 							for (int i = 0; i < namespaces.getNamespace().length; i++) {
 								NamespaceType currentNs = namespaces
 										.getNamespace(i);
 								if (currentNs.getPackageName() != null) {
-									if (currentNs.getGenerateStubs() != null
+									if ((currentNs.getGenerateStubs() != null)
 											&& !currentNs.getGenerateStubs()
 													.booleanValue()) {
 										if (!CommonTools
@@ -1524,18 +1558,19 @@ public class ModificationViewer extends GridPortalComponent {
 								securityPanel.getServiceSecurity(true));
 
 						// check the methods to make sure they are valid.......
-						if (info.getServices() != null
-								&& info.getServices().getService() != null) {
+						if ((info.getServices() != null)
+								&& (info.getServices().getService() != null)) {
 							for (int serviceI = 0; serviceI < info
 									.getServices().getService().length; serviceI++) {
 								ServiceType service = info.getServices()
 										.getService(serviceI);
 								copyRequiredJars(service.getServiceSecurity());
-								if (service.getMethods() != null
-										&& service.getMethods().getMethod() != null) {
+								if ((service.getMethods() != null)
+										&& (service.getMethods().getMethod() != null)) {
 									List methodNames = new ArrayList();
-									if (service.getMethods() != null
-											&& service.getMethods().getMethod() != null) {
+									if ((service.getMethods() != null)
+											&& (service.getMethods()
+													.getMethod() != null)) {
 										for (int methodI = 0; methodI < service
 												.getMethods().getMethod().length; methodI++) {
 											MethodType method = service
@@ -1842,8 +1877,8 @@ public class ModificationViewer extends GridPortalComponent {
 			addServiceProperyButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							if (getServicePropertyKeyTextField().getText()
-									.length() != 0
+							if ((getServicePropertyKeyTextField().getText()
+									.length() != 0)
 									&& CommonTools
 											.isValidJavaField(getServicePropertyKeyTextField()
 													.getText())) {

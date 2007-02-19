@@ -13,6 +13,24 @@ public class ExtensionsUpgradeManager {
 		this.service = service;
 	}
 
+	public boolean needsUpgrading() {
+		ExtensionType[] extensions = service.getExtensions().getExtension();
+		for (int extensionI = 0; extensionI < extensions.length; extensionI++) {
+			ExtensionType extension = extensions[extensionI];
+			String serviceExtensionVersion = extension.getVersion();
+			ExtensionDescription extDescription = ExtensionsLoader
+					.getInstance().getExtension(extension.getName());
+			if (extDescription != null) {
+				if (!extDescription.getVersion()
+						.equals(serviceExtensionVersion)) {
+					return true;
+				}
+
+			}
+		}
+		return false;
+	}
+
 	public void upgrade() throws Exception {
 		System.out.println("Trying to upgrade the service");
 
