@@ -8,15 +8,18 @@ import org.apache.axis.description.ServiceDesc;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
 
-public class UpgradeManager {
+public class IntroduceUpgradeManager {
 	private ServiceDescription service;
 	private String pathToService;
 	
-	public UpgradeManager(ServiceDescription service, String pathToService){
+	public IntroduceUpgradeManager(ServiceDescription service, String pathToService){
 		this.service = service;
 		this.pathToService = pathToService;
 	}
@@ -50,7 +53,7 @@ public class UpgradeManager {
 	public void upgrade() throws Exception {
 		System.out.println("Trying to upgrade the service");
 		
-		//now upgrade the rest
+		//upgrade the introduce service
 		String version = CommonTools.getIntroduceVersion();
 		if (version != null) {
 
@@ -73,13 +76,13 @@ public class UpgradeManager {
 					break;
 				}
 				
+				//upgrade the introduce service
 				System.out.println("Upgrading the service from version " + vers
 					+ " to " + newVersion + ".............");
 				Class clazz = Class.forName(className);
 				Constructor con = clazz.getConstructor(new Class[]{ServiceDescription.class});
 				UpgraderI upgrader = (UpgraderI) con.newInstance(new Object []{service});
 				upgrader.execute();
-
 			
                 System.out.println("COMPLETED Upgrading the service from version " + vers
                     + " to " + newVersion + ".............");
@@ -91,6 +94,21 @@ public class UpgradeManager {
 					+ File.separator + "introduce.xml", service,
 					IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 			
+			
+			ExtensionType [] extensions = service.getExtensions().getExtension();
+			for(int extensionI = 0; extensionI < extensions.length; extensionI ++){
+				ExtensionType extension = extensions[extensionI];
+				String serviceExtensionVersion = extension.getVersion();
+				ExtensionDescription extDescription = ExtensionsLoader.getInstance().getExtension(extension.getName());
+				if(extDescription!=null){
+					if(extDescription.getVersion().equals(serviceExtensionVersion)){
+					
+					}
+					
+				} else  {
+					//service does not have the right extension to run with this service
+				}
+			}
 			
 		} else {
 			System.err.println("ERROR: The service"

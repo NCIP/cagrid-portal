@@ -50,7 +50,7 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeN
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.upgrade.UpgradeManager;
+import gov.nih.nci.cagrid.introduce.upgrade.IntroduceUpgradeManager;
 
 import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
@@ -350,7 +350,7 @@ public class ModificationViewer extends GridPortalComponent {
 								this,
 								"This service is from an older of version of Introduce.  Would you like to try to upgrade this service to work with the current version of Introduce?  Otherwise Introduce will attempt to work with this service.");
 				if (answer == JOptionPane.OK_OPTION) {
-					UpgradeManager upgrader = new UpgradeManager(introService,
+					IntroduceUpgradeManager upgrader = new IntroduceUpgradeManager(introService,
 							this.methodsDirectory.getAbsolutePath());
 
 					try {
