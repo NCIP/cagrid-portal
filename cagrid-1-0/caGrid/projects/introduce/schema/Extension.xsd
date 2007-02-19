@@ -17,17 +17,32 @@
 				extends the ExtensionPreferencesConfigurationPanel</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:choice>
-				<xs:element ref="DiscoveryExtensionDescription"/>
-				<xs:element ref="ServiceExtensionDescription"/>
-				<xs:element ref="ResourcePropertyEditorExtensionDescription"/>
-				<xs:element ref="AuthorizationExtensionDescription"/>
-			</xs:choice>
+		    <xs:sequence>
+			  <xs:choice>
+			  	  <xs:element ref="DiscoveryExtensionDescription"/>
+				  <xs:element ref="ServiceExtensionDescription"/>
+				  <xs:element ref="ResourcePropertyEditorExtensionDescription"/>
+				  <xs:element ref="AuthorizationExtensionDescription"/>
+			  </xs:choice>
+			  <xs:element ref="UpgradsDescription" minOccurs="0" maxOccurs="1"/>
+			</xs:sequence>
 			<xs:attribute name="version" type="xs:string"/>
 			<xs:attribute name="extensionType" type="xs:string"/>
 			<xs:attribute name="extensionPreferencesPanel" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="UpgradsDescription" type="UpgradDescriptionType"/>
+	<xs:complexType name="UpgradsDescriptionType">
+	  <xs:sequence>
+	     <xs:element ref="UpgradDescription" minOccurs="0" maxOccurs="unbounded"/>
+	  </xs:sequence>
+	</xs:complexType>
+	<xs:element name="UpgradDescription" type="UpgradDescriptionType"/>
+	<xs:complexType name="UpgradDescriptionType">
+	  <xs:attribute name="fromVersion" type="xs:string" use="optional"/>
+	  <xs:attribute name="toVersion" type="xs:string" use="required"/>
+	  <xs:attribute name="upgradeClass" type="xs:string" use="required"/>
+	</xs:complexType>
 	<xs:element name="ResourcePropertyEditorExtensionDescription"
 		type="ResourcePropertyEditorExtensionDescriptionType"/>
 	<xs:complexType name="ResourcePropertyEditorExtensionDescriptionType">
