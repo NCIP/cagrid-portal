@@ -1,18 +1,17 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree;
 
-import java.awt.Font;
-
 import gov.nih.nci.cagrid.introduce.beans.software.ExtensionType;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
+import java.awt.Font;
+
 import javax.swing.JCheckBox;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 public class ExtensionUpdateTreeNode extends UpdateTypeTreeNode {
-	private ExtensionType extension;
 	private JCheckBox checkBox;
-	private boolean installed = false;;
+	private boolean installed = false;
+	private ExtensionType extension;
 
 	public ExtensionUpdateTreeNode(String displayName, DefaultTreeModel model,
 			ExtensionType extension) {
@@ -22,7 +21,7 @@ public class ExtensionUpdateTreeNode extends UpdateTypeTreeNode {
 		if (model != null) {
 			initialize();
 		}
-		if (ExtensionsLoader.getInstance().getExtension(extension.getName()) != null
+		if ((ExtensionsLoader.getInstance().getExtension(extension.getName()) != null)
 				&& ExtensionsLoader.getInstance().getExtension(
 						extension.getName()).getVersion().equals(
 						extension.getVersion())) {
@@ -33,12 +32,16 @@ public class ExtensionUpdateTreeNode extends UpdateTypeTreeNode {
 			checkBox.setFont(checkBox.getFont().deriveFont(Font.ITALIC));
 		}
 	}
-	
-	public void setInstalled(boolean installed){
+
+	public boolean isSelected() {
+		return getCheckBox().isSelected();
+	}
+
+	public void setInstalled(boolean installed) {
 		this.installed = installed;
 	}
-	
-	public boolean isInstalled(){
+
+	public boolean isInstalled() {
 		return installed;
 	}
 
@@ -51,6 +54,14 @@ public class ExtensionUpdateTreeNode extends UpdateTypeTreeNode {
 
 	public Object getUserObject() {
 		return checkBox;
+	}
+
+	public ExtensionType getExtension() {
+		return extension;
+	}
+
+	public void setExtension(ExtensionType extension) {
+		this.extension = extension;
 	}
 
 }

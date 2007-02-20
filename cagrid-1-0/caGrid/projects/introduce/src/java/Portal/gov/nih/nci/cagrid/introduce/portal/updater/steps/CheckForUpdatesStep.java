@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps;
 
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree.UpdateTree;
 
 import java.awt.Dimension;
@@ -29,14 +30,12 @@ import org.pietschy.wizard.PanelWizardStep;
 import org.projectmobius.common.MobiusException;
 
 public class CheckForUpdatesStep extends PanelWizardStep {
-	
+
 	private SoftwareType software = null;
-	
+
 	private SoftwareType requestedUpdates = null;
 
 	private JPanel descriptionPanel = null;
-
-	private Thread workerThread = null; // @jve:decl-index=0:
 
 	private JPanel busyPanel = null;
 
@@ -66,11 +65,8 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 	}
 
 	public void applyState() throws InvalidStateException {
-		//need to validate the updates.....
-		//pop up a busy dialog
-		//go to download step afterwords....
-		//JUST FOR TESTING NOW
-		this.requestedUpdates = this.software;
+		// need to gather the updates into a software list
+		requestedUpdates = getUpdatesTree().getNonInstalledSelectedSoftware();
 	}
 
 	protected void checkForUpdates() throws MalformedURLException, IOException,
@@ -80,12 +76,13 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 		URLConnection connection = url.openConnection();
 		InputStream stream = connection.getInputStream();
 		org.w3c.dom.Document doc = XMLUtils.newDocument(stream);
-		this.software = (SoftwareType)ObjectDeserializer.toObject(doc.getDocumentElement(), SoftwareType.class);
+		software = (SoftwareType) ObjectDeserializer.toObject(doc
+				.getDocumentElement(), SoftwareType.class);
 		stream.close();
 		this.getUpdatesTree().update(software);
 	}
-	
-	public SoftwareType getRequestedDownloads(){
+
+	public SoftwareType getRequestedDownloads() {
 		return requestedUpdates;
 	}
 
@@ -221,7 +218,7 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 									getBusyProgressBar().setIndeterminate(true);
 								}
 							});
-							
+
 							setComplete(true);
 							statusLabel
 									.setText("Updates found.  Press Next to view and select updates.");
@@ -246,7 +243,8 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 							}
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
-									getBusyProgressBar().setIndeterminate(false);
+									getBusyProgressBar()
+											.setIndeterminate(false);
 								}
 							});
 						}
@@ -267,16 +265,15 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 	private JTextField getUpdateSiteTextField() {
 		if (updateSiteTextField == null) {
 			updateSiteTextField = new JTextField();
-			updateSiteTextField
-					.setText("http://bmi.osu.edu/~hastings/introduce/software/software.xml");
+			updateSiteTextField.setText(CommonTools.getIntroduceUpdateSite());
 		}
 		return updateSiteTextField;
 	}
 
 	/**
-	 * This method initializes updatesPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes updatesPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getUpdatesPanel() {
 		if (updatesPanel == null) {
@@ -294,9 +291,9 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 	}
 
 	/**
-	 * This method initializes updatesScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes updatesScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getUpdatesScrollPane() {
 		if (updatesScrollPane == null) {
@@ -307,9 +304,9 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 	}
 
 	/**
-	 * This method initializes updatesTree	
-	 * 	
-	 * @return javax.swing.JTree	
+	 * This method initializes updatesTree
+	 * 
+	 * @return javax.swing.JTree
 	 */
 	private UpdateTree getUpdatesTree() {
 		if (updatesTree == null) {
@@ -317,4 +314,4 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 		}
 		return updatesTree;
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"

@@ -1,15 +1,12 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree;
 
-import java.awt.Font;
-import java.util.StringTokenizer;
-
 import gov.nih.nci.cagrid.introduce.beans.software.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
+
+import java.util.StringTokenizer;
 
 import javax.swing.JCheckBox;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
@@ -17,9 +14,9 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
 	private SoftwareType software;
 
 	private IntroduceType introduce;
-	
+
 	private JCheckBox checkBox;
-	
+
 	private boolean installed = false;
 
 	public IntroduceUpdateTreeNode(String displayName, DefaultTreeModel model,
@@ -32,25 +29,29 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
 			initialize();
 		}
 	}
-	
-	public JCheckBox getCheckBox(){
+
+	public boolean isSelected() {
+		return getCheckBox().isSelected();
+	}
+
+	public JCheckBox getCheckBox() {
 		return checkBox;
 	}
-	
-	public void setInstalled(boolean installed){
+
+	public void setInstalled(boolean installed) {
 		this.installed = installed;
 	}
-	
-	public boolean isInstalled(){
+
+	public boolean isInstalled() {
 		return installed;
 	}
-	
-	public Object getUserObject(){
+
+	public Object getUserObject() {
 		return checkBox;
 	}
 
 	public void initialize() {
-		ExtensionType[] extensionVersions = this.software.getExtension();
+		ExtensionType[] extensionVersions = software.getExtension();
 		if (extensionVersions != null) {
 			for (int j = 0; j < extensionVersions.length; j++) {
 				ExtensionType extension = extensionVersions[j];
@@ -59,8 +60,8 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
 							.getCompatibleIntroduceVersions())) {
 						ExtensionUpdateTreeNode node = new ExtensionUpdateTreeNode(
 								extension.getDisplayName() + " ("
-										+ extension.getVersion() + ")", getModel(),
-								extension);
+										+ extension.getVersion() + ")",
+								getModel(), extension);
 						getModel().insertNodeInto(node, this,
 								this.getChildCount());
 					}
@@ -80,5 +81,13 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
 		}
 
 		return false;
+	}
+
+	public IntroduceType getIntroduce() {
+		return introduce;
+	}
+
+	public void setIntroduce(IntroduceType introduce) {
+		this.introduce = introduce;
 	}
 }

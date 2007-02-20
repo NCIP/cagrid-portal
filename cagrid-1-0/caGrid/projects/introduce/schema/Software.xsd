@@ -16,20 +16,20 @@
 
 	<xs:element name="Introduce" type="IntroduceType"></xs:element>
 	<xs:complexType name="IntroduceType">
-		<xs:attribute name="version" type="xs:string"></xs:attribute>
-		<xs:attribute name="zipFileURL" type="xs:anyURI"></xs:attribute>
+		<xs:attribute name="version" use="required" type="xs:string"></xs:attribute>
+		<xs:attribute name="zipFileURL" use="required" type="xs:anyURI"></xs:attribute>
 	</xs:complexType>
 
 	<xs:element name="Extension" type="ExtensionType"></xs:element>
 	<xs:complexType name="ExtensionType">
 	    <xs:attribute name="name"
-			type="xs:string"/>
+			type="xs:string" use="required" />
 		<xs:attribute name="displayName"
-			type="xs:string"/>
-		<xs:attribute name="version" type="xs:string"></xs:attribute>
+			type="xs:string" use="required" />
+		<xs:attribute name="version" type="xs:string" use="required" ></xs:attribute>
 		<xs:attribute name="compatibleIntroduceVersions"
-			type="xs:string">
+			type="xs:string" use="required" >
 		</xs:attribute>
-		<xs:attribute name="zipFileURL" type="xs:anyURI"></xs:attribute>
+		<xs:attribute name="zipFileURL" use="required" type="xs:anyURI"></xs:attribute>
 	</xs:complexType>
 </xs:schema>

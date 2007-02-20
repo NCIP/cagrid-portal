@@ -1,10 +1,13 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree;
 
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.beans.software.ExtensionType;
+import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,7 +49,7 @@ public class UpdateTree extends JTree {
 				}
 				Object obj = node.getUserObject();
 
-				if (obj != null && obj instanceof JCheckBox) {
+				if ((obj != null) && (obj instanceof JCheckBox)) {
 					JCheckBox box = (JCheckBox) obj;
 					// return if this software is already installed
 					if (node instanceof IntroduceUpdateTreeNode) {
@@ -59,7 +62,7 @@ public class UpdateTree extends JTree {
 						}
 					}
 					box.setSelected(!box.isSelected());
-					if (node instanceof IntroduceUpdateTreeNode
+					if ((node instanceof IntroduceUpdateTreeNode)
 							&& !box.isSelected()) {
 						// need to select or deselect all of it's children
 						int children = node.getChildCount();
@@ -69,7 +72,7 @@ public class UpdateTree extends JTree {
 									.setSelected(box.isSelected());
 						}
 					}
-					if (node instanceof IntroduceUpdateTreeNode
+					if ((node instanceof IntroduceUpdateTreeNode)
 							&& box.isSelected()) {
 						// need to unselect anything else not in this branch
 						int introduceNodeCount = root.getChildCount();
@@ -96,6 +99,42 @@ public class UpdateTree extends JTree {
 		});
 	}
 
+	public SoftwareType getNonInstalledSelectedSoftware() {
+		SoftwareType software = new SoftwareType();
+		List introduceInstalls = new ArrayList();
+		List extensionInstalls = new ArrayList();
+
+		int introduceNodeCount = root.getChildCount();
+		for (int i = 0; i < introduceNodeCount; i++) {
+			DefaultMutableTreeNode treenode = (DefaultMutableTreeNode) root
+					.getChildAt(i);
+			IntroduceUpdateTreeNode introducenode = (IntroduceUpdateTreeNode) treenode;
+			if (!introducenode.isInstalled() && introducenode.isSelected()) {
+				introduceInstalls.add(introducenode.getIntroduce());
+			}
+			introducenode.getCheckBox().setSelected(false);
+			int children = introducenode.getChildCount();
+			for (int j = 0; j < children; j++) {
+				ExtensionUpdateTreeNode extensionnode = (ExtensionUpdateTreeNode) introducenode
+						.getChildAt(j);
+				if (!extensionnode.isInstalled() && extensionnode.isSelected()) {
+					extensionInstalls.add(extensionnode.getExtension());
+				}
+			}
+
+		}
+
+		IntroduceType[] introduces = new IntroduceType[introduceInstalls.size()];
+		introduceInstalls.toArray(introduces);
+		ExtensionType[] extensions = new ExtensionType[extensionInstalls.size()];
+		extensionInstalls.toArray(extensions);
+
+		software.setIntroduce(introduces);
+		software.setExtension(extensions);
+
+		return software;
+	}
+
 	private void initialize() {
 		root = new MainUpdateTreeNode("Introduce Versions and Extensions",
 				model, null);
@@ -112,7 +151,7 @@ public class UpdateTree extends JTree {
 		if (currentSelection != null) {
 			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection
 					.getLastPathComponent();
-			if (currentNode != this.root) {
+			if (currentNode != root) {
 				return currentNode;
 			}
 		}
@@ -174,7 +213,7 @@ public class UpdateTree extends JTree {
 		// Ignore all collapse requests; collapse events will not be fired
 		if (path.getLastPathComponent() != root) {
 			super.setExpandedState(path, state);
-		} else if (state && path.getLastPathComponent() == root) {
+		} else if (state && (path.getLastPathComponent() == root)) {
 			super.setExpandedState(path, state);
 		}
 	}

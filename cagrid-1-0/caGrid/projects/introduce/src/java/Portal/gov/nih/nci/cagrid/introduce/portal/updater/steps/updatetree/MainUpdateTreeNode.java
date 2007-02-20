@@ -1,15 +1,12 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree;
 
-import java.awt.Font;
-import java.util.StringTokenizer;
-
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.software.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.Font;
+import java.util.StringTokenizer;
+
 import javax.swing.tree.DefaultTreeModel;
 
 public class MainUpdateTreeNode extends UpdateTypeTreeNode {
@@ -26,13 +23,15 @@ public class MainUpdateTreeNode extends UpdateTypeTreeNode {
 	}
 
 	public void initialize() {
-		if (this.software != null) {
-			IntroduceType[] introduceVersions = this.software.getIntroduce();
+		if (software != null) {
+			IntroduceType[] introduceVersions = software.getIntroduce();
 			if (introduceVersions != null) {
 				for (int i = 0; i < introduceVersions.length; i++) {
 					IntroduceType introduce = introduceVersions[i];
 					if (!isOlderVersion(CommonTools.getIntroduceVersion(),
-							introduce.getVersion())) {
+							introduce.getVersion())
+							&& !CommonTools.getIntroduceVersion().equals(
+									introduce.getVersion())) {
 						// need to add this introduce version
 						IntroduceUpdateTreeNode introduceNode = new IntroduceUpdateTreeNode(
 								"Introduce (" + introduce.getVersion() + ")",
@@ -73,10 +72,10 @@ public class MainUpdateTreeNode extends UpdateTypeTreeNode {
 			if (!currentTokes.hasMoreElements()) {
 				return false;
 			}
-			int proposedPartVersion = Integer.valueOf(
-					(String) proposedTokes.nextToken()).intValue();
-			int currentPartVersion = Integer.valueOf(
-					(String) currentTokes.nextToken()).intValue();
+			int proposedPartVersion = Integer
+					.valueOf(proposedTokes.nextToken()).intValue();
+			int currentPartVersion = Integer.valueOf(currentTokes.nextToken())
+					.intValue();
 			if (proposedPartVersion > currentPartVersion) {
 				return false;
 			}

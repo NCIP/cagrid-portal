@@ -1,7 +1,6 @@
 <ns1:Software 
     xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Software">
-   <ns1:Introduce version="1.0" zipFileURL="http://bmi.osu.edu/~hastings/introduce/software/introduce_1-1.zip" />
+   <ns1:Introduce version="1.0" zipFileURL="http://bmi.osu.edu/~hastings/introduce/software/introduce_1-0.zip" />
    <ns1:Introduce version="1.1" zipFileURL="http://bmi.osu.edu/~hastings/introduce/software/introduce_1-1.zip" />
-   <ns1:Extension version="1.0" compatibleIntroduceVersions="1.0,1.1" displayName="Testing Extensions" name="testExtensions" zipFileURL="http://bmi.osu.edu/~hastings/introduce/software/testExtension.zip"/>
-   <ns1:Extension version="1.0" compatibleIntroduceVersions="1.0" displayName="Bulk Data Transfer" name="bdt" zipFileURL="http://bmi.osu.edu/~hastings/introduce/software/testExtension.zip"/>
+   <ns1:Extension version="1.1" compatibleIntroduceVersions="1.0,1.1" displayName="caGrid Data Service Extension" name="data" zipFileURL="http://bmi.osu.edu/~hastings/introduce/software/data-1.1.zip"/>
 </ns1:Software>

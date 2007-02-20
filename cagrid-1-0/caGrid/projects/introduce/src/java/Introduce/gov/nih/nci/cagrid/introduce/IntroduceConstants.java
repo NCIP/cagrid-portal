@@ -16,14 +16,16 @@ import javax.xml.namespace.QName;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin </A>
  */
 public class IntroduceConstants {
-	
+
 	// introduce specific constants
 	public static final String INTRODUCE_VERSION_PROPERTY = "introduce.version";
-	
+
+	public static final String INTRODUCE_UPDATE_SITE_PROPERTY = "introduce.update.site";
+
 	public static final String INTRODUCE_ENGINE_PROPERTIES = "conf/introduce/introduce.engine.properties";
-	
+
 	public static final String GLOBUS_LOCATION = "GLOBUS_LOCATION";
-	
+
 	public static final String SERVICE_SECURITY_METADATA_METHOD = "getServiceSecurityMetadata";
 
 	// service skeleton properties
@@ -50,7 +52,7 @@ public class IntroduceConstants {
 	public static final String INTRODUCE_SERVICE_PROPERTIES = "service.properties";
 
 	public static final String INTRODUCE_NS_EXCLUDES = "introduce.ns.excludes";
-	
+
 	public static final String INTRODUCE_SB_EXCLUDES = "introduce.soap.binding.excludes";
 
 	public static final QName INTRODUCE_SKELETON_QNAME = new QName(
@@ -62,9 +64,9 @@ public class IntroduceConstants {
 	public static final String INTRODUCE_MAIN_RESOURCE = "main";
 
 	public static final String INTRODUCE_BASE_RESOURCE = "base";
-	
+
 	public static final String INTRODUCE_LIFETIME_RESOURCE = "lifetime";
-	
+
 	public static final String INTRODUCE_CUSTOM_RESOURCE = "custom";
 
 	// deployment properties
@@ -75,9 +77,9 @@ public class IntroduceConstants {
 
 	// w3c namespaces
 	public static final String W3CNAMESPACE = "http://www.w3.org/2001/XMLSchema";
-	
+
 	public static final String WSDLAMESPACE = "http://schemas.xmlsoap.org/wsdl/";
-	
+
 	public static final String BASEFAULTS_NAMESPACE = "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd";
 
 	public static final String W3CNAMESPACE_PREFIX = "xs";
@@ -86,7 +88,9 @@ public class IntroduceConstants {
 	public static final String WSADDRESING_EPR_TYPE = "EndpointReference";
 	public static final String WSADDRESSING_EPR_CLASSNAME = "org.apache.axis.message.addressing.EndpointReferenceType";
 
-	public static final String WSADDRESING_LOCATION = ".." + File.separator + "ws" + File.separator + "addressing" + File.separator + "WS-Addressing.xsd";
+	public static final String WSADDRESING_LOCATION = ".." + File.separator
+			+ "ws" + File.separator + "addressing" + File.separator
+			+ "WS-Addressing.xsd";
 
 	public static final List GLOBUS_NAMESPACES = new ArrayList(
 			Arrays

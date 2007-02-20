@@ -10,9 +10,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,8 +18,6 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -145,6 +141,7 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
 							connection = url.openConnection();
 							addStatusLine("Downloading "
 									+ extensionTypes[i].getDisplayName()
+									+ " version "
 									+ extensionTypes[i].getVersion() + " ("
 									+ connection.getContentLength() + " bytes)");
 							getBusyProgressBar().setMinimum(0);
@@ -198,14 +195,17 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
 				addStatusLine("Writting out software updates description...");
 
 				try {
-					Utils.serializeObject(softwareUpdates, new QName("gme://gov.nih.nci.cagrid.introduce/1/Software","Software"), new FileWriter(new File("."+ File.separator + "updates" + File.separator + "software.xml")));
+					Utils.serializeObject(softwareUpdates, new QName(
+							"gme://gov.nih.nci.cagrid.introduce/1/Software",
+							"Software"), new FileWriter(new File("."
+							+ File.separator + "updates" + File.separator
+							+ "software.xml")));
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
-				
+
 				addStatusLine("");
 				addStatusLine("Finished.");
 
@@ -223,7 +223,6 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
 		th.start();
 	}
 
-
 	public void prepare() {
 		getStatusTextArea().setText("");
 		addStatusLine("Preparing to download updates...\n");
@@ -234,7 +233,6 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
 		getStatusTextArea().setText(
 				getStatusTextArea().getText() + statusLine + "\n");
 	}
-	
 
 	/**
 	 * This method initializes this

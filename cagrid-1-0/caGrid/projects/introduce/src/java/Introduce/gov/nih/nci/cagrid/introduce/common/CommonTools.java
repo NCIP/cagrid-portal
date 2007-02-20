@@ -43,7 +43,6 @@ import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.common.XMLUtilities;
 
-
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -59,7 +58,6 @@ public class CommonTools {
 
 	public static final String ALLOWED_EXISTING_JAVA_PACKAGE_REGEX = "[a-zA-Z\\_]++[A-Za-z0-9\\_\\$]*";
 
-
 	public static Process createAndOutputProcess(String cmd) throws Exception {
 		final Process p;
 
@@ -72,15 +70,14 @@ public class CommonTools {
 		return p;
 	}
 
-
 	public static List getProvidedNamespaces(File startDir) {
 		List globusNamespaces = new ArrayList();
-		File schemasDir = new File(startDir.getAbsolutePath() + File.separator + "share" + File.separator + "schema");
+		File schemasDir = new File(startDir.getAbsolutePath() + File.separator
+				+ "share" + File.separator + "schema");
 
 		CommonTools.getTargetNamespaces(globusNamespaces, schemasDir);
 		return globusNamespaces;
 	}
-
 
 	public static File findSchema(String schemaNamespace, File dir) {
 		File[] files = dir.listFiles();
@@ -92,7 +89,8 @@ public class CommonTools {
 					return found;
 				}
 			} else {
-				if (curFile.getAbsolutePath().endsWith(".xsd") || curFile.getAbsolutePath().endsWith(".XSD")) {
+				if (curFile.getAbsolutePath().endsWith(".xsd")
+						|| curFile.getAbsolutePath().endsWith(".XSD")) {
 					try {
 						if (getTargetNamespace(curFile).equals(schemaNamespace)) {
 							return curFile;
@@ -107,7 +105,6 @@ public class CommonTools {
 		return null;
 	}
 
-
 	public static void getTargetNamespaces(List namespaces, File dir) {
 		File[] files = dir.listFiles();
 		for (int i = 0; i < files.length; i++) {
@@ -115,7 +112,8 @@ public class CommonTools {
 			if (curFile.isDirectory()) {
 				getTargetNamespaces(namespaces, curFile);
 			} else {
-				if (curFile.getAbsolutePath().endsWith(".xsd") || curFile.getAbsolutePath().endsWith(".XSD")) {
+				if (curFile.getAbsolutePath().endsWith(".xsd")
+						|| curFile.getAbsolutePath().endsWith(".XSD")) {
 					try {
 						namespaces.add(getTargetNamespace(curFile));
 					} catch (Exception e) {
@@ -127,17 +125,16 @@ public class CommonTools {
 		}
 	}
 
-
 	public static String getTargetNamespace(File file) throws Exception {
 		Document doc = XMLUtilities.fileNameToDocument(file.getAbsolutePath());
 		return doc.getRootElement().getAttributeValue("targetNamespace");
 
 	}
 
-
 	public static boolean isValidPackageName(String packageName) {
 		if (packageName.length() > 0) {
-			StringTokenizer strtok = new StringTokenizer(packageName, ".", false);
+			StringTokenizer strtok = new StringTokenizer(packageName, ".",
+					false);
 			while (strtok.hasMoreElements()) {
 				String packageItem = strtok.nextToken();
 				if (!packageItem.matches(ALLOWED_JAVA_PACKAGE_REGEX)) {
@@ -148,10 +145,10 @@ public class CommonTools {
 		return true;
 	}
 
-
 	public static boolean isValidNoStubPackageName(String packageName) {
 		if (packageName.length() > 0) {
-			StringTokenizer strtok = new StringTokenizer(packageName, ".", false);
+			StringTokenizer strtok = new StringTokenizer(packageName, ".",
+					false);
 			while (strtok.hasMoreElements()) {
 				String packageItem = strtok.nextToken();
 				if (!packageItem.matches(ALLOWED_EXISTING_JAVA_PACKAGE_REGEX)) {
@@ -162,13 +159,13 @@ public class CommonTools {
 		return true;
 	}
 
-
 	public static boolean isValidServiceName(String serviceName) {
-		if (serviceName == null || serviceName.trim().equals("")) {
+		if ((serviceName == null) || serviceName.trim().equals("")) {
 			return false;
 		}
 
-		if (serviceName.substring(0, 1).toLowerCase().equals(serviceName.substring(0, 1))) {
+		if (serviceName.substring(0, 1).toLowerCase().equals(
+				serviceName.substring(0, 1))) {
 			return false;
 		}
 		if (!serviceName.matches(ALLOWED_JAVA_CLASS_REGEX)) {
@@ -177,7 +174,6 @@ public class CommonTools {
 		return true;
 
 	}
-
 
 	public static boolean isValidJavaField(String serviceName) {
 		if (serviceName.length() > 0) {
@@ -188,28 +184,26 @@ public class CommonTools {
 		return true;
 	}
 
-
-	public static String getAntCommand(String antCommand, String buildFileDir) throws Exception {
+	public static String getAntCommand(String antCommand, String buildFileDir)
+			throws Exception {
 		String cmd = " " + antCommand;
 		cmd = getAntCommandCall(buildFileDir) + cmd;
 		return cmd;
 	}
 
-
 	public static String getAntAllCommand(String buildFileDir) throws Exception {
 		return getAntCommand("all", buildFileDir);
 	}
 
-
-	public static String getAntMergeCommand(String buildFileDir) throws Exception {
+	public static String getAntMergeCommand(String buildFileDir)
+			throws Exception {
 		return getAntCommand("merge", buildFileDir);
 	}
 
-
-	public static String getAntDeployTomcatCommand(String buildFileDir) throws Exception {
+	public static String getAntDeployTomcatCommand(String buildFileDir)
+			throws Exception {
 		return createDeploymentCommand(buildFileDir, "deployTomcat");
 	}
-
 
 	private static String fixPathforOS(String path) {
 		String os = System.getProperty("os.name");
@@ -221,13 +215,13 @@ public class CommonTools {
 		return path;
 	}
 
-
-	public static String getAntDeployGlobusCommand(String buildFileDir) throws Exception {
+	public static String getAntDeployGlobusCommand(String buildFileDir)
+			throws Exception {
 		return createDeploymentCommand(buildFileDir, "deployGlobus");
 	}
 
-
-	private static String createDeploymentCommand(String buildFileDir, String deployTarget) throws Exception {
+	private static String createDeploymentCommand(String buildFileDir,
+			String deployTarget) throws Exception {
 		String dir = buildFileDir;
 		File dirF = new File(dir);
 		if (!dirF.isAbsolute()) {
@@ -235,15 +229,15 @@ public class CommonTools {
 		}
 		dir = fixPathforOS(dir);
 		String cmd = " -Dservice.properties.file=" + dir + File.separator
-			+ IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES;
+				+ IntroduceConstants.INTRODUCE_SERVICE_PROPERTIES;
 
 		cmd = getAntCommand(deployTarget, buildFileDir) + " " + cmd;
 		return cmd;
 	}
 
-
-	public static String getAntSkeletonCreationCommand(String buildFileDir, String name, String dir,
-		String packagename, String namespacedomain, String extensions) throws Exception {
+	public static String getAntSkeletonCreationCommand(String buildFileDir,
+			String name, String dir, String packagename,
+			String namespacedomain, String extensions) throws Exception {
 		// fix dir path if it relative......
 		System.out.println("CREATION: builddir: " + buildFileDir);
 		System.out.println("CREATION: destdir: " + dir);
@@ -252,18 +246,22 @@ public class CommonTools {
 			dir = buildFileDir + File.separator + dir;
 		}
 		dir = fixPathforOS(dir);
-		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir + " -Dintroduce.skeleton.service.name=" + name
-			+ " -Dintroduce.skeleton.package=" + packagename + " -Dintroduce.skeleton.package.dir="
-			+ packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
-			+ namespacedomain + " -Dintroduce.skeleton.extensions=" + extensions + " createService";
+		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir
+				+ " -Dintroduce.skeleton.service.name=" + name
+				+ " -Dintroduce.skeleton.package=" + packagename
+				+ " -Dintroduce.skeleton.package.dir="
+				+ packagename.replace('.', File.separatorChar)
+				+ " -Dintroduce.skeleton.namespace.domain=" + namespacedomain
+				+ " -Dintroduce.skeleton.extensions=" + extensions
+				+ " createService";
 		cmd = getAntCommandCall(buildFileDir) + cmd;
 		System.out.println("CREATION: cmd: " + cmd);
 		return cmd;
 	}
 
-
-	public static String getAntSkeletonPostCreationCommand(String buildFileDir, String name, String dir,
-		String packagename, String namespacedomain, String extensions) throws Exception {
+	public static String getAntSkeletonPostCreationCommand(String buildFileDir,
+			String name, String dir, String packagename,
+			String namespacedomain, String extensions) throws Exception {
 		// fix dir path if it relative......
 		System.out.println("CREATION: builddir: " + buildFileDir);
 		System.out.println("CREATION: destdir: " + dir);
@@ -272,48 +270,55 @@ public class CommonTools {
 			dir = buildFileDir + File.separator + dir;
 		}
 		dir = fixPathforOS(dir);
-		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir + " -Dintroduce.skeleton.service.name=" + name
-			+ " -Dintroduce.skeleton.package=" + packagename + " -Dintroduce.skeleton.package.dir="
-			+ packagename.replace('.', File.separatorChar) + " -Dintroduce.skeleton.namespace.domain="
-			+ namespacedomain + " -Dintroduce.skeleton.extensions=" + extensions + " postCreateService";
+		String cmd = " -Dintroduce.skeleton.destination.dir=" + dir
+				+ " -Dintroduce.skeleton.service.name=" + name
+				+ " -Dintroduce.skeleton.package=" + packagename
+				+ " -Dintroduce.skeleton.package.dir="
+				+ packagename.replace('.', File.separatorChar)
+				+ " -Dintroduce.skeleton.namespace.domain=" + namespacedomain
+				+ " -Dintroduce.skeleton.extensions=" + extensions
+				+ " postCreateService";
 		cmd = getAntCommandCall(buildFileDir) + cmd;
 		System.out.println("CREATION: cmd: " + cmd);
 		return cmd;
 	}
-
 
 	static String getAntCommandCall(String buildFileDir) throws Exception {
 		String os = System.getProperty("os.name");
 		String cmd = "";
 		if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
-			cmd = "-classpath \"" + CommonTools.getAntLauncherJarLocation(System.getProperty("java.class.path"), true)
-				+ "\" org.apache.tools.ant.launch.Launcher -buildfile " + "\"" + buildFileDir + File.separator
-				+ "build.xml\"" + cmd;
+			cmd = "-classpath \""
+					+ CommonTools.getAntLauncherJarLocation(System
+							.getProperty("java.class.path"), true)
+					+ "\" org.apache.tools.ant.launch.Launcher -buildfile "
+					+ "\"" + buildFileDir + File.separator + "build.xml\""
+					+ cmd;
 			cmd = "java.exe " + cmd;
 		} else {
 			// escape out the spaces.....
 			buildFileDir = buildFileDir.replaceAll("\\s", "\\ ");
-			cmd = "-classpath " + CommonTools.getAntLauncherJarLocation(System.getProperty("java.class.path"), false)
-				+ " org.apache.tools.ant.launch.Launcher -buildfile " + buildFileDir + File.separator + "build.xml"
-				+ cmd;
+			cmd = "-classpath "
+					+ CommonTools.getAntLauncherJarLocation(System
+							.getProperty("java.class.path"), false)
+					+ " org.apache.tools.ant.launch.Launcher -buildfile "
+					+ buildFileDir + File.separator + "build.xml" + cmd;
 			cmd = "java " + cmd;
 		}
 		return cmd;
 	}
-
 
 	static String getAntLauncherJarLocation(String path, boolean isWindows) {
 		String separator = isWindows ? ";" : ":";
 		StringTokenizer pathTokenizer = new StringTokenizer(path, separator);
 		while (pathTokenizer.hasMoreTokens()) {
 			String pathElement = pathTokenizer.nextToken();
-			if (pathElement.indexOf("ant-launcher") != -1 && pathElement.endsWith(".jar")) {
+			if ((pathElement.indexOf("ant-launcher") != -1)
+					&& pathElement.endsWith(".jar")) {
 				return pathElement;
 			}
 		}
 		return null;
 	}
-
 
 	/**
 	 * Gets a package name for a namespace using a namespace to package mapper
@@ -328,14 +333,14 @@ public class CommonTools {
 			// TODO: where should this mapperClassname preference be set
 			String mapperClassname = "gov.nih.nci.cagrid.introduce.common.CaBIGNamespaceToPackageMapper";
 			Class clazz = Class.forName(mapperClassname);
-			NamespaceToPackageMapper mapper = (NamespaceToPackageMapper) clazz.newInstance();
+			NamespaceToPackageMapper mapper = (NamespaceToPackageMapper) clazz
+					.newInstance();
 			return mapper.getPackageName(namespace.getRaw());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-
 
 	/**
 	 * Gets a package name for a namespace
@@ -346,16 +351,17 @@ public class CommonTools {
 	 *            The namespace types of a service
 	 * @return The package name
 	 */
-	public static String getPackageName(Namespace namespace, NamespacesType namespaceTypes) {
+	public static String getPackageName(Namespace namespace,
+			NamespacesType namespaceTypes) {
 		// first check to see if this namespace is already in use....
-		NamespaceType nsType = CommonTools.getNamespaceType(namespaceTypes, namespace.getRaw());
+		NamespaceType nsType = CommonTools.getNamespaceType(namespaceTypes,
+				namespace.getRaw());
 		if (nsType != null) {
 			return nsType.getPackageName();
 		} else {
 			return getPackageName(namespace);
 		}
 	}
-
 
 	public static boolean equals(ServiceSecurity ss, MethodSecurity ms) {
 		if ((ss == null) && (ms == null)) {
@@ -364,29 +370,38 @@ public class CommonTools {
 			return false;
 		} else if ((ss == null) && (ms != null)) {
 			return false;
-		} else if (!Utils.equals(ss.getSecuritySetting(), ms.getSecuritySetting())) {
+		} else if (!Utils.equals(ss.getSecuritySetting(), ms
+				.getSecuritySetting())) {
 			return false;
-		} else if (!Utils.equals(ss.getAnonymousClients(), ms.getAnonymousClients())) {
+		} else if (!Utils.equals(ss.getAnonymousClients(), ms
+				.getAnonymousClients())) {
 			return false;
-		} else if (!Utils.equals(ss.getSecureConversation(), ms.getSecureConversation())) {
+		} else if (!Utils.equals(ss.getSecureConversation(), ms
+				.getSecureConversation())) {
 			return false;
 		} else if (!Utils.equals(ss.getSecureMessage(), ms.getSecureMessage())) {
 			return false;
-		} else if (!Utils.equals(ss.getTransportLevelSecurity(), ms.getTransportLevelSecurity())) {
+		} else if (!Utils.equals(ss.getTransportLevelSecurity(), ms
+				.getTransportLevelSecurity())) {
 			return false;
-		} else if ((!Utils.equals(ss.getServiceAuthorization(), ms.getMethodAuthorization()))
-			&& (!Utils.equals(ss.getServiceAuthorization().getGridGrouperAuthorization(), ms.getMethodAuthorization()
-				.getGridGrouperAuthorization()))) {
+		} else if ((!Utils.equals(ss.getServiceAuthorization(), ms
+				.getMethodAuthorization()))
+				&& (!Utils
+						.equals(ss.getServiceAuthorization()
+								.getGridGrouperAuthorization(), ms
+								.getMethodAuthorization()
+								.getGridGrouperAuthorization()))) {
 			return false;
-		} else if ((!Utils.equals(ss.getServiceAuthorization(), ms.getMethodAuthorization()))
-			&& (!Utils.equals(ss.getServiceAuthorization().getCSMAuthorization(), ms.getMethodAuthorization()
-				.getCSMAuthorization()))) {
+		} else if ((!Utils.equals(ss.getServiceAuthorization(), ms
+				.getMethodAuthorization()))
+				&& (!Utils.equals(ss.getServiceAuthorization()
+						.getCSMAuthorization(), ms.getMethodAuthorization()
+						.getCSMAuthorization()))) {
 			return false;
 		} else {
 			return true;
 		}
 	}
-
 
 	/**
 	 * This method will create a namespaceType fully populated with the schema
@@ -399,21 +414,24 @@ public class CommonTools {
 	 * @return The NamespaceType representation of the schema
 	 * @throws MobiusException
 	 */
-	public static NamespaceType createNamespaceType(String xsdFilename) throws MobiusException {
+	public static NamespaceType createNamespaceType(String xsdFilename)
+			throws MobiusException {
 		NamespaceType namespaceType = new NamespaceType();
 		namespaceType.setLocation("./" + new File(xsdFilename).getName());
 		Document schemaDoc = XMLUtilities.fileNameToDocument(xsdFilename);
 
-		String rawNamespace = schemaDoc.getRootElement().getAttributeValue("targetNamespace");
+		String rawNamespace = schemaDoc.getRootElement().getAttributeValue(
+				"targetNamespace");
 		Namespace namespace = new Namespace(rawNamespace);
 		String packageName = getPackageName(namespace);
 		namespaceType.setPackageName(packageName);
 
 		namespaceType.setNamespace(namespace.getRaw());
 
-		List elementTypes = schemaDoc.getRootElement()
-			.getChildren("element", schemaDoc.getRootElement().getNamespace());
-		SchemaElementType[] schemaTypes = new SchemaElementType[elementTypes.size()];
+		List elementTypes = schemaDoc.getRootElement().getChildren("element",
+				schemaDoc.getRootElement().getNamespace());
+		SchemaElementType[] schemaTypes = new SchemaElementType[elementTypes
+				.size()];
 		for (int i = 0; i < elementTypes.size(); i++) {
 			Element element = (Element) elementTypes.get(i);
 			SchemaElementType type = new SchemaElementType();
@@ -423,7 +441,6 @@ public class CommonTools {
 		namespaceType.setSchemaElement(schemaTypes);
 		return namespaceType;
 	}
-
 
 	/**
 	 * Gets a service by name from the services container type
@@ -435,7 +452,7 @@ public class CommonTools {
 	 * @return The named service or null if not found
 	 */
 	public static ServiceType getService(ServicesType services, String name) {
-		if (services != null && services.getService() != null) {
+		if ((services != null) && (services.getService() != null)) {
 			for (int i = 0; i < services.getService().length; i++) {
 				if (services.getService(i).getName().equals(name)) {
 					return services.getService(i);
@@ -445,7 +462,6 @@ public class CommonTools {
 
 		return null;
 	}
-
 
 	/**
 	 * Gets a method by its name
@@ -457,7 +473,7 @@ public class CommonTools {
 	 * @return The named method, or null if not found
 	 */
 	public static MethodType getMethod(MethodsType methods, String name) {
-		if (methods != null && methods.getMethod() != null) {
+		if ((methods != null) && (methods.getMethod() != null)) {
 			for (int i = 0; i < methods.getMethod().length; i++) {
 				if (methods.getMethod(i).getName().equals(name)) {
 					return methods.getMethod(i);
@@ -468,11 +484,12 @@ public class CommonTools {
 		return null;
 	}
 
-
 	public static String methodTypeToString(MethodType method) {
 		// if it is imported from wsdl just return the name
-		if (method.isIsImported() && method.getImportInformation().getFromIntroduce() != null
-			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
+		if (method.isIsImported()
+				&& (method.getImportInformation().getFromIntroduce() != null)
+				&& !method.getImportInformation().getFromIntroduce()
+						.booleanValue()) {
 			return method.getName();
 		}
 
@@ -483,10 +500,12 @@ public class CommonTools {
 		MethodTypeOutput outputType = method.getOutput();
 		if (outputType != null) {
 			// use classname if set, else use schema type
-			if (outputType.getQName() != null && outputType.getQName().getLocalPart() != null
-				&& !outputType.getQName().getLocalPart().trim().equals("")) {
+			if ((outputType.getQName() != null)
+					&& (outputType.getQName().getLocalPart() != null)
+					&& !outputType.getQName().getLocalPart().trim().equals("")) {
 				String name = org.apache.axis.wsdl.toJava.Utils
-					.xmlNameToJavaClass(outputType.getQName().getLocalPart());
+						.xmlNameToJavaClass(outputType.getQName()
+								.getLocalPart());
 				if (name.indexOf("_") == 0) {
 					name = name.substring(1);
 				}
@@ -507,13 +526,16 @@ public class CommonTools {
 				for (int i = 0; i < inputarr.length; i++) {
 					MethodTypeInputsInput inputType = inputarr[i];
 					// use classname if set, else use schema type
-					if (inputType.getQName() != null && inputType.getQName().getLocalPart() != null
-						&& !inputType.getQName().getLocalPart().trim().equals("")) {
+					if ((inputType.getQName() != null)
+							&& (inputType.getQName().getLocalPart() != null)
+							&& !inputType.getQName().getLocalPart().trim()
+									.equals("")) {
 						if (input.length() != 0) {
 							input.append(", ");
 						}
-						String name = org.apache.axis.wsdl.toJava.Utils.xmlNameToJavaClass(inputType.getQName()
-							.getLocalPart());
+						String name = org.apache.axis.wsdl.toJava.Utils
+								.xmlNameToJavaClass(inputType.getQName()
+										.getLocalPart());
 						if (name.indexOf("_") == 0) {
 							name = name.substring(1);
 						}
@@ -533,28 +555,35 @@ public class CommonTools {
 			}
 		}
 
-		output.append("  ").append(method.getName()).append("(").append(input.toString()).append(")");
+		output.append("  ").append(method.getName()).append("(").append(
+				input.toString()).append(")");
 
 		return output.toString();
 	}
 
+	public static void importMethod(
+			MethodTypeImportInformation importInformation, File fromDir,
+			File toDir, String fromService, String toService,
+			String methodName, boolean copyFiles) throws Exception {
+		ServiceDescription fromintroService = (ServiceDescription) Utils
+				.deserializeDocument(fromDir.getAbsolutePath() + File.separator
+						+ "introduce.xml", ServiceDescription.class);
 
-	public static void importMethod(MethodTypeImportInformation importInformation, File fromDir, File toDir,
-		String fromService, String toService, String methodName, boolean copyFiles) throws Exception {
-		ServiceDescription fromintroService = (ServiceDescription) Utils.deserializeDocument(fromDir.getAbsolutePath()
-			+ File.separator + "introduce.xml", ServiceDescription.class);
-
-		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(toDir.getAbsolutePath()
-			+ File.separator + "introduce.xml", ServiceDescription.class);
+		ServiceDescription introService = (ServiceDescription) Utils
+				.deserializeDocument(toDir.getAbsolutePath() + File.separator
+						+ "introduce.xml", ServiceDescription.class);
 
 		if (copyFiles) {
-			File fromwsdl = new File(fromDir.getAbsolutePath() + File.separator + "schema" + File.separator
-				+ fromService);
-			File towsdl = new File(toDir.getAbsolutePath() + File.separator + "schema" + File.separator + toService);
+			File fromwsdl = new File(fromDir.getAbsolutePath() + File.separator
+					+ "schema" + File.separator + fromService);
+			File towsdl = new File(toDir.getAbsolutePath() + File.separator
+					+ "schema" + File.separator + toService);
 			Utils.copyDirectory(fromwsdl, towsdl);
 
-			File fromLibDir = new File(fromDir.getAbsolutePath() + File.separator + "lib");
-			File toLibDir = new File(toDir.getAbsolutePath() + File.separator + "lib");
+			File fromLibDir = new File(fromDir.getAbsolutePath()
+					+ File.separator + "lib");
+			File toLibDir = new File(toDir.getAbsolutePath() + File.separator
+					+ "lib");
 
 			Utils.copyDirectory(fromLibDir, toLibDir);
 		}
@@ -563,30 +592,34 @@ public class CommonTools {
 		// make sure to warn on duplicates and remome them
 		NamespacesType fromNamespaces = fromintroService.getNamespaces();
 		int fromNamespacesLength = 0;
-		if (fromNamespaces != null && fromNamespaces.getNamespace() != null) {
+		if ((fromNamespaces != null) && (fromNamespaces.getNamespace() != null)) {
 			fromNamespacesLength = fromNamespaces.getNamespace().length;
 		}
 		NamespacesType toNamespaces = introService.getNamespaces();
 		int toNamespacesLength = 0;
-		if (toNamespaces != null && toNamespaces.getNamespace() != null) {
+		if ((toNamespaces != null) && (toNamespaces.getNamespace() != null)) {
 			toNamespacesLength = toNamespaces.getNamespace().length;
 		}
 
 		List namespaces = new ArrayList();
 		List usedNamespaces = new ArrayList();
 		for (int i = 0; i < toNamespacesLength; i++) {
-			if (!usedNamespaces.contains(toNamespaces.getNamespace(i).getNamespace())) {
+			if (!usedNamespaces.contains(toNamespaces.getNamespace(i)
+					.getNamespace())) {
 				usedNamespaces.add(toNamespaces.getNamespace(i).getNamespace());
 				namespaces.add(toNamespaces.getNamespace(i));
 			}
 		}
 		for (int i = 0; i < fromNamespacesLength; i++) {
-			if (!usedNamespaces.contains(fromNamespaces.getNamespace(i).getNamespace())) {
-				usedNamespaces.add(fromNamespaces.getNamespace(i).getNamespace());
+			if (!usedNamespaces.contains(fromNamespaces.getNamespace(i)
+					.getNamespace())) {
+				usedNamespaces.add(fromNamespaces.getNamespace(i)
+						.getNamespace());
 				namespaces.add(fromNamespaces.getNamespace(i));
 			} else {
-				System.err.println("WARNING: During Import: Namespace was already being used in the original service: "
-					+ fromNamespaces.getNamespace(i).getNamespace());
+				System.err
+						.println("WARNING: During Import: Namespace was already being used in the original service: "
+								+ fromNamespaces.getNamespace(i).getNamespace());
 			}
 		}
 		NamespaceType[] newNamespacesArr = new NamespaceType[namespaces.size()];
@@ -596,9 +629,10 @@ public class CommonTools {
 		introService.setNamespaces(newNamespaces);
 
 		// find the method and add it methods....
-		MethodsType fromMethods = CommonTools.getService(fromintroService.getServices(), fromService).getMethods();
+		MethodsType fromMethods = CommonTools.getService(
+				fromintroService.getServices(), fromService).getMethods();
 		MethodType foundMethod = null;
-		if (fromMethods != null && fromMethods.getMethod() != null) {
+		if ((fromMethods != null) && (fromMethods.getMethod() != null)) {
 			boolean found = false;
 			for (int i = 0; i < fromMethods.getMethod().length; i++) {
 				foundMethod = fromMethods.getMethod(i);
@@ -608,14 +642,17 @@ public class CommonTools {
 				}
 			}
 			if (found != true) {
-				throw new Exception("Method " + methodName + " was not found in imported service");
+				throw new Exception("Method " + methodName
+						+ " was not found in imported service");
 			}
 
 		} else {
-			throw new Exception("Imported service was supposed to have methods.....");
+			throw new Exception(
+					"Imported service was supposed to have methods.....");
 		}
 
-		MethodsType methodsType = CommonTools.getService(introService.getServices(), toService).getMethods();
+		MethodsType methodsType = CommonTools.getService(
+				introService.getServices(), toService).getMethods();
 
 		foundMethod.setIsImported(true);
 		foundMethod.setImportInformation(importInformation);
@@ -624,10 +661,11 @@ public class CommonTools {
 		// this seems to be a wierd way be adding things....
 		MethodType[] newMethods;
 		int newLength = 0;
-		if (methodsType != null && methodsType.getMethod() != null) {
+		if ((methodsType != null) && (methodsType.getMethod() != null)) {
 			newLength = methodsType.getMethod().length + 1;
 			newMethods = new MethodType[newLength];
-			System.arraycopy(methodsType.getMethod(), 0, newMethods, 0, methodsType.getMethod().length);
+			System.arraycopy(methodsType.getMethod(), 0, newMethods, 0,
+					methodsType.getMethod().length);
 		} else {
 			newLength = 1;
 			newMethods = new MethodType[newLength];
@@ -635,12 +673,13 @@ public class CommonTools {
 		MethodsType newmethodsType = new MethodsType();
 		newMethods[newLength - 1] = foundMethod;
 		newmethodsType.setMethod(newMethods);
-		CommonTools.getService(introService.getServices(), toService).setMethods(newmethodsType);
+		CommonTools.getService(introService.getServices(), toService)
+				.setMethods(newmethodsType);
 
-		Utils.serializeDocument(toDir.getAbsolutePath() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE,
-			introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+		Utils.serializeDocument(toDir.getAbsolutePath() + File.separator
+				+ IntroduceConstants.INTRODUCE_XML_FILE, introService,
+				IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 	}
-
 
 	/**
 	 * Gets the directory which corresponds to a Java package name
@@ -653,9 +692,9 @@ public class CommonTools {
 		return service.getPackageName().replace('.', File.separatorChar);
 	}
 
-
-	public static NamespaceType getNamespaceType(NamespacesType namespacesType, String namespaceURI) {
-		if (namespacesType != null && namespacesType.getNamespace() != null) {
+	public static NamespaceType getNamespaceType(NamespacesType namespacesType,
+			String namespaceURI) {
+		if ((namespacesType != null) && (namespacesType.getNamespace() != null)) {
 			NamespaceType[] namespaces = namespacesType.getNamespace();
 			for (int i = 0; i < namespaces.length; i++) {
 				NamespaceType namespace = namespaces[i];
@@ -667,18 +706,20 @@ public class CommonTools {
 		return null;
 	}
 
-
-	public static SchemaInformation getSchemaInformation(NamespacesType namespacesType, QName qname) {
-		if (namespacesType != null && namespacesType.getNamespace() != null) {
+	public static SchemaInformation getSchemaInformation(
+			NamespacesType namespacesType, QName qname) {
+		if ((namespacesType != null) && (namespacesType.getNamespace() != null)) {
 			NamespaceType[] namespaces = namespacesType.getNamespace();
 			for (int i = 0; i < namespaces.length; i++) {
 				NamespaceType namespace = namespaces[i];
 				if (namespace.getNamespace().equals(qname.getNamespaceURI())) {
 					if (namespace.getSchemaElement() != null) {
 						for (int j = 0; j < namespace.getSchemaElement().length; j++) {
-							SchemaElementType type = namespace.getSchemaElement(j);
+							SchemaElementType type = namespace
+									.getSchemaElement(j);
 							if (type.getType().equals(qname.getLocalPart())) {
-								SchemaInformation info = new SchemaInformation(namespace, type);
+								SchemaInformation info = new SchemaInformation(
+										namespace, type);
 								return info;
 							}
 						}
@@ -689,7 +730,6 @@ public class CommonTools {
 		return null;
 	}
 
-
 	/**
 	 * Adds a resource property to a service
 	 * 
@@ -698,19 +738,20 @@ public class CommonTools {
 	 * @param resource
 	 *            The resource property to be added
 	 */
-	public static void addResourcePropety(ServiceType service, ResourcePropertyType resource) {
+	public static void addResourcePropety(ServiceType service,
+			ResourcePropertyType resource) {
 		ResourcePropertyType[] resourcesArray = null;
 		int length = 0;
-		if (service.getResourcePropertiesList() != null
-			&& service.getResourcePropertiesList().getResourceProperty() != null) {
+		if ((service.getResourcePropertiesList() != null)
+				&& (service.getResourcePropertiesList().getResourceProperty() != null)) {
 			length = service.getResourcePropertiesList().getResourceProperty().length + 1;
 		} else {
 			length = 1;
 		}
 		resourcesArray = new ResourcePropertyType[length];
 		if (length > 1) {
-			System.arraycopy(service.getResourcePropertiesList().getResourceProperty(), 0, resourcesArray, 0,
-				length - 1);
+			System.arraycopy(service.getResourcePropertiesList()
+					.getResourceProperty(), 0, resourcesArray, 0, length - 1);
 		}
 		resourcesArray[length - 1] = resource;
 		ResourcePropertiesListType resources = null;
@@ -723,7 +764,6 @@ public class CommonTools {
 		resources.setResourceProperty(resourcesArray);
 	}
 
-
 	/**
 	 * Gets all resource properties from a service which have a specified QName
 	 * 
@@ -733,11 +773,14 @@ public class CommonTools {
 	 *            The type of resource properties to locate
 	 * @return An Array of ResourcePropertyTypes which have the specified QName
 	 */
-	public static ResourcePropertyType[] getResourcePropertiesOfType(ServiceType service, QName type) {
-		ResourcePropertiesListType propsList = service.getResourcePropertiesList();
+	public static ResourcePropertyType[] getResourcePropertiesOfType(
+			ServiceType service, QName type) {
+		ResourcePropertiesListType propsList = service
+				.getResourcePropertiesList();
 		List typedProperties = new ArrayList();
 		if (propsList != null) {
-			ResourcePropertyType[] allProperties = propsList.getResourceProperty();
+			ResourcePropertyType[] allProperties = propsList
+					.getResourceProperty();
 			if (allProperties != null) {
 				for (int i = 0; i < allProperties.length; i++) {
 					if (allProperties[i].getQName().equals(type)) {
@@ -746,11 +789,11 @@ public class CommonTools {
 				}
 			}
 		}
-		ResourcePropertyType[] propArray = new ResourcePropertyType[typedProperties.size()];
+		ResourcePropertyType[] propArray = new ResourcePropertyType[typedProperties
+				.size()];
 		typedProperties.toArray(propArray);
 		return propArray;
 	}
-
 
 	/**
 	 * Adds a method to a service
@@ -763,14 +806,16 @@ public class CommonTools {
 	public static void addMethod(ServiceType service, MethodType method) {
 		MethodType[] methodsArray = null;
 		int length = 0;
-		if (service.getMethods() != null && service.getMethods().getMethod() != null) {
+		if ((service.getMethods() != null)
+				&& (service.getMethods().getMethod() != null)) {
 			length = service.getMethods().getMethod().length + 1;
 		} else {
 			length = 1;
 		}
 		methodsArray = new MethodType[length];
 		if (length > 1) {
-			System.arraycopy(service.getMethods().getMethod(), 0, methodsArray, 0, length - 1);
+			System.arraycopy(service.getMethods().getMethod(), 0, methodsArray,
+					0, length - 1);
 		}
 		methodsArray[length - 1] = method;
 		MethodsType methods = null;
@@ -782,7 +827,6 @@ public class CommonTools {
 		}
 		methods.setMethod(methodsArray);
 	}
-
 
 	/**
 	 * Removes a method from a MethodsType container object
@@ -805,7 +849,6 @@ public class CommonTools {
 		methodsType.setMethod(newMethods);
 	}
 
-
 	/**
 	 * Adds a namespace type to a service description
 	 * 
@@ -814,17 +857,20 @@ public class CommonTools {
 	 * @param nsType
 	 *            The namespace type to add
 	 */
-	public static void addNamespace(ServiceDescription serviceD, NamespaceType nsType) {
+	public static void addNamespace(ServiceDescription serviceD,
+			NamespaceType nsType) {
 		NamespaceType[] namespacesArray = null;
 		int length = 0;
-		if (serviceD.getNamespaces() != null && serviceD.getNamespaces().getNamespace() != null) {
+		if ((serviceD.getNamespaces() != null)
+				&& (serviceD.getNamespaces().getNamespace() != null)) {
 			length = serviceD.getNamespaces().getNamespace().length + 1;
 		} else {
 			length = 1;
 		}
 		namespacesArray = new NamespaceType[length];
 		if (length > 1) {
-			System.arraycopy(serviceD.getNamespaces().getNamespace(), 0, namespacesArray, 0, length - 1);
+			System.arraycopy(serviceD.getNamespaces().getNamespace(), 0,
+					namespacesArray, 0, length - 1);
 		}
 		namespacesArray[length - 1] = nsType;
 		NamespacesType namespaces = null;
@@ -837,7 +883,6 @@ public class CommonTools {
 		namespaces.setNamespace(namespacesArray);
 	}
 
-
 	/**
 	 * Define a unique name for use as a variable for the metadata at the
 	 * specified index given the scope of the ServiceMetadataListType.
@@ -848,11 +893,13 @@ public class CommonTools {
 	 *            the index into the metadata list of the targeted metadata item
 	 * @return the variable name to use
 	 */
-	public static String getResourcePropertyVariableName(ResourcePropertiesListType metadataList, int index) {
-		String baseName = metadataList.getResourceProperty(index).getQName().getLocalPart();
+	public static String getResourcePropertyVariableName(
+			ResourcePropertiesListType metadataList, int index) {
+		String baseName = metadataList.getResourceProperty(index).getQName()
+				.getLocalPart();
 
 		int previousNumber = 0;
-		for (int i = 0; (i < index && i < metadataList.getResourceProperty().length); i++) {
+		for (int i = 0; ((i < index) && (i < metadataList.getResourceProperty().length)); i++) {
 			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
 			if (metadata.getQName().getLocalPart().equalsIgnoreCase(baseName)) {
 				// the qname local parts are the same for multiple qnames
@@ -863,9 +910,8 @@ public class CommonTools {
 
 		// return the orginal name, if it is unique, otherwise append a number
 		return TemplateUtils.lowerCaseFirstCharacter(baseName
-			+ ((previousNumber > 0) ? String.valueOf(previousNumber) : ""));
+				+ ((previousNumber > 0) ? String.valueOf(previousNumber) : ""));
 	}
-
 
 	/**
 	 * Sets a service property on the service information. If no service
@@ -881,7 +927,8 @@ public class CommonTools {
 	 * @param value
 	 *            The value to associate with the property key
 	 */
-	public static void setServiceProperty(ServiceDescription desc, String key, String value, boolean isFromETC) {
+	public static void setServiceProperty(ServiceDescription desc, String key,
+			String value, boolean isFromETC) {
 		ServiceProperties props = desc.getServiceProperties();
 		if (props == null) {
 			props = new ServiceProperties();
@@ -889,8 +936,8 @@ public class CommonTools {
 		}
 		ServicePropertiesProperty[] allProperties = props.getProperty();
 		if (allProperties == null) {
-			allProperties = new ServicePropertiesProperty[]{new ServicePropertiesProperty(new Boolean(isFromETC), key,
-				value)};
+			allProperties = new ServicePropertiesProperty[] { new ServicePropertiesProperty(
+					new Boolean(isFromETC), key, value) };
 		} else {
 			boolean found = false;
 			for (int i = 0; i < allProperties.length; i++) {
@@ -902,13 +949,14 @@ public class CommonTools {
 				}
 			}
 			if (!found) {
-				allProperties = (ServicePropertiesProperty[]) Utils.appendToArray(allProperties,
-					new ServicePropertiesProperty(new Boolean(isFromETC), key, value));
+				allProperties = (ServicePropertiesProperty[]) Utils
+						.appendToArray(allProperties,
+								new ServicePropertiesProperty(new Boolean(
+										isFromETC), key, value));
 			}
 		}
 		props.setProperty(allProperties);
 	}
-
 
 	/**
 	 * Determines if a service information object contains the specified service
@@ -920,9 +968,12 @@ public class CommonTools {
 	 *            The property to check for
 	 * @return True if a property with the key name is found, false otherwise
 	 */
-	public static boolean servicePropertyExists(ServiceDescription desc, String key) {
-		if (desc.getServiceProperties() != null && desc.getServiceProperties().getProperty() != null) {
-			ServicePropertiesProperty[] props = desc.getServiceProperties().getProperty();
+	public static boolean servicePropertyExists(ServiceDescription desc,
+			String key) {
+		if ((desc.getServiceProperties() != null)
+				&& (desc.getServiceProperties().getProperty() != null)) {
+			ServicePropertiesProperty[] props = desc.getServiceProperties()
+					.getProperty();
 			for (int i = 0; i < props.length; i++) {
 				if (props[i].getKey().equals(key)) {
 					return true;
@@ -931,7 +982,6 @@ public class CommonTools {
 		}
 		return false;
 	}
-
 
 	/**
 	 * Gets the value of a service property from service information
@@ -944,9 +994,12 @@ public class CommonTools {
 	 * @throws Exception
 	 *             If no property with the specified key is found
 	 */
-	public static String getServicePropertyValue(ServiceDescription desc, String key) throws Exception {
-		if (desc.getServiceProperties() != null && desc.getServiceProperties().getProperty() != null) {
-			ServicePropertiesProperty[] props = desc.getServiceProperties().getProperty();
+	public static String getServicePropertyValue(ServiceDescription desc,
+			String key) throws Exception {
+		if ((desc.getServiceProperties() != null)
+				&& (desc.getServiceProperties().getProperty() != null)) {
+			ServicePropertiesProperty[] props = desc.getServiceProperties()
+					.getProperty();
 			for (int i = 0; i < props.length; i++) {
 				if (props[i].getKey().equals(key)) {
 					return props[i].getValue();
@@ -955,7 +1008,6 @@ public class CommonTools {
 		}
 		throw new Exception("No such property: " + key);
 	}
-
 
 	/**
 	 * Removes a service property from service information
@@ -966,13 +1018,15 @@ public class CommonTools {
 	 *            The key name of the property to remove
 	 * @return True if the property existed and was removed, false otherwise
 	 */
-	public static boolean removeServiceProperty(ServiceDescription desc, String key) {
-		ServicePropertiesProperty[] newProperties = new ServicePropertiesProperty[desc.getServiceProperties()
-			.getProperty().length - 1];
+	public static boolean removeServiceProperty(ServiceDescription desc,
+			String key) {
+		ServicePropertiesProperty[] newProperties = new ServicePropertiesProperty[desc
+				.getServiceProperties().getProperty().length - 1];
 		int newIndex = 0;
 		boolean removed = false;
 		for (int i = 0; i < desc.getServiceProperties().getProperty().length; i++) {
-			ServicePropertiesProperty current = desc.getServiceProperties().getProperty(i);
+			ServicePropertiesProperty current = desc.getServiceProperties()
+					.getProperty(i);
 			if (!current.getKey().equals(key)) {
 				newProperties[newIndex] = current;
 				newIndex++;
@@ -984,7 +1038,6 @@ public class CommonTools {
 		return removed;
 	}
 
-
 	/**
 	 * Determines if schema element types from a namespace type are referenced
 	 * in other parts of the service (ie Methods, Exceptions)
@@ -994,15 +1047,19 @@ public class CommonTools {
 	 * @return True if the namespace typs is in use in the service, false
 	 *         otherwise
 	 */
-	public static boolean isNamespaceTypeInUse(NamespaceType nsType, ServiceDescription desc) {
+	public static boolean isNamespaceTypeInUse(NamespaceType nsType,
+			ServiceDescription desc) {
 		String namespace = nsType.getNamespace();
 		ServiceType[] services = desc.getServices().getService();
 		for (int s = 0; s < services.length; s++) {
 			// resource properties
-			ResourcePropertiesListType propsList = services[s].getResourcePropertiesList();
+			ResourcePropertiesListType propsList = services[s]
+					.getResourcePropertiesList();
 			if (propsList != null) {
-				for (int p = 0; propsList.getResourceProperty() != null && p < propsList.getResourceProperty().length; p++) {
-					ResourcePropertyType prop = propsList.getResourceProperty(p);
+				for (int p = 0; (propsList.getResourceProperty() != null)
+						&& (p < propsList.getResourceProperty().length); p++) {
+					ResourcePropertyType prop = propsList
+							.getResourceProperty(p);
 					if (prop.getQName().getNamespaceURI().equals(namespace)) {
 						return true;
 					}
@@ -1011,14 +1068,17 @@ public class CommonTools {
 			// methods
 			MethodsType methods = services[s].getMethods();
 			if (methods != null) {
-				for (int m = 0; methods.getMethod() != null && m < methods.getMethod().length; m++) {
+				for (int m = 0; (methods.getMethod() != null)
+						&& (m < methods.getMethod().length); m++) {
 					MethodType method = methods.getMethod(m);
 					// inputs
 					MethodTypeInputs inputs = method.getInputs();
 					if (inputs != null) {
-						for (int i = 0; inputs.getInput() != null && i < inputs.getInput().length; i++) {
+						for (int i = 0; (inputs.getInput() != null)
+								&& (i < inputs.getInput().length); i++) {
 							MethodTypeInputsInput input = inputs.getInput(i);
-							if (input.getQName().getNamespaceURI().equals(namespace)) {
+							if (input.getQName().getNamespaceURI().equals(
+									namespace)) {
 								return true;
 							}
 						}
@@ -1026,16 +1086,20 @@ public class CommonTools {
 					// output
 					MethodTypeOutput output = method.getOutput();
 					if (output != null) {
-						if (output.getQName().getNamespaceURI().equals(namespace)) {
+						if (output.getQName().getNamespaceURI().equals(
+								namespace)) {
 							return true;
 						}
 					}
 					// exceptions
 					MethodTypeExceptions exceptions = method.getExceptions();
 					if (exceptions != null) {
-						for (int e = 0; exceptions.getException() != null && e < exceptions.getException().length; e++) {
-							MethodTypeExceptionsException exception = exceptions.getException(e);
-							if (exception.getQname().getNamespaceURI().equals(namespace)) {
+						for (int e = 0; (exceptions.getException() != null)
+								&& (e < exceptions.getException().length); e++) {
+							MethodTypeExceptionsException exception = exceptions
+									.getException(e);
+							if (exception.getQname().getNamespaceURI().equals(
+									namespace)) {
 								return true;
 							}
 						}
@@ -1045,7 +1109,6 @@ public class CommonTools {
 		}
 		return false;
 	}
-
 
 	/**
 	 * Determines if all schema element types used in the service are still
@@ -1058,7 +1121,6 @@ public class CommonTools {
 	public static boolean usedTypesAvailable(ServiceDescription desc) {
 		return getUnavailableUsedTypes(desc).size() == 0;
 	}
-
 
 	/**
 	 * Gets the types from a service description which are referenced in the
@@ -1074,36 +1136,45 @@ public class CommonTools {
 		ServiceType[] services = desc.getServices().getService();
 		for (int s = 0; s < services.length; s++) {
 			// resource properties
-			ResourcePropertiesListType propsList = services[s].getResourcePropertiesList();
+			ResourcePropertiesListType propsList = services[s]
+					.getResourcePropertiesList();
 			if (propsList != null) {
-				for (int p = 0; propsList.getResourceProperty() != null && p < propsList.getResourceProperty().length; p++) {
-					ResourcePropertyType prop = propsList.getResourceProperty(p);
+				for (int p = 0; (propsList.getResourceProperty() != null)
+						&& (p < propsList.getResourceProperty().length); p++) {
+					ResourcePropertyType prop = propsList
+							.getResourceProperty(p);
 					usedTypes.add(prop.getQName());
 				}
 			}
 			// methods
 			MethodsType methods = services[s].getMethods();
 			if (methods != null) {
-				for (int m = 0; methods.getMethod() != null && m < methods.getMethod().length; m++) {
+				for (int m = 0; (methods.getMethod() != null)
+						&& (m < methods.getMethod().length); m++) {
 					MethodType method = methods.getMethod(m);
 					// inputs
 					MethodTypeInputs inputs = method.getInputs();
 					if (inputs != null) {
-						for (int i = 0; inputs.getInput() != null && i < inputs.getInput().length; i++) {
+						for (int i = 0; (inputs.getInput() != null)
+								&& (i < inputs.getInput().length); i++) {
 							MethodTypeInputsInput input = inputs.getInput(i);
 							usedTypes.add(input.getQName());
 						}
 					}
 					// output
 					MethodTypeOutput output = method.getOutput();
-					if (output != null && (!output.getQName().getLocalPart().equals("void"))) {
+					if ((output != null)
+							&& (!output.getQName().getLocalPart()
+									.equals("void"))) {
 						usedTypes.add(output.getQName());
 					}
 					// exceptions
 					MethodTypeExceptions exceptions = method.getExceptions();
 					if (exceptions != null) {
-						for (int e = 0; exceptions.getException() != null && e < exceptions.getException().length; e++) {
-							MethodTypeExceptionsException exception = exceptions.getException(e);
+						for (int e = 0; (exceptions.getException() != null)
+								&& (e < exceptions.getException().length); e++) {
+							MethodTypeExceptionsException exception = exceptions
+									.getException(e);
 							if (exception.getQname() != null) {
 								usedTypes.add(exception.getQname());
 							} else {
@@ -1120,25 +1191,42 @@ public class CommonTools {
 		// walk through namespace types removing QNames from used types
 		NamespacesType namespaces = desc.getNamespaces();
 		if (namespaces != null) {
-			for (int n = 0; namespaces.getNamespace() != null && usedTypes.size() != 0
-				&& n < namespaces.getNamespace().length; n++) {
+			for (int n = 0; (namespaces.getNamespace() != null)
+					&& (usedTypes.size() != 0)
+					&& (n < namespaces.getNamespace().length); n++) {
 				NamespaceType nsType = namespaces.getNamespace(n);
-				for (int t = 0; nsType.getSchemaElement() != null && t < nsType.getSchemaElement().length
-					&& usedTypes.size() != 0; t++) {
+				for (int t = 0; (nsType.getSchemaElement() != null)
+						&& (t < nsType.getSchemaElement().length)
+						&& (usedTypes.size() != 0); t++) {
 					SchemaElementType type = nsType.getSchemaElement(t);
-					usedTypes.remove(new QName(nsType.getNamespace(), type.getType()));
+					usedTypes.remove(new QName(nsType.getNamespace(), type
+							.getType()));
 				}
 			}
 		}
 		return usedTypes;
 	}
 
-
 	public static String getIntroduceVersion() {
 		Properties engineProps = new Properties();
 		try {
-			engineProps.load(new FileInputStream(IntroduceConstants.INTRODUCE_ENGINE_PROPERTIES));
-			return (String) engineProps.get(IntroduceConstants.INTRODUCE_VERSION_PROPERTY);
+			engineProps.load(new FileInputStream(
+					IntroduceConstants.INTRODUCE_ENGINE_PROPERTIES));
+			return (String) engineProps
+					.get(IntroduceConstants.INTRODUCE_VERSION_PROPERTY);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static String getIntroduceUpdateSite() {
+		Properties engineProps = new Properties();
+		try {
+			engineProps.load(new FileInputStream(
+					IntroduceConstants.INTRODUCE_ENGINE_PROPERTIES));
+			return (String) engineProps
+					.get(IntroduceConstants.INTRODUCE_UPDATE_SITE_PROPERTY);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
