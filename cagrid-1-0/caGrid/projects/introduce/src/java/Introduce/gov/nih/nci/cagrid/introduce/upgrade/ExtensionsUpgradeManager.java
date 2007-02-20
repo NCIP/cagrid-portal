@@ -56,8 +56,8 @@ public class ExtensionsUpgradeManager {
 			if ((extDescription != null)
 					&& (extDescription.getVersion() != null)) {
 				List upgrades = new ArrayList();
-				List extensionTypes = new ArrayList();
-				if ((serviceExtensionVersion == null)
+				if (((serviceExtensionVersion == null) && (extDescription
+						.getVersion() != null))
 						|| !extDescription.getVersion().equals(
 								serviceExtensionVersion)) {
 					// service needs to be upgraded
@@ -76,15 +76,20 @@ public class ExtensionsUpgradeManager {
 							boolean found = false;
 							int i = 0;
 							for (i = 0; i < extensionUpgrades.length; i++) {
-								if (extensionUpgrades[i].getFromVersion()
+								if ((extensionUpgrades[i].getFromVersion() == null)
+										&& (currentVersion == null)) {
+									found = true;
+									break;
+								} else if (extensionUpgrades[i]
+										.getFromVersion()
 										.equals(currentVersion)) {
 									found = true;
 									break;
 								}
+
 							}
 							if (found) {
-								upgrades.add(extensionUpgrades[i]
-										.getUpgradeClass());
+								upgrades.add(extensionUpgrades[i]);
 								currentVersion = extensionUpgrades[i]
 										.getToVersion();
 							} else {
@@ -104,13 +109,16 @@ public class ExtensionsUpgradeManager {
 
 				// run the upgraders that we put together in order
 				for (int i = 0; i < upgrades.size(); i++) {
-					Class clazz = Class.forName((String) upgrades.get(i));
+					UpgradeDescriptionType upgrade = (UpgradeDescriptionType) upgrades
+							.get(i);
+					Class clazz = Class.forName(upgrade.getUpgradeClass());
 					Constructor con = clazz.getConstructor(new Class[] {
 							ExtensionType.class, ServiceDescription.class,
-							String.class });
+							String.class, String.class, String.class });
 					UpgraderI upgrader = (UpgraderI) con
 							.newInstance(new Object[] { extension, service,
-									pathToService });
+									pathToService, upgrade.getFromVersion(),
+									upgrade.getToVersion() });
 					upgrader.execute();
 				}
 
@@ -118,10 +126,6 @@ public class ExtensionsUpgradeManager {
 						+ "introduce.xml", service,
 						IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
-			} else {
-				// service does not have the right extension to run with
-				error.add(extension.getName()
-						+ " does not appear to have any compatible upgrades.");
 			}
 		}
 

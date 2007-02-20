@@ -10,7 +10,8 @@ public abstract class IntroduceUpgraderBase extends UpgraderBase {
 	}
 
 	public void execute() throws Exception {
-		// TODO Auto-generated method stub
+		System.out.println("Upgrading Introduce Service From Version "
+				+ this.getFromVersion() + " to Version " + this.getToVersion());
 		super.execute();
 		getServiceDescription().setIntroduceVersion(getToVersion());
 	}

@@ -36,8 +36,6 @@ public abstract class UpgraderBase implements UpgraderI {
 	protected abstract void upgrade() throws Exception;
 
 	public void execute() throws Exception {
-		System.out.println("Upgrading Introduce Service From Version "
-				+ this.getFromVersion() + " to Version " + this.getToVersion());
 		this.upgrade();
 	}
 
