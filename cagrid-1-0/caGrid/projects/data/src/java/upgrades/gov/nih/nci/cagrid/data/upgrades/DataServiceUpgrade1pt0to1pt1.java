@@ -32,8 +32,6 @@ import org.jdom.JDOMException;
  *          dervin Exp $
  */
 public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
-	private ExtensionType dataExtension = null;
-
 
 	public DataServiceUpgrade1pt0to1pt1(ExtensionType extensionType, ServiceDescription serviceDescription,
 		String servicePath, String fromVersion, String toVersion) {
@@ -67,7 +65,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 			throw new UpgradeException(getClass().getName() 
 				+ " upgrades FROM 1.0 TO 1.1, found TO = " + getToVersion());
 		}
-		String currentVersion = getDataExtension().getVersion();
+		String currentVersion = getExtensionType().getVersion();
 		if (!((currentVersion == null) || currentVersion.equals("1.0"))) {
 			throw new UpgradeException(getClass().getName() 
 				+ " upgrades FROM 1.0 TO 1.1, current version found is " + currentVersion);
@@ -76,7 +74,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 
 
 	private void setCurrentExtensionVersion() throws UpgradeException {
-		getDataExtension().setVersion("1.1");
+		getExtensionType().setVersion("1.1");
 	}
 
 
@@ -108,7 +106,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		// get the properties for the query processor
 		Properties qpProps = proc.getRequiredParameters();
 		// set the user configured properties
-		Enumeration keyEnum = configuredProps.keys();
+		Enumeration keyEnum = qpProps.keys();
 		while (keyEnum.hasMoreElements()) {
 			String key = (String) keyEnum.nextElement();
 			String value = qpProps.getProperty(key);
@@ -154,14 +152,16 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		Element cadsrInfo = extensionData.getChild("CadsrInformation", extensionData.getNamespace());
 		// now we have a noDomainModel boolean flag...
 		boolean hasCadsrUrl = cadsrInfo.getAttributeValue("serviceUrl") != null;
-		boolean usingSuppliedModel = cadsrInfo.getAttributeValue("useSuppliedModel").equals("true");
+		boolean usingSuppliedModel = 
+			(cadsrInfo.getAttributeValue("useSuppliedModel") != null)
+			&& cadsrInfo.getAttributeValue("useSuppliedModel").equals("true");
 		boolean noDomainModel = (!hasCadsrUrl && !usingSuppliedModel);
 		cadsrInfo.setAttribute("noDomainModel", String.valueOf(noDomainModel));
 	}
 
 
 	private void setExtensionDataElement(Element extensionData) throws UpgradeException {
-		ExtensionTypeExtensionData ext = getDataExtension().getExtensionData();
+		ExtensionTypeExtensionData ext = getExtensionType().getExtensionData();
 		MessageElement rawExtensionData = null;
 		try {
 			rawExtensionData = AxisJdomUtils.fromElement(extensionData);
@@ -173,7 +173,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 
 
 	private Element getExtensionDataElement() throws UpgradeException {
-		MessageElement[] anys = getDataExtension().getExtensionData().get_any();
+		MessageElement[] anys = getExtensionType().getExtensionData().get_any();
 		MessageElement rawDataElement = null;
 		for (int i = 0; (anys != null) && (i < anys.length); i++) {
 			if (anys[i].getQName().equals(Data.getTypeDesc().getXmlType())) {
@@ -186,21 +186,5 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		}
 		Element extensionDataElement = AxisJdomUtils.fromMessageElement(rawDataElement);
 		return extensionDataElement;
-	}
-
-
-	private ExtensionType getDataExtension() throws UpgradeException {
-		if (dataExtension == null) {
-			ExtensionType[] existingExtensions = getServiceDescription().getExtensions().getExtension();
-			for (int i = 0; i < existingExtensions.length; i++) {
-				if (existingExtensions[i].getName().equals("data")) {
-					dataExtension = existingExtensions[i];
-					break;
-				}
-			}
-			// uhoh
-			throw new UpgradeException("No data service extension found in service model");
-		}
-		return dataExtension;
 	}
 }
