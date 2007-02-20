@@ -1,6 +1,11 @@
 package gov.nih.nci.cagrid.data.upgrades;
 
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
+import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.upgrade.ExtensionUpgraderBase;
 
 import java.io.File;
@@ -14,6 +19,8 @@ import java.util.Properties;
 import javax.xml.crypto.Data;
 
 import org.apache.axis.message.MessageElement;
+import org.jdom.Element;
+import org.jdom.JDOMException;
 
 import com.sun.xml.internal.bind.v2.schemagen.xmlschema.ExtensionType;
 
