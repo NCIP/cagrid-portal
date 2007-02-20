@@ -5,3 +5,4 @@ junit*.properties
 log4j.properties
 .fbwarnings
 tmp
+.fbprefs
