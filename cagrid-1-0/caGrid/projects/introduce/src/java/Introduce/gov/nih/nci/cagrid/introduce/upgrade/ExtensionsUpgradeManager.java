@@ -70,30 +70,29 @@ public class ExtensionsUpgradeManager {
 								.getUpgradesDescription()
 								.getUpgradeDescription();
 
-						boolean upgradesFound = false;
 						String currentVersion = serviceExtensionVersion;
-						while (!upgradesFound
-								&& !currentVersion.equals(extDescription
-										.getVersion())) {
-							for (int i = 0; i < extensionUpgrades.length; i++) {
-								boolean found = false;
+						while (((currentVersion == null) || !currentVersion
+								.equals(extDescription.getVersion()))) {
+							boolean found = false;
+							int i = 0;
+							for (i = 0; i < extensionUpgrades.length; i++) {
 								if (extensionUpgrades[i].getFromVersion()
 										.equals(currentVersion)) {
 									found = true;
 									break;
 								}
-								if (found) {
-									upgrades.add(extensionUpgrades[i]
-											.getUpgradeClass());
-									// extensionTypes.add(arg0);
-									currentVersion = extensionUpgrades[i]
-											.getToVersion();
-								} else {
-									error
-											.add(extension.getName()
-													+ " does not appear to have correct upgrade.");
-								}
 							}
+							if (found) {
+								upgrades.add(extensionUpgrades[i]
+										.getUpgradeClass());
+								currentVersion = extensionUpgrades[i]
+										.getToVersion();
+							} else {
+								error
+										.add(extension.getName()
+												+ " does not appear to have correct upgrade.");
+							}
+
 						}
 
 					} else {

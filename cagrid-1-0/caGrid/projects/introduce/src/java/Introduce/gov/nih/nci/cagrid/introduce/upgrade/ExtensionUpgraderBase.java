@@ -29,7 +29,7 @@ public abstract class ExtensionUpgraderBase extends UpgraderBase {
 	public void execute() throws Exception {
 		// TODO Auto-generated method stub
 		super.execute();
-		getServiceDescription().setIntroduceVersion(getToVersion());
+		extensionType.setVersion(getToVersion());
 	}
 
 	
