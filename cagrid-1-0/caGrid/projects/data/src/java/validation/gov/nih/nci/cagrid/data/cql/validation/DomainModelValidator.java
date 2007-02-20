@@ -98,10 +98,10 @@ public class DomainModelValidator implements CqlDomainValidator {
 		if (attrib.getPredicate() != null
 			&& !(attrib.getPredicate().getValue().equals(Predicate._IS_NOT_NULL) || attrib.getPredicate().getValue()
 				.equals(Predicate._IS_NULL))) {
-			String value = attrib.getValue();
+			String valueAsString = attrib.getValue().toString();
 			//check datatype name
 			String datatype = attribMetadata.getDataTypeName();
-			DataTypeValidator.validate(value, datatype);
+			DataTypeValidator.validate(valueAsString, datatype);
 			//check enumeration values
 			ValueDomain valueDomain = attribMetadata.getValueDomain();
 			if (valueDomain != null) {
@@ -114,9 +114,9 @@ public class DomainModelValidator implements CqlDomainValidator {
 						Enumeration e = enumeration[i];
 						permValues.add(e.getPermissibleValue());
 					}
-					if (!permValues.contains(value)) {
+					if (!permValues.contains(valueAsString)) {
 						throw new MalformedQueryException("Attribute '" + attrib.getName()
-							+ "' defines a permissible value enumeration, and the value'" + value
+							+ "' defines a permissible value enumeration, and the value'" + valueAsString
 							+ "' is not permissible.");
 					}
 				}
