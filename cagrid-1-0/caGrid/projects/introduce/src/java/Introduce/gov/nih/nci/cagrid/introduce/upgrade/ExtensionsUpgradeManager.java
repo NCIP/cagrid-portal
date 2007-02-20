@@ -30,9 +30,11 @@ public class ExtensionsUpgradeManager {
 			String serviceExtensionVersion = extension.getVersion();
 			ExtensionDescription extDescription = ExtensionsLoader
 					.getInstance().getExtension(extension.getName());
-			if (extDescription != null) {
-				if (!extDescription.getVersion()
-						.equals(serviceExtensionVersion)) {
+			if ((extDescription != null)
+					&& (extDescription.getVersion() != null)) {
+				if ((serviceExtensionVersion == null)
+						|| !extDescription.getVersion().equals(
+								serviceExtensionVersion)) {
 					return true;
 				}
 
@@ -51,11 +53,11 @@ public class ExtensionsUpgradeManager {
 			String serviceExtensionVersion = extension.getVersion();
 			ExtensionDescription extDescription = ExtensionsLoader
 					.getInstance().getExtension(extension.getName());
-			if (extDescription != null) {
+			if ((extDescription != null)
+					&& (extDescription.getVersion() != null)) {
 				List upgrades = new ArrayList();
 				List extensionTypes = new ArrayList();
-				if (((serviceExtensionVersion == null) && (extDescription
-						.getVersion() != null))
+				if ((serviceExtensionVersion == null)
 						|| !extDescription.getVersion().equals(
 								serviceExtensionVersion)) {
 					// service needs to be upgraded
