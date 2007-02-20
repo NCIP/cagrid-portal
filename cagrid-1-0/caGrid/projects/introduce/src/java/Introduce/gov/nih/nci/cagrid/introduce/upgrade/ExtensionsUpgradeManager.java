@@ -53,6 +53,7 @@ public class ExtensionsUpgradeManager {
 					.getInstance().getExtension(extension.getName());
 			if (extDescription != null) {
 				List upgrades = new ArrayList();
+				List extensionTypes = new ArrayList();
 				if (((serviceExtensionVersion == null) && (extDescription
 						.getVersion() != null))
 						|| !extDescription.getVersion().equals(
@@ -82,6 +83,7 @@ public class ExtensionsUpgradeManager {
 								if (found) {
 									upgrades.add(extensionUpgrades[i]
 											.getUpgradeClass());
+									// extensionTypes.add(arg0);
 									currentVersion = extensionUpgrades[i]
 											.getToVersion();
 								} else {
