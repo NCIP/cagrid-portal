@@ -1,13 +1,6 @@
 package gov.nih.nci.cagrid.data.upgrades;
 
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
-import gov.nih.nci.cagrid.data.extension.Data;
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.common.FileFilters;
-import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.upgrade.ExtensionUpgraderBase;
 
 import java.io.File;
@@ -18,9 +11,11 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Properties;
 
+import javax.xml.crypto.Data;
+
 import org.apache.axis.message.MessageElement;
-import org.jdom.Element;
-import org.jdom.JDOMException;
+
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.ExtensionType;
 
 /**
  * DataServiceUpgrade1pt0to1pt1 Utility to upgrade a 1.0 data service to 1.1
@@ -34,9 +29,10 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 	private ExtensionType dataExtension = null;
 
 	public DataServiceUpgrade1pt0to1pt1(ExtensionType extensionType,
-			ServiceDescription serviceDescription, String fromVersion,
-			String toVersion) {
-		super(extensionType, serviceDescription, fromVersion, toVersion);
+			ServiceDescription serviceDescription, String pathToService,
+			String fromVersion, String toVersion) {
+		super(extensionType, serviceDescription, pathToService, fromVersion,
+				toVersion);
 	}
 
 	protected void upgrade() throws Exception {
