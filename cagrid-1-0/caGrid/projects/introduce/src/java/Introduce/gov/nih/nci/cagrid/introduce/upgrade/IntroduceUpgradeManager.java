@@ -1,10 +1,5 @@
 package gov.nih.nci.cagrid.introduce.upgrade;
 
-import java.io.File;
-import java.lang.reflect.Constructor;
-
-import org.apache.axis.description.ServiceDesc;
-
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
@@ -12,18 +7,19 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
+import java.io.File;
+import java.lang.reflect.Constructor;
 
 public class IntroduceUpgradeManager {
 	private ServiceDescription service;
 	private String pathToService;
-	
-	public IntroduceUpgradeManager(ServiceDescription service, String pathToService){
+
+	public IntroduceUpgradeManager(ServiceDescription service,
+			String pathToService) {
 		this.service = service;
 		this.pathToService = pathToService;
 	}
-	
 
 	private static String getUpgradeVersion(String oldVersion) {
 		if (oldVersion.equals("1.0")) {
@@ -33,7 +29,6 @@ public class IntroduceUpgradeManager {
 		return null;
 	}
 
-
 	private static String getUpgradeClass(String version) {
 		if (version.equals("1.1")) {
 			return "gov.nih.nci.cagrid.introduce.upgrade.introduce.Introduce_1_0__1_1_Upgrader";
@@ -41,19 +36,19 @@ public class IntroduceUpgradeManager {
 		return null;
 	}
 
-	
-	public boolean canBeUpgraded(String version){
-		if(getUpgradeVersion(version)!=null && getUpgradeClass(getUpgradeVersion(version))!=null){
+	public boolean canBeUpgraded(String version) {
+		if ((getUpgradeVersion(version) != null)
+				&& (getUpgradeClass(getUpgradeVersion(version)) != null)) {
 			return true;
 		} else {
-		return false;	
+			return false;
 		}
 	}
-	
+
 	public void upgrade() throws Exception {
 		System.out.println("Trying to upgrade the service");
-		
-		//upgrade the introduce service
+
+		// upgrade the introduce service
 		String version = CommonTools.getIntroduceVersion();
 		if (version != null) {
 
@@ -62,57 +57,65 @@ public class IntroduceUpgradeManager {
 			while (canBeUpgraded(vers)) {
 				String newVersion = getUpgradeVersion(vers);
 				if (newVersion == null) {
-					System.out.println("The service"
-						+ " is upgradeable however no upgrade version from the version " + vers
-						+ " could be found.");
+					System.out
+							.println("The service"
+									+ " is upgradeable however no upgrade version from the version "
+									+ vers + " could be found.");
 					break;
 				}
 
 				String className = getUpgradeClass(newVersion);
 				if (className == null) {
-					System.out.println("The service"
-						+ " is upgradeable however no upgrade class from the version " + vers
-						+ " could be found.");
+					System.out
+							.println("The service"
+									+ " is upgradeable however no upgrade class from the version "
+									+ vers + " could be found.");
 					break;
 				}
-				
-				//upgrade the introduce service
+
+				// upgrade the introduce service
 				System.out.println("Upgrading the service from version " + vers
-					+ " to " + newVersion + ".............");
+						+ " to " + newVersion + ".............");
 				Class clazz = Class.forName(className);
-				Constructor con = clazz.getConstructor(new Class[]{ServiceDescription.class});
-				UpgraderI upgrader = (UpgraderI) con.newInstance(new Object []{service});
+				Constructor con = clazz.getConstructor(new Class[] {
+						ServiceDescription.class, String.class });
+				UpgraderI upgrader = (UpgraderI) con.newInstance(new Object[] {
+						service, pathToService });
 				upgrader.execute();
-			
-                System.out.println("COMPLETED Upgrading the service from version " + vers
-                    + " to " + newVersion + ".............");
-            	
-                vers = newVersion;
+
+				System.out
+						.println("COMPLETED Upgrading the service from version "
+								+ vers + " to " + newVersion + ".............");
+
+				vers = newVersion;
 			}
-			
-			Utils.serializeDocument(pathToService
-					+ File.separator + "introduce.xml", service,
+
+			Utils.serializeDocument(pathToService + File.separator
+					+ "introduce.xml", service,
 					IntroduceConstants.INTRODUCE_SKELETON_QNAME);
-			
-			
-			ExtensionType [] extensions = service.getExtensions().getExtension();
-			for(int extensionI = 0; extensionI < extensions.length; extensionI ++){
+
+			ExtensionType[] extensions = service.getExtensions().getExtension();
+			for (int extensionI = 0; extensionI < extensions.length; extensionI++) {
 				ExtensionType extension = extensions[extensionI];
 				String serviceExtensionVersion = extension.getVersion();
-				ExtensionDescription extDescription = ExtensionsLoader.getInstance().getExtension(extension.getName());
-				if(extDescription!=null){
-					if(extDescription.getVersion().equals(serviceExtensionVersion)){
-					
+				ExtensionDescription extDescription = ExtensionsLoader
+						.getInstance().getExtension(extension.getName());
+				if (extDescription != null) {
+					if (extDescription.getVersion().equals(
+							serviceExtensionVersion)) {
+
 					}
-					
-				} else  {
-					//service does not have the right extension to run with this service
+
+				} else {
+					// service does not have the right extension to run with
+					// this service
 				}
 			}
-			
+
 		} else {
-			System.err.println("ERROR: The service"
-				+ " is not upgradable because it's version cannot be determined or is corupt");
+			System.err
+					.println("ERROR: The service"
+							+ " is not upgradable because it's version cannot be determined or is corupt");
 		}
 	}
 

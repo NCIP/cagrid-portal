@@ -31,7 +31,7 @@
 			<xs:attribute name="extensionPreferencesPanel" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="UpgradesDescription" type="UpgradeDescriptionType"/>
+	<xs:element name="UpgradesDescription" type="UpgradesDescriptionType"/>
 	<xs:complexType name="UpgradesDescriptionType">
 	  <xs:sequence>
 	     <xs:element ref="UpgradeDescription" minOccurs="0" maxOccurs="unbounded"/>
