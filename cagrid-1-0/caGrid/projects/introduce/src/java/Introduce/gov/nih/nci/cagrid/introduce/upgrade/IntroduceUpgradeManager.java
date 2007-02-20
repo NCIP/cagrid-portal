@@ -3,10 +3,7 @@ package gov.nih.nci.cagrid.introduce.upgrade;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -93,24 +90,6 @@ public class IntroduceUpgradeManager {
 			Utils.serializeDocument(pathToService + File.separator
 					+ "introduce.xml", service,
 					IntroduceConstants.INTRODUCE_SKELETON_QNAME);
-
-			ExtensionType[] extensions = service.getExtensions().getExtension();
-			for (int extensionI = 0; extensionI < extensions.length; extensionI++) {
-				ExtensionType extension = extensions[extensionI];
-				String serviceExtensionVersion = extension.getVersion();
-				ExtensionDescription extDescription = ExtensionsLoader
-						.getInstance().getExtension(extension.getName());
-				if (extDescription != null) {
-					if (extDescription.getVersion().equals(
-							serviceExtensionVersion)) {
-
-					}
-
-				} else {
-					// service does not have the right extension to run with
-					// this service
-				}
-			}
 
 		} else {
 			System.err

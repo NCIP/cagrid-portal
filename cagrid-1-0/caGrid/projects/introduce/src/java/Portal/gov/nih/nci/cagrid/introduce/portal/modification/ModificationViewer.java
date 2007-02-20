@@ -367,6 +367,12 @@ public class ModificationViewer extends GridPortalComponent {
 											.getAbsolutePath());
 							if (extUpgrader.needsUpgrading()) {
 								extUpgrader.upgrade();
+								introService = (ServiceDescription) Utils
+										.deserializeDocument(methodsDirectory
+												.getAbsolutePath()
+												+ File.separator
+												+ "introduce.xml",
+												ServiceDescription.class);
 							}
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -393,6 +399,11 @@ public class ModificationViewer extends GridPortalComponent {
 							introService, methodsDirectory.getAbsolutePath());
 					try {
 						extUpgrader.upgrade();
+						introService = (ServiceDescription) Utils
+								.deserializeDocument(methodsDirectory
+										.getAbsolutePath()
+										+ File.separator + "introduce.xml",
+										ServiceDescription.class);
 					} catch (Exception e) {
 						e.printStackTrace();
 						throw new Exception(

@@ -1,11 +1,14 @@
 package gov.nih.nci.cagrid.introduce.upgrade;
 
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.UpgradeDescriptionType;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +108,10 @@ public class ExtensionsUpgradeManager {
 							.newInstance(new Object[] { service, pathToService });
 					upgrader.execute();
 				}
+
+				Utils.serializeDocument(pathToService + File.separator
+						+ "introduce.xml", service,
+						IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
 			} else {
 				// service does not have the right extension to run with
