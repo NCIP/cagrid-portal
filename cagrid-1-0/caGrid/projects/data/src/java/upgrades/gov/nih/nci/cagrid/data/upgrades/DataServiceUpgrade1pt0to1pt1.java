@@ -1,16 +1,25 @@
 package gov.nih.nci.cagrid.data.upgrades;
 
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.utilities.CastorMappingUtil;
+import gov.nih.nci.cagrid.data.utilities.WsddUtil;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
+import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.ExtensionUpgraderBase;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -51,6 +60,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		reconfigureCqlQueryProcessor(extensionData);
 		// change the version number
 		setCurrentExtensionVersion();
+		// fix up the castor mapping location
+		moveCastorMappingFile();
 		// store the modified extension data back into the service model
 		setExtensionDataElement(extensionData);
 	}
@@ -69,6 +80,52 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		if (!((currentVersion == null) || currentVersion.equals("1.0"))) {
 			throw new UpgradeException(getClass().getName() 
 				+ " upgrades FROM 1.0 TO 1.1, current version found is " + currentVersion);
+		}
+	}
+	
+	
+	private void moveCastorMappingFile() throws UpgradeException {
+		File oldCastorMapping = new File(getServicePath() + File.separator + "xml-mapping.xml");
+		if (oldCastorMapping.exists()) {
+			Properties introduceProperties = new Properties();
+			try {
+				introduceProperties.load(new FileInputStream(getServicePath() + File.separator + "introduce.properties"));
+			} catch (IOException ex) {
+				throw new UpgradeException("Error loading introduce properties for this service: " + ex.getMessage(), ex);
+			}
+			ServiceInformation serviceInfo = new ServiceInformation(
+				getServiceDescription(), introduceProperties, new File(getServicePath()));
+			File newCastorMapping = new File(CastorMappingUtil.getCustomCastorMappingFileName(serviceInfo));
+			try {
+				Utils.copyFile(oldCastorMapping, newCastorMapping);
+			} catch (IOException ex) {
+				throw new UpgradeException("Error moving castor mapping file: " + ex.getMessage(), ex);
+			}
+			// fix the server-config.wsdd file's castrorMapping parameter
+			File serverConfigFile = new File(getServicePath() + File.separator + "server-config.wsdd");
+			try {
+				WsddUtil.setServiceParameter(serverConfigFile.getAbsolutePath(),
+					serviceInfo.getServices().getService(0).getName(), DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER,
+					CastorMappingUtil.getCustomCastorMappingName(serviceInfo));
+			} catch (Exception ex) {
+				throw new UpgradeException("Error setting castor mapping parameter in server-config.wsdd: " + ex.getMessage(), ex);
+			}
+			// fix the client config file
+			String mainServiceName = serviceInfo.getIntroduceServiceProperties().getProperty(
+				IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+			ServiceType mainService = CommonTools.getService(serviceInfo.getServices(), mainServiceName);
+			String servicePackageName = mainService.getPackageName();
+			String packageDir = servicePackageName.replace('.', File.separatorChar);
+			File clientConfigFile = new File(getServicePath() + File.separator + "src" 
+				+ File.separator + packageDir + File.separator + "client" + File.separator + "client-config.wsdd");
+			try {
+				WsddUtil.setGlobalClientParameter(clientConfigFile.getAbsolutePath(), 
+					DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, 
+					CastorMappingUtil.getCustomCastorMappingName(serviceInfo));
+			} catch (Exception ex) {
+				throw new UpgradeException("Error setting castor mapping parameter in client-config.wsdd: " + ex.getMessage(), ex);
+			}
+			oldCastorMapping.delete();
 		}
 	}
 
