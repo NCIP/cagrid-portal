@@ -107,9 +107,11 @@ public class ExtensionsUpgradeManager {
 				for (int i = 0; i < upgrades.size(); i++) {
 					Class clazz = Class.forName((String) upgrades.get(i));
 					Constructor con = clazz.getConstructor(new Class[] {
-							ServiceDescription.class, String.class });
+							ExtensionType.class, ServiceDescription.class,
+							String.class });
 					UpgraderI upgrader = (UpgraderI) con
-							.newInstance(new Object[] { service, pathToService });
+							.newInstance(new Object[] { extension, service,
+									pathToService });
 					upgrader.execute();
 				}
 
