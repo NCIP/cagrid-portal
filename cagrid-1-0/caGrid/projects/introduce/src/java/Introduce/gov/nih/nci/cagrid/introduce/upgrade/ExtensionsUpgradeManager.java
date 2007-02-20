@@ -57,40 +57,38 @@ public class ExtensionsUpgradeManager {
 					// service needs to be upgraded
 					// put together a list of upgrades to run
 					UpgradeDescriptionType[] extensionUpgrades = null;
-					if (extDescription.getUpgradesDescription() != null) {
+					if ((extDescription.getUpgradesDescription() != null)
+							&& (extDescription.getUpgradesDescription()
+									.getUpgradeDescription() != null)) {
 						extensionUpgrades = extDescription
 								.getUpgradesDescription()
 								.getUpgradeDescription();
 
-						if (extensionUpgrades != null) {
-							boolean upgradesFound = false;
-							String currentVersion = serviceExtensionVersion;
-							while (!upgradesFound
-									&& !currentVersion.equals(extDescription
-											.getVersion())) {
-								for (int i = 0; i < extensionUpgrades.length; i++) {
-									boolean found = false;
-									if (extensionUpgrades[i].getFromVersion()
-											.equals(currentVersion)) {
-										found = true;
-										break;
-									}
-									if (found) {
-										upgrades.add(extensionUpgrades[i]
-												.getUpgradeClass());
-										currentVersion = extensionUpgrades[i]
-												.getToVersion();
-									} else {
-										error
-												.add(extension.getName()
-														+ " does not appear to have correct upgrade.");
-									}
+						boolean upgradesFound = false;
+						String currentVersion = serviceExtensionVersion;
+						while (!upgradesFound
+								&& !currentVersion.equals(extDescription
+										.getVersion())) {
+							for (int i = 0; i < extensionUpgrades.length; i++) {
+								boolean found = false;
+								if (extensionUpgrades[i].getFromVersion()
+										.equals(currentVersion)) {
+									found = true;
+									break;
+								}
+								if (found) {
+									upgrades.add(extensionUpgrades[i]
+											.getUpgradeClass());
+									currentVersion = extensionUpgrades[i]
+											.getToVersion();
+								} else {
+									error
+											.add(extension.getName()
+													+ " does not appear to have correct upgrade.");
 								}
 							}
-						} else {
-							error.add(extension.getName()
-									+ " does not appear to have any upgrades.");
 						}
+
 					} else {
 						error.add(extension.getName()
 								+ " does not appear to have any upgrades.");

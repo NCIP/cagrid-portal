@@ -5,8 +5,8 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 public abstract class IntroduceUpgraderBase extends UpgraderBase {
 
 	public IntroduceUpgraderBase(ServiceDescription serviceDescription,
-			String fromVersion, String toVersion) {
-		super(serviceDescription, fromVersion, toVersion);
+			String servicePath, String fromVersion, String toVersion) {
+		super(serviceDescription, servicePath, fromVersion, toVersion);
 	}
 
 	public void execute() throws Exception {
