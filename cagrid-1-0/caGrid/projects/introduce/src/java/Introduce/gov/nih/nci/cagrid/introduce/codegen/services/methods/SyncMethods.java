@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.ws.jaxme.js.JavaMethod;
-import org.apache.ws.jaxme.js.JavaQName;
-import org.apache.ws.jaxme.js.JavaQNameImpl;
 import org.apache.ws.jaxme.js.JavaSource;
 import org.apache.ws.jaxme.js.JavaSourceFactory;
 import org.apache.ws.jaxme.js.util.JavaParser;
