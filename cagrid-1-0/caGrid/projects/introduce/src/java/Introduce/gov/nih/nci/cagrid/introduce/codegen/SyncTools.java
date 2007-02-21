@@ -457,11 +457,11 @@ public class SyncTools {
 		System.gc();
 	}
 
+	
 	/**
 	 * TODO: requires running directory to be introduce's directory... need a
 	 * better way
 	 * 
-	 * @return
 	 */
 	private String getIntroduceXSD() {
 		return new File("schema" + File.separator
