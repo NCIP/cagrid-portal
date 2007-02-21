@@ -22,7 +22,7 @@ import java.util.zip.ZipOutputStream;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: ZipUtilities.java,v 1.1 2007-02-21 16:48:26 dervin Exp $ 
+ * @version $Id: ZipUtilities.java,v 1.2 2007-02-21 16:57:09 dervin Exp $ 
  */
 public class ZipUtilities {
 	
@@ -95,7 +95,7 @@ public class ZipUtilities {
 		Iterator fileIter = files.iterator();
 		while (fileIter.hasNext()) {
 			File fileToAdd = (File) fileIter.next();
-			String relativeFileName = fileToAdd.getAbsolutePath().substring(baseDirNameLength);
+			String relativeFileName = fileToAdd.getAbsolutePath().substring(baseDirNameLength + 1);
 			ZipEntry entry = new ZipEntry(relativeFileName);
 			zipOut.putNextEntry(entry);
 			if (!fileToAdd.isDirectory()) {
