@@ -28,8 +28,8 @@ public abstract class ExtensionUpgraderBase extends UpgraderBase {
 
 	public void execute() throws Exception {
 		System.out.println("Upgrading services " + extensionType.getName()
-				+ " extension " + this.getFromVersion() + " to Version "
-				+ this.getToVersion());
+				+ " extension  from Version " + this.getFromVersion()
+				+ " to Version " + this.getToVersion());
 		super.execute();
 		extensionType.setVersion(getToVersion());
 	}

@@ -82,21 +82,12 @@ public class IntroduceUpgradeManager {
 					}
 
 					// upgrade the introduce service
-					System.out.println("Upgrading the service from version "
-							+ vers + " to " + newVersion + ".............");
 					Class clazz = Class.forName(className);
 					Constructor con = clazz.getConstructor(new Class[] {
 							ServiceDescription.class, String.class });
 					UpgraderI upgrader = (UpgraderI) con
 							.newInstance(new Object[] { service, pathToService });
 					upgrader.execute();
-
-					System.out
-							.println("COMPLETED Upgrading the service from version "
-									+ vers
-									+ " to "
-									+ newVersion
-									+ ".............");
 
 					vers = newVersion;
 				}
