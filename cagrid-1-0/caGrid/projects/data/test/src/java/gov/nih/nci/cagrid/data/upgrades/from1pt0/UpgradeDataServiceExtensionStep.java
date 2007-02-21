@@ -15,12 +15,12 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeServiceStep.java,v 1.1 2007-02-20 21:03:17 dervin Exp $ 
+ * @version $Id: UpgradeDataServiceExtensionStep.java,v 1.1 2007-02-21 16:09:50 dervin Exp $ 
  */
-public class UpgradeServiceStep extends Step {
+public class UpgradeDataServiceExtensionStep extends Step {
 	private String serviceDir;
 	
-	public UpgradeServiceStep(String serviceDir) {
+	public UpgradeDataServiceExtensionStep(String serviceDir) {
 		this.serviceDir = serviceDir;
 	}
 	

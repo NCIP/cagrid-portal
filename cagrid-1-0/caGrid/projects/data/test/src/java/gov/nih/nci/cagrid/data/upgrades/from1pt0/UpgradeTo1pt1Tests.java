@@ -15,7 +15,7 @@ import com.atomicobject.haste.framework.Story;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeTo1pt1Tests.java,v 1.1 2007-02-20 21:03:17 dervin Exp $ 
+ * @version $Id: UpgradeTo1pt1Tests.java,v 1.2 2007-02-21 16:09:50 dervin Exp $ 
  */
 public class UpgradeTo1pt1Tests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -31,7 +31,9 @@ public class UpgradeTo1pt1Tests extends Story {
 		Vector steps = new Vector();
 		steps.add(new DeleteServiceDirectoryStep(SERVICE_DIR));
 		steps.add(new UnzipOldServiceStep(TEST_DIR));
-		steps.add(new UpgradeServiceStep(SERVICE_DIR));
+		steps.add(new UpgradeIntroduceServiceStep(SERVICE_DIR));
+		steps.add(new UpgradeDataServiceExtensionStep(SERVICE_DIR));
+		steps.add(new BuildUpgradedServiceStep(SERVICE_DIR));
 		return steps;
 	}
 	
