@@ -348,7 +348,7 @@ public class ModificationViewer extends GridPortalComponent {
 				int answer = JOptionPane
 						.showConfirmDialog(
 								this,
-								"This service is from an older of version of Introduce.  Would you like to try to upgrade this service to work with the current version of Introduce?  Otherwise Introduce will attempt to work with this service.");
+								"This service is from an older of version of Introduce.\nWould you like to try to upgrade this service to work with the current version of Introduce?  Otherwise Introduce will attempt to work with this service.");
 				if (answer == JOptionPane.OK_OPTION) {
 
 					try {
@@ -371,7 +371,7 @@ public class ModificationViewer extends GridPortalComponent {
 				int answer = JOptionPane
 						.showConfirmDialog(
 								this,
-								"This service contains uses older versions of Introduce extensions.  Would you like to try to upgrade this service to work with the current version of Introduce extensions that are currently installed?");
+								"This service contains uses older versions of Introduce extensions.\nWould you like to try to upgrade this service to work with the current version of Introduce extensions that are currently installed?");
 				if (answer == JOptionPane.OK_OPTION) {
 
 					try {
