@@ -50,8 +50,7 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeN
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.upgrade.ExtensionsUpgradeManager;
-import gov.nih.nci.cagrid.introduce.upgrade.IntroduceUpgradeManager;
+import gov.nih.nci.cagrid.introduce.upgrade.UpgradeManager;
 
 import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
@@ -342,43 +341,24 @@ public class ModificationViewer extends GridPortalComponent {
 							+ File.separator + "introduce.xml",
 							ServiceDescription.class);
 
-			if ((introService.getIntroduceVersion() == null)
-					|| !introService.getIntroduceVersion().equals(
-							CommonTools.getIntroduceVersion())) {
+			UpgradeManager upgrader = new UpgradeManager(introService,
+					methodsDirectory.getAbsolutePath());
+
+			if (upgrader.canIntroduceBeUpgraded()) {
 				int answer = JOptionPane
 						.showConfirmDialog(
 								this,
 								"This service is from an older of version of Introduce.  Would you like to try to upgrade this service to work with the current version of Introduce?  Otherwise Introduce will attempt to work with this service.");
 				if (answer == JOptionPane.OK_OPTION) {
-					IntroduceUpgradeManager upgrader = new IntroduceUpgradeManager(
-							introService, methodsDirectory.getAbsolutePath());
 
 					try {
-						upgrader.upgrade();
+						upgrader.upgradeIntroduce();
 						// reload the service description after the upgrade
 						introService = (ServiceDescription) Utils
 								.deserializeDocument(methodsDirectory
 										.getAbsolutePath()
 										+ File.separator + "introduce.xml",
 										ServiceDescription.class);
-						try {
-							ExtensionsUpgradeManager extUpgrader = new ExtensionsUpgradeManager(
-									introService, methodsDirectory
-											.getAbsolutePath());
-							if (extUpgrader.needsUpgrading()) {
-								extUpgrader.upgrade();
-								introService = (ServiceDescription) Utils
-										.deserializeDocument(methodsDirectory
-												.getAbsolutePath()
-												+ File.separator
-												+ "introduce.xml",
-												ServiceDescription.class);
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
-							throw new Exception(
-									"Extensions Upgrader Failed.  This service does not appear to be upgradable.");
-						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						throw new Exception(
@@ -387,18 +367,15 @@ public class ModificationViewer extends GridPortalComponent {
 				}
 			}
 
-			ExtensionsUpgradeManager extUpgrader = new ExtensionsUpgradeManager(
-					introService, methodsDirectory.getAbsolutePath());
-			if (extUpgrader.needsUpgrading()) {
+			if (upgrader.canExtensionsBeUpgraded()) {
 				int answer = JOptionPane
 						.showConfirmDialog(
 								this,
 								"This service contains uses older versions of Introduce extensions.  Would you like to try to upgrade this service to work with the current version of Introduce extensions that are currently installed?");
 				if (answer == JOptionPane.OK_OPTION) {
-					IntroduceUpgradeManager upgrader = new IntroduceUpgradeManager(
-							introService, methodsDirectory.getAbsolutePath());
+
 					try {
-						extUpgrader.upgrade();
+						upgrader.upgradeExtensions();
 						introService = (ServiceDescription) Utils
 								.deserializeDocument(methodsDirectory
 										.getAbsolutePath()

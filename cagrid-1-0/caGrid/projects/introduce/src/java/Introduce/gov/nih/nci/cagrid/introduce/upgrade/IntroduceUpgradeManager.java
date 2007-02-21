@@ -33,6 +33,15 @@ public class IntroduceUpgradeManager {
 		return null;
 	}
 
+	public boolean needsUpgrading() {
+		if ((service.getIntroduceVersion() == null)
+				|| !service.getIntroduceVersion().equals(
+						CommonTools.getIntroduceVersion())) {
+			return true;
+		}
+		return false;
+	}
+
 	public boolean canBeUpgraded(String version) {
 		if ((getUpgradeVersion(version) != null)
 				&& (getUpgradeClass(getUpgradeVersion(version)) != null)) {
@@ -45,57 +54,66 @@ public class IntroduceUpgradeManager {
 	public void upgrade() throws Exception {
 		System.out.println("Trying to upgrade the service");
 
-		// upgrade the introduce service
-		String version = CommonTools.getIntroduceVersion();
-		if (version != null) {
+		if (canBeUpgraded(service.getIntroduceVersion())) {
 
-			String vers = service.getIntroduceVersion();
+			// upgrade the introduce service
+			String version = CommonTools.getIntroduceVersion();
+			if (version != null) {
 
-			while (canBeUpgraded(vers)) {
-				String newVersion = getUpgradeVersion(vers);
-				if (newVersion == null) {
+				String vers = service.getIntroduceVersion();
+
+				while (canBeUpgraded(vers)) {
+					String newVersion = getUpgradeVersion(vers);
+					if (newVersion == null) {
+						System.out
+								.println("The service"
+										+ " is upgradeable however no upgrade version from the version "
+										+ vers + " could be found.");
+						break;
+					}
+
+					String className = getUpgradeClass(newVersion);
+					if (className == null) {
+						System.out
+								.println("The service"
+										+ " is upgradeable however no upgrade class from the version "
+										+ vers + " could be found.");
+						break;
+					}
+
+					// upgrade the introduce service
+					System.out.println("Upgrading the service from version "
+							+ vers + " to " + newVersion + ".............");
+					Class clazz = Class.forName(className);
+					Constructor con = clazz.getConstructor(new Class[] {
+							ServiceDescription.class, String.class });
+					UpgraderI upgrader = (UpgraderI) con
+							.newInstance(new Object[] { service, pathToService });
+					upgrader.execute();
+
 					System.out
-							.println("The service"
-									+ " is upgradeable however no upgrade version from the version "
-									+ vers + " could be found.");
-					break;
+							.println("COMPLETED Upgrading the service from version "
+									+ vers
+									+ " to "
+									+ newVersion
+									+ ".............");
+
+					vers = newVersion;
 				}
 
-				String className = getUpgradeClass(newVersion);
-				if (className == null) {
-					System.out
-							.println("The service"
-									+ " is upgradeable however no upgrade class from the version "
-									+ vers + " could be found.");
-					break;
-				}
+				Utils.serializeDocument(pathToService + File.separator
+						+ "introduce.xml", service,
+						IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
-				// upgrade the introduce service
-				System.out.println("Upgrading the service from version " + vers
-						+ " to " + newVersion + ".............");
-				Class clazz = Class.forName(className);
-				Constructor con = clazz.getConstructor(new Class[] {
-						ServiceDescription.class, String.class });
-				UpgraderI upgrader = (UpgraderI) con.newInstance(new Object[] {
-						service, pathToService });
-				upgrader.execute();
-
-				System.out
-						.println("COMPLETED Upgrading the service from version "
-								+ vers + " to " + newVersion + ".............");
-
-				vers = newVersion;
+			} else {
+				throw new Exception(
+						"ERROR: The service"
+								+ " is not upgradable because it's version cannot be determined or is corupt");
 			}
 
-			Utils.serializeDocument(pathToService + File.separator
-					+ "introduce.xml", service,
-					IntroduceConstants.INTRODUCE_SKELETON_QNAME);
-
 		} else {
-			System.err
-					.println("ERROR: The service"
-							+ " is not upgradable because it's version cannot be determined or is corupt");
+			throw new Exception("ERROR: The service"
+					+ " needs to be upgraded but no upgrader can be found");
 		}
 	}
-
 }
