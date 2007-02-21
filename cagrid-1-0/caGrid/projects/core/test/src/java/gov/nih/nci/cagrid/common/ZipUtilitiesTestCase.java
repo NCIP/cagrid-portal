@@ -18,7 +18,7 @@ import junit.framework.TestCase;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: ZipUtilitiesTestCase.java,v 1.1 2007-02-21 19:34:25 dervin Exp $ 
+ * @version $Id: ZipUtilitiesTestCase.java,v 1.2 2007-02-21 19:36:17 dervin Exp $ 
  */
 public class ZipUtilitiesTestCase extends TestCase {
 	public static final String SOURCE_DIR = "src" + File.separator + "java";
@@ -109,5 +109,8 @@ public class ZipUtilitiesTestCase extends TestCase {
 			assertTrue("Byte position " + i + "(" + sourceFileContents[i] + ") == (" + extractedContentBytes[i] + ")",
 				sourceFileContents[i] == extractedContentBytes[i]);
 		}
+		// now delete the zip file
+		File zipFile = new File(ZIP_FILE_NAME);
+		zipFile.delete();
 	}
 }
