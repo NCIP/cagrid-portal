@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
@@ -22,7 +23,7 @@ import java.util.zip.ZipOutputStream;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: ZipUtilities.java,v 1.2 2007-02-21 16:57:09 dervin Exp $ 
+ * @version $Id: ZipUtilities.java,v 1.3 2007-02-21 19:34:25 dervin Exp $ 
  */
 public class ZipUtilities {
 	
@@ -36,7 +37,7 @@ public class ZipUtilities {
 	 * @throws IOException
 	 */
 	public static void unzip(File zip, File location) throws IOException {
-		FileInputStream zipFileInput = new FileInputStream(zip);
+		FileInputStream zipFileInput = new FileInputStream(zip.getAbsoluteFile());
 		ZipInputStream zipInput = new ZipInputStream(zipFileInput);
 		ZipEntry entry = null;
 		String baseDir = null;
@@ -51,9 +52,12 @@ public class ZipUtilities {
 			if (entry.isDirectory()) {
 				outFile.mkdirs();
 			} else {
+				if (!outFile.getParentFile().exists()) {
+					outFile.getParentFile().mkdirs();
+				}
 				outFile.createNewFile();
 				BufferedOutputStream fileOut = new BufferedOutputStream(
-					new FileOutputStream(baseDir + File.separator + name));
+					new FileOutputStream(outFile));
 				copyStreams(zipInput, fileOut);
 				fileOut.flush();
 				fileOut.close();
@@ -122,16 +126,13 @@ public class ZipUtilities {
 	 */
 	public static byte[] extractEntryContents(File zipFile, String entryName) throws IOException {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		ZipInputStream zipInput = new ZipInputStream(new FileInputStream(zipFile));
-		ZipEntry entry = null;
-		while ((entry = zipInput.getNextEntry()) != null) {
-			if (entry.getName().equals(entryName)) {
-				copyStreams(zipInput, output);
-				break;
-			}
-			zipInput.closeEntry();
-		}
-		zipInput.close();
+		ZipFile zip = new ZipFile(zipFile);
+		ZipEntry entry = zip.getEntry(entryName);
+		InputStream stream = zip.getInputStream(entry);
+		copyStreams(stream, output);
+		stream.close();
+		output.flush();
+		output.close();
 		return output.toByteArray();
 	}
 	
