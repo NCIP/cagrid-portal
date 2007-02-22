@@ -10,7 +10,6 @@ public class UpgradeManager {
 	private IntroduceUpgradeManager iUpgrader;
 	private ExtensionsUpgradeManager eUpgrader;
 	private String pathToService;
-	private String id;
 
 	public UpgradeManager(ServiceDescription service, String pathToService) {
 		this.service = service;
