@@ -21,11 +21,17 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
 	protected void upgrade() throws Exception {
 		// need to replace the build.xml
+		Utils.copyFile(
+				new File(getServicePath() + File.separator + "build.xml"),
+				new File(getServicePath() + File.separator + "build.xml.OLD"));
 		Utils.copyFile(new File("." + File.separator + "skeleton"
 				+ File.separator + "build.xml"), new File(getServicePath()
 				+ File.separator + "build.xml"));
 
 		// need to replace the build-deploy.xml
+		Utils.copyFile(new File(getServicePath() + File.separator
+				+ "build-deploy.xml"), new File(getServicePath()
+				+ File.separator + "build-deploy.xml.OLD"));
 		Utils.copyFile(new File("." + File.separator + "skeleton"
 				+ File.separator + "build-deploy.xml"), new File(
 				getServicePath() + File.separator + "build-deploy.xml"));
@@ -38,6 +44,11 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 		ServiceInformation info = new ServiceInformation(
 				getServiceDescription(), serviceProperties, new File(
 						getServicePath()));
+
+		Utils.copyFile(new File(getServicePath() + File.separator + "etc"
+				+ File.separator + "registration.xml"), new File(
+				getServicePath() + File.separator + "etc" + File.separator
+						+ "registration.xml.OLD"));
 
 		RegistrationTemplate registrationT = new RegistrationTemplate();
 		String registrationS = registrationT.generate(info);
