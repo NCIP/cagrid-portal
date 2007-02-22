@@ -1,17 +1,17 @@
 package gov.nih.nci.cagrid.introduce.upgrade.introduce;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.Properties;
-
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistrationTemplate;
 import gov.nih.nci.cagrid.introduce.upgrade.IntroduceUpgraderBase;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.util.Properties;
 
 public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
@@ -38,7 +38,7 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
 		// need to replace the registration.xml
 		Properties serviceProperties = new Properties();
-		serviceProperties.load(new FileReader(
+		serviceProperties.load(new FileInputStream(
 				new File(getServicePath() + File.separator
 						+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE)));
 		ServiceInformation info = new ServiceInformation(
@@ -60,7 +60,7 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
 		// need to add to the deploy.properties
 		Properties deployProperties = new Properties();
-		deployProperties.load(new FileReader(new File(getServicePath()
+		deployProperties.load(new FileInputStream(new File(getServicePath()
 				+ File.separator + IntroduceConstants.DEPLOY_PROPERTIES_FILE)));
 		deployProperties.put("index.service.registration.refresh_seconds",
 				"600");
