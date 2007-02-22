@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptions;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.security.SyncAuthorization;
 import gov.nih.nci.cagrid.introduce.codegen.utils.TemplateUtils;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.info.SchemaInformation;
@@ -52,7 +51,7 @@ public class SyncSource {
 
 	public SyncSource(File baseDir, ServiceInformation info, ServiceType service) {
 		this.service = service;
-		this.serviceInfo = info;
+		serviceInfo = info;
 		serviceClient = baseDir.getAbsolutePath() + File.separator + "src"
 				+ File.separator + CommonTools.getPackageDir(service)
 				+ File.separator + "client" + File.separator
@@ -76,11 +75,11 @@ public class SyncSource {
 		// process the faults for this method...
 		MethodTypeExceptions exceptionsEl = method.getExceptions();
 		exceptions += "RemoteException";
-		if (method.getOutput().getIsClientHandle() != null
+		if ((method.getOutput().getIsClientHandle() != null)
 				&& method.getOutput().getIsClientHandle().booleanValue()) {
 			exceptions += ", org.apache.axis.types.URI.MalformedURIException";
 		}
-		if (exceptionsEl != null && exceptionsEl.getException() != null) {
+		if ((exceptionsEl != null) && (exceptionsEl.getException() != null)) {
 			if (exceptionsEl.getException().length > 0) {
 				exceptions += ", ";
 			}
@@ -116,7 +115,7 @@ public class SyncSource {
 		// packageName = method.getImportInformation().getPackageName();
 		// }
 		exceptions += "RemoteException";
-		if (exceptionsEl != null && exceptionsEl.getException() != null) {
+		if ((exceptionsEl != null) && (exceptionsEl.getException() != null)) {
 			if (exceptionsEl.getException().length > 0) {
 				exceptions += ", ";
 			}
@@ -156,9 +155,9 @@ public class SyncSource {
 			SchemaInformation info = CommonTools.getSchemaInformation(
 					serviceInfo.getNamespaces(), returnTypeEl.getQName());
 			returnType = info.getType().getClassName();
-			if (info.getType().getPackageName() != null
-					&& info.getType().getPackageName().length() > 0) {
-				if (returnTypeEl.getIsClientHandle() != null
+			if ((info.getType().getPackageName() != null)
+					&& (info.getType().getPackageName().length() > 0)) {
+				if ((returnTypeEl.getIsClientHandle() != null)
 						&& returnTypeEl.getIsClientHandle().booleanValue()) {
 					returnType = returnTypeEl.getClientHandleClass();
 				} else {
@@ -173,14 +172,15 @@ public class SyncSource {
 
 		methodString += "public " + returnType + " " + methodName + "(";
 
-		if (method.getInputs() != null && method.getInputs().getInput() != null) {
+		if ((method.getInputs() != null)
+				&& (method.getInputs().getInput() != null)) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
 				SchemaInformation info = CommonTools.getSchemaInformation(
 						serviceInfo.getNamespaces(), method.getInputs()
 								.getInput(j).getQName());
 				String packageName = info.getType().getPackageName();
 				String classType = null;
-				if (packageName != null && packageName.length() > 0) {
+				if ((packageName != null) && (packageName.length() > 0)) {
 					classType = packageName + "."
 							+ info.getType().getClassName();
 				} else {
@@ -219,8 +219,8 @@ public class SyncSource {
 			SchemaInformation info = CommonTools.getSchemaInformation(
 					serviceInfo.getNamespaces(), returnTypeEl.getQName());
 			returnType = info.getType().getClassName();
-			if (info.getType().getPackageName() != null
-					&& info.getType().getPackageName().length() > 0) {
+			if ((info.getType().getPackageName() != null)
+					&& (info.getType().getPackageName().length() > 0)) {
 				returnType = info.getType().getPackageName() + "." + returnType;
 			}
 			if (returnTypeEl.isIsArray()) {
@@ -228,14 +228,15 @@ public class SyncSource {
 			}
 		}
 		methodString += "public " + returnType + " " + methodName + "(";
-		if (method.getInputs() != null && method.getInputs().getInput() != null) {
+		if ((method.getInputs() != null)
+				&& (method.getInputs().getInput() != null)) {
 			for (int j = 0; j < method.getInputs().getInput().length; j++) {
 				SchemaInformation info = CommonTools.getSchemaInformation(
 						serviceInfo.getNamespaces(), method.getInputs()
 								.getInput(j).getQName());
 				String packageName = info.getType().getPackageName();
 				String classType = null;
-				if (packageName != null && packageName.length() > 0) {
+				if ((packageName != null) && (packageName.length() > 0)) {
 					classType = packageName + "."
 							+ info.getType().getClassName();
 				} else {
@@ -259,8 +260,8 @@ public class SyncSource {
 	public static List buildServicesClientHandleClassNameList(
 			ServiceInformation serviceInfo) {
 		List list = new ArrayList();
-		if (serviceInfo.getServices() != null
-				&& serviceInfo.getServices().getService() != null) {
+		if ((serviceInfo.getServices() != null)
+				&& (serviceInfo.getServices().getService() != null)) {
 			for (int i = 0; i < serviceInfo.getServices().getService().length; i++) {
 				ServiceType thisservice = serviceInfo.getServices().getService(
 						i);
@@ -395,7 +396,7 @@ public class SyncSource {
 				StringBuffer fileContent = null;
 				try {
 					fileContent = Utils.fileToStringBuffer(new File(
-							this.serviceInterface));
+							serviceInterface));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -404,7 +405,7 @@ public class SyncSource {
 				int endOfClass = fileContent.lastIndexOf("}");
 				String clientMethod = null;
 				if (method.isIsImported()
-						&& method.getImportInformation().getFromIntroduce() != null
+						&& (method.getImportInformation().getFromIntroduce() != null)
 						&& !method.getImportInformation().getFromIntroduce()
 								.booleanValue()) {
 					clientMethod = "\n    "
@@ -420,8 +421,7 @@ public class SyncSource {
 
 				fileContent.insert(endOfClass - 1, clientMethod);
 				try {
-					FileWriter fw = new FileWriter(new File(
-							this.serviceInterface));
+					FileWriter fw = new FileWriter(new File(serviceInterface));
 					fw.write(fileContent.toString());
 					fw.close();
 				} catch (IOException e1) {
@@ -451,7 +451,7 @@ public class SyncSource {
 				StringBuffer fileContent = null;
 				try {
 					fileContent = Utils.fileToStringBuffer(new File(
-							this.serviceInterface));
+							serviceInterface));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -460,7 +460,7 @@ public class SyncSource {
 				String clientMethod = null;
 
 				if (method.isIsImported()
-						&& method.getImportInformation().getFromIntroduce() != null
+						&& (method.getImportInformation().getFromIntroduce() != null)
 						&& !method.getImportInformation().getFromIntroduce()
 								.booleanValue()) {
 					clientMethod = "\n    "
@@ -475,7 +475,7 @@ public class SyncSource {
 				String restOfFile = fileContent.substring(startOfMethod);
 				int endOfMethod = startOfMethod + restOfFile.indexOf(";") + 1;
 
-				if (startOfMethod == -1 || endOfMethod == -1) {
+				if ((startOfMethod == -1) || (endOfMethod == -1)) {
 					System.err
 							.println("WARNING: Unable to locate method in I : "
 									+ TemplateUtils
@@ -486,11 +486,11 @@ public class SyncSource {
 
 				fileContent.delete(startOfMethod, endOfMethod);
 
-				// insert the new client method
+				// insert the new interface method
 				int endOfClass = fileContent.lastIndexOf("}");
 
 				if (method.isIsImported()
-						&& method.getImportInformation().getFromIntroduce() != null
+						&& (method.getImportInformation().getFromIntroduce() != null)
 						&& !method.getImportInformation().getFromIntroduce()
 								.booleanValue()) {
 					clientMethod = "\n    "
@@ -506,8 +506,7 @@ public class SyncSource {
 
 				fileContent.insert(endOfClass - 1, clientMethod);
 				try {
-					FileWriter fw = new FileWriter(new File(
-							this.serviceInterface));
+					FileWriter fw = new FileWriter(new File(serviceInterface));
 					fw.write(removeMultiNewLines(fileContent.toString()));
 					fw.close();
 				} catch (IOException e1) {
@@ -524,30 +523,41 @@ public class SyncSource {
 				addProviderImpl(method);
 			}
 			// redo the client method
-
 			removeClientImpl(mod.getIMethod());
 			addClientImpl(method);
 		}
 	}
 
 	public void addClientImpl(MethodType method) {
+		StringBuffer fileContent = null;
+		try {
+			fileContent = Utils.fileToStringBuffer(new File(serviceClient));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// insert the new client method
+		int endOfClass = fileContent.lastIndexOf("}") - 2;
+
+		addClientImpl(method, endOfClass);
+	}
+
+	public void addClientImpl(MethodType method, int fileLocation) {
 
 		StringBuffer fileContent = null;
 		String methodName = TemplateUtils.lowerCaseFirstCharacter(method
 				.getName());
 		try {
-			fileContent = Utils
-					.fileToStringBuffer(new File(this.serviceClient));
+			fileContent = Utils.fileToStringBuffer(new File(serviceClient));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		String lineStart = "      ";
 
 		// insert the new client method
-		int endOfClass = fileContent.lastIndexOf("}");
 		String clientMethod = null;
 		if (method.isIsImported()
-				&& method.getImportInformation().getFromIntroduce() != null
+				&& (method.getImportInformation().getFromIntroduce() != null)
 				&& !method.getImportInformation().getFromIntroduce()
 						.booleanValue()) {
 			clientMethod = "\n\t"
@@ -580,8 +590,8 @@ public class SyncSource {
 			methodString += method.getInputMessageClass() + " params = new "
 					+ method.getInputMessageClass() + "();\n";
 			// set the values fo the boxed wrapper
-			if (method.getInputs() != null
-					&& method.getInputs().getInput() != null) {
+			if ((method.getInputs() != null)
+					&& (method.getInputs().getInput() != null)) {
 				for (int j = 0; j < method.getInputs().getInput().length; j++) {
 					SchemaInformation inNamespace = CommonTools
 							.getSchemaInformation(serviceInfo.getNamespaces(),
@@ -637,7 +647,7 @@ public class SyncSource {
 						methodString += "return boxedResult.getResponse();\n";
 					}
 				} else {
-					if (returnTypeEl.getIsClientHandle() != null
+					if ((returnTypeEl.getIsClientHandle() != null)
 							&& returnTypeEl.getIsClientHandle().booleanValue()) {
 						// create the client handle and put the EPR in it
 						// then return the client handle...
@@ -697,10 +707,10 @@ public class SyncSource {
 		clientMethod += "      }\n";
 		clientMethod += "    }\n";
 
-		fileContent.insert(endOfClass - 2, clientMethod);
+		fileContent.insert(fileLocation, clientMethod);
 		try {
 			FileWriter fw = new FileWriter(new File(
-					removeMultiNewLines(this.serviceClient)));
+					removeMultiNewLines(serviceClient)));
 			fw.write(removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
@@ -712,7 +722,7 @@ public class SyncSource {
 	public void addImpl(MethodType method) {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = Utils.fileToStringBuffer(new File(this.serviceImpl));
+			fileContent = Utils.fileToStringBuffer(new File(serviceImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -721,7 +731,7 @@ public class SyncSource {
 		// insert the new client method
 		int endOfClass = fileContent.lastIndexOf("}");
 		if (method.isIsImported()
-				&& method.getImportInformation().getFromIntroduce() != null
+				&& (method.getImportInformation().getFromIntroduce() != null)
 				&& !method.getImportInformation().getFromIntroduce()
 						.booleanValue()) {
 			clientMethod = "\t\n"
@@ -742,7 +752,7 @@ public class SyncSource {
 		fileContent.insert(endOfClass - 1, clientMethod);
 		try {
 			String fileContentString = fileContent.toString();
-			FileWriter fw = new FileWriter(new File(this.serviceImpl));
+			FileWriter fw = new FileWriter(new File(serviceImpl));
 			fw.write(fileContentString);
 			fw.close();
 		} catch (IOException e1) {
@@ -754,8 +764,8 @@ public class SyncSource {
 
 		StringBuffer fileContent = null;
 		try {
-			fileContent = Utils.fileToStringBuffer(new File(
-					this.serviceProviderImpl));
+			fileContent = Utils
+					.fileToStringBuffer(new File(serviceProviderImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -773,7 +783,7 @@ public class SyncSource {
 
 		// can i create the unboxed call to the implementation
 		if (!method.isIsImported()
-				|| (method.getImportInformation().getFromIntroduce() == null || method
+				|| ((method.getImportInformation().getFromIntroduce() == null) || method
 						.getImportInformation().getFromIntroduce()
 						.booleanValue())) {
 			// slh -- in migration to globus 4 we need to check here for
@@ -802,8 +812,8 @@ public class SyncSource {
 			// unbox the params
 			String params = "";
 
-			if (method.getInputs() != null
-					&& method.getInputs().getInput() != null) {
+			if ((method.getInputs() != null)
+					&& (method.getInputs().getInput() != null)) {
 				// always unbox now
 				if (method.getInputs().getInput().length >= 1) {
 					// inputs were boxed and need to be unboxed
@@ -912,7 +922,7 @@ public class SyncSource {
 		fileContent.insert(endOfClass - 1, clientMethod);
 
 		try {
-			FileWriter fw = new FileWriter(new File(this.serviceProviderImpl));
+			FileWriter fw = new FileWriter(new File(serviceProviderImpl));
 			fw.write(removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
@@ -928,7 +938,7 @@ public class SyncSource {
 			StringBuffer fileContent = null;
 			try {
 				fileContent = Utils.fileToStringBuffer(new File(
-						this.serviceInterface));
+						serviceInterface));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -941,7 +951,7 @@ public class SyncSource {
 			String restOfFile = fileContent.substring(startOfMethod);
 			int endOfMethod = startOfMethod + restOfFile.indexOf(";\n") + 2;
 
-			if (startOfMethod == -1 || endOfMethod == -1) {
+			if ((startOfMethod == -1) || (endOfMethod == -1)) {
 				System.err.println("WARNING: Unable to locate method in I : "
 						+ method.getName());
 				return;
@@ -950,7 +960,7 @@ public class SyncSource {
 			fileContent.delete(startOfMethod, endOfMethod);
 
 			try {
-				FileWriter fw = new FileWriter(new File(this.serviceInterface));
+				FileWriter fw = new FileWriter(new File(serviceInterface));
 				fw.write(removeMultiNewLines(fileContent.toString()));
 				fw.close();
 			} catch (IOException e1) {
@@ -977,8 +987,7 @@ public class SyncSource {
 	public void removeClientImpl(JavaMethod method) throws Exception {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = Utils
-					.fileToStringBuffer(new File(this.serviceClient));
+			fileContent = Utils.fileToStringBuffer(new File(serviceClient));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -988,7 +997,7 @@ public class SyncSource {
 		int startOfMethod = startOfSignature(fileContent, clientMethod);
 		int endOfMethod = bracketMatch(fileContent, startOfMethod);
 
-		if (startOfMethod == -1 || endOfMethod == -1) {
+		if ((startOfMethod == -1) || (endOfMethod == -1)) {
 			System.err
 					.println("WARNING: Unable to locate method in clientImpl : "
 							+ method.getName());
@@ -998,7 +1007,7 @@ public class SyncSource {
 		fileContent.delete(startOfMethod, endOfMethod);
 
 		try {
-			FileWriter fw = new FileWriter(new File(this.serviceClient));
+			FileWriter fw = new FileWriter(new File(serviceClient));
 			fw.write(removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
@@ -1009,8 +1018,8 @@ public class SyncSource {
 	public void removeProviderImpl(JavaMethod method) throws Exception {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = Utils.fileToStringBuffer(new File(
-					this.serviceProviderImpl));
+			fileContent = Utils
+					.fileToStringBuffer(new File(serviceProviderImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1043,7 +1052,7 @@ public class SyncSource {
 			String matchedLine = null;
 			boolean found = false;
 
-			while (line1 != null && !found) {
+			while ((line1 != null) && !found) {
 				matchedLine = line1;
 				// if the line is empty just skip it...
 				if (!line1.equals("\n")) {
@@ -1101,8 +1110,8 @@ public class SyncSource {
 				int index = charsRead + matchedLine.indexOf(startToken);
 
 				char prevChar = fileContent.toString().charAt(--index);
-				while (prevChar != '\n'
-						&& (prevChar == ' ' || prevChar == '\t')) {
+				while ((prevChar != '\n')
+						&& ((prevChar == ' ') || (prevChar == '\t'))) {
 					prevChar = fileContent.toString().charAt(--index);
 				}
 				index++;
@@ -1116,7 +1125,7 @@ public class SyncSource {
 		int startOfMethod = startLocation;
 		int endOfMethod = bracketMatch(fileContent, startOfMethod);
 
-		if (startOfMethod == -1 || endOfMethod == -1) {
+		if ((startOfMethod == -1) || (endOfMethod == -1)) {
 			System.err
 					.println("WARNING: Unable to locate method in providerImpl: "
 							+ method.getName());
@@ -1126,7 +1135,7 @@ public class SyncSource {
 		fileContent.delete(startOfMethod, endOfMethod);
 
 		try {
-			FileWriter fw = new FileWriter(new File(this.serviceProviderImpl));
+			FileWriter fw = new FileWriter(new File(serviceProviderImpl));
 			fw.write(removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
@@ -1141,7 +1150,7 @@ public class SyncSource {
 
 		StringBuffer fileContent = null;
 		try {
-			fileContent = Utils.fileToStringBuffer(new File(this.serviceImpl));
+			fileContent = Utils.fileToStringBuffer(new File(serviceImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1149,7 +1158,7 @@ public class SyncSource {
 		// remove the old method signature
 		String clientMethod = "";
 		if (method.isIsImported()
-				&& method.getImportInformation().getFromIntroduce() != null
+				&& (method.getImportInformation().getFromIntroduce() != null)
 				&& !method.getImportInformation().getFromIntroduce()
 						.booleanValue()) {
 			clientMethod = "\n    "
@@ -1161,7 +1170,7 @@ public class SyncSource {
 		int startOfMethod = startOfSignature(fileContent, clientMethod);
 		int endOfSignature = endOfSignature(fileContent, startOfMethod);
 
-		if (startOfMethod == -1 || endOfSignature == -1) {
+		if ((startOfMethod == -1) || (endOfSignature == -1)) {
 			System.err.println("WARNING: Unable to locate method in Impl : "
 					+ oldMethod.getName());
 			return;
@@ -1171,7 +1180,7 @@ public class SyncSource {
 
 		// add in the new modified signature
 		if (method.isIsImported()
-				&& method.getImportInformation().getFromIntroduce() != null
+				&& (method.getImportInformation().getFromIntroduce() != null)
 				&& !method.getImportInformation().getFromIntroduce()
 						.booleanValue()) {
 			clientMethod = "\t\n"
@@ -1187,7 +1196,7 @@ public class SyncSource {
 		fileContent.insert(startOfMethod, clientMethod);
 
 		try {
-			FileWriter fw = new FileWriter(new File(this.serviceImpl));
+			FileWriter fw = new FileWriter(new File(serviceImpl));
 			fw.write(removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
@@ -1199,7 +1208,7 @@ public class SyncSource {
 	public void removeImpl(JavaMethod method) throws Exception {
 		StringBuffer fileContent = null;
 		try {
-			fileContent = Utils.fileToStringBuffer(new File(this.serviceImpl));
+			fileContent = Utils.fileToStringBuffer(new File(serviceImpl));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1210,7 +1219,7 @@ public class SyncSource {
 		int startOfMethod = startOfSignature(fileContent, clientMethod);
 		int endOfMethod = bracketMatch(fileContent, startOfMethod);
 
-		if (startOfMethod == -1 || endOfMethod == -1) {
+		if ((startOfMethod == -1) || (endOfMethod == -1)) {
 			System.err.println("WARNING: Unable to locate method in Impl : "
 					+ method.getName());
 			return;
@@ -1219,7 +1228,7 @@ public class SyncSource {
 		fileContent.delete(startOfMethod, endOfMethod);
 
 		try {
-			FileWriter fw = new FileWriter(new File(this.serviceImpl));
+			FileWriter fw = new FileWriter(new File(serviceImpl));
 			fw.write(removeMultiNewLines(fileContent.toString()));
 			fw.close();
 		} catch (IOException e1) {
@@ -1235,7 +1244,7 @@ public class SyncSource {
 		int index = startingIndex;
 		boolean found = false;
 		boolean canFind = false;
-		while (!found && index < sb.length() && index >= 0) {
+		while (!found && (index < sb.length()) && (index >= 0)) {
 			char ch = sb.charAt(index);
 			if (ch == '{') {
 				canFind = true;
@@ -1252,7 +1261,7 @@ public class SyncSource {
 		}
 		if (found) {
 			char ch = sb.charAt(index);
-			while (ch == '\t' || ch == ' ') {
+			while ((ch == '\t') || (ch == ' ')) {
 				ch = sb.charAt(++index);
 			}
 			return index;
@@ -1303,7 +1312,7 @@ public class SyncSource {
 			String matchedLine = null;
 			boolean found = false;
 
-			while (line1 != null && !found) {
+			while ((line1 != null) && !found) {
 				matchedLine = line1;
 				// if the line is empty just skip it...
 				if (!line1.equals("\n")) {
@@ -1359,8 +1368,8 @@ public class SyncSource {
 				int index = charsRead + matchedLine.indexOf(startToken);
 
 				char prevChar = sb.toString().charAt(--index);
-				while (prevChar != '\n'
-						&& (prevChar == ' ' || prevChar == '\t')) {
+				while ((prevChar != '\n')
+						&& ((prevChar == ' ') || (prevChar == '\t'))) {
 					prevChar = sb.toString().charAt(--index);
 				}
 				index++;

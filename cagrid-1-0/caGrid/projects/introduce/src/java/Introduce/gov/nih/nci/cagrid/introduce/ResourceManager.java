@@ -32,7 +32,6 @@ import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.XMLUtilities;
 import org.projectmobius.portal.PortalResourceManager;
 
-
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
@@ -60,20 +59,19 @@ public class ResourceManager {
 	public static File getIntroduceUserHome() {
 		String userHome = System.getProperty("user.home");
 		File userHomeF = new File(userHome);
-		File caGridCache = new File(userHomeF.getAbsolutePath() + File.separator + ".introduce");
+		File caGridCache = new File(userHomeF.getAbsolutePath()
+				+ File.separator + ".introduce");
 		if (!caGridCache.exists()) {
 			caGridCache.mkdirs();
 		}
 		return caGridCache;
 	}
 
-
 	public static String getResourcePath() {
 		File introduceCache = getIntroduceUserHome();
 		introduceCache.mkdir();
 		return introduceCache.getAbsolutePath();
 	}
-
 
 	public static String getServiceURLProperty(String key) {
 		Properties serviceProps = null;
@@ -87,7 +85,6 @@ public class ResourceManager {
 		return (String) serviceProps.get(key);
 	}
 
-
 	public static Enumeration getServiceURLPropertyKeys() {
 		Properties serviceProps = null;
 		try {
@@ -100,26 +97,28 @@ public class ResourceManager {
 		return serviceProps.keys();
 	}
 
-
 	private static Properties getServiceURLProperties() throws IOException {
 		Properties serviceProps = new Properties();
-		if (!new File(getResourcePath() + File.separator + SERVICE_URL_FILE).exists()) {
-			serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)),
-				"Introduce Global Service URLs");
+		if (!new File(getResourcePath() + File.separator + SERVICE_URL_FILE)
+				.exists()) {
+			serviceProps.store(new FileOutputStream(new File(getResourcePath()
+					+ File.separator + SERVICE_URL_FILE)),
+					"Introduce Global Service URLs");
 		} else {
-			serviceProps.load(new FileInputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)));
+			serviceProps.load(new FileInputStream(new File(getResourcePath()
+					+ File.separator + SERVICE_URL_FILE)));
 		}
 		return serviceProps;
 	}
 
-
-	public static void setServiceURLProperty(String key, String value) throws IOException {
+	public static void setServiceURLProperty(String key, String value)
+			throws IOException {
 		Properties serviceProps = getServiceURLProperties();
 		serviceProps.put(key, value);
-		serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)),
-			"Introduce Global Service URLs");
+		serviceProps.store(new FileOutputStream(new File(getResourcePath()
+				+ File.separator + SERVICE_URL_FILE)),
+				"Introduce Global Service URLs");
 	}
-
 
 	public static String getConfigurationProperty(String key) {
 		Properties serviceProps = null;
@@ -133,7 +132,6 @@ public class ResourceManager {
 		return (String) serviceProps.get(key);
 	}
 
-
 	public static Enumeration getConfigurationPropertyKeys() {
 		Properties serviceProps = null;
 		try {
@@ -146,51 +144,56 @@ public class ResourceManager {
 		return serviceProps.keys();
 	}
 
-
 	private static Properties getConfigurationProperties() throws IOException {
 		Properties serviceProps = new Properties();
-		if (!new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE).exists()) {
-			serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator
-				+ CONFIG_PROPERTIES_FILE)), "Introduce Global Configuration Properties");
+		if (!new File(getResourcePath() + File.separator
+				+ CONFIG_PROPERTIES_FILE).exists()) {
+			serviceProps.store(new FileOutputStream(new File(getResourcePath()
+					+ File.separator + CONFIG_PROPERTIES_FILE)),
+					"Introduce Global Configuration Properties");
 		} else {
-			serviceProps.load(new FileInputStream(new File(
-				getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE)));
+			serviceProps.load(new FileInputStream(new File(getResourcePath()
+					+ File.separator + CONFIG_PROPERTIES_FILE)));
 		}
 		return serviceProps;
 	}
 
-
-	public static void setConfigurationProperty(String key, String value) throws IOException {
+	public static void setConfigurationProperty(String key, String value)
+			throws IOException {
 		Properties serviceProps = getConfigurationProperties();
 		serviceProps.put(key, value);
-		serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE)),
-			"Introduce Global Configuration Properties");
+		serviceProps.store(new FileOutputStream(new File(getResourcePath()
+				+ File.separator + CONFIG_PROPERTIES_FILE)),
+				"Introduce Global Configuration Properties");
 	}
 
-
 	public static String getPortalConfigFileLocation() {
-		if (!new File(getResourcePath() + File.separator + PORTAL_CONFIG_FILE).exists()) {
+		if (!new File(getResourcePath() + File.separator + PORTAL_CONFIG_FILE)
+				.exists()) {
 			// need to copy over the example configuration file to the users
 			// space
 			try {
-				Utils.copyFile(new File("conf" + File.separator + "introduce" + File.separator
-					+ "introduce-portal-conf.xml.example"), new File(getResourcePath() + File.separator
-					+ PORTAL_CONFIG_FILE));
+				Utils.copyFile(
+						new File("conf" + File.separator + "introduce"
+								+ File.separator
+								+ "introduce-portal-conf.xml.example"),
+						new File(getResourcePath() + File.separator
+								+ PORTAL_CONFIG_FILE));
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.exit(1);
 			}
 		}
-		return new File(getResourcePath() + File.separator + PORTAL_CONFIG_FILE).getAbsolutePath();
+		return new File(getResourcePath() + File.separator + PORTAL_CONFIG_FILE)
+				.getAbsolutePath();
 	}
 
-
-	public static void setConfigFile(Document doc) throws IOException, MobiusException {
+	public static void setConfigFile(Document doc) throws IOException,
+			MobiusException {
 		FileWriter fw = new FileWriter(getPortalConfigFileLocation());
 		fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
 		fw.close();
 	}
-
 
 	public static String getStateProperty(String key) throws IOException {
 		File lastDir = new File(getResourcePath() + File.separator + STATE_FILE);
@@ -202,10 +205,11 @@ public class ResourceManager {
 		return properties.getProperty(key);
 	}
 
-
-	public static void setStateProperty(String key, String value) throws IOException {
+	public static void setStateProperty(String key, String value)
+			throws IOException {
 		if (key != null) {
-			File lastDir = new File(getResourcePath() + File.separator + STATE_FILE);
+			File lastDir = new File(getResourcePath() + File.separator
+					+ STATE_FILE);
 			if (!lastDir.exists()) {
 				lastDir.createNewFile();
 			}
@@ -216,29 +220,32 @@ public class ResourceManager {
 		}
 	}
 
-
-	private static synchronized void getDirectoryListing(List names, File dir, String parentPath) {
+	private static synchronized void getDirectoryListing(List names, File dir,
+			String parentPath) {
 		String[] children = dir.list();
 		if (children != null) {
 			for (int i = 0; i < children.length; i++) {
-				File child = new File(dir.getAbsolutePath() + File.separator + children[i]);
+				File child = new File(dir.getAbsolutePath() + File.separator
+						+ children[i]);
 				if (child.isDirectory()) {
 					if (parentPath.equals("")) {
 						getDirectoryListing(names, child, child.getName());
 					} else {
-						getDirectoryListing(names, child, parentPath + File.separator + child.getName());
+						getDirectoryListing(names, child, parentPath
+								+ File.separator + child.getName());
 					}
 				} else {
 					if (parentPath.equals("")) {
 						names.add(child.getName());
 					} else {
-						names.add(parentPath + File.separator + child.getName());
+						names
+								.add(parentPath + File.separator
+										+ child.getName());
 					}
 				}
 			}
 		}
 	}
-
 
 	public static synchronized void purgeArchives(String serviceName) {
 		String introduceCache = getResourcePath();
@@ -257,16 +264,17 @@ public class ResourceManager {
 		Collections.reverse(cacheFilesList);
 
 		for (int i = 0; i < cacheFilesList.size(); i++) {
-			System.out.println("Removing file from cache: " + i + "  " + introduceCache + File.separator
-				+ cacheFilesList.get(i));
-			File cacheFile = new File(introduceCache + File.separator + cacheFilesList.get(i));
+			System.out.println("Removing file from cache: " + i + "  "
+					+ introduceCache + File.separator + cacheFilesList.get(i));
+			File cacheFile = new File(introduceCache + File.separator
+					+ cacheFilesList.get(i));
 			cacheFile.delete();
 		}
 	}
 
-
-	public static synchronized void createArchive(String id, String serviceName, String baseDir) 
-		throws FileNotFoundException, IOException {
+	public static synchronized void createArchive(String id,
+			String serviceName, String baseDir) throws FileNotFoundException,
+			IOException {
 		File dir = new File(baseDir);
 
 		String introduceCache = getResourcePath();
@@ -278,12 +286,15 @@ public class ResourceManager {
 		byte[] buf = new byte[1024];
 
 		// Create the ZIP file
-		String outFilename = introduceCache + File.separator + serviceName + "_" + id + CACHE_POSTFIX;
-		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFilename));
+		String outFilename = introduceCache + File.separator + serviceName
+				+ "_" + id + CACHE_POSTFIX;
+		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(
+				outFilename));
 
 		// Compress the files
 		for (int i = 0; i < filenames.size(); i++) {
-			FileInputStream in = new FileInputStream(dir.getAbsolutePath() + File.separator + (String) filenames.get(i));
+			FileInputStream in = new FileInputStream(dir.getAbsolutePath()
+					+ File.separator + (String) filenames.get(i));
 
 			// Add ZIP entry to output stream.
 			out.putNextEntry(new ZipEntry((String) filenames.get(i)));
@@ -307,7 +318,6 @@ public class ResourceManager {
 		cleanup(serviceName);
 	}
 
-
 	private static void cleanup(String serviceName) {
 		String introduceCache = getResourcePath();
 
@@ -326,17 +336,20 @@ public class ResourceManager {
 
 		if (cacheFilesList.size() > MAX_ARCHIVE) {
 			for (int i = MAX_ARCHIVE; i < cacheFilesList.size(); i++) {
-				System.out.println("Removing file from cache: " + i + "  " + introduceCache + File.separator
-					+ cacheFilesList.get(i));
-				File cacheFile = new File(introduceCache + File.separator + cacheFilesList.get(i));
+				System.out.println("Removing file from cache: " + i + "  "
+						+ introduceCache + File.separator
+						+ cacheFilesList.get(i));
+				File cacheFile = new File(introduceCache + File.separator
+						+ cacheFilesList.get(i));
 				cacheFile.delete();
 			}
 		}
 	}
 
-
-	private static void unzip(String baseDir, ZipInputStream zin, String s) throws IOException {
-		File file = new File(new File(baseDir).getAbsolutePath() + File.separator + s);
+	private static void unzip(String baseDir, ZipInputStream zin, String s)
+			throws IOException {
+		File file = new File(new File(baseDir).getAbsolutePath()
+				+ File.separator + s);
 		file.getParentFile().mkdirs();
 		FileOutputStream out = new FileOutputStream(file);
 		byte[] b = new byte[512];
@@ -347,9 +360,33 @@ public class ResourceManager {
 		out.close();
 	}
 
+	public static synchronized void restoreSpecific(String currentId,
+			String serviceName, String baseDir) throws FileNotFoundException,
+			IOException {
+		File introduceCache = new File(getResourcePath());
+		introduceCache.mkdir();
+		File cachedFile = new File(introduceCache.getAbsolutePath()
+				+ File.separator + serviceName + "_" + currentId
+				+ CACHE_POSTFIX);
 
-	public static synchronized void restoreLatest(String currentId, String serviceName, String baseDir)
-		throws FileNotFoundException, IOException {
+		InputStream in = new BufferedInputStream(
+				new FileInputStream(cachedFile));
+		ZipInputStream zin = new ZipInputStream(in);
+		ZipEntry e;
+		while ((e = zin.getNextEntry()) != null) {
+			if (e.isDirectory()) {
+				new File(new File(baseDir).getAbsolutePath() + File.separator
+						+ e.getName()).mkdirs();
+			} else {
+				unzip(baseDir, zin, e.getName());
+			}
+		}
+		zin.close();
+	}
+
+	public static synchronized void restoreLatest(String currentId,
+			String serviceName, String baseDir) throws FileNotFoundException,
+			IOException {
 		File introduceCache = new File(getResourcePath());
 		introduceCache.mkdir();
 
@@ -364,24 +401,28 @@ public class ResourceManager {
 		long thisTime = Long.parseLong(currentId);
 		long lastTime = 0;
 		for (int i = 0; i < cacheFiles.length; i++) {
-			StringTokenizer strtok = new StringTokenizer(cacheFiles[i], "_", false);
+			StringTokenizer strtok = new StringTokenizer(cacheFiles[i], "_",
+					false);
 			strtok.nextToken();
 			String timeS = strtok.nextToken();
 			long time = Long.parseLong(timeS);
-			if (time > lastTime && time < thisTime) {
+			if ((time > lastTime) && (time < thisTime)) {
 				lastTime = time;
 			}
 		}
 
-		File cachedFile = new File(introduceCache.getAbsolutePath() + File.separator + serviceName + "_"
-			+ String.valueOf(lastTime) + CACHE_POSTFIX);
+		File cachedFile = new File(introduceCache.getAbsolutePath()
+				+ File.separator + serviceName + "_" + String.valueOf(lastTime)
+				+ CACHE_POSTFIX);
 
-		InputStream in = new BufferedInputStream(new FileInputStream(cachedFile));
+		InputStream in = new BufferedInputStream(
+				new FileInputStream(cachedFile));
 		ZipInputStream zin = new ZipInputStream(in);
 		ZipEntry e;
 		while ((e = zin.getNextEntry()) != null) {
 			if (e.isDirectory()) {
-				new File(new File(baseDir).getAbsolutePath() + File.separator + e.getName()).mkdirs();
+				new File(new File(baseDir).getAbsolutePath() + File.separator
+						+ e.getName()).mkdirs();
 			} else {
 				unzip(baseDir, zin, e.getName());
 			}
@@ -389,18 +430,20 @@ public class ResourceManager {
 		zin.close();
 	}
 
-
 	public static String promptDir(String defaultLocation) throws IOException {
-		return promptDir(PortalResourceManager.getInstance().getGridPortal(), defaultLocation);
+		return promptDir(PortalResourceManager.getInstance().getGridPortal(),
+				defaultLocation);
 	}
 
-
-	public static String promptDir(Component owner, String defaultLocation) throws IOException {
+	public static String promptDir(Component owner, String defaultLocation)
+			throws IOException {
 		JFileChooser chooser = null;
-		if (defaultLocation != null && defaultLocation.length() > 0 && new File(defaultLocation).exists()) {
+		if ((defaultLocation != null) && (defaultLocation.length() > 0)
+				&& new File(defaultLocation).exists()) {
 			chooser = new JFileChooser(new File(defaultLocation));
 		} else if (getStateProperty(LAST_DIRECTORY) != null) {
-			chooser = new JFileChooser(new File(getStateProperty(LAST_DIRECTORY)));
+			chooser = new JFileChooser(new File(
+					getStateProperty(LAST_DIRECTORY)));
 		} else {
 			chooser = new JFileChooser();
 		}
@@ -413,44 +456,49 @@ public class ResourceManager {
 
 		int returnVal = chooser.showOpenDialog(owner);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			setStateProperty(ResourceManager.LAST_DIRECTORY, chooser.getSelectedFile().getAbsolutePath());
+			setStateProperty(ResourceManager.LAST_DIRECTORY, chooser
+					.getSelectedFile().getAbsolutePath());
 			return chooser.getSelectedFile().getAbsolutePath();
 		}
 		return null;
 	}
-	
-	
-	public static String promptFile(String defaultLocation, FileFilter filter) throws IOException {
-		return promptFile(PortalResourceManager.getInstance().getGridPortal(), defaultLocation, filter);
+
+	public static String promptFile(String defaultLocation, FileFilter filter)
+			throws IOException {
+		return promptFile(PortalResourceManager.getInstance().getGridPortal(),
+				defaultLocation, filter);
 	}
 
-
-	public static String promptFile(Component owner, String defaultLocation, FileFilter filter) throws IOException {
-		String[] files = internalPromptFiles(owner, defaultLocation, filter, false, "Select File");
+	public static String promptFile(Component owner, String defaultLocation,
+			FileFilter filter) throws IOException {
+		String[] files = internalPromptFiles(owner, defaultLocation, filter,
+				false, "Select File");
 		if (files != null) {
 			return files[0];
 		}
 		return null;
 	}
-	
-	
-	public static String[] promptMultiFiles(String defaultLocation, FileFilter filter) throws IOException {
-		return promptMultiFiles(PortalResourceManager.getInstance().getGridPortal(), defaultLocation, filter);
+
+	public static String[] promptMultiFiles(String defaultLocation,
+			FileFilter filter) throws IOException {
+		return promptMultiFiles(PortalResourceManager.getInstance()
+				.getGridPortal(), defaultLocation, filter);
 	}
 
-
-	public static String[] promptMultiFiles(Component owner, 
-		String defaultLocation, FileFilter filter) throws IOException {
-		String[] files = internalPromptFiles(owner, defaultLocation, filter, true, "Select File(s)");
+	public static String[] promptMultiFiles(Component owner,
+			String defaultLocation, FileFilter filter) throws IOException {
+		String[] files = internalPromptFiles(owner, defaultLocation, filter,
+				true, "Select File(s)");
 		return files;
 	}
 
-
-	private static String[] internalPromptFiles(Component owner, String defaultLocation, 
-		FileFilter filter, boolean multiSelect,	String title) throws IOException {
+	private static String[] internalPromptFiles(Component owner,
+			String defaultLocation, FileFilter filter, boolean multiSelect,
+			String title) throws IOException {
 		String[] fileNames = null;
 		JFileChooser chooser = null;
-		if (defaultLocation != null && defaultLocation.length() != 0 && new File(defaultLocation).exists()) {
+		if ((defaultLocation != null) && (defaultLocation.length() != 0)
+				&& new File(defaultLocation).exists()) {
 			chooser = new JFileChooser(new File(defaultLocation));
 		} else if (getStateProperty(LAST_FILE) != null) {
 			chooser = new JFileChooser(new File(getStateProperty(LAST_FILE)));
@@ -471,9 +519,10 @@ public class ResourceManager {
 			if (multiSelect) {
 				files = chooser.getSelectedFiles();
 			} else {
-				files = new File[]{chooser.getSelectedFile()};
+				files = new File[] { chooser.getSelectedFile() };
 			}
-			setStateProperty(ResourceManager.LAST_FILE, files[0].getAbsolutePath());
+			setStateProperty(ResourceManager.LAST_FILE, files[0]
+					.getAbsolutePath());
 			fileNames = new String[files.length];
 			for (int i = 0; i < fileNames.length; i++) {
 				fileNames[i] = files[i].getAbsolutePath();
@@ -481,11 +530,11 @@ public class ResourceManager {
 		}
 		return fileNames;
 	}
-	
-	
+
 	public static void main(String[] args) {
 		try {
-			ResourceManager.createArchive(String.valueOf(System.currentTimeMillis()), "HelloWorld", "c:\\HelloWorld");
+			ResourceManager.createArchive(String.valueOf(System
+					.currentTimeMillis()), "HelloWorld", "c:\\HelloWorld");
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

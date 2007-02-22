@@ -344,16 +344,16 @@ public class ModificationViewer extends GridPortalComponent {
 			UpgradeManager upgrader = new UpgradeManager(introService,
 					methodsDirectory.getAbsolutePath());
 
-			if (upgrader.canIntroduceBeUpgraded()) {
+			if (upgrader.canIntroduceBeUpgraded()
+					|| upgrader.canExtensionsBeUpgraded()) {
 				int answer = JOptionPane
 						.showConfirmDialog(
 								this,
-								"This service is from an older of version of Introduce.\nWould you like to try to upgrade this service to work with the current version of Introduce?  Otherwise Introduce will attempt to work with this service.");
+								"This service is from an older of version of Introduce or uses an older version of an extension.\nWould you like to try to upgrade this service to work with the current version of Introduce and installed extensions?  Otherwise Introduce will attempt to work with this service.");
 				if (answer == JOptionPane.OK_OPTION) {
 
 					try {
-						upgrader.upgradeIntroduce();
-						// reload the service description after the upgrade
+						upgrader.upgrade();
 						introService = (ServiceDescription) Utils
 								.deserializeDocument(methodsDirectory
 										.getAbsolutePath()
@@ -362,33 +362,9 @@ public class ModificationViewer extends GridPortalComponent {
 					} catch (Exception e) {
 						e.printStackTrace();
 						throw new Exception(
-								"Service upgrader failed.  This service does not appear to be upgradable possibly due to modification of Introduce managed files.");
+								"Service upgrader failed.  This service or its extensions do not appear to be upgradable possibly due to modification of Introduce managed files.");
 					}
 				}
-			}
-
-			if (upgrader.canExtensionsBeUpgraded()) {
-				int answer = JOptionPane
-						.showConfirmDialog(
-								this,
-								"This service contains uses older versions of Introduce extensions.\nWould you like to try to upgrade this service to work with the current version of Introduce extensions that are currently installed?");
-				if (answer == JOptionPane.OK_OPTION) {
-
-					try {
-						upgrader.upgradeExtensions();
-						introService = (ServiceDescription) Utils
-								.deserializeDocument(methodsDirectory
-										.getAbsolutePath()
-										+ File.separator + "introduce.xml",
-										ServiceDescription.class);
-					} catch (Exception e) {
-						e.printStackTrace();
-						throw new Exception(
-								"Extensions Upgrader Failed.  This service does not appear to be upgradable.");
-					}
-
-				}
-
 			}
 
 			loadServiceProps();

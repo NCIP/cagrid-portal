@@ -25,20 +25,23 @@ public class ExtensionsUpgradeManager {
 
 	public boolean needsUpgrading() {
 		ExtensionType[] extensions = service.getExtensions().getExtension();
-		for (int extensionI = 0; extensionI < extensions.length; extensionI++) {
-			ExtensionType extension = extensions[extensionI];
-			String serviceExtensionVersion = extension.getVersion();
-			ExtensionDescription extDescription = ExtensionsLoader
-					.getInstance().getExtension(extension.getName());
-			if ((extDescription != null)
-					&& (extDescription.getVersion() != null)) {
-				if ((serviceExtensionVersion == null)
-						|| !extDescription.getVersion().equals(
-								serviceExtensionVersion)) {
-					return true;
-				}
+		if (extensions != null) {
+			for (int extensionI = 0; extensionI < extensions.length; extensionI++) {
+				ExtensionType extension = extensions[extensionI];
+				String serviceExtensionVersion = extension.getVersion();
+				ExtensionDescription extDescription = ExtensionsLoader
+						.getInstance().getExtension(extension.getName());
+				if ((extDescription != null)
+						&& (extDescription.getVersion() != null)) {
+					if ((serviceExtensionVersion == null)
+							|| !extDescription.getVersion().equals(
+									serviceExtensionVersion)) {
+						return true;
+					}
 
+				}
 			}
+			return false;
 		}
 		return false;
 	}
