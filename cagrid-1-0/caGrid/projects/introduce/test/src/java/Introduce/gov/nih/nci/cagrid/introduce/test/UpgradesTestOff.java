@@ -20,12 +20,12 @@ import junit.textui.TestRunner;
 
 import com.atomicobject.haste.framework.Story;
 
-public class UpgradesTest extends Story {
+public class UpgradesTestOff extends Story {
 	private TestCaseInfo tci1;
 
 	private GlobusHelper helper;
 
-	public UpgradesTest() {
+	public UpgradesTestOff() {
 		this.setName("Introduce Upgrades System Test");
 	}
 
@@ -60,6 +60,14 @@ public class UpgradesTest extends Story {
 	protected boolean storySetUp() throws Throwable {
 
 		super.storySetUp();
+
+		StopGlobusStep step2 = new StopGlobusStep(helper);
+		try {
+			step2.runStep();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
 		RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
 		try {
 			step1.runStep();
@@ -103,7 +111,7 @@ public class UpgradesTest extends Story {
 	 */
 	public static void main(String args[]) {
 		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(UpgradesTest.class));
+		TestResult result = runner.doRun(new TestSuite(UpgradesTestOff.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
 

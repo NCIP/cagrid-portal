@@ -37,7 +37,6 @@ import junit.textui.TestRunner;
 
 import com.atomicobject.haste.framework.Story;
 
-
 public class SyncToolsTest extends Story {
 	private TestCaseInfo tci1;
 
@@ -45,17 +44,16 @@ public class SyncToolsTest extends Story {
 
 	private GlobusHelper helper;
 
-
 	public SyncToolsTest() {
 		this.setName("Introduce Codegen System Test");
 	}
 
-
 	protected Vector steps() {
-		this.tci1 = new TestCaseInfo1();
-		this.tci2 = new TestCaseInfo2();
-		this.helper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP),
-			IntroduceTestConstants.TEST_PORT);
+		tci1 = new TestCaseInfo1();
+		tci2 = new TestCaseInfo2();
+		helper = new GlobusHelper(false, new File(
+				IntroduceTestConstants.TEST_TEMP),
+				IntroduceTestConstants.TEST_PORT);
 		Vector steps = new Vector();
 
 		try {
@@ -76,14 +74,19 @@ public class SyncToolsTest extends Story {
 			steps.add(new RemoveMethodStep(tci1, "newMethod", false));
 			steps.add(new RemoveMethodStep(tci2, "newMethod2", false));
 			steps.add(new AddSimpleMethodStep(tci2, "newMethod1", true));
-			steps.add(new AddImportedMethodStep(tci1, tci2, "newMethod1", true, false));
-			steps.add(new AddSimpleMethodWithFaultStep(tci1, "newMethodWithFault", false));
-			steps.add(new AddSimpleMethodWithReturnStep(tci1, "newMethodWithReturn", false));
-			steps.add(new AddSimpleMethodWithArraysStep(tci1, "newMethodWithArrays", true));
+			steps.add(new AddImportedMethodStep(tci1, tci2, "newMethod1", true,
+					false));
+			steps.add(new AddSimpleMethodWithFaultStep(tci1,
+					"newMethodWithFault", false));
+			steps.add(new AddSimpleMethodWithReturnStep(tci1,
+					"newMethodWithReturn", false));
+			steps.add(new AddSimpleMethodWithArraysStep(tci1,
+					"newMethodWithArrays", true));
 			steps.add(new RollBackStep(tci1));
-			steps.add(new AddComplexMethodWithFaultStep(tci1, "newComplexMethodWithFault", false));
-			steps
-				.add(new AddComplexMethodWithFaulsAndArraysStep(tci1, "newComplexMethodWithFaultStepsAndArrays", true));
+			steps.add(new AddComplexMethodWithFaultStep(tci1,
+					"newComplexMethodWithFault", false));
+			steps.add(new AddComplexMethodWithFaulsAndArraysStep(tci1,
+					"newComplexMethodWithFaultStepsAndArrays", true));
 			steps.add(new AddMetadatatWithLoadFromFileStep(tci1, true));
 			steps.add(new RemoveAllMetadataStep(tci1, true));
 			steps.add(new RemoveAllServicePropertiesStep(tci1, true));
@@ -94,16 +97,21 @@ public class SyncToolsTest extends Story {
 		return steps;
 	}
 
-
 	public String getDescription() {
 		return "Testing the Introduce code generation tools";
 	}
-	
-	
 
 	protected boolean storySetUp() throws Throwable {
 		// TODO Auto-generated method stub
 		super.storySetUp();
+
+		StopGlobusStep step2 = new StopGlobusStep(helper);
+		try {
+			step2.runStep();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
 		RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
 		try {
 			step1.runStep();
@@ -113,9 +121,6 @@ public class SyncToolsTest extends Story {
 		}
 		return true;
 	}
-
-
-
 
 	protected void storyTearDown() throws Throwable {
 		super.storyTearDown();
@@ -142,13 +147,11 @@ public class SyncToolsTest extends Story {
 		}
 	}
 
-
 	// used to make sure that if we are going to use a junit testsuite to test
 	// this
 	// that the test suite will not error out looking for a single test......
 	public void testDummy() throws Throwable {
 	}
-
 
 	/**
 	 * Convenience method for running all the Steps in this Story.
