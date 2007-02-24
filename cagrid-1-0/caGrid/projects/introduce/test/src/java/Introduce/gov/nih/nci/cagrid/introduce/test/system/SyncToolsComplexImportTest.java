@@ -1,9 +1,13 @@
-package gov.nih.nci.cagrid.introduce.test;
+package gov.nih.nci.cagrid.introduce.test.system;
 
+import gov.nih.nci.cagrid.introduce.steps.AddComplexMethodWithFaultStep;
 import gov.nih.nci.cagrid.introduce.steps.AddImportedMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.steps.CreateSkeletonStep;
 import gov.nih.nci.cagrid.introduce.steps.RemoveSkeletonStep;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo3;
 
 import java.util.Vector;
 
@@ -14,14 +18,14 @@ import junit.textui.TestRunner;
 import com.atomicobject.haste.framework.Story;
 
 
-public class SyncToolsSimpleImportTest extends Story {
+public class SyncToolsComplexImportTest extends Story {
 	private TestCaseInfo tci1;
 
 	private TestCaseInfo tci3;
 
 
-	public SyncToolsSimpleImportTest() {
-		this.setName("IntroduceCodegenSimpleImportSystemTest");
+	public SyncToolsComplexImportTest() {
+		this.setName("IntroduceCodegenComplexImportSystemTest");
 	}
 
 
@@ -34,7 +38,8 @@ public class SyncToolsSimpleImportTest extends Story {
 			steps.add(new CreateSkeletonStep(tci1, true));
 			steps.add(new CreateSkeletonStep(tci3, true));
 
-			steps.add(new AddSimpleMethodStep(tci3, "newMethod", true));
+			steps.add(new AddSimpleMethodStep(tci3, "newSimpleMethod", true));
+			steps.add(new AddComplexMethodWithFaultStep(tci3, "newMethod", true));
 			steps.add(new AddImportedMethodStep(tci1, tci3, "newMethod", true, true));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,7 +52,7 @@ public class SyncToolsSimpleImportTest extends Story {
 	public String getDescription() {
 		return "Testing the Introduce code generation tools";
 	}
-	
+
 
 	protected boolean storySetUp() throws Throwable {
 		// TODO Auto-generated method stub
@@ -70,6 +75,7 @@ public class SyncToolsSimpleImportTest extends Story {
 	}
 
 
+	
 	protected void storyTearDown() throws Throwable {
 		RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci1);
 		try {
@@ -100,7 +106,7 @@ public class SyncToolsSimpleImportTest extends Story {
 	 */
 	public static void main(String args[]) {
 		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(SyncToolsSimpleImportTest.class));
+		TestResult result = runner.doRun(new TestSuite(SyncToolsComplexImportTest.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
 

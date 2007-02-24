@@ -70,6 +70,11 @@
 		<mkdir dir="${service.deployment.dir}" />
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
+		
+		
+		<antcall target="preDeployTomcat" inheritall="true" />
+			
+			
 		<copy overwrite="true" todir="tmp" file="server-config.wsdd" />
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/server-config.wsdd" value="${service.deployment.dir.name}" token="SERVICE-INSTANCE-PATH" />
@@ -140,6 +145,9 @@
 		
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
+		
+		<antcall target="preDeployGlobus" inheritall="true" />
+				
 		<copy overwrite="true" todir="tmp" file="server-config.wsdd" />
 		<!-- replace the config paths in the server deploy file -->
 		<replace file="tmp/server-config.wsdd" value="${introduce.skeleton.service.name}" token="SERVICE-INSTANCE-PATH" />
@@ -176,6 +184,7 @@
 	
 	<!-- deploy a gar to globus -->
 	<target name="deployGlobus" depends="checkGlobus, createDeploymentGar" description="Deploys a gar to GLOBUS_LOCATION (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+		
 		<echo message="Deploying server to Globus Container" />
 		
 		<java classname="org.globus.bootstrap.AntBootstrap" fork="yes" failonerror="true">

@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.test;
+package gov.nih.nci.cagrid.introduce.test.system;
 
 import gov.nih.nci.cagrid.introduce.steps.AddComplexMethodWithFaulsAndArraysStep;
 import gov.nih.nci.cagrid.introduce.steps.AddComplexMethodWithFaultStep;
@@ -26,6 +26,10 @@ import gov.nih.nci.cagrid.introduce.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.introduce.steps.RollBackStep;
 import gov.nih.nci.cagrid.introduce.steps.StartGlobusStep;
 import gov.nih.nci.cagrid.introduce.steps.StopGlobusStep;
+import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo2;
 import gov.nih.nci.cagrid.introduce.util.GlobusHelper;
 
 import java.io.File;

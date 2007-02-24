@@ -42,8 +42,33 @@
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
 			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}/Introduce">
-					<include name="**/*Test.java" />
-					<include name="**/*TestCase.java" />
+					<include name="**/unit/*Test.java" />
+					<include name="**/unit/*TestCase.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+        <fail message="Tests failed! Check test reports." if="test.failed" />   
+		<!--<antcall target="testGUI" />-->
+	</target>
+	
+	<!-- call the test target for each project and aggregates the log resutls  -->
+	<target name="systemTest" depends="checkGlobus, instrument">
+		<echo message="Test results dir: ${junit.results.dir}" />
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+			<sysproperty key="basedir" value="${basedir}" />
+			<sysproperty key="build.dir" value="${classes.dir}" />
+			<jvmarg value="-Dbuild.dir=${classes.dir}" />
+			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
+			<classpath location="${instrumented.classes.dir}" />
+			<classpath refid="Introduce.test.classpath" />
+			<formatter type="xml" />
+			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
+			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}/Introduce">
+					<include name="**/system/*Test.java" />
+					<include name="**/system/*TestCase.java" />
 				</fileset>
 			</batchtest>
 		</junit>

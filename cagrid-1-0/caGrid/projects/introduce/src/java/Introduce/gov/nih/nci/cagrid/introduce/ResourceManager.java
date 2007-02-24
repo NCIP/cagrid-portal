@@ -253,7 +253,7 @@ public class ResourceManager {
 		final String finalServiceName = serviceName;
 		FilenameFilter f = new FilenameFilter() {
 			public boolean accept(File dir, String name) {
-				return name.indexOf(finalServiceName) != -1;
+				return name.indexOf(finalServiceName + "_") != -1;
 			}
 		};
 
@@ -324,7 +324,7 @@ public class ResourceManager {
 		final String finalServiceName = serviceName;
 		FilenameFilter f = new FilenameFilter() {
 			public boolean accept(File dir, String name) {
-				return name.indexOf(finalServiceName) != -1;
+				return name.indexOf(finalServiceName + "_") != -1;
 			}
 		};
 
@@ -393,7 +393,7 @@ public class ResourceManager {
 		final String finalServiceName = serviceName;
 		FilenameFilter f = new FilenameFilter() {
 			public boolean accept(File dir, String name) {
-				return name.indexOf(finalServiceName) != -1;
+				return name.indexOf(finalServiceName + "_") != -1;
 			}
 		};
 

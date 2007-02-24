@@ -27,6 +27,9 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 		Utils.copyFile(new File("." + File.separator + "skeleton"
 				+ File.separator + "build.xml"), new File(getServicePath()
 				+ File.separator + "build.xml"));
+		Utils.copyFile(new File("." + File.separator + "skeleton"
+				+ File.separator + "dev-build.xml"), new File(getServicePath()
+				+ File.separator + "dev-build.xml"));
 
 		// need to replace the build-deploy.xml
 		Utils.copyFile(new File(getServicePath() + File.separator
@@ -35,6 +38,9 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 		Utils.copyFile(new File("." + File.separator + "skeleton"
 				+ File.separator + "build-deploy.xml"), new File(
 				getServicePath() + File.separator + "build-deploy.xml"));
+		Utils.copyFile(new File("." + File.separator + "skeleton"
+				+ File.separator + "dev-build-deploy.xml"), new File(
+				getServicePath() + File.separator + "dev-build-deploy.xml"));
 
 		// need to replace the registration.xml
 		Properties serviceProperties = new Properties();

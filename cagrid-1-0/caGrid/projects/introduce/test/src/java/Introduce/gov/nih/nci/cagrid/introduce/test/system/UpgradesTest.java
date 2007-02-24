@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.test;
+package gov.nih.nci.cagrid.introduce.test.system;
 
 import gov.nih.nci.cagrid.introduce.steps.CleanupGlobusStep;
 import gov.nih.nci.cagrid.introduce.steps.CreateGlobusStep;
@@ -9,6 +9,9 @@ import gov.nih.nci.cagrid.introduce.steps.StartGlobusStep;
 import gov.nih.nci.cagrid.introduce.steps.StopGlobusStep;
 import gov.nih.nci.cagrid.introduce.steps.UnzipOldServiceStep;
 import gov.nih.nci.cagrid.introduce.steps.UpgradesStep;
+import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
 import gov.nih.nci.cagrid.introduce.util.GlobusHelper;
 
 import java.io.File;
@@ -20,12 +23,12 @@ import junit.textui.TestRunner;
 
 import com.atomicobject.haste.framework.Story;
 
-public class UpgradesTestOff extends Story {
+public class UpgradesTest extends Story {
 	private TestCaseInfo tci1;
 
 	private GlobusHelper helper;
 
-	public UpgradesTestOff() {
+	public UpgradesTest() {
 		this.setName("Introduce Upgrades System Test");
 	}
 
@@ -111,7 +114,7 @@ public class UpgradesTestOff extends Story {
 	 */
 	public static void main(String args[]) {
 		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(UpgradesTestOff.class));
+		TestResult result = runner.doRun(new TestSuite(UpgradesTest.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
 

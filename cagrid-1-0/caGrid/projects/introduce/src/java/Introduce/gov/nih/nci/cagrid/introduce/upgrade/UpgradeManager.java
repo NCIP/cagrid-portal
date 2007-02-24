@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.upgrade;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 
 import java.io.File;
@@ -10,6 +11,7 @@ public class UpgradeManager {
 	private IntroduceUpgradeManager iUpgrader;
 	private ExtensionsUpgradeManager eUpgrader;
 	private String pathToService;
+	private String id;
 
 	public UpgradeManager(ServiceDescription service, String pathToService) {
 		this.service = service;
@@ -36,9 +38,22 @@ public class UpgradeManager {
 
 	}
 
+	private void backup() throws Exception {
+		id = String.valueOf(System.currentTimeMillis());
+		ResourceManager.createArchive(id, service.getServices().getService(0)
+				.getName()
+				+ "UPGRADE", pathToService);
+	}
+
+	private void recover() throws Exception {
+		ResourceManager.restoreSpecific(id, service.getServices().getService(0)
+				.getName()
+				+ "UPGRADE", pathToService);
+	}
+
 	public void upgrade() throws Exception {
 		try {
-			// backup();
+			backup();
 
 			if (canIntroduceBeUpgraded()) {
 				upgradeIntroduce();
@@ -50,7 +65,7 @@ public class UpgradeManager {
 				upgradeExtensions();
 			}
 		} catch (Exception e) {
-			// recover();
+			recover();
 			throw e;
 		}
 	}

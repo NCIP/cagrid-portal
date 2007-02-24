@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.test;
+package gov.nih.nci.cagrid.introduce.test.unit;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;

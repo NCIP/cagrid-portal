@@ -3,3 +3,5 @@
 -- Added two new properties in the deploy.properties enabling the metadata pub/sub timing to be controlled.
 	--index.service.registration.refresh_seconds=600
 	--index.service.index.refresh_milliseconds=30000
+-- Added dev build.xml and build-deploy.xml which the user can freely edit without expecting changes by updates
+
