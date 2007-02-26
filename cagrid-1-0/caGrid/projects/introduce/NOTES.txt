@@ -18,23 +18,16 @@ support registration on resources
 
 To Do:
 
-Test the lifetime resource
-
 if provider is checked then authorrization needs to be disable.
 
 reload preferences from defaults
 
 (related to above)... when a method isn't found for modification, it should be re-added (in case they deleted it)
 
-need to fix the mem and stackoverflow issue on the mac.  
-
-i am not sure that service/method security on service contexts is right on priority and overides.
-
 when adding a serviceContext and then adding a method that returns its referece
 before you hit save, then when you hit save the reference type is not yet in the
 namespaceType list and therefore cant be refered to yet
 
-add tools for autocreating resource and wrapping epr into client handle type for implementation on server side (ResourceCreator.javajet)
 
 on save etc i have seen unable to delete namespace2package.mappings.
 
@@ -59,6 +52,14 @@ add tests to system tests for (coverage report shows no coverage):
 add a .cvsignore file to generated skeletons that includes the gar.  my right mouse button is slowly wearing out... and i am lazy...
 
 ============================ D O N E ================================================================
+add tools for autocreating resource and wrapping epr into client handle type for implementation on server side (ResourceCreator.javajet)
+
+i am not sure that service/method security on service contexts is right on priority and overides.
+
+need to fix the mem and stackoverflow issue on the mac.  
+
+Test the lifetime resource
+
 done)fix documentation link in installer and make sure relavent documentation is in there
 
 look at the upper case vs lower case methods issues.....

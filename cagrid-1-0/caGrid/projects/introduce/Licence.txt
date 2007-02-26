@@ -1,4 +1,5 @@
- Copyright 2006,2007 The Ohio State University Department of Biomedical Informatics.
+ Copyright 2005,2006,2007 
+ The Ohio State University Department of Biomedical Informatics.
  
  Licensed under the Apache License, Version 2.0 (the "License"); you may 
  not use this file or any files in this distribution except in compliance 
