@@ -6,7 +6,14 @@
 	<target name="prepareUpdateManager">
 		<path id="UpdateManager.classpath">
 			<pathelement location="${updater.classes.dir}" />
-			<pathelement location="${introduce.classes.dir}"/>
+			<pathelement location="${introduce.classes.dir}" />
+			<fileset dir="${ext.globus.dir}/lib">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		<path id="UpdateManager.test.classpath">
+			<pathelement location="${updater.classes.dir}" />
+			<pathelement location="${introduce.classes.dir}" />
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="*.jar" />
 			</fileset>

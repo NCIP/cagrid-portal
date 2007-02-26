@@ -155,6 +155,7 @@
 	<target name="compile-tests" depends="compile" description="Compiles all the test source files.">
 		<compileSubprojectTests name="Introduce" />
 		<compileSubprojectTests name="Portal" />
+		<compileSubprojectTests name="UpdateManager" />
 	</target>
 	<macrodef name="compileSubproject">
 		<attribute name="name" />
@@ -221,6 +222,11 @@
 			</manifest>
 		</jar>
 		<jar jarfile="${jars.prefix}portal-tests${jars.sufix}" basedir="${test.classes.dir}/Portal" defaultExcludes="false" update="no">
+			<manifest>
+				<attribute name="Created-By" value="${user.name}" />
+			</manifest>
+		</jar>
+		<jar jarfile="${jars.prefix}updater-tests${jars.sufix}" basedir="${test.classes.dir}/UpdateManager" defaultExcludes="false" update="no">
 			<manifest>
 				<attribute name="Created-By" value="${user.name}" />
 			</manifest>

@@ -1,18 +1,17 @@
 package gov.nih.nci.cagrid.data.creation.enumeration;
 
-import gov.nih.nci.cagrid.introduce.util.FileUtils;
+import gov.nih.nci.cagrid.introduce.test.util.FileUtils;
 
 import java.io.File;
 
 import com.atomicobject.haste.framework.Step;
 
-/** 
- *  DeleteOldServiceStep
- *  Deletes any old enumeration data service
+/**
+ * DeleteOldServiceStep Deletes any old enumeration data service
  * 
- * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
- * @created Nov 30, 2006 
- * @version $Id: DeleteOldServiceStep.java,v 1.1 2006-12-18 14:48:47 dervin Exp $ 
+ * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
+ * @created Nov 30, 2006
+ * @version $Id: DeleteOldServiceStep.java,v 1.2 2007-02-26 20:24:26 hastings Exp $
  */
 public class DeleteOldServiceStep extends Step {
 
