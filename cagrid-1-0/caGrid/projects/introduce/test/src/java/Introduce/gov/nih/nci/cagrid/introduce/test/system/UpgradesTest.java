@@ -1,18 +1,18 @@
 package gov.nih.nci.cagrid.introduce.test.system;
 
-import gov.nih.nci.cagrid.introduce.steps.CleanupGlobusStep;
-import gov.nih.nci.cagrid.introduce.steps.CreateGlobusStep;
-import gov.nih.nci.cagrid.introduce.steps.DeployGlobusServiceStep;
-import gov.nih.nci.cagrid.introduce.steps.InvokeSimpleMethodImplStep;
-import gov.nih.nci.cagrid.introduce.steps.RemoveSkeletonStep;
-import gov.nih.nci.cagrid.introduce.steps.StartGlobusStep;
-import gov.nih.nci.cagrid.introduce.steps.StopGlobusStep;
-import gov.nih.nci.cagrid.introduce.steps.UnzipOldServiceStep;
-import gov.nih.nci.cagrid.introduce.steps.UpgradesStep;
 import gov.nih.nci.cagrid.introduce.test.IntroduceTestConstants;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
-import gov.nih.nci.cagrid.introduce.util.GlobusHelper;
+import gov.nih.nci.cagrid.introduce.test.steps.CleanupGlobusStep;
+import gov.nih.nci.cagrid.introduce.test.steps.CreateGlobusStep;
+import gov.nih.nci.cagrid.introduce.test.steps.DeployGlobusServiceStep;
+import gov.nih.nci.cagrid.introduce.test.steps.InvokeSimpleMethodImplStep;
+import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
+import gov.nih.nci.cagrid.introduce.test.steps.StartGlobusStep;
+import gov.nih.nci.cagrid.introduce.test.steps.StopGlobusStep;
+import gov.nih.nci.cagrid.introduce.test.steps.UnzipOldServiceStep;
+import gov.nih.nci.cagrid.introduce.test.steps.UpgradesStep;
+import gov.nih.nci.cagrid.introduce.test.util.GlobusHelper;
 
 import java.io.File;
 import java.util.Vector;

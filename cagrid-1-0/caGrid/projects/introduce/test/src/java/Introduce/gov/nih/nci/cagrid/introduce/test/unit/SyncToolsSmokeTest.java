@@ -1,17 +1,17 @@
 package gov.nih.nci.cagrid.introduce.test.unit;
 
-import gov.nih.nci.cagrid.introduce.steps.AddMetadataStep;
-import gov.nih.nci.cagrid.introduce.steps.AddServicePropertiesStep;
-import gov.nih.nci.cagrid.introduce.steps.AddServiceStep;
-import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodImplStep;
-import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodStep;
-import gov.nih.nci.cagrid.introduce.steps.CreateSkeletonStep;
-import gov.nih.nci.cagrid.introduce.steps.ModifySimpleMethodStep;
-import gov.nih.nci.cagrid.introduce.steps.RemoveSimpleMethodImplStep;
-import gov.nih.nci.cagrid.introduce.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo2;
+import gov.nih.nci.cagrid.introduce.test.steps.AddMetadataStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddServicePropertiesStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddServiceStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodImplStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodStep;
+import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
+import gov.nih.nci.cagrid.introduce.test.steps.ModifySimpleMethodStep;
+import gov.nih.nci.cagrid.introduce.test.steps.RemoveSimpleMethodImplStep;
+import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 
 import java.util.Vector;
 

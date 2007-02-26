@@ -1,12 +1,12 @@
 package gov.nih.nci.cagrid.introduce.test.system;
 
-import gov.nih.nci.cagrid.introduce.steps.AddImportedMethodStep;
-import gov.nih.nci.cagrid.introduce.steps.AddSimpleMethodStep;
-import gov.nih.nci.cagrid.introduce.steps.CreateSkeletonStep;
-import gov.nih.nci.cagrid.introduce.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo1;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo3;
+import gov.nih.nci.cagrid.introduce.test.steps.AddImportedMethodStep;
+import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodStep;
+import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
+import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 
 import java.util.Vector;
 
