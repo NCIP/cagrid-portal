@@ -53,6 +53,52 @@
 
 		<fail message="Tests failed! Consult the logs for details." if="test.failed" />
 	</target>
+	
+	<!-- =============================================================== -->
+	<!-- Call systemTest for each project and aggregates the log resutls       -->
+	<!-- =============================================================== -->
+	<target name="systemTest" depends="prepare,createDartTestFiles" description="Runs all the projects system tests.">
+		<!-- Clean out old logs first -->
+		<delete failonerror="false">
+			<fileset dir="${junit.results.dir}">
+				<include name="*" />
+			</fileset>
+		</delete>
+		<for list="${system.testable.projects.list}" parallel="true" param="project.name" trim="true">
+			<sequential>
+				<echo message="System Testing project @{project.name}." />
+				<trycatch property="@{project.name}.test.failed.message">
+					<try>
+						<ant inheritall="false" dir="projects/@{project.name}" antfile="build.xml" target="systemTest">
+							<property name="junit.results.dir" value="${junit.results.dir}" />
+						</ant>
+					</try>
+					<catch>
+						<fail message="@{project.name} Tests failed (${@{project.name}.test.failed.message})" if="test.failfast" />
+						<echo message="@{project.name} Tests failed (${@{project.name}.test.failed.message}), proceeding with other tests, but build will fail at completion." />
+						<property name="test.failed" value="true" />
+					</catch>
+				</trycatch>
+			</sequential>
+		</for>
+		<trycatch property="test.report.failed.message">
+			<try>
+				<mkdir dir="${junit.results.dir}/report" />
+				<junitreport todir="${junit.results.dir}">
+					<fileset dir="${junit.results.dir}">
+						<include name="TEST-*.xml" />
+					</fileset>
+					<report format="frames" todir="${junit.results.dir}/report" />
+				</junitreport>
+				<echo message="Created test report in ${junit.results.dir}/report" />
+			</try>
+			<catch>
+				<echo message="Test Report creation failed (${test.report.failed.message})!" />
+			</catch>
+		</trycatch>
+
+		<fail message="Tests failed! Consult the logs for details." if="test.failed" />
+	</target>
 
 	<!-- =============================================================== -->
 	<!-- Run a dart experimental (currently only submits test results)   -->
