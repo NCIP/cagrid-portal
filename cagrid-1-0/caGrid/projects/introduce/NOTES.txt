@@ -40,7 +40,7 @@ solve timing problems in the addComplexTypeTest.....
 
 add tests to system tests for (coverage report shows no coverage):
 - (DONE) SystemProperties
--CustomBeans and Serialization
+-CustomBeans and Serialization (STILL NEED TESTS THAT SHOW NEED FOR SOAP BINDING STUB FIX)
 -Security
 - (DONE) simple types (boolean, string, etc) as input and output
 - (DONE) extensions
