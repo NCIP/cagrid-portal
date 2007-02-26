@@ -1,5 +1,5 @@
 <%@ jet package="gov.nih.nci.cagrid.data.codegen.templates" class="CQLResultTypesTemplate" 
-imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.* gov.nih.nci.cagrid.data.extension.*" %>
+imports="gov.nih.nci.cagrid.data.extension.CadsrInformation gov.nih.nci.cagrid.data.extension.CadsrPackage gov.nih.nci.cagrid.data.extension.ClassMapping gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType gov.nih.nci.cagrid.introduce.beans.service.ServiceType gov.nih.nci.cagrid.introduce.common.CommonTools gov.nih.nci.cagrid.introduce.info.ServiceInformation" %>
 <% 
 	gov.nih.nci.cagrid.data.codegen.ResultTypeGeneratorInformation info = (gov.nih.nci.cagrid.data.codegen.ResultTypeGeneratorInformation) argument;
   	ServiceInformation serviceInfo = info.getServiceInfo();

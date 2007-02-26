@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.data.creation.templates" class="EnumerationServiceClientTemplate" imports="gov.nih.nci.cagrid.data.* gov.nih.nci.cagrid.introduce.*"%>
+<%@ jet package="gov.nih.nci.cagrid.data.creation.templates" class="EnumerationServiceClientTemplate" %>
 <% gov.nih.nci.cagrid.introduce.info.ServiceInformation serviceInfo = (gov.nih.nci.cagrid.introduce.info.ServiceInformation) argument;
 		String serviceName = serviceInfo.getServices().getService()[0].getName();
 		String basePackage = serviceInfo.getServices().getService()[0].getPackageName();
