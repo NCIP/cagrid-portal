@@ -19,9 +19,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 import java.util.jar.JarFile;
 
@@ -39,7 +40,7 @@ import javax.swing.ScrollPaneConstants;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Jan 8, 2007 
- * @version $Id: ClientJarSelectionPanel.java,v 1.2 2007-01-10 17:58:54 dervin Exp $ 
+ * @version $Id: ClientJarSelectionPanel.java,v 1.3 2007-02-26 19:01:12 dervin Exp $ 
  */
 public class ClientJarSelectionPanel extends AbstractWizardPanel {
 	
@@ -61,10 +62,6 @@ public class ClientJarSelectionPanel extends AbstractWizardPanel {
 	}
 	
 
-	/**
-	 * This method initializes this
-	 * 
-	 */
 	private void initialize() {
         GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
         gridBagConstraints3.anchor = GridBagConstraints.NORTH;
@@ -364,6 +361,11 @@ public class ClientJarSelectionPanel extends AbstractWizardPanel {
 				StringBuffer mappingFile = JarUtilities.getFileContents(
 					jar, DataServiceConstants.CACORE_CASTOR_MAPPING_FILE);
 				if (mappingFile != null) {
+					if (getClientJarTextField().getText().length() != 0) {
+						// delete the old jar named in the client jar text field					
+						File oldLib = new File(getServiceLibDir() + File.separator + getClientJarTextField().getText());
+						oldLib.delete();
+					}
 					// copy the file into the service's lib directory
 					File inLib = new File(filename);
 					File outLib = new File(getServiceLibDir() + File.separator + inLib.getName());
@@ -385,6 +387,7 @@ public class ClientJarSelectionPanel extends AbstractWizardPanel {
 	
 	
 	private void addDependJars() {
+		// get the jar selection
 		String[] selection = null;
 		try {
 			selection = ResourceManager.promptMultiFiles(null, FileFilters.JAR_FILTER);
@@ -392,6 +395,7 @@ public class ClientJarSelectionPanel extends AbstractWizardPanel {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error selecting files", ex);
 		}
+		
 		if (selection != null) {
 			Vector allLibs = new Vector();
 			for (int i = 0; i < getDependsList().getModel().getSize(); i++) {
@@ -399,13 +403,16 @@ public class ClientJarSelectionPanel extends AbstractWizardPanel {
 			}
 			for (int i = 0; i < selection.length; i++) {
 				File inFile = new File(selection[i]);
-				File outFile = new File(getServiceLibDir() + File.separator + inFile.getName());
-				try {
-					Utils.copyFile(inFile, outFile);
-					allLibs.add(inFile.getName());
-				} catch (IOException ex) {
-					ex.printStackTrace();
-					ErrorDialog.showErrorDialog("Error copying library " + inFile.getAbsolutePath(), ex);
+				// ignore anything that is a repeat jar
+				if (shouldAddJar(inFile.getName())) {
+					File outFile = new File(getServiceLibDir() + File.separator + inFile.getName());
+					try {
+						Utils.copyFile(inFile, outFile);
+						allLibs.add(outFile.getName());
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						ErrorDialog.showErrorDialog("Error copying library " + inFile.getAbsolutePath(), ex);
+					}					
 				}
 			}
 			Collections.sort(allLibs);
@@ -415,23 +422,35 @@ public class ClientJarSelectionPanel extends AbstractWizardPanel {
 	}
 	
 	
+	private boolean shouldAddJar(String jarName) {
+		Set usedNames = new HashSet();
+		usedNames.add(getQpJarTextField().getText());
+		usedNames.add(getClientJarTextField().getText());
+		for (int i = 0; i < getDependsList().getModel().getSize(); i++) {
+			usedNames.add(getDependsList().getModel().getElementAt(i));
+		}
+		return !usedNames.contains(jarName);
+	}
+	
+	
 	private void removeDependJars() {
 		// seperate wheat from the chaff
-		List deleteItems = new ArrayList();
+		Set deleteItems = new HashSet();
+		Collections.addAll(deleteItems, getDependsList().getSelectedValues());
 		Vector remainingItems = new Vector(getDependsList().getModel().getSize());
 		for (int i = 0; i < getDependsList().getModel().getSize(); i++) {
-			if (getDependsList().getSelectionModel().isSelectedIndex(i)) {
-				deleteItems.add(getDependsList().getModel().getElementAt(i));
-			} else {
-				remainingItems.add(getDependsList().getModel().getElementAt(i));
+			String libName = (String) getDependsList().getModel().getElementAt(i);
+			if (!deleteItems.contains(libName)) {
+				remainingItems.add(libName);
 			}
 		}
 		// gather the wheat into the barn
 		Collections.sort(remainingItems);
 		getDependsList().setListData(remainingItems);
 		// burn the chaff in the firey furnace
-		for (int i = 0; i < deleteItems.size(); i++) {
-			File libFile = new File(getServiceLibDir() + File.separator + (String) deleteItems.get(i));
+		Iterator deleteItemIter = deleteItems.iterator();
+		while (deleteItemIter.hasNext()) {
+			File libFile = new File(getServiceLibDir() + File.separator + (String) deleteItemIter.next());
 			libFile.delete();
 		}
 		storeLibrariesInExtensionData();

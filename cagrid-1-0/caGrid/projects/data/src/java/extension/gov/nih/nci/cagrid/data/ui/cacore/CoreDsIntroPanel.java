@@ -238,24 +238,27 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 				AdditionalLibraries libs = data.getAdditionalLibraries();
 				if (libs == null) {
 					libs = new AdditionalLibraries();
+					data.setAdditionalLibraries(libs);
 				}
 				Set jarNames = new HashSet();
 				if (libs.getJarName() != null) {
 					Collections.addAll(jarNames, libs.getJarName());
 				}
-				jarNames.add(sdkQuery.getName());
+				// remove the old sdk QP library
 				jarNames.remove(oldSdkQuery.getName());
+				// add the new library
+				jarNames.add(sdkQuery.getName());
 				String[] names = new String[jarNames.size()];
 				jarNames.toArray(names);
 				libs.setJarName(names);
-				data.setAdditionalLibraries(libs);
+				// store the modified list
 				ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				ErrorDialog.showErrorDialog("Error adding the library to the service information", ex);
 				return;
 			}
-			// add the query processor class name
+			// add the query processor class name as a service property
 			CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
 				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, qpClassName, false);
 		}

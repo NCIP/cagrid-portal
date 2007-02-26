@@ -22,12 +22,16 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.Vector;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -111,7 +115,7 @@ public class ClassBrowserPanel extends JPanel {
 		// only bother adding the jar file to the list if it's not in there yet
 		for (int i = 0; i < jarFiles.length; i++) {
 			String jarFile = jarFiles[i];
-			final String shortJarName = (new File(jarFile)).getName();
+			String shortJarName = (new File(jarFile)).getName();
 			boolean shouldAdd = true;
 			String[] currentJars = getAdditionalJars();
 			for (int j = 0; j < currentJars.length; j++) {
@@ -247,30 +251,29 @@ public class ClassBrowserPanel extends JPanel {
 			removeJarsButton.setText("Remove Jars");
 			removeJarsButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					int[] selected = getAdditionalJarsList().getSelectedIndices();
-					if (selected.length != 0) {
-						String[] currentJars = getAdditionalJars();
-						String[] storedJars = new String[currentJars.length - selected.length];
-						int selectIndex = 0;
-						int storeIndex = 0;
-						for (int i = 0; i < currentJars.length; i++) {
-							String jar = currentJars[i];
-							if (i == selected[selectIndex]) {
-								// skip the selected jar
-								selectIndex++;
-								// delete the selected jar from the file
-								// system
-								deleteAdditionalJar(jar);
-							} else {
-								// add the jar to the new list
-								storedJars[storeIndex] = jar;
-								storeIndex++;
-							}
+					// identify selected / kept jars
+					Set selected = new HashSet();
+					Collections.addAll(selected, getAdditionalJarsList().getSelectedValues());
+					Vector keptJars = new Vector();
+					for (int i = 0; i < getAdditionalJarsList().getModel().getSize(); i++) {
+						String jarName = (String) getAdditionalJarsList().getModel().getElementAt(i);
+						if (!selected.contains(jarName)) {
+							keptJars.add(jarName);
 						}
-						getAdditionalJarsList().setListData(storedJars);
-						populateClassDropdown();
-						fireAdditionalJarsChanged();
 					}
+					// change the list contents
+					getAdditionalJarsList().setListData(keptJars);
+					// delete the selected jars
+					Iterator deleteJarsIter = selected.iterator();
+					while (deleteJarsIter.hasNext()) {
+						deleteAdditionalJar((String) deleteJarsIter.next());
+					}
+					
+					// update the class selection dropdown
+					populateClassDropdown();
+					
+					// notify listeners
+					fireAdditionalJarsChanged();
 				}
 			});
 		}
@@ -282,7 +285,7 @@ public class ClassBrowserPanel extends JPanel {
 		String libDir = serviceInfo.getIntroduceServiceProperties().getProperty(
 			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
 		File jarFile = new File(libDir + File.separator + shortJarName);
-		jarFile.deleteOnExit();
+		jarFile.delete();
 	}
 
 
