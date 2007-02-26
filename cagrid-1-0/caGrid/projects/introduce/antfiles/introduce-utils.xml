@@ -83,34 +83,4 @@
 		methods to this service skeleton">
 		<ant dir="${basedir}" antfile="antfiles/introduce-resync.xml" target="resyncService" inheritall="true" />
 	</target>
-	
-	<!-- =================================================================== -->
-	<!-- GME Viewer                                                          -->
-	<!-- =================================================================== -->
-	<target name="gmeViewer" depends="checkGlobus" description="Execute the Gme Viewer">
-		<java classname="org.globus.bootstrap.Bootstrap" fork="yes">
-			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}"/>
-			<arg value="org.projectmobius.tools.gme.viewer.GMEView"/>
-			<arg value="-config"/>
-			<arg value="${conf.dir}/gme/gme-view-globus-config.xml"/>
-			<classpath>
-				<fileset dir="${jars.dir}">
-					<include name="*.jar"/>
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar"/>
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar"/>
-				</fileset>
-				<fileset dir="${ext.globus.dir}/lib">
-					<include name="*.jar"/>
-				</fileset>
-				<fileset dir="${ant.library.dir}">
-					<include name="ant.jar"/>
-					<include name="ant-launcher.jar"/>
-				</fileset>
-			</classpath>
-		</java>
-	</target>
 </project>
