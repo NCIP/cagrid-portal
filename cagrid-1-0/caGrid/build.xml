@@ -48,7 +48,7 @@
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT SYSTEM TESTING             -->
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects from the projects.list -->
-	<property name="system.testable.projects.list" value="introduce" />
+	<property name="system.testable.projects.list" value="introduce, data" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT PROVIDE INTRODUCE EXTENSIONS       -->
 	<!-- ================================================================================ -->
