@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.cqlresultset.TargetAttribute;
 import gov.nih.nci.cagrid.dcql.Association;
 import gov.nih.nci.cagrid.dcql.ForeignAssociation;
+import gov.nih.nci.cagrid.dcql.ForeignPredicate;
 import gov.nih.nci.cagrid.dcql.Group;
 import gov.nih.nci.cagrid.dcql.JoinCondition;
 import gov.nih.nci.cagrid.dcql.Object;
@@ -25,7 +26,8 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * FederatedQueryProcessor decomposes the DCQL into individual CQLs. Each
- * individual CQL is executed by specified grid service in serviceURL by the DataServiceQueryExecutor.
+ * individual CQL is executed by specified grid service in serviceURL by the
+ * DataServiceQueryExecutor.
  * 
  * @author Srini Akkala
  * @author Scott Oster
@@ -263,10 +265,30 @@ class FederatedQueryProcessor {
 	 * 
 	 * @param list
 	 * @return
+	 * @throws FederatedQueryProcessingException 
 	 */
-	public static gov.nih.nci.cagrid.cqlquery.Group buildGroup(JoinCondition joinCondition, List list) {
+	public static gov.nih.nci.cagrid.cqlquery.Group buildGroup(JoinCondition joinCondition, List list) throws FederatedQueryProcessingException {
 		gov.nih.nci.cagrid.cqlquery.Group cqlGroup = new gov.nih.nci.cagrid.cqlquery.Group();
 		String property = joinCondition.getLocalAttributeName();
+
+		// preprocess the results to deal with null values
+		// we need to deal with these here, so the logic to handle the special
+		// cases (of list size) is correct.
+		// we don't need to process EQUAL_TO or NOT_EQUAL_TO, because we will
+		// convert these to IS_NULL and IS_NOT_NULL (which won't affect list
+		// size) but other predicates we will filter out (thus
+		// changing the list size)
+		if (!joinCondition.getPredicate().equals(ForeignPredicate.EQUAL_TO)
+			&& !joinCondition.getPredicate().equals(ForeignPredicate.NOT_EQUAL_TO)) {
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i) == null) {
+					// since these come from DISTINCT values, there should be
+					// more than one call to this, otherwise it would be
+					// inefficient; process the whole list just in case though
+					list.remove(i--);
+				}
+			}
+		}
 
 		// if the size of result set returned by sub query is zero we got no
 		// results, and this group should never evaluate to true
@@ -294,10 +316,9 @@ class FederatedQueryProcessor {
 			// entries and we only got one value).
 			cqlGroup.setLogicRelation(LogicalOperator.OR);
 			gov.nih.nci.cagrid.cqlquery.Attribute[] attrArray = new gov.nih.nci.cagrid.cqlquery.Attribute[2];
-			gov.nih.nci.cagrid.cqlquery.Attribute attr = new gov.nih.nci.cagrid.cqlquery.Attribute();
-			attr.setName(property);
-			attr.setPredicate(Predicate.fromValue(joinCondition.getPredicate().getValue()));
-			attr.setValue(list.get(0).toString());
+			java.lang.Object currRemoteValue = list.get(0);
+			gov.nih.nci.cagrid.cqlquery.Attribute attr = createAttributeFromValue(joinCondition, property,
+				currRemoteValue);
 			attrArray[0] = attr;
 			attrArray[1] = attr;
 			// attach the created attribute array
@@ -307,15 +328,9 @@ class FederatedQueryProcessor {
 			gov.nih.nci.cagrid.cqlquery.Attribute[] attrArray = new gov.nih.nci.cagrid.cqlquery.Attribute[list.size()];
 			cqlGroup.setLogicRelation(LogicalOperator.OR);
 			for (int i = 0; i < list.size(); i++) {
-				gov.nih.nci.cagrid.cqlquery.Attribute attr = new gov.nih.nci.cagrid.cqlquery.Attribute();
-				// set the local property name
-				attr.setName(property);
-				// set the predicate to the join predicate (this requires DCQL
-				// to use the same representation as CQL)
-				attr.setPredicate(Predicate.fromValue(joinCondition.getPredicate().getValue()));
-				// set the value to the string representation of the "foreign
-				// result value"
-				attr.setValue(list.get(i).toString());
+				java.lang.Object currRemoteValue = list.get(i);
+				gov.nih.nci.cagrid.cqlquery.Attribute attr = createAttributeFromValue(joinCondition, property,
+					currRemoteValue);
 				attrArray[i] = attr;
 			}
 			// attach the created attribute array
@@ -323,6 +338,41 @@ class FederatedQueryProcessor {
 		}
 
 		return cqlGroup;
+	}
+
+
+	/**
+	 * @param joinCondition
+	 * @param property
+	 * @param value
+	 * @return
+	 * @throws FederatedQueryProcessingException 
+	 */
+	private static gov.nih.nci.cagrid.cqlquery.Attribute createAttributeFromValue(JoinCondition joinCondition,
+		String property, java.lang.Object value) throws FederatedQueryProcessingException {
+		gov.nih.nci.cagrid.cqlquery.Attribute attr = new gov.nih.nci.cagrid.cqlquery.Attribute();
+		// set the local property name
+		attr.setName(property);
+		if (value == null) {
+			if(joinCondition.getPredicate().equals(ForeignPredicate.EQUAL_TO)){
+				//we got null, and are supposed to compare it as =, so that means is_null
+				attr.setPredicate(Predicate.IS_NULL);
+			}else if(joinCondition.getPredicate().equals(ForeignPredicate.NOT_EQUAL_TO)){
+				//we got null, and are supposed to compare it as !=, so that means is_not_null
+				attr.setPredicate(Predicate.IS_NOT_NULL);
+			}else{
+				//should not get here, nulls should have been filtered out
+				throw new FederatedQueryProcessingException("Internal problem processing query. Got unexpected null values.");
+			}
+		} else {
+			// set the predicate to the join predicate (this requires DCQL
+			// to use the same representation as CQL)
+			attr.setPredicate(Predicate.fromValue(joinCondition.getPredicate().getValue()));
+			// set the value to the string representation of the "foreign
+			// result value"
+			attr.setValue(value.toString());
+		}
+		return attr;
 	}
 
 

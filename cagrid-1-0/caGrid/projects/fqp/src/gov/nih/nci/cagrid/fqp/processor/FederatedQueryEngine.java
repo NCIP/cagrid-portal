@@ -18,7 +18,6 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
- * 
  * @author Srini Akkala
  * @author Scott Oster
  */
@@ -54,7 +53,8 @@ public class FederatedQueryEngine {
 			// aggregate results
 			CQLQueryResults currResults = DataServiceQueryExecutor.queryDataService(cqlQuery, targetServiceURLs[i]);
 			r.setCQLQueryResultCollection(currResults);
-			if (currResults.getTargetClassname()==null || !currResults.getTargetClassname().equals(dcqlQuery.getTargetObject().getName())) {
+			if (currResults.getTargetClassname() == null
+				|| !currResults.getTargetClassname().equals(dcqlQuery.getTargetObject().getName())) {
 				throw new RemoteDataServiceException("Data service (" + targetServiceURLs[i]
 					+ ") returned results of type (" + currResults.getTargetClassname() + ") when type ("
 					+ dcqlQuery.getTargetObject().getName() + ") was requested!");
@@ -86,7 +86,7 @@ public class FederatedQueryEngine {
 		for (int i = 0; i < targetServiceURLs.length; i++) {
 			// aggregate results
 			CQLQueryResults currResults = DataServiceQueryExecutor.queryDataService(cqlQuery, targetServiceURLs[i]);
-			if (currResults != null && currResults.getObjectResult() != null) {
+			if (currResults != null ) {
 				if (!currResults.getTargetClassname().equals(dcqlQuery.getTargetObject().getName())) {
 					throw new RemoteDataServiceException("Data service (" + targetServiceURLs[i]
 						+ ") returned results of type (" + currResults.getTargetClassname() + ") when type ("
