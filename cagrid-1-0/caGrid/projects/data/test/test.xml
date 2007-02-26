@@ -61,17 +61,22 @@
 	</target>
 	
 	
+	<target name="testEverything" description="Runs all system and non-system tests">
+		<antcall target="test"/>
+		<antcall target="systemTest"/>
+	</target>
+	
+	
 	<!-- call the test target for each project and aggregates the log resutls  -->
-	<target name="test" depends="compileTests, instrument" description="Runs the tests.">
-		<antcall target="testBase"/>
+	<target name="test" depends="compileTests, instrument" description="Runs all non-system tests.">
+		<antcall target="testCore"/>
 		<antcall target="testCreation"/>
-		<antcall target="testSystem"/>
 		<antcall target="testEnumerationCreation"/>
-		<antcall target="testEnumerationSystem"/>
 		<antcall target="testUpgradeFrom1pt0to1pt1"/>
 	</target>
 	
-	<target name="testBase" depends="compileTests" description="Runs the base set of tests for the data service core">
+	
+	<target name="testCore" depends="compileTests" description="Runs the base set of tests for the data service core">
 		<mkdir dir="${junit.results.dir}"/>
 		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
 			<sysproperty key="build.dirs" value="${build.utils.dest};${build.extension.dest};${build.service.dest}"/>
@@ -118,7 +123,17 @@
 		<fail message="Tests failed! Check test reports." if="test.failed"/>
 	</target>
 	
-	<target name="testSystem" depends="installIntroduceExtensions, compileTests, prepareClasspaths, testCreation" description="Runs the service creation and then system tests">
+	
+	<target name="systemTest" depends="prepareClasspaths" description="Runs system tests (deploy, invoke, etc)">
+		<antcall target="testBasicSystem"/>
+		<antcall target="testEnumerationSystem"/>
+		<!-- turn this on when it works
+		<antcall target="testUpgradedFrom1pt0to1pt1System"/>
+		-->
+	</target>
+	
+	
+	<target name="testBasicSystem" depends="installIntroduceExtensions, compileTests, prepareClasspaths, testCreation" description="Runs the service creation and then system tests">
 		<junit dir="${basedir}">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
 			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
@@ -137,6 +152,7 @@
 		</junit>
 		<fail message="Tests failed! Check test reports." if="test.failed"/>
 	</target>
+	
 	
 	<target name="testEnumerationCreation" depends="installIntroduceExtensions, compileTests, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration">
 		<mkdir dir="${junit.results.dir}"/>
@@ -161,6 +177,7 @@
 		<fail message="Tests failed! Check test reports." if="test.failed"/>
 	</target>
 	
+	
 	<target name="testEnumerationSystem" depends="testEnumerationCreation" description="Tests the enumeration data service system">
 		<junit dir="${basedir}">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
@@ -181,6 +198,7 @@
 		<fail message="Tests failed! Check test reports." if="test.failed"/>
 	</target>
 	
+	
 	<target name="testUpgradeFrom1pt0to1pt1" depends="installIntroduceExtensions, compileTests, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to 1.1">
 		<mkdir dir="${junit.results.dir}"/>
 		<junit dir="${introduce.dir}">
@@ -199,6 +217,26 @@
 			</batchtest>
 		</junit>
 	</target>
+	
+	
+	<target name="testUpgradedFrom1pt0to1pt1System" depends="testUpgradeFrom1pt0to1pt1" description="Performs system tests on the upgraded (1.0 to 1.1) service">
+		<junit dir="${basedir}">
+			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
+			<classpath location="${instrumented.classes.dir}"/>
+			<classpath refid="all.test.classpath"/>
+			<classpath>
+				<pathelement path="${test.classes.dir}"/>
+			</classpath>
+			<formatter type="xml"/>
+			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}"/>
+			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/system/UpgradedServiceSystemTest.java"/>
+				</fileset>
+			</batchtest>
+		</junit>	
+	</target>
+	
 	
 	<target name="coverageReport" depends="test" description="Runs the tests and generates a test
 		coverage report.">
