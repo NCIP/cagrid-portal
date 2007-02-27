@@ -6,7 +6,10 @@ import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.LazyCQLQueryProcessor;
-import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsUtil;
+import gov.nih.nci.cagrid.data.mapping.ClassToQname;
+import gov.nih.nci.cagrid.data.mapping.Mappings;
+import gov.nih.nci.cagrid.data.utilities.CQLResultsCreationUtil;
+import gov.nih.nci.cagrid.data.utilities.ResultsCreationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.io.ByteArrayInputStream;
@@ -15,7 +18,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import javax.xml.namespace.QName;
+
+import org.apache.axis.deployment.wsdd.WSDDDeployment;
+import org.apache.axis.deployment.wsdd.WSDDTypeMapping;
+import org.apache.axis.utils.XMLUtils;
 import org.hibernate.criterion.DetachedCriteria;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /** 
  *  CoreQueryProcessor
@@ -63,9 +73,14 @@ public class CoreQueryProcessor extends LazyCQLQueryProcessor {
 			throw new QueryProcessingException(ex);
 		}
 		List coreResultsList = queryCoreService(cqlQuery);
-		CQLQueryResults results = CQLQueryResultsUtil.createQueryResults(
-			coreResultsList, cqlQuery.getTarget().getName(), configStream);
-		return results;
+		try {
+			Mappings classToQnameMapping = wsddToMappings(configStream);
+			CQLQueryResults queryResults = CQLResultsCreationUtil.createObjectResults(
+				coreResultsList, cqlQuery.getTarget().getName(), classToQnameMapping);
+			return queryResults;
+		} catch (ResultsCreationException ex) {
+			throw new QueryProcessingException("Error creating CQL Query Results: " + ex.getMessage(), ex);
+		}
 	}
 	
 	
@@ -101,5 +116,29 @@ public class CoreQueryProcessor extends LazyCQLQueryProcessor {
 		Properties params = new Properties();
 		params.setProperty(APPLICATION_SERVICE_URL, "http://localhost:8080/cacore31/server/HTTPServer");
 		return params;
+	}
+	
+	
+	private Mappings wsddToMappings(InputStream wsddInput) throws QueryProcessingException {
+		try {
+			Document wsddDoc = XMLUtils.newDocument(wsddInput);
+			Element wsddRoot = wsddDoc.getDocumentElement();
+			WSDDDeployment deployment = new WSDDDeployment(wsddRoot);
+			WSDDTypeMapping[] wsddMappings = deployment.getTypeMappings();
+			ClassToQname[] classToQnames = new ClassToQname[wsddMappings.length];
+			for (int i = 0; i < wsddMappings.length; i++) {
+				ClassToQname c2q = new ClassToQname();
+				QName rawQname = wsddMappings[i].getQName();
+				c2q.setQname(rawQname.toString());
+				String className = wsddMappings[i].getLanguageSpecificType().getName();
+				c2q.setClassName(className);
+				classToQnames[i] = c2q;
+			}
+			Mappings mappings = new Mappings();
+			mappings.setMapping(classToQnames);
+			return mappings;
+		} catch (Exception ex) {
+			throw new QueryProcessingException("Error generating class to qname mappings: " + ex.getMessage(), ex);
+		}
 	}
 }
