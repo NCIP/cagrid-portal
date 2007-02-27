@@ -2,7 +2,6 @@
 	<target name="usage">
 		<echo message="Not to be called directly." />
 	</target>
-	<!-- put stuff in here needed for building introduce-->
 	<target name="prepareUpdateManager">
 		<path id="UpdateManager.classpath">
 			<pathelement location="${updater.classes.dir}" />

@@ -17,7 +17,6 @@ import java.util.zip.ZipInputStream;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.axis.utils.XMLUtils;
-import org.apache.bcel.verifier.exc.StaticCodeConstraintException;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.xml.sax.InputSource;
@@ -27,8 +26,11 @@ public class UpdateManager {
 
 	private SoftwareType software = null;
 
-	UpdateManager(SoftwareType software) {
+	public UpdateManager(SoftwareType software) throws Exception {
 		this.software = software;
+		if (software == null) {
+			throw new Exception("SofwareType cannot be null");
+		}
 	}
 
 	public void execute() {
@@ -36,28 +38,27 @@ public class UpdateManager {
 
 		ExtensionType[] extensionTypes = software.getExtension();
 
-		
 		if (introduceTypes != null) {
 			for (int i = 0; i < introduceTypes.length; i++) {
 				IntroduceType update = introduceTypes[i];
-				//if it is an introduce update i need to delete all files and 
-				//and directories before unzipping
+				// if it is an introduce update i need to delete all files and
+				// and directories before unzipping
 				File baseDir = new File(".");
 				File[] files = baseDir.listFiles();
 				System.out.println("Removing old version of Introduce.");
-				for(int fileI = 0; fileI < files.length; fileI++){
+				for (int fileI = 0; fileI < files.length; fileI++) {
 					File f = files[fileI];
-					if(f.isDirectory() && !f.getName().equals("updates")){
+					if (f.isDirectory() && !f.getName().equals("updates")) {
 						deleteDir(f);
 					} else {
 						f.delete();
 					}
 				}
-				
+
 				System.out.println("Installing new version of Introduce.");
-				File updateFile = new File("." + File.separator
-						+ "updates" + File.separator + "introduce"
-						+ update.getVersion() + ".zip");
+				File updateFile = new File("." + File.separator + "updates"
+						+ File.separator + "introduce" + update.getVersion()
+						+ ".zip");
 				try {
 					unzipIntroduce(updateFile);
 					updateFile.delete();
@@ -71,8 +72,8 @@ public class UpdateManager {
 		if (extensionTypes != null) {
 			for (int i = 0; i < extensionTypes.length; i++) {
 				ExtensionType update = extensionTypes[i];
-				File updateFile = new File("." + File.separator
-						+ "updates" + File.separator + update.getName()
+				File updateFile = new File("." + File.separator + "updates"
+						+ File.separator + update.getName()
 						+ update.getVersion() + ".zip");
 				try {
 					unzipExtension(updateFile);
@@ -85,14 +86,15 @@ public class UpdateManager {
 		}
 
 	}
-	
+
 	public static boolean deleteDir(File dir) {
 		if (dir.isDirectory()) {
 			String[] children = dir.list();
 			for (int i = 0; i < children.length; i++) {
 				boolean success = deleteDir(new File(dir, children[i]));
 				if (!success) {
-					System.err.println("could not remove directory: " + dir.getAbsolutePath());
+					System.err.println("could not remove directory: "
+							+ dir.getAbsolutePath());
 					return false;
 				}
 			}
@@ -115,7 +117,7 @@ public class UpdateManager {
 		}
 		zin.close();
 	}
-	
+
 	private void unzipExtension(File cachedFile) throws IOException {
 
 		InputStream in = new BufferedInputStream(
@@ -145,20 +147,18 @@ public class UpdateManager {
 		}
 		out.close();
 	}
-	
-	
 
 	public static void main(String[] args) {
 		File updateFile = new File("updates" + File.separator + "software.xml");
-		if(!updateFile.exists()){
+		if (!updateFile.exists()) {
 			System.out.println("No updates to process");
 			System.exit(0);
 		}
-		
+
 		org.w3c.dom.Document doc = null;
 		try {
-			doc = XMLUtils.newDocument(new InputSource(new FileInputStream(updateFile
-					)));
+			doc = XMLUtils.newDocument(new InputSource(new FileInputStream(
+					updateFile)));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -180,7 +180,14 @@ public class UpdateManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		UpdateManager manager = new UpdateManager(software);
+		UpdateManager manager = null;
+		try {
+			manager = new UpdateManager(software);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(2);
+		}
 		manager.execute();
 		updateFile.delete();
 		System.exit(1);
