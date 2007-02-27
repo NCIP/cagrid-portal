@@ -30,5 +30,6 @@
 					registration.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 </xs:schema>

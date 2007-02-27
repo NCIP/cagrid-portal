@@ -37,6 +37,7 @@
 					<xs:attribute name="isArray" type="xs:boolean" use="required"/>
 					<xs:attribute name="isClientHandle" type="xs:boolean" use="optional"/>
 					<xs:attribute name="clientHandleClass" type="xs:string" use="optional"/>
+					<xs:attribute name="description" type="xs:string" use="optional"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="Exceptions" minOccurs="0">
@@ -46,6 +47,7 @@
 							<xs:complexType>
 								<xs:attribute name="name" type="xs:string" use="required"/>
 								<xs:attribute name="qname" type="xs:QName" use="optional"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -76,5 +78,6 @@
 		<xs:attribute name="outputMessageClass" type="xs:string" use="optional"/>
 		<xs:attribute name="boxedInputParameter" type="xs:string" use="optional"/>
 		<xs:attribute name="boxedOutputParameter" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 </xs:schema>
