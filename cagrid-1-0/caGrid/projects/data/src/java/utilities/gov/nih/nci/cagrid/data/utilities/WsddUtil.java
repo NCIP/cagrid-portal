@@ -31,8 +31,9 @@ public class WsddUtil {
 	public static void setGlobalClientParameter(String clientWsddFile, String key, String value) throws Exception {
 		Element wsddRoot = XMLUtilities.fileNameToDocument(clientWsddFile).getRootElement();
 		Element configElement = wsddRoot.getChild("globalConfiguration", wsddRoot.getNamespace());
+		
 		setParameter(configElement, key, value);
-		String editedWsdd = XMLUtilities.elementToString(wsddRoot);
+		String editedWsdd = XMLUtilities.formatXML(XMLUtilities.elementToString(wsddRoot));
 		FileWriter writer = new FileWriter(clientWsddFile);
 		writer.write(editedWsdd);
 		writer.flush();
@@ -90,6 +91,15 @@ public class WsddUtil {
 			paramElement.setAttribute("name", key);
 			paramElement.setAttribute("value", value);
 			parentElem.addContent(paramElement);
+		}
+	}
+	
+	
+	public static void main(String[] args) {
+		try {
+			setGlobalClientParameter("client-config.wsdd", "OBVIOUS", "CHANGE");
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 }
