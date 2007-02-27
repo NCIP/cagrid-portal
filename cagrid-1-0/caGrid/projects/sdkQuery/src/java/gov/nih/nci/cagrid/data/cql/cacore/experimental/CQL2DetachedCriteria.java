@@ -45,6 +45,7 @@ public class CQL2DetachedCriteria {
 	 * @param query
 	 * 		A fully valid CQL query.
 	 * @return
+	 * 		A DetachedCriteria query to execute the CQL
 	 * @throws MalformedQueryException
 	 * @throws QueryProcessingException
 	 */
@@ -73,7 +74,6 @@ public class CQL2DetachedCriteria {
 	 * 		The class of the object being restricted
 	 * @param objectType
 	 * 		The Object type restriction
-	 * @return
 	 * @throws MalformedQueryException
 	 * @throws QueryProcessingException
 	 */
@@ -145,12 +145,13 @@ public class CQL2DetachedCriteria {
 	 * @param attrib
 	 * 		The Attribute restriction
 	 * @return
+	 * 		A single Criterion to express a CQL attribute query part
 	 * @throws MalformedQueryException
 	 * @throws QueryProcessingException
 	 */
 	private static Criterion handleAttribute(Class objectClass, Attribute attrib) throws MalformedQueryException, QueryProcessingException {
 		String name = attrib.getName();
-		String value = attrib.getValue();
+		String value = attrib.getValue().toString();
 		String predicate = attrib.getPredicate().getValue();
 		Method factoryMethod = getRestrictionFactory(predicate);
 		if (factoryMethod == null) {
@@ -247,6 +248,7 @@ public class CQL2DetachedCriteria {
 	 * @param value
 	 * @param objectType
 	 * @return
+	 * 		A value object of the type specified
 	 * @throws MalformedQueryException
 	 * @throws QueryProcessingException
 	 */
@@ -289,6 +291,7 @@ public class CQL2DetachedCriteria {
 	 * 
 	 * @param predicate
 	 * @return
+	 * 		The method required to produce a query restriction
 	 * @throws QueryProcessingException
 	 */
 	private static Method getRestrictionFactory(String predicate) throws QueryProcessingException {
@@ -325,6 +328,7 @@ public class CQL2DetachedCriteria {
 	 * @param group
 	 * 		The group restriction
 	 * @return
+	 * 		A Junction to express a CQL group
 	 * @throws MalformedQueryException
 	 * @throws QueryProcessingException
 	 */
