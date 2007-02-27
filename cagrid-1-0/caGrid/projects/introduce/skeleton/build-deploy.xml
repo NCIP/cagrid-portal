@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
 <project name="build-deploy file" basedir="." default="deploy">
+	<!-- ============================================================== -->
+	<!-- MASTER DEPLOY FILE DO NOT EDIT OR INTRODUCE MAY OVERWRITE      -->
+	<!-- ============================================================== -->
+		
+		
 	<property file="deploy.properties" />
 	<property name="service.deployment.path" value="${service.deployment.prefix}/${introduce.skeleton.service.name}" />
 	<pathconvert dirsep="_" property="service.deployment.dir.name">

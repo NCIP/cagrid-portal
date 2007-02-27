@@ -47,6 +47,7 @@
 							<xs:complexType>
 								<xs:attribute name="name" type="xs:string" use="required"/>
 								<xs:attribute name="qname" type="xs:QName" use="optional"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
