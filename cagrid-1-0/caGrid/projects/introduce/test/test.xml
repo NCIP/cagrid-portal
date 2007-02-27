@@ -17,7 +17,7 @@
 				<path refid="Portal.test.classpath" />
 			</classpath>
 		</taskdef>
-		<delete file="${cobertura.data.file}"/>
+		<delete file="${cobertura.data.file}" />
 		<mkdir dir="${instrumented.classes.dir}" />
 		<cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
 			<fileset dir="${introduce.classes.dir}">
@@ -38,18 +38,23 @@
 			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
 			<classpath location="${instrumented.classes.dir}" />
 			<classpath refid="Introduce.test.classpath" />
+			<classpath refid="UpdateManager.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
 			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}/Introduce">
-					<include name="**/unit/*Test.java" />
-					<include name="**/unit/*TestCase.java" />
+					<include name="**/unit/**/*Test.java" />
+					<include name="**/unit/**/*TestCase.java" />
+				</fileset>
+				<fileset dir="${test.src.dir}/UpdateManager">
+					<include name="**/unit/**/*Test.java" />
+					<include name="**/unit/**/*TestCase.java" />
 				</fileset>
 			</batchtest>
 		</junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />   
+		<fail message="Tests failed! Check test reports." if="test.failed" />
 	</target>
-	
+
 	<!-- call the test target for each project and aggregates the log resutls  -->
 	<target name="systemTest" depends="checkGlobus, instrument">
 		<echo message="Test results dir: ${junit.results.dir}" />
@@ -62,29 +67,34 @@
 			<jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}" />
 			<classpath location="${instrumented.classes.dir}" />
 			<classpath refid="Introduce.test.classpath" />
+			<classpath refid="UpdateManager.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
 			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}/Introduce">
-					<include name="**/system/*Test.java" />
-					<include name="**/system/*TestCase.java" />
+					<include name="**/system/**/*Test.java" />
+					<include name="**/system/**/*TestCase.java" />
+				</fileset>
+				<fileset dir="${test.src.dir}/UpdateManager">
+					<include name="**/unit/**/*Test.java" />
+					<include name="**/unit/**/*TestCase.java" />
 				</fileset>
 			</batchtest>
 		</junit>
-        <fail message="System Tests failed! Check test reports." if="test.failed" />   
+		<fail message="System Tests failed! Check test reports." if="test.failed" />
 	</target>
 
 	<!-- setting the ant var introduce.test.gui will make the gui tests run, else they will not -->
 	<target name="testGUI" depends="checkGlobus" if="introduce.test.gui">
-		
+
 		<!-- add hte add filters line here -->
-		<filter token="TestDir" value="${basedir}"/>
-		<filter token="Timeout" value="100000"/>
+		<filter token="TestDir" value="${basedir}" />
+		<filter token="Timeout" value="100000" />
 		<!-- then copy each of those scripts.template to scripts -->
 		<copy todir="${basedir}/test/resources/abbot" filtering="true" overwrite="true">
-		        <fileset dir="${basedir}/test/resources/scripts"/>
-		  </copy>
-		
+			<fileset dir="${basedir}/test/resources/scripts" />
+		</copy>
+
 		<junit dir="${basedir}" printsummary="yes" errorproperty="gui.test.failed" failureproperty="gui.test.failed" showoutput="true">
 			<sysproperty key="basedir" value="${basedir}" />
 			<jvmarg value="-Dbasedir=${basedir}" />
@@ -100,7 +110,7 @@
 				</fileset>
 			</batchtest>
 		</junit>
-        <fail message="Tests failed! Check test reports." if="gui.test.failed" />   
+		<fail message="Tests failed! Check test reports." if="gui.test.failed" />
 	</target>
 
 	<target name="coverageReport" depends="test" description="Runs the tests and generates a test
