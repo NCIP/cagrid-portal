@@ -269,6 +269,7 @@ public class AttributeModifyDialog extends JDialog {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Predicate pred = (Predicate) getPredicateComboBox().getSelectedItem();
 					String value = getValueTextField().getText();
+					// TODO: Attribute value of correct type!
 					attribute = new Attribute(attribType.getName(), pred, value);
 					dispose();
 				}

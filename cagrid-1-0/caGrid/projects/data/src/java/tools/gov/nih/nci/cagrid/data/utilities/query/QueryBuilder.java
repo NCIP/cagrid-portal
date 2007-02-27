@@ -835,6 +835,7 @@ public class QueryBuilder extends JFrame {
 					String choice = JOptionPane.showInputDialog(
 						QueryBuilder.this, "Enter new value", node.getAttribute().getValue());
 					if (choice != null) {
+						// TODO: Typed attribute values!
 						node.getAttribute().setValue(choice);
 						node.rebuild();
 						getQueryTree().refreshTree();
@@ -982,7 +983,11 @@ public class QueryBuilder extends JFrame {
 		chooser.setFileFilter(FileFilters.XML_FILTER);
 		int choice = chooser.showSaveDialog(this);
 		if (choice == JFileChooser.APPROVE_OPTION) {
-			File cqlFile = chooser.getSelectedFile();
+			String fileName = chooser.getSelectedFile().getAbsolutePath();
+			if (!fileName.endsWith(".xml") || !fileName.endsWith(".XML")) {
+				fileName += ".xml";
+			}
+			File cqlFile = new File(fileName);
 			lastDirectory = cqlFile.getAbsolutePath();
 			// get the CQL query from the tree
 			QueryTreeNode queryNode = getQueryTree().getQueryTreeNode();
@@ -1071,7 +1076,11 @@ public class QueryBuilder extends JFrame {
 			chooser.setFileFilter(FileFilters.XML_FILTER);
 			int choice = chooser.showSaveDialog(this);
 			if (choice == JFileChooser.APPROVE_OPTION) {
-				File outFile = chooser.getSelectedFile();
+				String fileName = chooser.getSelectedFile().getAbsolutePath();
+				if (!fileName.endsWith(".xml") || !fileName.endsWith(".XML")) {
+					fileName += ".xml";
+				}
+				File outFile = new File(fileName);
 				lastDirectory = outFile.getAbsolutePath();
 				try {
 					FileWriter writer = new FileWriter(outFile);
