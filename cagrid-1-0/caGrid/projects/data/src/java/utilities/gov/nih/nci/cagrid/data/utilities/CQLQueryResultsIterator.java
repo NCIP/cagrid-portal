@@ -73,6 +73,9 @@ public class CQLQueryResultsIterator implements Iterator {
 	 * @param wsddFilename
 	 */
 	private CQLQueryResultsIterator(CQLQueryResults results, boolean xmlOnly, InputStream wsdd) {
+		if (results == null) {
+			throw new IllegalArgumentException("Results cannot be null");
+		}
 		this.results = results;
 		this.xmlOnly = xmlOnly;
 		this.wsddConfigStream = wsdd;
