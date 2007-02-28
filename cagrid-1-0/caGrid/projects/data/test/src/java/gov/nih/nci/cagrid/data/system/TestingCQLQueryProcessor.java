@@ -28,7 +28,7 @@ import org.projectmobius.bookstore.BookStore;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> 
  * @created Nov 7, 2006 
- * @version $Id: TestingCQLQueryProcessor.java,v 1.2 2007-01-26 21:26:29 dervin Exp $ 
+ * @version $Id: TestingCQLQueryProcessor.java,v 1.3 2007-02-28 15:00:39 dervin Exp $ 
  */
 public class TestingCQLQueryProcessor extends LazyCQLQueryProcessor {
 	public static final String PROPERTY_STARTS_WITH_LOWERCASE = "thisPropertyStartsWithLowercase";
@@ -59,6 +59,7 @@ public class TestingCQLQueryProcessor extends LazyCQLQueryProcessor {
 		if (ucPropString.equals(UC_DEFAULT_VALUE)) {
 			throw new InitializationException("Default value found for property " + PROPERTY_STARTS_WITH_UPPERCASE + ", service properties incorrectly transfered");
 		}
+		super.initialize(props, wsddStream);
 	}
 	
 
