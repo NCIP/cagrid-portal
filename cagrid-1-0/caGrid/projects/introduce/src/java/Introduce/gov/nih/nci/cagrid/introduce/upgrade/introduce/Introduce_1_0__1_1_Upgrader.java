@@ -11,7 +11,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.util.List;
 import java.util.Properties;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.Namespace;
+import org.projectmobius.common.XMLUtilities;
 
 public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 
@@ -76,6 +82,46 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 		deployProperties.store(new FileOutputStream(new File(getServicePath()
 				+ File.separator + IntroduceConstants.DEPLOY_PROPERTIES_FILE)),
 				"Service Deployment Properties");
+
+		// need to add the new template var to the jndi so that it can be
+		// replaced
+		// by the new property for shutting off registration
+		Document jndiDoc = XMLUtilities.fileNameToDocument(getServicePath()
+				+ File.separator + "jndi-config.xml");
+		List<Element> services = jndiDoc.getRootElement().getChildren(
+				"service",
+				Namespace.getNamespace("http://wsrf.globus.org/jndi/config"));
+		for (Element service : services) {
+			List<Element> resources = service.getChildren("resource", Namespace
+					.getNamespace("http://wsrf.globus.org/jndi/config"));
+			for (Element resource : resources) {
+				List<Element> parameters = resource
+						.getChild(
+								"resourceParameters",
+								Namespace
+										.getNamespace("http://wsrf.globus.org/jndi/config"))
+						.getChildren(
+								"parameter",
+								Namespace
+										.getNamespace("http://wsrf.globus.org/jndi/config"));
+				for (Element parameter : parameters) {
+					if (parameter
+							.getChild(
+									"name",
+									Namespace
+											.getNamespace("http://wsrf.globus.org/jndi/config"))
+							.getText().equals("performRegistration")) {
+						parameter
+								.getChild(
+										"value",
+										Namespace
+												.getNamespace("http://wsrf.globus.org/jndi/config"))
+								.setText("PERFORM_REGISTRATION");
+					}
+
+				}
+			}
+		}
 
 		// need to add the soapFix.jar to the lib directory
 		Utils.copyFile(new File("." + File.separator + "skeleton"
