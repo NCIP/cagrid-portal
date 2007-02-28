@@ -14,10 +14,12 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
+import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.ExtensionUpgraderBase;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -58,6 +60,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		// move the configuration for the CQL query processor into
 		// the service properties and remove it from the extension data
 		reconfigureCqlQueryProcessor(extensionData);
+		// update the data service libraries
+		updateLibraries();
 		// change the version number
 		setCurrentExtensionVersion();
 		// fix up the castor mapping location
@@ -80,6 +84,43 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		if (!((currentVersion == null) || currentVersion.equals("1.0"))) {
 			throw new UpgradeException(getClass().getName() 
 				+ " upgrades FROM 1.0 TO 1.1, current version found is " + currentVersion);
+		}
+	}
+	
+	
+	private void updateLibraries() throws UpgradeException {
+		FileFilter dataLibFilter = new FileFilter() {
+			public boolean accept(File name) {
+				String filename = name.getName();
+				return filename.startsWith("caGrid-1.0-data-") && filename.endsWith(".jar");
+			}
+		};
+		// locate the old data service libs in the service
+		File serviceLibDir = new File(getServicePath() + File.separator + "lib");
+		File[] serviceDataLibs = serviceLibDir.listFiles(dataLibFilter);
+		// delete the old libraries
+		for (int i = 0; i < serviceDataLibs.length; i++) {
+			serviceDataLibs[i].delete();
+		}
+		// copy new libraries in
+		File buildLibDir = new File(".." + File.separator + "data" + File.separator + "build" + File.separator + "lib");
+		File[] dataLibs = buildLibDir.listFiles(dataLibFilter);
+		File[] outLibs = new File[dataLibs.length];
+		for (int i = 0; i < dataLibs.length; i++) {
+			File out = new File(
+				serviceLibDir.getAbsolutePath() + File.separator + dataLibs[i].getName());
+			try {
+				Utils.copyFile(dataLibs[i], out);
+			} catch (IOException ex) {
+				throw new UpgradeException("Error copying new data service library: " + ex.getMessage(), ex);
+			}
+			outLibs[i] = out;
+		}
+		File classpathFile = new File(getServicePath() + File.separator + ".classpath");
+		try {
+			ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibs);
+		} catch (Exception ex) {
+			throw new UpgradeException("Error updating eclipse .classpath file: " + ex.getMessage(), ex);
 		}
 	}
 	
