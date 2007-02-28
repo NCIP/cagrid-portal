@@ -97,7 +97,7 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 			for (Element resource : resources) {
 				List<Element> parameters = resource
 						.getChild(
-								"resourceParameters",
+								"resourceParams",
 								Namespace
 										.getNamespace("http://wsrf.globus.org/jndi/config"))
 						.getChildren(
