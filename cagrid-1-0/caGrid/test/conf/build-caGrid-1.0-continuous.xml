@@ -16,8 +16,8 @@
 
     <target name="test" depends="build">
         <!-- Call the target that tests  -->
-        <ant dir="caGrid" antfile="build.xml" target="test" inheritAll="false" inheritRefs="true"/>
+        <ant dir="caGrid" antfile="build.xml" target="test" inheritAll="false" inheritRefs="true">
+            <property name="run.system.tests" value="false"/>
+        </ant>
     </target>
-
-
 </project>

@@ -2,157 +2,124 @@
 <!-- caGrid Utilities build file                                             -->
 <!-- ======================================================================= -->
 <project name="caGrid_tests_harness" basedir=".">
-	<property name="test.logs.dir" value="${test.dir}/logs" />
-	<property name="junit.results.dir" value="${test.logs.dir}/junit" />
+    <import file="test-dart.xml" />
 
-	<!-- The presence of this property causes the build to fail as soon as test fails. -->
-	<!-- <property name="test.failfast" value="true" /> -->
+    <property name="test.logs.dir" value="${test.dir}/logs" />
+    <property name="junit.results.dir" value="${test.logs.dir}/junit" />
 
-	<!-- =============================================================== -->
-	<!-- Call test for each project and aggregates the log resutls       -->
-	<!-- =============================================================== -->
-	<target name="test" depends="prepare,createDartTestFiles" description="Test all the projects.">
-		<!-- Clean out old logs first -->
-		<delete failonerror="false">
-			<fileset dir="${junit.results.dir}">
-				<include name="*" />
-			</fileset>
-		</delete>
-		<for list="${testable.projects.list}" parallel="true" param="project.name" trim="true">
-			<sequential>
-				<echo message="Testing project @{project.name}." />
-				<trycatch property="@{project.name}.test.failed.message">
-					<try>
-						<ant inheritall="false" dir="projects/@{project.name}" antfile="build.xml" target="test">
-							<property name="junit.results.dir" value="${junit.results.dir}" />
-						</ant>
-					</try>
-					<catch>
-						<fail message="@{project.name} Tests failed (${@{project.name}.test.failed.message})" if="test.failfast" />
-						<echo message="@{project.name} Tests failed (${@{project.name}.test.failed.message}), proceeding with other tests, but build will fail at completion." />
-						<property name="test.failed" value="true" />
-					</catch>
-				</trycatch>
-			</sequential>
-		</for>
-		<trycatch property="test.report.failed.message">
-			<try>
-				<mkdir dir="${junit.results.dir}/report" />
-				<junitreport todir="${junit.results.dir}">
-					<fileset dir="${junit.results.dir}">
-						<include name="TEST-*.xml" />
-					</fileset>
-					<report format="frames" todir="${junit.results.dir}/report" />
-				</junitreport>
-				<echo message="Created test report in ${junit.results.dir}/report" />
-			</try>
-			<catch>
-				<echo message="Test Report creation failed (${test.report.failed.message})!" />
-			</catch>
-		</trycatch>
+    <!-- The presence of this property causes the build to fail as soon as test fails. -->
+    <!-- <property name="test.failfast" value="true" /> -->
+    <!-- The presence of this property causes unit tests to be run during test target. -->
+    <property name="run.unit.tests" value="true" />
+    <!-- The presence of this property causes system tests to be run during test target. -->
+    <property name="run.system.tests" value="true" />
 
-		<fail message="Tests failed! Consult the logs for details." if="test.failed" />
-	</target>
-	
-	<!-- =============================================================== -->
-	<!-- Call systemTest for each project and aggregates the log resutls       -->
-	<!-- =============================================================== -->
-	<target name="systemTest" depends="prepare,createDartTestFiles" description="Runs all the projects system tests.">
-		<!-- Clean out old logs first -->
-		<delete failonerror="false">
-			<fileset dir="${junit.results.dir}">
-				<include name="*" />
-			</fileset>
-		</delete>
-		<for list="${system.testable.projects.list}" parallel="true" param="project.name" trim="true">
-			<sequential>
-				<echo message="System Testing project @{project.name}." />
-				<trycatch property="@{project.name}.test.failed.message">
-					<try>
-						<ant inheritall="false" dir="projects/@{project.name}" antfile="build.xml" target="systemTest">
-							<property name="junit.results.dir" value="${junit.results.dir}" />
-						</ant>
-					</try>
-					<catch>
-						<fail message="@{project.name} Tests failed (${@{project.name}.test.failed.message})" if="test.failfast" />
-						<echo message="@{project.name} Tests failed (${@{project.name}.test.failed.message}), proceeding with other tests, but build will fail at completion." />
-						<property name="test.failed" value="true" />
-					</catch>
-				</trycatch>
-			</sequential>
-		</for>
-		<trycatch property="test.report.failed.message">
-			<try>
-				<mkdir dir="${junit.results.dir}/report" />
-				<junitreport todir="${junit.results.dir}">
-					<fileset dir="${junit.results.dir}">
-						<include name="TEST-*.xml" />
-					</fileset>
-					<report format="frames" todir="${junit.results.dir}/report" />
-				</junitreport>
-				<echo message="Created test report in ${junit.results.dir}/report" />
-			</try>
-			<catch>
-				<echo message="Test Report creation failed (${test.report.failed.message})!" />
-			</catch>
-		</trycatch>
+    <!-- ============================================================================ -->
+    <!-- Calls unit and system test for each project and aggregates the log resutls   -->
+    <!-- ============================================================================ -->
+    <target name="test" depends="prepare,createDartTestFiles" description="Test all the projects.">
+        <!-- Clean out old logs first -->
+        <delete failonerror="false">
+            <fileset dir="${junit.results.dir}">
+                <include name="*" />
+            </fileset>
+        </delete>
 
-		<fail message="Tests failed! Consult the logs for details." if="test.failed" />
-	</target>
+        <!-- Call Unit Tests -->
+        <if>
+            <equals arg1="${run.unit.tests}" arg2="true" />
+            <then>
+                <trycatch>
+                    <try>
+                        <runtarget target="unit-test" />
+                    </try>
+                    <catch>
+                        <property name="test.failed" value="true" />
+                    </catch>
+                </trycatch>
+            </then>
+        </if>
 
-	<!-- =============================================================== -->
-	<!-- Run a dart experimental (currently only submits test results)   -->
-	<!-- =============================================================== -->
-	<target name="experimental" depends="clean,all" description="Tests all the projects, and 
-		publishes results to the testing dashboard.">
 
-		<trycatch>
-			<try>
-				<runtarget target="test" />
-			</try>
-			<catch>
-				<echo message="Tests failed!  Proceeding to publish results." />
-			</catch>
-		</trycatch>
+        <!-- Call System Tests -->
+        <if>
+            <equals arg1="${run.system.tests}" arg2="true" />
+            <then>
+                <trycatch>
+                    <try>
+                        <runtarget target="system-test" />
+                    </try>
+                    <catch>
+                        <property name="test.failed" value="true" />
+                    </catch>
+                </trycatch>
+            </then>
+        </if>
 
-		<tstamp>
-			<format property="BUILDSTAMP" pattern="yyyy-MM-dd'T'HH:mm:ss.SZ" locale="en" />
-			<format property="BUILDFILE" pattern="yyyy-MM-dd'T'HH.mm.ss.SZ" locale="en" />
-		</tstamp>
-		<echo message="${BUILDSTAMP}" />
-		<property name="dart.experimental.log" value="${test.logs.dir}/${BUILDFILE}.xml" />
-		<concat destfile="${dart.experimental.log}">
-			<header filtering="no">
-				<![CDATA[<cruisecontrol>
-				<info>
-					<property name="builddate" value="@BUILDSTAMP@"/>
-				</info>]]></header>
-			<fileset dir="${junit.results.dir}">
-				<include name="TEST-*.xml" />
-			</fileset>
-			<fileset dir="${test.logs.dir}">
-				<include name="BuildNameExperimental.xml" />
-			</fileset>
-			<footer filtering="no">
-				<![CDATA[</cruisecontrol>]]></footer>
-		</concat>
-		<!-- Hackaroo to strip out the xml pragmas (NOTE: this requires a literal exact match) -->
-		<replace file="${dart.experimental.log}" summary="true" token="@BUILDSTAMP@" value="${BUILDSTAMP}" />
-		<replace file="${dart.experimental.log}" summary="true">
-			<replacetoken><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>]]></replacetoken>
-		</replace>
-		<replace file="${dart.experimental.log}" summary="true">
-			<replacetoken><![CDATA[<?xml version="1.0" encoding="utf-8" ?>]]></replacetoken>
-		</replace>
-		<replace file="${dart.experimental.log}" summary="true">
-			<replacetoken><![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]></replacetoken>
-		</replace>
-		<replace file="${dart.experimental.log}" summary="true">
-			<replacetoken><![CDATA[<?xml version="1.0" encoding="utf-8"?>]]></replacetoken>
-		</replace>
-		<ant target="publish">
-			<property name="dart.logfile" value="${dart.experimental.log}" />
-		</ant>
-	</target>
 
+        <!-- Try to create a report -->
+        <trycatch property="test.report.failed.message">
+            <try>
+                <mkdir dir="${junit.results.dir}/report" />
+                <junitreport todir="${junit.results.dir}">
+                    <fileset dir="${junit.results.dir}">
+                        <include name="TEST-*.xml" />
+                    </fileset>
+                    <report format="frames" todir="${junit.results.dir}/report" />
+                </junitreport>
+                <echo message="Created test report in ${junit.results.dir}/report" />
+            </try>
+            <catch>
+                <echo message="Test Report creation failed (${test.report.failed.message})!" />
+            </catch>
+        </trycatch>
+
+        <fail message="Tests failed! Consult the logs for details." if="test.failed" />
+    </target>
+
+    <!-- not to be called directly -->
+    <target name="unit-test">
+        <for list="${unit.testable.projects.list}" parallel="true" param="project.name" trim="true">
+            <sequential>
+                <echo message="Unit testing project @{project.name}." />
+                <trycatch property="@{project.name}.unit.test.failed.message">
+                    <try>
+                        <ant inheritall="false" dir="projects/@{project.name}" antfile="build.xml" target="test">
+                            <property name="junit.results.dir" value="${junit.results.dir}" />
+                        </ant>
+                    </try>
+                    <catch>
+                        <fail message="@{project.name} Unit tests failed (${@{project.name}.unit.test.failed.message})" if="test.failfast" />
+                        <echo message="@{project.name} Unit tests failed (${@{project.name}.unit.test.failed.message}), proceeding with other tests, but build will fail at completion." />
+                        <property name="unit.test.failed" value="true" />
+                    </catch>
+                </trycatch>
+            </sequential>
+        </for>
+
+        <fail message="Unit Tests failed! Consult the logs for details." if="unit.test.failed" />
+    </target>
+
+    <!-- not to be called directly -->
+    <target name="system-test">
+        <for list="${system.testable.projects.list}" parallel="true" param="project.name" trim="true">
+            <sequential>
+                <echo message="System Testing project @{project.name}." />
+                <trycatch property="@{project.name}.system.test.failed.message">
+                    <try>
+                        <ant inheritall="false" dir="projects/@{project.name}" antfile="build.xml" target="systemTest">
+                            <property name="junit.results.dir" value="${junit.results.dir}" />
+                        </ant>
+                    </try>
+                    <catch>
+                        <fail message="@{project.name} System tests failed (${@{project.name}.system.test.failed.message})" if="test.failfast" />
+                        <echo message="@{project.name} System tests failed (${@{project.name}.system.test.failed.message}), proceeding with other tests, but build will fail at completion." />
+                        <property name="test.failed" value="true" />
+                    </catch>
+                </trycatch>
+            </sequential>
+        </for>
+
+        <fail message="System Tests failed! Consult the logs for details." if="system.test.failed" />
+    </target>
 </project>

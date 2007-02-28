@@ -30,7 +30,6 @@
 	<import file="${antfiles.dir}/report-utilities.xml" />
 
 	<!-- IMPORT THE TEST TARGET -->
-	<import file="${test.dir}/test-dart.xml" />
 	<import file="${test.dir}/test.xml" />
 
 
@@ -40,10 +39,10 @@
 	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
 	<property name="projects.list" value="authz, bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, evs, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, sdkQuery32, syncgts, workflow/WorkflowFactoryService, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service, service-security-provider" />
 	<!-- ================================================================================ -->
-	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
+	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT UNIT TESTING               -->
 	<!-- ================================================================================ -->
 	<!-- This should be a subset of the projects above -->
-	<property name="testable.projects.list" value="introduce, cabigextensions, core, discovery, cadsr, evs, fqp, gridca, gts, data, sdkQuery, sdkQuery32, gridgrouper, wsEnum, metadatautils, dorian" />
+	<property name="unit.testable.projects.list" value="introduce, cabigextensions, core, discovery, cadsr, evs, fqp, gridca, gts, data, sdkQuery, sdkQuery32, gridgrouper, wsEnum, metadatautils, dorian" />
 	<!-- ================================================================================ -->
 	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT SYSTEM TESTING             -->
 	<!-- ================================================================================ -->
