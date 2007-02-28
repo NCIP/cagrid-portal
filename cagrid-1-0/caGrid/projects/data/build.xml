@@ -631,7 +631,7 @@
     <!-- Build and install extensions for introduce -->
     <!-- this target installs the default introduce extension, which adds an operation provider to a service
 	which MAKES it a data service -->
-    <target name="installIntroduceExtensions" depends="all" description="Builds and installs the Data Services extensions into Introduce.">
+    <target name="installIntroduceExtensions" description="Builds and installs the Data Services extensions into Introduce.">
         <delete dir="${introduce.extensions.dir}/data" failonerror="false"/>
         <mkdir dir="${introduce.extensions.dir}/data" />
         <mkdir dir="${introduce.extensions.dir}/data/schema" />
@@ -666,7 +666,7 @@
 
 
     <!-- Build and install the data service 'from scratch' extension for introduce -->
-    <target name="installFromScratchIntroduceExtension" depends="all" description="Builds and installs the Data Service from scratch extensions to Introduce.">
+    <target name="installFromScratchIntroduceExtension" description="Builds and installs the Data Service from scratch extensions to Introduce.">
         <delete dir="${introduce.extensions.dir}/dataFS" />
         <mkdir dir="${introduce.extensions.dir}/dataFS" />
         <mkdir dir="${introduce.extensions.dir}/dataFS/schema" />
