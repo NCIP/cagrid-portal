@@ -33,7 +33,7 @@
     <target name="test" depends="instrument, create_config_files,nuke">
         <echo message="Test results dir: ${junit.results.dir}" />
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true">
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" forkmode="once">
             <sysproperty key="basedir" value="${basedir}" />
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
             <jvmarg value="-Xmx512M" />

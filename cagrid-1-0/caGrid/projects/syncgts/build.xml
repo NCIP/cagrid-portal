@@ -308,7 +308,7 @@
 	<target name="test" depends="checkGlobus">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true">
+		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" forkmode="once">
 			<sysproperty key="basedir" value="${basedir}" />
 			<jvmarg value="-Dbuild.dir=${build.dir}" />
 			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />

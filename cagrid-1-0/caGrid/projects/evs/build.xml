@@ -281,7 +281,7 @@
     <target name="test" depends="checkGlobus" description="Runs the service's tests.">
         <echo message="Test results dir: ${junit.results.dir}" />
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true">
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" forkmode="once">
             <classpath refid="test.run.classpath" />
 			<sysproperty key="build.dir" value="${build.dest}" />
 			<jvmarg value="-Xmx512M" />

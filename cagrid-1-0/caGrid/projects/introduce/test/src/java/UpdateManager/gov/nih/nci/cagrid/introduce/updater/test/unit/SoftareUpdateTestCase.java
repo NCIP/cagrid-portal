@@ -1,4 +1,4 @@
-package gov.nih.nci.introduce.updater.test.unit;
+package gov.nih.nci.cagrid.introduce.updater.test.unit;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;

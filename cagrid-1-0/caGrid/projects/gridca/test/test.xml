@@ -23,7 +23,7 @@
     <target name="test" depends="create_config_files, instrument">
         <echo message="Test results dir: ${junit.results.dir}" />
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="true">
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="true" forkmode="once">
             <sysproperty key="basedir" value="${basedir}" />
             <jvmarg value="-Xmx512M" />
             <jvmarg value="-Dbuild.dir=${build.dir}" />

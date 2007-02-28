@@ -18,7 +18,7 @@
     <!-- call the test target for each project and aggregates the log resutls  -->
     <target name="test" depends="instrument">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${basedir}" printsummary="withOutAndErr" showoutput="true" fork="true" errorproperty="test.failed" failureproperty="test.failed">
+        <junit dir="${basedir}" printsummary="withOutAndErr" showoutput="true" fork="true" errorproperty="test.failed" failureproperty="test.failed" forkmode="once">
             <sysproperty key="build.dir" value="${classes.dir}" />
             <jvmarg value="-Dbuild.dir=${classes.dir}" />
             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
