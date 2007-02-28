@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import org.apache.tools.ant.taskdefs.CallTarget;
 import org.apache.tools.ant.taskdefs.Copy;
 import org.apache.tools.ant.types.FileSet;
 
@@ -29,7 +28,7 @@ public class ResolveDependencies extends Task {
 
 
 	public File getExtDir() {
-		return extDir;
+		return this.extDir;
 	}
 
 
@@ -54,33 +53,39 @@ public class ResolveDependencies extends Task {
 	}
 
 
+	@Override
 	public void execute() throws BuildException {
 		super.execute();
-		for (int i = 0; i < artifactList.size(); i++) {
+		for (int i = 0; i < this.artifactList.size(); i++) {
 
-			Artifact artifact = (Artifact) artifactList.get(i);
-			CallTarget antCall = artifact.getAntCall();
+			Artifact artifact = (Artifact) this.artifactList.get(i);
+			GeneratingCallTarget antCall = artifact.getAntCall();
 			if (antCall != null) {
-				// see if we call this target yet, in this run, if so, skip it
-				String prop = "called.antcall.of." + artifact.getIdentifer();
-				String calledProperty = this.getProject().getProperty(prop);
-				if (calledProperty != null) {
-					System.out.println("Skipping dependent artifact's ant call, as propery was set:" + prop);
-				} else if (this.getProject().getProperty(SKIP_ANTCALLS_PROPERTY) != null ) {
+
+				if (this.getProject().getProperty(SKIP_ANTCALLS_PROPERTY) != null) {
 					System.out.println("Skipping all artifact ant calls, as global propery was set:"
 						+ SKIP_ANTCALLS_PROPERTY);
 				} else {
-					System.out
-						.println("Calling dependent artifact's ant call for first time; setting property:" + prop);
-					this.getProject().setProperty(prop, "true");
-					antCall.setProject(this.getProject());
-					antCall.execute();
+					// see if we call this target yet, in this run, if so, skip
+					// it
+					String prop = "called.antcall.of." + antCall.getTarget();
+					String calledProperty = this.getProject().getProperty(prop);
+					if (calledProperty != null) {
+						System.out.println("Skipping dependent artifact's ant call, as propery was set:" + prop);
+					} else {
+						System.out.println("Calling dependent artifact's ant call for first time; setting property:"
+							+ prop);
+						this.getProject().setProperty(prop, "true");
+						antCall.setProject(this.getProject());
+						antCall.execute();
+					}
 				}
 			}
 
 			// configure a copy task to send the created artifacts where they
 			// need to go
 			Copy copyTask = new Copy();
+			copyTask.setTaskName(this.getTaskName() + " copy");
 			copyTask.setProject(this.getProject());
 			copyTask.setOverwrite(true);
 			// add the files from the artifact
@@ -122,7 +127,7 @@ public class ResolveDependencies extends Task {
 
 
 	public File getTargetDir() {
-		return targetDir;
+		return this.targetDir;
 	}
 
 

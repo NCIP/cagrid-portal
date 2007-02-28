@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.taskdefs.CallTarget;
 import org.apache.tools.ant.types.DataType;
 import org.apache.tools.ant.types.FileSet;
 
@@ -23,8 +22,8 @@ public class Artifact extends DataType {
 
 	private String track;
 	private String type;
-	private List fileSetList;
-	private CallTarget antcall;
+	private final List fileSetList;
+	private GeneratingCallTarget antcall;
 
 
 	public Artifact() {
@@ -47,7 +46,7 @@ public class Artifact extends DataType {
 		if (isReference()) {
 			return getReferencedArtifact().getTrack();
 		}
-		return track;
+		return this.track;
 	}
 
 
@@ -63,7 +62,7 @@ public class Artifact extends DataType {
 		if (isReference()) {
 			return getReferencedArtifact().getType();
 		}
-		return type;
+		return this.type;
 	}
 
 
@@ -91,7 +90,7 @@ public class Artifact extends DataType {
 	}
 
 
-	public CallTarget getAntCall() {
+	public GeneratingCallTarget getAntCall() {
 		if (isReference()) {
 			return getReferencedArtifact().getAntCall();
 		}
@@ -99,7 +98,7 @@ public class Artifact extends DataType {
 	}
 
 
-	public void addConfiguredAntCall(CallTarget antcall) {
+	public void addConfiguredGeneratingAntCall(GeneratingCallTarget antcall) {
 		if (isReference()) {
 			throw new BuildException("Cannont use other attributes and refid.");
 		}
