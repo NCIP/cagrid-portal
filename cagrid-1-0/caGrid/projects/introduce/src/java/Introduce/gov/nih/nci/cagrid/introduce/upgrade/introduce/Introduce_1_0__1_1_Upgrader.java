@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -88,14 +89,17 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 		// by the new property for shutting off registration
 		Document jndiDoc = XMLUtilities.fileNameToDocument(getServicePath()
 				+ File.separator + "jndi-config.xml");
-		List<Element> services = jndiDoc.getRootElement().getChildren(
-				"service",
+		List services = jndiDoc.getRootElement().getChildren("service",
 				Namespace.getNamespace("http://wsrf.globus.org/jndi/config"));
-		for (Element service : services) {
-			List<Element> resources = service.getChildren("resource", Namespace
+		Iterator serviceI = services.iterator();
+		while (serviceI.hasNext()) {
+			Element service = (Element) serviceI.next();
+			List resources = service.getChildren("resource", Namespace
 					.getNamespace("http://wsrf.globus.org/jndi/config"));
-			for (Element resource : resources) {
-				List<Element> parameters = resource
+			Iterator resourceI = resources.iterator();
+			while (resourceI.hasNext()) {
+				Element resource = (Element) resourceI.next();
+				List parameters = resource
 						.getChild(
 								"resourceParams",
 								Namespace
@@ -104,7 +108,9 @@ public class Introduce_1_0__1_1_Upgrader extends IntroduceUpgraderBase {
 								"parameter",
 								Namespace
 										.getNamespace("http://wsrf.globus.org/jndi/config"));
-				for (Element parameter : parameters) {
+				Iterator parameterI = parameters.iterator();
+				while (parameterI.hasNext()) {
+					Element parameter = (Element) parameterI.next();
 					if (parameter
 							.getChild(
 									"name",
