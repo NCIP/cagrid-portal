@@ -27,19 +27,24 @@ import org.globus.gsi.bc.BouncyCastleOpenSSLKey;
  *          Exp $
  */
 public class KeyUtil {
+	
+	public static KeyPair generateRSAKeyPair2048() throws Exception {
+		return generateRSAKeyPair(2048);
+	}
 
 	public static KeyPair generateRSAKeyPair1024() throws Exception {
-		SecurityUtil.init();
-		KeyPairGenerator kpGen = KeyPairGenerator.getInstance("RSA", "BC");
-		kpGen.initialize(1024, new SecureRandom());
-		return kpGen.generateKeyPair();
+		return generateRSAKeyPair(1024);
 	}
 
 
 	public static KeyPair generateRSAKeyPair512() throws Exception {
+		return generateRSAKeyPair(512);
+	}
+	
+	public static KeyPair generateRSAKeyPair(int size) throws Exception {
 		SecurityUtil.init();
 		KeyPairGenerator kpGen = KeyPairGenerator.getInstance("RSA", "BC");
-		kpGen.initialize(512, new SecureRandom());
+		kpGen.initialize(size, new SecureRandom());
 		return kpGen.generateKeyPair();
 	}
 
