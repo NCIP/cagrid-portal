@@ -1,0 +1,17 @@
+Implementation enhancements to investiate
+
+I.  	SDK 3.2 uses a slightly newer version of Hibernate.
+	A.	Can it now handle cases of returning multiple attributes?
+	B.	Can I get type / table metadata to determine if a given type has subclasses?
+	C.	Distinct attributes in HQL
+	D.	Count results in HQL
+	E.	Multiple associations to same type
+	F.	Detached criteria use in general
+II.		CSM
+III.	CQL
+	A.	caCORE has their own version of CQL
+		1.	Doesn't support all features of CQL
+		2.	Should sync up bean re-use
+	B.	Potential to reuse HQL translation process
+	C.	Predicate value types
+	
