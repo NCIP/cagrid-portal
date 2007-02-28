@@ -97,6 +97,7 @@
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.dir.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.prefix}" token="SERVICE-INSTANCE-PREFIX" />
 		<replace file="tmp/jndi-config.xml" value="etc/${service.deployment.dir.name}" token="ETC-PATH" />
+		<replace file="tmp/jndi-config.xml" value="${perform.index.service.registration}" token="PERFORM_REGISTRATION" />
 		<copy overwrite="true" toDir="${service.deployment.dir}">
 			<fileset dir="tmp">
 				<include name="jndi-config.xml" />
@@ -164,6 +165,7 @@
 		<replace file="tmp/jndi-config.xml" value="${introduce.skeleton.service.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/jndi-config.xml" value="${service.deployment.prefix}" token="SERVICE-INSTANCE-PREFIX" />
 		<replace file="tmp/jndi-config.xml" value="etc/${service.deployment.dir.name}" token="ETC-PATH" />
+		<replace file="tmp/jndi-config.xml" value="${perform.index.service.registration}" token="PERFORM_REGISTRATION" />
 		<mkdir dir="tmp/etc"/>
 		<copy overwrite="true" toDir="tmp/etc">
 			<fileset dir="etc">

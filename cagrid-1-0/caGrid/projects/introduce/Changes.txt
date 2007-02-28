@@ -1,5 +1,6 @@
 1.0 - 1.1
 -- Added a new target in the service build file which enables fixing the soap bindings to work with custom serialization.
+-- Added property "perform.index.service.registration" to the deploy.properties to enable or disable index service registration.
 -- Added two new properties in the deploy.properties enabling the metadata pub/sub timing to be controlled.
 	--index.service.registration.refresh_seconds=600
 	--index.service.index.refresh_milliseconds=30000
