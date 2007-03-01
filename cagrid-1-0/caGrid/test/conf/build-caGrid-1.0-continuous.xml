@@ -18,6 +18,7 @@
         <!-- Call the target that tests  -->
         <ant dir="caGrid" antfile="build.xml" target="test" inheritAll="false" inheritRefs="true">
             <property name="run.system.tests" value="false"/>
+            <property name="create.test.report" value="false"/>
         </ant>
     </target>
 </project>

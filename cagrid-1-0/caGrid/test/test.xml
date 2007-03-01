@@ -13,6 +13,8 @@
     <property name="run.unit.tests" value="true" />
     <!-- The presence of this property causes system tests to be run during test target. -->
     <property name="run.system.tests" value="true" />
+    <!-- The presence of this property causes an html test report to be created. -->
+    <property name="create.test.report" value="true" />
 
     <!-- ============================================================================ -->
     <!-- Calls unit and system test for each project and aggregates the log resutls   -->
@@ -38,6 +40,9 @@
                     </catch>
                 </trycatch>
             </then>
+            <else>
+                <echo message="Skipping unit tests." />
+            </else>
         </if>
 
 
@@ -54,25 +59,36 @@
                     </catch>
                 </trycatch>
             </then>
+            <else>
+                <echo message="Skipping system tests." />
+            </else>
         </if>
 
 
         <!-- Try to create a report -->
-        <trycatch property="test.report.failed.message">
-            <try>
-                <mkdir dir="${junit.results.dir}/report" />
-                <junitreport todir="${junit.results.dir}">
-                    <fileset dir="${junit.results.dir}">
-                        <include name="TEST-*.xml" />
-                    </fileset>
-                    <report format="frames" todir="${junit.results.dir}/report" />
-                </junitreport>
-                <echo message="Created test report in ${junit.results.dir}/report" />
-            </try>
-            <catch>
-                <echo message="Test Report creation failed (${test.report.failed.message})!" />
-            </catch>
-        </trycatch>
+        <if>
+            <equals arg1="${create.test.report}" arg2="true" />
+            <then>
+                <trycatch property="test.report.failed.message">
+                    <try>
+                        <mkdir dir="${junit.results.dir}/report" />
+                        <junitreport todir="${junit.results.dir}">
+                            <fileset dir="${junit.results.dir}">
+                                <include name="TEST-*.xml" />
+                            </fileset>
+                            <report format="frames" todir="${junit.results.dir}/report" />
+                        </junitreport>
+                        <echo message="Created test report in ${junit.results.dir}/report" />
+                    </try>
+                    <catch>
+                        <echo message="Test Report creation failed (${test.report.failed.message})!" />
+                    </catch>
+                </trycatch>
+            </then>
+            <else>
+                <echo message="Skipping test report creation." />
+            </else>
+        </if>
 
         <fail message="Tests failed! ${test.failed.message} Consult the logs for details." if="test.failed" />
     </target>
