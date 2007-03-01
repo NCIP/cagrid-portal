@@ -127,7 +127,7 @@
 	
 	<!-- system tests against the basic data service -->
 	<target name="testBasicSystem" depends="setGlobus, installIntroduceExtensions, prepareClasspaths, testCreation" description="Runs the service creation and then system tests">
-		<junit dir="${basedir}">
+		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
 			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
 			<classpath location="${instrumented.classes.dir}"/>
@@ -175,7 +175,7 @@
 	
 	<!-- system tests against the enumeration data service -->
 	<target name="testEnumerationSystem" depends="setGlobus, testEnumerationCreation" description="Tests the enumeration data service system">
-		<junit dir="${basedir}">
+		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
 			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
 			<classpath location="${instrumented.classes.dir}"/>
@@ -198,7 +198,7 @@
 	<!-- tests upgrading a 1.0 service to 1.1 -->
     <target name="testUpgradeFrom1pt0to1pt1" depends="setGlobus, installIntroduceExtensions, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to 1.1" unless="upgrade.1pt0.to.1pt1.completed">
 		<mkdir dir="${junit.results.dir}"/>
-		<junit dir="${introduce.dir}">
+		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
 			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
 			<classpath location="${instrumented.classes.dir}"/>
 			<classpath refid="all.test.classpath"/>
@@ -220,7 +220,7 @@
 	
 	<!-- system tests against the service upgraded from 1.0 to 1.1 -->
 	<target name="testUpgradedFrom1pt0to1pt1System" depends="setGlobus, testUpgradeFrom1pt0to1pt1" description="Performs system tests on the upgraded (1.0 to 1.1) service">
-		<junit dir="${basedir}">
+		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
 			<jvmarg value="-Dintroduce.base.dir=../introduce"/>
 			<classpath location="${instrumented.classes.dir}"/>
