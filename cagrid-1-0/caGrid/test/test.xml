@@ -29,7 +29,7 @@
         <if>
             <equals arg1="${run.unit.tests}" arg2="true" />
             <then>
-                <trycatch>
+                <trycatch property="test.failed.message">
                     <try>
                         <runtarget target="unit-test" />
                     </try>
@@ -45,7 +45,7 @@
         <if>
             <equals arg1="${run.system.tests}" arg2="true" />
             <then>
-                <trycatch>
+                <trycatch property="test.failed.message">
                     <try>
                         <runtarget target="system-test" />
                     </try>
@@ -74,7 +74,7 @@
             </catch>
         </trycatch>
 
-        <fail message="Tests failed! Consult the logs for details." if="test.failed" />
+        <fail message="Tests failed! ${test.failed.message} Consult the logs for details." if="test.failed" />
     </target>
 
     <!-- not to be called directly -->
