@@ -23,11 +23,14 @@ public class ExceptionsTable extends PortalBaseTable {
 
 	public static String NAME = "Name";
 
+	public static String DESC = "Description";
+
 	public static String IS_CREATED = "Created";
 
 	public static String DATA1 = "DATA1";
 
 	private MethodType method;
+
 	private ServiceType service;
 
 
@@ -41,29 +44,26 @@ public class ExceptionsTable extends PortalBaseTable {
 
 
 	public boolean isCellEditable(int row, int column) {
+		if (column == 2) {
+			return true;
+		}
 		return false;
 	}
 
 
-	public void addRow(final QName exception, boolean isCreated) {
+	public void addRow(final QName exception, boolean isCreated, String description) {
 		final Vector v = new Vector();
 		v.add(exception.getNamespaceURI());
 		v.add(exception.getLocalPart());
+		if (description == null) {
+			v.add("");
+		} else {
+			v.add(description);
+		}
 		v.add(new Boolean(isCreated));
 		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
-	}
-
-
-	public void modifySelectedRow(final QName exception) throws Exception {
-		int row = getSelectedRow();
-		if ((row < 0) || (row >= getRowCount())) {
-			throw new Exception("invalid row");
-		}
-		Vector v = (Vector) getValueAt(getSelectedRow(), 1);
-		v.set(0, exception.getNamespaceURI());
-		v.set(1, exception.getLocalPart());
 	}
 
 
@@ -74,10 +74,11 @@ public class ExceptionsTable extends PortalBaseTable {
 
 	public MethodTypeExceptionsException getRowData(int row) throws Exception {
 		MethodTypeExceptionsException exception = new MethodTypeExceptionsException();
-		if (((Boolean) getValueAt(row, 2)).booleanValue()) {
+		if (((Boolean) getValueAt(row, 3)).booleanValue()) {
 			exception.setQname(new QName((String) getValueAt(row, 0), (String) getValueAt(row, 1)));
 		}
 		exception.setName((String) getValueAt(row, 1));
+		exception.setDescription(((String) getValueAt(row, 2)));
 		return exception;
 	}
 
@@ -113,11 +114,15 @@ public class ExceptionsTable extends PortalBaseTable {
 		if (method.getExceptions() != null) {
 			if (method.getExceptions().getException() != null) {
 				for (int i = 0; i < method.getExceptions().getException().length; i++) {
+					if (method.getExceptions().getException(i).getDescription() == null) {
+						method.getExceptions().getException(i).setDescription("");
+					}
 					if (method.getExceptions().getException(i).getQname() != null) {
-						addRow(method.getExceptions().getException(i).getQname(), true);
+						addRow(method.getExceptions().getException(i).getQname(), true, method.getExceptions()
+							.getException(i).getDescription());
 					} else {
 						addRow(new QName(service.getNamespace() + "/types", method.getExceptions().getException(i)
-							.getName()), false);
+							.getName()), false, method.getExceptions().getException(i).getDescription());
 					}
 				}
 			}
@@ -129,6 +134,7 @@ public class ExceptionsTable extends PortalBaseTable {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(NAMESPACE);
 		model.addColumn(NAME);
+		model.addColumn(DESC);
 		model.addColumn(IS_CREATED);
 		model.addColumn(DATA1);
 

@@ -26,6 +26,8 @@ public class OutputTypeTable extends PortalBaseTable {
 
 	public static String DATA2 = "DATA2";
 
+	public static String DESC = "Description";
+
 	private MethodType method;
 
 
@@ -60,6 +62,12 @@ public class OutputTypeTable extends PortalBaseTable {
 			v.add(new Boolean(output.isIsArray()));
 			v.add(output.getQName().getNamespaceURI());
 			v.add(output.getQName().getLocalPart());
+			String desc = output.getDescription();
+			if (desc == null) {
+				desc = "";
+				output.setDescription(desc);
+			}
+			v.add(desc);
 			v.add(output);
 			v.add(v);
 			((DefaultTableModel) this.getModel()).addRow(v);
@@ -71,12 +79,16 @@ public class OutputTypeTable extends PortalBaseTable {
 		if ((row < 0) || (row >= getRowCount())) {
 			throw new Exception("invalid row");
 		}
-		Vector v = (Vector) getValueAt(row, 4);
+		Vector v = (Vector) getValueAt(row, 5);
 		v.set(0, (new Boolean(output.isIsArray())));
 		v.set(1, output.getQName().getNamespaceURI());
 		v.set(2, output.getQName().getLocalPart());
-		v.set(3, output);
-		v.set(4, v);
+		if (output.getDescription() == null) {
+			output.setDescription("");
+		}
+		v.set(3, output.getDescription());
+		v.set(4, output);
+		v.set(5, v);
 		paint(getGraphics());
 	}
 
@@ -87,9 +99,11 @@ public class OutputTypeTable extends PortalBaseTable {
 
 
 	public MethodTypeOutput getRowData(int row) throws Exception {
-		MethodTypeOutput output = ((MethodTypeOutput) getValueAt(row, 3));
+		MethodTypeOutput output = ((MethodTypeOutput) getValueAt(row, 4));
 		boolean isArray = ((Boolean) getValueAt(row, 0)).booleanValue();
+		String description = ((String) getValueAt(row, 3));
 		output.setIsArray(isArray);
+		output.setDescription(description);
 		return output;
 	}
 
@@ -144,6 +158,7 @@ public class OutputTypeTable extends PortalBaseTable {
 			addColumn(ISARRAY);
 			addColumn(NAMESPACE);
 			addColumn(TYPE);
+			addColumn(DESC);
 			addColumn("DATA1");
 			addColumn("DATA2");
 		}

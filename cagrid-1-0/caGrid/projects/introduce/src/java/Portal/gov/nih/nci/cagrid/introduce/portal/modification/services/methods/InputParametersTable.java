@@ -21,6 +21,7 @@ public class InputParametersTable extends PortalBaseTable {
 	public static String ISARRAY = "Is Array";
 	public static String NAMESPACE = "Namespace";
 	public static String TYPE = "Type";
+	public static String DESC = "Description";
 	public static String DATA1 = "DATA1";
 
 	private MethodType method;
@@ -44,7 +45,12 @@ public class InputParametersTable extends PortalBaseTable {
 		v.add(new Boolean(input.isIsArray()));
 		v.add(input.getQName().getNamespaceURI());
 		v.add(input.getQName().getLocalPart());
-
+		String desc = input.getDescription();
+		if (desc == null) {
+			desc = "";
+			input.setDescription("");
+		}
+		v.add(desc);
 		v.add(v);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
@@ -56,12 +62,13 @@ public class InputParametersTable extends PortalBaseTable {
 		if ((row < 0) || (row >= getRowCount())) {
 			throw new Exception("invalid row");
 		}
-		Vector v = (Vector) getValueAt(row, 4);
+		Vector v = (Vector) getValueAt(row, 5);
 		v.set(0, input.getName());
 		v.set(1, new Boolean(input.isIsArray()));
 		v.set(2, input.getQName().getNamespaceURI());
 		v.set(3, input.getQName().getLocalPart());
-		v.set(4, v);
+		v.set(4, input.getDescription());
+		v.set(5, v);
 	}
 
 
@@ -70,12 +77,13 @@ public class InputParametersTable extends PortalBaseTable {
 		if ((row < 0) || (row >= getRowCount())) {
 			throw new Exception("invalid row");
 		}
-		Vector v = (Vector) getValueAt(getSelectedRow(), 4);
+		Vector v = (Vector) getValueAt(getSelectedRow(), 5);
 		v.set(0, input.getName());
 		v.set(1, new Boolean(input.isIsArray()));
 		v.set(2, input.getQName().getNamespaceURI());
 		v.set(3, input.getQName().getLocalPart());
-		v.set(4, v);
+		v.set(4, input.getDescription());
+		v.set(5, v);
 	}
 
 
@@ -92,7 +100,7 @@ public class InputParametersTable extends PortalBaseTable {
 
 
 	public void moveSelectedRowDown() throws Exception {
-		if (getSelectedRow() < getRowCount() - 1 && getRowCount() > 1) {
+		if ((getSelectedRow() < getRowCount() - 1) && (getRowCount() > 1)) {
 			MethodTypeInputsInput input1 = getRowData(getSelectedRow());
 			MethodTypeInputsInput input2 = getRowData(getSelectedRow() + 1);
 			modifySelectedRow(input2);
@@ -125,19 +133,22 @@ public class InputParametersTable extends PortalBaseTable {
 		}
 		MethodTypeInputsInput input = new MethodTypeInputsInput();
 
-		String name = ((String)getValueAt(row, 0));
+		String name = ((String) getValueAt(row, 0));
 		boolean isArray = ((Boolean) getValueAt(row, 1)).booleanValue();
 		String namespace = ((String) getValueAt(row, 2));
 		String type = ((String) getValueAt(row, 3));
+		String description = ((String) getValueAt(row, 4));
 
 		input.setIsArray(isArray);
 
-		if (name != null && !name.equals("")) {
+		if ((name != null) && !name.equals("")) {
 			input.setName(name);
 		}
-		if (namespace != null && !namespace.equals("") && type != null && !type.equals("")) {
+		if ((namespace != null) && !namespace.equals("") && (type != null) && !type.equals("")) {
 			input.setQName(new QName(namespace, type));
 		}
+
+		input.setDescription(description);
 
 		return input;
 	}
@@ -153,9 +164,9 @@ public class InputParametersTable extends PortalBaseTable {
 		this.getColumn(DATA1).setMaxWidth(0);
 		this.getColumn(DATA1).setMinWidth(0);
 		this.getColumn(DATA1).setPreferredWidth(0);
-		if (this.method.getInputs() != null && this.method.getInputs().getInput() != null) {
-			for (int i = 0; i < this.method.getInputs().getInput().length; i++) {
-				addRow(this.method.getInputs().getInput(i));
+		if ((method.getInputs() != null) && (method.getInputs().getInput() != null)) {
+			for (int i = 0; i < method.getInputs().getInput().length; i++) {
+				addRow(method.getInputs().getInput(i));
 			}
 		}
 
@@ -188,6 +199,7 @@ public class InputParametersTable extends PortalBaseTable {
 			addColumn(ISARRAY);
 			addColumn(NAMESPACE);
 			addColumn(TYPE);
+			addColumn(DESC);
 			addColumn(DATA1);
 		}
 
