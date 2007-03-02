@@ -41,14 +41,13 @@ import org.projectmobius.common.Namespace;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 
-/** 
- *  SchemaTypesPanel
- *  Panel to select schemas for the types in the domain model
+
+/**
+ * SchemaTypesPanel Panel to select schemas for the types in the domain model
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
- * @created Sep 26, 2006 
- * @version $Id$ 
+ * @created Sep 26, 2006
+ * @version $Id$
  */
 public class SchemaTypesPanel extends AbstractWizardPanel {
 
@@ -58,6 +57,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 	private JPanel gmePanel = null;
 	private JScrollPane packageNamespaceScrollPane = null;
 	private PackageSchemasTable packageNamespaceTable = null;
+
 
 	public SchemaTypesPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
 		super(extensionDescription, info);
@@ -94,7 +94,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error populating the packages table", ex);
-		}		
+		}
 	}
 
 
@@ -106,84 +106,84 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 	public String getPanelShortName() {
 		return "Schemas";
 	}
-	
-	
+
+
 	private void initialize() {
-        GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-        gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints4.gridy = 1;
-        gridBagConstraints4.weightx = 1.0;
-        gridBagConstraints4.weighty = 1.0;
-        gridBagConstraints4.gridx = 0;
-        GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-        gridBagConstraints3.gridx = 0;
-        gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints3.gridy = 0;
-        this.setLayout(new GridBagLayout());
-        this.setSize(new java.awt.Dimension(505,209));
-        this.add(getGmePanel(), gridBagConstraints3);
-        this.add(getPackageNamespaceScrollPane(), gridBagConstraints4);		
+		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+		gridBagConstraints4.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints4.gridy = 1;
+		gridBagConstraints4.weightx = 1.0;
+		gridBagConstraints4.weighty = 1.0;
+		gridBagConstraints4.gridx = 0;
+		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+		gridBagConstraints3.gridx = 0;
+		gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints3.gridy = 0;
+		this.setLayout(new GridBagLayout());
+		this.setSize(new java.awt.Dimension(505, 209));
+		this.add(getGmePanel(), gridBagConstraints3);
+		this.add(getPackageNamespaceScrollPane(), gridBagConstraints4);
 	}
 
 
 	/**
-	 * This method initializes jLabel	
-	 * 	
-	 * @return javax.swing.JLabel	
+	 * This method initializes jLabel
+	 * 
+	 * @return javax.swing.JLabel
 	 */
 	private JLabel getGmeUrlLabel() {
-		if (gmeUrlLabel == null) {
-			gmeUrlLabel = new JLabel();
-			gmeUrlLabel.setText("GME URL:");
+		if (this.gmeUrlLabel == null) {
+			this.gmeUrlLabel = new JLabel();
+			this.gmeUrlLabel.setText("GME URL:");
 		}
-		return gmeUrlLabel;
+		return this.gmeUrlLabel;
 	}
 
 
 	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes jTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getGmeUrlTextField() {
-		if (gmeUrlTextField == null) {
-			gmeUrlTextField = new JTextField();
+		if (this.gmeUrlTextField == null) {
+			this.gmeUrlTextField = new JTextField();
 			String url = ResourceManager.getServiceURLProperty(DataServiceConstants.GME_SERVICE_URL);
-			gmeUrlTextField.setText(url);
+			this.gmeUrlTextField.setText(url);
 		}
-		return gmeUrlTextField;
+		return this.gmeUrlTextField;
 	}
 
 
 	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getGmeSchemasButton() {
-		if (gmeSchemasButton == null) {
-			gmeSchemasButton = new JButton();
-			gmeSchemasButton.setText("Find Schemas Using GME");
-			gmeSchemasButton.addActionListener(new java.awt.event.ActionListener() {
+		if (this.gmeSchemasButton == null) {
+			this.gmeSchemasButton = new JButton();
+			this.gmeSchemasButton.setText("Find Schemas Using GME");
+			this.gmeSchemasButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					findSchemas();
 				}
 			});
 		}
-		return gmeSchemasButton;
+		return this.gmeSchemasButton;
 	}
 
 
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getGmePanel() {
-		if (gmePanel == null) {
+		if (this.gmePanel == null) {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints2.gridwidth = 2;
 			gridBagConstraints2.gridy = 1;
@@ -191,49 +191,49 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.weightx = 1.0;
-			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.gridx = 1;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
-			gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints.gridy = 0;
-			gmePanel = new JPanel();
-			gmePanel.setLayout(new GridBagLayout());
-			gmePanel.add(getGmeUrlLabel(), gridBagConstraints);
-			gmePanel.add(getGmeUrlTextField(), gridBagConstraints1);
-			gmePanel.add(getGmeSchemasButton(), gridBagConstraints2);
+			this.gmePanel = new JPanel();
+			this.gmePanel.setLayout(new GridBagLayout());
+			this.gmePanel.add(getGmeUrlLabel(), gridBagConstraints);
+			this.gmePanel.add(getGmeUrlTextField(), gridBagConstraints1);
+			this.gmePanel.add(getGmeSchemasButton(), gridBagConstraints2);
 		}
-		return gmePanel;
+		return this.gmePanel;
 	}
 
 
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getPackageNamespaceScrollPane() {
-		if (packageNamespaceScrollPane == null) {
-			packageNamespaceScrollPane = new JScrollPane();
-			packageNamespaceScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-			packageNamespaceScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
-				null, "Schema Mappings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
+		if (this.packageNamespaceScrollPane == null) {
+			this.packageNamespaceScrollPane = new JScrollPane();
+			this.packageNamespaceScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+			this.packageNamespaceScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				"Schema Mappings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-			packageNamespaceScrollPane.setViewportView(getPackageNamespaceTable());
+			this.packageNamespaceScrollPane.setViewportView(getPackageNamespaceTable());
 		}
-		return packageNamespaceScrollPane;
+		return this.packageNamespaceScrollPane;
 	}
 
 
 	/**
-	 * This method initializes jTable	
-	 * 	
-	 * @return javax.swing.JTable	
+	 * This method initializes jTable
+	 * 
+	 * @return javax.swing.JTable
 	 */
 	private PackageSchemasTable getPackageNamespaceTable() {
-		if (packageNamespaceTable == null) {
-			packageNamespaceTable = new PackageSchemasTable();
-			packageNamespaceTable.getModel().addTableModelListener(new TableModelListener() {
+		if (this.packageNamespaceTable == null) {
+			this.packageNamespaceTable = new PackageSchemasTable();
+			this.packageNamespaceTable.getModel().addTableModelListener(new TableModelListener() {
 				public void tableChanged(TableModelEvent e) {
 					if (e.getType() == TableModelEvent.UPDATE) {
 						setWizardComplete(allSchemasResolved());
@@ -247,10 +247,10 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 				}
 			});
 		}
-		return packageNamespaceTable;
+		return this.packageNamespaceTable;
 	}
-	
-	
+
+
 	private void findSchemas() {
 		// get the GME handle
 		try {
@@ -272,7 +272,8 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 							// found the namespace as well
 							// download the schema locally
 							pullSchemas(ns, gmeHandle);
-							// change the package namespace table to reflect the found schema
+							// change the package namespace table to reflect the
+							// found schema
 							int row = 0;
 							while (!getPackageNamespaceTable().getValueAt(row, 0).equals(packs[i].getName())) {
 								row++;
@@ -290,15 +291,15 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 			ErrorDialog.showErrorDialog("Error retrieving schemas from the GME", ex);
 		}
 	}
-	
-	
+
+
 	private XMLDataModelService getGmeHandle() throws MobiusException {
 		XMLDataModelService service = null;
 		GridServiceFactory oldFactory = GridServiceResolver.getInstance().getDefaultFactory();
 		GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
 		try {
-			service = (XMLDataModelService) GridServiceResolver.getInstance()
-				.getGridService(getGmeUrlTextField().getText());
+			service = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
+				getGmeUrlTextField().getText());
 		} catch (MobiusException ex) {
 			throw ex;
 		} finally {
@@ -306,12 +307,16 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 		}
 		return service;
 	}
-	
-	
+
+
 	private void pullSchemas(Namespace ns, XMLDataModelService gme) throws MobiusException {
 		// get the service's schema dir
-		File schemaDir = new File(CacoreWizardUtils.getServiceBaseDir(getServiceInformation()) + File.separator + "schema" 
-			+ File.separator + getServiceInformation().getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+		File schemaDir = new File(CacoreWizardUtils.getServiceBaseDir(getServiceInformation())
+			+ File.separator
+			+ "schema"
+			+ File.separator
+			+ getServiceInformation().getIntroduceServiceProperties().getProperty(
+				IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 		// have the GME cache the schema and its imports locally
 		List cachedNamespaces = gme.cacheSchema(ns, schemaDir);
 		// create namespace types and add them to the service
@@ -320,9 +325,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 			Namespace storedNs = (Namespace) nsIter.next();
 			ImportInfo storedSchemaInfo = new ImportInfo(storedNs);
 			File location = new File(schemaDir.getAbsolutePath() + File.separator + storedSchemaInfo.getFileName());
-			NamespaceType nsType = CommonTools.createNamespaceType(location.getAbsolutePath());
-			// make the location relative to the schema directory
-			nsType.setLocation("./" + location.getName());
+			NamespaceType nsType = CommonTools.createNamespaceType(location.getAbsolutePath(), schemaDir);
 			// set the package name
 			String packName = CommonTools.getPackageName(storedNs);
 			nsType.setPackageName(packName);
@@ -336,15 +339,15 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 			CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
 			// add the namespace to the introduce namespace excludes list so
 			// that beans will not be built for these data types
-			String excludes = getServiceInformation().getIntroduceServiceProperties()
-				.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES);
+			String excludes = getServiceInformation().getIntroduceServiceProperties().getProperty(
+				IntroduceConstants.INTRODUCE_NS_EXCLUDES);
 			excludes += " -x " + nsType.getNamespace();
 			getServiceInformation().getIntroduceServiceProperties().setProperty(
 				IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);
 		}
 	}
-	
-	
+
+
 	private boolean allSchemasResolved() {
 		for (int i = 0; i < getPackageNamespaceTable().getRowCount(); i++) {
 			String status = (String) getPackageNamespaceTable().getValueAt(i, 2);
@@ -354,8 +357,8 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 		}
 		return true;
 	}
-	
-	
+
+
 	private void storePackageMappings() throws Exception {
 		Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
 		CadsrInformation info = data.getCadsrInformation();

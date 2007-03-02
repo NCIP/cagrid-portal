@@ -44,7 +44,7 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
 		try {
 			Properties serviceProperties = info.getIntroduceServiceProperties();
 			ServiceDescription serviceDescription = info.getServiceDescriptor();
-			
+
 			// grab schemas and copy them into the service's directory
 			copyMetadataSchemas(getServiceSchemaDir(serviceProperties));
 
@@ -90,8 +90,7 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
 		List newNamespaces = new ArrayList(Arrays.asList(namespaces.getNamespace()));
 		// caGrid metadata namespace
 		NamespaceType cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-			+ MetadataConstants.CAGRID_METADATA_SCHEMA);
-		cagridMdNamespace.setLocation("./" + MetadataConstants.CAGRID_METADATA_SCHEMA);
+			+ MetadataConstants.CAGRID_METADATA_SCHEMA, new File(schemaDir));
 		cagridMdNamespace.setGenerateStubs(Boolean.FALSE);
 		newNamespaces.add(cagridMdNamespace);
 

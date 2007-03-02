@@ -68,8 +68,10 @@ public class SkeletonSecurityOperationProviderCreator {
 			ii.setPackageName(SECURITY_SERVICE_PACKAGE);
 			ii.setPortTypeName("ServiceSecurityPortType");
 			ii.setWsdlFile(SERVICE_SECURITY_WSDL);
-			//ii.setInputMessage(new QName(SECURITY_SERVICE_NS, "GetServiceSecurityMetadataRequest"));
-			//ii.setOutputMessage(new QName(SECURITY_SERVICE_NS, "GetServiceSecurityMetadataResponse"));
+			// ii.setInputMessage(new QName(SECURITY_SERVICE_NS,
+			// "GetServiceSecurityMetadataRequest"));
+			// ii.setOutputMessage(new QName(SECURITY_SERVICE_NS,
+			// "GetServiceSecurityMetadataResponse"));
 			method.setIsImported(true);
 			method.setImportInformation(ii);
 
@@ -89,19 +91,18 @@ public class SkeletonSecurityOperationProviderCreator {
 					+ info.getIntroduceServiceProperties().getProperty(
 						IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator;
 
-				// add in the namespace type
-				NamespaceType nsType = CommonTools.createNamespaceType(PATH_TO_SCHEMA + File.separator
-					+ SERVICE_SECURITY_XSD);
-				nsType.setGenerateStubs(new Boolean(false));
-				nsType.setPackageName("gov.nih.nci.cagrid.metadata.security");
-				nsType.setLocation("./xsd/" + SERVICE_SECURITY_XSD);
-				CommonTools.addNamespace(info.getServiceDescriptor(), nsType);
-
 				// copy over the wsdl file and the required schema
 				Utils.copyFile(new File(PATH_TO_WSDL + File.separator + SERVICE_SECURITY_WSDL), new File(
 					pathToServSchema + SERVICE_SECURITY_WSDL));
-				Utils.copyFile(new File(PATH_TO_SCHEMA + File.separator + SERVICE_SECURITY_XSD), new File(
-					pathToServSchema + "xsd" + File.separator + SERVICE_SECURITY_XSD));
+				File servSecurityXSDDest = new File(pathToServSchema + "xsd" + File.separator + SERVICE_SECURITY_XSD);
+				Utils.copyFile(new File(PATH_TO_SCHEMA + File.separator + SERVICE_SECURITY_XSD), servSecurityXSDDest);
+
+				// add in the namespace type
+				NamespaceType nsType = CommonTools.createNamespaceType(servSecurityXSDDest.getAbsolutePath(), new File(
+					pathToServSchema));
+				nsType.setGenerateStubs(new Boolean(false));
+				nsType.setPackageName("gov.nih.nci.cagrid.metadata.security");
+				CommonTools.addNamespace(info.getServiceDescriptor(), nsType);
 
 				// set the namespace of hte sercure service to be in the ns
 				// excludes do that
@@ -109,8 +110,8 @@ public class SkeletonSecurityOperationProviderCreator {
 				Properties props = new Properties();
 				props.load(new FileInputStream(new File(info.getBaseDirectory().getAbsolutePath() + File.separator
 					+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE)));
-				props.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES, 
-					props.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES) 
+				props.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES, props
+					.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES)
 					+ " " + SERVICE_NS_EXCLUDE);
 				props.store(new FileOutputStream(new File(info.getBaseDirectory().getAbsolutePath() + File.separator
 					+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE)), "Introduce service properties");

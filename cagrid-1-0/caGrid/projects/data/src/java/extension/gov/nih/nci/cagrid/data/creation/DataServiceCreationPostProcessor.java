@@ -74,6 +74,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		// grab cql query and result set schemas and move them into the
 		// service's directory
 		String schemaDir = getServiceSchemaDir(props);
+		File schemaDirFile = new File(schemaDir);
 		System.out.println("Copying schemas to " + schemaDir);
 		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "dataFS"
 			+ File.separator + "schema");
@@ -96,19 +97,19 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		List dsNamespaces = new ArrayList(Arrays.asList(namespaces.getNamespace()));
 		// query namespace
 		NamespaceType queryNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-			+ DataServiceConstants.CQL_QUERY_SCHEMA);
+			+ DataServiceConstants.CQL_QUERY_SCHEMA, schemaDirFile);
 		queryNamespace.setLocation("./" + DataServiceConstants.CQL_QUERY_SCHEMA);
 		// query result namespace
 		NamespaceType resultNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-			+ DataServiceConstants.CQL_RESULT_SET_SCHEMA);
+			+ DataServiceConstants.CQL_RESULT_SET_SCHEMA, schemaDirFile);
 		resultNamespace.setLocation("./" + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
 		// ds metadata namespace
 		NamespaceType dsMetadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-			+ DataServiceConstants.DATA_METADATA_SCHEMA);
+			+ DataServiceConstants.DATA_METADATA_SCHEMA, schemaDirFile);
 		dsMetadataNamespace.setLocation("./" + DataServiceConstants.DATA_METADATA_SCHEMA);
 		// caGrid metadata namespace
 		NamespaceType cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-			+ DataServiceConstants.CAGRID_METADATA_SCHEMA);
+			+ DataServiceConstants.CAGRID_METADATA_SCHEMA, schemaDirFile);
 		cagridMdNamespace.setLocation("./" + DataServiceConstants.CAGRID_METADATA_SCHEMA);
 		// prevent metadata beans from being built
 		cagridMdNamespace.setGenerateStubs(Boolean.FALSE);

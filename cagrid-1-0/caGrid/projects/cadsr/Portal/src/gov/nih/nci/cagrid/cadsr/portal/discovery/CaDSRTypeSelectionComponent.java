@@ -102,12 +102,12 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 	 * @return javax.swing.JPanel
 	 */
 	private CaDSRBrowserPanel getCaDSRPanel() {
-		if (caDSRPanel == null) {
-			caDSRPanel = new CaDSRBrowserPanel(false, false);
-			caDSRPanel.addPackageSelectionListener(this);
-			caDSRPanel.addProjectSelectionListener(this);
+		if (this.caDSRPanel == null) {
+			this.caDSRPanel = new CaDSRBrowserPanel(false, false);
+			this.caDSRPanel.addPackageSelectionListener(this);
+			this.caDSRPanel.addProjectSelectionListener(this);
 		}
-		return caDSRPanel;
+		return this.caDSRPanel;
 	}
 
 
@@ -180,9 +180,7 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 					String filename = imp.getFileName();
 					// create a namespace type from the imported schema
 					String fullSchemaName = schemaDestinationDir.getAbsolutePath() + File.separator + filename;
-					NamespaceType type = CommonTools.createNamespaceType(fullSchemaName);
-					// fix the location to be relative to the root schema
-					type.setLocation("./" + filename);
+					NamespaceType type = CommonTools.createNamespaceType(fullSchemaName, new File(fullSchemaName));
 					namespaceTypes.add(type);
 				}
 			}
@@ -218,7 +216,7 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getNsPanel() {
-		if (nsPanel == null) {
+		if (this.nsPanel == null) {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints2.gridx = 1;
@@ -229,14 +227,14 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 			gridBagConstraints1.insets = new java.awt.Insets(7, 5, 7, 2);
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.gridx = 0;
-			nsLabel = new JLabel();
-			nsLabel.setText("Namespace:");
-			nsPanel = new JPanel();
-			nsPanel.setLayout(new GridBagLayout());
-			nsPanel.add(nsLabel, gridBagConstraints1);
-			nsPanel.add(getNsTextField(), gridBagConstraints2);
+			this.nsLabel = new JLabel();
+			this.nsLabel.setText("Namespace:");
+			this.nsPanel = new JPanel();
+			this.nsPanel.setLayout(new GridBagLayout());
+			this.nsPanel.add(this.nsLabel, gridBagConstraints1);
+			this.nsPanel.add(getNsTextField(), gridBagConstraints2);
 		}
-		return nsPanel;
+		return this.nsPanel;
 	}
 
 
@@ -246,12 +244,12 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getNsTextField() {
-		if (nsTextField == null) {
-			nsTextField = new JTextField();
-			nsTextField.setEditable(false);
-			nsTextField.setText("unavailable");
+		if (this.nsTextField == null) {
+			this.nsTextField = new JTextField();
+			this.nsTextField.setEditable(false);
+			this.nsTextField.setText("unavailable");
 		}
-		return nsTextField;
+		return this.nsTextField;
 	}
 
 
@@ -266,7 +264,7 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 		Project proj = getCaDSRPanel().getSelectedProject();
 		if (proj != null) {
-			//get the Context
+			// get the Context
 			String context = "caBIG";
 			try {
 				CaDSRServiceI cadsrService = new CaDSRServiceClient(getCaDSRURL());

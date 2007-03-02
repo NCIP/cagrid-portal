@@ -43,14 +43,14 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		ServiceDescription serviceDescription = serviceInfo.getServiceDescriptor();
 		this.serviceProperties = serviceInfo.getIntroduceServiceProperties();
 
-		info = new ServiceInformation(serviceDescription, serviceProperties, new File(serviceProperties
+		this.info = new ServiceInformation(serviceDescription, this.serviceProperties, new File(this.serviceProperties
 			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)));
 
 		// apply data service requirements to it
 		try {
 			System.out.println("Adding data service components to template");
-			makeBDTService(serviceDescription, serviceProperties);
-			addResourceImplStub(serviceDescription, serviceProperties);
+			makeBDTService(serviceDescription, this.serviceProperties);
+			addResourceImplStub(serviceDescription, this.serviceProperties);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new CreationExtensionException(
@@ -70,6 +70,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 
 	private void makeBDTService(ServiceDescription description, Properties props) throws Exception {
 		String schemaDir = getServiceSchemaDir(props);
+		File schemaDirFile = new File(schemaDir);
 		System.out.println("Copying schemas to " + schemaDir);
 		File extensionSchemaDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "bdt"
 			+ File.separator + "schema");
@@ -103,22 +104,22 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		List bdtNamespaces = new ArrayList(Arrays.asList(namespaces.getNamespace()));
 		// metadata
 		NamespaceType metadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-			+ BDTServiceConstants.METADATA_SCHEMA);
+			+ BDTServiceConstants.METADATA_SCHEMA, schemaDirFile);
 		// metadataNamespace.setGenerateStubs(new Boolean(false));
 		metadataNamespace.setPackageName("gov.nih.nci.cagrid.bdt.beans.metadata");
 		// transfer
 		NamespaceType transferNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-			+ BDTServiceConstants.TRANSFER_SCHEMA);
+			+ BDTServiceConstants.TRANSFER_SCHEMA, schemaDirFile);
 		transferNamespace.setGenerateStubs(new Boolean(false));
 		transferNamespace.setPackageName("org.globus.transfer");
 		// enumeration
 		NamespaceType enumerationNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-			+ BDTServiceConstants.ENUMERATION_SCHEMA);
+			+ BDTServiceConstants.ENUMERATION_SCHEMA, schemaDirFile);
 		enumerationNamespace.setGenerateStubs(new Boolean(false));
 		enumerationNamespace.setPackageName("org.xmlsoap.schemas.ws._2004._09.enumeration");
 		// new addressing
 		NamespaceType addressingNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-			+ BDTServiceConstants.ADDRESSING_SCHEMA);
+			+ BDTServiceConstants.ADDRESSING_SCHEMA, schemaDirFile);
 		addressingNamespace.setGenerateStubs(new Boolean(false));
 		addressingNamespace.setPackageName("org.globus.addressing");
 
@@ -175,7 +176,8 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 
 	private void addResourceImplStub(ServiceDescription desc, Properties serviceProperties) throws Exception {
 		BDTResourceTemplate resourceT = new BDTResourceTemplate();
-		String resourceS = resourceT.generate(new SpecificServiceInformation(info, info.getServices().getService(0)));
+		String resourceS = resourceT.generate(new SpecificServiceInformation(this.info, this.info.getServices()
+			.getService(0)));
 		File resourceF = new File(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 			+ File.separator + "src" + File.separator + CommonTools.getPackageDir(desc.getServices().getService(0))
 			+ File.separator + "service" + File.separator + "BDTResource.java");
@@ -209,7 +211,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 
 		try {
 			Utils.copyFile(new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "bdt" + File.separator
-				+ "etc" + File.separator + "BulkDataHandler-metadata.xml"), new File(serviceProperties
+				+ "etc" + File.separator + "BulkDataHandler-metadata.xml"), new File(this.serviceProperties
 				.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 				+ File.separator + "etc" + File.separator + "BulkDataHandler-metadata.xml"));
 		} catch (Exception e) {

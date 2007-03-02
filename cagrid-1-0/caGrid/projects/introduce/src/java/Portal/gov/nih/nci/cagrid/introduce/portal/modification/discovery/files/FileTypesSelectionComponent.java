@@ -80,10 +80,10 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 		gridBagConstraints9.gridy = 1;
 		gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints9.gridx = 0;
-		namespaceLabel = new JLabel();
-		namespaceLabel.setText("Namespace");
+		this.namespaceLabel = new JLabel();
+		this.namespaceLabel.setText("Namespace");
 		this.setLayout(new GridBagLayout());
-		this.add(namespaceLabel, gridBagConstraints9);
+		this.add(this.namespaceLabel, gridBagConstraints9);
 		this.add(getBrowseButton(), gridBagConstraints);
 		this.add(getNamespaceText(), gridBagConstraints1);
 		this.add(getFilenameText(), gridBagConstraints2);
@@ -96,20 +96,21 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 	 * @return javax.swing.JButton
 	 */
 	private JButton getBrowseButton() {
-		if (browseButton == null) {
-			browseButton = new JButton();
-			browseButton.setText("Browse");
-			browseButton.addActionListener(new java.awt.event.ActionListener() {
+		if (this.browseButton == null) {
+			this.browseButton = new JButton();
+			this.browseButton.setText("Browse");
+			this.browseButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						String selectedFilename = ResourceManager.promptFile(null,
-							FileFilters.XSD_FILTER);
+						String selectedFilename = ResourceManager.promptFile(null, FileFilters.XSD_FILTER);
 						if (selectedFilename != null) {
-							currentFile = new File(selectedFilename).getAbsolutePath();
-							getFilenameText().setText(currentFile);
-							Document doc = XMLUtilities.fileNameToDocument(currentFile);
-							currentNamespace = new Namespace(doc.getRootElement().getAttributeValue("targetNamespace"));
-							getNamespaceText().setText(currentNamespace.getRaw());
+							FileTypesSelectionComponent.this.currentFile = new File(selectedFilename).getAbsolutePath();
+							getFilenameText().setText(FileTypesSelectionComponent.this.currentFile);
+							Document doc = XMLUtilities
+								.fileNameToDocument(FileTypesSelectionComponent.this.currentFile);
+							FileTypesSelectionComponent.this.currentNamespace = new Namespace(doc.getRootElement()
+								.getAttributeValue("targetNamespace"));
+							getNamespaceText().setText(FileTypesSelectionComponent.this.currentNamespace.getRaw());
 						}
 					} catch (Exception ex) {
 						ErrorDialog.showErrorDialog("Please make sure the file is a valid XML Schema", ex);
@@ -117,34 +118,33 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 				}
 			});
 		}
-		return browseButton;
+		return this.browseButton;
 	}
 
 
 	public NamespaceType[] createNamespaceType(File schemaDestinationDir) {
 		try {
 			List namespaces = new ArrayList();
-			
-			String currentFileName = (new File(currentFile)).getName();			
+
+			String currentFileName = (new File(this.currentFile)).getName();
 			NamespaceType root = new NamespaceType();
 			// set the package name
-			String packageName = CommonTools.getPackageName(currentNamespace);
+			String packageName = CommonTools.getPackageName(this.currentNamespace);
 			root.setPackageName(packageName);
-			root.setNamespace(currentNamespace.getRaw());
+			root.setNamespace(this.currentNamespace.getRaw());
 			root.setLocation("./" + currentFileName);
-			
+
 			namespaces.add(root);
 
-			ExtensionTools.setSchemaElements(root, XMLUtilities.fileNameToDocument(currentFile));
-			Set storedSchemas = new HashSet();			
-			copySchemas(currentFile, schemaDestinationDir, new HashSet(), storedSchemas);
+			ExtensionTools.setSchemaElements(root, XMLUtilities.fileNameToDocument(this.currentFile));
+			Set storedSchemas = new HashSet();
+			copySchemas(this.currentFile, schemaDestinationDir, new HashSet(), storedSchemas);
 			Iterator schemaFileIter = storedSchemas.iterator();
 			while (schemaFileIter.hasNext()) {
 				File storedSchemaFile = new File((String) schemaFileIter.next());
 				if (!storedSchemaFile.getName().equals(currentFileName)) {
-					NamespaceType nsType = CommonTools.createNamespaceType(storedSchemaFile.getAbsolutePath());
-					String relPath = Utils.getRelativePath(schemaDestinationDir, storedSchemaFile);
-					nsType.setLocation("./" + relPath);
+					NamespaceType nsType = CommonTools.createNamespaceType(storedSchemaFile.getAbsolutePath(),
+						schemaDestinationDir);
 					namespaces.add(nsType);
 				}
 			}
@@ -158,10 +158,11 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 	}
 
 
-	public static void copySchemas(String fileName, File copyToDirectory, Set visitedSchemas, Set storedSchemas) throws Exception {
+	public static void copySchemas(String fileName, File copyToDirectory, Set visitedSchemas, Set storedSchemas)
+		throws Exception {
 		File schemaFile = new File(fileName);
 		System.out.println("Copying schema " + fileName + " to " + copyToDirectory.getCanonicalPath());
-		File outFile = new File(copyToDirectory.getCanonicalPath() + File.separator + schemaFile.getName()); 
+		File outFile = new File(copyToDirectory.getCanonicalPath() + File.separator + schemaFile.getName());
 		Utils.copyFile(schemaFile, outFile);
 		storedSchemas.add(outFile.getAbsolutePath());
 		// mark the schema as visited
@@ -198,11 +199,11 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getNamespaceText() {
-		if (namespaceText == null) {
-			namespaceText = new JTextField();
-			namespaceText.setEditable(false);
+		if (this.namespaceText == null) {
+			this.namespaceText = new JTextField();
+			this.namespaceText.setEditable(false);
 		}
-		return namespaceText;
+		return this.namespaceText;
 	}
 
 
@@ -212,12 +213,12 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getFilenameText() {
-		if (filenameText == null) {
-			filenameText = new JTextField();
-			filenameText.setEnabled(true);
-			filenameText.setEditable(false);
+		if (this.filenameText == null) {
+			this.filenameText = new JTextField();
+			this.filenameText.setEnabled(true);
+			this.filenameText.setEditable(false);
 		}
-		return filenameText;
+		return this.filenameText;
 	}
 
 } // @jve:decl-index=0:visual-constraint="16,10"

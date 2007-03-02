@@ -51,9 +51,10 @@ public class SkeletonSchemaCreator {
 		serviceXSDFW.close();
 
 		// add the new service xsd to the namespace list.
-		NamespaceType newServiceReferenceSchema = CommonTools.createNamespaceType(info.getBaseDirectory()
-			+ File.separator + "schema" + File.separator + info.getServices().getService(0).getName() + File.separator
-			+ service.getName() + "Types.xsd");
+		String serviceSchemaDir = info.getBaseDirectory() + File.separator + "schema" + File.separator
+			+ info.getServices().getService(0).getName();
+		NamespaceType newServiceReferenceSchema = CommonTools.createNamespaceType(serviceSchemaDir + File.separator
+			+ service.getName() + "Types.xsd", new File(serviceSchemaDir));
 		newServiceReferenceSchema.setPackageName(service.getPackageName() + ".stubs.types");
 		CommonTools.addNamespace(info.getServiceDescriptor(), newServiceReferenceSchema);
 

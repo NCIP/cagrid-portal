@@ -78,10 +78,10 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 	 * @return javax.swing.JPanel
 	 */
 	private GMESchemaLocatorPanel getGmePanel() {
-		if (gmePanel == null) {
-			gmePanel = new GMESchemaLocatorPanel(false);
+		if (this.gmePanel == null) {
+			this.gmePanel = new GMESchemaLocatorPanel(false);
 		}
-		return gmePanel;
+		return this.gmePanel;
 	}
 
 
@@ -101,7 +101,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 					namespaces.add(root);
 
 					gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(root, XMLUtilities
-						.stringToDocument(gmePanel.currentNode.getSchemaContents()));
+						.stringToDocument(this.gmePanel.currentNode.getSchemaContents()));
 					List importedNamespaces = cacheSchema(schemaDestinationDir, root.getNamespace());
 					Iterator importedNsIter = importedNamespaces.iterator();
 					while (importedNsIter.hasNext()) {
@@ -111,9 +111,8 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 							String filename = importInfo.getFileName();
 							File schemaFile = new File(schemaDestinationDir.getAbsolutePath() + File.separator
 								+ filename);
-							NamespaceType type = CommonTools.createNamespaceType(schemaFile.getAbsolutePath());
-							String relPath = Utils.getRelativePath(schemaDestinationDir, schemaFile);
-							type.setLocation(relPath);
+							NamespaceType type = CommonTools.createNamespaceType(schemaFile.getAbsolutePath(),
+								schemaDestinationDir);
 							namespaces.add(type);
 						}
 					}
@@ -159,8 +158,9 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 					NamespaceType[] createdNs = panel.createNamespaceType(new File("."));
 					if (createdNs != null) {
 						for (int i = 0; i < createdNs.length; i++) {
-							System.out.println("Created Namespace:" + createdNs[i].getNamespace() + " at location:"
-								+ createdNs[i].getLocation());
+							NamespaceType element = createdNs[i];
+							System.out.println("Created Namespace:" + element.getNamespace() + " at location:"
+								+ element.getLocation());
 						}
 					} else {
 						System.out.println("Problem creating namespace");

@@ -122,6 +122,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 	private void addDataServiceNamespaces(ServiceDescription description, Properties properties)
 		throws CreationExtensionException {
 		String schemaDir = getServiceSchemaDir(properties);
+		File schemaDirFile = new File(schemaDir);
 		NamespacesType namespaces = description.getNamespaces();
 		if (namespaces == null) {
 			namespaces = new NamespacesType();
@@ -137,26 +138,22 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		try {
 			// query namespace
 			queryNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-				+ DataServiceConstants.CQL_QUERY_SCHEMA);
-			queryNamespace.setLocation("./" + DataServiceConstants.CQL_QUERY_SCHEMA);
+				+ DataServiceConstants.CQL_QUERY_SCHEMA, schemaDirFile);
 			// query result namespace
 			resultNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-				+ DataServiceConstants.CQL_RESULT_SET_SCHEMA);
+				+ DataServiceConstants.CQL_RESULT_SET_SCHEMA, schemaDirFile);
 			resultRestrictionNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-				+ CQLResultTypesGenerator.getResultTypeXSDFileName(getDataService(description)));
-			resultNamespace.setLocation("./" + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
+				+ CQLResultTypesGenerator.getResultTypeXSDFileName(getDataService(description)), schemaDirFile);
 			// ds metadata namespace
 			dsMetadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-				+ DataServiceConstants.DATA_METADATA_SCHEMA);
-			dsMetadataNamespace.setLocation("./" + DataServiceConstants.DATA_METADATA_SCHEMA);
+				+ DataServiceConstants.DATA_METADATA_SCHEMA, schemaDirFile);
 			// ds exceptions namespace
 			dsExceptionsNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-				+ DataServiceConstants.DATA_SERVICE_EXCEPTIONS_SCHEMA);
-			dsExceptionsNamespace.setLocation("./" + DataServiceConstants.DATA_SERVICE_EXCEPTIONS_SCHEMA);
+				+ DataServiceConstants.DATA_SERVICE_EXCEPTIONS_SCHEMA, schemaDirFile);
+
 			// caGrid metadata namespace
 			cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-				+ DataServiceConstants.CAGRID_METADATA_SCHEMA);
-			cagridMdNamespace.setLocation("./" + DataServiceConstants.CAGRID_METADATA_SCHEMA);
+				+ DataServiceConstants.CAGRID_METADATA_SCHEMA, schemaDirFile);
 		} catch (MobiusException ex) {
 			throw new CreationExtensionException("Error creating namespace for data service: " + ex.getMessage(), ex);
 		}
@@ -328,15 +325,15 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		// does the server config location property exist?
 		if (!CommonTools.servicePropertyExists(desc, DataServiceConstants.SERVER_CONFIG_LOCATION)) {
 			CommonTools.setServiceProperty(desc, DataServiceConstants.SERVER_CONFIG_LOCATION, "server-config.wsdd",
-				true, "");
+				true,"");
 		}
 		CommonTools.setServiceProperty(desc, DataServiceConstants.CQL_VALIDATOR_CLASS, DEFAULT_CQL_VALIDATOR_CLASS,
-			false, "");
+			false,"");
 		CommonTools.setServiceProperty(desc, DataServiceConstants.DOMAIN_MODEL_VALIDATOR_CLASS,
-			DEFAULT_DOMAIN_MODEL_VALIDATOR, false, "");
+			DEFAULT_DOMAIN_MODEL_VALIDATOR, false,"");
 		CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_CQL_FLAG, String.valueOf(false), false, "");
 		CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, String.valueOf(false),
-			false, "");
+			false,"");
 		CommonTools.setServiceProperty(desc, DataServiceConstants.CLASS_MAPPINGS_FILENAME,
 			DataServiceConstants.CLASS_TO_QNAME_XML, true, "");
 	}
