@@ -30,16 +30,16 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-/** 
- *  CsmConfigPanel
- *  Panel to configure CSM security (Using the caCORE SDK ClientSession) for the caCORE service
- *  NOTE: this class is presently unused, but will have a place when support for 
- *  caCORE SDK version 3.2 is pushed through caGrid Data Services
+
+/**
+ * CsmConfigPanel Panel to configure CSM security (Using the caCORE SDK
+ * ClientSession) for the caCORE service NOTE: this class is presently unused,
+ * but will have a place when support for caCORE SDK version 3.2 is pushed
+ * through caGrid Data Services
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
- * @created Oct 30, 2006 
- * @version $Id$ 
+ * @created Oct 30, 2006
+ * @version $Id$
  */
 public class CsmConfigPanel extends AbstractWizardPanel {
 	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
@@ -47,15 +47,13 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 	public static final String CSM_CONTEXT_NAME = "csmContextName";
 	// sdk 3.2 only
 	public static final String CSM_CONFIGURATION_FILENAME = "csmConfigurationFilename";
-	
-	public static final String PERFORMANCE_WARNING = 
-		"NOTE:\n" +
-		"Enabling CSM security for the caCORE SDK data source will cause " + 
-		"significant performance degredation when multiple clients connect " +
-		"to the data service.  Due to a bug in the caCORE SDK API, all calls " +
-		"to the query method when CSM is enabled must be synchronized, and " +
-		"cannot be executed in parallel.";
-	
+
+	public static final String PERFORMANCE_WARNING = "NOTE:\n"
+		+ "Enabling CSM security for the caCORE SDK data source will cause "
+		+ "significant performance degredation when multiple clients connect "
+		+ "to the data service.  Due to a bug in the caCORE SDK API, all calls "
+		+ "to the query method when CSM is enabled must be synchronized, and " + "cannot be executed in parallel.";
+
 	private JCheckBox useCsmCheckBox = null;
 	private JLabel csmContextLabel = null;
 	private JTextField csmContextTextField = null;
@@ -69,58 +67,57 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 	private JButton csmClearButtonButton = null;
 	private JPanel buttonPanel = null;
 
+
 	public CsmConfigPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
 		super(extensionDescription, info);
 		initialize();
 	}
-	
-	
+
+
 	private void initialize() {
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints.gridx = 0;
-        GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-        gridBagConstraints7.gridx = 0;
-        gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints7.weightx = 1.0D;
-        gridBagConstraints7.gridy = 2;
-        GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-        gridBagConstraints6.gridx = 0;
-        gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints6.insets = new java.awt.Insets(2,2,2,2);
-        gridBagConstraints6.gridy = 1;
-        this.setLayout(new GridBagLayout());
-        this.setSize(new java.awt.Dimension(622,132));
-        this.add(getUseCsmCheckBox(), gridBagConstraints6);
-        this.add(getConfigPanel(), gridBagConstraints7);
-        this.add(getPerformanceWarningScrollPane(), gridBagConstraints);		
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
+		gridBagConstraints.gridy = 0;
+		gridBagConstraints.weightx = 1.0;
+		gridBagConstraints.weighty = 1.0;
+		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints.gridx = 0;
+		GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+		gridBagConstraints7.gridx = 0;
+		gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
+		gridBagConstraints7.weightx = 1.0D;
+		gridBagConstraints7.gridy = 2;
+		GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+		gridBagConstraints6.gridx = 0;
+		gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
+		gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
+		gridBagConstraints6.gridy = 1;
+		this.setLayout(new GridBagLayout());
+		this.setSize(new java.awt.Dimension(622, 132));
+		this.add(getUseCsmCheckBox(), gridBagConstraints6);
+		this.add(getConfigPanel(), gridBagConstraints7);
+		this.add(getPerformanceWarningScrollPane(), gridBagConstraints);
 	}
-	
+
 
 	public void update() {
 		// load data into gui
 		try {
-			String useCsmValue = CommonTools.getServicePropertyValue(
-				getServiceInformation().getServiceDescriptor(),
+			String useCsmValue = CommonTools.getServicePropertyValue(getServiceInformation().getServiceDescriptor(),
 				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_CSM_FLAG);
 			getUseCsmCheckBox().setSelected(Boolean.parseBoolean(useCsmValue));
-			
-			String csmContextName = CommonTools.getServicePropertyValue(
-				getServiceInformation().getServiceDescriptor(),
+
+			String csmContextName = CommonTools.getServicePropertyValue(getServiceInformation().getServiceDescriptor(),
 				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONTEXT_NAME);
 			getCsmContextTextField().setText(csmContextName);
-			String appserviceUrl = CommonTools.getServicePropertyValue(
-				getServiceInformation().getServiceDescriptor(),
+			String appserviceUrl = CommonTools.getServicePropertyValue(getServiceInformation().getServiceDescriptor(),
 				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + APPLICATION_SERVICE_URL);
 			getUseAppserviceUrlCheckBox().setSelected(csmContextName.equals(appserviceUrl));
-			
-			// enable / disable the CSM config file based on SDK version (must be 3.2)
+
+			// enable / disable the CSM config file based on SDK version (must
+			// be 3.2)
 			String sdkVersion = (String) getBitBucket().get(CoreDsIntroPanel.CACORE_VERSION_PROPERTY);
-			boolean isSdk32 = sdkVersion != null && sdkVersion.equals(CoreDsIntroPanel.CACORE_32_VERSION);
+			boolean isSdk32 = (sdkVersion != null) && sdkVersion.equals(CoreDsIntroPanel.CACORE_32_VERSION);
 			getCsmConfigLabel().setEnabled(isSdk32);
 			getCsmConfigTextField().setEnabled(isSdk32);
 			getCsmConfigBrowseButton().setEnabled(isSdk32);
@@ -143,9 +140,9 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes jCheckBox	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes jCheckBox
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getUseCsmCheckBox() {
 		if (useCsmCheckBox == null) {
@@ -156,8 +153,8 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 					PortalUtils.setContainerEnabled(getConfigPanel(), useCsmCheckBox.isSelected());
 					// set the use CSM property in the service properties
 					CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
-						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_CSM_FLAG,
-						String.valueOf(getUseCsmCheckBox().isSelected()), false);
+						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_CSM_FLAG, String
+							.valueOf(getUseCsmCheckBox().isSelected()), false, "");
 				}
 			});
 		}
@@ -166,9 +163,9 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes jLabel	
-	 * 	
-	 * @return javax.swing.JLabel	
+	 * This method initializes jLabel
+	 * 
+	 * @return javax.swing.JLabel
 	 */
 	private JLabel getCsmContextLabel() {
 		if (csmContextLabel == null) {
@@ -180,9 +177,9 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes jTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getCsmContextTextField() {
 		if (csmContextTextField == null) {
@@ -193,9 +190,9 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes jCheckBox	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes jCheckBox
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getUseAppserviceUrlCheckBox() {
 		if (useAppserviceUrlCheckBox == null) {
@@ -208,9 +205,9 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 					getCsmContextTextField().setEditable(!selected);
 					if (selected) {
 						try {
-							String appserviceUrl = CommonTools.getServicePropertyValue(
-								getServiceInformation().getServiceDescriptor(),
-								DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + APPLICATION_SERVICE_URL);
+							String appserviceUrl = CommonTools.getServicePropertyValue(getServiceInformation()
+								.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX
+								+ APPLICATION_SERVICE_URL);
 							getCsmContextTextField().setText(appserviceUrl);
 						} catch (Exception ex) {
 							ex.printStackTrace();
@@ -225,9 +222,9 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getConfigPanel() {
 		if (configPanel == null) {
@@ -251,24 +248,24 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 2;
 			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.gridy = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints3.gridy = 0;
 			gridBagConstraints3.weightx = 1.0;
-			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints3.gridx = 1;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints1.gridy = 0;
 			configPanel = new JPanel();
 			configPanel.setLayout(new GridBagLayout());
-			configPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-				null, "Configuration Options", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+			configPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuration Options",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 			configPanel.add(getCsmContextLabel(), gridBagConstraints1);
 			configPanel.add(getCsmContextTextField(), gridBagConstraints3);
@@ -282,9 +279,9 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes performanceWarningTextArea	
-	 * 	
-	 * @return javax.swing.JTextArea	
+	 * This method initializes performanceWarningTextArea
+	 * 
+	 * @return javax.swing.JTextArea
 	 */
 	private JTextArea getPerformanceWarningTextArea() {
 		if (performanceWarningTextArea == null) {
@@ -299,16 +296,16 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes performanceWarningScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes performanceWarningScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getPerformanceWarningScrollPane() {
 		if (performanceWarningScrollPane == null) {
 			performanceWarningScrollPane = new JScrollPane();
-			performanceWarningScrollPane.setBorder(BorderFactory.createTitledBorder(
-				null, "Note", TitledBorder.DEFAULT_JUSTIFICATION, 
-				TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			performanceWarningScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Note",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel
+					.getPanelLabelColor()));
 			performanceWarningScrollPane.setViewportView(getPerformanceWarningTextArea());
 		}
 		return performanceWarningScrollPane;
@@ -316,9 +313,9 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes csmConfigLabel	
-	 * 	
-	 * @return javax.swing.JLabel	
+	 * This method initializes csmConfigLabel
+	 * 
+	 * @return javax.swing.JLabel
 	 */
 	private JLabel getCsmConfigLabel() {
 		if (csmConfigLabel == null) {
@@ -330,9 +327,9 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes csmConfigTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes csmConfigTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getCsmConfigTextField() {
 		if (csmConfigTextField == null) {
@@ -344,9 +341,9 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes csmConfigBrowseButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes csmConfigBrowseButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getCsmConfigBrowseButton() {
 		if (csmConfigBrowseButton == null) {
@@ -363,9 +360,9 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 								+ File.separator + "etc" + File.separator + inFile.getName());
 							Utils.copyFile(inFile, outFile);
 							// set the CQL configuration property
-							CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
-								DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, 
-								inFile.getName(), true);
+							CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
+								DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, inFile
+									.getName(), true, "");
 							getCsmConfigTextField().setText(inFile.getName());
 						}
 					} catch (IOException ex) {
@@ -380,9 +377,9 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes csmClearButtonButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes csmClearButtonButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getCsmClearButtonButton() {
 		if (csmClearButtonButton == null) {
@@ -395,11 +392,10 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 						+ File.separator + "etc" + File.separator + getCsmConfigTextField().getText());
 					configFile.delete();
 					// "unset" the configuration property
-					CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
-						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, 
-						"", false);
+					CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
+						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, "", false, "");
 					// clean up the GUI
-					getCsmConfigTextField().setText("");					
+					getCsmConfigTextField().setText("");
 				}
 			});
 		}
@@ -408,9 +404,9 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes buttonPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes buttonPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {

@@ -32,45 +32,44 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.BevelBorder;
 
-/** 
- *  CoreDsIntroPanel
- *  Simple panel to show the user some information about what they're getting into
- *  for developing a caGrid data service backended by the cacore SDK
+
+/**
+ * CoreDsIntroPanel Simple panel to show the user some information about what
+ * they're getting into for developing a caGrid data service backended by the
+ * cacore SDK
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
- * @created Sep 25, 2006 
- * @version $Id$ 
+ * @created Sep 25, 2006
+ * @version $Id$
  */
 public class CoreDsIntroPanel extends AbstractWizardPanel {
 	// constants to select which caCORE version is used
 	public static final String CACORE_VERSION_PROPERTY = "cacoreVersion";
 	public static final String CACORE_31_VERSION = "cacore31";
 	public static final String CACORE_32_VERSION = "cacore32";
-	
+
 	// constants for the 3.1 version of the SDK Query Processor
-	public static final String SDK_31_QUERY_LIB = ".." + File.separator + "sdkQuery" + File.separator 
-		+ "build" + File.separator + "lib" + File.separator + "caGrid-1.0-sdkQuery.jar";
+	public static final String SDK_31_QUERY_LIB = ".." + File.separator + "sdkQuery" + File.separator + "build"
+		+ File.separator + "lib" + File.separator + "caGrid-1.0-sdkQuery.jar";
 	public static final String SDK_31_QUERY_PROCESSOR = "gov.nih.nci.cagrid.data.cql.cacore.HQLCoreQueryProcessor";
-	
+
 	// constants for the 3.2 version of the SDK Query Processor
-	public static final String SDK_32_QUERY_LIB = ".." + File.separator + "sdkQuery32" + File.separator 
-		+ "build" + File.separator + "lib" + File.separator + "caGrid-1.0-sdkQuery32.jar";
+	public static final String SDK_32_QUERY_LIB = ".." + File.separator + "sdkQuery32" + File.separator + "build"
+		+ File.separator + "lib" + File.separator + "caGrid-1.0-sdkQuery32.jar";
 	public static final String SDK_32_QUERY_PROCESSOR = "gov.nih.nci.cagrid.data.sdk32query.HQLCoreQueryProcessor";
 
 	/**
-	 * This is the text message shown to the user to let them know what the wizard does
-	 * and what it expects from them.  A better idea may be to load this from a text file
-	 * so if it changes, we dont need to recompile.
+	 * This is the text message shown to the user to let them know what the
+	 * wizard does and what it expects from them. A better idea may be to load
+	 * this from a text file so if it changes, we dont need to recompile.
 	 */
-	private static String INFO_TEXT = 
-		"This wizard will guide you through a simplified process to create a caGrid Data Service " +
-		"using a caCORE SDK backend as your data source.  In the following screens, you will be " +
-		"required to provide your generated client.jar, along with the URL of the data source to " +
-		"have the data service connect to.  Your domain model should be registered in the caDSR " +
-		"for proper generation of a Domain Model metadata extract, or you can provide this file " +
-		"yourself.  Finally, the schemas for all data types in your model need to be added, " +
-		"either from the GME, or from your local file system.";
+	private static String INFO_TEXT = "This wizard will guide you through a simplified process to create a caGrid Data Service "
+		+ "using a caCORE SDK backend as your data source.  In the following screens, you will be "
+		+ "required to provide your generated client.jar, along with the URL of the data source to "
+		+ "have the data service connect to.  Your domain model should be registered in the caDSR "
+		+ "for proper generation of a Domain Model metadata extract, or you can provide this file "
+		+ "yourself.  Finally, the schemas for all data types in your model need to be added, "
+		+ "either from the GME, or from your local file system.";
 
 	private JLabel wizardLabel = null;
 	private JTextArea infoTextArea = null;
@@ -78,40 +77,40 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 	private JPanel versionSelectionPanel = null;
 	private JRadioButton sdk31RadioButton = null;
 	private JRadioButton sdk32RadioButton = null;
-	
+
 
 	public CoreDsIntroPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
 		super(extensionDescription, info);
 		initialize();
 	}
-	
-	
+
+
 	private void initialize() {
-        GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-        gridBagConstraints11.gridx = 0;
-        gridBagConstraints11.insets = new Insets(5, 10, 10, 10);
-        gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints11.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints11.gridy = 1;
-        GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-        gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints1.gridy = 0;
-        gridBagConstraints1.weightx = 1.0;
-        gridBagConstraints1.weighty = 1.0;
-        gridBagConstraints1.insets = new java.awt.Insets(10,10,10,10);
-        gridBagConstraints1.gridheight = 2;
-        gridBagConstraints1.gridx = 1;
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.anchor = GridBagConstraints.NORTH;
-        gridBagConstraints.insets = new Insets(10, 10, 5, 10);
-        gridBagConstraints.gridy = 0;
-        this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(608, 301));
-        this.add(getWizardLabel(), gridBagConstraints);
-        this.add(getInfoTextScrollPane(), gridBagConstraints1);
-        this.add(getVersionSelectionPanel(), gridBagConstraints11);
-        groupSdkVersionButtons();
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.gridx = 0;
+		gridBagConstraints11.insets = new Insets(5, 10, 10, 10);
+		gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints11.anchor = GridBagConstraints.NORTH;
+		gridBagConstraints11.gridy = 1;
+		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+		gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints1.gridy = 0;
+		gridBagConstraints1.weightx = 1.0;
+		gridBagConstraints1.weighty = 1.0;
+		gridBagConstraints1.insets = new java.awt.Insets(10, 10, 10, 10);
+		gridBagConstraints1.gridheight = 2;
+		gridBagConstraints1.gridx = 1;
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.anchor = GridBagConstraints.NORTH;
+		gridBagConstraints.insets = new Insets(10, 10, 5, 10);
+		gridBagConstraints.gridy = 0;
+		this.setLayout(new GridBagLayout());
+		this.setSize(new Dimension(608, 301));
+		this.add(getWizardLabel(), gridBagConstraints);
+		this.add(getInfoTextScrollPane(), gridBagConstraints1);
+		this.add(getVersionSelectionPanel(), gridBagConstraints11);
+		groupSdkVersionButtons();
 	}
 
 
@@ -142,9 +141,9 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes jLabel	
-	 * 	
-	 * @return javax.swing.JLabel	
+	 * This method initializes jLabel
+	 * 
+	 * @return javax.swing.JLabel
 	 */
 	private JLabel getWizardLabel() {
 		if (wizardLabel == null) {
@@ -157,9 +156,9 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes jTextArea	
-	 * 	
-	 * @return javax.swing.JTextArea	
+	 * This method initializes jTextArea
+	 * 
+	 * @return javax.swing.JTextArea
 	 */
 	private JTextArea getInfoTextArea() {
 		if (infoTextArea == null) {
@@ -175,9 +174,9 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getInfoTextScrollPane() {
 		if (infoTextScrollPane == null) {
@@ -188,11 +187,11 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 		}
 		return infoTextScrollPane;
 	}
-	
-	
+
+
 	/**
-	 * Copies the caCORE SDK query processor jar into the data service
-	 * and sets the query processor class property
+	 * Copies the caCORE SDK query processor jar into the data service and sets
+	 * the query processor class property
 	 */
 	private void setLibrariesAndProcessor() {
 		String libName = null;
@@ -210,21 +209,19 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 		// get the path to the SDK Query project
 		File sdkQuery = new File(libName);
 		if (!sdkQuery.exists()) {
-			String[] error = {
-				"The SDK Query project does not exist or has not",
-				"yet been built.  Please build this project first!"
-			};
+			String[] error = {"The SDK Query project does not exist or has not",
+					"yet been built.  Please build this project first!"};
 			ErrorDialog.showErrorDialog("SDK Query Library Not Found", error);
 		} else {
 			// delete the old query processor library
-			File oldSdkQuery = new File(CacoreWizardUtils.getServiceBaseDir(getServiceInformation())
-				+ File.separator + "lib" + File.separator + deleteLib);
+			File oldSdkQuery = new File(CacoreWizardUtils.getServiceBaseDir(getServiceInformation()) + File.separator
+				+ "lib" + File.separator + deleteLib);
 			if (oldSdkQuery.exists()) {
 				oldSdkQuery.delete();
 			}
 			// copy the library to the service's lib dir
-			File sdkQueryOut = new File(CacoreWizardUtils.getServiceBaseDir(getServiceInformation())
-				+ File.separator + "lib" + File.separator + sdkQuery.getName());
+			File sdkQueryOut = new File(CacoreWizardUtils.getServiceBaseDir(getServiceInformation()) + File.separator
+				+ "lib" + File.separator + sdkQuery.getName());
 			try {
 				Utils.copyFile(sdkQuery, sdkQueryOut);
 			} catch (Exception ex) {
@@ -259,16 +256,16 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 				return;
 			}
 			// add the query processor class name as a service property
-			CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
-				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, qpClassName, false);
+			CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
+				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, qpClassName, false, "");
 		}
 	}
 
 
 	/**
-	 * This method initializes versionSelectionPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes versionSelectionPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getVersionSelectionPanel() {
 		if (versionSelectionPanel == null) {
@@ -294,9 +291,9 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes sdk31RadioButton	
-	 * 	
-	 * @return javax.swing.JRadioButton	
+	 * This method initializes sdk31RadioButton
+	 * 
+	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getSdk31RadioButton() {
 		if (sdk31RadioButton == null) {
@@ -308,9 +305,9 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes sdk32RadioButton	
-	 * 	
-	 * @return javax.swing.JRadioButton	
+	 * This method initializes sdk32RadioButton
+	 * 
+	 * @return javax.swing.JRadioButton
 	 */
 	private JRadioButton getSdk32RadioButton() {
 		if (sdk32RadioButton == null) {
@@ -319,22 +316,22 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 		}
 		return sdk32RadioButton;
 	}
-	
-	
+
+
 	private void groupSdkVersionButtons() {
 		NotifyingButtonGroup group = new NotifyingButtonGroup();
-        group.add(getSdk31RadioButton());
-        group.add(getSdk32RadioButton());
-        group.addGroupSelectionListener(new GroupSelectionListener() {
-        	public void selectionChanged(final ButtonModel previousSelection, final ButtonModel currentSelection) {
-        		if (currentSelection == getSdk31RadioButton().getModel()) {
-        			getBitBucket().put(CACORE_VERSION_PROPERTY, CACORE_31_VERSION);
-        		} else {
-        			getBitBucket().put(CACORE_VERSION_PROPERTY, CACORE_32_VERSION);
-        		}
-        		setLibrariesAndProcessor();
-        	}
-        });
-        group.setSelected(getSdk31RadioButton().getModel(), true);
+		group.add(getSdk31RadioButton());
+		group.add(getSdk32RadioButton());
+		group.addGroupSelectionListener(new GroupSelectionListener() {
+			public void selectionChanged(final ButtonModel previousSelection, final ButtonModel currentSelection) {
+				if (currentSelection == getSdk31RadioButton().getModel()) {
+					getBitBucket().put(CACORE_VERSION_PROPERTY, CACORE_31_VERSION);
+				} else {
+					getBitBucket().put(CACORE_VERSION_PROPERTY, CACORE_32_VERSION);
+				}
+				setLibrariesAndProcessor();
+			}
+		});
+		group.setSelected(getSdk31RadioButton().getModel(), true);
 	}
 }

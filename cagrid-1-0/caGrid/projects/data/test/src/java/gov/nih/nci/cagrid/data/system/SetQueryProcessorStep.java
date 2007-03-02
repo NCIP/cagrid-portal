@@ -17,31 +17,31 @@ import java.util.Properties;
 
 import com.atomicobject.haste.framework.Step;
 
-/** 
- *  SetQueryProcessorStep
- *  Step to set the service's query processor to my testing one
+
+/**
+ * SetQueryProcessorStep Step to set the service's query processor to my testing
+ * one
  * 
- * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
- * @created Nov 8, 2006 
- * @version $Id: SetQueryProcessorStep.java,v 1.4 2007-01-26 21:26:29 dervin Exp $ 
+ * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
+ * @created Nov 8, 2006
+ * @version $Id: SetQueryProcessorStep.java,v 1.5 2007-03-02 19:06:16 hastings Exp $
  */
 public class SetQueryProcessorStep extends Step {
-	
+
 	private String serviceDir;
-	
+
+
 	public SetQueryProcessorStep(String serviceDir) {
 		this.serviceDir = serviceDir;
 	}
-	
+
 
 	public void runStep() throws Throwable {
 		System.out.println("Running step: " + getClass().getName());
-		String serviceModelFile = serviceDir 
-			+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
+		String serviceModelFile = serviceDir + File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
 		ServiceDescription desc = null;
 		try {
-			desc = (ServiceDescription) Utils.deserializeDocument(
-				serviceModelFile, ServiceDescription.class);
+			desc = (ServiceDescription) Utils.deserializeDocument(serviceModelFile, ServiceDescription.class);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail("Error loading service description: " + ex.getMessage());
@@ -59,9 +59,9 @@ public class SetQueryProcessorStep extends Step {
 			}
 		}
 		if (dataExtension == null) {
-			fail("Data service extension not found in service description"); 
+			fail("Data service extension not found in service description");
 		}
-		
+
 		// set service properties for the testing CQL Query Processor
 		TestingCQLQueryProcessor testProc = new TestingCQLQueryProcessor();
 		Properties testProperties = testProc.getRequiredParameters();
@@ -80,18 +80,19 @@ public class SetQueryProcessorStep extends Step {
 			String prefixedKey = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + key;
 			String defaultValue = testProperties.getProperty(key);
 			String changedValue = defaultValue + "_CHANGED";
-			ServicePropertiesProperty testProp = new ServicePropertiesProperty(Boolean.FALSE, prefixedKey, changedValue);
+			ServicePropertiesProperty testProp = new ServicePropertiesProperty("", Boolean.FALSE, prefixedKey,
+				changedValue);
 			retainedPropereties.add(testProp);
 		}
-		
+
 		// set the new properties in the service description
 		ServicePropertiesProperty[] properties = new ServicePropertiesProperty[retainedPropereties.size()];
 		retainedPropereties.toArray(properties);
 		desc.getServiceProperties().setProperty(properties);
-		
+
 		// set the service property for the new query processor
-		CommonTools.setServiceProperty(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, 
-			TestingCQLQueryProcessor.class.getName(), false);
+		CommonTools.setServiceProperty(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY,
+			TestingCQLQueryProcessor.class.getName(), false, "");
 		// copy the testing jar file to the service
 		File buildLibDir = new File("build" + File.separator + "lib");
 		File[] testJars = buildLibDir.listFiles(new FileFilter() {

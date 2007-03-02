@@ -35,13 +35,14 @@ import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
 
-/** 
- *  AppserviceConfigPanel
- *  Wizard panel to configure parameters for caCORE SDK 3.1 data source
+
+/**
+ * AppserviceConfigPanel Wizard panel to configure parameters for caCORE SDK 3.1
+ * data source
  * 
- * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
- * @created Nov 9, 2006 
- * @version $Id: AppserviceConfigPanel.java,v 1.5 2007-01-10 21:55:57 dervin Exp $ 
+ * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
+ * @created Nov 9, 2006
+ * @version $Id: AppserviceConfigPanel.java,v 1.6 2007-03-02 19:06:16 hastings Exp $
  */
 public class AppserviceConfigPanel extends AbstractWizardPanel {
 	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
@@ -50,15 +51,13 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 	public static final String CSM_CONTEXT_NAME = "csmContextName";
 	// sdk 3.2 only
 	public static final String CSM_CONFIGURATION_FILENAME = "csmConfigurationFilename";
-	
-	public static final String PERFORMANCE_WARNING = 
-		"NOTE:\n" +
-		"Enabling CSM security for the caCORE SDK data source will cause " + 
-		"significant performance degredation when multiple clients connect " +
-		"to the data service.  Due to a bug in the caCORE SDK API, all calls " +
-		"to the query method when CSM is enabled must be synchronized, and " +
-		"cannot be executed in parallel.";
-	
+
+	public static final String PERFORMANCE_WARNING = "NOTE:\n"
+		+ "Enabling CSM security for the caCORE SDK data source will cause "
+		+ "significant performance degredation when multiple clients connect "
+		+ "to the data service.  Due to a bug in the caCORE SDK API, all calls "
+		+ "to the query method when CSM is enabled must be synchronized, and " + "cannot be executed in parallel.";
+
 	private JLabel serviceUrlLabel = null;
 	private JTextField serviceUrlTextField = null;
 	private JCheckBox useCsmCheckBox = null;
@@ -77,34 +76,35 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 	private JButton csmConfigurationClearButton = null;
 	private JPanel configButtonPanel = null;
 
+
 	public AppserviceConfigPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
 		super(extensionDescription, info);
 		initialize();
 	}
-	
-	
+
+
 	private void initialize() {
-        GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-        gridBagConstraints10.gridx = 0;
-        gridBagConstraints10.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints10.weightx = 1.0D;
-        gridBagConstraints10.gridy = 2;
-        GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-        gridBagConstraints9.gridx = 0;
-        gridBagConstraints9.weightx = 1.0D;
-        gridBagConstraints9.fill = GridBagConstraints.BOTH;
-        gridBagConstraints9.weighty = 1.0D;
-        gridBagConstraints9.gridy = 1;
-        GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-        gridBagConstraints6.gridx = 0;
-        gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints6.weightx = 1.0D;
-        gridBagConstraints6.gridy = 0;
-        this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(558, 273));
-        this.add(getAppserviceConfigPanel(), gridBagConstraints6);
-        this.add(getCsmInfoPanel(), gridBagConstraints9);
-        this.add(getCsmOptionsPanel(), gridBagConstraints10);		
+		GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+		gridBagConstraints10.gridx = 0;
+		gridBagConstraints10.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints10.weightx = 1.0D;
+		gridBagConstraints10.gridy = 2;
+		GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+		gridBagConstraints9.gridx = 0;
+		gridBagConstraints9.weightx = 1.0D;
+		gridBagConstraints9.fill = GridBagConstraints.BOTH;
+		gridBagConstraints9.weighty = 1.0D;
+		gridBagConstraints9.gridy = 1;
+		GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+		gridBagConstraints6.gridx = 0;
+		gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints6.weightx = 1.0D;
+		gridBagConstraints6.gridy = 0;
+		this.setLayout(new GridBagLayout());
+		this.setSize(new Dimension(558, 273));
+		this.add(getAppserviceConfigPanel(), gridBagConstraints6);
+		this.add(getCsmInfoPanel(), gridBagConstraints9);
+		this.add(getCsmOptionsPanel(), gridBagConstraints10);
 	}
 
 
@@ -126,8 +126,8 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 			for (int i = 0; i < props.length; i++) {
 				String prefixedPropName = props[i].getKey();
 				if (prefixedPropName.startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
-					String propName = prefixedPropName.substring(
-						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX.length());
+					String propName = prefixedPropName.substring(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX
+						.length());
 					String propValue = props[i].getValue();
 					if (propName.equals(USE_CSM_FLAG)) {
 						csmFound = true;
@@ -139,7 +139,8 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 						// find the appservice URL for comparison
 						String appserviceUrl = null;
 						for (int j = 0; j < props.length; j++) {
-							if (props[j].getKey().equals(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY + APPLICATION_SERVICE_URL)) {
+							if (props[j].getKey().equals(
+								DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY + APPLICATION_SERVICE_URL)) {
 								appserviceUrl = props[j].getValue();
 								break;
 							}
@@ -153,17 +154,18 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 					}
 				}
 			}
-			
+
 			// default for USE CSM flag
 			if (!csmFound) {
 				getUseCsmCheckBox().setSelected(false);
 				PortalUtils.setContainerEnabled(getCsmOptionsPanel(), false);
 			}
-			
+
 			if (getUseCsmCheckBox().isSelected()) {
-				// enable / disable the CSM config file based on SDK version (must be 3.2)
+				// enable / disable the CSM config file based on SDK version
+				// (must be 3.2)
 				String sdkVersion = (String) getBitBucket().get(CoreDsIntroPanel.CACORE_VERSION_PROPERTY);
-				boolean isSdk32 = sdkVersion != null && sdkVersion.equals(CoreDsIntroPanel.CACORE_32_VERSION);
+				boolean isSdk32 = (sdkVersion != null) && sdkVersion.equals(CoreDsIntroPanel.CACORE_32_VERSION);
 				getCsmConfigFileLabel().setEnabled(isSdk32);
 				getCsmConfigurationFileTextField().setEnabled(isSdk32);
 				getCsmConfigurationBrowseButton().setEnabled(isSdk32);
@@ -174,12 +176,12 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 			ErrorDialog.showErrorDialog("Error loading data for CSM", ex);
 		}
 	}
-	
-	
+
+
 	/**
-	 * This method initializes jLabel	
-	 * 	
-	 * @return javax.swing.JLabel	
+	 * This method initializes jLabel
+	 * 
+	 * @return javax.swing.JLabel
 	 */
 	private JLabel getServiceUrlLabel() {
 		if (serviceUrlLabel == null) {
@@ -188,12 +190,12 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 		}
 		return serviceUrlLabel;
 	}
-	
-	
+
+
 	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes jTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getServiceUrlTextField() {
 		if (serviceUrlTextField == null) {
@@ -203,25 +205,25 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 					changeAppServiceUrl();
 				}
 
-			    
-			    public void removeUpdate(DocumentEvent e) {
-			    	changeAppServiceUrl();
-			    }
-			    
 
-			    public void changedUpdate(DocumentEvent e) {
-			    	changeAppServiceUrl();
-			    }
+				public void removeUpdate(DocumentEvent e) {
+					changeAppServiceUrl();
+				}
+
+
+				public void changedUpdate(DocumentEvent e) {
+					changeAppServiceUrl();
+				}
 			});
 		}
 		return serviceUrlTextField;
 	}
-	
-	
+
+
 	/**
-	 * This method initializes jCheckBox	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes jCheckBox
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getUseCsmCheckBox() {
 		if (useCsmCheckBox == null) {
@@ -232,10 +234,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 					PortalUtils.setContainerEnabled(getCsmOptionsPanel(), useCsmCheckBox.isSelected());
 					// set the use CSM property in the service properties
 					try {
-						CommonTools.setServiceProperty(
-							getServiceInformation().getServiceDescriptor(), 
-							DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_CSM_FLAG, 
-							String.valueOf(useCsmCheckBox.isSelected()), false);
+						CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
+							DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_CSM_FLAG, String
+								.valueOf(useCsmCheckBox.isSelected()), false, "");
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						ErrorDialog.showErrorDialog("Error storing use CSM property", ex);
@@ -248,9 +249,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes jLabel	
-	 * 	
-	 * @return javax.swing.JLabel	
+	 * This method initializes jLabel
+	 * 
+	 * @return javax.swing.JLabel
 	 */
 	private JLabel getCsmContextLabel() {
 		if (csmContextLabel == null) {
@@ -262,9 +263,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes jTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getCsmContextTextField() {
 		if (csmContextTextField == null) {
@@ -290,9 +291,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes jCheckBox	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes jCheckBox
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getUseAppserviceUrlCheckBox() {
 		if (useAppserviceUrlCheckBox == null) {
@@ -305,8 +306,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 					getCsmContextTextField().setEditable(!selected);
 					if (selected) {
 						try {
-							String appserviceUrl = CommonTools.getServicePropertyValue(getServiceInformation().getServiceDescriptor(),
-								DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + APPLICATION_SERVICE_URL);
+							String appserviceUrl = CommonTools.getServicePropertyValue(getServiceInformation()
+								.getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX
+								+ APPLICATION_SERVICE_URL);
 							getCsmContextTextField().setText(appserviceUrl);
 						} catch (Exception ex) {
 							ex.printStackTrace();
@@ -321,9 +323,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getCsmOptionsPanel() {
 		if (csmOptionsPanel == null) {
@@ -345,25 +347,25 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 2;
 			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints5.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.gridy = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints3.gridy = 0;
 			gridBagConstraints3.weightx = 1.0;
-			gridBagConstraints3.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints3.gridx = 1;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.insets = new java.awt.Insets(2,2,2,2);
+			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints1.gridy = 0;
 			csmOptionsPanel = new JPanel();
 			csmOptionsPanel.setLayout(new GridBagLayout());
-			csmOptionsPanel.setBorder(BorderFactory.createTitledBorder(
-				null, "CSM Configuration Options", TitledBorder.DEFAULT_JUSTIFICATION, 
-				TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			csmOptionsPanel.setBorder(BorderFactory.createTitledBorder(null, "CSM Configuration Options",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel
+					.getPanelLabelColor()));
 			csmOptionsPanel.add(getCsmContextLabel(), gridBagConstraints1);
 			csmOptionsPanel.add(getCsmContextTextField(), gridBagConstraints3);
 			csmOptionsPanel.add(getUseAppserviceUrlCheckBox(), gridBagConstraints5);
@@ -376,9 +378,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes performanceWarningTextArea	
-	 * 	
-	 * @return javax.swing.JTextArea	
+	 * This method initializes performanceWarningTextArea
+	 * 
+	 * @return javax.swing.JTextArea
 	 */
 	private JTextArea getPerformanceWarningTextArea() {
 		if (performanceWarningTextArea == null) {
@@ -393,39 +395,39 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes performanceWarningScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes performanceWarningScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getPerformanceWarningScrollPane() {
 		if (performanceWarningScrollPane == null) {
 			performanceWarningScrollPane = new JScrollPane();
-			performanceWarningScrollPane.setBorder(BorderFactory.createTitledBorder(
-				null, "Note", TitledBorder.DEFAULT_JUSTIFICATION, 
-				TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			performanceWarningScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Note",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel
+					.getPanelLabelColor()));
 			performanceWarningScrollPane.setViewportView(getPerformanceWarningTextArea());
 		}
 		return performanceWarningScrollPane;
 	}
-	
-	
+
+
 	private void changeAppServiceUrl() {
 		try {
 			CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
-				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + APPLICATION_SERVICE_URL,
-				getServiceUrlTextField().getText(), false);
+				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + APPLICATION_SERVICE_URL, getServiceUrlTextField()
+					.getText(), false, "");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error setting the application service URL: " + ex.getMessage(), ex);
 		}
 	}
-	
-	
+
+
 	private void changeCsmContext() {
 		try {
 			CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
-				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONTEXT_NAME,
-				getCsmContextTextField().getText(), false);
+				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONTEXT_NAME, getCsmContextTextField()
+					.getText(), false, "");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error setting CSM context: " + ex.getMessage(), ex);
@@ -434,9 +436,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes caseInsensitiveCheckBox	
-	 * 	
-	 * @return javax.swing.JCheckBox	
+	 * This method initializes caseInsensitiveCheckBox
+	 * 
+	 * @return javax.swing.JCheckBox
 	 */
 	private JCheckBox getCaseInsensitiveCheckBox() {
 		if (caseInsensitiveCheckBox == null) {
@@ -446,8 +448,8 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					try {
 						CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
-							DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CASE_INSENSITIVE_QUERYING,
-							String.valueOf(caseInsensitiveCheckBox.isSelected()), false);
+							DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CASE_INSENSITIVE_QUERYING, String
+								.valueOf(caseInsensitiveCheckBox.isSelected()), false, "");
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						ErrorDialog.showErrorDialog("Error setting the case insensitive flag: " + ex.getMessage(), ex);
@@ -460,9 +462,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes appserviceConfigPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes appserviceConfigPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getAppserviceConfigPanel() {
 		if (appserviceConfigPanel == null) {
@@ -485,9 +487,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 			gridBagConstraints.gridy = 0;
 			appserviceConfigPanel = new JPanel();
 			appserviceConfigPanel.setLayout(new GridBagLayout());
-			appserviceConfigPanel.setBorder(BorderFactory.createTitledBorder(
-				null, "Application Service Options", TitledBorder.DEFAULT_JUSTIFICATION, 
-				TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
+			appserviceConfigPanel.setBorder(BorderFactory.createTitledBorder(null, "Application Service Options",
+				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel
+					.getPanelLabelColor()));
 			appserviceConfigPanel.add(getServiceUrlLabel(), gridBagConstraints);
 			appserviceConfigPanel.add(getServiceUrlTextField(), gridBagConstraints2);
 			appserviceConfigPanel.add(getCaseInsensitiveCheckBox(), gridBagConstraints4);
@@ -497,9 +499,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes csmInfoPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes csmInfoPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getCsmInfoPanel() {
 		if (csmInfoPanel == null) {
@@ -525,9 +527,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes csmConfigFileLabel	
-	 * 	
-	 * @return javax.swing.JLabel	
+	 * This method initializes csmConfigFileLabel
+	 * 
+	 * @return javax.swing.JLabel
 	 */
 	private JLabel getCsmConfigFileLabel() {
 		if (csmConfigFileLabel == null) {
@@ -539,9 +541,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes csmConfigurationFileTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes csmConfigurationFileTextField
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getCsmConfigurationFileTextField() {
 		if (csmConfigurationFileTextField == null) {
@@ -552,9 +554,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes csmConfigurationBrowseButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes csmConfigurationBrowseButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getCsmConfigurationBrowseButton() {
 		if (csmConfigurationBrowseButton == null) {
@@ -571,9 +573,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 								+ File.separator + "etc" + File.separator + inFile.getName());
 							Utils.copyFile(inFile, outFile);
 							// set the CQL configuration property
-							CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
-								DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, 
-								inFile.getName(), true);
+							CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
+								DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, inFile
+									.getName(), true, "");
 							getCsmConfigurationFileTextField().setText(inFile.getName());
 						}
 					} catch (IOException ex) {
@@ -588,9 +590,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes csmConfigurationClearButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes csmConfigurationClearButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getCsmConfigurationClearButton() {
 		if (csmConfigurationClearButton == null) {
@@ -603,9 +605,8 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 						+ File.separator + "etc" + File.separator + getCsmConfigurationFileTextField().getText());
 					configFile.delete();
 					// "unset" the configuration property
-					CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
-						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, 
-						"", false);
+					CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
+						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, "", false, "");
 					// clean up the GUI
 					getCsmConfigurationFileTextField().setText("");
 				}
@@ -616,9 +617,9 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 
 
 	/**
-	 * This method initializes configButtonPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes configButtonPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getConfigButtonPanel() {
 		if (configButtonPanel == null) {

@@ -77,17 +77,16 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 				+ getFromVersion());
 		}
 		if (!getToVersion().equals("1.1")) {
-			throw new UpgradeException(getClass().getName() 
-				+ " upgrades FROM 1.0 TO 1.1, found TO = " + getToVersion());
+			throw new UpgradeException(getClass().getName() + " upgrades FROM 1.0 TO 1.1, found TO = " + getToVersion());
 		}
 		String currentVersion = getExtensionType().getVersion();
 		if (!((currentVersion == null) || currentVersion.equals("1.0"))) {
-			throw new UpgradeException(getClass().getName() 
-				+ " upgrades FROM 1.0 TO 1.1, current version found is " + currentVersion);
+			throw new UpgradeException(getClass().getName() + " upgrades FROM 1.0 TO 1.1, current version found is "
+				+ currentVersion);
 		}
 	}
-	
-	
+
+
 	private void updateLibraries() throws UpgradeException {
 		FileFilter dataLibFilter = new FileFilter() {
 			public boolean accept(File name) {
@@ -107,8 +106,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		File[] dataLibs = buildLibDir.listFiles(dataLibFilter);
 		File[] outLibs = new File[dataLibs.length];
 		for (int i = 0; i < dataLibs.length; i++) {
-			File out = new File(
-				serviceLibDir.getAbsolutePath() + File.separator + dataLibs[i].getName());
+			File out = new File(serviceLibDir.getAbsolutePath() + File.separator + dataLibs[i].getName());
 			try {
 				Utils.copyFile(dataLibs[i], out);
 			} catch (IOException ex) {
@@ -123,19 +121,21 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 			throw new UpgradeException("Error updating eclipse .classpath file: " + ex.getMessage(), ex);
 		}
 	}
-	
-	
+
+
 	private void moveCastorMappingFile() throws UpgradeException {
 		File oldCastorMapping = new File(getServicePath() + File.separator + "xml-mapping.xml");
 		if (oldCastorMapping.exists()) {
 			Properties introduceProperties = new Properties();
 			try {
-				introduceProperties.load(new FileInputStream(getServicePath() + File.separator + "introduce.properties"));
+				introduceProperties
+					.load(new FileInputStream(getServicePath() + File.separator + "introduce.properties"));
 			} catch (IOException ex) {
-				throw new UpgradeException("Error loading introduce properties for this service: " + ex.getMessage(), ex);
+				throw new UpgradeException("Error loading introduce properties for this service: " + ex.getMessage(),
+					ex);
 			}
-			ServiceInformation serviceInfo = new ServiceInformation(
-				getServiceDescription(), introduceProperties, new File(getServicePath()));
+			ServiceInformation serviceInfo = new ServiceInformation(getServiceDescription(), introduceProperties,
+				new File(getServicePath()));
 			File newCastorMapping = new File(CastorMappingUtil.getCustomCastorMappingFileName(serviceInfo));
 			try {
 				Utils.copyFile(oldCastorMapping, newCastorMapping);
@@ -145,11 +145,12 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 			// fix the server-config.wsdd file's castrorMapping parameter
 			File serverConfigFile = new File(getServicePath() + File.separator + "server-config.wsdd");
 			try {
-				WsddUtil.setServiceParameter(serverConfigFile.getAbsolutePath(),
-					serviceInfo.getServices().getService(0).getName(), DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER,
-					CastorMappingUtil.getCustomCastorMappingName(serviceInfo));
+				WsddUtil.setServiceParameter(serverConfigFile.getAbsolutePath(), serviceInfo.getServices()
+					.getService(0).getName(), DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, CastorMappingUtil
+					.getCustomCastorMappingName(serviceInfo));
 			} catch (Exception ex) {
-				throw new UpgradeException("Error setting castor mapping parameter in server-config.wsdd: " + ex.getMessage(), ex);
+				throw new UpgradeException("Error setting castor mapping parameter in server-config.wsdd: "
+					+ ex.getMessage(), ex);
 			}
 			// fix the client config file
 			String mainServiceName = serviceInfo.getIntroduceServiceProperties().getProperty(
@@ -157,14 +158,15 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 			ServiceType mainService = CommonTools.getService(serviceInfo.getServices(), mainServiceName);
 			String servicePackageName = mainService.getPackageName();
 			String packageDir = servicePackageName.replace('.', File.separatorChar);
-			File clientConfigFile = new File(getServicePath() + File.separator + "src" 
-				+ File.separator + packageDir + File.separator + "client" + File.separator + "client-config.wsdd");
+			File clientConfigFile = new File(getServicePath() + File.separator + "src" + File.separator + packageDir
+				+ File.separator + "client" + File.separator + "client-config.wsdd");
 			try {
-				WsddUtil.setGlobalClientParameter(clientConfigFile.getAbsolutePath(), 
-					DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, 
-					CastorMappingUtil.getCustomCastorMappingName(serviceInfo));
+				WsddUtil.setGlobalClientParameter(clientConfigFile.getAbsolutePath(),
+					DataServiceConstants.CASTOR_MAPPING_WSDD_PARAMETER, CastorMappingUtil
+						.getCustomCastorMappingName(serviceInfo));
 			} catch (Exception ex) {
-				throw new UpgradeException("Error setting castor mapping parameter in client-config.wsdd: " + ex.getMessage(), ex);
+				throw new UpgradeException("Error setting castor mapping parameter in client-config.wsdd: "
+					+ ex.getMessage(), ex);
 			}
 			oldCastorMapping.delete();
 		}
@@ -213,13 +215,12 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 			}
 			// add the property to the service properties
 			String extendedKey = "cqlQueryProcessorConfig_" + key;
-			CommonTools.setServiceProperty(getServiceDescription(), extendedKey, value, false);
+			CommonTools.setServiceProperty(getServiceDescription(), extendedKey, value, false, "");
 		}
 	}
 
 
-	private CQLQueryProcessor loadQueryProcessorInstance(String queryProcessorClassName)
-		throws UpgradeException {
+	private CQLQueryProcessor loadQueryProcessorInstance(String queryProcessorClassName) throws UpgradeException {
 		// reflect load the query processor (this should live in the service's
 		// lib dir)
 		File libDir = new File(getServicePath() + File.separator + "lib");
@@ -250,8 +251,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		Element cadsrInfo = extensionData.getChild("CadsrInformation", extensionData.getNamespace());
 		// now we have a noDomainModel boolean flag...
 		boolean hasCadsrUrl = cadsrInfo.getAttributeValue("serviceUrl") != null;
-		boolean usingSuppliedModel = 
-			(cadsrInfo.getAttributeValue("useSuppliedModel") != null)
+		boolean usingSuppliedModel = (cadsrInfo.getAttributeValue("useSuppliedModel") != null)
 			&& cadsrInfo.getAttributeValue("useSuppliedModel").equals("true");
 		boolean noDomainModel = (!hasCadsrUrl && !usingSuppliedModel);
 		cadsrInfo.setAttribute("noDomainModel", String.valueOf(noDomainModel));

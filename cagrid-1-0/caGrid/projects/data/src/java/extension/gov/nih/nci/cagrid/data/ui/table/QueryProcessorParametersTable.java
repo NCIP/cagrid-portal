@@ -27,29 +27,30 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
-/** 
- *  QueryProcessorParametersTable
- *  Table for configuring and displaying query processor parameters
+
+/**
+ * QueryProcessorParametersTable Table for configuring and displaying query
+ * processor parameters
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * 
- * @created Oct 10, 2006 
- * @version $Id$ 
+ * @created Oct 10, 2006
+ * @version $Id$
  */
 public class QueryProcessorParametersTable extends JTable {
 	private ExtensionTypeExtensionData extData;
 	private ServiceInformation serviceInfo;
 	private JTextField editorTextField = null;
 
+
 	public QueryProcessorParametersTable(ExtensionTypeExtensionData extensionData, ServiceInformation serviceInfo) {
 		super(createModel());
-		this.extData = extensionData;
+		extData = extensionData;
 		this.serviceInfo = serviceInfo;
 		setDefaultEditor(Object.class, new DefaultCellEditor(getEditorTextField()));
 		classChanged();
 	}
-	
-	
+
+
 	private JTextField getEditorTextField() {
 		if (editorTextField == null) {
 			editorTextField = new JTextField();
@@ -58,33 +59,32 @@ public class QueryProcessorParametersTable extends JTable {
 					store(editorTextField.getText());
 				}
 
-			    
+
 				public void removeUpdate(DocumentEvent e) {
 					store(editorTextField.getText());
 				}
 
 
-			    public void changedUpdate(DocumentEvent e) {
-			    	store(editorTextField.getText());
-			    }
-			    
-			    
-			    private void store(String text) {
-			    	setValueAt(text, getSelectedRow(), getSelectedColumn());
-			    	try {
-			    		storeProperties();
-			    	} catch (Exception ex) {
-			    		ex.printStackTrace();
-			    		ErrorDialog.showErrorDialog(
-			    			"Error storing query processor properties!", ex);
-			    	}
-			    }
+				public void changedUpdate(DocumentEvent e) {
+					store(editorTextField.getText());
+				}
+
+
+				private void store(String text) {
+					setValueAt(text, getSelectedRow(), getSelectedColumn());
+					try {
+						storeProperties();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						ErrorDialog.showErrorDialog("Error storing query processor properties!", ex);
+					}
+				}
 			});
 		}
 		return editorTextField;
 	}
-	
-	
+
+
 	public void classChanged() {
 		// clear the table
 		while (getRowCount() != 0) {
@@ -102,7 +102,7 @@ public class QueryProcessorParametersTable extends JTable {
 				Properties configuredProps = new Properties();
 				ServiceProperties serviceProps = serviceInfo.getServiceProperties();
 				if (serviceProps != null) {
-					for (int i = 0; serviceProps.getProperty() != null && i < serviceProps.getProperty().length; i++) {
+					for (int i = 0; (serviceProps.getProperty() != null) && (i < serviceProps.getProperty().length); i++) {
 						ServicePropertiesProperty property = serviceProps.getProperty(i);
 						String rawKey = property.getKey();
 						if (rawKey.startsWith(DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX)) {
@@ -121,7 +121,7 @@ public class QueryProcessorParametersTable extends JTable {
 					} else {
 						val = defaultProps.getProperty(key);
 					}
-					((DefaultTableModel) getModel()).addRow(new String[] {key, def, val});
+					((DefaultTableModel) getModel()).addRow(new String[]{key, def, val});
 				}
 				storeProperties();
 			} else {
@@ -133,29 +133,29 @@ public class QueryProcessorParametersTable extends JTable {
 			ErrorDialog.showErrorDialog("Error loading query processor", ex);
 		}
 	}
-	
-	
+
+
 	public boolean isCellEditable(int row, int column) {
 		return column == 2;
 	}
-	
-	
+
+
 	public void clearTable() {
 		while (getRowCount() != 0) {
 			((DefaultTableModel) getModel()).removeRow(0);
 		}
 	}
-	
-	
+
+
 	private String getQpClassname() throws Exception {
 		return CommonTools.getServicePropertyValue(serviceInfo.getServiceDescriptor(),
 			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
 	}
-	
-	
+
+
 	private Class getQueryProcessorClass() throws Exception {
 		String className = getQpClassname();
-		if (className != null && className.length() != 0 
+		if ((className != null) && (className.length() != 0)
 			&& !className.endsWith(DataServiceConstants.QUERY_PROCESSOR_STUB_NAME)) {
 			String[] libs = getJarFilenames();
 			URL[] urls = new URL[libs.length];
@@ -169,15 +169,15 @@ public class QueryProcessorParametersTable extends JTable {
 		}
 		return null;
 	}
-	
-	
+
+
 	private String[] getJarFilenames() throws Exception {
 		String libDir = serviceInfo.getIntroduceServiceProperties().getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
-		AdditionalLibraries additionalLibs = 
-			ExtensionDataUtils.getExtensionData(extData).getAdditionalLibraries();
+			IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+			+ File.separator + "lib";
+		AdditionalLibraries additionalLibs = ExtensionDataUtils.getExtensionData(extData).getAdditionalLibraries();
 		List namesList = new ArrayList();
-		if (additionalLibs != null && additionalLibs.getJarName() != null) {
+		if ((additionalLibs != null) && (additionalLibs.getJarName() != null)) {
 			for (int i = 0; i < additionalLibs.getJarName().length; i++) {
 				String name = additionalLibs.getJarName(i);
 				namesList.add(libDir + File.separator + name);
@@ -187,20 +187,19 @@ public class QueryProcessorParametersTable extends JTable {
 		namesList.toArray(names);
 		return names;
 	}
-	
-	
+
+
 	private void storeProperties() throws Exception {
 		// set / add service properties to match the information in this table
 		for (int i = 0; i < getRowCount(); i++) {
 			String key = (String) getValueAt(i, 0);
 			String userVal = (String) getValueAt(i, 2);
 			String prefixedKey = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + key;
-			CommonTools.setServiceProperty(
-				serviceInfo.getServiceDescriptor(), prefixedKey, userVal, false);
+			CommonTools.setServiceProperty(serviceInfo.getServiceDescriptor(), prefixedKey, userVal, false, "");
 		}
 	}
-	
-	
+
+
 	private static DefaultTableModel createModel() {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn("Parameter");
