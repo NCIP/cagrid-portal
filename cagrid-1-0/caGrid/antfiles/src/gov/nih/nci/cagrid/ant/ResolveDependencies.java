@@ -16,6 +16,7 @@ import org.apache.tools.ant.types.FileSet;
 public class ResolveDependencies extends Task {
 
 	public static final String SKIP_ANTCALLS_PROPERTY = "skip.artifact.antcalls";
+	public static final String ANTCALL_PROPERTY_PREFIX = ResolveDependencies.class.getName() + ".called.antcall.";
 
 	private List artifactList;
 	private File extDir;
@@ -53,12 +54,12 @@ public class ResolveDependencies extends Task {
 	}
 
 
-	@Override
 	public void execute() throws BuildException {
 		super.execute();
 		for (int i = 0; i < this.artifactList.size(); i++) {
 
 			Artifact artifact = (Artifact) this.artifactList.get(i);
+			System.out.println("Processing Artifact [" + artifact.getIdentifer() + "]");
 			GeneratingCallTarget antCall = artifact.getAntCall();
 			if (antCall != null) {
 
@@ -68,18 +69,20 @@ public class ResolveDependencies extends Task {
 				} else {
 					// see if we call this target yet, in this run, if so, skip
 					// it
-					String prop = "called.antcall.of." + antCall.getTarget();
+					String prop = ANTCALL_PROPERTY_PREFIX + antCall.getTarget();
 					String calledProperty = this.getProject().getProperty(prop);
+
 					if (calledProperty != null) {
 						System.out.println("Skipping dependent artifact's ant call, as propery was set:" + prop);
 					} else {
+
 						System.out.println("Calling dependent artifact's ant call for first time; setting property:"
 							+ prop);
 						this.getProject().setProperty(prop, "true");
-						antCall.setProject(this.getProject());
 						antCall.execute();
 					}
 				}
+
 			}
 
 			// configure a copy task to send the created artifacts where they

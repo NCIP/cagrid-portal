@@ -44,7 +44,7 @@
         </artifact>
         <artifact track="main" type="jars" id="ant-contrib.jars">
             <fileset dir="${share.dir}/lib">
-                <include name="ant-contrib.jar" />
+                <include name="ant-contrib*.jar" />
             </fileset>
         </artifact>
         <artifact track="test" type="jars" id="common.test.jars">

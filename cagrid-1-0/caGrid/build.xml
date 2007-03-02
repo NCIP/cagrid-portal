@@ -26,6 +26,7 @@
     <fail message="JDK 1.5 is currently required to build this project!" unless="isJDK1.5" />
 
     <!-- IMPORT THE UTILITIES TARGETS -->
+    <import file="${antfiles.dir}/ant-tasks.xml" />
     <import file="${antfiles.dir}/artifacts.xml" />
     <import file="${antfiles.dir}/ant-utilities.xml" />
     <import file="${antfiles.dir}/test-utilities.xml" />
@@ -63,36 +64,8 @@
     <!-- Bootstrap the build by setting up the structure and building    -->
     <!-- our custom ant tasks.                                           -->
     <!-- =============================================================== -->
-    <target name="prepare">
+    <target name="prepare" depends="check-anttask-rebuild-needed, build-ant-tasks, define-ant-tasks">
         <tstamp />
-        <delete dir="${antfiles.dir}/build" />
-        <mkdir dir="${antfiles.dir}/build" />
-        <javac srcdir="${antfiles.dir}/src" destdir="${antfiles.dir}/build" debug="on" deprecation="off" optimize="off">
-            <classpath>
-                <fileset dir="${ant.library.dir}">
-                    <include name="ant.jar" />
-                </fileset>
-            </classpath>
-        </javac>
-
-
-        <typedef name="artifact" classname="gov.nih.nci.cagrid.ant.Artifact" loaderref="artifact">
-            <classpath>
-                <pathelement location="${antfiles.dir}/build" />
-            </classpath>
-        </typedef>
-        <taskdef name="resolveDependencies" classname="gov.nih.nci.cagrid.ant.ResolveDependencies" loaderref="artifact">
-            <classpath>
-                <pathelement location="${antfiles.dir}/build" />
-            </classpath>
-        </taskdef>
-
-
-        <taskdef resource="net/sf/antcontrib/antlib.xml">
-            <classpath>
-                <pathelement location="${share.lib.dir}/ant-contrib.jar" />
-            </classpath>
-        </taskdef>
     </target>
 
     <!-- =============================================================== -->
@@ -731,7 +704,6 @@
         <property name="skip.artifact.antcalls" value="true" />
     </target>
 
-
     <!-- ============================================================== -->
     <!-- Builds from scratch                                            -->
     <!-- ============================================================== -->
@@ -746,12 +718,5 @@
             </sequential>
         </for>
         <runtarget target="installIntroduceExtensions" />
-        <runtarget target="displayBuildWarning" />
-    </target>
-    <target name="displayBuildWarning" unless="isJDK1.5">
-        <echo message="=====================================================================================" />
-        <echo message="WARNING: When building with a JDK of version &lt; 1.5, not all projects can be built!" />
-        <echo message="         You are using Java Version: ${ant.java.version}" />
-        <echo message="=====================================================================================" />
     </target>
 </project>
