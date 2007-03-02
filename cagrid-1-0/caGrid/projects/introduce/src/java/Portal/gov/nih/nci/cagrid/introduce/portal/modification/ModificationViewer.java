@@ -478,9 +478,9 @@ public class ModificationViewer extends GridPortalComponent {
 			gridBagConstraints8.gridx = 0;
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new GridBagLayout());
-			buttonPanel.add(getUndoButton(), gridBagConstraints8);
 			buttonPanel.add(getSaveButton(), gridBagConstraints9);
 			buttonPanel.add(getCancel(), gridBagConstraints10);
+			buttonPanel.add(getUndoButton(), gridBagConstraints8);
 		}
 		return buttonPanel;
 	}
@@ -1662,6 +1662,7 @@ public class ModificationViewer extends GridPortalComponent {
 			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
 			gridBagConstraints14.gridx = 0;
 			gridBagConstraints14.anchor = GridBagConstraints.SOUTHWEST;
+			gridBagConstraints14.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints14.gridy = 4;
 			descriptionLabel = new JLabel();
 			descriptionLabel.setText("Description:");
