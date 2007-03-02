@@ -103,7 +103,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private final static String GRID_MAP_AUTHORIZATION = "Gridmap";
 
 	private final static String GRID_GROUPER_AUTHORIZATION = "Grid Grouper";
-	
+
 	private final static String CSM_AUTHORIZATION = "Common Security Module (CSM)";
 
 	private final static String FILE_SYSTEM_PROXY = "Proxy from file system"; // @jve:decl-index=0:
@@ -177,7 +177,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private GridGrouperExpressionEditor gridGrouper = null;
 
 	private CSMPanel csmPanel = null;
-	
+
 	private ServiceDescription description;
 
 
@@ -319,15 +319,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 			}
 
 			if (tlsButton.isSelected()) {
-				ss.setTransportLevelSecurity(this.tlsPanel.getTransportLevelSecurity());
+				ss.setTransportLevelSecurity(tlsPanel.getTransportLevelSecurity());
 
 			}
 			if (secureConversationButton.isSelected()) {
-				ss.setSecureConversation(this.secureConversationPanel.getSecureConversation());
+				ss.setSecureConversation(secureConversationPanel.getSecureConversation());
 
 			}
 			if (secureMessageButton.isSelected()) {
-				ss.setSecureMessage(this.secureMessagePanel.getSecureMessage());
+				ss.setSecureMessage(secureMessagePanel.getSecureMessage());
 			}
 			if (runAsMode.isEnabled()) {
 				ss.setRunAsMode((RunAsMode) runAsMode.getSelectedItem());
@@ -339,22 +339,22 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				ss.setAnonymousClients(AnonymousCommunication.No);
 			}
 
-			if ((this.certificateLocation != null) && (this.privateKeyLocation != null)) {
+			if ((certificateLocation != null) && (privateKeyLocation != null)) {
 				ServiceCredential cred = new ServiceCredential();
 				X509Credential x509 = new X509Credential();
-				x509.setCertificateLocation(this.certificateLocation);
-				x509.setPrivateKeyLocation(this.privateKeyLocation);
+				x509.setCertificateLocation(certificateLocation);
+				x509.setPrivateKeyLocation(privateKeyLocation);
 				cred.setX509Credential(x509);
 				ss.setServiceCredentials(cred);
-			} else if (this.proxyLocation != null) {
+			} else if (proxyLocation != null) {
 				ServiceCredential cred = new ServiceCredential();
 				ProxyCredential proxy = new ProxyCredential();
-				proxy.setProxyLocation(this.proxyLocation);
+				proxy.setProxyLocation(proxyLocation);
 				cred.setProxyCredential(proxy);
 				ss.setServiceCredentials(cred);
 			}
 
-			String authType = (String) this.authorizationMechanism.getSelectedItem();
+			String authType = (String) authorizationMechanism.getSelectedItem();
 			ServiceAuthorization sa = new ServiceAuthorization();
 			if (authType.equals(GRID_MAP_AUTHORIZATION)) {
 				GridMapAuthorization gma = new GridMapAuthorization();
@@ -365,7 +365,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				MembershipExpression exp = getGridGrouper().getMembershipExpression();
 				sa.setGridGrouperAuthorization(exp);
 			} else if (authType.equals(CSM_AUTHORIZATION)) {
-				CommonTools.setServiceProperty(this.description, CSMPanel.CSM_CONFIGURATION_FILE, "", false);
+				CommonTools.setServiceProperty(description, CSMPanel.CSM_CONFIGURATION_FILE, "", false, "");
 				sa.setCSMAuthorization(getCsmPanel().getAuthorization());
 			} else {
 				sa.setNoAuthorization(new NoAuthorization());
@@ -379,7 +379,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	public void setServiceSecurity(ServiceSecurity ss) throws Exception {
-		if (ss != null && ss.getSecuritySetting() != null) {
+		if ((ss != null) && (ss.getSecuritySetting() != null)) {
 			if (ss.getSecuritySetting().equals(SecuritySetting.None)) {
 				noneButton.setSelected(true);
 			} else if (ss.getSecuritySetting().equals(SecuritySetting.Custom)) {
@@ -388,22 +388,22 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 				TransportLevelSecurity tls = ss.getTransportLevelSecurity();
 				if (tls != null) {
 					tlsButton.setSelected(true);
-					this.tlsPanel.setTransportLevelSecurity(tls);
+					tlsPanel.setTransportLevelSecurity(tls);
 				}
 				SecureConversation sc = ss.getSecureConversation();
 				if (sc != null) {
 					secureConversationButton.setSelected(true);
-					this.secureConversationPanel.setSecureConversation(sc);
+					secureConversationPanel.setSecureConversation(sc);
 				}
 				SecureMessage sm = ss.getSecureMessage();
 				if (sm != null) {
 					secureMessageButton.setSelected(true);
-					this.secureMessagePanel.setSecureMessage(sm);
+					secureMessagePanel.setSecureMessage(sm);
 				}
 
 				RunAsMode runas = ss.getRunAsMode();
 				if (runas != null) {
-					this.runAsMode.setSelectedItem(runas);
+					runAsMode.setSelectedItem(runas);
 				}
 
 				AnonymousCommunication anon = ss.getAnonymousClients();
@@ -423,19 +423,19 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 						String location = sa.getGridMapAuthorization().getGridMapFileLocation();
 						if (location != null) {
 							((GridMapPanel) gridmapPanel).setGridMapFile(location);
-							this.authorizationMechanism.setSelectedItem(GRID_MAP_AUTHORIZATION);
+							authorizationMechanism.setSelectedItem(GRID_MAP_AUTHORIZATION);
 						} else {
 							PortalUtils.showErrorMessage("No GridMap file specified!!!");
-							this.authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
+							authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
 						}
 					} else if (sa.getGridGrouperAuthorization() != null) {
 						this.getGridGrouper().setExpression(sa.getGridGrouperAuthorization());
-						this.authorizationMechanism.setSelectedItem(GRID_GROUPER_AUTHORIZATION);
+						authorizationMechanism.setSelectedItem(GRID_GROUPER_AUTHORIZATION);
 					} else if (sa.getCSMAuthorization() != null) {
 						this.getCsmPanel().setAuthorization(sa.getCSMAuthorization());
-						this.authorizationMechanism.setSelectedItem(CSM_AUTHORIZATION);
+						authorizationMechanism.setSelectedItem(CSM_AUTHORIZATION);
 					} else {
-						this.authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
+						authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
 					}
 				}
 				synchronize();
@@ -510,9 +510,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 		if ((secureConversationButton.isSelected()) || (secureMessageButton.isSelected())) {
 			credentialLoadMethod.setEnabled(true);
 			loadCredentialsButton.setEnabled(true);
-			if ((this.certificateLocation != null) && (this.privateKeyLocation != null)) {
+			if ((certificateLocation != null) && (privateKeyLocation != null)) {
 				credentialPanelLayout.show(credentialsPanel, PKI_CRED_PANEL);
-			} else if (this.proxyLocation != null) {
+			} else if (proxyLocation != null) {
 				credentialPanelLayout.show(credentialsPanel, PROXY_CRED_PANEL);
 			} else {
 				credentialPanelLayout.show(credentialsPanel, N0_CRED_PANEL);
@@ -527,7 +527,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private void syncAuthorization() {
 		if (isSecure()) {
 			authorizationMechanism.setEnabled(true);
-			String mech = (String) this.authorizationMechanism.getSelectedItem();
+			String mech = (String) authorizationMechanism.getSelectedItem();
 
 			authLayout.show(authPanel, mech);
 
@@ -541,18 +541,18 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private synchronized void synchRunAsMode() {
 		if (!isSyncingRunAs) {
 			isSyncingRunAs = true;
-			this.runAsMode.removeAllItems();
+			runAsMode.removeAllItems();
 			if (isSecure()) {
 				runAsMode.setEnabled(true);
-				this.runAsMode.addItem(RunAsMode.System);
+				runAsMode.addItem(RunAsMode.System);
 				if (hasServiceCredentials()) {
-					this.runAsMode.addItem(RunAsMode.Service);
+					runAsMode.addItem(RunAsMode.Service);
 				}
 
 				if (!getAnonymousCommunication().isEnabled()) {
-					this.runAsMode.addItem(RunAsMode.Caller);
+					runAsMode.addItem(RunAsMode.Caller);
 				} else if (getAnonymousCommunication().getSelectedItem().equals(AnonymousCommunication.No)) {
-					this.runAsMode.addItem(RunAsMode.Caller);
+					runAsMode.addItem(RunAsMode.Caller);
 				}
 
 			}
@@ -563,9 +563,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	private boolean hasServiceCredentials() {
-		if ((this.certificateLocation != null) && (this.privateKeyLocation != null)) {
+		if ((certificateLocation != null) && (privateKeyLocation != null)) {
 			return true;
-		} else if (this.proxyLocation != null) {
+		} else if (proxyLocation != null) {
 			return true;
 		} else {
 			return false;
@@ -944,12 +944,12 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	public void setProxy(ProxyCredential proxy) throws Exception {
 		if (proxy != null) {
-			this.certificateLocation = null;
-			this.privateKeyLocation = null;
-			this.proxyLocation = proxy.getProxyLocation();
+			certificateLocation = null;
+			privateKeyLocation = null;
+			proxyLocation = proxy.getProxyLocation();
 			try {
-				this.proxyPanel.clearProxy();
-				this.proxyPanel.showProxy(ProxyUtil.loadProxy(this.proxyLocation));
+				proxyPanel.clearProxy();
+				proxyPanel.showProxy(ProxyUtil.loadProxy(proxyLocation));
 			} catch (Exception e) {
 				PortalUtils.showErrorMessage("Invalid proxy specified!!!");
 			}
@@ -962,11 +962,11 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	public void setCredentials(X509Credential cred) throws Exception {
 		if (cred != null) {
-			this.certificateLocation = cred.getCertificateLocation();
-			this.privateKeyLocation = cred.getPrivateKeyLocation();
-			this.proxyLocation = null;
+			certificateLocation = cred.getCertificateLocation();
+			privateKeyLocation = cred.getPrivateKeyLocation();
+			proxyLocation = null;
 			try {
-				this.certificatePanel.setCertificate(CertUtil.loadCertificate(new File(cred.getCertificateLocation())));
+				certificatePanel.setCertificate(CertUtil.loadCertificate(new File(cred.getCertificateLocation())));
 			} catch (Exception e) {
 				// PortalUtils.showErrorMessage("Invalid certificate
 				// specified!!!");
@@ -986,8 +986,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JPanel getCredentialsPanel() {
 		if (credentialsPanel == null) {
 			credentialsPanel = new JPanel();
-			this.credentialPanelLayout = new CardLayout();
-			credentialsPanel.setLayout(this.credentialPanelLayout);
+			credentialPanelLayout = new CardLayout();
+			credentialsPanel.setLayout(credentialPanelLayout);
 			credentialsPanel.add(getNonePanel(), N0_CRED_PANEL);
 			credentialsPanel.add(getCertificatePanel(), PKI_CRED_PANEL);
 			credentialsPanel.add(getProxyPanel(), PROXY_CRED_PANEL);
@@ -1225,7 +1225,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 	 */
 	private GridGrouperExpressionEditor getGridGrouper() {
 		if (gridGrouper == null) {
-			gridGrouper = new GridGrouperExpressionEditor(GridGrouperURLManager.getGridGroupers(), GridGrouperURLManager.getLoadOnStartup());
+			gridGrouper = new GridGrouperExpressionEditor(GridGrouperURLManager.getGridGroupers(),
+				GridGrouperURLManager.getLoadOnStartup());
 			gridGrouper.setName(GRID_GROUPER_AUTHORIZATION);
 		}
 		return gridGrouper;
@@ -1233,13 +1234,13 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	/**
-	 * This method initializes csmPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes csmPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private CSMPanel getCsmPanel() {
 		if (csmPanel == null) {
-			csmPanel = new CSMPanel(this.service.getName());
+			csmPanel = new CSMPanel(service.getName());
 			csmPanel.setName(CSM_AUTHORIZATION);
 		}
 		return csmPanel;

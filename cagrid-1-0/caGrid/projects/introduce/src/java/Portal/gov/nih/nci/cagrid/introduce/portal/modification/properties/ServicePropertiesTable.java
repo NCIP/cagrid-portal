@@ -24,6 +24,7 @@ public class ServicePropertiesTable extends PortalBaseTable {
 
 	public static String NAME = "Name";
 	public static String VALUE = "Default Value";
+	public static String DESC = "Description";
 	public static String ETC = "Path From Etc";
 	public static String DATA1 = "DATA1";
 
@@ -35,8 +36,9 @@ public class ServicePropertiesTable extends PortalBaseTable {
 		this.info = info;
 		initialize();
 	}
-	
-	public void setServiceInformation(ServiceInformation info){
+
+
+	public void setServiceInformation(ServiceInformation info) {
 		this.info = info;
 		refreshView();
 	}
@@ -55,11 +57,15 @@ public class ServicePropertiesTable extends PortalBaseTable {
 		// add new data
 		if (info.getServiceProperties() != null) {
 			ServicePropertiesProperty[] allProperties = info.getServiceProperties().getProperty();
-			if (allProperties != null && allProperties.length > 0) {
+			if ((allProperties != null) && (allProperties.length > 0)) {
 				for (int i = 0; i < allProperties.length; i++) {
-					Vector v = new Vector(4);
+					Vector v = new Vector(5);
 					v.add(allProperties[i].getKey());
 					v.add(allProperties[i].getValue());
+					if (allProperties[i].getDescription() == null) {
+						allProperties[i].setDescription("");
+					}
+					v.add(allProperties[i].getDescription());
 					if (allProperties[i].getIsFromETC() != null) {
 						v.add(allProperties[i].getIsFromETC());
 					} else {
@@ -82,9 +88,9 @@ public class ServicePropertiesTable extends PortalBaseTable {
 	}
 
 
-	public void addRow(String key, String value, boolean isFromETC) {
+	public void addRow(String key, String value, boolean isFromETC, String description) {
 		// add the property to the service model
-		CommonTools.setServiceProperty(info.getServiceDescriptor(), key, value, isFromETC);
+		CommonTools.setServiceProperty(info.getServiceDescriptor(), key, value, isFromETC, description);
 
 		// add the row to the GUI
 		refreshView();
@@ -185,7 +191,7 @@ public class ServicePropertiesTable extends PortalBaseTable {
 			String o1 = (String) v1.get(colIndex);
 			String o2 = (String) v2.get(colIndex);
 
-			if (o1 == null && o2 == null) {
+			if ((o1 == null) && (o2 == null)) {
 				return 0;
 			} else if (o1 == null) {
 				return 1;
@@ -214,6 +220,7 @@ public class ServicePropertiesTable extends PortalBaseTable {
 			super();
 			addColumn(NAME);
 			addColumn(VALUE);
+			addColumn(DESC);
 			addColumn(ETC);
 			addColumn(DATA1);
 		}

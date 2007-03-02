@@ -131,15 +131,15 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private GridGrouperExpressionEditor gridGrouper = null;
 
 	private CSMPanel csmPanel = null;
-	
+
 	private ServiceDescription description;
 
 
-	public MethodSecurityPanel(ServiceDescription description,ServiceType service, MethodType method) {
+	public MethodSecurityPanel(ServiceDescription description, ServiceType service, MethodType method) {
 		super();
 		this.description = description;
 		this.service = service;
-		this.serviceSecurity = this.service.getServiceSecurity();
+		serviceSecurity = this.service.getServiceSecurity();
 		this.method = method;
 		initialize();
 		if (this.method.getMethodSecurity() != null) {
@@ -278,7 +278,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	public MethodSecurity getMethodSecurity(String methodName) throws Exception {
 		MethodSecurity ms = new MethodSecurity();
 		if (noneButton.isSelected()) {
-			if (this.serviceSecurity == null) {
+			if (serviceSecurity == null) {
 				return null;
 			} else {
 				ms.setSecuritySetting(SecuritySetting.None);
@@ -290,15 +290,15 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			}
 
 			if (tlsButton.isSelected()) {
-				ms.setTransportLevelSecurity(this.tlsPanel.getTransportLevelSecurity());
+				ms.setTransportLevelSecurity(tlsPanel.getTransportLevelSecurity());
 
 			}
 			if (secureConversationButton.isSelected()) {
-				ms.setSecureConversation(this.secureConversationPanel.getSecureConversation());
+				ms.setSecureConversation(secureConversationPanel.getSecureConversation());
 
 			}
 			if (secureMessageButton.isSelected()) {
-				ms.setSecureMessage(this.secureMessagePanel.getSecureMessage());
+				ms.setSecureMessage(secureMessagePanel.getSecureMessage());
 			}
 
 			if (runAsMode.isEnabled()) {
@@ -310,14 +310,14 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			} else {
 				ms.setAnonymousClients(AnonymousCommunication.No);
 			}
-			String authType = (String) this.authorizationMechanism.getSelectedItem();
+			String authType = (String) authorizationMechanism.getSelectedItem();
 			MethodAuthorization ma = new MethodAuthorization();
 			if (authType.equals(GRID_GROUPER_AUTHORIZATION)) {
 				// TODO: Validate the expression
 				MembershipExpression exp = getGridGrouper().getMembershipExpression();
 				ma.setGridGrouperAuthorization(exp);
 			} else if (authType.equals(CSM_AUTHORIZATION)) {
-				CommonTools.setServiceProperty(this.description, CSMPanel.CSM_CONFIGURATION_FILE, "", false);
+				CommonTools.setServiceProperty(description, CSMPanel.CSM_CONFIGURATION_FILE, "", false, "");
 				ma.setCSMAuthorization(getCsmPanel().getAuthorization());
 			} else {
 				ma.setNoAuthorization(new NoAuthorization());
@@ -341,22 +341,22 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 				TransportLevelSecurity tls = ms.getTransportLevelSecurity();
 				if (tls != null) {
 					tlsButton.setSelected(true);
-					this.tlsPanel.setTransportLevelSecurity(tls);
+					tlsPanel.setTransportLevelSecurity(tls);
 				}
 				SecureConversation sc = ms.getSecureConversation();
 				if (sc != null) {
 					secureConversationButton.setSelected(true);
-					this.secureConversationPanel.setSecureConversation(sc);
+					secureConversationPanel.setSecureConversation(sc);
 				}
 				SecureMessage sm = ms.getSecureMessage();
 				if (sm != null) {
 					secureMessageButton.setSelected(true);
-					this.secureMessagePanel.setSecureMessage(sm);
+					secureMessagePanel.setSecureMessage(sm);
 				}
 
 				RunAsMode runas = ms.getRunAsMode();
 				if (runas != null) {
-					this.runAsMode.setSelectedItem(runas);
+					runAsMode.setSelectedItem(runas);
 				}
 
 				AnonymousCommunication anon = ms.getAnonymousClients();
@@ -368,12 +368,12 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 				if (ma != null) {
 					if (ma.getGridGrouperAuthorization() != null) {
 						this.getGridGrouper().setExpression(ma.getGridGrouperAuthorization());
-						this.authorizationMechanism.setSelectedItem(GRID_GROUPER_AUTHORIZATION);
+						authorizationMechanism.setSelectedItem(GRID_GROUPER_AUTHORIZATION);
 					} else if (ma.getCSMAuthorization() != null) {
 						this.getCsmPanel().setAuthorization(ma.getCSMAuthorization());
-						this.authorizationMechanism.setSelectedItem(CSM_AUTHORIZATION);
+						authorizationMechanism.setSelectedItem(CSM_AUTHORIZATION);
 					} else {
-						this.authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
+						authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
 					}
 				}
 
@@ -410,7 +410,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private void syncAuthorization() {
 		if (isSecure()) {
 			authorizationMechanism.setEnabled(true);
-			String mech = (String) this.authorizationMechanism.getSelectedItem();
+			String mech = (String) authorizationMechanism.getSelectedItem();
 			authLayout.show(authPanel, mech);
 		} else {
 			authorizationMechanism.setEnabled(false);
@@ -439,18 +439,18 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private synchronized void synchRunAsMode() {
 		if (!isSyncingRunAs) {
 			isSyncingRunAs = true;
-			this.runAsMode.removeAllItems();
+			runAsMode.removeAllItems();
 			if (isSecure()) {
 				runAsMode.setEnabled(true);
-				this.runAsMode.addItem(RunAsMode.System);
+				runAsMode.addItem(RunAsMode.System);
 				if (hasServiceCredentials()) {
-					this.runAsMode.addItem(RunAsMode.Service);
+					runAsMode.addItem(RunAsMode.Service);
 				}
 
 				if (!getAnonymousCommunication().isEnabled()) {
-					this.runAsMode.addItem(RunAsMode.Caller);
+					runAsMode.addItem(RunAsMode.Caller);
 				} else if (getAnonymousCommunication().getSelectedItem().equals(AnonymousCommunication.No)) {
-					this.runAsMode.addItem(RunAsMode.Caller);
+					runAsMode.addItem(RunAsMode.Caller);
 				}
 
 			}
@@ -483,36 +483,36 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 
 	public void applyServiceSettings() {
-		if (this.serviceSecurity != null) {
+		if (serviceSecurity != null) {
 			if (this.isSecure()) {
-				this.customButton.setSelected(true);
-				if (this.serviceSecurity.getTransportLevelSecurity() != null) {
-					TransportLevelSecurity s = this.serviceSecurity.getTransportLevelSecurity();
-					this.tlsButton.setSelected(true);
+				customButton.setSelected(true);
+				if (serviceSecurity.getTransportLevelSecurity() != null) {
+					TransportLevelSecurity s = serviceSecurity.getTransportLevelSecurity();
+					tlsButton.setSelected(true);
 					tlsPanel.setTransportLevelSecurity(s);
 				}
 
-				if (this.serviceSecurity.getSecureConversation() != null) {
-					SecureConversation s = this.serviceSecurity.getSecureConversation();
-					this.secureConversationButton.setSelected(true);
-					this.secureConversationPanel.setSecureConversation(s);
+				if (serviceSecurity.getSecureConversation() != null) {
+					SecureConversation s = serviceSecurity.getSecureConversation();
+					secureConversationButton.setSelected(true);
+					secureConversationPanel.setSecureConversation(s);
 				}
 
-				if (this.serviceSecurity.getSecureMessage() != null) {
-					SecureMessage s = this.serviceSecurity.getSecureMessage();
-					this.secureMessageButton.setSelected(true);
-					this.secureMessagePanel.setSecureMessage(s);
+				if (serviceSecurity.getSecureMessage() != null) {
+					SecureMessage s = serviceSecurity.getSecureMessage();
+					secureMessageButton.setSelected(true);
+					secureMessagePanel.setSecureMessage(s);
 				}
-				if (this.serviceSecurity.getRunAsMode() != null) {
-					this.runAsMode.setSelectedItem(this.serviceSecurity.getRunAsMode());
+				if (serviceSecurity.getRunAsMode() != null) {
+					runAsMode.setSelectedItem(serviceSecurity.getRunAsMode());
 				}
 
-				if (this.serviceSecurity.getAnonymousClients() != null) {
-					this.anonymousCommunication.setSelectedItem(this.serviceSecurity.getAnonymousClients());
+				if (serviceSecurity.getAnonymousClients() != null) {
+					anonymousCommunication.setSelectedItem(serviceSecurity.getAnonymousClients());
 				}
 
 			} else {
-				this.noneButton.setSelected(true);
+				noneButton.setSelected(true);
 			}
 		}
 	}
