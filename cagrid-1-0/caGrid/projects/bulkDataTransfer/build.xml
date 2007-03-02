@@ -340,7 +340,7 @@
 		<echo message="================================================================================" />
 	</target>
 	
-	<target name="installIntroduceExtensions" depends="all">
+	<target name="installIntroduceExtensions" >
 		<delete dir="${introduce.extensions.dir}/bdt" />
 		<mkdir dir="${introduce.extensions.dir}/bdt" />
 		<mkdir dir="${introduce.extensions.dir}/bdt/schema" />
