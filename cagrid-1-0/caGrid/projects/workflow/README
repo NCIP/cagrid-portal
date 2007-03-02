@@ -1,6 +1,6 @@
 1. check out cagrid 1.0
-2. downloaded activebpel from  http://activebpel.org/download/files/2.1/final/activebpel-2.1-all.tar.gz
-2.1 tar zxf activebpel-2.1-all.tar.gz
+2. downloaded activebpel from  http://gforge.nci.nih.gov/frs/download.php/1387/activebpel-caGrid-1.0.tar.gz
+2.1 tar zxf activebpel-caGrid-1.0.tar.gz
 2.2 cd activebpel-2.1
 2.3 run install.sh or install.bat depending on your OS
 3. cd cagrid-1-0/caGrid/projects/workflow
