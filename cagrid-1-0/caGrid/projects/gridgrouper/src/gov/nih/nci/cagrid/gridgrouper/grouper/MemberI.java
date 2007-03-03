@@ -73,10 +73,6 @@ public interface MemberI {
 	//
 	// public Set getPrivs(StemI ns);
 	//
-	// 
-	//
-	//	
-	//
 	// public Set hasAdmin() throws GrouperRuntimeException;
 	//
 	// public boolean hasAdmin(Group g);
