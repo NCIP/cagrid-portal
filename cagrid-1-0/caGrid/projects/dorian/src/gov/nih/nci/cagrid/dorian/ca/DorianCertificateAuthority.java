@@ -281,7 +281,7 @@ public class DorianCertificateAuthority extends LoggingObject implements
 			Date expirationDate) throws CertificateAuthorityFault,
 			NoCACredentialsFault {
 		try {
-			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+			KeyPair pair = KeyUtil.generateRSAKeyPair2048();
 			X509Certificate cacert = CertUtil.generateCACertificate(
 					new X509Name(dn), new Date(), expirationDate, pair);
 			deleteCACredentials();
