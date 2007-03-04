@@ -682,7 +682,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				public void stateChanged(ChangeEvent e) {
 					CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(),
 						DataServiceConstants.VALIDATE_CQL_FLAG, String.valueOf(getCqlSyntaxValidationCheckBox()
-							.isSelected()), false, "");
+							.isSelected()), false);
 				}
 			});
 			// set the check box selection
@@ -717,7 +717,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 				public void stateChanged(ChangeEvent e) {
 					CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(),
 						DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, String
-							.valueOf(getDomainModelValidationCheckBox().isSelected()), false, "");
+							.valueOf(getDomainModelValidationCheckBox().isSelected()), false);
 				}
 			});
 			// set the check box selection
@@ -1193,7 +1193,7 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	private void saveProcessorClassName(String className) throws Exception {
 		// store the property
 		CommonTools.setServiceProperty(getServiceInfo().getServiceDescriptor(),
-			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false, "");
+			DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, className, false);
 		// remove all query processor config properties from the service
 		// properties
 		ServicePropertiesProperty[] oldProperties = getServiceInfo().getServiceProperties().getProperty();

@@ -16,7 +16,8 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 9, 2006
- * @version $Id: EnableValidationStep.java,v 1.2 2007-03-02 19:06:16 hastings Exp $
+ * @version $Id: EnableValidationStep.java,v 1.2 2007/03/02 19:06:16 hastings
+ *          Exp $
  */
 public class EnableValidationStep extends Step {
 
@@ -33,7 +34,7 @@ public class EnableValidationStep extends Step {
 		String serviceModelFilename = serviceBaseDir + File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
 		ServiceDescription desc = (ServiceDescription) Utils.deserializeDocument(serviceModelFilename,
 			ServiceDescription.class);
-		CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_CQL_FLAG, String.valueOf(true), false, "");
+		CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_CQL_FLAG, String.valueOf(true), false);
 		/*
 		 * Turn this back on when we get a domain model for the Bookstore
 		 * CommonTools.setServiceProperty(desc,

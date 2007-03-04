@@ -257,7 +257,7 @@ public class CoreDsIntroPanel extends AbstractWizardPanel {
 			}
 			// add the query processor class name as a service property
 			CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
-				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, qpClassName, false, "");
+				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, qpClassName, false);
 		}
 	}
 

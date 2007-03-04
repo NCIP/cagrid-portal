@@ -24,7 +24,8 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 8, 2006
- * @version $Id: SetQueryProcessorStep.java,v 1.5 2007-03-02 19:06:16 hastings Exp $
+ * @version $Id: SetQueryProcessorStep.java,v 1.5 2007/03/02 19:06:16 hastings
+ *          Exp $
  */
 public class SetQueryProcessorStep extends Step {
 
@@ -92,7 +93,7 @@ public class SetQueryProcessorStep extends Step {
 
 		// set the service property for the new query processor
 		CommonTools.setServiceProperty(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY,
-			TestingCQLQueryProcessor.class.getName(), false, "");
+			TestingCQLQueryProcessor.class.getName(), false);
 		// copy the testing jar file to the service
 		File buildLibDir = new File("build" + File.separator + "lib");
 		File[] testJars = buildLibDir.listFiles(new FileFilter() {

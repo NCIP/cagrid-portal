@@ -42,7 +42,8 @@ import java.io.IOException;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 9, 2006
- * @version $Id: AppserviceConfigPanel.java,v 1.6 2007-03-02 19:06:16 hastings Exp $
+ * @version $Id: AppserviceConfigPanel.java,v 1.6 2007/03/02 19:06:16 hastings
+ *          Exp $
  */
 public class AppserviceConfigPanel extends AbstractWizardPanel {
 	public static final String APPLICATION_SERVICE_URL = "appserviceUrl";
@@ -236,7 +237,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 					try {
 						CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
 							DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_CSM_FLAG, String
-								.valueOf(useCsmCheckBox.isSelected()), false, "");
+								.valueOf(useCsmCheckBox.isSelected()), false);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						ErrorDialog.showErrorDialog("Error storing use CSM property", ex);
@@ -415,7 +416,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 		try {
 			CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
 				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + APPLICATION_SERVICE_URL, getServiceUrlTextField()
-					.getText(), false, "");
+					.getText(), false);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error setting the application service URL: " + ex.getMessage(), ex);
@@ -427,7 +428,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 		try {
 			CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
 				DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONTEXT_NAME, getCsmContextTextField()
-					.getText(), false, "");
+					.getText(), false);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			ErrorDialog.showErrorDialog("Error setting CSM context: " + ex.getMessage(), ex);
@@ -449,7 +450,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 					try {
 						CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
 							DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CASE_INSENSITIVE_QUERYING, String
-								.valueOf(caseInsensitiveCheckBox.isSelected()), false, "");
+								.valueOf(caseInsensitiveCheckBox.isSelected()), false);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						ErrorDialog.showErrorDialog("Error setting the case insensitive flag: " + ex.getMessage(), ex);
@@ -575,7 +576,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 							// set the CQL configuration property
 							CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
 								DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, inFile
-									.getName(), true, "");
+									.getName(), true);
 							getCsmConfigurationFileTextField().setText(inFile.getName());
 						}
 					} catch (IOException ex) {
@@ -606,7 +607,7 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
 					configFile.delete();
 					// "unset" the configuration property
 					CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
-						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, "", false, "");
+						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, "", false);
 					// clean up the GUI
 					getCsmConfigurationFileTextField().setText("");
 				}

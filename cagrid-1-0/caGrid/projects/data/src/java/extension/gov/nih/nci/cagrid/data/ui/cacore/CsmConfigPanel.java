@@ -154,7 +154,7 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 					// set the use CSM property in the service properties
 					CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
 						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + USE_CSM_FLAG, String
-							.valueOf(getUseCsmCheckBox().isSelected()), false, "");
+							.valueOf(getUseCsmCheckBox().isSelected()), false);
 				}
 			});
 		}
@@ -362,7 +362,7 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 							// set the CQL configuration property
 							CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
 								DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, inFile
-									.getName(), true, "");
+									.getName(), true);
 							getCsmConfigTextField().setText(inFile.getName());
 						}
 					} catch (IOException ex) {
@@ -393,7 +393,7 @@ public class CsmConfigPanel extends AbstractWizardPanel {
 					configFile.delete();
 					// "unset" the configuration property
 					CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
-						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, "", false, "");
+						DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + CSM_CONFIGURATION_FILENAME, "", false);
 					// clean up the GUI
 					getCsmConfigTextField().setText("");
 				}

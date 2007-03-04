@@ -215,7 +215,7 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 			}
 			// add the property to the service properties
 			String extendedKey = "cqlQueryProcessorConfig_" + key;
-			CommonTools.setServiceProperty(getServiceDescription(), extendedKey, value, false, "");
+			CommonTools.setServiceProperty(getServiceDescription(), extendedKey, value, false);
 		}
 	}
 

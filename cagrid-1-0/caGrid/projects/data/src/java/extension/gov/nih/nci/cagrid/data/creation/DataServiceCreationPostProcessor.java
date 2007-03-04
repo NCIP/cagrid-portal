@@ -237,7 +237,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 	private void modifyServiceProperties(ServiceDescription desc) throws Exception {
 		// does the query processor class property exist?
 		if (!CommonTools.servicePropertyExists(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
-			CommonTools.setServiceProperty(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, "", false, "");
+			CommonTools.setServiceProperty(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, "", false);
 		} else {
 			String value = CommonTools.getServicePropertyValue(desc,
 				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);

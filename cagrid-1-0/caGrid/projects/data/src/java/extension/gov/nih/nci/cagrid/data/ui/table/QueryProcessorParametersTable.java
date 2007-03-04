@@ -195,7 +195,7 @@ public class QueryProcessorParametersTable extends JTable {
 			String key = (String) getValueAt(i, 0);
 			String userVal = (String) getValueAt(i, 2);
 			String prefixedKey = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + key;
-			CommonTools.setServiceProperty(serviceInfo.getServiceDescriptor(), prefixedKey, userVal, false, "");
+			CommonTools.setServiceProperty(serviceInfo.getServiceDescriptor(), prefixedKey, userVal, false);
 		}
 	}
 
