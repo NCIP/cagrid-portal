@@ -890,6 +890,25 @@ public class CommonTools {
 	 * @param value
 	 *            The value to associate with the property key
 	 */
+	public static void setServiceProperty(ServiceDescription desc, String key, String value, boolean isFromETC) {
+		setServiceProperty(desc, key, value, isFromETC, "");
+	}
+
+
+	/**
+	 * Sets a service property on the service information. If no service
+	 * properties are found, a new array of properties is created and
+	 * initialized with a single property containing the key and value
+	 * specified. If the property is found to exist in the service, it's value
+	 * is changed to the one specified.
+	 * 
+	 * @param desc
+	 *            The service information to set a property on
+	 * @param key
+	 *            The key of the service property to set
+	 * @param value
+	 *            The value to associate with the property key
+	 */
 	public static void setServiceProperty(ServiceDescription desc, String key, String value, boolean isFromETC,
 		String description) {
 		if (description == null) {

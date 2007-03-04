@@ -317,7 +317,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 				MembershipExpression exp = getGridGrouper().getMembershipExpression();
 				ma.setGridGrouperAuthorization(exp);
 			} else if (authType.equals(CSM_AUTHORIZATION)) {
-				CommonTools.setServiceProperty(description, CSMPanel.CSM_CONFIGURATION_FILE, "", false, "");
+				CommonTools.setServiceProperty(description, CSMPanel.CSM_CONFIGURATION_FILE, "", false);
 				ma.setCSMAuthorization(getCsmPanel().getAuthorization());
 			} else {
 				ma.setNoAuthorization(new NoAuthorization());
