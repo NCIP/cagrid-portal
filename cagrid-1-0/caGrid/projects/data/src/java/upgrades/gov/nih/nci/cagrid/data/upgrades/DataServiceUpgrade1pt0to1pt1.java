@@ -96,6 +96,9 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		if (serviceIsUsingEnumeration()) {
 			updateEnumerationLibraries();
 		}
+		if (serviceIsUsingSdkDataSource()) {
+			updateSdkQueryLibraries();
+		}
 	}
 	
 	
@@ -163,6 +166,68 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 			outLibs[i] = outFile;
 		}
 		// update the Eclipse .classpath file
+		File classpathFile = new File(getServicePath() + File.separator + ".classpath");
+		try {
+			ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibs);
+		} catch (Exception ex) {
+			throw new UpgradeException("Error updating Eclipse .classpath file: " + ex.getMessage(), ex);
+		}
+	}
+	
+	
+	private void updateSdkQueryLibraries() throws UpgradeException {
+		FileFilter sdkLibFilter = new FileFilter() {
+			public boolean accept(File name) {
+				String filename = name.getName();
+				return (filename.startsWith("caGrid-1.0-sdkQuery") 
+					|| filename.startsWith("caGrid-1.0-sdkQuery32"))
+					&& filename.endsWith(".jar");
+			}
+		};
+		// locate old libraries in the service
+		File serviceLibDir = new File(getServicePath() + File.separator + "lib");
+		boolean isSdk31 = false;
+		boolean isSdk32 = false;
+		File[] oldLibs = serviceLibDir.listFiles(sdkLibFilter);
+		// first must see which version of SDK we're using
+		for (int i = 0; i < oldLibs.length; i++) {
+			if (oldLibs[i].getName().indexOf("caGrid-1.0-sdkQuery32") != -1) {
+				isSdk32 = true;
+			} else {
+				if (oldLibs[i].getName().indexOf("caGrid-1.0-sdkQuery") != -1) {
+					isSdk31 = true;
+				}
+			}
+		}
+		if ((!isSdk31 && !isSdk32)
+			|| (isSdk31 && isSdk32)) {
+			throw new UpgradeException("Unable to determine SDK version to upgrade");
+		}
+		// delete old libs
+		for (int i = 0; i < oldLibs.length; i++) {
+			oldLibs[i].delete();
+		}
+		// locate new libraries
+		File[] newLibs = null;
+		if (isSdk31) {
+			File sdk31LibDir = new File(".." + File.separator + "sdkQuery" + File.separator + "build" + File.separator + "lib");
+			newLibs = sdk31LibDir.listFiles(sdkLibFilter);
+		} else if (isSdk32) {
+			File sdk32LibDir = new File(".." + File.separator + "sdkQuery32" + File.separator + "build" + File.separator + "lib");
+			newLibs = sdk32LibDir.listFiles(sdkLibFilter);
+		}
+		// copy the libraries in
+		File[] outLibs = new File[newLibs.length];
+		for (int i = 0; i < newLibs.length; i++) {
+			File output = new File(getServicePath() + File.separator + "lib" + File.separator + newLibs[i].getName());
+			try {
+				Utils.copyFile(newLibs[i], output);
+			} catch (IOException ex) {
+				throw new UpgradeException("Error copying SDK Query Processor library: " + ex.getMessage(), ex);
+			}
+			outLibs[i] = output;
+		}
+		// sync up the Eclipse .classpath file
 		File classpathFile = new File(getServicePath() + File.separator + ".classpath");
 		try {
 			ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibs);
@@ -363,6 +428,14 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		Element serviceFeaturesElement = extDataElement.getChild("ServiceFeatures", extDataElement.getNamespace());
 		String useEnumValue = serviceFeaturesElement.getAttributeValue("useWsEnumeration");
 		return Boolean.valueOf(useEnumValue).booleanValue();
+	}
+	
+	
+	private boolean serviceIsUsingSdkDataSource() throws UpgradeException {
+		Element extDataElement = getExtensionDataElement();
+		Element serviceFeaturesElement = extDataElement.getChild("ServiceFeatures", extDataElement.getNamespace());
+		String useSdkValue = serviceFeaturesElement.getAttributeValue("useSdkDataSource");
+		return Boolean.valueOf(useSdkValue).booleanValue();
 	}
 
 
