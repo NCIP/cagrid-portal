@@ -57,22 +57,6 @@ public abstract class Database {
 		return getConnectionManager().getUsedConnectionCount();
 	}
 
-	/*
-	 * public boolean tableExists(String tableName) throws DatabaseException {
-	 * boolean exists = false; Connection c = null; try { c =
-	 * this.getConnectionManager().getConnection(); DatabaseMetaData dbMetadata =
-	 * c.getMetaData(); String[] names = { "TABLE" }; names[0] = tableName; //
-	 * ResultSet tables = dbMetadata.getTables(null, "%", tableName, // names);
-	 * ResultSet tables = dbMetadata .getTables(null, null, tableName, null); if
-	 * (tables.next()) { exists = true; } tables.close();
-	 * this.getConnectionManager().releaseConnection(c); } catch (Exception e) {
-	 * try { this.getConnectionManager().releaseConnection(c); } catch
-	 * (Exception ex) { log.error(e.getMessage(), ex); }
-	 * log.error(e.getMessage(), e);
-	 * 
-	 * throw new DatabaseException(e.getMessage()); } return exists; }
-	 * 
-	 */
 
 	public boolean tableExists(final String tableName) throws DatabaseException {
 		Connection c = null;

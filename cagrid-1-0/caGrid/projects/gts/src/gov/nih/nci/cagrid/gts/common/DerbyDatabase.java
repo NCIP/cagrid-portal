@@ -26,17 +26,10 @@ public class DerbyDatabase extends Database {
 				+ File.separator + "gtsdbs");
 		dbHome.mkdirs();
 		this.dbLocation = dbHome.getAbsolutePath() + File.separator + db;
-		// this.dbLocation = "derbyDB";
-
 	}
 
 	protected ConnectionManager getConnectionManager() throws DatabaseException {
 		if (cm == null) {
-			/*
-			 * String url = "jdbc:derby:" + dbLocation +
-			 * ";create=true;dataEncryption=true;bootPassword=" +
-			 * derbyEncryptionPassword;
-			 */
 			String url = "jdbc:derby:" + dbLocation
 					+ ";create=true;dataEncryption=true;bootPassword="
 					+ derbyEncryptionPassword;
