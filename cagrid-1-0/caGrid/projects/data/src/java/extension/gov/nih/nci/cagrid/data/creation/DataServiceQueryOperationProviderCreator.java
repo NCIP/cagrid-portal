@@ -150,7 +150,6 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 			// ds exceptions namespace
 			dsExceptionsNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.DATA_SERVICE_EXCEPTIONS_SCHEMA, schemaDirFile);
-
 			// caGrid metadata namespace
 			cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 				+ DataServiceConstants.CAGRID_METADATA_SCHEMA, schemaDirFile);
@@ -195,6 +194,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 	private void addQueryMethod(ServiceDescription description, ServiceType service) throws CreationExtensionException {
 		MethodType queryMethod = new MethodType();
 		queryMethod.setName(DataServiceConstants.QUERY_METHOD_NAME);
+		queryMethod.setDescription(DataServiceConstants.QUERY_METHOD_DESCRIPTION);
 		// get namespaces needed out of the service description
 		NamespaceType queryNamespace = getNamespaceType(description, DataServiceConstants.CQL_QUERY_URI);
 		// method input parameters
@@ -204,19 +204,25 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		queryInput.setIsArray(false);
 		QName queryQname = new QName(queryNamespace.getNamespace(), queryNamespace.getSchemaElement(0).getType());
 		queryInput.setQName(queryQname);
+		queryInput.setDescription(DataServiceConstants.QUERY_METHOD_PARAMETER_DESCRIPTION);
 		inputs.setInput(new MethodTypeInputsInput[]{queryInput});
 		queryMethod.setInputs(inputs);
 		// method output
 		MethodTypeOutput output = new MethodTypeOutput();
 		output.setIsArray(false);
 		output.setQName(DataServiceConstants.CQL_RESULT_COLLECTION_QNAME);
+		output.setDescription(DataServiceConstants.QUERY_METHOD_OUTPUT_DESCRIPTION);
 		queryMethod.setOutput(output);
 		// exceptions on query method
 		MethodTypeExceptions queryExceptions = new MethodTypeExceptions();
-		MethodTypeExceptionsException qpException = new MethodTypeExceptionsException("",
-			DataServiceConstants.QUERY_PROCESSING_EXCEPTION_NAME, DataServiceConstants.QUERY_PROCESSING_EXCEPTION_QNAME);
-		MethodTypeExceptionsException mqException = new MethodTypeExceptionsException("",
-			DataServiceConstants.MALFORMED_QUERY_EXCEPTION_NAME, DataServiceConstants.MALFORMED_QUERY_EXCEPTION_QNAME);
+		MethodTypeExceptionsException qpException = new MethodTypeExceptionsException(
+			DataServiceConstants.QUERY_PROCESSING_EXCEPTION_DESCRIPTION,
+			DataServiceConstants.QUERY_PROCESSING_EXCEPTION_NAME, 
+			DataServiceConstants.QUERY_PROCESSING_EXCEPTION_QNAME);
+		MethodTypeExceptionsException mqException = new MethodTypeExceptionsException(
+			DataServiceConstants.MALFORMED_QUERY_EXCEPTION_DESCRIPTION,
+			DataServiceConstants.MALFORMED_QUERY_EXCEPTION_NAME, 
+			DataServiceConstants.MALFORMED_QUERY_EXCEPTION_QNAME);
 		queryExceptions.setException(new MethodTypeExceptionsException[]{qpException, mqException});
 		queryMethod.setExceptions(queryExceptions);
 		// query method is imported
@@ -325,17 +331,18 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 		// does the server config location property exist?
 		if (!CommonTools.servicePropertyExists(desc, DataServiceConstants.SERVER_CONFIG_LOCATION)) {
 			CommonTools.setServiceProperty(desc, DataServiceConstants.SERVER_CONFIG_LOCATION, "server-config.wsdd",
-				true,"");
+				true, "The location of the server-config.wsdd file");
 		}
 		CommonTools.setServiceProperty(desc, DataServiceConstants.CQL_VALIDATOR_CLASS, DEFAULT_CQL_VALIDATOR_CLASS,
-			false,"");
+			false, "The name of the class to use for CQL query structure validation");
 		CommonTools.setServiceProperty(desc, DataServiceConstants.DOMAIN_MODEL_VALIDATOR_CLASS,
-			DEFAULT_DOMAIN_MODEL_VALIDATOR, false,"");
-		CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_CQL_FLAG, String.valueOf(false), false, "");
+			DEFAULT_DOMAIN_MODEL_VALIDATOR, false, "The name of the class to use for CQL validation against a domain model");
+		CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_CQL_FLAG, String.valueOf(false), false, 
+			"A flag to indicate that CQL should be validated for structural correctness");
 		CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, String.valueOf(false),
-			false,"");
+			false, "A flag to indicate that CQL should be validated for correctness against the domain model");
 		CommonTools.setServiceProperty(desc, DataServiceConstants.CLASS_MAPPINGS_FILENAME,
-			DataServiceConstants.CLASS_TO_QNAME_XML, true, "");
+			DataServiceConstants.CLASS_TO_QNAME_XML, true, "The name of the file containing the class name to QName mapping");
 	}
 
 

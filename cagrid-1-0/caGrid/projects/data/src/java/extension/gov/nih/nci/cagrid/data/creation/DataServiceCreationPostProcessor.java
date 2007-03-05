@@ -98,21 +98,22 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		// query namespace
 		NamespaceType queryNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ DataServiceConstants.CQL_QUERY_SCHEMA, schemaDirFile);
-		queryNamespace.setLocation("./" + DataServiceConstants.CQL_QUERY_SCHEMA);
+
 		// query result namespace
 		NamespaceType resultNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ DataServiceConstants.CQL_RESULT_SET_SCHEMA, schemaDirFile);
-		resultNamespace.setLocation("./" + DataServiceConstants.CQL_RESULT_SET_SCHEMA);
+
 		// ds metadata namespace
 		NamespaceType dsMetadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ DataServiceConstants.DATA_METADATA_SCHEMA, schemaDirFile);
-		dsMetadataNamespace.setLocation("./" + DataServiceConstants.DATA_METADATA_SCHEMA);
+
 		// caGrid metadata namespace
 		NamespaceType cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ DataServiceConstants.CAGRID_METADATA_SCHEMA, schemaDirFile);
-		cagridMdNamespace.setLocation("./" + DataServiceConstants.CAGRID_METADATA_SCHEMA);
+
 		// prevent metadata beans from being built
 		cagridMdNamespace.setGenerateStubs(Boolean.FALSE);
+		
 		// add those new namespaces to the list of namespace types
 		dsNamespaces.add(queryNamespace);
 		dsNamespaces.add(resultNamespace);
@@ -122,15 +123,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		dsNamespaces.toArray(nsArray);
 		namespaces.setNamespace(nsArray);
 		description.setNamespaces(namespaces);
-		// add the CQL and CQLResult namespaces to the ns excludes
-		/*
-		 * String excludes =
-		 * props.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES); excludes += "
-		 * -x " + DataServiceConstants.CQL_QUERY_URI; excludes += " -x " +
-		 * DataServiceConstants.CQL_RESULT_SET_URI;
-		 * props.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES,
-		 * excludes);
-		 */
+
 		// query method
 		System.out.println("Building query method");
 		MethodsType methods = dataService.getMethods();
@@ -139,6 +132,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		}
 		MethodType queryMethod = new MethodType();
 		queryMethod.setName(DataServiceConstants.QUERY_METHOD_NAME);
+		queryMethod.setDescription(DataServiceConstants.QUERY_METHOD_DESCRIPTION);
 		// method input parameters
 		MethodTypeInputs inputs = new MethodTypeInputs();
 		MethodTypeInputsInput queryInput = new MethodTypeInputsInput();
@@ -146,6 +140,7 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		queryInput.setIsArray(false);
 		QName queryQname = new QName(queryNamespace.getNamespace(), queryNamespace.getSchemaElement(0).getType());
 		queryInput.setQName(queryQname);
+		queryInput.setDescription(DataServiceConstants.QUERY_METHOD_PARAMETER_DESCRIPTION);
 		inputs.setInput(new MethodTypeInputsInput[]{queryInput});
 		queryMethod.setInputs(inputs);
 		// method output
@@ -153,13 +148,18 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		output.setIsArray(false);
 		QName resultSetQName = new QName(resultNamespace.getNamespace(), resultNamespace.getSchemaElement(0).getType());
 		output.setQName(resultSetQName);
+		output.setDescription(DataServiceConstants.QUERY_METHOD_OUTPUT_DESCRIPTION);
 		queryMethod.setOutput(output);
 		// exceptions on query method
 		MethodTypeExceptions queryExceptions = new MethodTypeExceptions();
-		MethodTypeExceptionsException qpException = new MethodTypeExceptionsException("",
-			DataServiceConstants.QUERY_PROCESSING_EXCEPTION_NAME, DataServiceConstants.QUERY_PROCESSING_EXCEPTION_QNAME);
-		MethodTypeExceptionsException mqException = new MethodTypeExceptionsException("",
-			DataServiceConstants.MALFORMED_QUERY_EXCEPTION_NAME, DataServiceConstants.MALFORMED_QUERY_EXCEPTION_QNAME);
+		MethodTypeExceptionsException qpException = new MethodTypeExceptionsException(
+			DataServiceConstants.QUERY_PROCESSING_EXCEPTION_DESCRIPTION,
+			DataServiceConstants.QUERY_PROCESSING_EXCEPTION_NAME, 
+			DataServiceConstants.QUERY_PROCESSING_EXCEPTION_QNAME);
+		MethodTypeExceptionsException mqException = new MethodTypeExceptionsException(
+			DataServiceConstants.MALFORMED_QUERY_EXCEPTION_DESCRIPTION,
+			DataServiceConstants.MALFORMED_QUERY_EXCEPTION_NAME, 
+			DataServiceConstants.MALFORMED_QUERY_EXCEPTION_QNAME);
 		queryExceptions.setException(new MethodTypeExceptionsException[]{qpException, mqException});
 		queryMethod.setExceptions(queryExceptions);
 		// add query method to methods array
@@ -173,7 +173,6 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		dsMethods[dsMethods.length - 1] = queryMethod;
 		methods.setMethod(dsMethods);
 		dataService.setMethods(methods);
-
 	}
 
 
@@ -184,13 +183,14 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 
 
 	private String getServiceLibDir(Properties props) {
-		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
+		return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) 
+			+ File.separator + "lib";
 	}
 
 
 	private void copySchema(String schemaName, String outputDir) throws Exception {
-		File schemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "dataFS" + File.separator
-			+ "schema" + File.separator + schemaName);
+		File schemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "dataFS" 
+			+ File.separator + "schema" + File.separator + schemaName);
 		System.out.println("Copying schema from " + schemaFile.getAbsolutePath());
 		File outputFile = new File(outputDir + File.separator + schemaName);
 		System.out.println("Saving schema to " + outputFile.getAbsolutePath());
@@ -239,15 +239,15 @@ public class DataServiceCreationPostProcessor implements CreationExtensionPostPr
 		if (!CommonTools.servicePropertyExists(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
 			CommonTools.setServiceProperty(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, "", false);
 		} else {
-			String value = CommonTools.getServicePropertyValue(desc,
-				DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
-			System.out.println(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY + " property is already defined as "
-				+ value);
+			String value = CommonTools.getServicePropertyValue(
+				desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
+			System.out.println(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY 
+				+ " property is already defined as " + value);
 		}
 		// does the server config location property exist?
 		if (!CommonTools.servicePropertyExists(desc, DataServiceConstants.SERVER_CONFIG_LOCATION)) {
 			CommonTools.setServiceProperty(desc, DataServiceConstants.SERVER_CONFIG_LOCATION, "server-config.wsdd",
-				true, "");
+				true, "The location of the server-config.wsdd file");
 		}
 	}
 }
