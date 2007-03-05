@@ -10,6 +10,8 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
@@ -64,6 +66,8 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		updateLibraries();
 		// change the version number
 		setCurrentExtensionVersion();
+		// set the method documentation strings
+		setDescriptionStrings();
 		// fix up the castor mapping location
 		moveCastorMappingFile();
 		// store the modified extension data back into the service model
@@ -88,6 +92,14 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 
 
 	private void updateLibraries() throws UpgradeException {
+		updateDataLibraries();
+		if (serviceIsUsingEnumeration()) {
+			updateEnumerationLibraries();
+		}
+	}
+	
+	
+	private void updateDataLibraries() throws UpgradeException {
 		FileFilter dataLibFilter = new FileFilter() {
 			public boolean accept(File name) {
 				String filename = name.getName();
@@ -114,11 +126,48 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 			}
 			outLibs[i] = out;
 		}
+		// update the Eclipse .classpath file
 		File classpathFile = new File(getServicePath() + File.separator + ".classpath");
 		try {
 			ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibs);
 		} catch (Exception ex) {
-			throw new UpgradeException("Error updating eclipse .classpath file: " + ex.getMessage(), ex);
+			throw new UpgradeException("Error updating Eclipse .classpath file: " + ex.getMessage(), ex);
+		}
+	}
+	
+	
+	private void updateEnumerationLibraries() throws UpgradeException {
+		FileFilter enumLibFilter = new FileFilter() {
+			public boolean accept(File name) {
+				String filename = name.getName();
+				return filename.equals("caGrid-1.0-wsEnum.jar");
+			}
+		};
+		// locate old enumeration libraries in the service
+		File serviceLibDir = new File(getServicePath() + File.separator + "lib");
+		File[] oldEnumLibs = serviceLibDir.listFiles(enumLibFilter);
+		for (int i = 0; i < oldEnumLibs.length; i++) {
+			oldEnumLibs[i].delete();
+		}
+		// copy in new libraries
+		File enumBuildLibDir = new File(".." + File.separator + "wsEnum" + File.separator + "build" + File.separator + "lib");
+		File[] newEnumLibs = enumBuildLibDir.listFiles(enumLibFilter);
+		File[] outLibs = new File[newEnumLibs.length];
+		for (int i = 0; i < newEnumLibs.length; i++) {
+			File outFile = new File(serviceLibDir.getAbsolutePath() + File.separator + newEnumLibs[i].getName());
+			try {
+				Utils.copyFile(newEnumLibs[i], outFile);
+			} catch (IOException ex) {
+				throw new UpgradeException("Error copying new enumeration library: " + ex.getMessage(), ex);
+			}
+			outLibs[i] = outFile;
+		}
+		// update the Eclipse .classpath file
+		File classpathFile = new File(getServicePath() + File.separator + ".classpath");
+		try {
+			ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibs);
+		} catch (Exception ex) {
+			throw new UpgradeException("Error updating Eclipse .classpath file: " + ex.getMessage(), ex);
 		}
 	}
 
@@ -255,6 +304,65 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 			&& cadsrInfo.getAttributeValue("useSuppliedModel").equals("true");
 		boolean noDomainModel = (!hasCadsrUrl && !usingSuppliedModel);
 		cadsrInfo.setAttribute("noDomainModel", String.valueOf(noDomainModel));
+	}
+	
+	
+	private void setDescriptionStrings() throws UpgradeException {
+		// get the query method
+		MethodType queryMethod = null;
+		MethodType enumerationMethod = null;
+		MethodType[] allMethods = getServiceDescription().getServices().getService(0).getMethods().getMethod();
+		for (int i = 0; i < allMethods.length; i++) {
+			if (allMethods[i].getName().equals(DataServiceConstants.QUERY_METHOD_NAME)) {
+				queryMethod = allMethods[i];
+			} else if (allMethods[i].getName().equals(DataServiceConstants.ENUMERATION_QUERY_METHOD_NAME)) {
+				enumerationMethod = allMethods[i];
+			}
+		}
+		
+		// query method is REQUIRED
+		if (queryMethod == null) {
+			throw new UpgradeException("No standard query method found in the data service!");
+		}
+		
+		// set descriptions for query method
+		queryMethod.setDescription(DataServiceConstants.QUERY_METHOD_DESCRIPTION);
+		queryMethod.getInputs().getInput(0).setDescription(DataServiceConstants.QUERY_METHOD_PARAMETER_DESCRIPTION);
+		queryMethod.getOutput().setDescription(DataServiceConstants.QUERY_METHOD_OUTPUT_DESCRIPTION);
+		MethodTypeExceptionsException[] queryExceptions = queryMethod.getExceptions().getException();
+		for (int i = 0; i < queryExceptions.length; i++) {
+			if (queryExceptions[i].getQname().equals(DataServiceConstants.QUERY_PROCESSING_EXCEPTION_QNAME)) {
+				queryExceptions[i].setDescription(DataServiceConstants.QUERY_PROCESSING_EXCEPTION_DESCRIPTION);
+			} else if (queryExceptions[i].getQname().equals(DataServiceConstants.MALFORMED_QUERY_EXCEPTION_QNAME)) {
+				queryExceptions[i].setDescription(DataServiceConstants.MALFORMED_QUERY_EXCEPTION_DESCRIPTION);
+			}
+		}
+		
+		// enumeration query method is optional
+		if (serviceIsUsingEnumeration()) {
+			if (enumerationMethod == null) {
+				throw new UpgradeException("No enumeration query method found in the data service!");
+			}
+			enumerationMethod.setDescription(DataServiceConstants.ENUMERATION_QUERY_METHOD_DESCRIPTION);
+			enumerationMethod.getInputs().getInput(0).setDescription(DataServiceConstants.QUERY_METHOD_PARAMETER_DESCRIPTION);
+			enumerationMethod.getOutput().setDescription(DataServiceConstants.ENUMERATION_QUERY_METHOD_OUTPUT_DESCRIPTION);
+			MethodTypeExceptionsException[] enumExceptions = enumerationMethod.getExceptions().getException();
+			for (int i = 0; i < enumExceptions.length; i++) {
+				if (enumExceptions[i].getQname().equals(DataServiceConstants.QUERY_PROCESSING_EXCEPTION_QNAME)) {
+					enumExceptions[i].setDescription(DataServiceConstants.QUERY_PROCESSING_EXCEPTION_DESCRIPTION);
+				} else if (enumExceptions[i].getQname().equals(DataServiceConstants.MALFORMED_QUERY_EXCEPTION_QNAME)) {
+					enumExceptions[i].setDescription(DataServiceConstants.MALFORMED_QUERY_EXCEPTION_DESCRIPTION);
+				}
+			}
+		}
+	}
+	
+	
+	private boolean serviceIsUsingEnumeration() throws UpgradeException {
+		Element extDataElement = getExtensionDataElement();
+		Element serviceFeaturesElement = extDataElement.getChild("ServiceFeatures", extDataElement.getNamespace());
+		String useEnumValue = serviceFeaturesElement.getAttributeValue("useWsEnumeration");
+		return Boolean.valueOf(useEnumValue).booleanValue();
 	}
 
 
