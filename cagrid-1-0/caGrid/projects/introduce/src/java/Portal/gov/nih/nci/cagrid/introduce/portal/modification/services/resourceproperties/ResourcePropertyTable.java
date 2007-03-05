@@ -17,7 +17,6 @@ import javax.xml.namespace.QName;
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
- * 
  */
 public class ResourcePropertyTable extends PortalBaseTable {
 
@@ -25,9 +24,11 @@ public class ResourcePropertyTable extends PortalBaseTable {
 	public static String TYPE = "Type";
 	public static String POPULATE_FROM_FILE = "Populate From File";
 	public static String REGISTER = "Register";
+	public static String DESC = "Description";
 	public static String DATA = "Data";
 
 	private ResourcePropertiesListType metadatas;
+
 
 	public ResourcePropertyTable(ResourcePropertiesListType metadatas) {
 		super(createTableModel());
@@ -41,17 +42,20 @@ public class ResourcePropertyTable extends PortalBaseTable {
 					String type = (String) getValueAt(row, 1);
 					Boolean populateFromFile = (Boolean) getValueAt(row, 2);
 					Boolean register = (Boolean) getValueAt(row, 3);
+					String description = (String) getValueAt(row, 4);
 					switch (e.getColumn()) {
-						case 0:
-						case 1:
+						case 0 :
+						case 1 :
 							edit.setQName(new QName(namespace, type));
 							break;
-						case 2:
+						case 2 :
 							edit.setPopulateFromFile(populateFromFile.booleanValue());
 							break;
-						case 3:
+						case 3 :
 							edit.setRegister(register.booleanValue());
 							break;
+						case 4 :
+							edit.setDescription(description);
 					}
 				}
 			}
@@ -61,13 +65,13 @@ public class ResourcePropertyTable extends PortalBaseTable {
 
 
 	public boolean isCellEditable(int row, int column) {
-		if(column == 0 || column == 1){
+		if ((column == 0) || (column == 1)) {
 			return false;
 		}
 		return true;
 	}
-	
-	
+
+
 	public ResourcePropertyType getRowData(int row) throws Exception {
 		if ((row < 0) || (row >= getRowCount())) {
 			throw new Exception("invalid row");
@@ -76,37 +80,44 @@ public class ResourcePropertyTable extends PortalBaseTable {
 		String type = (String) getValueAt(row, 1);
 		Boolean populateFromFile = (Boolean) getValueAt(row, 2);
 		Boolean register = (Boolean) getValueAt(row, 3);
+		String description = (String) getValueAt(row, 4);
 
-		ResourcePropertyType metadata = (ResourcePropertyType) getValueAt(row, 4);
+		ResourcePropertyType metadata = (ResourcePropertyType) getValueAt(row, 5);
 
-		if (namespace != null && !namespace.equals("") && type != null && !type.equals("")) {
-			metadata.setQName(new QName(namespace,type));
+		if ((namespace != null) && !namespace.equals("") && (type != null) && !type.equals("")) {
+			metadata.setQName(new QName(namespace, type));
 		}
-		if (populateFromFile != null && !populateFromFile.equals("")) {
+		if ((populateFromFile != null) && !populateFromFile.equals("")) {
 			metadata.setPopulateFromFile(populateFromFile.booleanValue());
 		}
-		if (register != null && !register.equals("")) {
+		if ((register != null) && !register.equals("")) {
 			metadata.setRegister(register.booleanValue());
 		}
-		
+		if (description != null) {
+			metadata.setDescription(description);
+		}
 		return metadata;
 	}
 
 
 	public void addRow(ResourcePropertyType metadata) {
-		final Vector v = new Vector(4);
+		final Vector v = new Vector(5);
 		v.add(metadata.getQName().getNamespaceURI());
 		v.add(metadata.getQName().getLocalPart());
 		v.add(new Boolean(metadata.isPopulateFromFile()));
 		v.add(new Boolean(metadata.isRegister()));
+		if (metadata.getDescription() == null) {
+			metadata.setDescription("");
+		}
+		v.add(metadata.getDescription());
 		v.add(metadata);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
 		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
 		paint(getGraphics());
 	}
-	
-	
+
+
 	public void removeSelectedRow() throws Exception {
 		int row = getSelectedRow();
 		if ((row < 0) || (row >= getRowCount())) {
@@ -121,7 +132,7 @@ public class ResourcePropertyTable extends PortalBaseTable {
 			setRowSelectionInterval(oldSelectedRow - 1, oldSelectedRow - 1);
 		}
 	}
-	
+
 
 	private void initialize() {
 		this.getTableHeader().setReorderingAllowed(false);
@@ -133,18 +144,18 @@ public class ResourcePropertyTable extends PortalBaseTable {
 		this.getColumn(DATA).setPreferredWidth(0);
 		while (getRowCount() != 0) {
 			removeRow(0);
-		}		
+		}
 
-		if (metadatas != null && metadatas.getResourceProperty() != null) {
+		if ((metadatas != null) && (metadatas.getResourceProperty() != null)) {
 			for (int i = 0; i < metadatas.getResourceProperty().length; i++) {
 				this.addRow(metadatas.getResourceProperty(i));
 			}
 		}
 	}
 
-	
-	public void setResourceProperties(ResourcePropertiesListType properties){
-		this.metadatas = properties;
+
+	public void setResourceProperties(ResourcePropertiesListType properties) {
+		metadatas = properties;
 		initialize();
 	}
 
@@ -166,7 +177,8 @@ public class ResourcePropertyTable extends PortalBaseTable {
 		// TODO Auto-generated method stub
 
 	}
-	
+
+
 	public static class MyDefaultTableModel extends DefaultTableModel {
 
 		public MyDefaultTableModel() {
@@ -175,6 +187,7 @@ public class ResourcePropertyTable extends PortalBaseTable {
 			addColumn(TYPE);
 			addColumn(POPULATE_FROM_FILE);
 			addColumn(REGISTER);
+			addColumn(DESC);
 			addColumn(DATA);
 		}
 
