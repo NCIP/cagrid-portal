@@ -312,9 +312,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 	private void pullSchemas(Namespace ns, XMLDataModelService gme) throws MobiusException {
 		// get the service's schema dir
 		File schemaDir = new File(CacoreWizardUtils.getServiceBaseDir(getServiceInformation())
-			+ File.separator
-			+ "schema"
-			+ File.separator
+			+ File.separator + "schema" + File.separator
 			+ getServiceInformation().getIntroduceServiceProperties().getProperty(
 				IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 		// have the GME cache the schema and its imports locally
@@ -326,24 +324,27 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 			ImportInfo storedSchemaInfo = new ImportInfo(storedNs);
 			File location = new File(schemaDir.getAbsolutePath() + File.separator + storedSchemaInfo.getFileName());
 			NamespaceType nsType = CommonTools.createNamespaceType(location.getAbsolutePath(), schemaDir);
-			// set the package name
-			String packName = CommonTools.getPackageName(storedNs);
-			nsType.setPackageName(packName);
-			// fix the serialization / deserialization on the namespace types
-			for (int i = 0; nsType.getSchemaElement() != null && i < nsType.getSchemaElement().length; i++) {
-				SchemaElementType type = nsType.getSchemaElement(i);
-				type.setSerializer(DataServiceConstants.SDK_SERIALIZER);
-				type.setDeserializer(DataServiceConstants.SDK_DESERIALIZER);
-				type.setClassName(type.getType());
+			// if the namespace already exists in the service, ignore it
+			if (CommonTools.getNamespaceType(getServiceInformation().getNamespaces(), nsType.getNamespace()) == null) {
+				// set the package name
+				String packName = CommonTools.getPackageName(storedNs);
+				nsType.setPackageName(packName);
+				// fix the serialization / deserialization on the namespace types
+				for (int i = 0; nsType.getSchemaElement() != null && i < nsType.getSchemaElement().length; i++) {
+					SchemaElementType type = nsType.getSchemaElement(i);
+					type.setSerializer(DataServiceConstants.SDK_SERIALIZER);
+					type.setDeserializer(DataServiceConstants.SDK_DESERIALIZER);
+					type.setClassName(type.getType());
+				}
+				CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
+				// add the namespace to the introduce namespace excludes list so
+				// that beans will not be built for these data types
+				String excludes = getServiceInformation().getIntroduceServiceProperties().getProperty(
+					IntroduceConstants.INTRODUCE_NS_EXCLUDES);
+				excludes += " -x " + nsType.getNamespace();
+				getServiceInformation().getIntroduceServiceProperties().setProperty(
+					IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);	
 			}
-			CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
-			// add the namespace to the introduce namespace excludes list so
-			// that beans will not be built for these data types
-			String excludes = getServiceInformation().getIntroduceServiceProperties().getProperty(
-				IntroduceConstants.INTRODUCE_NS_EXCLUDES);
-			excludes += " -x " + nsType.getNamespace();
-			getServiceInformation().getIntroduceServiceProperties().setProperty(
-				IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);
 		}
 	}
 

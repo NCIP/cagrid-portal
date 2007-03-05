@@ -128,28 +128,32 @@ public class PackageSchemasTable extends JTable {
 		NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(info, pack);
 		if (resolved != null) {
 			if (resolved.length != 0) {
-				// set the resolution status on the table
-				setValueAt(pack.getMappedNamespace(), dataRow, 1);
-				setValueAt(STATUS_SCHEMA_FOUND, dataRow, 2);
-				// set the package name
-				resolved[0].setPackageName(pack.getName());
-				// set the serializers / deserializers for the FIRST namespace type's schema elements
-				SchemaElementType[] types = resolved[0].getSchemaElement();
-				for (int i = 0; types != null && i < types.length; i++) {
-					types[i].setClassName(types[i].getType());
-					types[i].setSerializer(DataServiceConstants.SDK_SERIALIZER);
-					types[i].setDeserializer(DataServiceConstants.SDK_DESERIALIZER);
+				// see if we should actually add the package
+				if (CommonTools.getNamespaceType(
+					info.getNamespaces(), resolved[0].getNamespace()) == null) {
+					// set the resolution status on the table
+					setValueAt(pack.getMappedNamespace(), dataRow, 1);
+					setValueAt(STATUS_SCHEMA_FOUND, dataRow, 2);
+					// set the package name
+					resolved[0].setPackageName(pack.getName());
+					// set the serializers / deserializers for the FIRST namespace type's schema elements
+					SchemaElementType[] types = resolved[0].getSchemaElement();
+					for (int i = 0; types != null && i < types.length; i++) {
+						types[i].setClassName(types[i].getType());
+						types[i].setSerializer(DataServiceConstants.SDK_SERIALIZER);
+						types[i].setDeserializer(DataServiceConstants.SDK_DESERIALIZER);
+					}
+					// add the types to the service
+					for (int i = 0; i < resolved.length; i++) {
+						CommonTools.addNamespace(info.getServiceDescriptor(), resolved[i]);
+						// namespace excludes
+						String excludes = info.getIntroduceServiceProperties()
+							.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES);
+						excludes += " -x " + resolved[i].getNamespace();
+						info.getIntroduceServiceProperties().setProperty(
+							IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);
+					} 
 				}
-				// add the types to the service
-				for (int i = 0; i < resolved.length; i++) {
-					CommonTools.addNamespace(info.getServiceDescriptor(), resolved[i]);
-					// namespace excludes
-					String excludes = info.getIntroduceServiceProperties()
-						.getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES);
-					excludes += " -x " + resolved[i].getNamespace();
-					info.getIntroduceServiceProperties().setProperty(
-						IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);
-				} 
 			}
 		} else {
 			ErrorDialog.showErrorDialog("Error retrieving schemas!");
