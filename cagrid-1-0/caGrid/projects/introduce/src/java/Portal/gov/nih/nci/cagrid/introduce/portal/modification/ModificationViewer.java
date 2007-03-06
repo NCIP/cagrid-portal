@@ -1405,8 +1405,8 @@ public class ModificationViewer extends GridPortalComponent {
 							for (int i = 0; i < namespaces.getNamespace().length; i++) {
 								NamespaceType currentNs = namespaces.getNamespace(i);
 								if (currentNs.getPackageName() != null) {
-									if ((currentNs.getGenerateStubs() != null)
-										&& !currentNs.getGenerateStubs().booleanValue()) {
+									if ((currentNs.getGenerateStubs() == null)
+										|| (!currentNs.getGenerateStubs().booleanValue())) {
 										if (!CommonTools.isValidNoStubPackageName(currentNs.getPackageName())) {
 											setErrorMessage("Error: Invalid package name for namespace "
 												+ currentNs.getNamespace() + " : " + currentNs.getPackageName());
