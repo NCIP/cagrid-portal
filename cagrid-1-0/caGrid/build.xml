@@ -60,6 +60,9 @@
     <property name="introduce.extensions.dir" value="${projects.dir}/introduce/extensions" />
 
 
+    <!-- At parse time we clean out the custom ant task build, to be sure it gets built at parse time -->
+    <delete failonerror="false" dir="${antfiles.dir}/build" />
+
     <!-- =============================================================== -->
     <!-- Bootstrap the build by setting up the structure and building    -->
     <!-- our custom ant tasks.                                           -->
