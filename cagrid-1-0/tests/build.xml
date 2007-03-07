@@ -64,11 +64,23 @@
 		<typedef name="artifact" classname="gov.nih.nci.cagrid.ant.Artifact" loaderref="artifact">
 			<classpath>
 				<pathelement location="${cagrid.antfiles.dir}/build" />
+				<fileset dir="${ant.library.dir}"> 
+					<include name="ant.jar" />
+				</fileset>
+				<fileset dir="${share.lib.dir}">
+					<include name="ant-contrib*.jar" />
+				</fileset>
 			</classpath>
 		</typedef>
 		<taskdef name="resolveDependencies" classname="gov.nih.nci.cagrid.ant.ResolveDependencies" loaderref="artifact">
 			<classpath>
 				<pathelement location="${cagrid.antfiles.dir}/build" />
+				<fileset dir="${ant.library.dir}"> 
+					<include name="ant.jar" />
+				</fileset>
+				<fileset dir="${share.lib.dir}">
+					<include name="ant-contrib*.jar" />
+				</fileset>
 			</classpath>
 		</taskdef>
 
