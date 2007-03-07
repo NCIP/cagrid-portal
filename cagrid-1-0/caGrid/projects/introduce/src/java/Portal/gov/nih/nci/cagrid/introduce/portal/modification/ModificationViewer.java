@@ -1266,13 +1266,16 @@ public class ModificationViewer extends GridPortalComponent {
 					if (node instanceof NamespaceTypeTreeNode) {
 						getNamespaceTypeConfigurationPanel().setNamespaceType((NamespaceType) node.getUserObject());
 						getSchemaElementTypeConfigurationPanel().clear();
+						getSchemaElementTypeConfigurationPanel().setHide(true);
 					} else if (node instanceof SchemaElementTypeTreeNode) {
 						NamespaceTypeTreeNode parentNode = (NamespaceTypeTreeNode) node.getParent();
 						NamespaceType nsType = (NamespaceType) parentNode.getUserObject();
 						if (nsType.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+							getSchemaElementTypeConfigurationPanel().setHide(true);
 							getSchemaElementTypeConfigurationPanel().setSchemaElementType(
 								(SchemaElementType) node.getUserObject(), false);
 						} else {
+							getSchemaElementTypeConfigurationPanel().setHide(false);
 							getSchemaElementTypeConfigurationPanel().setSchemaElementType(
 								(SchemaElementType) node.getUserObject(), true);
 						}

@@ -18,6 +18,12 @@ support registration on resources
 
 To Do:
 
+need to validate that namespace exist policy on the descovery tools is working.
+
+need to add javadoc to interface of services using hte descriptions
+
+need to fix the method mod viewer tomake sure that it has the slider in the right place
+
 if provider is checked then authorrization needs to be disable.
 
 reload preferences from defaults
@@ -52,6 +58,9 @@ add tests to system tests for (coverage report shows no coverage):
 add a .cvsignore file to generated skeletons that includes the gar.  my right mouse button is slowly wearing out... and i am lazy...
 
 ============================ D O N E ================================================================
+need to disable the custom serialzation when a namespacetypenode is selected in the modification
+view
+
 add tools for autocreating resource and wrapping epr into client handle type for implementation on server side (ResourceCreator.javajet)
 
 i am not sure that service/method security on service contexts is right on priority and overides.

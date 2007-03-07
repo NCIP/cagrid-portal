@@ -20,6 +20,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 
 	private JTextField typeText = null;
 	private JTextField classNameText = null;
+	private boolean hide = false;
 
 	private SchemaElementType type;
 	private JPanel beanPanel = null;
@@ -41,6 +42,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 	public SchemaElementTypeConfigurePanel() {
 		super();
 		initialize();
+		this.setHide(true);
 	}
 
 
@@ -354,6 +356,27 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 	}
 
 
+	public void setHide(boolean hide) {
+		this.hide = hide;
+		if (hide) {
+			getCustomBeanPanel().setVisible(false);
+			customizeLabel.setIcon(IntroduceLookAndFeel.getAddIcon());
+			customizeLabel.setEnabled(false);
+			getTypeText().setEnabled(false);
+			typeLabel.setEnabled(false);
+		} else {
+			customizeLabel.setEnabled(true);
+			getTypeText().setEnabled(true);
+			typeLabel.setEnabled(true);
+		}
+	}
+
+
+	public boolean getHide() {
+		return hide;
+	}
+
+
 	/**
 	 * This method initializes customBeanWrapperPanel
 	 * 
@@ -378,7 +401,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 					if (getCustomBeanPanel().isVisible()) {
 						getCustomBeanPanel().setVisible(false);
 						customizeLabel.setIcon(IntroduceLookAndFeel.getAddIcon());
-					} else {
+					} else if (!getHide()) {
 						getCustomBeanPanel().setVisible(true);
 						customizeLabel.setIcon(IntroduceLookAndFeel.getRemoveIcon());
 					}
