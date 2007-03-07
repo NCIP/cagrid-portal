@@ -28,6 +28,7 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -1254,8 +1255,12 @@ public class MethodViewer extends GridPortalBaseFrame {
 	private JScrollPane getInputNamespaceScrollPane() {
 		if (inputNamespaceScrollPane == null) {
 			inputNamespaceScrollPane = new JScrollPane();
+			inputNamespaceScrollPane.setPreferredSize(new Dimension(200,400));
 			inputNamespaceScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			inputNamespaceScrollPane.setViewportView(getInputNamespaceTypesJTree());
+			inputNamespaceScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Types",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
 
 		}
 		return inputNamespaceScrollPane;
