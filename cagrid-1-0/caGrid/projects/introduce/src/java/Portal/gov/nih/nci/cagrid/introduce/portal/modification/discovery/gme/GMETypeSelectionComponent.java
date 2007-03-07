@@ -4,25 +4,23 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.gme.GMESchemaLocatorPanel;
+import gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
-import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-
+import org.jdom.Document;
 import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.Namespace;
@@ -48,8 +46,8 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 	private GMESchemaLocatorPanel gmePanel = null;
 
 
-	public GMETypeSelectionComponent(DiscoveryExtensionDescriptionType descriptor) {
-		super(descriptor);
+	public GMETypeSelectionComponent(DiscoveryExtensionDescriptionType descriptor, NamespacesType types) {
+		super(descriptor, types);
 		initialize();
 		this.getGmePanel().discoverFromGME();
 	}
@@ -78,46 +76,34 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 	 * @return javax.swing.JPanel
 	 */
 	private GMESchemaLocatorPanel getGmePanel() {
-		if (this.gmePanel == null) {
-			this.gmePanel = new GMESchemaLocatorPanel(false);
+		if (gmePanel == null) {
+			gmePanel = new GMESchemaLocatorPanel(false);
 		}
-		return this.gmePanel;
+		return gmePanel;
 	}
 
 
-	public NamespaceType[] createNamespaceType(File schemaDestinationDir) {
+	public NamespaceType[] createNamespaceType(File schemaDestinationDir, String namespaceExistsPolicy) {
 		Namespace selectedNS = getGmePanel().getSelectedSchemaNamespace();
 		if (!selectedNS.getRaw().equals(IntroduceConstants.W3CNAMESPACE)) {
 			try {
 				if (selectedNS != null) {
-					List namespaces = new ArrayList();
-					NamespaceType root = new NamespaceType();
-					// set the package name
-					String packageName = CommonTools.getPackageName(selectedNS);
-					root.setPackageName(packageName);
-					root.setNamespace(selectedNS.getRaw());
-					ImportInfo ii = new ImportInfo(selectedNS);
-					root.setLocation("./" + ii.getFileName());
-					namespaces.add(root);
+					File tmpPath = new File("tmp" + File.separator + "gmeCache");
+					tmpPath.mkdirs();
 
-					gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(root, XMLUtilities
-						.stringToDocument(this.gmePanel.currentNode.getSchemaContents()));
-					List importedNamespaces = cacheSchema(schemaDestinationDir, root.getNamespace());
+					List importedNamespaces = cacheSchema(tmpPath, selectedNS.getRaw());
 					Iterator importedNsIter = importedNamespaces.iterator();
+					NamespaceType[] types = null;
 					while (importedNsIter.hasNext()) {
 						Namespace ns = (Namespace) importedNsIter.next();
-						if (!ns.getRaw().equals(root.getNamespace())) {
+						if (ns.getRaw().equals(selectedNS.getRaw())) {
 							ImportInfo importInfo = new ImportInfo(ns);
 							String filename = importInfo.getFileName();
-							File schemaFile = new File(schemaDestinationDir.getAbsolutePath() + File.separator
-								+ filename);
-							NamespaceType type = CommonTools.createNamespaceType(schemaFile.getAbsolutePath(),
-								schemaDestinationDir);
-							namespaces.add(type);
+							types = createNamespaceTypeFromFiles(tmpPath.getAbsolutePath() + File.separator + filename,
+								ns, schemaDestinationDir, namespaceExistsPolicy);
 						}
 					}
-					NamespaceType[] types = new NamespaceType[namespaces.size()];
-					namespaces.toArray(types);
+					Utils.deleteDir(tmpPath);
 					return types;
 				} else {
 					return null;
@@ -140,39 +126,152 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 	}
 
 
-	public static void main(String[] args) {
+	public NamespaceType[] createNamespaceTypeFromFiles(String startingSchema, Namespace startingNamespace,
+		File schemaDestinationDir, String namespaceExistsPolicy) {
 		try {
-			JFrame frame = new JFrame();
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			if (namespaceAlreadyExists(startingNamespace.getRaw()) && namespaceExistsPolicy.equals(ERROR)) {
+				addError("Namespace already exists.");
+				return null;
+			}
 
-			ExtensionDescription ext = (ExtensionDescription) Utils.deserializeDocument("extensions" + File.separator
-				+ "gme_discovery" + File.separator + "extension.xml", ExtensionDescription.class);
-			final GMETypeSelectionComponent panel = new GMETypeSelectionComponent(ext
-				.getDiscoveryExtensionDescription());
-			frame.getContentPane().setLayout(new BorderLayout());
-			frame.getContentPane().add(panel, BorderLayout.CENTER);
+			boolean result = checkAgainstPolicy(startingSchema, new HashSet(), namespaceExistsPolicy);
+			if (result == false) {
+				return null;
+			}
 
-			JButton createButton = new JButton("Test Create");
-			createButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					NamespaceType[] createdNs = panel.createNamespaceType(new File("."));
-					if (createdNs != null) {
-						for (int i = 0; i < createdNs.length; i++) {
-							NamespaceType element = createdNs[i];
-							System.out.println("Created Namespace:" + element.getNamespace() + " at location:"
-								+ element.getLocation());
-						}
-					} else {
-						System.out.println("Problem creating namespace");
-					}
+			List namespaces = new ArrayList();
+
+			String currentFileName = (new File(startingSchema)).getName();
+			NamespaceType root = new NamespaceType();
+			// set the package name
+			String packageName = CommonTools.getPackageName(startingNamespace);
+			root.setPackageName(packageName);
+			root.setNamespace(startingNamespace.getRaw());
+			root.setLocation("./" + currentFileName);
+
+			namespaces.add(root);
+
+			ExtensionTools.setSchemaElements(root, XMLUtilities.fileNameToDocument(startingSchema));
+			Set storedSchemas = new HashSet();
+			copySchemas(startingSchema, schemaDestinationDir, new HashSet(), storedSchemas, namespaceExistsPolicy);
+			Iterator schemaFileIter = storedSchemas.iterator();
+			while (schemaFileIter.hasNext()) {
+				File storedSchemaFile = new File((String) schemaFileIter.next());
+				if (!storedSchemaFile.getName().equals(currentFileName)) {
+					NamespaceType nsType = CommonTools.createNamespaceType(storedSchemaFile.getAbsolutePath(),
+						schemaDestinationDir);
+					namespaces.add(nsType);
 				}
-			});
-			frame.getContentPane().add(createButton, BorderLayout.SOUTH);
-
-			frame.pack();
-			frame.setVisible(true);
+			}
+			NamespaceType[] types = new NamespaceType[namespaces.size()];
+			namespaces.toArray(types);
+			return types;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
+	}
+
+
+	private boolean checkAgainstPolicy(String fileName, Set visitedSchemas, String namespaceExistsPolicy) {
+		try {
+			File schemaFile = new File(fileName);
+			// mark the schema as visited
+			visitedSchemas.add(schemaFile.getCanonicalPath());
+			// look for imports
+			Document schema = XMLUtilities.fileNameToDocument(schemaFile.getCanonicalPath());
+			List importEls = schema.getRootElement().getChildren("import",
+				schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
+			if (importEls != null) {
+				for (int i = 0; i < importEls.size(); i++) {
+					org.jdom.Element importEl = (org.jdom.Element) importEls.get(i);
+					String location = importEl.getAttributeValue("schemaLocation");
+					if (location != null) {
+						String namespace = importEl.getAttributeValue("namespace");
+						if (namespace != null) {
+							// see if namespace already exists if so check
+							// property
+							// to see if supposed to error;
+							if (namespaceAlreadyExists(namespace)) {
+								if (namespaceExistsPolicy.equals(ERROR)) {
+									addError("Imported namespace already exists: "
+										+ namespace
+										+ ". \nIf you want this schema to be overwriten please change the policy to \"ignore\" in the introduce preferences menu");
+									return false;
+								}
+							}
+
+						}
+
+						File currentPath = schemaFile.getCanonicalFile().getParentFile();
+						if (!schemaFile.equals(new File(currentPath.getCanonicalPath() + File.separator + location))) {
+							File importedSchema = new File(currentPath + File.separator + location);
+							if (!visitedSchemas.contains(importedSchema.getCanonicalPath())) {
+								// only copy schemas not yet visited
+								boolean result = checkAgainstPolicy(importedSchema.getCanonicalPath(), visitedSchemas,
+									namespaceExistsPolicy);
+								if (result == false) {
+									return false;
+								}
+							}
+						} else {
+							System.err.println("WARNING: Schema is importing itself. " + schemaFile);
+						}
+
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			addError(e.getMessage());
+			return false;
+		}
+		return true;
+	}
+
+
+	public void copySchemas(String fileName, File copyToDirectory, Set visitedSchemas, Set storedSchemas,
+		String namespaceExistsPolicy) throws Exception {
+		File schemaFile = new File(fileName);
+		Document schema = XMLUtilities.fileNameToDocument(schemaFile.getCanonicalPath());
+		String namespaceURI = schema.getRootElement().getAttribute("targetNamespace").getValue();
+		if (namespaceAlreadyExists(namespaceURI) && namespaceExistsPolicy.equals(IGNORE)) {
+			// do nothing just ignore.....
+		} else {
+			System.out.println("Copying schema " + fileName + " to " + copyToDirectory.getCanonicalPath());
+			File outFile = new File(copyToDirectory.getCanonicalPath() + File.separator + schemaFile.getName());
+			Utils.copyFile(schemaFile, outFile);
+			storedSchemas.add(outFile.getAbsolutePath());
+			// mark the schema as visited
+			visitedSchemas.add(schemaFile.getCanonicalPath());
+		}
+
+		// look for imports
+		List importEls = schema.getRootElement().getChildren("import",
+			schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
+		if (importEls != null) {
+			for (int i = 0; i < importEls.size(); i++) {
+				org.jdom.Element importEl = (org.jdom.Element) importEls.get(i);
+				String location = importEl.getAttributeValue("schemaLocation");
+				if (location != null) {
+					File currentPath = schemaFile.getCanonicalFile().getParentFile();
+					if (!schemaFile.equals(new File(currentPath.getCanonicalPath() + File.separator + location))) {
+						File importedSchema = new File(currentPath + File.separator + location);
+						if (!visitedSchemas.contains(importedSchema.getCanonicalPath())) {
+							// only copy schemas not yet visited
+							copySchemas(importedSchema.getCanonicalPath(), new File(copyToDirectory.getCanonicalFile()
+								+ File.separator + location).getParentFile(), visitedSchemas, storedSchemas,
+								namespaceExistsPolicy);
+						}
+					} else {
+						System.err.println("WARNING: Schema is importing itself. " + schemaFile);
+					}
+				}
+			}
+		}
+	}
+
+
+	public static void main(String[] args) {
 	}
 }

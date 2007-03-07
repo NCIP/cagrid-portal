@@ -8,26 +8,20 @@ import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.cadsr.portal.PackageSelectedListener;
 import gov.nih.nci.cagrid.cadsr.portal.ProjectSelectedListener;
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
-import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -54,8 +48,8 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 	private JTextField nsTextField = null;
 
 
-	public CaDSRTypeSelectionComponent(DiscoveryExtensionDescriptionType desc) {
-		super(desc);
+	public CaDSRTypeSelectionComponent(DiscoveryExtensionDescriptionType desc, NamespacesType currentNamespaces) {
+		super(desc, currentNamespaces);
 		initialize();
 		this.getCaDSRPanel().setDefaultCaDSRURL(getCaDSRURL());
 		this.getCaDSRPanel().discoverFromCaDSR();
@@ -102,16 +96,16 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 	 * @return javax.swing.JPanel
 	 */
 	private CaDSRBrowserPanel getCaDSRPanel() {
-		if (this.caDSRPanel == null) {
-			this.caDSRPanel = new CaDSRBrowserPanel(false, false);
-			this.caDSRPanel.addPackageSelectionListener(this);
-			this.caDSRPanel.addProjectSelectionListener(this);
+		if (caDSRPanel == null) {
+			caDSRPanel = new CaDSRBrowserPanel(false, false);
+			caDSRPanel.addPackageSelectionListener(this);
+			caDSRPanel.addProjectSelectionListener(this);
 		}
-		return this.caDSRPanel;
+		return caDSRPanel;
 	}
 
 
-	public NamespaceType[] createNamespaceType(File schemaDestinationDir) {
+	public NamespaceType[] createNamespaceType(File schemaDestinationDir, String namespaceExistsPolicy) {
 		try {
 			List namespaceTypes = new ArrayList();
 			NamespaceType rootNamespace = new NamespaceType();
@@ -216,7 +210,7 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getNsPanel() {
-		if (this.nsPanel == null) {
+		if (nsPanel == null) {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints2.gridx = 1;
@@ -227,14 +221,14 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 			gridBagConstraints1.insets = new java.awt.Insets(7, 5, 7, 2);
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.gridx = 0;
-			this.nsLabel = new JLabel();
-			this.nsLabel.setText("Namespace:");
-			this.nsPanel = new JPanel();
-			this.nsPanel.setLayout(new GridBagLayout());
-			this.nsPanel.add(this.nsLabel, gridBagConstraints1);
-			this.nsPanel.add(getNsTextField(), gridBagConstraints2);
+			nsLabel = new JLabel();
+			nsLabel.setText("Namespace:");
+			nsPanel = new JPanel();
+			nsPanel.setLayout(new GridBagLayout());
+			nsPanel.add(nsLabel, gridBagConstraints1);
+			nsPanel.add(getNsTextField(), gridBagConstraints2);
 		}
-		return this.nsPanel;
+		return nsPanel;
 	}
 
 
@@ -244,12 +238,12 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getNsTextField() {
-		if (this.nsTextField == null) {
-			this.nsTextField = new JTextField();
-			this.nsTextField.setEditable(false);
-			this.nsTextField.setText("unavailable");
+		if (nsTextField == null) {
+			nsTextField = new JTextField();
+			nsTextField.setEditable(false);
+			nsTextField.setText("unavailable");
 		}
-		return this.nsTextField;
+		return nsTextField;
 	}
 
 
@@ -287,37 +281,6 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 
 	public static void main(String[] args) {
-		try {
-			JFrame frame = new JFrame();
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-			ExtensionDescription ext = (ExtensionDescription) Utils.deserializeDocument("extension.xml",
-				ExtensionDescription.class);
-			final CaDSRTypeSelectionComponent panel = new CaDSRTypeSelectionComponent(ext
-				.getDiscoveryExtensionDescription());
-			frame.getContentPane().setLayout(new BorderLayout());
-			frame.getContentPane().add(panel, BorderLayout.CENTER);
-
-			JButton createButton = new JButton("Test Create");
-			createButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					NamespaceType[] createdNs = panel.createNamespaceType(new File("."));
-					if (createdNs != null) {
-						for (int i = 0; i < createdNs.length; i++) {
-							System.out.println("Created Namespace:" + createdNs[i].getNamespace() + " at location:"
-								+ createdNs[i].getLocation());
-						}
-					} else {
-						System.out.println("Problem creating namespace");
-					}
-				}
-			});
-			frame.getContentPane().add(createButton, BorderLayout.SOUTH);
-
-			frame.pack();
-			frame.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

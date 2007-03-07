@@ -1,22 +1,15 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.globus;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
-import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
 
 import org.projectmobius.common.XMLUtilities;
 
@@ -37,8 +30,8 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 	private GlobusConfigurationPanel globusPanel = null;
 
 
-	public GlobusTypeSelectionComponent(DiscoveryExtensionDescriptionType descriptor) {
-		super(descriptor);
+	public GlobusTypeSelectionComponent(DiscoveryExtensionDescriptionType descriptor, NamespacesType types) {
+		super(descriptor, types);
 		initialize();
 		this.getGlobusPanel().discoverFromGlobus();
 	}
@@ -74,7 +67,7 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 	}
 
 
-	public NamespaceType[] createNamespaceType(File schemaDestinationDir) {
+	public NamespaceType[] createNamespaceType(File schemaDestinationDir, String namespaceExistsPolicy) {
 		NamespaceType input = new NamespaceType();
 		try {
 			String currentNamespace = getGlobusPanel().currentNamespace;
@@ -98,7 +91,7 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 					+ File.separator
 					+ currentSchemaFile.getAbsolutePath().substring(index + 1,
 						currentSchemaFile.getAbsolutePath().length());
-				location = location.replace('\\','/');
+				location = location.replace('\\', '/');
 				input.setLocation(location);
 				gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools.setSchemaElements(input, XMLUtilities
 					.fileNameToDocument(currentSchemaFile.getAbsolutePath()));
@@ -114,37 +107,5 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 
 
 	public static void main(String[] args) {
-		try {
-			JFrame frame = new JFrame();
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-			ExtensionDescription ext = (ExtensionDescription) Utils.deserializeDocument("extensions" + File.separator
-				+ "gme_discovery" + File.separator + "extension.xml", ExtensionDescription.class);
-			final GlobusTypeSelectionComponent panel = new GlobusTypeSelectionComponent(ext
-				.getDiscoveryExtensionDescription());
-			frame.getContentPane().setLayout(new BorderLayout());
-			frame.getContentPane().add(panel, BorderLayout.CENTER);
-
-			JButton createButton = new JButton("Test Create");
-			createButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					NamespaceType[] createdNs = panel.createNamespaceType(new File("."));
-					if (createdNs != null) {
-						for (int i = 0; i < createdNs.length; i++) {
-							System.out.println("Created Namespace:" + createdNs[i].getNamespace() + " at location:"
-								+ createdNs[i].getLocation());
-						}
-					} else {
-						System.out.println("Problem creating namespace");
-					}
-				}
-			});
-			frame.getContentPane().add(createButton, BorderLayout.SOUTH);
-
-			frame.pack();
-			frame.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

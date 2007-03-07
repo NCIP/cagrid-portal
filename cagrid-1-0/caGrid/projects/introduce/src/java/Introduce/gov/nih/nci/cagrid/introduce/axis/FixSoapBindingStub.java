@@ -18,26 +18,29 @@ import java.util.StringTokenizer;
 import org.apache.axis.utils.XMLUtils;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 
+
 public class FixSoapBindingStub {
 
 	public String soapBindingFile;
 	public String customSerializationNamespaces;
 
-	public FixSoapBindingStub(String soapBindingFile,
-			String customSerializationNamespaces) {
+
+	public FixSoapBindingStub(String soapBindingFile, String customSerializationNamespaces) {
 		this.soapBindingFile = soapBindingFile;
 		this.customSerializationNamespaces = customSerializationNamespaces;
 	}
 
-	public void execute() {
 
-		StringTokenizer strtok = new StringTokenizer(
-				customSerializationNamespaces, " ", false);
+	public void execute() {
+		if (customSerializationNamespaces == null) {
+			return;
+		}
+
+		StringTokenizer strtok = new StringTokenizer(customSerializationNamespaces, " ", false);
 
 		StringBuffer oldContent = null;
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(new File(
-					this.soapBindingFile)));
+			BufferedReader br = new BufferedReader(new FileReader(new File(soapBindingFile)));
 			StringBuffer sb = new StringBuffer();
 			try {
 				String s = null;
@@ -59,8 +62,7 @@ public class FixSoapBindingStub {
 			StringBuffer newFileContent = new StringBuffer();
 
 			// find the method
-			BufferedReader br = new BufferedReader(new StringReader(oldContent
-					.toString()));
+			BufferedReader br = new BufferedReader(new StringReader(oldContent.toString()));
 
 			try {
 				String line = br.readLine();
@@ -84,7 +86,7 @@ public class FixSoapBindingStub {
 		}
 
 		try {
-			FileWriter fw = new FileWriter(new File(this.soapBindingFile));
+			FileWriter fw = new FileWriter(new File(soapBindingFile));
 			fw.write(oldContent.toString());
 			fw.close();
 		} catch (IOException e1) {
@@ -92,17 +94,17 @@ public class FixSoapBindingStub {
 		}
 	}
 
+
 	public static void main(String[] args) {
 		System.out.println(args[0]);
 		ServiceDescription introService = null;
 		try {
 			InputStream inputStream = null;
 
-			inputStream = new FileInputStream(args[0] + File.separator
-					+ "introduce.xml");
+			inputStream = new FileInputStream(args[0] + File.separator + "introduce.xml");
 			org.w3c.dom.Document doc = XMLUtils.newDocument(inputStream);
-			introService = (ServiceDescription) ObjectDeserializer.toObject(doc
-					.getDocumentElement(), ServiceDescription.class);
+			introService = (ServiceDescription) ObjectDeserializer.toObject(doc.getDocumentElement(),
+				ServiceDescription.class);
 			inputStream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,8 +113,7 @@ public class FixSoapBindingStub {
 
 		Properties props = new Properties();
 		try {
-			props.load(new FileInputStream(new File(args[0] + File.separator
-					+ "introduce.properties")));
+			props.load(new FileInputStream(new File(args[0] + File.separator + "introduce.properties")));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return;
@@ -120,23 +121,16 @@ public class FixSoapBindingStub {
 			e.printStackTrace();
 			return;
 		}
-		
-		String excludeArgs = (String) props
-				.get("introduce.soap.binding.excludes");
-		
 
+		String excludeArgs = (String) props.get("introduce.soap.binding.excludes");
 		ServiceType[] services = introService.getServices().getService();
 		String mainServiceName = services[0].getName();
 		for (int i = 0; i < services.length; i++) {
-			String stubFileName = args[0] + File.separator + "build"
-					+ File.separator + "stubs-" + mainServiceName
-					+ File.separator + "src" + File.separator
-					+ services[i].getPackageName().replace(".", File.separator)
-					+ File.separator + "stubs" + File.separator + "bindings"
-					+ File.separator + services[i].getName()
-					+ "PortTypeSOAPBindingStub.java";
-			FixSoapBindingStub stubFixer = new FixSoapBindingStub(stubFileName,
-					excludeArgs);
+			String stubFileName = args[0] + File.separator + "build" + File.separator + "stubs-" + mainServiceName
+				+ File.separator + "src" + File.separator + services[i].getPackageName().replace(".", File.separator)
+				+ File.separator + "stubs" + File.separator + "bindings" + File.separator + services[i].getName()
+				+ "PortTypeSOAPBindingStub.java";
+			FixSoapBindingStub stubFixer = new FixSoapBindingStub(stubFileName, excludeArgs);
 			stubFixer.execute();
 		}
 

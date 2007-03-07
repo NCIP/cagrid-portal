@@ -100,15 +100,15 @@ public class SyncTools {
 		public MultiServiceSymbolTable(ServiceInformation info, Set excludedSet) throws Exception {
 			this.info = info;
 			this.excludedSet = excludedSet;
-			this.symbolTables = new ArrayList();
+			symbolTables = new ArrayList();
 		}
 
 
 		public Element getElement(QName qname) {
 			Element element = null;
-			for (int i = 0; i < this.symbolTables.size(); i++) {
+			for (int i = 0; i < symbolTables.size(); i++) {
 
-				element = ((SymbolTable) this.symbolTables.get(i)).getElement(qname);
+				element = ((SymbolTable) symbolTables.get(i)).getElement(qname);
 				if (element != null) {
 					break;
 				}
@@ -119,9 +119,9 @@ public class SyncTools {
 
 		public Type getType(QName qname) {
 			Type type = null;
-			for (int i = 0; i < this.symbolTables.size(); i++) {
+			for (int i = 0; i < symbolTables.size(); i++) {
 
-				type = ((SymbolTable) this.symbolTables.get(i)).getType(qname);
+				type = ((SymbolTable) symbolTables.get(i)).getType(qname);
 				if (type != null) {
 					break;
 				}
@@ -132,9 +132,9 @@ public class SyncTools {
 
 		public MessageEntry getMessageEntry(QName qname) {
 			MessageEntry type = null;
-			for (int i = 0; i < this.symbolTables.size(); i++) {
+			for (int i = 0; i < symbolTables.size(); i++) {
 
-				type = ((SymbolTable) this.symbolTables.get(i)).getMessageEntry(qname);
+				type = ((SymbolTable) symbolTables.get(i)).getMessageEntry(qname);
 				if (type != null) {
 					break;
 				}
@@ -144,18 +144,18 @@ public class SyncTools {
 
 
 		public void dump(PrintStream stream) {
-			for (int i = 0; i < this.symbolTables.size(); i++) {
-				((SymbolTable) this.symbolTables.get(i)).dump(stream);
+			for (int i = 0; i < symbolTables.size(); i++) {
+				((SymbolTable) symbolTables.get(i)).dump(stream);
 			}
 		}
 
 
 		public void generateSymbolTable() throws Exception {
 
-			if (this.info.getServices() != null && this.info.getServices().getService() != null) {
-				for (int serviceI = 0; serviceI < this.info.getServices().getService().length; serviceI++) {
+			if ((info.getServices() != null) && (info.getServices().getService() != null)) {
+				for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
 
-					ServiceType service = this.info.getServices().getService(serviceI);
+					ServiceType service = info.getServices().getService(serviceI);
 
 					Emitter parser = new Emitter();
 					SymbolTable table = null;
@@ -165,20 +165,20 @@ public class SyncTools {
 
 					List excludeList = new ArrayList();
 					// one hammer(List), one solution
-					excludeList.addAll(this.excludedSet);
+					excludeList.addAll(excludedSet);
 					parser.setNamespaceExcludes(excludeList);
 
-					parser.setOutputDir(SyncTools.this.baseDirectory.getAbsolutePath() + File.separator + "tmp");
-					parser.setNStoPkg(SyncTools.this.baseDirectory.getAbsolutePath() + File.separator + "build"
-						+ File.separator + IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
+					parser.setOutputDir(baseDirectory.getAbsolutePath() + File.separator + "tmp");
+					parser.setNStoPkg(baseDirectory.getAbsolutePath() + File.separator + "build" + File.separator
+						+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
 					try {
-						parser.run(new File(SyncTools.this.baseDirectory.getAbsolutePath()
+						parser.run(new File(baseDirectory.getAbsolutePath()
 							+ File.separator
 							+ "build"
 							+ File.separator
 							+ "schema"
 							+ File.separator
-							+ this.info.getIntroduceServiceProperties().get(
+							+ info.getIntroduceServiceProperties().get(
 								IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
 							+ service.getName() + ".wsdl").getAbsolutePath());
 					} catch (Exception e) {
@@ -187,14 +187,14 @@ public class SyncTools {
 					}
 					table = parser.getSymbolTable();
 
-					this.symbolTables.add(table);
+					symbolTables.add(table);
 					parser = null;
 					System.gc();
 				}
 
 			}
 
-			Utils.deleteDir(new File(SyncTools.this.baseDirectory.getAbsolutePath() + File.separator + "tmp"));
+			Utils.deleteDir(new File(baseDirectory.getAbsolutePath() + File.separator + "tmp"));
 		}
 	}
 
@@ -206,7 +206,7 @@ public class SyncTools {
 
 
 	public SyncTools(File directory) {
-		this.baseDirectory = directory;
+		baseDirectory = directory;
 	}
 
 
@@ -230,7 +230,7 @@ public class SyncTools {
 
 
 	public void sync() throws Exception {
-		String introduceXML = this.baseDirectory + File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
+		String introduceXML = baseDirectory + File.separator + IntroduceConstants.INTRODUCE_XML_FILE;
 		File introduceXMLFile = new File(introduceXML);
 		if (!introduceXMLFile.exists() || !introduceXMLFile.canRead()) {
 			throw new Exception("Unable to read the Introduce document:" + introduceXML);
@@ -247,21 +247,21 @@ public class SyncTools {
 		// STEP 1: populate the object model representation of the service
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(introduceXML,
 			ServiceDescription.class);
-		if (introService.getIntroduceVersion() == null
+		if ((introService.getIntroduceVersion() == null)
 			|| !introService.getIntroduceVersion().equals(CommonTools.getIntroduceVersion())) {
 			throw new Exception("Introduce version in project does not match version provided by Introduce Toolkit ( "
 				+ CommonTools.getIntroduceVersion() + " ): " + introService.getIntroduceVersion());
 		}
-		File servicePropertiesFile = new File(this.baseDirectory.getAbsolutePath() + File.separator
+		File servicePropertiesFile = new File(baseDirectory.getAbsolutePath() + File.separator
 			+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(new FileInputStream(servicePropertiesFile));
 
 		// have to set the service directory in the service properties
-		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, this.baseDirectory
+		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR, baseDirectory
 			.getAbsolutePath());
-		ServiceInformation info = new ServiceInformation(introService, serviceProperties, this.baseDirectory);
-		File schemaDir = new File(this.baseDirectory.getAbsolutePath() + File.separator + "schema");
+		ServiceInformation info = new ServiceInformation(introService, serviceProperties, baseDirectory);
+		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema");
 
 		// STEP 2: make a backup of the service implementation
 		this.createArchive(info);
@@ -276,10 +276,10 @@ public class SyncTools {
 		if (info.getServices().getService() != null) {
 			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
 				ServiceType service = info.getServices().getService(serviceI);
-				if (service.getMethods() != null && service.getMethods().getMethod() != null) {
+				if ((service.getMethods() != null) && (service.getMethods().getMethod() != null)) {
 					for (int methodI = 0; methodI < service.getMethods().getMethod().length; methodI++) {
 						MethodType method = service.getMethods().getMethod(methodI);
-						if (method.getExceptions() != null && method.getExceptions().getException() != null) {
+						if ((method.getExceptions() != null) && (method.getExceptions().getException() != null)) {
 							for (int exceptionI = 0; exceptionI < method.getExceptions().getException().length; exceptionI++) {
 								MethodTypeExceptionsException exception = method.getExceptions().getException(
 									exceptionI);
@@ -314,7 +314,7 @@ public class SyncTools {
 		serviceProperties.setProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludeLine);
 
 		Set excludeSOAPStubSet = generateSOAPStubExcludesSet(info);
-		String soapBindingExcludeLine = "";
+		String soapBindingExcludeLine = " ";
 		for (Iterator iter = excludeSOAPStubSet.iterator(); iter.hasNext();) {
 			String namespace = (String) iter.next();
 			soapBindingExcludeLine += namespace;
@@ -326,7 +326,7 @@ public class SyncTools {
 
 		// write all the services into the services list property
 		String servicesList = "";
-		if (info.getServices() != null && info.getServices().getService() != null) {
+		if ((info.getServices() != null) && (info.getServices().getService() != null)) {
 			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
 				ServiceType service = info.getServices().getService(serviceI);
 				servicesList += service.getName();
@@ -342,7 +342,7 @@ public class SyncTools {
 
 		System.out.println("Synchronizing with pre processing extensions");
 		// run any extensions that need to be ran
-		if (introService.getExtensions() != null && introService.getExtensions().getExtension() != null) {
+		if ((introService.getExtensions() != null) && (introService.getExtensions().getExtension() != null)) {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for (int i = 0; i < extensions.length; i++) {
 				ExtensionType element = extensions[i];
@@ -357,7 +357,7 @@ public class SyncTools {
 
 		// serialize the possibly modified model back to disk
 		System.out.println("Serializing service model to disk");
-		Utils.serializeDocument(this.baseDirectory.getAbsolutePath() + File.separator
+		Utils.serializeDocument(baseDirectory.getAbsolutePath() + File.separator
 			+ IntroduceConstants.INTRODUCE_XML_FILE, introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
 		// STEP 4: write out namespace mappings and flatten the wsdl file then
@@ -382,10 +382,10 @@ public class SyncTools {
 		}
 
 		// STEP 7: run the code generation tools
-		SyncTool baseS = new SyncBase(this.baseDirectory, info);
-		SyncTool servicesS = new SyncServices(this.baseDirectory, info);
-		SyncTool serializerS = new SyncSerialization(this.baseDirectory, info);
-		SyncTool propertiesS = new SyncProperties(this.baseDirectory, info);
+		SyncTool baseS = new SyncBase(baseDirectory, info);
+		SyncTool servicesS = new SyncServices(baseDirectory, info);
+		SyncTool serializerS = new SyncSerialization(baseDirectory, info);
+		SyncTool propertiesS = new SyncProperties(baseDirectory, info);
 
 		System.out.println("Synchronizing the base files");
 		baseS.sync();
@@ -399,7 +399,7 @@ public class SyncTools {
 		// STEP 8: run the extensions
 		System.out.println("Synchronizing with post processing extensions");
 		// run any extensions that need to be ran
-		if (introService.getExtensions() != null && introService.getExtensions().getExtension() != null) {
+		if ((introService.getExtensions() != null) && (introService.getExtensions().getExtension() != null)) {
 			ExtensionType[] extensions = introService.getExtensions().getExtension();
 			for (int i = 0; i < extensions.length; i++) {
 				ExtensionType element = extensions[i];
@@ -441,7 +441,7 @@ public class SyncTools {
 		// // TODO Auto-generated catch block
 		// e.printStackTrace();
 		// }
-		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
+		if ((info.getNamespaces() != null) && (info.getNamespaces().getNamespace() != null)) {
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
 				NamespaceType ntype = info.getNamespaces().getNamespace(i);
 				if (ntype.getSchemaElement() != null) {
@@ -469,7 +469,7 @@ public class SyncTools {
 								type.setPackageName(getPackageName(element.getName()));
 							}
 						} else {
-							if (type.getSerializer() == null || type.getDeserializer() == null) {
+							if ((type.getSerializer() == null) || (type.getDeserializer() == null)) {
 								throw new SynchronizationException(
 									"When specifying a custom classname, you must also specify both a serializer and deserializer: "
 										+ type.getClassName());
@@ -489,14 +489,14 @@ public class SyncTools {
 		if (info.getServices().getService() != null) {
 			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
 				ServiceType service = info.getServices().getService(serviceI);
-				if (service.getMethods() != null && service.getMethods().getMethod() != null) {
+				if ((service.getMethods() != null) && (service.getMethods().getMethod() != null)) {
 					for (int i = 0; i < service.getMethods().getMethod().length; i++) {
 						MethodType mtype = service.getMethods().getMethod(i);
 						// process the inputs
 						if (!mtype.isIsImported()
-							|| (mtype.getImportInformation().getFromIntroduce() == null || mtype.getImportInformation()
-								.getFromIntroduce().booleanValue())) {
-							if (mtype.getInputs() != null && mtype.getInputs().getInput() != null) {
+							|| ((mtype.getImportInformation().getFromIntroduce() == null) || mtype
+								.getImportInformation().getFromIntroduce().booleanValue())) {
+							if ((mtype.getInputs() != null) && (mtype.getInputs().getInput() != null)) {
 								for (int j = 0; j < mtype.getInputs().getInput().length; j++) {
 									MethodTypeInputsInput inputParam = mtype.getInputs().getInput(j);
 									SchemaInformation namespace = CommonTools.getSchemaInformation(
@@ -515,7 +515,7 @@ public class SyncTools {
 										}
 
 										Type type = table.getType(qname);
-										if (type == null && !mtype.isIsImported()) {
+										if ((type == null) && !mtype.isIsImported()) {
 											table.dump(System.err);
 											throw new SynchronizationException(
 												"Unable to find Element in symbol table for: " + qname);
@@ -546,7 +546,7 @@ public class SyncTools {
 						System.out.println("LOOKING AT METHOD: " + mtype.getName());
 						// populate the input message class name
 						QName messageQName = null;
-						if (mtype.isIsImported() && mtype.getImportInformation().getInputMessage() != null
+						if (mtype.isIsImported() && (mtype.getImportInformation().getInputMessage() != null)
 							&& !mtype.getImportInformation().getInputMessage().equals("")) {
 							messageQName = mtype.getImportInformation().getInputMessage();
 						} else if (mtype.isIsImported()) {
@@ -583,7 +583,7 @@ public class SyncTools {
 
 						// pupulate the output message class name
 						messageQName = null;
-						if (mtype.isIsImported() && mtype.getImportInformation().getOutputMessage() != null
+						if (mtype.isIsImported() && (mtype.getImportInformation().getOutputMessage() != null)
 							&& !mtype.getImportInformation().getOutputMessage().equals("")) {
 							messageQName = mtype.getImportInformation().getOutputMessage();
 						} else if (mtype.isIsImported()) {
@@ -629,7 +629,7 @@ public class SyncTools {
 
 	private void createNewServices(ServiceInformation info) {
 		List newServices = new ArrayList();
-		if (info.getServices() != null && info.getServices().getService() != null) {
+		if ((info.getServices() != null) && (info.getServices().getService() != null)) {
 			for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
 				File serviceDir = new File(info.getBaseDirectory() + File.separator + "src" + File.separator
 					+ CommonTools.getPackageDir(info.getServices().getService(serviceI)));
@@ -834,15 +834,15 @@ public class SyncTools {
 	 */
 	private Set generateNamespaceExcludesSet(ServiceInformation info) throws Exception {
 		Set excludeSet = new HashSet();
-		File schemaDir = new File(this.baseDirectory.getAbsolutePath() + File.separator + "schema" + File.separator
+		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema" + File.separator
 			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 		// exclude namespaces that have FQN for metadata class
 		// get the classnames from the axis symbol table
-		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
+		if ((info.getNamespaces() != null) && (info.getNamespaces().getNamespace() != null)) {
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
 				NamespaceType ntype = info.getNamespaces().getNamespace(i);
 
-				if (ntype.getGenerateStubs() != null && !ntype.getGenerateStubs().booleanValue()) {
+				if ((ntype.getGenerateStubs() != null) && !ntype.getGenerateStubs().booleanValue()) {
 					// the model explictly says not to generate stubs
 					excludeSet.add(ntype.getNamespace());
 					TemplateUtils.walkSchemasGetNamespaces(schemaDir + File.separator + ntype.getLocation(),
@@ -875,11 +875,11 @@ public class SyncTools {
 
 	private Set generateSOAPStubExcludesSet(ServiceInformation info) throws Exception {
 		Set excludeSet = new HashSet();
-		File schemaDir = new File(this.baseDirectory.getAbsolutePath() + File.separator + "schema" + File.separator
+		File schemaDir = new File(baseDirectory.getAbsolutePath() + File.separator + "schema" + File.separator
 			+ info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 		// exclude namespaces that have FQN for metadata class
 		// get the classnames from the axis symbol table
-		if (info.getNamespaces() != null && info.getNamespaces().getNamespace() != null) {
+		if ((info.getNamespaces() != null) && (info.getNamespaces().getNamespace() != null)) {
 			for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
 				NamespaceType ntype = info.getNamespaces().getNamespace(i);
 
@@ -912,7 +912,7 @@ public class SyncTools {
 	private void writeNamespaceMappings(ServiceInformation info) throws IOException {
 		NamespaceMappingsTemplate namespaceMappingsT = new NamespaceMappingsTemplate();
 		String namespaceMappingsS = namespaceMappingsT.generate(info);
-		File namespaceMappingsF = new File(this.baseDirectory.getAbsolutePath() + File.separator
+		File namespaceMappingsF = new File(baseDirectory.getAbsolutePath() + File.separator
 			+ IntroduceConstants.NAMESPACE2PACKAGE_MAPPINGS_FILE);
 		FileWriter namespaceMappingsFW = new FileWriter(namespaceMappingsF);
 		namespaceMappingsFW.write(namespaceMappingsS);
@@ -921,7 +921,7 @@ public class SyncTools {
 
 
 	private void mergeNamespaces() throws Exception {
-		String cmd = CommonTools.getAntMergeCommand(this.baseDirectory.getAbsolutePath());
+		String cmd = CommonTools.getAntMergeCommand(baseDirectory.getAbsolutePath());
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
 		if (p.exitValue() != 0) {
@@ -954,7 +954,7 @@ public class SyncTools {
 				// rewrite the wsdl for each service....
 				ServiceType service = info.getServices().getService(serviceI);
 				// for each service add any imported operations.....
-				if (service.getMethods() != null && service.getMethods().getMethod() != null) {
+				if ((service.getMethods() != null) && (service.getMethods().getMethod() != null)) {
 					for (int methodI = 0; methodI < service.getMethods().getMethod().length; methodI++) {
 						MethodType method = service.getMethods().getMethod(methodI);
 						if (method.isIsImported()) {
@@ -978,11 +978,11 @@ public class SyncTools {
 		info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP,
 			String.valueOf(id));
 		info.getIntroduceServiceProperties().store(
-			new FileOutputStream(this.baseDirectory.getAbsolutePath() + File.separator
+			new FileOutputStream(baseDirectory.getAbsolutePath() + File.separator
 				+ IntroduceConstants.INTRODUCE_PROPERTIES_FILE), "Introduce Properties");
 
 		ResourceManager.createArchive(String.valueOf(id), info.getIntroduceServiceProperties().getProperty(
-			IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), this.baseDirectory.getAbsolutePath());
+			IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME), baseDirectory.getAbsolutePath());
 	}
 
 

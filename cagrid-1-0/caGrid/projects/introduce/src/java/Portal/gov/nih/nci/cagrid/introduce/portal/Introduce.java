@@ -4,9 +4,11 @@ import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.SplashScreen;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.ResourceManager;
+import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 
@@ -18,6 +20,7 @@ import org.projectmobius.portal.PortalResourceManager;
 public final class Introduce {
 
 	private static SplashScreen introduceSplash;
+
 
 	public static void main(String[] args) {
 		showIntroduceSplash();
@@ -39,13 +42,25 @@ public final class Introduce {
 	}
 
 
+	private static void initialize() {
+		try {
+			ResourceManager.setConfigurationProperty(IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY,
+				NamespaceTypeDiscoveryComponent.ERROR);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		checkGlobusLocation();
+	}
+
+
 	private static void showGridPortal(String confFile) {
 		try {
+			initialize();
+
 			GridPortal portal = null;
 			if (confFile == null) {
 				confFile = ResourceManager.getPortalConfigFileLocation();
 			}
-			checkGlobusLocation();
 			portal = new GridPortal(confFile);
 			Dimension dim = PortalResourceManager.getInstance().getGridPortalConfig().getApplicationDimensions();
 			try {
@@ -63,17 +78,17 @@ public final class Introduce {
 		}
 	}
 
-	
+
 	private static void checkGlobusLocation() {
 		String currGlobusLocation = ResourceManager.getConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION);
-		if (currGlobusLocation == null || currGlobusLocation.length() == 0) {
+		if ((currGlobusLocation == null) || (currGlobusLocation.length() == 0)) {
 			try {
 				String globusLocation = System.getenv("GLOBUS_LOCATION");
 				ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, globusLocation);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				String[] error = {"Error getting GLOBUS_LOCATION environment variable: ", ex.getMessage(),
-				"Please set GLOBUS_LOCATION in preferences!"};
+						"Please set GLOBUS_LOCATION in preferences!"};
 				ErrorDialog.showErrorDialog("Error getting GLOBUS_LOCATION", error);
 				try {
 					ResourceManager.setConfigurationProperty(IntroduceConstants.GLOBUS_LOCATION, "");

@@ -1151,7 +1151,8 @@ public class ModificationViewer extends GridPortalComponent {
 							IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 					NamespaceTypeDiscoveryComponent discoveryComponent = (NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane()
 						.getSelectedComponent();
-					NamespaceType[] types = discoveryComponent.createNamespaceType(schemaDir);
+					NamespaceType[] types = discoveryComponent.createNamespaceType(schemaDir, ResourceManager
+						.getConfigurationProperty(IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY));
 					List messages = new ArrayList();
 					if (types != null) {
 						for (int i = 0; i < types.length; i++) {
@@ -1182,7 +1183,7 @@ public class ModificationViewer extends GridPortalComponent {
 						// reload the types tree
 						getNamespaceJTree().setNamespaces(info.getNamespaces());
 					} else {
-						ErrorDialog.showErrorDialog("Error retrieving schema");
+						ErrorDialog.showErrorDialog("Error retrieving schema: " + discoveryComponent.getErrorMessage());
 					}
 					if (messages.size() != 0) {
 						String[] msg = new String[messages.size()];
@@ -1354,7 +1355,7 @@ public class ModificationViewer extends GridPortalComponent {
 					DiscoveryExtensionDescriptionType dd = (DiscoveryExtensionDescriptionType) discoveryTypes.get(i);
 					try {
 						NamespaceTypeDiscoveryComponent comp = gov.nih.nci.cagrid.introduce.portal.extension.ExtensionTools
-							.getNamespaceTypeDiscoveryComponent(dd.getName());
+							.getNamespaceTypeDiscoveryComponent(dd.getName(), info.getNamespaces());
 						if (comp != null) {
 							discoveryTabbedPane.addTab(dd.getDisplayName(), comp);
 						}
