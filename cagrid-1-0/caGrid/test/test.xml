@@ -2,24 +2,54 @@
 <!-- caGrid Utilities build file                                             -->
 <!-- ======================================================================= -->
 <project name="caGrid_tests_harness" basedir=".">
+
+    <!-- ======================================================================= -->
+    <!--   TESTING OPTIONS:                                                      -->
+    <!-- ======================================================================= -->
+    <!--    run.unit.tests                                                       -->
+    <!--        - A true value for this property causes unit tests to be run     -->
+    <!--          during test target.                                            -->
+    <!--    run.system.tests                                                     -->
+    <!--        - A true value for this property causes system tests to be run   -->
+    <!--          during test target.                                            -->
+    <!--    create.test.report                                                   -->
+    <!--        - A true value for this property causes an html test report to   -->
+    <!--          be created.                                                    -->
+    <!--    test.failfast                                                        -->
+    <!--        - The presence of this property causes the build to fail as      -->
+    <!--          soon as test fails.                                            -->
+    <!-- ======================================================================= -->
     <import file="test-dart.xml" />
 
     <property name="test.logs.dir" value="${test.dir}/logs" />
     <property name="junit.results.dir" value="${test.logs.dir}/junit" />
 
-    <!-- The presence of this property causes the build to fail as soon as test fails. -->
-    <!-- <property name="test.failfast" value="true" /> -->
-    <!-- The presence of this property causes unit tests to be run during test target. -->
-    <property name="run.unit.tests" value="true" />
-    <!-- The presence of this property causes system tests to be run during test target. -->
-    <property name="run.system.tests" value="true" />
-    <!-- The presence of this property causes an html test report to be created. -->
-    <property name="create.test.report" value="true" />
+
+    <target name="set-test-defaults">
+        <property name="run.unit.tests" value="true" />
+        <property name="run.system.tests" value="true" />
+        <property name="create.test.report" value="true" />
+    </target>
+
+    <target name="set-smoke-test-defaults">
+        <property name="run.unit.tests" value="true" />
+        <property name="run.system.tests" value="false" />
+        <property name="create.test.report" value="false" />
+        <property name="test.failfast" value="true" />
+    </target>
+    <target name="set-unit-test-defaults">
+        <property name="run.unit.tests" value="true" />
+        <property name="run.system.tests" value="false" />
+        <property name="create.test.report" value="true" />
+    </target>
+
+    <target name="smokeTest" depends="set-smoke-test-defaults,test" description="Unit tests all the projects, failing at first failure." />
+    <target name="unitTest" depends="set-unit-test-defaults,test" description="Unit tests all the projects completely, generating a report." />
 
     <!-- ============================================================================ -->
     <!-- Calls unit and system test for each project and aggregates the log resutls   -->
     <!-- ============================================================================ -->
-    <target name="test" depends="prepare,createDartTestFiles" description="Test all the projects.">
+    <target name="test" depends="prepare,set-test-defaults,createDartTestFiles" description="Completely tests all the projects (system and unit tests), generating a report.">
         <!-- Clean out old logs first -->
         <delete failonerror="false">
             <fileset dir="${junit.results.dir}">
