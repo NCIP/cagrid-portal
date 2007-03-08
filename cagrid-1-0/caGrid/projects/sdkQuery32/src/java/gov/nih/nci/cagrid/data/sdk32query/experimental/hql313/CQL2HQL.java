@@ -26,7 +26,7 @@ import java.util.Map;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2HQL.java,v 1.1 2007-03-08 20:21:41 dervin Exp $ 
+ * @version $Id: CQL2HQL.java,v 1.2 2007-03-08 20:35:29 dervin Exp $ 
  */
 public class CQL2HQL {
 	
@@ -194,6 +194,8 @@ public class CQL2HQL {
 			if (caseInsensitive && !isBoolAttribute) {
 				hql.append(')');
 			}
+		} else {
+			hql.append(predicateAsString);
 		}
 	}
 	
