@@ -25,66 +25,66 @@ import javax.swing.JTabbedPane;
 
 import org.projectmobius.portal.PortalResourceManager;
 
-
-/**
- * SchemaResolutionDialog Dialog to resolve schemas from all available namespace
- * type discovery extension components
+/** 
+ *  SchemaResolutionDialog
+ *  Dialog to resolve schemas from all available namespace type discovery extension components
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
- * @created Sep 27, 2006
- * @version $Id$
+ * 
+ * @created Sep 27, 2006 
+ * @version $Id$ 
  */
 public class SchemaResolutionDialog extends JDialog {
-
+	
 	public static final String SELECT_AN_ITEM = " -- SELECT AN ITEM --";
-
+	
 	private transient ServiceInformation serviceInfo;
 	private transient CadsrPackage cadsrPackage;
-
+	
 	private JButton loadSchemasButton = null;
 	private JButton cancelButton = null;
 	private JPanel buttonPanel = null;
 	private JPanel mainPanel = null;
 	private JTabbedPane discoveryTabbedPane = null;
 	private NamespaceType[] resolvedSchemas;
-
-
+	
 	private SchemaResolutionDialog(ServiceInformation info, CadsrPackage pack) {
 		super(PortalResourceManager.getInstance().getGridPortal(), "Schema Resolution", true);
-		serviceInfo = info;
-		cadsrPackage = pack;
-		resolvedSchemas = null;
+		this.serviceInfo = info;
+		this.cadsrPackage = pack;
+		this.resolvedSchemas = null;
 		initialize();
 	}
-
-
+	
+	
 	/**
 	 * Resolves schemas for the given cadsr package
 	 * 
 	 * @param info
 	 * @param pack
-	 * @return null if an error occurs resolving schemas an empty array (length ==
-	 *         0) if user cancels the dialog array of NamespaceType (length !=
-	 *         0) if resolution was successful
+	 * @return
+	 * 		null if an error occurs resolving schemas
+	 * 		an empty array (length == 0) if user cancels the dialog
+	 * 		array of NamespaceType (length != 0) if resolution was successful
 	 */
 	public static NamespaceType[] resolveSchemas(ServiceInformation info, CadsrPackage pack) {
 		SchemaResolutionDialog dialog = new SchemaResolutionDialog(info, pack);
 		return dialog.resolvedSchemas;
 	}
-
-
+	
+	
 	private void initialize() {
 		setModal(true);
 		this.setSize(new java.awt.Dimension(400, 330));
 		this.setContentPane(getMainPanel());
 		this.setVisible(true);
 	}
-
+	
 
 	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
+	 * This method initializes jButton	
+	 * 	
+	 * @return javax.swing.JButton	
 	 */
 	private JButton getLoadSchemasButton() {
 		if (loadSchemasButton == null) {
@@ -104,9 +104,9 @@ public class SchemaResolutionDialog extends JDialog {
 
 
 	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
+	 * This method initializes jButton	
+	 * 	
+	 * @return javax.swing.JButton	
 	 */
 	private JButton getCancelButton() {
 		if (cancelButton == null) {
@@ -124,19 +124,19 @@ public class SchemaResolutionDialog extends JDialog {
 
 
 	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.gridx = 1;
-			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints15.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints15.gridy = 0;
 			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
 			gridBagConstraints14.gridx = 0;
-			gridBagConstraints14.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints14.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints14.gridy = 0;
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new GridBagLayout());
@@ -148,9 +148,9 @@ public class SchemaResolutionDialog extends JDialog {
 
 
 	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
@@ -159,12 +159,12 @@ public class SchemaResolutionDialog extends JDialog {
 			gridBagConstraints.gridy = 0;
 			gridBagConstraints.weightx = 1.0;
 			gridBagConstraints.weighty = 1.0;
-			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints.gridx = 0;
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
 			gridBagConstraints19.gridx = 0;
 			gridBagConstraints19.anchor = java.awt.GridBagConstraints.EAST;
-			gridBagConstraints19.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints19.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints19.gridy = 1;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
@@ -173,8 +173,8 @@ public class SchemaResolutionDialog extends JDialog {
 		}
 		return mainPanel;
 	}
-
-
+	
+	
 	private JTabbedPane getDiscoveryTabbedPane() {
 		if (discoveryTabbedPane == null) {
 			discoveryTabbedPane = new JTabbedPane();
@@ -199,17 +199,15 @@ public class SchemaResolutionDialog extends JDialog {
 		}
 		return discoveryTabbedPane;
 	}
-
-
+	
+	
 	private NamespaceType[] loadSchemas() {
 		// get the disvovery type component
 		NamespaceTypeDiscoveryComponent discComponent = (NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane()
 			.getSelectedComponent();
 		// get the service's schema directory
-		File schemaDir = new File(CacoreWizardUtils.getServiceBaseDir(serviceInfo)
-			+ File.separator
-			+ "schema"
-			+ File.separator
+		File schemaDir = new File(CacoreWizardUtils.getServiceBaseDir(serviceInfo) 
+			+ File.separator + "schema" + File.separator 
 			+ serviceInfo.getIntroduceServiceProperties().getProperty(
 				IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 		NamespaceType[] namespaces = discComponent.createNamespaceType(schemaDir, ResourceManager
