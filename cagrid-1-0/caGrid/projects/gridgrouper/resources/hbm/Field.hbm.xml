@@ -20,7 +20,7 @@
   limitations under the License.
 -->
 
-<!-- $Id: Field.hbm.xml,v 1.5 2007-03-08 20:41:32 langella Exp $ -->
+<!-- $Id: Field.hbm.xml,v 1.6 2007-03-08 21:44:50 langella Exp $ -->
 
 <hibernate-mapping package="edu.internet2.middleware.grouper">
   <class name="Field" table="grouper_fields">
@@ -104,10 +104,9 @@ Schema specification for a Group attribute or list.
     <!-- nullable -->
     <property name="nullable"
               type="boolean"
-    >
-    <column name="nullable" sql-type="boolean"/>
-    </property>
+    />
     <!-- nullable -->
 
   </class>
 </hibernate-mapping>
+
