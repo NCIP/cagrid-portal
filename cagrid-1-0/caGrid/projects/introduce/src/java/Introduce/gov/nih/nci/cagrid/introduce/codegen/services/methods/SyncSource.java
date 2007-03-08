@@ -50,6 +50,12 @@ public class SyncSource {
 
 	private ServiceType service;
 
+	private static final String TAB = "\t";
+
+	private static final String DOUBLE_TAB = TAB + TAB;
+
+	private static final String TRIPPLE_TAB = DOUBLE_TAB + TAB;
+
 
 	public SyncSource(File baseDir, ServiceInformation info, ServiceType service) {
 		this.service = service;
@@ -71,34 +77,33 @@ public class SyncSource {
 
 	public String createJavaDoc(MethodType method) {
 		if (method.getDescription() != null) {
-			String javaDoc = "\t/**************************************************\n";
+			String javaDoc = TAB + "/**************************************************\n";
 			if (method.getDescription() != null) {
-				javaDoc += "\t* " + method.getDescription() + "\n\t*\n";
+				javaDoc += TAB + "* " + method.getDescription() + "\n";
+				javaDoc += TAB + "*\n";
 			}
 			if ((method.getInputs() != null) && (method.getInputs().getInput() != null)
 				&& (method.getInputs().getInput().length > 0)) {
 				for (int i = 0; i < method.getInputs().getInput().length; i++) {
-					javaDoc += "\t* @param " + method.getInputs().getInput(i).getName();
+					javaDoc += TAB + "* @param " + method.getInputs().getInput(i).getName() + "\n";
 					if (method.getInputs().getInput(i).getDescription() != null) {
-						javaDoc += "\n\t*\t" + method.getInputs().getInput(i).getDescription();
+						javaDoc += TAB + "*\t" + method.getInputs().getInput(i).getDescription() + "\n";
 					}
-					javaDoc += "\n";
 				}
 			}
 			if ((method.getOutput() != null) && (method.getOutput().getDescription() != null)) {
-				javaDoc += "\t* @return " + method.getOutput().getDescription() + "\n";
+				javaDoc += TAB + "* @return " + method.getOutput().getDescription() + "\n";
 			}
 			if ((method.getExceptions() != null) && (method.getExceptions().getException() != null)
 				&& (method.getExceptions().getException().length > 0)) {
 				for (int i = 0; i < method.getExceptions().getException().length; i++) {
-					javaDoc += "\t* @throws " + method.getExceptions().getException(i).getName();
+					javaDoc += TAB + "* @throws " + method.getExceptions().getException(i).getName() + "\n";
 					if (method.getExceptions().getException(i).getDescription() != null) {
-						javaDoc += "\n\t*\t" + method.getExceptions().getException(i).getDescription();
+						javaDoc += TAB + "*\t" + method.getExceptions().getException(i).getDescription() + "\n";
 					}
-					javaDoc += "\n";
 				}
 			}
-			javaDoc += "\t**************************************************/";
+			javaDoc += TAB + "**************************************************/";
 			return javaDoc;
 		} else {
 			return "";
@@ -143,10 +148,6 @@ public class SyncSource {
 		String exceptions = "";
 		// process the faults for this method...
 		MethodTypeExceptions exceptionsEl = method.getExceptions();
-		// String packageName = service.getPackageName() + ".stubs";
-		// if (method.isIsImported()) {
-		// packageName = method.getImportInformation().getPackageName();
-		// }
 		exceptions += "RemoteException";
 		if ((exceptionsEl != null) && (exceptionsEl.getException() != null)) {
 			if (exceptionsEl.getException().length > 0) {
@@ -417,18 +418,18 @@ public class SyncSource {
 				String clientMethod = null;
 				if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 					&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-					clientMethod = "\n    " + createBoxedSignatureStringFromMethod(method) + " "
+					clientMethod = TAB + createBoxedSignatureStringFromMethod(method) + " "
 						+ createClientExceptions(method);
 				} else {
-					clientMethod = "\n    " + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+					clientMethod = TAB + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
 						+ createClientExceptions(method);
 				}
-				clientMethod += ";\n";
+				clientMethod += ";\n\n";
 
-				fileContent.insert(endOfClass - 1, clientMethod);
+				fileContent.insert(endOfClass, clientMethod);
 				try {
 					FileWriter fw = new FileWriter(new File(serviceInterface));
-					fw.write(fileContent.toString());
+					fw.write(removeMultiNewLines(fileContent.toString()));
 					fw.close();
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -466,9 +467,9 @@ public class SyncSource {
 
 				if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 					&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-					clientMethod = "\n    " + createBoxedSignatureStringFromMethod(mod.getIMethod());
+					clientMethod = TAB + createBoxedSignatureStringFromMethod(mod.getIMethod());
 				} else {
-					clientMethod = "\n    " + createClientUnBoxedSignatureStringFromMethod(mod.getIMethod());
+					clientMethod = TAB + createClientUnBoxedSignatureStringFromMethod(mod.getIMethod());
 				}
 				int startOfMethod = startOfSignature(fileContent, clientMethod);
 				String restOfFile = fileContent.substring(startOfMethod);
@@ -487,15 +488,15 @@ public class SyncSource {
 
 				if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 					&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-					clientMethod = "\n    " + createBoxedSignatureStringFromMethod(method) + " "
+					clientMethod = TAB + createBoxedSignatureStringFromMethod(method) + " "
 						+ createClientExceptions(method);
 				} else {
-					clientMethod = "\n    " + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+					clientMethod = TAB + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
 						+ createClientExceptions(method);
 				}
-				clientMethod += ";\n";
+				clientMethod += ";\n\n";
 
-				fileContent.insert(endOfClass - 1, clientMethod);
+				fileContent.insert(endOfClass, clientMethod);
 				try {
 					FileWriter fw = new FileWriter(new File(serviceInterface));
 					fw.write(removeMultiNewLines(fileContent.toString()));
@@ -529,7 +530,7 @@ public class SyncSource {
 		}
 
 		// insert the new client method
-		int endOfClass = fileContent.lastIndexOf("}") - 2;
+		int endOfClass = fileContent.lastIndexOf("}");
 
 		addClientImpl(method, endOfClass);
 	}
@@ -544,27 +545,25 @@ public class SyncSource {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String lineStart = "      ";
 
 		// insert the new client method
 		String clientMethod = null;
 		if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-			clientMethod = "\n\t" + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
+			clientMethod = TAB + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
 		} else {
-			clientMethod = "\n\t" + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+			clientMethod = TAB + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
 				+ createClientExceptions(method);
 		}
 		clientMethod += "{\n";
-		clientMethod += lineStart + "synchronized(portTypeMutex){\n";
-		lineStart += "  ";
-		clientMethod += lineStart + "configureStubSecurity((Stub)portType,\""
+		clientMethod += DOUBLE_TAB + "synchronized(portTypeMutex){\n";
+		clientMethod += TRIPPLE_TAB + "configureStubSecurity((Stub)portType,\""
 			+ TemplateUtils.lowerCaseFirstCharacter(method.getName()) + "\");\n";
 
 		// put in the call to the client
 		String var = "portType";
 
-		String methodString = lineStart;
+		String methodString = DOUBLE_TAB;
 		MethodTypeOutput returnTypeEl = method.getOutput();
 
 		if (!method.isIsImported()
@@ -582,30 +581,30 @@ public class SyncSource {
 					String containerClassName = method.getInputs().getInput(j).getContainerClass();
 					String containerMethodCall = TemplateUtils.upperCaseFirstCharacter(JavaUtils
 						.xmlNameToJava(inNamespace.getType().getType()));
-					methodString += lineStart;
+					methodString += DOUBLE_TAB;
 					if (inNamespace.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 						methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "("
 							+ paramName + ");\n";
 					} else {
 						methodString += containerClassName + " " + paramName + "Container = new " + containerClassName
 							+ "();\n";
-						methodString += lineStart;
+						methodString += DOUBLE_TAB;
 						methodString += paramName + "Container.set" + containerMethodCall + "(" + paramName + ");\n";
-						methodString += lineStart;
+						methodString += DOUBLE_TAB;
 						methodString += "params.set" + TemplateUtils.upperCaseFirstCharacter(paramName) + "("
 							+ paramName + "Container);\n";
 					}
 				}
 			}
 			// make the call
-			methodString += lineStart;
+			methodString += DOUBLE_TAB;
 
 			// always boxed returns now because of complex types in wsdl
 			methodString += method.getOutputMessageClass() + " boxedResult = " + var + "." + methodName + "(params);\n";
 
 			if (!returnTypeEl.getQName().getNamespaceURI().equals("")
 				&& !returnTypeEl.getQName().getLocalPart().equals("void")) {
-				methodString += lineStart;
+				methodString += DOUBLE_TAB;
 				SchemaInformation info = CommonTools.getSchemaInformation(serviceInfo.getNamespaces(), returnTypeEl
 					.getQName());
 				if (info.getNamespace().getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
@@ -620,21 +619,21 @@ public class SyncSource {
 						// then return the client handle...
 						if (returnTypeEl.isIsArray()) {
 							methodString += returnTypeEl.getClientHandleClass() + "[] clientArray = null;\n";
-							methodString += lineStart + "if(boxedResult.getEndpointReference()!=null){\n";
-							methodString += lineStart + "  clientArray = new " + returnTypeEl.getClientHandleClass()
+							methodString += DOUBLE_TAB + "if(boxedResult.getEndpointReference()!=null){\n";
+							methodString += DOUBLE_TAB + "  clientArray = new " + returnTypeEl.getClientHandleClass()
 								+ "[boxedResult.getEndpointReference().length];\n";
-							methodString += lineStart
+							methodString += DOUBLE_TAB
 								+ "  for(int i = 0; i < boxedResult.getEndpointReference().length; i++){\n";
-							methodString += lineStart + "	   clientArray[i] = new "
+							methodString += DOUBLE_TAB + "	   clientArray[i] = new "
 								+ returnTypeEl.getClientHandleClass() + "(boxedResult.getEndpointReference(i));\n";
-							methodString += lineStart + "  }\n";
-							methodString += lineStart + "}\n";
-							methodString += lineStart + "return clientArray;\n";
+							methodString += DOUBLE_TAB + "  }\n";
+							methodString += DOUBLE_TAB + "}\n";
+							methodString += DOUBLE_TAB + "return clientArray;\n";
 						} else {
 							methodString += "EndpointReferenceType ref = boxedResult.get";
 							methodString += TemplateUtils.upperCaseFirstCharacter(info.getType().getType())
 								+ "().getEndpointReference();\n";
-							methodString += lineStart + "return new " + returnTypeEl.getClientHandleClass()
+							methodString += DOUBLE_TAB + "return new " + returnTypeEl.getClientHandleClass()
 								+ "(ref);\n";
 						}
 					} else {
@@ -660,8 +659,8 @@ public class SyncSource {
 		}
 
 		clientMethod += methodString;
-		clientMethod += "      }\n";
-		clientMethod += "    }\n";
+		clientMethod += DOUBLE_TAB + "}\n";
+		clientMethod += TAB + "}\n\n";
 
 		fileContent.insert(fileLocation, clientMethod);
 		try {
@@ -688,22 +687,22 @@ public class SyncSource {
 		int endOfClass = fileContent.lastIndexOf("}");
 		if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-			clientMethod = "\t\n" + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
+			clientMethod = TAB + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
 		} else {
-			clientMethod = "\n\t" + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+			clientMethod = TAB + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
 				+ createExceptions(method, serviceInfo, service);
 		}
 
 		clientMethod += "{\n";
-		clientMethod += "\t\t//TODO: Implement this autogenerated method\n";
-		clientMethod += "\t\tthrow new RemoteException(\"Not yet implemented\");\n";
-		clientMethod += "\t}\n";
+		clientMethod += DOUBLE_TAB + "//TODO: Implement this autogenerated method\n";
+		clientMethod += DOUBLE_TAB + "throw new RemoteException(\"Not yet implemented\");\n";
+		clientMethod += TAB + "}\n\n";
 
-		fileContent.insert(endOfClass - 1, clientMethod);
+		fileContent.insert(endOfClass, clientMethod);
 		try {
 			String fileContentString = fileContent.toString();
 			FileWriter fw = new FileWriter(new File(serviceImpl));
-			fw.write(fileContentString);
+			fw.write(removeMultiNewLines(fileContentString));
 			fw.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -724,7 +723,6 @@ public class SyncSource {
 		int endOfClass = fileContent.lastIndexOf("}");
 
 		String var = "impl";
-		String lineStart = "\t\t";
 		String methodName = TemplateUtils.lowerCaseFirstCharacter(method.getName());
 
 		String clientMethod = "";
@@ -737,14 +735,14 @@ public class SyncSource {
 			// slh -- in migration to globus 4 we need to check here for
 			// autoboxing
 			// and get appropriate
-			clientMethod = "\n\t" + createBoxedSignatureStringFromMethod(method) + " "
+			clientMethod = DOUBLE_TAB + createBoxedSignatureStringFromMethod(method) + " "
 				+ createExceptions(method, serviceInfo, service);
 
 			// clientMethod += " throws RemoteException";
 			clientMethod += "{\n";
 
 			// Authorization
-			clientMethod += "\t\t" + TemplateUtils.upperCaseFirstCharacter(service.getName())
+			clientMethod += DOUBLE_TAB + TemplateUtils.upperCaseFirstCharacter(service.getName())
 				+ "Authorization.authorize" + TemplateUtils.upperCaseFirstCharacter(method.getName()) + "();\n";
 			// clientMethod +=
 			// SyncAuthorization.addAuthorizationToProviderImpl(service, method,
@@ -795,10 +793,10 @@ public class SyncSource {
 			}
 
 			// need to unbox on the way out
-			methodString += lineStart;
+			methodString += DOUBLE_TAB;
 			methodString += method.getOutputMessageClass() + " boxedResult = new " + method.getOutputMessageClass()
 				+ "();\n";
-			methodString += lineStart;
+			methodString += DOUBLE_TAB;
 			if (returnTypeEl.getQName().getNamespaceURI().equals("")
 				&& returnTypeEl.getQName().getLocalPart().equals("void")) {
 				// just call but dont set anything
@@ -814,16 +812,16 @@ public class SyncSource {
 						+ methodName + "(" + params + "));\n";
 				}
 			}
-			methodString += lineStart;
+			methodString += DOUBLE_TAB;
 			methodString += "return boxedResult;\n";
 			clientMethod += methodString;
-			clientMethod += "\t}\n";
+			clientMethod += TAB + "}\n\n";
 
 		} else {
 			// create a boxed call
-			clientMethod = "\n\t" + createBoxedSignatureStringFromMethod(method) + " "
+			clientMethod = TAB + createBoxedSignatureStringFromMethod(method) + " "
 				+ createExceptions(method, serviceInfo, service);
-			clientMethod += "{\n\t\t";
+			clientMethod += "{\n" + DOUBLE_TAB;
 			if (method.getOutputMessageClass() != null) {
 				clientMethod += "return ";
 			}
@@ -835,10 +833,10 @@ public class SyncSource {
 			}
 
 			clientMethod += methodString;
-			clientMethod += "\t}\n";
+			clientMethod += TAB + "}\n\n";
 		}
 
-		fileContent.insert(endOfClass - 1, clientMethod);
+		fileContent.insert(endOfClass, clientMethod);
 
 		try {
 			FileWriter fw = new FileWriter(new File(serviceProviderImpl));
@@ -1066,9 +1064,9 @@ public class SyncSource {
 		String clientMethod = "";
 		if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-			clientMethod = "\n    " + createBoxedSignatureStringFromMethod(oldMethod);
+			clientMethod = TAB + createBoxedSignatureStringFromMethod(oldMethod);
 		} else {
-			clientMethod = "\n    " + createClientUnBoxedSignatureStringFromMethod(oldMethod);
+			clientMethod = TAB + createClientUnBoxedSignatureStringFromMethod(oldMethod);
 		}
 		int startOfMethod = startOfSignature(fileContent, clientMethod);
 		int endOfSignature = endOfSignature(fileContent, startOfMethod);
@@ -1083,9 +1081,9 @@ public class SyncSource {
 		// add in the new modified signature
 		if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-			clientMethod = "\t\n" + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
+			clientMethod = TAB + createBoxedSignatureStringFromMethod(method) + " " + createClientExceptions(method);
 		} else {
-			clientMethod = "\n\t" + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+			clientMethod = TAB + createUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
 				+ createExceptions(method, serviceInfo, service);
 		}
 		clientMethod += "{";
