@@ -67,6 +67,7 @@
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
 		</fileset>
+		<pathelement location="${build.dest}"/>
 	</path>
 	
 	<!-- check for java 1.5 -->
