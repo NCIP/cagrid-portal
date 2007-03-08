@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.sdk32query.experiemental;
+package gov.nih.nci.cagrid.data.sdk32query.experimental.directcql;
 
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.system.query.cql.CQLAssociation;
@@ -19,7 +19,7 @@ import java.util.Map;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Jan 22, 2007 
- * @version $Id: CQL2CoreCQL.java,v 1.2 2007-02-01 16:39:45 dervin Exp $ 
+ * @version $Id: CQL2CoreCQL.java,v 1.1 2007-03-08 20:21:41 dervin Exp $ 
  */
 public class CQL2CoreCQL {
 	

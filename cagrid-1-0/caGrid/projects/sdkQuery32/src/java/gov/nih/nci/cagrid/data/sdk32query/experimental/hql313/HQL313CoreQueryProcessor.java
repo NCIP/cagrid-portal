@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.data.sdk32query.experiemental.hql313;
+package gov.nih.nci.cagrid.data.sdk32query.experimental.hql313;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
@@ -27,7 +27,7 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 3:22:07 PM
- * @version $Id: HQL313CoreQueryProcessor.java,v 1.1 2007-03-02 21:06:29 dervin Exp $ 
+ * @version $Id: HQL313CoreQueryProcessor.java,v 1.1 2007-03-08 20:21:41 dervin Exp $ 
  */
 public class HQL313CoreQueryProcessor extends CQLQueryProcessor {
 	public static final String APPSERVICE_URL = "applicationServiceUrl";
