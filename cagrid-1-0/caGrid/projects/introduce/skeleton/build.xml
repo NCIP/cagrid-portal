@@ -63,13 +63,13 @@
 
 	<!--import deployment ant files -->
 	<import file="build-deploy.xml" />
-	
+
 	<!--import run ant files -->
 	<import file="run-tools.xml" />
 
 	<!--import developers targets and properties -->
 	<import file="dev-build.xml" />
-	
+
 	<!--import developers deploy targets and properties -->
 	<import file="dev-build-deploy.xml" />
 
@@ -109,7 +109,7 @@
 
 	<!-- Sets up the build directory structure -->
 	<target name="init" depends="checkGlobus, defineClasspaths">
-		<antcall target="preInit" inheritall="true" />
+		<runtarget target="preInit" />
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
 		<mkdir dir="${test.build.dest}" />
@@ -133,11 +133,11 @@
 
 		<!-- Creates etc.dir in case it doesn't exist. Has no effect if dir already exists -->
 		<mkdir dir="${etc.dir}" />
-		<antcall target="postInit" inheritall="true" />
+		<runtarget target="postInit" />
 	</target>
 
 	<target name="defineClasspaths">
-		<antcall target="defineExtendedClasspaths" inheritall="true" />
+		<runtarget target="defineExtendedClasspaths" />
 		<path id="base.classpath">
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
@@ -215,7 +215,7 @@
 	<!-- Generate the stub source files -->
 	<!-- This is done with a GT4 tool -->
 	<target name="stubs" depends="init">
-		<antcall target="preStubs" inheritall="true" />
+		<runtarget target="preStubs" />
 		<for list="${introduce.skeleton.services.list}" parallel="false" param="service.name" trim="true">
 			<sequential>
 				<echo message="Generating stubs for @{service.name}." />
@@ -224,9 +224,8 @@
 				</antcall>
 			</sequential>
 		</for>
-		<antcall target="stubGenerationPostProcesser">
-		</antcall>
-		<antcall target="postStubs" inheritall="true" />
+		<antcall target="stubGenerationPostProcesser" />
+		<runtarget target="postStubs" />
 	</target>
 
 	<target name="stubGenerationPostProcesser">
@@ -238,17 +237,17 @@
 
 	<!-- Compile the stubs generated in the previous step -->
 	<target name="compileStubs" depends="stubs">
-		<antcall target="preCompileStubs" inheritall="true" />
+		<runtarget target="preCompileStubs" />
 		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}" classpathref="base.classpath">
 			<include name="**/*.java" />
 		</javac>
-		<antcall target="postCompileStubs" inheritall="true" />
+		<runtarget target="postCompileStubs" />
 	</target>
 
 
 	<!-- Compile the implementation classes (service, resource, etc.) -->
 	<target name="compile" depends="compileStubs" description="Compiles the service.">
-		<antcall target="preCompile" inheritall="true" />
+		<runtarget target="preCompile" />
 		<javac srcdir="${src.dir}" classpathref="service.build.classpath" includes="**" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
 
 		<!-- Copy the source code, wsdd, properties, etc to the build dir for include in the jar -->
@@ -257,21 +256,21 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		<antcall target="postCompile" inheritall="true" />
+		<runtarget target="postCompile" />
 	</target>
 
 
 	<!-- Compile the test implementation classes (service, resource, etc.) -->
 	<target name="compileTests" depends="compile">
-		<antcall target="preCompileTests" inheritall="true" />
+		<runtarget target="preCompileTests" />
 		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
-		<antcall target="postCompileStubs" inheritall="true" />
+		<runtarget target="postCompileStubs" />
 	</target>
 
 
 	<!-- Create a JAR file with the implementation classes -->
 	<target name="jar" depends="compile">
-		<antcall target="preJar" inheritall="true" />
+		<runtarget target="preJar" />
 		<jar jarfile="${build.lib.dir}/${client.jar.name}" basedir="${build.dest}">
 			<include name="**/client/**" />
 		</jar>
@@ -283,23 +282,23 @@
 			<exclude name="**/client/**" />
 			<exclude name="**/service/**" />
 		</jar>
-		<antcall target="postJar" inheritall="true" />
+		<runtarget target="postJar" />
 	</target>
 
 
 	<!-- Create a JAR file with the test implementation classes -->
 	<target name="jarTests" depends="jar,compileTests">
-		<antcall target="preJarTests" inheritall="true" />
+		<runtarget target="preJarTests" />
 		<jar jarfile="${build.lib.dir}/${test.jar.name}" basedir="${test.build.dest}" />
-		<antcall target="postJarTests" inheritall="true" />
+		<runtarget target="postJarTests" />
 	</target>
 
 
 	<!-- Create a JAR file with the stub classes -->
 	<target name="jarStubs" depends="compileStubs">
-		<antcall target="preJarStubs" inheritall="true" />
+		<runtarget target="preJarStubs" />
 		<jar destfile="${build.lib.dir}/${stubs.jar.name}" basedir="${stubs.dest}" />
-		<antcall target="postJarStubs" inheritall="true" />
+		<runtarget target="postJarStubs" />
 	</target>
 
 
@@ -325,11 +324,11 @@
 
 	<!-- Clean up all the intermediate files -->
 	<target name="clean" description="Removes all generated build artifacts.">
-		<antcall target="preClean" inheritall="true" />
+		<runtarget target="preClean" />
 		<delete dir="tmp" />
 		<delete dir="${build.dir}" />
 		<delete file="${gar.name}" />
-		<antcall target="postClean" inheritall="true" />
+		<runtarget target="postClean" />
 	</target>
 
 	<!-- =================================================================== -->

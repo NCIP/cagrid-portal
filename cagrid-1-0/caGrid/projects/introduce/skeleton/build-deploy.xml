@@ -77,7 +77,7 @@
 		<mkdir dir="tmp" />
 		
 		
-		<antcall target="preDeployTomcat" inheritall="true" />
+		<runtarget target="preDeployTomcat"/>
 			
 			
 		<copy overwrite="true" todir="tmp" file="server-config.wsdd" />
@@ -152,7 +152,7 @@
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
 		
-		<antcall target="preDeployGlobus" inheritall="true" />
+		<runtarget target="preDeployGlobus"/>
 				
 		<copy overwrite="true" todir="tmp" file="server-config.wsdd" />
 		<!-- replace the config paths in the server deploy file -->
