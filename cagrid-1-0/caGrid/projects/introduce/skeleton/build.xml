@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-<!-- adopted from GTBS and modified -->
 <project default="help" name="Introduce Master Build File" basedir=".">
 
 	<!-- ============================================================== -->
@@ -19,6 +18,7 @@
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
 	<property name="lib.dir" value="lib" />
+	<property name="ext.lib.dir" value="ext/lib" />
 	<property name="etc.dir" value="etc" />
 	<property name="schema.dir" value="schema" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
@@ -74,9 +74,10 @@
 	<import file="dev-build-deploy.xml" />
 
 
+	<!-- using ant contrib for contidionals, looping , and runtarget -->
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
-			<pathelement location="${lib.dir}/ant-contrib.jar" />
+			<pathelement location="${ext.lib.dir}/ant-contrib.jar" />
 		</classpath>
 	</taskdef>
 

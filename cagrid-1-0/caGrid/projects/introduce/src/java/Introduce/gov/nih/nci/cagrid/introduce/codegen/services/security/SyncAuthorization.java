@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.codegen.security;
+package gov.nih.nci.cagrid.introduce.codegen.services.security;
 
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClientUtils;

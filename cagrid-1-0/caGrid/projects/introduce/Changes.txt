@@ -5,6 +5,7 @@
 	--index.service.registration.refresh_seconds=600
 	--index.service.index.refresh_milliseconds=30000
 -- Added "dev" build.xml and build-deploy.xml which the user can freely edit without expecting changes by updates
+-- Moved ant-contrib.jar to ext/lib in the service instead of lib because the service itself does not need that jar as it is only used for building
 
 
 
