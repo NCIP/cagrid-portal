@@ -40,7 +40,7 @@ import javax.swing.ScrollPaneConstants;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Jan 8, 2007 
- * @version $Id: ClientJarSelectionPanel.java,v 1.3 2007-02-26 19:01:12 dervin Exp $ 
+ * @version $Id: ClientJarSelectionPanel.java,v 1.4 2007-03-09 16:53:50 dervin Exp $ 
  */
 public class ClientJarSelectionPanel extends AbstractWizardPanel {
 	
@@ -135,7 +135,7 @@ public class ClientJarSelectionPanel extends AbstractWizardPanel {
 
 
 	public String getPanelTitle() {
-		return "Client jar and depencendy selection"; 
+		return "Client jar and dependency selection"; 
 	}
 
 
@@ -377,6 +377,8 @@ public class ClientJarSelectionPanel extends AbstractWizardPanel {
 					getClientJarTextField().setText(outLib.getName());
 					setNextEnabled(true);
 					storeLibrariesInExtensionData();
+				} else {
+					ErrorDialog.showErrorDialog("Selected file does not appear to be an SDK client");
 				}
 			} catch (IOException ex) {
 				ex.printStackTrace();
