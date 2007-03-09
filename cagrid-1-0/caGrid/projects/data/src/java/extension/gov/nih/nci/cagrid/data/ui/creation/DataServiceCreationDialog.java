@@ -311,9 +311,12 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 				extension.setName(desc.getServiceExtensionDescription().getName());
 				extension.setExtensionType(desc.getExtensionType());
 				extension.setVersion(desc.getVersion());
-				getServiceInfo().getExtensions().setExtension(
-					(ExtensionType[]) Utils.appendToArray(
-						getServiceInfo().getExtensions().getExtension(), extension));
+				// BDT extension has to run before data extension does
+				ExtensionType[] currentExtensions = getServiceInfo().getExtensions().getExtension();
+				ExtensionType[] newExtensions = new ExtensionType[currentExtensions.length + 1];
+				newExtensions[0] = extension;
+				System.arraycopy(currentExtensions, 0, newExtensions, 0, currentExtensions.length);
+				getServiceInfo().getExtensions().setExtension(newExtensions);
 			}
 		}
 		
