@@ -18,6 +18,8 @@ support registration on resources
 
 To Do:
 
+need to clean up config params and deploy params to have "display" names
+
 might need to modify new dev-* files in the skeleton to use macros and not and tasks
 
 need to validate soapfix
