@@ -50,7 +50,7 @@ public class SyncSource {
 
 	private ServiceType service;
 
-	private static final String TAB = "\t";
+	private static final String TAB = "  ";
 
 	private static final String DOUBLE_TAB = TAB + TAB;
 
@@ -76,34 +76,36 @@ public class SyncSource {
 
 
 	public String createJavaDoc(MethodType method) {
-		if (method.getDescription() != null) {
-			String javaDoc = TAB + "/**************************************************\n";
+		if ((method.getDescription() != null) && !method.getDescription().trim().equals("")) {
+			String javaDoc = TAB + "/**\n";
 			if (method.getDescription() != null) {
-				javaDoc += TAB + "* " + method.getDescription() + "\n";
-				javaDoc += TAB + "*\n";
+				javaDoc += TAB + " * " + method.getDescription() + "\n";
+				javaDoc += TAB + " *\n";
 			}
 			if ((method.getInputs() != null) && (method.getInputs().getInput() != null)
 				&& (method.getInputs().getInput().length > 0)) {
 				for (int i = 0; i < method.getInputs().getInput().length; i++) {
-					javaDoc += TAB + "* @param " + method.getInputs().getInput(i).getName() + "\n";
-					if (method.getInputs().getInput(i).getDescription() != null) {
-						javaDoc += TAB + "*\t" + method.getInputs().getInput(i).getDescription() + "\n";
+					javaDoc += TAB + " * @param " + method.getInputs().getInput(i).getName() + "\n";
+					if ((method.getInputs().getInput(i).getDescription() != null)
+						&& (method.getInputs().getInput(i).getDescription().length() > 0)) {
+						javaDoc += TAB + " *\t" + method.getInputs().getInput(i).getDescription() + "\n";
 					}
 				}
 			}
-			if ((method.getOutput() != null) && (method.getOutput().getDescription() != null)) {
-				javaDoc += TAB + "* @return " + method.getOutput().getDescription() + "\n";
+			if ((method.getOutput() != null) && (method.getOutput().getDescription() != null)
+				&& (method.getOutput().getDescription().length() > 0)) {
+				javaDoc += TAB + " * @return " + method.getOutput().getDescription() + "\n";
 			}
 			if ((method.getExceptions() != null) && (method.getExceptions().getException() != null)
 				&& (method.getExceptions().getException().length > 0)) {
 				for (int i = 0; i < method.getExceptions().getException().length; i++) {
-					javaDoc += TAB + "* @throws " + method.getExceptions().getException(i).getName() + "\n";
+					javaDoc += TAB + " * @throws " + method.getExceptions().getException(i).getName() + "\n";
 					if (method.getExceptions().getException(i).getDescription() != null) {
-						javaDoc += TAB + "*\t" + method.getExceptions().getException(i).getDescription() + "\n";
+						javaDoc += TAB + " *\t" + method.getExceptions().getException(i).getDescription() + "\n";
 					}
 				}
 			}
-			javaDoc += TAB + "**************************************************/";
+			javaDoc += TAB + " */";
 			return javaDoc;
 		} else {
 			return "";
@@ -418,10 +420,11 @@ public class SyncSource {
 				String clientMethod = null;
 				if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 					&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-					clientMethod = TAB + createBoxedSignatureStringFromMethod(method) + " "
-						+ createClientExceptions(method);
+					clientMethod = createJavaDoc(method) + "\n" + TAB + createBoxedSignatureStringFromMethod(method)
+						+ " " + createClientExceptions(method);
 				} else {
-					clientMethod = TAB + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+					clientMethod = createJavaDoc(method) + "\n" + TAB
+						+ createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
 						+ createClientExceptions(method);
 				}
 				clientMethod += ";\n\n";
@@ -467,13 +470,14 @@ public class SyncSource {
 
 				if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 					&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-					clientMethod = TAB + createBoxedSignatureStringFromMethod(mod.getIMethod());
+					clientMethod = createBoxedSignatureStringFromMethod(mod.getIMethod());
 				} else {
-					clientMethod = TAB + createClientUnBoxedSignatureStringFromMethod(mod.getIMethod());
+					clientMethod = createClientUnBoxedSignatureStringFromMethod(mod.getIMethod());
 				}
 				int startOfMethod = startOfSignature(fileContent, clientMethod);
 				String restOfFile = fileContent.substring(startOfMethod);
 				int endOfMethod = startOfMethod + restOfFile.indexOf(";") + 1;
+				startOfMethod = startOfJavaDoc(fileContent, startOfMethod);
 
 				if ((startOfMethod == -1) || (endOfMethod == -1)) {
 					System.err.println("WARNING: Unable to locate method in I : "
@@ -488,10 +492,11 @@ public class SyncSource {
 
 				if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 					&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-					clientMethod = TAB + createBoxedSignatureStringFromMethod(method) + " "
-						+ createClientExceptions(method);
+					clientMethod = createJavaDoc(method) + "\n" + TAB + createBoxedSignatureStringFromMethod(method)
+						+ " " + createClientExceptions(method);
 				} else {
-					clientMethod = TAB + createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
+					clientMethod = createJavaDoc(method) + "\n" + TAB
+						+ createClientUnBoxedSignatureStringFromMethod(method, serviceInfo) + " "
 						+ createClientExceptions(method);
 				}
 				clientMethod += ";\n\n";
@@ -865,7 +870,8 @@ public class SyncSource {
 			System.err.println("Looking to remove method: |" + clientMethod + "|");
 			int startOfMethod = startOfSignature(fileContent, clientMethod);
 			String restOfFile = fileContent.substring(startOfMethod);
-			int endOfMethod = startOfMethod + restOfFile.indexOf(";\n") + 2;
+			int endOfMethod = startOfMethod + restOfFile.indexOf(";") + 1;
+			startOfMethod = startOfJavaDoc(fileContent, startOfMethod);
 
 			if ((startOfMethod == -1) || (endOfMethod == -1)) {
 				System.err.println("WARNING: Unable to locate method in I : " + method.getName());
@@ -1064,9 +1070,9 @@ public class SyncSource {
 		String clientMethod = "";
 		if (method.isIsImported() && (method.getImportInformation().getFromIntroduce() != null)
 			&& !method.getImportInformation().getFromIntroduce().booleanValue()) {
-			clientMethod = TAB + createBoxedSignatureStringFromMethod(oldMethod);
+			clientMethod = createBoxedSignatureStringFromMethod(oldMethod);
 		} else {
-			clientMethod = TAB + createClientUnBoxedSignatureStringFromMethod(oldMethod);
+			clientMethod = createClientUnBoxedSignatureStringFromMethod(oldMethod);
 		}
 		int startOfMethod = startOfSignature(fileContent, clientMethod);
 		int endOfSignature = endOfSignature(fileContent, startOfMethod);
@@ -1196,7 +1202,7 @@ public class SyncSource {
 			while ((line != null) && (totalRead < startOfMethod)) {
 				line = br.readLine() + "\n";
 				totalRead += line.length();
-				if (totalRead < startOfMethod) {
+				if (totalRead <= startOfMethod) {
 					backwardsBuffer.add(0, line);
 				}
 
@@ -1212,12 +1218,14 @@ public class SyncSource {
 		while (stillSearch) {
 			String line = (String) backwardsBuffer.get(lineBack++);
 			String trimmedLine = line.trim();
-			if (trimmedLine.startsWith("*")) {
+			if (trimmedLine.startsWith("\n")) {
+				javaDocLength += line.length();
+			} else if (trimmedLine.startsWith("*")) {
 				javaDocLength += line.length();
 			} else if (trimmedLine.startsWith("/*")) {
 				javaDocLength += line.length();
 				stillSearch = false;
-			} else if (trimmedLine.startsWith("}")) {
+			} else {
 				javaDocLength = 0;
 				stillSearch = false;
 			}
