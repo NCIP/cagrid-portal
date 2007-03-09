@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data.ui.creation;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.ErrorDialog;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
@@ -23,8 +24,6 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
@@ -32,9 +31,9 @@ import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.WindowConstants;
 
 import org.projectmobius.portal.PortalResourceManager;
 
@@ -49,6 +48,7 @@ import org.projectmobius.portal.PortalResourceManager;
  */
 public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 	public static final String WS_ENUM_EXTENSION_NAME = "cagrid_wsEnum";
+	public static final String BDT_EXTENSIONS_NAME = "bdt";
 
 	private JPanel mainPanel = null;
 	private JCheckBox wsEnumCheckBox = null;
@@ -60,9 +60,12 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 	private JPanel dataSourcePanel = null;
 	private ButtonGroup dataButtonGroup = null;
 
+	private JCheckBox bdtCheckBox = null;
+
 
 	public DataServiceCreationDialog(Frame f, ServiceExtensionDescriptionType desc, ServiceInformation info) {
 		super(f, desc, info);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				setFeatureStatus();
@@ -97,11 +100,13 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 			gridBagConstraints4.gridx = 1;
 			gridBagConstraints4.insets = new java.awt.Insets(4,4,4,4);
 			gridBagConstraints4.weightx = 1.0D;
+			gridBagConstraints4.fill = GridBagConstraints.BOTH;
 			gridBagConstraints4.gridy = 0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.insets = new java.awt.Insets(4,4,4,4);
 			gridBagConstraints1.weightx = 1.0D;
+			gridBagConstraints1.fill = GridBagConstraints.BOTH;
 			gridBagConstraints1.gridy = 0;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
@@ -122,41 +127,8 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 		if (wsEnumCheckBox == null) {
 			wsEnumCheckBox = new JCheckBox();
 			wsEnumCheckBox.setText("Use WS-Enumeration");
-			wsEnumCheckBox.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					if (wsEnumCheckBox.isSelected()) {
-						if (wsEnumExtensionInstalled()) {
-							if (!wsEnumExtensionUsed()) {
-								// add the ws Enumeration extension
-								ExtensionDescription ext = 
-									ExtensionsLoader.getInstance().getExtension(WS_ENUM_EXTENSION_NAME);
-								ExtensionType extType = new ExtensionType();
-								extType.setName(ext.getServiceExtensionDescription().getName());
-								extType.setExtensionType(ext.getExtensionType());
-								ExtensionType[] serviceExtensions = getServiceInfo().getExtensions().getExtension();
-								ExtensionType[] allExtensions = new ExtensionType[serviceExtensions.length + 1];
-								System.arraycopy(serviceExtensions, 0, allExtensions, 0, serviceExtensions.length);
-								allExtensions[allExtensions.length - 1] = extType;
-								getServiceInfo().getExtensions().setExtension(allExtensions);
-							}
-						} else {
-							// extension not installed, complain loudly
-							String[] message = {
-								"The extension " + WS_ENUM_EXTENSION_NAME,
-								"is not installed in Introduce.",
-								"Are you sure you wish to enable this feature?"
-							};
-							int choice = JOptionPane.showConfirmDialog(
-								PortalResourceManager.getInstance().getGridPortal(),
-								message, "WS-Enumeration not installed", JOptionPane.YES_NO_OPTION);
-							if (choice == JOptionPane.NO_OPTION) {
-								// you have chosen wisely
-								wsEnumCheckBox.setSelected(false);
-							}
-						}
-					}
-				}
-			});
+			// can only use ws-enumeration if the extension has been installed
+			wsEnumCheckBox.setEnabled(wsEnumExtensionInstalled());
 		}
 		return wsEnumCheckBox;
 	}
@@ -201,12 +173,17 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 	 */
 	private JPanel getFeaturesPanel() {
 		if (featuresPanel == null) {
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 0;
+			gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints12.gridy = 1;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 0;
 			gridBagConstraints11.weightx = 1.0D;
 			gridBagConstraints11.insets = new java.awt.Insets(2,2,2,2);
 			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.gridy = 2;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.gridx = 0;
@@ -220,6 +197,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
 			featuresPanel.add(getWsEnumCheckBox(), gridBagConstraints);
 			featuresPanel.add(getGridIdentCheckBox(), gridBagConstraints11);
+			featuresPanel.add(getBdtCheckBox(), gridBagConstraints12);
 		}
 		return featuresPanel;
 	}
@@ -311,6 +289,35 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 	
 	
 	private void setFeatureStatus() {
+		if (getWsEnumCheckBox().isSelected()) {
+			if (!wsEnumExtensionUsed()) {
+				// add the ws-enum extension
+				ExtensionDescription desc = ExtensionsLoader.getInstance().getExtension(WS_ENUM_EXTENSION_NAME);
+				ExtensionType extension = new ExtensionType();
+				extension.setName(desc.getServiceExtensionDescription().getName());
+				extension.setExtensionType(desc.getExtensionType());
+				extension.setVersion(desc.getVersion());
+				getServiceInfo().getExtensions().setExtension(
+					(ExtensionType[]) Utils.appendToArray(
+						getServiceInfo().getExtensions().getExtension(), extension));
+			}
+		}
+		
+		if (getBdtCheckBox().isSelected()) {
+			if (!bdtExtensionUsed()) {
+				// add the BDT extension
+				ExtensionDescription desc = ExtensionsLoader.getInstance().getExtension(BDT_EXTENSIONS_NAME);
+				ExtensionType extension = new ExtensionType();
+				extension.setName(desc.getServiceExtensionDescription().getName());
+				extension.setExtensionType(desc.getExtensionType());
+				extension.setVersion(desc.getVersion());
+				getServiceInfo().getExtensions().setExtension(
+					(ExtensionType[]) Utils.appendToArray(
+						getServiceInfo().getExtensions().getExtension(), extension));
+			}
+		}
+		
+		// set the selected service features
 		ExtensionTypeExtensionData data = 
 			getExtensionTypeExtensionData();
 		ServiceFeatures features = new ServiceFeatures();
@@ -318,6 +325,8 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 			features.setUseSdkDataSource(getSdkDataRadioButton().isSelected());
 			features.setUseGridIdeitifiers(getGridIdentCheckBox().isSelected());
 			features.setUseWsEnumeration(getWsEnumCheckBox().isSelected());
+			features.setUseBdt(getBdtCheckBox().isSelected());
+			
 			Data extData = ExtensionDataUtils.getExtensionData(data);
 			extData.setServiceFeatures(features);
 			ExtensionDataUtils.storeExtensionData(data, extData);
@@ -350,5 +359,44 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 			}
 		}		
 		return false;
+	}
+	
+	
+	private boolean bdtExtensionInstalled() {
+		List extensionDescriptors = ExtensionsLoader.getInstance().getServiceExtensions();
+		for (int i = 0; i < extensionDescriptors.size(); i++) {
+			ServiceExtensionDescriptionType desc = (ServiceExtensionDescriptionType) extensionDescriptors.get(i);
+			if (desc.getName().equals(BDT_EXTENSIONS_NAME)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	private boolean bdtExtensionUsed() {
+		ExtensionType[] extensions = getServiceInfo().getExtensions().getExtension();
+		for (int i = 0; i < extensions.length; i++) {
+			if (extensions[i].getName().equals(BDT_EXTENSIONS_NAME)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	/**
+	 * This method initializes bdtCheckBox	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getBdtCheckBox() {
+		if (bdtCheckBox == null) {
+			bdtCheckBox = new JCheckBox();
+			bdtCheckBox.setText("Use caGrid BDT");
+			// can only enable BDT if it has been installed
+			bdtCheckBox.setEnabled(bdtExtensionInstalled());
+		}
+		return bdtCheckBox;
 	}
 }

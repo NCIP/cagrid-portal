@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
@@ -64,10 +65,14 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		reconfigureCqlQueryProcessor(extensionData);
 		// update the data service libraries
 		updateLibraries();
+		// update schemas
+		updateDataSchemas();
 		// change the version number
 		setCurrentExtensionVersion();
 		// set the method documentation strings
 		setDescriptionStrings();
+		// add new attributes to extension data's Service Features
+		updateServiceFeatures();
 		// fix up the castor mapping location
 		moveCastorMappingFile();
 		// store the modified extension data back into the service model
@@ -242,11 +247,11 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 		if (oldCastorMapping.exists()) {
 			Properties introduceProperties = new Properties();
 			try {
-				introduceProperties
-					.load(new FileInputStream(getServicePath() + File.separator + "introduce.properties"));
+				introduceProperties.load(new FileInputStream(
+					getServicePath() + File.separator + "introduce.properties"));
 			} catch (IOException ex) {
-				throw new UpgradeException("Error loading introduce properties for this service: " + ex.getMessage(),
-					ex);
+				throw new UpgradeException(
+					"Error loading introduce properties for this service: " + ex.getMessage(), ex);
 			}
 			ServiceInformation serviceInfo = new ServiceInformation(getServiceDescription(), introduceProperties,
 				new File(getServicePath()));
@@ -284,6 +289,32 @@ public class DataServiceUpgrade1pt0to1pt1 extends ExtensionUpgraderBase {
 			}
 			oldCastorMapping.delete();
 		}
+	}
+	
+	
+	private void updateDataSchemas() throws UpgradeException {
+		String serviceName = getServiceDescription().getServices().getService(0).getName();
+		// extension data has been updated
+		File serviceExtensionDataSchema = new File(getServicePath() + File.separator + "schema" 
+			+ File.separator + serviceName + "DataServiceExtensionData.xsd");
+		File newExtensionDataSchema = new File(ExtensionsLoader.getInstance().getExtensionsDir() 
+			+ File.separator + "data" + File.separator + "schema" + File.separator + "Data"
+			+ File.separator + "DataServiceExtensionData.xsd");
+		try {
+			Utils.copyFile(newExtensionDataSchema, serviceExtensionDataSchema);
+		} catch (IOException ex) {
+			throw new UpgradeException("Error upgrading extension data schema: " + ex.getMessage(), ex);
+		}
+		
+		// if the CQL schema changes, upgrade it here
+	}
+	
+	
+	private void updateServiceFeatures() throws UpgradeException {
+		Element extDataElement = getExtensionDataElement();
+		Element serviceFeaturesElement = extDataElement.getChild("ServiceFeatures", extDataElement.getNamespace());
+		serviceFeaturesElement.setAttribute("useBdt", String.valueOf(false));
+		setExtensionDataElement(extDataElement);
 	}
 
 
