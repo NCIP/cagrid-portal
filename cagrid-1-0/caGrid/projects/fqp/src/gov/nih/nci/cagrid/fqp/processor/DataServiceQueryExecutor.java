@@ -30,6 +30,7 @@ public class DataServiceQueryExecutor {
 	 * @param cqlQuery
 	 * @param targetServiceURL
 	 * @return
+	 * 		The results of querying a the data service
 	 * @throws RemoteDataServiceException
 	 */
 	public static CQLQueryResults queryDataService(CQLQuery cqlQuery, String targetServiceURL)

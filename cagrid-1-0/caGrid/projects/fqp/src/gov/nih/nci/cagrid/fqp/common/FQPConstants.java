@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.fqp.common;
 
-import javax.xml.namespace.QName;
 
 
 /**

@@ -8,7 +8,6 @@ import javax.xml.namespace.QName;
 
 import org.globus.gsi.jaas.JaasSubject;
 import org.globus.security.gridmap.GridMap;
-import org.globus.wsrf.config.ConfigException;
 import org.globus.wsrf.impl.security.authorization.Authorization;
 import org.globus.wsrf.impl.security.descriptor.GSISecureConvAuthMethod;
 import org.globus.wsrf.impl.security.descriptor.GSISecureMsgAuthMethod;
@@ -33,11 +32,10 @@ public class SecurityUtils {
 	 * 
 	 * @return the created ResourceSecurityDescriptor, or null
 	 * @throws SecurityException
-	 * @throws ConfigException
 	 * @throws SecurityDescriptorException
 	 */
-	public static ResourceSecurityDescriptor createResultsResourceSecurityDescriptor() throws SecurityException,
-		SecurityDescriptorException {
+	public static ResourceSecurityDescriptor createResultsResourceSecurityDescriptor() throws 
+		SecurityException, SecurityDescriptorException {
 		ResourceSecurityDescriptor desc = null;
 
 		String peer = SecurityManager.getManager().getCaller();

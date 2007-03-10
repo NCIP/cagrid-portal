@@ -21,7 +21,7 @@ public class SerializationUtils {
 	 * Write the XML representation of the specified metadata to the specified
 	 * writer. If either are null, an IllegalArgumentException will be thown.
 	 * 
-	 * @param domainModel
+	 * @param cqlQuery
 	 * @param writer
 	 * @throws Exception
 	 */
@@ -57,7 +57,7 @@ public class SerializationUtils {
 	 * Write the XML representation of the specified metadata to the specified
 	 * writer. If either are null, an IllegalArgumentException will be thown.
 	 * 
-	 * @param domainModel
+	 * @param dcqlQuery
 	 * @param writer
 	 * @throws Exception
 	 */
