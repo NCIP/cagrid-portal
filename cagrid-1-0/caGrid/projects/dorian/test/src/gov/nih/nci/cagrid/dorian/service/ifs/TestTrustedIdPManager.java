@@ -101,8 +101,8 @@ public class TestTrustedIdPManager extends TestCase {
 				idp = tm.addTrustedIdP(idp);
 				assertEquals(1, tm.getTrustedIdPs().length);
 				assertEquals(idp.getAuthenticationMethod().length, tm.getAuthenticationMethods(idp.getId()).length);
-				TrustedIdP[] list = tm.getTrustedIdPs();
-				assertEquals(idp, list[0]);
+				TrustedIdP[] idps = tm.getTrustedIdPs();
+				assertEquals(idp, idps[0]);
 				assertTrue(tm.determineTrustedIdPExistsByName(name));
 				TrustedIdP temp = tm.getTrustedIdPByName(idp.getName());
 				assertEquals(idp, temp);

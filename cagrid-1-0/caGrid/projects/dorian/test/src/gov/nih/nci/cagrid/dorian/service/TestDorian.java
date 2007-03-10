@@ -593,10 +593,10 @@ public class TestDorian extends TestCase {
 
 		assertEquals(idpCert.getSubjectDN().toString(), saml.getIssuer());
 		Iterator itr = saml.getStatements();
-		int count = 0;
+		int statementCount = 0;
 		boolean authFound = false;
 		while (itr.hasNext()) {
-			count = count + 1;
+			statementCount = statementCount + 1;
 			SAMLStatement stmt = (SAMLStatement) itr.next();
 			if (stmt instanceof SAMLAuthenticationStatement) {
 				if (authFound) {
@@ -631,7 +631,7 @@ public class TestDorian extends TestCase {
 
 		}
 
-		assertEquals(2, count);
+		assertEquals(2, statementCount);
 		assertTrue(authFound);
 	}
 

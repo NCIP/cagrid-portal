@@ -72,11 +72,11 @@ public class Utils {
 		return CA_SUBJECT_PREFIX + ",CN=" + CA_SUBJECT_DN;
 	}
 
-	public static CertificateAuthority getCA(Database db) throws Exception {
+	public static CertificateAuthority getCA(Database cadb) throws Exception {
 		DorianCertificateAuthorityConf conf = new DorianCertificateAuthorityConf();
 		conf.setCaPassword("password");
 		conf.setAutoRenewal(false);
-		DorianCertificateAuthority ca = new DorianCertificateAuthority(db, conf);
+		DorianCertificateAuthority ca = new DorianCertificateAuthority(cadb, conf);
 		ca.clearDatabase();
 		KeyPair rootPair = KeyUtil.generateRSAKeyPair1024();
 
