@@ -1,4 +1,4 @@
-<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus" class="ServiceAuthorizationTemplate" imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.codegen.services.security.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.*" %>
+<%@ jet package="gov.nih.nci.cagrid.introduce.templates.service.globus" class="ServiceAuthorizationTemplate" imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.codegen.services.security.tools.* gov.nih.nci.cagrid.introduce.beans.method.* gov.nih.nci.cagrid.introduce.beans.service.* gov.nih.nci.cagrid.introduce.common.* gov.nih.nci.cagrid.introduce.info.* gov.nih.nci.cagrid.introduce.codegen.utils.* gov.nih.nci.cagrid.introduce.codegen.* gov.nih.nci.cagrid.introduce.beans.namespace.* java.util.* gov.nih.nci.cagrid.introduce.beans.resource.* gov.nih.nci.cagrid.introduce.beans.property.*" %>
 <% gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation info = (gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation) argument; 
    String serviceName = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
    String namespaceDomain = info.getIntroduceServiceProperties().getProperty(gov.nih.nci.cagrid.introduce.IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN);
@@ -52,7 +52,7 @@ public class <%=info.getService().getName()%>Authorization{
 							try {
 							written = true;
 %>
-    public static final String gridGrouperAuthorize<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %> = <%=SyncAuthorization.generateGridGrouperQuery(method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization())%>
+    public static final String gridGrouperAuthorize<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %> = <%=AuthorizationGenerator.generateGridGrouperQuery(method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization())%>
 <%
 							} catch(Exception e ) {
 							   e.printStackTrace();
@@ -68,7 +68,7 @@ public class <%=info.getService().getName()%>Authorization{
 							if (info.getService().getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization() != null) {
 							try{
 %>
-    public static final String gridGrouperAuthorize<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %> = <%=SyncAuthorization.generateGridGrouperQuery(info.getService().getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization())%>
+    public static final String gridGrouperAuthorize<%=TemplateUtils.upperCaseFirstCharacter(method.getName()) %> = <%=AuthorizationGenerator.generateGridGrouperQuery(info.getService().getServiceSecurity().getServiceAuthorization().getGridGrouperAuthorization())%>
 <%
 							} catch(Exception e ) {
 							   e.printStackTrace();
@@ -84,7 +84,7 @@ public class <%=info.getService().getName()%>Authorization{
 		<%
 		 String auth = "";
 		  try {
-			auth = SyncAuthorization.addAuthorizationToProviderImpl(info.getService(), method, "\t\t");
+			auth = AuthorizationGenerator.addAuthorizationToProviderImpl(info.getService(), method, "\t\t");
 		  } catch (Exception e) {
 		  	e.printStackTrace();
 		  }

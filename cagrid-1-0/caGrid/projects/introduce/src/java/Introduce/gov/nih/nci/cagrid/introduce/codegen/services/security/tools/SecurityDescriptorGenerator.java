@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.codegen.services.security;
+package gov.nih.nci.cagrid.introduce.codegen.services.security.tools;
 
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;

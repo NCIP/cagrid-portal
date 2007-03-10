@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.codegen.services.security;
+package gov.nih.nci.cagrid.introduce.codegen.services.security.tools;
 
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClientUtils;
@@ -12,7 +12,7 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 
 
-public class SyncAuthorization {
+public class AuthorizationGenerator {
 
 	public static String addAuthorizationToProviderImpl(ServiceType service, MethodType method, String lineStart)
 		throws Exception {

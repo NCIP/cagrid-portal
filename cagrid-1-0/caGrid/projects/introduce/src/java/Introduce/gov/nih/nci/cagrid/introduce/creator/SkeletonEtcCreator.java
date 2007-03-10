@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.codegen.services.security.SecurityMetadataGenerator;
+import gov.nih.nci.cagrid.introduce.codegen.services.security.tools.SecurityMetadataGenerator;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.info.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.etc.RegistrationTemplate;
