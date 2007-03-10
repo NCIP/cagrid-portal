@@ -1,7 +1,7 @@
 <!-- ======================================================================= -->
-<!-- caGrid Utilities build file                                             -->
+<!-- caGrid caBIG Extensions project build file                              -->
 <!-- ======================================================================= -->
-<project name="caGrid-core_tests_harness" basedir=".">
+<project name="caGrid-cabigextensions_tests_harness" basedir=".">
     <property name="junit.results.dir" value="${test.logs.dir}/junit" />
 
     <property name="instrumented.classes.dir" value="${build.dir}/instrumented-classes" />
