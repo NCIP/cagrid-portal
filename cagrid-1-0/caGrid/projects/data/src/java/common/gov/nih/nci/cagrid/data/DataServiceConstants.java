@@ -121,6 +121,11 @@ public class DataServiceConstants {
 	public static final String ENUMERATION_QUERY_METHOD_NAME = "enumerationQuery";
 	public static final String ENUMERATION_DATA_SERVICE_NAMESPACE = "http://gov.nih.nci.cagrid.data.enumeration/EnumerationDataService";
 	
+	// bdt query method constants
+	public static final String BDT_QUERY_METHOD_NAME = "bdtQuery";
+	public static final String BDT_QUERY_METHOD_DESCRIPTION = "The standard caGrid Data Service query method which returns results handled by Bulk Data Transfer.";
+	public static final String BDT_QUERY_METHOD_OUTPUT_SUFFIX = "";
+	
 	private DataServiceConstants() {
 		
 	}
