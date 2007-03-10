@@ -371,6 +371,11 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 				FeatureCreator wsEnumCreator = new WsEnumerationFeatureCreator(info, service, serviceProps);
 				wsEnumCreator.addFeature();
 			}
+			// bdt
+			if (features.isUseBdt()) {
+				FeatureCreator bdtCreator = new BDTFeatureCreator(info, service, serviceProps);
+				bdtCreator.addFeature();
+			}
 		} else {
 			log.warn("No data service features information could be found!");
 		}
