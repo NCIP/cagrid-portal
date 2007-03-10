@@ -51,7 +51,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
 
             // Perform query: Assume no data is returned
             LOG.debug("Calling evsSearch");
-            evsResults = (List)appService.evsSearch(evsSearch);
+            evsResults = appService.evsSearch(evsSearch);
 
             // Return data
             gov.nih.nci.cagrid.evs.service.DescLogicConceptVocabularyName[] names = null;
@@ -117,7 +117,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
 
             // Perform query: Assume no data is returned
             LOG.debug("Calling evsSearch");
-            metaResults = (List)appService.evsSearch(metaSearch);
+            metaResults = appService.evsSearch(metaSearch);
 
             // Return data
             gov.nih.nci.evs.domain.Source[] sources = null;
@@ -206,7 +206,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
                 LOG.debug("calling evsSearch: getDescLogicConceptNameByCode");
 
                 // The return should be 1 record which is a string, corresponding to the name.
-                List nameList = (List) appService.evsSearch(evsSearch);
+                List nameList = appService.evsSearch(evsSearch);
                 if ( nameList != null && nameList.size() > 0)
                 {
                     String searchTerm = (String) nameList.get(0);
@@ -221,7 +221,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
                                             );
 
                     // Perform query: Assume no data is returned
-                    evsResults = (List)appService.evsSearch(evsSearch2);
+                    evsResults = appService.evsSearch(evsSearch2);
                 }
             }
             else
@@ -235,7 +235,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
                 LOG.debug("Calling evsSearch: searchDescLogicConcepts");
 
                 // Perform query: Assume no data is returned
-                evsResults = (List)appService.evsSearch(evsSearch);
+                evsResults = appService.evsSearch(evsSearch);
             }
 
             // Return data
@@ -320,7 +320,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
 
             // Perform query: Assume no data is returned
             LOG.debug("Calling evsSearch");
-            evsResults = (List)appService.evsSearch(evsSearch);
+            evsResults = appService.evsSearch(evsSearch);
 
             // Return data
             gov.nih.nci.evs.domain.MetaThesaurusConcept[] concepts = null;
@@ -398,7 +398,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
             List evsResults 	= new ArrayList();
             // Perform query: Assume no data is returned
             LOG.debug("Calling evsSearch");
-            evsResults = (List)appService.evsSearch(evsSearch);
+            evsResults = appService.evsSearch(evsSearch);
 
             // Return data
             gov.nih.nci.evs.domain.HistoryRecord[] historys = null;
@@ -475,7 +475,7 @@ public class EVSGridServiceImpl extends EVSGridServiceImplBase {
 
             // Perform query: Assume no data is returned
             LOG.debug("Calling evsSearch");
-            evsResults = (List)appService.evsSearch(evsSearch);
+            evsResults = appService.evsSearch(evsSearch);
 
             // Return data
             gov.nih.nci.evs.domain.MetaThesaurusConcept[] concepts = null;
