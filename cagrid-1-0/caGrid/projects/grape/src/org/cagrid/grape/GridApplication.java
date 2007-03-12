@@ -71,11 +71,13 @@ public class GridApplication extends JFrame {
 	private Application app;
 
 	private MobiusPoolManager threadManager;
+	private ConfigurationManager configurationManager;
 
 	public GridApplication(Application app) throws Exception {
 		super();
 		this.app = app;
 		this.threadManager = new MobiusPoolManager();
+		configurationManager = new ConfigurationManager(app.getConfiguration());
 		initialize();
 	}
 
@@ -258,7 +260,9 @@ public class GridApplication extends JFrame {
 				}
 			}
 			jJMenuBar.add(getWindowsMenu());
-			jJMenuBar.add(getConfigMenu());
+			if(this.configurationManager.getConfigurationMenu()!=null){
+			jJMenuBar.add(this.configurationManager.getConfigurationMenu());
+			}
 			jJMenuBar.add(getHelpMenu());
 
 		}
@@ -485,14 +489,6 @@ public class GridApplication extends JFrame {
 		return closeAllMenuItem;
 	}
 
-	private javax.swing.JMenu getConfigMenu() {
-		if (configMenu == null) {
-			configMenu = new javax.swing.JMenu();
-			configMenu.setText("Configuration");
-			configMenu.setMnemonic(java.awt.event.KeyEvent.VK_C);
-		}
-		return configMenu;
-	}
 
 	static public class ExecuteComponent extends MobiusRunnable {
 		private Component component;

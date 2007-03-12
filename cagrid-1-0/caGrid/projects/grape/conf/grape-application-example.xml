@@ -82,4 +82,71 @@
             </components>
         </menu>      
     </menus>
+    <configuration>
+        
+        <ConfigurationGroups>
+        <ConfigurationGroup>
+            <name>Security</name>
+            <ConfigurationDescriptors>
+                <ConfigurationDescriptor>
+                    <DisplayName>Dorian</DisplayName>
+                    <SystemName>dorian</SystemName>
+                    <ModelClassname>org.cagrid.grape.configuration.GeneralConfiguration</ModelClassname>
+                    <qname>
+                        <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
+                        <name>GeneralConfiguration</name>
+                    </qname>
+                    <UIClassname>org.cagrid.grape.configuration.GeneralConfigurationWindow</UIClassname>
+                    <DefaultFile>conf/general-configuration-example.xml</DefaultFile>
+                </ConfigurationDescriptor>
+                <ConfigurationDescriptor>
+                    <DisplayName>Grid Grouper</DisplayName>
+                    <SystemName>gridgrouper</SystemName>
+                    <ModelClassname>org.cagrid.grape.configuration.GeneralConfiguration</ModelClassname>
+                    <qname>
+                        <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
+                        <name>GeneralConfiguration</name>
+                    </qname>
+                    <UIClassname>org.cagrid.grape.configuration.GeneralConfigurationWindow</UIClassname>                    
+                    <DefaultFile>conf/general-configuration-example.xml</DefaultFile>
+                </ConfigurationDescriptor>
+                <ConfigurationDescriptor>
+                    <DisplayName>Grid Trust Service (GTS)</DisplayName>
+                    <SystemName>gts</SystemName>
+                    <ModelClassname>org.cagrid.grape.configuration.GeneralConfiguration</ModelClassname>
+                    <qname>
+                        <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
+                        <name>GeneralConfiguration</name>
+                    </qname>
+                    <UIClassname>org.cagrid.grape.configuration.GeneralConfigurationWindow</UIClassname>
+                    <DefaultFile>conf/general-configuration-example.xml</DefaultFile>
+                </ConfigurationDescriptor>
+                <ConfigurationDescriptor>
+                    <DisplayName>SyncGTS</DisplayName>
+                    <SystemName>syncgts</SystemName>
+                    <ModelClassname>org.cagrid.grape.configuration.GeneralConfiguration</ModelClassname>
+                    <qname>
+                        <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
+                        <name>GeneralConfiguration</name>
+                    </qname>
+                    <DefaultFile>conf/general-configuration-example.xml</DefaultFile>
+                </ConfigurationDescriptor>
+            </ConfigurationDescriptors>
+        </ConfigurationGroup>
+        </ConfigurationGroups>
+        
+        <ConfigurationDescriptors>
+        <ConfigurationDescriptor>
+            <DisplayName>Discovery</DisplayName>
+            <SystemName>discovery</SystemName>
+            <ModelClassname>org.cagrid.grape.configuration.GeneralConfiguration</ModelClassname>
+            <qname>
+                <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
+                <name>GeneralConfiguration</name>
+            </qname>
+            <UIClassname>org.cagrid.grape.configuration.GeneralConfigurationWindow</UIClassname>
+            <DefaultFile>conf/general-configuration-example.xml</DefaultFile>
+        </ConfigurationDescriptor>
+        </ConfigurationDescriptors>
+    </configuration>
 </application>
