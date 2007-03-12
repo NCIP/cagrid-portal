@@ -11,8 +11,12 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.info.ServiceInformation;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 import java.util.Properties;
 
 import javax.xml.namespace.QName;
@@ -24,7 +28,7 @@ import javax.xml.namespace.QName;
  * @author David Ervin
  * 
  * @created Mar 9, 2007 3:45:48 PM
- * @version $Id: BDTFeatureCreator.java,v 1.2 2007-03-12 17:00:39 dervin Exp $ 
+ * @version $Id: BDTFeatureCreator.java,v 1.3 2007-03-12 20:51:20 dervin Exp $ 
  */
 public class BDTFeatureCreator extends FeatureCreator {
 	
@@ -37,9 +41,47 @@ public class BDTFeatureCreator extends FeatureCreator {
 
 
 	public void addFeature() throws CreationExtensionException {
-		System.out.println("ADDING BDT SERVICE");
 		ensureBdtExtensionAdded();
 		addBdtQueryMethod();
+		copyWsEnumerationLibs();
+	}
+	
+	
+	private void copyWsEnumerationLibs() throws CreationExtensionException {
+		File extensionLibDir = ExtensionsLoader.getInstance().getExtensionsDir();
+		File[] sourceLibs = extensionLibDir.listFiles(new FileFilter() {
+			public boolean accept(File pathname) {
+				String name = pathname.getName();
+				if (name.endsWith(".jar")) {
+					return name.endsWith("_enum.jar") || name.indexOf("wsEnum") != -1
+						|| name.indexOf("cabigextensions-stubs") != -1;
+				}
+				return false;
+			}
+		});
+		File serviceLibDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
+			+ File.separator + "lib");
+		File[] outputLibs = new File[sourceLibs.length];
+		try {
+			for (int i = 0; i < sourceLibs.length; i++) {
+				outputLibs[i] = new File(serviceLibDir.getAbsolutePath() 
+					+ File.separator + sourceLibs[i].getName());
+				Utils.copyFile(sourceLibs[i], outputLibs[i]);
+			}
+		} catch (IOException ex) {
+			throw new CreationExtensionException("Error copying WS-Enumeration library: " + ex.getMessage(), ex);
+		}
+		
+		// sync up the Eclipse classpath
+		File classpathFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
+			+ File.separator + ".classpath");
+		if (classpathFile.exists()) {
+			try {
+				ExtensionUtilities.syncEclipseClasspath(classpathFile, outputLibs);
+			} catch (Exception ex) {
+				throw new CreationExtensionException("Error syncing Eclipse .classpath file: " + ex.getMessage(), ex);
+			}
+		}
 	}
 	
 	
@@ -119,8 +161,6 @@ public class BDTFeatureCreator extends FeatureCreator {
 			moreExtensions[0] = bdtExtension;
 			System.arraycopy(usedExtensions, 0, moreExtensions, 1, usedExtensions.length);
 			getServiceInformation().getExtensions().setExtension(moreExtensions);
-		} else {
-			System.out.println("BDT Extension was already present in the service");
 		}
 	}
 }
