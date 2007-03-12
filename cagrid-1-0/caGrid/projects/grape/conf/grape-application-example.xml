@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://www.cagrid.org/1/grape"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.cagrid.org/1/grape file:/C:/projects/cagrid-1-0/caGrid/projects/grape/schema/grape.xsd">
+    <name>Grape Sample Application</name>
+    <icon>/applications-internet.png</icon>
+    <dimensions>
+        <width>850</width>
+        <height>700</height>
+    </dimensions>
+    <menus>
+        <menu>
+            <title>Security</title>
+            <description>tools</description>
+            <showIcons>false</showIcons>
+            <submenus>
+            <menu>
+                <title>Grid User Administration</title>
+                <description></description>
+                <showIcons>true</showIcons>
+                <components>
+                    <component>
+                        <title>Manage Users</title>
+                        <description>Manage Users</description>
+                        <classname>foo</classname>
+                        <icon>/applications-internet.png</icon>
+                        <showOnToolBar>false</showOnToolBar>
+                    </component>
+                    <component>
+                        <title>Manage Identity Providers</title>
+                        <description>Manage Identity Providers</description>
+                        <classname>foo</classname>
+                        <icon>/applications-internet.png</icon>
+                        <showOnToolBar>false</showOnToolBar>
+                    </component>
+                </components>
+            </menu>
+                <menu>
+                    <title>Grid Trust Fabric Administration</title>
+                    <description></description>
+                    <showIcons>true</showIcons>
+                    <components>
+                        <component>
+                            <title>Certificate Authorities</title>
+                            <description>Certificate Authorities</description>
+                            <classname>foo</classname>
+                            <icon>/applications-internet.png</icon>
+                            <showOnToolBar>false</showOnToolBar>
+                        </component>
+                        <component>
+                            <title>Levels of Assurance</title>
+                            <description>Levels of Assurance</description>
+                            <classname>foo</classname>
+                            <icon>/applications-internet.png</icon>
+                            <showOnToolBar>false</showOnToolBar>
+                        </component>
+                    </components>
+                </menu>              
+            </submenus>
+            <components>
+                <component>
+                    <title>Login</title>
+                    <description>Login</description>
+                    <classname>foo</classname>
+                    <icon>/applications-internet.png</icon>
+                    <showOnToolBar>true</showOnToolBar>
+                </component>
+            </components>
+        </menu>
+        <menu>
+            <title>Discovery</title>
+            <description></description>
+            <showIcons>true</showIcons>
+            <components>
+                <component>
+                    <title>Discover Grid Services</title>
+                    <description>Discover Grid Services</description>
+                    <classname>foo</classname>
+                    <icon>/applications-internet.png</icon>
+                    <showOnToolBar>true</showOnToolBar>
+                </component>
+            </components>
+        </menu>      
+    </menus>
+</application>

@@ -41,7 +41,7 @@
     <!--                          DEFINE THE SUB PROJECTS                                 -->
     <!-- ================================================================================ -->
     <!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-    <property name="projects.list" value="authz, bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, evs, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, sdkQuery32, syncgts, workflow/WorkflowFactoryService, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service, service-security-provider" />
+    <property name="projects.list" value="authz, bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, evs, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, sdkQuery32, syncgts, workflow/WorkflowFactoryService, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service, service-security-provider, grape" />
     <!-- ================================================================================ -->
     <!--                  DEFINE THE SUB PROJECTS THAT SUPPORT UNIT TESTING               -->
     <!-- ================================================================================ -->
@@ -131,6 +131,16 @@
         </resolveDependencies>
         <ant dir="${projects.dir}/metadatautils" inheritAll="false" antfile="build.xml" target="all" />
     </target>
+	
+	 	<!-- =============================================================== -->
+	    <!-- Grid Application Envrionment (GRAPE)                            -->
+	    <!-- =============================================================== -->
+	    <target name="build-grape" depends="prepare" description="Builds the Grid Application Envrionment (GRAPE)">
+	        <resolveDependencies extdir="${projects.dir}/grape/ext">
+	            <artifact refid="core.jars" />
+	        </resolveDependencies>
+	        <ant dir="${projects.dir}/grape" inheritAll="false" antfile="build.xml" target="all" />
+	    </target>
 
 
     <!-- =============================================================== -->
