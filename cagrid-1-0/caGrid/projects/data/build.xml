@@ -12,8 +12,8 @@
 
     <!-- build with debugging information -->
     <property name="java.debug" value="on" />
-    <!-- enforce java 1.4 compliance at build time -->
-    <property name="java.source" value="1.4" />
+    <!-- enforce java 1.5 compliance at build time -->
+    <property name="java.source" value="1.5" />
 
     <!-- Information -->
     <property name="project.version" value="1.0" />
