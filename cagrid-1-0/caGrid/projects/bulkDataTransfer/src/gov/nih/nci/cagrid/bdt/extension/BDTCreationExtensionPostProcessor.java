@@ -46,23 +46,23 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		this.info = new ServiceInformation(serviceDescription, this.serviceProperties, new File(this.serviceProperties
 			.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)));
 
-		// apply data service requirements to it
+		// apply bulk data transfer requirements to it
 		try {
-			System.out.println("Adding data service components to template");
+			System.out.println("Adding bulk data transfer components to template");
 			makeBDTService(serviceDescription, this.serviceProperties);
 			addResourceImplStub(serviceDescription, this.serviceProperties);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new CreationExtensionException(
-				"Error adding data service components to template! " + ex.getMessage(), ex);
+				"Error adding bulk data transfer components to template! " + ex.getMessage(), ex);
 		}
 		// add the proper deployment properties
 		try {
-			System.out.println("Adding deploy property for query processor class");
+			System.out.println("Modifying service properties");
 			modifyServiceProperties(serviceDescription);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			throw new CreationExtensionException("Error adding query processor parameter to service! "
+			throw new CreationExtensionException("Error modifying service properties! "
 				+ ex.getMessage(), ex);
 		}
 	}
@@ -91,7 +91,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 			copySchema(subname, schemaDir);
 		}
 
-		// copy libraries for data services into the new bdt lib directory
+		// copy libraries for BDT services into the new bdt lib directory
 		copyLibraries(props);
 		// namespaces
 		System.out.println("Modifying namespace definitions");
@@ -136,8 +136,8 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		ServiceType mainService = description.getServices().getService(0);
 
 		// add the bdt subservice
-		ServiceDescription desc = (ServiceDescription) Utils.deserializeDocument(extensionDir + File.separator
-			+ "introduce.xml", ServiceDescription.class);
+		ServiceDescription desc = (ServiceDescription) Utils.deserializeDocument(
+			extensionDir + File.separator + "introduce.xml", ServiceDescription.class);
 		ServiceType bdtService = desc.getServices().getService(0);
 		bdtService.setName(mainService.getName() + bdtService.getName());
 		bdtService.setNamespace(mainService.getNamespace() + "BDT");
@@ -162,23 +162,21 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 				mpi.setProviderClass("gov.nih.nci.cagrid.bdt.service.globus.BulkDataHandlerProviderImpl");
 				method.setProviderInformation(mpi);
 			}
-
 		}
-
+		
 		List services = new ArrayList(Arrays.asList(description.getServices().getService()));
 		services.add(bdtService);
 		ServiceType[] servicesArr = new ServiceType[services.size()];
 		services.toArray(servicesArr);
 		description.getServices().setService(servicesArr);
-
 	}
 
 
-	private void addResourceImplStub(ServiceDescription desc, Properties serviceProperties) throws Exception {
+	private void addResourceImplStub(ServiceDescription desc, Properties properties) throws Exception {
 		BDTResourceTemplate resourceT = new BDTResourceTemplate();
-		String resourceS = resourceT.generate(new SpecificServiceInformation(this.info, this.info.getServices()
-			.getService(0)));
-		File resourceF = new File(serviceProperties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
+		String resourceS = resourceT.generate(new SpecificServiceInformation(
+			this.info, this.info.getServices().getService(0)));
+		File resourceF = new File(properties.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR)
 			+ File.separator + "src" + File.separator + CommonTools.getPackageDir(desc.getServices().getService(0))
 			+ File.separator + "service" + File.separator + "BDTResource.java");
 		FileWriter resourceFW = new FileWriter(resourceF);
@@ -299,5 +297,4 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 			addServiceMetadata(desc);
 		}
 	}
-
 }
