@@ -20,13 +20,9 @@ To Do:
 
 need to clean up config params and deploy params to have "display" names
 
-might need to modify new dev-* files in the skeleton to use macros and not and tasks
-
 need to validate soapfix
 
-need to validate that namespace exist policy on the descovery tools is working.
-
-need to add javadoc to interface of services using hte descriptions (almost done, methods are finished, but class could be done)
+need to validate that namespace exist policy on the descovery tools is working. (Globus one does not do anything curently and not sure if scotts cadsr one has been moved forward)
 
 if provider is checked then authorization needs to be disable.
 
@@ -62,6 +58,9 @@ add tests to system tests for (coverage report shows no coverage):
 add a .cvsignore file to generated skeletons that includes the gar.  my right mouse button is slowly wearing out... and i am lazy...
 
 ============================ D O N E ================================================================
+
+need to add javadoc to interface of services using hte descriptions (almost done, methods are finished, but class could be done)
+
 need to fix the method mod viewer tomake sure that it has the slider in the right place
 
 need to disable the custom serialzation when a namespacetypenode is selected in the modification
