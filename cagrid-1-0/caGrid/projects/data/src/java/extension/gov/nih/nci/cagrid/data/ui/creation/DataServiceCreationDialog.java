@@ -322,15 +322,19 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
 				// add the BDT extension
 				ExtensionDescription desc = ExtensionsLoader.getInstance()
 					.getExtension(BDT_EXTENSIONS_NAME);
-				ExtensionType extension = new ExtensionType();
-				extension.setName(desc.getServiceExtensionDescription().getName());
-				extension.setExtensionType(desc.getExtensionType());
-				extension.setVersion(desc.getVersion());
+				ExtensionType bdtExtension = new ExtensionType();
+				bdtExtension.setName(desc.getServiceExtensionDescription().getName());
+				bdtExtension.setExtensionType(desc.getExtensionType());
+				bdtExtension.setVersion(desc.getVersion());
 				// BDT extension has to run before data extension does
 				ExtensionType[] currentExtensions = getServiceInfo().getExtensions().getExtension();
 				ExtensionType[] newExtensions = new ExtensionType[currentExtensions.length + 1];
-				newExtensions[0] = extension;
-				System.arraycopy(currentExtensions, 0, newExtensions, 0, currentExtensions.length);
+				newExtensions[0] = bdtExtension;
+				System.arraycopy(currentExtensions, 0, newExtensions, 1, currentExtensions.length);
+				System.out.println("Service has " + newExtensions.length + " extensions:");
+				for (int i = 0; i < newExtensions.length; i++) {
+					System.out.println(newExtensions[i].getName());
+				}
 				getServiceInfo().getExtensions().setExtension(newExtensions);
 			}
 		}
