@@ -44,7 +44,7 @@ public class GridGrouperClientUtils {
 
 
 	public static boolean isMember(GlobusCredential cred, String xml, String memberId) throws Exception {
-		return isMember(null, xmlToExpression(xml), memberId);
+		return isMember(cred, xmlToExpression(xml), memberId);
 	}
 
 
