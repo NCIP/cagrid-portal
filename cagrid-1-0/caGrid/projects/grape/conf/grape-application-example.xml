@@ -22,14 +22,14 @@
                     <component>
                         <title>Manage Users</title>
                         <description>Manage Users</description>
-                        <classname>foo</classname>
+                        <classname>org.cagrid.grape.samples.SampleWindow</classname>
                         <icon>/applications-internet.png</icon>
                         <showOnToolBar>false</showOnToolBar>
                     </component>
                     <component>
                         <title>Manage Identity Providers</title>
                         <description>Manage Identity Providers</description>
-                        <classname>foo</classname>
+                        <classname>org.cagrid.grape.samples.SampleWindow</classname>
                         <icon>/applications-internet.png</icon>
                         <showOnToolBar>false</showOnToolBar>
                     </component>
@@ -43,14 +43,14 @@
                         <component>
                             <title>Certificate Authorities</title>
                             <description>Certificate Authorities</description>
-                            <classname>foo</classname>
+                            <classname>org.cagrid.grape.samples.SampleWindow</classname>
                             <icon>/applications-internet.png</icon>
                             <showOnToolBar>false</showOnToolBar>
                         </component>
                         <component>
                             <title>Levels of Assurance</title>
                             <description>Levels of Assurance</description>
-                            <classname>foo</classname>
+                            <classname>org.cagrid.grape.samples.SampleWindow</classname>
                             <icon>/applications-internet.png</icon>
                             <showOnToolBar>false</showOnToolBar>
                         </component>
@@ -61,7 +61,7 @@
                 <component>
                     <title>Login</title>
                     <description>Login</description>
-                    <classname>foo</classname>
+                    <classname>org.cagrid.grape.samples.SampleWindow</classname>
                     <icon>/applications-internet.png</icon>
                     <showOnToolBar>true</showOnToolBar>
                 </component>
@@ -75,7 +75,7 @@
                 <component>
                     <title>Discover Grid Services</title>
                     <description>Discover Grid Services</description>
-                    <classname>foo</classname>
+                    <classname>org.cagrid.grape.samples.SampleWindow</classname>
                     <icon>/applications-internet.png</icon>
                     <showOnToolBar>true</showOnToolBar>
                 </component>
