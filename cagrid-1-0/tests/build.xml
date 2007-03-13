@@ -103,7 +103,7 @@
     <!-- ============================================================== -->
     <!-- Cleans up generated stuff                                      -->
     <!-- ============================================================== -->
-    <target name="tests-clean" depends="prepare" description="Cleans all projects.">
+    <target name="clean" depends="prepare, caGrid-Master.clean" description="Cleans all projects and test suites.">
         <for list="${tests.projects.list}" parallel="true" param="project.name" trim="true">
             <sequential>
                 <echo message="Cleaning project @{project.name}." />
@@ -117,7 +117,7 @@
     <!-- ============================================================== -->
     <!-- Builds from scratch                                            -->
     <!-- ============================================================== -->
-    <target name="tests-all" depends="prepare, tests-clean" description="Builds the entire application">
+    <target name="all" depends="prepare, clean, caGrid-Master.all" description="Builds the entire application and test suite">
         <for list="${tests.projects.list}" parallel="false" param="project.name" trim="true">
             <sequential>
                 <echo message="Building project @{project.name}." />
