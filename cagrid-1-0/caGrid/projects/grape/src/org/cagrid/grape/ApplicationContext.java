@@ -7,11 +7,10 @@ public class ApplicationContext {
 	private GridApplication application;
 
 	private Component component;
-	
+
 	public ApplicationContext(GridApplication application) {
 		this(application, null);
 	}
-
 
 	public ApplicationContext(GridApplication application, Component component) {
 		this.application = application;
@@ -26,8 +25,13 @@ public class ApplicationContext {
 		this.application.addApplicationComponent(comp);
 	}
 
-	public void addApplicationComponent(ApplicationComponent comp, int width, int height) {
+	public void addApplicationComponent(ApplicationComponent comp, int width,
+			int height) {
 		this.application.addApplicationComponent(comp, width, height);
+	}
+
+	public ConfigurationManager getConfigurationManager() {
+		return this.application.getConfigurationManager();
 	}
 
 }

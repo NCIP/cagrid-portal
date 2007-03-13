@@ -18,13 +18,13 @@ public class GeneralConfigurationWindow extends ConfigurationComponent {
 
 	private JLabel label = null;
 	
-	private GeneralConfigurationWindow conf;
+	private GeneralConfiguration conf;
 
 	/**
 	 * This is the default constructor
 	 */
-	public GeneralConfigurationWindow(ApplicationContext context, GeneralConfigurationWindow conf) {
-		super(context,conf);
+	public GeneralConfigurationWindow(ApplicationContext context, String systemName, GeneralConfiguration conf) {
+		super(context,systemName,conf);
 		initialize();
 		this.conf = conf;
 	}
@@ -52,7 +52,6 @@ public class GeneralConfigurationWindow extends ConfigurationComponent {
 			gridBagConstraints.ipady = 0;
 			gridBagConstraints.gridy = 0;
 			label = new JLabel();
-			label.setText(this.getContext().getComponent().getTitle());
 			label.setFont(new Font("Dialog", Font.BOLD, 36));
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new GridBagLayout());

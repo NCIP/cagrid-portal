@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -77,7 +78,7 @@ public class GridApplication extends JFrame {
 		super();
 		this.app = app;
 		this.threadManager = new MobiusPoolManager();
-		configurationManager = new ConfigurationManager(app.getConfiguration());
+		configurationManager = new ConfigurationManager(new ApplicationContext(this),app.getConfiguration());
 		initialize();
 	}
 
@@ -260,9 +261,12 @@ public class GridApplication extends JFrame {
 				}
 			}
 			jJMenuBar.add(getWindowsMenu());
+			/*
 			if(this.configurationManager.getConfigurationMenu()!=null){
-			jJMenuBar.add(this.configurationManager.getConfigurationMenu());
+				//jJMenuBar.add(confMenu);
+				jJMenuBar.add(this.configurationManager.getConfigurationMenu());
 			}
+			*/
 			jJMenuBar.add(getHelpMenu());
 
 		}
@@ -424,6 +428,12 @@ public class GridApplication extends JFrame {
 			desktop = new MDIDesktopPane();
 		}
 		return desktop;
+	}
+	
+
+
+	public ConfigurationManager getConfigurationManager() {
+		return configurationManager;
 	}
 
 	protected void closeAllFrames() {

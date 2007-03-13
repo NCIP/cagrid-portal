@@ -75,7 +75,6 @@
     <xsd:complexType name="ConfigurationGroup">
         <xsd:sequence>
             <xsd:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
-            <xsd:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="ConfigurationDescriptors" type="grape:ConfigurationDescriptors" minOccurs="1" maxOccurs="1"/>                        
         </xsd:sequence>
     </xsd:complexType>
