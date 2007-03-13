@@ -44,40 +44,17 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	private static final String MUST_STOP_THREAD = "StopThread";
 	private static final String ITERATION_RESULT = "IterationResult";
 	
-	private static StringBuffer configFileContents = null;
-	
 	private File file = null;
 	private BufferedReader fileReader = null;
 	private QName objectQName = null;
 	private boolean isReleased;
 	
-	private PersistantSDKObjectIterator(File file, QName objectQName) throws FileNotFoundException {
+	private PersistantSDKObjectIterator(File file, QName objectQName)
+		throws FileNotFoundException {
 		this.file = file;
-		this.fileReader = new BufferedReader(new FileReader(file));
 		this.objectQName = objectQName;
+		this.fileReader = new BufferedReader(new FileReader(file));
 		this.isReleased = false;
-	}
-	
-	
-	/**
-	 * Loads a wsdd config file for discovering type mappings needed to serialize / deserialize SDK objects
-	 * 
-	 * @param filename
-	 * @throws Exception
-	 */
-	public static void loadWsddConfig(String filename) throws Exception {
-		configFileContents = Utils.fileToStringBuffer(new File(filename));
-	}
-	
-	
-	/**
-	 * Loads a WSDD configuration stream
-	 * 
-	 * @param stream
-	 * @throws Exception
-	 */
-	public static void loadWsddStream(InputStream stream) throws Exception {
-		configFileContents = Utils.inputStreamToStringBuffer(stream);
 	}
 	
 	
@@ -95,17 +72,19 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	 * 		The list of caCORE SDK objects to be enumerated
 	 * @param objectQName
 	 * 		The QName of the objects
+	 * @param wsddInput
+	 * 		An input stream to the WSDD configuration file
 	 * @return
 	 * 		An enum iterator instance to iterate the given objects
 	 * @throws Exception
 	 */
-	public static EnumIterator createIterator(List objects, QName objectQName) throws Exception {
+	public static EnumIterator createIterator(List objects, QName objectQName, InputStream wsddInput) throws Exception {
 		File tempSerializationDir = new File(Utils.getCaGridUserHome().getAbsolutePath() 
 			+ File.separator + "SDKEnumIterator");
 		if (!tempSerializationDir.exists()) {
 			tempSerializationDir.mkdirs();
 		}
-		return createIterator(objects, objectQName, 
+		return createIterator(objects, objectQName, wsddInput, 
 			File.createTempFile("EnumIteration", ".serialized", tempSerializationDir).getAbsolutePath());
 	}
 	
@@ -119,17 +98,20 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	 * 		The list of caCORE SDK objects to be enumerated
 	 * @param objectQName
 	 * 		The QName of the objects
-	 * @param filename
+	 * @param tempFilename
 	 * 		The name of the file to serialize objects into.
 	 * 		<b><i>NOTE:</b></i> For security reasons, access to this location 
-	 * 		must be controlled in a production data environment. 
+	 * 		must be controlled in a production data environment.
+	 * @param wsddInput
+	 * 		An input stream of the WSDD configuration file
 	 * @return
 	 * 		An enum iterator instance to iterate the given objects
 	 * @throws Exception
 	 */
-	public static EnumIterator createIterator(List objects, QName objectQName, String filename) throws Exception {
-		writeSdkObjects(objects, objectQName, filename);
-		return new PersistantSDKObjectIterator(new File(filename), objectQName);
+	public static EnumIterator createIterator(List objects, QName objectQName, InputStream wsddInput, String tempFilename) throws Exception {
+		StringBuffer wsddContents = Utils.inputStreamToStringBuffer(wsddInput);
+		writeSdkObjects(objects, objectQName, tempFilename, wsddContents);
+		return new PersistantSDKObjectIterator(new File(tempFilename), objectQName);
 	}
 	
 	
@@ -142,16 +124,22 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	 * 		The QName of the objects
 	 * @param filename
 	 * 		The filename to store the objects into
+	 * @param wsddContents
+	 * 		The contents of the WSDD configuration file
 	 * @throws Exception
 	 */
-	private static void writeSdkObjects(List objects, QName name, String filename) throws Exception {
+	private static void writeSdkObjects(List objects, QName name, String filename, StringBuffer wsddContents) throws Exception {
 		BufferedWriter fileWriter = new BufferedWriter(new FileWriter(filename));
 		Iterator objIter = objects.iterator();
+		byte[] configBytes = null;
+		if (wsddContents != null) {
+			configBytes = wsddContents.toString().getBytes();
+		}
 		while (objIter.hasNext()) {
 			StringWriter writer = new StringWriter();
-			if (configFileContents != null) {
+			if (configBytes != null) {
 				Utils.serializeObject(objIter.next(), name, writer, 
-					new ByteArrayInputStream(configFileContents.toString().getBytes()));
+					new ByteArrayInputStream(configBytes));
 			} else {
 				Utils.serializeObject(objIter.next(), name, writer);
 			}
@@ -179,7 +167,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
      */
 	public IterationResult next(final IterationConstraints constraints) throws TimeoutException, NoSuchElementException {
 		ThreadGroup execGroup = new ThreadGroup("next executor");
-		final Map threadCommunicationBuffer = new HashMap();
+		final Map<Object, Object> threadCommunicationBuffer = new HashMap<Object, Object>();
 		synchronized (threadCommunicationBuffer) {
 			threadCommunicationBuffer.put(MUST_STOP_THREAD, Boolean.FALSE);	
 		}
@@ -193,7 +181,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 					}
 					
 					// temporary list to hold SOAPElements
-					List soapElements = new ArrayList(constraints.getMaxElements());
+					List<SOAPElement> soapElements = new ArrayList<SOAPElement>(constraints.getMaxElements());
 					
 					// start building results
 					String xml = null;
@@ -309,7 +297,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	 * @return
 	 * 		An iteration result wrapping the result list
 	 */
-	private IterationResult wrapUpElements(List soapElements, boolean end) {
+	private IterationResult wrapUpElements(List<SOAPElement> soapElements, boolean end) {
 		SOAPElement[] elements = new SOAPElement[soapElements.size()];
 		soapElements.toArray(elements);
 		return new IterationResult(elements, end);

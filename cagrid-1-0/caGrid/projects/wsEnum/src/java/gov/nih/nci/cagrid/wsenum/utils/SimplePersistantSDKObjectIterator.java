@@ -40,8 +40,6 @@ import org.globus.wsrf.encoding.SerializationException;
  */
 public class SimplePersistantSDKObjectIterator implements EnumIterator {
 	
-	private static StringBuffer configFileContents = null;
-	
 	private File file = null;
 	private BufferedReader fileReader = null;
 	private QName objectQName = null;
@@ -52,22 +50,6 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 		this.fileReader = new BufferedReader(new FileReader(file));
 		this.objectQName = objectQName;
 		this.isReleased = false;
-	}
-	
-	
-	/**
-	 * Loads a wsdd config file for discovering type mappings needed to serialize / deserialize SDK objects
-	 * 
-	 * @param filename
-	 * @throws Exception
-	 */
-	public static void loadWsddConfig(String filename) throws Exception {
-		configFileContents = Utils.fileToStringBuffer(new File(filename));
-	}
-	
-	
-	public static void loadWsddStream(InputStream stream) throws Exception {
-		configFileContents = Utils.inputStreamToStringBuffer(stream);
 	}
 	
 	
@@ -85,17 +67,19 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 	 * 		The list of caCORE SDK objects to be enumerated
 	 * @param objectQName
 	 * 		The QName of the objects
+	 * @param wsddInput
+	 * 		An input stream of the WSDD configuration
 	 * @return
 	 * 		An enum iterator instance for the given objects
 	 * @throws Exception
 	 */
-	public static EnumIterator createIterator(List objects, QName objectQName) throws Exception {
+	public static EnumIterator createIterator(List objects, QName objectQName, InputStream wsddInput) throws Exception {
 		File tempSerializationDir = new File(Utils.getCaGridUserHome().getAbsolutePath() 
 			+ File.separator + "SDKEnumIterator");
 		if (!tempSerializationDir.exists()) {
 			tempSerializationDir.mkdirs();
 		}
-		return createIterator(objects, objectQName, 
+		return createIterator(objects, objectQName, wsddInput, 
 			File.createTempFile("EnumIteration", ".serialized", tempSerializationDir).getAbsolutePath());
 	}
 	
@@ -112,13 +96,16 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 	 * @param filename
 	 * 		The name of the file to serialize objects into.
 	 * 		<b><i>NOTE:</b></i> For security reasons, access to this location 
-	 * 		must be controlled in a production data environment. 
+	 * 		must be controlled in a production data environment.
+	 * @param wsddInput
+	 * 		An input stream of the WSDD configuration 
 	 * @return
 	 * 		An enum iterator instance for the given objects
 	 * @throws Exception
 	 */
-	public static EnumIterator createIterator(List objects, QName objectQName, String filename) throws Exception {
-		writeSdkObjects(objects, objectQName, filename);
+	public static EnumIterator createIterator(List objects, QName objectQName, InputStream wsddInput, String filename) throws Exception {
+		StringBuffer wsddContents = Utils.inputStreamToStringBuffer(wsddInput);
+		writeSdkObjects(objects, objectQName, filename, wsddContents);
 		return new SimplePersistantSDKObjectIterator(new File(filename), objectQName);
 	}
 	
@@ -132,16 +119,22 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 	 * 		The QName of the objects
 	 * @param filename
 	 * 		The filename to store the objects into
+	 * @param configFileContents
+	 * 		The contents of the WSDD config document
 	 * @throws Exception
 	 */
-	private static void writeSdkObjects(List objects, QName name, String filename) throws Exception {
+	private static void writeSdkObjects(List objects, QName name, String filename, StringBuffer configFileContents) throws Exception {
 		BufferedWriter fileWriter = new BufferedWriter(new FileWriter(filename));
 		Iterator objIter = objects.iterator();
+		byte[] configBytes = null;
+		if (configFileContents != null) {
+			configBytes = configFileContents.toString().getBytes();
+		}
 		while (objIter.hasNext()) {
 			StringWriter writer = new StringWriter();
-			if (configFileContents != null) {
+			if (configBytes != null) {
 				Utils.serializeObject(objIter.next(), name, writer, 
-					new ByteArrayInputStream(configFileContents.toString().getBytes()));
+					new ByteArrayInputStream(configBytes));
 			} else {
 				Utils.serializeObject(objIter.next(), name, writer);
 			}
@@ -173,7 +166,7 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 			throw new NoSuchElementException("Enumeration has been released");
 		}
 		// temporary list to hold SOAPElements
-		List soapElements = new ArrayList(constraints.getMaxElements());
+		List<SOAPElement> soapElements = new ArrayList<SOAPElement>(constraints.getMaxElements());
 		
 		// start building results
 		String xml = null;
@@ -201,7 +194,7 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 	 * @return
 	 * 		Wraps the list of soap elements in an iteration result
 	 */
-	private IterationResult wrapUpElements(List soapElements, boolean end) {
+	private IterationResult wrapUpElements(List<SOAPElement> soapElements, boolean end) {
 		SOAPElement[] elements = new SOAPElement[soapElements.size()];
 		soapElements.toArray(elements);
 		return new IterationResult(elements, end);

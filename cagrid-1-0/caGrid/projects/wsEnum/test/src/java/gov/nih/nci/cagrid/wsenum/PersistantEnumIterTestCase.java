@@ -52,7 +52,7 @@ public class PersistantEnumIterTestCase extends TestCase {
 	private String wsddFilename;
 	private QName geneQname;
 	private MessageContext messageContext;
-	private List objectList;
+	private List<Object> objectList;
 	private EnumIterator enumIterator;
 	
 	public PersistantEnumIterTestCase(String name) {
@@ -71,7 +71,7 @@ public class PersistantEnumIterTestCase extends TestCase {
 		// QName for the data type
 		geneQname = new QName("gme://caCORE.cabig/3.0/gov.nih.nci.cabio.domain", "Gene");
 		// need a list of SDK objects
-		objectList = new ArrayList();
+		objectList = new ArrayList<Object>();
 		for (int i = 0; i < 10; i++) {
 			Gene g = new Gene();
 			g.setSymbol("Symbol" + i);
@@ -80,8 +80,7 @@ public class PersistantEnumIterTestCase extends TestCase {
 		}
 		// set up the enum iterator
 		try {
-			PersistantSDKObjectIterator.loadWsddConfig(wsddFilename);
-			enumIterator = PersistantSDKObjectIterator.createIterator(objectList, geneQname);
+			enumIterator = PersistantSDKObjectIterator.createIterator(objectList, geneQname, new FileInputStream(wsddFilename));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail("Error initializing the Simple SDK Iterator: " + ex.getMessage());

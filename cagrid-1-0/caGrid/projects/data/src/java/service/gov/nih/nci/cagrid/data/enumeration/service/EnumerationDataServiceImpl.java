@@ -79,7 +79,7 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 		// perform the query
 		CQLQueryResults results = processor.processQuery(query);
 		// pump the results into a list
-		List resultList = new LinkedList();
+		List<Object> resultList = new LinkedList<Object>();
 		
 		try {
 			String serverConfigLocation = ServiceConfigUtil.getConfigProperty(
@@ -89,10 +89,10 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 			while (resIter.hasNext()) {
 				resultList.add(resIter.next());
 			}
-			SimplePersistantSDKObjectIterator.loadWsddStream(new FileInputStream(serverConfigLocation));
 			// create the EnumIterator from the objects
+			InputStream wsddStream = new FileInputStream(serverConfigLocation);
 			QName name = Utils.getRegisteredQName(resultList.get(0).getClass());
-			EnumIterator enumIter = SimplePersistantSDKObjectIterator.createIterator(resultList, name);
+			EnumIterator enumIter = SimplePersistantSDKObjectIterator.createIterator(resultList, name, wsddStream);
 			return enumIter;
 		} catch (Exception ex) {
 			throw new gov.nih.nci.cagrid.data.QueryProcessingException(ex);
