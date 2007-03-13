@@ -12,7 +12,7 @@
 
 	<!-- Information -->
 	<property name="project.version" value="1.0" />
-	<property name="project.name" value="caGrid-${project.version}-core" />
+	<property name="project.name" value="caGrid-${project.version}-${ant.project.name}" />
 
 
 	<property name="src.dir" value="${basedir}/src/java" />

@@ -3,7 +3,7 @@
 <!-- caGrid 1.0 discovery build file                                        -->
 <!-- ================================================================= -->
 
-<project name="core" default="compile" basedir=".">
+<project name="discovery" default="compile" basedir=".">
     <!-- Environment -->
     <property environment="env" />
     <property file="${basedir}/build.properties" />
@@ -12,7 +12,7 @@
 
     <!-- Information -->
 	<property name="project.version" value="1.0" />
-	<property name="project.name" value="caGrid-${project.version}-discovery" />
+	<property name="project.name" value="caGrid-${project.version}-${ant.project.name}" />
 
     <property name="src.dir" value="${basedir}/src/java" />
     <property name="build.dir" value="${basedir}/build" />
