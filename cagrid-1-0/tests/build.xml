@@ -23,8 +23,8 @@
     <property name="tests.projects.list" value="echo,cqlprocessors,coretests,workflow-services" />
 
     <!-- configuring (repurposing) the caGrid build -->
-    <property name="unit.testable.projects.list" value="" />
-    <property name="system.testable.projects.list" value="cqlprocessors,coretests" />
+    <property name="system.testable.projects.list" value="" />
+    <property name="unit.testable.projects.list" value="cqlprocessors,coretests" />
 
 
     <!-- IMPORT THE UTILITIES TARGETS -->
