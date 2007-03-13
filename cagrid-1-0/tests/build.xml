@@ -3,7 +3,7 @@
 <!-- caGrid Tests build file                                           -->
 <!-- ================================================================= -->
 
-<project name="cagrid-1.0-tests" default="tests-all" basedir=".">
+<project name="cagrid-1.0-tests" default="all" basedir=".">
     <dirname property="cagrid-1.0-tests.basedir" file="${ant.file.cagrid-1.0-tests}" />
 
     <!-- Give user the chance to override properties -->
