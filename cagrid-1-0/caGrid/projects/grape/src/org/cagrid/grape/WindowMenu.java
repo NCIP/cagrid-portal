@@ -12,8 +12,6 @@ import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
-import org.cagrid.grape.utils.IconUtils;
-
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -27,14 +25,15 @@ public class WindowMenu extends JMenu {
     private MDIDesktopPane desktop;
     private JMenuItem cascade = new JMenuItem("Cascade");
     private JMenuItem tile = new JMenuItem("Tile");
+    private JMenuItem prefs;
 
 
-    public WindowMenu(MDIDesktopPane desktop) {
+    public WindowMenu(MDIDesktopPane desktop, final GridApplication app) {
         this.desktop = desktop;
         setText("Window");
         setMnemonic(java.awt.event.KeyEvent.VK_W);
         cascade.setMnemonic(java.awt.event.KeyEvent.VK_C);
-        cascade.setIcon(IconUtils.loadIcon("/Cascade.gif"));
+        cascade.setIcon(LookAndFeel.getCascadeIcon());
         cascade.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 WindowMenu.this.desktop.cascadeFrames();
@@ -42,12 +41,25 @@ public class WindowMenu extends JMenu {
         });
 
         tile.setMnemonic(java.awt.event.KeyEvent.VK_T);
-        tile.setIcon(IconUtils.loadIcon("/TileVertical.gif"));
+        tile.setIcon(LookAndFeel.getTileIcon());
         tile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 WindowMenu.this.desktop.tileFrames();
             }
         });
+        
+        prefs = new javax.swing.JMenuItem();
+		prefs.setText("Preferences...");
+		prefs.setIcon(LookAndFeel.getPreferencesIcon());
+		prefs.setMnemonic(java.awt.event.KeyEvent.VK_Q);
+		prefs.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				ConfigurationWindow window = new ConfigurationWindow(app,app.getConfigurationManager());
+				window.setModal(false);
+				window.setSize(500,400);
+				window.setVisible(true);
+			}
+		});
         addMenuListener(new MenuListener() {
             public void menuCanceled(MenuEvent e) {
             }
@@ -73,6 +85,7 @@ public class WindowMenu extends JMenu {
 
         add(cascade);
         add(tile);
+        add(prefs);
         if (array.length > 0)
             addSeparator();
         cascade.setEnabled(array.length > 0);

@@ -423,7 +423,7 @@ public class GridApplication extends JFrame {
 	 */
 	private javax.swing.JMenu getWindowsMenu() {
 		if (windowsMenu == null) {
-			windowsMenu = new WindowMenu(getMDIDesktopPane());
+			windowsMenu = new WindowMenu(getMDIDesktopPane(),this);
 		}
 		return windowsMenu;
 	}

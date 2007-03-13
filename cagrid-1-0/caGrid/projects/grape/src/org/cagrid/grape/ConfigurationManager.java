@@ -30,11 +30,14 @@ public class ConfigurationManager {
 	private Logger log;
 
 	private ApplicationContext context;
+	
+	private Configuration configuration;
 
 	public ConfigurationManager(ApplicationContext context,
 			Configuration configuration) throws Exception {
 		confsByName = new HashMap();
 		objectsByName = new HashMap();
+		this.configuration = configuration;
 		this.context = context;
 		log = Logger.getLogger(this.getClass().getName());
 		if (configuration != null) {
@@ -47,6 +50,14 @@ public class ConfigurationManager {
 
 		}
 	}
+	
+	
+
+	public Configuration getConfiguration() {
+		return configuration;
+	}
+
+
 
 	private void processConfigurationGroups(ConfigurationGroups list)
 			throws Exception {
