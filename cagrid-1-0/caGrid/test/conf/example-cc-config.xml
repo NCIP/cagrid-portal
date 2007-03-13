@@ -127,8 +127,8 @@
 
     <!-- directory to write build logs to -->
     <log logdir="logs/caGrid-1.0-system">
-	<merge dir="checkout/caGrid-1.0-system/cagrid-1-0/tests/test/logs/"/>
-	<merge file="checkout/caGrid-1.0-system/cagrid-1-0/tests/test/logs/BuildNameSystem.xml"/>
+		<merge dir="checkout/caGrid-1.0-system/cagrid-1-0/caGrid/test/logs/"/>
+		<merge file="checkout/caGrid-1.0-system/cagrid-1-0/caGrid/test/logs/BuildNameSystem.xml"/>
     </log>
 
     <!-- Publishers are run *after* a build completes -->
