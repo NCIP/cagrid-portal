@@ -118,7 +118,7 @@
     <schedule interval="7200">
       <ant anthome="/usr/local/home/oster/bin/ant"
            buildfile="build-caGrid-1.0-system.xml"
-           target="test-tests"
+           target="test"
            uselogger="true"
            usedebug="false"
            timeout="5000"
