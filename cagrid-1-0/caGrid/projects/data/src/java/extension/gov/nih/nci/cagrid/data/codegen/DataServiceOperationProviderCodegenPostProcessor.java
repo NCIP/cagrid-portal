@@ -53,6 +53,13 @@ public class DataServiceOperationProviderCodegenPostProcessor extends BaseCodege
 			&& extensionData.getServiceFeatures().isUseSdkDataSource()) {
 			rebuildCastorMappings(extensionData, info);
 		}
+		
+		// handle service feature modifications
+		if (extensionData.getServiceFeatures().isUseBdt()) {
+			BDTFeatureCodegen bdtCodegen = new BDTFeatureCodegen(
+				info, info.getServices().getService(0), info.getIntroduceServiceProperties());
+			bdtCodegen.codegenFeature();
+		}
 	}
 	
 	
