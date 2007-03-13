@@ -111,19 +111,6 @@
                 <ant dir="${tests.projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean" />
             </sequential>
         </for>
-
-        <for list="${tests.cleanable.projects.list}" parallel="true" param="project.name" trim="true">
-            <sequential>
-                <echo message="Cleaning artifacts from project @{project.name}." />
-                <ant dir="${tests.projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean-artifacts" />
-            </sequential>
-        </for>
-
-        <delete failonerror="false">
-            <fileset dir="${junit.results.dir}">
-                <include name="*" />
-            </fileset>
-        </delete>
     </target>
 
 
