@@ -55,7 +55,8 @@ public class DataServiceOperationProviderCodegenPostProcessor extends BaseCodege
 		}
 		
 		// handle service feature modifications
-		if (extensionData.getServiceFeatures().isUseBdt()) {
+		if (extensionData.getServiceFeatures() != null &&
+			extensionData.getServiceFeatures().isUseBdt()) {
 			BDTFeatureCodegen bdtCodegen = new BDTFeatureCodegen(
 				info, info.getServices().getService(0), info.getIntroduceServiceProperties());
 			bdtCodegen.codegenFeature();
