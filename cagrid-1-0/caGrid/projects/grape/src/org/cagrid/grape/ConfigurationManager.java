@@ -7,7 +7,6 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.xml.namespace.QName;
 
@@ -151,6 +150,15 @@ public class ConfigurationManager {
 			throws Exception {
 		if (confsByName.containsKey(systemName)) {
 			return (ConfigurationDescriptor) confsByName.get(systemName);
+		} else {
+			throw new Exception("The configuration " + systemName
+					+ " does not exist!!!");
+		}
+	}
+	
+	public Object getConfigurationObject(String systemName) throws Exception {
+		if (objectsByName.containsKey(systemName)) {
+			return objectsByName.get(systemName);
 		} else {
 			throw new Exception("The configuration " + systemName
 					+ " does not exist!!!");

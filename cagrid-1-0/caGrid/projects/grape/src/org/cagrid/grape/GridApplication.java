@@ -25,6 +25,11 @@ import org.cagrid.grape.filters.XMLFileFilter;
 import org.cagrid.grape.model.Application;
 import org.cagrid.grape.model.Component;
 import org.cagrid.grape.model.Components;
+import org.cagrid.grape.model.Configuration;
+import org.cagrid.grape.model.ConfigurationDescriptor;
+import org.cagrid.grape.model.ConfigurationDescriptors;
+import org.cagrid.grape.model.ConfigurationGroup;
+import org.cagrid.grape.model.ConfigurationGroups;
 import org.cagrid.grape.model.Menu;
 import org.cagrid.grape.model.Menus;
 import org.cagrid.grape.model.Submenus;
@@ -67,18 +72,18 @@ public class GridApplication extends JFrame {
 
 	private ApplicationComponent lastComp = null;
 
-	private javax.swing.JMenu configMenu = null;
-
 	private Application app;
 
 	private MobiusPoolManager threadManager;
+
 	private ConfigurationManager configurationManager;
 
 	public GridApplication(Application app) throws Exception {
 		super();
 		this.app = app;
 		this.threadManager = new MobiusPoolManager();
-		configurationManager = new ConfigurationManager(new ApplicationContext(this),app.getConfiguration());
+		configurationManager = new ConfigurationManager(new ApplicationContext(
+				this), app.getConfiguration());
 		initialize();
 	}
 
@@ -164,7 +169,7 @@ public class GridApplication extends JFrame {
 
 	}
 
-	private void initialize() {
+	private void initialize() throws Exception {
 		try {
 
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -246,7 +251,8 @@ public class GridApplication extends JFrame {
 	 * 
 	 * @return javax.swing.JMenuBar
 	 */
-	private javax.swing.JMenuBar getJJMenuBar(List toolbarComponents) {
+	private javax.swing.JMenuBar getJJMenuBar(List toolbarComponents)
+			throws Exception {
 		if (jJMenuBar == null) {
 			jJMenuBar = new javax.swing.JMenuBar();
 			jJMenuBar.add(getFileMenu());
@@ -261,16 +267,119 @@ public class GridApplication extends JFrame {
 				}
 			}
 			jJMenuBar.add(getWindowsMenu());
-			/*
-			if(this.configurationManager.getConfigurationMenu()!=null){
-				//jJMenuBar.add(confMenu);
-				jJMenuBar.add(this.configurationManager.getConfigurationMenu());
+			javax.swing.JMenu conf = new javax.swing.JMenu();
+			conf.setText("Configuration");
+			conf.setMnemonic(java.awt.event.KeyEvent.VK_F);
+
+			if (processConfiguration(app.getConfiguration(), conf)) {
+				jJMenuBar.add(conf);
 			}
-			*/
 			jJMenuBar.add(getHelpMenu());
 
 		}
 		return jJMenuBar;
+	}
+
+	private boolean processConfiguration(Configuration c, JMenu m)
+			throws Exception {
+		boolean show = false;
+		if (this.processConfigurationGroups(c.getConfigurationGroups(), m)) {
+			show = true;
+		}
+
+		if (this.processConfigurationDescriptors(c
+				.getConfigurationDescriptors(), m)) {
+			show = true;
+		}
+
+		return show;
+
+	}
+
+	private boolean processConfigurationGroups(ConfigurationGroups list, JMenu m)
+			throws Exception {
+		boolean show = false;
+		if (list != null) {
+			ConfigurationGroup[] group = list.getConfigurationGroup();
+			if (group != null) {
+				for (int i = 0; i < group.length; i++) {
+					if (this.processConfigurationGroup(group[i], m)) {
+						show = true;
+					}
+				}
+			}
+		}
+		if (show) {
+
+		}
+		return show;
+	}
+
+	private boolean processConfigurationDescriptors(
+			ConfigurationDescriptors list, JMenu m) throws Exception {
+		boolean show = false;
+		if (list != null) {
+			ConfigurationDescriptor[] des = list.getConfigurationDescriptor();
+			if (des != null) {
+				for (int i = 0; i < des.length; i++) {
+					if (this.processConfigurationDescriptor(des[i], m)) {
+						show = true;
+					}
+				}
+
+			}
+		}
+		return show;
+	}
+
+	private boolean processConfigurationGroup(ConfigurationGroup des, JMenu m)
+			throws Exception {
+		boolean show = false;
+		if (des != null) {
+			javax.swing.JMenu jmenu = new javax.swing.JMenu();
+			jmenu.setText(des.getName());
+			jmenu.setMnemonic(java.awt.event.KeyEvent.VK_F);
+			show = processConfigurationDescriptors(des
+					.getConfigurationDescriptors(), jmenu);
+			if (show) {
+				m.add(jmenu);
+			}
+		}
+
+		return show;
+
+	}
+
+	private boolean processConfigurationDescriptor(
+			final ConfigurationDescriptor des, JMenu m) throws Exception {
+		if (des.getUIClassname() != null) {
+			Class[] types = new Class[3];
+			types[0] = ApplicationContext.class;
+			types[1] = String.class;
+			types[2] = Class.forName(des.getModelClassname());
+
+			Constructor c = Class.forName(des.getUIClassname()).getConstructor(
+					types);
+			Object[] args = new Object[3];
+			args[0] = new ApplicationContext(this);
+			args[1] = des.getSystemName();
+			args[2] = this.configurationManager.getConfigurationObject(des
+					.getSystemName());
+			final ConfigurationComponent config = (ConfigurationComponent) c
+					.newInstance(args);
+			JMenuItem item = new javax.swing.JMenuItem();
+			item.setText(des.getDisplayName());
+			item.setMnemonic(java.awt.event.KeyEvent.VK_Q);
+			item.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					addApplicationComponent(config);
+				}
+			});
+			m.add(item);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private javax.swing.JMenu getMenu(List toolbarComponents, Menu menu) {
@@ -429,8 +538,6 @@ public class GridApplication extends JFrame {
 		}
 		return desktop;
 	}
-	
-
 
 	public ConfigurationManager getConfigurationManager() {
 		return configurationManager;
@@ -499,7 +606,6 @@ public class GridApplication extends JFrame {
 		return closeAllMenuItem;
 	}
 
-
 	static public class ExecuteComponent extends MobiusRunnable {
 		private Component component;
 
@@ -513,13 +619,16 @@ public class GridApplication extends JFrame {
 
 		public void execute() {
 			try {
-				ApplicationContext context = new ApplicationContext(app,component);
+				ApplicationContext context = new ApplicationContext(app,
+						component);
 				Class[] inputTypes = new Class[1];
 				inputTypes[0] = ApplicationContext.class;
-				Constructor constructor = Class.forName(component.getClassname()).getConstructor(inputTypes);
+				Constructor constructor = Class.forName(
+						component.getClassname()).getConstructor(inputTypes);
 				Object[] inputs = new Object[1];
 				inputs[0] = context;
-				ApplicationComponent comp = (ApplicationComponent)constructor.newInstance(inputs);
+				ApplicationComponent comp = (ApplicationComponent) constructor
+						.newInstance(inputs);
 				if (component.getDimensions() != null) {
 					app.addApplicationComponent(comp, component.getDimensions()
 							.getWidth(), component.getDimensions().getHeight());
