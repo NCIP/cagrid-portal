@@ -30,19 +30,19 @@ public class CreationStep extends Step {
 			CreationTests.SERVICE_DIR, CreationTests.PACKAGE_NAME, CreationTests.SERVICE_NAMESPACE, "data");
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertTrue("Creating new data service completed successfully", p.exitValue() == 0);
+		assertTrue("Creating new data service failed", p.exitValue() == 0);
 		
 		System.out.println("Invoking post creation processes...");
 		cmd = CommonTools.getAntSkeletonPostCreationCommand(introduceDir, CreationTests.SERVICE_NAME,
 			CreationTests.SERVICE_DIR, CreationTests.PACKAGE_NAME, CreationTests.SERVICE_NAMESPACE, "data");
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertTrue("Service post creations completed successfully", p.exitValue() == 0);
+		assertTrue("Service post creation process failed", p.exitValue() == 0);
 
 		System.out.println("Building created service...");
 		cmd = CommonTools.getAntAllCommand(CreationTests.SERVICE_DIR);
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertTrue("Build process completed successfully", p.exitValue() == 0);
+		assertTrue("Build process failed", p.exitValue() == 0);
 	}
 }

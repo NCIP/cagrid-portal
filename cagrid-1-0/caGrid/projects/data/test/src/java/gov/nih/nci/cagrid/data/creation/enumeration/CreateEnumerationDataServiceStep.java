@@ -23,7 +23,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 30, 2006 
- * @version $Id: CreateEnumerationDataServiceStep.java,v 1.1 2006-12-18 14:48:47 dervin Exp $ 
+ * @version $Id: CreateEnumerationDataServiceStep.java,v 1.2 2007-03-13 19:27:13 dervin Exp $ 
  */
 public class CreateEnumerationDataServiceStep extends Step {
 	
@@ -44,13 +44,13 @@ public class CreateEnumerationDataServiceStep extends Step {
 			"data");
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertTrue("Service created successfully", p.exitValue() == 0);
+		assertTrue("Service creation process failed", p.exitValue() == 0);
 
 		// verify the service model exists
 		System.out.println("Verifying the service model file exists");
 		File serviceModelFile = new File(CreateEnumerationTests.SERVICE_DIR + File.separator + IntroduceConstants.INTRODUCE_XML_FILE);
-		assertTrue("Service model file exists: " + serviceModelFile.getAbsolutePath(), serviceModelFile.exists());
-		assertTrue("Service model file can be read: " + serviceModelFile.getAbsolutePath(), serviceModelFile.canRead());
+		assertTrue("Service model file does not exist: " + serviceModelFile.getAbsolutePath(), serviceModelFile.exists());
+		assertTrue("Service model file cannot be read: " + serviceModelFile.getAbsolutePath(), serviceModelFile.canRead());
 		
 		// deserialize the service model
 		System.out.println("Deserializing service description from introduce.xml");
@@ -61,7 +61,7 @@ public class CreateEnumerationDataServiceStep extends Step {
 		System.out.println("Locating the ws-enumeration extension");
 		ExtensionDescription ext = 
 			ExtensionsLoader.getInstance().getExtension(WsEnumerationFeatureCreator.WS_ENUM_EXTENSION_NAME);
-		assertNotNull("Ws enumeration extension is available", ext);
+		assertNotNull("Ws enumeration extension is not available", ext);
 		ExtensionType extType = new ExtensionType();
 		extType.setName(ext.getServiceExtensionDescription().getName());
 		extType.setExtensionType(ext.getExtensionType());
@@ -74,7 +74,7 @@ public class CreateEnumerationDataServiceStep extends Step {
 		serviceDesc.getExtensions().setExtension(allExtensions);
 		
 		// verify the data extension is in there
-		assertTrue("Service description has extensions", 
+		assertTrue("Service description has no extensions", 
 			serviceDesc.getExtensions() != null 
 			&& serviceDesc.getExtensions().getExtension() != null
 			&& serviceDesc.getExtensions().getExtension().length != 0);
@@ -86,7 +86,7 @@ public class CreateEnumerationDataServiceStep extends Step {
 				break;
 			}
 		}
-		assertNotNull("Data service extension found", dataExtension);
+		assertNotNull("Data service extension not found", dataExtension);
 		ExtensionTypeExtensionData extData = new ExtensionTypeExtensionData();
 		dataExtension.setExtensionData(extData);
 		
@@ -115,13 +115,13 @@ public class CreateEnumerationDataServiceStep extends Step {
 			"data");
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertTrue("Post creation succeded", p.exitValue() == 0);
+		assertTrue("Post creation process failed", p.exitValue() == 0);
 
 		// rebuild the code
 		System.out.println("Executing build command");
 		cmd = CommonTools.getAntAllCommand(CreateEnumerationTests.SERVICE_DIR);
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertTrue("Service built successfully", p.exitValue() == 0);
+		assertTrue("Service failed to build", p.exitValue() == 0);
 	}
 }

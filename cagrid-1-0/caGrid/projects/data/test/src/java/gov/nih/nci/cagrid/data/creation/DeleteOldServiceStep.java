@@ -26,7 +26,7 @@ public class DeleteOldServiceStep extends Step {
 		File oldServiceDir = new File(CreationTests.SERVICE_DIR);
 		if (oldServiceDir.exists()) {
 			boolean deleted = Utils.deleteDir(oldServiceDir);
-			assertTrue("Deleting directory: " + oldServiceDir.getAbsolutePath(), deleted);
+			assertTrue("Failed to delete directory: " + oldServiceDir.getAbsolutePath(), deleted);
 		} else {
 			System.out.println("Service dir " + oldServiceDir.getAbsolutePath() + " did not exist...");
 		}
