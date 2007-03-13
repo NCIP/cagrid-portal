@@ -139,18 +139,8 @@
 	<target name="clean" depends="" description="Removes generated files.">
 		<delete dir="${build.dir}" />
 	</target>
-
-	<!-- ============================================================== -->
-	<!-- Cleans up specially placed artifaces                           -->
-	<!-- ============================================================== -->
-	<target name="clean-artifacts" depends="" description="Removes artifacts.">
-		<delete>
-			<fileset dir="test/resources/services/BasicDataService/lib">
-				<include name="*.jar"/>
-			</fileset>
-		</delete>
-	</target>
-
+    
+    
 	<!-- ============================================================== -->
 	<!-- Creates the test jar files                                     -->
 	<!-- ============================================================== -->

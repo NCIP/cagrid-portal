@@ -3,244 +3,140 @@
 <!-- caGrid Tests build file                                           -->
 <!-- ================================================================= -->
 
-<project name="catrid-1.0-tests" default="all" basedir=".">
-	<!-- Give user the chance to override properties -->
-	<property environment="env" />
-	<property file="build.properties" />
+<project name="cagrid-1.0-tests" default="tests-all" basedir=".">
+    <dirname property="cagrid-1.0-tests.basedir" file="${ant.file.cagrid-1.0-tests}" />
 
-	<!-- Layout info -->
-	<property name="cagrid.dir" location="../caGrid" />
-	<property name="projects.dir" location="${cagrid.dir}/projects" />
-	<property name="tests.projects.dir" location="${basedir}/projects" />
-	<property name="test.dir" location="${basedir}/test" />
-	<property name="share.dir" location="${cagrid.dir}/share" />
-	<property name="share.lib.dir" location="${share.dir}/lib" />
-	<property name="tests.share.dir" location="${basedir}/share" />
-	<property name="tests.share.lib.dir" location="${test.share.dir}/lib" />
-	<property name="test.lib.dir" location="${cagrid.dir}/test/lib" />
-	<property name="cagrid.antfiles.dir" location="${cagrid.dir}/antfiles" />
-	<property name="antfiles.dir" location="${basedir}/antfiles" />
-	<property name="cagrid.test.dir" location="${cagrid.dir}/test" />
-	<property name="reports.dir" location="${basedir}/reports"/>
+    <!-- Give user the chance to override properties -->
+    <property environment="env" />
+    <property file="build.properties" />
 
-	<!-- IMPORT THE UTILITIES TARGETS -->
-	<import file="${cagrid.antfiles.dir}/artifacts.xml" />
-	<import file="${antfiles.dir}/artifacts.xml" />
-	<import file="${antfiles.dir}/report-utilities.xml" />
-	<import file="${cagrid.antfiles.dir}/ant-utilities.xml" />
-	<import file="${cagrid.antfiles.dir}/test-utilities.xml" />
-	<import file="${cagrid.antfiles.dir}/report-utilities.xml" />
+    <!-- Layout info -->
+    <property name="cagrid.dir" location="../caGrid" />
+    <property name="cagrid.antfiles.dir" location="${cagrid.dir}/antfiles" />
+    <property name="tests.projects.dir" location="${cagrid-1.0-tests.basedir}/projects" />
+    <property name="tests.test.dir" location="${cagrid-1.0-tests.basedir}/test" />
 
-	<!-- IMPORT THE TEST TARGET -->
-	<property name="build.name.template" location="${cagrid.test.dir}/BuildNameTemplate.xml"/>
-	<property name="cc2dart.xls.file" location="${cagrid.test.dir}/CC2DART.xsl"/>
-	<import file="${test.dir}/test.xml" />
-	<import file="${cagrid.test.dir}/test-dart.xml" />
+    <!-- ================================================================================ -->
+    <!--                          DEFINE THE SUB PROJECTS                                 -->
+    <!-- ================================================================================ -->
+    <!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
+    <property name="tests.projects.list" value="echo,cqlprocessors,coretests,workflow-services" />
+
+    <!-- configuring (repurposing) the caGrid build -->
+    <property name="unit.testable.projects.list" value="" />
+    <property name="system.testable.projects.list" value="cqlprocessors,coretests" />
 
 
-	<!-- ================================================================================ -->
-	<!--                          DEFINE THE SUB PROJECTS                                 -->
-	<!-- ================================================================================ -->
-	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="projects.list" value="echo,cqlprocessors,coretests,workflow-services" />
-	<!-- ================================================================================ -->
-	<!--                  DEFINE THE SUB PROJECTS THAT SUPPORT TESTING                    -->
-	<!-- ================================================================================ -->
-	<!-- This should be a subset of the projects above -->
-	<property name="testable.projects.list" value="cqlprocessors,coretests" />
-	<!-- ================================================================================ -->
-	<!--           DEFINE THE SUB PROJECTS THAT SUPPORT SPECIAL ARTIFACT CLEANING         -->
-	<!-- ================================================================================ -->
-	<!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="cleanable.projects.list" value="coretests" />
+    <!-- IMPORT THE UTILITIES TARGETS -->
+    <import file="${cagrid.dir}/build.xml" />
+    <import file="${cagrid-1.0-tests.basedir}/antfiles/artifacts.xml" />
 
-	<!-- =============================================================== -->
-	<!-- Bootstrap the build by setting up the structure and building    -->
-	<!-- our custom ant tasks.                                           -->
-	<!-- =============================================================== -->
-	<target name="prepare">
-		<tstamp />
 
-		<typedef name="artifact" classname="gov.nih.nci.cagrid.ant.Artifact" loaderref="artifact">
-			<classpath>
-				<pathelement location="${cagrid.antfiles.dir}/build" />
-				<fileset dir="${ant.library.dir}"> 
-					<include name="ant.jar" />
-				</fileset>
-				<fileset dir="${share.lib.dir}">
-					<include name="ant-contrib*.jar" />
-				</fileset>
-			</classpath>
-		</typedef>
-		<taskdef name="resolveDependencies" classname="gov.nih.nci.cagrid.ant.ResolveDependencies" loaderref="artifact">
-			<classpath>
-				<pathelement location="${cagrid.antfiles.dir}/build" />
-				<fileset dir="${ant.library.dir}"> 
-					<include name="ant.jar" />
-				</fileset>
-				<fileset dir="${share.lib.dir}">
-					<include name="ant-contrib*.jar" />
-				</fileset>
-			</classpath>
-		</taskdef>
-
-		<taskdef resource="net/sf/antcontrib/antlib.xml">
-			<classpath>
-				<pathelement location="${share.lib.dir}/ant-contrib.jar" />
-			</classpath>
-		</taskdef>
-	</target>
-
-	<!-- =============================================================== -->
-	<!-- echo                                                            -->
-	<!-- =============================================================== -->
-	<target name="build-echo" depends="prepare" description="Builds echo">
-		<ant dir="${tests.projects.dir}/echo" inheritAll="false" antfile="build.xml" target="all" />
-	</target>
+    <!-- =============================================================== -->
+    <!-- echo                                                            -->
+    <!-- =============================================================== -->
+    <target name="build-echo" depends="prepare" description="Builds echo">
+        <ant dir="${tests.projects.dir}/echo" inheritAll="false" antfile="build.xml" target="all" />
+    </target>
 
     <target name="build-workflow-services" description="Builds echo">
-        <ant dir="${tests.projects.dir}/workflow-services" inheritAll="false" antfile="build.xml" target="all"/>
+        <ant dir="${tests.projects.dir}/workflow-services" inheritAll="false" antfile="build.xml" target="all" />
     </target>
 
 
-	<!-- =============================================================== -->
-	<!-- echo                                                            -->
-	<!-- =============================================================== -->
-	<target name="build-cqlprocessors" depends="prepare" description="Builds cqlprocessors">
-		<resolveDependencies extdir="${tests.projects.dir}/cqlprocessors/ext">
-			<artifact refid="common.test.jars" />
-			<artifact refid="test.coverage.jars" />
-			<artifact refid="core.jars" />
-			<artifact refid="data.jars" />
-		</resolveDependencies>
-		<ant dir="${tests.projects.dir}/cqlprocessors" inheritAll="false" antfile="build.xml" target="all" />
-	</target>
+    <!-- =============================================================== -->
+    <!-- echo                                                            -->
+    <!-- =============================================================== -->
+    <target name="build-cqlprocessors" depends="prepare" description="Builds cqlprocessors">
+        <resolveDependencies extdir="${tests.projects.dir}/cqlprocessors/ext">
+            <artifact refid="common.test.jars" />
+            <artifact refid="test.coverage.jars" />
+            <artifact refid="core.jars" />
+            <artifact refid="data.jars" />
+        </resolveDependencies>
+        <ant dir="${tests.projects.dir}/cqlprocessors" inheritAll="false" antfile="build.xml" target="all" />
+    </target>
 
-	<!-- =============================================================== -->
-	<!-- coretests                                                       -->
-	<!-- =============================================================== -->
-	<target name="build-coretests" depends="prepare" description="Builds coretests">
-		<resolveDependencies extdir="${tests.projects.dir}/coretests/ext">
-			<artifact refid="echo.jars" />
-			<artifact refid="cqlprocessors.jars" />
-			<artifact refid="dorian.jars" />
-			<artifact refid="gridca.jars" />
-			<artifact refid="opensaml.jars" />
-			<artifact refid="opensaml.endorsed" />
-			<artifact refid="common.test.jars" />
-			<artifact refid="test.coverage.jars" />
-			<artifact refid="cadsr.jars" />
-			<artifact refid="discovery.jars" />
-			<artifact refid="core.jars" />
-			<artifact refid="introduce.jars" />
-			<artifact refid="gme.globus.client.jars" />
-			<artifact refid="security.metadata.jars" />
-			<artifact refid="mds.jars" />
-			<artifact refid="core.test.jars" />
-			<artifact refid="common.metadata.jars" />
-			<artifact refid="data.metadata.jars" />
-			<artifact refid="metadatautils.jars" />
-			<artifact refid="caCORE.jars" />
-			<artifact refid="graph.jars" />
-  	                <artifact refid="authentication.service.client.jars" />
-			<!-- <artifact refid="introduce.servicesecurity.jars" /> -->
-			<artifact refid="gridgrouper.jars" />
-			<artifact refid="gridgrouper.client.jars" />
-			<artifact refid="evs.jars" />
-		</resolveDependencies>
-		<resolveDependencies extdir="${tests.projects.dir}/coretests/test/resources/services/BasicDataService">
-			<artifact refid="cqlprocessors.jars" />
-		</resolveDependencies>
-		<ant dir="${tests.projects.dir}/coretests" inheritAll="false" antfile="build.xml" target="all" />
-	</target>
-
-	<!-- =============================================================== -->
-	<!-- cagrid builds                                                   -->
-	<!-- =============================================================== -->
-
-	<target name="build-core">
-		<echo>core must be built in the main caGrid build</echo>
-	</target>
-	<target name="build-discovery">
-		<echo>discovery must be built in the main caGrid build</echo>
-	</target>
-	<target name="build-introduce">
-		<echo>introduce must be built in the main caGrid build</echo>
-	</target>
-	<target name="build-cadsr">
-		<echo>cadsr must be built in the main caGrid build</echo>
-	</target>
-	<target name="build-gme">
-		<echo>gme must be built in the main caGrid build</echo>
-	</target>
-	<target name="build-metadata">
-		<echo>metadata must be built in the main caGrid build</echo>
-	</target>
-	<target name="build-metadatautils">
-		<echo>metadatautils must be built in the main caGrid build</echo>
-	</target>
-	<target name="build-graph">
-		<echo>graph must be built in the main caGrid build</echo>
-	</target>
-	<target name="build-introduceServiceSecurity">
-		<echo>introduceServiceSecurity must be built in the main caGrid build</echo>
-	</target>
-	<target name="build-dorian">
-		<echo>dorian must be built in the main caGrid build</echo>
-	</target>
-	<target name="build-gridca">
-		<echo>gridca must be built in the main caGrid build</echo>
-	</target>
-	<target name="build-opensaml">
-		<echo>opensaml must be built in the main caGrid build</echo>
-	</target>
-	<target name="build-data">
-		<echo>data must be built in the main caGrid build</echo>
-	</target>
-	<target name="build-gridgrouper">
-		<echo>gridgrouper must be built in the main caGrid build</echo>
-	</target>
-	<target name="build-authentication-service">
-		<echo>authentication-service must be built in the main caGrid build</echo>
-	</target>
-
-	<!-- ============================================================== -->
-	<!-- Cleans up generated stuff                                      -->
-	<!-- ============================================================== -->
-	<target name="clean" depends="prepare" description="Cleans all projects.">
-		<for list="${projects.list}" parallel="true" param="project.name" trim="true">
-			<sequential>
-				<echo message="Cleaning project @{project.name}." />
-				<delete dir="${tests.projects.dir}/@{project.name}/ext" />
-				<ant dir="${tests.projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean" />
-			</sequential>
-		</for>
-
-		<for list="${cleanable.projects.list}" parallel="true" param="project.name" trim="true">
-			<sequential>
-				<echo message="Cleaning artifacts from project @{project.name}." />
-				<ant dir="${tests.projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean-artifacts" />
-			</sequential>
-		</for>
-
-		<delete failonerror="false">
-			<fileset dir="${junit.results.dir}">
-				<include name="*"/>
-			</fileset>
-		</delete>
-	</target>
+    <!-- =============================================================== -->
+    <!-- coretests                                                       -->
+    <!-- =============================================================== -->
+    <target name="build-coretests" depends="prepare" description="Builds coretests">
+        <resolveDependencies extdir="${tests.projects.dir}/coretests/ext">
+            <artifact refid="echo.jars" />
+            <artifact refid="cqlprocessors.jars" />
+            <artifact refid="dorian.jars" />
+            <artifact refid="gridca.jars" />
+            <artifact refid="opensaml.jars" />
+            <artifact refid="opensaml.endorsed" />
+            <artifact refid="common.test.jars" />
+            <artifact refid="test.coverage.jars" />
+            <artifact refid="cadsr.jars" />
+            <artifact refid="discovery.jars" />
+            <artifact refid="core.jars" />
+            <artifact refid="introduce.jars" />
+            <artifact refid="gme.globus.client.jars" />
+            <artifact refid="security.metadata.jars" />
+            <artifact refid="mds.jars" />
+            <artifact refid="core.test.jars" />
+            <artifact refid="common.metadata.jars" />
+            <artifact refid="data.metadata.jars" />
+            <artifact refid="metadatautils.jars" />
+            <artifact refid="caCORE.jars" />
+            <artifact refid="graph.jars" />
+            <artifact refid="authentication.service.client.jars" />
+            <artifact refid="gridgrouper.jars" />
+            <artifact refid="gridgrouper.client.jars" />
+            <artifact refid="evs.jars" />
+        </resolveDependencies>
+        <delete failonerror="false">
+            <fileset dir="${tests.projects.dir}/coretests/test/resources/services/BasicDataService/lib">
+                <include name="*.jar" />
+            </fileset>
+        </delete>
+        <resolveDependencies extdir="${tests.projects.dir}/coretests/test/resources/services/BasicDataService">
+            <artifact refid="cqlprocessors.jars" />
+        </resolveDependencies>
+        <ant dir="${tests.projects.dir}/coretests" inheritAll="false" antfile="build.xml" target="all" />
+    </target>
 
 
-	<!-- ============================================================== -->
-	<!-- Builds from scratch                                            -->
-	<!-- ============================================================== -->
-	<target name="all" depends="prepare, clean" description="Builds the entire application">
-		<for list="${projects.list}" parallel="false" param="project.name" trim="true">
-			<sequential>
-				<echo message="Building project @{project.name}." />
-				<runtarget target="build-@{project.name}" />
-				<echo message="Built project @{project.name}." />
-			</sequential>
-		</for>
-	</target>
+    <!-- ============================================================== -->
+    <!-- Cleans up generated stuff                                      -->
+    <!-- ============================================================== -->
+    <target name="tests-clean" depends="prepare" description="Cleans all projects.">
+        <for list="${tests.projects.list}" parallel="true" param="project.name" trim="true">
+            <sequential>
+                <echo message="Cleaning project @{project.name}." />
+                <delete dir="${tests.projects.dir}/@{project.name}/ext" />
+                <ant dir="${tests.projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean" />
+            </sequential>
+        </for>
+
+        <for list="${tests.cleanable.projects.list}" parallel="true" param="project.name" trim="true">
+            <sequential>
+                <echo message="Cleaning artifacts from project @{project.name}." />
+                <ant dir="${tests.projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean-artifacts" />
+            </sequential>
+        </for>
+
+        <delete failonerror="false">
+            <fileset dir="${junit.results.dir}">
+                <include name="*" />
+            </fileset>
+        </delete>
+    </target>
+
+
+    <!-- ============================================================== -->
+    <!-- Builds from scratch                                            -->
+    <!-- ============================================================== -->
+    <target name="tests-all" depends="prepare, tests-clean" description="Builds the entire application">
+        <for list="${tests.projects.list}" parallel="false" param="project.name" trim="true">
+            <sequential>
+                <echo message="Building project @{project.name}." />
+                <runtarget target="build-@{project.name}" />
+                <echo message="Built project @{project.name}." />
+            </sequential>
+        </for>
+    </target>
 </project>

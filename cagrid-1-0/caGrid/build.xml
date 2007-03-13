@@ -2,19 +2,20 @@
 <!-- ================================================================= -->
 <!-- caGrid Master build file                                          -->
 <!-- ================================================================= -->
-
-<project name="Master" default="all" basedir=".">
+<project name="caGrid-Master" default="all" basedir=".">
+    <dirname property="caGrid-Master.basedir" file="${ant.file.caGrid-Master}"/>
+    
     <!-- Give user the chance to override properties -->
     <property environment="env" />
     <property file="build.properties" />
 
     <!-- Layout info -->
-    <property name="projects.dir" location="${basedir}/projects" />
-    <property name="test.dir" location="${basedir}/test" />
-    <property name="share.dir" location="${basedir}/share" />
+    <property name="projects.dir" location="${caGrid-Master.basedir}/projects" />
+    <property name="test.dir" location="${caGrid-Master.basedir}/test" />
+    <property name="share.dir" location="${caGrid-Master.basedir}/share" />
     <property name="share.lib.dir" location="${share.dir}/lib" />
     <property name="test.lib.dir" location="${test.dir}/lib" />
-    <property name="antfiles.dir" location="${basedir}/antfiles" />
+    <property name="antfiles.dir" location="${caGrid-Master.basedir}/antfiles" />
 
     <condition property="isJDK1.5" value="true">
         <or>
@@ -41,7 +42,7 @@
     <!--                          DEFINE THE SUB PROJECTS                                 -->
     <!-- ================================================================================ -->
     <!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-    <property name="projects.list" value="authz, bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, evs, portal, dorian, fqp, gme, graph, gridca, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, sdkQuery32, syncgts, workflow/WorkflowFactoryService, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service, service-security-provider, grape" />
+    <property name="projects.list" value="authz, bulkDataTransfer, cabigextensions, cadsr, core, data, discovery, evs, portal, dorian, fqp, gme, grape, graph, gridca, gts, installer, introduce, metadata, metadatautils, opensaml, sdkQuery, sdkQuery32, syncgts, workflow/WorkflowFactoryService, gridgrouper, wsEnum, ws-transfer, ws-naming, ws-handlesystem, security-ui, authentication-service, service-security-provider" />
     <!-- ================================================================================ -->
     <!--                  DEFINE THE SUB PROJECTS THAT SUPPORT UNIT TESTING               -->
     <!-- ================================================================================ -->
@@ -140,7 +141,7 @@
 	            <artifact refid="core.jars" />
 	        </resolveDependencies>
 	        <ant dir="${projects.dir}/grape" inheritAll="false" antfile="build.xml" target="all" />
-	    </target>
+    </target>
 
 
     <!-- =============================================================== -->
