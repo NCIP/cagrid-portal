@@ -2,12 +2,10 @@ package gov.nih.nci.cagrid.wsenum.utils;
 
 import gov.nih.nci.cagrid.common.Utils;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,18 +36,10 @@ import org.globus.wsrf.encoding.SerializationException;
  * @created Aug 17, 2006 
  * @version $Id$ 
  */
-public class SimplePersistantSDKObjectIterator implements EnumIterator {
-	
-	private File file = null;
-	private BufferedReader fileReader = null;
-	private QName objectQName = null;
-	private boolean isReleased;
+public class SimplePersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	
 	private SimplePersistantSDKObjectIterator(File file, QName objectQName) throws FileNotFoundException {
-		this.file = file;
-		this.fileReader = new BufferedReader(new FileReader(file));
-		this.objectQName = objectQName;
-		this.isReleased = false;
+		super(file, objectQName);
 	}
 	
 	
@@ -162,7 +152,7 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
      */
 	public IterationResult next(IterationConstraints constraints) throws TimeoutException, NoSuchElementException {
 		// check for release
-		if (isReleased) {
+		if (enumerationIsReleased()) {
 			throw new NoSuchElementException("Enumeration has been released");
 		}
 		// temporary list to hold SOAPElements
@@ -170,76 +160,25 @@ public class SimplePersistantSDKObjectIterator implements EnumIterator {
 		
 		// start building results
 		String xml = null;
-		while (soapElements.size() < constraints.getMaxElements() && (xml = getNextXmlChunk()) != null) {
-			try {
-				SOAPElement element = ObjectSerializer.toSOAPElement(xml, objectQName);
-				soapElements.add(element);
-			} catch (SerializationException ex) {
-				release();
-				NoSuchElementException nse = new NoSuchElementException("Error serializing element -- " + ex.getMessage());
-				nse.setStackTrace(ex.getStackTrace());
-				throw nse;
+		try {
+			while (soapElements.size() < constraints.getMaxElements() && (xml = getNextXmlChunk()) != null) {
+				try {
+					SOAPElement element = ObjectSerializer.toSOAPElement(xml, getObjectQName());
+					soapElements.add(element);
+				} catch (SerializationException ex) {
+					release();
+					NoSuchElementException nse = new NoSuchElementException("Error serializing element -- " + ex.getMessage());
+					nse.setStackTrace(ex.getStackTrace());
+					throw nse;
+				}
 			}
+		} catch (IOException ex) {
+			release();
+			NoSuchElementException nse = new NoSuchElementException("Error reading XML chunk from persistance file: " + ex.getMessage());
+			nse.setStackTrace(ex.getStackTrace());
+			throw nse;
 		}
 		// if the xml text is null, we're at the end of the iteration
 		return wrapUpElements(soapElements, xml == null);
-	}
-	
-	
-	/**
-	 * Encapsulates converting the list of SOAPElements to an array, then an Iteration Result
-	 * 
-	 * @param soapElements
-	 * @param end
-	 * @return
-	 * 		Wraps the list of soap elements in an iteration result
-	 */
-	private IterationResult wrapUpElements(List<SOAPElement> soapElements, boolean end) {
-		SOAPElement[] elements = new SOAPElement[soapElements.size()];
-		soapElements.toArray(elements);
-		return new IterationResult(elements, end);
-	}
-	
-	
-	/**
-	 * Reads the next chunk of XML from the file
-	 * 
-	 * @return
-	 * 		Null if no more XML is found
-	 */
-	private String getNextXmlChunk() {
-		try {
-			String charCountStr = fileReader.readLine();
-			if (charCountStr != null) {
-				int toRead = Integer.parseInt(charCountStr);
-				char[] charBuff = new char[toRead];
-				int count = 0;
-				int len = 0;
-				while (count < toRead) {
-					len = fileReader.read(charBuff, count, charBuff.length - count);
-					count += len;
-				}
-				return new String(charBuff);
-			} else {
-				return null;
-			}
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			return null;
-		}
-	}
-
-
-	/**
-	 * Releases the enumeration's resources.  Specificaly, this deletes the underlying serialization file
-	 */
-	public void release() {
-		try {
-			fileReader.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		file.delete();
-		isReleased = true;
 	}
 }

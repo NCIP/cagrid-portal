@@ -2,16 +2,9 @@ package gov.nih.nci.cagrid.wsenum.utils;
 
 import gov.nih.nci.cagrid.common.Utils;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -39,22 +32,14 @@ import org.globus.wsrf.encoding.SerializationException;
  * @created Aug 17, 2006 
  * @version $Id$ 
  */
-public class PersistantSDKObjectIterator implements EnumIterator {
+public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	private static final String THREAD_EXCEPTION = "ThreadException";
 	private static final String MUST_STOP_THREAD = "StopThread";
 	private static final String ITERATION_RESULT = "IterationResult";
-	
-	private File file = null;
-	private BufferedReader fileReader = null;
-	private QName objectQName = null;
-	private boolean isReleased;
-	
+		
 	private PersistantSDKObjectIterator(File file, QName objectQName)
 		throws FileNotFoundException {
-		this.file = file;
-		this.objectQName = objectQName;
-		this.fileReader = new BufferedReader(new FileReader(file));
-		this.isReleased = false;
+		super(file, objectQName);
 	}
 	
 	
@@ -79,12 +64,37 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	 * @throws Exception
 	 */
 	public static EnumIterator createIterator(List objects, QName objectQName, InputStream wsddInput) throws Exception {
+		return createIterator(objects.iterator(), objectQName, wsddInput);
+	}
+	
+	
+	/**
+	 * Serializes a List of caCORE SDK generated objects to a temp file on
+	 * the local disk, then creates an EnumIterator which can return
+	 * those objects.
+	 * 
+	 * <b><i>NOTE:</b></i> The temp file is created in the current user's 
+	 * home directory /.cagrid/SDKEnumIterator directory.  For security
+	 * reasons, access to this location must be controlled in a production
+	 * data environment. 
+	 * 
+	 * @param objectIter
+	 * 		An iterator to a collection of caCORE SDK objects to be enumerated
+	 * @param objectQName
+	 * 		The QName of the objects
+	 * @param wsddInput
+	 * 		An input stream to the WSDD configuration file
+	 * @return
+	 * 		An enum iterator instance to iterate the given objects
+	 * @throws Exception
+	 */
+	public static EnumIterator createIterator(Iterator objectIter, QName objectQName, InputStream wsddInput) throws Exception {
 		File tempSerializationDir = new File(Utils.getCaGridUserHome().getAbsolutePath() 
 			+ File.separator + "SDKEnumIterator");
 		if (!tempSerializationDir.exists()) {
 			tempSerializationDir.mkdirs();
 		}
-		return createIterator(objects, objectQName, wsddInput, 
+		return createIterator(objectIter, objectQName, wsddInput, 
 			File.createTempFile("EnumIteration", ".serialized", tempSerializationDir).getAbsolutePath());
 	}
 	
@@ -109,46 +119,33 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	 * @throws Exception
 	 */
 	public static EnumIterator createIterator(List objects, QName objectQName, InputStream wsddInput, String tempFilename) throws Exception {
-		StringBuffer wsddContents = Utils.inputStreamToStringBuffer(wsddInput);
-		writeSdkObjects(objects, objectQName, tempFilename, wsddContents);
-		return new PersistantSDKObjectIterator(new File(tempFilename), objectQName);
+		return createIterator(objects.iterator(), objectQName, wsddInput, tempFilename);
 	}
 	
 	
 	/**
-	 * Writes the SDK serializable objects to disk
+	 * Serializes a List of caCORE SDK generated objects to a specified file on
+	 * the local disk, then creates an EnumIterator which can return
+	 * those objects.
 	 * 
-	 * @param objects
-	 * 		The list of objects to write out
-	 * @param name
+	 * @param objectIter
+	 * 		An iterator to a collection of caCORE SDK objects to be enumerated
+	 * @param objectQName
 	 * 		The QName of the objects
-	 * @param filename
-	 * 		The filename to store the objects into
-	 * @param wsddContents
-	 * 		The contents of the WSDD configuration file
+	 * @param tempFilename
+	 * 		The name of the file to serialize objects into.
+	 * 		<b><i>NOTE:</b></i> For security reasons, access to this location 
+	 * 		must be controlled in a production data environment.
+	 * @param wsddInput
+	 * 		An input stream of the WSDD configuration file
+	 * @return
+	 * 		An enum iterator instance to iterate the given objects
 	 * @throws Exception
 	 */
-	private static void writeSdkObjects(List objects, QName name, String filename, StringBuffer wsddContents) throws Exception {
-		BufferedWriter fileWriter = new BufferedWriter(new FileWriter(filename));
-		Iterator objIter = objects.iterator();
-		byte[] configBytes = null;
-		if (wsddContents != null) {
-			configBytes = wsddContents.toString().getBytes();
-		}
-		while (objIter.hasNext()) {
-			StringWriter writer = new StringWriter();
-			if (configBytes != null) {
-				Utils.serializeObject(objIter.next(), name, writer, 
-					new ByteArrayInputStream(configBytes));
-			} else {
-				Utils.serializeObject(objIter.next(), name, writer);
-			}
-			String xml = writer.toString().trim();
-			fileWriter.write(String.valueOf(xml.length()) + "\n");
-			fileWriter.write(xml);
-		}
-		fileWriter.flush();
-		fileWriter.close();
+	public static EnumIterator createIterator(Iterator objectIter, QName objectQName, InputStream wsddInput, String tempFilename) throws Exception {
+		StringBuffer wsddContents = Utils.inputStreamToStringBuffer(wsddInput);
+		writeSdkObjects(objectIter, objectQName, tempFilename, wsddContents);
+		return new PersistantSDKObjectIterator(new File(tempFilename), objectQName);
 	}
 	
 
@@ -176,7 +173,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 				Thread.yield();
 				try {
 					// check for release
-					if (isReleased) {
+					if (enumerationIsReleased()) {
 						throw new NoSuchElementException("Enumeration has been released");
 					}
 					
@@ -188,7 +185,7 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 					checkForStop(threadCommunicationBuffer);
 					while (soapElements.size() < constraints.getMaxElements() && (xml = getNextXmlChunk()) != null) {
 						try {
-							SOAPElement element = ObjectSerializer.toSOAPElement(xml, objectQName);
+							SOAPElement element = ObjectSerializer.toSOAPElement(xml, getObjectQName());
 							if (constraints.getMaxCharacters() != -1) {
 								// check the length of the newly created element can fit
 								// in the iteration result
@@ -290,45 +287,6 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 	
 	
 	/**
-	 * Encapsulates converting the list of SOAPElements to an array, then an Iteration Result
-	 * 
-	 * @param soapElements
-	 * @param end
-	 * @return
-	 * 		An iteration result wrapping the result list
-	 */
-	private IterationResult wrapUpElements(List<SOAPElement> soapElements, boolean end) {
-		SOAPElement[] elements = new SOAPElement[soapElements.size()];
-		soapElements.toArray(elements);
-		return new IterationResult(elements, end);
-	}
-	
-	
-	/**
-	 * Reads the next chunk of XML from the file
-	 * 
-	 * @return
-	 * 		Null if no more XML is found
-	 */
-	private String getNextXmlChunk() throws IOException {
-		String charCountStr = fileReader.readLine();
-		if (charCountStr != null) {
-			int toRead = Integer.parseInt(charCountStr);
-			char[] charBuff = new char[toRead];
-			int count = 0;
-			int len = 0;
-			while (count < toRead) {
-				len = fileReader.read(charBuff, count, charBuff.length - count);
-				count += len;
-			}
-			return new String(charBuff);
-		} else {
-			return null;
-		}
-	}
-	
-	
-	/**
 	 * Counts all the characters in a list of soap elements
 	 * 
 	 * @param soapElements
@@ -358,19 +316,5 @@ public class PersistantSDKObjectIterator implements EnumIterator {
 				throw new InterruptedException();
 			}
 		}
-	}
-
-
-	/**
-	 * Releases the enumeration's resources.  Specificaly, this deletes the underlying serialization file
-	 */
-	public void release() {
-		try {
-			fileReader.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		file.delete();
-		isReleased = true;
 	}
 }

@@ -246,7 +246,8 @@ public class PersistantEnumIterTestCase extends TestCase {
 	 * the iterator to the point that timeouts are a real possibility
 	 */
 	private void slowDownIterator() {
-		Class iterClass = enumIterator.getClass();
+		// parent class has the file reader
+		Class iterClass = enumIterator.getClass().getSuperclass();
 		try {
 			Field readerField = iterClass.getDeclaredField("fileReader");
 			readerField.setAccessible(true);
