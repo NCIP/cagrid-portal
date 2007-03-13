@@ -26,7 +26,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 8, 2006 
- * @version $Id: InvokeDataServiceStep.java,v 1.2 2006-11-09 15:27:52 dervin Exp $ 
+ * @version $Id: InvokeDataServiceStep.java,v 1.3 2007-03-13 19:34:15 dervin Exp $ 
  */
 public class InvokeDataServiceStep extends Step {
 	public static final String URL_PART = "/wsrf/services/cagrid/";
@@ -112,8 +112,9 @@ public class InvokeDataServiceStep extends Step {
 		
 		try {
 			client.query(query);
+			fail("Exception QueryProcessingExceptionType should have been thrown");
 		} catch (QueryProcessingExceptionType ex) {
-			assertTrue("Query Processing Exception Type thrown", true);
+			// expected
 		}
 	}
 	
@@ -134,10 +135,10 @@ public class InvokeDataServiceStep extends Step {
 		query.setTarget(target);
 		try {
 			client.query(query);
+			fail("Exception MalformedQueryExceptionType should have been thrown");
 		} catch (MalformedQueryExceptionType ex) {
-			assertTrue("Malformed Query Exception Type thrown", true);
-		}
-		
+			// expected
+		}		
 	}
 	
 	

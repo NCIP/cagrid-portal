@@ -9,7 +9,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 8, 2006
- * @version $Id: StopGlobusStep.java,v 1.3 2007-02-26 20:24:27 hastings Exp $
+ * @version $Id: StopGlobusStep.java,v 1.4 2007-03-13 19:34:15 dervin Exp $
  */
 public class StopGlobusStep extends Step {
 
@@ -25,6 +25,6 @@ public class StopGlobusStep extends Step {
 
 		helper.stopGlobus();
 
-		assertFalse(helper.isGlobusRunning());
+		assertFalse("Globus should no longer be running, yet it is", helper.isGlobusRunning());
 	}
 }

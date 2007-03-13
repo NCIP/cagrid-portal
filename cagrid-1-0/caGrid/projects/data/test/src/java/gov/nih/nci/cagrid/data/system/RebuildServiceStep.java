@@ -11,7 +11,7 @@ import com.atomicobject.haste.framework.Step;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 7, 2006 
- * @version $Id: RebuildServiceStep.java,v 1.2 2006-12-18 14:48:47 dervin Exp $ 
+ * @version $Id: RebuildServiceStep.java,v 1.3 2007-03-13 19:34:15 dervin Exp $ 
  */
 public class RebuildServiceStep extends Step {
 	
@@ -40,12 +40,12 @@ public class RebuildServiceStep extends Step {
 			serviceBaseDir, packageName, namespace, "data");
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertTrue("Service post creations completed successfully", p.exitValue() == 0);
+		assertTrue("Service post creation process failed", p.exitValue() == 0);
 
 		System.out.println("Building created service...");
 		cmd = CommonTools.getAntAllCommand(serviceBaseDir);
 		p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();
-		assertTrue("Build process completed successfully", p.exitValue() == 0);
+		assertTrue("Build process failed", p.exitValue() == 0);
 	}
 }
