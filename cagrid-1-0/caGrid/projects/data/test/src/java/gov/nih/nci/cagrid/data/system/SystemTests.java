@@ -12,19 +12,17 @@ import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 import com.atomicobject.haste.framework.Step;
-import com.atomicobject.haste.framework.Story;
 
 
 /**
- * SystemTests Story for data service system tests
+ * SystemTests 
+ * Story for data service system tests
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.11 2007-03-01 17:49:18 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.12 2007-03-14 18:29:17 dervin Exp $
  */
-public class SystemTests extends Story {
-	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
-
+public class SystemTests extends BaseSystemTest {
 	private static GlobusHelper globusHelper = new GlobusHelper(false, new File(IntroduceTestConstants.TEST_TEMP),
 		IntroduceTestConstants.TEST_PORT + 1);
 
@@ -88,15 +86,6 @@ public class SystemTests extends Story {
 		} catch (Throwable ex) {
 			ex.printStackTrace();
 		}
-	}
-
-
-	private String getIntroduceBaseDir() {
-		String dir = System.getProperty(INTRODUCE_DIR_PROPERTY);
-		if (dir == null) {
-			fail("Introduce base dir environment variable " + INTRODUCE_DIR_PROPERTY + " is required");
-		}
-		return dir;
 	}
 
 
