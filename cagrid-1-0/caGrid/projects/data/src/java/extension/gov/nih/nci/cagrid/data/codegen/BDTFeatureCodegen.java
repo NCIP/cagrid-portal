@@ -11,44 +11,45 @@ import java.util.Properties;
 
 /** 
  *  BDTFeatureCodegen
- *  TODO:DOCUMENT ME
+ *  Generates source code for the BDT data service and writes it
+ *  into the service impl and BDT Resource
  * 
  * @author David Ervin
  * 
  * @created Mar 13, 2007 1:10:16 PM
- * @version $Id: BDTFeatureCodegen.java,v 1.1 2007-03-13 18:34:28 dervin Exp $ 
+ * @version $Id: BDTFeatureCodegen.java,v 1.2 2007-03-14 14:18:45 dervin Exp $ 
  */
 public class BDTFeatureCodegen extends FeatureCodegen {
 	public static final String NL = System.getProperties().getProperty("line.separator");
 	
 	// service impl edits
 	public static final String SERVICE_START = "BDTResource thisResource = (BDTResource)bdtHome.find(bdtResourceKey);";
-	public static final String SERVICE_LINE1 = "String classToQnameMapfile = gov.nih.nci.cagrid.data.service.ServiceConfigUtil.getClassToQnameMappingsFile();" + NL;
-	public static final String SERVICE_LINE2 = "java.io.InputStream wsddStream = new java.io.FileInputStream(gov.nih.nci.cagrid.data.service.ServiceConfigUtil" + NL 
-		+ "\t.getConfigProperty(gov.nih.nci.cagrid.data.DataServiceConstants.SERVER_CONFIG_LOCATION));" + NL;
-	public static final String SERVICE_LINE3 = "thisResource.initialize(cqlQuery, classToQnameMapfile, wsddStream);" + NL;
+	public static final String SERVICE_LINE1 = "\t\t\tString classToQnameMapfile = gov.nih.nci.cagrid.data.service.ServiceConfigUtil.getClassToQnameMappingsFile();" + NL;
+	public static final String SERVICE_LINE2 = "\t\t\tjava.io.InputStream wsddStream = new java.io.FileInputStream(gov.nih.nci.cagrid.data.service.ServiceConfigUtil" + NL 
+		+ "\t\t\t\t.getConfigProperty(gov.nih.nci.cagrid.data.DataServiceConstants.SERVER_CONFIG_LOCATION));" + NL;
+	public static final String SERVICE_LINE3 = "\t\t\tthisResource.initialize(cqlQuery, classToQnameMapfile, wsddStream);" + NL;
 	
 	// bdt resource edits
 	public static final String RESOURCE_CLASS_DECLARATION = "public class BDTResource extends BDTResourceBase implements BDTResourceI {";
-	public static final String RESOURCE_LINE1 = "private gov.nih.nci.cagrid.data.service.bdt.BDTResourceHelper helper;" + NL;
+	public static final String RESOURCE_LINE1 = "\tprivate gov.nih.nci.cagrid.data.service.bdt.BDTResourceHelper helper;" + NL;
 	public static final String RESOURCE_INITIALIZE = 
-		"void initialize(gov.nih.nci.cagrid.cqlquery.CQLQuery query, " + NL +
-		"\t\tString classToQnameMapfile, " + NL + 
-		"\t\tjava.io.InputStream wsddStream) {" + NL +
-		"\tthis.helper = new gov.nih.nci.cagrid.data.service.bdt.BDTResourceHelper(" + NL +
-		"\t\tquery, classToQnameMapfile, wsddStream);" + NL +
-		"}";
+		"\tvoid initialize(gov.nih.nci.cagrid.cqlquery.CQLQuery query, " + NL +
+		"\t\t\tString classToQnameMapfile, " + NL + 
+		"\t\t\tjava.io.InputStream wsddStream) {" + NL +
+		"\t\tthis.helper = new gov.nih.nci.cagrid.data.service.bdt.BDTResourceHelper(" + NL +
+		"\t\t\tquery, classToQnameMapfile, wsddStream);" + NL +
+		"\t}";
 	public static final String RESOURCE_CREATE_ENUM_METHOD = "public EnumIterator createEnumeration() throws BDTException {";
 	public static final String RESOURCE_CREATE_ENUM_METHOD_IMPL = 
-		"try {" + NL +
-		"\treturn helper.createEnumIterator();" + NL +
-		"} catch (gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ex) {" + NL +
-		"\tthrow new BDTException(\"Error processing query: \" + ex.getMessage(), ex);" + NL +
-		"} catch (gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType ex) {" + NL +
-		"throw new BDTException(\"Improperly formed query: \" + ex.getMessage(), ex);" + NL +
-		"}";
+		"\ttry {" + NL +
+		"\t\treturn helper.createEnumIterator();" + NL +
+		"\t} catch (gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ex) {" + NL +
+		"\t\tthrow new BDTException(\"Error processing query: \" + ex.getMessage(), ex);" + NL +
+		"\t} catch (gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType ex) {" + NL +
+		"\t\tthrow new BDTException(\"Improperly formed query: \" + ex.getMessage(), ex);" + NL +
+		"\t}";
 	public static final String RESOURCE_GET_METHOD = "public AnyXmlType get() throws BDTException {";
-	public static final String RESOURCE_GET_METHOD_IMPL = "return helper.resultsAsAnyType();";
+	public static final String RESOURCE_GET_METHOD_IMPL = "\t\treturn helper.resultsAsAnyType();";
 	
 
 	public BDTFeatureCodegen(ServiceInformation info, ServiceType mainService, Properties serviceProps) {
@@ -62,12 +63,7 @@ public class BDTFeatureCodegen extends FeatureCodegen {
 	}
 	
 	
-	private void editBdtImpl() throws CodegenExtensionException {
-		System.out.println("EDITING BDT IMPL");
-		System.out.println("EDITING BDT IMPL");
-		System.out.println("EDITING BDT IMPL");
-		System.out.println("EDITING BDT IMPL");
-		
+	private void editBdtImpl() throws CodegenExtensionException {		
 		String serviceName = getServiceInformation().getServices().getService()[0].getName();
 		String basePackage = getServiceInformation().getServices().getService()[0].getPackageName();
 		// full name of the service impl class
@@ -99,22 +95,11 @@ public class BDTFeatureCodegen extends FeatureCodegen {
 		} catch (IOException ex) {
 			throw new CodegenExtensionException("Error writing service source file: " + ex.getMessage(), ex);
 		}
-		
-		System.out.println("WROTE BDT IMPL");
-		System.out.println("WROTE BDT IMPL");
-		System.out.println("WROTE BDT IMPL");
-		System.out.println("WROTE BDT IMPL");
-		System.out.println("WROTE BDT IMPL");
 	}
 	
 	
 	
-	private void editBdtResource() throws CodegenExtensionException {
-		System.out.println("EDITING BDT RESOURCE");
-		System.out.println("EDITING BDT RESOURCE");
-		System.out.println("EDITING BDT RESOURCE");
-		System.out.println("EDITING BDT RESOURCE");
-		
+	private void editBdtResource() throws CodegenExtensionException {		
 		String basePackage = getServiceInformation().getServices().getService()[0].getPackageName();
 		// full name of the service impl class
 		String fullClassName = basePackage + ".service.BDTResource";
@@ -173,10 +158,5 @@ public class BDTFeatureCodegen extends FeatureCodegen {
 		} catch (IOException ex) {
 			throw new CodegenExtensionException("Error writing BDT Resource source file: " + ex.getMessage(), ex);
 		}
-		
-		System.out.println("WROTE BDT RESOURCE");
-		System.out.println("WROTE BDT RESOURCE");
-		System.out.println("WROTE BDT RESOURCE");
-		System.out.println("WROTE BDT RESOURCE");
 	}
 }
