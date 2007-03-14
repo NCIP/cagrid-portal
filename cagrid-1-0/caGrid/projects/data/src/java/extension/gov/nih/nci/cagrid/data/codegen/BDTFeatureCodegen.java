@@ -17,7 +17,7 @@ import java.util.Properties;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 1:10:16 PM
- * @version $Id: BDTFeatureCodegen.java,v 1.2 2007-03-14 14:18:45 dervin Exp $ 
+ * @version $Id: BDTFeatureCodegen.java,v 1.3 2007-03-14 16:29:12 dervin Exp $ 
  */
 public class BDTFeatureCodegen extends FeatureCodegen {
 	public static final String NL = System.getProperties().getProperty("line.separator");
@@ -47,9 +47,16 @@ public class BDTFeatureCodegen extends FeatureCodegen {
 		"\t\tthrow new BDTException(\"Error processing query: \" + ex.getMessage(), ex);" + NL +
 		"\t} catch (gov.nih.nci.cagrid.data.faults.MalformedQueryExceptionType ex) {" + NL +
 		"\t\tthrow new BDTException(\"Improperly formed query: \" + ex.getMessage(), ex);" + NL +
-		"\t}";
+		"\t}" + NL;
 	public static final String RESOURCE_GET_METHOD = "public AnyXmlType get() throws BDTException {";
-	public static final String RESOURCE_GET_METHOD_IMPL = "\t\treturn helper.resultsAsAnyType();";
+	public static final String RESOURCE_GET_METHOD_IMPL =
+		"\ttry {" + NL +
+		"\t\treturn helper.resultsAsAnyType();" + NL +
+		"\t} catch (gov.nih.nci.cagrid.data.QueryProcessingException ex) {" + NL +
+		"\t\tthrow new BDTException(\"Error processing query: \" + ex.getMessage(), ex);" + NL +
+		"\t} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {" + NL +
+		"\t\tthrow new BDTException(\"Improperly formed query: \" + ex.getMessage(), ex);" + NL +
+		"\t}" + NL;
 	
 
 	public BDTFeatureCodegen(ServiceInformation info, ServiceType mainService, Properties serviceProps) {

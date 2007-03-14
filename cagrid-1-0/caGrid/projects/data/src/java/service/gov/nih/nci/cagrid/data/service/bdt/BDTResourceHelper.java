@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.service.bdt;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
@@ -18,12 +19,16 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.message.MessageElement;
+import org.apache.axis.utils.XMLUtils;
 import org.globus.transfer.AnyXmlType;
 import org.globus.ws.enumeration.EnumIterator;
+import org.w3c.dom.Document;
 
 /** 
  *  BDTResourceHelper
@@ -32,7 +37,7 @@ import org.globus.ws.enumeration.EnumIterator;
  * @author David Ervin
  * 
  * @created Mar 12, 2007 2:08:57 PM
- * @version $Id: BDTResourceHelper.java,v 1.1 2007-03-13 16:14:11 dervin Exp $ 
+ * @version $Id: BDTResourceHelper.java,v 1.2 2007-03-14 16:29:12 dervin Exp $ 
  */
 public class BDTResourceHelper extends BaseServiceImpl {
 	private CQLQuery query;
@@ -84,9 +89,29 @@ public class BDTResourceHelper extends BaseServiceImpl {
 	 * @return
 	 * 		The query result
 	 */
-	public AnyXmlType resultsAsAnyType() {
+	public AnyXmlType resultsAsAnyType() throws QueryProcessingException, MalformedQueryException {
 		AnyXmlType any = new AnyXmlType();
-		
+		CQLQueryResults results = processQuery();
+		// serialize the results
+		StringWriter writer = new StringWriter();
+		try {
+			Utils.serializeObject(results, DataServiceConstants.CQL_RESULT_SET_QNAME, 
+				writer, getConsumableInputStream());
+		} catch (Exception ex) {
+			throw new QueryProcessingException("Error serializing results: " + ex.getMessage(), ex);
+		}
+		// convert the XML to a w3c Dom element
+		byte[] xmlBytes = writer.getBuffer().toString().getBytes();
+		ByteArrayInputStream xmlInputStream = new ByteArrayInputStream(xmlBytes);
+		Document doc = null;
+		try {
+			doc = XMLUtils.newDocument(xmlInputStream);
+		} catch (Exception ex) {
+			throw new QueryProcessingException("Error DOMing xml: " + ex.getMessage(), ex);
+		}
+		// create the any type element
+		MessageElement anyElement = new MessageElement(doc.getDocumentElement());
+		any.set_any(new MessageElement[] {anyElement});
 		return any;
 	}
 	
@@ -103,6 +128,31 @@ public class BDTResourceHelper extends BaseServiceImpl {
 	
 	
 	/**
+	 * Processes the CQL query if it has not already been done, and returns the 
+	 * CQL Query Results from it
+	 * 
+	 * @return
+	 * 		The CQLQueryResults of processing the query
+	 * @throws QueryProcessingException
+	 * @throws MalformedQueryException
+	 */
+	private CQLQueryResults processQuery() throws QueryProcessingException, MalformedQueryException {
+		if (queryResults == null) {
+			// initialize the CQL Query Processor
+			CQLQueryProcessor processor = null;
+			try {
+				processor = getCqlQueryProcessorInstance();
+			} catch (QueryProcessingExceptionType ex) {
+				throw new QueryProcessingException(ex);
+			}
+			// perform the query
+			queryResults = processor.processQuery(query);
+		}
+		return queryResults;
+	}
+	
+	
+	/**
 	 * Processes a CQL query and returns an Iteration over the result set
 	 * 
 	 * @return
@@ -113,17 +163,9 @@ public class BDTResourceHelper extends BaseServiceImpl {
 	 * @throws FileNotFoundException
 	 */
 	private Iterator processQueryAndIterate() throws QueryProcessingException, 
-		MalformedQueryException, IOException, FileNotFoundException {
-		Iterator iterator = null;
-		if (queryResults == null) {
-			// initialize the CQL Query Processor
-			CQLQueryProcessor processor = getCqlQueryProcessorInstance();
-			// perform the query
-			queryResults = processor.processQuery(query);
-		}
-		// use the existing result set
-		iterator = new CQLQueryResultsIterator(queryResults, getConsumableInputStream());
-		
+		MalformedQueryException, IOException {
+		CQLQueryResults results = processQuery();
+		Iterator iterator = new CQLQueryResultsIterator(results, getConsumableInputStream());
 		return iterator;
 	}
 	
