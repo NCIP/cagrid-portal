@@ -41,7 +41,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package org.cagrid.grape.configuration;
+package org.cagrid.grape;
 
 import java.awt.Component;
 

@@ -41,12 +41,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package org.cagrid.grape.configuration;
+package org.cagrid.grape;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import org.cagrid.grape.ConfigurationWindow;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>

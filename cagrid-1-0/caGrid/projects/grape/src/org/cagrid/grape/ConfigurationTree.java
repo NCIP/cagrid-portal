@@ -41,12 +41,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package org.cagrid.grape.configuration;
+package org.cagrid.grape;
 
-import javax.swing.ImageIcon;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.cagrid.grape.LookAndFeel;
-import org.cagrid.grape.model.ConfigurationGroup;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -57,21 +61,69 @@ import org.cagrid.grape.model.ConfigurationGroup;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class ConfigurationGroupTreeNode extends ConfigurationBaseTreeNode {
+public class ConfigurationTree extends JTree {
 
-	private ConfigurationGroup group;
+	private ConfigurationTreeNode rootNode;
 
-	public ConfigurationGroupTreeNode(ConfigurationTree tree,
-			ConfigurationGroup group) {
-		super(tree);
-		this.group = group;
+	public ConfigurationTree(ConfigurationWindow window, ConfigurationManager conf) throws Exception{
+		super();
+		this.rootNode = new ConfigurationTreeNode(this,conf);
+		setModel(new DefaultTreeModel(this.rootNode));
+		this.addMouseListener(new ConfigurationTreeEventListener(this,window));
+		this.setCellRenderer(new ConfigurationTreeRenderer());
 	}
 
-	public ImageIcon getIcon() {
-		return LookAndFeel.getPreferencesIcon();
+	public ConfigurationTreeNode getRootNode() {
+		return this.rootNode;
 	}
 
-	public String toString() {
-		return group.getName();
+
+	public ConfigurationBaseTreeNode getCurrentNode() {
+		TreePath currentSelection = this.getSelectionPath();
+		if (currentSelection != null) {
+			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection
+					.getLastPathComponent();
+			return (ConfigurationBaseTreeNode) currentNode;
+		}
+		return null;
 	}
+
+	/**
+	 * Get all the selected service nodes
+	 * 
+	 * @return A List of GridServiceTreeNodes
+	 */
+	public List getSelectedNodes() {
+		List selected = new LinkedList();
+		TreePath[] currentSelection = this.getSelectionPaths();
+		if (currentSelection != null) {
+			for (int i = 0; i < currentSelection.length; i++) {
+				TreePath path = currentSelection[i];
+				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) path
+						.getLastPathComponent();
+				if (currentNode != this.getRootNode()) {
+					selected.add(currentNode);
+				}
+			}
+		}
+		return selected;
+	}
+
+	/**
+	 * Reload a portion of the tree's view in a synchronized way
+	 * 
+	 * @param reloadPoint
+	 *            The node from which to reload
+	 */
+	public synchronized void reload(TreeNode reloadPoint) {
+		((DefaultTreeModel) this.getModel()).reload(reloadPoint);
+	}
+
+	/**
+	 * Reload from the root
+	 */
+	public synchronized void reload() {
+		this.reload(getRootNode());
+	}
+
 }

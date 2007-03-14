@@ -41,13 +41,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package org.cagrid.grape.configuration;
+package org.cagrid.grape;
 
 import javax.swing.ImageIcon;
 
-import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.model.ConfigurationDescriptor;
-import org.cagrid.grape.model.ConfigurationGroup;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -62,14 +60,15 @@ public class ConfigurationDescriptorTreeNode extends ConfigurationBaseTreeNode {
 
 	private ConfigurationDescriptor des;
 
-	public ConfigurationDescriptorTreeNode(ConfigurationTree tree,
-			ConfigurationDescriptor des) {
-		super(tree);
+	public ConfigurationDescriptorTreeNode(ConfigurationTree tree,ConfigurationManager conf,
+			ConfigurationDescriptor des) throws Exception{
+		super(tree,conf);
 		this.des = des;
+		//this.processConfigurationDescriptor(des);
 	}
 
 	public ImageIcon getIcon() {
-		return LookAndFeel.getPreferencesIcon();
+		return LookAndFeel.getPreferencesTreeIcon();
 	}
 
 	public String toString() {

@@ -3,11 +3,9 @@ package org.cagrid.grape;
 import gov.nih.nci.cagrid.common.Utils;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JMenuItem;
 import javax.xml.namespace.QName;
 
 import org.apache.log4j.Logger;
@@ -127,30 +125,6 @@ public class ConfigurationManager {
 						+ conf.getAbsolutePath());
 			}
 
-			// TODO: Move this elsewhere
-			if (des.getUIClassname() != null) {
-				Class[] types = new Class[3];
-				types[0] = ApplicationContext.class;
-				types[1] = String.class;
-				types[2] = Class.forName(des.getModelClassname());
-
-				Constructor c = Class.forName(des.getUIClassname())
-						.getConstructor(types);
-				Object[] args = new Object[3];
-				args[0] = context;
-				args[1] = des.getSystemName();
-				args[2] = obj;
-				final ConfigurationComponent config = (ConfigurationComponent) c
-						.newInstance(args);
-				JMenuItem item = new javax.swing.JMenuItem();
-				item.setText(des.getDisplayName());
-				item.setMnemonic(java.awt.event.KeyEvent.VK_Q);
-				item.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						context.addApplicationComponent(config);
-					}
-				});
-			}
 			confsByName.put(des.getSystemName(), des);
 			objectsByName.put(des.getSystemName(), obj);
 		}

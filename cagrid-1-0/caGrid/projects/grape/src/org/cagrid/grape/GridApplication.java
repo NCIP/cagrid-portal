@@ -267,120 +267,12 @@ public class GridApplication extends JFrame {
 				}
 			}
 			jJMenuBar.add(getWindowsMenu());
-			javax.swing.JMenu conf = new javax.swing.JMenu();
-			conf.setText("Configuration");
-			conf.setMnemonic(java.awt.event.KeyEvent.VK_F);
-
-			if (processConfiguration(app.getConfiguration(), conf)) {
-				jJMenuBar.add(conf);
-			}
 			jJMenuBar.add(getHelpMenu());
-
 		}
 		return jJMenuBar;
 	}
 
-	private boolean processConfiguration(Configuration c, JMenu m)
-			throws Exception {
-		boolean show = false;
-		if (this.processConfigurationGroups(c.getConfigurationGroups(), m)) {
-			show = true;
-		}
 
-		if (this.processConfigurationDescriptors(c
-				.getConfigurationDescriptors(), m)) {
-			show = true;
-		}
-
-		return show;
-
-	}
-
-	private boolean processConfigurationGroups(ConfigurationGroups list, JMenu m)
-			throws Exception {
-		boolean show = false;
-		if (list != null) {
-			ConfigurationGroup[] group = list.getConfigurationGroup();
-			if (group != null) {
-				for (int i = 0; i < group.length; i++) {
-					if (this.processConfigurationGroup(group[i], m)) {
-						show = true;
-					}
-				}
-			}
-		}
-		if (show) {
-
-		}
-		return show;
-	}
-
-	private boolean processConfigurationDescriptors(
-			ConfigurationDescriptors list, JMenu m) throws Exception {
-		boolean show = false;
-		if (list != null) {
-			ConfigurationDescriptor[] des = list.getConfigurationDescriptor();
-			if (des != null) {
-				for (int i = 0; i < des.length; i++) {
-					if (this.processConfigurationDescriptor(des[i], m)) {
-						show = true;
-					}
-				}
-
-			}
-		}
-		return show;
-	}
-
-	private boolean processConfigurationGroup(ConfigurationGroup des, JMenu m)
-			throws Exception {
-		boolean show = false;
-		if (des != null) {
-			javax.swing.JMenu jmenu = new javax.swing.JMenu();
-			jmenu.setText(des.getName());
-			jmenu.setMnemonic(java.awt.event.KeyEvent.VK_F);
-			show = processConfigurationDescriptors(des
-					.getConfigurationDescriptors(), jmenu);
-			if (show) {
-				m.add(jmenu);
-			}
-		}
-
-		return show;
-
-	}
-
-	private boolean processConfigurationDescriptor(
-			final ConfigurationDescriptor des, JMenu m) throws Exception {
-		if (des.getUIClassname() != null) {
-			Class[] types = new Class[3];
-			types[0] = ApplicationContext.class;
-			types[1] = String.class;
-			types[2] = Class.forName(des.getModelClassname());
-
-			Constructor c = Class.forName(des.getUIClassname()).getConstructor(
-					types);
-			Object[] args = new Object[3];
-			args[0] = new ApplicationContext(this);
-			args[1] = des.getSystemName();
-			args[2] = this.configurationManager.getConfigurationObject(des
-					.getSystemName());
-			final ConfigurationComponent config = (ConfigurationComponent) c
-					.newInstance(args);
-			JMenuItem item = new javax.swing.JMenuItem();
-			item.setText(des.getDisplayName());
-			item.setMnemonic(java.awt.event.KeyEvent.VK_Q);
-			item.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					addApplicationComponent(config);
-				}
-			});
-			m.add(item);
-			return true;
-		} else {
-			return false;
-		}
-	}
 
 	private javax.swing.JMenu getMenu(List toolbarComponents, Menu menu) {
 		javax.swing.JMenu jmenu = new javax.swing.JMenu();
@@ -604,6 +496,48 @@ public class GridApplication extends JFrame {
 					});
 		}
 		return closeAllMenuItem;
+	}
+	
+	public void showErrorMessage(String msg) {
+		showErrorMessage("Portal Error", msg);
+	}
+
+	public void showErrorMessage(Exception e) {
+		showErrorMessage("Portal Error", e);
+	}
+
+	public void showConfigurationErrorMessage(String msg) {
+		showErrorMessage("Portal Configuration Error", new String[] {msg});
+	}
+
+	public void showMessage(String msg) {
+		showMessage(new String[] {msg});
+	}
+	
+	
+	public void showMessage(String[] msg) {
+		showMessage("Information", msg);
+	}
+
+	public void showMessage(String title, String msg) {
+		showMessage(title, new String[] {msg});
+	}	
+	
+	public void showMessage(String title, String[] msg) {
+		JOptionPane.showMessageDialog(this, msg, title, JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	public void showErrorMessage(String title, Exception e) {
+		String mess = Utils.getExceptionMessage(e);
+		JOptionPane.showMessageDialog(this, mess, title, JOptionPane.ERROR_MESSAGE);
+	}
+
+	public void showErrorMessage(String title, String msg) {
+		showErrorMessage(title, new String[] {msg});
+	}	
+	
+	public void showErrorMessage(String title, String[] msg) {
+		JOptionPane.showMessageDialog(this, msg, title, JOptionPane.ERROR_MESSAGE);		
 	}
 
 	static public class ExecuteComponent extends MobiusRunnable {

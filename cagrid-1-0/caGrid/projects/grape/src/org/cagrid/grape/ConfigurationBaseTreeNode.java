@@ -41,20 +41,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package org.cagrid.grape.configuration;
+package org.cagrid.grape;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.swing.JTree;
+import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
 
-import org.cagrid.grape.ConfigurationWindow;
-import org.cagrid.grape.model.Configuration;
+import org.cagrid.grape.model.ConfigurationDescriptor;
+import org.cagrid.grape.model.ConfigurationDescriptors;
+import org.cagrid.grape.model.ConfigurationGroup;
+import org.cagrid.grape.model.ConfigurationGroups;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -65,69 +60,69 @@ import org.cagrid.grape.model.Configuration;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class ConfigurationTree extends JTree {
 
-	private ConfigurationTreeNode rootNode;
+public abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
 
-	public ConfigurationTree(ConfigurationWindow window, Configuration conf) {
-		super();
-		this.rootNode = new ConfigurationTreeNode(this,conf);
-		setModel(new DefaultTreeModel(this.rootNode));
-		this.addMouseListener(new ConfigurationTreeEventListener(this,window));
-		this.setCellRenderer(new ConfigurationTreeRenderer());
+	private ConfigurationTree tree;
+
+	private ConfigurationManager configurationManager;
+
+	public ConfigurationBaseTreeNode(ConfigurationTree tree,
+			ConfigurationManager configurationManager) {
+		this.tree = tree;
+		this.configurationManager = configurationManager;
 	}
 
-	public ConfigurationTreeNode getRootNode() {
-		return this.rootNode;
+	public ConfigurationTree getTree() {
+		return tree;
 	}
 
-
-	public ConfigurationBaseTreeNode getCurrentNode() {
-		TreePath currentSelection = this.getSelectionPath();
-		if (currentSelection != null) {
-			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentSelection
-					.getLastPathComponent();
-			return (ConfigurationBaseTreeNode) currentNode;
-		}
-		return null;
-	}
-
-	/**
-	 * Get all the selected service nodes
-	 * 
-	 * @return A List of GridServiceTreeNodes
-	 */
-	public List getSelectedNodes() {
-		List selected = new LinkedList();
-		TreePath[] currentSelection = this.getSelectionPaths();
-		if (currentSelection != null) {
-			for (int i = 0; i < currentSelection.length; i++) {
-				TreePath path = currentSelection[i];
-				DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) path
-						.getLastPathComponent();
-				if (currentNode != this.getRootNode()) {
-					selected.add(currentNode);
+	protected void processConfigurationGroups(ConfigurationGroups list)
+			throws Exception {
+		if (list != null) {
+			ConfigurationGroup[] group = list.getConfigurationGroup();
+			if (group != null) {
+				for (int i = 0; i < group.length; i++) {
+					this.processConfigurationGroup(group[i]);
 				}
 			}
 		}
-		return selected;
 	}
 
-	/**
-	 * Reload a portion of the tree's view in a synchronized way
-	 * 
-	 * @param reloadPoint
-	 *            The node from which to reload
-	 */
-	public synchronized void reload(TreeNode reloadPoint) {
-		((DefaultTreeModel) this.getModel()).reload(reloadPoint);
+	protected void processConfigurationDescriptors(ConfigurationDescriptors list)
+			throws Exception {
+
+		if (list != null) {
+			ConfigurationDescriptor[] des = list.getConfigurationDescriptor();
+			if (des != null) {
+				for (int i = 0; i < des.length; i++) {
+					this.processConfigurationDescriptor(des[i]);
+				}
+
+			}
+		}
 	}
 
-	/**
-	 * Reload from the root
-	 */
-	public synchronized void reload() {
-		this.reload(getRootNode());
+	protected void processConfigurationGroup(ConfigurationGroup des)
+			throws Exception {
+		if (des != null) {
+			this.add(new ConfigurationGroupTreeNode(getTree(),
+					getConfigurationManager(), des));
+		}
 	}
 
+	protected void processConfigurationDescriptor(ConfigurationDescriptor des) throws Exception {
+		if (des != null) {
+			this.add(new ConfigurationDescriptorTreeNode(getTree(),
+					getConfigurationManager(), des));
+		}
+	}
+
+	public ConfigurationManager getConfigurationManager() {
+		return configurationManager;
+	}
+
+	public abstract ImageIcon getIcon();
+
+	public abstract String toString();
 }

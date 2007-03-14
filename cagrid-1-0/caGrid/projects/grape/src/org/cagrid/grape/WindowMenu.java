@@ -1,6 +1,8 @@
 package org.cagrid.grape;
 
 
+
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
@@ -26,10 +28,12 @@ public class WindowMenu extends JMenu {
     private JMenuItem cascade = new JMenuItem("Cascade");
     private JMenuItem tile = new JMenuItem("Tile");
     private JMenuItem prefs;
+    private GridApplication app;
 
 
     public WindowMenu(MDIDesktopPane desktop, final GridApplication app) {
         this.desktop = desktop;
+        this.app = app;
         setText("Window");
         setMnemonic(java.awt.event.KeyEvent.VK_W);
         cascade.setMnemonic(java.awt.event.KeyEvent.VK_C);
@@ -54,10 +58,14 @@ public class WindowMenu extends JMenu {
 		prefs.setMnemonic(java.awt.event.KeyEvent.VK_Q);
 		prefs.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
+				try{
 				ConfigurationWindow window = new ConfigurationWindow(app,app.getConfigurationManager());
 				window.setModal(false);
 				window.setSize(500,400);
 				window.setVisible(true);
+				}catch (Exception ex) {
+					app.showErrorMessage(ex);
+				}
 			}
 		});
         addMenuListener(new MenuListener() {

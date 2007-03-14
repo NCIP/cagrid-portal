@@ -41,12 +41,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package org.cagrid.grape.configuration;
+package org.cagrid.grape;
 
 import javax.swing.ImageIcon;
 
-import org.cagrid.grape.LookAndFeel;
-import org.cagrid.grape.model.Configuration;
+import org.cagrid.grape.model.ConfigurationGroup;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -57,50 +56,25 @@ import org.cagrid.grape.model.Configuration;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class ConfigurationTreeNode extends ConfigurationBaseTreeNode {
+public class ConfigurationGroupTreeNode extends ConfigurationBaseTreeNode {
 
-	public ConfigurationTreeNode(ConfigurationTree tree, Configuration conf) {
-		super(tree);
+	private ConfigurationGroup group;
+
+
+	public ConfigurationGroupTreeNode(ConfigurationTree tree,
+			ConfigurationManager conf, ConfigurationGroup group) throws Exception{
+		super(tree, conf);
+		this.group = group;
+		this.processConfigurationDescriptors(group.getConfigurationDescriptors());
 	}
 
-	/*
-	 * 
-	public synchronized void addGridGrouper(GridGrouper grouper) {
-		if (groupers.containsKey(grouper.getName())) {
-			PortalUtils.showErrorMessage("The Grid Grouper Service "
-					+ grouper.getName() + " has already been added!!!");
-		} else {
-			int id = getBrowser().getProgress().startEvent(
-					"Loading Grid Grouper Service.... ");
-			try {
-				StemI root = grouper.getRootStem();
-				StemTreeNode node = new StemTreeNode(getBrowser(),
-						((Stem) root), true);
-				synchronized (getTree()) {
-					this.add(node);
-					getTree().reload(this);
-				}
-				node.loadStem();
-				getBrowser().getProgress().stopEvent(id,
-						"Grid Grouper Service Successfully Loaded!!!");
-				this.groupers.put(grouper.getName(), node);
-			} catch (Exception e) {
-				PortalUtils.showErrorMessage(e);
-				getBrowser().getProgress().stopEvent(id,
-						"Error loading Grid Grouper Service!!!");
-			}
 
-		}
-
-	}
-
-*/
 
 	public ImageIcon getIcon() {
-		return LookAndFeel.getPreferencesIcon();
+		return LookAndFeel.getPreferencesTreeIcon();
 	}
 
 	public String toString() {
-		return "Grid Grouper Service(s)";
+		return group.getName();
 	}
 }

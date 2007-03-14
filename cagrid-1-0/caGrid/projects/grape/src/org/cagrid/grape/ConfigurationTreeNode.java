@@ -41,10 +41,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package org.cagrid.grape.configuration;
+package org.cagrid.grape;
 
 import javax.swing.ImageIcon;
-import javax.swing.tree.DefaultMutableTreeNode;
+
+import org.cagrid.grape.model.Configuration;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -55,21 +56,29 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
+public class ConfigurationTreeNode extends ConfigurationBaseTreeNode {
 
-public abstract class ConfigurationBaseTreeNode extends DefaultMutableTreeNode {
-
-
-	private ConfigurationTree tree;
-
-	public ConfigurationBaseTreeNode(ConfigurationTree tree) {
-		this.tree = tree;
+	public ConfigurationTreeNode(ConfigurationTree tree,
+			ConfigurationManager conf) throws Exception {
+		super(tree,conf);
+		processConfiguration(conf.getConfiguration());
 	}
 
-	public ConfigurationTree getTree() {
-		return tree;
+	private void processConfiguration(Configuration c) throws Exception {
+		if (c != null) {
+			this.processConfigurationGroups(c.getConfigurationGroups());
+			this.processConfigurationDescriptors(c
+					.getConfigurationDescriptors());
+		}
+
 	}
 
-	public abstract ImageIcon getIcon();
 
-	public abstract String toString();	
+	public ImageIcon getIcon() {
+		return LookAndFeel.getPreferencesTreeIcon();
+	}
+
+	public String toString() {
+		return "Preferences";
+	}
 }
